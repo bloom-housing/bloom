@@ -1,32 +1,18 @@
 {
-  "welcome": {
-    "title": "Find affordable rental housing in Detroit",
-    "heroText": "Detroit Home Connect is a place for you to find housing that you can afford based on your household needs."
-  },
-  "nav": {
-    "siteTitle": "Detroit Home Connect"
-  },
-  "region": {
-    "name": "Detroit"
-  },
-  "footer": {
-    "copyright": "City of Detroit © 2021 • All Rights Reserved",
-    "header": "Detroit Home Connect",
-    "headerLink": "City of Detroit",
-    "forGeneralInquiries": "For general program inquiries:",
-    "youMayCall": "You may call the City of Detroit HRD at:",
-    "forListingQuestions": "For listing and application questions:",
-    "pleaseContact": "Please contact the Property Agent displayed on each listing."
-  },
-  "leasingAgent": {
-    "contact": "Management Company",
-    "dueToHighCallVolume": ""
-  },
-  "listingFilters": {
-    "resetButton": "See All Listings"
-  },
-  "listings": {
-    "communityPrograms": "Community Programs",
-    "communityProgramsDescription": "This program includes opportunities for members of specific communities"
-  }
+  "welcome.title": "Find affordable rental housing in Detroit",
+  "welcome.herText": "Detroit Home Connect is a place for you to find housing that you can afford based on your household needs.",
+  "nav.siteTitle": "Detroit Home Connect",
+  "region.name": "Detroit",
+  "footer.copyright": "City of Detroit © 2021 • All Rights Reserved",
+  "footer.header": "Detroit Home Connect",
+  "footer.headerLink": "City of Detroit",
+  "footer.forGeneralInquiries": "For general program inquiries:",
+  "footer.youMayCall": "You may call the City of Detroit HRD at:",
+  "footer.forListingQuestions": "For listing and application questions:",
+  "footer.pleaseContact": "Please contact the Property Agent displayed on each listing.",
+  "leasingAgent.contact": "Management Company",
+  "leasingAgent.dueToHighCallVolume": "",
+  "listingFilters.resetButton": "See All Listings",
+  "listings.communityPrograms": "Community Programs",
+  "listings.communityProgramsDescription": "This program includes opportunities for members of specific communities"
 }

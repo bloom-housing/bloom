@@ -32,10 +32,7 @@ export class AssetsService {
 
   async list(queryParams: PaginationQueryParams) {
     const qb = this._getQb()
-    return await paginate(qb, {
-      limit: queryParams.limit > 0 ? queryParams.limit : 10,
-      page: queryParams.page > 0 ? queryParams.page : 1,
-    })
+    return await paginate(qb, { limit: queryParams.limit, page: queryParams.page })
   }
 
   async findOne(id: string): Promise<Asset> {

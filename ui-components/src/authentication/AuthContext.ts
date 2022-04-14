@@ -18,6 +18,9 @@ import {
   JurisdictionsService,
   ProgramsService,
   UserPreferencesService,
+  RequestMfaCodeResponse,
+  EnumRequestMfaCodeMfaType,
+  EnumLoginMfaType,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -49,7 +52,12 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
-  login: (email: string, password: string) => Promise<User | undefined>
+  login: (
+    email: string,
+    password: string,
+    mfaCode?: string,
+    mfaType?: EnumLoginMfaType
+  ) => Promise<User | undefined>
   loginWithToken: (token: string) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -66,6 +74,12 @@ type ContextProps = {
   loading: boolean
   profile?: User
   userPreferencesService: UserPreferencesService
+  requestMfaCode: (
+    email: string,
+    password: string,
+    mfaType: EnumRequestMfaCodeMfaType,
+    phoneNumber?: string
+  ) => Promise<RequestMfaCodeResponse | undefined>
 }
 
 // Internal Provider State
@@ -243,11 +257,16 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
     userPreferencesService: new UserPreferencesService(),
-    login: async (email, password) => {
+    login: async (
+      email,
+      password,
+      mfaCode: string | undefined = undefined,
+      mfaType: EnumLoginMfaType | undefined = undefined
+    ) => {
       dispatch(signOut())
       dispatch(startLoading())
       try {
-        const response = await authService?.login({ body: { email, password } })
+        const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
           dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
           const profile = await userService?.userControllerProfile()
@@ -341,6 +360,16 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
           body: { email, appUrl: window.location.origin },
         })
         return response?.message
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    requestMfaCode: async (email, password, mfaType, phoneNumber) => {
+      dispatch(startLoading())
+      try {
+        return await authService?.requestMfaCode({
+          body: { email, password, mfaType, phoneNumber },
+        })
       } finally {
         dispatch(stopLoading())
       }

@@ -23,41 +23,45 @@ const DetailsApplicationData = () => {
       inset
     >
       <GridCell>
-        <ViewItem label={t("application.details.number")}>
+        <ViewItem label={t("application.details.number")} dataTestId="number">
           {application.confirmationCode || application.id}
         </ViewItem>
       </GridCell>
 
       {application.submissionType && (
         <GridCell>
-          <ViewItem label={t("application.details.type")}>
+          <ViewItem label={t("application.details.type")} dataTestId="type">
             {t(`application.details.submissionType.${application.submissionType}`)}
           </ViewItem>
         </GridCell>
       )}
 
       <GridCell>
-        <ViewItem label={t("application.details.submittedDate")}>{applicationDate.date}</ViewItem>
+        <ViewItem label={t("application.details.submittedDate")} dataTestId="submittedDate">
+          {applicationDate.date}
+        </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.timeDate")}>{applicationDate.time}</ViewItem>
+        <ViewItem label={t("application.details.timeDate")} dataTestId="timeDate">
+          {applicationDate.time}
+        </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.language")}>
+        <ViewItem label={t("application.details.language")} dataTestId="language">
           {application.language ? t(`languages.${application.language}`) : t("t.n/a")}
         </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.totalSize")}>
+        <ViewItem label={t("application.details.totalSize")} dataTestId="totalSize">
           {!application.householdSize ? 1 : application.householdSize}
         </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.submittedBy")}>
+        <ViewItem label={t("application.details.submittedBy")} dataTestId="submittedBy">
           {application.applicant.firstName && application.applicant.lastName
             ? `${application.applicant.firstName} ${application.applicant.lastName}`
             : t("t.n/a")}

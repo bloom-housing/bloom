@@ -67,10 +67,7 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
-  image: {
-    label: "test_label",
-    fileId: "fileid",
-  },
+  images: [],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
   costsNotIncluded:
@@ -1052,7 +1049,20 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         },
       ],
       events: [],
-      listingPrograms: [],
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+        },
+      ],
     }
 
     return await this.listingRepository.save(listingCreateDto)

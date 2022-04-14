@@ -1,4 +1,5 @@
 import React from "react"
+import Markdown from "markdown-to-jsx"
 import type { ReactNode } from "react"
 import type { AlertTypes } from "./alertTypes"
 import { colorClasses } from "./alertTypes"
@@ -30,7 +31,11 @@ const AlertNotice = (props: AlertNoticeProps) => {
       )}
 
       <div className="alert-notice__body">
-        {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
+        {typeof props.children === "string" ? (
+          <Markdown>{props.children}</Markdown>
+        ) : (
+          props.children
+        )}
       </div>
     </div>
   )

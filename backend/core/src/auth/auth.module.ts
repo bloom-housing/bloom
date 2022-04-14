@@ -1,9 +1,10 @@
 import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
-import { LocalStrategy } from "./passport-strategies/local.strategy"
+import { LocalMfaStrategy } from "./passport-strategies/local-mfa.strategy"
 import { JwtStrategy } from "./passport-strategies/jwt.strategy"
 import { PassportModule } from "@nestjs/passport"
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { TwilioModule } from "nestjs-twilio"
 import { RevokedToken } from "./entities/revoked-token.entity"
 import { SharedModule } from "../shared/shared.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
@@ -19,6 +20,7 @@ import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
+import { SmsMfaService } from "./services/sms-mfa.service"
 import { UserPreferencesController } from "./controllers/user-preferences.controller"
 import { UserPreferencesService } from "./services/user-preferences.services"
 import { UserPreferences } from "./entities/user-preferences.entity"
@@ -36,6 +38,14 @@ import { UserPreferences } from "./entities/user-preferences.entity"
         },
       }),
     }),
+    TwilioModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        accountSid: configService.get("TWILIO_ACCOUNT_SID"),
+        authToken: configService.get("TWILIO_AUTH_TOKEN"),
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forFeature([RevokedToken, User, Application, UserPreferences]),
     SharedModule,
     JurisdictionsModule,
@@ -43,12 +53,13 @@ import { UserPreferences } from "./entities/user-preferences.entity"
     forwardRef(() => ActivityLogModule),
   ],
   providers: [
-    LocalStrategy,
+    LocalMfaStrategy,
     JwtStrategy,
     AuthService,
     AuthzService,
     UserService,
     PasswordService,
+    SmsMfaService,
     UserPreferencesService,
   ],
   exports: [AuthzService, AuthService, UserService, UserPreferencesService],

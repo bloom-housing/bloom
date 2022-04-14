@@ -16,11 +16,7 @@ export enum RoleOption {
 }
 export const roleKeys = Object.values(RoleOption)
 
-export const numberOptions = (
-  end: number,
-  start = 1,
-  addEmpty: boolean = false
-): SelectOption[] => {
+export const numberOptions = (end: number, start = 1, addEmpty = false): SelectOption[] => {
   const nums = []
   if (addEmpty) {
     nums.push({ label: "", value: "" })

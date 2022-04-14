@@ -5,35 +5,37 @@ import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
   content: string
-  subContent?: string
+  iconColor?: string
+  iconType?: IconTypes
   status?: ApplicationStatusType
+  subContent?: string
   vivid?: boolean
   withIcon?: boolean
-  iconType?: IconTypes
 }
 
 const ApplicationStatus = (props: ApplicationStatusProps) => {
   let bgColor = ""
+  const {
+    content,
+    iconColor,
+    iconType = "clock",
+    status = ApplicationStatusType.Open,
+    subContent,
+    vivid,
+    withIcon = true,
+  } = props
+
   // determine styling
-  const vivid = props.vivid || false
   let textColor = vivid ? "text-white" : "text-gray-800"
   const textSize = vivid ? "text-xs" : "text-sm"
 
-  const status = props.status || ApplicationStatusType.Open
-  const content = props.content
-  const withIcon = props.withIcon ?? true
-  const iconType = props.iconType ?? "clock"
-
-  let icon
-
-  if (withIcon) {
-    icon = (
-      <span>
-        <Icon size="medium" symbol={iconType} fill={vivid ? IconFillColors.white : undefined} />{" "}
-        &nbsp;
-      </span>
-    )
-  }
+  const icon = withIcon && (
+    <Icon
+      size="medium"
+      symbol={iconType}
+      fill={iconColor || (vivid ? IconFillColors.white : undefined)}
+    />
+  )
 
   switch (status) {
     case ApplicationStatusType.Open:
@@ -57,13 +59,15 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   return (
     <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
       {icon}
-      {content}
-      {props.subContent && (
-        <>
-          <br />
-          <span className={"application-status__sub-content"}>{props.subContent}</span>
-        </>
-      )}
+      <span>
+        {content}
+        {subContent && (
+          <>
+            <br />
+            {subContent}
+          </>
+        )}
+      </span>
     </div>
   )
 }

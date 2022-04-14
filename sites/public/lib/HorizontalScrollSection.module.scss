@@ -17,10 +17,10 @@ $icon-large: 40px;
 .title {
   align-items: center;
   display: flex;
-  padding: 0 $small-padding;
+  padding: 0 0.5rem;
 
   @screen sm {
-    padding: 0 $large-padding;
+    padding: 0 1rem;
   }
 }
 
@@ -42,19 +42,19 @@ $icon-large: 40px;
 .subtitle {
   color: $tailwind-primary;
   font-size: 0.875rem;
-  padding: 0 $small-padding;
+  padding: 0;
 
   @screen sm {
-    padding: 0 $large-padding;
+    padding: 0;
   }
 }
 
 .icon-space.subtitle {
   margin-inline-start: 16px;
-  padding: 0 $small-padding + $icon-small;
+  padding: 0 2.5rem;
 
   @screen sm {
-    padding: 0 $large-padding + $icon-large;
+    padding: 0 3.5rem;
   }
 }
 
@@ -89,12 +89,12 @@ $icon-large: 40px;
   overflow-x: scroll;
   padding-top: 34px;
   scroll-behavior: smooth;
-  scroll-padding-inline-start: $small-padding;
+  scroll-padding-inline-start: 1rem;
   scroll-snap-type: x proximity;
   scrollbar-width: none; /* Firefox */
 
   @screen sm {
-    scroll-padding-inline-start: $large-padding;
+    scroll-padding-inline-start: 1rem;
   }
 }
 
@@ -104,10 +104,10 @@ $icon-large: 40px;
 }
 
 .content > *:first-child {
-  margin-inline-start: $small-padding;
+  margin-inline-start: 0.5rem;
 
   @screen sm {
-    margin-inline-start: $large-padding;
+    margin-inline-start: 1rem;
   }
 }
 

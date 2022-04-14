@@ -5,7 +5,7 @@ import {
   ListingMarketingTypeEnum,
   ListingReviewOrder,
   ListingStatus,
-  UnitStatus
+  UnitStatus,
 } from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
@@ -20,6 +20,7 @@ export const SanMateoHUD2019: AmiChart = {
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "Alameda",
+    emailFromAddress: "Alameda Housing Email",
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
@@ -1530,4 +1531,6 @@ export const ArcherListing: Listing = {
     },
   ],
   marketingType: ListingMarketingTypeEnum.marketing,
+  // TODO confirm not used anywhere
+  // totalUnits: 2,
 }

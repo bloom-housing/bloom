@@ -57,6 +57,8 @@ import { Listing10136Seed } from "./seeds/listings/listing-detroit-10136"
 import { ListingDefaultReservedSeed } from "../seeder/seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultMultipleAMI } from "../seeder/seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "../seeder/seeds/listings/listing-default-multiple-ami-and-percentages"
+import { ListingDefaultLottery } from "./seeds/listings/listing-default-lottery-results"
+import { ListingDefaultLotteryPending } from "./seeds/listings/listing-default-lottery-pending"
 import { ListingDefaultMissingAMI } from "../seeder/seeds/listings/listing-default-missing-ami"
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
@@ -67,6 +69,7 @@ import { AmiDefaultTriton } from "../seeder/seeds/ami-charts/triton-ami-chart"
 import { AmiDefaultTritonDetroit } from "../seeder/seeds/ami-charts/triton-ami-chart-detroit"
 import { AmiDefaultSanJose } from "../seeder/seeds/ami-charts/default-ami-chart-san-jose"
 import { AmiDefaultSanMateo } from "../seeder/seeds/ami-charts/default-ami-chart-san-mateo"
+import { Asset } from "../assets/entities/asset.entity"
 
 @Module({})
 export class SeederModule {
@@ -81,6 +84,7 @@ export class SeederModule {
           ...dbConfig,
         }),
         TypeOrmModule.forFeature([
+          Asset,
           Listing,
           Preference,
           UnitAccessibilityPriorityType,
@@ -138,6 +142,8 @@ export class SeederModule {
         ListingDefaultMultipleAMI,
         ListingDefaultMultipleAMIAndPercentages,
         ListingDefaultMissingAMI,
+        ListingDefaultLottery,
+        ListingDefaultLotteryPending,
         ListingDefaultSummaryWith30And60AmiPercentageSeed,
         ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed,
         ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed,

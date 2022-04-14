@@ -2,7 +2,7 @@ import React from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { t, AlertBox } from "@bloom-housing/ui-components"
+import { AlertBox, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 import Layout from "../../../layouts/application"
@@ -29,7 +29,7 @@ export default function ListingPage(props: ListingProps) {
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
       <AlertBox
-        className="pt-4 pb-4 bg-red-700 font-bold text-sm"
+        className="pt-6 pb-4 bg-red-700 font-bold text-sm"
         type="alert"
         boundToLayoutWidth
         inverted

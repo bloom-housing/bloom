@@ -13,6 +13,7 @@ import {
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import {
+  IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
@@ -138,13 +139,24 @@ export class User {
   @JoinTable()
   jurisdictions: Jurisdiction[]
 
-  @OneToOne(() => UserPreferences, (preferences) => preferences.user, {
-    eager: true,
-    cascade: true,
-    nullable: true,
-  })
+  @Column({ type: "bool", default: false })
   @Expose()
-  preferences?: UserPreferences
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  mfaEnabled?: boolean
+
+  @Column("varchar", { nullable: true })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
+  mfaCode?: string
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  mfaCodeUpdatedAt?: Date | null
+
   @Column({ default: () => "NOW()" })
   @Expose()
   @Type(() => Date)
@@ -154,4 +166,25 @@ export class User {
   @Expose()
   @Type(() => Date)
   failedLoginAttemptsCount?: number
+
+  @Column({ type: "bool", nullable: true, default: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  phoneNumberVerified?: boolean
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  hitConfirmationURL?: Date | null
+
+  @OneToOne(() => UserPreferences, (preferences) => preferences.user, {
+    eager: true,
+    cascade: true,
+    nullable: true,
+  })
+  @Expose()
+  preferences?: UserPreferences
 }

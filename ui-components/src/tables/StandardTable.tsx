@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
-import { getTranslationWithArguments } from "../helpers/translationHelpers"
+import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
 import { Icon } from "../icons/Icon"
 import { t } from "../helpers/translator"
 

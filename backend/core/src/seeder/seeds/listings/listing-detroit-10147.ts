@@ -33,7 +33,7 @@ const mshListing: ListingSeedType = {
   managementWebsite: "www.elitep-m.com",
   name: "Melrose Square Homes",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,

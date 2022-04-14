@@ -54,7 +54,9 @@ const PreferencesList = (props: PreferencesListProps) => {
           <div className="preferences-list__links">
             {preference.links.map((link: ListPreferenceLink, linkIndex: number) => (
               <span key={linkIndex}>
-                <a href={link.url}>{link.title}</a>
+                <a href={link.url} target="_blank">
+                  {link.title}
+                </a>
               </span>
             ))}
           </div>

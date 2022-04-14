@@ -1,5 +1,6 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { PageHeader, SiteAlert, t, AuthContext } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
@@ -7,11 +8,16 @@ import { MetaTags } from "../../src/MetaTags"
 import ListingGuard from "../../src/ListingGuard"
 
 const NewListing = () => {
+  const router = useRouter()
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
   const { profile } = useContext(AuthContext)
 
-  if (!profile?.roles.isAdmin) return "An error has occurred."
+  useEffect(() => {
+    if (!profile?.roles.isAdmin) {
+      void router.push("/")
+    }
+  }, [profile, router])
 
   return (
     <ListingGuard>

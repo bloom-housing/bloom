@@ -8,33 +8,35 @@ import {
   Icon,
   LinkButton,
   t,
-  AlertBox,
-  SiteAlert,
-  AlertNotice,
-  ErrorMessage,
+  FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NavigationContext } from "../../config/NavigationContext"
-
-export type NetworkErrorValue = {
-  title: string
-  content: string
-} | null
+import { AlertTypes } from "../../notifications/alertTypes"
 
 export type NetworkErrorDetermineError = (status: number, error: Error) => void
 
+export type NetworkStatusType = AlertTypes
+
 export type NetworkErrorReset = () => void
+
+export type NetworkStatusContent = {
+  title: string
+  description: string
+  error?: boolean
+} | null
+
+export type NetworkStatus = {
+  content: NetworkStatusContent
+  type?: NetworkStatusType
+  reset: NetworkErrorReset
+}
 
 export type FormSignInProps = {
   control: FormSignInControl
   onSubmit: (data: FormSignInValues) => void
-  networkError: FormSignInNetworkError
+  networkStatus: NetworkStatus
   showRegisterBtn?: boolean
-}
-
-export type FormSignInNetworkError = {
-  error: NetworkErrorValue
-  reset: NetworkErrorReset
 }
 
 export type FormSignInControl = {
@@ -50,7 +52,7 @@ export type FormSignInValues = {
 
 const FormSignIn = ({
   onSubmit,
-  networkError,
+  networkStatus,
   showRegisterBtn,
   control: { errors, register, handleSubmit },
 }: FormSignInProps) => {
@@ -61,31 +63,16 @@ const FormSignIn = ({
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
+      <div className="form-card__lead text-center">
         <Icon size="2xl" symbol="profile" />
         <h2 className="form-card__title">{t(`nav.signIn`)}</h2>
       </div>
-
-      {Object.entries(errors).length > 0 && !networkError.error && (
-        <AlertBox type="alert" inverted closeable>
-          {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
-        </AlertBox>
-      )}
-
-      {!!networkError.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={"householdsize-error"} error={!!networkError.error}>
-          <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
-            {networkError.error.title}
-          </AlertBox>
-
-          <AlertNotice title="" type="alert" inverted>
-            {networkError.error.content}
-          </AlertNotice>
-        </ErrorMessage>
-      )}
-
-      <SiteAlert type="notice" dismissable />
-      <div className="form-card__group pt-0 border-b">
+      <FormSignInErrorBox
+        errors={errors}
+        networkStatus={networkStatus}
+        errorMessageId={"main-sign-in"}
+      />
+      <div className="form-card__group pt-0">
         <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}

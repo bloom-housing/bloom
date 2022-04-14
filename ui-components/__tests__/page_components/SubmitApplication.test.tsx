@@ -10,8 +10,8 @@ import {
 } from "../../src/page_components/listing/listing_sidebar/SubmitApplication.stories"
 
 afterEach(cleanup)
-// TODO: there aren't translations for these in Detroit
-describe.skip("<ApplicationAddresses>", () => {
+
+describe("<ApplicationAddresses>", () => {
   it("includes mailing address, includes drop off address, includes due date, includes postmarks, includes office hours", () => {
     const { getByText } = render(<AllFields />)
     expect(getByText("Submit a Paper Application")).toBeTruthy()

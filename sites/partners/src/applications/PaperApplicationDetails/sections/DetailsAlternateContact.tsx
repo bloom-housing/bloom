@@ -15,19 +15,19 @@ const DetailsAlternateContact = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.name.firstName")}>
+          <ViewItem label={t("application.name.firstName")} dataTestId="alternateContact.firstName">
             {application.alternateContact.firstName || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.lastName")}>
+          <ViewItem label={t("application.name.lastName")} dataTestId="alternateContact.lastName">
             {application.alternateContact.lastName || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.relationship")}>
+          <ViewItem label={t("t.relationship")} dataTestId="relationship">
             {(() => {
               if (!application.alternateContact.type) return t("t.n/a")
 
@@ -43,27 +43,31 @@ const DetailsAlternateContact = () => {
 
         {
           <GridCell>
-            <ViewItem label={t("application.details.agency")}>
+            <ViewItem label={t("application.details.agency")} dataTestId="alternateContact.agency">
               {application.alternateContact.agency || t("t.n/a")}
             </ViewItem>
           </GridCell>
         }
 
         <GridCell>
-          <ViewItem label={t("t.email")}>
+          <ViewItem label={t("t.email")} dataTestId="alternateContact.emailAddress">
             {application.alternateContact.emailAddress || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.phone")}>
+          <ViewItem label={t("t.phone")} dataTestId="alternateContact.phoneNumber">
             {application.alternateContact.phoneNumber || t("t.n/a")}
           </ViewItem>
         </GridCell>
       </GridSection>
 
       <GridSection subtitle={t("application.contact.address")} columns={3}>
-        <DetailsAddressColumns type={AddressColsType.alternateAddress} application={application} />
+        <DetailsAddressColumns
+          type={AddressColsType.alternateAddress}
+          application={application}
+          dataTestId="alternateContact"
+        />
       </GridSection>
     </GridSection>
   )

@@ -44,6 +44,7 @@ import ListingPhoto from "./sections/ListingPhoto"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
+import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import SelectAndOrder from "./sections/SelectAndOrder"
@@ -51,7 +52,6 @@ import Verification from "./sections/Verification"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalProgramList } from "../../../lib/hooks"
-import ApplicationDates from "./sections/ApplicationDates"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -178,11 +178,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
       return
     }
-    let formData = {
-      ...defaultValues,
-      ...getValues(),
-      ...(newData || {}),
-    }
+    let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
     if (status) {
       formData = { ...formData, status }
     }
@@ -197,13 +193,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           clearErrors()
 
           const dataPipeline = new ListingDataPipeline(formData, {
+            programs,
             units,
             unitGroups: unitsSummaries,
             openHouseEvents,
             profile,
             latLong,
             customMapPositionChosen,
-            programs,
           })
           const formattedData = await dataPipeline.run()
 
@@ -231,10 +227,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
              */
             if (process.env.backendProxyBase) {
               try {
+                // clear individual listing's cache
                 await axios.request({
-                  url: `${process.env.backendProxyBase}/listings*`,
+                  url: `${process.env.backendProxyBase}/listings/${result.id}*`,
                   method: "purge",
                 })
+                // clear list caches if published
+                if (result.status !== ListingStatus.pending) {
+                  await axios.request({
+                    url: `${process.env.backendProxyBase}/listings?*`,
+                    method: "purge",
+                  })
+                }
               } catch (e) {
                 console.log("purge error = ", e)
               }
@@ -259,11 +263,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               const readableError = getReadableErrorMessage(errorMessage)
               if (readableError) {
                 setError(fieldName, { message: readableError })
-                if (fieldName === "buildingAddress") {
-                  setError(`${fieldName}.city`, { message: readableError })
-                  setError(`${fieldName}.state`, { message: readableError })
-                  setError(`${fieldName}.street`, { message: readableError })
-                  setError(`${fieldName}.zipCode`, { message: readableError })
+                if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
+                  const setIfEmpty = (
+                    fieldName: string,
+                    fieldValue: string,
+                    errorMessage: string
+                  ) => {
+                    if (!fieldValue) {
+                      setError(fieldName, { message: errorMessage })
+                    }
+                  }
+                  const address = formData.buildingAddress
+                  setIfEmpty(`buildingAddress.city`, address.city, readableError)
+                  setIfEmpty(`buildingAddress.state`, address.state, readableError)
+                  setIfEmpty(`buildingAddress.street`, address.street, readableError)
+                  setIfEmpty(`buildingAddress.zipCode`, address.zipCode, readableError)
                 }
               }
             })
@@ -277,13 +291,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     [
       loading,
       clearErrors,
+      programs,
       units,
       unitsSummaries,
       openHouseEvents,
       profile,
       latLong,
       customMapPositionChosen,
-      programs,
       editMode,
       listingsService,
       listing?.id,

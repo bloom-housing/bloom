@@ -50,6 +50,7 @@ import { ListingFeatures } from "./listing-features.entity"
 import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
+import { ListingImage } from "./listing-image.entity"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
 import { ListingSeasonEnum } from "../types/listing-season-enum"
 
@@ -105,7 +106,9 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiPropertyOptional()
   get referralApplication(): ApplicationMethodDto | undefined {
-    return this.applicationMethods?.find((method) => method.type === ApplicationMethodType.Referral)
+    return this.applicationMethods
+      ? this.applicationMethods.find((method) => method.type === ApplicationMethodType.Referral)
+      : undefined
   }
 
   // booleans to make dealing with different application methods easier to parse
@@ -476,12 +479,15 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   reservedCommunityMinAge?: number | null
 
-  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
+  @OneToMany(() => ListingImage, (listingImage) => listingImage.listing, {
+    cascade: true,
+    eager: true,
+  })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Asset)
-  image?: Asset | null
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingImage)
+  images?: ListingImage[] | null
 
   @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
   @Expose()
@@ -584,6 +590,20 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingProgram)
   listingPrograms?: ListingProgram[]
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  publishedAt?: Date | null
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  closedAt?: Date | null
 
   @OneToOne(() => ListingFeatures, {
     nullable: true,

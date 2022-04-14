@@ -77,25 +77,14 @@ export class UserController {
     )
   }
 
-  @Post("resend-partner-confirmation")
-  @UseGuards(OptionalAuthGuard, AuthzGuard)
-  @ApiOperation({
-    summary: "Resend partner confirmation",
-    operationId: "resendPartnerConfirmation",
-  })
-  async requestConfirmationResend(@Body() dto: EmailDto): Promise<StatusDto> {
-    await this.userService.resendPartnerConfirmation(dto)
-    return mapTo(StatusDto, { status: "ok" })
-  }
-
   @Post("is-confirmation-token-valid")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({
     summary: "Verifies token is valid",
     operationId: "isUserConfirmationTokenValid",
   })
-  isUserConfirmationTokenValid(@Body() dto: ConfirmDto): boolean {
-    return this.userService.isUserConfirmationTokenValid(dto)
+  async isUserConfirmationTokenValid(@Body() dto: ConfirmDto): Promise<boolean> {
+    return await this.userService.isUserConfirmationTokenValid(dto)
   }
 
   @Post("resend-confirmation")
@@ -103,6 +92,14 @@ export class UserController {
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
   async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
     await this.userService.resendPublicConfirmation(dto)
+    return mapTo(StatusDto, { status: "ok" })
+  }
+
+  @Post("resend-partner-confirmation")
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Resend confirmation", operationId: "resendPartnerConfirmation" })
+  async resendPartnerConfirmation(@Body() dto: EmailDto): Promise<StatusDto> {
+    await this.userService.resendPartnerConfirmation(dto)
     return mapTo(StatusDto, { status: "ok" })
   }
 

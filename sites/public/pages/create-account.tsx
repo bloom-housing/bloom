@@ -27,7 +27,7 @@ import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
-const CreateAccount = () => {
+export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
@@ -66,8 +66,11 @@ const CreateAccount = () => {
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
+      } else if (status === 409) {
+        console.error(err)
+        setRequestError(`${t("authentication.createAccount.errors.emailInUse")}`)
       } else {
-        console.log(JSON.stringify(err))
+        console.error(err)
         setRequestError(`${t("authentication.createAccount.errors.generic")}`)
       }
       window.scrollTo(0, 0)
@@ -283,5 +286,3 @@ const CreateAccount = () => {
     </FormsLayout>
   )
 }
-
-export default CreateAccount

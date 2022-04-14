@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react"
-import { getTranslationWithArguments } from "../../src/helpers/translationHelpers"
+import { getTranslationWithArguments } from "../../src/helpers/getTranslationWithArguments"
 
 afterEach(cleanup)
 

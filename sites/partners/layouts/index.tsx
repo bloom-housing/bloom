@@ -16,13 +16,7 @@ import {
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
-
-  const languages =
-    router?.locales?.map((item) => ({
-      prefix: item === "en" ? "" : item,
-      label: t(`languages.${item}`),
-    })) || []
-
+  const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
@@ -58,16 +52,9 @@ const Layout = (props) => {
           title={t("nav.siteTitlePartners")}
           logoWidth={"wide"}
           menuLinks={menuLinks}
+          siteHeaderWidth={"wide"}
           homeURL={"/"}
           logoClass={"md:h-36 md:mt-0"}
-          languages={languages.map((lang) => {
-            return {
-              label: lang.label,
-              onClick: () =>
-                void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
-              active: t("config.routePrefix") === lang.prefix,
-            }
-          })}
         />
 
         <main>{props.children}</main>
@@ -88,7 +75,7 @@ const Layout = (props) => {
               </a>
             </p>
           </FooterSection>
-          <FooterNav copyright={t("footer.copyright")}>
+          <FooterNav copyright={`City of Detroit © ${currentYear} • All Rights Reserved`}>
             <LocalizedLink href={`${process.env.publicBaseUrl}/privacy`}>
               {t("pageTitle.privacy")}
             </LocalizedLink>{" "}

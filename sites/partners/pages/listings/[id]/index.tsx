@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import axios from "axios"
 import {
   AppearanceStyleType,
   PageHeader,
@@ -10,8 +11,7 @@ import {
   AlertBox,
   SiteAlert,
 } from "@bloom-housing/ui-components"
-import { ListingStatus } from "@bloom-housing/backend-core/types"
-import { useSingleListingData } from "../../../lib/hooks"
+import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 
 import ListingGuard from "../../../src/ListingGuard"
 import Layout from "../../../layouts"
@@ -33,19 +33,24 @@ import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/se
 import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
 import DetailApplicationTypes from "../../../src/listings/PaperListingDetails/sections/DetailApplicationTypes"
 import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
+import DetailApplicationDates from "../../../src/listings/PaperListingDetails/sections/DetailApplicationDates"
 import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
 import DetailVerification from "../../../src/listings/PaperListingDetails/sections/DetailVerification"
-import DetailApplicationDates from "../../../src/listings/PaperListingDetails/sections/DetailApplicationDates"
 
-export default function ApplicationsList() {
+interface ListingProps {
+  listing: Listing
+}
+
+export default function ListingDetail(props: ListingProps) {
   const router = useRouter()
-  const listingId = router.query.id as string
-  const { listingDto } = useSingleListingData(listingId)
+  /* const listingId = router.query.id as string
+  const { listingDto, listingLoading } = useSingleListingData(listingId) */
+  const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
 
   const listingStatus = useMemo(() => {
-    switch (listingDto?.status) {
+    switch (listing?.status) {
       case ListingStatus.active:
         return (
           <Tag styleType={AppearanceStyleType.success} pillStyle>
@@ -65,12 +70,12 @@ export default function ApplicationsList() {
           </Tag>
         )
     }
-  }, [listingDto?.status])
+  }, [listing?.status])
 
-  if (!listingDto) return null
+  if (!listing) return null
 
   return (
-    <ListingContext.Provider value={listingDto}>
+    <ListingContext.Provider value={listing}>
       <ListingGuard>
         <>
           <Layout>
@@ -82,9 +87,14 @@ export default function ApplicationsList() {
               className="relative"
               title={
                 <>
-                  <p className="font-sans font-semibold uppercase text-3xl">{listingDto.name}</p>
+                  <p
+                    data-test-id="page-header-text"
+                    className="font-sans font-semibold uppercase text-3xl"
+                  >
+                    {listing.name}
+                  </p>
 
-                  <p className="font-sans text-base mt-1">{listingDto.id}</p>
+                  <p className="font-sans text-base mt-1">{listing.id}</p>
                 </>
               }
             >
@@ -148,4 +158,17 @@ export default function ApplicationsList() {
       </ListingGuard>
     </ListingContext.Provider>
   )
+}
+
+export async function getServerSideProps(context: { params: Record<string, string> }) {
+  let response
+
+  try {
+    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+  } catch (e) {
+    console.log("e = ", e)
+    return { notFound: true }
+  }
+
+  return { props: { listing: response.data } }
 }

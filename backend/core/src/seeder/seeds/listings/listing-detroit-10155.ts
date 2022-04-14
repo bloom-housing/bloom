@@ -34,7 +34,7 @@ const listingSeed: ListingSeedType = {
   managementCompany: "Premier Property Management",
   name: "Morton Manor",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,

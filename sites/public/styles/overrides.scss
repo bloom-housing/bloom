@@ -85,6 +85,7 @@ $header-desktop-min-size: 1024px;
           height: 40px;
           padding: 1rem;
           text-transform: none;
+          border: none;
         }
 
         .navbar-link__sign-in {
@@ -318,9 +319,13 @@ li.progress-nav__item {
 
 .hero {
   @apply font-bold;
-  @apply mx-4;
+  @apply mx-2;
   @apply mb-4;
   @apply rounded-2xl;
+
+  @screen sm {
+    @apply mx-4;
+  }
 }
 
 .hero__title {
@@ -491,12 +496,18 @@ li.progress-nav__item {
 }
 
 .latest-listings {
-  .listings-row_content {
+  .listings-row_table,
+  .listings-row_footer_container {
     display: none;
   }
 
   .listings-row {
     margin: 0 15px;
+  }
+
+  .listings-row_content {
+    width: 100%;
+    @apply px-0;
   }
 
   .listings-row:hover {

@@ -19,12 +19,13 @@
   @apply absolute;
   @apply z-10;
   @apply w-full;
-  @apply mt-4;
+  @apply mt-1;
+  @apply px-4;
+  @apply flex-wrap;
 
   @screen md {
     @apply items-start;
     @apply justify-start;
-    @apply ml-4;
   }
 }
 
@@ -33,33 +34,6 @@
   @apply inset-x-0;
   @apply bottom-0;
   @apply py-1;
-}
-
-.image-card__overlay {
-  background: rgb(0, 0, 0);
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.9374124649859944) 0%,
-    rgba(0, 0, 0, 0.665703781512605) 80%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  @screen md {
-    background: rgb(0, 0, 0);
-    background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.9374124649859944) 20%,
-      rgba(0, 0, 0, 0.665703781512605) 40%,
-      rgba(255, 255, 255, 0) 60%
-    );
-  }
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  @apply w-full;
-  height: 100%;
-  @screen md {
-    height: 100%;
-  }
 }
 
 .image-card__placeholder {

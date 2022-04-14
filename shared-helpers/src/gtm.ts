@@ -1,3 +1,5 @@
+import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+
 declare global {
   interface Window {
     dataLayer: DataLayerArgsUnion[]
@@ -16,10 +18,12 @@ export type ListingList = PageView & {
 }
 
 export type ListingDetail = PageView & {
-  listingStartDate: Date
+  listingStartDate: string
   listingStatus: string
   listingID: string
-  applicationDueDate: Date
+  listingType: ListingReviewOrder
+  applicationDueDate: string
+  digitalApplication: boolean
   paperApplication: boolean
 }
 

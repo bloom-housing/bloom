@@ -9,6 +9,6 @@ export default {
 
 const listing = Object.assign({}, Archer) as any
 
-export const showBWMapWithPin = () => {
+export const showMapWithPin = () => {
   return <ListingMap address={listing.buildingAddress} listingName={listing.name} />
 }

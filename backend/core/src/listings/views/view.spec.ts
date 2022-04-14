@@ -59,7 +59,7 @@ describe("listing views", () => {
       view.getViewQb()
 
       expect(mockQueryBuilder.select).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(10)
+      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(11)
     })
 
     it("should map unitSummary to listings", () => {
@@ -80,7 +80,7 @@ describe("listing views", () => {
 
       view.getViewQb()
 
-      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(32)
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(33)
     })
   })
 

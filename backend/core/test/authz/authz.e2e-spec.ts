@@ -236,6 +236,11 @@ describe("Authz", () => {
     it(`should not allow normal/anonymous user to POST listings`, async () => {
       // anonymous
       await supertest(app.getHttpServer()).post(listingsEndpoint).expect(403)
+      // logged in normal user
+      await supertest(app.getHttpServer())
+        .post(listingsEndpoint)
+        .set(...setAuthorization(userAccessToken))
+        .expect(403)
     })
 
     it(`should not allow normal user to change it's role`, async () => {

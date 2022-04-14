@@ -41,7 +41,7 @@ const DOBField = (props: DOBFieldProps) => {
   const validateAge = (value: string) => {
     return (
       parseInt(value) > 1900 &&
-      dayjs(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") < dayjs().subtract(18, "years")
+      dayjs(`${birthMonth}/${birthDay}/${value}`, "M/D/YYYY") < dayjs().subtract(18, "years")
     )
   }
 
@@ -58,7 +58,7 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder="MM"
+          placeholder={t("account.settings.placeholders.month")}
           defaultValue={defaultDOB?.birthMonth ? defaultDOB.birthMonth : ""}
           error={error?.birthMonth !== undefined}
           validation={{
@@ -80,7 +80,7 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder="DD"
+          placeholder={t("account.settings.placeholders.day")}
           defaultValue={defaultDOB?.birthDay ? defaultDOB.birthDay : ""}
           error={error?.birthDay !== undefined}
           validation={{
@@ -102,7 +102,7 @@ const DOBField = (props: DOBFieldProps) => {
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder="YYYY"
+          placeholder={t("account.settings.placeholders.year")}
           defaultValue={defaultDOB?.birthYear ? defaultDOB.birthYear : ""}
           error={error?.birthYear !== undefined}
           validation={{

@@ -42,7 +42,7 @@ const nccListing: ListingSeedType = {
   managementWebsite: "www.kmgprestige.com/communities/",
   name: "New Center Commons",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,

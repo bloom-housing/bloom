@@ -10,7 +10,7 @@ const unitTypeTwoBdrm = { name: "twoBdrm", numBedrooms: 2 } as UnitType
 const unitTypeThreeBdrm = { name: "threeBdrm", numBedrooms: 3 } as UnitType
 const unitTypeFourBdrm = { name: "fourBdrm", numBedrooms: 4 } as UnitType
 
-const unitGroups: Omit<UnitGroup, "id" | "listing" | "openWaitlist" | "amiLevels">[] = [
+const unitGroups: Omit<UnitGroup, "id" | "listing" | "openWaitlist" | "amiLevels" | "listingId">[] = [
   {
     unitType: [unitTypeStudio, unitTypeOneBdrm],
     minOccupancy: 1,

@@ -2,7 +2,7 @@ import Layout from "../layouts"
 import Head from "next/head"
 import { Hero, t } from "@bloom-housing/ui-components"
 
-const Unauthorized = () => {
+export default () => {
   const pageTitle = t("errors.unauthorized.title")
 
   return (
@@ -14,5 +14,3 @@ const Unauthorized = () => {
     </Layout>
   )
 }
-
-export default Unauthorized

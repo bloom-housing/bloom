@@ -12,18 +12,20 @@ import { ListingContext } from "../../ListingContext"
 const DetailListingPhoto = () => {
   const listing = useContext(ListingContext)
 
-  let listingFormPhoto = listing.image
+  let listingFormPhoto = listing.images[0]
 
   // Set listing photo from assets if necessary:
-  if (listing.image == null && listing.assets.length > 0) {
-    listingFormPhoto = listing.assets.find((asset) => asset.label == "building")
+  // TODO: get rid of assets entirely
+  if (listing.images?.length === 0 && listing.assets.length > 0) {
+    const asset = listing.assets.find((asset) => asset.label == "building")
+    listingFormPhoto = { ordinal: 0, image: { fileId: asset.fileId, label: asset.label } }
   }
 
   const urlTest = new RegExp(/https?:\/\//)
-  const listingPhotoUrl = listingFormPhoto
-    ? urlTest.test(listingFormPhoto.fileId)
-      ? listingFormPhoto.fileId
-      : cloudinaryUrlFromId(listingFormPhoto.fileId)
+  const listingPhotoUrl = listingFormPhoto?.image
+    ? urlTest.test(listingFormPhoto.image.fileId)
+      ? listingFormPhoto.image.fileId
+      : cloudinaryUrlFromId(listingFormPhoto.image.fileId)
     : null
 
   const photoTableHeaders = {
@@ -37,7 +39,7 @@ const DetailListingPhoto = () => {
           <img src={listingPhotoUrl} />
         </TableThumbnail>
       ),
-      fileName: listingFormPhoto?.fileId.split("/").slice(-1).join(),
+      fileName: listingFormPhoto?.image?.fileId.split("/").slice(-1).join(),
     },
   ]
 

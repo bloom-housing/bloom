@@ -13,7 +13,7 @@ const DetailsTerms = () => {
       grid={false}
     >
       <GridCell>
-        <ViewItem label={t("application.details.signatureOnTerms")}>
+        <ViewItem label={t("application.details.signatureOnTerms")} dataTestId="signatureOnTerms">
           {(() => {
             if (application.acceptedTerms === null) {
               return t("t.n/a")
