@@ -85,10 +85,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     name: "minOccupancy",
   })
 
-  const maxOccupancy: number = useWatch({
-    control,
-    name: "maxOccupancy",
-  }) || numberOccupancyOptions
+  const maxOccupancy: number =
+    useWatch({
+      control,
+      name: "maxOccupancy",
+    }) || numberOccupancyOptions
 
   const maxAmiHouseholdSize = 8
 
