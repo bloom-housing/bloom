@@ -22,6 +22,7 @@ import { ReRequestConfirmation } from "./ReRequestConfirmation"
 type FormUserConfirmFields = {
   password: string
   passwordConfirmation: string
+  agree: boolean
 }
 
 const MIN_PASSWORD_LENGTH = 8
