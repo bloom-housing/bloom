@@ -1,5 +1,3 @@
 {
-  "config": {
-    "routePrefix": "tl"
-  }
+  "config.routePrefix": "tl"
 }

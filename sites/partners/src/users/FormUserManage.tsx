@@ -76,9 +76,17 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       id: listing.id,
       label: listing.name,
       value: listing.id,
-      onChange: () => setValue("listings_all", false),
+      inputProps: {
+        onChange: () => {
+          if (getValues("user_listings").length === listings.length) {
+            setValue("listings_all", true)
+          } else {
+            setValue("listings_all", false)
+          }
+        },
+      },
     }))
-  }, [listings, setValue])
+  }, [getValues, listings, setValue])
 
   /**
    * Control listing checkboxes on select/deselect all listings option
@@ -149,10 +157,11 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       roles,
       leasingAgentInListings: leasingAgentInListings,
       jurisdictions: jurisdictions,
+      agreedToTermsOfService: user?.agreedToTermsOfService ?? false,
     }
 
     return body
-  }, [getValues, listings, trigger])
+  }, [getValues, listings, trigger, user?.agreedToTermsOfService])
 
   const onInvite = async () => {
     const body = await createUserBody()
@@ -187,7 +196,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
 
     void resendConfirmation(() =>
       userService
-        .resendConfirmation({ body })
+        .resendPartnerConfirmation({ body })
         .then(() => {
           setSiteAlertMessage(t(`users.confirmationSent`), "success")
         })

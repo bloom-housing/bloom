@@ -32,33 +32,40 @@ export class ListingsService {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
-  public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const getOrderByCondition = (params: ListingsQueryParams): OrderByCondition => {
-      switch (params.orderBy) {
-        case OrderByFieldsEnum.mostRecentlyUpdated:
-          return { "listings.updated_at": "DESC" }
-        case OrderByFieldsEnum.mostRecentlyClosed:
-          return {
-            "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
-            "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
-          }
-        case OrderByFieldsEnum.applicationDates:
-        case undefined:
-          // Default to ordering by applicationDates (i.e. applicationDueDate
-          // and applicationOpenDate) if no orderBy param is specified.
-          return {
-            "listings.applicationDueDate": "ASC",
-            "listings.applicationOpenDate": "DESC",
-            "listings.id": "ASC",
-          }
-        default:
-          throw new HttpException(
-            `OrderBy parameter not recognized or not yet implemented.`,
-            HttpStatus.NOT_IMPLEMENTED
-          )
-      }
+  private static getOrderByCondition(params: ListingsQueryParams): OrderByCondition {
+    switch (params.orderBy) {
+      case OrderByFieldsEnum.mostRecentlyUpdated:
+        return { "listings.updated_at": params.order }
+      case OrderByFieldsEnum.status:
+        return { "listings.status": params.order }
+      case OrderByFieldsEnum.name:
+        return { "listings.name": params.order }
+      case OrderByFieldsEnum.waitlistOpen:
+        return { "listings.isWaitlistOpen": params.order }
+      case OrderByFieldsEnum.unitsAvailable:
+        return { "property.unitsAvailable": params.order }
+      case OrderByFieldsEnum.mostRecentlyClosed:
+        return {
+          "listings.closedAt": { order: params.order, nulls: "NULLS LAST" },
+        }
+      case OrderByFieldsEnum.marketingType:
+        return { "listings.marketingType": params.order }
+      case OrderByFieldsEnum.applicationDates:
+      case undefined:
+        // Default to ordering by applicationDates (i.e. applicationDueDate
+        // and applicationOpenDate) if no orderBy param is specified.
+        return {
+          "listings.applicationDueDate": params.order,
+        }
+      default:
+        throw new HttpException(
+          `OrderBy parameter not recognized or not yet implemented.`,
+          HttpStatus.NOT_IMPLEMENTED
+        )
     }
+  }
 
+  public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
@@ -69,8 +76,9 @@ export class ListingsService {
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
+      .orderBy(ListingsService.getOrderByCondition(params))
       .groupBy("listings.id")
-      .orderBy(getOrderByCondition(params))
+      .addGroupBy("property.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -100,7 +108,7 @@ export class ListingsService {
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(getOrderByCondition(params))
+      .orderBy(ListingsService.getOrderByCondition(params))
       // Order by units.maxOccupancy is applied last so that it affects the order
       // of units _within_ a listing, rather than the overall listing order)
       .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")

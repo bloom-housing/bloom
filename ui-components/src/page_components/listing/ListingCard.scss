@@ -34,19 +34,17 @@
   }
 }
 
-.listings-row_title {
-  @apply font-alt-sans;
-  @apply font-semibold;
-  @apply text-gray-900;
-  @apply text-base;
-  @apply mb-2;
+.listings-row_table {
+  @apply mb-4;
 }
 
-.listings-row_subtitle {
-  @apply font-alt-sans;
-  @apply text-gray-800;
-  @apply text-sm;
-  @apply mb-3;
+.listings-row_footer {
+  @apply flex;
+  @apply justify-end;
+  @apply w-full;
+  a:not(:first-child) {
+    @apply ml-1;
+  }
 }
 
 .listings-row_table {

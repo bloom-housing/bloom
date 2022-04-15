@@ -141,8 +141,8 @@ const LotteryResults = (props: LotteryResultsProps) => {
       <section className="border rounded-md p-8 bg-white">
         <Dropzone
           id="lottery-results-upload"
-          label="Upload Results"
-          helptext="Select PDF file"
+          label={t("listings.sections.lotteryResultsHelperText")}
+          helptext={t("listings.pdfHelperText")}
           uploader={pdfUploader}
           accept="application/pdf"
           progress={progressValue}

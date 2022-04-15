@@ -136,7 +136,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
 
   const getPartialError = (fieldKey: string, fieldSubKey: string) => {
     if (fieldHasError(errors[fieldKey]) && !getValues(fieldSubKey)) {
-      return "Cannot enter a partial address"
+      return t("errors.partialAddress")
     }
   }
 
@@ -183,9 +183,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         <hr className="mt-6 mb-6" />
         <span className="form-section__title">{"Application Address"}</span>
         <span className="form-section__description">
-          {
-            "In the event of paper applications, where do you want applications mailed or dropped off?"
-          }
+          {t("listings.sections.applicationAddressSubtitle")}
         </span>
         <GridSection columns={3}>
           <GridCell>

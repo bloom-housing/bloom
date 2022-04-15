@@ -800,6 +800,48 @@ export class UserService {
   /**
    * Resend confirmation
    */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-partner-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Verifies token is valid
+   */
+  isUserConfirmationTokenValid(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/is-confirmation-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
   resendConfirmation(
     params: {
       /** requestBody */
@@ -1160,6 +1202,8 @@ export class ListingsService {
       view?: string
       /**  */
       orderBy?: OrderByFieldsEnum
+      /**  */
+      order?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1173,6 +1217,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
+        order: params["order"],
       }
       let data = null
 
@@ -3875,6 +3920,11 @@ export interface PaginatedAssets {
   meta: PaginationMeta
 }
 
+export interface UserErrorExtraModel {
+  /**  */
+  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
+}
+
 export interface Login {
   /**  */
   email: string
@@ -4020,6 +4070,12 @@ export interface User {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserCreate {
@@ -4064,6 +4120,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserBasic {
@@ -4126,6 +4185,12 @@ export interface UserBasic {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface Email {
@@ -4227,6 +4292,12 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserFilterParams {
@@ -4292,6 +4363,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserProfileUpdate {
@@ -4336,6 +4410,9 @@ export interface UserProfileUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
@@ -6453,6 +6530,16 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
+}
 export enum EnumLoginMfaType {
   "sms" = "sms",
   "email" = "email",
@@ -6499,6 +6586,11 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "name" = "name",
+  "waitlistOpen" = "waitlistOpen",
+  "status" = "status",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
 }
 
 export enum ListingApplicationAddressType {
