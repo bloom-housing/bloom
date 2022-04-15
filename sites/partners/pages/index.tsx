@@ -86,8 +86,7 @@ export default function ListingsList() {
       {
         headerName: t("listings.listingName"),
         field: "name",
-        sortable: true,
-        sort: "asc",
+        sortable: false,
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
@@ -126,7 +125,9 @@ export default function ListingsList() {
   const { listingDtos, listingsLoading } = useListingsData({
     page: currentPage,
     limit: itemsPerPage,
-    userId: !isAdmin ? profile?.id : undefined,
+    listingIds: !isAdmin
+      ? profile?.leasingAgentInListings?.map((listing) => listing.id)
+      : undefined,
   })
 
   return (

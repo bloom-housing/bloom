@@ -31,7 +31,7 @@ const listingSeed: ListingSeedType = {
   leasingAgentName: "Natasha Gaston",
   leasingAgentPhone: "313-926-8509",
   managementCompany: "NRP Group",
-  managementWebsite: "www.nrpgroup.com/Home/Communities",
+  managementWebsite: "https://www.nrpgroup.com/Home/Communities",
   name: "MLK Homes",
   status: ListingStatus.active,
   image: undefined,

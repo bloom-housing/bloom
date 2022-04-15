@@ -31,7 +31,7 @@ const listingSeed: ListingSeedType = {
   leasingAgentName: "Kristy Schornak",
   leasingAgentPhone: "313-821-0469",
   managementCompany: "Continental Management",
-  managementWebsite: "www.continentalmgt.com",
+  managementWebsite: "https://www.continentalmgt.com",
   name: "Morningside Commons Multi",
   status: ListingStatus.active,
   image: undefined,

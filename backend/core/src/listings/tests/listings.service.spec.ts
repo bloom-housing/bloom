@@ -480,7 +480,7 @@ describe("ListingsService", () => {
   })
 
   describe("ListingsService.list sorting", () => {
-    it("defaults to ordering by application dates when no orderBy param is set", async () => {
+    it("defaults to ordering by name when no orderBy param is set", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
@@ -488,8 +488,7 @@ describe("ListingsService", () => {
       await service.list({})
 
       const expectedOrderByArgument = {
-        "listings.applicationDueDate": "ASC",
-        "listings.applicationOpenDate": "DESC",
+        "listings.name": "ASC",
       }
 
       // The inner query must be ordered so that the ordering applies across all pages (if pagination is requested)

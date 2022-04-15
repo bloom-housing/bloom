@@ -33,7 +33,7 @@ const ncpListing: ListingSeedType = {
   isWaitlistOpen: false,
   leasingAgentPhone: "313-872-7717",
   managementCompany: "KMG Prestige",
-  managementWebsite: "www.kmgprestige.com/communities/",
+  managementWebsite: "https://www.kmgprestige.com/communities/",
   name: "New Center Pavilion",
   status: ListingStatus.active,
   image: undefined,

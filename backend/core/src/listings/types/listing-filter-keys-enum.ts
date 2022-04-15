@@ -1,5 +1,6 @@
 // The names of supported filters on /listings
 export enum ListingFilterKeys {
+  id = "id",
   status = "status",
   name = "name",
   bedrooms = "bedrooms",

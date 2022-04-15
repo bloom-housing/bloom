@@ -4,7 +4,7 @@ import {
   ListingFilterKeys,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
-import { Neighborhoods, Region, regionNeighborhoodMap } from "./regionNeighborhoodMap"
+import { Region, regionNeighborhoodMap } from "./regionNeighborhoodMap"
 
 // TODO(#629): Refactor filter state storage strategy
 // Currently, the knowledge of "what a filter is" is spread across multiple
@@ -50,7 +50,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.availability:
       return EnumListingFilterParamsComparison["NA"]
     default: {
-      const _exhaustiveCheck: never = filterKey
+      const _exhaustiveCheck: any = filterKey
       return _exhaustiveCheck
     }
   }

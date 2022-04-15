@@ -12,6 +12,16 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
+    example: "FAB1A3C6-965E-4054-9A48-A282E92E9426",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.id]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
     example: "Coliseum",
     required: false,
   })

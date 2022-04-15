@@ -33,7 +33,7 @@ const listingSeed: ListingSeedType = {
   leasingAgentName: "James Harrigan",
   leasingAgentPhone: "810-750-7000",
   managementCompany: "Independent Management Service",
-  managementWebsite: "www.imsproperties.net/michigan",
+  managementWebsite: "https://www.imsproperties.net/michigan",
   name: "Martin Luther King II",
   status: ListingStatus.pending,
   image: undefined,

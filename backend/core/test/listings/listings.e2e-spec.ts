@@ -167,7 +167,9 @@ describe("Listings", () => {
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
 
     const listing: ListingDto = { ...res.body.items[0] }
 
@@ -189,7 +191,9 @@ describe("Listings", () => {
   })
 
   it("should add/overwrite image in existing listing", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
 
     const listing: ListingUpdateDto = { ...res.body.items[0] }
 
@@ -256,7 +260,9 @@ describe("Listings", () => {
   })
 
   it("should add/overwrite listing events in existing listing", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
 
     const listing: ListingUpdateDto = { ...res.body.items[0] }
 
@@ -292,7 +298,9 @@ describe("Listings", () => {
   })
 
   it("should add/overwrite and remove listing programs in existing listing", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
     const listing: ListingUpdateDto = { ...res.body.items[0] }
     const newProgram = await programsRepository.save({
       title: "TestTitle",
@@ -518,22 +526,22 @@ describe("Listings", () => {
     })
   })
 
-  it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
+  it("defaults to sorting listings by name", async () => {
     const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
     const listings = res.body.items
 
     // The Coliseum seed has the soonest applicationDueDate (1 day in the future)
-    expect(listings[0].name).toBe("Test: Coliseum")
+    expect(listings[0].name).toBe("Medical Center Village")
 
     // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
     // (5 days in the future). Between the two, Triton 1 appears first because it has
     // the closer applicationOpenDate.
     const secondListing = listings[1]
-    expect(secondListing.name).toBe("Test: Triton 1")
+    expect(secondListing.name).toBe("Melrose Square Homes")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Triton 2")
+    expect(thirdListing.name).toBe("New Center Commons")
     const fourthListing = listings[3]
-    expect(fourthListing.name).toBe("Test: Default, No Preferences")
+    expect(fourthListing.name).toBe("New Center Pavilion")
 
     const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
     const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)

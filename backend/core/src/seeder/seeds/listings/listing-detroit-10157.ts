@@ -38,7 +38,7 @@ const nccListing: ListingSeedType = {
   hrdId: "HRD10157",
   leasingAgentPhone: "313-873-1022",
   managementCompany: "KMG Prestige",
-  managementWebsite: "www.kmgprestige.com/communities/",
+  managementWebsite: "https://www.kmgprestige.com/communities/",
   name: "New Center Commons",
   status: ListingStatus.active,
   image: undefined,

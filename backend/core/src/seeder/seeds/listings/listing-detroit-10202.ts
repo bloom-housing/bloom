@@ -32,7 +32,7 @@ const mcvListing: ListingSeedType = {
   leasingAgentName: "Janelle Henderson",
   leasingAgentPhone: "313-824-2244",
   managementCompany: "Associated Management Co",
-  managementWebsite: "associated-management.rentlinx.com/listings",
+  managementWebsite: "https://associated-management.rentlinx.com/listings",
   name: "River Towers",
   status: ListingStatus.pending,
   image: undefined,

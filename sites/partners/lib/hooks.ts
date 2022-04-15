@@ -24,7 +24,7 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
-  userId?: string
+  listingIds?: string[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -40,22 +40,22 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+export function useListingsData({ page, limit, listingIds }: UseListingsDataProps) {
   const params = {
     page,
     limit,
+    view: "base",
   }
 
   // filter if logged user is an agent
-  if (typeof userId !== undefined) {
+  if (listingIds !== undefined) {
     Object.assign(params, {
       filter: [
         {
-          $comparison: EnumListingFilterParamsComparison["="],
-          leasingAgents: userId,
+          $comparison: EnumListingFilterParamsComparison["IN"],
+          id: listingIds.join(","),
         },
       ],
-      view: "base",
     })
   }
 
