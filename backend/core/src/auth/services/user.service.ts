@@ -475,6 +475,7 @@ export class UserService {
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionService.findOne({ where: { name: "Detroit" } })],
         preferences: (dto.preferences as unknown) as UserPreferences,
+        mfaEnabled: false,
       },
       authContext
     )

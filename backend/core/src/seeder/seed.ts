@@ -382,7 +382,7 @@ async function seed() {
   await userRepo.save(admin)
   await userRepo.save({
     ...mfaUser,
-    mfaEnabled: true,
+    mfaEnabled: false,
     mfaCode: "123456",
     mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
   })
