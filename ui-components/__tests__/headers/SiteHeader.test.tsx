@@ -1,14 +1,15 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, getByLabelText } from "@testing-library/react"
 import { SiteHeader } from "../../src/headers/SiteHeader"
 
 afterEach(cleanup)
 
 describe("<SiteHeader>", () => {
   it("renders default state", () => {
-    const { getByText, queryByText } = render(
+    const { getByLabelText, getByText, queryByText } = render(
       <SiteHeader
         homeURL={"/"}
+        languageNavLabel='Choose a language'
         languages={[
           { label: "English", onClick: () => console.log("Clicked English"), active: true },
           { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
@@ -62,5 +63,6 @@ describe("<SiteHeader>", () => {
     expect(getByText("English")).toBeTruthy()
     expect(getByText("中文")).toBeTruthy()
     expect(getByText("Español")).toBeTruthy()
+    expect(getByLabelText("Choose a language")).toBeTruthy()
   })
 })
