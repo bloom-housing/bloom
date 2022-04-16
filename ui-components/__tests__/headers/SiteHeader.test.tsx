@@ -9,7 +9,7 @@ describe("<SiteHeader>", () => {
     const { getByLabelText, getByText, queryByText } = render(
       <SiteHeader
         homeURL={"/"}
-        languageNavLabel='Choose a language'
+        languageNavLabel="Choose a language"
         languages={[
           { label: "English", onClick: () => console.log("Clicked English"), active: true },
           { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
