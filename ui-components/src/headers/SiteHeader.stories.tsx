@@ -25,6 +25,7 @@ export const withLanguage = () => (
       { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
       { label: "中文", onClick: () => console.log("Clicked 中文"), active: false },
     ]}
+    languageNavLabel='Choose a Language'
     logoSrc="/images/logo_glyph.svg"
     title="Alameda County Housing Portal"
     menuLinks={[]}
