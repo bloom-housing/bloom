@@ -118,9 +118,15 @@ const ApplicationAddress = () => {
     id: item.id,
     label: t(`t.${item.id}`),
     defaultChecked: application?.contactPreferences?.includes(item.id) || false,
+<<<<<<< HEAD
     disabled: 
       (item.id === 'phone' && noPhone && true) || 
       (item.id === 'email' && application.applicant.noEmail && true)
+=======
+    disabled:
+      (item.id === "phone" && noPhone && true) ||
+      (item.id === "email" && application.applicant.noEmail && true),
+>>>>>>> 179c57f29d65bb306a5e32e798cacc2606f47a57
   }))
 
   useEffect(() => {
