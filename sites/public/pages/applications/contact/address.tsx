@@ -118,6 +118,7 @@ const ApplicationAddress = () => {
     id: item.id,
     label: t(`t.${item.id}`),
     defaultChecked: application?.contactPreferences?.includes(item.id) || false,
+    disabled: item.id === 'phone' && noPhone && true || item.id === 'email' && application.applicant.noEmail && true,
   }))
 
   useEffect(() => {
