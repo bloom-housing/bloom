@@ -1533,5 +1533,6 @@
   "resources.utilityAssistance": "Utility assistance",
   "resources.homelessnessServices": "Homelessness services",
   "resources.detroitLandBankAuthority": "Detroit Land Bank Authority",
-  "resources.homeRepairResources": "Home repair resources"
+  "resources.homeRepairResources": "Home repair resources",
+  "account.noFavorites": "It looks like you haven't favorited any listings yet."
 }

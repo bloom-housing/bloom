@@ -22,11 +22,9 @@ const FavoriteButton = ({ id, name }: FavoriteButtonProps) => {
     favoriteIds: [],
   }
 
-  const [listingFavorited, setListingFavorited] = useState(preferences.favoriteIds?.includes(id))
-
-  useEffect(() => {
-    setListingFavorited(preferences.favoriteIds?.includes(id))
-  }, [preferences.favoriteIds, id])
+  const [listingFavorited, setListingFavorited] = useState(
+    preferences.favoriteIds?.includes(id) ?? false
+  )
 
   if (!profile) {
     return <span />

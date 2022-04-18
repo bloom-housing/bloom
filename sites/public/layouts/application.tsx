@@ -51,6 +51,10 @@ const Layout = (props) => {
           href: "/account/edit",
         },
         {
+          title: t("account.myFavorites"),
+          href: "/account/favorites",
+        },
+        {
           title: t("nav.signOut"),
           onClick: async () => {
             setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
