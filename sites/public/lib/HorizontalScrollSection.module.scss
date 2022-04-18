@@ -16,6 +16,7 @@ $icon-large: 40px;
 
 .title {
   align-items: center;
+  justify-content: center;
   display: flex;
   padding: 0 0.5rem;
 
@@ -95,6 +96,10 @@ $icon-large: 40px;
 
   @screen sm {
     scroll-padding-inline-start: 1rem;
+  }
+
+  @media (min-width: 1600px) {
+    justify-content: center;
   }
 }
 

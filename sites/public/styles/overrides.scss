@@ -33,6 +33,7 @@ $header-desktop-min-size: 1024px;
 .homepage-extra {
   @apply text-center;
   @apply text-base;
+  @apply mb-10;
 }
 
 // Fix rtl border between action blocks on the homepage.

@@ -135,21 +135,7 @@ const Layout = (props) => {
                 {t("footer.forGeneralInquiries")}
               </h5>
               <p className="text-left">
-                <Markdown
-                  options={{
-                    overrides: {
-                      a: {
-                        component: ({ children, ...props }) => (
-                          <a {...props} className="font-bold">
-                            {children}
-                          </a>
-                        ),
-                      },
-                    },
-                  }}
-                >
-                  {t("footer.contactInfo")}
-                </Markdown>
+                <Markdown>{t("footer.contactInfo")}</Markdown>
               </p>
             </FooterSection>
           </div>

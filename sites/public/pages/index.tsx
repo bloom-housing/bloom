@@ -108,7 +108,28 @@ export default function Home({ latestListings }) {
       >
         <p className="max-w-md mx-auto">{t("welcome.heroText")}</p>
       </Hero>
-      <div className="homepage-extra">
+      {showLatestListings && latestListings?.items && (
+        <HorizontalScrollSection
+          title={t("welcome.latestListings")}
+          subtitle={getLastUpdatedString(latestListings.items)}
+          scrollAmount={560}
+          icon="clock"
+          className={`${styles["latest-listings"]} latest-listings`}
+        >
+          {getListings(latestListings.items)}
+        </HorizontalScrollSection>
+      )}
+      <HorizontalScrollSection
+        title={t("welcome.cityRegions")}
+        scrollAmount={311}
+        icon="map"
+        className={styles.regions}
+      >
+        {Object.entries(Region).map((region) => (
+          <RegionButton region={region} />
+        ))}
+      </HorizontalScrollSection>
+      <section className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
           <ActionBlock
             className="flex-1 has-bold-header"
@@ -131,28 +152,7 @@ export default function Home({ latestListings }) {
             ]}
           />
         </div>
-      </div>
-      {showLatestListings && latestListings?.items && (
-        <HorizontalScrollSection
-          title={t("welcome.latestListings")}
-          subtitle={getLastUpdatedString(latestListings.items)}
-          scrollAmount={560}
-          icon="clock"
-          className={`${styles["latest-listings"]} latest-listings`}
-        >
-          {getListings(latestListings.items)}
-        </HorizontalScrollSection>
-      )}
-      <HorizontalScrollSection
-        title={t("welcome.cityRegions")}
-        scrollAmount={311}
-        icon="map"
-        className={styles.regions}
-      >
-        {Object.entries(Region).map((region) => (
-          <RegionButton region={region} />
-        ))}
-      </HorizontalScrollSection>
+      </section>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
       />
