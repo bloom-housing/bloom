@@ -20,7 +20,7 @@ import {
   Heading,
   ImageCard,
   InfoCard,
-  LeasingAgent,
+  Contact,
   ListSection,
   ListingDetailItem,
   ListingDetails,
@@ -651,7 +651,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            {!appOpenInFuture && <LeasingAgent listing={listing} />}
+            {!appOpenInFuture && <Contact sectionTitle={"Contact Leasing Agent"} />}
           </aside>
         </ListingDetailItem>
 

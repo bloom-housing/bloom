@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { LeasingAgent } from "../../src/page_components/listing/listing_sidebar/LeasingAgent"
+import { LeasingAgent } from "page_components/listing/listing_sidebar/Contact"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import { Listing } from "@bloom-housing/backend-core/types"
 

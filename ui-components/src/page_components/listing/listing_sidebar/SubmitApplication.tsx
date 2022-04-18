@@ -1,7 +1,7 @@
 import * as React from "react"
 import { t } from "../../../helpers/translator"
-import { Address } from "../../../helpers/address"
-import { SidebarAddress } from "./SidebarAddress"
+import { Address } from "../../../page_components/listing/listing_sidebar/MultiLineAddress"
+import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -60,7 +60,7 @@ const SubmitApplication = (props: ApplicationAddressesProps) => {
             <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
             <>
               <p className="text-gray-700">{props.applicationOrganization}</p>
-              <SidebarAddress address={props.applicationMailingAddress} />
+              <ContactAddress address={props.applicationMailingAddress} />
             </>
             <p className="mt-4 text-tiny text-gray-750">{getPostmarkString()}</p>
           </>
@@ -69,9 +69,9 @@ const SubmitApplication = (props: ApplicationAddressesProps) => {
           <>
             {props.applicationMailingAddress && <OrDivider bgColor="gray-100" />}
             <h3 className="text-caps-tiny">{t("listings.apply.dropOffApplication")}</h3>
-            <SidebarAddress
+            <ContactAddress
               address={props.applicationDropOffAddress}
-              officeHours={props.applicationDropOffAddressOfficeHours}
+              // officeHours={props.applicationDropOffAddressOfficeHours}
             />
           </>
         )}

@@ -3,8 +3,8 @@ import { t } from "../../../helpers/translator"
 import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
-import { Address } from "../../../helpers/address"
-import { SidebarAddress } from "./SidebarAddress"
+import { Address } from "../../../page_components/listing/listing_sidebar/MultiLineAddress"
+import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -96,9 +96,9 @@ const GetApplication = (props: ApplicationsProps) => {
             <OrDivider bgColor="white" />
           )}
           <h3 className="text-caps-tiny">{t("listings.apply.pickUpAnApplication")}</h3>
-          <SidebarAddress
+          <ContactAddress
             address={props.applicationPickUpAddress}
-            officeHours={props.applicationPickUpAddressOfficeHours}
+            // officeHours={props.applicationPickUpAddressOfficeHours}
           />
         </>
       )}

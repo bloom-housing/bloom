@@ -3,7 +3,10 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
 
 import "./ListingMap.scss"
-import { MultiLineAddress, Address } from "../../helpers/address"
+import {
+  MultiLineAddress,
+  Address,
+} from "../../page_components/listing/listing_sidebar/MultiLineAddress"
 import { useIntersect } from "../../.."
 
 export interface ListingMapProps {
