@@ -133,7 +133,7 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
   let groupedUnitData: Record<string, React.ReactNode>[] = null
 
   // unit group summary
-  groupedUnitData = listing.unitSummaries.unitGroupSummary?.map((group) => {
+  groupedUnitData = listing?.unitSummaries?.unitGroupSummary?.map((group) => {
     let rentRange = null
     let rentAsPercentIncomeRange = null
     if (group.rentRange && group.rentRange.min === group.rentRange.max) {
