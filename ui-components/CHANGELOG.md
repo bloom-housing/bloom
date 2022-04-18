@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.3...@bloom-housing/ui-components@4.2.2-alpha.4) (2022-04-18)
+
+
+### Bug Fixes
+
+* add optional prop for Language Nav aria label ([#2672](https://github.com/bloom-housing/bloom/issues/2672)) ([5f1b3f6](https://github.com/bloom-housing/bloom/commit/5f1b3f66f5269cfd9285b958f608cdb41e779c70))
+
+
+
+
+
 ## [4.2.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.2...@bloom-housing/ui-components@4.2.2-alpha.3) (2022-04-18)
 
 
