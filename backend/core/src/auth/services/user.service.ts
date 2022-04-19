@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, FindConditions, Repository } from "typeorm"
+import { DeepPartial, Repository } from "typeorm"
 import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import dayjs from "dayjs"
@@ -46,13 +46,14 @@ import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
+import { UserRepository } from "../repositories/user-repository"
 
 dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
     @InjectRepository(Application) private readonly applicationsRepository: Repository<Application>,
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,
@@ -63,18 +64,12 @@ export class UserService {
     private readonly smsMfaService: SmsMfaService
   ) {}
 
-  public async findByEmail(email: string) {
-    return await this.userRepository.findOne({
-      where: { email: email.toLowerCase() },
-      relations: ["leasingAgentInListings"],
-    })
-  }
-
-  public async find(options: FindConditions<User>) {
-    return await this.userRepository.findOne({
-      where: options,
-      relations: ["leasingAgentInListings"],
-    })
+  public async findById(id: string) {
+    const user =  await this.userRepository.findById(id)
+    if (!user) {
+      throw new NotFoundException()
+    }
+    return user
   }
 
   public static isPasswordOutdated(user: User) {
@@ -84,14 +79,6 @@ export class UserService {
       user.roles &&
       (user.roles.isAdmin || user.roles.isPartner)
     )
-  }
-
-  public async findOneOrFail(options: FindConditions<User>) {
-    const user = await this.find(options)
-    if (!user) {
-      throw new NotFoundException()
-    }
-    return user
   }
 
   public async list(
@@ -104,11 +91,11 @@ export class UserService {
       PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
-    const distinctIDQB = this._getQb(false)
+    const distinctIDQB = this.userRepository.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
     distinctIDQB.orderBy("user.id")
-    const qb = this._getQb()
+    const qb = this.userRepository.getQb()
 
     if (params.filter) {
       const filter = new UserQueryFilter()
@@ -138,13 +125,7 @@ export class UserService {
   }
 
   async update(dto: UserUpdateDto, authContext: AuthContext) {
-    const user = await this.find({
-      id: dto.id,
-    })
-    if (!user) {
-      throw new NotFoundException()
-    }
-
+    const user = await this.findById(dto.id)
     let passwordHash
     let passwordUpdatedAt
     if (dto.password) {
@@ -201,7 +182,7 @@ export class UserService {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
 
-    const user = await this.find({ id: token.id })
+    const user = await this.userRepository.findById(token.id)
     if (!user) {
       console.error(`Trying to confirm non-existing user ${token.id}.`)
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
@@ -232,7 +213,7 @@ export class UserService {
   }
 
   public async resendPartnerConfirmation(dto: EmailDto) {
-    const user = await this.findByEmail(dto.email)
+    const user = await this.userRepository.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -270,13 +251,13 @@ export class UserService {
   public async isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
       const token = decode(dto.token, process.env.APP_SECRET)
-      const user = await this.find({ id: token.id })
+      const user = await this.userRepository.findById(token.id)
       await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
       console.error("isUserConfirmationTokenValid error = ", e)
       try {
-        const user = await this.find({ confirmationToken: dto.token })
+        const user = await this.userRepository.findByConfirmationToken(dto.token)
         await this.setHitConfirmationURl(user, dto.token)
       } catch (e) {
         console.error("isUserConfirmationTokenValid error = ", e)
@@ -295,7 +276,7 @@ export class UserService {
   }
 
   public async resendPublicConfirmation(dto: EmailDto) {
-    const user = await this.findByEmail(dto.email)
+    const user = await this.userRepository.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -346,7 +327,7 @@ export class UserService {
         ...dto,
       })
     }
-    const existingUser = await this.findByEmail(dto.email)
+    const existingUser = await this.userRepository.findByEmail(dto.email)
 
     if (existingUser) {
       if (!existingUser.roles && dto.roles) {
@@ -395,7 +376,7 @@ export class UserService {
   }
 
   public async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await this.findByEmail(dto.email)
+    const user = await this.userRepository.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -409,7 +390,7 @@ export class UserService {
   }
 
   public async updatePassword(dto: UpdatePasswordDto) {
-    const user = await this.find({ resetToken: dto.token })
+    const user = await this.userRepository.findByResetToken(dto.token)
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
@@ -424,19 +405,6 @@ export class UserService {
     user.resetToken = null
     await this.userRepository.save(user)
     return this.authService.generateAccessToken(user)
-  }
-
-  private _getQb(withSelect = true) {
-    const qb = this.userRepository.createQueryBuilder("user")
-    if (withSelect) {
-      qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
-      qb.leftJoinAndSelect("user.roles", "user_roles")
-    } else {
-      qb.leftJoin("user.leasingAgentInListings", "listings")
-      qb.leftJoin("user.roles", "user_roles")
-    }
-
-    return qb
   }
 
   async invitePartnersPortalUser(dto: UserInviteDto, authContext: AuthContext) {
@@ -559,4 +527,5 @@ export class UserService {
           phoneNumberVerified: user.phoneNumberVerified,
         }
   }
+
 }
