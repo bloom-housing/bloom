@@ -302,7 +302,7 @@ const ApplicationsList = () => {
               </div>
               <div className="mt-2">
                 {!validSearch && (
-                  <AlertBox type="notice">Enter at least 3 characters to search</AlertBox>
+                  <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
                 )}
               </div>
               <div className="flex-row">
