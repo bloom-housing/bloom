@@ -45,8 +45,10 @@ import {
   getGenericAddress,
   getHmiSummary,
   getImageTagLabelFromListing,
+  getListingTags,
   getUnitGroupSummary,
   openInFuture,
+  getListingTag,
 } from "../lib/helpers"
 
 interface ListingProps {
@@ -295,6 +297,11 @@ export const ListingView = (props: ListingProps) => {
               {t("t.viewOnMap")}
             </a>
           </p>
+        </div>
+        <div className={"flex flex-wrap mx-2"}>
+          {getListingTags(listing.listingPrograms, listing.features)?.map((cardTag) =>
+            getListingTag(cardTag)
+          )}
         </div>
         <div className="text-right px-2">
           <FavoriteButton name={listing.name} id={listing.id} />

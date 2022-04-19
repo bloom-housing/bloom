@@ -95,7 +95,11 @@ const ListingCard = (props: ListingCardProps) => {
           <div className={"inline-flex flex-wrap justify-start w-full"}>
             {cardTags?.map((cardTag, index) => {
               return (
-                <Tag styleType={AppearanceStyleType.warning} className={"mr-2 mb-2"} key={index}>
+                <Tag
+                  styleType={AppearanceStyleType.accentLight}
+                  className={"mr-2 mb-2 font-bold px-3 py-2"}
+                  key={index}
+                >
                   {cardTag.iconType && (
                     <Icon
                       size={"medium"}

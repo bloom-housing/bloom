@@ -36,6 +36,7 @@ const views: Views = {
       "features.heatingInUnit",
       "features.acInUnit",
       "features.laundryInBuilding",
+      "listingPrograms.ordinal",
       "listingsProgramsProgram.id",
       "listingsProgramsProgram.title",
       "summaryUnitType.numBedrooms",
