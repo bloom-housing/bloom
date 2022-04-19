@@ -7,6 +7,7 @@ import { Address } from "../../../page_components/listing/listing_sidebar/MultiL
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
+import Heading from "../../../headers/Heading"
 
 export interface PaperApplication {
   fileURL: string
@@ -95,11 +96,13 @@ const GetApplication = (props: ApplicationsProps) => {
           {props.applicationsOpen && (props.onlineApplicationURL || props.paperMethod) && (
             <OrDivider bgColor="white" />
           )}
-          <h3 className="text-caps-tiny">{t("listings.apply.pickUpAnApplication")}</h3>
-          <ContactAddress
-            address={props.applicationPickUpAddress}
-            // officeHours={props.applicationPickUpAddressOfficeHours}
-          />
+          <Heading priority={3} style={"sidebarSubHeader"}>
+            {t("listings.apply.pickUpAnApplication")}
+          </Heading>
+          <ContactAddress address={props.applicationPickUpAddress} />
+          <Heading priority={3} style={"sidebarSubHeader"}>
+            {props.applicationPickUpAddressOfficeHours}
+          </Heading>
         </>
       )}
     </section>

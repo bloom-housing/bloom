@@ -16,6 +16,7 @@ const HeaderStyleMap = {
   tableSubheader: "table-subheader",
   sidebarHeader: "text-caps-underline",
   categoryHeader: "category-header",
+  sidebarSubHeader: "text-caps-tiny",
 }
 
 const Heading = (props: HeadingProps) => {

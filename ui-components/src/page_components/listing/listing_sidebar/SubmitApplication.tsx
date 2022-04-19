@@ -4,6 +4,7 @@ import { Address } from "../../../page_components/listing/listing_sidebar/MultiL
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
+import Heading from "../../../headers/Heading"
 
 export interface PostmarkedApplication {
   postmarkedApplicationsReceivedByDate: string | null
@@ -57,7 +58,9 @@ const SubmitApplication = (props: ApplicationAddressesProps) => {
         <div className="text-serif-lg">{t("listings.apply.submitAPaperApplication")}</div>
         {props.applicationMailingAddress && (
           <>
-            <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
+            <Heading priority={3} style={"sidebarSubHeader"}>
+              {t("listings.apply.sendByUsMail")}
+            </Heading>
             <>
               <p className="text-gray-700">{props.applicationOrganization}</p>
               <ContactAddress address={props.applicationMailingAddress} />
@@ -68,11 +71,13 @@ const SubmitApplication = (props: ApplicationAddressesProps) => {
         {props.applicationDropOffAddress && (
           <>
             {props.applicationMailingAddress && <OrDivider bgColor="gray-100" />}
-            <h3 className="text-caps-tiny">{t("listings.apply.dropOffApplication")}</h3>
-            <ContactAddress
-              address={props.applicationDropOffAddress}
-              // officeHours={props.applicationDropOffAddressOfficeHours}
-            />
+            <Heading priority={3} style={"sidebarSubHeader"}>
+              {t("listings.apply.dropOffApplication")}
+            </Heading>
+            <ContactAddress address={props.applicationDropOffAddress} />
+            <Heading priority={3} style={"sidebarSubHeader"}>
+              {props.applicationDropOffAddressOfficeHours}
+            </Heading>
           </>
         )}
       </section>

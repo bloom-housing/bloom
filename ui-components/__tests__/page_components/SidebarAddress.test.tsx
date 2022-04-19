@@ -11,11 +11,8 @@ describe("<SidebarAddress>", () => {
     expect(getByText(ArcherListing.buildingAddress?.street || "", { exact: false })).toBeTruthy()
     expect(getByText("Get Directions")).toBeTruthy()
   })
-  it("renders with office hours and no address", () => {
-    const { getByText, queryByText } = render(
-      <ContactAddress officeHours={"These are my office hours"} />
-    )
+  it("renders with no address", () => {
+    const { queryByText } = render(<ContactAddress />)
     expect(queryByText("Get Directions")).toBeNull()
-    expect(getByText("These are my office hours")).toBeTruthy()
   })
 })

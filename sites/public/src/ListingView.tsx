@@ -651,7 +651,32 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            {!appOpenInFuture && <Contact sectionTitle={"Contact Leasing Agent"} />}
+            {!appOpenInFuture && (
+              <Contact
+                sectionTitle={t("leasingAgent.contact")}
+                additionalInformation={
+                  listing.leasingAgentOfficeHours
+                    ? [
+                        {
+                          title: t("leasingAgent.officeHours"),
+                          content: listing.leasingAgentOfficeHours,
+                        },
+                      ]
+                    : undefined
+                }
+                contactAddress={listing.leasingAgentAddress}
+                contactEmail={listing.leasingAgentEmail}
+                contactName={listing.leasingAgentName}
+                contactPhoneNumber={listing.leasingAgentPhone}
+                contactPhoneNumberNote={t("leasingAgent.dueToHighCallVolume")}
+                contactTitle={listing.leasingAgentTitle}
+                strings={{
+                  email: t("t.email"),
+                  website: t("t.website"),
+                  getDirections: t("t.getDirections"),
+                }}
+              />
+            )}
           </aside>
         </ListingDetailItem>
 

@@ -2,6 +2,7 @@ import * as React from "react"
 import { ContactAddress } from "./ContactAddress"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Address } from "./MultiLineAddress"
+import Heading from "../../../headers/Heading"
 
 export interface ContactProps {
   additionalInformation?: { title: string; content: string | React.ReactNode }[]
@@ -12,10 +13,8 @@ export interface ContactProps {
   contactPhoneNumber?: string
   contactPhoneNumberNote?: string
   contactTitle?: string
-  emailString?: string
   sectionTitle: string
-  mapString?: string
-  websiteString?: string
+  strings?: { email?: string; getDirections?: string; website?: string }
 }
 
 const Contact = ({
@@ -27,10 +26,8 @@ const Contact = ({
   contactPhoneNumber,
   contactPhoneNumberNote,
   contactTitle,
-  emailString,
   sectionTitle,
-  mapString,
-  websiteString,
+  strings,
 }: ContactProps) => {
   const formattedPhoneLink = contactPhoneNumber
     ? `tel:${contactPhoneNumber.replace(/[-()]/g, "")}`
@@ -50,42 +47,46 @@ const Contact = ({
 
       {contactPhoneNumber && (
         <>
-          <p className="mt-5">
+          <p className="mt-3">
             <a href={formattedPhoneLink}>
               <Icon symbol="phone" size="medium" fill={IconFillColors.primary} className={"pr-2"} />
               {contactPhoneNumber}
             </a>
           </p>
           {contactPhoneNumberNote && (
-            <p className="text-sm text-gray-700 pl-6">{contactPhoneNumberNote}</p>
+            <p className="text-sm text-gray-700">{contactPhoneNumberNote}</p>
           )}
         </>
       )}
 
       {contactEmail && (
-        <p className="my-5">
+        <p className="my-3">
           <a href={`mailto:${contactEmail}`}>
             <Icon symbol="mail" size="medium" fill={IconFillColors.primary} className={"pr-2"} />
-            {emailString && emailString}
+            {strings?.email && strings?.email}
           </a>
         </p>
       )}
 
       {formattedCompanyWebsite && (
-        <p className="my-5">
+        <p className="my-3">
           <a href={formattedCompanyWebsite} target="_blank" rel="noreferrer noopener">
             <Icon symbol="globe" size="medium" fill={IconFillColors.primary} className={"pr-2"} />
-            {websiteString && websiteString}
+            {strings?.website && strings?.website}
           </a>
         </p>
       )}
 
-      {contactAddress && <ContactAddress address={contactAddress} mapString={mapString} />}
+      {contactAddress && (
+        <ContactAddress address={contactAddress} mapString={strings?.getDirections} />
+      )}
 
       {additionalInformation?.map((info) => {
         return (
           <>
-            <h3 className="text-caps-tiny ">{info.title}</h3>
+            <Heading priority={3} style={"sidebarSubHeader"}>
+              {info.title}
+            </Heading>
             <div className="text-gray-800 text-tiny markdown">{info.content}</div>
           </>
         )
