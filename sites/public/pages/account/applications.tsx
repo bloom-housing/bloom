@@ -80,9 +80,9 @@ const Applications = () => {
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
         <Head>
-          <title>{t("nav.myApplications")}</title>
+          <title>{t("account.myApplications")}</title>
         </Head>
-        <MetaTags title={t("nav.myApplications")} description="" />
+        <MetaTags title={t("account.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
             <DashBlocks>

@@ -47,7 +47,7 @@ const DateField = (props: DateFieldProps) => {
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder="MM"
+          placeholder={t("account.settings.placeholders.month")}
           defaultValue={defaultDate?.month ?? ""}
           error={error?.month !== undefined}
           validation={{
@@ -68,7 +68,7 @@ const DateField = (props: DateFieldProps) => {
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder="DD"
+          placeholder={t("account.settings.placeholders.day")}
           defaultValue={defaultDate?.day ?? ""}
           error={error?.day !== undefined}
           validation={{
@@ -89,7 +89,7 @@ const DateField = (props: DateFieldProps) => {
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder="YYYY"
+          placeholder={t("account.settings.placeholders.year")}
           defaultValue={defaultDate?.year ?? ""}
           error={error?.year !== undefined}
           validation={{

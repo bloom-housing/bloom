@@ -1,8 +1,8 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
-import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDefined, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import dayjs from "dayjs"
-import { OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
@@ -18,6 +18,7 @@ import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { ListingImageDto } from "./listing-image.dto"
+import { IncomePeriod } from "../../applications/types/income-period-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -126,19 +127,8 @@ export class ListingDto extends OmitType(Listing, [
   result?: AssetDto | null
 
   @Expose()
-  @Transform(
-    (_value, listing) => {
-      if (
-        dayjs(listing.applicationDueDate).isBefore(dayjs()) &&
-        listing.status !== ListingStatus.pending
-      ) {
-        listing.status = ListingStatus.closed
-      }
-
-      return listing.status
-    },
-    { toClassOnly: true }
-  )
+  @IsEnum(ListingStatus, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
 
   @Expose()

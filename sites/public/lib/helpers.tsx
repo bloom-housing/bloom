@@ -105,13 +105,16 @@ export const getListings = (listings) => {
         imageCardProps={{
           imageUrl:
             imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          subtitle: getListingCardSubtitle(listing.buildingAddress),
-          title: listing.name,
           href: `/listing/${listing.id}/${listing.urlSlug}`,
-          tagLabel: listing.reservedCommunityType
-            ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+          tags: listing.reservedCommunityType
+            ? [
+                {
+                  text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+                },
+              ]
             : undefined,
           statuses: [getListingApplicationStatus(listing)],
+          description: listing.name,
         }}
         tableProps={{
           headers: unitSummariesHeaders,
@@ -119,9 +122,13 @@ export const getListings = (listings) => {
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
-        seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
-        tableHeaderProps={{
-          tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
+        footerButtons={[
+          { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
+        ]}
+        contentProps={{
+          contentHeader: { text: listing.name },
+          contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
+          tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
         }}
       />
     )

@@ -25,6 +25,7 @@ describe("<Timeout>", () => {
             mfaEnabled: false,
             passwordUpdatedAt: new Date(),
             passwordValidForDays: 180,
+            agreedToTermsOfService: true,
           },
           signOut: () => {},
         }}
