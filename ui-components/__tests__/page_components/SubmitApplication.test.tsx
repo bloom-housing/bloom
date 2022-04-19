@@ -11,7 +11,7 @@ import {
 
 afterEach(cleanup)
 
-describe("<ApplicationAddresses>", () => {
+describe("<SubmitApplication>", () => {
   it("includes mailing address, includes drop off address, includes due date, includes postmarks, includes office hours", () => {
     const { getByText } = render(<AllFields />)
     expect(getByText("Submit a Paper Application")).toBeTruthy()

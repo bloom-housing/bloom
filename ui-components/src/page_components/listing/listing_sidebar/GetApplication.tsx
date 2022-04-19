@@ -6,7 +6,6 @@ import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 import { Address } from "../../../page_components/listing/listing_sidebar/MultiLineAddress"
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
-import { ListingStatus } from "@bloom-housing/backend-core/types"
 import Heading from "../../../headers/Heading"
 
 export interface PaperApplication {
@@ -24,16 +23,11 @@ export interface ApplicationsProps {
   applicationPickUpAddressOfficeHours?: string
   applicationPickUpAddress?: Address
   preview?: boolean
-  listingStatus?: ListingStatus
 }
 
 const GetApplication = (props: ApplicationsProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
-
-  if (props.listingStatus === ListingStatus.closed) {
-    return null
-  }
 
   return (
     <section className="aside-block">
@@ -100,9 +94,14 @@ const GetApplication = (props: ApplicationsProps) => {
             {t("listings.apply.pickUpAnApplication")}
           </Heading>
           <ContactAddress address={props.applicationPickUpAddress} />
-          <Heading priority={3} style={"sidebarSubHeader"}>
-            {props.applicationPickUpAddressOfficeHours}
-          </Heading>
+          {props.applicationPickUpAddressOfficeHours && (
+            <>
+              <Heading priority={3} style={"sidebarSubHeader"}>
+                {t("leasingAgent.officeHours")}
+              </Heading>
+              {props.applicationPickUpAddressOfficeHours}
+            </>
+          )}
         </>
       )}
     </section>

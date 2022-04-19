@@ -8,6 +8,7 @@ import {
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -351,7 +352,6 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
-        listingStatus={listing.status}
       />
       <SubmitApplication
         applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
@@ -485,7 +485,13 @@ export const ListingView = (props: ListingProps) => {
               }}
             />
           )}
-          {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
+          {hasNonReferralMethods &&
+          !applicationsClosed &&
+          listing.status !== ListingStatus.closed ? (
+            <>{applySidebar()}</>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <ListingDetails>
@@ -625,7 +631,10 @@ export const ListingView = (props: ListingProps) => {
                   }}
                 />
               )}
-              {hasNonReferralMethods && !applicationsClosed && applySidebar()}
+              {hasNonReferralMethods &&
+                !applicationsClosed &&
+                listing.status !== ListingStatus.closed &&
+                applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication
                   phoneNumber={
