@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.2.1...@bloom-housing/partners@4.2.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* listings pending translation for ag grid ([5b42ab0](https://github.com/seanmalbert/bloom/commit/5b42ab006abddc19a0fcc260fbf519c3903e44df))
+
+
+
+
+
 ## [4.2.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.2.0...@bloom-housing/partners@4.2.1) (2022-04-11)
 
 

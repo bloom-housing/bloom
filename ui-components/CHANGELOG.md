@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.2.1...@bloom-housing/ui-components@4.2.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* footer nav widths ([27a704f](https://github.com/seanmalbert/bloom/commit/27a704f1dfab8b759fdf922ae8a41a1117d9c039))
+
+
+
+
+
 ## [4.2.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.2.0...@bloom-housing/ui-components@4.2.1) (2022-04-11)
 
 

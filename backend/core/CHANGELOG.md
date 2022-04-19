@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.1...@bloom-housing/backend-core@4.2.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* adds region to user phone # validation ([#2652](https://github.com/seanmalbert/bloom/issues/2652)) ([d3e0c40](https://github.com/seanmalbert/bloom/commit/d3e0c4041d9aba4d703da85596d59ec765ad179a))
+
+
+
+
+
 ## [4.2.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.0...@bloom-housing/backend-core@4.2.1) (2022-04-11)
 
 
