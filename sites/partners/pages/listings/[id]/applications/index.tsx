@@ -134,7 +134,7 @@ const ApplicationsList = () => {
       setValidSearch(false)
     }
   }
-  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
+  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 500))
   useEffect(() => {
     setCurrentPage(1)
     debounceFilter.current(filterField)
@@ -297,13 +297,15 @@ const ApplicationsList = () => {
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <div className="flex justify-between">
-              <div className="w-56">
-                <Field name="filter-input" register={register} placeholder={t("t.filter")} />
-              </div>
-              <div className="mt-2">
-                {!validSearch && (
-                  <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
-                )}
+              <div className="flex flex-wrap">
+                <div className="mr-5 w-56">
+                  <Field name="filter-input" register={register} placeholder={t("t.filter")} />
+                </div>
+                <div className="mt-2">
+                  {!validSearch && (
+                    <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
+                  )}
+                </div>
               </div>
               <div className="flex-row">
                 <LocalizedLink href={`/listings/${listingId}/applications/add`}>
