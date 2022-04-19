@@ -13,26 +13,18 @@ export class UserRepository extends Repository<User> {
   }
 
   public async findByEmail(email: string) {
-    return this.getQb()
-      .where("user.email = :email", {email: email.toLowerCase()})
-      .getOne()
+    return this.getQb().where("user.email = :email", { email: email.toLowerCase() }).getOne()
   }
 
   public async findById(id: string) {
-    return this.getQb()
-      .where("user.id = :id", {id})
-      .getOne()
+    return this.getQb().where("user.id = :id", { id }).getOne()
   }
 
   public async findByConfirmationToken(token: string) {
-    return this.getQb()
-      .where("user.confirmationToken = :token", {token})
-      .getOne()
+    return this.getQb().where("user.confirmationToken = :token", { token }).getOne()
   }
 
   public async findByResetToken(token: string) {
-    return this.getQb()
-      .where("user.resetToken = :token", {token})
-      .getOne()
+    return this.getQb().where("user.resetToken = :token", { token }).getOne()
   }
 }

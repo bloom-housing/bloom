@@ -65,7 +65,7 @@ export class UserService {
   ) {}
 
   public async findById(id: string) {
-    const user =  await this.userRepository.findById(id)
+    const user = await this.userRepository.findById(id)
     if (!user) {
       throw new NotFoundException()
     }
@@ -527,5 +527,4 @@ export class UserService {
           phoneNumberVerified: user.phoneNumberVerified,
         }
   }
-
 }

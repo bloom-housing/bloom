@@ -22,7 +22,12 @@ declare const expect: jest.Expect
 
 describe("UserService", () => {
   let service: UserService
-  const mockUserRepo = { findOne: jest.fn(), save: jest.fn(), findByEmail: jest.fn(), findByResetToken: jest.fn() }
+  const mockUserRepo = {
+    findOne: jest.fn(),
+    save: jest.fn(),
+    findByEmail: jest.fn(),
+    findByResetToken: jest.fn(),
+  }
   const mockApplicationRepo = {
     createQueryBuilder: jest.fn(),
     save: jest.fn(),
