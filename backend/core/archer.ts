@@ -1,6 +1,5 @@
 import {
   AmiChart,
-  EnumJurisdictionLanguages,
   Listing,
   ListingReviewOrder,
   ListingStatus,
@@ -16,14 +15,6 @@ export const SanMateoHUD2019: AmiChart = {
   name: "SanMateoHUD2019",
   jurisdiction: {
     id: "jurisdictiion_id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    name: "Alameda",
-    emailFromAddress: "Alameda Housing Email",
-    programs: [],
-    languages: [EnumJurisdictionLanguages.en],
-    preferences: [],
-    publicUrl: "",
   },
   items: [
     {
