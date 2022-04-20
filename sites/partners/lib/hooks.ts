@@ -4,8 +4,6 @@ import qs from "qs"
 
 import { AuthContext } from "@bloom-housing/ui-components"
 import {
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
   EnumPreferencesFilterParamsComparison,
   EnumProgramsFilterParamsComparison,
@@ -69,56 +67,6 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
     listingDtos: data,
     listingsLoading: !error && !data,
     listingsError: error,
-  }
-}
-
-export function useApplicationsData(
-  pageIndex: number,
-  limit = 10,
-  listingId: string,
-  search: string,
-  orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
-) {
-  const { applicationsService } = useContext(AuthContext)
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", pageIndex.toString())
-  queryParams.append("limit", limit.toString())
-
-  if (search) {
-    queryParams.append("search", search)
-  }
-
-  if (orderBy) {
-    queryParams.append("orderBy", search)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
-  }
-
-  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
-
-  const params = {
-    listingId,
-    page: pageIndex,
-    limit,
-  }
-
-  if (search) {
-    Object.assign(params, { search })
-  }
-
-  if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
-  }
-
-  const fetcher = () => applicationsService.list(params)
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    appsData: data,
-    appsLoading: !error && !data,
-    appsError: error,
   }
 }
 

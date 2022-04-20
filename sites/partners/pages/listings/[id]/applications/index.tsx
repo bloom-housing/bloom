@@ -78,17 +78,6 @@ const ApplicationsList = () => {
   })
   useEffect(() => {
     setAppsLoading(true)
-    const queryParams = new URLSearchParams()
-    queryParams.append("listingId", listingId)
-    queryParams.append("page", currentPage.toString())
-    queryParams.append("limit", itemsPerPage.toString())
-    if (delayedFilterValue) {
-      queryParams.append("search", delayedFilterValue)
-    }
-    if (sortOptions.orderBy) {
-      queryParams.append("orderBy", delayedFilterValue)
-      queryParams.append("order", sortOptions.order ?? EnumApplicationsApiExtraModelOrder.ASC)
-    }
     const params = {
       listingId,
       page: currentPage,
