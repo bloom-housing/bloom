@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.8...@bloom-housing/ui-components@4.2.2-alpha.9) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [4.2.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.7...@bloom-housing/ui-components@4.2.2-alpha.8) (2022-04-20)
 
 
