@@ -89,7 +89,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     control,
     name: "maxOccupancy",
   })
-
+  
   const maxAmiHouseholdSize = 8
 
   const getAmiChartTableData = () => {
@@ -459,7 +459,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 inputProps={{
                   onChange: () => {
                     trigger("minOccupancy")
-                  },
+                  }
                 }}
               />
             </ViewItem>
@@ -481,7 +481,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 inputProps={{
                   onChange: () => {
                     trigger("maxOccupancy")
-                  },
+                  }
                 }}
               />
             </ViewItem>
