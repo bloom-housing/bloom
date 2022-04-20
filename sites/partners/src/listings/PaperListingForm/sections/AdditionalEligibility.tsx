@@ -12,14 +12,15 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, watch, setValue } = formMethods
+  const { register, errors, clearErrors, watch, setValue, getValues } = formMethods
 
   const jurisdiction: string = watch("jurisdiction.id")
+  const currentValue = getValues().rentalAssistance
 
   const { data: currentJurisdiction = undefined } = useJurisdiction(jurisdiction)
 
   useEffect(() => {
-    if (currentJurisdiction) {
+    if (currentJurisdiction && !currentValue) {
       setValue(
         "rentalAssistance",
         props.defaultText ?? (currentJurisdiction && currentJurisdiction?.rentalAssistanceDefault)
