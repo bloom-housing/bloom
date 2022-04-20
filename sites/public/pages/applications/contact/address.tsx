@@ -115,8 +115,6 @@ const ApplicationAddress = () => {
   const workInRegion = watch("applicant.workInRegion")
   const clientLoaded = OnClientSide()
 
-
-
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
     label: t(`t.${item.id}`),
