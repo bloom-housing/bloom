@@ -32,6 +32,16 @@ export const getGenericAddress = (bloomAddress: Address) => {
     : null
 }
 
+export const disableContactFormOption = (id: string, noPhone: boolean, noEmail: boolean) => {
+  if ((id === "phone" || id === "text") && noPhone === true) {
+    return true
+  } else if (id === "email" && noEmail === true) {
+    return true
+  } else {
+    return false
+  }
+}
+
 export const openInFuture = (listing: Listing) => {
   const nowTime = dayjs()
   return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)

@@ -22,6 +22,7 @@ import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { disableContactFormOption } from "../../../lib/helpers"
 import {
   contactPreferencesKeys,
   phoneNumberKeys,
@@ -114,13 +115,13 @@ const ApplicationAddress = () => {
   const workInRegion = watch("applicant.workInRegion")
   const clientLoaded = OnClientSide()
 
+
+
   const contactPreferencesOptions = contactPreferencesKeys?.map((item) => ({
     id: item.id,
     label: t(`t.${item.id}`),
     defaultChecked: application?.contactPreferences?.includes(item.id) || false,
-    disabled:
-      ((item.id === "phone" || item.id === "text") && noPhone) ||
-      (item.id === "email" && application.applicant.noEmail),
+    disabled: disableContactFormOption(item.id, noPhone, application.applicant.noEmail),
   }))
 
   useEffect(() => {
