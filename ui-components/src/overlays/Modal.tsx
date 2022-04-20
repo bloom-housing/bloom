@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useRef } from "react"
 import "./Modal.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
+import { nanoid } from "nanoid"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {
   title: string
@@ -9,12 +10,17 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   hideCloseIcon?: boolean
   children?: React.ReactNode
   slim?: boolean
+  role?: string
 }
 
-const ModalHeader = (props: { title: string }) => (
-  <header className="modal__inner">
-    <h1 className="modal__title">{props.title}</h1>
-  </header>
+const ModalHeader = (props: { title: string; uniqueId?: string }) => (
+  <>
+    <header className="modal__inner">
+      <h1 className="modal__title" id={props.uniqueId}>
+        {props.title}
+      </h1>
+    </header>
+  </>
 )
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
@@ -28,17 +34,20 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
 )
 
 export const Modal = (props: ModalProps) => {
+  const uniqueIdRef = useRef(nanoid())
+
   return (
     <Overlay
-      ariaLabel={props.ariaLabel || props.title}
+      ariaLabelledBy={uniqueIdRef.current}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
       backdrop={props.backdrop}
       slim={props.slim}
+      role={props.role ? props.role : "dialog"}
     >
       <div className="modal">
-        <ModalHeader title={props.title} />
+        <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
 
         <section className="modal__inner">
           {typeof props.children === "string" ? (
