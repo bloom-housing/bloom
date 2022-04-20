@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.9...@bloom-housing/partners@4.2.2-alpha.10) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.8...@bloom-housing/partners@4.2.2-alpha.9) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.7...@bloom-housing/partners@4.2.2-alpha.8) (2022-04-20)
+
+
+### Features
+
+* **backend:** add jurisdiction default rental assistance text ([#2604](https://github.com/bloom-housing/bloom/issues/2604)) ([00b684c](https://github.com/bloom-housing/bloom/commit/00b684cd8b8b1f9ef201b8aec78c13572a4125a5))
+
+
+
+
+
+## [4.2.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.6...@bloom-housing/partners@4.2.2-alpha.7) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.5...@bloom-housing/partners@4.2.2-alpha.6) (2022-04-19)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.4...@bloom-housing/partners@4.2.2-alpha.5) (2022-04-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.3...@bloom-housing/partners@4.2.2-alpha.4) (2022-04-18)
+
+
+### Features
+
+* refactor ada form fields ([#2612](https://github.com/bloom-housing/bloom/issues/2612)) ([f516f21](https://github.com/bloom-housing/bloom/commit/f516f2164249cea5b622b6bb5cd6efb5455003ca))
+
+
+
+
+
 ## [4.2.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.2...@bloom-housing/partners@4.2.2-alpha.3) (2022-04-14)
 
 
