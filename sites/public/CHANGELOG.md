@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.9...@bloom-housing/public@4.2.2-alpha.10) (2022-04-20)
+
+
+### Bug Fixes
+
+* no application message and loading spinner working ([#2603](https://github.com/bloom-housing/bloom/issues/2603)) ([0ae1596](https://github.com/bloom-housing/bloom/commit/0ae159671b3b62fa572e27a8a860d693fab86a2c))
+
+
+
+
+
 ## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.8...@bloom-housing/public@4.2.2-alpha.9) (2022-04-20)
 
 **Note:** Version bump only for package @bloom-housing/public
