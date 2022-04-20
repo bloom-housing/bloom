@@ -456,6 +456,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 error={fieldHasError(errors?.minOccupancy)}
                 errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                 validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                inputProps={{
+                  onChange: () => {
+                    trigger("minOccupancy")
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
@@ -473,6 +478,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 error={fieldHasError(errors?.maxOccupancy)}
                 errorMessage={t("errors.maxLessThanMinOccupancyError")}
                 validation={{ min: minOccupancy }}
+                inputProps={{
+                  onChange: () => {
+                    trigger("maxOccupancy")
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
