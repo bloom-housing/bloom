@@ -198,6 +198,19 @@ export const Calendar = (props: IconProps) => {
   )
 }
 
+export const CalendarBlock = (props: IconProps) => {
+  return (
+    <svg width={"12"} height={"13"} viewBox={"0 0 12 13"}>
+      <path
+        d={
+          "M3 1.25C3 0.851562 3.32812 0.5 3.75 0.5C4.14844 0.5 4.5 0.851562 4.5 1.25V2H7.5V1.25C7.5 0.851562 7.82812 0.5 8.25 0.5C8.64844 0.5 9 0.851562 9 1.25V2H10.125C10.7344 2 11.25 2.51562 11.25 3.125V4.25H0.75V3.125C0.75 2.51562 1.24219 2 1.875 2H3V1.25ZM11.25 11.375C11.25 12.0078 10.7344 12.5 10.125 12.5H1.875C1.24219 12.5 0.75 12.0078 0.75 11.375V5H11.25V11.375Z"
+        }
+        fill={props.fill ?? "currentColor"}
+      />
+    </svg>
+  )
+}
+
 export const Check = (props: IconProps) => {
   return (
     <svg viewBox={"0 0 32 32"} fill={props.fill ?? "currentColor"}>
