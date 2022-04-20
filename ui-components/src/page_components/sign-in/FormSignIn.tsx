@@ -73,7 +73,7 @@ const FormSignIn = ({
         networkStatus={networkStatus}
         errorMessageId={"main-sign-in"}
       />
-      <div className="form-card__group pt-0">
+      <div className="form-card__group pt-0 border-b">
         <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}
