@@ -47,6 +47,11 @@ export class ListingsService {
           return {
             "listings.applicationDueDate": "ASC",
           }
+        case OrderByFieldsEnum.comingSoon:
+          return {
+            "listings.marketingType": { order: "DESC", nulls: "NULLS LAST" },
+            "listings.updated_at": "DESC",
+          }
         case undefined:
           // Default to ordering by applicationDates (i.e. applicationDueDate
           // and applicationOpenDate) if no orderBy param is specified.

@@ -141,9 +141,9 @@ export async function fetchBaseListingData() {
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
-        limit: "10",
+        limit: "8",
         page: "1",
-        orderBy: OrderByFieldsEnum.mostRecentlyUpdated,
+        orderBy: OrderByFieldsEnum.comingSoon,
         filter: [
           {
             $comparison: EnumListingFilterParamsComparison["="],
