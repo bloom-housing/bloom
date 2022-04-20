@@ -33,13 +33,12 @@ export const getGenericAddress = (bloomAddress: Address) => {
 }
 
 export const disableContactFormOption = (id: string, noPhone: boolean, noEmail: boolean) => {
-  if ((id === "phone" || id === "text") && noPhone === true) {
+  if ((id === "phone" || id === "text") && noPhone) {
     return true
-  } else if (id === "email" && noEmail === true) {
+  } else if (id === "email" && noEmail) {
     return true
-  } else {
-    return false
   }
+  return false
 }
 
 export const openInFuture = (listing: Listing) => {
