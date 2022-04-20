@@ -80,6 +80,7 @@ const StackedTable = (props: StackedTableProps) => {
       data={modifiedData}
       className={tableClasses.join(" ")}
       responsiveCollapse={true}
+      cellClassName={"b-0"}
     />
   )
 }

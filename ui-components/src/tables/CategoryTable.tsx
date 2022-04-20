@@ -22,7 +22,7 @@ const CategoryTable = (props: CategoryTableProps) => {
           {category.header}
         </Heading>
         <hr className={"my-2"} />
-        <StackedTable {...category.tableData} className={"category-table mb-8"} />
+        <StackedTable {...category.tableData} className={"category-table mb-2 md:mb-6"} />
       </div>
     )
   })

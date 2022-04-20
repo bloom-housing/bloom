@@ -1,11 +1,18 @@
 import React from "react"
 
 import { GroupedTable } from "./GroupedTable"
-import { mockData, mockHeaders } from "../tables/StandardTable.stories"
+import { mockData } from "../tables/StandardTable.stories"
+import t from "../helpers/translator"
 
 export default {
   title: "Tables/GroupedTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+}
+
+const headers = {
+  name: t("t.name"),
+  relationship: t("t.relationship"),
+  dob: t("application.household.member.dateOfBirth"),
 }
 
 const data = [
@@ -19,4 +26,4 @@ const data = [
   },
 ]
 
-export const Default = () => <GroupedTable headers={mockHeaders} data={data} />
+export const Default = () => <GroupedTable headers={headers} data={data} />

@@ -18,6 +18,8 @@ export interface MinimalTableProps {
   responsiveCollapse?: boolean
   /** A class name applied to the root of the table */
   className?: string
+  /** A class name applied to the cells of the table */
+  cellClassName?: string
   /** An id applied to the table */
   id?: string
 }
@@ -33,6 +35,7 @@ const MinimalTable = (props: MinimalTableProps) => {
       headers={props.headers}
       data={props.data}
       tableClassName={tableClasses.join(" ")}
+      cellClassName={`${props.cellClassName ? props.cellClassName : `px-5 py-3`}`}
       responsiveCollapse={props.responsiveCollapse}
       id={props.id}
     />

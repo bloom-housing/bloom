@@ -1,7 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
 import { Cell, StandardTableData, StandardTableProps } from "./StandardTable"
-import t from "../helpers/translator"
 
 export interface GroupedTableGroup {
   header?: string | React.ReactNode
