@@ -5,9 +5,16 @@ Application confirmation with lottery number (confirmation number)
 import React, { useContext, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { AppearanceStyleType, Button, FormCard, AuthContext, t } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
+import {
+  AppearanceStyleType,
+  ApplicationTimeline,
+  Button,
+  FormCard,
+  AuthContext,
+  t,
+} from "@bloom-housing/ui-components"
 import { imageUrlFromListing, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
@@ -54,43 +61,30 @@ const ApplicationConfirmation = () => {
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 
-        <div className="form-card__group border-b">
-          <h3 className="form-card__paragraph-title">
-            {t("application.review.confirmation.whatExpectTitle")}
-          </h3>
+        <div className="form-card__group border-b markdown markdown-informational">
+          <ApplicationTimeline />
 
-          <p className="field-note mt-2">
-            {t("application.review.confirmation.whatExpectSecondparagraph")}
-          </p>
+          <Markdown options={{ disableParsingRawHTML: true }}>
+            {t("application.review.confirmation.whatHappensNext")}
+          </Markdown>
         </div>
 
-        <div className="form-card__group border-b">
-          <h3 className="form-card__paragraph-title">
-            {t("application.review.confirmation.doNotSubmitTitle")}
-          </h3>
-
-          <p className="field-note mt-1">{t("application.review.confirmation.needToUpdate")}</p>
-
-          {listing && (
-            <p className="field-note mt-2">
-              {listing.leasingAgentName}
-              <br />
-              {listing.leasingAgentPhone}
-              <br />
-              {listing.leasingAgentEmail}
-            </p>
-          )}
+        <div className="form-card__group border-b markdown markdown-informational">
+          <Markdown options={{ disableParsingRawHTML: true }}>
+            {t("application.review.confirmation.needToMakeUpdates", {
+              agentName: listing?.leasingAgentName || "",
+              agentPhone: listing?.leasingAgentPhone || "",
+              agentEmail: listing?.leasingAgentEmail || "",
+              agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+            })}
+          </Markdown>
         </div>
 
         {initialStateLoaded && !profile && (
-          <div className="form-card__group">
-            <h3 className="form-card__paragraph-title">
-              {t("application.review.confirmation.createAccountTitle")}
-            </h3>
-
-            <p className="field-note mt-1">
-              {t("application.review.confirmation.createAccountParagraph")}
-            </p>
+          <div className="form-card__group markdown markdown-informational">
+            <Markdown options={{ disableParsingRawHTML: true }}>
+              {t("application.review.confirmation.createAccount")}
+            </Markdown>
           </div>
         )}
 
@@ -110,14 +104,10 @@ const ApplicationConfirmation = () => {
           )}
 
           <div className="form-card__pager-row py-6">
-            <a className="lined text-tiny" href="/" data-test-id={"app-confirmation-done"}>
-              {t("application.review.confirmation.imdone")}
-            </a>
-          </div>
-
-          <div className="form-card__pager-row py-6">
-            <Link href="/listings" data-test-id={"app-confirmation-browse"}>
-              <a className="lined text-tiny">{t("application.review.confirmation.browseMore")}</a>
+            <Link href="/listings">
+              <a data-test-id={"app-confirmation-browse"} className="lined text-tiny">
+                {t("application.review.confirmation.browseMore")}
+              </a>
             </Link>
           </div>
 
