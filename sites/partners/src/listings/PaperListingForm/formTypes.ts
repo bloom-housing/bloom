@@ -154,6 +154,7 @@ export const formDefaults: FormListing = {
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: "",
+  region: null,
   petPolicy: "",
   smokingPolicy: "",
   unitsAvailable: 0,

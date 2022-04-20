@@ -38,6 +38,12 @@ const DetailBuildingDetails = () => {
             </ViewItem>
 
             <GridCell span={2}>
+              <ViewItem id="region" label={t("t.region")}>
+                {listing.region}
+              </ViewItem>
+            </GridCell>
+
+            <GridCell span={2}>
               <ViewItem id="yearBuilt" label={t("listings.yearBuilt")}>
                 {listing.yearBuilt}
               </ViewItem>

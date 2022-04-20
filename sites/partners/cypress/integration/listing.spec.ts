@@ -146,6 +146,7 @@ describe("Listing Management Tests", () => {
         "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
       )
       cy.getByID("buildingAddress.street").contains(listing["buildingAddress.street"])
+      cy.get("#region").contains(listing.region)
       cy.get("#neighborhood").contains(listing.neighborhood)
       cy.get("#neighborhood").contains(listing.neighborhood)
       cy.getByID("buildingAddress.city").contains(listing["buildingAddress.city"])

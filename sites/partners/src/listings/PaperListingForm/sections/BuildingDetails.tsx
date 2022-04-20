@@ -18,7 +18,7 @@ import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-
+import { Region } from "@bloom-housing/backend-core/types"
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
 }
@@ -64,6 +64,14 @@ const neighborhoodOptions: SelectOption[] = [
   { value: "Southwest / Vernor area", label: "Southwest / Vernor area" },
   { value: "Warrendale / Cody Rouge area", label: "Warrendale / Cody Rouge area" },
   { value: "West End area", label: "West End area" },
+]
+
+const regionOptions: SelectOption[] = [
+  { value: "", label: "" },
+  ...Object.values(Region).map((item) => ({
+    label: item,
+    value: item,
+  })),
 ]
 
 const BuildingDetails = ({
@@ -221,7 +229,7 @@ const BuildingDetails = ({
           />
         </ViewItem>
       </GridSection>
-      <GridSection columns={6}>
+      <GridSection columns={6} className="mb-0">
         <GridCell span={2}>
           <Field
             label={t("application.contact.city")}
@@ -294,6 +302,27 @@ const BuildingDetails = ({
           register={register}
         />
         <GridCell span={2}>
+          <ViewItem label={t("t.region")}>
+            <Select
+              id="region"
+              name="region"
+              label={t("t.region")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={regionOptions}
+              keyPrefix="t"
+              errorMessage={fieldMessage(errors?.region)}
+              inputProps={{
+                onChange: () => clearErrors("region"),
+              }}
+            />
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+
+      <GridSection columns={3} wrapperClassName="mt-0">
+        <GridCell span={1}>
           <Field
             label={t("listings.yearBuilt")}
             name={"yearBuilt"}

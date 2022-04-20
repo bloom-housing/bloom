@@ -3,6 +3,7 @@
   "name": "Basic Test Listing",
   "developer": "Basic Test Developer",
   "buildingAddress.street": "548 Market St. #59930",
+  "region": "Basic Test Region",
   "neighborhood": "Basic Test Neighborhood",
   "buildingAddress.city": "San Francisco",
   "buildingAddress.state": "California",

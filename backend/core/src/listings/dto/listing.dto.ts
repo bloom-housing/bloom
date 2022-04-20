@@ -1,8 +1,8 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
-import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDefined, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import dayjs from "dayjs"
-import { OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
@@ -18,6 +18,8 @@ import { UnitGroupDto } from "../../units-summary/dto/unit-group.dto"
 import { ListingFeaturesDto } from "./listing-features.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
+import { Column } from "typeorm"
+import { Region } from "../../property/types/region-enum"
 import { ListingImageDto } from "./listing-image.dto"
 
 export class ListingDto extends OmitType(Listing, [
@@ -307,6 +309,16 @@ export class ListingDto extends OmitType(Listing, [
     { toClassOnly: true }
   )
   yearBuilt?: number | null
+
+  @Column({ type: "enum", enum: Region, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(Region, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: Region,
+    enumName: "Region",
+  })
+  region?: Region | null
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
