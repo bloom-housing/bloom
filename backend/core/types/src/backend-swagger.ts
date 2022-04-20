@@ -1202,6 +1202,8 @@ export class ListingsService {
       view?: string
       /**  */
       orderBy?: OrderByFieldsEnum
+      /**  */
+      order?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1215,6 +1217,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
+        order: params["order"],
       }
       let data = null
 
@@ -4072,6 +4075,9 @@ export interface User {
   phoneNumberVerified?: boolean
 
   /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
   hitConfirmationURL?: Date
 }
 
@@ -4184,6 +4190,9 @@ export interface UserBasic {
   phoneNumberVerified?: boolean
 
   /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
   hitConfirmationURL?: Date
 }
 
@@ -4286,6 +4295,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 
   /**  */
   hitConfirmationURL?: Date
@@ -4401,6 +4413,9 @@ export interface UserProfileUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
@@ -6580,6 +6595,11 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "name" = "name",
+  "waitlistOpen" = "waitlistOpen",
+  "status" = "status",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
 }
 
 export enum ListingApplicationAddressType {

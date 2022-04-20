@@ -54,12 +54,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
                   const extra = option.extraData?.map((extra) => {
                     if (extra.type === InputType.text)
                       return (
-                        <ViewItem
-                          key={extra.key}
-                          label={t(`application.preferences.options.name`, {
-                            county: listingDto?.countyCode,
-                          })}
-                        >
+                        <ViewItem key={extra.key} label={t("t.name")}>
                           {extra.value}
                         </ViewItem>
                       )

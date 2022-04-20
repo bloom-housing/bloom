@@ -18,6 +18,7 @@ export class UserInviteDto extends OmitType(UserDto, [
   "passwordValidForDays",
   "lastLoginAt",
   "failedLoginAttemptsCount",
+  "agreedToTermsOfService",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

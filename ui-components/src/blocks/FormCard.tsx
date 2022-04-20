@@ -14,7 +14,7 @@ const FormCard = (props: FormCardProps) => {
       <article className={classNames}>
         <div className="form-card__header">
           <header className="form-card__header_group">
-            <h5 className="form-card__header_title">{props.header}</h5>
+            <h1 className="form-card__header_title">{props.header}</h1>
           </header>
 
           <div className="form-card__header_nav">{props.children}</div>

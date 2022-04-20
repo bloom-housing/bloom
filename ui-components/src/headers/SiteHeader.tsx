@@ -24,6 +24,7 @@ export interface SiteHeaderProps {
   dropdownItemClassName?: string
   homeURL: string
   imageOnly?: boolean
+  languageNavLabel?: string
   languages?: LangItem[]
   logoClass?: string
   logoSrc: string
@@ -422,8 +423,10 @@ const SiteHeader = (props: SiteHeaderProps) => {
   }
 
   return (
-    <div className={"site-header"}>
-      {props.languages && <LanguageNav languages={props.languages} />}
+    <header className={"site-header"}>
+      {props.languages && (
+        <LanguageNav ariaLabel={props.languageNavLabel} languages={props.languages} />
+      )}
 
       <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
         <div className="navbar-notice__text">{props.notice ?? ""}</div>
@@ -441,7 +444,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </nav>
       {!isDesktop && mobileMenu && getMobileDropdown()}
       {getMobileDrawer()}
-    </div>
+    </header>
   )
 }
 

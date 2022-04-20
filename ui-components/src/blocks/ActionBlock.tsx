@@ -41,7 +41,7 @@ const ActionBlock = ({
     <div className={actionBlockClasses.join(" ")}>
       <div className="action-block__head">
         {icon && <div className="action-block__icon">{icon}</div>}
-        <h3 className="action-block__header">{header}</h3>
+        <h2 className="action-block__header">{header}</h2>
         {subheader && layout === ActionBlockLayout.block && (
           <p className="action-block__subheader">{subheader}</p>
         )}

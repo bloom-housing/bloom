@@ -10,9 +10,10 @@ import {
   ViewItem,
 } from "@bloom-housing/ui-components"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { Jurisdiction } from "@bloom-housing/backend-core/types"
 
 interface ListingIntroProps {
-  jurisdictionOptions: SelectOption[]
+  jurisdictions: Jurisdiction[]
 }
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
@@ -20,25 +21,33 @@ const ListingIntro = (props: ListingIntroProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors } = formMethods
 
-  const hideSelect = props.jurisdictionOptions.length <= 2
+  const jurisdictionOptions: SelectOption[] = [
+    { label: "", value: "" },
+    ...props.jurisdictions.map((jurisdiction) => ({
+      label: jurisdiction.name,
+      value: jurisdiction.id,
+    })),
+  ]
+  const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
   return (
     <GridSection
       columns={3}
       title={t("listings.sections.introTitle")}
       description={t("listings.sections.introSubtitle")}
     >
-      <GridCell span={2} className={`${hideSelect ? "hidden" : ""}`}>
+      <GridCell span={2} className={`${defaultJurisdiction ? "hidden" : ""}`}>
         <ViewItem
           label={t("t.jurisdiction")}
           error={fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])}
         >
           <Select
             id={"jurisdiction.id"}
+            defaultValue={defaultJurisdiction}
             name={"jurisdiction.id"}
             label={t("t.jurisdiction")}
             labelClassName="sr-only"
             register={register}
-            controlClassName={`control ${hideSelect ? "hidden" : ""}`}
+            controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
             error={
               fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
             }
@@ -49,7 +58,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               undefined
             }
             keyPrefix={"jurisdictions"}
-            options={props.jurisdictionOptions}
+            options={jurisdictionOptions}
             inputProps={{
               onChange: () => clearErrors("jurisdiction"),
             }}
