@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.7...@bloom-housing/partners@4.2.2-alpha.8) (2022-04-20)
+
+
+### Features
+
+* **backend:** add jurisdiction default rental assistance text ([#2604](https://github.com/bloom-housing/bloom/issues/2604)) ([00b684c](https://github.com/bloom-housing/bloom/commit/00b684cd8b8b1f9ef201b8aec78c13572a4125a5))
+
+
+
+
+
 ## [4.2.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.6...@bloom-housing/partners@4.2.2-alpha.7) (2022-04-20)
 
 **Note:** Version bump only for package @bloom-housing/partners
