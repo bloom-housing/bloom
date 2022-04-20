@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from "react"
+import React, { useContext, useState, useRef, useEffect, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import {
@@ -12,7 +12,9 @@ import {
   FormSignInMFAType,
   FormSignInMFACode,
   FormSignInAddPhone,
+  useMutate,
   t,
+  ResendConfirmationModal,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
@@ -26,10 +28,9 @@ import {
   onSubmitMfaCodeWithPhone,
   onSubmitMfaCode,
 } from "../lib/signInHelpers"
-import { ConfirmationModal } from "../src/ConfirmationModal"
 
 const SignIn = () => {
-  const { login, requestMfaCode } = useContext(AuthContext)
+  const { login, requestMfaCode, userService } = useContext(AuthContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, setValue, control, watch, reset } = useForm()
@@ -52,6 +53,50 @@ const SignIn = () => {
     message: NetworkStatusContent
     type: NetworkStatusType
   }>()
+
+  const {
+    mutate: mutateResendConfirmation,
+    reset: resetResendConfirmation,
+    isLoading: isResendConfirmationLoading,
+  } = useMutate<{ status: string }>()
+
+  const onResendConfirmationSubmit = useCallback(
+    (email: string) => {
+      void mutateResendConfirmation(
+        () =>
+          userService.resendPartnerConfirmation({
+            body: {
+              email: email,
+              appUrl: window.location.origin,
+            },
+          }),
+        {
+          onSuccess: () => {
+            setConfirmationStatusMessage({
+              message: {
+                title: "",
+                description: t("authentication.createAccount.emailSent"),
+              },
+              type: "success",
+            })
+            setConfirmationStatusModal(false)
+          },
+          onError: (err) => {
+            setConfirmationStatusMessage({
+              message: {
+                title: t("errors.somethingWentWrong"),
+                description: t("authentication.signIn.errorGenericMessage"),
+                error: err,
+              },
+              type: "alert",
+            })
+            setConfirmationStatusModal(false)
+          },
+        }
+      )
+    },
+    [mutateResendConfirmation, userService]
+  )
 
   useEffect(() => {
     if (
@@ -97,9 +142,9 @@ const SignIn = () => {
           router,
           resetNetworkError
         )}
-        control={{ register, errors, handleSubmit }}
+        control={{ register, errors, handleSubmit, watch }}
         networkStatus={{
-          content: networkStatusContent,
+          content: { ...networkStatusContent, error: !!networkStatusContent?.error },
           type: networkStatusType,
           reset: () => {
             reset()
@@ -124,7 +169,10 @@ const SignIn = () => {
           resetNetworkError
         )}
         control={{ register, errors, handleSubmit, setValue }}
-        networkError={{ content: networkError, reset: resetNetworkError }}
+        networkError={{
+          content: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
       />
     )
   } else if (renderStep === EnumRenderStep.phoneNumber) {
@@ -141,7 +189,10 @@ const SignIn = () => {
           resetNetworkError
         )}
         control={{ errors, handleSubmit, control }}
-        networkError={{ content: networkError, reset: resetNetworkError }}
+        networkError={{
+          content: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
         phoneNumber={phoneNumber}
       />
     )
@@ -157,8 +208,11 @@ const SignIn = () => {
           mfaType,
           resetNetworkError
         )}
-        control={{ register, errors, handleSubmit }}
-        networkError={{ content: networkError, reset: resetNetworkError }}
+        control={{ register, errors, handleSubmit, watch }}
+        networkError={{
+          content: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
         mfaType={mfaType}
         allowPhoneNumberEdit={allowPhoneNumberEdit}
         phoneNumber={phoneNumber}
@@ -169,31 +223,16 @@ const SignIn = () => {
 
   return (
     <>
-      <ConfirmationModal
+      <ResendConfirmationModal
         isOpen={confirmationStatusModal}
-        onSuccess={() => {
-          setConfirmationStatusMessage({
-            message: {
-              title: "",
-              description: t("authentication.createAccount.emailSent"),
-            },
-            type: "success",
-          })
+        onClose={() => {
           setConfirmationStatusModal(false)
+          resetResendConfirmation()
+          resetNetworkError()
         }}
-        onError={(err) => {
-          setConfirmationStatusMessage({
-            message: {
-              title: t("errors.somethingWentWrong"),
-              description: t("authentication.signIn.errorGenericMessage"),
-              error: err,
-            },
-            type: "alert",
-          })
-          setConfirmationStatusModal(false)
-        }}
-        onClose={() => setConfirmationStatusModal(false)}
         initialEmailValue={emailValue.current as string}
+        onSubmit={(email) => onResendConfirmationSubmit(email)}
+        loading={isResendConfirmationLoading}
       />
       <FormsLayout>{formToRender}</FormsLayout>
     </>

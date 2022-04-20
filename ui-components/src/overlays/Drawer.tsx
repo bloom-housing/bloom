@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useRef } from "react"
 import "./Drawer.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
@@ -6,6 +6,7 @@ import { Tag } from "../text/Tag"
 import { AppearanceStyleType, AppearanceSizeType } from "../global/AppearanceTypes"
 import { AlertTypes } from "../notifications/alertTypes"
 import { AlertBox } from "../notifications"
+import { nanoid } from "nanoid"
 
 export enum DrawerSide {
   left = "left",
@@ -28,18 +29,25 @@ const Drawer = (props: DrawerProps) => {
   const drawerClasses = ["drawer"]
   if (props.className) drawerClasses.push(props.className)
 
+  const uniqueIdRef = useRef(nanoid())
+
   return (
     <Overlay
-      ariaLabel={props.ariaLabel || props.title}
+      ariaLabelledBy={uniqueIdRef.current}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
       backdrop={props.backdrop}
       className={"has-drawer" + (props.direction == DrawerSide.left ? " is-direction-left" : "")}
+      role="dialog"
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
-          {props.title && <h1 className="drawer__title">{props.title}</h1>}
+          {props.title && (
+            <h1 className="drawer__title" id={uniqueIdRef.current}>
+              {props.title}
+            </h1>
+          )}
           {props.headerTag && (
             <Tag
               pillStyle={true}

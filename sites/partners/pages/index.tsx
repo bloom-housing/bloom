@@ -100,7 +100,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         flex: 1,
-        valueFormatter: ({ value }) => t(`listings.${value}`),
+        valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
         cellRenderer: "ApplicationsLink",
       },
       {
