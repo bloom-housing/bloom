@@ -458,8 +458,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 validation={{ max: maxOccupancy || numberOccupancyOptions }}
                 inputProps={{
                   onChange: () => {
-                    trigger("minOccupancy")
-                    trigger("maxOccupancy")
+                    void trigger("minOccupancy")
+                    void trigger("maxOccupancy")
                   },
                 }}
               />
@@ -481,8 +481,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 validation={{ min: minOccupancy }}
                 inputProps={{
                   onChange: () => {
-                    trigger("minOccupancy")
-                    trigger("maxOccupancy")
+                    void trigger("minOccupancy")
+                    void trigger("maxOccupancy")
                   },
                 }}
               />
