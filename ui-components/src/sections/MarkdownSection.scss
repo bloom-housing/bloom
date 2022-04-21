@@ -1,9 +1,12 @@
 .markdown-section {
-  @apply px-5;
   @apply my-6;
 
   @screen md {
     @apply my-12;
+  }
+
+  &--with-padding {
+    @apply px-5;
   }
 }
 

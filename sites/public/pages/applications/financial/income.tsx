@@ -144,7 +144,7 @@ const ApplicationIncome = () => {
         {incomeError && (
           <>
             <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
-              {t("application.financial.income.validationError.title")}
+              {t("application.household.dontQualifyHeader")}
             </AlertBox>
             <AlertNotice
               title={t(`application.financial.income.validationError.reason.${incomeError}`)}
@@ -158,7 +158,7 @@ const ApplicationIncome = () => {
                 {t(`application.financial.income.validationError.instruction2`)}
               </p>
               <p>
-                <a href="#">{t("nav.getAssistance")}</a>
+                <a href="#">{t("pageTitle.getAssistance")}</a>
               </p>
             </AlertNotice>
           </>

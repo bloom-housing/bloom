@@ -335,15 +335,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <Tab>Application Process</Tab>
                         </TabList>
                         <TabPanel>
-                          <ListingIntro
-                            jurisdictionOptions={[
-                              { label: "", value: "" },
-                              ...profile.jurisdictions.map((jurisdiction) => ({
-                                label: jurisdiction.name,
-                                value: jurisdiction.id,
-                              })),
-                            ]}
-                          />
+                          <ListingIntro jurisdictions={profile.jurisdictions} />
                           <ListingPhoto />
                           <BuildingDetails
                             listing={listing}
@@ -386,7 +378,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           />
                           <AdditionalFees />
                           <BuildingFeatures />
-                          <AdditionalEligibility />
+                          <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
 

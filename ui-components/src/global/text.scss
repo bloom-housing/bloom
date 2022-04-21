@@ -139,3 +139,40 @@ h1.title {
 .icon-item {
   @apply block;
 }
+
+.card-header {
+  @apply font-alt-sans;
+  @apply font-semibold;
+  @apply text-blue-700;
+  @apply text-3xl;
+  @apply mb-1;
+}
+
+.card-subheader {
+  @apply font-alt-sans;
+  @apply text-black;
+  @apply text-base;
+  @apply mb-3;
+}
+
+.table-header {
+  @apply font-alt-sans;
+  @apply font-semibold;
+  @apply text-gray-800;
+  @apply text-sm;
+  @apply mb-1;
+}
+
+.table-subheader {
+  @apply font-alt-sans;
+  @apply text-gray-750;
+  @apply text-sm;
+  @apply mb-3;
+}
+
+.category-header {
+  @apply font-alt-sans;
+  @apply font-semibold;
+  @apply text-gray-700;
+  @apply text-sm;
+}

@@ -24,6 +24,7 @@ export const SanMateoHUD2019: AmiChart = {
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
     publicUrl: "",
+    rentalAssistanceDefault: "",
   },
   items: [
     {

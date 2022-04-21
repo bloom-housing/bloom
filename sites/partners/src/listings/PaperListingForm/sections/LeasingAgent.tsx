@@ -23,7 +23,7 @@ const LeasingAgent = () => {
 
   const getErrorMessage = (fieldKey: string) => {
     if (fieldHasError(errors?.leasingAgentAddress) && !getValues(fieldKey)) {
-      return "Cannot enter a partial address"
+      return t("errors.partialAddress")
     }
   }
 

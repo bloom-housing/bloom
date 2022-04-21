@@ -16,6 +16,7 @@ import {
   Textarea,
   PhoneField,
   PhoneMask,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
@@ -109,27 +110,29 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   /*
     Show a preview of the uploaded file within the drawer
   */
-  const previewPaperApplicationsTableRows = []
+  const previewPaperApplicationsTableRows: StandardTableData = []
   if (cloudinaryData.url != "") {
     previewPaperApplicationsTableRows.push({
-      fileName: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf`,
-      language: t(`languages.${selectedLanguage}`),
-      actions: (
-        <Button
-          type="button"
-          className="font-semibold uppercase text-red-700"
-          onClick={() => {
-            setCloudinaryData({
-              id: "",
-              url: "",
-            })
-            setProgressValue(0)
-          }}
-          unstyled
-        >
-          {t("t.delete")}
-        </Button>
-      ),
+      fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
+      language: { content: t(`languages.${selectedLanguage}`) },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            className="font-semibold uppercase text-red-700"
+            onClick={() => {
+              setCloudinaryData({
+                id: "",
+                url: "",
+              })
+              setProgressValue(0)
+            }}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
     })
   }
 
@@ -374,32 +377,34 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   className="mb-8"
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
-                    fileName: `${item.file.fileId.split("/").slice(-1).join()}.pdf`,
-                    language: t(`languages.${item.language}`),
-                    actions: (
-                      <div className="flex">
-                        <Button
-                          type="button"
-                          className="font-semibold uppercase text-red-700"
-                          onClick={() => {
-                            const items = methods.paper.paperApplications.filter(
-                              (paperApp) => item !== paperApp
-                            )
+                    fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+                    language: { content: t(`languages.${item.language}`) },
+                    actions: {
+                      content: (
+                        <div className="flex">
+                          <Button
+                            type="button"
+                            className="font-semibold uppercase text-red-700"
+                            onClick={() => {
+                              const items = methods.paper.paperApplications.filter(
+                                (paperApp) => item !== paperApp
+                              )
 
-                            setMethods({
-                              ...methods,
-                              paper: {
-                                ...methods.paper,
-                                paperApplications: items,
-                              },
-                            })
-                          }}
-                          unstyled
-                        >
-                          {t("t.delete")}
-                        </Button>
-                      </div>
-                    ),
+                              setMethods({
+                                ...methods,
+                                paper: {
+                                  ...methods.paper,
+                                  paperApplications: items,
+                                },
+                              })
+                            }}
+                            unstyled
+                          >
+                            {t("t.delete")}
+                          </Button>
+                        </div>
+                      ),
+                    },
                   }))}
                 ></MinimalTable>
               )}
@@ -577,8 +582,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           )}
           <Dropzone
             id="listing-paper-application-upload"
-            label="Upload File"
-            helptext="Select PDF file"
+            label={t("t.uploadFile")}
+            helptext={t("listings.pdfHelperText")}
             uploader={pdfUploader}
             accept="application/pdf"
             progress={progressValue}

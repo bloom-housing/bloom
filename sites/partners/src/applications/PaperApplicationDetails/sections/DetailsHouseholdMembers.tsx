@@ -31,26 +31,32 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
       return t("t.n/a")
     }
     return application?.householdMembers?.map((item) => ({
-      name: `${item.firstName} ${item.middleName} ${item.lastName}`,
-      relationship: item.relationship
-        ? t(`application.form.options.relationship.${item.relationship}`)
-        : t("t.n/a"),
-      birth:
-        item.birthMonth && item.birthDay && item.birthYear
-          ? `${item.birthMonth}/${item.birthDay}/${item.birthYear}`
+      name: { content: `${item.firstName} ${item.middleName} ${item.lastName}` },
+      relationship: {
+        content: item.relationship
+          ? t(`application.form.options.relationship.${item.relationship}`)
           : t("t.n/a"),
-      sameResidence: checkAvailablility(item.sameAddress),
-      workInRegion: checkAvailablility(item.workInRegion),
-      action: (
-        <Button
-          type="button"
-          className="font-semibold uppercase"
-          onClick={() => setMembersDrawer(item)}
-          unstyled
-        >
-          {t("t.view")}
-        </Button>
-      ),
+      },
+      birth: {
+        content:
+          item.birthMonth && item.birthDay && item.birthYear
+            ? `${item.birthMonth}/${item.birthDay}/${item.birthYear}`
+            : t("t.n/a"),
+      },
+      sameResidence: { content: checkAvailablility(item.sameAddress) },
+      workInRegion: { content: checkAvailablility(item.workInRegion) },
+      action: {
+        content: (
+          <Button
+            type="button"
+            className="font-semibold uppercase"
+            onClick={() => setMembersDrawer(item)}
+            unstyled
+          >
+            {t("t.view")}
+          </Button>
+        ),
+      },
     }))
   }, [application, setMembersDrawer])
 

@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import {
-  LocalizedLink,
   SiteHeader,
   SiteFooter,
   FooterNav,
@@ -17,7 +16,7 @@ import {
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
-
+  const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
@@ -60,10 +59,7 @@ const Layout = (props) => {
         <main>{props.children}</main>
 
         <SiteFooter>
-          <FooterNav copyright="© 2020 • All Rights Reserved">
-            <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
-            <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
-          </FooterNav>
+          <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
           <FooterSection className="bg-black" small>
             <ExygyFooter />
           </FooterSection>

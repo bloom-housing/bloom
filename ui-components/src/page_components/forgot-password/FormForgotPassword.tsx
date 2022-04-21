@@ -13,6 +13,7 @@ import {
   ErrorMessage,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { NetworkErrorReset, NetworkStatusContent } from "../sign-in/FormSignIn"
 import { NavigationContext } from "../../config/NavigationContext"
 import type { UseFormMethods } from "react-hook-form"
 
@@ -22,15 +23,8 @@ export type FormForgotPasswordProps = {
   networkError: FormForgotPasswordNetworkError
 }
 
-export type NetworkErrorReset = () => void
-
-export type NetworkErrorValue = {
-  title: string
-  content: string
-} | null
-
 export type FormForgotPasswordNetworkError = {
-  error: NetworkErrorValue
+  error: NetworkStatusContent
   reset: NetworkErrorReset
 }
 
@@ -75,7 +69,7 @@ const FormForgotPassword = ({
           </AlertBox>
 
           <AlertNotice title="" type="alert" inverted>
-            {networkError.error.content}
+            {networkError.error.description}
           </AlertNotice>
         </ErrorMessage>
       )}

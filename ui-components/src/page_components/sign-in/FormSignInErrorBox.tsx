@@ -1,11 +1,11 @@
 import React from "react"
 import { t, AlertBox, SiteAlert, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import { FormSignInNetworkError } from "./FormSignIn"
+import { NetworkStatus } from "./FormSignIn"
 
 export type FormSignInErrorBoxProps = {
   errors: FormSignInErrorBoxControl["errors"]
-  networkError: FormSignInNetworkError
+  networkStatus: NetworkStatus
   errorMessageId: string
 }
 
@@ -14,25 +14,37 @@ export type FormSignInErrorBoxControl = {
   control: UseFormMethods["control"]
 }
 
-const FormSignInErrorBox = ({ networkError, errors, errorMessageId }: FormSignInErrorBoxProps) => {
+const FormSignInErrorBox = ({ networkStatus, errors, errorMessageId }: FormSignInErrorBoxProps) => {
   return (
     <div className="border-b">
-      {Object.entries(errors).length > 0 && !networkError.error && (
+      {Object.entries(errors).length > 0 && !networkStatus.content && (
         <AlertBox type="alert" inverted closeable>
           {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
         </AlertBox>
       )}
 
-      {!!networkError.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={`form-sign-in-${errorMessageId}-error`} error={!!networkError.error}>
-          <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
-            {networkError.error.title}
+      {networkStatus.content?.error && Object.entries(errors).length === 0 && (
+        <ErrorMessage id={`form-sign-in-${errorMessageId}-error`} error={!!networkStatus.content}>
+          <AlertBox type={"alert"} inverted onClose={() => networkStatus.reset()}>
+            {networkStatus.content.title}
           </AlertBox>
 
           <AlertNotice title="" type="alert" inverted>
-            {networkError.error.content}
+            {networkStatus.content.description}
           </AlertNotice>
         </ErrorMessage>
+      )}
+
+      {networkStatus.type === "success" && (
+        <>
+          <AlertBox type="success" inverted onClose={() => networkStatus.reset()}>
+            {networkStatus.content?.title}
+          </AlertBox>
+
+          <AlertNotice title="" type="success" inverted>
+            {networkStatus.content?.description}
+          </AlertNotice>
+        </>
       )}
 
       <SiteAlert type="notice" dismissable />
