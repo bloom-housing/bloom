@@ -50,6 +50,7 @@ import {
   pdfUrlFromListingEvents,
   getTimeRangeString,
   getCurrencyRange,
+  getPostmarkString,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -353,24 +354,36 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
       />
-      <SubmitApplication
-        applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
-        applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
-        applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
-        applicationOrganization={listing.applicationOrganization}
-        postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: getDateString(
-            listing.postmarkedApplicationsReceivedByDate,
-            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
-          ),
-          developer: listing.developer,
-          applicationsDueDate: getDateString(
-            listing.applicationDueDate,
-            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
-          ),
-        }}
-        listingStatus={listing.status}
-      />
+      {!(
+        listing.status === ListingStatus.closed ||
+        !(listing.applicationMailingAddress || listing.applicationDropOffAddress)
+      ) && (
+        <SubmitApplication
+          applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
+          applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
+          applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
+          applicationOrganization={listing.applicationOrganization}
+          strings={{
+            postmark: getPostmarkString(
+              listing.applicationDueDate
+                ? getDateString(listing.applicationDueDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
+                : null,
+              listing.postmarkedApplicationsReceivedByDate
+                ? getDateString(
+                    listing.postmarkedApplicationsReceivedByDate,
+                    `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+                  )
+                : null,
+              listing.developer
+            ),
+            mailHeader: t("listings.apply.sendByUsMail"),
+            dropOffHeader: t("listings.apply.dropOffApplication"),
+            sectionHeader: t("listings.apply.submitAPaperApplication"),
+            officeHoursHeader: t("leasingAgent.officeHours"),
+            mapString: t("t.getDirections"),
+          }}
+        />
+      )}
     </>
   )
 

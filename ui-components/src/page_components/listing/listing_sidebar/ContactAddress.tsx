@@ -21,7 +21,12 @@ const ContactAddress = ({ address, mapString }: AddressProps) => {
     <>
       <p className="text-gray-700 mb-1">{mainAddress}</p>
       <p className="mb-4">
-        <a href={googleMapsHref} className="inline-block pt-1" target="_blank">
+        <a
+          href={googleMapsHref}
+          className="inline-block pt-1"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           <Icon symbol="map" size="medium" fill={IconFillColors.primary} className={"pr-2"} />
           {mapString && mapString}
         </a>
