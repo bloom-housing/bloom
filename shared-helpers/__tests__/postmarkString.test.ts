@@ -4,7 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 
-describe("postmark strung helper", () => {
+describe("postmark string helper", () => {
   it("no data", () => {
     expect(getPostmarkString(null, null, null)).toBe("")
   })

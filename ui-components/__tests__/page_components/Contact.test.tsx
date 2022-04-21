@@ -23,6 +23,10 @@ describe("<Contact>", () => {
           state: "State",
           zipCode: "12345",
         }}
+        additionalInformation={[
+          { title: "Additional Info 1", content: "Content 1" },
+          { title: "Additional Info 2", content: "Content 2" },
+        ]}
       />
     )
     expect(getByText("Contact Leasing Agent")).toBeTruthy()
@@ -38,5 +42,9 @@ describe("<Contact>", () => {
     expect(getByText("City", { exact: false })).toBeTruthy()
     expect(getByText("State", { exact: false })).toBeTruthy()
     expect(getByText("12345", { exact: false })).toBeTruthy()
+    expect(getByText("Additional Info 1")).toBeTruthy()
+    expect(getByText("Additional Info 2")).toBeTruthy()
+    expect(getByText("Content 1")).toBeTruthy()
+    expect(getByText("Content 2")).toBeTruthy()
   })
 })

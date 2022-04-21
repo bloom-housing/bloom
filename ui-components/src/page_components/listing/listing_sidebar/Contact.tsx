@@ -2,21 +2,31 @@ import * as React from "react"
 import { ContactAddress } from "./ContactAddress"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Address } from "./MultiLineAddress"
-import Heading from "../../../headers/Heading"
+import { Heading } from "../../../headers/Heading"
 
 export interface ContactProps {
+  /** Any number of text sections rendered after the contact information */
   additionalInformation?: { title: string; content: string | React.ReactNode }[]
+  /** The contact's address */
   contactAddress?: Address
+  /** The contact's company and website */
   contactCompany?: { name: string; website: string }
+  /** The contact's email */
   contactEmail?: string
+  /** The contact's name */
   contactName?: string
+  /** The contact's phone number */
   contactPhoneNumber?: string
+  /** Additional information pertaining to the contact's phone number */
   contactPhoneNumberNote?: string
+  /** The contact's title */
   contactTitle?: string
+  /** The text for the section's header */
   sectionTitle: string
   strings?: { email?: string; getDirections?: string; website?: string }
 }
 
+/** Displays information about a contact, including their address, contact information, and notes */
 const Contact = ({
   additionalInformation,
   contactAddress,

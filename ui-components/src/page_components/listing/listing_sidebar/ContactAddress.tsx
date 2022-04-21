@@ -4,12 +4,15 @@ import { Icon, IconFillColors } from "../../../icons/Icon"
 import { MultiLineAddress, Address } from "./MultiLineAddress"
 import { OneLineAddress } from "./OneLineAddress"
 
-export interface AddressProps {
+export interface ContactAddressProps {
+  /** An address */
   address?: Address
+  /** A string for the map link */
   mapString?: string
 }
 
-const ContactAddress = ({ address, mapString }: AddressProps) => {
+/** Renders an address followed by a Google Maps link to the address */
+const ContactAddress = ({ address, mapString }: ContactAddressProps) => {
   if (!address?.street) return null
 
   const oneLineAddress = <OneLineAddress address={address} />

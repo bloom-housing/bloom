@@ -14,17 +14,11 @@ export interface ApplicationAddressesProps {
   /** The application organization, often the developer */
   applicationOrganization?: string
   strings?: {
-    /** Additional information concerning postmarked dates on mailed paper applications */
     postmark?: string
-    /** Header of the paper application mailing address section */
     mailHeader?: string
-    /** Header of this section */
     sectionHeader?: string
-    /** Header of the paper application dropoff address section */
     dropOffHeader?: string
-    /** Header of the dropoff address office hours section */
     officeHoursHeader?: string
-    /** Description of the address map link */
     mapString?: string
   }
 }

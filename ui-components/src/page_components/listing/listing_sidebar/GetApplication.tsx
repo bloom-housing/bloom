@@ -6,7 +6,7 @@ import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 import { Address } from "../../../page_components/listing/listing_sidebar/MultiLineAddress"
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
-import Heading from "../../../headers/Heading"
+import { Heading } from "../../../headers/Heading"
 
 export interface PaperApplication {
   fileURL: string
@@ -14,17 +14,26 @@ export interface PaperApplication {
 }
 
 export interface ApplicationsProps {
-  onlineApplicationURL?: string
-  applicationsOpen: boolean
-  applicationsOpenDate?: string
-  paperApplications?: PaperApplication[]
-  paperMethod?: boolean
-  postmarkedApplicationsReceivedByDate?: string
-  applicationPickUpAddressOfficeHours?: string
+  /** The pickup address for the application */
   applicationPickUpAddress?: Address
+  /** Office hours for the agent at the pickup address */
+  applicationPickUpAddressOfficeHours?: string
+  /** Whether or not applications are currently open */
+  applicationsOpen: boolean
+  /** The date applications open */
+  applicationsOpenDate?: string
+  /** The URL for an online applications */
+  onlineApplicationURL?: string
+  /** Any number of paper application objects, including their URL and language */
+  paperApplications?: PaperApplication[]
+  /** Whether or not there is a paper application method */
+  paperMethod?: boolean
+  /** The date mailed applications must be received by */
+  postmarkedApplicationsReceivedByDate?: string
+  /** Whether or not to hide actionable application buttons */
   preview?: boolean
 }
-
+/** Displays information regarding how to apply, including an online application link button, paper application downloads, and a paper application pickup address */
 const GetApplication = (props: ApplicationsProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
@@ -93,13 +102,18 @@ const GetApplication = (props: ApplicationsProps) => {
           <Heading priority={3} style={"sidebarSubHeader"}>
             {t("listings.apply.pickUpAnApplication")}
           </Heading>
-          <ContactAddress address={props.applicationPickUpAddress} />
+          <ContactAddress
+            address={props.applicationPickUpAddress}
+            mapString={t("t.getDirections")}
+          />
           {props.applicationPickUpAddressOfficeHours && (
             <>
               <Heading priority={3} style={"sidebarSubHeader"}>
                 {t("leasingAgent.officeHours")}
               </Heading>
-              {props.applicationPickUpAddressOfficeHours}
+              <p className="text-gray-800 text-tiny markdown">
+                {props.applicationPickUpAddressOfficeHours}
+              </p>
             </>
           )}
         </>
