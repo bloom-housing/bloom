@@ -102,7 +102,7 @@ export default function Home({ latestListings }) {
       )}
       <Hero
         title={heroTitle}
-        backgroundImage={"/images/hero.png"}
+        backgroundImage={"/images/hero-placeholder.jpg"}
         heroInset={heroInset}
         innerClassName="bg-white bg-opacity-90 max-w-2xl mx-auto p-8 rounded-xl"
       >
