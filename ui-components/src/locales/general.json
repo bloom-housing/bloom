@@ -915,5 +915,19 @@
   "welcome.viewAdditionalHousing": "View additional housing opportunities and resources",
   "welcome.viewAdditionalHousingTruncated": "View opportunities and resources",
   "whatToExpect.default": "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
-  "whatToExpect.label": "What to Expect"
+  "whatToExpect.label": "What to Expect",
+  "application.programs.VHHP.veteran.label": "Veteran",
+  "application.programs.VHHP.veteranStatus.label": "Veteran Status",
+  "application.programs.VHHP.veteran.description": "You are a Veteran or active member of the military. “Veteran” means any person who actively served within one or more of the military services of the United States who was called to and released from active duty or active service, for a period of not less than 90 consecutive days or was discharged from the service due to a service-connected disability within that 90-day period. This includes all Veterans regardless of discharge status.",
+  "application.programs.VHHP.veteranStatus.description": "You are ineligible for VA health care and/or VA Supportive Housing (HUD-VASH).",
+  "application.preferences.oaklandHousingAuthority.liveOrWork.label": "Live or Work",
+  "application.preferences.oaklandHousingAuthority.liveOrWork.description": "You have lived and/or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at this property and can verify your previous residency/employment at the applicant interview.",
+  "application.preferences.oaklandHousingAuthority.family.label": "Family",
+  "application.preferences.oaklandHousingAuthority.family.description": "You are a family with two or more persons, or a single person applicant that is 62 years of age or older, or a single person applicant with a disability.",
+  "application.preferences.oaklandHousingAuthority.veteran.label": "Veteran",
+  "application.preferences.oaklandHousingAuthority.veteran.description": "You are a Veteran or active member of the military who was discharged or released from such service under conditions other than dishonorable.",
+  "application.preferences.southAlamedaCounty.live.label": "Live in Fremont, Newark or Union City",
+  "application.preferences.southAlamedaCounty.live.description": "At least one member of my household lives in Fremont, Newark or Union City.",
+  "application.preferences.southAlamedaCounty.work.label": "Work in Fremont, Newark or Union City",
+  "application.preferences.southAlamedaCounty.work.description": "At least one member of my household works in Fremont, Newark or Union City. (If checked, please add work address):"
 }
