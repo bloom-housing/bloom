@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.11...@bloom-housing/partners@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* min max occupancy validation in Add Unit ([#2661](https://github.com/bloom-housing/bloom/issues/2661)) ([67a6723](https://github.com/bloom-housing/bloom/commit/67a67231e26ef407808f1e6f9137d60dbb442002))
+
+
+
+
+
 ## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.10...@bloom-housing/partners@4.2.2-alpha.11) (2022-04-21)
 
 
