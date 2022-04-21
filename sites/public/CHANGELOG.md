@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.11...@bloom-housing/public@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* add disabled field to contactPreferencesOptions ([#2673](https://github.com/bloom-housing/bloom/issues/2673)) ([b858637](https://github.com/bloom-housing/bloom/commit/b858637b84e2ff98eacf51ca5eccce613ae13733))
+
+
+
+
+
 ## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.10...@bloom-housing/public@4.2.2-alpha.11) (2022-04-21)
 
 
