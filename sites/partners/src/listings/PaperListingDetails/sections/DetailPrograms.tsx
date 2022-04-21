@@ -16,9 +16,9 @@ const DetailPrograms = () => {
       listing?.listingPrograms
         .sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
-          order: index + 1,
-          name: program.program.title,
-          description: program.program.description,
+          order: { content: index + 1 },
+          name: { content: program.program.title },
+          description: { content: program.program.description },
         })),
     [listing]
   )

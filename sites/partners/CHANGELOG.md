@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.11...@bloom-housing/partners@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* min max occupancy validation in Add Unit ([#2661](https://github.com/bloom-housing/bloom/issues/2661)) ([67a6723](https://github.com/bloom-housing/bloom/commit/67a67231e26ef407808f1e6f9137d60dbb442002))
+
+
+
+
+
+## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.10...@bloom-housing/partners@4.2.2-alpha.11) (2022-04-21)
+
+
+### Features
+
+* new category table component ([#2648](https://github.com/bloom-housing/bloom/issues/2648)) ([3b3fe46](https://github.com/bloom-housing/bloom/commit/3b3fe46dda3d0e553664c10cea46849551ce064c))
+
+
+### BREAKING CHANGES
+
+* There is a new prop interface for the StandardTable component and all components that use it, which includes passing cell content within a new object, allowing us to support new cell options - all tables will need to pass data with the new format.
+
+
+
+
+
 ## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.9...@bloom-housing/partners@4.2.2-alpha.10) (2022-04-20)
 
 **Note:** Version bump only for package @bloom-housing/partners

@@ -12,26 +12,26 @@ const headers = {
 
 const data = [
   {
-    name: "Virginia Kirch",
-    relationship: "Colleague",
-    dob: "12/01/1994",
+    name: { content: "Virginia Kirch" },
+    relationship: { content: "Colleague" },
+    dob: { content: "12/01/1994" },
   },
   {
-    name: "Trixie Fabian",
-    relationship: "Partner",
-    dob: "06/01/1955",
+    name: { content: "Trixie Fabian" },
+    relationship: { content: "Partner" },
+    dob: { content: "06/01/1955" },
   },
 ]
 
 describe("<MinimalTable>", () => {
   it("renders without error", () => {
     const { getByText } = render(<MinimalTable headers={headers} data={data} />)
-    expect(getByText(data[0].name))
-    expect(getByText(data[0].relationship))
-    expect(getByText(data[0].dob))
-    expect(getByText(data[1].name))
-    expect(getByText(data[1].relationship))
-    expect(getByText(data[1].dob))
+    expect(getByText(data[0].name.content))
+    expect(getByText(data[0].relationship.content))
+    expect(getByText(data[0].dob.content))
+    expect(getByText(data[1].name.content))
+    expect(getByText(data[1].relationship.content))
+    expect(getByText(data[1].dob.content))
   })
 
   it("supports flush column styling", () => {

@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.11...@bloom-housing/public@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* add disabled field to contactPreferencesOptions ([#2673](https://github.com/bloom-housing/bloom/issues/2673)) ([b858637](https://github.com/bloom-housing/bloom/commit/b858637b84e2ff98eacf51ca5eccce613ae13733))
+
+
+
+
+
+## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.10...@bloom-housing/public@4.2.2-alpha.11) (2022-04-21)
+
+
+### Features
+
+* new category table component ([#2648](https://github.com/bloom-housing/bloom/issues/2648)) ([3b3fe46](https://github.com/bloom-housing/bloom/commit/3b3fe46dda3d0e553664c10cea46849551ce064c))
+
+
+### BREAKING CHANGES
+
+* There is a new prop interface for the StandardTable component and all components that use it, which includes passing cell content within a new object, allowing us to support new cell options - all tables will need to pass data with the new format.
+
+
+
+
+
+## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.9...@bloom-housing/public@4.2.2-alpha.10) (2022-04-20)
+
+
+### Bug Fixes
+
+* no application message and loading spinner working ([#2603](https://github.com/bloom-housing/bloom/issues/2603)) ([0ae1596](https://github.com/bloom-housing/bloom/commit/0ae159671b3b62fa572e27a8a860d693fab86a2c))
+
+
+
+
+
 ## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.8...@bloom-housing/public@4.2.2-alpha.9) (2022-04-20)
 
 **Note:** Version bump only for package @bloom-housing/public

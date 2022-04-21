@@ -37,28 +37,32 @@ const DetailApplicationDates = () => {
           const { startTime, endTime, url } = event
 
           return {
-            date: startTime && getDetailFieldDate(startTime),
-            startTime: startTime && getDetailFieldTime(startTime),
-            endTime: endTime && getDetailFieldTime(endTime),
-            url: url ? (
-              <LinkButton className="mx-0" href={url} unstyled>
-                {t("t.url")}
-              </LinkButton>
-            ) : (
-              t("t.n/a")
-            ),
-            view: (
-              <div className="flex">
-                <Button
-                  type="button"
-                  className="front-semibold uppercase"
-                  onClick={() => setDrawer(event)}
-                  unstyled
-                >
-                  {t("t.view")}
-                </Button>
-              </div>
-            ),
+            date: { content: startTime && getDetailFieldDate(startTime) },
+            startTime: { content: startTime && getDetailFieldTime(startTime) },
+            endTime: { content: endTime && getDetailFieldTime(endTime) },
+            url: {
+              content: url ? (
+                <LinkButton className="mx-0" href={url} unstyled>
+                  {t("t.url")}
+                </LinkButton>
+              ) : (
+                t("t.n/a")
+              ),
+            },
+            view: {
+              content: (
+                <div className="flex">
+                  <Button
+                    type="button"
+                    className="front-semibold uppercase"
+                    onClick={() => setDrawer(event)}
+                    unstyled
+                  >
+                    {t("t.view")}
+                  </Button>
+                </div>
+              ),
+            },
           }
         }),
     [listing]

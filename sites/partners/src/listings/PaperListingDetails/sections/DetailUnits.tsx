@@ -24,23 +24,25 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const unitTableData = useMemo(
     () =>
       listing?.units.map((unit) => ({
-        number: unit.number,
-        unitType: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`),
-        amiPercentage: unit.amiPercentage,
-        monthlyRent: unit.monthlyRent,
-        sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType?.name,
-        status: t(`listings.unit.statusOptions.${unit.status}`),
-        action: (
-          <Button
-            type="button"
-            className="font-semibold uppercase"
-            onClick={() => setUnitDrawer(unit)}
-            unstyled
-          >
-            {t("t.view")}
-          </Button>
-        ),
+        number: { content: unit.number },
+        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        amiPercentage: { content: unit.amiPercentage },
+        monthlyRent: { content: unit.monthlyRent },
+        sqFeet: { content: unit.sqFeet },
+        priorityType: { content: unit.priorityType?.name },
+        status: { content: t(`listings.unit.statusOptions.${unit.status}`) },
+        action: {
+          content: (
+            <Button
+              type="button"
+              className="font-semibold uppercase"
+              onClick={() => setUnitDrawer(unit)}
+              unstyled
+            >
+              {t("t.view")}
+            </Button>
+          ),
+        },
       })),
     [listing, setUnitDrawer]
   )

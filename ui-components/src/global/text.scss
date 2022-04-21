@@ -169,3 +169,10 @@ h1.title {
   @apply text-sm;
   @apply mb-3;
 }
+
+.category-header {
+  @apply font-alt-sans;
+  @apply font-semibold;
+  @apply text-gray-700;
+  @apply text-sm;
+}
