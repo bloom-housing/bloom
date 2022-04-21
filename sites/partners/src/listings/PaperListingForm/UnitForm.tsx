@@ -88,7 +88,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const maxOccupancy: number = useWatch({
     control,
     name: "maxOccupancy",
-  }) || numberOccupancyOptions
+  })
 
   const maxAmiHouseholdSize = 8
 
@@ -455,7 +455,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 options={numberOptions(numberOccupancyOptions)}
                 error={fieldHasError(errors?.minOccupancy)}
                 errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
-                validation={{ max: maxOccupancy }}
+                validation={{ max: maxOccupancy || numberOccupancyOptions }}
                 inputProps={{
                   onChange: () => {
                     trigger("minOccupancy")
