@@ -352,7 +352,7 @@ export const minimalDataApplication: Application = {
   additionalPhone: false,
   additionalPhoneNumber: "",
   additionalPhoneNumberType: "",
-  contactPreferences: ["email"],
+  contactPreferences: ["letter"],
   householdSize: 1,
   housingStatus: "",
   sendMailToMailingAddress: false,
