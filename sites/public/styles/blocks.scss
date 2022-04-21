@@ -1,0 +1,28 @@
+.image-card-tag__wrapper {
+  justify-content: flex-end;
+
+  .tag {
+    @apply text-base;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-inline-end: 12px;
+    padding: 8px 16px;
+
+    @screen md {
+      margin-inline-end: 36px;
+    }
+  }
+
+  .tag__icon {
+    padding-inline-end: 10px;
+
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+.action-block.has-bold-header .action-block__header {
+  font-weight: 600;
+}

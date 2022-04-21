@@ -9,14 +9,15 @@
 .region {
   @apply bg-primary;
   background-size: cover;
-  border-radius: 50px;
-  height: 146px;
-  margin: 0 33px 8px 0;
+  background-position: 50% 50%;
+  border-radius: 14px 14px 2px 2px;
+  height: 130px;
+  margin: 0 33px 2.2rem 0;
   position: relative;
   width: 209px;
 
   @screen sm {
-    height: 194px;
+    height: 170px;
     width: 278px;
   }
 }
@@ -25,19 +26,14 @@
 }
 
 .region__text {
-  @apply text-primary-dark;
-  backdrop-filter: blur(5px);
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 48px 0 16px 48px; //TODO(#674): Double check border-radius
-  bottom: 21px;
-  font-size: 0.875rem;
+  bottom: -2rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  left: 21px;
   line-height: 1rem;
   max-width: 236px;
   overflow: hidden;
-  padding: 10px 17px;
   position: absolute;
   text-overflow: ellipsis;
   white-space: nowrap;
+  @apply text-primary-dark;
 }

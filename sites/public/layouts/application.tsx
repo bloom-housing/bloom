@@ -13,6 +13,7 @@ import {
   AuthContext,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -107,10 +108,10 @@ const Layout = (props) => {
 
       <SiteFooter>
         <div className="footer-sections">
-          <div className="footer-logo">
+          <div className="footer-logo text-white">
             <h2 className="sr-only">{t("footer.srHeading")}</h2>
             <FooterSection small={true}>
-              <div className="flex justify-center pb-7">
+              <div className="flex pb-7">
                 <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
                 <div className="flex flex-col justify-center text-white ml-2">
                   <h4 className="text-left text-base font-bold md:text-lg">{t("footer.header")}</h4>
@@ -123,29 +124,23 @@ const Layout = (props) => {
                   </a>
                 </div>
               </div>
+
+              <p className="text-left">{t("footer.description")}</p>
             </FooterSection>
           </div>
-          <div className="footer-info">
-            <FooterSection small={true} className="footer-info__column">
-              <div className="flex flex-col justify-center px-4 text-white">
-                <h5 className="text-sm font-bold text-left mb-3">
-                  {t("footer.forListingQuestions")}
-                </h5>
-                <p className="text-sm text-left">{t("footer.pleaseContact")}</p>
-              </div>
-            </FooterSection>
-            <FooterSection small={true} className="footer-info__column">
-              <div className="flex flex-col justify-center px-4 text-white">
-                <h5 className="text-sm font-bold text-left mb-3">
-                  {t("footer.forGeneralInquiries")}
-                </h5>
-                <p className="text-sm text-left">
-                  {t("footer.youMayCall")}{" "}
-                  <a className="font-bold" href="tel:313-224-6380">
-                    (313) 224-6380
-                  </a>
-                </p>
-              </div>
+          <div className="footer-info text-white">
+            <FooterSection small={true}>
+              <h5 className="text-base font-bold text-left mb-3">
+                {t("footer.forListingQuestions")}
+              </h5>
+              <p className="text-left">{t("footer.pleaseContact")}</p>
+
+              <h5 className="text-base font-bold text-left mb-3">
+                {t("footer.forGeneralInquiries")}
+              </h5>
+              <p className="text-left">
+                <Markdown>{t("footer.contactInfo")}</Markdown>
+              </p>
             </FooterSection>
           </div>
         </div>
