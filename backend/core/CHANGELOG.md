@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.2...@bloom-housing/backend-core@4.2.2-alpha.3) (2022-04-21)
+
+
+### Features
+
+* **backend:** improve user queries ([#2676](https://github.com/bloom-housing/bloom/issues/2676)) ([4733e8a](https://github.com/bloom-housing/bloom/commit/4733e8a9909e47bb2522f9b319f45fe25923cdb5))
+
+
+
+
+
 ## [4.2.2-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.1...@bloom-housing/backend-core@4.2.2-alpha.2) (2022-04-20)
 
 
