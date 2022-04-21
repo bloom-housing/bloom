@@ -35,10 +35,8 @@ export const getGenericAddress = (bloomAddress: Address) => {
 export const disableContactFormOption = (id: string, noPhone: boolean, noEmail: boolean) => {
   if (id === "phone" || id === "text") {
     return noPhone
-  } else if (id === "email" && noEmail) {
-    return true
-  }
-  return false
+  } 
+  return id === "email" && noEmail
 }
 
 export const openInFuture = (listing: Listing) => {
