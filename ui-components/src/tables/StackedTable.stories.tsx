@@ -5,6 +5,7 @@ import { StackedTable } from "./StackedTable"
 export default {
   title: "Tables/StackedTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  component: StackedTable,
 }
 
 const basicTableHeaders = {
@@ -107,7 +108,7 @@ const responsiveTableHeaders = {
 
 const responsiveTableRows = [
   {
-    units: { cellText: "Studio", cellSubText: "23 available", hideMobile: true },
+    units: { cellText: "Studio", cellSubText: "23 available", hideSubTextMobile: true },
     availability: { cellText: "23", cellSubText: "available" },
     income: { cellText: "$0 to $6,854", cellSubText: "per month" },
     rent: { cellText: "30%", cellSubText: "income" },

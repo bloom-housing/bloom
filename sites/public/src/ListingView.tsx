@@ -39,6 +39,7 @@ import {
   getSummariesTable,
   t,
   EventType,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -101,17 +102,24 @@ export const ListingView = (props: ListingProps) => {
 
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
-  const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
+  const hmiData: StandardTableData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
+    const amiRows = Object.keys(row).reduce((acc, rowContent) => {
+      acc[rowContent] = { content: row[rowContent] }
+      return acc
+    }, {})
     return {
-      ...row,
-      sizeColumn: (
-        <strong>
-          {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
-        </strong>
-      ),
+      ...amiRows,
+      sizeColumn: {
+        content: (
+          <strong>
+            {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
+          </strong>
+        ),
+      },
     }
   })
-  let groupedUnits: Record<string, React.ReactNode>[] = null
+
+  let groupedUnits: StandardTableData = []
 
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
