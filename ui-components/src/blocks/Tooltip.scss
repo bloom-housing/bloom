@@ -1,0 +1,13 @@
+.tooltip {
+  @apply relative;
+}
+
+.tooltip__element {
+  @apply absolute;
+  @apply bg-primary-dark;
+  @apply text-white;
+  top: -100%;
+  left: 0;
+  width: 280px;
+  font-size: 1rem;
+}
