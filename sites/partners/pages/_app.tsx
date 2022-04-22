@@ -24,14 +24,14 @@ const signInMessage = "Login is required to view this page."
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
-  const skipLoginRoutes = ["/forgot-password", "/reset-password", "/users/confirm"]
+  const skipLoginRoutes = ["/forgot-password", "/reset-password", "/users/confirm", "/users/terms"]
 
   useMemo(() => {
     addTranslation(translations.general, true)
     if (locale && locale !== "en" && translations[locale]) {
       addTranslation(translations[locale])
     }
-
+    addTranslation(overrideTranslations.en)
     if (overrideTranslations[locale]) {
       addTranslation(overrideTranslations[locale])
     }
@@ -58,6 +58,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
           <AuthProvider>
             <RequireLogin
               signInPath="/sign-in"
+              termsPath="/users/terms"
               signInMessage={signInMessage}
               skipForRoutes={skipLoginRoutes}
             >

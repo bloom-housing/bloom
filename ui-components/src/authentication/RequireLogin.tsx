@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect } from "react"
+import React, { FunctionComponent, useContext, useEffect, useState } from "react"
 import { clearSiteAlertMessage, setSiteAlertMessage } from "../notifications/SiteAlert"
 import { NavigationContext } from "../config/NavigationContext"
 import { AuthContext } from "./AuthContext"
@@ -12,6 +12,7 @@ type XOR<T, U> = T | U extends Record<string, unknown>
 type RequireLoginProps = {
   signInPath: string
   signInMessage: string
+  termsPath?: string // partners portal required accepted terms after sign-in
 } & XOR<{ requireForRoutes?: string[] }, { skipForRoutes: string[] }>
 
 /**
@@ -24,10 +25,12 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   children,
   signInPath,
   signInMessage,
+  termsPath,
   ...rest
 }) => {
   const { router } = useContext(NavigationContext)
   const { profile, initialStateLoaded } = useContext(AuthContext)
+  const [hasTerms, setHasTerms] = useState(false)
 
   // Parse just the pathname portion of the signInPath (in case we want to pass URL params)
   const [signInPathname] = signInPath.split("?")
@@ -45,15 +48,37 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
       : true)
 
   useEffect(() => {
+    if (profile?.jurisdictions?.some((jurisdiction) => jurisdiction.partnerTerms)) {
+      setHasTerms(true)
+    }
+  }, [profile])
+
+  useEffect(() => {
     if (loginRequiredForPath && initialStateLoaded && !profile) {
       setSiteAlertMessage(signInMessage, "notice")
       void router.push(signInPath)
     } else {
       clearSiteAlertMessage("notice")
     }
-  }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath, signInMessage])
 
-  if (loginRequiredForPath && !profile) {
+    if (termsPath && profile && !profile?.agreedToTermsOfService && hasTerms) {
+      void router.push(termsPath)
+    }
+  }, [
+    loginRequiredForPath,
+    initialStateLoaded,
+    profile,
+    router,
+    signInPath,
+    signInMessage,
+    termsPath,
+    hasTerms,
+  ])
+
+  if (
+    loginRequiredForPath &&
+    (!profile || (hasTerms && termsPath && !profile.agreedToTermsOfService))
+  ) {
     return null
   }
 

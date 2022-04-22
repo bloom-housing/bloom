@@ -1,36 +1,42 @@
+import LinkButton from "../../actions/LinkButton"
+import Icon from "../../icons/Icon"
 import * as React from "react"
 import { ListingCard } from "./ListingCard"
 
 export default {
   title: "Listing/ListingCard",
+  component: ListingCard,
 }
 
-export const BasicCard = () => {
+const standardImageCardProps = {
+  imageUrl: "/images/listing.jpg",
+  href: "listing-link",
+  tags: [{ text: "reserved community tag" }],
+  statuses: [{ content: "status content" }],
+}
+
+const standardTableProps = {
+  headers: {
+    unitType: "t.unitType",
+    minimumIncome: "t.incomeRange",
+    rent: "t.rent",
+  },
+  data: [
+    {
+      unitType: { content: "cellA" },
+      minimumIncome: { content: "cellB" },
+      rent: { content: "cellC" },
+    },
+  ],
+  responsiveCollapse: true,
+}
+
+export const WithStandardTable = () => {
   return (
     <ListingCard
-      imageCardProps={{
-        imageUrl:
-          "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=640:*",
-        subtitle: "subtitle",
-        title: "title",
-        href: "listing-link",
-        tagLabel: "reserved community tag",
-        statuses: [{ content: "status content" }],
-      }}
-      tableProps={{
-        headers: {
-          unitType: "t.unitType",
-          minimumIncome: "t.incomeRange",
-          rent: "t.rent",
-        },
-        data: [{ unitType: "cellA", minimumIncome: "cellB", rent: "cellC" }],
-        responsiveCollapse: true,
-      }}
-      seeDetailsLink={`see-details-link`}
-      tableHeaderProps={{
-        tableHeader: "optional table header",
-        tableSubHeader: "optional table subheader",
-      }}
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
     />
   )
 }
@@ -39,12 +45,9 @@ export const withStackedTable = () => {
   return (
     <ListingCard
       imageCardProps={{
-        imageUrl:
-          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
-        subtitle: "subtitle",
-        title: "title",
+        imageUrl: "/images/listing.jpg",
         href: "listing-link",
-        tagLabel: "reserved community tag",
+        tags: [{ text: "reserved community tag" }],
         statuses: [{ content: "status content" }],
       }}
       tableProps={{
@@ -56,7 +59,7 @@ export const withStackedTable = () => {
         },
         stackedData: [
           {
-            units: { cellText: "Studio", cellSubText: "23 available", hideMobile: true },
+            units: { cellText: "Studio", cellSubText: "23 available", hideSubTextMobile: true },
             availability: { cellText: "23", cellSubText: "available" },
             income: { cellText: "$0 to $6,854", cellSubText: "per month" },
             rent: { cellText: "30%", cellSubText: "income" },
@@ -70,11 +73,78 @@ export const withStackedTable = () => {
         ],
         headersHiddenDesktop: ["availability"],
       }}
-      seeDetailsLink={`see-details-link`}
-      tableHeaderProps={{
-        tableHeader: "optional table header",
-        tableSubHeader: "optional table subheader",
-        stackedTable: true,
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      stackedTable={true}
+    />
+  )
+}
+
+export const WithHeaders = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      contentProps={{
+        contentHeader: { text: "Optional content header" },
+        contentSubheader: { text: "Optional content subheader" },
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
+export const WithTags = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      contentProps={{
+        contentHeader: { text: "Optional content header" },
+        contentSubheader: { text: "Optional content subheader" },
+      }}
+      cardTags={[
+        { text: "Tag 1 text" },
+        { text: "Tag 2 text" },
+        { text: "A tag with a longer name" },
+      ]}
+    />
+  )
+}
+
+export const WithTagsAndHeaders = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      contentProps={{
+        contentHeader: { text: "Optional content header" },
+        contentSubheader: { text: "Optional content subheader" },
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+      cardTags={[
+        { text: "Tag 1 text" },
+        { text: "Tag 2 text" },
+        { text: "A tag with a longer name" },
+      ]}
+    />
+  )
+}
+export const WithHeadersContent = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      contentProps={{
+        contentHeader: { text: "Property Listing" },
+        contentSubheader: { text: "Street Address, Local City ST 12345" },
+        tableHeader: { text: "Open Waitlist & Available Units" },
+        tableSubheader: { text: "Includes priority units for mobility impairments" },
       }}
     />
   )
@@ -84,10 +154,7 @@ export const NoContent = () => {
   return (
     <ListingCard
       imageCardProps={{
-        imageUrl:
-          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
-        subtitle: "subtitle",
-        title: "title",
+        imageUrl: "/images/listing.jpg",
         href: "listing-link",
       }}
     />
@@ -138,17 +205,75 @@ export const CustomContent = () => {
   return (
     <ListingCard
       imageCardProps={{
-        imageUrl:
-          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
-        subtitle: "subtitle",
-        title: "title",
+        imageUrl: "/images/listing.jpg",
         href: "listing-link",
-        tagLabel: "Habitat for Humanity",
+        tags: [{ text: "Habitat for Humanity" }],
         statuses: [{ content: "status content" }],
       }}
-      seeDetailsLink={`see-details-link`}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
     >
       {exampleCustomContent()}
     </ListingCard>
+  )
+}
+
+export const MultipleFooterButtons = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[
+        { text: "See Details", href: "see-details-link" },
+        { text: "Apply", href: "apply-link" },
+      ]}
+      contentProps={{
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
+export const MultipleSpreadFooterButtons = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[
+        { text: "See Details", href: "see-details-link" },
+        { text: "Apply", href: "apply-link" },
+      ]}
+      footerContainerClass={"flex justify-between"}
+      contentProps={{
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
+const getCustomFooter = () => {
+  return (
+    <div className={"flex justify-between"}>
+      <span className={"w-5 flex items-center"}>
+        <Icon symbol={"like"} size={"large"} aria-label={"favorite"} />
+      </span>
+      <LinkButton href={"see-details-link"}>See Details</LinkButton>
+    </div>
+  )
+}
+
+export const CustomFooter = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerContent={getCustomFooter()}
+      footerContainerClass={"flex justify-between"}
+      contentProps={{
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
   )
 }

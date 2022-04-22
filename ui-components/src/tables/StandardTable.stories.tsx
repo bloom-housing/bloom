@@ -1,43 +1,45 @@
 import React from "react"
 import { Button } from "../actions/Button"
-import { StandardTable, TableThumbnail } from "./StandardTable"
+import { StandardTable, StandardTableData, TableHeaders, TableThumbnail } from "./StandardTable"
 
 export default {
   title: "Tables/StandardTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
   includeStories: ["Default", "ImageCells", "Draggable"],
+  excludeStories: ["mockHeaders", "mockData", "preferenceHeaders", "preferenceData"],
+  component: StandardTable,
 }
 
-const headers = {
+export const mockHeaders: TableHeaders = {
   name: "t.name",
   relationship: "t.relationship",
   dob: "application.household.member.dateOfBirth",
 }
 
-const data = [
+export const mockData: StandardTableData = [
   {
-    name: "Jim Halpert",
-    relationship: "Husband",
-    dob: "05/01/1985",
+    name: { content: "Jim Halpert" },
+    relationship: { content: "Husband" },
+    dob: { content: "05/01/1985" },
   },
   {
-    name: "Michael Scott",
-    relationship: "Friend",
-    dob: "05/01/1975",
+    name: { content: "Michael Scott" },
+    relationship: { content: "Friend" },
+    dob: { content: "05/01/1975" },
   },
 ]
 
-let i = 50
+let i = 5
 while (i > 0) {
-  data.push(data[0])
-  data.push(data[1])
+  mockData.push(mockData[0])
+  mockData.push(mockData[1])
   i--
 }
 
-export const Default = () => <StandardTable headers={headers} data={data} />
+export const Default = () => <StandardTable headers={mockHeaders} data={mockData} />
 
-const headersWithImage = { image: "Image", ...headers }
-const dataWithImage = [...data] as any
+const headersWithImage = { image: "Image", ...mockHeaders }
+const dataWithImage = [...mockData] as any
 dataWithImage[0].image = (
   <TableThumbnail>
     <a href="#">
@@ -72,16 +74,16 @@ const getDeleteButton = () => {
 
 export const preferenceData = [
   {
-    name: "Live or Work in City of Hayward",
-    action: getDeleteButton(),
+    name: { content: "Live or Work in City of Hayward" },
+    action: { content: getDeleteButton() },
   },
   {
-    name: "Displacee Tenant",
-    action: getDeleteButton(),
+    name: { content: "Displacee Tenant" },
+    action: { content: getDeleteButton() },
   },
   {
-    name: "Veteran Status",
-    action: getDeleteButton(),
+    name: { content: "Veteran Status" },
+    action: { content: getDeleteButton() },
   },
 ]
 

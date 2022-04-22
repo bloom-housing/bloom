@@ -1,5 +1,12 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell, MinimalTable } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  ViewItem,
+  GridCell,
+  MinimalTable,
+  StandardTableData,
+} from "@bloom-housing/ui-components"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
@@ -24,13 +31,13 @@ const DetailApplicationTypes = () => {
     language: "t.language",
   }
 
-  const paperApplicationsTableRows = []
+  const paperApplicationsTableRows: StandardTableData = []
 
   if (paperMethod) {
     paperMethod.paperApplications.forEach((item) => {
       paperApplicationsTableRows.push({
-        fileName: `${item.file.fileId.split("/").slice(-1).join()}.pdf`,
-        language: t(`languages.${item.language}`),
+        fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+        language: { content: t(`languages.${item.language}`) },
       })
     })
   }

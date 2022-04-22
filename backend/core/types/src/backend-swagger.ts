@@ -800,6 +800,48 @@ export class UserService {
   /**
    * Resend confirmation
    */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-partner-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Verifies token is valid
+   */
+  isUserConfirmationTokenValid(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/is-confirmation-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
   resendConfirmation(
     params: {
       /** requestBody */
@@ -1160,6 +1202,8 @@ export class ListingsService {
       view?: string
       /**  */
       orderBy?: OrderByFieldsEnum
+      /**  */
+      order?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1173,6 +1217,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
+        order: params["order"],
       }
       let data = null
 
@@ -1487,6 +1532,116 @@ export class PreferencesService {
   }
 }
 
+export class ProgramsService {
+  /**
+   * List programs
+   */
+  list(
+    params: {
+      /**  */
+      filter?: ProgramsFilterParams[]
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { filter: params["filter"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create program
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ProgramCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update program
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ProgramUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs/{programId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get program by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      programId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs/{programId}"
+      url = url.replace("{programId}", params["programId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete program by id
+   */
+  delete(
+    params: {
+      /**  */
+      programId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs/{programId}"
+      url = url.replace("{programId}", params["programId"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class PropertiesService {
   /**
    * List properties
@@ -1684,116 +1839,6 @@ export class PropertyGroupsService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/propertyGroups/{propertyGroupId}"
       url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ProgramsService {
-  /**
-   * List programs
-   */
-  list(
-    params: {
-      /**  */
-      filter?: ProgramsFilterParams[]
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { filter: params["filter"] }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create program
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ProgramCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update program
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ProgramUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get program by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      programId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-      url = url.replace("{programId}", params["programId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete program by id
-   */
-  delete(
-    params: {
-      /**  */
-      programId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-      url = url.replace("{programId}", params["programId"] + "")
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -2490,6 +2535,9 @@ export interface Jurisdiction {
 
   /**  */
   emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 }
 
 export interface AmiChart {
@@ -3875,6 +3923,11 @@ export interface PaginatedAssets {
   meta: PaginationMeta
 }
 
+export interface UserErrorExtraModel {
+  /**  */
+  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
+}
+
 export interface Login {
   /**  */
   email: string
@@ -4020,6 +4073,12 @@ export interface User {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserCreate {
@@ -4064,6 +4123,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserBasic {
@@ -4126,6 +4188,12 @@ export interface UserBasic {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface Email {
@@ -4227,6 +4295,12 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserFilterParams {
@@ -4292,6 +4366,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserProfileUpdate {
@@ -4336,6 +4413,9 @@ export interface UserProfileUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
@@ -4356,6 +4436,9 @@ export interface JurisdictionCreate {
 
   /**  */
   emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 
   /**  */
   programs: Id[]
@@ -4391,6 +4474,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 
   /**  */
   programs: Id[]
@@ -6038,6 +6124,45 @@ export interface PreferenceUpdate {
   id: string
 }
 
+export interface ProgramsFilterParams {
+  /**  */
+  $comparison: EnumProgramsFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
+export interface ProgramCreate {
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+}
+
+export interface ProgramUpdate {
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+
+  /**  */
+  id: string
+}
+
 export interface Property {
   /**  */
   units: Unit[]
@@ -6233,45 +6358,6 @@ export interface PropertyGroupUpdate {
   id: string
 }
 
-export interface ProgramsFilterParams {
-  /**  */
-  $comparison: EnumProgramsFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-}
-
-export interface ProgramCreate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-}
-
-export interface ProgramUpdate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-
-  /**  */
-  id: string
-}
-
 export interface ReservedCommunityTypeCreate {
   /**  */
   jurisdiction: Id
@@ -6453,6 +6539,16 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
+}
 export enum EnumLoginMfaType {
   "sms" = "sms",
   "email" = "email",
@@ -6499,6 +6595,11 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "name" = "name",
+  "waitlistOpen" = "waitlistOpen",
+  "status" = "status",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
 }
 
 export enum ListingApplicationAddressType {

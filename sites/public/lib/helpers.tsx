@@ -32,6 +32,13 @@ export const getGenericAddress = (bloomAddress: Address) => {
     : null
 }
 
+export const disableContactFormOption = (id: string, noPhone: boolean, noEmail: boolean) => {
+  if (id === "phone" || id === "text") {
+    return noPhone
+  }
+  return id === "email" && noEmail
+}
+
 export const openInFuture = (listing: Listing) => {
   const nowTime = dayjs()
   return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
@@ -46,11 +53,11 @@ const getListingTableData = (unitsSummarized: UnitsSummarized) => {
   return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
 }
 
-const getListingImageCardStatus = (listing: Listing): StatusBarType => {
+export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
   let content = ""
   let subContent = ""
   let formattedDate = ""
-  let appStatus = ApplicationStatusType.Open
+  let status = ApplicationStatusType.Open
 
   if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
@@ -59,18 +66,18 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
     content = t("listings.applicationOpenPeriod")
   } else {
     if (listing.status === ListingStatus.closed) {
-      appStatus = ApplicationStatusType.Closed
+      status = ApplicationStatusType.Closed
       content = t("listings.applicationsClosed")
     } else if (listing.applicationDueDate) {
       const dueDate = dayjs(listing.applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
+      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
 
       // if due date is in future, listing is open
       if (dayjs() < dueDate) {
         content = t("listings.applicationDeadline")
       } else {
-        appStatus = ApplicationStatusType.Closed
+        status = ApplicationStatusType.Closed
         content = t("listings.applicationsClosed")
       }
     }
@@ -86,7 +93,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
   }
 
   return {
-    status: appStatus,
+    status,
     content,
     subContent,
   }
@@ -105,13 +112,16 @@ export const getListings = (listings) => {
         imageCardProps={{
           imageUrl:
             imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          subtitle: getListingCardSubtitle(listing.buildingAddress),
-          title: listing.name,
           href: `/listing/${listing.id}/${listing.urlSlug}`,
-          tagLabel: listing.reservedCommunityType
-            ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+          tags: listing.reservedCommunityType
+            ? [
+                {
+                  text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+                },
+              ]
             : undefined,
-          statuses: [getListingImageCardStatus(listing)],
+          statuses: [getListingApplicationStatus(listing)],
+          description: listing.name,
         }}
         tableProps={{
           headers: unitSummariesHeaders,
@@ -119,9 +129,13 @@ export const getListings = (listings) => {
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
-        seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
-        tableHeaderProps={{
-          tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
+        footerButtons={[
+          { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
+        ]}
+        contentProps={{
+          contentHeader: { text: listing.name },
+          contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
+          tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
         }}
       />
     )

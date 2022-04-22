@@ -9,14 +9,22 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
-import { blankApplication, OnClientSide } from "@bloom-housing/shared-helpers"
+import {
+  blankApplication,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/appAutofill"
+import { useRouter } from "next/router"
+import { UserStatus } from "../../../lib/constants"
 
 export default () => {
+  const router = useRouter()
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
   const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
@@ -37,14 +45,14 @@ export default () => {
       if (previousApplication && useDetails) {
         const withUpdatedLang = {
           ...previousApplication,
-          language: conductor.application.language,
+          language: router.locale,
         }
 
         conductor.application = withUpdatedLang
       } else {
         const newApplication = {
           ...blankApplication,
-          language: conductor.application.language,
+          language: router.locale,
         }
         conductor.application = newApplication
       }
@@ -53,7 +61,15 @@ export default () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl()
     }
-  }, [conductor, context, previousApplication, submitted, useDetails])
+  }, [submitted, previousApplication, useDetails, context, conductor, router])
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Autofill",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   useEffect(() => {
     if (!profile || previousApplication) {

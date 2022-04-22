@@ -11,13 +11,13 @@ import {
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import { FormSignInNetworkError } from "./FormSignIn"
+import { NetworkStatus } from "./FormSignIn"
 import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFAProps = {
   control: FormSignInMFAControl
   onSubmit: (data: FormSignInMFAValues) => void
-  networkError: FormSignInNetworkError
+  networkError: NetworkStatus
 }
 
 export type FormSignInMFAControl = {
@@ -42,17 +42,23 @@ const FormSignInMFAType = ({
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("nav.signInMFA.verificationChoiceMainTitle")}</h2>
+      <div className="form-card__lead text-center">
+        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <h2 className="form-card__title is-borderless">
+          {t("nav.signInMFA.verificationChoiceMainTitle")}
+        </h2>
         <p className="form-card__sub-title">
           {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
         </p>
       </div>
-      <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-type"} />
+      <FormSignInErrorBox
+        errors={errors}
+        networkStatus={networkError}
+        errorMessageId={"mfa-type"}
+      />
 
       <SiteAlert type="notice" dismissable />
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}

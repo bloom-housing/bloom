@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react"
+import React, { useMemo, useState, useEffect, useContext } from "react"
 import { useForm } from "react-hook-form"
 import {
   AlertBox,
@@ -18,15 +18,18 @@ import {
   getExclusiveKeys,
   setExclusive,
   ProgressNav,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { FormMetadataExtraData, Preference } from "@bloom-housing/backend-core/types"
-import { stateKeys, OnClientSide } from "@bloom-housing/shared-helpers"
+import { stateKeys, OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesAll = () => {
   const clientLoaded = OnClientSide()
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("preferencesAll")
   const preferences = listing?.listingPreferences
   const [page, setPage] = useState(conductor.navigatedThroughBack ? preferences.length : 1)
@@ -45,6 +48,14 @@ const ApplicationPreferencesAll = () => {
   })
 
   const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(preferencesByPage))
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - All Preferences",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   /*
     Required to keep the form up to date before submitting this section if you're moving between pages

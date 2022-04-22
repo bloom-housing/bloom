@@ -21,6 +21,7 @@ const amiChart: AmiChart = {
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
     publicUrl: "",
+    rentalAssistanceDefault: "",
   },
   items: [
     {

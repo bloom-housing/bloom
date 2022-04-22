@@ -7,6 +7,7 @@ import { t } from "../helpers/translator"
 
 export interface TableHeadersOptions {
   name: string
+  mobileReplacement?: string
   className?: string
 }
 export interface TableHeaders {
@@ -28,9 +29,11 @@ export const Cell = (props: {
   className?: string
   colSpan?: number
   children: React.ReactNode
+  mobileReplacement?: string | React.ReactNode
 }) => (
   <td
     data-label={props.headerLabel instanceof Object ? props.headerLabel?.name : props.headerLabel}
+    data-cell={props.mobileReplacement}
     className={props.className || "p-5"}
     colSpan={props.colSpan}
   >
@@ -42,19 +45,35 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
   return <span className="table__thumbnail">{props.children}</span>
 }
 
-export interface StandardTableProps {
-  draggable?: boolean
-  setData?: (data: unknown[]) => void
-  headers: TableHeaders
-  data?: StandardTableData
-  tableClassName?: string
-  cellClassName?: string
-  responsiveCollapse?: boolean
-  translateData?: boolean
-  id?: string
+export type StandardTableCell = {
+  /** The main content of the cell */
+  content: React.ReactNode
+  /** Text content that will replace this cell's header on mobile views */
+  mobileReplacement?: string
 }
 
-export type StandardTableData = Record<string, React.ReactNode>[] | undefined
+export type StandardTableData = Record<string, StandardTableCell>[]
+
+export interface StandardTableProps {
+  /** If the table should be sortable through dragging */
+  draggable?: boolean
+  /** A set state function tied to the table's data, used if the table is draggable */
+  setData?: (data: unknown[]) => void
+  /** The headers for the table passed as text content with optional settings */
+  headers: TableHeaders
+  /** The table data passed as records of column name to cell data with optional settings */
+  data?: StandardTableData
+  /** A class name applied to the root of the table */
+  tableClassName?: string
+  /** A class name applied to each cell */
+  cellClassName?: string
+  /** If the table should collapse on mobile views to show repeating columns on the left for every row */
+  responsiveCollapse?: boolean
+  /** If cell text should be translated or left raw */
+  translateData?: boolean
+  /** An id applied to the table */
+  id?: string
+}
 
 const headerName = (header: string | TableHeadersOptions) => {
   if (typeof header === "string") {
@@ -99,16 +118,16 @@ export const StandardTable = (props: StandardTableProps) => {
     )
   }
 
-  const body = tableData?.map((row: Record<string, React.ReactNode>, dataIndex) => {
+  const body = tableData?.map((row, dataIndex) => {
     const rowKey = row["id"]
-      ? `row-${row["id"] as string}`
+      ? `row-${row["id"].content as string}`
       : process.env.NODE_ENV === "test"
       ? `standardrow-${dataIndex}`
       : nanoid()
 
     const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
-      const cell = row[colKey]
+      const cell = row[colKey]?.content
 
       const cellClass = [headerClassName(headers[colKey]), cellClassName].join(" ")
 
@@ -121,6 +140,7 @@ export const StandardTable = (props: StandardTableProps) => {
               : headers[colKey]
           }
           className={cellClass !== " " ? cellClass : undefined}
+          mobileReplacement={row[colKey]?.mobileReplacement}
         >
           {props.translateData && typeof cell === "string" && cell !== ""
             ? getTranslationWithArguments(cell)
@@ -176,11 +196,7 @@ export const StandardTable = (props: StandardTableProps) => {
     tableClasses.push(props.tableClassName)
   }
 
-  const reorder = (
-    list: Record<string, React.ReactNode>[] | undefined,
-    startIndex: number,
-    endIndex: number
-  ) => {
+  const reorder = (list: StandardTableData | undefined, startIndex: number, endIndex: number) => {
     if (!list) return
 
     const result = Array.from(list)

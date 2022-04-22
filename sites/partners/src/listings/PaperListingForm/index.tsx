@@ -202,10 +202,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
              */
             if (process.env.backendProxyBase) {
               try {
+                // clear individual listing's cache
                 await axios.request({
-                  url: `${process.env.backendProxyBase}/listings*`,
+                  url: `${process.env.backendProxyBase}/listings/${result.id}*`,
                   method: "purge",
                 })
+                // clear list caches if published
+                if (result.status !== ListingStatus.pending) {
+                  await axios.request({
+                    url: `${process.env.backendProxyBase}/listings?*`,
+                    method: "purge",
+                  })
+                }
               } catch (e) {
                 console.log("purge error = ", e)
               }
@@ -327,15 +335,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <Tab>Application Process</Tab>
                         </TabList>
                         <TabPanel>
-                          <ListingIntro
-                            jurisdictionOptions={[
-                              { label: "", value: "" },
-                              ...profile.jurisdictions.map((jurisdiction) => ({
-                                label: jurisdiction.name,
-                                value: jurisdiction.id,
-                              })),
-                            ]}
-                          />
+                          <ListingIntro jurisdictions={profile.jurisdictions} />
                           <ListingPhoto />
                           <BuildingDetails
                             listing={listing}
@@ -378,7 +378,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           />
                           <AdditionalFees />
                           <BuildingFeatures />
-                          <AdditionalEligibility />
+                          <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
 

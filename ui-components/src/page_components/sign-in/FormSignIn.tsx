@@ -12,26 +12,38 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NavigationContext } from "../../config/NavigationContext"
-import type { NetworkErrorReset, NetworkErrorValue } from "../forgot-password/FormForgotPassword"
+import { AlertTypes } from "../../notifications/alertTypes"
 
 export type NetworkErrorDetermineError = (status: number, error: Error) => void
+
+export type NetworkStatusType = AlertTypes
+
+export type NetworkErrorReset = () => void
+
+export type NetworkStatusContent = {
+  title: string
+  description: string
+  error?: boolean
+} | null
+
+export type NetworkStatus = {
+  content: NetworkStatusContent
+  type?: NetworkStatusType
+  reset: NetworkErrorReset
+}
 
 export type FormSignInProps = {
   control: FormSignInControl
   onSubmit: (data: FormSignInValues) => void
-  networkError: FormSignInNetworkError
+  networkStatus: NetworkStatus
   showRegisterBtn?: boolean
-}
-
-export type FormSignInNetworkError = {
-  error: NetworkErrorValue
-  reset: NetworkErrorReset
 }
 
 export type FormSignInControl = {
   errors: UseFormMethods["errors"]
   handleSubmit: UseFormMethods["handleSubmit"]
   register: UseFormMethods["register"]
+  watch: UseFormMethods["watch"]
 }
 
 export type FormSignInValues = {
@@ -41,7 +53,7 @@ export type FormSignInValues = {
 
 const FormSignIn = ({
   onSubmit,
-  networkError,
+  networkStatus,
   showRegisterBtn,
   control: { errors, register, handleSubmit },
 }: FormSignInProps) => {
@@ -52,16 +64,16 @@ const FormSignIn = ({
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
+      <div className="form-card__lead text-center">
         <Icon size="2xl" symbol="profile" />
         <h2 className="form-card__title">{t(`nav.signIn`)}</h2>
       </div>
       <FormSignInErrorBox
         errors={errors}
-        networkError={networkError}
+        networkStatus={networkStatus}
         errorMessageId={"main-sign-in"}
       />
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}

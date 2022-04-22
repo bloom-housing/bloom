@@ -3,7 +3,7 @@
 Primary applicant details. Name, DOB and Email Address
 https://github.com/bloom-housing/bloom/issues/255
 */
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -17,13 +17,16 @@ import {
   t,
   ProgressNav,
   emailRegex,
+  AuthContext,
 } from "@bloom-housing/ui-components"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationName = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("primaryApplicantName")
   const [autofilled, setAutofilled] = useState(false)
 
@@ -60,6 +63,14 @@ const ApplicationName = () => {
       )
     )
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Contact Name",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

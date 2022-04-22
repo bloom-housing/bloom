@@ -37,6 +37,7 @@ describe("Unit Transformations", () => {
         preferences: [],
         publicUrl: "",
         emailFromAddress: "email from address",
+        rentalAssistanceDefault: "",
       },
     }
 
