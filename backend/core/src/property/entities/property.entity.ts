@@ -12,12 +12,13 @@ import {
 import { Expose, Type } from "class-transformer"
 import {
   IsDate,
-  IsDefined, IsEnum,
+  IsDefined,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { Unit } from "../../units/entities/unit.entity"
 import { PropertyGroup } from "../../property-groups/entities/property-group.entity"

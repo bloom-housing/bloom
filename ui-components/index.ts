@@ -70,7 +70,7 @@ export * from "./src/helpers/preferences"
 export * from "./src/helpers/resolveObject"
 export * from "./src/helpers/useIntersect"
 export * from "./src/helpers/useMutate"
-export * from "./src/helpers/tableSummaries"
+// export * from "./src/helpers/tableSummaries"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
