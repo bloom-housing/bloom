@@ -18,12 +18,19 @@ const Tooltip: React.FC<TooltipProps> = ({ className, id, text, children }) => {
 
   return (
     <div className={`tooltip ${className || ""}`}>
-      <div className="tooltip__element" role="tooltip" id={id} hidden={isHidden}>
+      <div
+        className="tooltip__element"
+        role="tooltip"
+        id={id}
+        hidden={isHidden}
+        data-test-id="tooltip-element"
+      >
         {text}
       </div>
 
       <div
         className="tooltip__children"
+        data-test-id="tooltip-children"
         onFocus={show}
         onMouseEnter={show}
         onBlur={hide}

@@ -16,6 +16,7 @@ export * from "./src/blocks/ImageCard"
 export * from "./src/blocks/InfoCard"
 export * from "./src/blocks/StatusBar"
 export * from "./src/blocks/ViewItem"
+export * from "./src/blocks/Tooltip"
 
 /* Contexts */
 export * from "./src/authentication"
