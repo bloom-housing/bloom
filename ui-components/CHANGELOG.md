@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.13...@bloom-housing/ui-components@4.2.2-alpha.14) (2022-04-22)
+
+
+### Features
+
+* swap anchor tags with LinkComponent for language routes ([#2686](https://github.com/bloom-housing/bloom/issues/2686)) ([a397930](https://github.com/bloom-housing/bloom/commit/a3979306fe39acd7b424a9e7364d791ad77fa2d0))
+
+
+
+
+
 ## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.12...@bloom-housing/ui-components@4.2.2-alpha.13) (2022-04-22)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
