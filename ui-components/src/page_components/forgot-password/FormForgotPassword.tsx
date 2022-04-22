@@ -63,7 +63,7 @@ const FormForgotPassword = ({
       )}
 
       {!!networkError.error?.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={"householdsize-error"} error={!!networkError.error}>
+        <ErrorMessage id={"forgotpasswordemail-error"} error={!!networkError.error}>
           <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
             {networkError.error.title}
           </AlertBox>
@@ -86,6 +86,7 @@ const FormForgotPassword = ({
             error={errors.email}
             errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
             register={register}
+            onChange={() => networkError.reset()}
           />
           <section>
             <div className="text-center mt-6">
