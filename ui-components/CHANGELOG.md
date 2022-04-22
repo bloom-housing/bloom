@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.11...@bloom-housing/ui-components@4.2.2-alpha.12) (2022-04-22)
+
+
+### Bug Fixes
+
+* forgot password empty warning and two minor style changes ([#2680](https://github.com/bloom-housing/bloom/issues/2680)) ([01f1519](https://github.com/bloom-housing/bloom/commit/01f15194e2de8595a772c8c87f455d882e47f164))
+
+
+
+
+
 ## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.10...@bloom-housing/ui-components@4.2.2-alpha.11) (2022-04-21)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
