@@ -46,15 +46,21 @@ yarn test:a11y
 
 ## Tailwind
 
-- We are using the [Tailwind](https://v2.tailwindcss.com) framework to make use of their low-level utility library that styles components based on custom settings. We configure the settings in `tailwind.config`. Some styles live in a global folder, but for the most part our components are styled with isolated SCSS files.
+- We are using the [Tailwind](https://v2.tailwindcss.com) framework to make use of their low-level utility classes in page-level markup and sometimes in components. We configure the settings in `tailwind.config.js`.
 
-- Use Tailwind where possible before creating custom style sheets or custom classes for consistency.
-
-Vendor Plugins
+## Vendor Plugins
 
 - [AG Grid](https://www.ag-grid.com)
 
 ## Style Conventions
+
+- Some styles live in a global folder, but for the most part our components are styled with isolated SCSS files located alongside React component TS files.
+
+- We are currently in the process of migrating components to a second-generation styling convention which relies on CSS variables for design tokens and generally removes `@apply` Tailwind statements.
+
+- Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `src/global/tokens` folder.
+
+- More information on this process can be found in [Styling2ndGen.md](https://github.com/bloom-housing/bloom/blob/dev/docs/Styling2ndGen.md).
 
 ### Naming Conventions
 

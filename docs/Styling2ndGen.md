@@ -8,7 +8,7 @@ First, we'll go over the what & why of the new component architecture, then we'l
 
 In this updated system, the Bloom design tokens are defined as [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) (aka CSS Variables). They're values you can insert into (almost) every place you would put an actual property value in CSS.
 
-Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `ui-components/global/tokens` folder.
+Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `ui-components/src/global/tokens` folder.
 
 For example, some colors in `tokens/colors.scss`:
 
