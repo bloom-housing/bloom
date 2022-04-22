@@ -1,6 +1,8 @@
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 
+import { BADGES } from "./constants"
+
 // Set up translation file
 import { addTranslation } from "../src/helpers/translator"
 import general from "../src/locales/general.json"
@@ -34,6 +36,16 @@ export const parameters = {
           enabled: false,
         },
       ],
+    },
+  },
+  badgesConfig: {
+    [BADGES.GEN2]: {
+      styles: {
+        backgroundColor: "#e41d3d",
+        borderColor: "#b21d38",
+        color: "#fff",
+      },
+      title: "2nd Generation",
     },
   },
 }
