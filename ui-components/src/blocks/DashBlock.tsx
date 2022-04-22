@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import "./DashBlocks.scss"
-import { NavigationContext } from '../config/NavigationContext'
+import { NavigationContext } from "../config/NavigationContext"
 
 interface DashBlockProps {
   href?: string
@@ -27,7 +27,7 @@ const DashBlock = (props: DashBlockProps) => {
   if (href) {
     wrapper = (
       <LinkComponent href={href} className="dash-item">
-          {header}
+        {header}
       </LinkComponent>
     )
   } else {
