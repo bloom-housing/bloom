@@ -76,7 +76,7 @@ const FormForgotPassword = ({
 
       <SiteAlert type="notice" dismissable />
 
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}
