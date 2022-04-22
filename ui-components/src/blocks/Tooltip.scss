@@ -1,13 +1,36 @@
+$tooltip_padding: 8px;
+$tooltip_arrow_height: 9px;
+
 .tooltip {
   @apply relative;
+  width: fit-content;
 }
 
 .tooltip__element {
-  @apply absolute;
+  @apply w-full;
+  @apply absolute left-1/2;
   @apply bg-primary-dark;
   @apply text-white;
-  top: -100%;
-  left: 0;
-  width: 280px;
-  font-size: 1rem;
+  @apply rounded;
+  @apply p-2;
+  @apply text-sm font-bold text-center;
+  top: calc(-100% - $tooltip_arrow_height - $tooltip_padding * 2);
+  transform: translateX(-50%);
+  max-width: 280px;
+
+  &::before {
+    content: '';
+    @apply absolute bottom-0;
+    @apply w-0 h-0;
+    @apply border-solid;
+    @apply left-1/2;
+    bottom: -$tooltip_arrow_height;
+    transform: translateX(-50%);
+    border-width: $tooltip_arrow_height 7px 0 7px;
+    border-color: theme('colors.primary-dark') transparent transparent transparent;
+  }
+}
+
+.tooltip__children {
+  width: fit-content;
 }

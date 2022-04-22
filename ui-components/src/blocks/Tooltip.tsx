@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import useKeyPress from "../helpers/useKeyPress"
 import "./Tooltip.scss"
 
 export interface TooltipProps {
@@ -13,13 +14,21 @@ const Tooltip: React.FC<TooltipProps> = ({ className, id, text, children }) => {
   const show = () => setHidden(false)
   const hide = () => setHidden(true)
 
+  useKeyPress("Escape", () => hide())
+
   return (
     <div className={`tooltip ${className || ""}`}>
       <div className="tooltip__element" role="tooltip" id={id} hidden={isHidden}>
         {text}
       </div>
 
-      <div onFocus={show} onMouseEnter={show} onBlur={hide} onMouseLeave={hide}>
+      <div
+        className="tooltip__children"
+        onFocus={show}
+        onMouseEnter={show}
+        onBlur={hide}
+        onMouseLeave={hide}
+      >
         {children}
       </div>
     </div>
