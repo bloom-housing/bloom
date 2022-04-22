@@ -1,4 +1,5 @@
 import React from "react"
+import { Button } from "../.."
 import { Tooltip } from './Tooltip'
 
 export default {
@@ -6,13 +7,9 @@ export default {
 }
 
 export const TooltipStory = () => (
-  <div style={{ marginTop: '100px', marginLeft: '100px', width: '200px', backgroundColor: '#fafafa' }}>
+  <div style={{ marginTop: '100px', marginLeft: '100px' }}>
     <Tooltip id="test-tooltip" text="Lorem ipsum dolor sit amet.">
-      <div>
-        <button>test 1</button>
-        <button>test 2</button>
-      </div>
+      <Button>Click me</Button>
     </Tooltip>
   </div>
-
 )
