@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { Waitlist } from "../../src/page_components/listing/listing_sidebar/Waitlist"
+import { QuantityRowSection } from "page_components/listing/listing_sidebar/QuantityRowSection"
 
 afterEach(cleanup)
 
@@ -12,14 +12,16 @@ const strings = {
   description: "Description",
 }
 
-describe("<Waitlist>", () => {
+describe("<QuantityRowSection>", () => {
   it("renders with an open waitlist", () => {
     const { getByText } = render(
-      <Waitlist
-        waitlistMaxSize={100}
-        waitlistCurrentSize={40}
-        waitlistOpenSpots={60}
+      <QuantityRowSection
         strings={strings}
+        quantityRows={[
+          { amount: 100, text: "Final Size" },
+          { amount: 40, text: "Current Size" },
+          { amount: 60, text: "Open Spots" },
+        ]}
       />
     )
     expect(getByText("Section Title")).toBeTruthy()
@@ -33,10 +35,12 @@ describe("<Waitlist>", () => {
   })
   it("renders with open spots", () => {
     const { getByText, queryByText } = render(
-      <Waitlist
-        waitlistMaxSize={10}
-        waitlistCurrentSize={0}
-        waitlistOpenSpots={10}
+      <QuantityRowSection
+        quantityRows={[
+          { amount: 10, text: "Final Size" },
+          { amount: 0, text: "Current Size" },
+          { amount: 10, text: "Open Spots" },
+        ]}
         strings={strings}
       />
     )
@@ -45,10 +49,11 @@ describe("<Waitlist>", () => {
   })
   it("doesn't show null values", () => {
     const { queryByText } = render(
-      <Waitlist
-        waitlistMaxSize={10}
-        waitlistCurrentSize={null}
-        waitlistOpenSpots={10}
+      <QuantityRowSection
+        quantityRows={[
+          { amount: 10, text: "Final Size" },
+          { amount: 10, text: "Open Spots" },
+        ]}
         strings={strings}
       />
     )

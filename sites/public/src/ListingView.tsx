@@ -34,7 +34,7 @@ import {
   SubmitApplication,
   TableHeaders,
   UnitTables,
-  Waitlist,
+  QuantityRowSection,
   WhatToExpect,
   getSummariesTable,
   t,
@@ -463,15 +463,24 @@ export const ListingView = (props: ListingProps) => {
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
           {!applicationsClosed && listing.isWaitlistOpen && (
-            <Waitlist
-              waitlistMaxSize={listing.waitlistMaxSize}
-              waitlistCurrentSize={listing.waitlistCurrentSize}
-              waitlistOpenSpots={listing.waitlistOpenSpots}
+            <QuantityRowSection
+              quantityRows={[
+                {
+                  text: t("listings.waitlist.currentSize"),
+                  amount: listing.waitlistCurrentSize,
+                },
+                {
+                  text: t("listings.waitlist.openSlots"),
+                  amount: listing.waitlistOpenSpots,
+                },
+                {
+                  text: t("listings.waitlist.finalSize"),
+                  amount: listing.waitlistMaxSize,
+                },
+              ]}
               strings={{
                 sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-                currentSize: t("listings.waitlist.currentSize"),
-                openSpots: t("listings.waitlist.openSlots"),
-                finalSize: t("listings.waitlist.finalSize"),
+
                 description: t("listings.waitlist.submitAnApplication"),
               }}
             />
@@ -594,15 +603,24 @@ export const ListingView = (props: ListingProps) => {
                 />
               )}
               {!applicationsClosed && listing.isWaitlistOpen && (
-                <Waitlist
-                  waitlistMaxSize={listing.waitlistMaxSize}
-                  waitlistCurrentSize={listing.waitlistCurrentSize}
-                  waitlistOpenSpots={listing.waitlistOpenSpots}
+                <QuantityRowSection
+                  quantityRows={[
+                    {
+                      text: t("listings.waitlist.currentSize"),
+                      amount: listing.waitlistCurrentSize,
+                    },
+                    {
+                      text: t("listings.waitlist.openSlots"),
+                      amount: listing.waitlistOpenSpots,
+                    },
+                    {
+                      text: t("listings.waitlist.finalSize"),
+                      amount: listing.waitlistMaxSize,
+                    },
+                  ]}
                   strings={{
                     sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-                    currentSize: t("listings.waitlist.currentSize"),
-                    openSpots: t("listings.waitlist.openSlots"),
-                    finalSize: t("listings.waitlist.finalSize"),
+
                     description: t("listings.waitlist.submitAnApplication"),
                   }}
                 />
