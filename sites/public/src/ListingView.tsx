@@ -480,7 +480,6 @@ export const ListingView = (props: ListingProps) => {
               ]}
               strings={{
                 sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-
                 description: t("listings.waitlist.submitAnApplication"),
               }}
             />
@@ -620,7 +619,6 @@ export const ListingView = (props: ListingProps) => {
                   ]}
                   strings={{
                     sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-
                     description: t("listings.waitlist.submitAnApplication"),
                   }}
                 />
