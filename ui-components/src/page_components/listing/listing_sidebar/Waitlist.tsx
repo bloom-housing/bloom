@@ -30,7 +30,9 @@ const Waitlist = ({
     <section className="aside-block is-tinted">
       <h4 className="text-caps-tiny">{strings.sectionTitle}</h4>
       <div>
-        <p className="text-tiny text-gray-800 pb-3">{strings.description}</p>
+        {strings.description && (
+          <p className="text-tiny text-gray-800 pb-3">{strings.description}</p>
+        )}
         <ul>
           {waitlistCurrentSize !== null &&
             waitlistCurrentSize !== undefined &&
