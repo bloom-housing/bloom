@@ -23,10 +23,13 @@ describe("stringFormatting helpers", () => {
     it("with just max", () => {
       expect(getCurrencyRange(null, 10)).toBe("$10")
     })
+    it("with the same values", () => {
+      expect(getCurrencyRange(100, 100)).toBe("$100")
+    })
     it("with a range", () => {
       expect(getCurrencyRange(100, 200)).toBe("$100 – $200")
     })
-    it("with just neither", () => {
+    it("with neither", () => {
       expect(getCurrencyRange(null, null)).toBe("")
     })
   })
