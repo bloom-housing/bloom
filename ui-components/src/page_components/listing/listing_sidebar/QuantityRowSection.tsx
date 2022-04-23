@@ -17,7 +17,7 @@ export interface QuantityRowSectionProps {
 const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) => {
   const getRow = (amount: number | null, text: string) => {
     return (
-      <li className={"uppercase text-gray-800 font-bold font-alt-sans leading-7"}>
+      <li key={text} className={"uppercase text-gray-800 font-bold font-alt-sans leading-7"}>
         <span className="text-right w-12 inline-block pr-2.5 text-base">{amount}</span>
         <span className={"text-sm"}>{text}</span>
       </li>

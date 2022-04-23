@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { QuantityRowSection } from "page_components/listing/listing_sidebar/QuantityRowSection"
+import { QuantityRowSection } from "../../src/page_components/listing/listing_sidebar/QuantityRowSection"
 
 afterEach(cleanup)
 
