@@ -23,7 +23,7 @@ export interface ContactProps {
   contactTitle?: string
   /** The text for the section's header */
   sectionTitle: string
-  strings?: { email?: string; getDirections?: string; website?: string }
+  strings: { email?: string; getDirections: string; website?: string }
 }
 
 /** Displays information about a contact, including their address, contact information, and notes */
@@ -88,7 +88,7 @@ const Contact = ({
       )}
 
       {contactAddress && (
-        <ContactAddress address={contactAddress} mapString={strings?.getDirections} />
+        <ContactAddress address={contactAddress} mapString={strings.getDirections} />
       )}
 
       {additionalInformation?.map((info) => {
