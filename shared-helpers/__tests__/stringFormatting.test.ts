@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react"
-import { getTimeRangeString } from "../src/stringFormatting"
+import { getTimeRangeString, getCurrencyRange } from "../src/stringFormatting"
 
 afterEach(cleanup)
 
@@ -14,6 +14,20 @@ describe("stringFormatting helpers", () => {
       expect(getTimeRangeString(new Date(2018, 8, 10, 10), new Date(2018, 8, 18, 10))).toBe(
         "10:00am"
       )
+    })
+  })
+  describe("getCurrencyRange", () => {
+    it("with just min", () => {
+      expect(getCurrencyRange(10, null)).toBe("$10")
+    })
+    it("with just max", () => {
+      expect(getCurrencyRange(null, 10)).toBe("$10")
+    })
+    it("with a range", () => {
+      expect(getCurrencyRange(100, 200)).toBe("$100 – $200")
+    })
+    it("with just neither", () => {
+      expect(getCurrencyRange(null, null)).toBe("")
     })
   })
 })

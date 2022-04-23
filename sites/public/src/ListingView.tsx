@@ -48,6 +48,7 @@ import {
   occupancyTable,
   pdfUrlFromListingEvents,
   getTimeRangeString,
+  getCurrencyRange,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -668,11 +669,19 @@ export const ListingView = (props: ListingProps) => {
               />
             </dl>
             <AdditionalFees
-              depositMin={listing.depositMin}
-              depositMax={listing.depositMax}
-              applicationFee={listing.applicationFee}
+              deposit={getCurrencyRange(parseInt(listing.depositMin), parseInt(listing.depositMax))}
+              applicationFee={`$${listing.applicationFee}`}
               costsNotIncluded={listing.costsNotIncluded}
-              depositHelperText={listing.depositHelperText}
+              strings={{
+                sectionHeader: t("listings.sections.additionalFees"),
+                applicationFee: t("listings.applicationFee"),
+                deposit: t("t.deposit"),
+                applicationFeeSubtext: [
+                  t("listings.applicationPerApplicantAgeDescription"),
+                  t("listings.applicationFeeDueAt"),
+                ],
+                depositSubtext: [listing.depositHelperText],
+              }}
             />
           </div>
         </ListingDetailItem>

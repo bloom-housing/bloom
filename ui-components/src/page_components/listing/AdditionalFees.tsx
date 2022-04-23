@@ -1,49 +1,56 @@
 import * as React from "react"
-import { t } from "../../helpers/translator"
 
 export interface AdditionalFeesProps {
-  depositMin?: string
-  depositMax?: string
+  /** The application fee for the property, rendered in the first block */
   applicationFee?: string
-  costsNotIncluded?: string
-  depositHelperText?: string
+  /** Costs not included in the deposit or application fee, rendered below both blocks */
+  costsNotIncluded?: string | React.ReactNode
+  /** The deposit amount for the property, rendered in the second block */
+  deposit?: string
+  strings: {
+    sectionHeader: string
+    deposit?: string
+    depositSubtext?: string[]
+    applicationFee?: string
+    applicationFeeSubtext?: string[]
+  }
 }
 
-const AdditionalFees = (props: AdditionalFeesProps) => {
-  if (!props.depositMin && !props.depositMax && !props.applicationFee && !props.costsNotIncluded) {
-    return <></>
-  }
-
-  const getDeposit = () => {
-    const min = props.depositMin
-    const max = props.depositMax
-    if (min && max && min !== max) {
-      return `$${min} – $${max}`
-    } else if (min) return `$${min}`
-    else return `$${max}`
-  }
+const AdditionalFees = ({
+  deposit,
+  applicationFee,
+  costsNotIncluded,
+  strings,
+}: AdditionalFeesProps) => {
   return (
     <div className="info-card bg-gray-100 border-0">
-      <p className="info-card__title">{t("listings.sections.additionalFees")}</p>
+      <p className="info-card__title mb-2">{strings.sectionHeader}</p>
       <div className="info-card__columns text-sm">
-        {props.applicationFee && (
-          <div className="info-card__column">
-            <div className="text-base">{t("listings.applicationFee")}</div>
-            <div className="text-xl font-bold">${props.applicationFee}</div>
-            <div>{t("listings.applicationPerApplicantAgeDescription")}</div>
-            <div>{t("listings.applicationFeeDueAt")}</div>
+        {applicationFee && (
+          <div className={`info-card__column ${deposit && "mr-2"}`}>
+            <div className="text-base">{strings.applicationFee}</div>
+            <div className="text-xl font-bold">{applicationFee}</div>
+            {strings.applicationFeeSubtext?.map((appFeeSubtext, index) => (
+              <div key={index}>{appFeeSubtext}</div>
+            ))}
           </div>
         )}
-        {(props.depositMin || props.depositMax) && (
-          <div className="info-card__column">
-            <div className="text-base">{t("t.deposit")}</div>
-            <div className="text-xl font-bold">{getDeposit()}</div>
-            {props.depositHelperText && <div>{props.depositHelperText}</div>}
+        {deposit && (
+          <div className={`info-card__column ${applicationFee && "ml-2"}`}>
+            <div className="text-base">{strings.deposit}</div>
+            <div className="text-xl font-bold">{deposit}</div>
+            {strings.depositSubtext?.map((depositSubtext, index) => (
+              <div key={index}>{depositSubtext}</div>
+            ))}
           </div>
         )}
       </div>
 
-      {props.costsNotIncluded && <p className="text-sm mt-6">{props.costsNotIncluded}</p>}
+      {costsNotIncluded && (
+        <p className={`text-sm mt-2 ${(applicationFee || deposit) && `mt-6`}`}>
+          {costsNotIncluded}
+        </p>
+      )}
     </div>
   )
 }
