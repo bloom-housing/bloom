@@ -392,8 +392,8 @@ export const ListingView = (props: ListingProps) => {
               : undefined
           }
         />
-        <div className="py-3 mx-3">
-          <Heading priority={1} style={"cardHeader"}>
+        <div className="py-3 mx-3 flex flex-col items-center md:items-start">
+          <Heading priority={1} style={"cardHeader"} className={"text-black"}>
             {listing.name}
           </Heading>
           <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
