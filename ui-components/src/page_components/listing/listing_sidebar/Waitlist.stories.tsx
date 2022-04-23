@@ -3,29 +3,25 @@ import { Waitlist } from "./Waitlist"
 
 export default {
   title: "Listing Sidebar/Waitlist",
+  component: Waitlist,
 }
 
-export const NotOpen = () => {
-  return (
-    <>
-      <Waitlist isWaitlistOpen={false} />
-      <p>
-        <br />
-        <br />
-        <br />
-        (Note: this should be blank ^^^)
-      </p>
-    </>
-  )
+const strings = {
+  currentSize: "Current Waitlist Size",
+  openSpots: "Open Waitlist Slots",
+  finalSize: "Final Waitlist Size",
+  sectionTitle: "Available Units and Waitlist",
+  description:
+    "Once ranked applicants fill all available units, the remaining ranked applicants will be placed on a waitlist for those same units.",
 }
 
 export const OpenAndAllValuesSupplied = () => {
   return (
     <Waitlist
-      isWaitlistOpen={true}
       waitlistMaxSize={100}
       waitlistCurrentSize={40}
       waitlistOpenSpots={60}
+      strings={strings}
     />
   )
 }
@@ -33,18 +29,37 @@ export const OpenAndAllValuesSupplied = () => {
 export const OpenWithSomeZeroes = () => {
   return (
     <Waitlist
-      isWaitlistOpen={true}
       waitlistMaxSize={10}
       waitlistCurrentSize={0}
       waitlistOpenSpots={0}
+      strings={strings}
     />
   )
 }
 
 export const OpenWithOnlyMaxAndOpen = () => {
-  return <Waitlist isWaitlistOpen={true} waitlistMaxSize={10} waitlistOpenSpots={10} />
+  return <Waitlist waitlistMaxSize={10} waitlistOpenSpots={10} strings={strings} />
 }
 
 export const OpenWithOnlyMax = () => {
-  return <Waitlist isWaitlistOpen={true} waitlistMaxSize={10} waitlistCurrentSize={null} />
+  return <Waitlist waitlistMaxSize={10} waitlistCurrentSize={null} strings={strings} />
+}
+
+export const CustomDescription = () => {
+  const customDescription = () => {
+    return (
+      <div>
+        <div className={"italic pb-2"}>Custom styled content.</div>
+        <div className={"underline"}>More custom styled content.</div>
+      </div>
+    )
+  }
+  return (
+    <Waitlist
+      waitlistMaxSize={100}
+      waitlistCurrentSize={40}
+      waitlistOpenSpots={60}
+      strings={{ ...strings, description: customDescription() }}
+    />
+  )
 }

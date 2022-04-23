@@ -462,12 +462,18 @@ export const ListingView = (props: ListingProps) => {
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
-          {!applicationsClosed && (
+          {!applicationsClosed && listing.isWaitlistOpen && (
             <Waitlist
-              isWaitlistOpen={listing.isWaitlistOpen}
               waitlistMaxSize={listing.waitlistMaxSize}
               waitlistCurrentSize={listing.waitlistCurrentSize}
               waitlistOpenSpots={listing.waitlistOpenSpots}
+              strings={{
+                sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                currentSize: t("listings.waitlist.currentSize"),
+                openSpots: t("listings.waitlist.openSlots"),
+                finalSize: t("listings.waitlist.finalSize"),
+                description: t("listings.waitlist.submitAnApplication"),
+              }}
             />
           )}
           {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
@@ -587,12 +593,18 @@ export const ListingView = (props: ListingProps) => {
                   headerText={t("listings.openHouseEvent.header")}
                 />
               )}
-              {!applicationsClosed && (
+              {!applicationsClosed && listing.isWaitlistOpen && (
                 <Waitlist
-                  isWaitlistOpen={listing.isWaitlistOpen}
                   waitlistMaxSize={listing.waitlistMaxSize}
                   waitlistCurrentSize={listing.waitlistCurrentSize}
                   waitlistOpenSpots={listing.waitlistOpenSpots}
+                  strings={{
+                    sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                    currentSize: t("listings.waitlist.currentSize"),
+                    openSpots: t("listings.waitlist.openSlots"),
+                    finalSize: t("listings.waitlist.finalSize"),
+                    description: t("listings.waitlist.submitAnApplication"),
+                  }}
                 />
               )}
               {hasNonReferralMethods && !applicationsClosed && applySidebar()}
