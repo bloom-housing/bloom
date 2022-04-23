@@ -6,9 +6,9 @@ import { OneLineAddress } from "./OneLineAddress"
 
 export interface ContactAddressProps {
   /** An address */
-  address?: Address
+  address: Address
   /** A string for the map link */
-  mapString?: string
+  mapString: string
 }
 
 /** Renders an address followed by a Google Maps link to the address */
@@ -31,7 +31,7 @@ const ContactAddress = ({ address, mapString }: ContactAddressProps) => {
           rel="noreferrer noopener"
         >
           <Icon symbol="map" size="medium" fill={IconFillColors.primary} className={"pr-2"} />
-          {mapString && mapString}
+          {mapString}
         </a>
       </p>
     </>

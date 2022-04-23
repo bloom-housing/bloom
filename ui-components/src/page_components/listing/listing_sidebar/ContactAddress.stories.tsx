@@ -20,17 +20,3 @@ export const Default = () => {
     />
   )
 }
-
-export const NoMapText = () => {
-  return (
-    <ContactAddress
-      address={{
-        street: "Street 1",
-        street2: "Street 2",
-        city: "City",
-        state: "State",
-        zipCode: "12345",
-      }}
-    />
-  )
-}

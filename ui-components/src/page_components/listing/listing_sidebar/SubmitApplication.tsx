@@ -13,13 +13,13 @@ export interface ApplicationAddressesProps {
   applicationMailingAddress?: Address
   /** The application organization, often the developer */
   applicationOrganization?: string
-  strings?: {
+  strings: {
     postmark?: string
     mailHeader?: string
     sectionHeader?: string
     dropOffHeader?: string
     officeHoursHeader?: string
-    mapString?: string
+    mapString: string
   }
 }
 
@@ -34,32 +34,30 @@ const SubmitApplication = ({
   return (
     <>
       <section className="aside-block is-tinted bg-gray-100">
-        <div className="text-serif-lg">{strings?.sectionHeader}</div>
+        <div className="text-serif-lg">{strings.sectionHeader}</div>
         {applicationMailingAddress && (
           <>
             <Heading priority={3} style={"sidebarSubHeader"}>
-              {strings?.mailHeader}
+              {strings.mailHeader}
             </Heading>
             <>
               <p className="text-gray-700">{applicationOrganization}</p>
-              <ContactAddress address={applicationMailingAddress} mapString={strings?.mapString} />
+              <ContactAddress address={applicationMailingAddress} mapString={strings.mapString} />
             </>
-            {strings?.postmark && (
-              <p className="mt-4 text-tiny text-gray-750">{strings.postmark}</p>
-            )}
+            {strings.postmark && <p className="mt-4 text-tiny text-gray-750">{strings.postmark}</p>}
           </>
         )}
         {applicationDropOffAddress && (
           <>
             {applicationMailingAddress && <OrDivider bgColor="gray-100" />}
             <Heading priority={3} style={"sidebarSubHeader"}>
-              {strings?.dropOffHeader}
+              {strings.dropOffHeader}
             </Heading>
-            <ContactAddress address={applicationDropOffAddress} mapString={strings?.mapString} />
+            <ContactAddress address={applicationDropOffAddress} mapString={strings.mapString} />
             {applicationDropOffAddressOfficeHours && (
               <>
                 <Heading priority={3} style={"sidebarSubHeader"}>
-                  {strings?.officeHoursHeader}
+                  {strings.officeHoursHeader}
                 </Heading>
                 <p className="mt-4 text-tiny text-gray-750">
                   {applicationDropOffAddressOfficeHours}

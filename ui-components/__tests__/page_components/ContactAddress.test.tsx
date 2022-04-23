@@ -18,8 +18,4 @@ describe("<ContactAddress>", () => {
     expect(getByText("Zip Code", { exact: false })).toBeTruthy()
     expect(getByText("Get Directions")).toBeTruthy()
   })
-  it("renders with no address", () => {
-    const { queryByText } = render(<ContactAddress mapString={"Get Directions"} />)
-    expect(queryByText("Get Directions")).toBeNull()
-  })
 })
