@@ -288,9 +288,7 @@ describe("Listings", () => {
   })
 
   it("defaults to sorting listings by applicationDueDate", async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/listings?limit=all`)
-      .expect(200)
+    const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
     const listings = res.body.items
 
     // The Coliseum seed has the soonest applicationDueDate (1 day in the future)

@@ -324,13 +324,24 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      await service.list({ orderBy: [OrderByFieldsEnum.mostRecentlyUpdated], order: [OrderParam.DESC] })
+      await service.list({
+        orderBy: [OrderByFieldsEnum.mostRecentlyUpdated],
+        order: [OrderParam.DESC],
+      })
 
       expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
-      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledWith("listings.updated_at", "DESC", undefined)
+      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledWith(
+        "listings.updated_at",
+        "DESC",
+        undefined
+      )
 
       expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith("listings.updated_at", "DESC", undefined)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
+        "listings.updated_at",
+        "DESC",
+        undefined
+      )
 
       // Verify that the full query is still also ordered by the number of bedrooms
       // (or max_occupancy) at the unit level.

@@ -8,8 +8,9 @@ import {
   IsEnum,
   IsIn,
   IsOptional,
-  IsString, Validate,
-  ValidateNested
+  IsString,
+  Validate,
+  ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
@@ -49,7 +50,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     name: "orderBy",
     required: false,
     enumName: "OrderByFieldsEnum",
-    example: "[\"updatedAt\"]",
+    example: '["updatedAt"]',
     isArray: true,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -57,14 +58,14 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFilterParams)
   @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default], each: true })
-  @Validate(OrderQueryParamValidator, {groups: [ValidationsGroupsEnum.default]})
+  @Validate(OrderQueryParamValidator, { groups: [ValidationsGroupsEnum.default] })
   orderBy?: OrderByFieldsEnum[]
 
   @Expose()
   @ApiProperty({
     enum: OrderParam,
-    example: "[\"DESC\"]",
-    default: "[\"DESC\"]",
+    example: '["DESC"]',
+    default: '["DESC"]',
     required: false,
     isArray: true,
   })
@@ -72,6 +73,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
   @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default], each: true })
-  @Validate(OrderQueryParamValidator, {groups: [ValidationsGroupsEnum.default]})
+  @Validate(OrderQueryParamValidator, { groups: [ValidationsGroupsEnum.default] })
   order?: OrderParam[]
 }

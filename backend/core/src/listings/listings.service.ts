@@ -21,7 +21,11 @@ import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 import { OrderParam } from "../applications/types/order-param"
 
-type OrderByConditionData = {key: string, order: "DESC" | "ASC", nulls?: "NULLS LAST" | "NULLS FIRST"}
+type OrderByConditionData = {
+  key: string
+  order: "DESC" | "ASC"
+  nulls?: "NULLS LAST" | "NULLS FIRST"
+}
 
 @Injectable()
 export class ListingsService {
@@ -35,10 +39,13 @@ export class ListingsService {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
-  private static getOrderByCondition(orderBy: OrderByFieldsEnum, order: OrderParam): OrderByConditionData {
+  private static getOrderByCondition(
+    orderBy: OrderByFieldsEnum,
+    order: OrderParam
+  ): OrderByConditionData {
     switch (orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
-        return {key: "listings.updated_at", order}
+        return { key: "listings.updated_at", order }
       case OrderByFieldsEnum.status:
         return { key: "listings.status", order }
       case OrderByFieldsEnum.name:
@@ -49,7 +56,9 @@ export class ListingsService {
         return { key: "property.unitsAvailable", order }
       case OrderByFieldsEnum.mostRecentlyClosed:
         return {
-          key: "listings.closedAt", order, nulls: "NULLS LAST"
+          key: "listings.closedAt",
+          order,
+          nulls: "NULLS LAST",
         }
       case OrderByFieldsEnum.marketingType:
         return { key: "listings.marketingType", order }
@@ -68,11 +77,15 @@ export class ListingsService {
 
   private static buildOrderByConditions(params: ListingsQueryParams): Array<OrderByConditionData> {
     if (!params.order || !params.orderBy) {
-      return [ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC)]
+      return [
+        ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC),
+      ]
     }
     const orderByConditionDataArray = []
-    for(let i = 0; i < params.order.length; i++) {
-      orderByConditionDataArray.push(ListingsService.getOrderByCondition(params.orderBy[i], params.order[i]))
+    for (let i = 0; i < params.order.length; i++) {
+      orderByConditionDataArray.push(
+        ListingsService.getOrderByCondition(params.orderBy[i], params.order[i])
+      )
     }
     return orderByConditionDataArray
   }
@@ -90,13 +103,15 @@ export class ListingsService {
       .leftJoin("units.unitType", "unitTypeRef")
 
     const orderByConditions = ListingsService.buildOrderByConditions(params)
-    for(const orderByCondition of orderByConditions) {
-      innerFilteredQuery = innerFilteredQuery.addOrderBy(orderByCondition.key, orderByCondition.order, orderByCondition.nulls)
+    for (const orderByCondition of orderByConditions) {
+      innerFilteredQuery = innerFilteredQuery.addOrderBy(
+        orderByCondition.key,
+        orderByCondition.order,
+        orderByCondition.nulls
+      )
     }
 
-      innerFilteredQuery = innerFilteredQuery
-      .groupBy("listings.id")
-      .addGroupBy("property.id")
+    innerFilteredQuery = innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -127,15 +142,17 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
 
-    for(const orderByCondition of orderByConditions) {
-      mainQuery = mainQuery.addOrderBy(orderByCondition.key, orderByCondition.order, orderByCondition.nulls)
+    for (const orderByCondition of orderByConditions) {
+      mainQuery = mainQuery.addOrderBy(
+        orderByCondition.key,
+        orderByCondition.order,
+        orderByCondition.nulls
+      )
     }
 
     // Order by units.maxOccupancy is applied last so that it affects the order
     // of units _within_ a listing, rather than the overall listing order)
-    let listings = await mainQuery
-      .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
-      .getMany()
+    let listings = await mainQuery.addOrderBy("units.max_occupancy", "ASC", "NULLS LAST").getMany()
 
     // get summarized units from view
     listings = view.mapUnitSummary(listings)
