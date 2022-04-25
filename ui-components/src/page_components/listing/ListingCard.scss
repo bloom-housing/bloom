@@ -21,10 +21,6 @@
   @apply p-3;
   @apply pb-0;
 
-  @screen md {
-    @apply pb-3;
-  }
-
   @screen lg {
     @apply w-6/12;
   }
@@ -42,8 +38,10 @@
     @apply flex;
     @apply flex-col;
     @apply items-center;
+    @apply text-center;
     @screen md {
       @apply items-start;
+      @apply text-left;
     }
   }
 }
