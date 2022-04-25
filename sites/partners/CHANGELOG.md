@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.16...@bloom-housing/partners@4.2.2-alpha.17) (2022-04-25)
+
+
+### Bug Fixes
+
+* Add admins into users table ([#2683](https://github.com/bloom-housing/bloom/issues/2683)) ([f1e0972](https://github.com/bloom-housing/bloom/commit/f1e0972838116ed5e76814dff002556de625e2e7)), closes [#2657](https://github.com/bloom-housing/bloom/issues/2657)
+
+
+
+
+
 ## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.15...@bloom-housing/partners@4.2.2-alpha.16) (2022-04-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
