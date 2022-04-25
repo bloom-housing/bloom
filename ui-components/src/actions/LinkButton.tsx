@@ -7,6 +7,7 @@ import { isExternalLink } from "../helpers/links"
 export interface LinkButtonProps extends Omit<ButtonProps, "onClick"> {
   href: string
   dataTestId?: string
+  linkProps?: Record<string, unknown>
 }
 
 const LinkButton = (props: LinkButtonProps) => {
@@ -15,7 +16,12 @@ const LinkButton = (props: LinkButtonProps) => {
 
   if (isExternalLink(props.href)) {
     return (
-      <a href={props.href} className={buttonClasses.join(" ")} data-test-id={props.dataTestId}>
+      <a
+        href={props.href}
+        className={buttonClasses.join(" ")}
+        data-test-id={props.dataTestId}
+        {...props.linkProps}
+      >
         {buttonInner(props)}
       </a>
     )

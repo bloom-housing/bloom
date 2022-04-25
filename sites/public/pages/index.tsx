@@ -136,7 +136,15 @@ export default function Home({ latestListings }) {
             header={t("welcome.signUp")}
             icon={<Icon size="3xl" symbol="mailThin" />}
             actions={[
-              <LinkButton key={"sign-up"} href={"#"}>
+              <LinkButton
+                key={"sign-up"}
+                href={
+                  "https://public.govdelivery.com/accounts/MIDETROIT/subscriber/new?topic_id=MIDETROIT_415"
+                }
+                linkProps={{
+                  target: "_blank",
+                }}
+              >
                 {t("welcome.signUpToday")}
               </LinkButton>,
             ]}
