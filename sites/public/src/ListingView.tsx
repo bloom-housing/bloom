@@ -44,11 +44,11 @@ import { ErrorPage } from "../pages/_error"
 import {
   getGenericAddress,
   getHmiSummary,
-  getImageTagLabelFromListing,
   getListingTags,
   getUnitGroupSummary,
   openInFuture,
   getListingTag,
+  getImageCardTag,
 } from "../lib/helpers"
 
 interface ListingProps {
@@ -272,17 +272,7 @@ export const ListingView = (props: ListingProps) => {
       <header className="image-card--leader">
         <ImageCard
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
-          tags={
-            getImageTagLabelFromListing(listing)
-              ? [
-                  {
-                    text: getImageTagLabelFromListing(listing),
-                    iconType: listing?.isVerified ? "badgeCheck" : null,
-                    iconColor: "#193154",
-                  },
-                ]
-              : []
-          }
+          tags={getImageCardTag(listing)}
         />
         <div className="py-3 mx-3">
           <Heading priority={1} style={"cardHeader"}>
