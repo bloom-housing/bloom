@@ -62,6 +62,8 @@ const FormSummaryDetails = ({
     return null
   }
 
+  console.log(application)
+
   const alternateContactName = () => {
     switch (application.alternateContact.type) {
       case "other":

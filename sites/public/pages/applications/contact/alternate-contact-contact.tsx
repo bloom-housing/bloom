@@ -38,12 +38,14 @@ export default () => {
     application.alternateContact.phoneNumber = data.phoneNumber
     application.alternateContact.emailAddress = data.emailAddress || null
     application.alternateContact.mailingAddress.street = data.mailingAddress.street
+    application.alternateContact.mailingAddress.street2 = data.mailingAddress.street2
     application.alternateContact.mailingAddress.state = data.mailingAddress.state
     application.alternateContact.mailingAddress.zipCode = data.mailingAddress.zipCode
     application.alternateContact.mailingAddress.city = data.mailingAddress.city
     conductor.completeSection(1)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
+    console.log(data)
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -144,7 +146,14 @@ export default () => {
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
               />
-
+              <Field
+                id="mailingAddress.street2"
+                name="mailingAddress.street2"
+                label={t("application.contact.apt")}
+                register={register}
+                placeholder={t("application.contact.apt")}
+                dataTestId={"app-alternate-mailing-address-street2"}
+              />
               <div className="flex max-w-2xl">
                 <Field
                   id="mailingAddress.city"

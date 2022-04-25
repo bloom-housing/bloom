@@ -29,6 +29,7 @@ export const OneLineAddress = (props: AddressProps) => {
 
 export const MultiLineAddress = (props: AddressProps) => {
   if (!props.address) return null
+  console.log(props.address)
 
   return (
     <>
@@ -40,6 +41,12 @@ export const MultiLineAddress = (props: AddressProps) => {
       )}
       <Markdown children={props.address.street || ""} />
       <br />
+      {props.address.street2 && (
+        <>
+          {props.address.street2}
+          <br />
+        </>
+      )}
       {props.address.city}, {props.address.state} {props.address.zipCode}
     </>
   )
