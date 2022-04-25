@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, OrderByCondition, Repository } from "typeorm"
+import { In, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
@@ -19,6 +19,9 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
+import { OrderParam } from "../applications/types/order-param"
+
+type OrderByConditionData = {key: string, order: "DESC" | "ASC", nulls?: "NULLS LAST" | "NULLS FIRST"}
 
 @Injectable()
 export class ListingsService {
@@ -32,31 +35,29 @@ export class ListingsService {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
-  private static getOrderByCondition(params: ListingsQueryParams): OrderByCondition {
-    switch (params.orderBy) {
+  private static getOrderByCondition(orderBy: OrderByFieldsEnum, order: OrderParam): OrderByConditionData {
+    switch (orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
-        return { "listings.updated_at": params.order }
+        return {key: "listings.updated_at", order}
       case OrderByFieldsEnum.status:
-        return { "listings.status": params.order }
+        return { key: "listings.status", order }
       case OrderByFieldsEnum.name:
-        return { "listings.name": params.order }
+        return { key: "listings.name", order }
       case OrderByFieldsEnum.waitlistOpen:
-        return { "listings.isWaitlistOpen": params.order }
+        return { key: "listings.isWaitlistOpen", order }
       case OrderByFieldsEnum.unitsAvailable:
-        return { "property.unitsAvailable": params.order }
+        return { key: "property.unitsAvailable", order }
       case OrderByFieldsEnum.mostRecentlyClosed:
         return {
-          "listings.closedAt": { order: params.order, nulls: "NULLS LAST" },
+          key: "listings.closedAt", order, nulls: "NULLS LAST"
         }
       case OrderByFieldsEnum.marketingType:
-        return { "listings.marketingType": params.order }
+        return { key: "listings.marketingType", order }
       case OrderByFieldsEnum.applicationDates:
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
         // and applicationOpenDate) if no orderBy param is specified.
-        return {
-          "listings.applicationDueDate": params.order,
-        }
+        return { key: "listings.applicationDueDate", order }
       default:
         throw new HttpException(
           `OrderBy parameter not recognized or not yet implemented.`,
@@ -65,10 +66,21 @@ export class ListingsService {
     }
   }
 
+  private static buildOrderByConditions(params: ListingsQueryParams): Array<OrderByConditionData> {
+    if (!params.order || !params.orderBy) {
+      return [ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC)]
+    }
+    const orderByConditionDataArray = []
+    for(let i = 0; i < params.order.length; i++) {
+      orderByConditionDataArray.push(ListingsService.getOrderByCondition(params.orderBy[i], params.order[i]))
+    }
+    return orderByConditionDataArray
+  }
+
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
-    const innerFilteredQuery = this.listingRepository
+    let innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
@@ -76,7 +88,13 @@ export class ListingsService {
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
-      .orderBy(ListingsService.getOrderByCondition(params))
+
+    const orderByConditions = ListingsService.buildOrderByConditions(params)
+    for(const orderByCondition of orderByConditions) {
+      innerFilteredQuery = innerFilteredQuery.addOrderBy(orderByCondition.key, orderByCondition.order, orderByCondition.nulls)
+    }
+
+      innerFilteredQuery = innerFilteredQuery
       .groupBy("listings.id")
       .addGroupBy("property.id")
 
@@ -101,16 +119,21 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let listings = await view
+    let mainQuery = await view
       .getViewQb()
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(ListingsService.getOrderByCondition(params))
-      // Order by units.maxOccupancy is applied last so that it affects the order
-      // of units _within_ a listing, rather than the overall listing order)
+
+    for(const orderByCondition of orderByConditions) {
+      mainQuery = mainQuery.addOrderBy(orderByCondition.key, orderByCondition.order, orderByCondition.nulls)
+    }
+
+    // Order by units.maxOccupancy is applied last so that it affects the order
+    // of units _within_ a listing, rather than the overall listing order)
+    let listings = await mainQuery
       .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getMany()
 

@@ -1201,9 +1201,9 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
-      orderBy?: OrderByFieldsEnum
+      orderBy?: any | null[]
       /**  */
-      order?: string
+      order?: any | null[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -6591,17 +6591,6 @@ export enum EnumListingFilterParamsStatus {
   "pending" = "pending",
   "closed" = "closed",
 }
-export enum OrderByFieldsEnum {
-  "mostRecentlyUpdated" = "mostRecentlyUpdated",
-  "applicationDates" = "applicationDates",
-  "mostRecentlyClosed" = "mostRecentlyClosed",
-  "name" = "name",
-  "waitlistOpen" = "waitlistOpen",
-  "status" = "status",
-  "unitsAvailable" = "unitsAvailable",
-  "marketingType" = "marketingType",
-}
-
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
 }
