@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, OrderByCondition, Repository } from "typeorm"
+import { In, Repository, SelectQueryBuilder } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { Listing } from "./entities/listing.entity"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
@@ -19,6 +19,7 @@ import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 import { UnitGroup } from "../units-summary/entities/unit-group.entity"
+import { ListingSeasonEnum } from "./types/listing-season-enum"
 
 @Injectable()
 export class ListingsService {
@@ -34,43 +35,9 @@ export class ListingsService {
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const getOrderByCondition = (params: ListingsQueryParams): OrderByCondition => {
-      switch (params.orderBy) {
-        case OrderByFieldsEnum.mostRecentlyUpdated:
-          return { "listings.updated_at": "DESC" }
-        case OrderByFieldsEnum.mostRecentlyClosed:
-          return {
-            "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
-            "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
-          }
-        case OrderByFieldsEnum.applicationDates:
-          return {
-            "listings.applicationDueDate": "ASC",
-          }
-        case OrderByFieldsEnum.comingSoon:
-          return {
-            "listings.marketingType": { order: "DESC", nulls: "NULLS LAST" },
-            "listings.updated_at": "DESC",
-          }
-        case undefined:
-          // Default to ordering by applicationDates (i.e. applicationDueDate
-          // and applicationOpenDate) if no orderBy param is specified.
-          return {
-            "listings.name": "ASC",
-          }
-        default:
-          throw new HttpException(
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
-            HttpStatus.NOT_IMPLEMENTED
-          )
-      }
-    }
-
-    const orderBy = getOrderByCondition(params)
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
-    const innerFilteredQuery = this.listingRepository
+    let innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
@@ -78,7 +45,8 @@ export class ListingsService {
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")
       .groupBy("listings.id")
-      .orderBy(orderBy)
+
+    innerFilteredQuery = ListingsService.addOrderByToQb(innerFilteredQuery, params)
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -101,15 +69,17 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let listings = await view
+    let mainQuery = view
       .getViewQb()
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(orderBy)
-      .getMany()
+
+    mainQuery = ListingsService.addOrderByToQb(mainQuery, params)
+
+    let listings = await mainQuery.getMany()
 
     listings = await this.addUnitSummariesToListings(listings)
     // Set pagination info
@@ -313,5 +283,47 @@ export class ListingsService {
     }
 
     return canUpdate
+  }
+
+  private static addOrderByToQb(qb: SelectQueryBuilder<Listing>, params: ListingsQueryParams) {
+    switch (params.orderBy) {
+      case OrderByFieldsEnum.mostRecentlyUpdated:
+        qb.orderBy({ "listings.updated_at": "DESC" })
+        break
+      case OrderByFieldsEnum.mostRecentlyClosed:
+        qb.orderBy({
+          "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
+          "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
+        })
+        break
+      case OrderByFieldsEnum.applicationDates:
+        qb.orderBy({
+          "listings.applicationDueDate": "ASC",
+        })
+        break
+      case OrderByFieldsEnum.comingSoon:
+        qb.orderBy("listings.marketingType", "DESC", "NULLS LAST")
+        qb.addOrderBy(`to_char(listings.marketingDate, 'YYYY')`, "ASC")
+        qb.addOrderBy(
+          `CASE listings.marketingSeason WHEN '${ListingSeasonEnum.Spring}' THEN 1 WHEN '${ListingSeasonEnum.Summer}' THEN 2  WHEN '${ListingSeasonEnum.Fall}' THEN 3  WHEN '${ListingSeasonEnum.Winter}' THEN 4 END`,
+          "ASC"
+        )
+        qb.addOrderBy("listings.updatedAt", "DESC")
+        break
+      case undefined:
+        // Default to ordering by applicationDates (i.e. applicationDueDate
+        // and applicationOpenDate) if no orderBy param is specified.
+        qb.orderBy({
+          "listings.name": "ASC",
+        })
+        break
+      default:
+        throw new HttpException(
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
+          HttpStatus.NOT_IMPLEMENTED
+        )
+    }
+    return qb
   }
 }
