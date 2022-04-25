@@ -188,7 +188,7 @@ describe("Listing Management Tests", () => {
       cy.get("#rentalHistory").contains(listing["rentalHistory"])
       cy.get("#criminalBackground").contains(listing["criminalBackground"])
       cy.get("#rentalAssistance").contains(
-        "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property."
+        "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy."
       )
       cy.get("#buildingSelectionCriteriaTable").contains(listing["buildingSelectionCriteriaURL"])
       cy.get("#requiredDocuments").contains(listing["requiredDocuments"])

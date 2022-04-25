@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.15...@bloom-housing/partners@4.2.2-alpha.16) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.14...@bloom-housing/partners@4.2.2-alpha.15) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.13...@bloom-housing/partners@4.2.2-alpha.14) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.12...@bloom-housing/partners@4.2.2-alpha.13) (2022-04-21)
+
+
+### Features
+
+* **backend:** improve user queries ([#2676](https://github.com/bloom-housing/bloom/issues/2676)) ([4733e8a](https://github.com/bloom-housing/bloom/commit/4733e8a9909e47bb2522f9b319f45fe25923cdb5))
+
+
+
+
+
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.11...@bloom-housing/partners@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* min max occupancy validation in Add Unit ([#2661](https://github.com/bloom-housing/bloom/issues/2661)) ([67a6723](https://github.com/bloom-housing/bloom/commit/67a67231e26ef407808f1e6f9137d60dbb442002))
+
+
+
+
+
 ## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.10...@bloom-housing/partners@4.2.2-alpha.11) (2022-04-21)
 
 

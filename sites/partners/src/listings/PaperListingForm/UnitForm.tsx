@@ -65,6 +65,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, trigger, getValues, setValue, control, reset } = useForm()
 
+  const numberOccupancyOptions = 10
+
   const rentType: string = useWatch({
     control,
     name: "rentType",
@@ -76,6 +78,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const amiChartID: string = useWatch({
     control,
     name: "amiChart.id",
+  })
+
+  const minOccupancy: number = useWatch({
+    control,
+    name: "minOccupancy",
+  })
+
+  const maxOccupancy: number = useWatch({
+    control,
+    name: "maxOccupancy",
   })
 
   const maxAmiHouseholdSize = 8
@@ -440,7 +452,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={numberOptions(10)}
+                options={numberOptions(numberOccupancyOptions)}
+                error={fieldHasError(errors?.minOccupancy)}
+                errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
+                validation={{ max: maxOccupancy || numberOccupancyOptions }}
+                inputProps={{
+                  onChange: () => {
+                    void trigger("minOccupancy")
+                    void trigger("maxOccupancy")
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
@@ -454,7 +475,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={numberOptions(10)}
+                options={numberOptions(numberOccupancyOptions)}
+                error={fieldHasError(errors?.maxOccupancy)}
+                errorMessage={t("errors.maxLessThanMinOccupancyError")}
+                validation={{ min: minOccupancy }}
+                inputProps={{
+                  onChange: () => {
+                    void trigger("minOccupancy")
+                    void trigger("maxOccupancy")
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
