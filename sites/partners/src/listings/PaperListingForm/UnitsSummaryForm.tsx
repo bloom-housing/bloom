@@ -338,8 +338,8 @@ const UnitsSummaryForm = ({
                     validation={{ min: totalAvailable }}
                     inputProps={{
                       onBlur: () => {
-                        trigger("totalCount")
-                        trigger("totalAvailable")
+                        void trigger("totalCount")
+                        void trigger("totalAvailable")
                       },
                     }}
                   />
@@ -362,8 +362,8 @@ const UnitsSummaryForm = ({
                     validation={{ max: maxOccupancy || minOccupancy }}
                     inputProps={{
                       onChange: () => {
-                        trigger("minOccupancy")
-                        trigger("maxOccupancy")
+                        void trigger("minOccupancy")
+                        void trigger("maxOccupancy")
                       },
                     }}
                   />
@@ -384,8 +384,8 @@ const UnitsSummaryForm = ({
                     validation={{ min: minOccupancy }}
                     inputProps={{
                       onChange: () => {
-                        trigger("minOccupancy")
-                        trigger("maxOccupancy")
+                        void trigger("minOccupancy")
+                        void trigger("maxOccupancy")
                       },
                     }}
                   />
@@ -408,8 +408,8 @@ const UnitsSummaryForm = ({
                     validation={{ max: sqFeetMax || sqFeetMin }}
                     inputProps={{
                       onBlur: () => {
-                        trigger("sqFeetMin")
-                        trigger("sqFeetMax")
+                        void trigger("sqFeetMin")
+                        void trigger("sqFeetMax")
                       },
                     }}
                   />
@@ -430,8 +430,8 @@ const UnitsSummaryForm = ({
                     validation={{ min: sqFeetMin }}
                     inputProps={{
                       onBlur: () => {
-                        trigger("sqFeetMin")
-                        trigger("sqFeetMax")
+                        void trigger("sqFeetMin")
+                        void trigger("sqFeetMax")
                       },
                     }}
                   />
@@ -454,8 +454,8 @@ const UnitsSummaryForm = ({
                     validation={{ max: floorMax || floorMin }}
                     inputProps={{
                       onChange: () => {
-                        trigger("floorMin")
-                        trigger("floorMax")
+                        void trigger("floorMin")
+                        void trigger("floorMax")
                       },
                     }}
                   />
@@ -476,8 +476,8 @@ const UnitsSummaryForm = ({
                     validation={{ min: floorMin }}
                     inputProps={{
                       onChange: () => {
-                        trigger("floorMin")
-                        trigger("floorMax")
+                        void trigger("floorMin")
+                        void trigger("floorMax")
                       },
                     }}
                   />
@@ -500,8 +500,8 @@ const UnitsSummaryForm = ({
                     validation={{ max: bathroomMax || bathroomMin }}
                     inputProps={{
                       onChange: () => {
-                        trigger("bathroomMin")
-                        trigger("bathroomMax")
+                        void trigger("bathroomMin")
+                        void trigger("bathroomMax")
                       },
                     }}
                   />
@@ -522,8 +522,8 @@ const UnitsSummaryForm = ({
                     validation={{ min: bathroomMin }}
                     inputProps={{
                       onChange: () => {
-                        trigger("bathroomMin")
-                        trigger("bathroomMax")
+                        void trigger("bathroomMin")
+                        void trigger("bathroomMax")
                       },
                     }}
                   />
@@ -547,8 +547,8 @@ const UnitsSummaryForm = ({
                   validation={{ max: totalCount || totalAvailable }}
                   inputProps={{
                     onBlur: () => {
-                      trigger("totalCount")
-                      trigger("totalAvailable")
+                      void trigger("totalCount")
+                      void trigger("totalAvailable")
                     },
                   }}
                 />
