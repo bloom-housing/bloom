@@ -179,12 +179,14 @@ export const getListings = (listings) => {
   ))
 }
 
-export const usToIntlPhone = (usPhoneNumber: string): string => {
-  return usPhoneNumber.replace(/\((\d{3})\) (\d{3})-(\d{4})/, "+1$1$2$3")
+export const usToIntlPhone = (usPhoneNumber: string | null): string => {
+  return usPhoneNumber !== ""
+    ? usPhoneNumber.replace(/\((\d{3})\) (\d{3})-(\d{4})/, "+1$1$2$3")
+    : null
 }
 
-export const intlToUsPhone = (intlPhoneNumber: string): string => {
-  return intlPhoneNumber.replace(/\+1(\d{10})/, "$1")
+export const intlToUsPhone = (intlPhoneNumber: string | null): string => {
+  return intlPhoneNumber !== "" ? intlPhoneNumber.replace(/\+1(\d{10})/, "$1") : null
 }
 
 interface UnitSummaryTable {

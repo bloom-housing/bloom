@@ -181,6 +181,7 @@ export default () => {
               name="phoneNumber"
               label={t("authentication.createAccount.phone")}
               placeholder={t("authentication.createAccount.phonePlaceholder")}
+              required={false}
               error={errors.phoneNumber}
               errorMessage={t("authentication.signIn.phoneError")}
               controlClassName="control"
