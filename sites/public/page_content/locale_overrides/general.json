@@ -12,5 +12,5 @@
   "application.preferences.southAlamedaCounty.live.label": "Live in Fremont, Newark or Union City",
   "application.preferences.southAlamedaCounty.live.description": "At least one member of my household lives in Fremont, Newark or Union City.",
   "application.preferences.southAlamedaCounty.work.label": "Work in Fremont, Newark or Union City",
-  "application.preferences.southAlamedaCounty.work.description": "At least one member of my household works in Fremont, Newark or Union City. (If checked, please add work address):"
+  "application.preferences.southAlamedaCounty.work.description": "At least one member of my household works in Fremont, Newark or Union City:"
 }

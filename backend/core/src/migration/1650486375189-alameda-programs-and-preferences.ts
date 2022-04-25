@@ -18,7 +18,7 @@ export class alamedaProgramsAndPreferences1650486375189 implements MigrationInte
           'Oakland Housing Authority Preferences' as title,
           '' as subtitle,
           'Does anyone in your household satisfy any of the following preferences? (check all that apply)' as description,
-          '{"key":"oaklandHousingAuthority","type":"checkbox","options":[{"key":"liveOrWork","extraData":[],"description":true},{"key":"family","extraData":[],"description":true},{"key":"veteran","extraData":[],"description":true}]}' as form_metadata
+          '{"hideFromListing": true,"key":"oaklandHousingAuthority","type":"checkbox","options":[{"key":"liveOrWork","extraData":[],"description":true},{"key":"family","extraData":[],"description":true},{"key":"veteran","extraData":[],"description":true}]}' as form_metadata
         ;
 
         INSERT INTO preferences(title, subtitle, description, form_metadata)
