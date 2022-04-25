@@ -146,6 +146,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ...summary,
         tempId: i + 1,
         amiLevels: summary?.amiLevels?.map((elem, index) => ({ ...elem, tempId: index + 1 })),
+        openWaitListQuestion: summary?.openWaitlist?.toString(),
       }))
       setUnitsSummaries(tempSummaries)
     }

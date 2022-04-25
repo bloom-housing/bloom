@@ -107,7 +107,7 @@ const UnitsSummaryForm = ({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
-      openWaitListQuestion: summary?.openWaitlist?.toString(),
+      openWaitListQuestion: summary?.openWaitListQuestion || summary?.openWaitlist?.toString(),
     })
   }, [summaries, reset, currentTempId, setCurrent])
 
