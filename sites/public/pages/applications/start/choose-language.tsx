@@ -136,7 +136,7 @@ const ApplicationChooseLanguage = () => {
 
                 {listing.applicationConfig.languages.map((lang, index) => (
                   <Button
-                    className="language-select mx-1"
+                    className="language-select mx-1 mb-2 md:mb-0"
                     onClick={() => {
                       onLanguageSelect(lang)
                     }}
