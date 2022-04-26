@@ -472,6 +472,7 @@ export const ListingView = (props: ListingProps) => {
                 {
                   text: t("listings.waitlist.openSlots"),
                   amount: listing.waitlistOpenSpots,
+                  emphasized: true,
                 },
                 {
                   text: t("listings.waitlist.finalSize"),
@@ -611,6 +612,7 @@ export const ListingView = (props: ListingProps) => {
                     {
                       text: t("listings.waitlist.openSlots"),
                       amount: listing.waitlistOpenSpots,
+                      emphasized: true,
                     },
                     {
                       text: t("listings.waitlist.finalSize"),

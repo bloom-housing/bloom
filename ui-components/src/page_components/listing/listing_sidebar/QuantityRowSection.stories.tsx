@@ -25,6 +25,19 @@ export const OpenAndAllValuesSupplied = () => {
   )
 }
 
+export const EmphasizedValue = () => {
+  return (
+    <QuantityRowSection
+      quantityRows={[
+        { amount: 100, text: "Final Size" },
+        { amount: 40, text: "Current Size" },
+        { amount: 60, text: "Open Spots", emphasized: true },
+      ]}
+      strings={strings}
+    />
+  )
+}
+
 export const OpenWithSomeZeroes = () => {
   return (
     <QuantityRowSection

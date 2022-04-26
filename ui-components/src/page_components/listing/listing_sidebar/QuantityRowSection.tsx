@@ -3,6 +3,7 @@ import * as React from "react"
 export interface QuantityRow {
   amount: number | null
   text: string
+  emphasized?: boolean
 }
 
 export interface QuantityRowSectionProps {
@@ -15,11 +16,16 @@ export interface QuantityRowSectionProps {
 }
 
 const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) => {
-  const getRow = (amount: number | null, text: string) => {
+  const getRow = (row: QuantityRow) => {
     return (
-      <li key={text} className={"uppercase text-gray-800 font-bold font-alt-sans leading-7"}>
-        <span className="text-right w-12 inline-block pr-2.5 text-base">{amount}</span>
-        <span className={"text-sm"}>{text}</span>
+      <li
+        key={row.text}
+        className={`uppercase text-gray-800 ${
+          row.emphasized ? "font-bold" : "font-normal"
+        } font-alt-sans leading-7`}
+      >
+        <span className="text-right w-12 inline-block pr-2.5 text-base">{row.amount}</span>
+        <span className={"text-sm"}>{row.text}</span>
       </li>
     )
   }
@@ -32,11 +38,7 @@ const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) 
           <p className="text-tiny text-gray-800 pb-3">{strings.description}</p>
         )}
         {quantityRows.length && (
-          <ul>
-            {quantityRows.map((row) =>
-              row.amount !== null ? getRow(row.amount, row.text) : <></>
-            )}
-          </ul>
+          <ul>{quantityRows.map((row) => (row.amount !== null ? getRow(row) : <></>))}</ul>
         )}
       </div>
     </section>
