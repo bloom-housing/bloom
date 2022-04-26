@@ -45,7 +45,6 @@ export default () => {
     conductor.completeSection(1)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
-    console.log(data)
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -153,6 +152,7 @@ export default () => {
                 register={register}
                 placeholder={t("application.contact.apt")}
                 dataTestId={"app-alternate-mailing-address-street2"}
+                defaultValue={application.alternateContact.mailingAddress.street2}
               />
               <div className="flex max-w-2xl">
                 <Field
