@@ -114,19 +114,16 @@ const ApplicationsList = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const filterField = watch("filter-input", "")
-  const fetchFilteredResults = (value: string) => {
-    if (value.length === 0 || value.length > 2) {
-      setDelayedFilterValue(value)
+  const debounceFilter = useRef(debounce((value: string) => setDelayedFilterValue(value), 500))
+  useEffect(() => {
+    setCurrentPage(1)
+    if (filterField.length === 0 || filterField.length > 2) {
       setValidSearch(true)
+      debounceFilter.current(filterField)
     } else {
       setDelayedFilterValue("")
       setValidSearch(false)
     }
-  }
-  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 500))
-  useEffect(() => {
-    setCurrentPage(1)
-    debounceFilter.current(filterField)
   }, [filterField])
 
   /* Pagination */
