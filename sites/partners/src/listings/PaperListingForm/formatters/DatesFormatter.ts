@@ -1,6 +1,8 @@
 import Formatter from "./Formatter"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { createDate, createTime } from "../../../../lib/helpers"
+import dayjs from "dayjs"
+import { ListingMarketingTypeEnum, ListingSeasonEnum } from "@bloom-housing/backend-core/types"
 
 export default class DatesFormatter extends Formatter {
   /** Set dates/times for certain fields */
@@ -23,6 +25,21 @@ export default class DatesFormatter extends Formatter {
           : postmarkByDateFormatted
     } else {
       this.data.postmarkedApplicationsReceivedByDate = null
+    }
+
+    this.data.marketingType = ListingMarketingTypeEnum[this.data.marketingType]
+
+    if (this.data.marketingType === ListingMarketingTypeEnum.comingSoon) {
+      this.data.marketingDate = this.data.marketingStartDate
+        ? dayjs().set("year", this.data.marketingStartDate).toDate()
+        : null
+
+      this.data.marketingSeason = this.data.marketingSeason
+        ? ListingSeasonEnum[this.data.marketingSeason]
+        : null
+    } else {
+      this.data.marketingDate = null
+      this.data.marketingSeason = null
     }
   }
 }

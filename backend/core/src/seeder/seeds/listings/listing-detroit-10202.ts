@@ -5,6 +5,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 //
 const mcvProperty: PropertySeedType = {
@@ -35,7 +36,7 @@ const mcvListing: ListingSeedType = {
   managementWebsite: "https://associated-management.rentlinx.com/listings",
   name: "River Towers",
   status: ListingStatus.pending,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -61,6 +62,7 @@ const mcvListing: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10202Seed extends ListingDefaultSeed {
@@ -72,12 +74,7 @@ export class Listing10202Seed extends ListingDefaultSeed {
       ...mcvProperty,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId: "https://s3.amazonaws.com/photos.rentlinx.com/L800/85883803.jpg",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

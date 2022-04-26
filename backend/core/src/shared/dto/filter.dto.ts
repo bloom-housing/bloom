@@ -12,6 +12,7 @@ export enum Compare {
   "<=" = "<=",
   "NA" = "NA", // For filters that don't use the comparison param
 }
+
 export class BaseFilter {
   @Expose()
   @ApiProperty({

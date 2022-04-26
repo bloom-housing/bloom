@@ -18,7 +18,7 @@ import { useRouter } from "next/router"
 import FilterForm from "../src/forms/filters/FilterForm"
 import { getListings } from "../lib/helpers"
 import { fetchBaseListingData } from "../lib/hooks"
-import FindRentalsForMeLink from "../lib/FindRentalsForMeLink"
+import { FindRentalsForMeLink } from "../lib/FindRentalsForMeLink"
 import { ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 
@@ -32,12 +32,14 @@ const ListingsPage = ({ initialListings }) => {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
-  const onSubmit = (page: number, data: ListingFilterState) => {
+  const onSubmit = (page: number, limit: number, data: ListingFilterState) => {
     if (data[FrontendListingFilterStateKeys.includeNulls] === false) {
       delete data[FrontendListingFilterStateKeys.includeNulls]
     }
     setFilterModalVisible(false)
-    void router.push(`/listings/filtered?page=${page}${encodeToFrontendFilterString(data)}`)
+    void router.push(
+      `/listings/filtered?page=${page}&limit=${limit}${encodeToFrontendFilterString(data)}`
+    )
   }
   useEffect(() => {
     pushGtmEvent<ListingList>({
@@ -67,7 +69,7 @@ const ListingsPage = ({ initialListings }) => {
         title={t("listingFilters.modalTitle")}
         onClose={() => setFilterModalVisible(false)}
       >
-        <FilterForm onSubmit={(data) => onSubmit(/*page=*/ 1, data)} />
+        <FilterForm onSubmit={(data) => onSubmit(/*page=*/ 1, 8, data)} />
       </Modal>
       <div className="flex container content-center max-w-5xl px-4 pt-8 mx-auto">
         <h3 className="text-3xl text-primary-darker font-bold">All rentals</h3>
@@ -97,9 +99,10 @@ const ListingsPage = ({ initialListings }) => {
             totalItems={initialListings?.meta.totalItems}
             totalPages={initialListings?.meta.totalPages}
             currentPage={1}
-            itemsPerPage={10}
+            itemsPerPage={8}
             quantityLabel={t("listings.totalListings")}
-            setCurrentPage={(page) => onSubmit(page, {})}
+            setCurrentPage={(page) => onSubmit(page, 8, {})}
+            setItemsPerPage={(limit) => onSubmit(1, Number(limit), {})}
             includeBorder={false}
             matchListingCardWidth={true}
           />

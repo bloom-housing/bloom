@@ -19,6 +19,7 @@ import { ApplicationMethodCreateDto } from "../../application-methods/dto/applic
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { ListingPreferenceUpdateDto } from "../../preferences/dto/listing-preference-update.dto"
 import { ListingProgramUpdateDto } from "../../program/dto/listing-program-update.dto"
+import { ListingImageUpdateDto } from "./listing-image-update.dto"
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -30,7 +31,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "applicationMethods",
   "buildingSelectionCriteriaFile",
   "events",
-  "image",
+  "images",
   "leasingAgentAddress",
   "leasingAgents",
   "urlSlug",
@@ -58,6 +59,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "referralApplication",
   "listingPreferences",
   "listingPrograms",
+  "publishedAt",
+  "closedAt",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -97,9 +100,9 @@ export class ListingCreateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AssetCreateDto)
-  image?: AssetCreateDto | null
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingImageUpdateDto)
+  images?: ListingImageUpdateDto[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -132,10 +135,11 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   amenities?: string | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  buildingAddress: AddressCreateDto
+  buildingAddress?: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

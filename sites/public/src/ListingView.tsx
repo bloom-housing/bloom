@@ -29,7 +29,9 @@ import {
   ListSection,
   StandardTable,
   t,
+  FavoriteButton,
   InfoCard,
+  Heading,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -42,15 +44,17 @@ import { ErrorPage } from "../pages/_error"
 import {
   getGenericAddress,
   getHmiSummary,
-  getImageTagIconFromListing,
-  getImageTagLabelFromListing,
+  getListingTags,
   getUnitGroupSummary,
   openInFuture,
+  getListingTag,
+  getImageCardTag,
 } from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
   preview?: boolean
+  allowFavoriting?: boolean
 }
 
 export const ListingView = (props: ListingProps) => {
@@ -267,21 +271,30 @@ export const ListingView = (props: ListingProps) => {
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
         <ImageCard
-          title={listing.name}
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
-          tagLabel={getImageTagLabelFromListing(listing)}
-          tagIcon={getImageTagIconFromListing(listing)}
+          tags={getImageCardTag(listing)}
         />
-        <div className="p-3">
-          <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
+        <div className="py-3 mx-3">
+          <Heading priority={1} style={"cardHeader"}>
+            {listing.name}
+          </Heading>
+          <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
             {oneLineAddress}
-          </p>
-          <p className="text-gray-700 text-base">{listing.developer}</p>
-          <p className="text-xl">
+          </Heading>
+          <p className="text-gray-750 text-base mb-1">{listing.developer}</p>
+          <p className="text-base">
             <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
               {t("t.viewOnMap")}
             </a>
           </p>
+        </div>
+        <div className={"flex flex-wrap mx-2"}>
+          {getListingTags(listing.listingPrograms, listing.features)?.map((cardTag) =>
+            getListingTag(cardTag)
+          )}
+        </div>
+        <div className="text-right px-2">
+          <FavoriteButton name={listing.name} id={listing.id} />
         </div>
       </header>
 

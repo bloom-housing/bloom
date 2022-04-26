@@ -36,6 +36,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.acInUnit:
     case ListingFilterKeys.minAmiPercentage:
     case ListingFilterKeys.jurisdiction:
+    case ListingFilterKeys.favorited:
       return EnumListingFilterParamsComparison["="]
     case ListingFilterKeys.minRent:
       return EnumListingFilterParamsComparison[">="]
@@ -45,8 +46,8 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.zipcode:
     case ListingFilterKeys.neighborhood:
       return EnumListingFilterParamsComparison["IN"]
-    case ListingFilterKeys.seniorHousing:
-    case ListingFilterKeys.independentLivingHousing:
+    // case ListingFilterKeys.seniorHousing:
+    // case ListingFilterKeys.independentLivingHousing:
     case ListingFilterKeys.availability:
       return EnumListingFilterParamsComparison["NA"]
     default: {
@@ -73,6 +74,7 @@ export const FrontendListingFilterStateKeys = {
   ...BedroomFields,
   ...Region,
   includeNulls: "includeNulls" as const,
+  favorited: "favorited" as const,
 }
 
 // The types in this interface are `string | ...` because we don't currently parse
@@ -85,8 +87,8 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.zipcode]?: string
   [FrontendListingFilterStateKeys.minRent]?: string | number
   [FrontendListingFilterStateKeys.maxRent]?: string | number
-  [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
-  [FrontendListingFilterStateKeys.independentLivingHousing]?: string | boolean
+  // [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
+  // [FrontendListingFilterStateKeys.independentLivingHousing]?: string | boolean
   [FrontendListingFilterStateKeys.includeNulls]?: boolean
   [FrontendListingFilterStateKeys.minAmiPercentage]?: string | number
   [FrontendListingFilterStateKeys.studio]?: string | boolean
@@ -111,6 +113,8 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.midtownNewCenter]?: string | boolean
   [FrontendListingFilterStateKeys.southwest]?: string | boolean
   [FrontendListingFilterStateKeys.westside]?: string | boolean
+  [FrontendListingFilterStateKeys.status]?: string
+  [FrontendListingFilterStateKeys.favorited]?: string | boolean
 }
 
 // Since it'd be tricky to OR a separate ">=" comparison with an "IN"

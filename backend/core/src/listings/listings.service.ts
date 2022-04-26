@@ -1,20 +1,8 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  NotFoundException,
-  Scope,
-} from "@nestjs/common"
-import { REQUEST } from "@nestjs/core"
-import { Request as ExpressRequest } from "express"
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, OrderByCondition, Repository } from "typeorm"
+import { In, Repository, SelectQueryBuilder } from "typeorm"
 import { plainToClass } from "class-transformer"
-import { Interval } from "@nestjs/schedule"
-import { Queue } from "bull"
-import { InjectQueue } from "@nestjs/bull"
 import { Listing } from "./entities/listing.entity"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/query-filter"
@@ -28,20 +16,18 @@ import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
-import { ListingNotificationInfo, ListingUpdateType } from "./listings-notifications"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 import { UnitGroup } from "../units-summary/entities/unit-group.entity"
+import { ListingSeasonEnum } from "./types/listing-season-enum"
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ListingsService {
   constructor(
-    @Inject(REQUEST) private req: ExpressRequest,
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
-    private readonly translationService: TranslationsService,
-    @InjectQueue("listings-notifications")
-    private listingsNotificationsQueue: Queue<ListingNotificationInfo>
+    @InjectRepository(UnitGroup) private readonly unitGroupRepository: Repository<UnitGroup>,
+    private readonly translationService: TranslationsService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -49,33 +35,9 @@ export class ListingsService {
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const getOrderByCondition = (params: ListingsQueryParams): OrderByCondition => {
-      switch (params.orderBy) {
-        case OrderByFieldsEnum.mostRecentlyUpdated:
-          return { "listings.updated_at": "DESC" }
-        case OrderByFieldsEnum.applicationDates:
-          return {
-            "listings.applicationDueDate": "ASC",
-          }
-        case undefined:
-          // Default to ordering by applicationDates (i.e. applicationDueDate
-          // and applicationOpenDate) if no orderBy param is specified.
-          return {
-            "listings.name": "ASC",
-          }
-        default:
-          throw new HttpException(
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
-            HttpStatus.NOT_IMPLEMENTED
-          )
-      }
-    }
-
-    const orderBy = getOrderByCondition(params)
     // Inner query to get the sorted listing ids of the listings to display
-    // TODO(avaleske): Only join the tables we need for the filters that are applied.
-    const innerFilteredQuery = this.listingRepository
+    // TODO(avaleske): Only join the tables we need for the filters that are applied
+    let innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
@@ -83,7 +45,8 @@ export class ListingsService {
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")
       .groupBy("listings.id")
-      .orderBy(orderBy)
+
+    innerFilteredQuery = ListingsService.addOrderByToQb(innerFilteredQuery, params)
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -106,16 +69,19 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    const listings = await view
+    let mainQuery = view
       .getViewQb()
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(orderBy)
-      .getMany()
 
+    mainQuery = ListingsService.addOrderByToQb(mainQuery, params)
+
+    let listings = await mainQuery.getMany()
+
+    listings = await this.addUnitSummariesToListings(listings)
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
     const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
@@ -147,35 +113,58 @@ export class ListingsService {
     return paginatedListings
   }
 
+  private async addUnitSummariesToListings(listings: Listing[]) {
+    const res = await this.unitGroupRepository.find({
+      cache: true,
+      where: {
+        listing: {
+          id: In(listings.map((listing) => listing.id)),
+        },
+      },
+    })
+
+    const unitGroupMap = res.reduce(
+      (
+        obj: Record<string, Array<UnitGroup>>,
+        current: UnitGroup
+      ): Record<string, Array<UnitGroup>> => {
+        if (obj[current.listingId] !== undefined) {
+          obj[current.listingId].push(current)
+        } else {
+          obj[current.listingId] = [current]
+        }
+
+        return obj
+      },
+      {}
+    )
+
+    // using map with {...listing, unitSummaries} throws a type error
+    listings.forEach((listing) => {
+      listing.unitSummaries = summarizeUnits(unitGroupMap[listing.id], [])
+    })
+
+    return listings
+  }
+
   async create(listingDto: ListingCreateDto): Promise<Listing> {
     const listing = this.listingRepository.create({
       ...listingDto,
+      publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
+      closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
       property: plainToClass(PropertyCreateDto, listingDto),
     })
-    const saveResult: Listing = await listing.save()
-
-    // Add a job to the listings notification queue, to asynchronously send notifications about
-    // the creation of this new listing.
-    await this.listingsNotificationsQueue.add({
-      listing: saveResult,
-      updateType: ListingUpdateType.CREATE,
-    })
-
-    return saveResult
+    return await listing.save()
   }
 
   async update(listingDto: ListingUpdateDto) {
     const qb = this.getFullyJoinedQueryBuilder()
     qb.where("listings.id = :id", { id: listingDto.id })
     const listing = await qb.getOne()
-    const previousListingStatus: ListingStatus = listing.status
 
     if (!listing) {
       throw new NotFoundException()
     }
-
-    this.userCanUpdateOrThrow(this.req.user, listingDto, previousListingStatus)
-
     let availableUnits = 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
@@ -193,6 +182,14 @@ export class ListingsService {
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: false }),
+      publishedAt:
+        listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
+          ? new Date()
+          : listing.publishedAt,
+      closedAt:
+        listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
+          ? new Date()
+          : listing.closedAt,
       property: plainToClass(
         PropertyUpdateDto,
         {
@@ -206,15 +203,7 @@ export class ListingsService {
       ),
     })
 
-    const saveResult: Listing = await this.listingRepository.save(listing)
-    const newListingStatus: ListingStatus = saveResult.status
-    if (newListingStatus !== previousListingStatus && newListingStatus === ListingStatus.active) {
-      await this.listingsNotificationsQueue.add({
-        listing: saveResult,
-        updateType: ListingUpdateType.MODIFY,
-      })
-    }
-    return saveResult
+    return await this.listingRepository.save(listing)
   }
 
   async delete(listingId: string) {
@@ -296,19 +285,45 @@ export class ListingsService {
     return canUpdate
   }
 
-  @Interval(1000 * 60 * 60)
-  public async changeOverdueListingsStatusCron() {
-    const listings = await this.listingRepository
-      .createQueryBuilder("listings")
-      .select(["listings.id", "listings.applicationDueDate", "listings.status"])
-      .where(`listings.status = '${ListingStatus.active}'`)
-      .andWhere(`listings.applicationDueDate IS NOT NULL`)
-      .andWhere(`listings.applicationDueDate < NOW()`)
-      .getMany()
-    for (const listing of listings) {
-      listing.status = ListingStatus.closed
+  private static addOrderByToQb(qb: SelectQueryBuilder<Listing>, params: ListingsQueryParams) {
+    switch (params.orderBy) {
+      case OrderByFieldsEnum.mostRecentlyUpdated:
+        qb.orderBy({ "listings.updated_at": "DESC" })
+        break
+      case OrderByFieldsEnum.mostRecentlyClosed:
+        qb.orderBy({
+          "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
+          "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
+        })
+        break
+      case OrderByFieldsEnum.applicationDates:
+        qb.orderBy({
+          "listings.applicationDueDate": "ASC",
+        })
+        break
+      case OrderByFieldsEnum.comingSoon:
+        qb.orderBy("listings.marketingType", "DESC", "NULLS LAST")
+        qb.addOrderBy(`to_char(listings.marketingDate, 'YYYY')`, "ASC")
+        qb.addOrderBy(
+          `CASE listings.marketingSeason WHEN '${ListingSeasonEnum.Spring}' THEN 1 WHEN '${ListingSeasonEnum.Summer}' THEN 2  WHEN '${ListingSeasonEnum.Fall}' THEN 3  WHEN '${ListingSeasonEnum.Winter}' THEN 4 END`,
+          "ASC"
+        )
+        qb.addOrderBy("listings.updatedAt", "DESC")
+        break
+      case undefined:
+        // Default to ordering by applicationDates (i.e. applicationDueDate
+        // and applicationOpenDate) if no orderBy param is specified.
+        qb.orderBy({
+          "listings.name": "ASC",
+        })
+        break
+      default:
+        throw new HttpException(
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
+          HttpStatus.NOT_IMPLEMENTED
+        )
     }
-
-    await this.listingRepository.save(listings)
+    return qb
   }
 }

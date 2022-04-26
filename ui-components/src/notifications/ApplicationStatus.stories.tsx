@@ -2,24 +2,24 @@ import * as React from "react"
 
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
-dayjs.extend(advancedFormat)
-
 import { ApplicationStatus } from "./ApplicationStatus"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
-import { IconCheck } from "../icons/Icon.stories"
+import { text, withKnobs } from "@storybook/addon-knobs"
+
+dayjs.extend(advancedFormat)
 
 export default {
   component: ApplicationStatus,
   title: "Notifications/Application Status",
-  decorators: [(storyFn: any) => <div>{storyFn()}</div>],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
 }
 
 function formatDateTime(date: Date, showTime?: boolean) {
   return (
     dayjs(date).format("MMMM D, YYYY") +
-    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mm A") : "")
+    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mmA") : "")
   )
 }
 
@@ -30,6 +30,15 @@ listing.applicationDueDate = dayjs().add(days, "days").format()
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate)}
+    status={ApplicationStatusType.Open}
+    vivid
+  />
+)
+
+export const withSubContent = () => (
+  <ApplicationStatus
+    content="First Come First Served (and a really long string to test wrapping on smaller sizes)"
+    subContent="Application Due Date: July 10th"
     status={ApplicationStatusType.Open}
     vivid
   />
@@ -47,6 +56,7 @@ export const dueSoonWithTime = () => (
 const listingPast = Object.assign({}, Archer) as any
 listingPast.applicationOpenDate = ""
 days = 10
+
 export const pastDue = () => (
   <ApplicationStatus
     content={
@@ -64,6 +74,16 @@ export const pastDueAndVivid = () => (
     }
     status={ApplicationStatusType.Closed}
     vivid={true}
+  />
+)
+
+export const pastDueWithIconColor = () => (
+  <ApplicationStatus
+    content={
+      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
+    }
+    iconColor={text("Icon Color", "#ff0000")}
+    status={ApplicationStatusType.Closed}
   />
 )
 

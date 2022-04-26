@@ -81,6 +81,11 @@
     }
   }
 
+  &.is-accent-light {
+    @apply text-gray-900;
+    @apply bg-yellow-300;
+  }
+
   &.is-closed {
     @apply text-white;
     @apply bg-gray-750;

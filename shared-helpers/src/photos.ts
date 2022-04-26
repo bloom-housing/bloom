@@ -7,7 +7,8 @@ export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
 
 export const imageUrlFromListing = (listing: Listing, size = 400) => {
   // Use the new `image` field
-  const imageAssets = listing?.image ? [listing.image] : listing?.assets
+  const imageAssets =
+    listing?.images?.length && listing.images[0].image ? [listing.images[0].image] : listing?.assets
 
   // Fallback to `assets`
   const cloudinaryBuilding = imageAssets?.find(
@@ -15,5 +16,8 @@ export const imageUrlFromListing = (listing: Listing, size = 400) => {
   )?.fileId
   if (cloudinaryBuilding) return cloudinaryUrlFromId(cloudinaryBuilding, size)
 
-  return encodeURI(imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId || "")
+  return (
+    imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId ||
+    "/images/detroitDefault.png"
+  )
 }

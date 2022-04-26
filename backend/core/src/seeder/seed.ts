@@ -26,6 +26,8 @@ import { ListingTritonSeed, ListingTritonSeedDetroit } from "./seeds/listings/li
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
+import { ListingDefaultLottery } from "./seeds/listings/listing-default-lottery-results"
+import { ListingDefaultLotteryPending } from "./seeds/listings/listing-default-lottery-pending"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
 import { AmiChartDefaultSeed } from "./seeds/ami-charts/default-ami-chart"
@@ -59,6 +61,7 @@ import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationMethodsService } from "../application-methods/application-methods.service"
 import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
+import dayjs from "dayjs"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -76,6 +79,7 @@ const listingSeeds: any[] = [
   ListingDefaultBmrChartSeed,
   ListingTritonSeed,
   ListingDefaultReservedSeed,
+  ListingDefaultFCFSSeed,
   ListingDefaultSummaryWith30And60AmiPercentageSeed,
   ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed,
   ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed,
@@ -88,6 +92,8 @@ const listingSeeds: any[] = [
   ListingDefaultMultipleAMI,
   ListingDefaultMultipleAMIAndPercentages,
   ListingDefaultMissingAMI,
+  ListingDefaultLottery,
+  ListingDefaultLotteryPending,
   ListingTritonSeedDetroit,
   ListingDefaultFCFSSeed,
 ]
@@ -241,7 +247,7 @@ async function seed() {
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
-
+  await createPrograms(app, jurisdictions)
   await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
@@ -259,6 +265,7 @@ async function seed() {
     }),
     new AuthContext(null)
   )
+
   await userService.confirm({ token: user1.confirmationToken })
 
   const user2 = await userService.createPublicUser(
@@ -277,6 +284,47 @@ async function seed() {
   )
   await userService.confirm({ token: user2.confirmationToken })
 
+  // create not confirmed user
+  await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "user+notconfirmed@example.com",
+      emailConfirmation: "user+notconfirmed@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      password: "abcdef",
+      passwordConfirmation: "abcdef",
+      jurisdictions: [jurisdictions[0]],
+    }),
+    new AuthContext(null)
+  )
+
+  // create user with expired password
+  const userExpiredPassword = await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "user+expired@example.com",
+      emailConfirmation: "user+expired@example.com",
+      firstName: "Second",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      password: "abcdef",
+      passwordConfirmation: "abcdef",
+      jurisdictions: [jurisdictions[0]],
+      roles: { isAdmin: false, isPartner: true },
+    }),
+    new AuthContext(null)
+  )
+
+  await userService.confirm({ token: userExpiredPassword.confirmationToken })
+
+  userExpiredPassword.passwordValidForDays = 180
+  userExpiredPassword.passwordUpdatedAt = new Date("2020-01-01")
+  userExpiredPassword.confirmedAt = new Date()
+
+  await userRepo.save(userExpiredPassword)
+
   const admin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "admin@example.com",
@@ -287,6 +335,21 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "abcdef",
+      jurisdictions,
+    }),
+    new AuthContext(null)
+  )
+
+  const mfaUser = await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "mfaUser@bloom.com",
+      emailConfirmation: "mfaUser@bloom.com",
+      firstName: "I",
+      middleName: "Use",
+      lastName: "MFA",
+      dob: new Date(),
+      password: "abcdef12",
+      passwordConfirmation: "abcdef12",
       jurisdictions,
     }),
     new AuthContext(null)
@@ -315,10 +378,19 @@ async function seed() {
   })
 
   await userRepo.save(admin)
+  await userRepo.save({
+    ...mfaUser,
+    mfaEnabled: false,
+    mfaCode: "123456",
+    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
+  })
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
   await rolesRepo.save(roles)
+  await rolesRepo.save(mfaRoles)
 
   await userService.confirm({ token: admin.confirmationToken })
+  await userService.confirm({ token: mfaUser.confirmationToken })
   await app.close()
 }
 

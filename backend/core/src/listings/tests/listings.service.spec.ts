@@ -1,11 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { getQueueToken } from "@nestjs/bull"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { AvailabilityFilterEnum } from "../types/listing-filter-keys-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingCreateDto } from "../dto/listing-create.dto"
-import { ListingUpdateType } from "../listings-notifications"
 import { ListingUpdateDto } from "../dto/listing-update.dto"
 import { ListingsService } from "../listings.service"
 import { Listing } from "../entities/listing.entity"
@@ -16,6 +14,8 @@ import { Compare } from "../../shared/dto/filter.dto"
 import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { ContextIdFactory } from "@nestjs/core"
+import { UnitGroup } from "../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -119,6 +119,7 @@ const mockListingsCreateDto: ListingCreateDto = {
   status: null,
   displayWaitlistSize: false,
   hasId: null,
+  marketingType: ListingMarketingTypeEnum.Marketing,
   listingPreferences: [],
   save: jest.fn(),
   remove: jest.fn(),
@@ -140,6 +141,7 @@ const mockListingsUpdateDto: ListingUpdateDto = {
   status: ListingStatus.pending,
   displayWaitlistSize: false,
   hasId: null,
+  marketingType: ListingMarketingTypeEnum.Marketing,
   listingPreferences: [],
   save: jest.fn(),
   remove: jest.fn(),
@@ -166,12 +168,16 @@ describe("ListingsService", () => {
           useValue: jest.fn(),
         },
         {
-          provide: TranslationsService,
-          useValue: { translateListing: jest.fn() },
+          provide: getRepositoryToken(UnitGroup),
+          useValue: {
+            find: jest.fn(() => {
+              return []
+            }),
+          },
         },
         {
-          provide: getQueueToken("listings-notifications"),
-          useValue: mockListingsNotificationsQueue,
+          provide: TranslationsService,
+          useValue: { translateListing: jest.fn() },
         },
       ],
     }).compile()
@@ -514,77 +520,6 @@ describe("ListingsService", () => {
 
       expect(mockQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
       expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
-    })
-  })
-
-  describe("listing notifications", () => {
-    it("should trigger a notification upon new listing creation", async () => {
-      const mockSavedListing = { id: "some fake ID" }
-      const mockCreatedListing = { save: jest.fn().mockReturnValue(mockSavedListing) }
-      mockListingsRepo.create.mockReturnValueOnce(mockCreatedListing)
-
-      await service.create(mockListingsCreateDto)
-
-      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(1)
-      expect(mockListingsNotificationsQueue.add).toHaveBeenLastCalledWith({
-        listing: mockSavedListing,
-        updateType: ListingUpdateType.CREATE,
-      })
-    })
-
-    it.skip("should trigger a notification when a listing is updated from 'pending' to 'active'", async () => {
-      // Simulate the DB lookup retrieving the already-existing listing, with status 'pending'.
-      mockQueryBuilder.getOne.mockReturnValueOnce({
-        id: "mock-listing-id",
-        property: { id: "mock-property-id" },
-        status: ListingStatus.pending,
-      })
-
-      // Simulate the new saved listing having status 'active'.
-      const mockSavedListing = { id: "mock-listing-id", status: ListingStatus.active }
-      mockListingsRepo.save.mockReturnValueOnce(mockSavedListing)
-
-      await service.update(mockListingsUpdateDto)
-
-      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(1)
-      expect(mockListingsNotificationsQueue.add).toHaveBeenLastCalledWith({
-        listing: mockSavedListing,
-        updateType: ListingUpdateType.MODIFY,
-      })
-    })
-
-    it.skip("should not trigger a notification when a listing is updated but the status is 'active' before and after", async () => {
-      // Simulate the DB lookup retrieving the already-existing listing, with status 'active'.
-      mockQueryBuilder.getOne.mockReturnValueOnce({
-        id: "mock-listing-id",
-        property: { id: "mock-property-id" },
-        status: ListingStatus.active,
-      })
-
-      // Simulate the new saved listing having status 'active'.
-      const mockSavedListing = { id: "mock-listing-id", status: ListingStatus.active }
-      mockListingsRepo.save.mockReturnValueOnce(mockSavedListing)
-
-      await service.update(mockListingsUpdateDto)
-
-      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(0)
-    })
-
-    it.skip("should not trigger a notification when a listing is updated from 'closed' to 'pending'", async () => {
-      // Simulate the DB lookup retrieving the already-existing listing, with status 'closed'.
-      mockQueryBuilder.getOne.mockReturnValueOnce({
-        id: "mock-listing-id",
-        property: { id: "mock-property-id" },
-        status: ListingStatus.closed,
-      })
-
-      // Simulate the new saved listing having status 'pending'.
-      const mockSavedListing = { id: "mock-listing-id", status: ListingStatus.pending }
-      mockListingsRepo.save.mockReturnValueOnce(mockSavedListing)
-
-      await service.update(mockListingsUpdateDto)
-
-      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(0)
     })
   })
 })

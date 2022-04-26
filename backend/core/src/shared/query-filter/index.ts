@@ -6,11 +6,11 @@ import {
   ListingFilterKeys,
 } from "../../listings/types/listing-filter-keys-enum"
 import {
-  addSeniorHousingQuery,
   addAvailabilityQuery,
+  addBedroomsQuery,
   addMinAmiPercentageFilter,
-  addIndependentLivingHousingQuery,
-} from "./custom_filters"
+  addFavoritedFilter,
+} from "./custom-filters"
 import { UserFilterKeys } from "../../auth/types/user-filter-keys"
 import { addIsPortalUserQuery } from "../../auth/filters/user-query-filter"
 
@@ -62,17 +62,22 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       // Handle custom filters here, before dropping into generic filter handler
       switch (filterKey) {
         // custom listing filters
-        case ListingFilterKeys.seniorHousing:
-          addSeniorHousingQuery(qb, filterValue)
-          continue
-        case ListingFilterKeys.independentLivingHousing:
-          addIndependentLivingHousingQuery(qb, filterValue)
-          continue
         case ListingFilterKeys.availability:
           addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum, includeNulls)
           continue
+        case ListingFilterKeys.bedrooms:
+          addBedroomsQuery(
+            qb,
+            typeof filterValue === "string"
+              ? filterValue.split(",").map((val) => Number(val))
+              : [filterValue]
+          )
+          continue
         case ListingFilterKeys.minAmiPercentage:
           addMinAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
+          continue
+        case ListingFilterKeys.favorited:
+          addFavoritedFilter(qb, filterValue)
           continue
         // custom user filters
         case UserFilterKeys.isPortalUser:

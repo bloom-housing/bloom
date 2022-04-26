@@ -3,11 +3,11 @@ export enum ListingFilterKeys {
   id = "id",
   status = "status",
   name = "name",
+  isVerified = "isVerified",
   bedrooms = "bedrooms",
   zipcode = "zipcode",
   availability = "availability",
-  seniorHousing = "seniorHousing",
-  independentLivingHousing = "independentLivingHousing",
+  program = "program",
   minRent = "minRent",
   maxRent = "maxRent",
   minAmiPercentage = "minAmiPercentage",
@@ -26,6 +26,9 @@ export enum ListingFilterKeys {
   acInUnit = "acInUnit",
   neighborhood = "neighborhood",
   jurisdiction = "jurisdiction",
+  favorited = "favorited",
+  marketingType = "marketingType",
+  region = "region",
 }
 
 export enum AvailabilityFilterEnum {

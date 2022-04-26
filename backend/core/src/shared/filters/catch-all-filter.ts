@@ -11,6 +11,9 @@ export class CatchAllFilter extends BaseExceptionFilter {
     } else if (exception.message === "tokenExpired") {
       const response = host.switchToHttp().getResponse()
       response.status(404).json({ message: exception.message })
+    } else if (exception.response === "emailInUse") {
+      const response = host.switchToHttp().getResponse()
+      response.status(409).json({ message: "That email is already in use" })
     } else {
       super.catch(exception, host)
     }

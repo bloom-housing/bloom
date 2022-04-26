@@ -78,7 +78,12 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
     if (type === "add" || type === "edit") {
       elements.push(
         <GridCell key="btn-submit">
-          <Button styleType={AppearanceStyleType.primary} fullWidth onClick={() => false}>
+          <Button
+            styleType={AppearanceStyleType.primary}
+            fullWidth
+            onClick={() => false}
+            dataTestId={"submitApplicationButton"}
+          >
             {type === "edit" ? t("application.add.saveAndExit") : t("t.submit")}
           </Button>
         </GridCell>

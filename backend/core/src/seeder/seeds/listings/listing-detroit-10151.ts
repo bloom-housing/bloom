@@ -5,6 +5,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -34,7 +35,7 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "https://www.nrpgroup.com/Home/Communities",
   name: "MLK Homes",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -60,6 +61,7 @@ const listingSeed: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10151Seed extends ListingDefaultSeed {
@@ -73,13 +75,7 @@ export class Listing10151Seed extends ListingDefaultSeed {
 
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "specialNeeds" })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "https://images1.apartments.com/i2/Lzldwt350ozz-zuJtBQf3-V7EB0-hqEaz5ssWS4sCAI/112/martin-luther-king-apartments-detroit-mi-primary-photo.jpg?p=1",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

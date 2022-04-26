@@ -1,22 +1,14 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useContext } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
-  AppearanceStyleType,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  Icon,
   AuthContext,
   t,
-  AlertBox,
-  SiteAlert,
   setSiteAlertMessage,
+  FormForgotPassword,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, useCatchNetworkError } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
-import { emailRegex } from "../lib/helpers"
 import FormsLayout from "../layouts/forms"
 
 const ForgotPassword = () => {
@@ -28,7 +20,15 @@ const ForgotPassword = () => {
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
-  const [requestError, setRequestError] = useState<string>()
+  const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Forgot Password",
+      status: UserStatus.NotLoggedIn,
+    })
+  }, [])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -45,55 +45,22 @@ const ForgotPassword = () => {
       await forgotPassword(email)
       setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
       await router.push("/")
-    } catch (err) {
-      const { status, data } = err.response || {}
-      if (status === 404) {
-        setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
-      } else {
-        console.error(err)
-        setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
-      }
+    } catch (error) {
+      const { status } = error.response || {}
+      determineNetworkError(status, error)
     }
   }
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
-          <h2 className="form-card__title">{t("authentication.forgotPassword.sendEmail")}</h2>
-        </div>
-        {requestError && (
-          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-            {requestError}
-          </AlertBox>
-        )}
-        <SiteAlert type="notice" dismissable />
-        <div className="form-card__group pt-0 border-b">
-          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-            <Field
-              caps={true}
-              name="email"
-              label={t("t.email")}
-              validation={{ required: true, pattern: emailRegex }}
-              error={errors.email}
-              errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
-              register={register}
-            />
-
-            <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary}>
-                {t("authentication.forgotPassword.sendEmail")}
-              </Button>
-            </div>
-            <div className="text-center mt-6">
-              <a href="#" onClick={() => router.back()}>
-                {t("t.cancel")}
-              </a>
-            </div>
-          </Form>
-        </div>
-      </FormCard>
+      <FormForgotPassword
+        onSubmit={onSubmit}
+        control={{ register, errors, handleSubmit }}
+        networkError={{
+          error: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
+      />
     </FormsLayout>
   )
 }

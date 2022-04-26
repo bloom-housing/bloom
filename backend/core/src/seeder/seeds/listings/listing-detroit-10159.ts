@@ -5,6 +5,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -37,7 +38,7 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "https://www.elitep-m.com",
   name: "New Center Square",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -62,6 +63,7 @@ const listingSeed: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10159Seed extends ListingDefaultSeed {
@@ -72,13 +74,7 @@ export class Listing10159Seed extends ListingDefaultSeed {
       ...propertySeed,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "https://rentpath-res.cloudinary.com/t_rp,cs_tinysrgb,fl_force_strip,w_400,h_240,c_fill,q_auto:low,dpr_1.0/e_unsharp_mask:50/ed25c8ac2a650c47de36884830f2cf2d",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

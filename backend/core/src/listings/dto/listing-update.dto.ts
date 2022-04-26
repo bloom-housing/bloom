@@ -21,6 +21,7 @@ import { ApplicationMethodUpdateDto } from "../../application-methods/dto/applic
 import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
 import { ListingPreferenceUpdateDto } from "../../preferences/dto/listing-preference-update.dto"
 import { ListingProgramUpdateDto } from "../../program/dto/listing-program-update.dto"
+import { ListingImageUpdateDto } from "./listing-image-update.dto"
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
   "id",
@@ -31,7 +32,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "applicationPickUpAddress",
   "applicationMethods",
   "buildingSelectionCriteriaFile",
-  "image",
+  "images",
   "events",
   "leasingAgentAddress",
   "urlSlug",
@@ -60,6 +61,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "referralApplication",
   "listingPreferences",
   "listingPrograms",
+  "publishedAt",
+  "closedAt",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -103,6 +106,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   applicationMailingAddress: AddressUpdateDto | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetUpdateDto)
+  buildingSelectionCriteriaFile?: AssetUpdateDto | null
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventUpdateDto)
@@ -110,9 +119,9 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AssetUpdateDto)
-  image?: AssetUpdateDto | null
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingImageUpdateDto)
+  images?: ListingImageUpdateDto[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -145,10 +154,11 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   amenities?: string | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
-  buildingAddress: AddressUpdateDto
+  buildingAddress?: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

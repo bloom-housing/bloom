@@ -13,6 +13,7 @@ import { Expose, Type } from "class-transformer"
 import {
   IsDate,
   IsDefined,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -23,6 +24,8 @@ import { Unit } from "../../units/entities/unit.entity"
 import { PropertyGroup } from "../../property-groups/entities/property-group.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { Region } from "../types/region-enum"
+import { ApiProperty } from "@nestjs/swagger"
 
 @Entity()
 export class Property {
@@ -45,7 +48,6 @@ export class Property {
   updatedAt: Date
 
   @OneToMany(() => Unit, (unit) => unit.property, { eager: true, cascade: true })
-  @Expose()
   units: Unit[]
 
   @ManyToMany(() => PropertyGroup)
@@ -100,6 +102,16 @@ export class Property {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   neighborhood?: string | null
+
+  @Column({ type: "enum", enum: Region, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(Region, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: Region,
+    enumName: "Region",
+  })
+  region?: Region | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

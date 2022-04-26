@@ -11,6 +11,7 @@ import {
   PaperApplicationCreate,
   UnitGroup,
   UnitGroupAmiLevel,
+  ListingMarketingTypeEnum,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
@@ -18,7 +19,7 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
+export type FormListing = Omit<Listing, "countyCode" | "unitSummaries" | "unitGroups"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -66,6 +67,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
     period: TimeFieldPeriod
   }
   lotteryDateNotes?: string
+  marketingStartDate?: number
   postMarkDate?: {
     month: string
     day: string
@@ -116,15 +118,16 @@ export const formDefaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
+  images: [],
   listingFeatures: [],
   features: {},
-  image: null,
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
   leasingAgentOfficeHours: "",
   leasingAgentPhone: null,
   leasingAgentTitle: "",
+  marketingType: ListingMarketingTypeEnum.marketing,
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
@@ -151,6 +154,7 @@ export const formDefaults: FormListing = {
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: "",
+  region: null,
   petPolicy: "",
   smokingPolicy: "",
   unitsAvailable: 0,
@@ -180,7 +184,11 @@ export type TempAmiLevel = UnitGroupAmiLevel & {
   tempId?: number
 }
 
-export interface TempUnitsSummary extends UnitGroup {
+export type UnitGroupType = Omit<UnitGroup, "listingId"> & {
+  listingId?: string
+}
+
+export interface TempUnitsSummary extends UnitGroupType {
   tempId?: number
   amiLevels: TempAmiLevel[]
   openWaitListQuestion?: string
@@ -193,12 +201,12 @@ export type TempEvent = ListingEvent & {
 export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
+  programs: Program[]
   units: TempUnit[]
   unitsSummaries?: TempUnitsSummary[]
   openHouseEvents: TempEvent[]
   profile: User
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
-  unitGroups: UnitGroup[]
-  programs: Program[]
+  unitGroups: UnitGroupType[]
 }

@@ -18,6 +18,7 @@ import { ListingReviewOrder } from "../../../listings/types/listing-review-order
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
 import { FormMetaDataType } from "../../../applications/types/form-metadata/form-metadata"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
@@ -202,10 +203,7 @@ export const defaultListing: ListingSeedType = {
   depositMin: "500",
   disableUnitsAccordion: true,
   displayWaitlistSize: false,
-  image: {
-    label: "test_label",
-    fileId: "fileid",
-  },
+  images: [],
   leasingAgentAddress: {
     city: "San Francisco",
     state: "CA",
@@ -236,6 +234,7 @@ export const defaultListing: ListingSeedType = {
   isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: "Custom what to expect text",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 // Preferences

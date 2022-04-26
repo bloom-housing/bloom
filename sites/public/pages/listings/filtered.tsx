@@ -12,24 +12,25 @@ import {
   LoadingOverlay,
   ListingFilterState,
   FrontendListingFilterStateKeys,
+  AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../src/MetaTags"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useListingsData } from "../../lib/hooks"
-import { OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
+import { EnumListingFilterParamsStatus, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import FilterForm from "../../src/forms/filters/FilterForm"
 import { getListings } from "../../lib/helpers"
-import FindRentalsForMeLink from "../../lib/FindRentalsForMeLink"
+import { FindRentalsForMeLink } from "../../lib/FindRentalsForMeLink"
 
 const FilteredListingsPage = () => {
   const router = useRouter()
 
-  // Pagination state
+  /* Pagination */
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filterState, setFilterState] = useState<ListingFilterState>()
-  const itemsPerPage = 10
 
   // Filter state
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false)
@@ -49,7 +50,10 @@ const FilteredListingsPage = () => {
     if (router.query.page) {
       setCurrentPage(Number(router.query.page))
     }
-
+    if (router.query.limit) {
+      setItemsPerPage(Number(router.query.limit))
+    }
+    router.query[FrontendListingFilterStateKeys.status] = EnumListingFilterParamsStatus.active
     setFilterState(decodeFiltersFromFrontendUrl(router.query))
   }, [router.query])
 
@@ -57,13 +61,13 @@ const FilteredListingsPage = () => {
     currentPage,
     itemsPerPage,
     filterState,
-    OrderByFieldsEnum.mostRecentlyUpdated
+    OrderByFieldsEnum.comingSoon
   )
 
   let numberOfFilters = 0
   if (filterState) {
     numberOfFilters = Object.keys(filterState).filter(
-      (p) => p !== "$comparison" && p !== "includeNulls"
+      (p) => p !== "$comparison" && p !== "includeNulls" && p !== "status"
     ).length
     // We want to consider rent as a single filter, so if both min and max are defined, reduce the count.
     if (filterState.minRent !== undefined && filterState.maxRent != undefined) {
@@ -85,6 +89,8 @@ const FilteredListingsPage = () => {
     if (data?.[FrontendListingFilterStateKeys.includeNulls] === false) {
       delete data[FrontendListingFilterStateKeys.includeNulls]
     }
+    // hide status filter
+    delete data[FrontendListingFilterStateKeys.status]
     setFilterModalVisible(false)
     setQueryString(/*page=*/ 1, data)
   }
@@ -169,7 +175,8 @@ const FilteredListingsPage = () => {
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 quantityLabel={t("listings.totalListings")}
-                setCurrentPage={setQueryString}
+                setCurrentPage={setCurrentPage}
+                setItemsPerPage={setItemsPerPage}
                 includeBorder={false}
                 matchListingCardWidth={true}
               />

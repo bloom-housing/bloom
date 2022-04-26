@@ -7,6 +7,7 @@ import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { UnitGroupAmiLevel } from "../../../units-summary/entities/unit-group-ami-level.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -36,7 +37,7 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "https://www.imsproperties.net/michigan",
   name: "Martin Luther King II",
   status: ListingStatus.pending,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -47,21 +48,22 @@ const listingSeed: ListingSeedType = {
   reviewOrderType: undefined,
   isWaitlistOpen: undefined,
   features: {
-    elevator: true,
-    wheelchairRamp: true,
+    elevator: false,
+    wheelchairRamp: false,
     serviceAnimalsAllowed: false,
-    accessibleParking: true,
-    parkingOnSite: true,
+    accessibleParking: false,
+    parkingOnSite: false,
     inUnitWasherDryer: false,
-    laundryInBuilding: true,
-    barrierFreeEntrance: true,
+    laundryInBuilding: false,
+    barrierFreeEntrance: false,
     rollInShower: false,
     grabBars: false,
     heatingInUnit: false,
-    acInUnit: true,
+    acInUnit: false,
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10136Seed extends ListingDefaultSeed {
@@ -95,7 +97,7 @@ export class Listing10136Seed extends ListingDefaultSeed {
       name: CountyCode.detroit,
     })
 
-    const unitGroups: Omit<UnitGroup, "id">[] = [
+    const unitGroups: Omit<UnitGroup, "id" | "listingId">[] = [
       {
         amiLevels: [],
         unitType: [unitTypeStudio, unitTypeOneBdrm],

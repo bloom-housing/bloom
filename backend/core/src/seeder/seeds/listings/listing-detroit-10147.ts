@@ -1,10 +1,11 @@
-import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
+import { ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const mshProperty: PropertySeedType = {
   buildingAddress: {
@@ -32,7 +33,7 @@ const mshListing: ListingSeedType = {
   managementWebsite: "https://www.elitep-m.com",
   name: "Melrose Square Homes",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -58,6 +59,7 @@ const mshListing: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10147Seed extends ListingDefaultSeed {

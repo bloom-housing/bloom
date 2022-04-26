@@ -1,10 +1,8 @@
 import {
   Body,
-  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   Post,
   Put,
@@ -18,7 +16,6 @@ import {
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { Cache } from "cache-manager"
 import { ListingDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -46,17 +43,12 @@ import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-met
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
-  cacheKeys: string[]
-  constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private readonly listingsService: ListingsService
-  ) {}
+  constructor(private readonly listingsService: ListingsService) {}
 
   // TODO: Limit requests to defined fields
   @Get()
   @ApiExtraModels(ListingFilterParams)
   @ApiOperation({ summary: "List listings", operationId: "list" })
-  // ClassSerializerInterceptor has to come after CacheInterceptor
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
@@ -68,7 +60,6 @@ export class ListingsController {
   @UsePipes(new ListingCreateValidationPipe(defaultValidationPipeOptions))
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
     const listing = await this.listingsService.create(listingDto)
-    await this.cacheManager.del("/listings")
     return mapTo(ListingDto, listing)
   }
 
@@ -98,7 +89,6 @@ export class ListingsController {
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto)
-    await this.cacheManager.del("/listings")
     return mapTo(ListingDto, listing)
   }
 
@@ -107,6 +97,5 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async delete(@Param("id") listingId: string) {
     await this.listingsService.delete(listingId)
-    await this.cacheManager.del("/listings")
   }
 }

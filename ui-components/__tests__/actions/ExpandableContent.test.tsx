@@ -6,7 +6,7 @@ afterEach(cleanup)
 
 describe("<ExpandableContent>", () => {
   const INNER_CONTENT_CLASS = "inner-content"
-  const content = <div data-test-id={INNER_CONTENT_CLASS}>Sample content</div>
+  const content = <div data-testid={INNER_CONTENT_CLASS}>Sample content</div>
 
   it("renders content after button click", () => {
     const { getByText, queryByTestId } = render(<ExpandableContent>{content}</ExpandableContent>)

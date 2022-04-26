@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
 } from "typeorm"
 import {
   IsBoolean,
@@ -42,6 +43,11 @@ export class UnitGroup {
   @ManyToOne(() => Listing, (listing) => listing.unitGroups, {})
   listing: Listing
 
+  @RelationId((unitGroupEntity: UnitGroup) => unitGroupEntity.listing)
+  @Expose()
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  listingId: string
+
   @OneToMany(() => UnitGroupAmiLevel, (UnitGroupAmiLevel) => UnitGroupAmiLevel.unitGroup, {
     eager: true,
     cascade: true,
@@ -76,13 +82,13 @@ export class UnitGroup {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   floorMax?: number | null
 
-  @Column({ nullable: true, type: "integer" })
+  @Column({ nullable: true, type: "numeric" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   sqFeetMin?: number | null
 
-  @Column({ nullable: true, type: "integer" })
+  @Column({ nullable: true, type: "numeric" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
@@ -107,13 +113,13 @@ export class UnitGroup {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   totalAvailable?: number | null
 
-  @Column({ nullable: true, type: "integer" })
+  @Column({ nullable: true, type: "numeric" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   bathroomMin?: number | null
 
-  @Column({ nullable: true, type: "integer" })
+  @Column({ nullable: true, type: "numeric" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })

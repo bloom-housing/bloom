@@ -14,7 +14,7 @@ const DetailsHouseholdIncome = () => {
       inset
     >
       <GridCell>
-        <ViewItem label={t("application.details.annualIncome")}>
+        <ViewItem label={t("application.details.annualIncome")} dataTestId="annualIncome">
           {application.incomePeriod === IncomePeriod.perYear
             ? formatIncome(
                 parseFloat(application.income),
@@ -26,7 +26,7 @@ const DetailsHouseholdIncome = () => {
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.monthlyIncome")}>
+        <ViewItem label={t("application.details.monthlyIncome")} dataTestId="monthlyIncome">
           {application.incomePeriod === IncomePeriod.perMonth
             ? formatIncome(
                 parseFloat(application.income),
@@ -38,7 +38,7 @@ const DetailsHouseholdIncome = () => {
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.vouchers")}>
+        <ViewItem label={t("application.details.vouchers")} dataTestId="vouchers">
           {(() => {
             if (application.incomeVouchers === null) return t("t.n/a")
 

@@ -6,7 +6,7 @@ import FormsLayout from "../../../layouts/forms"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { useRouter } from "next/router"
 
-const AccountApplication = () => {
+export default () => {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { applicationsService, listingsService } = useContext(AuthContext)
@@ -117,5 +117,3 @@ const AccountApplication = () => {
     </>
   )
 }
-
-export default AccountApplication

@@ -18,7 +18,7 @@ import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-
+import { Region } from "@bloom-housing/backend-core/types"
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
 }
@@ -64,6 +64,14 @@ const neighborhoodOptions: SelectOption[] = [
   { value: "Southwest / Vernor area", label: "Southwest / Vernor area" },
   { value: "Warrendale / Cody Rouge area", label: "Warrendale / Cody Rouge area" },
   { value: "West End area", label: "West End area" },
+]
+
+const regionOptions: SelectOption[] = [
+  { value: "", label: "" },
+  ...Object.values(Region).map((item) => ({
+    label: item,
+    value: item,
+  })),
 ]
 
 const BuildingDetails = ({
@@ -167,6 +175,12 @@ const BuildingDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapPinPosition])
 
+  const getAddressErrorMessage = (fieldKey: string, defaultMessage: string) => {
+    return errors?.buildingAddress && !getValues("buildingAddress.street")
+      ? t("errors.partialAddress")
+      : defaultMessage
+  }
+
   return (
     <GridSection
       grid={false}
@@ -181,14 +195,21 @@ const BuildingDetails = ({
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
-            error={fieldHasError(errors?.buildingAddress?.street)}
-            errorMessage={fieldMessage(errors?.buildingAddress?.street)}
+            error={
+              !!getAddressErrorMessage(
+                "buildingAddress.street",
+                fieldMessage(errors?.buildingAddress?.street)
+              )
+            }
+            errorMessage={getAddressErrorMessage(
+              "buildingAddress.street",
+              fieldMessage(errors?.buildingAddress?.street)
+            )}
             placeholder={t("application.contact.streetAddress")}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress.street"),
+              onChange: () => clearErrors("buildingAddress"),
             }}
             register={register}
-            validation={{ required: true }}
           />
         </GridCell>
         <ViewItem label={t("t.neighborhood")} className={"mb-0"}>
@@ -208,20 +229,27 @@ const BuildingDetails = ({
           />
         </ViewItem>
       </GridSection>
-      <GridSection columns={6}>
+      <GridSection columns={6} className="mb-0">
         <GridCell span={2}>
           <Field
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
-            error={fieldHasError(errors?.buildingAddress?.city)}
-            errorMessage={fieldMessage(errors?.buildingAddress?.city)}
+            error={
+              !!getAddressErrorMessage(
+                "buildingAddress.city",
+                fieldMessage(errors?.buildingAddress?.city)
+              )
+            }
+            errorMessage={getAddressErrorMessage(
+              "buildingAddress.city",
+              fieldMessage(errors?.buildingAddress?.city)
+            )}
             placeholder={t("application.contact.city")}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress.city"),
+              onChange: () => clearErrors("buildingAddress"),
             }}
             register={register}
-            validation={{ required: true }}
           />
         </GridCell>
         <ViewItem
@@ -232,33 +260,69 @@ const BuildingDetails = ({
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
-            error={fieldHasError(errors?.buildingAddress?.state)}
+            error={
+              !!getAddressErrorMessage(
+                "buildingAddress.state",
+                fieldMessage(errors?.buildingAddress?.state)
+              )
+            }
+            errorMessage={getAddressErrorMessage(
+              "buildingAddress.state",
+              fieldMessage(errors?.buildingAddress?.state)
+            )}
             label={t("application.contact.state")}
             labelClassName="sr-only"
             register={register}
             controlClassName="control"
             options={stateKeys}
             keyPrefix="states"
-            errorMessage={fieldMessage(errors?.buildingAddress?.state)}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress.state"),
+              onChange: () => clearErrors("buildingAddress"),
             }}
           />
         </ViewItem>
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
-          error={fieldHasError(errors?.buildingAddress?.zipCode)}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
-          errorMessage={fieldMessage(errors?.buildingAddress?.zipCode)}
+          error={
+            !!getAddressErrorMessage(
+              "buildingAddress.zipCode",
+              fieldMessage(errors?.buildingAddress?.zipCode)
+            )
+          }
+          errorMessage={getAddressErrorMessage(
+            "buildingAddress.zipCode",
+            fieldMessage(errors?.buildingAddress?.zipCode)
+          )}
           inputProps={{
-            onChange: () => clearErrors("buildingAddress.zipCode"),
+            onChange: () => clearErrors("buildingAddress"),
           }}
           register={register}
-          validation={{ required: true }}
         />
         <GridCell span={2}>
+          <ViewItem label={t("t.region")}>
+            <Select
+              id="region"
+              name="region"
+              label={t("t.region")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={regionOptions}
+              keyPrefix="t"
+              errorMessage={fieldMessage(errors?.region)}
+              inputProps={{
+                onChange: () => clearErrors("region"),
+              }}
+            />
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+
+      <GridSection columns={3} wrapperClassName="mt-0">
+        <GridCell span={1}>
           <Field
             label={t("listings.yearBuilt")}
             name={"yearBuilt"}
@@ -266,6 +330,13 @@ const BuildingDetails = ({
             placeholder={t("listings.yearBuilt")}
             type={"number"}
             register={register}
+            inputProps={{
+              onKeyPress: (e) => {
+                if (e.target.value && e.target.value.length > 3) {
+                  e.preventDefault()
+                }
+              },
+            }}
           />
         </GridCell>
       </GridSection>

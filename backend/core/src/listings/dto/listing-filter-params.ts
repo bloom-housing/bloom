@@ -6,6 +6,8 @@ import { IsBooleanString, IsEnum, IsNumberString, IsOptional, IsString } from "c
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { AvailabilityFilterEnum, ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { ListingStatus } from "../types/listing-status-enum"
+import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
+import { Region } from "../../property/types/region-enum"
 
 // add other listing filter params here
 export class ListingFilterParams extends BaseFilter {
@@ -81,13 +83,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: Boolean,
-    example: "true",
+    type: String,
+    example: "senior62",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.seniorHousing]?: boolean;
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.program]?: string;
 
   @Expose()
   @ApiProperty({
@@ -97,7 +99,7 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.independentLivingHousing]?: boolean;
+  [ListingFilterKeys.isVerified]?: boolean;
 
   @Expose()
   @ApiProperty({
@@ -261,11 +263,41 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
+    enum: Object.keys(Region),
+    example: "eastside",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(Region, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.region]?: Region;
+
+  @Expose()
+  @ApiProperty({
     type: String,
     example: "bab6cb4f-7a5a-4ee5-b327-0c2508807780",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.jurisdiction]?: string
+  [ListingFilterKeys.jurisdiction]?: string;
+
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(ListingMarketingTypeEnum),
+    example: "marketing",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingMarketingTypeEnum, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.marketingType]?: ListingMarketingTypeEnum;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "bab6cb4f-7a5a-4ee5-b327-0c2508807780",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.favorited]?: string
 }

@@ -166,12 +166,12 @@ describe("EmailService", () => {
       await service.welcome(user, "http://localhost:3000", "http://localhost:3000/?token=")
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
-      expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Bloom")
+      expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Detroit Home Connect")
       // Check if translation is working correctly
       expect(sendMock.mock.calls[0][0].html).toContain(
         "Alameda County - Housing and Community Development (HCD) Department"
       )
-      expect(sendMock.mock.calls[0][0].html).toContain("<h1>Hello Test \n User</h1>")
+      expect(sendMock.mock.calls[0][0].html).toContain("<h1>Hello Test \n User,</h1>")
     })
   })
 

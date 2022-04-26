@@ -14,6 +14,7 @@ export type OverlayProps = {
   backdrop?: boolean
   onClose?: () => void
   children: React.ReactNode
+  slim?: boolean
 }
 
 const OverlayInner = (props: OverlayProps) => {
@@ -37,7 +38,7 @@ const OverlayInner = (props: OverlayProps) => {
         if (e.target === e.currentTarget) closeHandler()
       }}
     >
-      <div className="fixed-overlay__inner">
+      <div className={`fixed-overlay__inner ${props.slim ? "fixed-overlay__inner-slim" : ""}`}>
         <FocusLock>{props.children}</FocusLock>
       </div>
     </div>

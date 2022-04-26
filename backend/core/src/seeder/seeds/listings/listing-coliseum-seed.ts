@@ -17,6 +17,7 @@ import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
@@ -66,10 +67,7 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
-  image: {
-    label: "test_label",
-    fileId: "fileid",
-  },
+  images: [],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
   costsNotIncluded:
@@ -114,6 +112,7 @@ const coliseumListing: ListingSeedType = {
   waitlistOpenSpots: 3000,
   isWaitlistOpen: true,
   whatToExpect: null,
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class ListingColiseumSeed extends ListingDefaultSeed {
@@ -1050,7 +1049,20 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         },
       ],
       events: [],
-      listingPrograms: [],
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+        },
+      ],
     }
 
     return await this.listingRepository.save(listingCreateDto)

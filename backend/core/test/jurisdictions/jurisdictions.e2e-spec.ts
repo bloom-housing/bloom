@@ -83,6 +83,7 @@ describe("Jurisdictions", () => {
         preferences: [newPreference],
         programs: [newProgram],
         publicUrl: "",
+        emailFromAddress: "",
       })
       .expect(201)
 
@@ -112,13 +113,20 @@ describe("Jurisdictions", () => {
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test2", languages: [Language.en], preferences: [], publicUrl: "" })
+      .send({
+        name: "test2",
+        languages: [Language.en],
+        preferences: [],
+        publicUrl: "",
+        emailFromAddress: "",
+      })
       .send({
         name: "test2",
         programs: [],
         languages: [Language.en],
         preferences: [],
         publicUrl: "",
+        emailFromAddress: "",
       })
       .expect(201)
     expect(res.body).toHaveProperty("id")
@@ -138,7 +146,7 @@ describe("Jurisdictions", () => {
     await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test2", languages: ["non_existent_language"] })
+      .send({ name: "test2", languages: ["non_existent_language"], emailFromAddress: "" })
       .expect(400)
   })
 

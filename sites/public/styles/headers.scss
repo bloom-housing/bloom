@@ -1,0 +1,296 @@
+.site-header {
+  @apply pb-10;
+
+  .navbar-notice-hide {
+    display: none;
+  }
+
+  .navbar-container {
+    border: none;
+
+    .navbar {
+      align-items: center;
+      height: auto;
+      justify-content: flex-start;
+      max-height: none;
+      padding: 24px 0 18px;
+
+      @media (min-width: $header-desktop-min-size) {
+        padding: 0 12px;
+        width: 100%;
+      }
+
+      @screen lg {
+        padding: 0 50px;
+        width: 100%;
+      }
+
+      @screen xl {
+        justify-content: center;
+      }
+
+      .navbar-menu {
+        height: 48px;
+        margin-right: 12px;
+        min-width: 48px;
+        width: 48px;
+
+        @media (min-width: $header-desktop-min-size) {
+          margin: 40px 0 24px;
+          width: 100%;
+        }
+
+        @screen xl {
+          margin: 48px 0 32px;
+        }
+
+        .button.navbar-mobile-menu-button {
+          align-items: center;
+          justify-content: center;
+          margin: 0;
+          padding: 0;
+        }
+
+        .button {
+          width: 60px;
+        }
+
+        .button__content {
+          display: none;
+        }
+
+        .button__icon {
+          margin: 0;
+        }
+
+        .ui-base svg {
+          height: 18px;
+          width: 21px;
+        }
+
+        .navbar-link {
+          @apply text-primary;
+          align-items: center;
+          display: flex;
+          font-size: 1.125rem;
+          font-weight: 700;
+          height: 40px;
+          padding: 1rem;
+          text-transform: none;
+        }
+
+        .navbar-link__sign-in {
+          margin-inline-start: 1rem;
+          padding-inline-start: 2rem;
+          position: relative;
+        }
+
+        // This is a little hacky to get the divider line to the left of the "sign in" link, but
+        // this is the simplest way to do it without making significant changes to the SiteHeader
+        // component
+        .navbar-link__sign-in:before {
+          border-inline-start: 3px solid $tailwind-primary;
+          content: "";
+          height: 18px;
+          inset-inline-start: 0;
+          position: absolute;
+        }
+
+        .navbar-link__sign-up {
+          border: 2px solid $tailwind-primary;
+          border-radius: 44px;
+        }
+
+        .navbar-link.navbar-link__sign-up:hover {
+          @apply text-white;
+          background-color: $tailwind-primary;
+          border: 2px solid $tailwind-primary;
+          border-radius: 44px;
+        }
+
+        .navbar-link:hover {
+          @apply text-primary-dark;
+          border: none;
+        }
+
+        .navbar-dropdown-container {
+          display: flex;
+          margin-left: -1rem;
+          margin-top: 10px;
+          width: auto;
+          .navbar-dropdown {
+            .navbar-dropdown-item-container {
+              display: flex;
+            }
+            .navbar-dropdown-item {
+              flex: 1 1 auto;
+              font-size: 0.75rem;
+            }
+          }
+        }
+
+        .navbar-mobile-menu-button {
+          @apply flex;
+          border: none;
+          margin: 2.75rem 0.5rem 0;
+          padding: 0 0.5rem 0.75rem;
+        }
+
+        .ui-icon svg rect {
+          fill: $tailwind-primary;
+        }
+      }
+
+      .navbar-logo {
+        @screen md {
+          width: 100%;
+        }
+
+        @media (min-width: $header-desktop-min-size) {
+          padding: 48px 0 32px 0;
+          width: 100%;
+        }
+
+        @screen xl {
+          padding: 48px 0 32px;
+        }
+
+        .logo {
+          background-color: initial;
+          box-shadow: none;
+          height: 100%;
+          margin: 0;
+          max-height: 15rem;
+          max-width: 100%;
+          padding: 0;
+          width: 100%;
+
+          .logo-content {
+            align-items: center;
+            display: flex;
+            padding: 0;
+          }
+
+          .logo__title {
+            @apply text-primary-dark;
+            @apply text-base;
+            letter-spacing: initial;
+            margin-left: 4px;
+            text-align: left;
+            text-transform: none;
+
+            @media (min-width: $header-desktop-min-size) {
+              @apply text-2xl;
+              margin-left: 8px;
+            }
+
+            @screen xl {
+              @apply text-2xl;
+            }
+          }
+
+          .logo__subtitle {
+            font-size: 0.625rem;
+            font-weight: 400;
+
+            @media (min-width: $header-desktop-min-size) {
+              @apply text-sm;
+            }
+          }
+
+          .logo__image {
+            height: 57px;
+            margin: -12px 0 0 12px;
+            // The header logo should allow for a larger maximum height than the default
+            // logo.
+            max-height: 5rem;
+
+            @media (min-width: $header-desktop-min-size) {
+              height: 77px;
+              // Negative margin to center around the shield
+              margin: -16px 0 0;
+              max-height: 6rem;
+            }
+
+            @screen xl {
+              max-height: 7rem;
+            }
+          }
+        }
+
+        .navbar-custom-width {
+          align-items: initial;
+          display: initial;
+          flex-direction: initial;
+          justify-content: initial;
+        }
+      }
+    }
+  }
+
+  .navbar-mobile-dropdown-container .navbar-mobile-dropdown .navbar-mobile-dropdown-item {
+    @screen md {
+      @apply text-primary;
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-transform: none;
+    }
+  }
+}
+
+.hero {
+  @apply font-bold;
+  @apply mx-4;
+  @apply mb-4;
+  @apply rounded-2xl;
+}
+
+.hero__title {
+  @apply text-3xl;
+  @apply text-primary-dark;
+  @apply tracking-normal;
+  @apply leading-tight;
+  @apply mb-5;
+
+  @screen sm {
+    @apply text-6xl;
+  }
+}
+
+.hero__subtitle {
+  @apply mb-5;
+  color: black;
+  font-size: unset;
+  font-weight: normal;
+  text-shadow: none;
+}
+
+.hero__button {
+  background-color: #ffbe42;
+  color: black;
+  display: inline-block;
+  font-size: large;
+  max-width: 100%;
+  padding: 12px;
+  padding: 0.875rem 2.25rem;
+  width: auto;
+  margin-top: 1rem;
+  border-radius: 40px;
+
+  @screen sm {
+    margin-top: 0;
+  }
+
+  &:hover {
+    @apply bg-primary;
+    color: white;
+  }
+}
+
+.page-header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  @screen md {
+    font-size: 1.75rem;
+  }
+}

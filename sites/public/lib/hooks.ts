@@ -16,6 +16,8 @@ import {
   ListingReviewOrder,
   OrderByFieldsEnum,
   ListingStatus,
+  EnumListingFilterParamsComparison,
+  EnumListingFilterParamsStatus,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -139,9 +141,15 @@ export async function fetchBaseListingData() {
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
-        limit: "10",
+        limit: "8",
         page: "1",
-        orderBy: OrderByFieldsEnum.mostRecentlyUpdated,
+        orderBy: OrderByFieldsEnum.comingSoon,
+        filter: [
+          {
+            $comparison: EnumListingFilterParamsComparison["="],
+            status: EnumListingFilterParamsStatus.active,
+          },
+        ],
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)

@@ -1,4 +1,7 @@
-import { AvailabilityFilterEnum } from "@bloom-housing/backend-core/types"
+import {
+  AvailabilityFilterEnum,
+  EnumListingFilterParamsStatus,
+} from "@bloom-housing/backend-core/types"
 import {
   t,
   SelectOption,
@@ -85,6 +88,13 @@ const FilterForm = (props: FilterFormProps) => {
   return (
     <Form onSubmit={handleSubmit(props.onSubmit)}>
       <div className="form-card__group">
+        <Field
+          id="status"
+          name={FrontendListingFilterStateKeys.status}
+          type="hidden"
+          register={register}
+          defaultValue={EnumListingFilterParamsStatus.active}
+        />
         <Select
           id={"availability"}
           name={FrontendListingFilterStateKeys.availability}
@@ -306,7 +316,7 @@ const FilterForm = (props: FilterFormProps) => {
             defaultValue={props.filterState?.maxRent}
           />
         </div>
-        <Select
+        {/* <Select
           id="seniorHousing"
           name={FrontendListingFilterStateKeys.seniorHousing}
           label={t("listingFilters.senior")}
@@ -315,7 +325,7 @@ const FilterForm = (props: FilterFormProps) => {
           options={seniorHousingOptions}
           defaultValue={props.filterState?.seniorHousing?.toString()}
           labelClassName="filter-header"
-        />
+        /> */}
         {/* TODO(#515): Add more explanation and an ami percentage
         calculator to this filter */}
         <Select

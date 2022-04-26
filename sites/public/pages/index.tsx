@@ -1,13 +1,27 @@
 import React, { useState } from "react"
 import Head from "next/head"
-import { AlertBox, Hero, t, SiteAlert } from "@bloom-housing/ui-components"
+import Link from "next/link"
+import {
+  AlertBox,
+  Hero,
+  t,
+  SiteAlert,
+  ActionBlock,
+  LinkButton,
+  Icon,
+} from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
+import qs from "qs"
 import styles from "./index.module.scss"
-import { Listing } from "@bloom-housing/backend-core/types"
+import {
+  EnumListingFilterParamsComparison,
+  EnumListingFilterParamsStatus,
+  Listing,
+} from "@bloom-housing/backend-core/types"
 import { getListings } from "../lib/helpers"
 import moment from "moment"
 import {
@@ -16,6 +30,8 @@ import {
 } from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
 
 export default function Home({ latestListings }) {
+  const showLatestListings = false // Disabled for now
+
   const blankAlertInfo = {
     alertMessage: null,
     alertType: null,
@@ -27,12 +43,9 @@ export default function Home({ latestListings }) {
 
   const heroInset: React.ReactNode = (
     <>
-      <a href="/listings" className="hero__button__first hero__button">
-        {t("welcome.seeRentalListings")}
-      </a>
-      <a href="/eligibility/welcome" className="hero__button__second hero__button">
-        {t("welcome.findRentalsForMe")}
-      </a>
+      <Link href="/listings">
+        <a className="hero__button">{t("welcome.seeRentalListings")}</a>
+      </Link>
     </>
   )
 
@@ -87,8 +100,15 @@ export default function Home({ latestListings }) {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
-      {latestListings && latestListings.items && (
+      <Hero
+        title={heroTitle}
+        backgroundImage={"/images/hero-placeholder.jpg"}
+        heroInset={heroInset}
+        innerClassName="bg-white bg-opacity-90 max-w-2xl mx-auto p-8 rounded-xl"
+      >
+        <p className="max-w-md mx-auto">{t("welcome.heroText")}</p>
+      </Hero>
+      {showLatestListings && latestListings?.items && (
         <HorizontalScrollSection
           title={t("welcome.latestListings")}
           subtitle={getLastUpdatedString(latestListings.items)}
@@ -105,10 +125,42 @@ export default function Home({ latestListings }) {
         icon="map"
         className={styles.regions}
       >
-        {Object.entries(Region).map((region) => (
-          <RegionButton region={region} />
+        {Object.entries(Region).map((region, index) => (
+          <RegionButton region={region} key={index} />
         ))}
       </HorizontalScrollSection>
+      <section className="homepage-extra">
+        <div className="action-blocks mt-4 mb-4 w-full">
+          <ActionBlock
+            className="flex-1 has-bold-header"
+            header={t("welcome.signUp")}
+            icon={<Icon size="3xl" symbol="mailThin" />}
+            actions={[
+              <LinkButton
+                key={"sign-up"}
+                href={
+                  "https://public.govdelivery.com/accounts/MIDETROIT/subscriber/new?topic_id=MIDETROIT_415"
+                }
+                linkProps={{
+                  target: "_blank",
+                }}
+              >
+                {t("welcome.signUpToday")}
+              </LinkButton>,
+            ]}
+          />
+          <ActionBlock
+            className="flex-1 has-bold-header"
+            header={t("welcome.seeMoreOpportunitiesTruncated")}
+            icon={<Icon size="3xl" symbol="building" />}
+            actions={[
+              <LinkButton href="/additional-resources" key={"additional-resources"}>
+                {t("welcome.viewAdditionalHousingTruncated")}
+              </LinkButton>,
+            ]}
+          />
+        </div>
+      </section>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
       />
@@ -125,6 +177,15 @@ export async function getStaticProps() {
         orderBy: "mostRecentlyUpdated",
         availability: "hasAvailability",
         view: "base",
+        filter: [
+          {
+            $comparison: EnumListingFilterParamsComparison["="],
+            status: EnumListingFilterParamsStatus.active,
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
       },
     })
     latestListings = response.data

@@ -7,6 +7,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -39,7 +40,7 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "https://www.voa.org/housing_properties/oak-village-independence-house",
   name: "Oak Village Independence",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -64,6 +65,7 @@ const listingSeed: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10168Seed extends ListingDefaultSeed {
@@ -75,13 +77,7 @@ export class Listing10168Seed extends ListingDefaultSeed {
         "https://voa-production.s3.amazonaws.com/uploads/pdf_file/file/1118/Oak_Village_Independence_House_Resident_Selection_Guidelines.pdf",
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "https://voa-production.s3.amazonaws.com/uploads/housing_property_image/image/1290/DSC_0881.jpg",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
 

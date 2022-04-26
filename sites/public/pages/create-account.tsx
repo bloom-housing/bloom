@@ -27,7 +27,7 @@ import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
-const CreateAccount = () => {
+export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
@@ -52,17 +52,13 @@ const CreateAccount = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { dob, phoneNumber, smsSubscription, emailSubscription, ...rest } = data
+      const { dob, phoneNumber, ...rest } = data
       await createUser({
         ...rest,
         dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
         language,
         // Convert (123) 456-7890 to E.164 format with US country code: +11234567890
         phoneNumber: usToIntlPhone(phoneNumber),
-        preferences: {
-          sendEmailNotifications: emailSubscription,
-          sendSmsNotifications: smsSubscription,
-        },
       })
 
       setOpenModal(true)
@@ -70,8 +66,11 @@ const CreateAccount = () => {
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
+      } else if (status === 409) {
+        console.error(err)
+        setRequestError(`${t("authentication.createAccount.errors.emailInUse")}`)
       } else {
-        console.log(JSON.stringify(err))
+        console.error(err)
         setRequestError(`${t("authentication.createAccount.errors.generic")}`)
       }
       window.scrollTo(0, 0)
@@ -175,12 +174,6 @@ const CreateAccount = () => {
               errorMessage={t("authentication.createAccount.errors.emailMismatch")}
               register={register}
             />
-            <Field
-              name="emailSubscription"
-              type="checkbox"
-              label={t("authentication.createAccount.emailSubscription")}
-              register={register}
-            />
           </div>
           <div className="form-card__group border-b">
             <PhoneField
@@ -188,16 +181,11 @@ const CreateAccount = () => {
               name="phoneNumber"
               label={t("authentication.createAccount.phone")}
               placeholder={t("authentication.createAccount.phonePlaceholder")}
+              required={false}
               error={errors.phoneNumber}
               errorMessage={t("authentication.signIn.phoneError")}
               controlClassName="control"
               control={control}
-            />
-            <Field
-              name="smsSubscription"
-              type="checkbox"
-              label={t("authentication.createAccount.smsSubscription")}
-              register={register}
             />
           </div>
 
@@ -246,12 +234,7 @@ const CreateAccount = () => {
             />
 
             <div className="text-center mt-10">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  console.info("button has been clicked!")
-                }}
-              >
+              <Button type="submit" styleType={AppearanceStyleType.primary}>
                 {t("account.createAccount")}
               </Button>
             </div>
@@ -304,5 +287,3 @@ const CreateAccount = () => {
     </FormsLayout>
   )
 }
-
-export default CreateAccount
