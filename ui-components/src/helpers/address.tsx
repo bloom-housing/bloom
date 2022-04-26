@@ -29,7 +29,6 @@ export const OneLineAddress = (props: AddressProps) => {
 
 export const MultiLineAddress = (props: AddressProps) => {
   if (!props.address) return null
-  console.log(props.address)
 
   return (
     <>
