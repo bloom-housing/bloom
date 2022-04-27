@@ -4511,6 +4511,14 @@ export interface ListingFilterParams {
   jurisdiction?: string
 }
 
+export interface ListingsApiExtraModels {
+  /**  */
+  orderBy?: OrderByFieldsEnum[]
+
+  /**  */
+  order?: EnumListingsApiExtraModelsOrder[]
+}
+
 export interface UnitAccessibilityPriorityType {
   /**  */
   name: string
@@ -6590,6 +6598,20 @@ export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
+}
+export enum OrderByFieldsEnum {
+  "mostRecentlyUpdated" = "mostRecentlyUpdated",
+  "applicationDates" = "applicationDates",
+  "mostRecentlyClosed" = "mostRecentlyClosed",
+  "name" = "name",
+  "waitlistOpen" = "waitlistOpen",
+  "status" = "status",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
+}
+export enum EnumListingsApiExtraModelsOrder {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
 }
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
