@@ -270,7 +270,6 @@ table {
     }
 
     .stacked-table-cell-container {
-      width: 50%;
       @apply flex;
       @apply flex-col;
       @apply items-start;
@@ -376,4 +375,18 @@ table.td-plain {
 
 .table__is-dragging {
   display: table;
+}
+
+.categories-container {
+  table {
+    @apply mb-2;
+    @screen md {
+      @apply mb-5;
+    }
+  }
+  .category-table-container:last-child {
+    table {
+      @apply mb-0;
+    }
+  }
 }

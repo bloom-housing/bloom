@@ -17,17 +17,17 @@ export interface CategoryTableProps {
 const CategoryTable = (props: CategoryTableProps) => {
   const tables = props.categoryData.map((category, index) => {
     return (
-      <div key={index}>
+      <div key={index} className={"category-table-container"}>
         <Heading priority={3} style={"categoryHeader"}>
           {category.header}
         </Heading>
         <hr className={"my-2"} />
-        <StackedTable {...category.tableData} className={"category-table mb-2 md:mb-6"} />
+        <StackedTable {...category.tableData} className={"category-table"} />
       </div>
     )
   })
 
-  return <>{tables}</>
+  return <div className={"categories-container"}>{tables}</div>
 }
 
 export { CategoryTable as default, CategoryTable }

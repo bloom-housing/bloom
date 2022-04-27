@@ -30,12 +30,12 @@ const responsiveTableHeaders: TableHeaders = {
 
 const longerRows = [
   {
-    units: { cellText: "Studio", cellSubText: "Waitlist (Listahan ng mga Naghihintay)" },
+    units: { cellText: "Studio", cellSubText: "Waitlist (Listahan ng mga Naghih intay)" },
     income: { cellText: "$3,638 hanggang $6,216", cellSubText: "kada buwan" },
     rent: { cellText: "$1,819", cellSubText: " kada buwan" },
   },
   {
-    units: { cellText: "Studio", cellSubText: "Waitlist (Listahan ng mga Naghihintay)" },
+    units: { cellText: "Studio", cellSubText: "Waitlist (Listahan ng mga Naghih intay)" },
     income: { cellText: "$3,638 hanggang $6,216", cellSubText: "kada buwan" },
     rent: { cellText: "$1,819", cellSubText: " kada buwan" },
   },
@@ -43,7 +43,7 @@ const longerRows = [
 
 const longerHeaders: TableHeaders = {
   units: { name: "MGA UNIT" },
-  income: { name: "HANAY NG KITA (INCOME RANGE)" },
+  income: { name: "HANAY NG KITA" },
   rent: { name: "UPA" },
 }
 
@@ -76,3 +76,22 @@ export const LongerStrings = () => (
     ]}
   />
 )
+
+export const SmallerContainer = () => {
+  return (
+    <div style={{ maxWidth: "500px" }}>
+      <CategoryTable
+        categoryData={[
+          {
+            header: "Header 1 but it's a long string",
+            tableData: { stackedData: longerRows, headers: longerHeaders },
+          },
+          {
+            header: "Header 2 but it's a long string",
+            tableData: { stackedData: longerRows, headers: longerHeaders },
+          },
+        ]}
+      />
+    </div>
+  )
+}
