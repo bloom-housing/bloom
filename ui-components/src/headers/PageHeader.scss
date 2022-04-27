@@ -20,11 +20,8 @@
 }
 
 .page-header__title {
-  @apply text-center;
-
   @screen md {
     @apply text-5xl;
-    @apply text-left;
   }
 }
 
