@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "4.2.2-alpha.18",
+  "version": "4.2.2-alpha.19",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -24,9 +24,9 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^4.2.2-alpha.3",
-    "@bloom-housing/shared-helpers": "^4.2.2-alpha.15",
-    "@bloom-housing/ui-components": "^4.2.2-alpha.15",
+    "@bloom-housing/backend-core": "^4.2.2-alpha.4",
+    "@bloom-housing/shared-helpers": "^4.2.2-alpha.16",
+    "@bloom-housing/ui-components": "^4.2.2-alpha.16",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
