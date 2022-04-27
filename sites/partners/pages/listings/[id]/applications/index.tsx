@@ -16,7 +16,11 @@ import {
   LoadingOverlay,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { useSingleListingData, useFlaggedApplicationsList } from "../../../../lib/hooks"
+import {
+  useSingleListingData,
+  useFlaggedApplicationsList,
+  useApplicationsData,
+} from "../../../../lib/hooks"
 import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 import Layout from "../../../../layouts"
 import { useForm } from "react-hook-form"
@@ -24,10 +28,8 @@ import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 import {
-  Application,
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
-  PaginationMeta,
 } from "@bloom-housing/backend-core/types"
 
 type ApplicationsListSortOptions = {
@@ -41,12 +43,6 @@ const ApplicationsList = () => {
   const router = useRouter()
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
-
-  /* Grid Data */
-  const [applications, setApplications] = useState<Application[] | null>()
-  const [appsError, setAppsError] = useState()
-  const [appsMeta, setAppsMeta] = useState<PaginationMeta | null>()
-  const [appsLoading, setAppsLoading] = useState<boolean>(true)
 
   /* Filter input */
   const [delayedFilterValue, setDelayedFilterValue] = useState("")
@@ -76,39 +72,15 @@ const ApplicationsList = () => {
     page: 1,
     limit: 1,
   })
-  useEffect(() => {
-    setAppsLoading(true)
-    const params = {
-      listingId,
-      page: currentPage,
-      limit: itemsPerPage,
-    }
-    if (delayedFilterValue) {
-      Object.assign(params, { search: delayedFilterValue })
-    }
-    if (sortOptions.orderBy) {
-      Object.assign(params, { orderBy: sortOptions.orderBy, order: sortOptions.order ?? "ASC" })
-    }
-    applicationsService
-      .list(params)
-      .then((res) => {
-        setApplications(res?.items)
-        setAppsMeta(res?.meta)
-        setAppsLoading(false)
-      })
-      .catch((e) => {
-        setAppsError(e.response.data.error)
-        setAppsLoading(false)
-      })
-  }, [
-    applicationsService,
+
+  const { applications, appsMeta, appsLoading, appsError } = useApplicationsData(
     currentPage,
     delayedFilterValue,
     itemsPerPage,
     listingId,
-    sortOptions.order,
     sortOptions.orderBy,
-  ])
+    sortOptions.order
+  )
 
   /* Data Filtering */
   // eslint-disable-next-line @typescript-eslint/unbound-method
