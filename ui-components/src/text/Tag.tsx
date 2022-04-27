@@ -7,6 +7,7 @@ export interface TagProps extends AppearanceProps {
   pillStyle?: boolean
   children: React.ReactNode
   fillContainer?: boolean
+  tabIndex?: number
 }
 
 export const Tag = (props: TagProps) => {
@@ -16,5 +17,9 @@ export const Tag = (props: TagProps) => {
   if (props.fillContainer) tagClasses.push("fill-container")
   if (props.className) tagClasses.push(props.className)
 
-  return <span className={tagClasses.join(" ")}>{props.children}</span>
+  return (
+    <span className={tagClasses.join(" ")} tabIndex={props.tabIndex}>
+      {props.children}
+    </span>
+  )
 }

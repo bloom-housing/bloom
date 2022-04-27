@@ -1131,6 +1131,8 @@
   "listings.unitsDescription": "Select the building units that are available through this listing.",
   "listings.unitTypesOrIndividual": "Do you want to show unit types or individual units?",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
+  "listings.managerHasConfirmedInformation": "A property manager has confirmed the information on this listing",
+  "listings.areaMedianIncome": "Area Median Income is the income number at which half of the population earns more and half earns less, based on the number of people in the household.",
   "lottery.applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",
   "lottery.viewPreferenceList": "View Preference List",
   "nav.srHeading": "Navigation Menu",

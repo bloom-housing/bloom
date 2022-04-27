@@ -1,0 +1,42 @@
+$tooltip_padding: 8px;
+$tooltip_arrow_height: 9px;
+
+.tooltip {
+  @apply relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.tooltip__element {
+  @apply w-full;
+  @apply fixed;
+  @apply bg-primary-dark;
+  @apply text-white;
+  @apply rounded;
+  @apply p-2;
+  @apply text-sm font-bold text-center;
+  @apply normal-case;
+  @apply opacity-0;
+  @apply invisible;
+  transform: translate(-50%, calc(-100% - $tooltip_padding * 2));
+
+  max-width: 280px;
+  transition: opacity 0.2s;
+
+  &--visible {
+    @apply opacity-100;
+    @apply visible;
+  }
+
+  &::before {
+    content: '';
+    @apply absolute bottom-0;
+    @apply w-0 h-0;
+    @apply border-solid;
+    @apply left-1/2;
+    bottom: -$tooltip_arrow_height;
+    transform: translateX(-50%);
+    border-width: $tooltip_arrow_height 7px 0 7px;
+    border-color: theme('colors.primary-dark') transparent transparent transparent;
+  }
+}

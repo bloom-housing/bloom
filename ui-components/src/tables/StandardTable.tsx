@@ -8,6 +8,7 @@ import { t } from "../helpers/translator"
 export interface TableHeadersOptions {
   name: string
   className?: string
+  icon?: React.ReactNode
 }
 export interface TableHeaders {
   [key: string]: string | TableHeadersOptions
