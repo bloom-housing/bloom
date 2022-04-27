@@ -31,6 +31,7 @@ export interface FieldProps {
   setValue?: UseFormMethods["setValue"]
   dataTestId?: string
   hidden?: boolean
+  labelClassName?: string
 }
 
 const Field = (props: FieldProps) => {
@@ -74,7 +75,7 @@ const Field = (props: FieldProps) => {
     if (props.caps) labelClasses.push("field-label--caps")
     if (props.primary) labelClasses.push("text-primary")
     if (props.readerOnly) labelClasses.push("sr-only")
-
+    if (props.labelClassName) labelClasses.push(props.labelClassName)
     return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
         {props.label}

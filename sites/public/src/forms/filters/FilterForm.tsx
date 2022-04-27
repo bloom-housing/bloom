@@ -1,358 +1,357 @@
-import {
-  AvailabilityFilterEnum,
-  EnumListingFilterParamsStatus,
-} from "@bloom-housing/backend-core/types"
+import { EnumListingFilterParamsStatus } from "@bloom-housing/backend-core/types"
 import {
   t,
-  SelectOption,
   Form,
-  Select,
   Field,
   Button,
   AppearanceStyleType,
   FrontendListingFilterStateKeys,
   ListingFilterState,
+  GridSection,
+  GridCell,
+  AppearanceBorderType,
+  ViewItem,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { Region } from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
-
-const isValidZipCodeOrEmpty = (value: string) => {
-  // Empty strings or whitespace are valid and will reset the filter.
-  if (!value.trim()) {
-    return true
-  }
-  let returnValue = true
-  value.split(",").forEach((element) => {
-    if (!/^[0-9]{5}$/.test(element.trim())) {
-      returnValue = false
-    }
-  })
-  return returnValue
-}
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
 
 interface FilterFormProps {
   onSubmit: (data: ListingFilterState) => void
+  onClose: (isOpen: boolean) => void
   filterState?: ListingFilterState
 }
 
+interface optionInterface {
+  value: string
+  label: string
+  translation?: string
+}
+
+const getTranslationString = (str: string) => {
+  if (str === "studio") {
+    return "studioPlus"
+  } else if (str === "oneBdrm") {
+    return "onePlus"
+  } else if (str === "twoBdrm") {
+    return "twoPlus"
+  } else if (str === "threeBdrm") {
+    return "threePlus"
+  } else if (str === "fourBdrm") {
+    return "fourPlus"
+  } else if (str === "SRO") {
+    return "SROPlus"
+  }
+}
+
 const FilterForm = (props: FilterFormProps) => {
-  // TODO: Select options should come from the database (#252)
-  const EMPTY_OPTION = { value: "", label: "" }
-  const preferredUnitOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "0", label: t("listingFilters.bedroomsOptions.studioPlus") },
-    { value: "1", label: t("listingFilters.bedroomsOptions.onePlus") },
-    { value: "2", label: t("listingFilters.bedroomsOptions.twoPlus") },
-    { value: "3", label: t("listingFilters.bedroomsOptions.threePlus") },
-    { value: "4", label: t("listingFilters.bedroomsOptions.fourPlus") },
+  // TODO: Select options should come from the database
+  const [bedroomOptions, setBedroomOptions] = useState<optionInterface[]>([])
+  const [communityProgramOptions, setCommunityProgramOptions] = useState<optionInterface[]>([])
+  const [regionOptions, setRegionOptions] = useState<optionInterface[]>([])
+  const [accessibilityFeatureOptions, setAccessibilityFeatureOptions] = useState<optionInterface[]>(
+    []
+  )
+  const [localFilterState, setLocalFilterState] = useState<ListingFilterState>({})
+
+  const availabilityOptions = [
+    { value: "vacantUnits", label: t("listings.vacantUnits") },
+    { value: "openWaitlist", label: t("publicFilter.waitlist.open") },
+    { value: "closedWaitlist", label: t("publicFilter.waitlist.closed") },
   ]
 
-  const availabilityOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: AvailabilityFilterEnum.hasAvailability, label: t("listingFilters.hasAvailability") },
-    { value: AvailabilityFilterEnum.noAvailability, label: t("listingFilters.noAvailability") },
-    { value: AvailabilityFilterEnum.waitlist, label: t("listingFilters.waitlist") },
-  ]
+  useEffect(() => {
+    const getAndSetOptions = async () => {
+      try {
+        const response = await axios.get(`${process.env.backendApiBase}/listings/meta`)
+        if (response.data) {
+          if (response.data.unitTypes) {
+            setBedroomOptions(
+              response.data.unitTypes.map((elem) => ({
+                label: elem.name,
+                value: elem.id,
+                translation: getTranslationString(elem.name),
+              }))
+            )
+          }
 
-  const seniorHousingOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "true", label: t("t.yes") },
-    { value: "false", label: t("t.no") },
-  ]
+          if (response.data.programs) {
+            setCommunityProgramOptions(
+              response.data.programs.map((elem) => ({
+                label: elem.title,
+                value: elem.id,
+              }))
+            )
+          }
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getAndSetOptions()
 
-  const amiOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "20", label: t("listingFilters.minAmiPercentageOptions.amiOption20") },
-    { value: "25", label: t("listingFilters.minAmiPercentageOptions.amiOption25") },
-    { value: "30", label: t("listingFilters.minAmiPercentageOptions.amiOption30") },
-    { value: "35", label: t("listingFilters.minAmiPercentageOptions.amiOption35") },
-    { value: "40", label: t("listingFilters.minAmiPercentageOptions.amiOption40") },
-    { value: "45", label: t("listingFilters.minAmiPercentageOptions.amiOption45") },
-    { value: "50", label: t("listingFilters.minAmiPercentageOptions.amiOption50") },
-    { value: "55", label: t("listingFilters.minAmiPercentageOptions.amiOption55") },
-    { value: "60", label: t("listingFilters.minAmiPercentageOptions.amiOption60") },
-    { value: "70", label: t("listingFilters.minAmiPercentageOptions.amiOption70") },
-    { value: "80", label: t("listingFilters.minAmiPercentageOptions.amiOption80") },
-    { value: "100", label: t("listingFilters.minAmiPercentageOptions.amiOption100") },
-    { value: "120", label: t("listingFilters.minAmiPercentageOptions.amiOption120") },
-    { value: "125", label: t("listingFilters.minAmiPercentageOptions.amiOption125") },
-    { value: "140", label: t("listingFilters.minAmiPercentageOptions.amiOption140") },
-    { value: "150", label: t("listingFilters.minAmiPercentageOptions.amiOption150") },
-  ]
+    setRegionOptions(
+      Object.entries(Region).map((elem) => ({
+        value: elem[1],
+        label: elem[0] === "MidtownNewCenter" ? "Midtown" : elem[1],
+      }))
+    )
+
+    setAccessibilityFeatureOptions(
+      Object.keys(listingFeatures).map((elem) => ({
+        value: elem,
+        label: listingFeatures[elem],
+      }))
+    )
+  }, [])
+
+  useEffect(() => {
+    setLocalFilterState({
+      ...props.filterState,
+    })
+  }, [props.filterState])
 
   // This is causing a linting issue with unbound-method, see issue:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, errors } = useForm()
+  const { handleSubmit, register, reset } = useForm()
 
   return (
-    <Form onSubmit={handleSubmit(props.onSubmit)}>
-      <div className="form-card__group">
-        <Field
-          id="status"
-          name={FrontendListingFilterStateKeys.status}
-          type="hidden"
-          register={register}
-          defaultValue={EnumListingFilterParamsStatus.active}
-        />
-        <Select
-          id={"availability"}
-          name={FrontendListingFilterStateKeys.availability}
-          label={t("listingFilters.availability")}
-          register={register}
-          controlClassName="control"
-          options={availabilityOptions}
-          defaultValue={props.filterState?.availability}
-          labelClassName="filter-header"
-        />
-        <label className="field-label filter-header">{t("listingFilters.bedrooms")}</label>
-        <div className="checkbox-filter-group">
-          <Field
-            id="studio"
-            name={FrontendListingFilterStateKeys.studio}
-            type="checkbox"
-            label={t("listingFilters.bedroomsOptions.studioPlus")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.studio),
-            }}
-          />
-          <Field
-            id="oneBdrm"
-            name={FrontendListingFilterStateKeys.oneBdrm}
-            type="checkbox"
-            label={t("listingFilters.bedroomsOptions.onePlus")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.oneBdrm),
-            }}
-          />
-          <Field
-            id="twoBdrm"
-            name={FrontendListingFilterStateKeys.twoBdrm}
-            type="checkbox"
-            label={t("listingFilters.bedroomsOptions.twoPlus")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.twoBdrm),
-            }}
-          />
-          <Field
-            id="threeBdrm"
-            name={FrontendListingFilterStateKeys.threeBdrm}
-            type="checkbox"
-            label={t("listingFilters.bedroomsOptions.threePlus")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.threeBdrm),
-            }}
-          />
-          <Field
-            id="fourPlusBdrm"
-            name={FrontendListingFilterStateKeys.fourPlusBdrm}
-            type="checkbox"
-            label={t("listingFilters.bedroomsOptions.fourPlus")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.fourPlusBdrm),
-            }}
-          />
-        </div>
-        <label className="field-label filter-header">{t("listingFilters.region")}</label>
-        <div className="checkbox-filter-group">
-          {Object.entries(Region).map((region) => (
+    <Form
+      onSubmit={handleSubmit(props.onSubmit)}
+      className={"flex flex-col justify-between h-full"}
+    >
+      <div>
+        <GridSection columns={1} className={"px-4"}>
+          <GridCell span={1}>
             <Field
-              id={region[0]}
-              name={region[0]}
-              type="checkbox"
-              label={region[1]}
+              id="status"
+              name={FrontendListingFilterStateKeys.status}
+              type="hidden"
               register={register}
-              inputProps={{ defaultChecked: Boolean(props.filterState?.[region[0]]) }}
-            ></Field>
-          ))}
-        </div>
-        <label className="field-label filter-header">{t("eligibility.accessibility.title")}</label>
-        <div className="checkbox-filter-group">
-          <Field
-            id="elevator"
-            name={FrontendListingFilterStateKeys.elevator}
-            type="checkbox"
-            label={t("eligibility.accessibility.elevator")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.elevator),
-            }}
-          />
-          <Field
-            id="wheelchairRamp"
-            name={FrontendListingFilterStateKeys.wheelchairRamp}
-            type="checkbox"
-            label={t("eligibility.accessibility.wheelchairRamp")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.wheelchairRamp),
-            }}
-          />
-          <Field
-            id="serviceAnimalsAllowed"
-            name={FrontendListingFilterStateKeys.serviceAnimalsAllowed}
-            type="checkbox"
-            label={t("eligibility.accessibility.serviceAnimalsAllowed")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.serviceAnimalsAllowed),
-            }}
-          />
-          <Field
-            id="accessibleParking"
-            name={FrontendListingFilterStateKeys.accessibleParking}
-            type="checkbox"
-            label={t("eligibility.accessibility.accessibleParking")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.accessibleParking),
-            }}
-          />
-          <Field
-            id="parkingOnSite"
-            name={FrontendListingFilterStateKeys.parkingOnSite}
-            type="checkbox"
-            label={t("eligibility.accessibility.parkingOnSite")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.parkingOnSite),
-            }}
-          />
-          <Field
-            id="inUnitWasherDryer"
-            name={FrontendListingFilterStateKeys.inUnitWasherDryer}
-            type="checkbox"
-            label={t("eligibility.accessibility.inUnitWasherDryer")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.inUnitWasherDryer),
-            }}
-          />
-          <Field
-            id="laundryInBuilding"
-            name={FrontendListingFilterStateKeys.laundryInBuilding}
-            type="checkbox"
-            label={t("eligibility.accessibility.laundryInBuilding")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.laundryInBuilding),
-            }}
-          />
-          <Field
-            id="barrierFreeEntrance"
-            name={FrontendListingFilterStateKeys.barrierFreeEntrance}
-            type="checkbox"
-            label={t("eligibility.accessibility.barrierFreeEntrance")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.barrierFreeEntrance),
-            }}
-          />
-          <Field
-            id="rollInShower"
-            name={FrontendListingFilterStateKeys.rollInShower}
-            type="checkbox"
-            label={t("eligibility.accessibility.rollInShower")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.rollInShower),
-            }}
-          />
-          <Field
-            id="grabBars"
-            name={FrontendListingFilterStateKeys.grabBars}
-            type="checkbox"
-            label={t("eligibility.accessibility.grabBars")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.grabBars),
-            }}
-          />
-          <Field
-            id="heatingInUnit"
-            name={FrontendListingFilterStateKeys.heatingInUnit}
-            type="checkbox"
-            label={t("eligibility.accessibility.heatingInUnit")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.heatingInUnit),
-            }}
-          />
-          <Field
-            id="acInUnit"
-            name={FrontendListingFilterStateKeys.acInUnit}
-            type="checkbox"
-            label={t("eligibility.accessibility.acInUnit")}
-            register={register}
-            inputProps={{
-              defaultChecked: Boolean(props.filterState?.acInUnit),
-            }}
-          />
-        </div>
-        <label className="field-label filter-header">{t("listingFilters.rentRange")}</label>
-        <div className="flex flex-row rent-range">
-          <Field
-            id="minRent"
-            name={FrontendListingFilterStateKeys.minRent}
-            register={register}
-            type="number"
-            placeholder={t("t.min")}
-            prepend="$"
-            defaultValue={props.filterState?.minRent}
-          />
-          <div className="flex items-center px-9">{t("t.to")}</div>
-          <Field
-            id="maxRent"
-            name={FrontendListingFilterStateKeys.maxRent}
-            register={register}
-            type="number"
-            placeholder={t("t.max")}
-            prepend="$"
-            defaultValue={props.filterState?.maxRent}
-          />
-        </div>
-        {/* <Select
-          id="seniorHousing"
-          name={FrontendListingFilterStateKeys.seniorHousing}
-          label={t("listingFilters.senior")}
-          register={register}
-          controlClassName="control"
-          options={seniorHousingOptions}
-          defaultValue={props.filterState?.seniorHousing?.toString()}
-          labelClassName="filter-header"
-        /> */}
-        {/* TODO(#515): Add more explanation and an ami percentage
-        calculator to this filter */}
-        <Select
-          id="amiSelect"
-          name={FrontendListingFilterStateKeys.minAmiPercentage}
-          label={t("listingFilters.minAmiPercentageLabel")}
-          register={register}
-          controlClassName="control"
-          options={amiOptions}
-          defaultValue={props.filterState?.minAmiPercentage?.toString()}
-          labelClassName="filter-header"
-        />
-        <Field
-          id="includeNulls"
-          name={FrontendListingFilterStateKeys.includeNulls}
-          type="checkbox"
-          label={t("listingFilters.includeUnknowns")}
-          register={register}
-          inputProps={{
-            defaultChecked: Boolean(props.filterState?.includeNulls),
-          }}
-        />
+              defaultValue={EnumListingFilterParamsStatus.active}
+            />
+            <ViewItem
+              className={"font-bold"}
+              label={t("publicFilter.confirmedListings")}
+              labelStyling={"text-gray-750"}
+            />
+            <Field
+              id="isVerified"
+              name={FrontendListingFilterStateKeys.isVerified}
+              type="checkbox"
+              label={t("publicFilter.confirmedListingsFieldLabel")}
+              register={register}
+              inputProps={{
+                defaultChecked: localFilterState?.isVerified,
+              }}
+              labelClassName={"text-gray-750 font-semibold"}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection columns={3} separator={true} className={"px-4"} wrapperClassName={"pt-4 mt-2"}>
+          <GridCell span={3}>
+            <ViewItem
+              className={"font-bold"}
+              label={t("t.availability")}
+              labelStyling={"text-gray-750"}
+            />
+            <FieldGroup
+              name="availability"
+              type="checkbox"
+              register={register}
+              fields={availabilityOptions.map((elem) => ({
+                id: elem.value,
+                label: elem.label,
+                value: elem.value,
+                inputProps: {
+                  defaultChecked: localFilterState?.availability?.includes(elem.value),
+                },
+              }))}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex items-center grid md:grid-cols-3 sm:grid-cols-1"
+              fieldLabelClassName={"text-gray-750"}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection columns={3} separator={true} className={"px-4"} wrapperClassName={"pt-4 mt-2"}>
+          <GridCell span={3}>
+            <ViewItem
+              className={"font-bold"}
+              label={t("publicFilter.bedRoomSize")}
+              labelStyling={"text-gray-750"}
+            />
+            <FieldGroup
+              name="bedRoomSize"
+              type="checkbox"
+              register={register}
+              fields={bedroomOptions.map((elem) => ({
+                id: FrontendListingFilterStateKeys[elem.label],
+                label: t(`listingFilters.bedroomsOptions.${elem.translation}`),
+                value: FrontendListingFilterStateKeys[elem.label],
+                inputProps: {
+                  defaultChecked: Boolean(
+                    localFilterState?.bedRoomSize?.includes(
+                      FrontendListingFilterStateKeys[elem.label]
+                    )
+                  ),
+                },
+              }))}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex items-center grid md:grid-cols-3 sm:grid-cols-1"
+              fieldLabelClassName={"text-gray-750"}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection columns={3} separator={true} className={"px-4"} wrapperClassName={"pt-4 mt-2"}>
+          <GridCell span={3}>
+            <ViewItem
+              className={"font-bold"}
+              label={t("publicFilter.rentRange")}
+              labelStyling={"text-gray-750"}
+            />
+          </GridCell>
+          <GridCell span={1}>
+            <Field
+              id={"minRent"}
+              name={FrontendListingFilterStateKeys.minRent}
+              placeholder={t("publicFilter.rentRangeMin")}
+              register={register}
+              prepend={"$"}
+              defaultValue={localFilterState?.minRent}
+            />
+          </GridCell>
+          <GridCell span={1}>
+            <Field
+              id={"maxRent"}
+              name={FrontendListingFilterStateKeys.maxRent}
+              placeholder={t("publicFilter.rentRangeMax")}
+              register={register}
+              prepend={"$"}
+              defaultValue={localFilterState?.maxRent}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection columns={3} separator={true} className={"px-4"} wrapperClassName={"pt-4 mt-4"}>
+          <GridCell span={3}>
+            <ViewItem
+              className={"font-bold"}
+              label={t("publicFilter.communityPrograms")}
+              labelStyling={"text-gray-750"}
+            />
+            <FieldGroup
+              name="communityPrograms"
+              type="checkbox"
+              register={register}
+              fields={communityProgramOptions.map((elem) => ({
+                id: elem.value,
+                label: elem.label,
+                value: elem.value,
+                inputProps: {
+                  defaultChecked: Boolean(
+                    localFilterState?.communityPrograms?.includes(elem.value)
+                  ),
+                },
+              }))}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex items-center grid md:grid-cols-3 sm:grid-cols-1"
+              fieldLabelClassName={"text-gray-750"}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection columns={3} separator={true} className={"px-4"} wrapperClassName={"pt-4 mt-2"}>
+          <GridCell span={3}>
+            <ViewItem
+              className={"font-bold"}
+              label={t("t.region")}
+              labelStyling={"text-gray-750"}
+            />
+            <FieldGroup
+              name="region"
+              type="checkbox"
+              register={register}
+              fields={regionOptions.map((elem) => ({
+                id: elem.value,
+                label: elem.label,
+                value: elem.value,
+                inputProps: {
+                  defaultChecked: Boolean(localFilterState?.region?.includes(elem.value)),
+                },
+              }))}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex items-center grid md:grid-cols-3 sm:grid-cols-1"
+              fieldLabelClassName={"text-gray-750"}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection
+          columns={3}
+          separator={true}
+          className={"px-4"}
+          wrapperClassName={"pt-4 mt-2 border-b pb-2 -mb-1"}
+        >
+          <GridCell span={3}>
+            <ViewItem
+              className={"font-bold"}
+              label={t("eligibility.accessibility.title")}
+              labelStyling={"text-gray-750"}
+            />
+            <FieldGroup
+              name="accessibility"
+              type="checkbox"
+              register={register}
+              fields={accessibilityFeatureOptions.map((elem) => ({
+                id: elem.value,
+                label: elem.label,
+                value: elem.value,
+                inputProps: {
+                  defaultChecked: Boolean(localFilterState?.accessibility?.includes(elem.value)),
+                },
+              }))}
+              fieldClassName="m-0"
+              fieldGroupClassName="flexitems-center grid md:grid-cols-3 sm:grid-cols-1"
+              fieldLabelClassName={"text-gray-750"}
+            />
+          </GridCell>
+        </GridSection>
       </div>
-      <div className="text-center mt-8 mb-5">
-        <Button type="submit" styleType={AppearanceStyleType.primary}>
-          {t("listingFilters.applyFilter")}
-        </Button>
+      <div>
+        <div className="text-left bg-white border-t border-gray-450">
+          <div className={"p-4 flex"}>
+            <Button
+              type="submit"
+              styleType={AppearanceStyleType.primary}
+              className={"border-primary-darker bg-primary-darker mr-3 hover:text-white"}
+            >
+              {t("t.done")}
+            </Button>
+            <Button
+              type="button"
+              styleType={AppearanceStyleType.secondary}
+              border={AppearanceBorderType.borderless}
+              className={"border-primary text-primary hover:text-white"}
+              onClick={() => {
+                setLocalFilterState({})
+                reset({
+                  status: EnumListingFilterParamsStatus.active,
+                  isVerified: "",
+                  availability: "",
+                  bedRoomSize: "",
+                  minRent: "",
+                  maxRent: "",
+                  communityPrograms: "",
+                  region: "",
+                  accessibility: "",
+                })
+              }}
+            >
+              {t("listingFilters.clear")}
+            </Button>
+          </div>
+        </div>
       </div>
     </Form>
   )

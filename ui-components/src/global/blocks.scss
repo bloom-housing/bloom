@@ -135,3 +135,7 @@ $shadow-left-slight: -3px 0px 3px -1px rgba(0, 0, 0, 0.1);
     @apply block;
   }
 }
+
+.is-tinted {
+  @apply bg-primary-lighter;
+}

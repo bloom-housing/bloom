@@ -16,6 +16,11 @@ import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { ContextIdFactory } from "@nestjs/core"
 import { UnitGroup } from "../../units-summary/entities/unit-group.entity"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
+import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { Program } from "../../program/entities/program.entity"
+import { ListingsNotificationsConsumer } from "../listings-notifications"
+import { BullModule, getQueueToken } from "@nestjs/bull"
+import { truncate } from "fs"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -176,11 +181,23 @@ describe("ListingsService", () => {
           },
         },
         {
+          provide: getRepositoryToken(UnitType),
+          useValue: jest.fn(),
+        },
+        {
+          provide: getRepositoryToken(Program),
+          useValue: jest.fn(),
+        },
+        {
           provide: TranslationsService,
           useValue: { translateListing: jest.fn() },
         },
       ],
-    }).compile()
+      imports: [BullModule.registerQueue({ name: "listings-notifications" })],
+    })
+      .overrideProvider(getQueueToken("listings-notifications"))
+      .useValue(mockListingsNotificationsQueue)
+      .compile()
 
     const contextId = ContextIdFactory.create()
     jest.spyOn(ContextIdFactory, "getByRequest").mockImplementation(() => contextId)
@@ -238,15 +255,15 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
-      const expectedNeighborhoodString = "Fox Creek, , Coliseum," // intentional extra and trailing commas for test
+      const expectedRegionString = "Downtown,Eastside," // intentional extra and trailing commas for test
       // lowercased, trimmed spaces, filtered empty
-      const expectedNeighborhoodArray = ["fox creek", "coliseum"]
+      const expectedRegionArray = ["Downtown", "Eastside"]
 
       const queryParams: ListingsQueryParams = {
         filter: [
           {
             $comparison: Compare["IN"],
-            neighborhood: expectedNeighborhoodString,
+            region: expectedRegionString,
           },
         ],
       }
@@ -255,9 +272,9 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
+        "property.region IN (:...region) ",
         {
-          neighborhood_0: expectedNeighborhoodArray,
+          region: expectedRegionArray,
         }
       )
     })
@@ -266,15 +283,15 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
-      const neighborhoodString = "neighborhood 1, , neighborhood 2," // intentional extra and trailing commas for test
+      const neighborhoodString = "Downtown,Eastside," // intentional extra and trailing commas for test
       // lowercased, trimmed spaces, filtered empty
-      const expectedNeighborhoodArray = ["neighborhood 1", "neighborhood 2"]
+      const expectedNeighborhoodArray = ["Downtown", "Eastside"]
 
       const queryParams: ListingsQueryParams = {
         filter: [
           {
             $comparison: Compare["IN"],
-            neighborhood: neighborhoodString,
+            region: neighborhoodString,
           },
         ],
       }
@@ -283,9 +300,9 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
+        "property.region IN (:...region) ",
         {
-          neighborhood_0: expectedNeighborhoodArray,
+          region: expectedNeighborhoodArray,
         }
       )
     })
@@ -340,16 +357,15 @@ describe("ListingsService", () => {
       )
     })
 
-    it("should include listings with missing data if $include_nulls is true for custom filters", async () => {
+    it("should filter by availability", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
       const queryParams: ListingsQueryParams = {
         filter: [
           {
-            $comparison: Compare["NA"],
-            availability: AvailabilityFilterEnum.waitlist,
-            $include_nulls: true,
+            $comparison: Compare["="],
+            availability: "openWaitlist",
           },
         ],
       }
@@ -358,9 +374,9 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(listings.is_waitlist_open = :availability OR listings.is_waitlist_open is NULL)",
+        "(coalesce(unitGroups.open_waitlist, false) = :openWaitlist)",
         {
-          availability: true,
+          openWaitlist: true,
         }
       )
     })

@@ -16,6 +16,8 @@ import { SmsModule } from "../sms/sms.module"
 import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { UnitGroup } from "../units-summary/entities/unit-group.entity"
+import { UnitType } from "../unit-types/entities/unit-type.entity"
+import { Program } from "../program/entities/program.entity"
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { UnitGroup } from "../units-summary/entities/unit-group.entity"
       AmiChart,
       ListingFeatures,
       UnitGroup,
+      UnitType,
+      Program,
     ]),
     AuthModule,
     TranslationsModule,

@@ -4,14 +4,13 @@ import {
   AgPagination,
   Button,
   AppearanceSizeType,
-  Modal,
-  AppearanceStyleType,
   t,
   encodeToFrontendFilterString,
   decodeFiltersFromFrontendUrl,
   LoadingOverlay,
   ListingFilterState,
   FrontendListingFilterStateKeys,
+  Drawer,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
@@ -75,10 +74,6 @@ const FilteredListingsPage = () => {
     }
   }
 
-  const buttonTitle = numberOfFilters
-    ? t("listingFilters.buttonTitleWithNumber", { number: numberOfFilters })
-    : t("listingFilters.buttonTitle")
-
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
@@ -86,9 +81,6 @@ const FilteredListingsPage = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const onSubmit = (data: ListingFilterState) => {
-    if (data?.[FrontendListingFilterStateKeys.includeNulls] === false) {
-      delete data[FrontendListingFilterStateKeys.includeNulls]
-    }
     // hide status filter
     delete data[FrontendListingFilterStateKeys.status]
     setFilterModalVisible(false)
@@ -117,56 +109,63 @@ const FilteredListingsPage = () => {
         inverse={true}
         tabNav={<FindRentalsForMeLink title={t("welcome.findRentalsForMe")} />}
       />
-      <Modal
+      <Drawer
         open={filterModalVisible}
         title={t("listingFilters.modalTitle")}
         onClose={() => setFilterModalVisible(false)}
+        contentAreaClassName={"px-0 pt-0 pb-0 h-full"}
       >
-        <FilterForm onSubmit={onSubmit} filterState={filterState} />
-      </Modal>
-      <h3 className="max-w-5xl container mx-auto text-4xl text-primary-darker font-bold px-4 py-8">
-        {rentalsFoundTitle}
-      </h3>
-      <div className="flex container content-center max-w-5xl px-4 mx-auto">
-        {}
-        <Button
-          className="mr-5"
-          size={AppearanceSizeType.normal}
-          icon="filter"
-          iconPlacement="left"
-          iconSize="base"
-          onClick={() => setFilterModalVisible(true)}
-        >
-          {buttonTitle}
-        </Button>
-        {numberOfFilters > 0 && (
+        <FilterForm onSubmit={onSubmit} filterState={filterState} onClose={setFilterModalVisible} />
+      </Drawer>
+      <div className={"bg-gray-300"}>
+        <h3 className="max-w-5xl container mx-auto text-3xl text-primary-darker font-bold px-4 pt-6 pb-4">
+          {rentalsFoundTitle}
+        </h3>
+        <div className="flex container content-center max-w-5xl px-4 mx-auto pb-6">
           <Button
-            className="mx-2"
             size={AppearanceSizeType.normal}
-            styleType={AppearanceStyleType.secondary}
-            // "Submit" the form with no params to trigger a reset.
-            onClick={() => onSubmit({})}
-            icon="close"
-            iconPlacement="right"
+            icon="filter"
+            iconPlacement="left"
+            iconSize="base"
+            onClick={() => setFilterModalVisible(true)}
           >
-            {t("listingFilters.resetButton")}
+            {t("listingFilters.buttonTitle")}
+            {numberOfFilters ? (
+              <span className={"bg-gray-450 text-gray-750 rounded-full px-2.5 py-1 ml-2"}>
+                {numberOfFilters}
+              </span>
+            ) : null}
           </Button>
-        )}
+          {numberOfFilters > 0 && (
+            <Button
+              className={"ml-4"}
+              size={AppearanceSizeType.normal}
+              // "Submit" the form with no params to trigger a reset.
+              onClick={() => onSubmit({})}
+              icon="closeSmall"
+              iconPlacement="right"
+              iconClass="pl-2 mr-0"
+            >
+              {t("listingFilters.resetButton")}
+            </Button>
+          )}
+        </div>
       </div>
+
       <LoadingOverlay isLoading={listingsLoading}>
         <>
           {listingsLoading && (
             <div className="container max-w-3xl my-4 px-4 py-10 content-start mx-auto" />
           )}
           {!listingsLoading && !listingsError && listingsData?.meta.totalItems === 0 && (
-            <div className="container max-w-3xl my-4 px-4 content-start mx-auto">
+            <div className="container max-w-5xl my-4 px-4 content-start mx-auto">
               <header>
-                <h2 className="page-header__title">{t("listingFilters.noResults")}</h2>
+                <h2 className="page-header__title text-left">{t("listingFilters.noResults")}</h2>
                 <p className="page-header__lead">{t("listingFilters.noResultsSubtitle")}</p>
               </header>
             </div>
           )}
-          {!listingsLoading && (
+          {!listingsLoading && listingsData?.meta.totalItems > 0 && (
             <div>
               {listingsData?.meta.totalItems > 0 && getListings(listingsData?.items)}
               <AgPagination

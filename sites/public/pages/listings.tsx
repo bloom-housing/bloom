@@ -5,12 +5,11 @@ import {
   AgPagination,
   Button,
   AppearanceSizeType,
-  Modal,
   t,
   encodeToFrontendFilterString,
   ListingFilterState,
-  FrontendListingFilterStateKeys,
   AuthContext,
+  Drawer,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
@@ -33,9 +32,6 @@ const ListingsPage = ({ initialListings }) => {
   const metaImage = "" // TODO: replace with hero image
 
   const onSubmit = (page: number, limit: number, data: ListingFilterState) => {
-    if (data[FrontendListingFilterStateKeys.includeNulls] === false) {
-      delete data[FrontendListingFilterStateKeys.includeNulls]
-    }
     setFilterModalVisible(false)
     void router.push(
       `/listings/filtered?page=${page}&limit=${limit}${encodeToFrontendFilterString(data)}`
@@ -64,28 +60,36 @@ const ListingsPage = ({ initialListings }) => {
         inverse={true}
         tabNav={<FindRentalsForMeLink title={t("welcome.findRentalsForMe")} />}
       />
-      <Modal
+      <Drawer
         open={filterModalVisible}
         title={t("listingFilters.modalTitle")}
         onClose={() => setFilterModalVisible(false)}
+        contentAreaClassName={"px-0 pt-0 pb-0 h-full"}
       >
-        <FilterForm onSubmit={(data) => onSubmit(/*page=*/ 1, 8, data)} />
-      </Modal>
-      <div className="flex container content-center max-w-5xl px-4 pt-8 mx-auto">
-        <h3 className="text-3xl text-primary-darker font-bold">All rentals</h3>
-        <Button
-          className="mx-5"
-          size={AppearanceSizeType.normal}
-          icon="filter"
-          iconPlacement="left"
-          iconSize="base"
-          onClick={() => setFilterModalVisible(true)}
-        >
-          {t("listingFilters.buttonTitle")}
-        </Button>
+        <FilterForm
+          onSubmit={(data) => onSubmit(/*page=*/ 1, 8, data)}
+          onClose={setFilterModalVisible}
+        />
+      </Drawer>
+
+      <div className={"bg-gray-300"}>
+        <h3 className="max-w-5xl container mx-auto text-3xl text-primary-darker font-bold px-4 py-8">
+          {t("listingFilters.allRentals")}
+          <Button
+            className="mx-5 bg-lush border-lush text-black"
+            size={AppearanceSizeType.normal}
+            icon="filter"
+            iconPlacement="left"
+            iconSize="base"
+            onClick={() => setFilterModalVisible(true)}
+            passToIconClass={"ui-icon__filledBlack"}
+          >
+            {t("listingFilters.buttonTitle")}
+          </Button>
+        </h3>
       </div>
       {initialListings?.meta?.totalItems === 0 && (
-        <div className="container max-w-3xl my-4 px-4 content-start mx-auto">
+        <div className="container max-w-5xl my-4 px-4 content-start mx-auto">
           <header>
             <h2 className="page-header__title">{t("listingFilters.noResults")}</h2>
             <p className="page-header__lead">{t("listingFilters.noResultsSubtitle")}</p>

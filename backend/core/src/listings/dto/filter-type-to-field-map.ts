@@ -21,7 +21,7 @@ export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   leasingAgents: "leasingAgents.id",
   program: "listingsProgramsProgram.title",
   // This is the inverse of the explanation for maxRent below.
-  minRent: "unitGroups.monthly_rent_max",
+  minRent: "amilevels.flat_rent_value",
   /**
    * The maxRent filter uses the monthly_rent_min field to avoid missing units
    * in the unitGroups's rent range. For example, if there's a unitGroups with
@@ -41,7 +41,7 @@ export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
    * listings with a monthly_rent_min that's <= $600. If we used the
    * monthly_rent_max field, we'd miss it.
    */
-  maxRent: "unitGroups.monthly_rent_min",
+  maxRent: "amilevels.flat_rent_value",
   elevator: "listing_features.elevator",
   wheelchairRamp: "listing_features.wheelchairRamp",
   serviceAnimalsAllowed: "listing_features.serviceAnimalsAllowed",
@@ -54,9 +54,23 @@ export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   grabBars: "listing_features.grabBars",
   heatingInUnit: "listing_features.heatingInUnit",
   acInUnit: "listing_features.acInUnit",
-  neighborhood: "property.neighborhood",
   jurisdiction: "jurisdiction.id",
   favorited: "",
   marketingType: "listings.marketingType",
   region: "property.region",
+  hearing: "",
+  mobility: "",
+  visual: "",
+  vacantUnits: "",
+  openWaitlist: "",
+  closedWaitlist: "",
+  Families: "",
+  ResidentswithDisabilities: "",
+  Seniors55: "",
+  Seniors62: "",
+  SupportiveHousingfortheHomeless: "",
+  Veterans: "",
+  bedRoomSize: "",
+  communityPrograms: "",
+  accessibility: "",
 }
