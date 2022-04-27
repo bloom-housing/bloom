@@ -72,56 +72,6 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
   }
 }
 
-export function useApplicationsData(
-  pageIndex: number,
-  limit = 10,
-  listingId: string,
-  search: string,
-  orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
-) {
-  const { applicationsService } = useContext(AuthContext)
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", pageIndex.toString())
-  queryParams.append("limit", limit.toString())
-
-  if (search) {
-    queryParams.append("search", search)
-  }
-
-  if (orderBy) {
-    queryParams.append("orderBy", search)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
-  }
-
-  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
-
-  const params = {
-    listingId,
-    page: pageIndex,
-    limit,
-  }
-
-  if (search) {
-    Object.assign(params, { search })
-  }
-
-  if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
-  }
-
-  const fetcher = () => applicationsService.list(params)
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    appsData: data,
-    appsLoading: !error && !data,
-    appsError: error,
-  }
-}
-
 export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
   const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
@@ -168,7 +118,57 @@ export function useFlaggedApplicationsList({
     error,
   }
 }
+export function useApplicationsData(
+  currentPage: number,
+  delayedFilterValue: string,
+  limit: number,
+  listingId: string,
+  orderBy?: EnumApplicationsApiExtraModelOrderBy,
+  order?: EnumApplicationsApiExtraModelOrder
+) {
+  const { applicationsService } = useContext(AuthContext)
 
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+  queryParams.append("page", currentPage.toString())
+  queryParams.append("limit", limit.toString())
+
+  if (delayedFilterValue) {
+    queryParams.append("search", delayedFilterValue)
+  }
+
+  if (orderBy) {
+    queryParams.append("orderBy", delayedFilterValue)
+    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
+  }
+  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
+
+  const params = {
+    listingId,
+    page: currentPage,
+    limit,
+  }
+
+  if (delayedFilterValue) {
+    Object.assign(params, { search: delayedFilterValue })
+  }
+
+  if (orderBy) {
+    Object.assign(params, { orderBy, order: order ?? "ASC" })
+  }
+  const fetcher = () => applicationsService.list(params)
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  const applications = data?.items
+  const appsMeta = data?.meta
+
+  return {
+    applications: applications ?? [],
+    appsMeta,
+    appsLoading: !error && !data,
+    appsError: error,
+  }
+}
 export function useSingleFlaggedApplication(afsId: string) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
