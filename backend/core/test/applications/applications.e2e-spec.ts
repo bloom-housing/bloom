@@ -23,6 +23,7 @@ import { UserService } from "../../src/auth/services/user.service"
 import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import { EmailService } from "../../src/email/email.service"
+import { UserRepository } from "../../src/auth/repositories/user-repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -54,7 +55,7 @@ describe("Applications", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([Application, HouseholdMember, Listing]),
+        TypeOrmModule.forFeature([Application, HouseholdMember, Listing, UserRepository]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 2,
@@ -652,8 +653,8 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userService = await app.resolve<UserService>(UserService)
-    const user = await userService.findByEmail(userCreateDto.email)
+    const userRepository = await app.resolve<UserRepository>(getRepositoryToken(UserRepository))
+    const user = await userRepository.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)

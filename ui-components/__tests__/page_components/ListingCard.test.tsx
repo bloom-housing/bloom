@@ -20,7 +20,13 @@ describe("<ListingCard>", () => {
             minimumIncome: "t.incomeRange",
             rent: "t.rent",
           },
-          data: [{ unitType: "cellA", minimumIncome: "cellB", rent: "cellC" }],
+          data: [
+            {
+              unitType: { content: "cellA" },
+              minimumIncome: { content: "cellB" },
+              rent: { content: "cellC" },
+            },
+          ],
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
