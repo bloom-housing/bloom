@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.2...@bloom-housing/backend-core@4.2.3) (2022-04-28)
+
+
+### Bug Fixes
+
+* authservice.token data null issue ([#2703](https://github.com/seanmalbert/bloom/issues/2703)) ([5430fa2](https://github.com/seanmalbert/bloom/commit/5430fa2802b2590c7514f228c200ae040eccf403))
+
+
+### Features
+
+* adding alameda prog and prefs ([#2696](https://github.com/seanmalbert/bloom/issues/2696)) ([85c0bf5](https://github.com/seanmalbert/bloom/commit/85c0bf5b41c86c4dddb0bfb99d65a652f8cad1a0))
+
+
+
+
+
 ## [4.2.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.1...@bloom-housing/backend-core@4.2.2) (2022-04-19)
 
 
