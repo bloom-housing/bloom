@@ -17,6 +17,7 @@ export interface HeroProps {
   secondaryButtonLink?: string
   secondaryButtonTitle?: string
   title: React.ReactNode
+  titleClassName?: string
 }
 
 const HeroButton = (props: { title: string; href: string; className?: string }) => (
@@ -46,7 +47,12 @@ const Hero = (props: HeroProps) => {
   return (
     <div className={heroClasses.join(" ")} style={styles} data-test-id="hero-component">
       <div className={innerClasses.join(" ")}>
-        <h1 className={`hero__title ${props.extraLargeTitle ? "lg:text-6.5xl" : ""}`}>
+        <h1
+          className={`hero__title 
+            ${props.extraLargeTitle ? "lg:text-6.5xl" : ""} 
+            ${props.titleClassName}
+            `}
+        >
           {props.title}
         </h1>
         {subHeader}
@@ -68,7 +74,7 @@ const Hero = (props: HeroProps) => {
                 />
               </div>
             ) : (
-              <HeroButton className={"px-5"} href={props.buttonLink} title={props.buttonTitle} />
+              <HeroButton className={`px-5`} href={props.buttonLink} title={props.buttonTitle} />
             )}
           </>
         )}

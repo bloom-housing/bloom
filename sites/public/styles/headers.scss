@@ -269,7 +269,6 @@
 }
 
 .hero__button {
-  background-color: #ffbe42;
   color: black;
   display: inline-block;
   font-size: large;
@@ -283,6 +282,10 @@
   @screen sm {
     margin-top: 0;
   }
+}
+
+.hero__home-button {
+  background-color: #ffbe42;
 
   &:hover {
     @apply bg-primary;

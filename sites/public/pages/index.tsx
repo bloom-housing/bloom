@@ -44,7 +44,7 @@ export default function Home({ latestListings }) {
   const heroInset: React.ReactNode = (
     <>
       <Link href="/listings">
-        <a className="hero__button">{t("welcome.seeRentalListings")}</a>
+        <a className="hero__button hero__home-button">{t("welcome.seeRentalListings")}</a>
       </Link>
     </>
   )
