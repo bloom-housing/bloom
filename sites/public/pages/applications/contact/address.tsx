@@ -50,8 +50,6 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
-  console.log(conductor)
-
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>(
@@ -144,7 +142,7 @@ const ApplicationAddress = () => {
       </FormCard>
       <FormCard>
         <FormBackLink
-          url={verifyAddress ? "#" : conductor.determinePreviousUrl()}
+          url={verifyAddress ? conductor.currentStep.url : conductor.determinePreviousUrl()}
           onClick={
             verifyAddress ? () => setVerifyAddress(false) : () => conductor.setNavigatedBack(true)
           }
