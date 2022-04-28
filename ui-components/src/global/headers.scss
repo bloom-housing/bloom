@@ -1,9 +1,9 @@
 // Listing Detail
 .detail-header {
   @apply relative;
-  @apply pr-4;
+  @apply pe-4;
   @apply pb-6;
-  @apply pl-4;
+  @apply ps-4;
   @apply pt-4;
   @apply border-b;
   @apply border-gray-400;
@@ -19,29 +19,22 @@
 }
 
 .detail-header__image {
-  @apply absolute;
+  @apply me-2;
+  @apply ms-2;
   @apply w-12;
-  @apply mr-2;
-
-  @screen md {
-    @apply left-0;
-  }
 }
 
 .detail-header__hgroup {
-  @apply ml-12;
-  @apply pl-4;
+  @apply ps-4;
 
   @screen md {
+    @apply ml-12;
     @apply border-l-2;
     @apply border-primary;
+    @apply w-full;
   }
 
   .ui-icon {
-    @apply absolute;
-    top: 1rem;
-    right: 1rem;
-
     @screen md {
       @apply hidden;
     }
