@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.4...@bloom-housing/backend-core@4.2.2-alpha.5) (2022-04-28)
+
+
+### Bug Fixes
+
+* authservice.token data null issue ([#2703](https://github.com/bloom-housing/bloom/issues/2703)) ([3b1b931](https://github.com/bloom-housing/bloom/commit/3b1b9316a6dd42adc22249b8e8dd836de2258406))
+
+
+
+
+
 ## [4.2.2-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.3...@bloom-housing/backend-core@4.2.2-alpha.4) (2022-04-27)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
