@@ -1,5 +1,4 @@
 import * as React from "react"
-import Markdown from "markdown-to-jsx"
 
 export interface Address {
   city?: string
@@ -38,9 +37,11 @@ export const MultiLineAddress = (props: AddressProps) => {
           <br />
         </>
       )}
-      <Markdown children={props.address.street || ""} />
-      <br />
-      {props.address.city}, {props.address.state} {props.address.zipCode}
+      {props.address.street} {props.address.street2}
+      {(props.address.street || props.address.street2) && <br />}
+      {props.address.city}
+      {props.address.city && (props.address.state || props.address.zipCode) && ","}{" "}
+      {props.address.state} {props.address.zipCode}
     </>
   )
 }
