@@ -25,6 +25,7 @@ type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
   userId?: string
+  search?: string
 }
 
 export function useSingleListingData(listingId: string) {
@@ -40,7 +41,7 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+export function useListingsData({ page, limit, userId, search }: UseListingsDataProps) {
   const params = {
     page,
     limit,
@@ -58,6 +59,14 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
       view: "base",
     })
   }
+
+  if (search) {
+    Object.assign(params, {
+      search,
+    })
+  }
+
+  console.log(params)
 
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingsService.list(params)

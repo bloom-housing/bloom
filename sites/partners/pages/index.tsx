@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useState } from "react"
+import React, { useMemo, useContext, useState, useRef, useEffect } from "react"
 import Head from "next/head"
 import {
   PageHeader,
@@ -8,11 +8,15 @@ import {
   LocalizedLink,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
+  debounce,
+  LoadingOverlay,
+  Field,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
-
+import { useForm } from "react-hook-form"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
@@ -50,6 +54,26 @@ class ListingsLink extends formatLinkCell {
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
   const isAdmin = profile.roles?.isAdmin || false
+
+  /* Filter input */
+  const [delayedFilterValue, setDelayedFilterValue] = useState("")
+  const [validSearch, setValidSearch] = useState<boolean>(true)
+
+  /* Data Filtering */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch } = useForm()
+  const filterField = watch("filter-input", "")
+  const debounceFilter = useRef(debounce((value: string) => setDelayedFilterValue(value), 500))
+  useEffect(() => {
+    setCurrentPage(1)
+    if (filterField.length === 0 || filterField.length > 2) {
+      setValidSearch(true)
+      debounceFilter.current(filterField)
+    } else {
+      setDelayedFilterValue("")
+      setValidSearch(false)
+    }
+  }, [filterField])
 
   /* Pagination */
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
@@ -132,11 +156,11 @@ export default function ListingsList() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData({
     page: currentPage,
     limit: itemsPerPage,
+    search: delayedFilterValue,
     userId: !isAdmin ? profile?.id : undefined,
   })
 
-  if (listingsLoading) return "Loading..."
-  if (listingsError) return "An error has occurred."
+  if (listingsError) return null
 
   return (
     <Layout>
@@ -153,7 +177,16 @@ export default function ListingsList() {
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
             <div className="flex justify-between">
-              <div className="w-56"></div>
+              <div className="flex flex-wrap">
+                <div className="mr-5 w-56">
+                  <Field name="filter-input" register={register} placeholder={t("t.filter")} />
+                </div>
+                <div className="mt-2">
+                  {!validSearch && (
+                    <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
+                  )}
+                </div>
+              </div>
               <div className="flex-row">
                 {isAdmin && (
                   <LocalizedLink href={`/listings/add`}>
@@ -166,27 +199,27 @@ export default function ListingsList() {
             </div>
 
             <div className="applications-table mt-5">
-              <AgGridReact
-                gridOptions={gridOptions}
-                columnDefs={columnDefs}
-                rowData={listingDtos.items}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressPaginationPanel={true}
-                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
-
+              <LoadingOverlay isLoading={listingsLoading}>
+                <AgGridReact
+                  gridOptions={gridOptions}
+                  columnDefs={columnDefs}
+                  rowData={listingDtos?.items}
+                  domLayout={"autoHeight"}
+                  headerHeight={83}
+                  rowHeight={58}
+                  suppressPaginationPanel={true}
+                  paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
+                  suppressScrollOnNewData={true}
+                ></AgGridReact>
+              </LoadingOverlay>
               <AgPagination
-                totalItems={listingDtos.meta.totalItems}
-                totalPages={listingDtos.meta.totalPages}
+                totalItems={listingDtos?.meta.totalItems}
+                totalPages={listingDtos?.meta.totalPages}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
-                quantityLabel={t("listings.totalListings")}
+                quantityLabel={t("applications.totalApplications")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
-                onPerPageChange={() => setCurrentPage(1)}
               />
             </div>
           </div>
