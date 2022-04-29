@@ -17,10 +17,12 @@ export const getPostmarkString = (
           developer,
         })
   } else {
-    return postmarkReceivedByDate
-      ? t("listings.apply.submitPaperNoDueDatePostMark", { postmarkReceivedByDate, developer })
-      : developer
-      ? t("listings.apply.submitPaperNoDueDateNoPostMark", { developer })
-      : ""
+    if (postmarkReceivedByDate) {
+      return t("listings.apply.submitPaperNoDueDatePostMark", { postmarkReceivedByDate, developer })
+    }
+    if (developer) {
+      return t("listings.apply.submitPaperNoDueDateNoPostMark", { developer })
+    }
+    return ""
   }
 }

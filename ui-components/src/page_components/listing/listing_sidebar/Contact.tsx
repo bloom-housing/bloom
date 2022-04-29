@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ContactAddress } from "./ContactAddress"
 import { Icon, IconFillColors } from "../../../icons/Icon"
-import { Address } from "./MultiLineAddress"
+import { Address } from "../../../helpers/MultiLineAddress"
 import { Heading } from "../../../headers/Heading"
 
 export interface ContactProps {
@@ -49,7 +49,9 @@ const Contact = ({
 
   return (
     <section className="aside-block">
-      <h4 className="text-caps-underline">{sectionTitle}</h4>
+      <Heading priority={4} style={"sidebarHeader"}>
+        {sectionTitle}
+      </Heading>
 
       {contactName && <p className="text-xl">{contactName}</p>}
       {contactTitle && <p className="text-gray-700">{contactTitle}</p>}

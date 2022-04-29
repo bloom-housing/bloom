@@ -1,5 +1,6 @@
 import * as React from "react"
-import { Address } from "../../../page_components/listing/listing_sidebar/MultiLineAddress"
+import Markdown from "markdown-to-jsx"
+import { Address } from "../../../helpers/MultiLineAddress"
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
 import { Heading } from "../../../headers/Heading"
@@ -60,7 +61,10 @@ const SubmitApplication = ({
                   {strings.officeHoursHeader}
                 </Heading>
                 <p className="mt-4 text-tiny text-gray-750">
-                  {applicationDropOffAddressOfficeHours}
+                  <Markdown
+                    children={applicationDropOffAddressOfficeHours}
+                    options={{ disableParsingRawHTML: true }}
+                  />
                 </p>
               </>
             )}

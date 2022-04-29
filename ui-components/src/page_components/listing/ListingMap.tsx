@@ -3,10 +3,7 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
 
 import "./ListingMap.scss"
-import {
-  MultiLineAddress,
-  Address,
-} from "../../page_components/listing/listing_sidebar/MultiLineAddress"
+import { MultiLineAddress, Address } from "../../helpers/MultiLineAddress"
 import { useIntersect } from "../../.."
 import { Heading } from "../../headers/Heading"
 

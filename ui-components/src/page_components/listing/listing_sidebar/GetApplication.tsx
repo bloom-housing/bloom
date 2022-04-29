@@ -3,10 +3,11 @@ import { t } from "../../../helpers/translator"
 import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
-import { Address } from "../../../page_components/listing/listing_sidebar/MultiLineAddress"
+import { Address } from "../../../helpers/MultiLineAddress"
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
 import { Heading } from "../../../headers/Heading"
+import Markdown from "markdown-to-jsx"
 
 export interface PaperApplication {
   fileURL: string
@@ -112,7 +113,10 @@ const GetApplication = (props: ApplicationsProps) => {
                 {t("leasingAgent.officeHours")}
               </Heading>
               <p className="text-gray-800 text-tiny markdown">
-                {props.applicationPickUpAddressOfficeHours}
+                <Markdown
+                  children={props.applicationPickUpAddressOfficeHours}
+                  options={{ disableParsingRawHTML: true }}
+                />
               </p>
             </>
           )}
