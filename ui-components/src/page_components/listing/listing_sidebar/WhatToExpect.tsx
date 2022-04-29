@@ -1,20 +1,28 @@
 import * as React from "react"
+import Markdown from "markdown-to-jsx"
 import { t } from "../../../helpers/translator"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { ExpandableContent } from "../../../actions/ExpandableContent"
 
 interface WhatToExpectProps {
-  listing: Listing
+  content: string
+  expandableContent: string
 }
 
-const WhatToExpect = (props: WhatToExpectProps) => {
-  const listing = props.listing
-
+const WhatToExpect = ({ content, expandableContent }: WhatToExpectProps) => {
+  if (!content) return null
   return (
     <section className="aside-block">
       <h4 className="text-caps-underline">{t("whatToExpect.label")}</h4>
-      <p className="text-tiny text-gray-800">
-        {listing.whatToExpect ? listing.whatToExpect : t("whatToExpect.default")}
-      </p>
+      <div className="text-tiny text-gray-750">
+        <Markdown options={{ disableParsingRawHTML: false }}>{content}</Markdown>
+        {expandableContent && (
+          <div className={"mt-2"}>
+            <ExpandableContent>
+              <Markdown options={{ disableParsingRawHTML: false }}>{expandableContent}</Markdown>
+            </ExpandableContent>
+          </div>
+        )}
+      </div>
     </section>
   )
 }

@@ -422,6 +422,12 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   whatToExpect?: string | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  whatToExpectAdditionalText?: string | null
+
   @Column({
     type: "enum",
     enum: ListingStatus,

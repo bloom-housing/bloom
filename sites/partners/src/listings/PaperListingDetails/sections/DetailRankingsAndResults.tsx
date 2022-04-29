@@ -85,6 +85,13 @@ const DetailRankingsAndResults = () => {
           </ViewItem>
         </GridCell>
       </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem id="whatToExpect" label={t("listings.whatToExpectAdditionalTextLabel")}>
+            {getDetailFieldString(listing.whatToExpectAdditionalText)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
     </GridSection>
   )
 }

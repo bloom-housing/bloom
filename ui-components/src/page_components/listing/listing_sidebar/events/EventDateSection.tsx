@@ -11,7 +11,7 @@ const EventDateSection = (props: { event: ListingEvent }) => {
   return (
     <>
       {props.event.startTime && (
-        <p className="text text-gray-800 pb-3 flex justify-between items-center">
+        <p className="text text-gray-750 pb-3 flex justify-between items-center">
           <span className="inline-block text-tiny uppercase">
             {dayjs(props.event.startTime).format("MMMM D, YYYY")}
           </span>

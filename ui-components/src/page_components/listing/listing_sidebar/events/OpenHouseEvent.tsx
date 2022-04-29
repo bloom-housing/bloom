@@ -11,7 +11,7 @@ const OpenHouseEvent = (props: { events: ListingEvent[] }) => {
         <div key={`openHouses-${index}`}>
           <EventDateSection event={openHouseEvent} />
           {openHouseEvent.url && (
-            <p className="text text-gray-800 pb-3">
+            <p className="text text-gray-750 pb-3">
               <a href={openHouseEvent.url}>
                 {openHouseEvent.label || t("listings.openHouseEvent.seeVideo")}
               </a>

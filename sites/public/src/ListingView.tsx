@@ -20,18 +20,19 @@ import {
   ImageCard,
   InfoCard,
   LeasingAgent,
+  ListSection,
   ListingDetailItem,
   ListingDetails,
   ListingMap,
   ListingUpdated,
-  ListSection,
   OneLineAddress,
   OpenHouseEvent,
   ReferralApplication,
   StandardTable,
   SubmitApplication,
-  t,
   Waitlist,
+  WhatToExpect,
+  t,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -75,7 +76,7 @@ export const ListingProcess = (props: ListingProcessProps) => {
   } = props
 
   return (
-    <aside className="w-full static md:mr-8 md:ml-2 md:border border-gray-400 bg-white">
+    <aside className="w-full static md:mr-8 md:ml-2 md:border border-gray-400 bg-white text-gray-750">
       <ListingUpdated listingUpdated={listing.updatedAt} />
       {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
       {!applicationsClosed && (
@@ -105,6 +106,10 @@ export const ListingProcess = (props: ListingProcessProps) => {
           <OpenHouseEvent events={openHouseEvents} />
         </div>
       )}
+      <WhatToExpect
+        content={listing.whatToExpect}
+        expandableContent={listing.whatToExpectAdditionalText}
+      />
       <LeasingAgent
         listing={listing}
         managementCompany={{

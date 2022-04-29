@@ -283,6 +283,7 @@
   "listings.waitlist.openSize": "Number of Openings",
   "listings.waitlist.openSizeQuestion": "How many spots are open on the list?",
   "listings.whatToExpectLabel": "Tell the applicant what to expect from the process",
+  "listings.whatToExpectAdditionalTextLabel": "Tell the applicant additional information about what to expect from the process",
   "listings.whenApplicationsClose": "When applications close to the public",
   "listings.whereDropOffQuestion": "Where are applications dropped off?",
   "listings.wherePickupQuestion": "Where are applications picked up?",

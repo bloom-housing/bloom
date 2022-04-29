@@ -8,7 +8,7 @@ const LotteryResultsEvent = (props: { event: ListingEvent }) => {
   return (
     <section className="aside-block">
       <h4 className="text-caps-underline">{t("listings.lotteryResults.header")}</h4>
-      <p className="text text-gray-800 pb-3 flex justify-between items-center">
+      <p className="text text-gray-750 pb-3 flex justify-between items-center">
         <span className="inline-block">{dayjs(props.event.startTime).format("MMMM D, YYYY")}</span>
       </p>
       {event.note && <p className="text text-gray-600">{event.note}</p>}

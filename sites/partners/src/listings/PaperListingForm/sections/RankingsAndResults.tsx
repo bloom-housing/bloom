@@ -269,6 +269,17 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
             />
           </GridCell>
         </GridSection>
+        <GridSection columns={3}>
+          <GridCell span={2}>
+            <Textarea
+              label={t("listings.whatToExpectAdditionalTextLabel")}
+              name={"whatToExpectAdditionalText"}
+              id={"whatToExpectAdditionalText"}
+              fullWidth={true}
+              register={register}
+            />
+          </GridCell>
+        </GridSection>
       </GridSection>
     </div>
   )

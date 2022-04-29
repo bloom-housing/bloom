@@ -5491,6 +5491,9 @@ export interface Listing {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   applicationConfig?: object
 
   /**  */
@@ -5956,6 +5959,9 @@ export interface ListingCreate {
 
   /**  */
   whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
 
   /**  */
   applicationConfig?: object
@@ -6433,6 +6439,9 @@ export interface ListingUpdate {
 
   /**  */
   whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
 
   /**  */
   applicationConfig?: object

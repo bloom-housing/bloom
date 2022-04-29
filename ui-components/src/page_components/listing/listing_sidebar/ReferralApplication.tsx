@@ -20,7 +20,7 @@ const ReferralApplication = (props: ReferralApplicationProps) => {
           {props.phoneNumber}
         </a>
       </p>
-      <p className="text-tiny mt-4 text-gray-800">{props.description}</p>
+      <p className="text-tiny mt-4 text-gray-750">{props.description}</p>
     </section>
   )
 }
