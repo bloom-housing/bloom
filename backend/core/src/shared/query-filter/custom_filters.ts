@@ -1,6 +1,7 @@
 import { getMetadataArgsStorage, WhereExpression } from "typeorm"
 import { UnitGroup } from "../../units-summary/entities/unit-group.entity"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { ListingMarketingTypeEnum } from "../../../types"
 
 export function addAvailabilityQuery(qb: WhereExpression, filterValue: string) {
   const val = filterValue?.split(",")
@@ -24,6 +25,11 @@ export function addAvailabilityQuery(qb: WhereExpression, filterValue: string) {
             closedWaitlist: false,
           })
         }
+        return
+      case "comingSoon":
+        qb.andWhere("listings.marketing_type = :marketing_type", {
+          marketing_type: ListingMarketingTypeEnum.comingSoon,
+        })
         return
       default:
         return
