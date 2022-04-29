@@ -35,7 +35,6 @@ import { Program } from "../program/entities/program.entity"
     ]),
     AuthModule,
     TranslationsModule,
-    BullModule.registerQueue({ name: "listings-notifications" }),
     SmsModule,
     ActivityLogModule,
   ],

@@ -3,8 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository, SelectQueryBuilder } from "typeorm"
 import { plainToClass } from "class-transformer"
-import { Queue } from "bull"
-import { InjectQueue } from "@nestjs/bull"
 import { Listing } from "./entities/listing.entity"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/query-filter"
@@ -34,7 +32,6 @@ export class ListingsService {
     @InjectRepository(UnitGroup) private readonly unitGroupRepository: Repository<UnitGroup>,
     @InjectRepository(UnitType) private readonly unitTypeRepository: Repository<UnitType>,
     @InjectRepository(Program) private readonly programRepository: Repository<Program>,
-    @InjectQueue("listings-notifications")
     private readonly translationService: TranslationsService
   ) {}
 
