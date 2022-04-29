@@ -118,7 +118,7 @@ export const getListingTag = (tag: ImageTag) => {
   )
 }
 
-export const getImageCardTag = (listing): ImageTag[] => {
+export const getImageCardTag = (listing: Listing): ImageTag[] => {
   const tag = getImageTagLabelFromListing(listing)
   return tag
     ? [
@@ -136,10 +136,13 @@ export const getImageCardTag = (listing): ImageTag[] => {
             listing?.marketingType === ListingMarketingTypeEnum.comingSoon
               ? AppearanceStyleType.closed
               : AppearanceStyleType.accentLight,
-          tooltip: {
-            id: "verified",
-            text: t("listings.managerHasConfirmedInformation"),
-          },
+          tooltip:
+            listing?.isVerified && listing?.marketingType !== ListingMarketingTypeEnum.comingSoon // show tooltip only for confirmed badge
+              ? {
+                  id: "verified",
+                  text: t("listings.managerHasConfirmedInformation"),
+                }
+              : undefined,
         },
       ]
     : null
