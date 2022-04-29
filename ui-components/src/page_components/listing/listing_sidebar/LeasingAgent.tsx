@@ -26,9 +26,9 @@ const LeasingAgent = (props: LeasingAgentProps) => {
       <h4 className="text-caps-underline">{t("leasingAgent.contact")}</h4>
 
       {listing.leasingAgentName && <p className="text-xl">{listing.leasingAgentName}</p>}
-      {listing.leasingAgentTitle && <p className="text-gray-700">{listing.leasingAgentTitle}</p>}
+      {listing.leasingAgentTitle && <p className="text-gray-750">{listing.leasingAgentTitle}</p>}
       {props.managementCompany?.name && (
-        <p className="text-gray-700">{props.managementCompany.name}</p>
+        <p className="text-gray-750">{props.managementCompany.name}</p>
       )}
 
       {listing.leasingAgentPhone && (
@@ -39,7 +39,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
               {listing.leasingAgentPhone}
             </a>
           </p>
-          <p className="text-sm text-gray-700">{t("leasingAgent.dueToHighCallVolume")}</p>
+          <p className="text-sm text-gray-750">{t("leasingAgent.dueToHighCallVolume")}</p>
         </>
       )}
 

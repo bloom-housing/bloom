@@ -28,7 +28,7 @@ const SidebarAddress = (props: SidebarAddressProps) => {
     hours = (
       <>
         <h3 className="text-caps-tiny ">{t("leasingAgent.officeHours")}</h3>
-        <div className="text-gray-800 text-tiny markdown">
+        <div className="text-gray-750 text-tiny markdown">
           <Markdown children={officeHours} options={{ disableParsingRawHTML: true }} />
         </div>
       </>

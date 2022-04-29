@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
-import { Icon, IconSize, IconTypes } from "../icons/Icon"
+import { Icon, IconSize, IconTypes, IconFillColors } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
@@ -11,6 +11,7 @@ export interface ButtonProps extends AppearanceProps {
   icon?: IconTypes
   iconPlacement?: "left" | "right"
   iconSize?: IconSize
+  iconColor?: string
   // TODO: inlineIcon is deprecated
   inlineIcon?: "left" | "right"
   inline?: boolean
@@ -22,6 +23,8 @@ export interface ButtonProps extends AppearanceProps {
   ariaLabel?: string
   dataTestId?: string
   "data-test-id"?: string
+  iconClass?: string
+  passToIconClass?: string
 }
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
@@ -44,13 +47,25 @@ export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
   if (props.icon) {
     return props.inlineIcon == "left" || props.iconPlacement == "left" ? (
       <>
-        <Icon className="button__icon" size={props.iconSize ?? iconSize} symbol={props.icon} />
+        <Icon
+          className={`button__icon ${props.iconClass}`}
+          size={props.iconSize ?? iconSize}
+          symbol={props.icon}
+          iconClass={props.passToIconClass}
+          fill={props.iconColor ?? IconFillColors.primary}
+        />
         <span className="button__content">{props.children}</span>
       </>
     ) : (
       <>
         <span className="button__content">{props.children}</span>
-        <Icon className="button__icon" size={props.iconSize ?? iconSize} symbol={props.icon} />
+        <Icon
+          className={`button__icon ${props.iconClass}`}
+          size={props.iconSize ?? iconSize}
+          symbol={props.icon}
+          iconClass={props.passToIconClass}
+          fill={props.iconColor ?? IconFillColors.primary}
+        />
       </>
     )
   } else if (props.loading) {

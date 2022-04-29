@@ -101,6 +101,11 @@ export class TranslationsService extends AbstractServiceFactory<
       pathsToFilter.push(`listingPreferences[${i}].preference.subtitle`)
     }
 
+    for (let i = 0; i < listing.listingPrograms.length; i++) {
+      pathsToFilter.push(`listingPrograms[${i}].program.title`)
+      pathsToFilter.push(`listingPrograms[${i}].program.description`)
+      pathsToFilter.push(`listingPrograms[${i}].program.subtitle`)
+    }
     const listingPathsAndValues: { [key: string]: any } = {}
     for (const path of pathsToFilter) {
       const value = lodash.get(listing, path)
@@ -113,7 +118,10 @@ export class TranslationsService extends AbstractServiceFactory<
     let persistedTranslatedValues
     persistedTranslatedValues = await this.getPersistedTranslatedValues(listing, language)
 
-    if (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt) {
+    if (
+      Object.keys(listingPathsAndValues).length > 0 &&
+      (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt)
+    ) {
       const newTranslations = await this.googleTranslateService.fetch(
         Object.values(listingPathsAndValues),
         language

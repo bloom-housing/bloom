@@ -2,7 +2,7 @@
 
 module.exports = {
   important: true,
-  plugins: [],
+  plugins: [require("tailwindcss-rtl")],
   purge: false,
   theme: {
     screens: {

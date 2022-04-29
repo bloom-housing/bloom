@@ -9,7 +9,7 @@ export interface WaitlistProps {
 }
 
 const WaitlistItem = (props: { className?: string; value: number; text: string }) => (
-  <li className={`uppercase text-gray-800 text-tiny ${props.className}`}>
+  <li className={`uppercase text-gray-750 text-tiny ${props.className}`}>
     <span className="text-right w-12 inline-block pr-2">{props.value}</span>
     <span>{props.text}</span>
   </li>
@@ -22,7 +22,7 @@ const Waitlist = (props: WaitlistProps) => {
     <section className="aside-block is-tinted">
       <h4 className="text-caps-tiny">{t("listings.waitlist.unitsAndWaitlist")}</h4>
       <div>
-        <p className="text-tiny text-gray-800 pb-3">{t("listings.waitlist.submitAnApplication")}</p>
+        <p className="text-tiny text-gray-750 pb-3">{t("listings.waitlist.submitAnApplication")}</p>
         <ul>
           {props.waitlistCurrentSize !== null && props.waitlistCurrentSize !== undefined && (
             <WaitlistItem

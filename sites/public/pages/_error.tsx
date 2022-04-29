@@ -23,8 +23,13 @@ const ErrorPage = () => {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <Hero title={pageTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings">
-        {t("errors.notFound.message")}
+      <Hero
+        title={pageTitle}
+        titleClassName="text-white"
+        buttonTitle={t("welcome.seeRentalListings")}
+        buttonLink="/listings"
+      >
+        <span className={"text-white"}>{t("errors.notFound.message")}</span>
       </Hero>
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>

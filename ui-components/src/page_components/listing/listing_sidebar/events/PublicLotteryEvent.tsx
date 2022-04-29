@@ -10,7 +10,7 @@ const PublicLotteryEvent = (props: { event: ListingEvent }) => {
       <h4 className="text-caps-underline">{t("listings.publicLottery.header")}</h4>
       <EventDateSection event={props.event} />
       {event.url && (
-        <p className="text text-gray-800 pb-3">
+        <p className="text text-gray-750 pb-3">
           <a href={event.url}>{t("listings.publicLottery.seeVideo")}</a>
         </p>
       )}

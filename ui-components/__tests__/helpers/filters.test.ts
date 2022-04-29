@@ -29,12 +29,12 @@ describe("encode backend filter array", () => {
 
   it("should handle multiple filters", () => {
     const filter: ListingFilterState = {
-      threeBdrm: true,
+      bedRoomSize: "3",
       zipcode: "48226",
     }
     expect(encodeToBackendFilterArray(filter)).toContainEqual({
       $comparison: EnumListingFilterParamsComparison["IN"],
-      bedrooms: "3",
+      bedRoomSize: "3",
     })
     expect(encodeToBackendFilterArray(filter)).toContainEqual({
       $comparison: EnumListingFilterParamsComparison["IN"],
@@ -44,13 +44,12 @@ describe("encode backend filter array", () => {
 
   it("should handle multiple bedroom filters", () => {
     const filter: ListingFilterState = {
-      twoBdrm: true,
-      threeBdrm: true,
+      bedRoomSize: "2,3",
     }
     expect(encodeToBackendFilterArray(filter)).toEqual([
       {
         $comparison: EnumListingFilterParamsComparison["IN"],
-        bedrooms: "2,3",
+        bedRoomSize: "2,3",
       },
     ])
   })

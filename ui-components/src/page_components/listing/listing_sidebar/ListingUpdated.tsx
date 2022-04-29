@@ -10,7 +10,7 @@ const ListingUpdated = (props: ListingUpdatedProps) => {
   const listingUpdated = props.listingUpdated
   return (
     <section className="aside-block">
-      <p className="text-tiny text-gray-800">
+      <p className="text-tiny text-gray-750">
         {`${t("listings.listingUpdated")}: ${dayjs(listingUpdated).format("MMMM DD, YYYY")}`}
       </p>
     </section>

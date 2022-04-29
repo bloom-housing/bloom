@@ -276,6 +276,134 @@ export const NoContent = () => {
   return (
     <ListingCard
       imageCardProps={{
+        imageUrl: "/images/listing.jpg",
+        href: "listing-link",
+      }}
+    />
+  )
+}
+
+const exampleCustomContent = () => {
+  const getHeader = (header: string) => {
+    return (
+      <div
+        className={
+          "font-sans font-semibold text-base uppercase text-gray-750 tracking-wider border-0 border-b pb-2 mb-2 md:mt-4"
+        }
+      >
+        {header}
+      </div>
+    )
+  }
+  const getContentRow = (prefix: string, content: string) => {
+    return (
+      <div>
+        <span className={"font-semibold"}>{prefix}</span> {content}
+      </div>
+    )
+  }
+  return (
+    <div className={"text-gray-750"}>
+      <div className={"font-alt-sans font-semibold text-base mb-2 text-gray-900"}>
+        Available units
+      </div>
+      {getHeader("Units")}
+      {getContentRow("2BR:", "2 available")}
+      {getContentRow("3BR:", "5 available")}
+      {getContentRow("4BR:", "1 available")}
+      {getHeader("Payments")}
+      <div>
+        No down payment, but you do need to complete 500 hours of sweat equity. Your monthly payment
+        will be 30% of your income.
+      </div>
+      <div className={"mt-4  border-0 border-b pb-2 mb-2"}>
+        You will need to attend an information session.
+      </div>
+    </div>
+  )
+}
+
+export const CustomContent = () => {
+  return (
+    <ListingCard
+      imageCardProps={{
+        imageUrl: "/images/listing.jpg",
+        href: "listing-link",
+        tags: [{ text: "Habitat for Humanity" }],
+        statuses: [{ content: "status content" }],
+      }}
+      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+    >
+      {exampleCustomContent()}
+    </ListingCard>
+  )
+}
+
+export const MultipleFooterButtons = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[
+        { text: "See Details", href: "see-details-link" },
+        { text: "Apply", href: "apply-link" },
+      ]}
+      contentProps={{
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
+export const MultipleSpreadFooterButtons = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[
+        { text: "See Details", href: "see-details-link" },
+        { text: "Apply", href: "apply-link" },
+      ]}
+      footerContainerClass={"flex justify-between"}
+      contentProps={{
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
+const getCustomFooter = () => {
+  return (
+    <div className={"flex justify-between"}>
+      <span className={"w-5 flex items-center"}>
+        <Icon symbol={"like"} size={"large"} aria-label={"favorite"} />
+      </span>
+      <LinkButton href={"see-details-link"}>See Details</LinkButton>
+    </div>
+  )
+}
+
+export const CustomFooter = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps }}
+      tableProps={{ ...standardTableProps }}
+      footerContent={getCustomFooter()}
+      footerContainerClass={"flex justify-between"}
+      contentProps={{
+        tableHeader: { text: "Optional table header" },
+        tableSubheader: { text: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
+export const NoContent = () => {
+  return (
+    <ListingCard
+      imageCardProps={{
         imageUrl:
           "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
         subtitle: "subtitle",

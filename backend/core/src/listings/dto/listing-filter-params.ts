@@ -4,10 +4,9 @@ import { Expose } from "class-transformer"
 import { ApiProperty } from "@nestjs/swagger"
 import { IsBooleanString, IsEnum, IsNumberString, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { AvailabilityFilterEnum, ListingFilterKeys } from "../types/listing-filter-keys-enum"
+import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
-import { Region } from "../../property/types/region-enum"
 
 // add other listing filter params here
 export class ListingFilterParams extends BaseFilter {
@@ -73,13 +72,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    enum: Object.keys(AvailabilityFilterEnum),
+    type: String,
     example: "hasAvailability",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(AvailabilityFilterEnum, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.availability]?: AvailabilityFilterEnum;
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.availability]?: string;
 
   @Expose()
   @ApiProperty({
@@ -254,26 +253,6 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
-    example: "Forest Park, Elmwood Park",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.neighborhood]?: string;
-
-  @Expose()
-  @ApiProperty({
-    enum: Object.keys(Region),
-    example: "eastside",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(Region, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.region]?: Region;
-
-  @Expose()
-  @ApiProperty({
-    type: String,
     example: "bab6cb4f-7a5a-4ee5-b327-0c2508807780",
     required: false,
   })
@@ -299,5 +278,35 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.favorited]?: string
+  [ListingFilterKeys.favorited]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "senior55",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.communityPrograms]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "visual",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.accessibility]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "downtown,eastside",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.region]?: string
 }

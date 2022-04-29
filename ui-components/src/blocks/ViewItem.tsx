@@ -11,6 +11,7 @@ export interface ViewItemProps {
   truncated?: boolean
   error?: boolean
   dataTestId?: string
+  labelStyling?: string
 }
 
 const ViewItem = (props: ViewItemProps) => {
@@ -25,7 +26,11 @@ const ViewItem = (props: ViewItemProps) => {
   return (
     <div id={props.id} className={viewItemClasses.join(" ")} data-test-id={props.dataTestId}>
       {props.label && (
-        <span className={`view-item__label ${props.error ? "text-alert text-tiny" : ""}`}>
+        <span
+          className={`view-item__label ${props.labelStyling} ${
+            props.error ? "text-alert text-tiny" : ""
+          }`}
+        >
           {props.label}
         </span>
       )}

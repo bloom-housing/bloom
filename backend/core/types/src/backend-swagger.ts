@@ -702,13 +702,19 @@ export class AuthService {
   /**
    * Token
    */
-  token(options: IRequestOptions = {}): Promise<LoginResponse> {
+  token(
+    params: {
+      /** requestBody */
+      body?: Token
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/token"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = null
+      let data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1214,6 +1220,21 @@ export class JurisdictionsService {
 }
 
 export class ListingsService {
+  /**
+   * Returns Listing Metadata
+   */
+  metadata(options: IRequestOptions = {}): Promise<ListingMetadata> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/meta"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
   /**
    * List listings
    */
@@ -3992,6 +4013,8 @@ export interface LoginResponse {
   accessToken: string
 }
 
+export interface Token {}
+
 export interface RequestMfaCode {
   /**  */
   email: string
@@ -4581,7 +4604,7 @@ export interface ListingFilterParams {
   leasingAgents?: string
 
   /**  */
-  availability?: EnumListingFilterParamsAvailability
+  availability?: string
 
   /**  */
   program?: string
@@ -4638,9 +4661,6 @@ export interface ListingFilterParams {
   neighborhood?: string
 
   /**  */
-  region?: EnumListingFilterParamsRegion
-
-  /**  */
   jurisdiction?: string
 
   /**  */
@@ -4648,6 +4668,85 @@ export interface ListingFilterParams {
 
   /**  */
   favorited?: string
+
+  /**  */
+  communityPrograms?: string
+
+  /**  */
+  accessibility?: string
+}
+
+export interface FormMetadataExtraData {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+}
+
+export interface FormMetadataOptions {
+  /**  */
+  key: string
+
+  /**  */
+  extraData?: FormMetadataExtraData[]
+
+  /**  */
+  description: boolean
+
+  /**  */
+  exclusive: boolean
+}
+
+export interface FormMetadata {
+  /**  */
+  key: string
+
+  /**  */
+  options: FormMetadataOptions[]
+
+  /**  */
+  hideGenericDecline: boolean
+
+  /**  */
+  customSelectText: string
+
+  /**  */
+  hideFromListing: boolean
+
+  /**  */
+  type: FormMetaDataType
+}
+
+export interface Program {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+}
+
+export interface ListingMetadata {
+  /**  */
+  programs?: Program[]
+
+  /**  */
+  unitTypes?: UnitType[]
 }
 
 export interface MinMax {
@@ -4819,71 +4918,6 @@ export interface ListingImage {
 
   /**  */
   ordinal?: number
-}
-
-export interface FormMetadataExtraData {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-}
-
-export interface FormMetadataOptions {
-  /**  */
-  key: string
-
-  /**  */
-  extraData?: FormMetadataExtraData[]
-
-  /**  */
-  description: boolean
-
-  /**  */
-  exclusive: boolean
-}
-
-export interface FormMetadata {
-  /**  */
-  key: string
-
-  /**  */
-  options: FormMetadataOptions[]
-
-  /**  */
-  hideGenericDecline: boolean
-
-  /**  */
-  customSelectText: string
-
-  /**  */
-  hideFromListing: boolean
-
-  /**  */
-  type: FormMetaDataType
-}
-
-export interface Program {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
 }
 
 export interface ListingProgram {
@@ -5465,6 +5499,9 @@ export interface Listing {
   whatToExpect?: string
 
   /**  */
+  whatToExpectAdditionalText?: string
+
+  /**  */
   applicationConfig?: object
 
   /**  */
@@ -5930,6 +5967,9 @@ export interface ListingCreate {
 
   /**  */
   whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
 
   /**  */
   applicationConfig?: object
@@ -6407,6 +6447,9 @@ export interface ListingUpdate {
 
   /**  */
   whatToExpect?: string
+
+  /**  */
+  whatToExpectAdditionalText?: string
 
   /**  */
   applicationConfig?: object
@@ -7004,22 +7047,15 @@ export enum EnumListingFilterParamsStatus {
   "pending" = "pending",
   "closed" = "closed",
 }
-export enum EnumListingFilterParamsAvailability {
-  "hasAvailability" = "hasAvailability",
-  "noAvailability" = "noAvailability",
-  "waitlist" = "waitlist",
-}
-export enum EnumListingFilterParamsRegion {
-  "Downtown" = "Downtown",
-  "Eastside" = "Eastside",
-  "MidtownNewCenter" = "MidtownNewCenter",
-  "Southwest" = "Southwest",
-  "Westside" = "Westside",
-}
 export enum EnumListingFilterParamsMarketingType {
   "Marketing" = "Marketing",
   "ComingSoon" = "ComingSoon",
 }
+export enum FormMetaDataType {
+  "radio" = "radio",
+  "checkbox" = "checkbox",
+}
+
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
@@ -7066,11 +7102,6 @@ export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
-}
-
-export enum FormMetaDataType {
-  "radio" = "radio",
-  "checkbox" = "checkbox",
 }
 
 export enum UnitStatus {

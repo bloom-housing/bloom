@@ -165,6 +165,7 @@ export interface IconProps {
   ariaHidden?: boolean
   iconClass?: string
   dataTestId?: string
+  tabIndex?: number
 }
 
 const Icon = (props: IconProps) => {
@@ -180,6 +181,7 @@ const Icon = (props: IconProps) => {
       className={wrapperClasses.join(" ")}
       aria-hidden={props.ariaHidden}
       data-test-id={props.dataTestId ?? null}
+      tabIndex={props.tabIndex}
     >
       <SpecificIcon
         fill={props.fill ? props.fill : undefined}

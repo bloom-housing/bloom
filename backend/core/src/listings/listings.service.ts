@@ -19,6 +19,9 @@ import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 import { UnitGroup } from "../units-summary/entities/unit-group.entity"
+import { ListingMetadataDto } from "./dto/listings-metadata.dto"
+import { UnitType } from "../unit-types/entities/unit-type.entity"
+import { Program } from "../program/entities/program.entity"
 import { ListingSeasonEnum } from "./types/listing-season-enum"
 
 @Injectable()
@@ -27,6 +30,8 @@ export class ListingsService {
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     @InjectRepository(UnitGroup) private readonly unitGroupRepository: Repository<UnitGroup>,
+    @InjectRepository(UnitType) private readonly unitTypeRepository: Repository<UnitType>,
+    @InjectRepository(Program) private readonly programRepository: Repository<Program>,
     private readonly translationService: TranslationsService
   ) {}
 
@@ -44,6 +49,10 @@ export class ListingsService {
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")
+      .leftJoin("listings.listingPrograms", "listing_programs")
+      .leftJoin("listing_programs.program", "programs")
+      .leftJoin("listings.unitGroups", "unitgroups")
+      .leftJoin("unitgroups.amiLevels", "amilevels")
       .groupBy("listings.id")
 
     innerFilteredQuery = ListingsService.addOrderByToQb(innerFilteredQuery, params)
@@ -283,6 +292,25 @@ export class ListingsService {
     }
 
     return canUpdate
+  }
+
+  public async getMetadata(): Promise<ListingMetadataDto> {
+    const unitTypes = await this.unitTypeRepository
+      .createQueryBuilder("unitTypes")
+      .select("unitTypes.id")
+      .addSelect("unitTypes.name")
+      .addSelect("unitTypes.numBedrooms")
+      .orderBy("unitTypes.numBedrooms")
+      .getMany()
+
+    const programs = await this.programRepository
+      .createQueryBuilder("programs")
+      .select("programs.id")
+      .addSelect("programs.title")
+      .orderBy("programs.title")
+      .getMany()
+
+    return { programs, unitTypes }
   }
 
   private static addOrderByToQb(qb: SelectQueryBuilder<Listing>, params: ListingsQueryParams) {
