@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.19...@bloom-housing/ui-components@4.2.2-alpha.20) (2022-04-29)
+
+
+### Bug Fixes
+
+* ux updates for new listing card design ([#2687](https://github.com/bloom-housing/bloom/issues/2687)) ([c8814ae](https://github.com/bloom-housing/bloom/commit/c8814ae57b62fa6f932017bb70d47663b09fca1a))
+
+
+
+
+
 ## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.18...@bloom-housing/ui-components@4.2.2-alpha.19) (2022-04-28)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
