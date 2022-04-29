@@ -54,12 +54,7 @@ const ListingsPage = ({ initialListings }) => {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader
-        className="listings-title"
-        title={t("pageTitle.rent")}
-        inverse={true}
-        tabNav={<FindRentalsForMeLink title={t("welcome.findRentalsForMe")} />}
-      />
+      <PageHeader className="listings-title" title={t("pageTitle.rent")} inverse={true} />
       <Drawer
         open={filterModalVisible}
         title={t("listingFilters.modalTitle")}
