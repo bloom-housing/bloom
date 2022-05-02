@@ -141,9 +141,11 @@ const ApplicationAddress = () => {
         />
       </FormCard>
       <FormCard>
-        {/* Use # instead of current url and see if problem persists */}
         {verifyAddress ? (
-          <FormBackLink url="#" onClick={() => setVerifyAddress(false)} />
+          <FormBackLink
+            url={"/applications/contact/address"}
+            onClick={() => setVerifyAddress(false)}
+          />
         ) : (
           <FormBackLink
             url={conductor.determinePreviousUrl()}
