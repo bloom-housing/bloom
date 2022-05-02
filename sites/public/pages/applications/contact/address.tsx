@@ -130,6 +130,8 @@ const ApplicationAddress = () => {
     })
   }, [profile])
 
+  // console.log(window.location.pathname === conductor.currentStep.url)
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -143,8 +145,11 @@ const ApplicationAddress = () => {
       <FormCard>
         {verifyAddress ? (
           <FormBackLink
-            url={"/applications/contact/address"}
-            onClick={() => setVerifyAddress(false)}
+            url={conductor.currentStep.url}
+            onClick={() => {
+              setVerifyAddress(false)
+              conductor.setNavigatedBack(false)
+            }}
           />
         ) : (
           <FormBackLink
