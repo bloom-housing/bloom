@@ -145,7 +145,7 @@ const ApplicationAddress = () => {
       <FormCard>
         {verifyAddress ? (
           <FormBackLink
-            url={conductor.currentStep.url}
+            url={window.location.pathname}
             onClick={() => {
               setVerifyAddress(false)
               conductor.setNavigatedBack(false)
