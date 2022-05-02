@@ -21,7 +21,6 @@ import { useListingsData } from "../../lib/hooks"
 import { EnumListingFilterParamsStatus, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import FilterForm from "../../src/forms/filters/FilterForm"
 import { getListings } from "../../lib/helpers"
-import { FindRentalsForMeLink } from "../../lib/FindRentalsForMeLink"
 
 const FilteredListingsPage = () => {
   const router = useRouter()
@@ -92,7 +91,7 @@ const FilteredListingsPage = () => {
     rentalsFoundTitle = t("listingFilters.loading")
   } else {
     rentalsFoundTitle = t("listingFilters.rentalsFound", {
-      smart_count: listingsData?.meta.totalItems,
+      smart_count: listingsData?.meta.totalItems ?? 0,
     })
   }
 

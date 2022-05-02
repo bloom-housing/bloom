@@ -53,6 +53,7 @@ export class ListingsService {
       .leftJoin("listing_programs.program", "programs")
       .leftJoin("listings.unitGroups", "unitgroups")
       .leftJoin("unitgroups.amiLevels", "amilevels")
+      .leftJoin("unitgroups.unitType", "unitTypes")
       .groupBy("listings.id")
 
     innerFilteredQuery = ListingsService.addOrderByToQb(innerFilteredQuery, params)

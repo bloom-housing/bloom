@@ -70,12 +70,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
           continue
         case ListingFilterKeys.bedrooms:
         case ListingFilterKeys.bedRoomSize:
-          addBedroomsQuery(
-            qb,
-            typeof filterValue === "string"
-              ? filterValue.split(",").map((val) => Number(val))
-              : [filterValue]
-          )
+          addBedroomsQuery(qb, filterValue)
           continue
         case ListingFilterKeys.minAmiPercentage:
           addMinAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)

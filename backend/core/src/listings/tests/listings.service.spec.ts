@@ -374,7 +374,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(coalesce(unitGroups.open_waitlist, false) = :openWaitlist)",
+        "(coalesce(unitgroups.open_waitlist, false) = :openWaitlist)",
         {
           openWaitlist: true,
         }
