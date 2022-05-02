@@ -130,8 +130,6 @@ const ApplicationAddress = () => {
     })
   }, [profile])
 
-  // console.log(window.location.pathname === conductor.currentStep.url)
-
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -143,20 +141,12 @@ const ApplicationAddress = () => {
         />
       </FormCard>
       <FormCard>
-        {verifyAddress ? (
-          <FormBackLink
-            url={window.location.pathname}
-            onClick={() => {
-              setVerifyAddress(false)
-              conductor.setNavigatedBack(false)
-            }}
-          />
-        ) : (
-          <FormBackLink
-            url={conductor.determinePreviousUrl()}
-            onClick={() => conductor.setNavigatedBack(true)}
-          />
-        )}
+        <FormBackLink
+          url={verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()}
+          onClick={
+            verifyAddress ? () => setVerifyAddress(false) : () => conductor.setNavigatedBack(true)
+          }
+        />
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {verifyAddress
