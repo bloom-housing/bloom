@@ -1,0 +1,3 @@
+### [Financial Counseling](https://detroitmi.gov/departments/department-neighborhoods/financial-empowerment-center-fec)
+
+The Financial Empowerment Center (FEC) offers professional, one-on-one financial counseling as a free public service to enable residents to address their financial challenges, needs, and plan for their futures. To schedule an appointment, call [313-322-6222](tel:+1-313-322-6222).

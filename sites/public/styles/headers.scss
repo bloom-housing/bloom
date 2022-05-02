@@ -77,6 +77,7 @@
           height: 40px;
           padding: 1rem;
           text-transform: none;
+          border: none;
         }
 
         .navbar-link__sign-in {
@@ -243,9 +244,13 @@
 
 .hero {
   @apply font-bold;
-  @apply mx-4;
+  @apply mx-2;
   @apply mb-4;
   @apply rounded-2xl;
+
+  @screen sm {
+    @apply mx-4;
+  }
 }
 
 .hero__title {
@@ -299,4 +304,8 @@
   @screen md {
     font-size: 1.75rem;
   }
+}
+
+.page-header__lead {
+  @apply mt-4;
 }

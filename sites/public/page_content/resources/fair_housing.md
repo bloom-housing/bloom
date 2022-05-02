@@ -1,0 +1,3 @@
+### [Fair Housing](https://www.fairhousingdetroit.org/)
+
+The Fair Housing Center of Metropolitan Detroit works to make sure residents have equal access to housing and are not discriminated against based on their identity. They provide housing assistance and counseling, as well as assistance to those pursuing legal cases related to fair housing issues. For more information, call [313-579-3247](tel:+1-313-579-3247).

@@ -1,0 +1,3 @@
+### [Tax Foreclosure Prevention](http://www.uchcdetroit.org/)
+
+Make It Home (MIH) is a home-purchase program that gives tenants living in foreclosed homes the option to purchase their home before the foreclosure auction. Call United Community Housing Coalition (UCHC) at [(313) 405-7726](tel:+1-313-405-7726). UCHC also offers counseling and homeowner solutions for those who might be at risk of foreclosure.

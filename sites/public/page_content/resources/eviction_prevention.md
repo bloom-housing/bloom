@@ -1,0 +1,3 @@
+### Eviction Prevention and Legal Assistance
+
+Several agencies in Detroit provide legal assistance to low-income households facing eviction and other issues. Organizations to call include the [United Community Housing Coalition](https://www.uchcdetroit.org/) ([313-963-3310](tel:+1-313-963-3310)), [Lakeshore Legal Aid](https://lakeshorelegalaid.org/) ([888-783-8190](tel:+1-888-783-8190)), and the [Legal Aid and Defender Association](https://ladadetroit.org/) ([313-967-5800](tel:+1-313-967-5800)).

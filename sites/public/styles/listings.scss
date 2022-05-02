@@ -73,7 +73,8 @@
 }
 
 .latest-listings {
-  .listings-row_content {
+  .listings-row_table,
+  .listings-row_footer_container {
     display: none;
   }
 
@@ -83,6 +84,11 @@
 
   .listings-row:hover {
     opacity: 0.7;
+  }
+
+  .listings-row_content {
+    width: 100%;
+    @apply px-0;
   }
 
   .listings-row_figure {
