@@ -141,15 +141,15 @@ const ApplicationAddress = () => {
         />
       </FormCard>
       <FormCard>
-        {/* Remove back link entirely and see if error persists */}
-        {/* {verifyAddress ? (
-          <FormBackLink url={conductor.currentStep.url} onClick={() => setVerifyAddress(false)} />
+        {/* Use # instead of current url and see if problem persists */}
+        {verifyAddress ? (
+          <FormBackLink url="#" onClick={() => setVerifyAddress(false)} />
         ) : (
           <FormBackLink
             url={conductor.determinePreviousUrl()}
             onClick={() => conductor.setNavigatedBack(true)}
           />
-        )} */}
+        )}
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {verifyAddress
