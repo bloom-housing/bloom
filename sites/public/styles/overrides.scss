@@ -24,11 +24,6 @@ $header-desktop-min-size: 1024px;
   stroke: $tailwind-primary;
 }
 
-// Increase the font size of markdown sections.
-.markdown-section__inner {
-  @apply text-xl;
-}
-
 // Center the front page.
 .homepage-extra {
   @apply text-center;

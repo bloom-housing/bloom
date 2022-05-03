@@ -102,7 +102,7 @@ export const getListingTag = (tag: ImageTag) => {
   return (
     <Tag
       styleType={AppearanceStyleType.accentLight}
-      className={"mr-2 mb-2 font-bold px-3 py-2"}
+      className={"me-2 mb-2 font-bold px-3 py-2"}
       key={tag.text}
     >
       {tag.iconType && (
@@ -110,7 +110,7 @@ export const getListingTag = (tag: ImageTag) => {
           size={"medium"}
           symbol={tag.iconType}
           fill={tag.iconColor ?? IconFillColors.primary}
-          className={"mr-2"}
+          className={"me-2"}
         />
       )}
       {tag.text}
@@ -118,7 +118,7 @@ export const getListingTag = (tag: ImageTag) => {
   )
 }
 
-export const getImageCardTag = (listing): ImageTag[] => {
+export const getImageCardTag = (listing: Listing): ImageTag[] => {
   const tag = getImageTagLabelFromListing(listing)
   return tag
     ? [
@@ -136,10 +136,13 @@ export const getImageCardTag = (listing): ImageTag[] => {
             listing?.marketingType === ListingMarketingTypeEnum.comingSoon
               ? AppearanceStyleType.closed
               : AppearanceStyleType.accentLight,
-          tooltip: {
-            id: "verified",
-            text: t("listings.managerHasConfirmedInformation"),
-          },
+          tooltip:
+            listing?.isVerified && listing?.marketingType !== ListingMarketingTypeEnum.comingSoon // show tooltip only for confirmed badge
+              ? {
+                  id: "verified",
+                  text: t("listings.managerHasConfirmedInformation"),
+                }
+              : undefined,
         },
       ]
     : null

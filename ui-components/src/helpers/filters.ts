@@ -153,18 +153,6 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.zipcode]?: string
 }
 
-// Since it'd be tricky to OR a separate ">=" comparison with an "IN"
-// comparison, we fake it by mapping 4+ bedrooms to being IN 4,5,...,10. If we
-// ever have units with > 10 bedrooms, we'll need to update this.
-const BedroomValues = {
-  [BedroomFields.studio]: 0,
-  [BedroomFields.SRO]: 0,
-  [BedroomFields.oneBdrm]: 1,
-  [BedroomFields.twoBdrm]: 2,
-  [BedroomFields.threeBdrm]: 3,
-  [BedroomFields.fourBdrm]: "4,5,6,7,8,9,10",
-}
-
 export function encodeToBackendFilterArray(filterState: ListingFilterState) {
   const filterArray: {
     [x: string]: any
@@ -187,22 +175,6 @@ export function encodeToBackendFilterArray(filterState: ListingFilterState) {
       })
     }
   }
-
-  // Special-case the bedroom filters, since they get combined from separate fields.
-  const bedrooms = []
-  const bedroomSize = filterState?.bedRoomSize?.split(",")
-  for (const bedroomFilterType in BedroomFields) {
-    if (bedroomSize && bedroomSize.includes(bedroomFilterType)) {
-      bedrooms.push(BedroomValues[bedroomFilterType])
-    }
-  }
-  if (bedrooms.length > 0) {
-    filterArray.push({
-      $comparison: getComparisonForFilter(ListingFilterKeys.bedrooms),
-      [ListingFilterKeys.bedrooms]: bedrooms.join(),
-    })
-  }
-
   return filterArray
 }
 

@@ -48,7 +48,7 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bedrooms]?: string;
+  [ListingFilterKeys.bedRoomSize]?: string;
 
   @Expose()
   @ApiProperty({

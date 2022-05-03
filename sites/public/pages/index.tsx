@@ -9,6 +9,7 @@ import {
   ActionBlock,
   LinkButton,
   Icon,
+  encodeToFrontendFilterString,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
@@ -71,7 +72,9 @@ export default function Home({ latestListings }) {
   const RegionButton = (props: { region: [string, Region] }) => (
     <a
       className={styles.region}
-      href={`/listings/filtered?page=1&${props.region[0]}=true`}
+      href={`/listings/filtered?page=1${encodeToFrontendFilterString({
+        region: props.region[1],
+      })}`}
       style={{ backgroundImage: `url(${regionImageUrls.get(props.region[1])})` }}
     >
       <p className={styles.region__text}>{props.region[1]}</p>

@@ -76,7 +76,7 @@ export const ListingProcess = (props: ListingProcessProps) => {
   } = props
 
   return (
-    <aside className="w-full static md:mr-8 md:ml-2 md:border border-gray-400 bg-white text-gray-750">
+    <aside className="w-full static md:me-8 md:ms-2 md:border border-gray-400 bg-white text-gray-750">
       <ListingUpdated listingUpdated={listing.updatedAt} />
       {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
       {!applicationsClosed && (
@@ -369,7 +369,7 @@ export const ListingView = (props: ListingProps) => {
           </div>
         </header>
 
-        <div className="w-full md:mt-6 md:mb-6 md:px-3 md:pr-8">
+        <div className="w-full md:mt-6 md:mb-6 md:px-3 md:pe-8">
           {groupedUnitData?.length > 0 && (
             <>
               <GroupedTable

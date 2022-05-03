@@ -1,6 +1,6 @@
 {
   "welcome.title": "Find affordable rental housing in Detroit",
-  "welcome.heroText": "Your resource to find income-restricted multi-family housing and apartments.",
+  "welcome.heroText": "Your resource to find multi-family housing based on your income and household needs",
   "welcome.signUp": "Get emailed whenever a new listing is posted",
   "welcome.seeMoreOpportunitiesTruncated": "See more affordable housing resources",
   "welcome.viewAdditionalHousingTruncated": "View resources",
@@ -20,5 +20,7 @@
   "leasingAgent.dueToHighCallVolume": "",
   "listingFilters.resetButton": "Show all listings",
   "listings.communityPrograms": "Community Programs",
-  "listings.communityProgramsDescription": "This program includes opportunities for members of specific communities"
+  "listings.communityProgramsDescription": "This program includes opportunities for members of specific communities",
+  "pageTitle.additionalResources": "Additional Housing Resources",
+  "pageDescription.additionalResources": "We encourage you to browse additional resources in your search for housing."
 }

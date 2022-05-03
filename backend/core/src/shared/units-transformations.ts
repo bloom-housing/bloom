@@ -1,4 +1,5 @@
 import { UnitGroupSummary } from "../units/types/unit-group-summary"
+
 import { HouseholdMaxIncomeSummary } from "../units/types/household-max-income-summary"
 import { UnitSummaries } from "../units/types/unit-summaries"
 
