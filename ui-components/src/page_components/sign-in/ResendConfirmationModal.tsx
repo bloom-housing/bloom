@@ -6,9 +6,8 @@ import {
   Form,
   Field,
   emailRegex,
-  NavigationContext,
 } from "@bloom-housing/ui-components"
-import React, { useEffect, useMemo, useContext } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 
 export type ResendConfirmationModalProps = {
@@ -30,7 +29,6 @@ const ResendConfirmationModal = ({
   onClose,
   onSubmit,
 }: ResendConfirmationModalProps) => {
-  const { router } = useContext(NavigationContext)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, reset, getValues, trigger } = useForm({
     defaultValues: useMemo(() => {

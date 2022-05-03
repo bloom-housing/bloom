@@ -2508,13 +2508,7 @@ export interface Id {
   id: string
 }
 
-export interface Jurisdiction {
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-
+export interface AmiChart {
   /**  */
   id: string
 
@@ -2524,46 +2518,14 @@ export interface Jurisdiction {
   /**  */
   updatedAt: Date
 
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-}
-
-export interface AmiChart {
   /**  */
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Jurisdiction
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   name: string
+
+  /**  */
+  jurisdiction: Id
 }
 
 export interface AmiChartCreate {
@@ -2571,13 +2533,22 @@ export interface AmiChartCreate {
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Id
+  name: string
 
   /**  */
-  name: string
+  jurisdiction: Id
 }
 
 export interface AmiChartUpdate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+
   /**  */
   id?: string
 
@@ -2586,15 +2557,6 @@ export interface AmiChartUpdate {
 
   /**  */
   updatedAt?: Date
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  jurisdiction: Id
-
-  /**  */
-  name: string
 }
 
 export interface Address {
@@ -4019,6 +3981,44 @@ export interface UserRoles {
 
   /**  */
   isPartner?: boolean
+}
+
+export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 }
 
 export interface User {
@@ -6486,13 +6486,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -6564,6 +6558,13 @@ export enum EnumLoginMfaType {
 export enum EnumRequestMfaCodeMfaType {
   "sms" = "sms",
   "email" = "email",
+}
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
 }
 export type CombinedRolesTypes = UserRolesCreate
 export enum EnumUserFilterParamsComparison {
