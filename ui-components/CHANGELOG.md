@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.21...@bloom-housing/ui-components@4.2.2-alpha.22) (2022-05-03)
+
+
+### Features
+
+* **backend:** improve ami chart dto definitions ([#2677](https://github.com/bloom-housing/bloom/issues/2677)) ([ca3890e](https://github.com/bloom-housing/bloom/commit/ca3890e2759f230824e31e6bd985300f40b0a0ed))
+
+
+
+
+
 ## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.20...@bloom-housing/ui-components@4.2.2-alpha.21) (2022-04-29)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
