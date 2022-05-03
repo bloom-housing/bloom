@@ -3,13 +3,11 @@ import { IsDate, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from 
 import { AmiChart } from "../entities/ami-chart.entity"
 import { AmiChartItem } from "../entities/ami-chart-item.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 import { HasKeys } from "../../shared/types/has-keys"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 
-
-export class AmiChartDto implements HasKeys<AmiChart>  {
+export class AmiChartDto implements HasKeys<AmiChart> {
   @Expose()
   id: string
 
