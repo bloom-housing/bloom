@@ -31,9 +31,16 @@ const ApplicationConfirmation = () => {
   const reviewOrder = useMemo(() => {
     if (listing) {
       if (listing.reviewOrderType == ListingReviewOrder.lottery) {
-        return t("application.review.confirmation.eligibleApplicants.lottery", {
-          lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
-        })
+        const lotteryText = []
+        if (listing.applicationDueDate) {
+          lotteryText.push(
+            t("application.review.confirmation.eligibleApplicants.lotteryDate", {
+              lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
+            })
+          )
+        }
+        lotteryText.push(t("application.review.confirmation.eligibleApplicants.lottery"))
+        return lotteryText.join(" ")
       } else {
         return t("application.review.confirmation.eligibleApplicants.FCFS")
       }
