@@ -3,6 +3,143 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.24...@bloom-housing/partners@4.2.2-alpha.25) (2022-05-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.23...@bloom-housing/partners@4.2.2-alpha.24) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.22...@bloom-housing/partners@4.2.2-alpha.23) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.21...@bloom-housing/partners@4.2.2-alpha.22) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.20...@bloom-housing/partners@4.2.2-alpha.21) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.19...@bloom-housing/partners@4.2.2-alpha.20) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.18...@bloom-housing/partners@4.2.2-alpha.19) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.17...@bloom-housing/partners@4.2.2-alpha.18) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.16...@bloom-housing/partners@4.2.2-alpha.17) (2022-04-25)
+
+
+### Bug Fixes
+
+* Add admins into users table ([#2683](https://github.com/bloom-housing/bloom/issues/2683)) ([f1e0972](https://github.com/bloom-housing/bloom/commit/f1e0972838116ed5e76814dff002556de625e2e7)), closes [#2657](https://github.com/bloom-housing/bloom/issues/2657)
+
+
+
+
+
+## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.15...@bloom-housing/partners@4.2.2-alpha.16) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.14...@bloom-housing/partners@4.2.2-alpha.15) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.13...@bloom-housing/partners@4.2.2-alpha.14) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.12...@bloom-housing/partners@4.2.2-alpha.13) (2022-04-21)
+
+
+### Features
+
+* **backend:** improve user queries ([#2676](https://github.com/bloom-housing/bloom/issues/2676)) ([4733e8a](https://github.com/bloom-housing/bloom/commit/4733e8a9909e47bb2522f9b319f45fe25923cdb5))
+
+
+
+
+
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.11...@bloom-housing/partners@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* min max occupancy validation in Add Unit ([#2661](https://github.com/bloom-housing/bloom/issues/2661)) ([67a6723](https://github.com/bloom-housing/bloom/commit/67a67231e26ef407808f1e6f9137d60dbb442002))
+
+
+
+
+
+## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.10...@bloom-housing/partners@4.2.2-alpha.11) (2022-04-21)
+
+
+### Features
+
+* new category table component ([#2648](https://github.com/bloom-housing/bloom/issues/2648)) ([3b3fe46](https://github.com/bloom-housing/bloom/commit/3b3fe46dda3d0e553664c10cea46849551ce064c))
+
+
+### BREAKING CHANGES
+
+* There is a new prop interface for the StandardTable component and all components that use it, which includes passing cell content within a new object, allowing us to support new cell options - all tables will need to pass data with the new format.
+
+
+
+
+
 ## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.9...@bloom-housing/partners@4.2.2-alpha.10) (2022-04-20)
 
 **Note:** Version bump only for package @bloom-housing/partners

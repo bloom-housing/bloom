@@ -14,9 +14,9 @@ const DetailPreferences = () => {
   const preferenceTableData = useMemo(
     () =>
       listing?.listingPreferences.map((listingPreference, index) => ({
-        order: index + 1,
-        name: listingPreference.preference.title,
-        description: listingPreference.preference.description,
+        order: { content: index + 1 },
+        name: { content: listingPreference.preference.title },
+        description: { content: listingPreference.preference.description },
       })),
     [listing]
   )

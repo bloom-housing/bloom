@@ -3,6 +3,140 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.24...@bloom-housing/public@4.2.2-alpha.25) (2022-05-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.23...@bloom-housing/public@4.2.2-alpha.24) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.22...@bloom-housing/public@4.2.2-alpha.23) (2022-04-29)
+
+
+### Bug Fixes
+
+* ux updates for new listing card design ([#2687](https://github.com/bloom-housing/bloom/issues/2687)) ([c8814ae](https://github.com/bloom-housing/bloom/commit/c8814ae57b62fa6f932017bb70d47663b09fca1a))
+
+
+
+
+
+## [4.2.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.21...@bloom-housing/public@4.2.2-alpha.22) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.20...@bloom-housing/public@4.2.2-alpha.21) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.19...@bloom-housing/public@4.2.2-alpha.20) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.18...@bloom-housing/public@4.2.2-alpha.19) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.17...@bloom-housing/public@4.2.2-alpha.18) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.16...@bloom-housing/public@4.2.2-alpha.17) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.15...@bloom-housing/public@4.2.2-alpha.16) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.14...@bloom-housing/public@4.2.2-alpha.15) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.13...@bloom-housing/public@4.2.2-alpha.14) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.12...@bloom-housing/public@4.2.2-alpha.13) (2022-04-21)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.11...@bloom-housing/public@4.2.2-alpha.12) (2022-04-21)
+
+
+### Features
+
+* add disabled field to contactPreferencesOptions ([#2673](https://github.com/bloom-housing/bloom/issues/2673)) ([b858637](https://github.com/bloom-housing/bloom/commit/b858637b84e2ff98eacf51ca5eccce613ae13733))
+
+
+
+
+
+## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.10...@bloom-housing/public@4.2.2-alpha.11) (2022-04-21)
+
+
+### Features
+
+* new category table component ([#2648](https://github.com/bloom-housing/bloom/issues/2648)) ([3b3fe46](https://github.com/bloom-housing/bloom/commit/3b3fe46dda3d0e553664c10cea46849551ce064c))
+
+
+### BREAKING CHANGES
+
+* There is a new prop interface for the StandardTable component and all components that use it, which includes passing cell content within a new object, allowing us to support new cell options - all tables will need to pass data with the new format.
+
+
+
+
+
 ## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.9...@bloom-housing/public@4.2.2-alpha.10) (2022-04-20)
 
 
