@@ -4016,6 +4016,9 @@ export interface Jurisdiction {
 
   /**  */
   emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 }
 
 export interface User {
