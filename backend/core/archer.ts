@@ -1,10 +1,4 @@
-import {
-  AmiChart,
-  Listing,
-  ListingReviewOrder,
-  ListingStatus,
-  UnitStatus,
-} from "./types"
+import { AmiChart, Listing, ListingReviewOrder, ListingStatus, UnitStatus } from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
 

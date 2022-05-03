@@ -98,6 +98,7 @@ export * from "./src/overlays/Drawer"
 export * from "./src/overlays/LoadingOverlay"
 
 /* Page Components */
+export * from "./src/page_components/ApplicationTimeline"
 export * from "./src/page_components/listing/AdditionalFees"
 export * from "./src/page_components/listing/ContentAccordion"
 export * from "./src/page_components/listing/ListingCard"
@@ -119,6 +120,7 @@ export * from "./src/page_components/listing/listing_sidebar/WhatToExpect"
 export * from "./src/page_components/listing/listing_sidebar/events/DownloadLotteryResults"
 export * from "./src/page_components/listing/listing_sidebar/events/EventSection"
 export * from "./src/page_components/sign-in/FormTerms"
+export * from "./src/page_components/sign-in/ResendConfirmationModal"
 export * from "./src/page_components/sign-in/FormSignIn"
 export * from "./src/page_components/sign-in/FormSignInMFAType"
 export * from "./src/page_components/sign-in/FormSignInMFACode"
@@ -143,6 +145,7 @@ export * from "./src/tables/StandardTable"
 export * from "./src/tables/GroupedTable"
 export * from "./src/tables/MinimalTable"
 export * from "./src/tables/StackedTable"
+export * from "./src/tables/CategoryTable"
 
 /* Text */
 export * from "./src/text/Description"

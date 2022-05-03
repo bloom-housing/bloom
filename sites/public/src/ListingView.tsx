@@ -39,6 +39,7 @@ import {
   getSummariesTable,
   t,
   EventType,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -47,6 +48,7 @@ import {
   occupancyTable,
   pdfUrlFromListingEvents,
   getTimeRangeString,
+  getCurrencyRange,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -101,17 +103,24 @@ export const ListingView = (props: ListingProps) => {
 
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
-  const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
+  const hmiData: StandardTableData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
+    const amiRows = Object.keys(row).reduce((acc, rowContent) => {
+      acc[rowContent] = { content: row[rowContent] }
+      return acc
+    }, {})
     return {
-      ...row,
-      sizeColumn: (
-        <strong>
-          {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
-        </strong>
-      ),
+      ...amiRows,
+      sizeColumn: {
+        content: (
+          <strong>
+            {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
+          </strong>
+        ),
+      },
     }
   })
-  let groupedUnits: Record<string, React.ReactNode>[] = null
+
+  let groupedUnits: StandardTableData = []
 
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
@@ -384,8 +393,8 @@ export const ListingView = (props: ListingProps) => {
               : undefined
           }
         />
-        <div className="py-3 mx-3">
-          <Heading priority={1} style={"cardHeader"}>
+        <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
+          <Heading priority={1} style={"cardHeader"} className={"text-black"}>
             {listing.name}
           </Heading>
           <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
@@ -660,11 +669,19 @@ export const ListingView = (props: ListingProps) => {
               />
             </dl>
             <AdditionalFees
-              depositMin={listing.depositMin}
-              depositMax={listing.depositMax}
-              applicationFee={listing.applicationFee}
+              deposit={getCurrencyRange(parseInt(listing.depositMin), parseInt(listing.depositMax))}
+              applicationFee={`$${listing.applicationFee}`}
               costsNotIncluded={listing.costsNotIncluded}
-              depositHelperText={listing.depositHelperText}
+              strings={{
+                sectionHeader: t("listings.sections.additionalFees"),
+                applicationFee: t("listings.applicationFee"),
+                deposit: t("t.deposit"),
+                applicationFeeSubtext: [
+                  t("listings.applicationPerApplicantAgeDescription"),
+                  t("listings.applicationFeeDueAt"),
+                ],
+                depositSubtext: [listing.depositHelperText],
+              }}
             />
           </div>
         </ListingDetailItem>

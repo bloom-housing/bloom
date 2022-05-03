@@ -6,6 +6,7 @@ import { GridSection, GridCell } from "./GridSection"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
+import { mockData, mockHeaders } from "../tables/StandardTable.stories"
 
 export default {
   title: "Sections/Grid Section",
@@ -314,32 +315,9 @@ export const GridSectionSingleColumnWarn = () => (
   </GridSection>
 )
 
-const headers = {
-  name: "t.name",
-  relationship: "t.relationship",
-  dob: "application.household.member.dateOfBirth",
-}
-const data = [
-  {
-    name: "Jim Halpert",
-    relationship: "Husband",
-    dob: "05/01/1985",
-  },
-  {
-    name: "Michael Scott",
-    relationship: "Friend",
-    dob: "05/01/1975",
-  },
-  {
-    name: "Jim Halpert",
-    relationship: "Husband",
-    dob: "05/01/1985",
-  },
-]
-
 export const GridSectionTable = () => (
   <GridSection title="Section Title" grid={false} tinted={true} inset={true}>
-    <MinimalTable headers={headers} data={data} />
+    <MinimalTable headers={mockHeaders} data={mockData} />
   </GridSection>
 )
 

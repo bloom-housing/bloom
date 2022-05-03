@@ -1,10 +1,4 @@
-import {
-  AmiChart,
-  EnumJurisdictionLanguages,
-  Listing,
-  ListingStatus,
-  UnitStatus,
-} from "./backend-swagger"
+import { AmiChart, Listing, ListingStatus, UnitStatus } from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",

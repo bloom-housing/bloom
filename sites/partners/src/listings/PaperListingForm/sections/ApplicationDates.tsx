@@ -45,36 +45,40 @@ const ApplicationDates = ({
       const { startTime, endTime, url } = event
 
       return {
-        date: startTime && getDetailFieldDate(startTime),
-        startTime: startTime && getDetailFieldTime(startTime),
-        endTime: endTime && getDetailFieldTime(endTime),
-        url: url?.length ? (
-          <LinkButton className="mx-0 my-0" href={url} unstyled>
-            {t("t.url")}
-          </LinkButton>
-        ) : (
-          t("t.n/a")
-        ),
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase"
-              onClick={() => setDrawerOpenHouse(event)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="font-semibold uppercase text-red-700"
-              onClick={() => setModalDeleteOpenHouse(event)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        date: { content: startTime && getDetailFieldDate(startTime) },
+        startTime: { content: startTime && getDetailFieldTime(startTime) },
+        endTime: { content: endTime && getDetailFieldTime(endTime) },
+        url: {
+          content: url.length ? (
+            <LinkButton className="mx-0 my-0" href={url} unstyled>
+              {t("t.url")}
+            </LinkButton>
+          ) : (
+            t("t.n/a")
+          ),
+        },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase"
+                onClick={() => setDrawerOpenHouse(event)}
+                unstyled
+              >
+                {t("t.edit")}
+              </Button>
+              <Button
+                type="button"
+                className="font-semibold uppercase text-red-700"
+                onClick={() => setModalDeleteOpenHouse(event)}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       }
     })
   }, [openHouseEvents])

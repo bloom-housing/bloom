@@ -5,33 +5,30 @@ import {
   t,
   Form,
   Field,
-  useMutate,
-  AuthContext,
+  emailRegex,
 } from "@bloom-housing/ui-components"
-import { useRouter } from "next/router"
-import { useEffect, useMemo, useContext } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { emailRegex } from "../lib/helpers"
 
-export type ConfirmationModalProps = {
+export type ResendConfirmationModalProps = {
   isOpen: boolean
   initialEmailValue: string
-  onSuccess: () => void
-  onError: (error: any) => void
   onClose: () => void
+  onSubmit: (email: string) => void
+  loading: boolean
 }
 
-const ConfirmationModal = ({
+export type ResendConfirmationModalForm = {
+  onSubmit: (email: string) => void
+}
+
+const ResendConfirmationModal = ({
   isOpen,
   initialEmailValue,
+  loading,
   onClose,
-  onSuccess,
-  onError,
-}: ConfirmationModalProps) => {
-  const router = useRouter()
-  const { userService } = useContext(AuthContext)
-  const { mutate, reset: resetMutate, isLoading } = useMutate<any>()
-
+  onSubmit,
+}: ResendConfirmationModalProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, reset, getValues, trigger } = useForm({
     defaultValues: useMemo(() => {
@@ -47,25 +44,12 @@ const ConfirmationModal = ({
     })
   }, [initialEmailValue, reset])
 
-  const onSubmit = async () => {
+  const onFormSubmit = async () => {
     const isValid = await trigger()
     if (!isValid) return
 
     const { emailResend } = getValues()
-
-    void mutate(
-      () =>
-        userService.resendPartnerConfirmation({
-          body: {
-            email: emailResend,
-            appUrl: window.location.origin,
-          },
-        }),
-      {
-        onSuccess,
-        onError,
-      }
-    )
+    onSubmit(emailResend)
   }
 
   return (
@@ -74,17 +58,15 @@ const ConfirmationModal = ({
       title={t("authentication.signIn.yourAccountIsNotConfirmed")}
       ariaDescription={t("authentication.createAccount.linkExpired")}
       onClose={() => {
-        void router.push("/")
         onClose()
-        resetMutate()
         window.scrollTo(0, 0)
       }}
       actions={[
         <Button
           type="button"
           styleType={AppearanceStyleType.primary}
-          onClick={() => onSubmit()}
-          loading={isLoading}
+          onClick={() => onFormSubmit()}
+          loading={loading}
         >
           {t("authentication.createAccount.resendTheEmail")}
         </Button>,
@@ -92,7 +74,6 @@ const ConfirmationModal = ({
           type="button"
           styleType={AppearanceStyleType.alert}
           onClick={() => {
-            void router.push("/")
             onClose()
             window.scrollTo(0, 0)
           }}
@@ -122,4 +103,4 @@ const ConfirmationModal = ({
   )
 }
 
-export { ConfirmationModal as default, ConfirmationModal }
+export { ResendConfirmationModal as default, ResendConfirmationModal }

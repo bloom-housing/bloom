@@ -89,38 +89,46 @@ const FormHouseholdMembers = ({
       const workInRegion = member.workInRegion as YesNoAnswer
 
       return {
-        name: (member.firstName + member.lastName).length
-          ? `${member.firstName} ${member.lastName}`
-          : t("t.n/a"),
-        relationship: member.relationship
-          ? t(`application.form.options.relationship.${member.relationship}`)
-          : t("t.n/a"),
-        dob:
-          birthMonth && birthDay && birthYear
-            ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
+        name: {
+          content: (member.firstName + member.lastName).length
+            ? `${member.firstName} ${member.lastName}`
             : t("t.n/a"),
-        sameResidence: chooseAddressStatus(sameResidence),
-        workInRegion: chooseAddressStatus(workInRegion),
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="font-semibold uppercase"
-              onClick={() => editMember(member.orderId)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="font-semibold uppercase text-red-700"
-              onClick={() => setMembersDeleteModal(member.orderId)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        },
+        relationship: {
+          content: member.relationship
+            ? t(`application.form.options.relationship.${member.relationship}`)
+            : t("t.n/a"),
+        },
+        dob: {
+          content:
+            birthMonth && birthDay && birthYear
+              ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
+              : t("t.n/a"),
+        },
+        sameResidence: { content: chooseAddressStatus(sameResidence) },
+        workInRegion: { content: chooseAddressStatus(workInRegion) },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="font-semibold uppercase"
+                onClick={() => editMember(member.orderId)}
+                unstyled
+              >
+                {t("t.edit")}
+              </Button>
+              <Button
+                type="button"
+                className="font-semibold uppercase text-red-700"
+                onClick={() => setMembersDeleteModal(member.orderId)}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       }
     })
   }, [editMember, householdMembers])

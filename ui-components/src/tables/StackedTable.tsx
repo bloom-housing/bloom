@@ -1,43 +1,54 @@
 import * as React from "react"
-import { TableHeaders } from "./StandardTable"
+import { StandardTableData, TableHeaders } from "./StandardTable"
 import { MinimalTable } from "./MinimalTable"
 
 export interface StackedTableRow {
+  /** The main text content of the cell */
   cellText: string
+  /** The subtext of the cell, displayed beneath the main text */
   cellSubText?: string
-  hideMobile?: boolean
+  /** Hides this cell's subtext on mobile views */
+  hideSubTextMobile?: boolean
+  /** Text content that will replace this cell's header on mobile views */
+  mobileReplacement?: string
 }
 
 export interface StackedTableProps {
+  /** The headers for the table passed as text content with optional settings */
   headers: TableHeaders
+  /** Headers hidden on desktop views */
   headersHiddenDesktop?: string[]
+  /** The table data passed as records of column name to cell data */
   stackedData?: Record<string, StackedTableRow>[]
+  /** A class name applied to the root of the table */
   className?: string
 }
 
 const StackedTable = (props: StackedTableProps) => {
-  const tableClasses = ["base", props.className]
-  const modifiedData: Record<string, React.ReactNode>[] = []
-  const cellTextClass = "font-semibold text-gray-750"
-  const cellSubtextClass = "text-sm text-gray-700"
+  const tableClasses = ["base", "stacked-table", props.className]
+  const modifiedData: StandardTableData = []
+
   props.stackedData?.forEach((dataRow) => {
     const dataCell = Object.keys(dataRow).reduce((acc, item) => {
-      acc[item] = (
-        <div
-          className={`md:flex md:flex-col w-1/2 md:w-full ${
-            props.headersHiddenDesktop?.includes(item) && "md:hidden"
-          }`}
-        >
-          <span className={`${cellTextClass}`}>{dataRow[item].cellText}</span>
-          <span
-            className={`pl-1 md:pl-0 ${
-              dataRow[item].hideMobile && "hidden md:block"
-            } ${cellSubtextClass}`}
+      acc[item] = {
+        content: (
+          <div
+            className={`stacked-table-cell-container ${
+              props.headersHiddenDesktop?.includes(item) && "md:hidden"
+            }`}
           >
-            {dataRow[item].cellSubText}
-          </span>
-        </div>
-      )
+            <span className={"stacked-table-cell"}>{dataRow[item].cellText}</span>
+            <span
+              className={`stacked-table-subtext  ${
+                dataRow[item].hideSubTextMobile && "hidden md:block"
+              } `}
+            >
+              {dataRow[item].cellSubText}
+            </span>
+          </div>
+        ),
+        mobileReplacement: dataRow[item].cellText,
+      }
       return acc
     }, {})
     modifiedData.push(dataCell)
@@ -48,14 +59,15 @@ const StackedTable = (props: StackedTableProps) => {
     if (props.headersHiddenDesktop?.includes(headerKey)) {
       let headerClasses = "md:hidden"
       headerClasses = `${tempHeader["className"] && tempHeader["className"]} ${headerClasses}`
-      tempHeader = { name: tempHeader["name"] ?? tempHeader, className: headerClasses }
+      tempHeader = {
+        name: tempHeader["name"] ?? tempHeader,
+        className: `stacked-table-header ${headerClasses}`,
+      }
     } else {
       acc[headerKey] = props.headers[headerKey]
       tempHeader = {
         name: tempHeader["name"] ?? tempHeader,
-        className: `${
-          tempHeader["className"] && tempHeader["className"]
-        } px-0 text-base text-gray-700 border-b`,
+        className: `${tempHeader["className"] && tempHeader["className"]} stacked-table-header`,
       }
     }
     acc[headerKey] = tempHeader
@@ -68,7 +80,7 @@ const StackedTable = (props: StackedTableProps) => {
       data={modifiedData}
       className={tableClasses.join(" ")}
       responsiveCollapse={true}
-      cellClassName={"py-3 px-0"}
+      cellClassName={"b-0"}
     />
   )
 }

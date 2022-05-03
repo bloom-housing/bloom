@@ -3,6 +3,165 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.20...@bloom-housing/ui-components@4.2.2-alpha.21) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.19...@bloom-housing/ui-components@4.2.2-alpha.20) (2022-04-29)
+
+
+### Bug Fixes
+
+* ux updates for new listing card design ([#2687](https://github.com/bloom-housing/bloom/issues/2687)) ([c8814ae](https://github.com/bloom-housing/bloom/commit/c8814ae57b62fa6f932017bb70d47663b09fca1a))
+
+
+
+
+
+## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.18...@bloom-housing/ui-components@4.2.2-alpha.19) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.17...@bloom-housing/ui-components@4.2.2-alpha.18) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.16...@bloom-housing/ui-components@4.2.2-alpha.17) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.15...@bloom-housing/ui-components@4.2.2-alpha.16) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.14...@bloom-housing/ui-components@4.2.2-alpha.15) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.13...@bloom-housing/ui-components@4.2.2-alpha.14) (2022-04-22)
+
+
+### Features
+
+* swap anchor tags with LinkComponent for language routes ([#2686](https://github.com/bloom-housing/bloom/issues/2686)) ([a397930](https://github.com/bloom-housing/bloom/commit/a3979306fe39acd7b424a9e7364d791ad77fa2d0))
+
+
+
+
+
+## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.12...@bloom-housing/ui-components@4.2.2-alpha.13) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.11...@bloom-housing/ui-components@4.2.2-alpha.12) (2022-04-22)
+
+
+### Bug Fixes
+
+* forgot password empty warning and two minor style changes ([#2680](https://github.com/bloom-housing/bloom/issues/2680)) ([01f1519](https://github.com/bloom-housing/bloom/commit/01f15194e2de8595a772c8c87f455d882e47f164))
+
+
+
+
+
+## [4.2.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.10...@bloom-housing/ui-components@4.2.2-alpha.11) (2022-04-21)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.9...@bloom-housing/ui-components@4.2.2-alpha.10) (2022-04-21)
+
+
+### Features
+
+* new category table component ([#2648](https://github.com/bloom-housing/bloom/issues/2648)) ([3b3fe46](https://github.com/bloom-housing/bloom/commit/3b3fe46dda3d0e553664c10cea46849551ce064c))
+
+
+### BREAKING CHANGES
+
+* There is a new prop interface for the StandardTable component and all components that use it, which includes passing cell content within a new object, allowing us to support new cell options - all tables will need to pass data with the new format.
+
+
+
+
+
+## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.8...@bloom-housing/ui-components@4.2.2-alpha.9) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.7...@bloom-housing/ui-components@4.2.2-alpha.8) (2022-04-20)
+
+
+### Features
+
+* application timeout screen reader accessible ([#2625](https://github.com/bloom-housing/bloom/issues/2625)) ([0771ef3](https://github.com/bloom-housing/bloom/commit/0771ef3f7e4001efb4dae8cca06743801daace05))
+
+
+
+
+
+## [4.2.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.6...@bloom-housing/ui-components@4.2.2-alpha.7) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.5...@bloom-housing/ui-components@4.2.2-alpha.6) (2022-04-20)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.4...@bloom-housing/ui-components@4.2.2-alpha.5) (2022-04-19)
+
+
+### Bug Fixes
+
+* footer nav widths ([42aef6f](https://github.com/bloom-housing/bloom/commit/42aef6f74a8a7e27c6bdb870cb6c69c7569f41c0))
+
+
+
+
+
 ## [4.2.2-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.3...@bloom-housing/ui-components@4.2.2-alpha.4) (2022-04-18)
 
 

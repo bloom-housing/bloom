@@ -1,5 +1,6 @@
 .dash-blocks {
   @apply w-full;
+  @apply mb-8;
 
   @screen md {
     @apply flex;
@@ -8,6 +9,7 @@
 }
 
 .dash-block {
+  align-self: stretch;
   @screen md {
     @apply px-2;
     flex: 50%;
@@ -24,13 +26,14 @@
   @apply bg-white;
   @apply p-4;
   @apply pt-8;
+  @apply pb-8;
   @apply text-tiny;
 
   @screen md {
     @apply rounded-lg;
     @apply border;
     @apply p-8;
-    @apply mb-8;
+    @apply h-full;
   }
 
   p {

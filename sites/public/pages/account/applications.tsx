@@ -12,16 +12,16 @@ import {
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
-import { PaginatedApplication } from "@bloom-housing/backend-core/types"
-import { StatusItemWrapper } from "./StatusItemWrapper"
+import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {
-  const { applicationsService, profile } = useContext(AuthContext)
-  const [applications, setApplications] = useState<PaginatedApplication>()
-  const [error, setError] = useState(null)
+  const { applicationsService, listingsService, profile } = useContext(AuthContext)
+  const [applications, setApplications] = useState<AppWithListing[]>()
   const [loading, setLoading] = useState(true)
+  const [listLoading, setListLoading] = useState(true)
+  const [error, setError] = useState()
 
   useEffect(() => {
     if (profile) {
@@ -33,16 +33,36 @@ const Applications = () => {
       applicationsService
         .list({ userId: profile.id })
         .then((apps) => {
-          setApplications(apps)
-          setLoading(false)
+          apps?.items?.length > 0 ? setApplications(apps.items) : setLoading(false)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
-          setError(`${err}`)
+          setError(err)
           setLoading(false)
         })
     }
   }, [profile, applicationsService])
+
+  useEffect(() => {
+    if (!applications || (applications && !listLoading)) return
+    void Promise.all(
+      applications?.map(async (app) => {
+        const retrievedListing = await listingsService.retrieve({ id: app?.listing.id })
+        app.fullListing = retrievedListing
+        return app
+      })
+    )
+      .then((res) => {
+        setListLoading(false)
+        setApplications(res)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error(`Error fetching applications: ${err}`)
+        setError(err)
+        setLoading(false)
+      })
+  }, [applications, listLoading, listingsService])
 
   const noApplicationsSection = () => {
     return error ? (
@@ -56,7 +76,6 @@ const Applications = () => {
       </div>
     )
   }
-
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
@@ -65,22 +84,20 @@ const Applications = () => {
         </Head>
         <MetaTags title={t("account.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
-          <LoadingOverlay isLoading={loading}>
-            <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
-              <DashBlocks>
-                <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+          <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
+            <DashBlocks>
+              <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+                <LoadingOverlay isLoading={loading}>
                   <Fragment>
-                    {applications &&
-                      applications.items.length > 0 &&
-                      applications.items.map((application, index) => (
-                        <StatusItemWrapper key={index} application={application} />
-                      ))}
+                    {applications?.map((application, index) => {
+                      return <StatusItemWrapper key={index} application={application} />
+                    })}
                   </Fragment>
-                  {!applications && !loading && noApplicationsSection()}
-                </DashBlock>
-              </DashBlocks>
-            </div>
-          </LoadingOverlay>
+                </LoadingOverlay>
+                {!applications && !loading && noApplicationsSection()}
+              </DashBlock>
+            </DashBlocks>
+          </div>
         </section>
       </Layout>
     </RequireLogin>
