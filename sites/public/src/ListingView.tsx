@@ -34,7 +34,7 @@ import {
   SubmitApplication,
   TableHeaders,
   UnitTables,
-  Waitlist,
+  QuantityRowSection,
   WhatToExpect,
   getSummariesTable,
   t,
@@ -462,12 +462,27 @@ export const ListingView = (props: ListingProps) => {
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
-          {!applicationsClosed && (
-            <Waitlist
-              isWaitlistOpen={listing.isWaitlistOpen}
-              waitlistMaxSize={listing.waitlistMaxSize}
-              waitlistCurrentSize={listing.waitlistCurrentSize}
-              waitlistOpenSpots={listing.waitlistOpenSpots}
+          {!applicationsClosed && listing.isWaitlistOpen && (
+            <QuantityRowSection
+              quantityRows={[
+                {
+                  text: t("listings.waitlist.currentSize"),
+                  amount: listing.waitlistCurrentSize,
+                },
+                {
+                  text: t("listings.waitlist.openSlots"),
+                  amount: listing.waitlistOpenSpots,
+                  emphasized: true,
+                },
+                {
+                  text: t("listings.waitlist.finalSize"),
+                  amount: listing.waitlistMaxSize,
+                },
+              ]}
+              strings={{
+                sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                description: t("listings.waitlist.submitAnApplication"),
+              }}
             />
           )}
           {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
@@ -587,12 +602,27 @@ export const ListingView = (props: ListingProps) => {
                   headerText={t("listings.openHouseEvent.header")}
                 />
               )}
-              {!applicationsClosed && (
-                <Waitlist
-                  isWaitlistOpen={listing.isWaitlistOpen}
-                  waitlistMaxSize={listing.waitlistMaxSize}
-                  waitlistCurrentSize={listing.waitlistCurrentSize}
-                  waitlistOpenSpots={listing.waitlistOpenSpots}
+              {!applicationsClosed && listing.isWaitlistOpen && (
+                <QuantityRowSection
+                  quantityRows={[
+                    {
+                      text: t("listings.waitlist.currentSize"),
+                      amount: listing.waitlistCurrentSize,
+                    },
+                    {
+                      text: t("listings.waitlist.openSlots"),
+                      amount: listing.waitlistOpenSpots,
+                      emphasized: true,
+                    },
+                    {
+                      text: t("listings.waitlist.finalSize"),
+                      amount: listing.waitlistMaxSize,
+                    },
+                  ]}
+                  strings={{
+                    sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                    description: t("listings.waitlist.submitAnApplication"),
+                  }}
                 />
               )}
               {hasNonReferralMethods && !applicationsClosed && applySidebar()}

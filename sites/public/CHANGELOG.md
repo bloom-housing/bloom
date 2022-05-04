@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.25...@bloom-housing/public@4.2.2-alpha.26) (2022-05-04)
+
+
+### Code Refactoring
+
+* remove business logic, strings from waitlist component ([#2689](https://github.com/bloom-housing/bloom/issues/2689)) ([a5721db](https://github.com/bloom-housing/bloom/commit/a5721db518453ddbd777e50ca92fdeac19997aa9))
+
+
+### BREAKING CHANGES
+
+* the Waitlist component was renamed to QuantityRowSection which also has a new prop set to account for a flexible number of rows and strings
+
+
+
+
+
 ## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.24...@bloom-housing/public@4.2.2-alpha.25) (2022-05-03)
 
 **Note:** Version bump only for package @bloom-housing/public
