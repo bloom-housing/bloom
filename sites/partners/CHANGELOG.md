@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.25...@bloom-housing/partners@4.2.2-alpha.26) (2022-05-04)
+
+
+### Bug Fixes
+
+* max update depth unit form issue ([#2682](https://github.com/bloom-housing/bloom/issues/2682)) ([57200b6](https://github.com/bloom-housing/bloom/commit/57200b69f3cb0b26965a1735196cb126a2754570))
+
+
+
+
+
 ## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.24...@bloom-housing/partners@4.2.2-alpha.25) (2022-05-03)
 
 **Note:** Version bump only for package @bloom-housing/partners
