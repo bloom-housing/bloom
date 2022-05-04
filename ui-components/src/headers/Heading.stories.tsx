@@ -16,6 +16,10 @@ export const tableHeader = () => <Heading style={"tableHeader"}>Table Header</He
 export const tableSubheader = () => <Heading style={"tableSubheader"}>Table Subheader</Heading>
 export const sidebarHeader = () => <Heading style={"sidebarHeader"}>Sidebar Header</Heading>
 export const categoryHeader = () => <Heading style={"categoryHeader"}>Category Header</Heading>
+export const sidebarSubHeader = () => (
+  <Heading style={"sidebarSubHeader"}>Sidebar Subheader</Heading>
+)
+
 export const customPriority = () => (
   <Heading style={"cardSubheader"} priority={6}>
     Custom Priority

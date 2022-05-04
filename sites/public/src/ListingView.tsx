@@ -8,6 +8,7 @@ import {
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -20,7 +21,7 @@ import {
   Heading,
   ImageCard,
   InfoCard,
-  LeasingAgent,
+  Contact,
   ListSection,
   ListingDetailItem,
   ListingDetails,
@@ -49,6 +50,7 @@ import {
   pdfUrlFromListingEvents,
   getTimeRangeString,
   getCurrencyRange,
+  getPostmarkString,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -351,26 +353,37 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
-        listingStatus={listing.status}
       />
-      <SubmitApplication
-        applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
-        applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
-        applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
-        applicationOrganization={listing.applicationOrganization}
-        postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: getDateString(
-            listing.postmarkedApplicationsReceivedByDate,
-            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
-          ),
-          developer: listing.developer,
-          applicationsDueDate: getDateString(
-            listing.applicationDueDate,
-            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
-          ),
-        }}
-        listingStatus={listing.status}
-      />
+      {!(
+        listing.status === ListingStatus.closed ||
+        !(listing.applicationMailingAddress || listing.applicationDropOffAddress)
+      ) && (
+        <SubmitApplication
+          applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
+          applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
+          applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
+          applicationOrganization={listing.applicationOrganization}
+          strings={{
+            postmark: getPostmarkString(
+              listing.applicationDueDate
+                ? getDateString(listing.applicationDueDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
+                : null,
+              listing.postmarkedApplicationsReceivedByDate
+                ? getDateString(
+                    listing.postmarkedApplicationsReceivedByDate,
+                    `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+                  )
+                : null,
+              listing.developer
+            ),
+            mailHeader: t("listings.apply.sendByUsMail"),
+            dropOffHeader: t("listings.apply.dropOffApplication"),
+            sectionHeader: t("listings.apply.submitAPaperApplication"),
+            officeHoursHeader: t("leasingAgent.officeHours"),
+            mapString: t("t.getDirections"),
+          }}
+        />
+      )}
     </>
   )
 
@@ -485,7 +498,13 @@ export const ListingView = (props: ListingProps) => {
               }}
             />
           )}
-          {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
+          {hasNonReferralMethods &&
+          !applicationsClosed &&
+          listing.status !== ListingStatus.closed ? (
+            <>{applySidebar()}</>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <ListingDetails>
@@ -625,7 +644,10 @@ export const ListingView = (props: ListingProps) => {
                   }}
                 />
               )}
-              {hasNonReferralMethods && !applicationsClosed && applySidebar()}
+              {hasNonReferralMethods &&
+                !applicationsClosed &&
+                listing.status !== ListingStatus.closed &&
+                applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication
                   phoneNumber={
@@ -651,7 +673,32 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            {!appOpenInFuture && <LeasingAgent listing={listing} />}
+            {!appOpenInFuture && (
+              <Contact
+                sectionTitle={t("leasingAgent.contact")}
+                additionalInformation={
+                  listing.leasingAgentOfficeHours
+                    ? [
+                        {
+                          title: t("leasingAgent.officeHours"),
+                          content: listing.leasingAgentOfficeHours,
+                        },
+                      ]
+                    : undefined
+                }
+                contactAddress={listing.leasingAgentAddress}
+                contactEmail={listing.leasingAgentEmail}
+                contactName={listing.leasingAgentName}
+                contactPhoneNumber={`${t("t.call")} ${listing.leasingAgentPhone}`}
+                contactPhoneNumberNote={t("leasingAgent.dueToHighCallVolume")}
+                contactTitle={listing.leasingAgentTitle}
+                strings={{
+                  email: t("t.email"),
+                  website: t("t.website"),
+                  getDirections: t("t.getDirections"),
+                }}
+              />
+            )}
           </aside>
         </ListingDetailItem>
 
