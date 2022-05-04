@@ -45,33 +45,33 @@ export function useListingsData({ page, limit, userId, search }: UseListingsData
   const params = {
     page,
     limit,
+    filter: [],
   }
 
   // filter if logged user is an agent
-  if (typeof userId !== undefined) {
+  if (userId) {
+    params.filter.push({
+      $comparison: EnumListingFilterParamsComparison["="],
+      leasingAgents: userId,
+    })
+
     Object.assign(params, {
-      filter: [
-        {
-          $comparison: EnumListingFilterParamsComparison["="],
-          leasingAgents: userId,
-        },
-      ],
       view: "base",
     })
   }
 
   if (search) {
-    Object.assign(params, {
-      search,
+    params.filter.push({
+      $comparison: EnumListingFilterParamsComparison["="],
+      name: search,
     })
   }
-
-  console.log(params)
 
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingsService.list(params)
 
   const paramsString = qs.stringify(params)
+
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
 
   return {
