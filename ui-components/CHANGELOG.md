@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.24...@bloom-housing/ui-components@4.2.2-alpha.25) (2022-05-04)
+
+
+### Bug Fixes
+
+* footer alignment issue with overflowing links ([#2713](https://github.com/bloom-housing/bloom/issues/2713)) ([b87be1d](https://github.com/bloom-housing/bloom/commit/b87be1da10d59df2616f5df51629a8201baa6f86))
+
+
+
+
+
 ## [4.2.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.23...@bloom-housing/ui-components@4.2.2-alpha.24) (2022-05-04)
 
 
