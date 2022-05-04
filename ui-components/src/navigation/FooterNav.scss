@@ -22,26 +22,30 @@
   .footer-sock__inner {
     @apply max-w-5xl;
     @apply m-auto;
-
+    justify-content: space-between;
     @screen lg {
       @apply flex;
     }
   }
 
   .footer-copyright {
+    width: auto;
     @screen lg {
-      @apply w-6/12;
       @apply text-left;
     }
   }
 
   .footer-nav {
     @apply mt-5;
+    width: auto;
 
     @screen lg {
       @apply mt-0;
-      @apply w-6/12;
       @apply text-right;
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: end;
     }
   }
 }
