@@ -15,6 +15,11 @@ Cypress.Commands.add("signIn", () => {
   cy.get(`[data-test-id="sign-in-button"]`).click()
 })
 
+Cypress.Commands.add("signOut", () => {
+  cy.get(`[data-test-id="My Account-2"]`).trigger("mouseover")
+  cy.get(`[data-test-id="Sign Out-3"]`).trigger("click")
+})
+
 Cypress.Commands.add("goNext", () => {
   return cy.get(`[data-test-id="app-next-step-button"]`).click()
 })
