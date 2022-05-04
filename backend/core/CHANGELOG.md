@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.6...@bloom-housing/backend-core@4.2.2-alpha.7) (2022-05-03)
+
+
+### Features
+
+* **backend:** improve ami chart dto definitions ([#2677](https://github.com/bloom-housing/bloom/issues/2677)) ([ca3890e](https://github.com/bloom-housing/bloom/commit/ca3890e2759f230824e31e6bd985300f40b0a0ed))
+
+
+
+
+
+## [4.2.2-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.5...@bloom-housing/backend-core@4.2.2-alpha.6) (2022-04-29)
+
+
+### Bug Fixes
+
+* check for empty translations before sending to google translate service ([#2700](https://github.com/bloom-housing/bloom/issues/2700)) ([d116fdb](https://github.com/bloom-housing/bloom/commit/d116fdbdab3c874679abc8e3dba8e23179fc78e2))
+
+
+
+
+
+## [4.2.2-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.4...@bloom-housing/backend-core@4.2.2-alpha.5) (2022-04-28)
+
+
+### Bug Fixes
+
+* authservice.token data null issue ([#2703](https://github.com/bloom-housing/bloom/issues/2703)) ([3b1b931](https://github.com/bloom-housing/bloom/commit/3b1b9316a6dd42adc22249b8e8dd836de2258406))
+
+
+
+
+
+## [4.2.2-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.3...@bloom-housing/backend-core@4.2.2-alpha.4) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [4.2.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.2...@bloom-housing/backend-core@4.2.2-alpha.3) (2022-04-21)
 
 

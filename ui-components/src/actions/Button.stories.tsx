@@ -1,16 +1,24 @@
 import * as React from "react"
-
 import { withKnobs, text, select } from "@storybook/addon-knobs"
+import { BADGES } from "../../.storybook/constants"
 import { Button } from "../actions/Button"
 import {
   AppearanceBorderType,
   AppearanceSizeType,
   AppearanceStyleType,
 } from "../global/AppearanceTypes"
+import ButtonDocumentation from "./Button.docs.mdx"
 
 export default {
-  title: "Actions/Button",
+  title: "Actions/Button 🚩",
+  id: "actions-button",
   decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
+  parameters: {
+    docs: {
+      page: ButtonDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 const handleClick = (e: React.MouseEvent) => {
@@ -114,6 +122,55 @@ export const inlineIcon = () => (
     </Button>
   </>
 )
+
+export const detroitStyle = () => {
+  const cssVarsOverride = `
+    .button-overrides {
+      --bloom-font-sans: Montserrat;
+      --bloom-font-alt-sans: var(--bloom-font-sans);
+      --bloom-color-primary: rgb(41,126,115);
+      --bloom-color-primary-dark: rgb(0,68,69);
+
+      --primary-appearance-hover-background-color: white;
+      --primary-appearance-hover-label-color: var(--bloom-color-primary-dark);
+
+      --outlined-appearance-hover-background-color: var(--bloom-color-primary);
+      --outlined-appearance-hover-border-color: var(--bloom-color-primary);
+    }
+
+    .button-overrides .button {
+      --normal-rounded: 60px;
+      --normal-padding: 0.5rem 1rem;
+      --normal-font-size: var(--bloom-font-size-base);
+      --label-letter-spacing: normal;
+      --label-transform: none;
+    }
+  `
+
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+        rel="stylesheet"
+      ></link>
+      <div className="button-overrides">
+        <Button styleType={AppearanceStyleType.primary} onClick={handleClick}>
+          "Detroit" Primary Button
+        </Button>{" "}
+        <Button onClick={handleClick}>"Detroit" Outlined Button</Button>
+        <style>{cssVarsOverride}</style>
+      </div>
+
+      <p className="mt-12 font-semibold">Customized using the following variable overrides:</p>
+
+      <pre>
+        {cssVarsOverride.replace(".button-overrides ", ":root ").replace(".button-overrides ", "")}
+      </pre>
+    </>
+  )
+}
 
 export const loading = () => (
   <Button styleType={AppearanceStyleType.primary} loading={true} onClick={handleClick}>

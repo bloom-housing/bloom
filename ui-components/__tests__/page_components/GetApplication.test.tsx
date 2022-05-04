@@ -18,7 +18,7 @@ describe("<Applications>", () => {
     expect(getByText("Get a Paper Application")).toBeTruthy()
     expect(getByText("Download Application")).toBeTruthy()
     expect(getByText("Pick up an application")).toBeTruthy()
-    expect(getByText("Pick Up Address Street")).toBeTruthy()
+    expect(getByText("Pick Up Address Street", { exact: false })).toBeTruthy()
     expect(getByText("Office Hours")).toBeTruthy()
   })
   it("disables buttons in preview state", () => {

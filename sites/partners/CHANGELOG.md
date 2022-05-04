@@ -3,6 +3,116 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.25...@bloom-housing/partners@4.2.2-alpha.26) (2022-05-04)
+
+
+### Bug Fixes
+
+* max update depth unit form issue ([#2682](https://github.com/bloom-housing/bloom/issues/2682)) ([57200b6](https://github.com/bloom-housing/bloom/commit/57200b69f3cb0b26965a1735196cb126a2754570))
+
+
+
+
+
+## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.24...@bloom-housing/partners@4.2.2-alpha.25) (2022-05-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.23...@bloom-housing/partners@4.2.2-alpha.24) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.22...@bloom-housing/partners@4.2.2-alpha.23) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.21...@bloom-housing/partners@4.2.2-alpha.22) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.20...@bloom-housing/partners@4.2.2-alpha.21) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.19...@bloom-housing/partners@4.2.2-alpha.20) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.18...@bloom-housing/partners@4.2.2-alpha.19) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.17...@bloom-housing/partners@4.2.2-alpha.18) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.16...@bloom-housing/partners@4.2.2-alpha.17) (2022-04-25)
+
+
+### Bug Fixes
+
+* Add admins into users table ([#2683](https://github.com/bloom-housing/bloom/issues/2683)) ([f1e0972](https://github.com/bloom-housing/bloom/commit/f1e0972838116ed5e76814dff002556de625e2e7)), closes [#2657](https://github.com/bloom-housing/bloom/issues/2657)
+
+
+
+
+
+## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.15...@bloom-housing/partners@4.2.2-alpha.16) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.14...@bloom-housing/partners@4.2.2-alpha.15) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.13...@bloom-housing/partners@4.2.2-alpha.14) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.12...@bloom-housing/partners@4.2.2-alpha.13) (2022-04-21)
 
 

@@ -3919,6 +3919,15 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
+"@geometricpanda/storybook-addon-badges@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@geometricpanda/storybook-addon-badges/-/storybook-addon-badges-0.2.1.tgz#b52ead21230d9c09b61982610ffb96b676dc0a1d"
+  integrity sha512-91N6Zx16MQa6QjjVaNgAwXDTGgN6VEViIcEQMhqIMvGLkcofccj7VwxCS6kRBJXobNGYE6UWJEbR/WZx16Po4w==
+  dependencies:
+    react "^17.0.2"
+    react-dom "^17.0.2"
+    react-is "^17.0.2"
+
 "@google-cloud/common@^3.0.0":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-3.7.0.tgz#ee3fba75aeaa614978aebf8740380670026592aa"
@@ -6858,6 +6867,11 @@
   integrity sha512-SXPBMnFVQg1s00dlMCc/jCdvPqdE4mXaMMCeRlxLDmTAEoegHT53xKtkDnzDTOcmMHUfcjyf36/YYZ6SxRdnsw==
   dependencies:
     "@types/unist" "*"
+
+"@types/mdx@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/mdx/-/mdx-2.0.1.tgz#e4c05d355d092d7b58db1abfe460e53f41102ac8"
+  integrity sha512-JPEv4iAl0I+o7g8yVWDwk30es8mfVrjkvh5UeVR2sYPpZCK44vrAPsbJpIS+rJAUxLgaSAMKTEH5Vn5qd9XsrQ==
 
 "@types/micromatch@^4.0.1":
   version "4.0.1"
