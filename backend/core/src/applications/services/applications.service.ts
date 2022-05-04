@@ -107,6 +107,7 @@ export class ApplicationsService {
     }
   }
 
+  // Submitting an application from public
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
     const listing = await this.listingsRepository
@@ -131,6 +132,7 @@ export class ApplicationsService {
     )
   }
 
+  // Entering a paper application from partners
   async create(applicationCreateDto: ApplicationCreateDto) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
     return this._create(applicationCreateDto, false)

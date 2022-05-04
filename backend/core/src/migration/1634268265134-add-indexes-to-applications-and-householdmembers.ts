@@ -5,7 +5,7 @@ export class addIndexesToApplicationsAndHouseholdmembers1634268265134
   name = "addIndexesToApplicationsAndHouseholdmembers1634268265134"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "listings" DROP COLUMN "csv_formatting_type"`)
+    await queryRunner.query(`ALTER TABLE "listings" DROP COLUMN IF EXISTS "csv_formatting_type"`)
     await queryRunner.query(
       `CREATE INDEX "IDX_520996eeecf9f6fb9425dc7352" ON "household_member" ("application_id") `
     )

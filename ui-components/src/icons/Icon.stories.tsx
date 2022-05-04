@@ -11,6 +11,7 @@ export const IconArrowBack = () => <Icon size="large" symbol="arrowBack" />
 export const IconArrowDown = () => <Icon size="large" symbol="arrowDown" />
 export const IconAssistance = () => <Icon size="large" symbol="assistance" />
 export const IconAsterisk = () => <Icon size="large" symbol="asterisk" />
+export const IconBadgeCheck = () => <Icon size="large" symbol="badgeCheck" />
 export const IconBed = () => <Icon size="large" symbol="bed" />
 export const IconBrowse = () => <Icon size="large" symbol="browse" />
 export const IconBuilding = () => <Icon size="large" symbol="building" />

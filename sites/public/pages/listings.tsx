@@ -17,7 +17,6 @@ import { useRouter } from "next/router"
 import FilterForm from "../src/forms/filters/FilterForm"
 import { getListings } from "../lib/helpers"
 import { fetchBaseListingData } from "../lib/hooks"
-import { FindRentalsForMeLink } from "../lib/FindRentalsForMeLink"
 import { ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 

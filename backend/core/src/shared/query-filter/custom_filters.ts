@@ -96,7 +96,7 @@ export function addRegionFilter(qb: WhereExpression, filterValue: string) {
 }
 
 export function addAccessibilityFilter(qb: WhereExpression, filterValue: string) {
-  let val = filterValue.split(",").filter((elem) => !!elem)
+  const val = filterValue.split(",").filter((elem) => !!elem)
   const whereClause = val
     .map((key) => {
       return `listing_features.${key} = true`

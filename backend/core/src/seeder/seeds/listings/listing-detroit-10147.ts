@@ -1,4 +1,4 @@
-import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
+import { ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"

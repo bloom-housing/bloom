@@ -160,7 +160,6 @@ export class UserService {
     if (!user) {
       throw new NotFoundException()
     }
-
     let passwordHash
     let passwordUpdatedAt
     if (dto.password) {
@@ -254,28 +253,6 @@ export class UserService {
     }
   }
 
-  public async resendPartnerConfirmation(dto: EmailDto) {
-    const user = await this.findByEmail(dto.email)
-    if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
-    }
-    if (user.confirmedAt) {
-      // if the user is already confirmed, we do nothing
-      // this is so on the front end people can't cheat to find out who has an email in the system
-      return {}
-    } else {
-      user.confirmationToken = UserService.createConfirmationToken(user.id, user.email)
-      try {
-        await this.userRepository.save(user)
-        const confirmationUrl = UserService.getPartnersConfirmationUrl(dto.appUrl, user)
-        await this.emailService.invite(user, dto.appUrl, confirmationUrl)
-        return user
-      } catch (err) {
-        throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
-      }
-    }
-  }
-
   private async setHitConfirmationURl(user: User, token: string) {
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
@@ -333,6 +310,28 @@ export class UserService {
         await this.userRepository.save(user)
         const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)
         await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
+        return user
+      } catch (err) {
+        throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+      }
+    }
+  }
+
+  public async resendPartnerConfirmation(dto: EmailDto) {
+    const user = await this.findByEmail(dto.email)
+    if (!user) {
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+    if (user.confirmedAt) {
+      // if the user is already confirmed, we do nothing
+      // this is so on the front end people can't cheat to find out who has an email in the system
+      return {}
+    } else {
+      user.confirmationToken = UserService.createConfirmationToken(user.id, user.email)
+      try {
+        await this.userRepository.save(user)
+        const confirmationUrl = UserService.getPartnersConfirmationUrl(dto.appUrl, user)
+        await this.emailService.invite(user, dto.appUrl, confirmationUrl)
         return user
       } catch (err) {
         throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)

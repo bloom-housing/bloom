@@ -38,6 +38,11 @@
     @apply bg-accent-warm-dark;
   }
 
+  &.is-accent-light {
+    @apply text-gray-900;
+    @apply bg-yellow-300;
+  }
+
   &.is-secondary {
     @apply text-white;
     @apply bg-secondary;

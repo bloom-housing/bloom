@@ -155,6 +155,9 @@ const Layout = (props) => {
             <a>{t("pageTitle.disclaimer")}</a>
           </Link>
         </FooterNav>
+        <FooterSection className="bg-black" small>
+          <ExygyFooter />
+        </FooterSection>
       </SiteFooter>
     </div>
   )

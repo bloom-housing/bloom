@@ -29,7 +29,7 @@ $tooltip_arrow_height: 9px;
   }
 
   &::before {
-    content: '';
+    content: "";
     @apply absolute bottom-0;
     @apply w-0 h-0;
     @apply border-solid;
@@ -37,6 +37,6 @@ $tooltip_arrow_height: 9px;
     bottom: -$tooltip_arrow_height;
     transform: translateX(-50%);
     border-width: $tooltip_arrow_height 7px 0 7px;
-    border-color: theme('colors.primary-dark') transparent transparent transparent;
+    border-color: theme("colors.primary-dark") transparent transparent transparent;
   }
 }

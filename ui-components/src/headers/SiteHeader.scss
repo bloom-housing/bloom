@@ -173,13 +173,13 @@
 
           .logo__image {
             @apply inline-block;
-            @apply mt-1;
+            @apply mt-0;
             @apply mb-1;
             max-height: 1.5rem;
             @apply hidden;
 
             @screen md {
-              @apply mt-3;
+              @apply mt-0;
               @apply mb-2;
               max-height: 2rem;
               @apply inline-block;

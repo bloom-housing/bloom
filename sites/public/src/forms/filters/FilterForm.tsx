@@ -92,7 +92,7 @@ const FilterForm = (props: FilterFormProps) => {
         console.error(e)
       }
     }
-    getAndSetOptions()
+    void getAndSetOptions()
 
     setRegionOptions(
       Object.entries(Region).map((elem) => ({

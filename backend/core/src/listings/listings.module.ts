@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { BullModule } from "@nestjs/bull"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
 import { Listing } from "./entities/listing.entity"

@@ -4,18 +4,18 @@ import { Tooltip } from "../../src/blocks/Tooltip"
 
 afterEach(cleanup)
 
-describe('<Tooltip>', () => {
-  it('render tooltip on hover', async () => {
+describe("<Tooltip>", () => {
+  it("render tooltip on hover", async () => {
     const { getByTestId } = render(<Tooltip id="tooltip" text="Lorem ipsum" />)
 
-    fireEvent.mouseOver(getByTestId("tooltip-children"));
+    fireEvent.mouseOver(getByTestId("tooltip-children"))
     await waitFor(() => expect(getByTestId("tooltip-element")).toBeVisible())
   })
 
-  it('render tooltip on focus', async () => {
+  it("render tooltip on focus", async () => {
     const { getByTestId } = render(<Tooltip id="tooltip" text="Lorem ipsum" />)
 
-    fireEvent.focus(getByTestId("tooltip-children"));
+    fireEvent.focus(getByTestId("tooltip-children"))
     await waitFor(() => expect(getByTestId("tooltip-element")).toBeVisible())
   })
 })

@@ -23,6 +23,9 @@
   // Inverts color scheme of alert
   &.invert {
     @apply text-white;
+    svg {
+      fill: white;
+    }
 
     .close {
       @apply text-white;

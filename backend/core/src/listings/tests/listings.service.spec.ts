@@ -1,7 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
-import { AvailabilityFilterEnum } from "../types/listing-filter-keys-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingCreateDto } from "../dto/listing-create.dto"
 import { ListingUpdateDto } from "../dto/listing-update.dto"
@@ -18,9 +17,7 @@ import { UnitGroup } from "../../units-summary/entities/unit-group.entity"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { Program } from "../../program/entities/program.entity"
-import { ListingsNotificationsConsumer } from "../listings-notifications"
 import { BullModule, getQueueToken } from "@nestjs/bull"
-import { truncate } from "fs"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
