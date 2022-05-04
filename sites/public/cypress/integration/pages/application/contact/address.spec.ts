@@ -69,6 +69,6 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.getByTestId("app-found-address-label").should("not.be.visible")
+    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
   })
 })

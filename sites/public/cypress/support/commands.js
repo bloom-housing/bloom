@@ -141,7 +141,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.getByTestId("app-found-address-choice").should("be.visible")
+  cy.getByTestId("app-found-address-choice").should("exist")
 
   cy.goNext() // accept validated address
   cy.isNextRouteValid("primaryApplicantAddress")
