@@ -9,7 +9,7 @@ export class UserRepository extends Repository<User> {
       .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
       .leftJoin("user.jurisdictions", "jurisdictions")
       .leftJoin("user.roles", "userRoles")
-      .select(["user", "jurisdictions", "userRoles", "leasingAgentInListings.id"])
+      .select(["user", "jurisdictions", "userRoles", "leasingAgentInListings.id", "leasingAgentInListings.name"])
   }
 
   public async findByEmail(email: string) {

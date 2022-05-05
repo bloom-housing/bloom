@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, Repository } from "typeorm"
+import { Brackets, DeepPartial, Repository } from "typeorm"
 import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import dayjs from "dayjs"
@@ -102,12 +102,26 @@ export class UserService {
       filter.addFilters(params.filter, userFilterTypeToFieldMap, distinctIDQB)
       filter.addFilters(params.filter, userFilterTypeToFieldMap, qb)
     }
+
+    if (params.search) {
+      distinctIDQB.andWhere(
+        new Brackets((subQb) => {
+          subQb.where("user.firstName ILIKE :search", {search: `%${params.search}%`})
+          subQb.orWhere("user.lastName ILIKE :search", {search: `%${params.search}%`})
+          subQb.orWhere("user.email ILIKE :search", {search: `%${params.search}%`})
+          subQb.orWhere("leasingAgentInListings.name ILIKE :search", {search: `%${params.search}%`})
+          subQb.orWhere("CONCAT(user.firstName, ' ', user.lastName, ' ', user.email, ' ', leasingAgentInListings.name) ILIKE :search", {search: `%${params.search}%`})
+        })
+      )
+    }
+
     const distinctIDResult = await paginate<User>(distinctIDQB, options)
 
     qb.andWhere("user.id IN (:...distinctIDs)", {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
-    const result = await qb.getMany()
+
+    const result = distinctIDResult.items.length ? await qb.getMany() : []
     /**
      * admin are the only ones that can access all users
      * so this will throw on the first user that isn't their own (non admin users can access themselves)
