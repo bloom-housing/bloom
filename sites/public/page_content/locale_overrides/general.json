@@ -22,5 +22,7 @@
   "listings.communityPrograms": "Community Programs",
   "listings.communityProgramsDescription": "This program includes opportunities for members of specific communities",
   "pageTitle.additionalResources": "Additional Housing Resources",
-  "pageDescription.additionalResources": "We encourage you to browse additional resources in your search for housing."
+  "pageDescription.additionalResources": "We encourage you to browse additional resources in your search for housing.",
+  "errors.minGreaterThanMaxRentError": "Min Rent must be less than or equal to Max Rent",
+  "errors.maxLessThanMinRentError": "Max Rent must be greater than or equal to Min Rent"
 }
