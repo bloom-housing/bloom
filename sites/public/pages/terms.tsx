@@ -4,20 +4,20 @@ import Markdown from "markdown-to-jsx"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
-import pageContent from "../page_content/disclaimer.md"
+import pageContent from "../page_content/terms.md"
 
-const Disclaimer = () => {
+const Terms = () => {
   const { profile } = useContext(AuthContext)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: "Disclaimer",
+      pageTitle: "Terms",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
 
-  const pageTitle = <>{t("pageTitle.disclaimer")}</>
+  const pageTitle = <>{t("pageTitle.terms")}</>
 
   return (
     <Layout>
@@ -29,4 +29,4 @@ const Disclaimer = () => {
   )
 }
 
-export default Disclaimer
+export default Terms
