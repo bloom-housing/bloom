@@ -1,28 +1,18 @@
 {
-  "welcome": {
-    "title": "العثور على سكن للإيجار بأسعار معقولة في Detroit",
-    "heroText": "Detroit Home Connect هو مكان لك للعثور على سكن يمكنك تحمل تكاليفه بناءً على احتياجاتك المنزلية."
-  },
-  "nav": {
-    "siteTitle": "ديترويت هوم كونيكت"
-  },
-  "region": {
-    "name": "ديترويت"
-  },
-  "footer": {
-    "copyright": "مدينة ديترويت © 2021 • جميع الحقوق محفوظة",
-    "header": "ديترويت هوم كونيكت",
-    "headerLink": "مدينة ديترويت",
-    "forGeneralInquiries": "للاستفسارات العامة حول البرنامج:",
-    "youMayCall": "يمكنك الاتصال بمدينة ديترويت HRD على:",
-    "forListingQuestions": "للحصول على قائمة الأسئلة والتطبيق:",
-    "pleaseContact": "প্রতিটি তালিকায় প্রদর্শিত সম্পত্তি এজেন্টের সাথে যোগাযোগ করুন।"
-  },
-  "leasingAgent": {
-    "contact": "شركة إدارة",
-    "dueToHighCallVolume": ""
-  },
-  "listingFilters": {
-    "resetButton": "انظر جميع القوائم"
-  }
+  "welcome.title": "العثور على سكن للإيجار بأسعار معقولة في Detroit",
+  "welcome.heroText": "مصدرك للعثور على سكن متعدد الأُسر بناءً على دخلك واحتياجات أسرتك",
+  "welcome.seeMoreOpportunitiesTruncated": "الاطلاع على المزيد من موارد الإسكان معقول التكلفة",
+  "welcome.viewAdditionalHousingTruncated": "عرض الموارد",
+  "nav.siteTitle": "ديترويت هوم كونيكت",
+  "region.name": "ديترويت",
+  "footer.copyright": "مدينة ديترويت © 2021 • جميع الحقوق محفوظة",
+  "footer.header": "ديترويت هوم كونيكت",
+  "footer.headerLink": "مدينة ديترويت",
+  "footer.forGeneralInquiries": "للاستفسارات العامة حول البرنامج:",
+  "footer.youMayCall": "يمكنك الاتصال بمدينة ديترويت HRD على:",
+  "footer.forListingQuestions": "للحصول على قائمة الأسئلة والتطبيق:",
+  "footer.pleaseContact": "প্রতিটি তালিকায় প্রদর্শিত সম্পত্তি এজেন্টের সাথে যোগাযোগ করুন।",
+  "leasingAgent.contact": "شركة إدارة",
+  "leasingAgent.dueToHighCallVolume": "",
+  "listingFilters.resetButton": "انظر جميع القوائم"
 }

@@ -1,28 +1,18 @@
 {
-  "welcome": {
-    "title": "Encuentre viviendas de alquiler asequibles en Detroit",
-    "heroText": "Detroit Home Connect es un lugar para que encuentre una vivienda que pueda pagar según las necesidades de su hogar."
-  },
-  "nav": {
-    "siteTitle": "Detroit Home Connect"
-  },
-  "region": {
-    "name": "Detroit"
-  },
-  "footer": {
-    "copyright": "Ciudad de Detroit © 2021 • Todos los derechos reservados",
-    "header": "Detroit Home Connect",
-    "headerLink": "Ciudad de Detroit",
-    "forGeneralInquiries": "Para consultas generales sobre programas:",
-    "youMayCall": "Puede llamar al Departamento de Recursos Humanos de la ciudad de Detroit al:",
-    "forListingQuestions": "Para preguntas sobre listas y solicitudes:",
-    "pleaseContact": "Comuníquese con el agente inmobiliario que se muestra en cada listado."
-  },
-  "leasingAgent": {
-    "contact": "Empresa de gestión",
-    "dueToHighCallVolume": ""
-  },
-  "listingFilters": {
-    "resetButton": "Ver Todos los Listados"
-  }
+  "welcome.title": "Encuentre viviendas de alquiler asequibles en Detroit",
+  "welcome.heroText": "Su recurso para encontrar viviendas multifamiliares según sus ingresos y necesidades de vivienda",
+  "welcome.seeMoreOpportunitiesTruncated": "Ver más recursos de viviendas asequibles",
+  "welcome.viewAdditionalHousingTruncated": "Ver recursos",
+  "nav.siteTitle": "Detroit Home Connect",
+  "region.name": "Detroit",
+  "footer.copyright": "Ciudad de Detroit © 2021 • Todos los derechos reservados",
+  "footer.header": "Detroit Home Connect",
+  "footer.headerLink": "Ciudad de Detroit",
+  "footer.forGeneralInquiries": "Para consultas generales sobre programas:",
+  "footer.youMayCall": "Puede llamar al Departamento de Recursos Humanos de la ciudad de Detroit al:",
+  "footer.forListingQuestions": "Para preguntas sobre listas y solicitudes:",
+  "footer.pleaseContact": "Comuníquese con el agente inmobiliario que se muestra en cada listado.",
+  "leasingAgent.contact": "Empresa de gestión",
+  "leasingAgent.dueToHighCallVolume": "",
+  "listingFilters.resetButton": "Ver Todos los Listados"
 }
