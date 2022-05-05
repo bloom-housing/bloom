@@ -11,8 +11,11 @@
   "footer.forGeneralInquiries": "للاستفسارات العامة حول البرنامج:",
   "footer.youMayCall": "يمكنك الاتصال بمدينة ديترويت HRD على:",
   "footer.forListingQuestions": "للحصول على قائمة الأسئلة والتطبيق:",
-  "footer.pleaseContact": "প্রতিটি তালিকায় প্রদর্শিত সম্পত্তি এজেন্টের সাথে যোগাযোগ করুন।",
+  "footer.pleaseContact": "‫يرجى الاتصال بوكلاء العقارات في كل قائمة.‬",
   "leasingAgent.contact": "شركة إدارة",
   "leasingAgent.dueToHighCallVolume": "",
-  "listingFilters.resetButton": "انظر جميع القوائم"
+  "listingFilters.resetButton": "انظر جميع القوائم",
+  "pageTitle.additionalResources": "موارد إسكان إضافية",
+  "pageDescription.resources": "جمعت إدارة الإسكان والتعمير بمدينة ديترويت قائمة بالموارد لمساعدتك على العثور على مسكنك وصيانته.",
+  "pageDescription.additionalResources": "نشجعك على تصفح الموارد الإضافية في رحلة بحثك عن السكن"
 }

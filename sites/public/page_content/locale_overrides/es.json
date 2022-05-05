@@ -14,5 +14,8 @@
   "footer.pleaseContact": "Comuníquese con el agente inmobiliario que se muestra en cada listado.",
   "leasingAgent.contact": "Empresa de gestión",
   "leasingAgent.dueToHighCallVolume": "",
-  "listingFilters.resetButton": "Ver Todos los Listados"
+  "listingFilters.resetButton": "Ver Todos los Listados",
+  "pageDescription.resources": "El Departamento de Vivienda y Revitalización de la Ciudad de Detroit ha compilado una lista de recursos para ayudarlo a encontrar y mantener su vivienda. Al final de esta página, también encontrará cuatro videos breves donde podrá obtener más información sobre el proceso de solicitud de vivienda asequible.",
+  "pageDescription.additionalResources": "El Departamento de Vivienda y Revitalización de la ciudad de Detroit ha compilado una lista de recursos para ayudarle a encontrar y mantener su vivienda.",
+  "pageTitle.additionalResources": "Recursos de vivienda adicionales"
 }
