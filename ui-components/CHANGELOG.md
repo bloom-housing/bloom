@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.25...@bloom-housing/ui-components@4.2.2-alpha.26) (2022-05-05)
+
+
+### Bug Fixes
+
+* use appropriate copy for FCFS vs Lottery in Application Confirmation screen ([#2702](https://github.com/bloom-housing/bloom/issues/2702)) ([5289504](https://github.com/bloom-housing/bloom/commit/52895044cba64eeb7789c68f0a5eb957785055b5))
+
+
+
+
+
 ## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.24...@bloom-housing/ui-components@4.2.2-alpha.25) (2022-05-04)
 
 
