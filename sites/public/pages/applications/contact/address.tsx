@@ -18,7 +18,7 @@ import {
   AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
@@ -130,6 +130,11 @@ const ApplicationAddress = () => {
     })
   }, [profile])
 
+  const backUrl = useMemo(() => {
+    console.log("backUrl changed")
+    return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
+  }, [verifyAddress])
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -142,7 +147,7 @@ const ApplicationAddress = () => {
       </FormCard>
       <FormCard>
         <FormBackLink
-          url={verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()}
+          url={backUrl}
           onClick={
             verifyAddress ? () => setVerifyAddress(false) : () => conductor.setNavigatedBack(true)
           }
