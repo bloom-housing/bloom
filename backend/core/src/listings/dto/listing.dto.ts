@@ -314,6 +314,12 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(Region, { groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (value, obj: Listing) => {
+      return obj.property?.region
+    },
+    { toClassOnly: true }
+  )
   @ApiProperty({
     enum: Region,
     enumName: "Region",
