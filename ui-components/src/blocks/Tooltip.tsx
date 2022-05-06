@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import useKeyPress from "../helpers/useKeyPress"
 import "./Tooltip.scss"
 
@@ -28,6 +28,14 @@ const Tooltip = ({ className, id, text, children }: React.PropsWithChildren<Tool
   const hide = () => setPosition(null)
 
   useKeyPress("Escape", () => hide())
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => hide())
+
+    return () => {
+      window.removeEventListener("scroll", () => hide())
+    }
+  }, [])
 
   return (
     <div
