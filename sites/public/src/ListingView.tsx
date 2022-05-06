@@ -37,7 +37,6 @@ import {
 import {
   cloudinaryPdfFromId,
   imageUrlFromListing,
-  listingFeatures,
   occupancyTable,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -329,7 +328,7 @@ export const ListingView = (props: ListingProps) => {
     const features = Object.keys(listing?.features ?? {}).map((feature, index) => {
       if (listing?.features[feature]) {
         featuresExist = true
-        return <li key={index}>{listingFeatures[feature]}</li>
+        return <li key={index}>{t(`eligibility.accessibility.${feature}`)}</li>
       }
     })
     return featuresExist ? <ul>{features}</ul> : null

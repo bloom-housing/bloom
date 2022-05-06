@@ -13,7 +13,9 @@ const DetailBuildingFeatures = () => {
       if (listing?.features[feature]) {
         featuresExist = true
         return (
-          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>{listingFeatures[feature]}</li>
+          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+            {t(`eligibility.accessibility.${feature}`)}
+          </li>
         )
       }
     })

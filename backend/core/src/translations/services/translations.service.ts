@@ -81,6 +81,7 @@ export class TranslationsService extends AbstractServiceFactory<
       "requiredDocuments",
       "specialNotes",
       "whatToExpect",
+      "whatToExpectAdditionalText",
       "property.accessibility",
       "property.amenities",
       "property.neighborhood",

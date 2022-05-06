@@ -102,9 +102,9 @@ const FilterForm = (props: FilterFormProps) => {
     )
 
     setAccessibilityFeatureOptions(
-      Object.keys(listingFeatures).map((elem) => ({
+      listingFeatures.map((elem) => ({
         value: elem,
-        label: listingFeatures[elem],
+        label: t(`eligibility.accessibility.${elem}`),
       }))
     )
   }, [])
