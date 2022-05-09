@@ -32,12 +32,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper("t", function (
-      phrase: string,
-      options?: number | Polyglot.InterpolationOptions
-    ) {
-      return polyglot.t(phrase, options)
-    })
+    Handlebars.registerHelper(
+      "t",
+      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
+        return polyglot.t(phrase, options)
+      }
+    )
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
@@ -152,6 +152,7 @@ export class EmailService {
       jurisdiction.emailFromAddress,
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
+        subject: this.polyglot.t("confirmation.subject"),
         listing: listing,
         listingUrl: listingUrl,
         application: application,
@@ -226,6 +227,12 @@ export class EmailService {
 
     fs.readdirSync(dirName).forEach((filename) => {
       partials[filename.slice(0, -4)] = this.partial("partials/" + filename)
+    })
+
+    const layoutsDirName = path.resolve(__dirname, "..", "shared", "views/layouts")
+
+    fs.readdirSync(layoutsDirName).forEach((filename) => {
+      partials[`layout_${filename.slice(0, -4)}`] = this.partial("layouts/" + filename)
     })
 
     return partials

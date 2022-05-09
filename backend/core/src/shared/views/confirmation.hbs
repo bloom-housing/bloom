@@ -1,7 +1,78 @@
-<h2>{{t "t.hello"}} {{> user-name }},</h2>
-<p>{{t "confirmation.thankYouForApplying"}} <a href="{{listingUrl}}">{{listing.name}}</a></p>
-<p>{{t "confirmation.yourConfirmationNumber"}} {{application.confirmationCode}}</p>
-<p>{{t "confirmation.whatToExpectNext"}}<br/>{{whatToExpectText}}</p>
-<p>{{t "confirmation.shouldBeChosen"}}</p>
-{{> leasing-agent }}
-{{> footer }}
+{{#> layout_default }}
+  <h1><span class="intro">We got your application for</span> <br />/Listing Name/</h1>
+
+  <table class="inset" role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td>
+          <div class="inset">
+
+            <div class="align-center mb2">
+              <h2 class="mb0 mt1">Your Confirmation Number</h2>
+              <p class="number">/code/</p>
+            </div>
+
+            <table class="steps mb1" role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tbody>
+                <tr>
+                  <td class="step step-complete"><img src="steps/step-left-active.png" alt="indication of step completed" /></td>
+                  <td class="step"><img src="steps/step-center-default.png" alt="indication of step not completed" /></span></td>
+                  <td class="step"><img src="steps/step-right-default.png" alt="indication of step not completed" /></span></td>
+                </tr>
+                <tr>
+                  <td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received<span class="sr-only"> completed</span></span></td>
+                  <td class="step"><span class="step-label">Application <br />closed<span class="sr-only"> not completed</span></span></td>
+                  <td class="step"><span class="step-label">Application <br />ranked<span class="sr-only"> not completed</span></span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h2 class="mt3">What happens next?</h2>
+            <ul>
+            <li>Once the application period closes, the property manager will begin processing applications.</li>
+            <li>Eligible applicants will pe placed in order based on first come first serve basis.</li>
+            <li>If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.</li>
+            </ul>
+
+            <h2>Prepare for next steps</h2>
+            <p>While you wait, there are things you can do to prepare for potential next steps and future opportunities.</p>
+            <p>
+              <a
+                class="link"
+                href="#"
+                target="_blank"
+                >Read about how you can prepare for next steps
+              </a>
+
+            <h2>What happens next?</h2>
+            <p>If you need to update information on your application, do not apply again. Instead, contact the agent for this listing.</p>
+            <h3>Property Manager</h3>
+            <p>
+              {{listing.leasingAgentName}}<br />
+              {{listing.leasingAgentTitle}}<br />
+              {{listing.leasingAgentPhone}}<br />
+              {{listing.leasingAgentEmail}}<br />
+            </p>
+            <h3>Office Hours</h3>
+            <p>{{listing.leasingAgentOfficeHours}}</p>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td align="center">
+          <a
+            class="btn btn-primary"
+            href="#"
+            target="_blank"
+            >See Listing
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+{{/layout_default }}
