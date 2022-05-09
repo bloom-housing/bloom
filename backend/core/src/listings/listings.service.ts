@@ -93,7 +93,7 @@ export class ListingsService {
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
-    let innerFilteredQuery = this.listingRepository
+    const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
@@ -104,14 +104,14 @@ export class ListingsService {
 
     const orderByConditions = ListingsService.buildOrderByConditions(params)
     for (const orderByCondition of orderByConditions) {
-      innerFilteredQuery = innerFilteredQuery.addOrderBy(
+      innerFilteredQuery.addOrderBy(
         orderByCondition.key,
         orderByCondition.order,
         orderByCondition.nulls
       )
     }
 
-    innerFilteredQuery = innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
+    innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
