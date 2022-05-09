@@ -95,9 +95,10 @@ describe("EmailService", () => {
       translations: {
         confirmation: {
           gotYourConfirmationNumber: "We got your application for",
-
           yourConfirmationNumber: "Your Confirmation Number", // UPDATED
-
+          applicationReceived: 'Application <br />received<span class="sr-only"> completed</span>',
+          applicationsClosed: 'Application <br />closed<span class="sr-only"> not completed</span>',
+          applicationsRanked: 'Application <br />ranked<span class="sr-only"> not completed</span>',
           whatHappensNext: "What happens next?",
           applicationPeriodCloses:
             "Once the application period closes, the property manager will begin processing applications.",
@@ -212,6 +213,7 @@ describe("EmailService", () => {
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.to).toEqual(user.email)
       expect(emailMock.subject).toEqual("Your Application Confirmation")
+      console.info(emailMock.html)
       expect(emailMock.html).toMatch("Your Confirmation Number")
       expect(emailMock.html).toMatch("Marisela Baca")
       expect(emailMock.html).toMatch(
