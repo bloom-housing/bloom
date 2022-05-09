@@ -308,7 +308,7 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
             .map<React.ReactNode>((type) => (
               <strong key={type}>{t(`listings.unitTypes.${type}`)}</strong>
             ))
-            .reduce((acc, curr) => [acc, ", ", curr])}
+            .reduce((acc, curr) => [acc, ", ", curr], [])}
         </>
       ),
       rent: rent ?? t("listings.unitsSummary.notAvailable"),

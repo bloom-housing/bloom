@@ -33,9 +33,9 @@ const FilteredListingsPage = () => {
   // Filter state
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false)
 
-  function setQueryString(page: number, filters = filterState) {
+  function setQueryString(page: number, limit: number, filters = filterState) {
     void router.push(
-      `/listings/filtered?page=${page}${encodeToFrontendFilterString(filters)}`,
+      `/listings/filtered?page=${page}&limit=${limit}${encodeToFrontendFilterString(filters)}`,
       undefined,
       {
         shallow: true,
@@ -79,11 +79,11 @@ const FilteredListingsPage = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const onSubmit = (data: ListingFilterState) => {
+  const onSubmit = (page: number, limit: number, data: ListingFilterState) => {
     // hide status filter
     delete data[FrontendListingFilterStateKeys.status]
     setFilterModalVisible(false)
-    setQueryString(/*page=*/ 1, data)
+    setQueryString(page, limit, data)
   }
 
   let rentalsFoundTitle: string
@@ -109,7 +109,11 @@ const FilteredListingsPage = () => {
         onClose={() => setFilterModalVisible(false)}
         contentAreaClassName={"px-0 pt-0 pb-0 h-full"}
       >
-        <FilterForm onSubmit={onSubmit} filterState={filterState} onClose={setFilterModalVisible} />
+        <FilterForm
+          onSubmit={(data) => onSubmit(1, itemsPerPage, data)}
+          filterState={filterState}
+          onClose={setFilterModalVisible}
+        />
       </Drawer>
       <div className={"bg-gray-300"}>
         <h3 className="max-w-5xl container mx-auto text-3xl text-primary-darker font-bold px-4 pt-6 pb-4">
@@ -135,7 +139,7 @@ const FilteredListingsPage = () => {
               className={"ms-4"}
               size={AppearanceSizeType.normal}
               // "Submit" the form with no params to trigger a reset.
-              onClick={() => onSubmit({})}
+              onClick={() => onSubmit(1, itemsPerPage, {})}
               icon="closeSmall"
               iconPlacement="right"
               iconClass="pl-2 me-0"
@@ -168,8 +172,8 @@ const FilteredListingsPage = () => {
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 quantityLabel={t("listings.totalListings")}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
+                setCurrentPage={(page) => onSubmit(page, itemsPerPage, filterState)}
+                setItemsPerPage={(limit) => onSubmit(1, Number(limit), filterState)}
                 includeBorder={false}
                 matchListingCardWidth={true}
               />
