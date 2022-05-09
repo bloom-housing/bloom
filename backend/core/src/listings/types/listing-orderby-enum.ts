@@ -3,4 +3,7 @@ export enum OrderByFieldsEnum {
   applicationDates = "applicationDates",
   mostRecentlyClosed = "mostRecentlyClosed",
   comingSoon = "comingSoon",
+  name = "name",
+  status = "status",
+  verified = "verified",
 }

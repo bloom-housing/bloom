@@ -10,11 +10,15 @@ import {
   EnumPreferencesFilterParamsComparison,
   EnumProgramsFilterParamsComparison,
   EnumUserFilterParamsComparison,
+  OrderByFieldsEnum,
+  OrderDirEnum,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
   page?: number
   limit: number | "all"
+  orderBy?: OrderByFieldsEnum
+  orderDir?: OrderDirEnum
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
@@ -40,11 +44,19 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, listingIds }: UseListingsDataProps) {
+export function useListingsData({
+  page,
+  limit,
+  listingIds,
+  orderBy,
+  orderDir,
+}: UseListingsDataProps) {
   const params = {
     page,
     limit,
     view: "base",
+    orderBy,
+    orderDir: OrderDirEnum.ASC,
   }
 
   // filter if logged user is an agent
@@ -57,6 +69,10 @@ export function useListingsData({ page, limit, listingIds }: UseListingsDataProp
         },
       ],
     })
+  }
+
+  if (orderBy) {
+    Object.assign(params, { orderBy, orderDir })
   }
 
   const { listingsService } = useContext(AuthContext)

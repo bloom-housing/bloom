@@ -1250,6 +1250,8 @@ export class ListingsService {
       view?: string
       /**  */
       orderBy?: OrderByFieldsEnum
+      /**  */
+      orderDir?: OrderDirEnum
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1263,6 +1265,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
+        orderDir: params["orderDir"],
       }
       let data = null
 
@@ -7061,6 +7064,14 @@ export enum OrderByFieldsEnum {
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
   "comingSoon" = "comingSoon",
+  "name" = "name",
+  "status" = "status",
+  "verified" = "verified",
+}
+
+export enum OrderDirEnum {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
 }
 
 export enum ListingApplicationAddressType {

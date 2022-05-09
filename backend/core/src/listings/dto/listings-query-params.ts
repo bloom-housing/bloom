@@ -12,6 +12,7 @@ import {
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
+import { OrderDirEnum } from "../../shared/types/orderdir-enum"
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
@@ -52,4 +53,16 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })
   orderBy?: OrderByFieldsEnum
+
+  @Expose()
+  @ApiProperty({
+    name: "orderDir",
+    required: false,
+    enum: OrderDirEnum,
+    enumName: "OrderDirEnum",
+    example: "ASC",
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(OrderDirEnum, { groups: [ValidationsGroupsEnum.default] })
+  orderDir?: OrderDirEnum
 }

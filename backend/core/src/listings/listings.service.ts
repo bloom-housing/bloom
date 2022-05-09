@@ -317,17 +317,17 @@ export class ListingsService {
   private static addOrderByToQb(qb: SelectQueryBuilder<Listing>, params: ListingsQueryParams) {
     switch (params.orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
-        qb.orderBy({ "listings.updated_at": "DESC" })
+        qb.orderBy({ "listings.updated_at": params.orderDir ?? "DESC" })
         break
       case OrderByFieldsEnum.mostRecentlyClosed:
         qb.orderBy({
-          "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
+          "listings.closedAt": { order: params.orderDir ?? "DESC", nulls: "NULLS LAST" },
           "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
         })
         break
       case OrderByFieldsEnum.applicationDates:
         qb.orderBy({
-          "listings.applicationDueDate": "ASC",
+          "listings.applicationDueDate": params.orderDir ?? "ASC",
         })
         break
       case OrderByFieldsEnum.comingSoon:
@@ -339,11 +339,24 @@ export class ListingsService {
         )
         qb.addOrderBy("listings.updatedAt", "DESC")
         break
+      case OrderByFieldsEnum.status:
+        qb.orderBy({
+          "listings.status": params.orderDir ?? "ASC",
+          "listings.name": "ASC",
+        })
+        break
+      case OrderByFieldsEnum.verified:
+        qb.orderBy({
+          "listings.isVerified": params.orderDir ?? "ASC",
+          "listings.name": "ASC",
+        })
+        break
+      case OrderByFieldsEnum.name:
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
         // and applicationOpenDate) if no orderBy param is specified.
         qb.orderBy({
-          "listings.name": "ASC",
+          "listings.name": params.orderDir ?? "ASC",
         })
         break
       default:
