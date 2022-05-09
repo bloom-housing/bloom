@@ -25,9 +25,15 @@
   ul:not(:last-child) {
     @apply mb-4;
   }
-
   ul {
     list-style: disc;
     @apply ml-6;
+  }
+  ol {
+    list-style: inside;
+    list-style-type: decimal;
+  }
+  li:last-child {
+    @apply mb-4;
   }
 }

@@ -151,8 +151,8 @@ const Layout = (props) => {
           <Link href="/privacy">
             <a>{t("pageTitle.privacy")}</a>
           </Link>
-          <Link href="/disclaimer">
-            <a>{t("pageTitle.disclaimer")}</a>
+          <Link href="/terms">
+            <a>{t("pageTitle.terms")}</a>
           </Link>
         </FooterNav>
         <FooterSection className="bg-black" small>

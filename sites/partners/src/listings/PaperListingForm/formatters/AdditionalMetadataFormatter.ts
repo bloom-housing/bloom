@@ -45,7 +45,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe
 
-    this.data.features = Object.keys(listingFeatures).reduce((acc, current) => {
+    this.data.features = listingFeatures.reduce((acc, current) => {
       return {
         ...acc,
         [current]: this.data.listingFeatures && this.data.listingFeatures.indexOf(current) >= 0,

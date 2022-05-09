@@ -238,20 +238,20 @@ export const preferredUnit = [
 
 export const bedroomKeys = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
 
-export const listingFeatures = {
-  elevator: "Elevator",
-  wheelchairRamp: "Wheelchair Ramp",
-  serviceAnimalsAllowed: "Service Animals Allowed",
-  accessibleParking: "Accessible Parking",
-  parkingOnSite: "Parking on Site",
-  inUnitWasherDryer: "In Unit Washer Dryer",
-  laundryInBuilding: "Laundry in Building",
-  barrierFreeEntrance: "Barrier Free Entrance",
-  rollInShower: "Laundry in Building",
-  grabBars: "Grab Bars",
-  heatingInUnit: "Heating in Unit",
-  acInUnit: "AC in Unit",
-  hearing: "Hearing",
-  mobility: "Mobility",
-  visual: "Visual",
-}
+export const listingFeatures = [
+  "wheelchairRamp",
+  "elevator",
+  "serviceAnimalsAllowed",
+  "accessibleParking",
+  "parkingOnSite",
+  "inUnitWasherDryer",
+  "laundryInBuilding",
+  "barrierFreeEntrance",
+  "rollInShower",
+  "grabBars",
+  "heatingInUnit",
+  "acInUnit",
+  "hearing",
+  "mobility",
+  "visual",
+]

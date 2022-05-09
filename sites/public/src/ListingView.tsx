@@ -37,7 +37,6 @@ import {
 import {
   cloudinaryPdfFromId,
   imageUrlFromListing,
-  listingFeatures,
   occupancyTable,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -329,7 +328,7 @@ export const ListingView = (props: ListingProps) => {
     const features = Object.keys(listing?.features ?? {}).map((feature, index) => {
       if (listing?.features[feature]) {
         featuresExist = true
-        return <li key={index}>{listingFeatures[feature]}</li>
+        return <li key={index}>{t(`eligibility.accessibility.${feature}`)}</li>
       }
     })
     return featuresExist ? <ul>{features}</ul> : null
@@ -379,10 +378,7 @@ export const ListingView = (props: ListingProps) => {
               />
               {hmiData.length > 0 && (
                 <div className="text-sm leading-5 mt-4 invisible md:visible">
-                  {t("listings.unitSummaryGroupMessage")}{" "}
-                  <a className="underline" href="#household_maximum_income_summary">
-                    {t("listings.unitSummaryGroupLinkText")}
-                  </a>
+                  {t("listings.unitSummaryGroupMessage")}
                 </div>
               )}
             </>

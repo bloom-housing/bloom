@@ -1,28 +1,21 @@
 {
-  "welcome": {
-    "title": "Detroit এ সাশ্রয়ী মূল্যের ভাড়া আবাসন খুঁজুন",
-    "heroText": "Detroit Home Connect হল আপনার জন্য আবাসন খোঁজার জায়গা যা আপনি আপনার পরিবারের প্রয়োজনের ভিত্তিতে সামর্থ্য করতে পারেন।"
-  },
-  "nav": {
-    "siteTitle": "ডেট্রয়েট হোম কানেক্ট"
-  },
-  "region": {
-    "name": "ডেট্রয়েট"
-  },
-  "footer": {
-    "copyright": "ডেট্রয়েট শহর © 2021 • সর্বস্বত্ব সংরক্ষিত",
-    "header": "ডেট্রয়েট হোম সংযোগ",
-    "headerLink": "ডেট্রয়েট শহর",
-    "forGeneralInquiries": "সাধারণ প্রোগ্রাম অনুসন্ধানের জন্য:",
-    "youMayCall": "আপনি ডেট্রয়েট এইচআরডি সিটিতে কল করতে পারেন:",
-    "forListingQuestions": "তালিকা এবং অ্যাপ্লিকেশন প্রশ্নের জন্য:",
-    "pleaseContact": "প্রতিটি তালিকায় প্রদর্শিত সম্পত্তি এজেন্টের সাথে যোগাযোগ করুন।"
-  },
-  "leasingAgent": {
-    "contact": "ব্যবস্থাপনা কোম্পানি",
-    "dueToHighCallVolume": ""
-  },
-  "listingFilters": {
-    "resetButton": "সমস্ত তালিকা দেখুন"
-  }
+  "welcome.title": "Detroit এ সাশ্রয়ী মূল্যের ভাড়া আবাসন খুঁজুন",
+  "welcome.heroText": "আপনার আয় এবং পরিবারের চাহিদার উপর ভিত্তি করে একাধিক-পারিবারিক আবাসন অনুসন্ধানের লক্ষ্যে আপনার সম্পদ",
+  "welcome.seeMoreOpportunitiesTruncated": "আরও সাশ্রয়ী মূল্যের আবাসন দেখুন",
+  "welcome.viewAdditionalHousingTruncated": "সম্পদ দেখুন",
+  "nav.siteTitle": "ডেট্রয়েট হোম কানেক্ট",
+  "region.name": "ডেট্রয়েট",
+  "footer.copyright": "ডেট্রয়েট শহর © 2021 • সর্বস্বত্ব সংরক্ষিত",
+  "footer.header": "ডেট্রয়েট হোম সংযোগ",
+  "footer.headerLink": "ডেট্রয়েট সিটি",
+  "footer.forGeneralInquiries": "সাধারণ প্রোগ্রাম অনুসন্ধানের জন্য:",
+  "footer.youMayCall": "আপনি ডেট্রয়েট এইচআরডি সিটিতে কল করতে পারেন:",
+  "footer.forListingQuestions": "তালিকা এবং অ্যাপ্লিকেশন প্রশ্নের জন্য:",
+  "footer.pleaseContact": "প্রতিটি তালিকায় প্রদর্শিত সম্পত্তি এজেন্টের সাথে যোগাযোগ করুন।",
+  "leasingAgent.contact": "ব্যবস্থাপনা কোম্পানি",
+  "leasingAgent.dueToHighCallVolume": "",
+  "listingFilters.resetButton": "সমস্ত তালিকা দেখুন",
+  "pageTitle.additionalResources": "অতিরিক্ত আবাসন সম্পদ",
+  "pageDescription.resources": "সিটি অফ ডেট্রয়েট হাউজিং অ্যান্ড রিভাইটালাইজেশন ডিপার্টমেন্ট আপনাকে আপনার আবাসন খুঁজে পেতে এবং বজায় রাখতে সহায়তা করার জন্য সংস্থানগুলির একটি তালিকা তৈরি করেছে। এই পৃষ্ঠার শেষে, আপনি চারটি ছোট ভিডিওও পাবেন যেখানে আপনি সাশ্রয়ী মূল্যের আবাসনের জন্য আবেদন প্রক্রিয়া সম্পর্কে আরও জানতে পারবেন।",
+  "pageDescription.additionalResources": "আমরা আপনাকে আবাসনের জন্য আপনার অনুসন্ধানে অতিরিক্ত সম্পদ ব্রাউজ করতে উৎসাহিত করি"
 }

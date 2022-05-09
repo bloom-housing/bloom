@@ -570,12 +570,6 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   phoneNumber?: string | null
 
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  region?: string | null
-
   @OneToMany(() => UnitGroup, (summary) => summary.listing, {
     nullable: true,
     eager: true,

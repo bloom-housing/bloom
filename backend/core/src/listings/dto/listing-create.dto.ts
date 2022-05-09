@@ -45,6 +45,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "householdSizeMax",
   "householdSizeMin",
   "neighborhood",
+  "region",
   "petPolicy",
   "smokingPolicy",
   "unitsAvailable",
@@ -165,6 +166,11 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   neighborhood?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  region?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

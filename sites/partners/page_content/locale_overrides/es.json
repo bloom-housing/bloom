@@ -1,11 +1,7 @@
 {
-  "nav": {
-    "siteTitlePartners": "Portal de socios de Detroit"
-  },
-  "footer": {
-    "copyright": "Ciudad de Detroit © 2021 • Todos los derechos reservados",
-    "header": "Detroit Home Connect es un proyecto del",
-    "headerUrl": "https://detroitmi.gov/departments/housing-and-revitalization-department",
-    "headerLink": "Ciudad de Detroit - Departamento de Vivienda y Revitalización"
-  }
+  "nav.siteTitlePartners": "Portal de socios de Detroit",
+  "footer.copyright": "Ciudad de Detroit © 2022 • Todos los derechos reservados",
+  "footer.header": "Detroit Home Connect es un proyecto del",
+  "footer.headerUrl": "https://detroitmi.gov/departments/housing-and-revitalization-department",
+  "footer.headerLink": "Ciudad de Detroit"
 }

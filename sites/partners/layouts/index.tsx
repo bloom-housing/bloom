@@ -79,8 +79,8 @@ const Layout = (props) => {
             <LocalizedLink href={`${process.env.publicBaseUrl}/privacy`}>
               {t("pageTitle.privacy")}
             </LocalizedLink>{" "}
-            <LocalizedLink href={`${process.env.publicBaseUrl}/disclaimer`}>
-              {t("pageTitle.disclaimer")}
+            <LocalizedLink href={`${process.env.publicBaseUrl}/terms`}>
+              {t("pageTitle.terms")}
             </LocalizedLink>
           </FooterNav>
         </SiteFooter>

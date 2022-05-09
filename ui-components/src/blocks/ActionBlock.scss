@@ -100,9 +100,9 @@
     }
   }
   .action-block__header {
-    @apply ml-6;
+    @apply ms-6;
     @media (max-width: 640px) {
-      @apply ml-0;
+      @apply ms-0;
     }
   }
 }

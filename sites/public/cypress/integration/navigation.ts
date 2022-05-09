@@ -14,21 +14,21 @@ describe("Navigating around the site", () => {
   })
 
   it("Loads a non-listing-related page directly", () => {
-    cy.visit("/disclaimer")
+    cy.visit("/terms")
 
-    // Check that the Disclaimer page banner text is present on the page
-    cy.contains("Endorsement Disclaimers")
+    // Check that the Terms page banner text is present on the page
+    cy.contains("Terms and Conditions")
   })
 
   it("Can navigate to all page types after initial site load", () => {
     cy.visit("/")
 
-    // Click on the Disclaimer page link in the footer
-    cy.get("footer a").contains("Disclaimer").click()
+    // Click on the Terms page link in the footer
+    cy.get("footer a").contains("Terms and Conditions").click()
 
-    // Should be on the disclaimer page
-    cy.location("pathname").should("equal", "/disclaimer")
-    cy.contains("Endorsement Disclaimers")
+    // Should be on the terms page
+    cy.location("pathname").should("equal", "/terms")
+    cy.contains("Terms and Conditions")
 
     // Click on the listings page link in the header nav
     cy.get(".navbar").contains("Sign in").click()

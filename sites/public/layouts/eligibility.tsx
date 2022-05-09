@@ -29,7 +29,7 @@ export interface EligibilityLayoutProps {
 const EligibilityLayout = (props: EligibilityLayoutProps) => {
   const router = useRouter()
   const { eligibilityRequirements } = useContext(EligibilityContext)
-
+  const clientLoaded = OnClientSide()
   const handleSubmit = props.formMethods.handleSubmit
 
   const onBack = async (data) => {

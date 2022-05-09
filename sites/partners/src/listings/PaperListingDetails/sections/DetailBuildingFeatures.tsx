@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
@@ -13,7 +12,9 @@ const DetailBuildingFeatures = () => {
       if (listing?.features[feature]) {
         featuresExist = true
         return (
-          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>{listingFeatures[feature]}</li>
+          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+            {t(`eligibility.accessibility.${feature}`)}
+          </li>
         )
       }
     })

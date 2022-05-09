@@ -97,7 +97,7 @@ const ListingCard = (props: ListingCardProps) => {
               return (
                 <Tag
                   styleType={AppearanceStyleType.accentLight}
-                  className={"mr-2 mb-2 font-bold px-3 py-2"}
+                  className={"me-2 mb-2 font-bold px-3 py-2"}
                   key={index}
                 >
                   {cardTag.iconType && (
@@ -105,7 +105,7 @@ const ListingCard = (props: ListingCardProps) => {
                       size={"medium"}
                       symbol={cardTag.iconType}
                       fill={cardTag.iconColor ?? IconFillColors.primary}
-                      className={"mr-2"}
+                      className={"me-2"}
                     />
                   )}
                   {cardTag.text}

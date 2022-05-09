@@ -5,7 +5,6 @@ const Resource = ({ children }) => (
   <div className="info-card markdown">
     <Markdown
       options={{
-        disableParsingRawHTML: true,
         overrides: {
           RenderIf,
           a: {

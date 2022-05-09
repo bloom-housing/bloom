@@ -33,6 +33,10 @@ import landBankAuthority from "../page_content/resources/land_bank_authority.md"
 import projectCleanSlate from "../page_content/resources/project_clean_slate.md"
 import civilRightsInclusionOpportunity from "../page_content/resources/civil_rights_inclusion_opportunity.md"
 import housingRelocationAssistance from "../page_content/resources/housing_relocation_assistance.md"
+import videoAffordableHousing from "../page_content/resources/video_affordable_housing.md"
+import videoIncomeRestrictions from "../page_content/resources/video_income_restrictions.md"
+import videoHousingApplication from "../page_content/resources/video_housing_application.md"
+import videoHousingWaitlists from "../page_content/resources/video_housing_waitlists.md"
 import sidebarContent from "../page_content/resources/sidebar.md"
 
 const AdditionalResources = () => {
@@ -64,8 +68,8 @@ const AdditionalResources = () => {
           <div className="pt-4 md:w-8/12 md:py-0 serif-paragraphs">
             <MarkdownSection>
               <InfoCardGrid
-                title="Resources"
-                subtitle="The City of Detroit Housing and Revitalization Department has compiled a list of resources to help you find and maintain your housing."
+                title={t("pageTitle.resources")}
+                subtitle={t("pageDescription.resources")}
               >
                 <Resource>{housingAndRevitalization}</Resource>
                 <Resource>{enforcePropertyConditions}</Resource>
@@ -85,6 +89,10 @@ const AdditionalResources = () => {
                 <Resource>{projectCleanSlate}</Resource>
                 <Resource>{civilRightsInclusionOpportunity}</Resource>
                 <Resource>{housingRelocationAssistance}</Resource>
+                <Resource>{videoAffordableHousing}</Resource>
+                <Resource>{videoIncomeRestrictions}</Resource>
+                <Resource>{videoHousingApplication}</Resource>
+                <Resource>{videoHousingWaitlists}</Resource>
               </InfoCardGrid>
             </MarkdownSection>
           </div>
