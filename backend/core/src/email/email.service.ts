@@ -119,7 +119,7 @@ export class EmailService {
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
     const jurisdiction = await this.getListingJurisdiction(listing)
     void (await this.loadTranslations(jurisdiction, application.language || Language.en))
-    let whatToExpectText
+    let eligibleApplicantsText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
@@ -129,18 +129,17 @@ export class EmailService {
       )
     }
 
-    if (listing.applicationDueDate) {
-      if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
+    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
+      eligibleApplicantsText = new Handlebars.SafeString(
+        this.polyglot.t("confirmation.eligibleApplicants.lottery", {
           lotteryDate: listing.applicationDueDate,
         })
-      } else {
-        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.noLottery", {
-          lotteryDate: listing.applicationDueDate,
-        })
-      }
+      )
     } else {
-      whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
+      // for when listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe
+      eligibleApplicantsText = new Handlebars.SafeString(
+        this.polyglot.t("confirmation.eligibleApplicants.FCFS")
+      )
     }
     const user = {
       firstName: application.applicant.firstName,
@@ -153,11 +152,14 @@ export class EmailService {
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
         subject: this.polyglot.t("confirmation.subject"),
-        listing: listing,
-        listingUrl: listingUrl,
-        application: application,
-        whatToExpectText: whatToExpectText,
-        user: user,
+        logoUrl:
+          "https://uploads-ssl.webflow.com/5fbfdd121e108ea418ede824/5fe4ca6204bf076f91493e3e_Rectangle%20143%20(1).jpg",
+        listing,
+        listingUrl,
+        application,
+        eligibleApplicantsText,
+        nextStepsUrl: "https://bloom.exygy.dev",
+        user,
       })
     )
   }

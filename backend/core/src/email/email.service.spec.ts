@@ -94,7 +94,28 @@ describe("EmailService", () => {
       language: Language.en,
       translations: {
         confirmation: {
-          yourConfirmationNumber: "Here is your confirmation number:",
+          gotYourConfirmationNumber: "We got your application for",
+
+          yourConfirmationNumber: "Your Confirmation Number", // UPDATED
+
+          whatHappensNext: "What happens next?",
+          applicationPeriodCloses:
+            "Once the application period closes, the property manager will begin processing applications.",
+          eligibleApplicants: {
+            FCFS:
+              "Eligible applicants will be placed in order based on <strong>first come first serve</strong> basis.",
+            lottery:
+              "The lottery will be held on %{lotteryDate}. Eligible applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
+          },
+          contactedForAnInterview:
+            "If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.",
+          prepareForNextSteps: "Prepare for next steps",
+          whileYouWait:
+            "While you wait, there are things you can do to prepare for potential next steps and future opportunities.",
+          readHowYouCanPrepare: "Read about how you can prepare for next steps",
+          needToMakeUpdates: "Need to make updates?",
+          ifYouNeedToUpdateInformation: "",
+
           shouldBeChosen:
             "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
           subject: "Your Application Confirmation",
@@ -115,6 +136,8 @@ describe("EmailService", () => {
             "https://docs.google.com/forms/d/e/1FAIpQLScr7JuVwiNW8q-ifFUWTFSWqEyV5ndA08jAhJQSlQ4ETrnl9w/viewform",
           feedback: "feedback",
           footer: "Alameda County - Housing and Community Development (HCD) Department",
+          line1: "Alameda County Housing Portal is a project of the",
+          line2: "Alameda County - Housing and Community Development (HCD) Department",
           thankYou: "Thank you",
         },
         forgotPassword: {
@@ -130,7 +153,8 @@ describe("EmailService", () => {
         },
         leasingAgent: {
           contactAgentToUpdateInfo:
-            "If you need to update information on your application, do not apply again. Contact the agent. See below for contact information for the Agent for this listing.",
+            "If you need to update information on your application, do not apply again. Instead, contact the agent for this listing.", // UPDATED"
+          propertyManager: "Property Manager",
           officeHours: "Office Hours:",
         },
         register: {
@@ -143,6 +167,7 @@ describe("EmailService", () => {
         },
         t: {
           hello: "Hello",
+          seeListing: "See Listing",
         },
       },
     })
@@ -182,17 +207,19 @@ describe("EmailService", () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       await service.confirmation(listing, application, "http://localhost:3000")
+
       expect(sendMock).toHaveBeenCalled()
-      expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
-      expect(sendMock.mock.calls[0][0].subject).toEqual("Your Application Confirmation")
-      expect(sendMock.mock.calls[0][0].html).toMatch(
-        /Applicants will be contacted by the agent in waitlist order until vacancies are filled/
+      const emailMock = sendMock.mock.calls[0][0]
+      expect(emailMock.to).toEqual(user.email)
+      expect(emailMock.subject).toEqual("Your Application Confirmation")
+      expect(emailMock.html).toMatch("Your Confirmation Number")
+      expect(emailMock.html).toMatch("Marisela Baca")
+      expect(emailMock.html).toMatch(
+        /Eligible applicants will be placed in order based on \<strong\>first come first serve\<\/strong\> basis./
       )
-      expect(sendMock.mock.calls[0][0].html).toMatch(
-        /http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/
-      )
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
       // contains application id
-      expect(sendMock.mock.calls[0][0].html).toMatch(/abc123/)
+      expect(emailMock.html).toMatch(/abc123/)
     })
   })
 

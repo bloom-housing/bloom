@@ -1,5 +1,5 @@
 {{#> layout_default }}
-  <h1><span class="intro">We got your application for</span> <br />/Listing Name/</h1>
+  <h1><span class="intro">{{t "confirmation.gotYourConfirmationNumber"}}</span> <br />{{listingUrl}}</h1>
 
   <table class="inset" role="presentation" border="0" cellpadding="0" cellspacing="0">
     <tbody>
@@ -8,8 +8,8 @@
           <div class="inset">
 
             <div class="align-center mb2">
-              <h2 class="mb0 mt1">Your Confirmation Number</h2>
-              <p class="number">/code/</p>
+              <h2 class="mb0 mt1">{{t "confirmation.yourConfirmationNumber"}}</h2>
+              <p class="number">{{application.confirmationCode}}</p>
             </div>
 
             <table class="steps mb1" role="presentation" border="0" cellpadding="0" cellspacing="0">
@@ -27,33 +27,33 @@
               </tbody>
             </table>
 
-            <h2 class="mt3">What happens next?</h2>
+            <h2 class="mt3">{{t "confirmation.whatHappensNext"}}</h2>
             <ul>
-            <li>Once the application period closes, the property manager will begin processing applications.</li>
-            <li>Eligible applicants will pe placed in order based on first come first serve basis.</li>
-            <li>If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.</li>
+            <li>{{t "confirmation.applicationPeriodCloses"}}</li>
+            <li>{{eligibleApplicantsText}}</li>
+            <li>{{t "confirmation.contactedForAnInterview"}}</li>
             </ul>
 
-            <h2>Prepare for next steps</h2>
-            <p>While you wait, there are things you can do to prepare for potential next steps and future opportunities.</p>
+            <h2>{{t "confirmation.prepareForNextSteps"}}</h2>
+            <p>{{t "confirmation.whileYouWait"}}</p>
             <p>
               <a
                 class="link"
-                href="#"
+                href="{{nextStepsUrl}}"
                 target="_blank"
-                >Read about how you can prepare for next steps
+                >{{t "confirmation.readHowYouCanPrepare"}}
               </a>
 
-            <h2>What happens next?</h2>
-            <p>If you need to update information on your application, do not apply again. Instead, contact the agent for this listing.</p>
-            <h3>Property Manager</h3>
+            <h2>{{t "confirmation.needToMakeUpdates"}}</h2>
+            <p>{{t "leasingAgent.contactAgentToUpdateInfo"}}</p>
+            <h3>{{t "leasingAgent.propertyManager"}}</h3>
             <p>
               {{listing.leasingAgentName}}<br />
               {{listing.leasingAgentTitle}}<br />
               {{listing.leasingAgentPhone}}<br />
               {{listing.leasingAgentEmail}}<br />
             </p>
-            <h3>Office Hours</h3>
+            <h3>{{t "leasingAgent.officeHours"}}</h3>
             <p>{{listing.leasingAgentOfficeHours}}</p>
           </div>
         </td>
@@ -67,9 +67,9 @@
         <td align="center">
           <a
             class="btn btn-primary"
-            href="#"
+            href="{{listingUrl}}"
             target="_blank"
-            >See Listing
+            >{{t "t.seeListing"}}
           </a>
         </td>
       </tr>
