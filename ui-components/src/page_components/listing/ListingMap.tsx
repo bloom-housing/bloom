@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
 
 import "./ListingMap.scss"
-import { MultiLineAddress, Address } from "../../helpers/address"
+import { MultiLineAddress, Address } from "../../helpers/MultiLineAddress"
 import { useIntersect } from "../../.."
+import { Heading } from "../../headers/Heading"
 
 export interface ListingMapProps {
   address?: Address
@@ -107,7 +108,11 @@ const ListingMap = (props: ListingMapProps) => {
   return (
     <div className="listing-map" ref={setIntersectingElement}>
       <div className="addressPopup">
-        {props.listingName && <h3 className="text-caps-tiny">{props.listingName}</h3>}
+        {props.listingName && (
+          <Heading priority={3} style={"sidebarSubHeader"}>
+            {props.listingName}
+          </Heading>
+        )}
         <MultiLineAddress address={props.address} />
       </div>
       {(process.env.mapBoxToken || process.env.MAPBOX_TOKEN) && hasIntersected && (

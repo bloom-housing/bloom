@@ -19,7 +19,6 @@ import { HouseholdMember } from "../../src/applications/entities/household-membe
 import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { UserDto } from "../../src/auth/dto/user.dto"
-import { UserService } from "../../src/auth/services/user.service"
 import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import { EmailService } from "../../src/email/email.service"

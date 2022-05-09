@@ -3,6 +3,90 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.25...@bloom-housing/ui-components@4.2.2-alpha.26) (2022-05-05)
+
+
+### Bug Fixes
+
+* use appropriate copy for FCFS vs Lottery in Application Confirmation screen ([#2702](https://github.com/bloom-housing/bloom/issues/2702)) ([5289504](https://github.com/bloom-housing/bloom/commit/52895044cba64eeb7789c68f0a5eb957785055b5))
+
+
+
+
+
+## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.24...@bloom-housing/ui-components@4.2.2-alpha.25) (2022-05-04)
+
+
+### Bug Fixes
+
+* footer alignment issue with overflowing links ([#2713](https://github.com/bloom-housing/bloom/issues/2713)) ([b87be1d](https://github.com/bloom-housing/bloom/commit/b87be1da10d59df2616f5df51629a8201baa6f86))
+
+
+
+
+
+## [4.2.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.23...@bloom-housing/ui-components@4.2.2-alpha.24) (2022-05-04)
+
+
+### Code Refactoring
+
+* remove backend dependencies from sidebar application components ([#2675](https://github.com/bloom-housing/bloom/issues/2675)) ([d2ebf87](https://github.com/bloom-housing/bloom/commit/d2ebf87c34af3f5b6168fa4e08663fea0a4a872c))
+
+
+### BREAKING CHANGES
+
+* the LeasingAgent component has been renamed to Contact with a new generalized prop set, the SidebarAddress component has been renamed to ContactAddress with a new generalized prop set
+
+
+
+
+
+## [4.2.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.22...@bloom-housing/ui-components@4.2.2-alpha.23) (2022-05-04)
+
+
+### Code Refactoring
+
+* remove business logic, strings from waitlist component ([#2689](https://github.com/bloom-housing/bloom/issues/2689)) ([a5721db](https://github.com/bloom-housing/bloom/commit/a5721db518453ddbd777e50ca92fdeac19997aa9))
+
+
+### BREAKING CHANGES
+
+* the Waitlist component was renamed to QuantityRowSection which also has a new prop set to account for a flexible number of rows and strings
+
+
+
+
+
+## [4.2.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.21...@bloom-housing/ui-components@4.2.2-alpha.22) (2022-05-03)
+
+
+### Features
+
+* **backend:** improve ami chart dto definitions ([#2677](https://github.com/bloom-housing/bloom/issues/2677)) ([ca3890e](https://github.com/bloom-housing/bloom/commit/ca3890e2759f230824e31e6bd985300f40b0a0ed))
+
+
+
+
+
+## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.20...@bloom-housing/ui-components@4.2.2-alpha.21) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.19...@bloom-housing/ui-components@4.2.2-alpha.20) (2022-04-29)
+
+
+### Bug Fixes
+
+* ux updates for new listing card design ([#2687](https://github.com/bloom-housing/bloom/issues/2687)) ([c8814ae](https://github.com/bloom-housing/bloom/commit/c8814ae57b62fa6f932017bb70d47663b09fca1a))
+
+
+
+
+
 ## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.18...@bloom-housing/ui-components@4.2.2-alpha.19) (2022-04-28)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
