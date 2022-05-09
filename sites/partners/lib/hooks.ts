@@ -12,9 +12,14 @@ import {
   EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
-interface PaginationProps {
+export interface PaginationProps {
   page?: number
   limit: number | "all"
+}
+
+export interface ColumnOrder {
+  orderBy: string
+  order: string
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
@@ -25,6 +30,7 @@ type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
   userId?: string
+  sort: ColumnOrder[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -40,10 +46,12 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+export function useListingsData({ page, limit, userId, sort }: UseListingsDataProps) {
   const params = {
     page,
     limit,
+    orderBy: sort.filter((item) => item.orderBy).map((item) => item.orderBy),
+    order: sort.filter((item) => item.order).map((item) => item.order),
   }
 
   // filter if logged user is an agent
@@ -60,9 +68,11 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
   }
 
   const { listingsService } = useContext(AuthContext)
+
   const fetcher = () => listingsService.list(params)
 
   const paramsString = qs.stringify(params)
+
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
 
   return {
