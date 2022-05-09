@@ -46,8 +46,8 @@
     }
 
     select.input {
-      @apply pl-3;
-      @apply pr-8;
+      @apply ps-3;
+      @apply pe-8;
     }
 
     input.input {
@@ -64,11 +64,11 @@
     }
 
     .prepend + input[aria-invalid="false"] {
-      @apply pl-8;
+      @apply ps-8;
     }
 
     .prepend + input[aria-invalid="true"] {
-      @apply pl-12;
+      @apply pe-12;
     }
 
     &.control-narrower {
@@ -252,7 +252,7 @@ input[type="number"] {
   @apply flex;
 
   .field {
-    @apply mr-5;
+    @apply me-5;
     @apply mb-0;
   }
 }

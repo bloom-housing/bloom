@@ -132,13 +132,13 @@ const FilteredListingsPage = () => {
           </Button>
           {numberOfFilters > 0 && (
             <Button
-              className={"ml-4"}
+              className={"ms-4"}
               size={AppearanceSizeType.normal}
               // "Submit" the form with no params to trigger a reset.
               onClick={() => onSubmit({})}
               icon="closeSmall"
               iconPlacement="right"
-              iconClass="pl-2 mr-0"
+              iconClass="pl-2 me-0"
             >
               {t("listingFilters.resetButton")}
             </Button>

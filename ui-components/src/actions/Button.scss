@@ -87,24 +87,24 @@
 
     &.has-icon-left {
       .button__icon {
-        @apply mr-1;
+        @apply me-1;
       }
     }
     &.has-icon-right {
       .button__icon {
-        @apply ml-1;
+        @apply ms-1;
       }
     }
   }
 
   &.has-icon-left {
     .button__icon {
-      @apply mr-3;
+      @apply me-3;
     }
   }
   &.has-icon-right {
     .button__icon {
-      @apply ml-3;
+      @apply ms-3;
     }
   }
 

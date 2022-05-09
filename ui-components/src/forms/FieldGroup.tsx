@@ -57,7 +57,7 @@ const FieldGroup = ({
   // Always align two-option radio groups side by side
   if (fields?.length === 2) {
     fieldGroupClassName = `${fieldGroupClassName} flex`
-    fieldClassName = `${fieldClassName} flex-initial mr-4`
+    fieldClassName = `${fieldClassName} flex-initial me-4`
   }
 
   const [checkedInputs, setCheckedInputs] = useState<string[]>([])

@@ -345,7 +345,7 @@ const FilterForm = (props: FilterFormProps) => {
             <Button
               type="submit"
               styleType={AppearanceStyleType.primary}
-              className={"border-primary-darker bg-primary-darker mr-3 hover:text-white"}
+              className={"border-primary-darker bg-primary-darker me-3 hover:text-white"}
             >
               {t("t.done")}
             </Button>

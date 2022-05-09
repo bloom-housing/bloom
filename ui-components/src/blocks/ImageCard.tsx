@@ -73,14 +73,14 @@ const ImageCard = (props: ImageCardProps) => {
             <Tag
               tabIndex={0}
               styleType={tag.styleType ?? AppearanceStyleType.accentLight}
-              className={"mt-3 mr-2 ml-2 px-3 py-2"}
+              className={"mt-3 me-2 ms-2 px-3 py-2"}
             >
               {tag.iconType && (
                 <Icon
                   size={"medium"}
                   symbol={tag.iconType}
                   fill={tag.iconColor ?? IconFillColors.primary}
-                  className={"mr-2"}
+                  className={"me-2"}
                 />
               )}
               {tag.text}
