@@ -1,7 +1,14 @@
 import { PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { Expose, Type } from "class-transformer"
 import { ApiProperty, getSchemaPath } from "@nestjs/swagger"
-import { ArrayMaxSize, IsArray, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator"
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsOptional,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserFilterParams } from "./user-filter-params"
 import { IsLength } from "../../shared/decorators/isLength.decorator"

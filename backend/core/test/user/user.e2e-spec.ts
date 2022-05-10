@@ -998,13 +998,13 @@ describe("Applications", () => {
     const userRepository = await app.resolve<UserRepository>(UserRepository)
     const user = await userRepository.findByEmail(searchableEmailAddress)
 
-    user.leasingAgentInListings = [{id: listing.id} as Listing]
+    user.leasingAgentInListings = [{ id: listing.id } as Listing]
     await userRepository.save(user)
 
     res = await supertest(app.getHttpServer())
       .get(`/user/list?search=${listing.name}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
-    expect(res.body.items.map(item =>  item.email).includes(searchableEmailAddress)).toBe(true)
+    expect(res.body.items.map((item) => item.email).includes(searchableEmailAddress)).toBe(true)
   })
 })

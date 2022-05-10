@@ -106,11 +106,16 @@ export class UserService {
     if (params.search) {
       distinctIDQB.andWhere(
         new Brackets((subQb) => {
-          subQb.where("user.firstName ILIKE :search", {search: `%${params.search}%`})
-          subQb.orWhere("user.lastName ILIKE :search", {search: `%${params.search}%`})
-          subQb.orWhere("user.email ILIKE :search", {search: `%${params.search}%`})
-          subQb.orWhere("leasingAgentInListings.name ILIKE :search", {search: `%${params.search}%`})
-          subQb.orWhere("CONCAT(user.firstName, ' ', user.lastName, ' ', user.email, ' ', leasingAgentInListings.name) ILIKE :search", {search: `%${params.search}%`})
+          subQb.where("user.firstName ILIKE :search", { search: `%${params.search}%` })
+          subQb.orWhere("user.lastName ILIKE :search", { search: `%${params.search}%` })
+          subQb.orWhere("user.email ILIKE :search", { search: `%${params.search}%` })
+          subQb.orWhere("leasingAgentInListings.name ILIKE :search", {
+            search: `%${params.search}%`,
+          })
+          subQb.orWhere(
+            "CONCAT(user.firstName, ' ', user.lastName, ' ', user.email, ' ', leasingAgentInListings.name) ILIKE :search",
+            { search: `%${params.search}%` }
+          )
         })
       )
     }
