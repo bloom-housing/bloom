@@ -12,7 +12,7 @@
 
 <RenderIf language="ar">
 
-### [Detroit Home Connect: Understanding Income Restrictions](https://www.youtube.com/watch?v=jknVMnyXEW8&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=2&ab_channel=CityofDetroit)
+### [Detroit Home Connect: فهم قيود الدخل](https://www.youtube.com/watch?v=jknVMnyXEW8&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=2&ab_channel=CityofDetroit)
 
 </RenderIf>
 

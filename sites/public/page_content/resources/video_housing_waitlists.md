@@ -12,7 +12,7 @@
 
 <RenderIf language="ar">
 
-### [Detroit Home Connect: Affordable Housing Waitlists](https://www.youtube.com/watch?v=CZ8UVjdCcA8&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=3&ab_channel=CityofDetroit)
+### [Detroit Home Connect: قوائم انتظار الإسكان الميسور التكلفة](https://www.youtube.com/watch?v=CZ8UVjdCcA8&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=3&ab_channel=CityofDetroit)
 
 </RenderIf>
 

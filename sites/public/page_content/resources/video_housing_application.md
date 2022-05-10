@@ -12,7 +12,7 @@
 
 <RenderIf language="ar">
 
-### [Detroit Home Connect: The Affordable Housing Application](https://www.youtube.com/watch?v=39KLpIXiPDI&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=4&ab_channel=CityofDetroit)
+### [Detroit Home Connect: تطبيق الإسكان الميسور التكلفة](https://www.youtube.com/watch?v=39KLpIXiPDI&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=4&ab_channel=CityofDetroit)
 
 </RenderIf>
 

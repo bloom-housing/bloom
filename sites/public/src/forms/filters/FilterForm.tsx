@@ -269,7 +269,7 @@ const FilterForm = (props: FilterFormProps) => {
               register={register}
               fields={communityProgramOptions.map((elem) => ({
                 id: elem.value,
-                label: elem.label,
+                label: t(`listingFilters.program.${elem.label}`),
                 value: elem.value,
                 inputProps: {
                   defaultChecked: Boolean(
