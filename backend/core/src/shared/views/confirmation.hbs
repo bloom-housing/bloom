@@ -34,15 +34,19 @@
             <li>{{t "confirmation.contactedForAnInterview"}}</li>
             </ul>
 
-            <h2>{{t "confirmation.prepareForNextSteps"}}</h2>
-            <p>{{t "confirmation.whileYouWait"}}</p>
-            <p>
-              <a
-                class="link"
-                href="{{nextStepsUrl}}"
-                target="_blank"
-                >{{t "confirmation.readHowYouCanPrepare"}}
-              </a>
+            {{#if nextStepsUrl}}
+              <h2>{{t "confirmation.prepareForNextSteps"}}</h2>
+              <p>{{t "confirmation.whileYouWait"}}</p>
+
+              <p>
+                <a
+                  class="link"
+                  href="{{nextStepsUrl}}"
+                  target="_blank"
+                  >{{t "confirmation.readHowYouCanPrepare"}}
+                </a>
+              </p>
+            {{/if}}
 
             <h2>{{t "confirmation.needToMakeUpdates"}}</h2>
             <p>{{t "leasingAgent.contactAgentToUpdateInfo"}}</p>

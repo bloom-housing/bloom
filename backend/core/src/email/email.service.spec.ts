@@ -16,6 +16,7 @@ import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.se
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { GeneratedListingTranslation } from "../translations/entities/generated-listing-translation.entity"
 import { GoogleTranslateService } from "../translations/services/google-translate.service"
+import { ListingReviewOrder } from "../listings/types/listing-review-order-enum"
 
 declare const expect: jest.Expect
 jest.setTimeout(30000)
@@ -80,7 +81,13 @@ describe("EmailService", () => {
       },
       language: Language.en,
       translations: {
+        confirmation: {
+          whatHappensNext: "What happens next?",
+          applicationPeriodCloses:
+            "Once the application period closes, the property manager will begin processing applications.",
+        },
         footer: {
+          line1: "Generic Portal is a project of the",
           footer: "Generic footer",
           thankYou: "Thank you!",
         },
@@ -101,12 +108,13 @@ describe("EmailService", () => {
           applicationsRanked: 'Application <br />ranked<span class="sr-only"> not completed</span>',
           whatHappensNext: "What happens next?",
           applicationPeriodCloses:
-            "Once the application period closes, the property manager will begin processing applications.",
+            "JURISDICTION: Once the application period closes, the property manager will begin processing applications.",
           eligibleApplicants: {
             FCFS:
               "Eligible applicants will be placed in order based on <strong>first come first serve</strong> basis.",
+            lotteryDate: "The lottery will be held on %{lotteryDate}.",
             lottery:
-              "The lottery will be held on %{lotteryDate}. Eligible applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
+              "Eligible applicants will be placed in order <strong>based on preference and lottery rank</strong>.",
           },
           contactedForAnInterview:
             "If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.",
@@ -122,14 +130,6 @@ describe("EmailService", () => {
           subject: "Your Application Confirmation",
           thankYouForApplying: "Thanks for applying. We have received your application for",
           whatToExpectNext: "What to expect next:",
-          whatToExpect: {
-            FCFS:
-              "Applicants will be contacted by the property agent on a first come first serve basis until vacancies are filled.",
-            lottery:
-              "The lottery will be held on %{lotteryDate}. Applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
-            noLottery:
-              "Applicants will be contacted by the agent in waitlist order until vacancies are filled.",
-          },
         },
         footer: {
           callToAction: "How are we doing? We'd like to get your ",
@@ -169,6 +169,21 @@ describe("EmailService", () => {
         t: {
           hello: "Hello",
           seeListing: "See Listing",
+        },
+      },
+    })
+
+    await translationsService.create({
+      jurisdiction: {
+        id: jurisdiction.id,
+      },
+      language: Language.es,
+      translations: {
+        confirmation: {
+          yourConfirmationNumber: "SPANISH NUMBER", // UPDATED
+        },
+        footer: {
+          line1: "SPANISH Alameda County Housing Portal is a project of the",
         },
       },
     })
@@ -213,15 +228,46 @@ describe("EmailService", () => {
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.to).toEqual(user.email)
       expect(emailMock.subject).toEqual("Your Application Confirmation")
-      console.info(emailMock.html)
       expect(emailMock.html).toMatch("Your Confirmation Number")
       expect(emailMock.html).toMatch("Marisela Baca")
       expect(emailMock.html).toMatch(
-        /Eligible applicants will be placed in order based on \<strong\>first come first serve\<\/strong\> basis./
+        /Eligible applicants will be placed in order based on <strong>first come first serve<\/strong> basis./
       )
       expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
       // contains application id
       expect(emailMock.html).toMatch(/abc123/)
+    })
+
+    it("should support lottery order", async () => {
+      const service = await module.resolve(EmailService)
+      // TODO Remove BaseEntity from inheritance from all entities
+      await service.confirmation(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { ...listing, reviewOrderType: ListingReviewOrder.lottery },
+        application,
+        "http://localhost:3000"
+      )
+
+      const emailMock = sendMock.mock.calls[0][0]
+      expect(emailMock.html).toMatch(
+        /The lottery will be held on December 31, 2019. Eligible applicants will be placed in order <strong>based on preference and lottery rank<\/strong>./
+      )
+    })
+
+    it("should support translations", async () => {
+      const service = await module.resolve(EmailService)
+      await service.confirmation(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        listing,
+        { ...application, language: "es" },
+        "http://localhost:3000"
+      )
+
+      const emailMock = sendMock.mock.calls[0][0]
+      expect(emailMock.html).toMatch("SPANISH NUMBER")
+      expect(emailMock.html).toMatch("SPANISH Alameda County Housing Portal is a project of the")
     })
   })
 

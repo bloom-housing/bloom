@@ -6,6 +6,7 @@ import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
+import dayjs from "dayjs"
 import { ConfigService } from "@nestjs/config"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
@@ -16,6 +17,7 @@ import { ListingReviewOrder } from "../listings/types/listing-review-order-enum"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
+import { Translation } from "../translations/entities/translation.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -130,11 +132,16 @@ export class EmailService {
     }
 
     if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-      eligibleApplicantsText = new Handlebars.SafeString(
-        this.polyglot.t("confirmation.eligibleApplicants.lottery", {
-          lotteryDate: listing.applicationDueDate,
-        })
-      )
+      const lotteryText = []
+      if (listing.applicationDueDate) {
+        lotteryText.push(
+          this.polyglot.t("confirmation.eligibleApplicants.lotteryDate", {
+            lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
+          })
+        )
+      }
+      lotteryText.push(this.polyglot.t("confirmation.eligibleApplicants.lottery"))
+      eligibleApplicantsText = new Handlebars.SafeString(lotteryText.join(" "))
     } else {
       // for when listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe
       eligibleApplicantsText = new Handlebars.SafeString(
@@ -146,6 +153,7 @@ export class EmailService {
       middleName: application.applicant.middleName,
       lastName: application.applicant.lastName,
     }
+    const nextStepsUrl = this.polyglot.t("confirmation.nextStepsUrl")
     await this.send(
       application.applicant.emailAddress,
       jurisdiction.emailFromAddress,
@@ -158,7 +166,7 @@ export class EmailService {
         listingUrl,
         application,
         eligibleApplicantsText,
-        nextStepsUrl: "https://bloom.exygy.dev",
+        nextStepsUrl: nextStepsUrl != "confirmation.nextStepsUrl" ? nextStepsUrl : null,
         user,
       })
     )
@@ -189,19 +197,41 @@ export class EmailService {
   }
 
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
-    const jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-      language,
-      jurisdiction ? jurisdiction.id : null
-    )
-    const genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-      language,
+    let jurisdictionalTranslations: Translation | null,
+      genericTranslations: Translation | null,
+      jurisdictionalDefaultTranslations: Translation | null
+
+    if (language != Language.en) {
+      if (jurisdiction) {
+        jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          language,
+          jurisdiction.id
+        )
+      }
+      genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        language,
+        null
+      )
+    }
+
+    if (jurisdiction) {
+      jurisdictionalDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        Language.en,
+        jurisdiction.id
+      )
+    }
+
+    const genericDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+      Language.en,
       null
     )
 
     // Deep merge
     const translations = merge(
-      genericTranslations.translations,
-      jurisdictionalTranslations.translations
+      genericDefaultTranslations.translations,
+      genericTranslations?.translations,
+      jurisdictionalDefaultTranslations?.translations,
+      jurisdictionalTranslations?.translations
     )
 
     this.polyglot.replace(translations)
