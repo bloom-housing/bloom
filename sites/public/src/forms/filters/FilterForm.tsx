@@ -221,6 +221,7 @@ const FilterForm = (props: FilterFormProps) => {
             <Field
               id={"minRent"}
               name={FrontendListingFilterStateKeys.minRent}
+              type="number"
               placeholder={t("publicFilter.rentRangeMin")}
               register={register}
               prepend={"$"}
@@ -239,6 +240,7 @@ const FilterForm = (props: FilterFormProps) => {
           <GridCell span={1}>
             <Field
               id={"maxRent"}
+              type="number"
               name={FrontendListingFilterStateKeys.maxRent}
               placeholder={t("publicFilter.rentRangeMax")}
               register={register}
