@@ -1203,7 +1203,7 @@ export class ListingsService {
       /**  */
       orderBy?: any | null[]
       /**  */
-      order?: any | null[]
+      orderDir?: any | null[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1217,7 +1217,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
-        order: params["order"],
+        orderDir: params["orderDir"],
       }
       let data = null
 

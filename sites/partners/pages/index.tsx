@@ -81,7 +81,7 @@ export default function ListingsList() {
     setSortOptions(() =>
       sortedColumns.map((col) => ({
         orderBy: col.colId,
-        order: col.sort.toUpperCase(),
+        orderDir: col.sort.toUpperCase(),
       }))
     )
   }, [])

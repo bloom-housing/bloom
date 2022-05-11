@@ -22,8 +22,8 @@ import { TranslationsService } from "../translations/services/translations.servi
 import { OrderParam } from "../applications/types/order-param"
 
 type OrderByConditionData = {
-  key: string
-  order: "DESC" | "ASC"
+  orderBy: string
+  orderDir: "DESC" | "ASC"
   nulls?: "NULLS LAST" | "NULLS FIRST"
 }
 
@@ -41,32 +41,32 @@ export class ListingsService {
 
   private static getOrderByCondition(
     orderBy: OrderByFieldsEnum,
-    order: OrderParam
+    orderDir: OrderParam
   ): OrderByConditionData {
     switch (orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
-        return { key: "listings.updated_at", order }
+        return { orderBy: "listings.updated_at", orderDir }
       case OrderByFieldsEnum.status:
-        return { key: "listings.status", order }
+        return { orderBy: "listings.status", orderDir }
       case OrderByFieldsEnum.name:
-        return { key: "listings.name", order }
+        return { orderBy: "listings.name", orderDir }
       case OrderByFieldsEnum.waitlistOpen:
-        return { key: "listings.isWaitlistOpen", order }
+        return { orderBy: "listings.isWaitlistOpen", orderDir }
       case OrderByFieldsEnum.unitsAvailable:
-        return { key: "property.unitsAvailable", order }
+        return { orderBy: "property.unitsAvailable", orderDir }
       case OrderByFieldsEnum.mostRecentlyClosed:
         return {
-          key: "listings.closedAt",
-          order,
+          orderBy: "listings.closedAt",
+          orderDir,
           nulls: "NULLS LAST",
         }
       case OrderByFieldsEnum.marketingType:
-        return { key: "listings.marketingType", order }
+        return { orderBy: "listings.marketingType", orderDir }
       case OrderByFieldsEnum.applicationDates:
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
         // and applicationOpenDate) if no orderBy param is specified.
-        return { key: "listings.applicationDueDate", order }
+        return { orderBy: "listings.applicationDueDate", orderDir }
       default:
         throw new HttpException(
           `OrderBy parameter not recognized or not yet implemented.`,
@@ -76,15 +76,15 @@ export class ListingsService {
   }
 
   private static buildOrderByConditions(params: ListingsQueryParams): Array<OrderByConditionData> {
-    if (!params.order || !params.orderBy) {
+    if (!params.orderDir || !params.orderBy) {
       return [
         ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC),
       ]
     }
     const orderByConditionDataArray = []
-    for (let i = 0; i < params.order.length; i++) {
+    for (let i = 0; i < params.orderDir.length; i++) {
       orderByConditionDataArray.push(
-        ListingsService.getOrderByCondition(params.orderBy[i], params.order[i])
+        ListingsService.getOrderByCondition(params.orderBy[i], params.orderDir[i])
       )
     }
     return orderByConditionDataArray
@@ -105,8 +105,8 @@ export class ListingsService {
     const orderByConditions = ListingsService.buildOrderByConditions(params)
     for (const orderByCondition of orderByConditions) {
       innerFilteredQuery.addOrderBy(
-        orderByCondition.key,
-        orderByCondition.order,
+        orderByCondition.orderBy,
+        orderByCondition.orderDir,
         orderByCondition.nulls
       )
     }
@@ -136,19 +136,22 @@ export class ListingsService {
 
     let mainQuery = view
       .getViewQb()
-      .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
+
+    for (const query of [mainQuery, innerFilteredQuery]) {
+      for (const orderByCondition of orderByConditions) {
+        query.addOrderBy(
+          orderByCondition.orderBy,
+          orderByCondition.orderDir,
+          orderByCondition.nulls
+        )
+      }
+    }
+
+    mainQuery.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-
-    for (const orderByCondition of orderByConditions) {
-      mainQuery = mainQuery.addOrderBy(
-        orderByCondition.key,
-        orderByCondition.order,
-        orderByCondition.nulls
-      )
-    }
 
     // Order by units.maxOccupancy is applied last so that it affects the order
     // of units _within_ a listing, rather than the overall listing order)

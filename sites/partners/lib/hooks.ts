@@ -19,7 +19,7 @@ export interface PaginationProps {
 
 export interface ColumnOrder {
   orderBy: string
-  order: string
+  orderDir: string
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
@@ -51,7 +51,7 @@ export function useListingsData({ page, limit, userId, sort }: UseListingsDataPr
     page,
     limit,
     orderBy: sort.filter((item) => item.orderBy).map((item) => item.orderBy),
-    order: sort.filter((item) => item.order).map((item) => item.order),
+    orderDir: sort.filter((item) => item.orderDir).map((item) => item.orderDir),
   }
 
   // filter if logged user is an agent
@@ -88,7 +88,7 @@ export function useApplicationsData(
   listingId: string,
   search: string,
   orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
+  orderDir?: EnumApplicationsApiExtraModelOrder
 ) {
   const { applicationsService } = useContext(AuthContext)
 
@@ -103,7 +103,7 @@ export function useApplicationsData(
 
   if (orderBy) {
     queryParams.append("orderBy", search)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
+    queryParams.append("orderDir", orderDir ?? EnumApplicationsApiExtraModelOrder.ASC)
   }
 
   const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
@@ -119,7 +119,7 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
+    Object.assign(params, { orderBy, orderDir: orderDir ?? "ASC" })
   }
 
   const fetcher = () => applicationsService.list(params)
