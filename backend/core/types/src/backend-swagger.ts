@@ -1005,6 +1005,8 @@ export class UserService {
       limit?: number | "all"
       /**  */
       filter?: UserFilterParams[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -1012,7 +1014,12 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
       let data = null
 
       configs.data = data
