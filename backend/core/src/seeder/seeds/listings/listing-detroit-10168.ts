@@ -100,6 +100,7 @@ export class Listing10168Seed extends ListingDefaultSeed {
       reservedCommunityType: reservedType,
       // If a reservedCommunityType is specified, a reservedCommunityDescription MUST also be specified
       reservedCommunityDescription: "Persons with Disabilities",
+      digitalApplication: true,
     }
 
     const listing = await this.listingRepository.save(listingCreateDto)

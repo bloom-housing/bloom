@@ -58,8 +58,6 @@ import { User } from "../auth/entities/user.entity"
 import { Preference } from "../preferences/entities/preference.entity"
 import { Program } from "../program/entities/program.entity"
 import { Listing } from "../listings/entities/listing.entity"
-import { ApplicationMethodsService } from "../application-methods/application-methods.service"
-import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
 
@@ -209,9 +207,6 @@ const seedListings = async (
   await createPreferences(app, jurisdictions)
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
-  const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
-    ApplicationMethodsService
-  )
 
   for (const [index, listingSeed] of allSeeds.entries()) {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
@@ -221,15 +216,6 @@ const seedListings = async (
       (jurisdiction) => jurisdiction.name === listing.jurisdictionName
     )
     listing.leasingAgents = [everyOtherAgent]
-    const applicationMethods = await applicationMethodsService.create({
-      type: ApplicationMethodType.Internal,
-      acceptsPostmarkedApplications: false,
-      externalReference: "",
-      label: "Label",
-      paperApplications: [],
-      listing,
-    })
-    listing.applicationMethods = [applicationMethods]
     await listingRepository.save(listing)
 
     seeds.push(listing)
