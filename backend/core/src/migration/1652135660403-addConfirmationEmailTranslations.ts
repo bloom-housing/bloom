@@ -54,6 +54,11 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
     )
     alamedaTranslation = alamedaTranslation["0"]["translations"]
 
+    alamedaTranslation.header = {
+      logoTitle: "Alameda County Housing Portal",
+      logoUrl:
+        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png",
+    }
     alamedaTranslation.footer.line1 = "Alameda County Housing Portal is a project of the"
     alamedaTranslation.footer.line2 =
       "Alameda County - Housing and Community Development (HCD) Department"
@@ -73,6 +78,11 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
     )
     sanJoseTranslation = sanJoseTranslation["0"]["translations"]
 
+    sanJoseTranslation.header = {
+      logoTitle: "City of San José Housing Portal",
+      logoUrl:
+        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/san-jose-portal.png",
+    }
     sanJoseTranslation.footer.line1 = "City of San José Housing Portal is a project of the"
     sanJoseTranslation.footer.line2 = "City of San José - Housing Department"
 
@@ -91,6 +101,11 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
     )
     sanMateoTranslation = sanMateoTranslation["0"]["translations"]
 
+    sanMateoTranslation.header = {
+      logoTitle: "San Mateo County Housing",
+      logoUrl:
+        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/san-mateo-portal.png",
+    }
     sanMateoTranslation.footer.line1 = "San Mateo County Housing Portal is a project of the"
     sanMateoTranslation.footer.line2 = "San Mateo County - Department of Housing (DOH)"
 

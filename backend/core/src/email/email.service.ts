@@ -160,8 +160,10 @@ export class EmailService {
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
         subject: this.polyglot.t("confirmation.subject"),
-        logoUrl:
-          "https://uploads-ssl.webflow.com/5fbfdd121e108ea418ede824/5fe4ca6204bf076f91493e3e_Rectangle%20143%20(1).jpg",
+        header: {
+          logoTitle: this.polyglot.t("header.logoTitle"),
+          logoUrl: this.polyglot.t("header.logoUrl"),
+        },
         listing,
         listingUrl,
         application,
