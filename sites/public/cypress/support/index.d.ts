@@ -11,6 +11,7 @@ declare namespace Cypress {
     goNext(): Chainable<Element>
     isNextRouteValid(currentStep: string, skip?: number): Chainable
     signIn(): Chainable
+    signOut(): Chainable
     step1PrimaryApplicantName(application: Application): Chainable
     step2PrimaryApplicantAddresses(application: Application): Chainable
     step3AlternateContactType(application: Application): Chainable

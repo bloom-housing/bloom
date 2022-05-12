@@ -30,6 +30,7 @@
 
   .footer-copyright {
     width: auto;
+    flex-shrink: 0;
     @screen lg {
       @apply text-left;
     }

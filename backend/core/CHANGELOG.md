@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.8...@bloom-housing/backend-core@4.2.2-alpha.9) (2022-05-11)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.2.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.7...@bloom-housing/backend-core@4.2.2-alpha.8) (2022-05-11)
+
+
+### Features
+
+* **backend:** add search param to GET /user/list endpoint ([#2714](https://github.com/bloom-housing/bloom/issues/2714)) ([95c9a68](https://github.com/bloom-housing/bloom/commit/95c9a6838f534450c0da6919064f4a799898ed8f))
+
+
+
+
+
 ## [4.2.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.6...@bloom-housing/backend-core@4.2.2-alpha.7) (2022-05-03)
 
 
