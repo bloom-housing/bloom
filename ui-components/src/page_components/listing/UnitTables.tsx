@@ -1,11 +1,10 @@
 import React from "react"
-import { nanoid } from "nanoid"
 import { MinMax, UnitSummary, Unit } from "@bloom-housing/backend-core/types"
 
-import { StandardTable } from "../../tables/StandardTable"
+import { StandardTable, StandardTableData } from "../../tables/StandardTable"
 import { t } from "../../helpers/translator"
 import { numberOrdinal } from "../../helpers/numberOrdinal"
-import ContentAccordion from "./ContentAccordion"
+import { ContentAccordion } from "./ContentAccordion"
 
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
   let min: string | number = range.min
@@ -50,24 +49,26 @@ const UnitTables = (props: UnitTablesProps) => {
         const units = props.units.filter(
           (unit: Unit) => unit.unitType?.name == unitSummary.unitType.name
         )
-        const unitsFormatted = [] as Array<Record<string, React.ReactNode>>
+        const unitsFormatted = [] as StandardTableData
         let floorSection: React.ReactNode
         units.forEach((unit: Unit) => {
           unitsFormatted.push({
-            number: unit.number,
-            sqFeet: (
-              <>
-                {unit.sqFeet ? (
-                  <>
-                    <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </>
-            ),
-            numBathrooms: <strong>{unit.numBathrooms}</strong>,
-            floor: <strong>{unit.floor}</strong>,
+            number: { content: unit.number },
+            sqFeet: {
+              content: (
+                <>
+                  {unit.sqFeet ? (
+                    <>
+                      <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ),
+            },
+            numBathrooms: { content: <strong>{unit.numBathrooms}</strong> },
+            floor: { content: <strong>{unit.floor}</strong> },
           })
         })
 

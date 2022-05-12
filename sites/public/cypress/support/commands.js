@@ -15,6 +15,11 @@ Cypress.Commands.add("signIn", () => {
   cy.get(`[data-test-id="sign-in-button"]`).click()
 })
 
+Cypress.Commands.add("signOut", () => {
+  cy.get(`[data-test-id="My Account-2"]`).trigger("mouseover")
+  cy.get(`[data-test-id="Sign Out-3"]`).trigger("click")
+})
+
 Cypress.Commands.add("goNext", () => {
   return cy.get(`[data-test-id="app-next-step-button"]`).click()
 })
@@ -141,7 +146,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.getByTestId("app-found-address-choice").should("be.visible")
+  cy.getByTestId("app-found-address-choice").should("exist")
 
   cy.goNext() // accept validated address
   cy.isNextRouteValid("primaryApplicantAddress")

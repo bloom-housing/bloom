@@ -1,3 +1,10 @@
+/* Design Tokens: */
+@import "tokens/borders.scss";
+@import "tokens/colors.scss";
+@import "tokens/fonts.scss";
+@import "tokens/screens.scss";
+@import "tokens/sizes.scss";
+
 html {
   @apply antialiased;
 }

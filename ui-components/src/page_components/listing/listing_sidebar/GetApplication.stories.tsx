@@ -3,6 +3,7 @@ import { GetApplication } from "./GetApplication"
 
 export default {
   title: "Listing Sidebar/Get Application",
+  component: GetApplication,
 }
 
 export const AllFields = () => {
