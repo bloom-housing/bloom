@@ -88,7 +88,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toEqual(3)
+    expect(res.body.items.length).toEqual(1)
   })
 
   it("should return listings with matching zipcodes", async () => {
