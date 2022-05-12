@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 const tailwindToSassVars = (bloomTheme) => {
+  // TODO: we should remove this in favor of just using the new CSS variables
   const bloomColorVars = Object.keys(bloomTheme.theme.colors).map((colorKey) => {
     if (typeof bloomTheme.theme.colors[colorKey] == "object") {
       // create a map variable that can be used by the map-get SCSS function
@@ -17,7 +18,7 @@ const tailwindToSassVars = (bloomTheme) => {
     }
   })
   const bloomScreenVars = Object.keys(bloomTheme.theme.screens).map((screenKey) => {
-    return `$tailwind-screens-${screenKey}: ${bloomTheme.theme.screens[screenKey]};`
+    return `$screen-${screenKey}: ${bloomTheme.theme.screens[screenKey]};`
   })
 
   // Uncomment this if you want to debug:

@@ -3,6 +3,188 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.32...@bloom-housing/public@4.2.2-alpha.33) (2022-05-11)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.31...@bloom-housing/public@4.2.2-alpha.32) (2022-05-11)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.30...@bloom-housing/public@4.2.2-alpha.31) (2022-05-10)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.29...@bloom-housing/public@4.2.2-alpha.30) (2022-05-09)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.28...@bloom-housing/public@4.2.2-alpha.29) (2022-05-05)
+
+
+### Bug Fixes
+
+* use appropriate copy for FCFS vs Lottery in Application Confirmation screen ([#2702](https://github.com/bloom-housing/bloom/issues/2702)) ([5289504](https://github.com/bloom-housing/bloom/commit/52895044cba64eeb7789c68f0a5eb957785055b5))
+
+
+
+
+
+## [4.2.2-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.27...@bloom-housing/public@4.2.2-alpha.28) (2022-05-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.26...@bloom-housing/public@4.2.2-alpha.27) (2022-05-04)
+
+
+### Code Refactoring
+
+* remove backend dependencies from sidebar application components ([#2675](https://github.com/bloom-housing/bloom/issues/2675)) ([d2ebf87](https://github.com/bloom-housing/bloom/commit/d2ebf87c34af3f5b6168fa4e08663fea0a4a872c))
+
+
+### BREAKING CHANGES
+
+* the LeasingAgent component has been renamed to Contact with a new generalized prop set, the SidebarAddress component has been renamed to ContactAddress with a new generalized prop set
+
+
+
+
+
+## [4.2.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.25...@bloom-housing/public@4.2.2-alpha.26) (2022-05-04)
+
+
+### Code Refactoring
+
+* remove business logic, strings from waitlist component ([#2689](https://github.com/bloom-housing/bloom/issues/2689)) ([a5721db](https://github.com/bloom-housing/bloom/commit/a5721db518453ddbd777e50ca92fdeac19997aa9))
+
+
+### BREAKING CHANGES
+
+* the Waitlist component was renamed to QuantityRowSection which also has a new prop set to account for a flexible number of rows and strings
+
+
+
+
+
+## [4.2.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.24...@bloom-housing/public@4.2.2-alpha.25) (2022-05-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.23...@bloom-housing/public@4.2.2-alpha.24) (2022-04-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.22...@bloom-housing/public@4.2.2-alpha.23) (2022-04-29)
+
+
+### Bug Fixes
+
+* ux updates for new listing card design ([#2687](https://github.com/bloom-housing/bloom/issues/2687)) ([c8814ae](https://github.com/bloom-housing/bloom/commit/c8814ae57b62fa6f932017bb70d47663b09fca1a))
+
+
+
+
+
+## [4.2.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.21...@bloom-housing/public@4.2.2-alpha.22) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.20...@bloom-housing/public@4.2.2-alpha.21) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.19...@bloom-housing/public@4.2.2-alpha.20) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.18...@bloom-housing/public@4.2.2-alpha.19) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.17...@bloom-housing/public@4.2.2-alpha.18) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.16...@bloom-housing/public@4.2.2-alpha.17) (2022-04-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.15...@bloom-housing/public@4.2.2-alpha.16) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.14...@bloom-housing/public@4.2.2-alpha.15) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.2.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.13...@bloom-housing/public@4.2.2-alpha.14) (2022-04-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [4.2.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.12...@bloom-housing/public@4.2.2-alpha.13) (2022-04-21)
 
 **Note:** Version bump only for package @bloom-housing/public

@@ -956,4 +956,55 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: newPassword })
       .expect(201)
   })
+
+  it("should not crash with empty search query param", async () => {
+    const usersRepository = app.get<UserRepository>(UserRepository)
+
+    const totalUsersCount = await usersRepository.count()
+
+    const allUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?search=`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(allUsersListRes.body.meta.totalItems).toBe(totalUsersCount)
+  })
+
+  it("should find user by email and assigned listing", async () => {
+    const searchableEmailAddress = "searchable-email@example.com"
+    const listing = (await listingRepository.find({ take: 1 }))[0]
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: searchableEmailAddress,
+      emailConfirmation: searchableEmailAddress,
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    let res = await supertest(app.getHttpServer())
+      .get(`/user/list?search=${searchableEmailAddress}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.items[0].email).toBe(searchableEmailAddress)
+
+    const userRepository = await app.resolve<UserRepository>(UserRepository)
+    const user = await userRepository.findByEmail(searchableEmailAddress)
+
+    user.leasingAgentInListings = [{ id: listing.id } as Listing]
+    await userRepository.save(user)
+
+    res = await supertest(app.getHttpServer())
+      .get(`/user/list?search=${listing.name}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.items.map((item) => item.email).includes(searchableEmailAddress)).toBe(true)
+  })
 })

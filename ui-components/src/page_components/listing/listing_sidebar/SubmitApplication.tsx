@@ -1,78 +1,73 @@
 import * as React from "react"
-import { t } from "../../../helpers/translator"
-import { Address } from "../../../helpers/address"
-import { SidebarAddress } from "./SidebarAddress"
+import Markdown from "markdown-to-jsx"
+import { Address } from "../../../helpers/MultiLineAddress"
+import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
-import { ListingStatus } from "@bloom-housing/backend-core/types"
-
-export interface PostmarkedApplication {
-  postmarkedApplicationsReceivedByDate: string | null
-  developer: string
-  applicationsDueDate: string | null
-}
+import { Heading } from "../../../headers/Heading"
 
 export interface ApplicationAddressesProps {
-  applicationMailingAddress?: Address
+  /** The dropoff address for paper applications */
   applicationDropOffAddress?: Address
+  /** Office hours for developers at the dropoff address for paper applications */
   applicationDropOffAddressOfficeHours?: string
+  /** The mailing address for paper applications */
+  applicationMailingAddress?: Address
+  /** The application organization, often the developer */
   applicationOrganization?: string
-  postmarkedApplicationData?: PostmarkedApplication
-  listingStatus?: ListingStatus
+  strings: {
+    postmark?: string
+    mailHeader?: string
+    sectionHeader?: string
+    dropOffHeader?: string
+    officeHoursHeader?: string
+    mapString: string
+  }
 }
 
-const SubmitApplication = (props: ApplicationAddressesProps) => {
-  if (
-    props.listingStatus === ListingStatus.closed ||
-    !(props.applicationMailingAddress || props.applicationDropOffAddress)
-  ) {
-    return null
-  }
-
-  const getPostmarkString = () => {
-    const applicationDueDate = props.postmarkedApplicationData?.applicationsDueDate
-    const postmarkReceivedByDate =
-      props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate
-    const developer = props.postmarkedApplicationData?.developer
-    if (applicationDueDate) {
-      return postmarkReceivedByDate
-        ? t("listings.apply.submitPaperDueDatePostMark", {
-            applicationDueDate,
-            postmarkReceivedByDate,
-            developer,
-          })
-        : t("listings.apply.submitPaperDueDateNoPostMark", {
-            applicationDueDate,
-            developer,
-          })
-    } else {
-      return postmarkReceivedByDate
-        ? t("listings.apply.submitPaperNoDueDatePostMark", { postmarkReceivedByDate, developer })
-        : t("listings.apply.submitPaperNoDueDateNoPostMark", { developer })
-    }
-  }
-
+/** Displays information regarding paper applications, including two sections: (1) how to mail in applications and (2) how to drop off applications */
+const SubmitApplication = ({
+  applicationDropOffAddress,
+  applicationDropOffAddressOfficeHours,
+  applicationMailingAddress,
+  applicationOrganization,
+  strings,
+}: ApplicationAddressesProps) => {
   return (
     <>
       <section className="aside-block is-tinted bg-gray-100">
-        <div className="text-serif-lg">{t("listings.apply.submitAPaperApplication")}</div>
-        {props.applicationMailingAddress && (
+        <div className="text-serif-lg">{strings.sectionHeader}</div>
+        {applicationMailingAddress && (
           <>
-            <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
+            <Heading priority={3} style={"sidebarSubHeader"}>
+              {strings.mailHeader}
+            </Heading>
             <>
-              <p className="text-gray-700">{props.applicationOrganization}</p>
-              <SidebarAddress address={props.applicationMailingAddress} />
+              <p className="text-gray-700">{applicationOrganization}</p>
+              <ContactAddress address={applicationMailingAddress} mapString={strings.mapString} />
             </>
-            <p className="mt-4 text-tiny text-gray-750">{getPostmarkString()}</p>
+            {strings.postmark && <p className="mt-4 text-tiny text-gray-750">{strings.postmark}</p>}
           </>
         )}
-        {props.applicationDropOffAddress && (
+        {applicationDropOffAddress && (
           <>
-            {props.applicationMailingAddress && <OrDivider bgColor="gray-100" />}
-            <h3 className="text-caps-tiny">{t("listings.apply.dropOffApplication")}</h3>
-            <SidebarAddress
-              address={props.applicationDropOffAddress}
-              officeHours={props.applicationDropOffAddressOfficeHours}
-            />
+            {applicationMailingAddress && <OrDivider bgColor="gray-100" />}
+            <Heading priority={3} style={"sidebarSubHeader"}>
+              {strings.dropOffHeader}
+            </Heading>
+            <ContactAddress address={applicationDropOffAddress} mapString={strings.mapString} />
+            {applicationDropOffAddressOfficeHours && (
+              <>
+                <Heading priority={3} style={"sidebarSubHeader"}>
+                  {strings.officeHoursHeader}
+                </Heading>
+                <p className="mt-4 text-tiny text-gray-750">
+                  <Markdown
+                    children={applicationDropOffAddressOfficeHours}
+                    options={{ disableParsingRawHTML: true }}
+                  />
+                </p>
+              </>
+            )}
           </>
         )}
       </section>

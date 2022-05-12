@@ -88,8 +88,8 @@ h1.title {
 }
 
 .text-caps-tiny {
-  @apply mb-4;
-  @apply text-gray-700;
+  @apply mb-3;
+  @apply text-gray-750;
   @apply uppercase;
   @apply font-sans;
   @apply font-bold;
@@ -145,7 +145,8 @@ h1.title {
   @apply font-semibold;
   @apply text-blue-700;
   @apply text-3xl;
-  @apply mb-1;
+  @apply mb-3;
+  @apply leading-tight;
 }
 
 .card-subheader {

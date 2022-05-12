@@ -1,0 +1,64 @@
+:root {
+  --bloom-color-white: #ffffff;
+  --bloom-color-black: #000000;
+
+  --bloom-color-red-800: #b21d38;
+  --bloom-color-red-700: #e41d3d;
+  --bloom-color-red-300: #f9d2d8;
+
+  --bloom-color-green-800: #216e1f;
+  --bloom-color-green-700: #2e8540;
+  --bloom-color-green-300: #b4e5be;
+
+  --bloom-color-blue-800: #205493;
+  --bloom-color-blue-700: #0067be;
+  --bloom-color-blue-600: #0077da;
+  --bloom-color-blue-300: #daeeff;
+  --bloom-color-blue-200: #f5f8f9;
+
+  --bloom-color-yellow-800: #e5a000;
+  --bloom-color-yellow-700: #fdb81e;
+  --bloom-color-yellow-300: #fee8b6;
+
+  --bloom-color-gray-950: #242c2e;
+  --bloom-color-gray-900: #222222;
+  --bloom-color-gray-850: #333333;
+  --bloom-color-gray-800: #30383a;
+  --bloom-color-gray-750: #555555;
+  --bloom-color-gray-700: #767676;
+  --bloom-color-gray-600: #999999;
+  --bloom-color-gray-550: #aaaaaa;
+  --bloom-color-gray-500: #cccccc;
+  --bloom-color-gray-450: #dedee0;
+  --bloom-color-gray-400: #efefef;
+  --bloom-color-gray-300: #f6f6f6;
+  --bloom-color-gray-200: #f7f7f7;
+  --bloom-color-gray-100: #f9f9f9;
+
+  --bloom-color-primary: var(--bloom-color-blue-600);
+  --bloom-color-primary-dark: var(--bloom-color-blue-700);
+  --bloom-color-primary-darker: var(--bloom-color-blue-800);
+  --bloom-color-primary-light: var(--bloom-color-blue-300);
+  --bloom-color-primary-lighter: var(--bloom-color-blue-200);
+
+  --bloom-color-secondary: var(--bloom-color-blue-700);
+  --bloom-color-alert: var(--bloom-color-red-700);
+  --bloom-color-alert-light: var(--bloom-color-red-300);
+  --bloom-color-alert-dark: var(--bloom-color-red-800);
+  --bloom-color-success: var(--bloom-color-green-700);
+  --bloom-color-success-light: var(--bloom-color-green-300);
+  --bloom-color-success-dark: var(--bloom-color-green-800);
+  --bloom-color-warn: var(--bloom-color-yellow-700);
+  --bloom-color-warn-light: var(--bloom-color-yellow-300);
+  --bloom-color-warn-dark: var(--bloom-color-yellow-800);
+
+  --bloom-color-accent-cool: #00bed5;
+  --bloom-color-accent-cool-light: #c8f1ff;
+  --bloom-color-accent-cool-dark: #009db0;
+  --bloom-color-accent-warm: #ff6627;
+  --bloom-color-accent-warm-dark: #d54309;
+  --bloom-color-accent-warm-light: #ffd2c0;
+  --bloom-color-accent-warm-lighter: #fff7f3;
+
+  --bloom-color-lush: #99cd00;
+}

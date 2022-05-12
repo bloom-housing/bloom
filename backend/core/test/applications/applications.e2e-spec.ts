@@ -19,7 +19,6 @@ import { HouseholdMember } from "../../src/applications/entities/household-membe
 import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { UserDto } from "../../src/auth/dto/user.dto"
-import { UserService } from "../../src/auth/services/user.service"
 import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import { EmailService } from "../../src/email/email.service"
@@ -343,7 +342,7 @@ describe("Applications", () => {
     await supertest(app.getHttpServer()).get(`/applications/${res.body.id}`).expect(403)
   })
 
-  it(`should allow an admin to search for users application using search query param`, async () => {
+  it(`should allow an admin to search for users application using search query param with exact match`, async () => {
     const body = getTestAppBody(listing1Id)
     body.applicant.firstName = "MyName"
     const createRes = await supertest(app.getHttpServer())
@@ -363,8 +362,25 @@ describe("Applications", () => {
     expect(res.body.items[0].id === createRes.body.id)
     expect(res.body.items[0]).toMatchObject(createRes.body)
   })
+  it(`should not allow an admin to search for users application using a search query param of less than 3 characters`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.firstName = "John"
+    const createRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+    expect(createRes.body).toMatchObject(body)
+    expect(createRes.body).toHaveProperty("createdAt")
+    expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("id")
 
-  it(`should allow an admin to search for users application using search query param with partial textquery`, async () => {
+    await supertest(app.getHttpServer())
+      .get(`/applications/?search=jo`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(400)
+  })
+
+  it(`should allow an admin to search for users application using search query param with partial textquery of at least three 3 characters`, async () => {
     const body = getTestAppBody(listing1Id)
     body.applicant.firstName = "John"
     const createRes = await supertest(app.getHttpServer())

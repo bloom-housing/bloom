@@ -42,6 +42,32 @@ export const footer = () => (
   </SiteFooter>
 )
 
+export const footerManyLinks = () => (
+  <SiteFooter>
+    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+      <LocalizedLink href="/policy">Privacy Policy</LocalizedLink>
+      <LocalizedLink href="/policy">Get Assistance</LocalizedLink>
+      <LocalizedLink href="/policy">Give Feedback</LocalizedLink>
+      <LocalizedLink href="/policy">Contact</LocalizedLink>
+      <LocalizedLink href="/policy">About</LocalizedLink>
+    </FooterNav>
+  </SiteFooter>
+)
+
+export const overflowingLinks = () => (
+  <SiteFooter>
+    <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">
+      <LocalizedLink href="/policy">Privacy Policy</LocalizedLink>
+      <LocalizedLink href="/policy">Get Assistance</LocalizedLink>
+      <LocalizedLink href="/policy">Give Feedback</LocalizedLink>
+      <LocalizedLink href="/policy">Contact</LocalizedLink>
+      <LocalizedLink href="/policy">About</LocalizedLink>
+      <LocalizedLink href="/policy">Terms and Conditions</LocalizedLink>
+      <LocalizedLink href="/policy">Careers</LocalizedLink>
+    </FooterNav>
+  </SiteFooter>
+)
+
 export const withLogo = () => (
   <SiteFooter>
     <FooterSection>{logo}</FooterSection>

@@ -14,6 +14,7 @@ import { Application } from "../../applications/entities/application.entity"
 import { EmailService } from "../../email/email.service"
 import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
+import { UserRepository } from "../repositories/user-repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -22,12 +23,19 @@ declare const expect: jest.Expect
 
 describe("UserService", () => {
   let service: UserService
+  const mockUserRepoOrig = {
+    findOne: jest.fn(),
+    save: jest.fn(),
+  }
+
   const mockUserRepo = {
     findOne: jest.fn(),
     save: jest.fn(),
+    createQueryBuilder: jest.fn(),
     findByEmail: jest.fn(),
     findByResetToken: jest.fn(),
   }
+
   const mockApplicationRepo = {
     createQueryBuilder: jest.fn(),
     save: jest.fn(),
@@ -38,8 +46,13 @@ describe("UserService", () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        UserRepository,
         {
           provide: getRepositoryToken(User),
+          useValue: mockUserRepoOrig,
+        },
+        {
+          provide: getRepositoryToken(UserRepository),
           useValue: mockUserRepo,
         },
         {

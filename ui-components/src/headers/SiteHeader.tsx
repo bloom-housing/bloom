@@ -143,6 +143,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 }
                 dropdownOptionKeyDown(event, index)
               }}
+              data-test-id={`${option.title}-${index}`}
             >
               {dropdownOptionContent(option)}
             </button>
@@ -296,6 +297,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
                   href={menuLink.href}
                   key={`${menuLink.title}-${index}`}
+                  data-test-id={`${menuLink.title}-${index}`}
                 >
                   {menuContent}
                 </LinkComponent>
@@ -334,6 +336,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 }}
                 onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+                data-test-id={`${menuLink.title}-${index}`}
               >
                 {menuContent}
               </span>
