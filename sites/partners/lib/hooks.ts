@@ -148,8 +148,8 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    queryParams.append("orderBy", delayedFilterValue)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
+    queryParams.append("orderBy", orderBy)
+    queryParams.append("order", order || EnumApplicationsApiExtraModelOrder.ASC)
   }
   const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
 
@@ -164,8 +164,11 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
+    Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
   }
+
+  console.log(params)
+
   const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
 
