@@ -15,16 +15,13 @@ export interface FavoriteButtonProps {
 }
 
 const FavoriteButton = ({ id, name }: FavoriteButtonProps) => {
-  const { profile, userPreferencesService } = useContext(AuthContext)
-  const preferences = profile?.preferences || {
-    sendEmailNotifications: false,
-    sendSmsNotifications: false,
-    favoriteIds: [],
-  }
+  const { profile, userPreferencesService, updateProfile } = useContext(AuthContext)
+  const [listingFavorited, setListingFavorited] = useState(false)
+  const preferences = profile?.preferences
 
-  const [listingFavorited, setListingFavorited] = useState(
-    preferences.favoriteIds?.includes(id) ?? false
-  )
+  useEffect(() => {
+    setListingFavorited(preferences?.favoriteIds?.includes(id) ?? false)
+  }, [preferences])
 
   if (!profile) {
     return <span />
@@ -34,21 +31,32 @@ const FavoriteButton = ({ id, name }: FavoriteButtonProps) => {
     if (!profile || listingFavorited) {
       return
     }
-    preferences.favoriteIds?.push(id)
+    if (profile && !profile.preferences?.favoriteIds) {
+      if (!profile.preferences) {
+        profile.preferences = { favoriteIds: [id] }
+      } else if (!profile.preferences?.favoriteIds) {
+        profile.preferences.favoriteIds = [id]
+      }
+    } else {
+      preferences?.favoriteIds?.push(id)
+    }
 
     try {
       await userPreferencesService?.update({
         id: profile.id,
-        body: preferences,
+        body: preferences ?? { favoriteIds: [id] },
       })
       setListingFavorited(true)
+      if (updateProfile) {
+        updateProfile(profile)
+      }
     } catch (err) {
       console.warn(err)
     }
   }
 
   const removeFavorite = async () => {
-    if (!profile || !preferences.favoriteIds || preferences?.favoriteIds?.length === 0) {
+    if (!profile || !preferences?.favoriteIds || preferences?.favoriteIds?.length === 0) {
       return
     }
 
@@ -61,6 +69,9 @@ const FavoriteButton = ({ id, name }: FavoriteButtonProps) => {
         body: preferences,
       })
       setListingFavorited(false)
+      if (updateProfile) {
+        updateProfile(profile)
+      }
     } catch (err) {
       console.warn(err)
     }
