@@ -134,8 +134,7 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let mainQuery = view
-      .getViewQb()
+    let mainQuery = view.getViewQb()
 
     for (const query of [mainQuery, innerFilteredQuery]) {
       for (const orderByCondition of orderByConditions) {
@@ -147,7 +146,8 @@ export class ListingsService {
       }
     }
 
-    mainQuery.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
+    mainQuery
+      .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
