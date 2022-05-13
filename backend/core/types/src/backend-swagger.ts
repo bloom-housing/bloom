@@ -6493,6 +6493,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
