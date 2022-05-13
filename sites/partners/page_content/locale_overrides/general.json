@@ -339,5 +339,8 @@
   "application.preferences.oaklandHousingAuthority.family.label": "Family",
   "application.preferences.oaklandHousingAuthority.veteran.label": "Veteran",
   "application.preferences.southAlamedaCounty.live.label": "Live in Fremont, Newark or Union City",
-  "application.preferences.southAlamedaCounty.work.label": "Work in Fremont, Newark or Union City"
+  "application.preferences.southAlamedaCounty.work.label": "Work in Fremont, Newark or Union City",
+  "application.preferences.fremontPref.live.label": "Live in Fremont: At least one member of my household lives* in the City of Fremont",
+  "application.preferences.fremontPref.title": "Live or work in the City of Fremont ",
+  "application.preferences.fremontPref.work.label": "Work in Fremont: At least one member of my household works** in the City of Fremont"
 }

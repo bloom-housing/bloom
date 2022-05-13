@@ -12,5 +12,10 @@
   "application.preferences.southAlamedaCounty.live.label": "Live in Fremont, Newark or Union City",
   "application.preferences.southAlamedaCounty.live.description": "At least one member of my household lives in Fremont, Newark or Union City.",
   "application.preferences.southAlamedaCounty.work.label": "Work in Fremont, Newark or Union City",
-  "application.preferences.southAlamedaCounty.work.description": "At least one member of my household works in Fremont, Newark or Union City:"
+  "application.preferences.southAlamedaCounty.work.description": "At least one member of my household works in Fremont, Newark or Union City:",
+  "application.preferences.fremontPref.live.description": "Living in Fremont: Defined as a person or household who is currently a resident within the current incorporated area of Fremont and where that location is considered to be the household’s permanent place of residence. The City may require applicants to submit a driver license, voter registration, utility bill, vehicle registration or other evidence as proof of residency in Fremont.",
+  "application.preferences.fremontPref.live.label": "Live in Fremont: At least one member of my household lives* in the City of Fremont",
+  "application.preferences.fremontPref.title": "Live or work in the City of Fremont ",
+  "application.preferences.fremontPref.work.description": "Working in Fremont: Earning one's primary source of annual income (salary, wages, commissions), and working at least 50 percent of working hours (i.e. 20 or more hours per week) within the Fremont City limits, at the time of the application. Employment must be by a Fremont employer that is licensed and permitted by the City, at a primary work site in Fremont, or as providing household help, gardening, or similar services to a Fremont resident; or through operation of a Fremont-based business that is licensed and permitted by the City. Working in Fremont does NOT include self-employment consisting solely of operating a business entity established solely for the purposes of investment in a rental property.",
+  "application.preferences.fremontPref.work.label": "Work in Fremont: At least one member of my household works** in the City of Fremont"
 }
