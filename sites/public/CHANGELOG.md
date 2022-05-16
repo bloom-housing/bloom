@@ -11,6 +11,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.2.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@4.2.2...@bloom-housing/public@4.2.3) (2022-04-28)
 ## [4.2.2-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.32...@bloom-housing/public@4.2.2-alpha.33) (2022-05-11)
 
 **Note:** Version bump only for package @bloom-housing/public
@@ -19,6 +20,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.2.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@4.2.1...@bloom-housing/public@4.2.2) (2022-04-19)
 ## [4.2.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.2.2-alpha.31...@bloom-housing/public@4.2.2-alpha.32) (2022-05-11)
 
 **Note:** Version bump only for package @bloom-housing/public

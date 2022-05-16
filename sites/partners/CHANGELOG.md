@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [4.2.2-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.33...@bloom-housing/partners@4.2.2-alpha.34) (2022-05-13)
+## [4.2.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.2.2...@bloom-housing/partners@4.2.3) (2022-04-28)
+## [4.2.2-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.32...@bloom-housing/partners@4.2.2-alpha.33) (2022-05-11)
 
 **Note:** Version bump only for package @bloom-housing/partners
 
@@ -19,6 +21,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.2.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.2.1...@bloom-housing/partners@4.2.2) (2022-04-19)
+
+### Bug Fixes
+
+* listings pending translation for ag grid ([5b42ab0](https://github.com/seanmalbert/bloom/commit/5b42ab006abddc19a0fcc260fbf519c3903e44df))
 ## [4.2.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.2.2-alpha.31...@bloom-housing/partners@4.2.2-alpha.32) (2022-05-11)
 
 **Note:** Version bump only for package @bloom-housing/partners
