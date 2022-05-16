@@ -13,6 +13,7 @@ import {
   MinimalTable,
   TableThumbnail,
   FieldGroup,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
@@ -72,73 +73,81 @@ const LotteryResults = () => {
   /*
     Show a preview of the uploaded file within the upload drawer
   */
-  const previewTableRows = []
+  const previewTableRows: StandardTableData = []
   if (cloudinaryData.url !== "") {
     previewTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img alt="PDF preview" src={cloudinaryData.url} />
-        </TableThumbnail>
-      ),
-      fileName: cloudinaryData.id.split("/").slice(-1).join(),
-      actions: (
-        <Button
-          type="button"
-          className="font-semibold uppercase text-red-700"
-          onClick={() => {
-            setCloudinaryData({
-              id: "",
-              url: "",
-            })
-            setProgressValue(0)
-          }}
-          unstyled
-        >
-          {t("t.delete")}
-        </Button>
-      ),
+      preview: {
+        content: (
+          <TableThumbnail>
+            <img alt="PDF preview" src={cloudinaryData.url} />
+          </TableThumbnail>
+        ),
+      },
+      fileName: { content: cloudinaryData.id.split("/").slice(-1).join() },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            className="font-semibold uppercase text-red-700"
+            onClick={() => {
+              setCloudinaryData({
+                id: "",
+                url: "",
+              })
+              setProgressValue(0)
+            }}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
     })
   }
 
   /*
     Show the specified criteria in the listing form if its present
   */
-  const criteriaTableRows = []
+  const criteriaTableRows: StandardTableData = []
   if (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "") {
     const listingPhotoUrl = cloudinaryUrlFromId(listingCriteriaFile.fileId)
 
     criteriaTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img src={listingPhotoUrl} />
-        </TableThumbnail>
-      ),
-      fileName: listingCriteriaFile.fileId.split("/").slice(-1).join(),
-      actions: (
-        <div className="flex">
-          <Button
-            type="button"
-            className="font-semibold uppercase"
-            onClick={() => {
-              setDrawerState(true)
-            }}
-            unstyled
-          >
-            {t("t.edit")}
-          </Button>
-          <Button
-            type="button"
-            className="font-semibold uppercase text-red-700"
-            onClick={() => {
-              setCloudinaryData({ ...cloudinaryData, id: "" })
-              deletePDF()
-            }}
-            unstyled
-          >
-            {t("t.delete")}
-          </Button>
-        </div>
-      ),
+      preview: {
+        content: (
+          <TableThumbnail>
+            <img src={listingPhotoUrl} />
+          </TableThumbnail>
+        ),
+      },
+      fileName: { content: listingCriteriaFile.fileId.split("/").slice(-1).join() },
+      actions: {
+        content: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="font-semibold uppercase"
+              onClick={() => {
+                setDrawerState(true)
+              }}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => {
+                setCloudinaryData({ ...cloudinaryData, id: "" })
+                deletePDF()
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      },
     })
   } else if (listingCriteriaURL && listingCriteriaURL != "") {
     criteriaTableHeaders = {
@@ -146,31 +155,33 @@ const LotteryResults = () => {
       actions: criteriaTableHeaders.actions,
     }
     criteriaTableRows.push({
-      fileName: listingCriteriaURL,
-      actions: (
-        <div className="flex">
-          <Button
-            type="button"
-            className="font-semibold uppercase"
-            onClick={() => {
-              setDrawerState(true)
-            }}
-            unstyled
-          >
-            {t("t.edit")}
-          </Button>
-          <Button
-            type="button"
-            className="font-semibold uppercase text-red-700"
-            onClick={() => {
-              setValue("buildingSelectionCriteria", "")
-            }}
-            unstyled
-          >
-            {t("t.delete")}
-          </Button>
-        </div>
-      ),
+      fileName: { content: listingCriteriaURL },
+      actions: {
+        content: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="font-semibold uppercase"
+              onClick={() => {
+                setDrawerState(true)
+              }}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => {
+                setValue("buildingSelectionCriteria", "")
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      },
     })
   }
 

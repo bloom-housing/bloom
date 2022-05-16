@@ -21,6 +21,7 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
+import { UserRepository } from "./repositories/user-repository"
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { TwilioModule } from "nestjs-twilio"
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([RevokedToken, User, Application]),
+    TypeOrmModule.forFeature([RevokedToken, User, UserRepository, Application]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,

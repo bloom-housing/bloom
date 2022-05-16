@@ -21,6 +21,7 @@ import { UserService } from "../services/user.service"
 import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { UserErrorExtraModel } from "../user-errors"
+import { TokenDto } from "../dto/token.dto"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -43,6 +44,7 @@ export class AuthController {
 
   @UseGuards(DefaultAuthGuard)
   @Post("token")
+  @ApiBody({ type: TokenDto })
   @ApiOperation({ summary: "Token", operationId: "token" })
   token(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)

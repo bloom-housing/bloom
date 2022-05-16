@@ -65,4 +65,9 @@ export class Jurisdiction extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   emailFromAddress: string
+
+  @Column({ type: "text" })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  rentalAssistanceDefault: string
 }
