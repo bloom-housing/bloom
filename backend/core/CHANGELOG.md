@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.2...@bloom-housing/backend-core@4.2.3) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+### Features
+* adding alameda prog and prefs ([#2696](https://github.com/seanmalbert/bloom/issues/2696)) ([85c0bf5](https://github.com/seanmalbert/bloom/commit/85c0bf5b41c86c4dddb0bfb99d65a652f8cad1a0))
+
 ## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.8...@bloom-housing/backend-core@4.2.2-alpha.9) (2022-05-11)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
