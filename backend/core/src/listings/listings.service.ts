@@ -134,7 +134,7 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let mainQuery = view.getViewQb()
+    const mainQuery = view.getViewQb()
 
     for (const query of [mainQuery, innerFilteredQuery]) {
       for (const orderByCondition of orderByConditions) {
