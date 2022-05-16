@@ -326,10 +326,10 @@ describe("ListingsService", () => {
 
       await service.list({
         orderBy: [OrderByFieldsEnum.mostRecentlyUpdated],
-        order: [OrderParam.DESC],
+        orderDir: [OrderParam.DESC],
       })
 
-      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
+      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
       expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledWith(
         "listings.updated_at",
         "DESC",
