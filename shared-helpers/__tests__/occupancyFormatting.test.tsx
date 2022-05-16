@@ -111,16 +111,16 @@ describe("occupancy formatting helper", () => {
   it("properly creates occupany table", () => {
     expect(occupancyTable(testListing)).toStrictEqual([
       {
-        occupancy: "2-6 people",
-        unitType: <strong>3 BR</strong>,
+        occupancy: { content: "2-6 people" },
+        unitType: { content: <strong>3 BR</strong> },
       },
       {
-        occupancy: "at least 1 person",
-        unitType: <strong>2 BR</strong>,
+        occupancy: { content: "at least 1 person" },
+        unitType: { content: <strong>2 BR</strong> },
       },
       {
-        occupancy: "1 person",
-        unitType: <strong>SRO</strong>,
+        occupancy: { content: "1 person" },
+        unitType: { content: <strong>SRO</strong> },
       },
     ])
   })

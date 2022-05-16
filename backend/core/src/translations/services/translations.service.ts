@@ -113,7 +113,10 @@ export class TranslationsService extends AbstractServiceFactory<
     let persistedTranslatedValues
     persistedTranslatedValues = await this.getPersistedTranslatedValues(listing, language)
 
-    if (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt) {
+    if (
+      Object.keys(listingPathsAndValues).length > 0 &&
+      (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt)
+    ) {
       const newTranslations = await this.googleTranslateService.fetch(
         Object.values(listingPathsAndValues),
         language

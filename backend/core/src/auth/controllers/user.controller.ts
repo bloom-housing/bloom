@@ -173,7 +173,7 @@ export class UserController {
   @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
   @UseGuards(DefaultAuthGuard, AuthzGuard)
   async retrieve(@Param("id") userId: string): Promise<UserDto> {
-    return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
+    return mapTo(UserDto, await this.userService.findById(userId))
   }
 
   @Delete(`:id`)

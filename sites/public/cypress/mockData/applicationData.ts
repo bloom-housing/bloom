@@ -140,6 +140,7 @@ export const coliseumApplication: Application = {
     mailingAddress: {
       ...idDefaults,
       street: "Contact Street",
+      street2: "Contact Street 2",
       city: "Contact City",
       state: "AK",
       zipCode: "90222",
@@ -352,7 +353,7 @@ export const minimalDataApplication: Application = {
   additionalPhone: false,
   additionalPhoneNumber: "",
   additionalPhoneNumberType: "",
-  contactPreferences: ["email"],
+  contactPreferences: ["letter"],
   householdSize: 1,
   housingStatus: "",
   sendMailToMailingAddress: false,
@@ -386,6 +387,7 @@ export const minimalDataApplication: Application = {
     mailingAddress: {
       ...idDefaults,
       street: "",
+      street2: "",
       city: "",
       state: "",
       zipCode: "",

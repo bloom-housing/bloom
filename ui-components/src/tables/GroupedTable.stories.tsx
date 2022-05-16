@@ -1,6 +1,8 @@
 import React from "react"
 
 import { GroupedTable } from "./GroupedTable"
+import { mockData } from "../tables/StandardTable.stories"
+import t from "../helpers/translator"
 
 export default {
   title: "Tables/GroupedTable",
@@ -8,40 +10,19 @@ export default {
 }
 
 const headers = {
-  name: "t.name",
-  relationship: "t.relationship",
-  dob: "application.household.member.dateOfBirth",
+  name: t("t.name"),
+  relationship: t("t.relationship"),
+  dob: t("application.household.member.dateOfBirth"),
 }
+
 const data = [
-  {
-    data: [
-      {
-        name: "Jim Halpert",
-        relationship: "Husband",
-        dob: "05/01/1985",
-      },
-      {
-        name: "Michael Scott",
-        relationship: "Friend",
-        dob: "05/01/1975",
-      },
-    ],
-  },
   {
     header: "Reserved",
     className: "reserved",
-    data: [
-      {
-        name: "Jim Halpert",
-        relationship: "Husband",
-        dob: "05/01/1985",
-      },
-      {
-        name: "Michael Scott",
-        relationship: "Friend",
-        dob: "05/01/1975",
-      },
-    ],
+    data: mockData,
+  },
+  {
+    data: mockData,
   },
 ]
 

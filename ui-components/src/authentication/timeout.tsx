@@ -98,6 +98,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
       ariaDescription={promptText}
       actions={modalActions}
       hideCloseIcon
+      role="alertdialog"
     >
       {promptText}
     </Modal>

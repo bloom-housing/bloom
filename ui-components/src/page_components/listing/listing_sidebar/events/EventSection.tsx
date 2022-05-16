@@ -1,4 +1,5 @@
 import * as React from "react"
+import Heading from "../../../../headers/Heading"
 
 export type EventType = {
   timeString?: string
@@ -19,9 +20,9 @@ const EventSection = (props: EventSectionProps) => {
   return (
     <section className="aside-block">
       {props.headerText && (
-        <h4 className={props.sectionHeader ? "text-caps-underline" : "text-caps-tiny"}>
+        <Heading priority={4} style={props.sectionHeader ? "sidebarHeader" : "sidebarSubHeader"}>
           {props.headerText}
-        </h4>
+        </Heading>
       )}
       {props.events.map((event, index) => (
         <div key={`events-${index}`} className={`${index !== props.events.length - 1 && "pb-3"}`}>

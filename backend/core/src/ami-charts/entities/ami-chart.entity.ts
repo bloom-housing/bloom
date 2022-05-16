@@ -15,38 +15,20 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 @Entity()
 export class AmiChart {
   @PrimaryGeneratedColumn("uuid")
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id: string
 
   @CreateDateColumn()
-  @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
   createdAt: Date
 
   @UpdateDateColumn()
-  @Expose()
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
   updatedAt: Date
 
   @Column("jsonb")
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AmiChartItem)
   items: AmiChartItem[]
 
   @Column()
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   name: string
 
   @ManyToOne(() => Jurisdiction, { eager: true, nullable: false })
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Jurisdiction)
   jurisdiction: Jurisdiction
 }

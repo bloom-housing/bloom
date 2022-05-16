@@ -1,37 +1,46 @@
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
-import { OmitType } from "@nestjs/swagger"
+import { IsDate, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChart } from "../entities/ami-chart.entity"
 import { AmiChartItem } from "../entities/ami-chart-item.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { IdDto } from "../../shared/dto/id.dto"
+import { HasKeys } from "../../shared/types/has-keys"
+import { AbstractEntity } from "../../shared/entities/abstract.entity"
 
-export class AmiChartDto extends OmitType(AmiChart, ["items", "jurisdiction"] as const) {
+export class AmiChartDto implements HasKeys<AmiChart> {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  id: string
+
+  @Expose()
+  @Type(() => Date)
+  createdAt: Date
+
+  @Expose()
+  @Type(() => Date)
+  updatedAt: Date
+
+  @Expose()
   @Type(() => AmiChartItem)
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   items: AmiChartItem[]
 
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => JurisdictionDto)
-  jurisdiction: JurisdictionDto
+  name: string
+
+  @Expose()
+  @Type(() => IdDto)
+  jurisdiction: IdDto
 }
 
-export class AmiChartCreateDto extends OmitType(AmiChartDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-  "items",
-  "jurisdiction",
-] as const) {
+export class AmiChartCreateDto implements Omit<HasKeys<AmiChart>, keyof AbstractEntity> {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AmiChartItem)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => AmiChartItem)
   items: AmiChartItem[]
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  name: string
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -39,13 +48,7 @@ export class AmiChartCreateDto extends OmitType(AmiChartDto, [
   jurisdiction: IdDto
 }
 
-export class AmiChartUpdateDto extends OmitType(AmiChartDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-  "items",
-  "jurisdiction",
-]) {
+export class AmiChartUpdateDto extends AmiChartCreateDto {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
@@ -62,15 +65,4 @@ export class AmiChartUpdateDto extends OmitType(AmiChartDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AmiChartItem)
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  items: AmiChartItem[]
-
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  jurisdiction: IdDto
 }

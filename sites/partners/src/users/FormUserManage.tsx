@@ -125,7 +125,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       }
 
       return []
-    })() as string[]
+    })()
 
     const validation = await trigger()
 
@@ -365,7 +365,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                   register={register}
                   type="checkbox"
                   inputProps={{
-                    onChange: (e) => updateAllCheckboxes(e),
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateAllCheckboxes(e),
                   }}
                 />
 

@@ -36,7 +36,7 @@ describe("applications/contact/address", function () {
     cy.getByTestId("app-primary-work-in-region-no").check()
 
     cy.goNext()
-    cy.getByTestId("app-found-address-choice").should("be.visible")
+    cy.getByTestId("app-found-address-label").should("be.visible")
     cy.getByTestId("app-found-address-label").should("include.text", "Montgomery St")
     cy.getByTestId("app-found-address-label").should("include.text", "94111")
     cy.reload()
@@ -58,7 +58,7 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.getByTestId("app-found-address-choice").should("not.be.visible")
+    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
 
     // Let's go back and add other weirdness
     cy.getByTestId("app-edit-original-address").click()
@@ -69,6 +69,6 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.getByTestId("app-found-address-choice").should("not.be.visible")
+    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
   })
 })

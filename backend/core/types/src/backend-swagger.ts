@@ -1005,6 +1005,8 @@ export class UserService {
       limit?: number | "all"
       /**  */
       filter?: UserFilterParams[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -1012,7 +1014,12 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
       let data = null
 
       configs.data = data
@@ -1208,6 +1215,8 @@ export class ListingsService {
       view?: string
       /**  */
       orderBy?: OrderByFieldsEnum
+      /**  */
+      order?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1221,6 +1230,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
+        order: params["order"],
       }
       let data = null
 
@@ -2505,13 +2515,7 @@ export interface Id {
   id: string
 }
 
-export interface Jurisdiction {
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-
+export interface AmiChart {
   /**  */
   id: string
 
@@ -2521,43 +2525,14 @@ export interface Jurisdiction {
   /**  */
   updatedAt: Date
 
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-}
-
-export interface AmiChart {
   /**  */
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Jurisdiction
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   name: string
+
+  /**  */
+  jurisdiction: Id
 }
 
 export interface AmiChartCreate {
@@ -2565,13 +2540,22 @@ export interface AmiChartCreate {
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Id
+  name: string
 
   /**  */
-  name: string
+  jurisdiction: Id
 }
 
 export interface AmiChartUpdate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+
   /**  */
   id?: string
 
@@ -2580,15 +2564,6 @@ export interface AmiChartUpdate {
 
   /**  */
   updatedAt?: Date
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  jurisdiction: Id
-
-  /**  */
-  name: string
 }
 
 export interface Address {
@@ -4015,6 +3990,44 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+}
+
 export interface User {
   /**  */
   language?: Language
@@ -4440,6 +4453,9 @@ export interface JurisdictionCreate {
   emailFromAddress: string
 
   /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4473,6 +4489,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 
   /**  */
   programs: Id[]
@@ -6474,13 +6493,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -6553,6 +6566,13 @@ export enum EnumRequestMfaCodeMfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
 export type CombinedRolesTypes = UserRolesCreate
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
@@ -6591,6 +6611,11 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "name" = "name",
+  "waitlistOpen" = "waitlistOpen",
+  "status" = "status",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
 }
 
 export enum ListingApplicationAddressType {

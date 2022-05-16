@@ -122,8 +122,10 @@ const ListingCard = (props: ListingCardProps) => {
             (contentProps.contentHeader?.text || contentProps?.contentSubheader?.text) && (
               <hr className={"mb-2"} />
             )}
-          {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
-          {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
+          <div className={"listings-row_headers"}>
+            {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
+            {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
+          </div>
           {children && children}
           {tableProps && (tableProps.data || tableProps.stackedData) && (
             <>
@@ -159,7 +161,7 @@ const ListingCard = (props: ListingCardProps) => {
         <ImageCard {...imageCardProps} />
       </div>
       <div className="listings-row_content">
-        <div>{getContentHeader()}</div>
+        <div className={"listings-row_headers"}>{getContentHeader()}</div>
         {getContent()}
       </div>
     </article>

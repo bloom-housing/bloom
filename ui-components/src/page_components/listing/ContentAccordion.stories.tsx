@@ -2,6 +2,7 @@ import * as React from "react"
 
 import ContentAccordion from "./ContentAccordion"
 import { StandardTable } from "../../tables/StandardTable"
+import { mockData, mockHeaders } from "../../tables/StandardTable.stories"
 
 export default {
   title: "Listing/Content Accordion",
@@ -24,25 +25,6 @@ export const blueThemeBasic = () => {
   )
 }
 
-const headers = {
-  name: "t.name",
-  relationship: "t.relationship",
-  dob: "application.household.member.dateOfBirth",
-}
-
-const data = [
-  {
-    name: "Jim Halpert",
-    relationship: "Husband",
-    dob: "05/01/1985",
-  },
-  {
-    name: "Michael Scott",
-    relationship: "Friend",
-    dob: "05/01/1975",
-  },
-]
-
 export const blueThemeFilled = () => {
   const customBarContent = () => {
     return (
@@ -55,7 +37,7 @@ export const blueThemeFilled = () => {
   const customExpandedContent = () => {
     return (
       <div>
-        <StandardTable headers={headers} data={data} />
+        <StandardTable headers={mockHeaders} data={mockData} />
       </div>
     )
   }
