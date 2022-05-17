@@ -12,6 +12,7 @@ module.exports = {
     "@storybook/addon-a11y",
     "@storybook/addon-viewport",
     "@storybook/addon-knobs",
+    "@geometricpanda/storybook-addon-badges",
   ],
   typescript: {
     check: false,

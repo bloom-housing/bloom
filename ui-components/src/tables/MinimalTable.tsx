@@ -1,16 +1,26 @@
 import * as React from "react"
-import { TableHeaders, StandardTable } from "./StandardTable"
+import { TableHeaders, StandardTable, StandardTableData } from "./StandardTable"
 
 export interface MinimalTableProps {
+  /** If the table should be sortable through dragging */
   draggable?: boolean
+  /** A set state function tied to the table's data, used if the table is draggable */
   setData?: (data: unknown[]) => void
+  /** The headers for the table passed as text content with optional settings */
   headers: TableHeaders
-  data?: Record<string, React.ReactNode>[]
+  /** The table data passed as records of column name to cell data with optional settings */
+  data?: StandardTableData
+  /** Removes cell margins on the left of every row's first cell */
   flushLeft?: boolean
+  /** Removes cell margins on the right of every row's last cell */
   flushRight?: boolean
+  /** If the table should collapse on mobile views to show repeating columns on the left for every row */
   responsiveCollapse?: boolean
+  /** A class name applied to the root of the table */
   className?: string
+  /** A class name applied to the cells of the table */
   cellClassName?: string
+  /** An id applied to the table */
   id?: string
 }
 

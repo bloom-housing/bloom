@@ -1,7 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { StandardTable, TableThumbnail } from "../../src/tables/StandardTable"
-import { t } from "../../src/helpers/translator"
+import { StandardTable, StandardTableData, TableThumbnail } from "../../src/tables/StandardTable"
 
 afterEach(cleanup)
 
@@ -13,39 +12,43 @@ const headers = {
 
 const data = [
   {
-    number: "100",
-    sqFeet: "800",
-    numBathrooms: "2",
+    number: { content: "100" },
+    sqFeet: { content: "800" },
+    numBathrooms: { content: "2" },
   },
   {
-    number: "101",
-    sqFeet: "850",
-    numBathrooms: "3",
+    number: { content: "101" },
+    sqFeet: { content: "850" },
+    numBathrooms: { content: "3" },
   },
 ]
 
 const headersWithImage = { image: "t.text", ...headers }
-const dataWithImage = [...data] as any
-dataWithImage[0].image = (
-  <TableThumbnail>
-    <img src="/images/listing.jpg" />
-  </TableThumbnail>
-)
-dataWithImage[1].image = (
-  <TableThumbnail>
-    <img src="/images/logo_glyph.svg" />
-  </TableThumbnail>
-)
+const dataWithImage: StandardTableData = [...data]
+dataWithImage[0].image = {
+  content: (
+    <TableThumbnail>
+      <img src="/images/listing.jpg" />
+    </TableThumbnail>
+  ),
+}
+dataWithImage[1].image = {
+  content: (
+    <TableThumbnail>
+      <img src="/images/logo_glyph.svg" />
+    </TableThumbnail>
+  ),
+}
 
 describe("<StandardTable>", () => {
   it("renders default state", () => {
     const { getByText } = render(<StandardTable headers={headers} data={data} />)
-    expect(getByText(data[0].number))
-    expect(getByText(data[0].sqFeet))
-    expect(getByText(data[0].numBathrooms))
-    expect(getByText(data[1].number))
-    expect(getByText(data[1].sqFeet))
-    expect(getByText(data[1].numBathrooms))
+    expect(getByText(data[0].number.content))
+    expect(getByText(data[0].sqFeet.content))
+    expect(getByText(data[0].numBathrooms.content))
+    expect(getByText(data[1].number.content))
+    expect(getByText(data[1].sqFeet.content))
+    expect(getByText(data[1].numBathrooms.content))
   })
 
   it("renders with image thumbnails", () => {
@@ -63,12 +66,12 @@ describe("<StandardTable>", () => {
         responsiveCollapse={true}
       />
     )
-    expect(getByText(data[0].number))
-    expect(getByText(data[0].sqFeet))
-    expect(getByText(data[0].numBathrooms))
-    expect(getByText(data[1].number))
-    expect(getByText(data[1].sqFeet))
-    expect(getByText(data[1].numBathrooms))
+    expect(getByText(data[0].number.content))
+    expect(getByText(data[0].sqFeet.content))
+    expect(getByText(data[0].numBathrooms.content))
+    expect(getByText(data[1].number.content))
+    expect(getByText(data[1].sqFeet.content))
+    expect(getByText(data[1].numBathrooms.content))
     expect(container.getElementsByClassName("table-class").length).toBe(1)
     expect(container.getElementsByClassName("cell-class").length).toBe(6)
   })

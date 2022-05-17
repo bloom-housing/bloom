@@ -19,6 +19,7 @@
 .listings-row_figure {
   @apply w-full;
   @apply p-3;
+  @apply pb-0;
 
   @screen lg {
     @apply w-6/12;
@@ -31,6 +32,17 @@
 
   @screen lg {
     @apply w-6/12;
+  }
+
+  .listings-row_headers {
+    @apply flex;
+    @apply flex-col;
+    @apply items-center;
+    @apply text-center;
+    @screen md {
+      @apply items-start;
+      @apply text-left;
+    }
   }
 }
 

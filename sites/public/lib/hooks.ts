@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import qs from "qs"
 import { useRouter } from "next/router"
-import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
+import { ApplicationStatusProps, isInternalLink } from "@bloom-housing/ui-components"
 import {
   EnumListingFilterParamsComparison,
   EnumListingFilterParamsStatus,

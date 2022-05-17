@@ -1,34 +1,47 @@
 .page-header {
-  @apply py-8;
-  @apply border-t;
-  @apply border-gray-450;
+  /* Component Variables */
+  --background-color: var(--bloom-color-primary-lighter);
+  --border-color: var(--bloom-color-gray-450);
+  --text-color: inherit;
+  --inverse-background-color: var(--bloom-color-primary-darker);
+  --inverse-border-color: var(--bloom-color-primary);
+  --inverse-text-color: var(--bloom-color-white);
+  --title-font-size: var(--bloom-font-size-5xl);
 
-  @screen md {
-    @apply py-10;
+  /* Base Styles */
+  padding: var(--bloom-s8) 0;
+  background-color: var(--background-color);
+  border-top: var(--bloom-border-1) solid var(--border-color);
+  color: var(--text-color);
+
+  @media (min-width: $screen-sm) {
+    padding: var(--bloom-s10) 0;
   }
 
-  &.bg-primary-dark {
-    @apply text-white;
-    @apply border-primary;
+  /* Variants */
+  &.is-inverse {
+    --background-color: var(--inverse-background-color);
+    --border-color: var(--inverse-border-color);
+    --text-color: var(--inverse-text-color);
   }
 }
 
 .page-header__group {
-  @apply px-5;
-  @apply m-auto;
-  @apply max-w-5xl;
+  padding: 0 var(--bloom-s5);
+  margin: auto;
+  max-width: var(--bloom-width-5xl);
 }
 
 .page-header__title {
-  @apply text-center;
+  text-align: center;
 
-  @screen md {
-    @apply text-5xl;
-    @apply text-left;
+  @media (min-width: $screen-md) {
+    font-size: var(--title-font-size);
+    text-align: left;
   }
 }
 
 .page-header__lead {
-  @apply m-auto;
-  @apply max-w-5xl;
+  margin: auto;
+  max-width: var(--bloom-width-5xl);
 }

@@ -9,6 +9,7 @@ import {
   Dropzone,
   MinimalTable,
   TableThumbnail,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import {
   ListingEvent,
@@ -74,31 +75,35 @@ const LotteryResults = (props: LotteryResultsProps) => {
   /*
     Show a preview of the uploaded file within the upload drawer
   */
-  const previewTableRows = []
+  const previewTableRows: StandardTableData = []
   if (cloudinaryData.url !== "") {
     previewTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img alt="PDF preview" src={cloudinaryData.url} />
-        </TableThumbnail>
-      ),
-      fileName: cloudinaryData.id.split("/").slice(-1).join(),
-      actions: (
-        <Button
-          type="button"
-          className="font-semibold uppercase text-red-700"
-          onClick={() => {
-            setCloudinaryData({
-              id: "",
-              url: "",
-            })
-            setProgressValue(0)
-          }}
-          unstyled
-        >
-          {t("t.delete")}
-        </Button>
-      ),
+      preview: {
+        content: (
+          <TableThumbnail>
+            <img alt="PDF preview" src={cloudinaryData.url} />
+          </TableThumbnail>
+        ),
+      },
+      fileName: { content: cloudinaryData.id.split("/").slice(-1).join() },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            className="font-semibold uppercase text-red-700"
+            onClick={() => {
+              setCloudinaryData({
+                id: "",
+                url: "",
+              })
+              setProgressValue(0)
+            }}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
     })
   }
 
