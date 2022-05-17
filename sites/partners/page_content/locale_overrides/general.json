@@ -344,5 +344,8 @@
   "application.preferences.southAlamedaCounty.work.label": "Work in Fremont, Newark or Union City",
   "application.preferences.fremontPref.live.label": "Live in Fremont: At least one member of my household lives* in the City of Fremont",
   "application.preferences.fremontPref.title": "Live or work in the City of Fremont ",
-  "application.preferences.fremontPref.work.label": "Work in Fremont: At least one member of my household works** in the City of Fremont"
+  "application.preferences.fremontPref.work.label": "Work in Fremont: At least one member of my household works** in the City of Fremont",
+  "application.preferences.emeryvillePref.live.label": "At least one member of my household lives in the Emeryville",
+  "application.preferences.emeryvillePref.work.label": "At least one member of my household works at least 50% of weekly hours in Emeryville",
+  "application.preferences.emeryvillePref.child.label": "I have a child enrolled in the Emeryville Unified School District (EUSD) or Emeryville Child Development Center (ECDC)"
 }
