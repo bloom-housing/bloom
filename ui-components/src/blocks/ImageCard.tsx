@@ -100,7 +100,7 @@ const ImageCard = (props: ImageCardProps) => {
       </div>
       <figure className="image-card">
         {props.imageUrl ? (
-          <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />
+          <img src={props.imageUrl} alt={props.description || ""} />
         ) : (
           <div className={"image-card__placeholder"} />
         )}
