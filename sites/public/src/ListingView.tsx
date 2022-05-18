@@ -6,6 +6,7 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   Listing,
+  ListingMetadata,
   ListingApplicationAddressType,
   ListingEvent,
   ListingEventType,
@@ -33,6 +34,9 @@ import {
   Waitlist,
   WhatToExpect,
   t,
+  ExpandableText,
+  PreferencesList,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -61,6 +65,7 @@ interface ListingProcessProps {
 
 interface ListingProps {
   listing: Listing
+  listingMetadata: ListingMetadata
   preview?: boolean
   allowFavoriting?: boolean
 }
@@ -127,7 +132,7 @@ export const ListingProcess = (props: ListingProcessProps) => {
 }
 
 export const ListingView = (props: ListingProps) => {
-  const { listing } = props
+  const { listing, listingMetadata } = props
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -147,6 +152,10 @@ export const ListingView = (props: ListingProps) => {
 
   const { headers: hmiHeaders, data: hmiData } = getHmiSummary(listing)
 
+  const occupancyHeaders = {
+    unitType: "t.unitType",
+    occupancy: "t.occupancy",
+  }
   const occupancyData = occupancyTable(listing)
 
   let openHouseEvents: ListingEvent[] | null = null
@@ -336,6 +345,94 @@ export const ListingView = (props: ListingProps) => {
     return featuresExist ? <ul>{features}</ul> : null
   }
 
+  const getReservedTitle = () => {
+    if (
+      listing.reservedCommunityType.name === "senior55" ||
+      listing.reservedCommunityType.name === "senior62" ||
+      listing.reservedCommunityType.name === "senior"
+    ) {
+      return t("listings.reservedCommunitySeniorTitle")
+    } else return t("listings.reservedCommunityTitleDefault")
+  }
+
+  const getPreferenceData = () => {
+    return listing.listingPreferences
+      .filter((listingPref) => {
+        return (
+          !listingPref.preference.formMetadata ||
+          !listingPref.preference.formMetadata.hideFromListing
+        )
+      })
+      .map((listingPref, index) => {
+        return {
+          ordinal: index + 1,
+          links: listingPref.preference.links,
+          title: listingPref.preference.title,
+          subtitle: listingPref.preference.subtitle,
+          description: listingPref.preference.description,
+        }
+      })
+  }
+
+  const occupancyDescription = (() => {
+    if (listingMetadata.unitTypes.map((unitType) => unitType.name).includes("SRO")) {
+      return listingMetadata.unitTypes.length == 1
+        ? t("listings.occupancyDescriptionAllSro")
+        : t("listings.occupancyDescriptionSomeSro")
+    } else {
+      return t("listings.occupancyDescriptionNoSro")
+    }
+  })()
+
+  const householdMaximumIncomeSubheader = listing?.units[0]?.bmrProgramChart
+    ? t("listings.forIncomeCalculationsBMR")
+    : t("listings.forIncomeCalculations")
+
+  const preferencesSection = (() => {
+    if (listing.listingPreferences && listing.listingPreferences.length > 0) {
+      return (
+        <ListSection
+          title={t("listings.sections.housingPreferencesTitle")}
+          subtitle={t("listings.sections.housingPreferencesSubtitle")}
+        >
+          <>
+            <PreferencesList listingPreferences={getPreferenceData()} />
+            <p className="text-gray-700 text-tiny">
+              {t("listings.remainingUnitsAfterPreferenceConsideration")}
+            </p>
+          </>
+        </ListSection>
+      )
+    }
+
+    return null
+  })()
+
+  const buildingSelectionCriteria = (() => {
+    if (listing.buildingSelectionCriteriaFile) {
+      return (
+        <p>
+          <a
+            href={cloudinaryPdfFromId(
+              listing.buildingSelectionCriteriaFile.fileId,
+              process.env.cloudinaryCloudName
+            )}
+          >
+            {t("listings.moreBuildingSelectionCriteria")}
+          </a>
+        </p>
+      )
+    } else if (listing.buildingSelectionCriteria) {
+      return (
+        <p>
+          <a href={listing.buildingSelectionCriteria}>
+            {t("listings.moreBuildingSelectionCriteria")}
+          </a>
+        </p>
+      )
+    }
+  })()
+
   const accessibilityFeatures = getAccessibilityFeatures()
 
   return (
@@ -405,7 +502,6 @@ export const ListingView = (props: ListingProps) => {
               />
             </div>
           </ListingDetailItem>
-
           {hmiData?.length || occupancyData?.length || listing.listingPrograms?.length ? (
             <ListingDetailItem
               imageAlt={t("listings.eligibilityNotebook")}
@@ -460,6 +556,94 @@ export const ListingView = (props: ListingProps) => {
             </ListingDetailItem>
           ) : null}
 
+          <ListingDetailItem
+            imageAlt={t("listings.eligibilityNotebook")}
+            imageSrc="/images/listing-eligibility.svg"
+            title={t("listings.sections.eligibilityTitle")}
+            subtitle={t("listings.sections.eligibilitySubtitle")}
+            desktopClass="bg-primary-lighter"
+          >
+            <ul>
+              {listing.reservedCommunityType && (
+                <ListSection title={getReservedTitle()} subtitle={null}>
+                  <InfoCard
+                    title={t(
+                      `listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`
+                    )}
+                    subtitle={t("listings.allUnits")}
+                  >
+                    <ExpandableText className="text-sm text-gray-700">
+                      {listing.reservedCommunityDescription}
+                    </ExpandableText>
+                  </InfoCard>
+                </ListSection>
+              )}
+
+              <ListSection
+                title={t("listings.householdMaximumIncome")}
+                subtitle={householdMaximumIncomeSubheader}
+              >
+                <StandardTable
+                  headers={hmiHeaders}
+                  data={hmiData}
+                  responsiveCollapse={true}
+                  translateData={true}
+                />
+              </ListSection>
+
+              <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
+                <StandardTable
+                  headers={occupancyHeaders}
+                  data={occupancyData}
+                  responsiveCollapse={false}
+                />
+              </ListSection>
+
+              {listing.rentalAssistance && (
+                <ListSection
+                  title={t("listings.sections.rentalAssistanceTitle")}
+                  subtitle={listing.rentalAssistance}
+                />
+              )}
+
+              {preferencesSection}
+
+              {(listing.creditHistory ||
+                listing.rentalHistory ||
+                listing.criminalBackground ||
+                buildingSelectionCriteria) && (
+                <ListSection
+                  title={t("listings.sections.additionalEligibilityTitle")}
+                  subtitle={t("listings.sections.additionalEligibilitySubtitle")}
+                >
+                  <>
+                    {listing.creditHistory && (
+                      <InfoCard title={t("listings.creditHistory")}>
+                        <ExpandableText className="text-sm text-gray-700">
+                          {listing.creditHistory}
+                        </ExpandableText>
+                      </InfoCard>
+                    )}
+                    {listing.rentalHistory && (
+                      <InfoCard title={t("listings.rentalHistory")}>
+                        <ExpandableText className="text-sm text-gray-700">
+                          {listing.rentalHistory}
+                        </ExpandableText>
+                      </InfoCard>
+                    )}
+                    {listing.criminalBackground && (
+                      <InfoCard title={t("listings.criminalBackground")}>
+                        <ExpandableText className="text-sm text-gray-700">
+                          {listing.criminalBackground}
+                        </ExpandableText>
+                      </InfoCard>
+                    )}
+                    {buildingSelectionCriteria}
+                  </>
+                </ListSection>
+              )}
+            </ul>
+          </ListingDetailItem>
           <ListingDetailItem
             imageAlt={t("listings.featuresCards")}
             imageSrc="/images/listing-features.svg"
@@ -537,7 +721,6 @@ export const ListingView = (props: ListingProps) => {
               </div>
             )}
           </ListingDetailItem>
-
           <ListingDetailItem
             imageAlt={t("listings.neighborhoodBuildings")}
             imageSrc="/images/listing-neighborhood.svg"
@@ -551,7 +734,6 @@ export const ListingView = (props: ListingProps) => {
               />
             </div>
           </ListingDetailItem>
-
           {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
             <ListingDetailItem
               imageAlt={t("listings.additionalInformationEnvelope")}

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, ListingMetadata } from "@bloom-housing/backend-core/types"
 import { AuthContext, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing, ListingDetail, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
@@ -13,10 +13,11 @@ import dayjs from "dayjs"
 
 interface ListingProps {
   listing: Listing
+  listingMetadata: ListingMetadata
 }
 
 export default function ListingPage(props: ListingProps) {
-  const { listing } = props
+  const { listing, listingMetadata } = props
 
   const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const { profile } = useContext(AuthContext)
@@ -63,7 +64,7 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-      <ListingView listing={listing} allowFavoriting={true} />
+      <ListingView listing={listing} allowFavoriting={true} listingMetadata={listingMetadata} />
     </Layout>
   )
 }
@@ -113,15 +114,22 @@ export async function getServerSideProps(context: {
   params: Record<string, string>
   locale: string
 }) {
-  let response
+  let listingResponse, listingMetadataResponse
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+    listingResponse = await axios.get(
+      `${process.env.backendApiBase}/listings/${context.params.id}`,
+      {
+        headers: { language: context.locale },
+      }
+    )
+
+    listingMetadataResponse = await axios.get(`${process.env.backendApiBase}/listings/meta`, {
       headers: { language: context.locale },
     })
   } catch (e) {
     return { notFound: true }
   }
 
-  return { props: { listing: response.data } }
+  return { props: { listing: listingResponse.data, listingMetadata: listingMetadataResponse.data } }
 }
