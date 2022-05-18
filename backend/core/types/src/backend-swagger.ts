@@ -4868,9 +4868,6 @@ export interface UnitAmiChartOverride {
 
 export interface Unit {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -5011,6 +5008,9 @@ export interface Listing {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   showWaitlist: boolean
@@ -5305,9 +5305,6 @@ export interface UnitAmiChartOverrideCreate {
 
 export interface UnitCreate {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -5449,6 +5446,9 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5721,9 +5721,6 @@ export interface UnitAmiChartOverrideUpdate {
 
 export interface UnitUpdate {
   /**  */
-  status: UnitStatus
-
-  /**  */
   id?: string
 
   /**  */
@@ -5861,6 +5858,9 @@ export interface ListingUpdate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   id?: string
@@ -6633,6 +6633,11 @@ export enum ListingReviewOrder {
   "firstComeFirstServe" = "firstComeFirstServe",
 }
 
+export enum ListingAvailability {
+  "availableUnits" = "availableUnits",
+  "openWaitlist" = "openWaitlist",
+}
+
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
@@ -6642,13 +6647,6 @@ export enum ListingEventType {
 export enum FormMetaDataType {
   "radio" = "radio",
   "checkbox" = "checkbox",
-}
-
-export enum UnitStatus {
-  "unknown" = "unknown",
-  "available" = "available",
-  "occupied" = "occupied",
-  "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate

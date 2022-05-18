@@ -9,7 +9,7 @@ import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.d
 import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
 import { summarizeUnits } from "../shared/units-transformations"
-import { Language } from "../../types"
+import { Language, ListingAvailability } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 import { ListingCreateDto } from "./dto/listing-create.dto"
@@ -170,7 +170,7 @@ export class ListingsService {
       if (!unit.id) {
         delete unit.id
       }
-      if (unit.status === "available") {
+      if (listingDto.listingAvailability === ListingAvailability.availableUnits) {
         availableUnits++
       }
     })

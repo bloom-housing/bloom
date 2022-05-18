@@ -70,6 +70,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     year: string
   }
   reviewOrderQuestion?: string
+  listingAvailabilityQuestion?: string
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
   whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
@@ -153,6 +154,7 @@ export const formDefaults: FormListing = {
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: null,
+  listingAvailability: null,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
