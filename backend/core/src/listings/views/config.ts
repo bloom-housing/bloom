@@ -43,6 +43,7 @@ const views: Views = {
       "listingImagesImage.fileId",
       "listingImagesImage.label",
       "listingPreferencesPreference.id",
+      "listings.listingAvailability",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },

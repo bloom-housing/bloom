@@ -5,6 +5,7 @@ import {
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
+  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -105,6 +106,15 @@ export const getListings = (listings) => {
     minimumIncome: "t.minimumIncome",
     rent: "t.rent",
   }
+
+  const generateTableSubHeader = (listing) => {
+    if (listing.listingAvailability === ListingAvailability.availableUnits) {
+      return { text: t("listings.availableUnits") }
+    } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
+      return { text: t("listings.waitlist.open") }
+    }
+    return null
+  }
   return listings.map((listing: Listing, index) => {
     return (
       <ListingCard
@@ -135,7 +145,7 @@ export const getListings = (listings) => {
         contentProps={{
           contentHeader: { text: listing.name },
           contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
-          tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
+          tableHeader: generateTableSubHeader(listing),
         }}
       />
     )
