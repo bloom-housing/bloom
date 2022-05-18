@@ -8,12 +8,13 @@ import {
   IsEnum,
   IsIn,
   IsOptional,
-  IsString,
-  ValidateNested,
+  IsString, MaxLength, MinLength,
+  ValidateNested
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
+import { IsLength } from "../../shared/decorators/isLength.decorator"
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
@@ -67,4 +68,18 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
   order?: OrderParam
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "search",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MinLength(3, {
+    message: "Search must be at least 3 characters",
+    groups: [ValidationsGroupsEnum.default],
+  })
+  search?: string
 }

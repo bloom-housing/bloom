@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, OrderByCondition, Repository } from "typeorm"
+import { Brackets, In, OrderByCondition, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
@@ -85,6 +85,12 @@ export class ListingsService {
         params.filter,
         filterTypeToFieldMap,
         innerFilteredQuery
+      )
+    }
+
+    if (params.search) {
+      innerFilteredQuery.andWhere(
+        "listings.name ILIKE :search", { search: `%${params.search}%` }
       )
     }
 

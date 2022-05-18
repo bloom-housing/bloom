@@ -1217,6 +1217,8 @@ export class ListingsService {
       orderBy?: OrderByFieldsEnum
       /**  */
       order?: string
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1231,6 +1233,7 @@ export class ListingsService {
         view: params["view"],
         orderBy: params["orderBy"],
         order: params["order"],
+        search: params["search"],
       }
       let data = null
 

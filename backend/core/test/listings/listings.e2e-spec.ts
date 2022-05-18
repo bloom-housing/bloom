@@ -22,6 +22,7 @@ import { Program } from "../../src/program/entities/program.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { makeTestListing } from "./utils/make-test-listing"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -400,6 +401,38 @@ describe("Listings", () => {
       .get(`/listings/${putResponse.body.id}`)
       .expect(200)
     expect(listingResponse2.body.listingPrograms.length).toBe(0)
+  })
+
+  it("should find listing by search", async () => {
+    const anyJurisdiction = (await jurisdictionsRepository.find({take: 1}))[0]
+    const newListingCreateDto = makeTestListing(anyJurisdiction.id)
+
+    const newListingName = "random-name"
+    newListingCreateDto.name = newListingName
+
+    let listingsSearchResponse = await supertest(app.getHttpServer())
+      .get(`/listings?search=random`)
+      .expect(200)
+
+    expect(listingsSearchResponse.body.items.length).toBe(0)
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .post(`/listings`)
+      .send(newListingCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+    expect(listingResponse.body.name).toBe(newListingName)
+
+    listingsSearchResponse = await supertest(app.getHttpServer())
+      .get(`/listings`)
+      .expect(200)
+    expect(listingsSearchResponse.body.items.length).toBeGreaterThan(1)
+
+    listingsSearchResponse = await supertest(app.getHttpServer())
+      .get(`/listings?search=random`)
+      .expect(200)
+
+    expect(listingsSearchResponse.body.items.length).toBe(1)
+    expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
   })
 
   afterEach(() => {

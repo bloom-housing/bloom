@@ -1,7 +1,6 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import dayjs from "dayjs"
 import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -18,7 +17,6 @@ import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { ListingImageDto } from "./listing-image.dto"
-import { IncomePeriod } from "../../applications/types/income-period-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
