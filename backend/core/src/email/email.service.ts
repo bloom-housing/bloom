@@ -62,6 +62,27 @@ export class EmailService {
     )
   }
 
+  public async partnerWelcome(user: User, appUrl: string, confirmationUrl: string) {
+    const jurisdiction = await this.getUserJurisdiction(user)
+    await this.loadTranslationsForUser(user)
+    if (this.configService.get<string>("NODE_ENV") === "production") {
+      Logger.log(
+        `Preparing to send a welcome email to ${user.email} from ${jurisdiction.emailFromAddress}...`
+      )
+    }
+
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t("register.welcome"),
+      this.template("partner-welcome")({
+        user: user,
+        confirmationUrl: confirmationUrl,
+        appOptions: { appUrl: appUrl },
+      })
+    )
+  }
+
   private async getUserJurisdiction(user?: User) {
     let jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     if (!jurisdiction && user?.jurisdictions) {

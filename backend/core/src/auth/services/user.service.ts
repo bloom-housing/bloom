@@ -245,7 +245,8 @@ export class UserService {
       try {
         await this.userRepository.save(user)
         const confirmationUrl = UserService.getPartnersConfirmationUrl(dto.appUrl, user)
-        await this.emailService.invite(user, dto.appUrl, confirmationUrl)
+
+        await this.emailService.partnerWelcome(user, dto.appUrl, confirmationUrl)
         return user
       } catch (err) {
         throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
@@ -442,7 +443,7 @@ export class UserService {
       authContext
     )
 
-    await this.emailService.invite(
+    await this.emailService.partnerWelcome(
       user,
       this.configService.get("PARTNERS_PORTAL_URL"),
       UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
