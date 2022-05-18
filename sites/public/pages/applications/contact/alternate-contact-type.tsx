@@ -99,6 +99,7 @@ const ApplicationAlternateContactType = () => {
                 return (
                   <Fragment key={option}>
                     <Field
+                      className="mb-1"
                       key={option}
                       type="radio"
                       id={"type-" + option}
