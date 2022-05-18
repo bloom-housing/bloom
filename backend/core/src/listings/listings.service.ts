@@ -234,7 +234,7 @@ export class ListingsService {
       const amiCharts = await this.amiChartsRepository.find({
         where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
       })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
+      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts, listing)
     }
     return listing
   }
