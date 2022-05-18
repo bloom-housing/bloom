@@ -9,6 +9,8 @@ import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-typ
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { AmiChartItem } from "../ami-charts/entities/ami-chart-item.entity"
 import { UnitAmiChartOverride } from "../units/entities/unit-ami-chart-override.entity"
+import { Listing } from "../listings/entities/listing.entity"
+import { ListingAvailability } from "../listings/types/listing-availability-enum"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -315,7 +317,7 @@ type UnitMap = {
 const UnitTypeSort = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
 
 // Allows for multiples rows under one unit type if the rent methods differ
-export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
+export const summarizeUnitsByTypeAndRent = (units: Units, listing: Listing): UnitSummary[] => {
   const summaries: UnitSummary[] = []
   const unitMap: UnitMap = {}
 
@@ -331,10 +333,9 @@ export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
     const finalSummary = unitMap[key].reduce((summary, unit, index) => {
       return getUnitsSummary(unit, index === 0 ? null : summary)
     }, {} as UnitSummary)
-    // TODO: YL
-    // finalSummary.totalAvailable = unitMap[key].filter(
-    //   (unit) => unit.status === UnitStatus.available
-    // ).length
+    if (listing.listingAvailability === ListingAvailability.availableUnits) {
+      finalSummary.totalAvailable = unitMap[key].length
+    }
     summaries.push(finalSummary)
   }
 
@@ -366,12 +367,12 @@ export const summarizeUnitsByType = (units: Units, unitTypes: UnitTypeDto[]): Un
   })
 }
 
-const summarizeByAmi = (units: Units, amiPercentages: string[]) => {
+const summarizeByAmi = (units: Units, amiPercentages: string[], listing: Listing) => {
   return amiPercentages.map((percent: string) => {
     const unitsByAmiPercentage = units.filter((unit: Unit) => unit.amiPercentage == percent)
     return {
       percent: percent,
-      byUnitType: summarizeUnitsByTypeAndRent(unitsByAmiPercentage),
+      byUnitType: summarizeUnitsByTypeAndRent(unitsByAmiPercentage, listing),
     }
   })
 }
@@ -385,7 +386,11 @@ export const getUnitTypes = (units: Unit[]): UnitType[] => {
   return Array.from(unitTypes.values())
 }
 
-export const summarizeUnits = (units: Unit[], amiCharts: AmiChart[]): UnitsSummarized => {
+export const summarizeUnits = (
+  units: Unit[],
+  amiCharts: AmiChart[],
+  listing: Listing
+): UnitsSummarized => {
   const data = {} as UnitsSummarized
 
   if (!units || (units && units.length === 0)) {
@@ -409,9 +414,9 @@ export const summarizeUnits = (units: Unit[], amiCharts: AmiChart[]): UnitsSumma
   data.amiPercentages = Array.from(
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
-  data.byUnitTypeAndRent = summarizeUnitsByTypeAndRent(units)
+  data.byUnitTypeAndRent = summarizeUnitsByTypeAndRent(units, listing)
   data.byUnitType = summarizeUnitsByType(units, data.unitTypes)
-  data.byAMI = summarizeByAmi(units, data.amiPercentages)
+  data.byAMI = summarizeByAmi(units, data.amiPercentages, listing)
   data.hmi = hmiData(
     units,
     data.byUnitType.reduce((maxHousehold, summary) => {
