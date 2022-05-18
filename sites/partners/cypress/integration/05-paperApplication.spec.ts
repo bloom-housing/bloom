@@ -9,7 +9,7 @@ describe("Paper Application Tests", () => {
 
   beforeEach(() => {
     cy.visit("/")
-    cy.getByTestId("listing-status-cell").eq(1).click()
+    cy.get(`[row-id="0"]`).find(`[col-id="status"]`).contains("Open").click()
     cy.getByTestId("addApplicationButton").contains("Add Application").click()
   })
 
