@@ -593,6 +593,7 @@
   "listings.availableAndWaitlist": "Available Units & Open Waitlist",
   "listings.availableUnitsAndWaitlist": "Available units and waitlist",
   "listings.availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>%{number} units</span>",
+  "listings.availableUnits": "Available Units",
   "listings.bath": "bath",
   "listings.browseListings": "Browse Listings",
   "listings.buildingImageAltText": "A picture of the building",
