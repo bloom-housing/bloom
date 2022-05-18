@@ -89,9 +89,7 @@ export class ListingsService {
     }
 
     if (params.search) {
-      innerFilteredQuery.andWhere(
-        "listings.name ILIKE :search", { search: `%${params.search}%` }
-      )
+      innerFilteredQuery.andWhere("listings.name ILIKE :search", { search: `%${params.search}%` })
     }
 
     // TODO(avaleske): Typescript doesn't realize that the `paginate` bool is a

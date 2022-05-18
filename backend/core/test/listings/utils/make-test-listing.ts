@@ -5,7 +5,7 @@ import { BaseEntity } from "typeorm"
 export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, keyof BaseEntity> {
   return {
     jurisdiction: {
-      id: jurisdictionId
+      id: jurisdictionId,
     },
     additionalApplicationSubmissionNotes: null,
     digitalApplication: false,
@@ -54,8 +54,7 @@ export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, 
     isWaitlistOpen: false,
     waitlistOpenSpots: null,
     customMapPin: null,
-    applicationMethods: [
-    ],
+    applicationMethods: [],
     applicationPickUpAddress: {
       placeName: null,
       city: "San Francisco",
@@ -65,7 +64,7 @@ export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, 
       street2: "Suite #59930",
       zipCode: "94104",
       latitude: 37.789673,
-      longitude: -122.40151
+      longitude: -122.40151,
     },
     applicationDropOffAddress: null,
     applicationMailingAddress: null,
@@ -81,14 +80,11 @@ export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, 
       street2: "Suite #59930",
       zipCode: "94104",
       latitude: 37.789673,
-      longitude: -122.40151
+      longitude: -122.40151,
     },
-    leasingAgents: [
-    ],
-    listingPrograms: [
-    ],
-    listingPreferences: [
-    ],
+    leasingAgents: [],
+    listingPrograms: [],
+    listingPreferences: [],
     reservedCommunityType: null,
     result: null,
     units: [],
@@ -103,7 +99,7 @@ export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, 
       street2: "Suite #59930",
       zipCode: "94104",
       latitude: 37.789673,
-      longitude: -122.40151
+      longitude: -122.40151,
     },
     buildingTotalUnits: 100,
     developer: "Developer",
@@ -116,6 +112,6 @@ export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, 
     unitAmenities: "Custom unit amenities text",
     servicesOffered: "Custom services offered text",
     yearBuilt: 2021,
-    countyCode: "Alameda"
+    countyCode: "Alameda",
   }
 }

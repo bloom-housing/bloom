@@ -8,8 +8,10 @@ import {
   IsEnum,
   IsIn,
   IsOptional,
-  IsString, MaxLength, MinLength,
-  ValidateNested
+  IsString,
+  MaxLength,
+  MinLength,
+  ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
