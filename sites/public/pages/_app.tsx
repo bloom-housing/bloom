@@ -77,7 +77,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         document.body.setAttribute("dir", "rtl")
       }
     } else {
-      document.body.removeAttribute("dir")
+      document.body.setAttribute("dir", "ltr")
     }
   }, [locale, router.events])
 

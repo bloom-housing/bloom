@@ -50,7 +50,7 @@ export const useFormConductor = (stepName: string) => {
   return context
 }
 
-const listingsFetcher = function () {
+const listingsFetcher = function (view: string) {
   return async (
     url: string,
     page: number,
@@ -60,11 +60,11 @@ const listingsFetcher = function () {
   ) => {
     const res = await axios.get(url, {
       params: {
-        view: "base",
-        page: page,
-        limit: limit,
+        view,
+        page,
+        limit,
         filter: encodeToBackendFilterArray(filters),
-        orderBy: orderBy,
+        orderBy,
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
@@ -77,13 +77,14 @@ const listingsFetcher = function () {
 // TODO: move this so it can be shared with the partner site.
 export function useListingsData(
   pageIndex: number,
-  limit = 10,
+  limit = 8,
   filters: ListingFilterState,
-  orderBy: OrderByFieldsEnum
+  orderBy: OrderByFieldsEnum,
+  view = "publicListings"
 ) {
   const { data, error } = useSWR(
     [`${process.env.listingServiceUrl}`, pageIndex, limit, filters, orderBy],
-    listingsFetcher()
+    listingsFetcher(view)
   )
 
   return {
@@ -140,9 +141,9 @@ export async function fetchBaseListingData() {
   try {
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
-        view: "base",
-        limit: "8",
-        page: "1",
+        view: "publicListings",
+        limit: 8,
+        page: 1,
         orderBy: OrderByFieldsEnum.comingSoon,
         filter: [
           {

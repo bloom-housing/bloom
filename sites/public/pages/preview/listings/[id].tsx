@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, ListingMetadata } from "@bloom-housing/backend-core/types"
 import { AlertBox, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
@@ -11,10 +11,11 @@ import { MetaTags } from "../../../src/MetaTags"
 
 interface ListingProps {
   listing: Listing
+  listingMetadata: ListingMetadata
 }
 
 export default function ListingPage(props: ListingProps) {
-  const { listing } = props
+  const { listing, listingMetadata } = props
   const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     regionName: t("region.name"),
@@ -37,19 +38,23 @@ export default function ListingPage(props: ListingProps) {
       >
         {t("listings.listingPreviewOnly")}
       </AlertBox>
-      <ListingView listing={listing} preview={false} />
+      <ListingView listing={listing} preview={false} listingMetadata={listingMetadata} />
     </Layout>
   )
 }
 
 export async function getServerSideProps(context: { params: Record<string, string> }) {
-  let response
+  let listingResponse, listingMetadataResponse
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+    listingResponse = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+
+    listingMetadataResponse = await axios.get(`${process.env.backendApiBase}/listings/meta`, {
+      headers: { language: "en" },
+    })
   } catch (e) {
     return { notFound: true }
   }
 
-  return { props: { listing: response.data } }
+  return { props: { listing: listingResponse.data, listingMetadata: listingMetadataResponse.data } }
 }

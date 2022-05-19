@@ -16,9 +16,7 @@ describe("<ImageCard>", () => {
   })
   it("renders with a link", () => {
     const { getByAltText } = render(<ImageCard imageUrl={"/images/listing.jpg"} href="/listings" />)
-    expect(getByAltText("A picture of the building").closest("a")?.getAttribute("href")).toBe(
-      "/listings"
-    )
+    expect(getByAltText("").closest("a")?.getAttribute("href")).toBe("/listings")
   })
   it("renders with an application status bar", () => {
     const { getByText } = render(

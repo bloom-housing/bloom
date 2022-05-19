@@ -56,6 +56,9 @@ const GetApplication = (props: ApplicationsProps) => {
               className="w-full mb-2"
               href={props.onlineApplicationURL}
               dataTestId={"listing-view-apply-button"}
+              linkProps={{
+                target: "_blank",
+              }}
             >
               {t("listings.apply.applyOnline")}
             </LinkButton>

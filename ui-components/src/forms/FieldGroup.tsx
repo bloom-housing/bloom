@@ -70,7 +70,7 @@ const FieldGroup = ({
     return (
       <div key={item.value}>
         <input
-          aria-describedby={`${name}-error`}
+          aria-describedby={error ? `${name}-error` : name}
           aria-invalid={!!error || false}
           type={type}
           id={item.id}

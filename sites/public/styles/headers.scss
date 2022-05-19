@@ -72,7 +72,10 @@
           @apply text-primary;
           align-items: center;
           display: flex;
-          font-size: 1.125rem;
+          font-size: 0.95rem;
+          @screen lg {
+            font-size: 1.125rem;
+          }
           font-weight: 700;
           height: 40px;
           padding: 1rem;
@@ -146,13 +149,8 @@
       }
 
       .navbar-logo {
-        @screen md {
-          width: 100%;
-        }
-
         @media (min-width: $header-desktop-min-size) {
           padding: 48px 0 32px 0;
-          width: 100%;
         }
 
         @screen xl {

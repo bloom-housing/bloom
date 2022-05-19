@@ -12,7 +12,7 @@
 
 <RenderIf language="ar">
 
-### [Detroit Home Connect: What is Affordable Housing?](https://www.youtube.com/watch?v=cqd1IlIm1HM&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=1&ab_channel=CityofDetroit)
+### [Detroit Home Connect: ما هو السكن الميسور التكلفة؟](https://www.youtube.com/watch?v=cqd1IlIm1HM&list=PLUZWFHZ-TRXc45NPGSxpFPDmfNcc8Dk7u&index=1&ab_channel=CityofDetroit)
 
 </RenderIf>
 

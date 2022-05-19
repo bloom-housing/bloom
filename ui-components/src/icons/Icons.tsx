@@ -479,7 +479,7 @@ export const Hamburger = (props: IconProps) => {
         />
       </mask>
       <g mask="url(#mask0)">
-        <rect x="-1.6875" width="11.8125" height="9" fill="#0077DA" />
+        <rect x="-1.6875" width="11.8125" height="9" fill={props.fill ?? "currentColor"} />
       </g>
     </svg>
   )

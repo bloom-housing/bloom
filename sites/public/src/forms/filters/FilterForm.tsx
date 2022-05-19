@@ -136,6 +136,7 @@ const FilterForm = (props: FilterFormProps) => {
               type="hidden"
               register={register}
               defaultValue={EnumListingFilterParamsStatus.active}
+              hidden={true}
             />
             <ViewItem
               className={"font-bold"}
@@ -221,13 +222,16 @@ const FilterForm = (props: FilterFormProps) => {
             <Field
               id={"minRent"}
               name={FrontendListingFilterStateKeys.minRent}
+              type="number"
               placeholder={t("publicFilter.rentRangeMin")}
+              label={t("publicFilter.rentRangeMin")}
               register={register}
               prepend={"$"}
               defaultValue={localFilterState?.minRent}
               error={errors?.minRent !== undefined}
               errorMessage={t("errors.minGreaterThanMaxRentError")}
               validation={{ max: maxRent || minRent }}
+              readerOnly
               inputProps={{
                 onBlur: () => {
                   void trigger("minRent")
@@ -239,14 +243,17 @@ const FilterForm = (props: FilterFormProps) => {
           <GridCell span={1}>
             <Field
               id={"maxRent"}
+              type="number"
               name={FrontendListingFilterStateKeys.maxRent}
               placeholder={t("publicFilter.rentRangeMax")}
+              label={t("publicFilter.rentRangeMax")}
               register={register}
               prepend={"$"}
               defaultValue={localFilterState?.maxRent}
               error={errors?.maxRent !== undefined}
               errorMessage={t("errors.maxLessThanMinRentError")}
               validation={{ min: minRent }}
+              readerOnly
               inputProps={{
                 onBlur: () => {
                   void trigger("minRent")
@@ -269,7 +276,7 @@ const FilterForm = (props: FilterFormProps) => {
               register={register}
               fields={communityProgramOptions.map((elem) => ({
                 id: elem.value,
-                label: elem.label,
+                label: t(`listingFilters.program.${elem.label}`),
                 value: elem.value,
                 inputProps: {
                   defaultChecked: Boolean(

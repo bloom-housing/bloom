@@ -88,7 +88,7 @@ const Layout = (props) => {
           logoSrc="/images/detroit-logo.png"
           homeURL="/"
           title={t("nav.siteTitle")}
-          subtitle="City of Detroit"
+          subtitle={t("footer.headerLink")}
           logoWidth={"medium"}
           languages={languages.map((lang) => {
             return {

@@ -143,7 +143,7 @@ export type IconFill = "white" | "primary"
 export const IconFillColors = {
   white: "#ffffff",
   black: "#000000",
-  primary: "#0077DA",
+  primary: "#289989",
 }
 
 export type IconSize =

@@ -24,7 +24,7 @@ import {
   ImageTag,
   Tooltip,
 } from "@bloom-housing/ui-components"
-import { imageUrlFromListing, listingFeatures } from "@bloom-housing/shared-helpers"
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -55,13 +55,7 @@ const getListingCardSubtitle = (address: Address) => {
 
 export const accessibilityFeaturesExist = (features: ListingFeatures) => {
   if (!features) return false
-  let featuresExist = false
-  Object.keys(listingFeatures).map((feature) => {
-    if (features[feature]) {
-      featuresExist = true
-    }
-  })
-  return featuresExist
+  return Object.keys(features).some((feature) => features[feature])
 }
 
 export const getImageTagLabelFromListing = (listing: Listing) => {
@@ -80,13 +74,18 @@ export const getImageTagLabelFromListing = (listing: Listing) => {
 
 export const getListingTags = (
   listingPrograms: ListingProgram[],
-  listingFeatures: ListingFeatures
+  listingFeatures: ListingFeatures,
+  translate?: boolean
 ) => {
   const tags: ImageTag[] =
     listingPrograms
       ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
       .map((program) => {
-        return { text: program.program.title }
+        return {
+          text: translate
+            ? t(`listingFilters.program.${program.program.title}`)
+            : program.program.title,
+        }
       }) ?? []
   if (accessibilityFeaturesExist(listingFeatures)) {
     tags.push({
@@ -174,7 +173,7 @@ export const getListings = (listings) => {
         contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
         tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
       }}
-      cardTags={getListingTags(listing.listingPrograms, listing.features)}
+      cardTags={getListingTags(listing.listingPrograms, listing.features, true)}
       footerContent={
         <div className={"flex justify-between items-center"}>
           <FavoriteButton name={listing.name} id={listing.id} />
@@ -291,9 +290,9 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
 
     if (rentRange && rentAsPercentIncomeRange) {
       rent = (
-        <>
+        <div>
           {rentRange}, {rentAsPercentIncomeRange}
-        </>
+        </div>
       )
     } else if (rentRange) {
       rent = rentRange

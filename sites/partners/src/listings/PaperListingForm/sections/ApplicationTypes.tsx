@@ -214,7 +214,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                         ...methods,
                         digital: {
                           ...methods.digital,
-                          type: ApplicationMethodType.Internal,
+                          type: ApplicationMethodType.ExternalLink,
                         },
                       })
                     },
@@ -236,6 +236,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               ]}
             />
           </GridCell>
+          {/* Disabling common application
           {digitalApplicationChoice === YesNoAnswer.Yes && (
             <GridCell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
@@ -280,12 +281,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 ]}
               />
             </GridCell>
-          )}
+          )} */}
         </GridSection>
-        {((commonDigitalApplicationChoice && commonDigitalApplicationChoice === YesNoAnswer.No) ||
-          (digitalApplicationChoice === YesNoAnswer.Yes &&
-            !commonDigitalApplicationChoice &&
-            listing?.commonDigitalApplication === false)) && (
+        {digitalApplicationChoice === YesNoAnswer.Yes && (
           <GridSection columns={1}>
             <GridCell>
               <Field

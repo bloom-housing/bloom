@@ -63,11 +63,9 @@
       background: transparent;
     }
 
-    .prepend + input[aria-invalid="false"] {
-      @apply ps-8;
-    }
-
+    .prepend + input[aria-invalid="false"],
     .prepend + input[aria-invalid="true"] {
+      @apply ps-8;
       @apply pe-12;
     }
 

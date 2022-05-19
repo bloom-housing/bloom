@@ -102,6 +102,7 @@
       max-width: 100%;
 
       .navbar-logo {
+        min-width: fit-content;
         @apply flex;
         @apply items-center;
         justify-content: center;

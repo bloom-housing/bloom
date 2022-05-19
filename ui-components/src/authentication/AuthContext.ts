@@ -80,6 +80,7 @@ type ContextProps = {
     mfaType: EnumRequestMfaCodeMfaType,
     phoneNumber?: string
   ) => Promise<RequestMfaCodeResponse | undefined>
+  updateProfile: (profile: User) => void
 }
 
 // Internal Provider State
@@ -373,6 +374,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       } finally {
         dispatch(stopLoading())
       }
+    },
+    updateProfile: (profile) => {
+      dispatch(saveProfile(profile))
     },
   }
   return createElement(AuthContext.Provider, { value: contextValues }, children)
