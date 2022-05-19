@@ -41,11 +41,12 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId, search }: UseListingsDataProps) {
+export function useListingsData({ page, limit, userId, search = "" }: UseListingsDataProps) {
   const params = {
     page,
     limit,
     filter: [],
+    search,
   }
 
   // filter if logged user is an agent
@@ -60,11 +61,10 @@ export function useListingsData({ page, limit, userId, search }: UseListingsData
     })
   }
 
-  if (search) {
-    params.filter.push({
-      $comparison: EnumListingFilterParamsComparison["="],
-      name: search,
-    })
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
   }
 
   const { listingsService } = useContext(AuthContext)
