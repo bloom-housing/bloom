@@ -266,21 +266,21 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
     } else {
       if (group.unitVacancies > 0) {
         availability = (
-          <div>
+          <span>
             <strong>{group.unitVacancies} </strong>
             {group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")}
-            {` ${t("t.&")}`}
-          </div>
+            {` ${t("t.&")} `}
+          </span>
         )
       }
 
       availability = (
-        <>
+        <span>
           {availability}
           <strong>
             {group.openWaitlist ? t("listings.waitlist.open") : t("listings.waitlist.closed")}
           </strong>
-        </>
+        </span>
       )
     }
 
