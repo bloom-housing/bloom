@@ -7,7 +7,6 @@ import {
   SiteFooter,
   FooterNav,
   FooterSection,
-  ExygyFooter,
   MenuLink,
   t,
   AuthContext,
@@ -155,9 +154,6 @@ const Layout = (props) => {
             <a>{t("pageTitle.terms")}</a>
           </Link>
         </FooterNav>
-        <FooterSection className="bg-black" small>
-          <ExygyFooter />
-        </FooterSection>
       </SiteFooter>
     </div>
   )
