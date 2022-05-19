@@ -149,7 +149,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       dataTestId: "individual-units",
     },
   ]
-  console.log("162:", { errors, listingAvailability })
+
   return (
     <>
       <GridSection

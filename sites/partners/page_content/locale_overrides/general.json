@@ -151,6 +151,7 @@
   "listings.isReferralOpportunity": "Is there a referral opportunity?",
   "listings.latitude": "Latitude",
   "listings.leasingAgentAddress": "Leasing Agent Address",
+  "listings.listingAvailabilityQuestion": "What is the listing availability?",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
   "listings.listingName": "Listing Name",
   "listings.listingStatus.active": "Open",
