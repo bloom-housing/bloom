@@ -59,7 +59,8 @@ const FilteredListingsPage = () => {
     currentPage,
     itemsPerPage,
     filterState,
-    OrderByFieldsEnum.comingSoon
+    OrderByFieldsEnum.comingSoon,
+    "publicListings"
   )
 
   let numberOfFilters = 0

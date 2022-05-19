@@ -5,6 +5,7 @@ export enum ListingViewEnum {
   detail = "detail",
   full = "full",
   partnerList = "partnerList",
+  publicListings = "publicListings",
 }
 
 export type Views = {

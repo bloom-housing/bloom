@@ -181,6 +181,7 @@ export default function ListingsList() {
       : undefined,
     orderBy: sortOptions.orderBy,
     orderDir: sortOptions.orderDir,
+    view: "partnerList",
   })
 
   const gridOptions: GridOptions = {

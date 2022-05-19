@@ -29,6 +29,7 @@ type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
   listingIds?: string[]
+  view?: string
 }
 
 export function useSingleListingData(listingId: string) {
@@ -50,11 +51,12 @@ export function useListingsData({
   listingIds,
   orderBy,
   orderDir,
+  view = "base",
 }: UseListingsDataProps) {
   const params = {
     page,
     limit,
-    view: "base",
+    view,
     orderBy,
     orderDir: OrderDirEnum.ASC,
   }

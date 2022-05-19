@@ -63,13 +63,15 @@ views.partnerList = {
   select: [
     "listings.id",
     "listings.name",
-    "listings.applicationDueDate",
+    "property.id",
+    ...getBaseAddressSelect(["buildingAddress"]),
     "listings.status",
-    "listings.waitlistMaxSize",
-    "listings.waitlistCurrentSize",
-    "property.unitsAvailable",
+    "listings.isVerified",
   ],
-  leftJoins: [{ join: "listings.property", alias: "property" }],
+  leftJoins: [
+    { join: "listings.property", alias: "property" },
+    { join: "property.buildingAddress", alias: "buildingAddress" },
+  ],
 }
 
 views.detail = {
@@ -206,6 +208,48 @@ views.full = {
     ["listingPrograms.program", "listingProgramsProgram"],
     ["listings.images", "listingImages"],
     ["listingImages.image", "listingImagesImage"],
+  ],
+}
+
+views.publicListings = {
+  select: [
+    "listings.id",
+    "listings.name",
+    "listings.marketingType",
+    "listings.marketingDate",
+    "listings.marketingSeason",
+    "listings.isVerified",
+    "property.id",
+    ...getBaseAddressSelect(["buildingAddress"]),
+    "listingImages.ordinal",
+    "listingImagesImage.id",
+    "listingImagesImage.fileId",
+    "listingImagesImage.label",
+    "listingPrograms.ordinal",
+    "listingsProgramsProgram.id",
+    "listingsProgramsProgram.title",
+    "features.id",
+    "features.elevator",
+    "features.wheelchairRamp",
+    "features.serviceAnimalsAllowed",
+    "features.accessibleParking",
+    "features.parkingOnSite",
+    "features.inUnitWasherDryer",
+    "features.barrierFreeEntrance",
+    "features.rollInShower",
+    "features.grabBars",
+    "features.heatingInUnit",
+    "features.acInUnit",
+    "features.laundryInBuilding",
+  ],
+  leftJoins: [
+    { join: "listings.property", alias: "property" },
+    { join: "property.buildingAddress", alias: "buildingAddress" },
+    { join: "listings.images", alias: "listingImages" },
+    { join: "listingImages.image", alias: "listingImagesImage" },
+    { join: "listings.listingPrograms", alias: "listingPrograms" },
+    { join: "listingPrograms.program", alias: "listingsProgramsProgram" },
+    { join: "listings.features", alias: "features" },
   ],
 }
 

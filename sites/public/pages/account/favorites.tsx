@@ -42,7 +42,8 @@ const FavoritedListingsPage = () => {
     currentPage,
     itemsPerPage,
     filterState,
-    OrderByFieldsEnum.mostRecentlyUpdated
+    OrderByFieldsEnum.comingSoon,
+    "publicListings"
   )
 
   const content = useMemo(() => {
