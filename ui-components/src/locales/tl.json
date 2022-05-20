@@ -290,7 +290,6 @@
   "application.viewApplication": "Tingnan ang Application",
   "application.yourLotteryNumber": "Ang numero ng kumpirmasyon mo ay",
   "applications.addApplication": "Magdagdag ng Application",
-  "applications.begin.fi": "Magsimula",
   "authentication.createAccount.accountConfirmed": "Ang account mo ay matagumpay nang nakumpirma.",
   "authentication.createAccount.anEmailHasBeenSent": "Ang email ay naipadala na sa %{email}",
   "authentication.createAccount.confirmationInstruction": "Paki-click ang link sa email na ipinadala namin sa iyo upang makumpleto ang paggawa ng account.",

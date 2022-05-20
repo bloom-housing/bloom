@@ -459,6 +459,7 @@
   "applications.begin.es": "Empezar",
   "applications.begin.vi": "Bắt đầu",
   "applications.begin.zh": "開始",
+  "applications.begin.tl": "Magsimula",
   "authentication.createAccount.accountConfirmed": "Your account was successfully confirmed.",
   "authentication.createAccount.anEmailHasBeenSent": "An email has been sent to %{email}",
   "authentication.createAccount.confirmationInstruction": "Please click on the link in the email we sent you in order to complete account creation.",
