@@ -242,6 +242,7 @@
   "application.review.confirmation.applicationsClosed": "Đã đóng các  \nđơn đăng ký",
   "application.review.confirmation.applicationsRanked": "Đã xếp hạng các  \nđơn đăng ký",
   "application.review.confirmation.browseMore": "Xem nhiều danh sách nhà hơn",
+  "application.review.confirmation.createAccount": "### Quý vị có muốn tạo một tài khoản không?\n\nViệc tạo tài khoản sẽ lưu thông tin của quý vị cho các đơn ghi danh sau này và quý vị có thể kiểm tra tình trạng của đơn ghi danh này bất cứ lúc nào.",
   "application.review.confirmation.createAccountParagraph": "Việc tạo tài khoản sẽ lưu thông tin của quý vị cho các đơn ghi danh sau này và quý vị có thể kiểm tra tình trạng của đơn ghi danh này bất cứ lúc nào.",
   "application.review.confirmation.createAccountTitle": "Quý vị có muốn tạo một tài khoản không?",
   "application.review.confirmation.doNotSubmitTitle": "Không gửi một đơn ghi danh khác cho danh sách này.",
