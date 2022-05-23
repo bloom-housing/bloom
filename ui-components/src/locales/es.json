@@ -247,6 +247,8 @@
   "application.review.confirmation.createAccountTitle": "¿Desea crear una cuenta?",
   "application.review.confirmation.doNotSubmitTitle": "No envíe otra solicitud para este listado.",
   "application.review.confirmation.eligibleApplicants.FCFS": "Los solicitantes elegibles serán contactados por orden de llegada hasta que se llenen las vacantes.",
+  "application.review.confirmation.eligibleApplicants.lottery": "Los solicitantes elegibles serán contactados por el agente en orden de clasificación de lotería hasta que se llenen las vacantes.",
+  "application.review.confirmation.eligibleApplicants.lotteryDate": "La lotería se llevará a cabo el **%{lotteryDate}**.",
   "application.review.confirmation.imdone": "No gracias, ya terminé.",
   "application.review.confirmation.lotteryNumber": "Este es el número de confirmación de su solicitud",
   "application.review.confirmation.needToMakeUpdates": "### ¿Necesita realizar actualizaciones?\n\nSi necesita actualizar la información de su solicitud, no vuelva a realizar una nueva solicitud.  Contáctese con el agente de este anuncio.\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**Horario de oficina**  \n%{agentOfficeHours}\n\nComuníquese con el agente si no ha recibido una confirmación por correo electrónico.",

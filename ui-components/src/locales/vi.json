@@ -247,6 +247,8 @@
   "application.review.confirmation.createAccountTitle": "Quý vị có muốn tạo một tài khoản không?",
   "application.review.confirmation.doNotSubmitTitle": "Không gửi một đơn ghi danh khác cho danh sách này.",
   "application.review.confirmation.eligibleApplicants.FCFS": "Những người đăng ký đủ điều kiện sẽ được liên hệ trên cơ sở ai đến trước được phục vụ trước cho đến khi hết căn hộ trống.",
+  "application.review.confirmation.eligibleApplicants.lottery": "Các ứng viên đủ điều kiện sẽ được đại lý liên hệ theo thứ tự xếp hạng xổ số cho đến khi các vị trí tuyển dụng được lấp đầy.",
+  "application.review.confirmation.eligibleApplicants.lotteryDate": "Cuộc rút thăm sẽ được tổ chức vào **%{lotteryDate}**.",
   "application.review.confirmation.imdone": "Không, cảm ơn, tôi đã làm xong.",
   "application.review.confirmation.lotteryNumber": "Đây là số xác nhận đơn ghi danh của quý vị",
   "application.review.confirmation.needToMakeUpdates": "### Quý vị cần cập nhật thông tin?\n\nNếu quý vị cần cập nhật thông tin trên đơn đăng ký của mình, đừng đăng ký lại. Thay vào đó, hãy liên hệ với đại lý cho danh sách này.\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**Giờ Làm việc**  \n%{agentOfficeHours}\n\nLiên hệ với đại lý nếu quý vị không nhận được email xác nhận.",

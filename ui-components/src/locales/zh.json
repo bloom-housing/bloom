@@ -247,6 +247,8 @@
   "application.review.confirmation.createAccountTitle": "您希望建立帳戶嗎？",
   "application.review.confirmation.doNotSubmitTitle": "請勿在這次上市提交另一份申請表。",
   "application.review.confirmation.eligibleApplicants.FCFS": "合格申請人會依先到先得原則收到聯絡，直到補滿缺額。",
+  "application.review.confirmation.eligibleApplicants.lottery": "代理商將按照抽籤順序聯繫符合條件的申請人，直到職位空缺被填補為止。",
+  "application.review.confirmation.eligibleApplicants.lotteryDate": "抽獎活動將於 **%{lotteryDate}**。",
   "application.review.confirmation.imdone": "不，謝謝，我已開立帳戶。",
   "application.review.confirmation.lotteryNumber": "這是您的申請確認號碼",
   "application.review.confirmation.needToMakeUpdates": "### 需要更新內容？\n\n如果您必須更新申請資訊，請勿再次申請。請您直接聯絡此刊登資訊的仲介人員。\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**辦公時間**  \n%{agentOfficeHours}\n\n如果您並未收到電子郵件確認，請聯絡仲介人員。",

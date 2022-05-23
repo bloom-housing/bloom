@@ -200,6 +200,8 @@
   "application.review.confirmation.createAccountTitle": "Gusto mo bang gumawa ng account?",
   "application.review.confirmation.doNotSubmitTitle": "Huwag magsumite ng isa pang application para sa listahang ito.",
   "application.review.confirmation.eligibleApplicants.FCFS": "Ang mga kwalipikadong aplikante ay tatawagan ayon sa batayang first come first serve hanggang sa mapuno ang bakante.",
+  "application.review.confirmation.eligibleApplicants.lottery": "Ang mga karapat-dapat na aplikante ay tatawagan ng ahente sa pagkakasunud-sunod ng ranggo ng lottery hanggang sa mapunan ang mga bakante.",
+  "application.review.confirmation.eligibleApplicants.lotteryDate": "Ang lottery ay gaganapin sa **%{lotteryDate}**.",
   "application.review.confirmation.imdone": "Salamat na lang_ tapos na ako.",
   "application.review.confirmation.lotteryNumber": "Narito ang iyong numero ng kumpirmasyon ng application",
   "application.review.confirmation.needToMakeUpdates": "### Kailangang gumawa ng mga update?\n\nKung kailangan mong i-update ang impormasyon sa iyong application, huwag mag-apply muli. Sa halip, makipag-ugnayan sa ahente para sa listahang ito.\n\n**%{agentName}**  \n%{agentPhone}  \n%{agentEmail}\n\n**Mga Oras na Bukas ang Opisina**  \n%{agentOfficeHours}\n\nTawagan ang ahente kung hindi ka nakatanggap ng email ng kumpirmasyon.",
