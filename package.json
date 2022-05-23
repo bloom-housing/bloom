@@ -54,6 +54,7 @@
     "clean": "rm -rf backend/core/dist/ backend/core/node_modules/ node_modules/ sites/partners/.next/ sites/partners/node_modules/ sites/public/.next/ sites/public/node_modules/ ui-components/node_modules/"
   },
   "dependencies": {
+    "react-remove-scroll": "^2.5.3",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10"
   },
   "devDependencies": {
