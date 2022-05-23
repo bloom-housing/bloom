@@ -160,7 +160,10 @@ export default function ListingsList() {
     userId: !isAdmin ? profile?.id : undefined,
   })
 
-  if (listingsError) return null
+  if (listingsLoading) return "Loading..."
+  if (listingsError) return "An error has occurred."
+
+  // if (listingsError) return null
 
   return (
     <Layout>
