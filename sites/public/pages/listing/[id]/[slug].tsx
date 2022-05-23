@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
+import { AuthContext, ListingDividerLine, t } from "@bloom-housing/ui-components"
 import { Listing, ListingMetadata } from "@bloom-housing/backend-core/types"
-import { AuthContext, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing, ListingDetail, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
@@ -64,6 +64,9 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
+      <span className="hidden md:block">
+        <ListingDividerLine />
+      </span>
       <ListingView listing={listing} allowFavoriting={true} listingMetadata={listingMetadata} />
     </Layout>
   )
