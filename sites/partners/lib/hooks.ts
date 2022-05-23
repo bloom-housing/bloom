@@ -30,7 +30,7 @@ type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
   userId?: string
-  sort: ColumnOrder[]
+  sort?: ColumnOrder[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -50,8 +50,15 @@ export function useListingsData({ page, limit, userId, sort }: UseListingsDataPr
   const params = {
     page,
     limit,
-    orderBy: sort.filter((item) => item.orderBy).map((item) => item.orderBy),
-    orderDir: sort.filter((item) => item.orderDir).map((item) => item.orderDir),
+  }
+
+  if (sort) {
+    Object.assign(params, {
+      orderBy: sort?.filter((item) => item.orderBy).map((item) => item.orderBy),
+    })
+    Object.assign(params, {
+      orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir),
+    })
   }
 
   // filter if logged user is an agent
@@ -166,8 +173,6 @@ export function useApplicationsData(
   if (orderBy) {
     Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
   }
-
-  console.log(params)
 
   const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
