@@ -67,6 +67,10 @@ const AgTable = ({
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
+  const defaultColDef = {
+    resizable: true,
+    maxWidth: 300,
+  }
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
@@ -79,11 +83,20 @@ const AgTable = ({
     },
     onColumnMoved: (params) => saveColumnState(params.columnApi),
     components: gridComponents,
+    suppressNoRowsOverlay: data.loading,
   }
 
   // update table items order on sort change
+  const initialLoadOnSort = useRef<boolean>(false)
+
   const onSortChange = useCallback(
     (columns: ColumnState[]) => {
+      // prevent multiple fetch on initial render
+      if (!initialLoadOnSort.current) {
+        initialLoadOnSort.current = true
+        return
+      }
+
       const sortedColumns = columns.filter((col) => !!col.sort)
 
       setSort(() =>
@@ -162,8 +175,8 @@ const AgTable = ({
         <LoadingOverlay isLoading={data.loading}>
           <div>
             <AgGridReact
+              defaultColDef={defaultColDef}
               onGridReady={onGridReady}
-              multiSortKey="ctrl"
               gridOptions={gridOptions}
               columnDefs={columns}
               rowData={data.items}
