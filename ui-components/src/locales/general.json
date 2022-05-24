@@ -707,7 +707,7 @@
   "listings.waitlist.currentSize": "Current Waitlist Size",
   "listings.waitlist.finalSize": "Final Waitlist Size",
   "listings.waitlist.isOpen": "Waitlist is open",
-  "listings.waitlist.label": "Open waitlist",
+  "listings.waitlist.label": "Waitlist",
   "listings.waitlist.open": "Open Waitlist",
   "listings.waitlist.openSlots": "Open Waitlist Slots",
   "listings.waitlist.submitAnApplication": "Once ranked applicants fill all available units, the remaining ranked applicants will be placed on a waitlist for those same units.",
