@@ -57,7 +57,7 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
     alamedaTranslation.header = {
       logoTitle: "Alameda County Housing Portal",
       logoUrl:
-        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png",
+        "https://res.cloudinary.com/exygy/image/upload/v1652459319/housingbayarea/163838489-d5a1bc08-7d69-4c4a-8a94-8485617d8b46_dkkqvw.png",
     }
     alamedaTranslation.footer.line1 = "Alameda County Housing Portal is a project of the"
     alamedaTranslation.footer.line2 =
@@ -81,7 +81,7 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
     sanJoseTranslation.header = {
       logoTitle: "City of San José Housing Portal",
       logoUrl:
-        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/san-jose-portal.png",
+        "https://res.cloudinary.com/exygy/image/upload/v1652459304/housingbayarea/163838487-7279a41f-4ec5-4da0-818b-4df3351a7971_yjnjh7.png",
     }
     sanJoseTranslation.footer.line1 = "City of San José Housing Portal is a project of the"
     sanJoseTranslation.footer.line2 = "City of San José - Housing Department"
@@ -104,7 +104,7 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
     sanMateoTranslation.header = {
       logoTitle: "San Mateo County Housing",
       logoUrl:
-        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/san-mateo-portal.png",
+        "https://res.cloudinary.com/exygy/image/upload/v1652459282/housingbayarea/163838485-87dd8976-b816-424c-a303-93e5473e931e_qvnsml.png",
     }
     sanMateoTranslation.footer.line1 = "San Mateo County Housing Portal is a project of the"
     sanMateoTranslation.footer.line2 = "San Mateo County - Department of Housing (DOH)"
