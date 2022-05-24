@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from "react"
 import Head from "next/head"
-import { AgGridReact } from "ag-grid-react"
 import dayjs from "dayjs"
 import {
   PageHeader,
-  AgPagination,
+  AgTable,
   Button,
   t,
   Drawer,
@@ -16,21 +15,19 @@ import Layout from "../../layouts"
 import { useUserList, useListingsData } from "../../lib/hooks"
 import { FormUserManage } from "../../src/users/FormUserManage"
 
-const defaultColDef = {
-  resizable: true,
-  maxWidth: 300,
-}
-
 type UserDrawerValue = {
   type: "add" | "edit"
   user?: User
 }
 
 const Users = () => {
-  /* Add user drawer */
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
 
-  /* Ag Grid column definitions */
+  const [delayedFilterValue, setDelayedFilterValue] = useState("")
+
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+
   const columns = useMemo(() => {
     return [
       {
@@ -95,26 +92,17 @@ const Users = () => {
     ]
   }, [])
 
-  /* Pagination */
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
-  const [currentPage, setCurrentPage] = useState<number>(1)
-
-  /* Fetch user list */
-  const { data: userList } = useUserList({
+  const { data: userList, loading, error } = useUserList({
     page: currentPage,
     limit: itemsPerPage,
+    search: delayedFilterValue,
   })
 
-  /* Fetch listings */
   const { listingDtos } = useListingsData({
     limit: "all",
   })
 
-  const resetPagination = () => {
-    setCurrentPage(1)
-  }
-
-  if (!userList) return null
+  if (error) return "An error has occurred."
 
   return (
     <Layout>
@@ -131,9 +119,28 @@ const Users = () => {
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <div className="ag-theme-alpine ag-theme-bloom">
-            <div className="flex justify-between">
-              <div className="w-56"></div>
+          <AgTable
+            id="users-table"
+            pagination={{
+              perPage: itemsPerPage,
+              setPerPage: setItemsPerPage,
+              currentPage: currentPage,
+              setCurrentPage: setCurrentPage,
+            }}
+            config={{
+              columns,
+              totalItemsLabel: t("users.totalUsers"),
+            }}
+            data={{
+              items: userList?.items,
+              loading: loading,
+              totalItems: userList?.meta.totalItems,
+              totalPages: userList?.meta.totalPages,
+            }}
+            search={{
+              setSearch: setDelayedFilterValue,
+            }}
+            headerContent={
               <div className="flex-row">
                 <Button
                   className="mx-1"
@@ -143,32 +150,8 @@ const Users = () => {
                   {t("users.addUser")}
                 </Button>
               </div>
-            </div>
-            <div className="applications-table mt-5">
-              <AgGridReact
-                columnDefs={columns}
-                defaultColDef={defaultColDef}
-                rowData={userList.items}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressPaginationPanel={true}
-                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
-
-              <AgPagination
-                totalItems={userList.meta.totalItems}
-                totalPages={userList.meta.totalPages}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                quantityLabel={t("users.totalUsers")}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
-                onPerPageChange={resetPagination}
-              />
-            </div>
-          </div>
+            }
+          />
         </article>
       </section>
 
