@@ -20,7 +20,7 @@ export interface AgTableProps {
   data: AgTableData
   pagination: AgTablePagination
   search: AgTableSearch
-  sort: AgTableSort
+  sort?: AgTableSort
   headerContent?: React.ReactNode
   className?: string
 }
@@ -34,7 +34,7 @@ export interface AgTablePagination {
 
 export interface AgTableConfig {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  gridComponents: { [p: string]: any }
+  gridComponents?: { [p: string]: any }
   columns: (ColDef | ColGroupDef)[]
   totalItemsLabel: string
 }
@@ -52,7 +52,7 @@ export interface AgTableSearch {
 }
 
 export interface AgTableSort {
-  setSort: React.Dispatch<React.SetStateAction<ColumnOrder[]>>
+  setSort?: React.Dispatch<React.SetStateAction<ColumnOrder[]>>
 }
 
 const AgTable = ({
@@ -60,7 +60,7 @@ const AgTable = ({
   className,
   pagination,
   search: { setSearch },
-  sort: { setSort },
+  sort: { setSort } = {},
   headerContent,
   data,
   config: { gridComponents, columns, totalItemsLabel },
@@ -78,6 +78,8 @@ const AgTable = ({
 
   const gridOptions: GridOptions = {
     onSortChanged: (params) => {
+      if (!setSort) return
+
       saveColumnState(params.columnApi)
       onSortChange(params.columnApi.getColumnState())
     },
@@ -91,6 +93,8 @@ const AgTable = ({
 
   const onSortChange = useCallback(
     (columns: ColumnState[]) => {
+      if (!setSort) return
+
       // prevent multiple fetch on initial render
       if (!initialLoadOnSort.current) {
         initialLoadOnSort.current = true
@@ -112,12 +116,7 @@ const AgTable = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const filterField = watch("filter-input", "")
-  const debounceFilter = useRef(
-    debounce((value: string) => {
-      console.log("trigger search", value)
-      setSearch(value)
-    }, 500)
-  )
+  const debounceFilter = useRef(debounce((value: string) => setSearch(value), 500))
   useEffect(() => {
     // pagination.setCurrentPage(1)
     if (filterField.length === 0 || filterField.length > 2) {
