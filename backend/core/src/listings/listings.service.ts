@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { Brackets, In, OrderByCondition, Repository } from "typeorm"
+import { In, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
@@ -19,6 +19,13 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
+import { OrderParam } from "../applications/types/order-param"
+
+type OrderByConditionData = {
+  orderBy: string
+  orderDir: "DESC" | "ASC"
+  nulls?: "NULLS LAST" | "NULLS FIRST"
+}
 
 @Injectable()
 export class ListingsService {
@@ -32,37 +39,55 @@ export class ListingsService {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
-  private static getOrderByCondition(params: ListingsQueryParams): OrderByCondition {
-    switch (params.orderBy) {
+  private static getOrderByCondition(
+    orderBy: OrderByFieldsEnum,
+    orderDir: OrderParam
+  ): OrderByConditionData {
+    switch (orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
-        return { "listings.updated_at": params.order }
+        return { orderBy: "listings.updated_at", orderDir }
       case OrderByFieldsEnum.status:
-        return { "listings.status": params.order }
+        return { orderBy: "listings.status", orderDir }
       case OrderByFieldsEnum.name:
-        return { "listings.name": params.order }
+        return { orderBy: "listings.name", orderDir }
       case OrderByFieldsEnum.waitlistOpen:
-        return { "listings.isWaitlistOpen": params.order }
+        return { orderBy: "listings.isWaitlistOpen", orderDir }
       case OrderByFieldsEnum.unitsAvailable:
-        return { "property.unitsAvailable": params.order }
+        return { orderBy: "property.unitsAvailable", orderDir }
       case OrderByFieldsEnum.mostRecentlyClosed:
         return {
-          "listings.closedAt": { order: params.order, nulls: "NULLS LAST" },
+          orderBy: "listings.closedAt",
+          orderDir,
+          nulls: "NULLS LAST",
         }
       case OrderByFieldsEnum.marketingType:
-        return { "listings.marketingType": params.order }
+        return { orderBy: "listings.marketingType", orderDir }
       case OrderByFieldsEnum.applicationDates:
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
         // and applicationOpenDate) if no orderBy param is specified.
-        return {
-          "listings.applicationDueDate": params.order,
-        }
+        return { orderBy: "listings.applicationDueDate", orderDir }
       default:
         throw new HttpException(
           `OrderBy parameter not recognized or not yet implemented.`,
           HttpStatus.NOT_IMPLEMENTED
         )
     }
+  }
+
+  private static buildOrderByConditions(params: ListingsQueryParams): Array<OrderByConditionData> {
+    if (!params.orderDir || !params.orderBy) {
+      return [
+        ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC),
+      ]
+    }
+    const orderByConditionDataArray = []
+    for (let i = 0; i < params.orderDir.length; i++) {
+      orderByConditionDataArray.push(
+        ListingsService.getOrderByCondition(params.orderBy[i], params.orderDir[i])
+      )
+    }
+    return orderByConditionDataArray
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
@@ -76,9 +101,17 @@ export class ListingsService {
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
-      .orderBy(ListingsService.getOrderByCondition(params))
-      .groupBy("listings.id")
-      .addGroupBy("property.id")
+
+    const orderByConditions = ListingsService.buildOrderByConditions(params)
+    for (const orderByCondition of orderByConditions) {
+      innerFilteredQuery.addOrderBy(
+        orderByCondition.orderBy,
+        orderByCondition.orderDir,
+        orderByCondition.nulls
+      )
+    }
+
+    innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -105,18 +138,28 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let listings = await view
-      .getViewQb()
+    const mainQuery = view.getViewQb()
+
+    for (const query of [mainQuery, innerFilteredQuery]) {
+      for (const orderByCondition of orderByConditions) {
+        query.addOrderBy(
+          orderByCondition.orderBy,
+          orderByCondition.orderDir,
+          orderByCondition.nulls
+        )
+      }
+    }
+
+    mainQuery
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(ListingsService.getOrderByCondition(params))
-      // Order by units.maxOccupancy is applied last so that it affects the order
-      // of units _within_ a listing, rather than the overall listing order)
-      .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
-      .getMany()
+
+    // Order by units.maxOccupancy is applied last so that it affects the order
+    // of units _within_ a listing, rather than the overall listing order)
+    let listings = await mainQuery.addOrderBy("units.max_occupancy", "ASC", "NULLS LAST").getMany()
 
     // get summarized units from view
     listings = view.mapUnitSummary(listings)
