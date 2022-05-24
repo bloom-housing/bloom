@@ -1214,7 +1214,7 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
-      order?: string
+      orderBy?: any | null[]
       /**  */
       orderDir?: any | null[]
       /**  */
@@ -1231,7 +1231,7 @@ export class ListingsService {
         limit: params["limit"],
         filter: params["filter"],
         view: params["view"],
-        order: params["order"],
+        orderBy: params["orderBy"],
         orderDir: params["orderDir"],
         search: params["search"],
       }
