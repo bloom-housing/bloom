@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import {
   Address,
   Listing,
+  ListingFeatures,
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
@@ -57,6 +58,17 @@ const getListingTableData = (
   return unitsSummarized !== undefined
     ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingAvailability)
     : []
+}
+
+export const accessibilityFeaturesExist = (features: ListingFeatures) => {
+  if (!features) return false
+  let featuresExist = false
+  Object.keys(listingFeatures).map((feature) => {
+    if (features[feature]) {
+      featuresExist = true
+    }
+  })
+  return featuresExist
 }
 
 export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
