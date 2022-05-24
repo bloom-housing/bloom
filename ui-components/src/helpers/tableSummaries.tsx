@@ -65,7 +65,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
               </>
             ) : (
               <span>
-                <strong>{t("listings.waitlist.label")}</strong>
+                <strong>{t("listings.waitlist.open")}</strong>
               </span>
             )}
           </span>
