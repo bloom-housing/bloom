@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useState } from "react"
+import React, { useMemo, useContext, useState, useCallback, useEffect } from "react"
 import Head from "next/head"
 import {
   PageHeader,
@@ -11,12 +11,13 @@ import {
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AgGridReact } from "ag-grid-react"
-import { GridOptions } from "ag-grid-community"
+import { GridOptions, ColumnState, ColumnApi } from "ag-grid-community"
 
-import { useListingsData } from "../lib/hooks"
+import { useListingsData, ColumnOrder } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
 
+const LISTING_COLUMN_STATE_KEY = "listing-column-state"
 class formatLinkCell {
   link: HTMLAnchorElement
 
@@ -29,6 +30,21 @@ class formatLinkCell {
 
   getGui() {
     return this.link
+  }
+}
+
+class formatWaitlistStatus {
+  text: HTMLSpanElement
+
+  init({ data }) {
+    const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
+
+    this.text = document.createElement("span")
+    this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+  }
+
+  getGui() {
+    return this.text
   }
 }
 
@@ -48,32 +64,62 @@ class ListingsLink extends formatLinkCell {
 }
 
 export default function ListingsList() {
+  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+
   const { profile } = useContext(AuthContext)
   const isAdmin = profile.roles?.isAdmin || false
+
+  const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
+
+  /* OrderBy columns */
+  const [sortOptions, setSortOptions] = useState<ColumnOrder[]>([])
+
+  // update table items order on sort change
+  const onSortChange = useCallback((columns: ColumnState[]) => {
+    const sortedColumns = columns.filter((col) => !!col.sort)
+
+    setSortOptions(() =>
+      sortedColumns.map((col) => ({
+        orderBy: col.colId,
+        orderDir: col.sort.toUpperCase(),
+      }))
+    )
+  }, [])
 
   /* Pagination */
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
   const [currentPage, setCurrentPage] = useState<number>(1)
 
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
+  // Load a table state on initial render & pagination change (because the new data comes from the API)
+  useEffect(() => {
+    const savedColumnState = sessionStorage.getItem(LISTING_COLUMN_STATE_KEY)
 
-  class formatWaitlistStatus {
-    text: HTMLSpanElement
+    if (gridColumnApi && savedColumnState) {
+      const parsedState: ColumnState[] = JSON.parse(savedColumnState)
 
-    init({ data }) {
-      const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
-
-      this.text = document.createElement("span")
-      this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+      gridColumnApi.applyColumnState({
+        state: parsedState,
+        applyOrder: true,
+      })
     }
+  }, [gridColumnApi, currentPage])
 
-    getGui() {
-      return this.text
-    }
+  function saveColumnState(api: ColumnApi) {
+    const columnState = api.getColumnState()
+    const columnStateJSON = JSON.stringify(columnState)
+    sessionStorage.setItem(LISTING_COLUMN_STATE_KEY, columnStateJSON)
+  }
+
+  function onGridReady(params) {
+    setGridColumnApi(params.columnApi)
   }
 
   const gridOptions: GridOptions = {
+    onSortChanged: (params) => {
+      saveColumnState(params.columnApi)
+      onSortChange(params.columnApi.getColumnState())
+    },
+    onColumnMoved: (params) => saveColumnState(params.columnApi),
     components: {
       ApplicationsLink,
       formatLinkCell,
@@ -87,7 +133,7 @@ export default function ListingsList() {
       {
         headerName: t("listings.listingName"),
         field: "name",
-        sortable: false,
+        sortable: true,
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
@@ -133,6 +179,7 @@ export default function ListingsList() {
     page: currentPage,
     limit: itemsPerPage,
     userId: !isAdmin ? profile?.id : undefined,
+    sort: sortOptions,
   })
 
   if (listingsLoading) return "Loading..."
@@ -143,11 +190,7 @@ export default function ListingsList() {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <MetaTags
-        title={t("nav.siteTitlePartners")}
-        image={metaImage}
-        description={metaDescription}
-      />
+      <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <PageHeader title={t("nav.listings")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -167,7 +210,9 @@ export default function ListingsList() {
 
             <div className="applications-table mt-5">
               <AgGridReact
+                onGridReady={onGridReady}
                 gridOptions={gridOptions}
+                multiSortKey="ctrl"
                 columnDefs={columnDefs}
                 rowData={listingDtos.items}
                 domLayout={"autoHeight"}
