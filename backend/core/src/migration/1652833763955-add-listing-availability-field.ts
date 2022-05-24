@@ -15,6 +15,7 @@ export class addListingAvailabilityField1652833763955 implements MigrationInterf
     await queryRunner.query(
       `ALTER TABLE "jurisdictions" ALTER COLUMN "rental_assistance_default" DROP DEFAULT`
     )
+    await queryRunner.query(`UPDATE listings SET listing_availability = 'availableUnits'`)
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
