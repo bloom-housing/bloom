@@ -32,6 +32,7 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
 
 ## move copy to here so the above can build from cache
 COPY ./default.conf /etc/nginx/conf.d/default.conf.template
+COPY ./shared-location.conf /etc/nginx/conf.d/shared-location.conf.template
 COPY ./proxy.conf /etc/nginx/conf.d/proxy.conf
 
 # configure and build
@@ -39,6 +40,8 @@ RUN cd /tmp/nginx && \
     BASE_CONFIGURE_ARGS=`nginx -V 2>&1 | grep "configure arguments" | cut -d " " -f 3-` && \
     /bin/sh -c "./configure ${BASE_CONFIGURE_ARGS} --add-module=/tmp/ngx_cache_purge" && \
     make && make install && \
-    rm -rf /tmp/nginx*
+    rm -rf /tmp/nginx* \
 
-CMD /bin/bash -c "envsubst '\$PORT,\$BACKEND_HOSTNAME' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
+ENV PROTOCOL=https
+
+CMD /bin/bash -c "envsubst '\$PORT,\$BACKEND_HOSTNAME,\$PROTOCOL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && envsubst '\$PORT,\$BACKEND_HOSTNAME,\$PROTOCOL' < /etc/nginx/conf.d/shared-location.conf.template > /etc/nginx/shared-location.conf" && nginx -g 'daemon off;'
