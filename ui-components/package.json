@@ -100,7 +100,9 @@
     "react-text-mask": "^5.4.3",
     "react-transition-group": "^4.4.1",
     "tailwindcss": "2.2.10",
-    "typesafe-actions": "^5.1.0"
+    "typesafe-actions": "^5.1.0",
+    "ag-grid-community": "^26.0.0",
+    "ag-grid-react": "^26.0.0"
   },
   "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
 }
