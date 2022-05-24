@@ -165,13 +165,13 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
-    let availableUnits = 0
+    const availableUnits =
+      listingDto.listingAvailability === ListingAvailability.availableUnits
+        ? listingDto.units.length
+        : 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
         delete unit.id
-      }
-      if (listingDto.listingAvailability === ListingAvailability.availableUnits) {
-        availableUnits++
       }
     })
 
