@@ -155,7 +155,7 @@ export default function ListingsList() {
             config={{
               gridComponents,
               columns: columnDefs,
-              totalItemsLabel: t("applications.totalApplications"),
+              totalItemsLabel: t("applications.totalListings"),
             }}
             data={{
               items: listingDtos?.items,
