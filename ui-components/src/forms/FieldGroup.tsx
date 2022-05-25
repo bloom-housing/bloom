@@ -93,8 +93,8 @@ const FieldGroup = ({
         />
         <label
           htmlFor={item.id}
-          className={`${fieldLabelClassName} ${
-            item.disabled && "text-gray-600 cursor-default cursor-not-allowed"
+          className={`font-semibold ${fieldLabelClassName} ${
+            item.disabled && "text-gray-600 cursor-not-allowed"
           }`}
         >
           {item.label}
