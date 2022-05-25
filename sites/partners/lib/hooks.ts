@@ -50,6 +50,7 @@ export function useListingsData({ page, limit, userId, sort }: UseListingsDataPr
   const params = {
     page,
     limit,
+    view: "base",
   }
 
   if (sort) {
