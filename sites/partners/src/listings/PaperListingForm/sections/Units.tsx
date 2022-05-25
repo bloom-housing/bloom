@@ -186,6 +186,8 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               groupSubNote={t("listings.requiredToPublish")}
               error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
               errorMessage={fieldMessage(errors?.listingAvailability)}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex h-12 items-center"
               fields={[
                 {
                   label: t("listings.availableUnits"),
