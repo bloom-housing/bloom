@@ -50,8 +50,13 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-const getListingTableData = (unitsSummarized: UnitsSummarized) => {
-  return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
+const getListingTableData = (
+  unitsSummarized: UnitsSummarized,
+  listingAvailability: ListingAvailability
+) => {
+  return unitsSummarized !== undefined
+    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingAvailability)
+    : []
 }
 
 export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
@@ -135,7 +140,7 @@ export const getListings = (listings) => {
         }}
         tableProps={{
           headers: unitSummariesHeaders,
-          data: getListingTableData(listing.unitsSummarized),
+          data: getListingTableData(listing.unitsSummarized, listing.listingAvailability),
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
