@@ -55,6 +55,7 @@ export function useListingsData({ page, limit, userId, search = "", sort }: UseL
     limit,
     filter: [],
     search,
+    view: "base",
   }
 
   if (sort) {
