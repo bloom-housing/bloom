@@ -6,14 +6,11 @@ export class UserRepository extends Repository<User> {
   public getQb(): SelectQueryBuilder<User> {
     return this.createQueryBuilder("user")
       .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.jurisdictions", "jurisdictions")
       .leftJoin("user.roles", "userRoles")
       .select([
-        "user.id",
-        "user.firstName",
-        "user.lastName",
-        "user.email",
-        "user.confirmedAt",
-        "user.createdAt",
+        "user",
+        "jurisdictions.id",
         "userRoles",
         "leasingAgentInListings.id",
         "leasingAgentInListings.name",
