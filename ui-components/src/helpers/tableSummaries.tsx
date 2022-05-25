@@ -1,9 +1,12 @@
 import * as React from "react"
 import { t } from "./translator"
-import { UnitSummary } from "@bloom-housing/backend-core/types"
+import { UnitSummary, ListingAvailability } from "@bloom-housing/backend-core/types"
 import { StandardTableData } from "../tables/StandardTable"
 
-export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData => {
+export const unitSummariesTable = (
+  summaries: UnitSummary[],
+  listingAvailability: ListingAvailability
+): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
     const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
@@ -43,6 +46,29 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
         )
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
+    let availability = null
+    if (listingAvailability === ListingAvailability.availableUnits) {
+      availability = (
+        <span>
+          {unitSummary.totalAvailable > 0 ? (
+            <>
+              <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
+            </>
+          ) : (
+            <span>
+              <strong>{t("listings.waitlist.open")}</strong>
+            </span>
+          )}
+        </span>
+      )
+    } else if (listingAvailability === ListingAvailability.openWaitlist) {
+      availability = (
+        <span>
+          <strong>{t("listings.waitlist.open")}</strong>
+        </span>
+      )
+    }
+
     return {
       unitType: {
         content: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
@@ -57,17 +83,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
       },
       rent: { content: <span>{rent}</span> },
       availability: {
-        content: (
-          <span>
-            {unitSummary.totalAvailable > 0 ? (
-              <>
-                <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
-              </>
-            ) : (
-              <span className="uppercase">{t("listings.waitlist.label")}</span>
-            )}
-          </span>
-        ),
+        content: availability,
       },
     }
   })
@@ -75,11 +91,14 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
   return unitSummaries
 }
 
-export const getSummariesTable = (summaries: UnitSummary[]): StandardTableData => {
+export const getSummariesTable = (
+  summaries: UnitSummary[],
+  listingAvailability: ListingAvailability
+): StandardTableData => {
   let unitSummaries: StandardTableData = []
 
   if (summaries?.length > 0) {
-    unitSummaries = unitSummariesTable(summaries)
+    unitSummaries = unitSummariesTable(summaries, listingAvailability)
   }
   return unitSummaries
 }

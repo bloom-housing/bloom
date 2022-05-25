@@ -5,6 +5,7 @@ import {
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
+  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -49,8 +50,13 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-const getListingTableData = (unitsSummarized: UnitsSummarized) => {
-  return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
+const getListingTableData = (
+  unitsSummarized: UnitsSummarized,
+  listingAvailability: ListingAvailability
+) => {
+  return unitsSummarized !== undefined
+    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingAvailability)
+    : []
 }
 
 export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
@@ -105,6 +111,15 @@ export const getListings = (listings) => {
     minimumIncome: "t.minimumIncome",
     rent: "t.rent",
   }
+
+  const generateTableSubHeader = (listing) => {
+    if (listing.listingAvailability === ListingAvailability.availableUnits) {
+      return { text: t("listings.availableUnits") }
+    } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
+      return { text: t("listings.waitlist.open") }
+    }
+    return null
+  }
   return listings.map((listing: Listing, index) => {
     return (
       <ListingCard
@@ -125,7 +140,7 @@ export const getListings = (listings) => {
         }}
         tableProps={{
           headers: unitSummariesHeaders,
-          data: getListingTableData(listing.unitsSummarized),
+          data: getListingTableData(listing.unitsSummarized, listing.listingAvailability),
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
@@ -135,7 +150,7 @@ export const getListings = (listings) => {
         contentProps={{
           contentHeader: { text: listing.name },
           contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
-          tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
+          tableHeader: generateTableSubHeader(listing),
         }}
       />
     )

@@ -125,7 +125,10 @@ export const ListingView = (props: ListingProps) => {
   let groupedUnits: StandardTableData = []
 
   if (amiValues.length == 1) {
-    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
+    groupedUnits = getSummariesTable(
+      listing.unitsSummarized.byUnitTypeAndRent,
+      listing.listingAvailability
+    )
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)
@@ -439,7 +442,9 @@ export const ListingView = (props: ListingProps) => {
                 return parseInt(item.percent, 10) == percent
               })
 
-              groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
+              groupedUnits = byAMI
+                ? getSummariesTable(byAMI.byUnitType, listing.listingAvailability)
+                : []
 
               return (
                 <React.Fragment key={percent}>

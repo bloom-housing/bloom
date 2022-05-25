@@ -3,7 +3,6 @@ import { getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitSeedType } from "./listings"
 import { CountyCode } from "../../../shared/types/county-code"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 
 export class ListingDefaultMissingAMI extends ListingDefaultSeed {
@@ -42,7 +41,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "1100",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -60,7 +58,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -78,7 +75,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -96,7 +92,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -114,7 +109,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
     ]
 
