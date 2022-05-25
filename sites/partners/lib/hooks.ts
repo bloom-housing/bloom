@@ -44,6 +44,7 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
   const params = {
     page,
     limit,
+    view: "base",
   }
 
   // filter if logged user is an agent
