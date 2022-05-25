@@ -4531,7 +4531,7 @@ export interface ListingsApiExtraModels {
   orderBy?: OrderByFieldsEnum[]
 
   /**  */
-  order?: EnumListingsApiExtraModelsOrder[]
+  orderDir?: OrderParam[]
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -6625,10 +6625,12 @@ export enum OrderByFieldsEnum {
   "unitsAvailable" = "unitsAvailable",
   "marketingType" = "marketingType",
 }
-export enum EnumListingsApiExtraModelsOrder {
+
+export enum OrderParam {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
 }
