@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.0...@bloom-housing/backend-core@4.4.1-alpha.1) (2022-05-25)
+
+
+### Performance Improvements
+
+* user list and user getQb ([#2756](https://github.com/bloom-housing/bloom/issues/2756)) ([bc45879](https://github.com/bloom-housing/bloom/commit/bc45879f79934b5a1cf48a4d6a911048906e3184))
+
+
+
+
+
 ## [4.4.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.3.1-alpha.1...@bloom-housing/backend-core@4.4.1-alpha.0) (2022-05-25)
 
 
