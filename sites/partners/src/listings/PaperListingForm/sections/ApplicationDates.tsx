@@ -49,7 +49,7 @@ const ApplicationDates = ({
         startTime: { content: startTime && getDetailFieldTime(startTime) },
         endTime: { content: endTime && getDetailFieldTime(endTime) },
         url: {
-          content: url.length ? (
+          content: url?.length ? (
             <LinkButton className="mx-0 my-0" href={url} unstyled>
               {t("t.url")}
             </LinkButton>

@@ -1214,9 +1214,9 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
-      orderBy?: OrderByFieldsEnum
+      orderBy?: any | null[]
       /**  */
-      order?: string
+      orderDir?: any | null[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1230,7 +1230,7 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
-        order: params["order"],
+        orderDir: params["orderDir"],
       }
       let data = null
 
@@ -4526,6 +4526,14 @@ export interface ListingFilterParams {
   jurisdiction?: string
 }
 
+export interface ListingsApiExtraModels {
+  /**  */
+  orderBy?: OrderByFieldsEnum[]
+
+  /**  */
+  order?: EnumListingsApiExtraModelsOrder[]
+}
+
 export interface UnitAccessibilityPriorityType {
   /**  */
   name: string
@@ -6617,7 +6625,10 @@ export enum OrderByFieldsEnum {
   "unitsAvailable" = "unitsAvailable",
   "marketingType" = "marketingType",
 }
-
+export enum EnumListingsApiExtraModelsOrder {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
+}
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
 }

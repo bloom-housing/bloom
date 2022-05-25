@@ -12,9 +12,14 @@ import {
   EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
-interface PaginationProps {
+export interface PaginationProps {
   page?: number
   limit: number | "all"
+}
+
+export interface ColumnOrder {
+  orderBy: string
+  orderDir: string
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
@@ -25,6 +30,7 @@ type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
   userId?: string
+  sort?: ColumnOrder[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -40,10 +46,20 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+export function useListingsData({ page, limit, userId, sort }: UseListingsDataProps) {
   const params = {
     page,
     limit,
+    view: "base",
+  }
+
+  if (sort) {
+    Object.assign(params, {
+      orderBy: sort?.filter((item) => item.orderBy).map((item) => item.orderBy),
+    })
+    Object.assign(params, {
+      orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir),
+    })
   }
 
   // filter if logged user is an agent
@@ -60,9 +76,11 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
   }
 
   const { listingsService } = useContext(AuthContext)
+
   const fetcher = () => listingsService.list(params)
 
   const paramsString = qs.stringify(params)
+
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
 
   return {
@@ -138,8 +156,8 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    queryParams.append("orderBy", delayedFilterValue)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
+    queryParams.append("orderBy", orderBy)
+    queryParams.append("order", order || EnumApplicationsApiExtraModelOrder.ASC)
   }
   const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
 
@@ -154,8 +172,9 @@ export function useApplicationsData(
   }
 
   if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
+    Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
   }
+
   const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
 
