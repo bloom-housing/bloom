@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.5...@bloom-housing/public@4.4.1-alpha.6) (2022-05-26)
+
+
+### Bug Fixes
+
+* visual design bugs ([#2737](https://github.com/bloom-housing/bloom/issues/2737)) ([dbac685](https://github.com/bloom-housing/bloom/commit/dbac685cd1e4d276b57a1d961eb5707decbc248b))
+
+
+
+
+
+## [4.4.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.4...@bloom-housing/public@4.4.1-alpha.5) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.4.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.3...@bloom-housing/public@4.4.1-alpha.4) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.4.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.2...@bloom-housing/public@4.4.1-alpha.3) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.4.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.1...@bloom-housing/public@4.4.1-alpha.2) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [4.4.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.0...@bloom-housing/public@4.4.1-alpha.1) (2022-05-25)
 
 **Note:** Version bump only for package @bloom-housing/public

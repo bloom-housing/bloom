@@ -44,6 +44,8 @@ import { MfaType } from "../types/mfa-type"
 import { SmsMfaService } from "./sms-mfa.service"
 import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
+import { addFilters } from "../../shared/query-filter"
+import { UserFilterParams } from "../dto/user-filter-params"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { UserRepository } from "../repositories/user-repository"
@@ -98,9 +100,16 @@ export class UserService {
     const qb = this.userRepository.getQb()
 
     if (params.filter) {
-      const filter = new UserQueryFilter()
-      filter.addFilters(params.filter, userFilterTypeToFieldMap, distinctIDQB)
-      filter.addFilters(params.filter, userFilterTypeToFieldMap, qb)
+      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
+        params.filter,
+        userFilterTypeToFieldMap,
+        distinctIDQB
+      )
+      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
+        params.filter,
+        userFilterTypeToFieldMap,
+        qb
+      )
     }
 
     if (params.search) {

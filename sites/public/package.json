@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "4.4.1-alpha.1",
+  "version": "4.4.1-alpha.6",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -24,9 +24,9 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^4.4.1-alpha.1",
-    "@bloom-housing/shared-helpers": "^4.4.1-alpha.1",
-    "@bloom-housing/ui-components": "^4.4.1-alpha.1",
+    "@bloom-housing/backend-core": "^4.4.1-alpha.4",
+    "@bloom-housing/shared-helpers": "^4.4.1-alpha.6",
+    "@bloom-housing/ui-components": "^4.4.1-alpha.6",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
@@ -35,7 +35,6 @@
     "next": "^11.1.1",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
-    "node-sass": "^7.0.0",
     "openapi-client-axios": "^3.6.2",
     "qs": "^6.10.1",
     "react": "^17.0.2",
@@ -58,6 +57,7 @@
     "next-transpile-modules": "^8.0.0",
     "nyc": "^15.1.0",
     "postcss": "^8.3.6",
+    "sass": "1.52.1",
     "sass-loader": "^10.0.3",
     "ts-loader": "^6.0.3",
     "typescript": "^4.5.5",

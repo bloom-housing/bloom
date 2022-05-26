@@ -6,7 +6,6 @@ import {
   ArrayMaxSize,
   IsArray,
   IsEnum,
-  IsIn,
   IsOptional,
   IsString,
   Validate,
@@ -72,7 +71,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default], each: true })
+  @IsEnum(OrderParam, { groups: [ValidationsGroupsEnum.default], each: true })
   @Validate(OrderQueryParamValidator, { groups: [ValidationsGroupsEnum.default] })
   orderDir?: OrderParam[]
 }

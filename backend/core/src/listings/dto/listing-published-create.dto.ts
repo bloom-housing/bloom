@@ -20,6 +20,7 @@ import { OmitType } from "@nestjs/swagger"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingImageUpdateDto } from "./listing-image-update.dto"
+import { ListingAvailability } from "../types/listing-availability-enum"
 
 export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "assets",
@@ -39,6 +40,7 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "rentalAssistance",
   "reviewOrderType",
   "units",
+  "listingAvailability",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -79,6 +81,10 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   isWaitlistOpen: boolean
+
+  @Expose()
+  @IsEnum(ListingAvailability, { groups: [ValidationsGroupsEnum.default] })
+  listingAvailability: ListingAvailability | null
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })

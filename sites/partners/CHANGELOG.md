@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.6...@bloom-housing/partners@4.4.1-alpha.7) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.5...@bloom-housing/partners@4.4.1-alpha.6) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.4...@bloom-housing/partners@4.4.1-alpha.5) (2022-05-26)
+
+
+### Bug Fixes
+
+* selectAndOrder drag and drop ([#2765](https://github.com/bloom-housing/bloom/issues/2765)) ([301a0eb](https://github.com/bloom-housing/bloom/commit/301a0eb8b6b018b3d664f2b84c3720f4055d452f))
+
+
+
+
+
+## [4.4.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.3...@bloom-housing/partners@4.4.1-alpha.4) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.2...@bloom-housing/partners@4.4.1-alpha.3) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.1...@bloom-housing/partners@4.4.1-alpha.2) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.4.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.0...@bloom-housing/partners@4.4.1-alpha.1) (2022-05-25)
 
 

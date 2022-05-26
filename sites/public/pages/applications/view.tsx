@@ -30,7 +30,12 @@ const ApplicationView = () => {
 
   return (
     <FormsLayout>
-      <FormCard header="Confirmation">
+      <FormCard
+        header={{
+          isVisible: true,
+          title: t("account.application.confirmation"),
+        }}
+      >
         <div className="py-2">
           {listing && (
             <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
