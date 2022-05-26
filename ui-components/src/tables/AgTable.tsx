@@ -187,7 +187,12 @@ const AgTable = ({
       <div className="flex justify-between flex-col md:flex-row">
         <div className="flex flex-wrap">
           <div className="md:mr-5 w-full md:w-56">
-            <Field name="filter-input" register={register} placeholder={t("t.filter")} />
+            <Field
+              dataTestId="ag-search-input"
+              name="filter-input"
+              register={register}
+              placeholder={t("t.filter")}
+            />
           </div>
           <div className="w-full md:w-auto mt-2 mb-2 md:mb-0">
             {!validSearch && (
