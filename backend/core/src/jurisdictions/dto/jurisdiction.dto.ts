@@ -6,7 +6,7 @@ import { Jurisdiction } from "../entities/jurisdiction.entity"
 import { IdDto } from "../../shared/dto/id.dto"
 import { IdNameDto } from "../../shared/dto/idName.dto"
 
-export class JurisdictionDto extends OmitType(Jurisdiction, ["preferences", "programs"] as const) {
+export class JurisdictionDto extends OmitType(Jurisdiction, ["preferences", "programs", "admins"] as const) {
   @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(1024, { groups: [ValidationsGroupsEnum.default] })

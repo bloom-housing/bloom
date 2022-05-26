@@ -4042,6 +4042,9 @@ export interface User {
   jurisdictions: Jurisdiction[]
 
   /**  */
+  adminInJurisdictions?: Jurisdiction[]
+
+  /**  */
   id: string
 
   /**  */
@@ -4141,6 +4144,9 @@ export interface UserCreate {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  adminInJurisdictions?: Jurisdiction[]
 }
 
 export interface UserBasic {
@@ -4155,6 +4161,9 @@ export interface UserBasic {
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  adminInJurisdictions?: Jurisdiction[]
 
   /**  */
   id: string
@@ -4291,6 +4300,9 @@ export interface UserUpdate {
   appUrl?: string
 
   /**  */
+  adminInJurisdictions?: Id[]
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -4357,6 +4369,9 @@ export interface UserInvite {
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  adminInJurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date

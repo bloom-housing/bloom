@@ -16,6 +16,7 @@ export class UserBasicDto extends OmitType(User, [
   "jurisdictions",
   "mfaCode",
   "mfaCodeUpdatedAt",
+  "adminInJurisdictions",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -35,4 +36,11 @@ export class UserBasicDto extends OmitType(User, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgentInListings?: IdDto[] | null
+
+  @Expose()
+  @IsOptional()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => JurisdictionDto)
+  adminInJurisdictions?: JurisdictionDto[] | null
 }

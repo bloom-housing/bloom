@@ -19,6 +19,7 @@ export class UserInviteDto extends OmitType(UserDto, [
   "lastLoginAt",
   "failedLoginAttemptsCount",
   "agreedToTermsOfService",
+  "adminInJurisdictions",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -38,4 +39,11 @@ export class UserInviteDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgentInListings?: IdDto[] | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  adminInJurisdictions?: IdDto[] | null
 }

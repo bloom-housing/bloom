@@ -432,10 +432,8 @@ export class UserService {
       {
         ...dto,
         passwordHash: await this.passwordService.passwordToHash(password),
-        leasingAgentInListings: dto.leasingAgentInListings as Listing[],
-        roles: dto.roles as UserRoles,
         jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as Jurisdiction[])
+          ? dto.jurisdictions
           : [await this.jurisdictionResolverService.getJurisdiction()],
         mfaEnabled: true,
       },

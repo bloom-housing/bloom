@@ -32,6 +32,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "passwordValidForDays",
   "lastLoginAt",
   "failedLoginAttemptsCount",
+  "adminInJurisdictions",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -94,4 +95,11 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  adminInJurisdictions?: IdDto[] | null
 }

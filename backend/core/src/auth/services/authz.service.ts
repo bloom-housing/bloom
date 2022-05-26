@@ -5,6 +5,7 @@ import { User } from "../entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoleEnum } from "../enum/user-role-enum"
 import { authzActions } from "../enum/authz-actions.enum"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Injectable()
 export class AuthzService {
