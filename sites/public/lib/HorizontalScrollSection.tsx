@@ -38,7 +38,10 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
   }
 
   const setButtonState = () => {
-    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
+    const scrollLeft = scrollContainerRef.current?.scrollLeft
+    const scrollWidth = scrollContainerRef.current?.scrollWidth
+    const clientWidth = scrollContainerRef.current?.clientWidth
+
     const scrollStart = isRtl() ? -scrollLeft : scrollLeft
     const scrollEnd = scrollWidth - clientWidth + (isRtl() ? scrollLeft : -scrollLeft)
     setCanScrollLeft(isRtl() ? scrollEnd > 0 : scrollStart > 0)
