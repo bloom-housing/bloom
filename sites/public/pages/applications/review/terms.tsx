@@ -86,7 +86,12 @@ const ApplicationTerms = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
