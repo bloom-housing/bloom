@@ -9,7 +9,7 @@ describe("Application Management Tests", () => {
 
   it("Application grid should display correct number of results", () => {
     cy.visit("/")
-    cy.get(`[row-id="1"]`).find(`[col-id="status"]`).contains("Open").click()
+    cy.getByTestId("listing-status-cell").eq(1).click()
     cy.getByID("lbTotalPages").contains("20")
     cy.get(".applications-table")
       .first()
