@@ -390,6 +390,31 @@ export const ListingView = (props: ListingProps) => {
     </>
   )
 
+  const getWaitlist = () => {
+    return (
+      <QuantityRowSection
+        quantityRows={[
+          {
+            text: t("listings.availableUnits"), // TODO: add singular / plural
+            amount: listing.unitsAvailable, // TODO: Get actual number of units available
+            emphasized: true,
+          },
+          {
+            text: t("listings.waitlist.openSlots"),
+            amount: listing.waitlistOpenSpots,
+            emphasized: true,
+          },
+        ]}
+        strings={{
+          sectionTitle: listing.isWaitlistOpen
+            ? t("listings.waitlist.isOpen")
+            : t("listings.availableUnits"),
+          description: t("listings.waitlist.submitAnApplication"),
+        }}
+      />
+    )
+  }
+
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
 
   return (
@@ -480,29 +505,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
-          {!applicationsClosed && listing.isWaitlistOpen && (
-            <QuantityRowSection
-              quantityRows={[
-                {
-                  text: t("listings.waitlist.currentSize"),
-                  amount: listing.waitlistCurrentSize,
-                },
-                {
-                  text: t("listings.waitlist.openSlots"),
-                  amount: listing.waitlistOpenSpots,
-                  emphasized: true,
-                },
-                {
-                  text: t("listings.waitlist.finalSize"),
-                  amount: listing.waitlistMaxSize,
-                },
-              ]}
-              strings={{
-                sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-                description: t("listings.waitlist.submitAnApplication"),
-              }}
-            />
-          )}
+          {!applicationsClosed && getWaitlist()}
           {hasNonReferralMethods &&
           !applicationsClosed &&
           listing.status !== ListingStatus.closed ? (
@@ -626,29 +629,7 @@ export const ListingView = (props: ListingProps) => {
                   headerText={t("listings.openHouseEvent.header")}
                 />
               )}
-              {!applicationsClosed && listing.isWaitlistOpen && (
-                <QuantityRowSection
-                  quantityRows={[
-                    {
-                      text: t("listings.waitlist.currentSize"),
-                      amount: listing.waitlistCurrentSize,
-                    },
-                    {
-                      text: t("listings.waitlist.openSlots"),
-                      amount: listing.waitlistOpenSpots,
-                      emphasized: true,
-                    },
-                    {
-                      text: t("listings.waitlist.finalSize"),
-                      amount: listing.waitlistMaxSize,
-                    },
-                  ]}
-                  strings={{
-                    sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-                    description: t("listings.waitlist.submitAnApplication"),
-                  }}
-                />
-              )}
+              {!applicationsClosed && getWaitlist()}
               {hasNonReferralMethods &&
                 !applicationsClosed &&
                 listing.status !== ListingStatus.closed &&

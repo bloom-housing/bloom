@@ -233,23 +233,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         {waitlistOpen === YesNoAnswer.Yes && (
           <GridSection columns={3}>
             <Field
-              name="waitlistMaxSize"
-              id="waitlistMaxSize"
-              register={register}
-              label={t("listings.waitlist.maxSizeQuestion")}
-              placeholder={t("listings.waitlist.maxSize")}
-              type={"number"}
-              subNote={t("listings.recommended")}
-            />
-            <Field
-              name="waitlistCurrentSize"
-              id="waitlistCurrentSize"
-              register={register}
-              label={t("listings.waitlist.currentSizeQuestion")}
-              placeholder={t("listings.waitlist.currentSize")}
-              type={"number"}
-            />
-            <Field
               name="waitlistOpenSpots"
               id="waitlistOpenSpots"
               register={register}
