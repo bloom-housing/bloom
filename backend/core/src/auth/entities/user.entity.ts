@@ -186,5 +186,4 @@ export class User {
 
   @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.admins, { nullable: true })
   adminInJurisdictions?: Jurisdiction[] | null
-
 }
