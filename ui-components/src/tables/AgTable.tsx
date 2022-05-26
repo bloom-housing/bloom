@@ -55,6 +55,31 @@ export interface AgTableSort {
   setSort?: React.Dispatch<React.SetStateAction<ColumnOrder[]>>
 }
 
+export const useAgTable = () => {
+  const [sortOptions, setSortOptions] = useState<ColumnOrder[]>([])
+  const [filterValue, setFilterValue] = useState("")
+
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+
+  return {
+    filter: {
+      filterValue,
+      setFilterValue,
+    },
+    sort: {
+      sortOptions,
+      setSortOptions,
+    },
+    pagination: {
+      itemsPerPage,
+      setItemsPerPage,
+      currentPage,
+      setCurrentPage,
+    },
+  }
+}
+
 const AgTable = ({
   id,
   className,
