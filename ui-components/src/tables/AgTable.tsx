@@ -190,6 +190,8 @@ const AgTable = ({
             <Field
               dataTestId="ag-search-input"
               name="filter-input"
+              label={t("t.filter")}
+              readerOnly={true}
               register={register}
               placeholder={t("t.filter")}
             />
