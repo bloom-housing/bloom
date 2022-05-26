@@ -5,23 +5,23 @@ import { AgTable, useAgTable } from "../../src/tables/AgTable"
 const agTableMockColumns = [
   {
     headerName: "Name",
-    field: "name"
+    field: "name",
   },
   {
     headerName: "Value",
-    field: "value"
-  }
+    field: "value",
+  },
 ]
 
 const agTableMockData = Array.from({ length: 10 }).map((_, index) => ({
   name: `${index + 1} row`,
-  value: `${index + 1}`
+  value: `${index + 1}`,
 }))
 
 const getTableMockData = (page: number, perPage: number, search: string) => {
   // works by name only
   if (search) {
-    return agTableMockData.filter(item => item.name.includes(search))
+    return agTableMockData.filter((item) => item.name.includes(search))
   }
 
   if (page === 1) return agTableMockData.slice(0, perPage)
@@ -30,11 +30,15 @@ const getTableMockData = (page: number, perPage: number, search: string) => {
   return agTableMockData
 }
 
-const AG_ROW_DOM_PATH = '.ag-center-cols-container > .ag-row'
+const AG_ROW_DOM_PATH = ".ag-center-cols-container > .ag-row"
 
 const AgTableComponent = ({ loading }: { loading?: boolean }) => {
   const tableOptions = useAgTable()
-  const tableItems = getTableMockData(tableOptions.pagination.currentPage, tableOptions.pagination.itemsPerPage, tableOptions.filter.filterValue)
+  const tableItems = getTableMockData(
+    tableOptions.pagination.currentPage,
+    tableOptions.pagination.itemsPerPage,
+    tableOptions.filter.filterValue
+  )
 
   return (
     <AgTable
@@ -53,7 +57,7 @@ const AgTableComponent = ({ loading }: { loading?: boolean }) => {
         items: tableItems,
         loading: loading || false,
         totalItems: agTableMockData.length,
-        totalPages: Math.ceil(agTableMockData.length / tableOptions.pagination.itemsPerPage)
+        totalPages: Math.ceil(agTableMockData.length / tableOptions.pagination.itemsPerPage),
       }}
       search={{
         setSearch: tableOptions.filter.setFilterValue,
@@ -61,11 +65,7 @@ const AgTableComponent = ({ loading }: { loading?: boolean }) => {
       sort={{
         setSort: tableOptions.sort.setSortOptions,
       }}
-      headerContent={
-        <div className="flex-row">
-          right content
-        </div>
-      }
+      headerContent={<div className="flex-row">right content</div>}
     />
   )
 }
@@ -107,7 +107,7 @@ describe("<AgTable>", () => {
 
     const pageSizeSelect = getByTestId("ag-page-size")
     expect(pageSizeSelect).toBeTruthy()
-    fireEvent.change(pageSizeSelect, { target: { value: 100 }})
+    fireEvent.change(pageSizeSelect, { target: { value: 100 } })
 
     await waitFor(() => {
       expect(container.querySelectorAll(AG_ROW_DOM_PATH).length).toBe(10)
@@ -119,7 +119,7 @@ describe("<AgTable>", () => {
 
     const pageSelect = getByTestId("ag-page-select")
     expect(pageSelect).toBeTruthy()
-    fireEvent.change(pageSelect, { target: { value: 2 }})
+    fireEvent.change(pageSelect, { target: { value: 2 } })
 
     await waitFor(() => {
       expect(container.querySelectorAll(AG_ROW_DOM_PATH).length).toBe(2)
@@ -131,11 +131,13 @@ describe("<AgTable>", () => {
 
     const searchInput = getByTestId("ag-search-input")
     expect(searchInput).toBeTruthy()
-    fireEvent.change(searchInput, { target: { value: "5 row" }})
+    fireEvent.change(searchInput, { target: { value: "5 row" } })
 
     await waitFor(() => {
       expect(container.querySelectorAll(AG_ROW_DOM_PATH).length).toBe(1)
-      expect(document.querySelector(".ag-center-cols-container > [row-id='0'] > [aria-colindex='1']")).toContainHTML("5 row")
+      expect(
+        document.querySelector(".ag-center-cols-container > [row-id='0'] > [aria-colindex='1']")
+      ).toContainHTML("5 row")
     })
   })
 

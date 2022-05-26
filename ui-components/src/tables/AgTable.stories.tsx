@@ -5,23 +5,23 @@ import { AgTable, useAgTable } from "./AgTable"
 const agTableMockColumns = [
   {
     headerName: "Name",
-    field: "name"
+    field: "name",
   },
   {
     headerName: "Value",
-    field: "value"
-  }
+    field: "value",
+  },
 ]
 
 const agTableMockData = Array.from({ length: 10 }).map((_, index) => ({
   name: `${index + 1} row`,
-  value: `${index + 1}`
+  value: `${index + 1}`,
 }))
 
 const getTableMockData = (page: number, perPage: number, search: string) => {
   // in story works by name only
   if (search) {
-    return agTableMockData.filter(item => item.name.includes(search))
+    return agTableMockData.filter((item) => item.name.includes(search))
   }
 
   if (page === 1) return agTableMockData.slice(0, perPage)
@@ -38,7 +38,11 @@ export default {
 
 export const Default = () => {
   const tableOptions = useAgTable()
-  const tableItems = getTableMockData(tableOptions.pagination.currentPage, tableOptions.pagination.itemsPerPage, tableOptions.filter.filterValue)
+  const tableItems = getTableMockData(
+    tableOptions.pagination.currentPage,
+    tableOptions.pagination.itemsPerPage,
+    tableOptions.filter.filterValue
+  )
 
   return (
     <AgTable
@@ -57,7 +61,7 @@ export const Default = () => {
         items: tableItems,
         loading: false,
         totalItems: agTableMockData.length,
-        totalPages: Math.ceil(agTableMockData.length / tableOptions.pagination.itemsPerPage)
+        totalPages: Math.ceil(agTableMockData.length / tableOptions.pagination.itemsPerPage),
       }}
       search={{
         setSearch: tableOptions.filter.setFilterValue,
@@ -65,11 +69,7 @@ export const Default = () => {
       sort={{
         setSort: tableOptions.sort.setSortOptions,
       }}
-      headerContent={
-        <div className="flex-row">
-          right content
-        </div>
-      }
+      headerContent={<div className="flex-row">right content</div>}
     />
   )
 }
