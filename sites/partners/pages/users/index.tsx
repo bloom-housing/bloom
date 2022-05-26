@@ -4,10 +4,10 @@ import dayjs from "dayjs"
 import {
   PageHeader,
   AgTable,
+  useAgTable,
   Button,
   t,
   Drawer,
-  AG_PER_PAGE_OPTIONS,
   SiteAlert,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
@@ -23,10 +23,7 @@ type UserDrawerValue = {
 const Users = () => {
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
 
-  const [delayedFilterValue, setDelayedFilterValue] = useState("")
-
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const tableOptions = useAgTable()
 
   const columns = useMemo(() => {
     return [
@@ -93,9 +90,9 @@ const Users = () => {
   }, [])
 
   const { data: userList, loading, error } = useUserList({
-    page: currentPage,
-    limit: itemsPerPage,
-    search: delayedFilterValue,
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
+    search: tableOptions.filter.filterValue,
   })
 
   const { listingDtos } = useListingsData({
@@ -122,10 +119,10 @@ const Users = () => {
           <AgTable
             id="users-table"
             pagination={{
-              perPage: itemsPerPage,
-              setPerPage: setItemsPerPage,
-              currentPage: currentPage,
-              setCurrentPage: setCurrentPage,
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
             }}
             config={{
               columns,
@@ -138,7 +135,7 @@ const Users = () => {
               totalPages: userList?.meta.totalPages,
             }}
             search={{
-              setSearch: setDelayedFilterValue,
+              setSearch: tableOptions.filter.setFilterValue,
             }}
             headerContent={
               <div className="flex-row">

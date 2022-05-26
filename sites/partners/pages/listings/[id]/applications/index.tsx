@@ -10,13 +10,12 @@ import {
   AuthContext,
   SiteAlert,
   setSiteAlertMessage,
-  AG_PER_PAGE_OPTIONS,
+  useAgTable,
 } from "@bloom-housing/ui-components"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
-  ColumnOrder,
 } from "../../../../lib/hooks"
 import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 import Layout from "../../../../layouts"
@@ -30,11 +29,7 @@ const ApplicationsList = () => {
   const { applicationsService } = useContext(AuthContext)
   const router = useRouter()
 
-  const [sortOptions, setSortOptions] = useState<ColumnOrder[]>([])
-  const [delayedFilterValue, setDelayedFilterValue] = useState("")
-
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const tableOptions = useAgTable()
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
@@ -51,12 +46,12 @@ const ApplicationsList = () => {
   })
 
   const { applications, appsMeta, appsLoading, appsError } = useApplicationsData(
-    currentPage,
-    delayedFilterValue,
-    itemsPerPage,
+    tableOptions.pagination.currentPage,
+    tableOptions.filter.filterValue,
+    tableOptions.pagination.itemsPerPage,
     listingId,
-    sortOptions?.[0]?.orderBy as EnumApplicationsApiExtraModelOrderBy,
-    sortOptions?.[0]?.orderDir as EnumApplicationsApiExtraModelOrder
+    tableOptions.sort.sortOptions?.[0]?.orderBy as EnumApplicationsApiExtraModelOrderBy,
+    tableOptions.sort.sortOptions?.[0]?.orderDir as EnumApplicationsApiExtraModelOrder
   )
 
   class formatLinkCell {
@@ -133,8 +128,6 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      {console.log(sortOptions)}
-
       <ApplicationSecondaryNav
         title={listingName}
         listingId={listingId}
@@ -152,10 +145,10 @@ const ApplicationsList = () => {
           <AgTable
             id="applications-table"
             pagination={{
-              perPage: itemsPerPage,
-              setPerPage: setItemsPerPage,
-              currentPage: currentPage,
-              setCurrentPage: setCurrentPage,
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
             }}
             config={{
               gridComponents,
@@ -169,10 +162,10 @@ const ApplicationsList = () => {
               totalPages: appsMeta?.totalPages,
             }}
             search={{
-              setSearch: setDelayedFilterValue,
+              setSearch: tableOptions.filter.setFilterValue,
             }}
             sort={{
-              setSort: setSortOptions,
+              setSort: tableOptions.sort.setSortOptions,
             }}
             headerContent={
               <div className="flex-row">
