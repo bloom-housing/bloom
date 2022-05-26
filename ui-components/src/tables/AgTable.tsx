@@ -116,9 +116,13 @@ const AgTable = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const filterField = watch("filter-input", "")
-  const debounceFilter = useRef(debounce((value: string) => setSearch(value), 500))
+  const debounceFilter = useRef(
+    debounce((value: string) => {
+      setSearch(value)
+      pagination.setCurrentPage(1)
+    }, 500)
+  )
   useEffect(() => {
-    // pagination.setCurrentPage(1)
     if (filterField.length === 0 || filterField.length > 2) {
       setValidSearch(true)
       debounceFilter.current(filterField)
