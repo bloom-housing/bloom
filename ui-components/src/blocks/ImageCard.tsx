@@ -61,7 +61,7 @@ const ImageCard = (props: ImageCardProps) => {
   }
 
   const image = (
-    <div className="image-card__wrapper">
+    <div className="image-card">
       <div className="image-card-tag__wrapper">
         {props.tags?.map((tag, index) => {
           return (
@@ -81,7 +81,7 @@ const ImageCard = (props: ImageCardProps) => {
           )
         })}
       </div>
-      <figure className="image-card">
+      <figure className="image-card__inner">
         {props.imageUrl ? (
           <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />
         ) : (

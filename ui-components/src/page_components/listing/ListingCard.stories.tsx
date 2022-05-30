@@ -82,11 +82,11 @@ export const withStackedTable = () => {
 export const WithHeaders = () => {
   return (
     <ListingCard
-      imageCardProps={{ ...standardImageCardProps }}
+      imageCardProps={{ ...standardImageCardProps, href: undefined }}
       tableProps={{ ...standardTableProps }}
       footerButtons={[{ text: "See Details", href: "see-details-link" }]}
       contentProps={{
-        contentHeader: { text: "Optional content header" },
+        contentHeader: { text: "Optional content header", href: "listing-link" },
         contentSubheader: { text: "Optional content subheader" },
         tableHeader: { text: "Optional table header" },
         tableSubheader: { text: "Optional table subheader" },
@@ -275,5 +275,67 @@ export const CustomFooter = () => {
         tableSubheader: { text: "Optional table subheader" },
       }}
     />
+  )
+}
+
+export const detroitStyle = () => {
+  const cssVarsOverride = `
+    .listing-card-overrides {
+      --bloom-font-sans: Montserrat;
+      --bloom-font-alt-sans: var(--bloom-font-sans);
+      --bloom-color-primary: rgb(41,126,115);
+      --bloom-color-primary-dark: rgb(0,68,69);
+      --primary-appearance-hover-background-color: white;
+      --primary-appearance-hover-label-color: var(--bloom-color-primary-dark);
+      --outlined-appearance-hover-background-color: var(--bloom-color-primary);
+      --outlined-appearance-hover-border-color: var(--bloom-color-primary);
+    }
+
+    .listing-card-overrides .image-card {
+      --tags-justify-mobile: flex-end;
+      --tags-justify-desktop: flex-end;
+      --border-radius: 24px;
+      --image-height: 340px;
+    }
+
+    .listing-card-overrides .button {
+      --normal-rounded: 60px;
+      --normal-padding: 0.5rem 1rem;
+      --normal-font-size: var(--bloom-font-size-base);
+      --label-letter-spacing: normal;
+      --label-transform: none;
+    }
+  `
+
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+        rel="stylesheet"
+      ></link>
+      <div className="listing-card-overrides">
+        <ListingCard
+          imageCardProps={{
+            imageUrl: "https://detroit-public-dev.netlify.app/images/detroitDefault.png",
+            href: "listing-link",
+            tags: [{ iconType: "calendar", iconColor: "white", text: "Coming Soon Fall 2022" }],
+          }}
+          tableProps={{ ...standardTableProps }}
+          footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+          contentProps={{
+            contentHeader: { text: "Optional content header" },
+            contentSubheader: { text: "Optional content subheader" },
+          }}
+          cardTags={[
+            { text: "Tag 1 text" },
+            { text: "Tag 2 text" },
+            { text: "A tag with a longer name" },
+          ]}
+        />
+        <style>{cssVarsOverride}</style>
+      </div>
+    </>
   )
 }

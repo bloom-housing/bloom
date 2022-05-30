@@ -1,12 +1,17 @@
 import * as React from "react"
+import { BADGES } from "../../.storybook/constants"
 import { ImageCard } from "./ImageCard"
 import { t } from "../helpers/translator"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { IconFillColors } from "../icons/Icon"
 
 export default {
-  title: "Blocks/Image Card",
+  title: "Blocks/Image Card 🚩",
+  id: "blocks/image-card",
   decorators: [(storyFn: any) => <div style={{ maxWidth: "700px" }}>{storyFn()}</div>],
+  parameters: {
+    badges: [BADGES.GEN2],
+  },
 }
 
 export const image = () => <ImageCard imageUrl="/images/listing.jpg" />
@@ -15,12 +20,16 @@ export const withLink = () => <ImageCard href="/listings" imageUrl="/images/list
 
 export const withNoImage = () => <ImageCard />
 
-export const withOneStatus = () => (
-  <ImageCard
-    href="/listings"
-    imageUrl="/images/listing.jpg"
-    statuses={[{ status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") }]}
-  />
+export const withOneStatusAndSmaller = () => (
+  <header className="image-card--leader">
+    <ImageCard
+      href="/listings"
+      imageUrl="/images/listing.jpg"
+      statuses={[
+        { status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") },
+      ]}
+    />
+  </header>
 )
 
 export const withDescriptionAsAlt = () => (

@@ -1,64 +1,65 @@
 .listings-row {
-  @apply flex;
-  @apply flex-row;
-  @apply flex-wrap;
-  @apply max-w-5xl;
-  @apply m-auto;
-  @apply mb-12;
-  max-width: 48rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: var(--bloom-width-3xl);
+  margin: auto;
+  margin-block-end: var(--bloom-s12);
+  position: relative;
 
   &:first-of-type {
-    @apply mt-12;
+    margin-block-start: var(--bloom-s12);
+    color: var(--bloom-color-accent-cool-light);
   }
 
-  @screen lg {
-    @apply max-w-5xl;
+  @media (min-width: $screen-lg) {
+    max-width: var(--bloom-width-5xl);
   }
 }
 
-.listings-row_figure {
-  @apply w-full;
-  @apply p-3;
-  @apply pb-0;
+.listings-row_figure, .listings-row_content {
+  width: 100%;
+  padding: var(--bloom-s3);
+  padding-bottom: 0px;
 
-  @screen lg {
-    @apply w-6/12;
+  @media (min-width: $screen-lg) {
+    width: 50%;
   }
 }
 
 .listings-row_content {
-  @apply w-full;
-  @apply p-3;
+  .listings-row_headers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
-  @screen lg {
-    @apply w-6/12;
+    @media (min-width: $screen-md) {
+      align-items: flex-start;
+      text-align: left;
+    }
   }
 
-  .listings-row_headers {
-    @apply flex;
-    @apply flex-col;
-    @apply items-center;
-    @apply text-center;
-    @screen md {
-      @apply items-start;
-      @apply text-left;
-    }
+  .is-card-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
   }
 }
 
 .listings-row_table {
-  @apply mb-4;
+  margin-block-end: var(--bloom-s12);
 }
 
 .listings-row_footer {
-  @apply flex;
-  @apply justify-end;
-  @apply w-full;
-  a:not(:first-child) {
-    @apply ml-1;
-  }
-}
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 
-.listings-row_table {
-  @apply mb-4;
+  a:not(:first-child) {
+    margin-inline-start: var(--bloom-s1);
+  }
 }

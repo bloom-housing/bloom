@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useContext } from "react"
 import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
 import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
@@ -8,12 +8,14 @@ import { Tag } from "../../text/Tag"
 import { AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
+import { NavigationContext } from "../../config/NavigationContext"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
 export interface CardHeader {
   customClass?: string
   text: string
+  href?: string
 }
 
 export interface FooterButton {
@@ -68,6 +70,7 @@ const ListingCard = (props: ListingCardProps) => {
     contentProps,
     tableProps,
   } = props
+  const { LinkComponent } = useContext(NavigationContext)
 
   const getHeader = (
     header: CardHeader | undefined,
@@ -78,7 +81,13 @@ const ListingCard = (props: ListingCardProps) => {
     if (header && header.text) {
       return (
         <Heading priority={priority} style={style} className={customClass}>
-          {header.text}
+          {header.href ? (
+            <LinkComponent className="is-card-link" href={header.href}>
+              {header.text}
+            </LinkComponent>
+          ) : (
+            header.text
+          )}
         </Heading>
       )
     } else {
