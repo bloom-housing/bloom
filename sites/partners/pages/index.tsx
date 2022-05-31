@@ -121,15 +121,13 @@ export default function ListingsList() {
     return columns
   }, [])
 
-  const { listingDtos, listingsLoading, listingsError } = useListingsData({
+  const { listingDtos, listingsLoading } = useListingsData({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
     userId: !isAdmin ? profile?.id : undefined,
     sort: tableOptions.sort.sortOptions,
   })
-
-  if (listingsError) return "An error has occurred."
 
   return (
     <Layout>
