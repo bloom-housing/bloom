@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.8...@bloom-housing/ui-components@4.4.1-alpha.9) (2022-05-31)
+
+
+### Features
+
+* load overly to partner listings grid ([#2621](https://github.com/bloom-housing/bloom/issues/2621)) ([4785f34](https://github.com/bloom-housing/bloom/commit/4785f344831f97dac2164224e32247619e5ac808))
+
+
+
+
+
 ## [4.4.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.7...@bloom-housing/ui-components@4.4.1-alpha.8) (2022-05-31)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
