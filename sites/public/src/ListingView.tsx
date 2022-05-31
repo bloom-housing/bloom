@@ -9,6 +9,7 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingStatus,
+  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -391,25 +392,35 @@ export const ListingView = (props: ListingProps) => {
   )
 
   const getWaitlist = () => {
+    const waitlistRow = [
+      {
+        text: t("listings.waitlist.openSlots"),
+        amount: listing.waitlistOpenSpots,
+        emphasized: true,
+      },
+    ]
+    const unitRow = [
+      {
+        text:
+          listing.unitsAvailable === 1 ? t("listings.availableUnit") : t("listings.availableUnits"),
+        amount: listing.unitsAvailable,
+        emphasized: true,
+      },
+    ]
     return (
       <QuantityRowSection
-        quantityRows={[
-          {
-            text: t("listings.availableUnits"), // TODO: add singular / plural
-            amount: listing.unitsAvailable, // TODO: Get actual number of units available
-            emphasized: true,
-          },
-          {
-            text: t("listings.waitlist.openSlots"),
-            amount: listing.waitlistOpenSpots,
-            emphasized: true,
-          },
-        ]}
+        quantityRows={
+          listing.listingAvailability === ListingAvailability.openWaitlist ? waitlistRow : unitRow
+        }
         strings={{
-          sectionTitle: listing.isWaitlistOpen
-            ? t("listings.waitlist.isOpen")
-            : t("listings.availableUnits"),
-          description: t("listings.waitlist.submitAnApplication"),
+          sectionTitle:
+            listing.listingAvailability === ListingAvailability.openWaitlist
+              ? t("listings.waitlist.isOpen")
+              : t("listings.availableUnits"),
+          description:
+            listing.listingAvailability === ListingAvailability.openWaitlist
+              ? t("listings.waitlist.submitForWaitlist")
+              : t("listings.availableUnitsDescription"),
         }}
       />
     )
