@@ -8,5 +8,5 @@ export default {
 }
 
 export const IconAlignCenter = () => <Icon symbol={faAlignCenter} size="large" />
-export const IconForwardStep = () => <Icon symbol={faForwardStep} size="large" />
-export const IconHandsClapping = () => <Icon symbol={faHandsClapping} size="large" />
+export const IconForwardStep = () => <Icon symbol={faForwardStep} size="large" fill="#2277CC" />
+export const IconHandsClapping = () => <Icon symbol={faHandsClapping} size="large" fill="#BB5511" />
