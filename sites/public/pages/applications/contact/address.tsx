@@ -18,10 +18,11 @@ import {
   AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useMemo, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import { disableContactFormOption } from "../../../lib/helpers"
 import {
   contactPreferencesKeys,
   phoneNumberKeys,
@@ -118,6 +119,7 @@ const ApplicationAddress = () => {
     id: item.id,
     label: t(`t.${item.id}`),
     defaultChecked: application?.contactPreferences?.includes(item.id) || false,
+    disabled: disableContactFormOption(item.id, noPhone, application.applicant.noEmail),
   }))
 
   useEffect(() => {
@@ -128,9 +130,22 @@ const ApplicationAddress = () => {
     })
   }, [profile])
 
+  const backUrl = useMemo(() => {
+    return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
+  }, [verifyAddress])
+
+  const backFunction = useCallback(() => {
+    return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
+  }, [verifyAddress])
+
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -139,11 +154,7 @@ const ApplicationAddress = () => {
         />
       </FormCard>
       <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
+        <FormBackLink url={backUrl} onClick={backFunction} />
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {verifyAddress
@@ -465,6 +476,7 @@ const ApplicationAddress = () => {
                 <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
                 <Field
+                  className="mb-1"
                   type="radio"
                   id="workInRegionYes"
                   name="applicant.workInRegion"
@@ -480,6 +492,7 @@ const ApplicationAddress = () => {
                 />
 
                 <Field
+                  className="mb-1"
                   type="radio"
                   id="workInRegionNo"
                   name="applicant.workInRegion"

@@ -12,9 +12,8 @@ export class PasswordService {
   // passwordHash is a hidden field - we need to build a query to get it directly
   public async getUserWithPassword(user: User) {
     return await this.userRepository
-      .createQueryBuilder()
+      .createQueryBuilder("user")
       .addSelect("user.passwordHash")
-      .from(User, "user")
       .where("user.id = :id", { id: user.id })
       .getOne()
   }

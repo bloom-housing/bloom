@@ -62,8 +62,8 @@ const FormForgotPassword = ({
         </AlertBox>
       )}
 
-      {!!networkError.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={"householdsize-error"} error={!!networkError.error}>
+      {!!networkError.error?.error && Object.entries(errors).length === 0 && (
+        <ErrorMessage id={"forgotpasswordemail-error"} error={!!networkError.error}>
           <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
             {networkError.error.title}
           </AlertBox>
@@ -76,7 +76,7 @@ const FormForgotPassword = ({
 
       <SiteAlert type="notice" dismissable />
 
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}
@@ -86,8 +86,9 @@ const FormForgotPassword = ({
             error={errors.email}
             errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
             register={register}
+            onChange={() => networkError.reset()}
           />
-          <section className="bg-gray-300">
+          <section>
             <div className="text-center mt-6">
               <Button styleType={AppearanceStyleType.primary}>
                 {t("authentication.forgotPassword.sendEmail")}

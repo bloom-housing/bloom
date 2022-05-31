@@ -112,7 +112,7 @@ const FormSignIn = ({
         </Form>
       </div>
       {showRegisterBtn && (
-        <div className="form-card__group text-center">
+        <div className="form-card__group text-center border-t">
           <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
 
           <LinkButton href="/create-account">{t("account.createAccount")}</LinkButton>

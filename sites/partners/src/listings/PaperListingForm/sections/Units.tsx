@@ -12,11 +12,13 @@ import {
   ViewItem,
   GridCell,
   FieldGroup,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../formTypes"
-import { fieldHasError } from "../../../../lib/helpers"
+import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import { ListingAvailability } from "@bloom-housing/backend-core/types"
 
 type UnitProps = {
   units: TempUnit[]
@@ -32,7 +34,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, reset, getValues } = formMethods
+  const { register, errors, clearErrors, reset, getValues, control } = formMethods
+  const listing = getValues()
+
+  const listingAvailability = useWatch({
+    control,
+    name: "listingAvailabilityQuestion",
+  })
 
   const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
@@ -43,7 +51,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     monthlyRent: "listings.unit.rent",
     sqFeet: "listings.unit.sqft",
     priorityType: "listings.unit.priorityType",
-    status: "listings.unit.status",
     action: "",
   }
 
@@ -93,36 +100,37 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     }
   }
 
-  const unitTableData = useMemo(
+  const unitTableData: StandardTableData = useMemo(
     () =>
       units.map((unit) => ({
-        number: unit.number,
-        unitType: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`),
-        amiPercentage: unit.amiPercentage,
-        monthlyRent: unit.monthlyRent,
-        sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType?.name,
-        status: t(`listings.unit.statusOptions.${unit.status}`),
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase"
-              onClick={() => editUnit(unit.tempId)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => setUnitDeleteModal(unit.tempId)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        number: { content: unit.number },
+        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        amiPercentage: { content: unit.amiPercentage },
+        monthlyRent: { content: unit.monthlyRent },
+        sqFeet: { content: unit.sqFeet },
+        priorityType: { content: unit.priorityType?.name },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase"
+                onClick={() => editUnit(unit.tempId)}
+                unstyled
+              >
+                {t("t.edit")}
+              </Button>
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => setUnitDeleteModal(unit.tempId)}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       })),
     [editUnit, units]
   )
@@ -160,6 +168,43 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               fields={disableUnitsAccordionOptions}
               fieldClassName="m-0"
               fieldGroupClassName="flex h-12 items-center"
+            />
+          </GridCell>
+          <GridCell>
+            <ViewItem
+              label={t("listings.listingAvailabilityQuestion")}
+              className={`mb-1 ${
+                fieldHasError(errors?.listingAvailability) &&
+                listingAvailability === null &&
+                "text-alert"
+              }`}
+            />
+            <FieldGroup
+              name="listingAvailabilityQuestion"
+              type="radio"
+              register={register}
+              groupSubNote={t("listings.requiredToPublish")}
+              error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
+              errorMessage={fieldMessage(errors?.listingAvailability)}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex h-12 items-center"
+              fields={[
+                {
+                  label: t("listings.availableUnits"),
+                  value: "availableUnits",
+                  id: "availableUnits",
+                  dataTestId: "listingAvailability.availableUnits",
+                  defaultChecked:
+                    listing?.listingAvailability === ListingAvailability.availableUnits,
+                },
+                {
+                  label: t("listings.waitlist.open"),
+                  value: "openWaitlist",
+                  id: "openWaitlist",
+                  dataTestId: "listingAvailability.openWaitlist",
+                  defaultChecked: listing?.listingAvailability === ListingAvailability.openWaitlist,
+                },
+              ]}
             />
           </GridCell>
         </GridSection>

@@ -1,9 +1,9 @@
 import * as React from "react"
-import { t } from "@bloom-housing/ui-components"
+import { StandardTableData, t } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 
-export const occupancyTable = (listing: Listing) => {
-  let occupancyData = [] as any
+export const occupancyTable = (listing: Listing): StandardTableData => {
+  let occupancyData: StandardTableData = []
   if (listing.unitsSummarized && listing.unitsSummarized.byUnitType) {
     occupancyData = listing.unitsSummarized.byUnitType.map((unitSummary) => {
       let occupancy = ""
@@ -21,8 +21,10 @@ export const occupancyTable = (listing: Listing) => {
       }
 
       return {
-        unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>,
-        occupancy: occupancy,
+        unitType: {
+          content: <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>,
+        },
+        occupancy: { content: occupancy },
       }
     })
   }

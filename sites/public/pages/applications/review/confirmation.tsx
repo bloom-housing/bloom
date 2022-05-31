@@ -2,10 +2,11 @@
 5.4 Confirmation
 Application confirmation with lottery number (confirmation number)
 */
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
+import dayjs from "dayjs"
 import {
   AppearanceStyleType,
   ApplicationTimeline,
@@ -14,6 +15,7 @@ import {
   AuthContext,
   t,
 } from "@bloom-housing/ui-components"
+import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { imageUrlFromListing, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -25,6 +27,27 @@ const ApplicationConfirmation = () => {
   const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
+
+  const reviewOrder = useMemo(() => {
+    if (listing) {
+      if (listing.reviewOrderType == ListingReviewOrder.lottery) {
+        const lotteryText = []
+        if (listing.applicationDueDate) {
+          lotteryText.push(
+            t("application.review.confirmation.eligibleApplicants.lotteryDate", {
+              lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
+            })
+          )
+        }
+        lotteryText.push(t("application.review.confirmation.eligibleApplicants.lottery"))
+        return lotteryText.join(" ")
+      } else {
+        return t("application.review.confirmation.eligibleApplicants.FCFS")
+      }
+    } else {
+      return ""
+    }
+  }, [listing, router.locale])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -65,7 +88,7 @@ const ApplicationConfirmation = () => {
           <ApplicationTimeline />
 
           <Markdown options={{ disableParsingRawHTML: true }}>
-            {t("application.review.confirmation.whatHappensNext")}
+            {t("application.review.confirmation.whatHappensNext", { reviewOrder })}
           </Markdown>
         </div>
 

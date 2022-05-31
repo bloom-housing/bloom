@@ -30,7 +30,6 @@ const views: Views = {
       "units.monthlyRent",
       "units.monthlyRentAsPercentOfIncome",
       "units.sqFeet",
-      "units.status",
       "amiChartOverride.id",
       "amiChartOverride.items",
       "unitType.id",
@@ -44,6 +43,7 @@ const views: Views = {
       "listingImagesImage.fileId",
       "listingImagesImage.label",
       "listingPreferencesPreference.id",
+      "listings.listingAvailability",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },

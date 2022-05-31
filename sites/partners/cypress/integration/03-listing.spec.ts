@@ -33,6 +33,7 @@ describe("Listing Management Tests", () => {
       cy.getByID("reservedCommunityType.id").select(listing["reservedCommunityType.id"])
       cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
       cy.getByTestId("unit-types").check()
+      cy.getByTestId("listingAvailability.availableUnits").check()
       cy.get("#addUnitsButton").contains("Add Unit").click()
       cy.getByID("number").type(listing["number"])
       cy.getByID("unitType.id").select(listing["unitType.id"])
@@ -164,11 +165,11 @@ describe("Listing Management Tests", () => {
       cy.get("#reservedCommunityType").contains(listing["reservedCommunityType.id"])
       cy.get("#reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
       cy.getByTestId("unit-types-or-individual").contains("Unit Types")
+      cy.getByTestId("listing-availability-question").contains("Available Units")
       cy.get("#unitTable").contains(listing["number"])
       cy.get("#unitTable").contains(listing["monthlyRent"])
       cy.get("#unitTable").contains(listing["sqFeet"])
       cy.get("#unitTable").contains(listing["priorityType.id"])
-      cy.get("#unitTable").contains("Available")
       cy.get("#preferenceTable").contains("1")
       cy.get("#preferenceTable").contains("Live/Work in County")
       cy.get("#preferenceTable").contains("At least one household member lives or works in County")
@@ -188,7 +189,7 @@ describe("Listing Management Tests", () => {
       cy.get("#rentalHistory").contains(listing["rentalHistory"])
       cy.get("#criminalBackground").contains(listing["criminalBackground"])
       cy.get("#rentalAssistance").contains(
-        "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property."
+        "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy."
       )
       cy.get("#buildingSelectionCriteriaTable").contains(listing["buildingSelectionCriteriaURL"])
       cy.get("#requiredDocuments").contains(listing["requiredDocuments"])

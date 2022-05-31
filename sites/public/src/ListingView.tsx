@@ -8,6 +8,7 @@ import {
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -20,7 +21,7 @@ import {
   Heading,
   ImageCard,
   InfoCard,
-  LeasingAgent,
+  Contact,
   ListSection,
   ListingDetailItem,
   ListingDetails,
@@ -34,11 +35,12 @@ import {
   SubmitApplication,
   TableHeaders,
   UnitTables,
-  Waitlist,
+  QuantityRowSection,
   WhatToExpect,
   getSummariesTable,
   t,
   EventType,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -47,6 +49,8 @@ import {
   occupancyTable,
   pdfUrlFromListingEvents,
   getTimeRangeString,
+  getCurrencyRange,
+  getPostmarkString,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -101,20 +105,30 @@ export const ListingView = (props: ListingProps) => {
 
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
-  const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
+  const hmiData: StandardTableData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
+    const amiRows = Object.keys(row).reduce((acc, rowContent) => {
+      acc[rowContent] = { content: row[rowContent] }
+      return acc
+    }, {})
     return {
-      ...row,
-      sizeColumn: (
-        <strong>
-          {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
-        </strong>
-      ),
+      ...amiRows,
+      sizeColumn: {
+        content: (
+          <strong>
+            {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
+          </strong>
+        ),
+      },
     }
   })
-  let groupedUnits: Record<string, React.ReactNode>[] = null
+
+  let groupedUnits: StandardTableData = []
 
   if (amiValues.length == 1) {
-    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
+    groupedUnits = getSummariesTable(
+      listing.unitsSummarized.byUnitTypeAndRent,
+      listing.listingAvailability
+    )
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)
@@ -342,26 +356,37 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
-        listingStatus={listing.status}
       />
-      <SubmitApplication
-        applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
-        applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
-        applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
-        applicationOrganization={listing.applicationOrganization}
-        postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: getDateString(
-            listing.postmarkedApplicationsReceivedByDate,
-            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
-          ),
-          developer: listing.developer,
-          applicationsDueDate: getDateString(
-            listing.applicationDueDate,
-            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
-          ),
-        }}
-        listingStatus={listing.status}
-      />
+      {!(
+        listing.status === ListingStatus.closed ||
+        !(listing.applicationMailingAddress || listing.applicationDropOffAddress)
+      ) && (
+        <SubmitApplication
+          applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
+          applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
+          applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
+          applicationOrganization={listing.applicationOrganization}
+          strings={{
+            postmark: getPostmarkString(
+              listing.applicationDueDate
+                ? getDateString(listing.applicationDueDate, `MMM DD, YYYY [${t("t.at")}] hh:mm A`)
+                : null,
+              listing.postmarkedApplicationsReceivedByDate
+                ? getDateString(
+                    listing.postmarkedApplicationsReceivedByDate,
+                    `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+                  )
+                : null,
+              listing.developer
+            ),
+            mailHeader: t("listings.apply.sendByUsMail"),
+            dropOffHeader: t("listings.apply.dropOffApplication"),
+            sectionHeader: t("listings.apply.submitAPaperApplication"),
+            officeHoursHeader: t("leasingAgent.officeHours"),
+            mapString: t("t.getDirections"),
+          }}
+        />
+      )}
     </>
   )
 
@@ -384,8 +409,8 @@ export const ListingView = (props: ListingProps) => {
               : undefined
           }
         />
-        <div className="py-3 mx-3">
-          <Heading priority={1} style={"cardHeader"}>
+        <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
+          <Heading priority={1} style={"cardHeader"} className={"text-black"}>
             {listing.name}
           </Heading>
           <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
@@ -417,7 +442,9 @@ export const ListingView = (props: ListingProps) => {
                 return parseInt(item.percent, 10) == percent
               })
 
-              groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
+              groupedUnits = byAMI
+                ? getSummariesTable(byAMI.byUnitType, listing.listingAvailability)
+                : []
 
               return (
                 <React.Fragment key={percent}>
@@ -453,15 +480,36 @@ export const ListingView = (props: ListingProps) => {
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
-          {!applicationsClosed && (
-            <Waitlist
-              isWaitlistOpen={listing.isWaitlistOpen}
-              waitlistMaxSize={listing.waitlistMaxSize}
-              waitlistCurrentSize={listing.waitlistCurrentSize}
-              waitlistOpenSpots={listing.waitlistOpenSpots}
+          {!applicationsClosed && listing.isWaitlistOpen && (
+            <QuantityRowSection
+              quantityRows={[
+                {
+                  text: t("listings.waitlist.currentSize"),
+                  amount: listing.waitlistCurrentSize,
+                },
+                {
+                  text: t("listings.waitlist.openSlots"),
+                  amount: listing.waitlistOpenSpots,
+                  emphasized: true,
+                },
+                {
+                  text: t("listings.waitlist.finalSize"),
+                  amount: listing.waitlistMaxSize,
+                },
+              ]}
+              strings={{
+                sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                description: t("listings.waitlist.submitAnApplication"),
+              }}
             />
           )}
-          {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
+          {hasNonReferralMethods &&
+          !applicationsClosed &&
+          listing.status !== ListingStatus.closed ? (
+            <>{applySidebar()}</>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <ListingDetails>
@@ -578,15 +626,33 @@ export const ListingView = (props: ListingProps) => {
                   headerText={t("listings.openHouseEvent.header")}
                 />
               )}
-              {!applicationsClosed && (
-                <Waitlist
-                  isWaitlistOpen={listing.isWaitlistOpen}
-                  waitlistMaxSize={listing.waitlistMaxSize}
-                  waitlistCurrentSize={listing.waitlistCurrentSize}
-                  waitlistOpenSpots={listing.waitlistOpenSpots}
+              {!applicationsClosed && listing.isWaitlistOpen && (
+                <QuantityRowSection
+                  quantityRows={[
+                    {
+                      text: t("listings.waitlist.currentSize"),
+                      amount: listing.waitlistCurrentSize,
+                    },
+                    {
+                      text: t("listings.waitlist.openSlots"),
+                      amount: listing.waitlistOpenSpots,
+                      emphasized: true,
+                    },
+                    {
+                      text: t("listings.waitlist.finalSize"),
+                      amount: listing.waitlistMaxSize,
+                    },
+                  ]}
+                  strings={{
+                    sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                    description: t("listings.waitlist.submitAnApplication"),
+                  }}
                 />
               )}
-              {hasNonReferralMethods && !applicationsClosed && applySidebar()}
+              {hasNonReferralMethods &&
+                !applicationsClosed &&
+                listing.status !== ListingStatus.closed &&
+                applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication
                   phoneNumber={
@@ -612,7 +678,32 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            {!appOpenInFuture && <LeasingAgent listing={listing} />}
+            {!appOpenInFuture && (
+              <Contact
+                sectionTitle={t("leasingAgent.contact")}
+                additionalInformation={
+                  listing.leasingAgentOfficeHours
+                    ? [
+                        {
+                          title: t("leasingAgent.officeHours"),
+                          content: listing.leasingAgentOfficeHours,
+                        },
+                      ]
+                    : undefined
+                }
+                contactAddress={listing.leasingAgentAddress}
+                contactEmail={listing.leasingAgentEmail}
+                contactName={listing.leasingAgentName}
+                contactPhoneNumber={`${t("t.call")} ${listing.leasingAgentPhone}`}
+                contactPhoneNumberNote={t("leasingAgent.dueToHighCallVolume")}
+                contactTitle={listing.leasingAgentTitle}
+                strings={{
+                  email: t("t.email"),
+                  website: t("t.website"),
+                  getDirections: t("t.getDirections"),
+                }}
+              />
+            )}
           </aside>
         </ListingDetailItem>
 
@@ -660,11 +751,19 @@ export const ListingView = (props: ListingProps) => {
               />
             </dl>
             <AdditionalFees
-              depositMin={listing.depositMin}
-              depositMax={listing.depositMax}
-              applicationFee={listing.applicationFee}
+              deposit={getCurrencyRange(parseInt(listing.depositMin), parseInt(listing.depositMax))}
+              applicationFee={`$${listing.applicationFee}`}
               costsNotIncluded={listing.costsNotIncluded}
-              depositHelperText={listing.depositHelperText}
+              strings={{
+                sectionHeader: t("listings.sections.additionalFees"),
+                applicationFee: t("listings.applicationFee"),
+                deposit: t("t.deposit"),
+                applicationFeeSubtext: [
+                  t("listings.applicationPerApplicantAgeDescription"),
+                  t("listings.applicationFeeDueAt"),
+                ],
+                depositSubtext: [listing.depositHelperText],
+              }}
             />
           </div>
         </ListingDetailItem>

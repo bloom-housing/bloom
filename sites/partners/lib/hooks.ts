@@ -12,19 +12,28 @@ import {
   EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
-interface PaginationProps {
+export interface PaginationProps {
   page?: number
   limit: number | "all"
+}
+
+export interface ColumnOrder {
+  orderBy: string
+  orderDir: string
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
   listingId: string
 }
 
-type UseUserListProps = PaginationProps
+type UseUserListProps = PaginationProps & {
+  search?: string
+}
 
 type UseListingsDataProps = PaginationProps & {
   userId?: string
+  search?: string
+  sort?: ColumnOrder[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -40,85 +49,54 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+export function useListingsData({ page, limit, userId, search = "", sort }: UseListingsDataProps) {
   const params = {
     page,
     limit,
+    filter: [],
+    search,
+    view: "base",
+  }
+
+  if (sort) {
+    Object.assign(params, {
+      orderBy: sort?.filter((item) => item.orderBy).map((item) => item.orderBy),
+    })
+    Object.assign(params, {
+      orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir),
+    })
   }
 
   // filter if logged user is an agent
-  if (typeof userId !== undefined) {
+  if (userId) {
+    params.filter.push({
+      $comparison: EnumListingFilterParamsComparison["="],
+      leasingAgents: userId,
+    })
+
     Object.assign(params, {
-      filter: [
-        {
-          $comparison: EnumListingFilterParamsComparison["="],
-          leasingAgents: userId,
-        },
-      ],
       view: "base",
     })
   }
 
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
   const { listingsService } = useContext(AuthContext)
+
   const fetcher = () => listingsService.list(params)
 
   const paramsString = qs.stringify(params)
+
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
 
   return {
     listingDtos: data,
     listingsLoading: !error && !data,
     listingsError: error,
-  }
-}
-
-export function useApplicationsData(
-  pageIndex: number,
-  limit = 10,
-  listingId: string,
-  search: string,
-  orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
-) {
-  const { applicationsService } = useContext(AuthContext)
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", pageIndex.toString())
-  queryParams.append("limit", limit.toString())
-
-  if (search) {
-    queryParams.append("search", search)
-  }
-
-  if (orderBy) {
-    queryParams.append("orderBy", search)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
-  }
-
-  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
-
-  const params = {
-    listingId,
-    page: pageIndex,
-    limit,
-  }
-
-  if (search) {
-    Object.assign(params, { search })
-  }
-
-  if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
-  }
-
-  const fetcher = () => applicationsService.list(params)
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    appsData: data,
-    appsLoading: !error && !data,
-    appsError: error,
   }
 }
 
@@ -168,7 +146,47 @@ export function useFlaggedApplicationsList({
     error,
   }
 }
+export function useApplicationsData(
+  currentPage: number,
+  delayedFilterValue: string,
+  limit: number,
+  listingId: string,
+  orderBy?: EnumApplicationsApiExtraModelOrderBy,
+  order?: EnumApplicationsApiExtraModelOrder
+) {
+  const { applicationsService } = useContext(AuthContext)
 
+  const params = {
+    listingId,
+    page: currentPage,
+    limit,
+  }
+
+  if (delayedFilterValue) {
+    Object.assign(params, { search: delayedFilterValue })
+  }
+
+  if (orderBy) {
+    Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
+  }
+
+  const paramsString = qs.stringify(params)
+
+  const endpoint = `${process.env.backendApiBase}/applications?${paramsString}`
+
+  const fetcher = () => applicationsService.list(params)
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  const applications = data?.items
+  const appsMeta = data?.meta
+
+  return {
+    applications: applications ?? [],
+    appsMeta,
+    appsLoading: !error && !data,
+    appsError: error,
+  }
+}
 export function useSingleFlaggedApplication(afsId: string) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
@@ -362,29 +380,32 @@ export function useReservedCommunityTypeList() {
   }
 }
 
-export function useUserList({ page, limit }: UseUserListProps) {
-  const queryParams = new URLSearchParams()
-  queryParams.append("page", page.toString())
-  queryParams.append("limit", limit.toString())
+export function useUserList({ page, limit, search = "" }: UseUserListProps) {
+  const params = {
+    page,
+    limit,
+    filter: [
+      {
+        isPortalUser: true,
+        $comparison: EnumUserFilterParamsComparison["="],
+      },
+    ],
+    search,
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  const paramsString = qs.stringify(params)
 
   const { userService } = useContext(AuthContext)
 
-  const fetcher = () =>
-    userService.list({
-      page,
-      limit,
-      filter: [
-        {
-          isPartner: true,
-          $comparison: EnumUserFilterParamsComparison["="],
-        },
-      ],
-    })
+  const fetcher = () => userService.list(params)
 
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/user/list?${queryParams.toString()}`,
-    fetcher
-  )
+  const { data, error } = useSWR(`${process.env.backendApiBase}/user/list?${paramsString}`, fetcher)
 
   return {
     data,

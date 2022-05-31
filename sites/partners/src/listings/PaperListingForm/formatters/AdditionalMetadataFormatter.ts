@@ -1,4 +1,4 @@
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { ListingReviewOrder, ListingAvailability } from "@bloom-housing/backend-core/types"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {
@@ -46,5 +46,11 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe
+
+    if (this.data.listingAvailabilityQuestion === "availableUnits") {
+      this.data.listingAvailability = ListingAvailability.availableUnits
+    } else if (this.data.listingAvailabilityQuestion === "openWaitlist") {
+      this.data.listingAvailability = ListingAvailability.openWaitlist
+    }
   }
 }

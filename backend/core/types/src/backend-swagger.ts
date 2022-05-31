@@ -702,13 +702,19 @@ export class AuthService {
   /**
    * Token
    */
-  token(options: IRequestOptions = {}): Promise<LoginResponse> {
+  token(
+    params: {
+      /** requestBody */
+      body?: Token
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/token"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = null
+      let data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -999,6 +1005,8 @@ export class UserService {
       limit?: number | "all"
       /**  */
       filter?: UserFilterParams[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -1006,7 +1014,12 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
       let data = null
 
       configs.data = data
@@ -1201,9 +1214,11 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
-      orderBy?: OrderByFieldsEnum
+      orderBy?: any | null[]
       /**  */
-      order?: string
+      orderDir?: any | null[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1217,7 +1232,8 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
-        order: params["order"],
+        orderDir: params["orderDir"],
+        search: params["search"],
       }
       let data = null
 
@@ -2502,13 +2518,7 @@ export interface Id {
   id: string
 }
 
-export interface Jurisdiction {
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-
+export interface AmiChart {
   /**  */
   id: string
 
@@ -2518,46 +2528,14 @@ export interface Jurisdiction {
   /**  */
   updatedAt: Date
 
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-}
-
-export interface AmiChart {
   /**  */
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Jurisdiction
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   name: string
+
+  /**  */
+  jurisdiction: Id
 }
 
 export interface AmiChartCreate {
@@ -2565,13 +2543,22 @@ export interface AmiChartCreate {
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Id
+  name: string
 
   /**  */
-  name: string
+  jurisdiction: Id
 }
 
 export interface AmiChartUpdate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+
   /**  */
   id?: string
 
@@ -2580,15 +2567,6 @@ export interface AmiChartUpdate {
 
   /**  */
   updatedAt?: Date
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  jurisdiction: Id
-
-  /**  */
-  name: string
 }
 
 export interface Address {
@@ -3947,6 +3925,8 @@ export interface LoginResponse {
   accessToken: string
 }
 
+export interface Token {}
+
 export interface RequestMfaCode {
   /**  */
   email: string
@@ -4011,6 +3991,44 @@ export interface UserRoles {
 
   /**  */
   isPartner?: boolean
+}
+
+export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
 }
 
 export interface User {
@@ -4511,6 +4529,14 @@ export interface ListingFilterParams {
   jurisdiction?: string
 }
 
+export interface ListingsApiExtraModels {
+  /**  */
+  orderBy?: OrderByFieldsEnum[]
+
+  /**  */
+  orderDir?: OrderParam[]
+}
+
 export interface UnitAccessibilityPriorityType {
   /**  */
   name: string
@@ -4853,9 +4879,6 @@ export interface UnitAmiChartOverride {
 
 export interface Unit {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -4996,6 +5019,9 @@ export interface Listing {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   showWaitlist: boolean
@@ -5290,9 +5316,6 @@ export interface UnitAmiChartOverrideCreate {
 
 export interface UnitCreate {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -5434,6 +5457,9 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5706,9 +5732,6 @@ export interface UnitAmiChartOverrideUpdate {
 
 export interface UnitUpdate {
   /**  */
-  status: UnitStatus
-
-  /**  */
   id?: string
 
   /**  */
@@ -5846,6 +5869,9 @@ export interface ListingUpdate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   id?: string
@@ -6478,13 +6504,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -6557,6 +6577,13 @@ export enum EnumRequestMfaCodeMfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
 export type CombinedRolesTypes = UserRolesCreate
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
@@ -6602,6 +6629,11 @@ export enum OrderByFieldsEnum {
   "marketingType" = "marketingType",
 }
 
+export enum OrderParam {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
+}
+
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
 }
@@ -6617,6 +6649,11 @@ export enum ListingReviewOrder {
   "firstComeFirstServe" = "firstComeFirstServe",
 }
 
+export enum ListingAvailability {
+  "availableUnits" = "availableUnits",
+  "openWaitlist" = "openWaitlist",
+}
+
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
@@ -6626,13 +6663,6 @@ export enum ListingEventType {
 export enum FormMetaDataType {
   "radio" = "radio",
   "checkbox" = "checkbox",
-}
-
-export enum UnitStatus {
-  "unknown" = "unknown",
-  "available" = "available",
-  "occupied" = "occupied",
-  "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate

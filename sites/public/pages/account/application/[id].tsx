@@ -48,7 +48,12 @@ export default () => {
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <FormsLayout>
           {noApplication && (
-            <FormCard header={t("account.application.error")}>
+            <FormCard
+              header={{
+                isVisible: true,
+                title: t("account.application.error"),
+              }}
+            >
               <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
               <a href={`applications`} className="button is-small">
                 {t("account.application.return")}
@@ -56,7 +61,12 @@ export default () => {
             </FormCard>
           )}
           {unauthorized && (
-            <FormCard header={t("account.application.error")}>
+            <FormCard
+              header={{
+                isVisible: true,
+                title: t("account.application.error"),
+              }}
+            >
               <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
               <a href={`applications`} className="button is-small">
                 {t("account.application.return")}
@@ -65,7 +75,12 @@ export default () => {
           )}
           {application && (
             <>
-              <FormCard header={t("account.application.confirmation")}>
+              <FormCard
+                header={{
+                  isVisible: true,
+                  title: t("account.application.confirmation"),
+                }}
+              >
                 <div className="py-2">
                   {listing && (
                     <Link

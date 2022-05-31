@@ -22,6 +22,8 @@ import {
   ApplicationFlaggedSet,
 } from "@bloom-housing/backend-core/types"
 
+/* TODO: refactor this component to use the AgTable if search and pagination are needed */
+
 const Flag = () => {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 

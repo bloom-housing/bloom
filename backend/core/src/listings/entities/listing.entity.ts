@@ -41,6 +41,7 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
+import { ListingAvailability } from "../types/listing-availability-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingProgram } from "../../program/entities/listing-program.entity"
@@ -426,6 +427,16 @@ class Listing extends BaseEntity {
     enumName: "ListingReviewOrder",
   })
   reviewOrderType?: ListingReviewOrder | null
+
+  @Column({ type: "enum", enum: ListingAvailability, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingAvailability, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingAvailability,
+    enumName: "ListingAvailability",
+  })
+  listingAvailability?: ListingAvailability | null
 
   @Expose()
   applicationConfig?: Record<string, unknown>

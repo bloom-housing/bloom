@@ -8,6 +8,7 @@ import {
   Drawer,
   AppearanceStyleType,
   Field,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { Preference, Program } from "@bloom-housing/backend-core/types"
@@ -75,47 +76,51 @@ const SelectAndOrder = ({
     [draftListingData]
   )
 
-  const draggableTableData = useMemo(
+  const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
-        name: item.title,
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => {
-                deleteItem(item, false)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        name: { content: item.title },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => {
+                  deleteItem(item, false)
+                }}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       })),
     [draftListingData, deleteItem]
   )
 
-  const formTableData = useMemo(
+  const formTableData: StandardTableData = useMemo(
     () =>
       listingData.map((item, index) => ({
-        order: index + 1,
-        name: item.title,
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => {
-                deleteItem(item, true)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        order: { content: index + 1 },
+        name: { content: item.title },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => {
+                  deleteItem(item, true)
+                }}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       })),
     [listingData, deleteItem]
   )
@@ -125,7 +130,9 @@ const SelectAndOrder = ({
     if (draftListingData.length > 0 && dragOrder.length > 0) {
       const newDragOrder = []
       dragOrder.forEach((item) => {
-        newDragOrder.push(draftListingData.filter((draftItem) => draftItem.title === item.name)[0])
+        newDragOrder.push(
+          draftListingData.filter((draftItem) => draftItem.title === item.name.content)[0]
+        )
       })
       setDraftListingData(newDragOrder)
     }

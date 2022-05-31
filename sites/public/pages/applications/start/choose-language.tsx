@@ -84,10 +84,7 @@ const ApplicationChooseLanguage = () => {
         language,
       })
       void loadListing(listingId, setListing, conductor, context, language).then(() => {
-        const newLocale = language == "en" ? "" : `/${language}`
-        void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
-          window.scrollTo(0, 0)
-        })
+        void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
     [conductor, context, listingId, router]
@@ -97,7 +94,12 @@ const ApplicationChooseLanguage = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -136,7 +138,7 @@ const ApplicationChooseLanguage = () => {
 
                 {listing.applicationConfig.languages.map((lang, index) => (
                   <Button
-                    className="language-select mx-1"
+                    className="language-select mx-1 mb-2"
                     onClick={() => {
                       onLanguageSelect(lang)
                     }}

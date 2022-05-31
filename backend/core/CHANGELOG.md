@@ -3,6 +3,371 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.5...@bloom-housing/backend-core@4.4.1-alpha.6) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.4.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.4...@bloom-housing/backend-core@4.4.1-alpha.5) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.4.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.3...@bloom-housing/backend-core@4.4.1-alpha.4) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.4.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.2...@bloom-housing/backend-core@4.4.1-alpha.3) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.4.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.1...@bloom-housing/backend-core@4.4.1-alpha.2) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.4.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.0...@bloom-housing/backend-core@4.4.1-alpha.1) (2022-05-25)
+
+
+### Performance Improvements
+
+* user list and user getQb ([#2756](https://github.com/bloom-housing/bloom/issues/2756)) ([bc45879](https://github.com/bloom-housing/bloom/commit/bc45879f79934b5a1cf48a4d6a911048906e3184))
+
+
+
+
+
+## [4.4.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.3.1-alpha.1...@bloom-housing/backend-core@4.4.1-alpha.0) (2022-05-25)
+
+
+* 2022 05 24 sync master (#2754) ([f52781f](https://github.com/bloom-housing/bloom/commit/f52781fe18fbdad071d6e9a8a2b29877596c5492)), closes [#2754](https://github.com/bloom-housing/bloom/issues/2754) [#2753](https://github.com/bloom-housing/bloom/issues/2753) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+
+
+
+
+
+# [4.4.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.3...@bloom-housing/backend-core@4.4.0) (2022-05-24)
+
+
+* 2022-05-24 release (#2753) ([3beb6b7](https://github.com/seanmalbert/bloom/commit/3beb6b77f74e51ec37457d4676a1fd01d1304a65)), closes [#2753](https://github.com/seanmalbert/bloom/issues/2753) [#2441](https://github.com/seanmalbert/bloom/issues/2441) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2459](https://github.com/seanmalbert/bloom/issues/2459) [#2464](https://github.com/seanmalbert/bloom/issues/2464) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2466](https://github.com/seanmalbert/bloom/issues/2466) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2451](https://github.com/seanmalbert/bloom/issues/2451) [#2415](https://github.com/seanmalbert/bloom/issues/2415) [#2354](https://github.com/seanmalbert/bloom/issues/2354) [#2455](https://github.com/seanmalbert/bloom/issues/2455) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2476](https://github.com/seanmalbert/bloom/issues/2476) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2470](https://github.com/seanmalbert/bloom/issues/2470) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2487](https://github.com/seanmalbert/bloom/issues/2487) [#2496](https://github.com/seanmalbert/bloom/issues/2496) [#2498](https://github.com/seanmalbert/bloom/issues/2498) [#2499](https://github.com/seanmalbert/bloom/issues/2499) [#2291](https://github.com/seanmalbert/bloom/issues/2291) [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2494](https://github.com/seanmalbert/bloom/issues/2494) [#2503](https://github.com/seanmalbert/bloom/issues/2503) [#2495](https://github.com/seanmalbert/bloom/issues/2495) [#2477](https://github.com/seanmalbert/bloom/issues/2477) [#2505](https://github.com/seanmalbert/bloom/issues/2505) [#2372](https://github.com/seanmalbert/bloom/issues/2372) [#2489](https://github.com/seanmalbert/bloom/issues/2489) [#2497](https://github.com/seanmalbert/bloom/issues/2497) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2486](https://github.com/seanmalbert/bloom/issues/2486)
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+
+
+
+
+
+## [4.3.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.3.1-alpha.0...@bloom-housing/backend-core@4.3.1-alpha.1) (2022-05-24)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.3.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.9...@bloom-housing/backend-core@4.3.1-alpha.0) (2022-05-16)
+
+
+### Bug Fixes
+
+* adds region to user phone # validation ([#2652](https://github.com/bloom-housing/bloom/issues/2652)) ([d3e0c40](https://github.com/bloom-housing/bloom/commit/d3e0c4041d9aba4d703da85596d59ec765ad179a))
+* ami charts without all households ([#2430](https://github.com/bloom-housing/bloom/issues/2430)) ([5e18eba](https://github.com/bloom-housing/bloom/commit/5e18eba1d24bff038b192477b72d9d3f1f05a39d))
+* app submission w/ no due date ([8e5a81c](https://github.com/bloom-housing/bloom/commit/8e5a81c37c4efc3404e5536bd54c10cd2962bca3))
+* authservice.token data null issue ([#2703](https://github.com/bloom-housing/bloom/issues/2703)) ([5430fa2](https://github.com/bloom-housing/bloom/commit/5430fa2802b2590c7514f228c200ae040eccf403))
+* await casbin enforcer ([d7eb196](https://github.com/bloom-housing/bloom/commit/d7eb196be0b05732325938e2db7b583d66cbc9cf))
+* cannot save custom mailing, dropoff, or pickup address ([edcb068](https://github.com/bloom-housing/bloom/commit/edcb068ca23411e0a34f1dc2ff4c77ab489ac0fc))
+* csv export auth check ([#2488](https://github.com/bloom-housing/bloom/issues/2488)) ([6faf8f5](https://github.com/bloom-housing/bloom/commit/6faf8f59b115adf73e70d56c855ba5b6d325d22a))
+* fix for csv dempgraphics and preference patch ([0ffc090](https://github.com/bloom-housing/bloom/commit/0ffc0900fee73b34fd953e5355552e2e763c239c))
+* listings management keep empty strings, remove empty objects ([3aba274](https://github.com/bloom-housing/bloom/commit/3aba274a751cdb2db55b65ade1cda5d1689ca681))
+* patches translations for preferences ([#2410](https://github.com/bloom-housing/bloom/issues/2410)) ([21f517e](https://github.com/bloom-housing/bloom/commit/21f517e3f62dc5fefc8b4031d8915c8d7690677d))
+* recalculate units available on listing update ([9c3967f](https://github.com/bloom-housing/bloom/commit/9c3967f0b74526db39df4f5dbc7ad9a52741a6ea))
+* units with invalid ami chart ([621ff02](https://github.com/bloom-housing/bloom/commit/621ff0227270861047e885467f9ddd77459adec1))
+* updates household member count ([f822713](https://github.com/bloom-housing/bloom/commit/f82271397d02025629d7ea039b40cdac95877c45))
+* updates partner check for listing perm ([#2484](https://github.com/bloom-housing/bloom/issues/2484)) ([c2ab01f](https://github.com/bloom-housing/bloom/commit/c2ab01f6520b138bead01dec7352618b90635432))
+
+
+* 2022-04-08 release (#2646) ([aa9de52](https://github.com/bloom-housing/bloom/commit/aa9de524d5e849ffded475070abf529de77c9a92)), closes [#2646](https://github.com/bloom-housing/bloom/issues/2646) [#2356](https://github.com/bloom-housing/bloom/issues/2356) [#2353](https://github.com/bloom-housing/bloom/issues/2353) [#2338](https://github.com/bloom-housing/bloom/issues/2338) [#2377](https://github.com/bloom-housing/bloom/issues/2377) [#2320](https://github.com/bloom-housing/bloom/issues/2320) [#2386](https://github.com/bloom-housing/bloom/issues/2386) [#2362](https://github.com/bloom-housing/bloom/issues/2362) [#2395](https://github.com/bloom-housing/bloom/issues/2395) [#2410](https://github.com/bloom-housing/bloom/issues/2410) [#2407](https://github.com/bloom-housing/bloom/issues/2407) [#2430](https://github.com/bloom-housing/bloom/issues/2430) [#2418](https://github.com/bloom-housing/bloom/issues/2418) [#2434](https://github.com/bloom-housing/bloom/issues/2434) [#2374](https://github.com/bloom-housing/bloom/issues/2374) [#2435](https://github.com/bloom-housing/bloom/issues/2435) [#2420](https://github.com/bloom-housing/bloom/issues/2420) [#2412](https://github.com/bloom-housing/bloom/issues/2412) [#2438](https://github.com/bloom-housing/bloom/issues/2438) [#2429](https://github.com/bloom-housing/bloom/issues/2429) [#2452](https://github.com/bloom-housing/bloom/issues/2452) [#2458](https://github.com/bloom-housing/bloom/issues/2458) [#2423](https://github.com/bloom-housing/bloom/issues/2423) [#2432](https://github.com/bloom-housing/bloom/issues/2432) [#2437](https://github.com/bloom-housing/bloom/issues/2437) [#2440](https://github.com/bloom-housing/bloom/issues/2440) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+* 2022-04-05 release (#2627) ([485fb48](https://github.com/bloom-housing/bloom/commit/485fb48cfbad48bcabfef5e2e704025f608aee89)), closes [#2627](https://github.com/bloom-housing/bloom/issues/2627) [#2352](https://github.com/bloom-housing/bloom/issues/2352) [#2316](https://github.com/bloom-housing/bloom/issues/2316) [#2356](https://github.com/bloom-housing/bloom/issues/2356) [#2353](https://github.com/bloom-housing/bloom/issues/2353) [#2338](https://github.com/bloom-housing/bloom/issues/2338) [#2377](https://github.com/bloom-housing/bloom/issues/2377) [#2320](https://github.com/bloom-housing/bloom/issues/2320) [#2386](https://github.com/bloom-housing/bloom/issues/2386) [#2362](https://github.com/bloom-housing/bloom/issues/2362) [#2395](https://github.com/bloom-housing/bloom/issues/2395) [#2410](https://github.com/bloom-housing/bloom/issues/2410) [#2407](https://github.com/bloom-housing/bloom/issues/2407) [#2430](https://github.com/bloom-housing/bloom/issues/2430) [#2418](https://github.com/bloom-housing/bloom/issues/2418) [#2434](https://github.com/bloom-housing/bloom/issues/2434) [#2374](https://github.com/bloom-housing/bloom/issues/2374) [#2435](https://github.com/bloom-housing/bloom/issues/2435) [#2420](https://github.com/bloom-housing/bloom/issues/2420) [#2412](https://github.com/bloom-housing/bloom/issues/2412) [#2438](https://github.com/bloom-housing/bloom/issues/2438) [#2429](https://github.com/bloom-housing/bloom/issues/2429) [#2452](https://github.com/bloom-housing/bloom/issues/2452) [#2458](https://github.com/bloom-housing/bloom/issues/2458) [#2423](https://github.com/bloom-housing/bloom/issues/2423) [#2432](https://github.com/bloom-housing/bloom/issues/2432) [#2437](https://github.com/bloom-housing/bloom/issues/2437) [#2440](https://github.com/bloom-housing/bloom/issues/2440) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+* 2022-04-04 release (#2614) ([fecab85](https://github.com/bloom-housing/bloom/commit/fecab85c748a55ab4aff5d591c8e0ac702254559)), closes [#2614](https://github.com/bloom-housing/bloom/issues/2614) [#2349](https://github.com/bloom-housing/bloom/issues/2349) [#2350](https://github.com/bloom-housing/bloom/issues/2350) [#2351](https://github.com/bloom-housing/bloom/issues/2351) [#2348](https://github.com/bloom-housing/bloom/issues/2348) [#2352](https://github.com/bloom-housing/bloom/issues/2352) [#2316](https://github.com/bloom-housing/bloom/issues/2316) [#2356](https://github.com/bloom-housing/bloom/issues/2356) [#2353](https://github.com/bloom-housing/bloom/issues/2353) [#2338](https://github.com/bloom-housing/bloom/issues/2338) [#2377](https://github.com/bloom-housing/bloom/issues/2377) [#2320](https://github.com/bloom-housing/bloom/issues/2320) [#2386](https://github.com/bloom-housing/bloom/issues/2386) [#2362](https://github.com/bloom-housing/bloom/issues/2362) [#2395](https://github.com/bloom-housing/bloom/issues/2395) [#2410](https://github.com/bloom-housing/bloom/issues/2410) [#2407](https://github.com/bloom-housing/bloom/issues/2407) [#2430](https://github.com/bloom-housing/bloom/issues/2430) [#2418](https://github.com/bloom-housing/bloom/issues/2418) [#2434](https://github.com/bloom-housing/bloom/issues/2434) [#2374](https://github.com/bloom-housing/bloom/issues/2374) [#2435](https://github.com/bloom-housing/bloom/issues/2435) [#2420](https://github.com/bloom-housing/bloom/issues/2420) [#2412](https://github.com/bloom-housing/bloom/issues/2412) [#2438](https://github.com/bloom-housing/bloom/issues/2438) [#2429](https://github.com/bloom-housing/bloom/issues/2429) [#2452](https://github.com/bloom-housing/bloom/issues/2452) [#2458](https://github.com/bloom-housing/bloom/issues/2458) [#2423](https://github.com/bloom-housing/bloom/issues/2423) [#2432](https://github.com/bloom-housing/bloom/issues/2432) [#2437](https://github.com/bloom-housing/bloom/issues/2437) [#2440](https://github.com/bloom-housing/bloom/issues/2440) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+* 2022-03-01 release (#2550) ([2f2264c](https://github.com/bloom-housing/bloom/commit/2f2264cffe41d0cc1ebb79ef5c894458694d9340)), closes [#2550](https://github.com/bloom-housing/bloom/issues/2550) [#2288](https://github.com/bloom-housing/bloom/issues/2288) [#2317](https://github.com/bloom-housing/bloom/issues/2317) [#2319](https://github.com/bloom-housing/bloom/issues/2319) [#2108](https://github.com/bloom-housing/bloom/issues/2108) [#2326](https://github.com/bloom-housing/bloom/issues/2326) [#2349](https://github.com/bloom-housing/bloom/issues/2349) [#2350](https://github.com/bloom-housing/bloom/issues/2350) [#2351](https://github.com/bloom-housing/bloom/issues/2351) [#2348](https://github.com/bloom-housing/bloom/issues/2348) [#2352](https://github.com/bloom-housing/bloom/issues/2352) [#2316](https://github.com/bloom-housing/bloom/issues/2316) [#2356](https://github.com/bloom-housing/bloom/issues/2356) [#2353](https://github.com/bloom-housing/bloom/issues/2353) [#2338](https://github.com/bloom-housing/bloom/issues/2338) [#2377](https://github.com/bloom-housing/bloom/issues/2377) [#2320](https://github.com/bloom-housing/bloom/issues/2320) [#2386](https://github.com/bloom-housing/bloom/issues/2386) [#2362](https://github.com/bloom-housing/bloom/issues/2362) [#2395](https://github.com/bloom-housing/bloom/issues/2395) [#2410](https://github.com/bloom-housing/bloom/issues/2410) [#2407](https://github.com/bloom-housing/bloom/issues/2407) [#2430](https://github.com/bloom-housing/bloom/issues/2430) [#2418](https://github.com/bloom-housing/bloom/issues/2418) [#2434](https://github.com/bloom-housing/bloom/issues/2434) [#2374](https://github.com/bloom-housing/bloom/issues/2374) [#2435](https://github.com/bloom-housing/bloom/issues/2435) [#2420](https://github.com/bloom-housing/bloom/issues/2420) [#2412](https://github.com/bloom-housing/bloom/issues/2412) [#2438](https://github.com/bloom-housing/bloom/issues/2438) [#2429](https://github.com/bloom-housing/bloom/issues/2429) [#2452](https://github.com/bloom-housing/bloom/issues/2452) [#2458](https://github.com/bloom-housing/bloom/issues/2458) [#2423](https://github.com/bloom-housing/bloom/issues/2423) [#2432](https://github.com/bloom-housing/bloom/issues/2432) [#2437](https://github.com/bloom-housing/bloom/issues/2437) [#2440](https://github.com/bloom-housing/bloom/issues/2440) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+* 2022-01-27 release (#2439) ([860f6af](https://github.com/bloom-housing/bloom/commit/860f6af6204903e4dcddf671d7ba54f3ec04f121)), closes [#2439](https://github.com/bloom-housing/bloom/issues/2439) [#2196](https://github.com/bloom-housing/bloom/issues/2196) [#2238](https://github.com/bloom-housing/bloom/issues/2238) [#2226](https://github.com/bloom-housing/bloom/issues/2226) [#2230](https://github.com/bloom-housing/bloom/issues/2230) [#2243](https://github.com/bloom-housing/bloom/issues/2243) [#2195](https://github.com/bloom-housing/bloom/issues/2195) [#2215](https://github.com/bloom-housing/bloom/issues/2215) [#2266](https://github.com/bloom-housing/bloom/issues/2266) [#2188](https://github.com/bloom-housing/bloom/issues/2188) [#2270](https://github.com/bloom-housing/bloom/issues/2270) [#2188](https://github.com/bloom-housing/bloom/issues/2188) [#2213](https://github.com/bloom-housing/bloom/issues/2213) [#2234](https://github.com/bloom-housing/bloom/issues/2234) [#1901](https://github.com/bloom-housing/bloom/issues/1901) [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#2280](https://github.com/bloom-housing/bloom/issues/2280) [#2253](https://github.com/bloom-housing/bloom/issues/2253) [#2276](https://github.com/bloom-housing/bloom/issues/2276) [#2282](https://github.com/bloom-housing/bloom/issues/2282) [#2262](https://github.com/bloom-housing/bloom/issues/2262) [#2278](https://github.com/bloom-housing/bloom/issues/2278) [#2293](https://github.com/bloom-housing/bloom/issues/2293) [#2295](https://github.com/bloom-housing/bloom/issues/2295) [#2296](https://github.com/bloom-housing/bloom/issues/2296) [#2294](https://github.com/bloom-housing/bloom/issues/2294) [#2277](https://github.com/bloom-housing/bloom/issues/2277) [#2290](https://github.com/bloom-housing/bloom/issues/2290) [#2299](https://github.com/bloom-housing/bloom/issues/2299) [#2292](https://github.com/bloom-housing/bloom/issues/2292) [#2303](https://github.com/bloom-housing/bloom/issues/2303) [#2305](https://github.com/bloom-housing/bloom/issues/2305) [#2306](https://github.com/bloom-housing/bloom/issues/2306) [#2308](https://github.com/bloom-housing/bloom/issues/2308) [#2190](https://github.com/bloom-housing/bloom/issues/2190) [#2239](https://github.com/bloom-housing/bloom/issues/2239) [#2311](https://github.com/bloom-housing/bloom/issues/2311) [#2302](https://github.com/bloom-housing/bloom/issues/2302) [#2301](https://github.com/bloom-housing/bloom/issues/2301) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#2313](https://github.com/bloom-housing/bloom/issues/2313) [#2289](https://github.com/bloom-housing/bloom/issues/2289) [#2279](https://github.com/bloom-housing/bloom/issues/2279) [#2288](https://github.com/bloom-housing/bloom/issues/2288) [#2317](https://github.com/bloom-housing/bloom/issues/2317) [#2319](https://github.com/bloom-housing/bloom/issues/2319) [#2108](https://github.com/bloom-housing/bloom/issues/2108) [#2326](https://github.com/bloom-housing/bloom/issues/2326) [#2349](https://github.com/bloom-housing/bloom/issues/2349) [#2350](https://github.com/bloom-housing/bloom/issues/2350) [#2351](https://github.com/bloom-housing/bloom/issues/2351) [#2348](https://github.com/bloom-housing/bloom/issues/2348) [#2352](https://github.com/bloom-housing/bloom/issues/2352) [#2316](https://github.com/bloom-housing/bloom/issues/2316) [#2356](https://github.com/bloom-housing/bloom/issues/2356) [#2353](https://github.com/bloom-housing/bloom/issues/2353) [#2338](https://github.com/bloom-housing/bloom/issues/2338) [#2377](https://github.com/bloom-housing/bloom/issues/2377) [#2320](https://github.com/bloom-housing/bloom/issues/2320) [#2386](https://github.com/bloom-housing/bloom/issues/2386) [#2362](https://github.com/bloom-housing/bloom/issues/2362) [#2395](https://github.com/bloom-housing/bloom/issues/2395) [#2410](https://github.com/bloom-housing/bloom/issues/2410) [#2407](https://github.com/bloom-housing/bloom/issues/2407) [#2430](https://github.com/bloom-housing/bloom/issues/2430) [#2418](https://github.com/bloom-housing/bloom/issues/2418) [#2434](https://github.com/bloom-housing/bloom/issues/2434) [#2374](https://github.com/bloom-housing/bloom/issues/2374) [#2435](https://github.com/bloom-housing/bloom/issues/2435) [#2420](https://github.com/bloom-housing/bloom/issues/2420) [#2412](https://github.com/bloom-housing/bloom/issues/2412) [#2434](https://github.com/bloom-housing/bloom/issues/2434)
+* Release 11 11 21 (#2162) ([4847469](https://github.com/bloom-housing/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/bloom-housing/bloom/issues/2162)
+
+
+### Features
+
+* add a phone number column to the user_accounts table ([44881da](https://github.com/bloom-housing/bloom/commit/44881da1a7ccc17b7d4db1fcf79513632c18066d))
+* Add San Jose email translations ([#2519](https://github.com/bloom-housing/bloom/issues/2519)) ([d1db032](https://github.com/bloom-housing/bloom/commit/d1db032672f40d325eba9e4a833d24f8b02464cc))
+* add SRO unit type ([a4c1403](https://github.com/bloom-housing/bloom/commit/a4c140350a84a5bacfa65fb6714aa594e406945d))
+* adding alameda prog and prefs ([#2696](https://github.com/bloom-housing/bloom/issues/2696)) ([85c0bf5](https://github.com/bloom-housing/bloom/commit/85c0bf5b41c86c4dddb0bfb99d65a652f8cad1a0))
+* adds jurisdictions to pref seeds ([8a70b68](https://github.com/bloom-housing/bloom/commit/8a70b688ec8c6eb785543d5ce91ae182f62af168))
+* adds new preferences, reserved community type ([90c0673](https://github.com/bloom-housing/bloom/commit/90c0673779eeb028041717d0b1e0e69fb0766c71))
+* adds whatToExpect to GTrans ([461961a](https://github.com/bloom-housing/bloom/commit/461961a4dd48d7a1c935e4dc03e9a62d2f455088))
+* adds whatToExpect to GTrans ([#2303](https://github.com/bloom-housing/bloom/issues/2303)) ([38e672a](https://github.com/bloom-housing/bloom/commit/38e672a4dbd6c39a7a01b04698f2096a62eed8a1))
+* ami chart jurisdictionalized ([b2e2537](https://github.com/bloom-housing/bloom/commit/b2e2537818d92ff41ea51fbbeb23d9d7e8c1cf52))
+* **backend:** add storing listing translations ([#2215](https://github.com/bloom-housing/bloom/issues/2215)) ([d6a1337](https://github.com/bloom-housing/bloom/commit/d6a1337fbe3da8a159e2b60638fc527aa65aaef0))
+* **backend:** all programs to csv export ([#2302](https://github.com/bloom-housing/bloom/issues/2302)) ([48b50f9](https://github.com/bloom-housing/bloom/commit/48b50f95be794773cc68ebee3144c1f44db26f04))
+* **backend:** fix translations table relation to jurisdiction ([#2506](https://github.com/bloom-housing/bloom/issues/2506)) ([22b9f23](https://github.com/bloom-housing/bloom/commit/22b9f23eb405f701796193515dff35058cc4f7dc))
+* better seed data for ami-charts ([24eb7e4](https://github.com/bloom-housing/bloom/commit/24eb7e41512963f8dc716b74e8a8684e1272e1b7))
+* feat(backend): make use of new application confirmation codes ([8f386e8](https://github.com/bloom-housing/bloom/commit/8f386e8e656c8d498d41de947f2e5246d3c16b19))
+* new demographics sub-race questions ([910df6a](https://github.com/bloom-housing/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
+* one month rent ([319743d](https://github.com/bloom-housing/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/bloom-housing/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* temp disable terms and set mfa enabled to false ([#2595](https://github.com/bloom-housing/bloom/issues/2595)) ([6de2dcd](https://github.com/bloom-housing/bloom/commit/6de2dcd8baeb28166d7a6c383846a7ab9a84b0e2))
+* updates email confirmation for lottery ([768064a](https://github.com/bloom-housing/bloom/commit/768064a985ed858fae681caebcbcdb561319eaf9))
+
+
+### Reverts
+
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/bloom-housing/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/bloom-housing/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+### BREAKING CHANGES
+
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* sign-in pages have been updated
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+
+
+
+
+## [4.2.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.2.2...@bloom-housing/backend-core@4.2.3) (2022-04-28)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+### Features
+* adding alameda prog and prefs ([#2696](https://github.com/seanmalbert/bloom/issues/2696)) ([85c0bf5](https://github.com/seanmalbert/bloom/commit/85c0bf5b41c86c4dddb0bfb99d65a652f8cad1a0))
+
+## [4.2.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.8...@bloom-housing/backend-core@4.2.2-alpha.9) (2022-05-11)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.2.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.7...@bloom-housing/backend-core@4.2.2-alpha.8) (2022-05-11)
+
+
+### Features
+
+* **backend:** add search param to GET /user/list endpoint ([#2714](https://github.com/bloom-housing/bloom/issues/2714)) ([95c9a68](https://github.com/bloom-housing/bloom/commit/95c9a6838f534450c0da6919064f4a799898ed8f))
+
+
+
+
+
+## [4.2.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.6...@bloom-housing/backend-core@4.2.2-alpha.7) (2022-05-03)
+
+
+### Features
+
+* **backend:** improve ami chart dto definitions ([#2677](https://github.com/bloom-housing/bloom/issues/2677)) ([ca3890e](https://github.com/bloom-housing/bloom/commit/ca3890e2759f230824e31e6bd985300f40b0a0ed))
+
+
+
+
+
+## [4.2.2-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.5...@bloom-housing/backend-core@4.2.2-alpha.6) (2022-04-29)
+
+
+### Bug Fixes
+
+* check for empty translations before sending to google translate service ([#2700](https://github.com/bloom-housing/bloom/issues/2700)) ([d116fdb](https://github.com/bloom-housing/bloom/commit/d116fdbdab3c874679abc8e3dba8e23179fc78e2))
+
+
+
+
+
+## [4.2.2-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.4...@bloom-housing/backend-core@4.2.2-alpha.5) (2022-04-28)
+
+
+### Bug Fixes
+
+* authservice.token data null issue ([#2703](https://github.com/bloom-housing/bloom/issues/2703)) ([3b1b931](https://github.com/bloom-housing/bloom/commit/3b1b9316a6dd42adc22249b8e8dd836de2258406))
+
+
+
+
+
+## [4.2.2-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.3...@bloom-housing/backend-core@4.2.2-alpha.4) (2022-04-27)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.2.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.2...@bloom-housing/backend-core@4.2.2-alpha.3) (2022-04-21)
+
+
+### Features
+
+* **backend:** improve user queries ([#2676](https://github.com/bloom-housing/bloom/issues/2676)) ([4733e8a](https://github.com/bloom-housing/bloom/commit/4733e8a9909e47bb2522f9b319f45fe25923cdb5))
+
+
+
+
+
 ## [4.2.2-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.1...@bloom-housing/backend-core@4.2.2-alpha.2) (2022-04-20)
 
 

@@ -163,7 +163,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
+        "(LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhood,
         }
@@ -191,7 +191,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0)",
+        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhoodArray,
         }
@@ -319,52 +319,33 @@ describe("ListingsService", () => {
   })
 
   describe("ListingsService.list sorting", () => {
-    it("defaults to ordering by application dates when no orderBy param is set", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
-
-      await service.list({ order: OrderParam.ASC })
-
-      const expectedOrderByArgument = {
-        "listings.applicationDueDate": "ASC",
-      }
-
-      // The inner query must be ordered so that the ordering applies across all pages (if pagination is requested)
-      expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
-      expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
-
-      // The full query must be ordered so that the ordering is applied within a page (if pagination is requested)
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
-
-      // The full query is additionally ordered by the number of bedrooms (or max_occupancy) at the unit level.
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
-        "units.max_occupancy",
-        "ASC",
-        "NULLS LAST"
-      )
-    })
-
     it("orders by the orderBy param (when set)", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      await service.list({ orderBy: OrderByFieldsEnum.mostRecentlyUpdated, order: OrderParam.DESC })
+      await service.list({
+        orderBy: [OrderByFieldsEnum.mostRecentlyUpdated],
+        orderDir: [OrderParam.DESC],
+      })
 
-      const expectedOrderByArgument = { "listings.updated_at": "DESC" }
+      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
+      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledWith(
+        "listings.updated_at",
+        "DESC",
+        undefined
+      )
 
-      expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
-      expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
-
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
+        "listings.updated_at",
+        "DESC",
+        undefined
+      )
 
       // Verify that the full query is still also ordered by the number of bedrooms
       // (or max_occupancy) at the unit level.
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
       expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
         "units.max_occupancy",
         "ASC",
