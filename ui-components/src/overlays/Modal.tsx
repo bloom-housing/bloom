@@ -11,6 +11,7 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   children?: React.ReactNode
   slim?: boolean
   role?: string
+  scrollable?: boolean
 }
 
 const ModalHeader = (props: { title: string; uniqueId?: string }) => (
@@ -35,6 +36,8 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
 
 export const Modal = (props: ModalProps) => {
   const uniqueIdRef = useRef(nanoid())
+  const classNames = ["modal__inner"]
+  if (props.scrollable) classNames.push("is-scrollable")
 
   return (
     <Overlay
@@ -49,7 +52,7 @@ export const Modal = (props: ModalProps) => {
       <div className="modal">
         <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
 
-        <section className="modal__inner">
+        <section className={classNames.join(" ")}>
           {typeof props.children === "string" ? (
             <p className="c-steel">{props.children}</p>
           ) : (
