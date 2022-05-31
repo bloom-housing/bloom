@@ -60,11 +60,6 @@ const getListingTableData = (
     : []
 }
 
-export const accessibilityFeaturesExist = (features: ListingFeatures) => {
-  if (!features) return false
-  return Object.keys(features).some((feature) => features[feature])
-}
-
 export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
   let content = ""
   let subContent = ""
