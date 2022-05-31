@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.9...@bloom-housing/public@4.4.1-alpha.10) (2022-05-31)
+
+
+### Bug Fixes
+
+* netlify oom build issues ([#2770](https://github.com/bloom-housing/bloom/issues/2770)) ([45b2cb5](https://github.com/bloom-housing/bloom/commit/45b2cb598d50f06d87d96edaad2b49edbb76a05b))
+
+
+
+
+
 ## [4.4.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.4.1-alpha.8...@bloom-housing/public@4.4.1-alpha.9) (2022-05-31)
 
 **Note:** Version bump only for package @bloom-housing/public
