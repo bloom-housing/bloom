@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCoffee, faForwardStep, faHandsClapping } from "@fortawesome/free-solid-svg-icons"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
@@ -67,6 +69,13 @@ export default function Home(props: IndexProps) {
         </AlertBox>
       )}
       <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
+      <div style={{ color: "maroon" }}>
+        <FontAwesomeIcon icon={faCoffee} />
+        &nbsp;
+        <FontAwesomeIcon icon={faForwardStep} />
+        &nbsp;
+        <FontAwesomeIcon icon={faHandsClapping} />
+      </div>
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
