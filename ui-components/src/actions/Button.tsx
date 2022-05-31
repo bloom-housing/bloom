@@ -2,13 +2,14 @@ import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
 import { Icon, IconSize, IconTypes } from "../icons/Icon"
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
   type?: "button" | "submit" | "reset"
   children: React.ReactNode
   onClick?: (e: React.MouseEvent) => void
-  icon?: IconTypes
+  icon?: IconTypes | IconDefinition
   iconPlacement?: "left" | "right"
   iconSize?: IconSize
   // TODO: inlineIcon is deprecated
