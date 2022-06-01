@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@4.4.1-alpha.9...@bloom-housing/shared-helpers@4.4.1-alpha.10) (2022-06-01)
+
+
+### Features
+
+* add accessibility building features to listing ([#2755](https://github.com/bloom-housing/bloom/issues/2755)) ([0c8dfb8](https://github.com/bloom-housing/bloom/commit/0c8dfb833d0ef6d4f4927636c9f01bae6f48e4f1))
+
+
+
+
+
 ## [4.4.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@4.4.1-alpha.8...@bloom-housing/shared-helpers@4.4.1-alpha.9) (2022-05-31)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
