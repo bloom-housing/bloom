@@ -239,3 +239,21 @@ export const preferredUnit = [
 ]
 
 export const bedroomKeys = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+
+export const listingFeatures = [
+  "wheelchairRamp",
+  "elevator",
+  "serviceAnimalsAllowed",
+  "accessibleParking",
+  "parkingOnSite",
+  "inUnitWasherDryer",
+  "laundryInBuilding",
+  "barrierFreeEntrance",
+  "rollInShower",
+  "grabBars",
+  "heatingInUnit",
+  "acInUnit",
+  "hearing",
+  "mobility",
+  "visual",
+]

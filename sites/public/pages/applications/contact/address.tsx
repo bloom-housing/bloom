@@ -140,7 +140,12 @@ const ApplicationAddress = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -471,6 +476,7 @@ const ApplicationAddress = () => {
                 <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>
 
                 <Field
+                  className="mb-1"
                   type="radio"
                   id="workInRegionYes"
                   name="applicant.workInRegion"
@@ -486,6 +492,7 @@ const ApplicationAddress = () => {
                 />
 
                 <Field
+                  className="mb-1"
                   type="radio"
                   id="workInRegionNo"
                   name="applicant.workInRegion"

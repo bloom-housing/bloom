@@ -43,7 +43,6 @@ export * from "./src/forms/TimeField"
 /* Global */
 export * from "./src/global/AppearanceTypes"
 export * from "./src/global/ApplicationStatusType"
-export * from "./src/global/vendor/AgPagination"
 
 /* Headers */
 export * from "./src/headers/Hero"
@@ -147,6 +146,8 @@ export * from "./src/tables/GroupedTable"
 export * from "./src/tables/MinimalTable"
 export * from "./src/tables/StackedTable"
 export * from "./src/tables/CategoryTable"
+export * from "./src/tables/AgTable"
+export * from "./src/tables/AgPagination"
 
 /* Text */
 export * from "./src/text/Description"

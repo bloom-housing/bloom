@@ -3,6 +3,90 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.11...@bloom-housing/partners@4.4.1-alpha.12) (2022-06-01)
+
+
+### Features
+
+* add accessibility building features to listing ([#2755](https://github.com/bloom-housing/bloom/issues/2755)) ([0c8dfb8](https://github.com/bloom-housing/bloom/commit/0c8dfb833d0ef6d4f4927636c9f01bae6f48e4f1))
+
+
+
+
+
+## [4.4.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.10...@bloom-housing/partners@4.4.1-alpha.11) (2022-05-31)
+
+
+### Bug Fixes
+
+* netlify oom build issues ([#2770](https://github.com/bloom-housing/bloom/issues/2770)) ([45b2cb5](https://github.com/bloom-housing/bloom/commit/45b2cb598d50f06d87d96edaad2b49edbb76a05b))
+
+
+
+
+
+## [4.4.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.9...@bloom-housing/partners@4.4.1-alpha.10) (2022-05-31)
+
+
+### Features
+
+* load overly to partner listings grid ([#2621](https://github.com/bloom-housing/bloom/issues/2621)) ([4785f34](https://github.com/bloom-housing/bloom/commit/4785f344831f97dac2164224e32247619e5ac808))
+
+
+
+
+
+## [4.4.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.8...@bloom-housing/partners@4.4.1-alpha.9) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.7...@bloom-housing/partners@4.4.1-alpha.8) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.6...@bloom-housing/partners@4.4.1-alpha.7) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.5...@bloom-housing/partners@4.4.1-alpha.6) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.4...@bloom-housing/partners@4.4.1-alpha.5) (2022-05-26)
+
+
+### Bug Fixes
+
+* selectAndOrder drag and drop ([#2765](https://github.com/bloom-housing/bloom/issues/2765)) ([301a0eb](https://github.com/bloom-housing/bloom/commit/301a0eb8b6b018b3d664f2b84c3720f4055d452f))
+
+
+
+
+
+## [4.4.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.3...@bloom-housing/partners@4.4.1-alpha.4) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.4.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.2...@bloom-housing/partners@4.4.1-alpha.3) (2022-05-25)
 
 **Note:** Version bump only for package @bloom-housing/partners

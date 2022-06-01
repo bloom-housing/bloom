@@ -6,6 +6,21 @@ import { getDetailFieldString } from "./helpers"
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
 
+  const getAccessibilityFeatures = () => {
+    let featuresExist = false
+    const features = Object.keys(listing?.features ?? {}).map((feature) => {
+      if (listing?.features[feature]) {
+        featuresExist = true
+        return (
+          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+            {t(`eligibility.accessibility.${feature}`)}
+          </li>
+        )
+      }
+    })
+    return featuresExist ? features : <>{t("t.none")}</>
+  }
+
   return (
     <GridSection
       className="bg-primary-lighter"
@@ -29,7 +44,7 @@ const DetailBuildingFeatures = () => {
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="accessibility" label={t("t.accessibility")}>
+          <ViewItem id="accessibility" label={t("t.additionalAccessibility")}>
             {getDetailFieldString(listing.accessibility)}
           </ViewItem>
         </GridCell>
@@ -52,6 +67,13 @@ const DetailBuildingFeatures = () => {
         <GridCell>
           <ViewItem id="servicesOffered" label={t("t.servicesOffered")}>
             {getDetailFieldString(listing.servicesOffered)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell className={"m-h-1"}>
+          <ViewItem label={"Accessibility Features"}>
+            <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
           </ViewItem>
         </GridCell>
       </GridSection>

@@ -165,7 +165,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
+        "(LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhood,
         }
@@ -193,7 +193,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0)",
+        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhoodArray,
         }
