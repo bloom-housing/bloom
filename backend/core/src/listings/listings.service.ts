@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
@@ -23,6 +23,9 @@ import { OrderParam } from "../applications/types/order-param"
 import { authzActions } from "../auth/enum/authz-actions.enum"
 import { ListingRepository } from "./repositories/listing.repository"
 import { AuthzService } from "../auth/services/authz.service"
+import { Request as ExpressRequest } from "express"
+import { REQUEST } from "@nestjs/core"
+import { User } from "../auth/entities/user.entity"
 
 type OrderByConditionData = {
   orderBy: string
@@ -30,13 +33,14 @@ type OrderByConditionData = {
   nulls?: "NULLS LAST" | "NULLS FIRST"
 }
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
   constructor(
     @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
+    @Inject(REQUEST) private req: ExpressRequest,
 ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -144,6 +148,10 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
+    await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
+      jurisdictionId: listingDto.jurisdiction.id,
+    })
+
     const listing = this.listingRepository.create({
       ...listingDto,
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
@@ -162,6 +170,8 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
+
+    await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.update)
 
     const availableUnits =
       listingDto.listingAvailability === ListingAvailability.availableUnits
@@ -204,6 +214,9 @@ export class ListingsService {
     const listing = await this.listingRepository.findOneOrFail({
       where: { id: listingId },
     })
+
+    await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.delete)
+
     return await this.listingRepository.remove(listing)
   }
 
@@ -309,13 +322,13 @@ export class ListingsService {
     return orderByConditionDataArray
   }
 
-  private async authorizeUserAction(user, listingId) {
+  private async authorizeUserActionForListingId(user, listingId: string, action) {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
     const jurisdictionId = await this.listingRepository.getJurisdictionIdByListingId(listingId)
 
-    return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
+    return await this.authzService.canOrThrow(user, "listing", action, {
       id: listingId,
       jurisdictionId,
     })
