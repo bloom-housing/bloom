@@ -4,7 +4,7 @@ import {
   setSiteAlertMessage,
   NavigationContext,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "./authContext"
+import { AuthContext } from "./AuthContext"
 // See https://github.com/Microsoft/TypeScript/issues/14094
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never }
 type XOR<T, U> = T | U extends Record<string, unknown>

@@ -7,10 +7,10 @@ import {
   t,
   Tag,
   Button,
-  AuthContext,
   AlertBox,
   SiteAlert,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleApplicationData } from "../../../lib/hooks"
 
 import Layout from "../../../layouts"

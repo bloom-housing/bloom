@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { AuthContext } from "./authContext"
+import { AuthContext } from "./AuthContext"
 import { NavigationContext } from "@bloom-housing/ui-components"
 
 /**

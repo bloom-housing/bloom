@@ -1,5 +1,5 @@
 import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
-import { AuthContext } from "./authContext"
+import { AuthContext } from "./AuthContext"
 import { ConfigContext } from "./ConfigContext"
 import {
   NavigationContext,

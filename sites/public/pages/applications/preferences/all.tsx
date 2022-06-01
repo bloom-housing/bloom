@@ -11,7 +11,6 @@ import {
   AppearanceStyleType,
   resolveObject,
   ProgressNav,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -29,6 +28,7 @@ import {
   getExclusiveKeys,
   setExclusive,
   ExtraField,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
