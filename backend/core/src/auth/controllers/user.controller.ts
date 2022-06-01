@@ -14,7 +14,6 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { Request as ExpressRequest } from "express"
 import { ResourceType } from "../decorators/resource-type.decorator"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
 import { UserService } from "../services/user.service"
@@ -26,8 +25,6 @@ import { StatusDto } from "../../shared/dto/status.dto"
 import { ConfirmDto } from "../dto/confirm.dto"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 import { UpdatePasswordDto } from "../dto/update-password.dto"
-import { AuthContext } from "../types/auth-context"
-import { User } from "../entities/user.entity"
 import { ResourceAction } from "../decorators/resource-action.decorator"
 import { UserBasicDto } from "../dto/user-basic.dto"
 import { EmailDto } from "../dto/email.dto"
@@ -63,7 +60,6 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
   async create(
-    @Request() req: ExpressRequest,
     @Body() dto: UserCreateDto,
     @Query() queryParams: UserCreateQueryParams
   ): Promise<UserBasicDto> {
@@ -71,7 +67,6 @@ export class UserController {
       UserBasicDto,
       await this.userService.createPublicUser(
         dto,
-        new AuthContext(req.user as User),
         queryParams.noWelcomeEmail !== true
       )
     )
@@ -139,8 +134,8 @@ export class UserController {
   @UseGuards(DefaultAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update user", operationId: "update" })
   @UseInterceptors(ActivityLogInterceptor)
-  async update(@Request() req: ExpressRequest, @Body() dto: UserUpdateDto): Promise<UserDto> {
-    return mapTo(UserDto, await this.userService.update(dto, new AuthContext(req.user as User)))
+  async update(@Body() dto: UserUpdateDto): Promise<UserDto> {
+    return mapTo(UserDto, await this.userService.update(dto))
   }
 
   @Get("/list")
@@ -149,11 +144,10 @@ export class UserController {
   @ApiOperation({ summary: "List users", operationId: "list" })
   async list(
     @Query() queryParams: UserListQueryParams,
-    @Request() req: ExpressRequest
   ): Promise<PaginatedUserListDto> {
     return mapTo(
       PaginatedUserListDto,
-      await this.userService.list(queryParams, new AuthContext(req.user as User))
+      await this.userService.list(queryParams)
     )
   }
 
@@ -162,10 +156,10 @@ export class UserController {
   @ApiOperation({ summary: "Invite user", operationId: "invite" })
   @ResourceAction(authzActions.invite)
   @UseInterceptors(ActivityLogInterceptor)
-  async invite(@Request() req: ExpressRequest, @Body() dto: UserInviteDto): Promise<UserBasicDto> {
+  async invite(@Body() dto: UserInviteDto): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.invitePartnersPortalUser(dto, new AuthContext(req.user as User))
+      await this.userService.invitePartnersPortalUser(dto)
     )
   }
 

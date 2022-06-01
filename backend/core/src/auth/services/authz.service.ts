@@ -50,13 +50,13 @@ export class AuthzService {
           void e.addPermissionForUser(
             user.id,
             "application",
-            `!r.obj || r.obj.listingId == '${leasingAgentInListing.id}'`,
+            `r.obj.listingId == '${leasingAgentInListing.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
           void e.addPermissionForUser(
             user.id,
             "listing",
-            `!r.obj || r.obj.id == '${leasingAgentInListing.id}'`,
+            `r.obj.id == '${leasingAgentInListing.id}'`,
             `(${authzActions.read}|${authzActions.update})`
           )
         })
@@ -67,20 +67,20 @@ export class AuthzService {
           void e.addPermissionForUser(
             user.id,
             "application",
-            `!r.obj || r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
           void e.addPermissionForUser(
             user.id,
             "listing",
-            `!r.obj || r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.update})`
           )
 
           void e.addPermissionForUser(
             user.id,
             "user",
-            `!r.obj || r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete}|${authzActions.invite})`
           )
         })

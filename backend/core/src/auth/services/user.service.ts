@@ -1,10 +1,10 @@
 import {
   BadRequestException,
-  HttpException,
+  HttpException, Inject,
   Injectable,
   NotFoundException,
   Scope,
-  UnauthorizedException,
+  UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Brackets, DeepPartial, Repository } from "typeorm"
@@ -20,7 +20,6 @@ import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 
-import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { EmailDto } from "../dto/email.dto"
@@ -32,8 +31,6 @@ import { ConfigService } from "@nestjs/config"
 import { authzActions } from "../enum/authz-actions.enum"
 import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
-import { Listing } from "../../listings/entities/listing.entity"
-import { UserRoles } from "../entities/user-roles.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { UserQueryFilter } from "../filters/user-query-filter"
 import { assignDefined } from "../../shared/utils/assign-defined"
@@ -47,6 +44,9 @@ import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { UserRepository } from "../repositories/user-repository"
+import { REQUEST } from "@nestjs/core"
+import { Request as ExpressRequest } from "express"
+import { UserProfileUpdateDto } from "../dto/user-profile.dto"
 
 dayjs.extend(advancedFormat)
 
@@ -61,29 +61,25 @@ export class UserService {
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
     private readonly jurisdictionResolverService: JurisdictionResolverService,
-    private readonly smsMfaService: SmsMfaService
-  ) {}
+    private readonly smsMfaService: SmsMfaService,
+    @Inject(REQUEST) private req: ExpressRequest,
+) {}
 
   public async findById(id: string) {
     const user = await this.userRepository.findById(id)
+
     if (!user) {
       throw new NotFoundException()
     }
+
+    await this.authorizeUserAction(this.req.user, user, authzActions.read)
+
     return user
   }
 
-  public static isPasswordOutdated(user: User) {
-    return (
-      new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
-        new Date() &&
-      user.roles &&
-      (user.roles.isAdmin || user.roles.isPartner)
-    )
-  }
 
   public async list(
     params: UserListQueryParams,
-    authContext: AuthContext
   ): Promise<Pagination<User>> {
     const options = {
       limit: params.limit === "all" ? undefined : params.limit,
@@ -133,7 +129,7 @@ export class UserService {
      */
     await Promise.all(
       result.map(async (user) => {
-        await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
+        await this.authorizeUserAction(this.req.user, user, authzActions.read)
       })
     )
 
@@ -143,8 +139,19 @@ export class UserService {
     }
   }
 
-  async update(dto: UserUpdateDto, authContext: AuthContext) {
+  async update(dto: UserUpdateDto | UserProfileUpdateDto) {
     const user = await this.findById(dto.id)
+
+    if (!user) {
+      throw new NotFoundException()
+    }
+
+    if (dto instanceof UserProfileUpdateDto) {
+      await this.authorizeUserProfileAction(this.req.user, user, authzActions.update)
+    } else {
+      await this.authorizeUserAction(this.req.user, user, authzActions.update)
+    }
+
     let passwordHash
     let passwordUpdatedAt
     if (dto.password) {
@@ -164,11 +171,11 @@ export class UserService {
     /**
      * jurisdictions should be filtered based off of what the authContext user has
      */
-    if (authContext.user.jurisdictions) {
+    if ((this.req.user as User).jurisdictions) {
       if (dto.jurisdictions) {
         dto.jurisdictions = dto.jurisdictions.filter(
           (jurisdiction) =>
-            authContext.user.jurisdictions.findIndex((val) => val.id === jurisdiction.id) > -1
+            (this.req.user as User).jurisdictions.findIndex((val) => val.id === jurisdiction.id) > -1
         )
       }
     } else {
@@ -253,20 +260,6 @@ export class UserService {
     }
   }
 
-  private async setHitConfirmationURl(user: User, token: string) {
-    if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
-    }
-
-    if (user.confirmationToken !== token) {
-      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
-    }
-    user.hitConfirmationURL = new Date()
-    await this.userRepository.save({
-      ...user,
-    })
-  }
-
   public async isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
       const token = decode(dto.token, process.env.APP_SECRET)
@@ -283,15 +276,6 @@ export class UserService {
       }
       return false
     }
-  }
-
-  private static createConfirmationToken(userId: string, email: string) {
-    const payload = {
-      id: userId,
-      email,
-      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
-    }
-    return encode(payload, process.env.APP_SECRET)
   }
 
   public async resendPublicConfirmation(dto: EmailDto) {
@@ -317,13 +301,6 @@ export class UserService {
     }
   }
 
-  private static getPublicConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}?token=${user.confirmationToken}`
-  }
-
-  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
-  }
 
   public async connectUserWithExistingApplications(user: User) {
     const applications = await this.applicationsRepository
@@ -340,12 +317,11 @@ export class UserService {
     await this.applicationsRepository.save(applications)
   }
 
-  public async _createUser(dto: DeepPartial<User>, authContext: AuthContext) {
+  public async _createUser(dto: DeepPartial<User>) {
     if (dto.confirmedAt) {
-      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
-        ...dto,
-      })
+      await this.authorizeUserAction(this.req.user, dto, authzActions.confirm)
     }
+
     const existingUser = await this.userRepository.findByEmail(dto.email)
 
     if (existingUser) {
@@ -372,7 +348,6 @@ export class UserService {
 
   public async createPublicUser(
     dto: UserCreateDto,
-    authContext: AuthContext,
     sendWelcomeEmail = false
   ) {
     const newUser = await this._createUser(
@@ -384,7 +359,6 @@ export class UserService {
           : [await this.jurisdictionResolverService.getJurisdiction()],
         mfaEnabled: false,
       },
-      authContext
     )
     if (sendWelcomeEmail) {
       const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, newUser)
@@ -426,8 +400,16 @@ export class UserService {
     return this.authService.generateAccessToken(user)
   }
 
-  async invitePartnersPortalUser(dto: UserInviteDto, authContext: AuthContext) {
+  async invitePartnersPortalUser(dto: UserInviteDto) {
     const password = crypto.randomBytes(8).toString("hex")
+
+    // For each jurisdiction we need to check if this requesting user is allowed to invite new users to i
+    await Promise.all(
+      dto.jurisdictions.map(async (jurisdiction) => {
+        await this.authorizeUserAction(this.req.user, {jurisdictionId: jurisdiction.id}, authzActions.invite)
+      })
+    )
+
     const user = await this._createUser(
       {
         ...dto,
@@ -437,7 +419,6 @@ export class UserService {
           : [await this.jurisdictionResolverService.getJurisdiction()],
         mfaEnabled: true,
       },
-      authContext
     )
 
     await this.emailService.invite(
@@ -450,24 +431,16 @@ export class UserService {
 
   async delete(userId: string) {
     const user = await this.userRepository.findOne({ id: userId })
+
     if (!user) {
       throw new NotFoundException()
     }
+
+    await this.authorizeUserAction(this.req.user, user, authzActions.delete)
+
     await this.userRepository.remove(user)
   }
 
-  generateMfaCode() {
-    let out = ""
-    const characters = "0123456789"
-    for (let i = 0; i < this.configService.get<number>("MFA_CODE_LENGTH"); i++) {
-      out += characters.charAt(Math.floor(Math.random() * characters.length))
-    }
-    return out
-  }
-
-  private static hasUsedMfaInThePast(user: User): boolean {
-    return !!user.mfaCodeUpdatedAt
-  }
 
   async getMfaInfo(getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
     const user = await this.userRepository.findOne({
@@ -543,5 +516,73 @@ export class UserService {
           phoneNumber: user.phoneNumber,
           phoneNumberVerified: user.phoneNumberVerified,
         }
+  }
+
+  public static isPasswordOutdated(user: User) {
+    return (
+      new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
+      new Date() &&
+      user.roles &&
+      (user.roles.isAdmin || user.roles.isPartner)
+    )
+  }
+
+  private generateMfaCode() {
+    let out = ""
+    const characters = "0123456789"
+    for (let i = 0; i < this.configService.get<number>("MFA_CODE_LENGTH"); i++) {
+      out += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return out
+  }
+
+  private static hasUsedMfaInThePast(user: User): boolean {
+    return !!user.mfaCodeUpdatedAt
+  }
+
+  private static createConfirmationToken(userId: string, email: string) {
+    const payload = {
+      id: userId,
+      email,
+      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
+    }
+    return encode(payload, process.env.APP_SECRET)
+  }
+
+  private static getPublicConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}?token=${user.confirmationToken}`
+  }
+
+  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
+  }
+
+  private async setHitConfirmationURl(user: User, token: string) {
+    if (!user) {
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+
+    if (user.confirmationToken !== token) {
+      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
+    }
+    user.hitConfirmationURL = new Date()
+
+    await this.userRepository.save({
+      ...user,
+    })
+  }
+
+  private async authorizeUserAction(requestingUser, targetUser, action) {
+    return await this.authzService.canOrThrow(requestingUser, "user", action, {
+      id: targetUser.id,
+      jurisdictionId: targetUser.id,
+    })
+  }
+
+  private async authorizeUserProfileAction(requestingUser, targetUser, action) {
+    return await this.authzService.canOrThrow(requestingUser, "userProfile", action, {
+      id: targetUser.id,
+      jurisdictionId: targetUser.id,
+    })
   }
 }

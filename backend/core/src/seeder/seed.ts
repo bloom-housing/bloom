@@ -34,7 +34,6 @@ import {
 } from "./seeds/listings/shared"
 import { UserCreateDto } from "../auth/dto/user-create.dto"
 import { AmiDefaultSanJose } from "./seeds/ami-charts/default-ami-chart-san-jose"
-import { AuthContext } from "../auth/types/auth-context"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { AmiDefaultMissingAMI } from "./seeds/ami-charts/missing-household-ami-levels"
 import { SeederModule } from "./seeder.module"
@@ -107,7 +106,6 @@ export async function createLeasingAgents(
             ...leasingAgent,
             jurisdictions: [jurisdictions[0]],
           }),
-          new AuthContext(null)
         )
     )
   )
@@ -247,7 +245,6 @@ async function seed() {
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
     }),
-    new AuthContext(null)
   )
 
   await userService.confirm({ token: user1.confirmationToken })
@@ -264,7 +261,6 @@ async function seed() {
       passwordConfirmation: "ghijkl",
       jurisdictions: [jurisdictions[0]],
     }),
-    new AuthContext(null)
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -281,7 +277,6 @@ async function seed() {
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
     }),
-    new AuthContext(null)
   )
 
   // create user with expired password
@@ -298,7 +293,6 @@ async function seed() {
       jurisdictions: [jurisdictions[0]],
       roles: { isAdmin: false, isPartner: true },
     }),
-    new AuthContext(null)
   )
 
   await userService.confirm({ token: userExpiredPassword.confirmationToken })
@@ -321,7 +315,6 @@ async function seed() {
       passwordConfirmation: "abcdef",
       jurisdictions,
     }),
-    new AuthContext(null)
   )
 
   const mfaUser = await userService.createPublicUser(
@@ -336,7 +329,6 @@ async function seed() {
       passwordConfirmation: "abcdef12",
       jurisdictions,
     }),
-    new AuthContext(null)
   )
 
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)

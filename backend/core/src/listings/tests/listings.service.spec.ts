@@ -10,6 +10,7 @@ import { Compare } from "../../shared/dto/filter.dto"
 import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
+import { AuthzService } from "../../auth/services/authz.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -106,6 +107,7 @@ describe("ListingsService", () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ListingsService,
+        AuthzService,
         {
           provide: getRepositoryToken(Listing),
           useValue: mockListingsRepo,
@@ -121,7 +123,7 @@ describe("ListingsService", () => {
       ],
     }).compile()
 
-    service = module.get(ListingsService)
+    service = await module.resolve(ListingsService)
   })
 
   afterEach(() => {

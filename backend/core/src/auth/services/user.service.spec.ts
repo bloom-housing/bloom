@@ -107,7 +107,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
     })
@@ -124,7 +124,7 @@ describe("UserService", () => {
       }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(null)
       mockUserRepo.save = jest.fn().mockRejectedValue(new Error(USER_ERRORS.ERROR_SAVING.message))
-      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
       )
 
@@ -143,7 +143,7 @@ describe("UserService", () => {
         dob: new Date(),
       }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue({ ...user, confirmedAt: new Date() })
-      await expect(service._createUser(user, null)).rejects.toThrow(
+      await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 
@@ -180,7 +180,7 @@ describe("UserService", () => {
         dob: new Date(),
       }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
-      await expect(service._createUser(user, null)).rejects.toThrow(
+      await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 
@@ -217,7 +217,7 @@ describe("UserService", () => {
 
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
       mockUserRepo.save = jest.fn().mockResolvedValue(user)
-      const savedUser = await service.invitePartnersPortalUser(user, null)
+      const savedUser = await service.invitePartnersPortalUser(user)
       expect(savedUser).toBe(user)
 
       // Reset mockUserRepo.save
@@ -253,7 +253,7 @@ describe("UserService", () => {
       }
 
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
-      await expect(service._createUser(user, null)).rejects.toThrow(
+      await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 
