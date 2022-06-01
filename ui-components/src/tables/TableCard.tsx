@@ -28,7 +28,7 @@ const TableCard = ({ title, children, elementsQty, onAddClick }: TableCardProps)
       </div>
 
       <div className="table-card__footer">
-        <Button type="button" onClick={onAddClick}>
+        <Button type="button" onClick={onAddClick} data-test-id="table-card-btn-add">
           {t("t.addItem")}
         </Button>
       </div>
