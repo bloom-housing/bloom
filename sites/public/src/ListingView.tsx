@@ -392,6 +392,19 @@ export const ListingView = (props: ListingProps) => {
 
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
 
+  const getAccessibilityFeatures = () => {
+    let featuresExist = false
+    const features = Object.keys(listing?.features ?? {}).map((feature, index) => {
+      if (listing?.features[feature]) {
+        featuresExist = true
+        return <li key={index}>{t(`eligibility.accessibility.${feature}`)}</li>
+      }
+    })
+    return featuresExist ? <ul>{features}</ul> : null
+  }
+
+  const accessibilityFeatures = getAccessibilityFeatures()
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -736,8 +749,14 @@ export const ListingView = (props: ListingProps) => {
               {listing.servicesOffered && (
                 <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
               )}
+              {accessibilityFeatures && (
+                <Description term={t("t.accessibility")} description={accessibilityFeatures} />
+              )}
               {listing.accessibility && (
-                <Description term={t("t.accessibility")} description={listing.accessibility} />
+                <Description
+                  term={t("t.additionalAccessibility")}
+                  description={listing.accessibility}
+                />
               )}
               <Description
                 term={t("t.unitFeatures")}

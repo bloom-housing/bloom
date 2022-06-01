@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.7...@bloom-housing/backend-core@4.4.1-alpha.8) (2022-06-01)
+
+
+### Features
+
+* add accessibility building features to listing ([#2755](https://github.com/bloom-housing/bloom/issues/2755)) ([0c8dfb8](https://github.com/bloom-housing/bloom/commit/0c8dfb833d0ef6d4f4927636c9f01bae6f48e4f1))
+
+
+
+
+
+## [4.4.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.6...@bloom-housing/backend-core@4.4.1-alpha.7) (2022-05-31)
+
+
+### Features
+
+* load overly to partner listings grid ([#2621](https://github.com/bloom-housing/bloom/issues/2621)) ([4785f34](https://github.com/bloom-housing/bloom/commit/4785f344831f97dac2164224e32247619e5ac808))
+
+
+
+
+
+## [4.4.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.5...@bloom-housing/backend-core@4.4.1-alpha.6) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.4.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.4...@bloom-housing/backend-core@4.4.1-alpha.5) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [4.4.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.3...@bloom-housing/backend-core@4.4.1-alpha.4) (2022-05-26)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
