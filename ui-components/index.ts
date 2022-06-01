@@ -147,6 +147,7 @@ export * from "./src/tables/GroupedTable"
 export * from "./src/tables/MinimalTable"
 export * from "./src/tables/StackedTable"
 export * from "./src/tables/CategoryTable"
+export * from "./src/tables/TableCard"
 
 /* Text */
 export * from "./src/text/Description"
