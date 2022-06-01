@@ -46,18 +46,42 @@ export class AuthzService {
       //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
       //  User side this is expressed by 'leasingAgentInListings' property.
       await Promise.all(
-        user?.leasingAgentInListings.map((listing: Listing) => {
+        user?.leasingAgentInListings.map((leasingAgentInListing: Listing) => {
           void e.addPermissionForUser(
             user.id,
             "application",
-            `!r.obj || r.obj.listing_id == '${listing.id}'`,
+            `!r.obj || r.obj.listingId == '${leasingAgentInListing.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
           void e.addPermissionForUser(
             user.id,
             "listing",
-            `!r.obj || r.obj.id == '${listing.id}'`,
+            `!r.obj || r.obj.id == '${leasingAgentInListing.id}'`,
             `(${authzActions.read}|${authzActions.update})`
+          )
+        })
+      )
+
+      await Promise.all(
+        user?.adminInJurisdictions.map((adminInJurisdiction: Jurisdiction) => {
+          void e.addPermissionForUser(
+            user.id,
+            "application",
+            `!r.obj || r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+          )
+          void e.addPermissionForUser(
+            user.id,
+            "listing",
+            `!r.obj || r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.update})`
+          )
+
+          void e.addPermissionForUser(
+            user.id,
+            "user",
+            `!r.obj || r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete}|${authzActions.invite})`
           )
         })
       )
