@@ -89,7 +89,6 @@ export * from "./src/notifications/ErrorMessage"
 export * from "./src/notifications/StatusAside"
 export * from "./src/notifications/StatusMessage"
 export * from "./src/notifications"
-export * from "./src/notifications/SiteAlert"
 
 /* Overlays */
 export * from "./src/overlays/Overlay"
