@@ -10,10 +10,12 @@ export default {
   component: TableCard,
 }
 
-export const Blank = () => <TableCard title="Table Card Title" elementsQty={0} onAddClick={() => console.log('click')} />
+export const Blank = () => (
+  <TableCard title="Table Card Title" elementsQty={0} onAddClick={() => console.log("click")} />
+)
 
 export const WithTable = () => (
-  <TableCard title="Table Card Title" elementsQty={3} onAddClick={() => console.log('click')}>
+  <TableCard title="Table Card Title" elementsQty={3} onAddClick={() => console.log("click")}>
     <div className="px-3">
       <MinimalTable headers={mockHeaders} data={mockData} />
     </div>
