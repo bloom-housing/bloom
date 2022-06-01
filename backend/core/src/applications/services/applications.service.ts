@@ -18,7 +18,6 @@ import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/ap
 import { AuthzService } from "../../auth/services/authz.service"
 import { ListingsService } from "../../listings/listings.service"
 import { Application } from "../entities/application.entity"
-import { Listing } from "../../listings/entities/listing.entity"
 import { authzActions } from "../../auth/enum/authz-actions.enum"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
@@ -27,6 +26,7 @@ import { PaginatedApplicationListQueryParams } from "../dto/paginated-applicatio
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
+import { ListingRepository } from "../../listings/repositories/listing.repository"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -37,7 +37,7 @@ export class ApplicationsService {
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
-    @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
+    @InjectRepository(ListingRepository) private readonly listingsRepository: ListingRepository,
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
@@ -325,7 +325,7 @@ export class ApplicationsService {
     listingId: string,
     action
   ) {
-    const jurisdictionId = await this.getJurisdictionForListingId(listingId)
+    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
 
     let resource: T & { listingId: string ; jurisdictionId: string } = {
       ...app,
@@ -340,26 +340,12 @@ export class ApplicationsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
-    const jurisdictionId = await this.getJurisdictionForListingId(listingId)
+    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
 
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
       id: listingId,
       jurisdictionId,
     })
-  }
-
-  private async getJurisdictionForListingId(listingId: string | null): Promise<string | null> {
-    if (!listingId) {
-      return null
-    }
-
-    const listing = await this.listingsRepository.createQueryBuilder("listings")
-      .where("listings.id = :listingId", {listingId})
-      .leftJoin("listings.jurisdiction", "jurisdiction")
-      .select(["listings.id", "jurisdiction.id"])
-      .getOne()
-
-    return listing.jurisdiction.id
   }
 
   public static generateConfirmationCode(): string {

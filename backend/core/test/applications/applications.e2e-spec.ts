@@ -23,6 +23,7 @@ import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import { EmailService } from "../../src/email/email.service"
 import { UserRepository } from "../../src/auth/repositories/user-repository"
+import { ListingRepository } from "../../src/listings/repositories/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -54,7 +55,7 @@ describe("Applications", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([Application, HouseholdMember, Listing, UserRepository]),
+        TypeOrmModule.forFeature([Application, HouseholdMember, Listing, UserRepository, ListingRepository]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 2,
