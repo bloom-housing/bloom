@@ -268,7 +268,7 @@
   "listings.waitlist.currentSizeQuestion": "How many people are on the current list?",
   "listings.waitlist.maxSize": "Maximum Waitlist Size",
   "listings.waitlist.maxSizeQuestion": "What is the maximum size of the waitlist?",
-  "listings.waitlist.openQuestion": "Do you want to show a waitlist?",
+  "listings.waitlist.openQuestion": "Do you want to show a waitlist size?",
   "listings.waitlist.openSize": "Number of Openings",
   "listings.waitlist.openSizeQuestion": "How many spots are open on the list?",
   "listings.whatToExpectLabel": "Tell the applicant what to expect from the process",
