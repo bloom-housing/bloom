@@ -12,11 +12,19 @@ export default {
 }
 
 export const Blank = () => (
-  <StandardCard title="Table Card Title" emptyStateMessage="Add items to edit" footer={<Button>Add item</Button>}  />
+  <StandardCard
+    title="Table Card Title"
+    emptyStateMessage="Add items to edit"
+    footer={<Button>Add item</Button>}
+  />
 )
 
 export const WithTable = () => (
-  <StandardCard title="Table Card Title" emptyStateMessage="Add items to edit" footer={<Button>Add item</Button>}>
+  <StandardCard
+    title="Table Card Title"
+    emptyStateMessage="Add items to edit"
+    footer={<Button>Add item</Button>}
+  >
     <div className="px-3">
       <MinimalTable headers={mockHeaders} data={mockData} />
     </div>
