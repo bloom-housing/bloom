@@ -417,7 +417,7 @@ export class UserService {
       await Promise.all(
         jurisdictionsIds.map(async (jurisdictionId) => {
           await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invite, {
-            jurisdictionId
+            jurisdictionId,
           })
         })
       )

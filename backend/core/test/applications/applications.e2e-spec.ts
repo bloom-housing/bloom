@@ -55,7 +55,13 @@ describe("Applications", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([Application, HouseholdMember, Listing, UserRepository, ListingRepository]),
+        TypeOrmModule.forFeature([
+          Application,
+          HouseholdMember,
+          Listing,
+          UserRepository,
+          ListingRepository,
+        ]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 2,

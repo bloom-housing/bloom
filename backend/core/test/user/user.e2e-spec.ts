@@ -554,21 +554,19 @@ describe("Applications", () => {
   })
 
   it("should allow filtering by isPartner user role", async () => {
-    const user = await userRepository._createUser(
-      {
-        dob: new Date(),
-        email: "michalp@airnauts.com",
-        firstName: "Michal",
-        jurisdictions: [],
-        language: Language.en,
-        lastName: "",
-        middleName: "",
-        roles: { isPartner: true, isAdmin: false },
-        updatedAt: undefined,
-        passwordHash: "abcd",
-        mfaEnabled: false,
-      }
-    )
+    const user = await userRepository._createUser({
+      dob: new Date(),
+      email: "michalp@airnauts.com",
+      firstName: "Michal",
+      jurisdictions: [],
+      language: Language.en,
+      lastName: "",
+      middleName: "",
+      roles: { isPartner: true, isAdmin: false },
+      updatedAt: undefined,
+      passwordHash: "abcd",
+      mfaEnabled: false,
+    })
 
     const filters = [
       {
@@ -592,21 +590,19 @@ describe("Applications", () => {
   })
 
   it("should get and delete a user by ID", async () => {
-    const user = await userRepository._createUser(
-      {
-        dob: new Date(),
-        email: "test+1@test.com",
-        firstName: "test",
-        jurisdictions: [],
-        language: Language.en,
-        lastName: "",
-        middleName: "",
-        roles: { isPartner: true, isAdmin: false },
-        updatedAt: undefined,
-        passwordHash: "abcd",
-        mfaEnabled: false,
-      }
-    )
+    const user = await userRepository._createUser({
+      dob: new Date(),
+      email: "test+1@test.com",
+      firstName: "test",
+      jurisdictions: [],
+      language: Language.en,
+      lastName: "",
+      middleName: "",
+      roles: { isPartner: true, isAdmin: false },
+      updatedAt: undefined,
+      passwordHash: "abcd",
+      mfaEnabled: false,
+    })
 
     const res = await supertest(app.getHttpServer())
       .get(`/user/${user.id}`)
@@ -628,21 +624,19 @@ describe("Applications", () => {
 
   it("should create and delete a user with existing application by ID", async () => {
     const listing = (await listingRepository.find({ take: 1 }))[0]
-    const user = await userRepository._createUser(
-      {
-        dob: new Date(),
-        email: "test+1@test.com",
-        firstName: "test",
-        jurisdictions: [],
-        language: Language.en,
-        lastName: "",
-        middleName: "",
-        roles: { isPartner: true, isAdmin: false },
-        updatedAt: undefined,
-        passwordHash: "abcd",
-        mfaEnabled: false,
-      }
-    )
+    const user = await userRepository._createUser({
+      dob: new Date(),
+      email: "test+1@test.com",
+      firstName: "test",
+      jurisdictions: [],
+      language: Language.en,
+      lastName: "",
+      middleName: "",
+      roles: { isPartner: true, isAdmin: false },
+      updatedAt: undefined,
+      passwordHash: "abcd",
+      mfaEnabled: false,
+    })
     const applicationUpdate = getTestAppBody(listing.id)
     const newApp = await applicationsRepository.save({
       ...applicationUpdate,

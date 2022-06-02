@@ -65,10 +65,7 @@ export class UserController {
   ): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.createPublicUser(
-        dto,
-        queryParams.noWelcomeEmail !== true
-      )
+      await this.userService.createPublicUser(dto, queryParams.noWelcomeEmail !== true)
     )
   }
 
@@ -142,13 +139,8 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiExtraModels(UserFilterParams)
   @ApiOperation({ summary: "List users", operationId: "list" })
-  async list(
-    @Query() queryParams: UserListQueryParams,
-  ): Promise<PaginatedUserListDto> {
-    return mapTo(
-      PaginatedUserListDto,
-      await this.userService.list(queryParams)
-    )
+  async list(@Query() queryParams: UserListQueryParams): Promise<PaginatedUserListDto> {
+    return mapTo(PaginatedUserListDto, await this.userService.list(queryParams))
   }
 
   @Post("/invite")
@@ -156,10 +148,7 @@ export class UserController {
   @ApiOperation({ summary: "Invite user", operationId: "invite" })
   @UseInterceptors(ActivityLogInterceptor)
   async invite(@Body() dto: UserInviteDto): Promise<UserBasicDto> {
-    return mapTo(
-      UserBasicDto,
-      await this.userService.invitePartnersPortalUser(dto)
-    )
+    return mapTo(UserBasicDto, await this.userService.invitePartnersPortalUser(dto))
   }
 
   @Get(`:id`)

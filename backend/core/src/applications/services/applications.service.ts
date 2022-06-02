@@ -37,7 +37,7 @@ export class ApplicationsService {
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
-    @InjectRepository(ListingRepository) private readonly listingsRepository: ListingRepository,
+    @InjectRepository(ListingRepository) private readonly listingsRepository: ListingRepository
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
@@ -46,7 +46,12 @@ export class ApplicationsService {
 
     await Promise.all(
       result.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, application.listingId,authzActions.read)
+        await this.authorizeUserAction(
+          this.req.user,
+          application,
+          application.listingId,
+          authzActions.read
+        )
       })
     )
 
@@ -101,7 +106,12 @@ export class ApplicationsService {
 
     await Promise.all(
       result.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, application.listingId,authzActions.read)
+        await this.authorizeUserAction(
+          this.req.user,
+          application,
+          application.listingId,
+          authzActions.read
+        )
       })
     )
 
@@ -128,7 +138,12 @@ export class ApplicationsService {
       throw new BadRequestException("Listing is not open for application submission.")
     }
 
-    await this.authorizeUserAction(this.req.user, applicationCreateDto, listing.id, authzActions.submit)
+    await this.authorizeUserAction(
+      this.req.user,
+      applicationCreateDto,
+      listing.id,
+      authzActions.submit
+    )
 
     return await this._create(
       {
@@ -140,7 +155,12 @@ export class ApplicationsService {
   }
 
   async create(applicationCreateDto: ApplicationCreateDto) {
-    await this.authorizeUserAction(this.req.user, applicationCreateDto, applicationCreateDto.listing.id, authzActions.create)
+    await this.authorizeUserAction(
+      this.req.user,
+      applicationCreateDto,
+      applicationCreateDto.listing.id,
+      authzActions.create
+    )
 
     return this._create(applicationCreateDto, false)
   }
@@ -153,7 +173,12 @@ export class ApplicationsService {
       relations: ["user"],
     })
 
-    await this.authorizeUserAction(this.req.user, application, application.listingId, authzActions.read)
+    await this.authorizeUserAction(
+      this.req.user,
+      application,
+      application.listingId,
+      authzActions.read
+    )
 
     return application
   }
@@ -167,7 +192,12 @@ export class ApplicationsService {
       throw new NotFoundException()
     }
 
-    await this.authorizeUserAction(this.req.user, application, application.listingId, authzActions.update)
+    await this.authorizeUserAction(
+      this.req.user,
+      application,
+      application.listingId,
+      authzActions.update
+    )
 
     assignDefined(application, {
       ...applicationUpdateDto,
@@ -192,13 +222,18 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
-    const application = await this.repository.findOne({id: applicationId})
+    const application = await this.repository.findOne({ id: applicationId })
 
     if (!application) {
       throw new NotFoundException()
     }
 
-    await this.authorizeUserAction(this.req.user, application, application.listingId, authzActions.delete)
+    await this.authorizeUserAction(
+      this.req.user,
+      application,
+      application.listingId,
+      authzActions.delete
+    )
 
     return await this.repository.softRemove({ id: applicationId })
   }
@@ -331,7 +366,7 @@ export class ApplicationsService {
   ) {
     const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
 
-    let resource: T & { listingId: string ; jurisdictionId: string } = {
+    let resource: T & { listingId: string; jurisdictionId: string } = {
       ...app,
       listingId,
       jurisdictionId,

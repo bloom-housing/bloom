@@ -19,9 +19,7 @@ export class UserProfileController {
   @Put(":id")
   @UseGuards(DefaultAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update profile user", operationId: "update" })
-  async update(
-    @Body() dto: UserProfileUpdateDto
-  ): Promise<UserDto> {
+  async update(@Body() dto: UserProfileUpdateDto): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.update(dto))
   }
 }

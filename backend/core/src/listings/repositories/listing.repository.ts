@@ -9,7 +9,7 @@ export class ListingRepository extends Repository<Listing> {
     }
 
     const listing = await this.createQueryBuilder("listings")
-      .where("listings.id = :listingId", {listingId})
+      .where("listings.id = :listingId", { listingId })
       .leftJoin("listings.jurisdiction", "jurisdiction")
       .select(["listings.id", "jurisdiction.id"])
       .getOne()

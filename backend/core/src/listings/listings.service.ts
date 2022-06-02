@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Scope,
+} from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
@@ -40,8 +47,8 @@ export class ListingsService {
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
-    @Inject(REQUEST) private req: ExpressRequest,
-) {}
+    @Inject(REQUEST) private req: ExpressRequest
+  ) {}
 
   private getFullyJoinedQueryBuilder() {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
@@ -152,7 +159,6 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-
     await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
       jurisdictionId: listingDto.jurisdiction.id,
     })

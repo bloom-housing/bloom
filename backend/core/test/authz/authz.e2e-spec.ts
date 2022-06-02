@@ -48,7 +48,7 @@ describe("Authz", () => {
   beforeAll(async () => {
     const testEmailService = {
       invite: async () => {},
-      confirmation: async () => {}
+      confirmation: async () => {},
     }
 
     const moduleRef = await Test.createTestingModule({
@@ -261,29 +261,29 @@ describe("Authz", () => {
       // anonymous
       await supertest(app.getHttpServer())
         .put(listingsEndpoint + `/${listing1Id}`)
-        .send({id: listing1Id})
+        .send({ id: listing1Id })
         .expect(403)
 
       // logged in normal user
       await supertest(app.getHttpServer())
         .put(listingsEndpoint + `/${listing1Id}`)
-        .send({id: listing1Id})
+        .send({ id: listing1Id })
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
     it(`should not allow normal/anonymous user to POST listings`, async () => {
-      const anyJurisdiction = (await jurisdictionsRepository.find({take: 1}))[0]
+      const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
 
       // anonymous
       await supertest(app.getHttpServer())
         .post(listingsEndpoint)
-        .send({jurisdiction: {id: anyJurisdiction.id}})
+        .send({ jurisdiction: { id: anyJurisdiction.id } })
         .expect(403)
 
       // logged in normal user
       await supertest(app.getHttpServer())
         .post(listingsEndpoint)
-        .send({jurisdiction: {id: anyJurisdiction.id}})
+        .send({ jurisdiction: { id: anyJurisdiction.id } })
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
@@ -314,7 +314,7 @@ describe("Authz", () => {
     it("can add/view/edit all listings within their jurisdiction", async () => {
       const jurisdiction = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
-        rentalAssistanceDefault: ""
+        rentalAssistanceDefault: "",
       })
 
       const password = "abcdef"
@@ -333,7 +333,11 @@ describe("Authz", () => {
 
       await usersRepository.save(createJurisdictionalAdminDto)
 
-      const jurisdictionalAdminAccessToken = await getUserAccessToken(app, createJurisdictionalAdminDto.email, password)
+      const jurisdictionalAdminAccessToken = await getUserAccessToken(
+        app,
+        createJurisdictionalAdminDto.email,
+        password
+      )
 
       const newListingCreateDto = makeTestListing(jurisdiction.id)
       let listingResponse = await supertest(app.getHttpServer())
@@ -353,8 +357,8 @@ describe("Authz", () => {
       listingResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listingResponse.body.id}`)
         .send({
-          ...listingResponse.body  ,
-          name: changeName
+          ...listingResponse.body,
+          name: changeName,
         })
         .set(...setAuthorization(jurisdictionalAdminAccessToken))
         .expect(200)
@@ -366,7 +370,7 @@ describe("Authz", () => {
       // create jurisdiction
       const jurisdiction = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
-        rentalAssistanceDefault: ""
+        rentalAssistanceDefault: "",
       })
 
       const password = "abcdef"
@@ -385,7 +389,11 @@ describe("Authz", () => {
 
       await usersRepository.save(createJurisdictionalAdminDto)
 
-      const jurisdictionalAdminAccessToken = await getUserAccessToken(app, createJurisdictionalAdminDto.email, password)
+      const jurisdictionalAdminAccessToken = await getUserAccessToken(
+        app,
+        createJurisdictionalAdminDto.email,
+        password
+      )
       // use jurisdictional admin account to create new user and edit it
 
       const newListingCreateDto = makeTestListing(jurisdiction.id)
@@ -401,7 +409,7 @@ describe("Authz", () => {
         firstName: "Name",
         lastName: "Name",
         jurisdictions: [jurisdiction],
-        leasingAgentInListings: [{id: listingResponse.body.id}],
+        leasingAgentInListings: [{ id: listingResponse.body.id }],
       }
 
       await supertest(app.getHttpServer())
@@ -416,12 +424,12 @@ describe("Authz", () => {
       // create jurisdiction
       const jurisdiction1 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
-        rentalAssistanceDefault: ""
+        rentalAssistanceDefault: "",
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
-        rentalAssistanceDefault: ""
+        rentalAssistanceDefault: "",
       })
 
       const password = "abcdef"
@@ -440,7 +448,11 @@ describe("Authz", () => {
 
       await usersRepository.save(createJurisdictionalAdminDto)
 
-      const jurisdictionalAdminAccessToken = await getUserAccessToken(app, createJurisdictionalAdminDto.email, password)
+      const jurisdictionalAdminAccessToken = await getUserAccessToken(
+        app,
+        createJurisdictionalAdminDto.email,
+        password
+      )
 
       const newListingCreateDto = makeTestListing(jurisdiction2.id)
       await supertest(app.getHttpServer())
@@ -453,12 +465,12 @@ describe("Authz", () => {
     it("cannot add new users to other jurisdiction", async () => {
       const jurisdiction1 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
-        rentalAssistanceDefault: ""
+        rentalAssistanceDefault: "",
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
-        rentalAssistanceDefault: ""
+        rentalAssistanceDefault: "",
       })
 
       const password = "abcdef"
@@ -477,7 +489,11 @@ describe("Authz", () => {
 
       await usersRepository.save(createJurisdictionalAdminDto)
 
-      const jurisdictionalAdminAccessToken = await getUserAccessToken(app, createJurisdictionalAdminDto.email, password)
+      const jurisdictionalAdminAccessToken = await getUserAccessToken(
+        app,
+        createJurisdictionalAdminDto.email,
+        password
+      )
 
       const newListingCreateDto = makeTestListing(jurisdiction2.id)
       let listingResponse = await supertest(app.getHttpServer())
@@ -492,7 +508,7 @@ describe("Authz", () => {
         firstName: "Name",
         lastName: "Name",
         jurisdictions: [jurisdiction2],
-        leasingAgentInListings: [{id: listingResponse.body.id}],
+        leasingAgentInListings: [{ id: listingResponse.body.id }],
       }
 
       await supertest(app.getHttpServer())

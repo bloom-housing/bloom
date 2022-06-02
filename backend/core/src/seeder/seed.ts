@@ -106,7 +106,7 @@ export async function createLeasingAgents(
           plainToClass(UserCreateDto, {
             ...leasingAgent,
             jurisdictions: [jurisdictions[0]],
-          }),
+          })
         )
     )
   )
@@ -245,7 +245,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-    }),
+    })
   )
 
   await userService.confirm({ token: user1.confirmationToken })
@@ -261,7 +261,7 @@ async function seed() {
       password: "ghijkl",
       passwordConfirmation: "ghijkl",
       jurisdictions: [jurisdictions[0]],
-    }),
+    })
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -277,7 +277,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-    }),
+    })
   )
 
   // create user with expired password
@@ -292,7 +292,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-    }),
+    })
   )
 
   await userService.confirm({ token: userExpiredPassword.confirmationToken })
@@ -314,7 +314,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions,
-    }),
+    })
   )
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
   await rolesRepo.save(roles)
@@ -331,7 +331,7 @@ async function seed() {
       password: "abcdef12",
       passwordConfirmation: "abcdef12",
       jurisdictions,
-    }),
+    })
   )
   await userRepo.save(mfaUser)
   await userRepo.save({
@@ -344,7 +344,7 @@ async function seed() {
   await rolesRepo.save(mfaRoles)
   await userService.confirm({ token: mfaUser.confirmationToken })
 
-  const alamedaJurisdiction = jurisdictions.filter(j => j.name == CountyCode.alameda)[0]
+  const alamedaJurisdiction = jurisdictions.filter((j) => j.name == CountyCode.alameda)[0]
   const alamedaAdmin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "alameda-admin@example.com",
@@ -356,7 +356,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [alamedaJurisdiction],
-    }),
+    })
   )
   alamedaAdmin.adminInJurisdictions = [alamedaJurisdiction]
   await userRepo.save(alamedaAdmin)
