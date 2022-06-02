@@ -1,10 +1,11 @@
 import {
   BadRequestException,
-  HttpException, Inject,
+  HttpException,
+  Inject,
   Injectable,
   NotFoundException,
   Scope,
-  UnauthorizedException
+  UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Brackets, DeepPartial, Repository } from "typeorm"
@@ -48,6 +49,7 @@ import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
+import { ListingRepository } from "../../listings/repositories/listing.repository"
 
 dayjs.extend(advancedFormat)
 
@@ -55,6 +57,7 @@ dayjs.extend(advancedFormat)
 export class UserService {
   constructor(
     @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
+    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(Application) private readonly applicationsRepository: Repository<Application>,
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,
@@ -63,8 +66,8 @@ export class UserService {
     private readonly passwordService: PasswordService,
     private readonly jurisdictionResolverService: JurisdictionResolverService,
     private readonly smsMfaService: SmsMfaService,
-    @Inject(REQUEST) private req: ExpressRequest,
-) {}
+    @Inject(REQUEST) private req: ExpressRequest
+  ) {}
 
   public async findById(id: string) {
     const user = await this.userRepository.findById(id)
@@ -78,10 +81,7 @@ export class UserService {
     return user
   }
 
-
-  public async list(
-    params: UserListQueryParams,
-  ): Promise<Pagination<User>> {
+  public async list(params: UserListQueryParams): Promise<Pagination<User>> {
     const options = {
       limit: params.limit === "all" ? undefined : params.limit,
       page: params.page || 10,
@@ -183,7 +183,8 @@ export class UserService {
       if (dto.jurisdictions) {
         dto.jurisdictions = dto.jurisdictions.filter(
           (jurisdiction) =>
-            (this.req.user as User).jurisdictions.findIndex((val) => val.id === jurisdiction.id) > -1
+            (this.req.user as User).jurisdictions.findIndex((val) => val.id === jurisdiction.id) >
+            -1
         )
       }
     } else {
@@ -309,7 +310,6 @@ export class UserService {
     }
   }
 
-
   public async connectUserWithExistingApplications(user: User) {
     const applications = await this.applicationsRepository
       .createQueryBuilder("applications")
@@ -354,20 +354,15 @@ export class UserService {
     return await this.userRepository.save(newUser)
   }
 
-  public async createPublicUser(
-    dto: UserCreateDto,
-    sendWelcomeEmail = false
-  ) {
-    const newUser = await this._createUser(
-      {
-        ...dto,
-        passwordHash: await this.passwordService.passwordToHash(dto.password),
-        jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as Jurisdiction[])
-          : [await this.jurisdictionResolverService.getJurisdiction()],
-        mfaEnabled: false,
-      },
-    )
+  public async createPublicUser(dto: UserCreateDto, sendWelcomeEmail = false) {
+    const newUser = await this._createUser({
+      ...dto,
+      passwordHash: await this.passwordService.passwordToHash(dto.password),
+      jurisdictions: dto.jurisdictions
+        ? (dto.jurisdictions as Jurisdiction[])
+        : [await this.jurisdictionResolverService.getJurisdiction()],
+      mfaEnabled: false,
+    })
     if (sendWelcomeEmail) {
       const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, newUser)
       await this.emailService.welcome(newUser, dto.appUrl, confirmationUrl)
@@ -411,23 +406,35 @@ export class UserService {
   async invitePartnersPortalUser(dto: UserInviteDto) {
     const password = crypto.randomBytes(8).toString("hex")
 
-    // For each jurisdiction we need to check if this requesting user is allowed to invite new users to i
-    await Promise.all(
-      dto.jurisdictions.map(async (jurisdiction) => {
-        await this.authorizeUserAction(this.req.user, {jurisdictionId: jurisdiction.id}, authzActions.invite)
-      })
-    )
+    if (dto.leasingAgentInListings?.length) {
+      // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
+      const jurisdictionsIds = await Promise.all(
+        dto.leasingAgentInListings.map(async (listing) => {
+          return await this.listingRepository.getJurisdictionIdByListingId(listing.id)
+        })
+      )
 
-    const user = await this._createUser(
-      {
-        ...dto,
-        passwordHash: await this.passwordService.passwordToHash(password),
-        jurisdictions: dto.jurisdictions
-          ? dto.jurisdictions
-          : [await this.jurisdictionResolverService.getJurisdiction()],
-        mfaEnabled: true,
+      await Promise.all(
+        jurisdictionsIds.map(async (jurisdictionId) => {
+          await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invite, {
+            jurisdictionId
+          })
+        })
+      )
+    }
+
+    const user = await this._createUser({
+      ...dto,
+      roles: {
+        isPartner: true,
+        isAdmin: false,
       },
-    )
+      passwordHash: await this.passwordService.passwordToHash(password),
+      jurisdictions: dto.jurisdictions
+        ? dto.jurisdictions
+        : [await this.jurisdictionResolverService.getJurisdiction()],
+      mfaEnabled: true,
+    })
 
     await this.emailService.invite(
       user,
@@ -448,7 +455,6 @@ export class UserService {
 
     await this.userRepository.remove(user)
   }
-
 
   async getMfaInfo(getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
     const user = await this.userRepository.findOne({
@@ -529,7 +535,7 @@ export class UserService {
   public static isPasswordOutdated(user: User) {
     return (
       new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
-      new Date() &&
+        new Date() &&
       user.roles &&
       (user.roles.isAdmin || user.roles.isPartner)
     )

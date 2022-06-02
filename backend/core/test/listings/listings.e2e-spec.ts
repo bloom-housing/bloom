@@ -22,7 +22,7 @@ import { Program } from "../../src/program/entities/program.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
-import { makeTestListing } from "./utils/make-test-listing"
+import { makeTestListing } from "../utils/make-test-listing"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -51,6 +51,7 @@ describe("Listings", () => {
         TypeOrmModule.forFeature([Program]),
       ],
     }).compile()
+
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()

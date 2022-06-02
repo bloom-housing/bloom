@@ -152,6 +152,7 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
+
     await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
       jurisdictionId: listingDto.jurisdiction.id,
     })

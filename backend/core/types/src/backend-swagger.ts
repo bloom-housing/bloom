@@ -4349,29 +4349,15 @@ export interface PaginatedUserList {
   meta: PaginationMeta
 }
 
-export interface UserRolesCreate {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
 export interface UserInvite {
   /**  */
   language?: Language
-
-  /**  */
-  roles: CombinedRolesTypes
 
   /**  */
   jurisdictions: Id[]
 
   /**  */
   leasingAgentInListings?: Id[]
-
-  /**  */
-  adminInJurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -6652,7 +6638,7 @@ export enum EnumJurisdictionLanguages {
   "zh" = "zh",
   "tl" = "tl",
 }
-export type CombinedRolesTypes = UserRolesCreate
+export type CombinedRolesTypes = UserRoles
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

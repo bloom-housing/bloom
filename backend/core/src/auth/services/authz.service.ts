@@ -74,14 +74,14 @@ export class AuthzService {
             user.id,
             "listing",
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.update})`
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
 
           void e.addPermissionForUser(
             user.id,
             "user",
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete}|${authzActions.invite})`
+            `(${authzActions.read}|${authzActions.invite})`
           )
         })
       )

@@ -52,6 +52,7 @@ import { ApplicationMethodsService } from "../application-methods/application-me
 import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
+import { CountyCode } from "../shared/types/county-code"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -291,7 +292,6 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-      roles: { isAdmin: false, isPartner: true },
     }),
   )
 
@@ -316,6 +316,9 @@ async function seed() {
       jurisdictions,
     }),
   )
+  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  await rolesRepo.save(roles)
+  await userService.confirm({ token: admin.confirmationToken })
 
   const mfaUser = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
@@ -330,6 +333,34 @@ async function seed() {
       jurisdictions,
     }),
   )
+  await userRepo.save(mfaUser)
+  await userRepo.save({
+    ...mfaUser,
+    mfaEnabled: true,
+    mfaCode: "123456",
+    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
+  })
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
+  await rolesRepo.save(mfaRoles)
+  await userService.confirm({ token: mfaUser.confirmationToken })
+
+  const alamedaJurisdiction = jurisdictions.filter(j => j.name == CountyCode.alameda)[0]
+  const alamedaAdmin = await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "alameda-admin@example.com",
+      emailConfirmation: "alameda-admin@example.com",
+      firstName: "Alameda",
+      middleName: "Admin",
+      lastName: "MFA",
+      dob: new Date(),
+      password: "abcdef",
+      passwordConfirmation: "abcdef",
+      jurisdictions: [alamedaJurisdiction],
+    }),
+  )
+  alamedaAdmin.adminInJurisdictions = [alamedaJurisdiction]
+  await userRepo.save(alamedaAdmin)
+  await userService.confirm({ token: alamedaAdmin.confirmationToken })
 
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
 
@@ -344,20 +375,6 @@ async function seed() {
     }
   }
 
-  await userRepo.save(admin)
-  await userRepo.save({
-    ...mfaUser,
-    mfaEnabled: true,
-    mfaCode: "123456",
-    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
-  })
-  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
-  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
-  await rolesRepo.save(roles)
-  await rolesRepo.save(mfaRoles)
-
-  await userService.confirm({ token: admin.confirmationToken })
-  await userService.confirm({ token: mfaUser.confirmationToken })
   await app.close()
 }
 

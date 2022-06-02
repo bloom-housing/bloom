@@ -451,10 +451,12 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
+
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+
     await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
       .set(...setAuthorization(user1AccessToken))

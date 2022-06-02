@@ -152,9 +152,8 @@ export class UserController {
   }
 
   @Post("/invite")
-  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @UseGuards(OptionalAuthGuard)
   @ApiOperation({ summary: "Invite user", operationId: "invite" })
-  @ResourceAction(authzActions.invite)
   @UseInterceptors(ActivityLogInterceptor)
   async invite(@Body() dto: UserInviteDto): Promise<UserBasicDto> {
     return mapTo(

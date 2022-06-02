@@ -15,6 +15,7 @@ import { EmailService } from "../../email/email.service"
 import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { UserRepository } from "../repositories/user-repository"
+import { ListingRepository } from "../../listings/repositories/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -41,6 +42,14 @@ describe("UserService", () => {
     save: jest.fn(),
   }
 
+  const mockListingRepository = {
+    findOne: jest.fn(),
+    save: jest.fn(),
+    createQueryBuilder: jest.fn(),
+    findByEmail: jest.fn(),
+    findByResetToken: jest.fn(),
+  }
+
   beforeEach(async () => {
     process.env.APP_SECRET = "SECRET"
     const module: TestingModule = await Test.createTestingModule({
@@ -58,6 +67,10 @@ describe("UserService", () => {
         {
           provide: getRepositoryToken(Application),
           useValue: mockApplicationRepo,
+        },
+        {
+          provide: getRepositoryToken(ListingRepository),
+          useValue: mockListingRepository,
         },
         {
           provide: EmailService,
@@ -211,7 +224,6 @@ describe("UserService", () => {
         firstName: "First",
         lastName: "Last",
         dob: new Date(),
-        roles: { isPartner: true },
         jurisdictions: [],
       }
 
@@ -248,7 +260,6 @@ describe("UserService", () => {
         firstName: "First",
         lastName: "Last",
         dob: new Date(),
-        roles: { isPartner: true },
         jurisdictions: [],
       }
 

@@ -22,11 +22,6 @@ export class UserInviteDto extends OmitType(UserDto, [
   "adminInJurisdictions",
 ] as const) {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => UserRolesCreateDto)
-  roles: UserRolesCreateDto | null
-
-  @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -39,11 +34,4 @@ export class UserInviteDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgentInListings?: IdDto[] | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  adminInJurisdictions?: IdDto[] | null
 }

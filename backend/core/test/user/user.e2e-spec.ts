@@ -384,7 +384,6 @@ describe("Applications", () => {
       lastName: "Partner",
       dob: new Date(),
       leasingAgentInListings: [{ id: listing.id }],
-      roles: { isPartner: true },
       jurisdictions: [{ id: jurisdiction.id }],
     }
 
@@ -568,8 +567,7 @@ describe("Applications", () => {
         updatedAt: undefined,
         passwordHash: "abcd",
         mfaEnabled: false,
-      },
-      null
+      }
     )
 
     const filters = [
@@ -607,8 +605,7 @@ describe("Applications", () => {
         updatedAt: undefined,
         passwordHash: "abcd",
         mfaEnabled: false,
-      },
-      null
+      }
     )
 
     const res = await supertest(app.getHttpServer())
@@ -644,8 +641,7 @@ describe("Applications", () => {
         updatedAt: undefined,
         passwordHash: "abcd",
         mfaEnabled: false,
-      },
-      null
+      }
     )
     const applicationUpdate = getTestAppBody(listing.id)
     const newApp = await applicationsRepository.save({

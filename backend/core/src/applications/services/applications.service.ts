@@ -192,7 +192,11 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
-    const application = await this.findOne(applicationId)
+    const application = await this.repository.findOne({id: applicationId})
+
+    if (!application) {
+      throw new NotFoundException()
+    }
 
     await this.authorizeUserAction(this.req.user, application, application.listingId, authzActions.delete)
 
