@@ -1,21 +1,21 @@
-.table-card__inner {
+.standard-card__inner {
   @apply overflow-hidden;
   border-radius: var(--bloom-rounded-lg);
   border: var(--bloom-border-1) solid var(--bloom-color-gray-500);
   background-color: var(--bloom-color-white);
 }
 
-.table-card__title {
+.standard-card__title {
   font-family: var(--bloom-font-alt-sans);
   padding: var(--bloom-s6) var(--bloom-s6) var(--bloom-s2) var(--bloom-s7);
 }
 
-.table-card__blank {
+.standard-card__blank {
   color: var(--bloom-color-gray-750);
   background-color: var(--bloom-color-gray-200);
   padding: var(--bloom-s3) var(--bloom-s7);
 }
 
-.table-card__footer {
+.standard-card__footer {
   margin-top: var(--bloom-s3);
 }

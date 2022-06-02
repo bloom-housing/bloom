@@ -16,6 +16,7 @@ export * from "./src/blocks/ImageCard"
 export * from "./src/blocks/InfoCard"
 export * from "./src/blocks/StatusBar"
 export * from "./src/blocks/ViewItem"
+export * from "./src/blocks/StandardCard"
 
 /* Contexts */
 export * from "./src/authentication"
@@ -148,7 +149,6 @@ export * from "./src/tables/StackedTable"
 export * from "./src/tables/CategoryTable"
 export * from "./src/tables/AgTable"
 export * from "./src/tables/AgPagination"
-export * from "./src/tables/TableCard"
 
 /* Text */
 export * from "./src/text/Description"
