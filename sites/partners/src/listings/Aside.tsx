@@ -203,7 +203,7 @@ const Aside = ({
         <GridCell key="btn-preview">
           <a
             target="_blank"
-            href={`${listing.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+            href={`${listing?.jurisdiction.publicUrl}/preview/listings/${listingId}`}
           >
             <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}
