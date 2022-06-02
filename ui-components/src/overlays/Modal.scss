@@ -36,7 +36,7 @@
   }
 
   &.is-scrollable {
-    height: 80vh;
+    max-height: calc(100vh - 200px);
     @apply overflow-y-auto;
   }
 }
