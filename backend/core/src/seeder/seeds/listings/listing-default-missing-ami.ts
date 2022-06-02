@@ -20,10 +20,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
-
     const missingAmiLevelsUnits: Array<UnitSeedType> = [
       {
         amiChart: amiChart,
@@ -111,6 +107,11 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         sqFeet: "750",
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...getDefaultProperty(),
+      unitsAvailable: missingAmiLevelsUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<
       UnitCreateDto,
