@@ -10,10 +10,13 @@ export class addConfirmationEmailTranslations1652135660403 implements MigrationI
 
     generalTranslation = generalTranslation["0"]["translations"]
 
-    generalTranslation.confirmation.yourConfirmationNumber = "Your Confirmation Number"
     generalTranslation.confirmation = {
       ...generalTranslation.confirmation,
       gotYourConfirmationNumber: "We got your application for",
+      yourConfirmationNumber: "Your Confirmation Number",
+      applicationReceived: 'Application <br />received<span class="sr-only"> completed</span>',
+      applicationsClosed: 'Application <br />closed<span class="sr-only"> not completed</span>',
+      applicationsRanked: 'Application <br />ranked<span class="sr-only"> not completed</span>',
       whatHappensNext: "What happens next?",
       applicationPeriodCloses:
         "Once the application period closes, the property manager will begin processing applications.",
