@@ -10,6 +10,17 @@
     &:last-of-type a {
       @apply rounded-b-lg;
     }
+
+    &.is-current {
+      @apply text-gray-900;
+      cursor: pointer;
+      @apply text-gray-900;
+      @apply block;
+      @apply px-4;
+      @apply py-2;
+      @apply border-b;
+      @apply bg-primary-lighter;
+    }
   }
 
   a {
@@ -24,9 +35,6 @@
       @apply text-primary;
     }
 
-    &.is-current {
-      @apply text-gray-900;
-      box-shadow: inset 3px 0px 0px 0px $tailwind-primary;
-    }
+
   }
 }
