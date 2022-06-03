@@ -3,12 +3,12 @@ import {
   AgPagination,
   t,
   LoadingOverlay,
-  ListingFilterState,
   AuthContext,
   LinkButton,
   RequireLogin,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
+import { ListingFilterState } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import React, { useEffect, useState, useContext, useMemo } from "react"
 import { useRouter } from "next/router"

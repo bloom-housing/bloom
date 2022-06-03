@@ -6,8 +6,6 @@ import {
   Button,
   AppearanceSizeType,
   t,
-  encodeToFrontendFilterString,
-  ListingFilterState,
   AuthContext,
   Drawer,
 } from "@bloom-housing/ui-components"
@@ -17,7 +15,12 @@ import { useRouter } from "next/router"
 import FilterForm from "../src/forms/filters/FilterForm"
 import { getListings } from "../lib/helpers"
 import { fetchBaseListingData } from "../lib/hooks"
-import { ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import {
+  ListingList,
+  pushGtmEvent,
+  encodeToFrontendFilterString,
+  ListingFilterState,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 
 const ListingsPage = ({ initialListings }) => {

@@ -3,7 +3,7 @@ import {
   ListingFilterKeys,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
-import { Region } from "./regionNeighborhoodMap"
+import { Region } from "./regions"
 
 // TODO(#629): Refactor filter state storage strategy
 // Currently, the knowledge of "what a filter is" is spread across multiple

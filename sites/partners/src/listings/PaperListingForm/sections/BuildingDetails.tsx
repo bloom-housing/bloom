@@ -12,7 +12,7 @@ import {
   LatitudeLongitude,
   SelectOption,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys, neighborhoodRegions } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
@@ -39,32 +39,10 @@ type BuildingDetailsProps = {
   setCustomMapPositionChosen?: (customMapPosition: boolean) => void
 }
 
-const neighborhoodOptions: SelectOption[] = [
-  { value: "", label: "" },
-  { value: "Airport Sub area", label: "Airport Sub area" },
-  { value: "Barton McFarland area", label: "Barton McFarland area" },
-  { value: "Boston-Edison / North End area", label: "Boston-Edison / North End area" },
-  { value: "Boynton", label: "Boynton" },
-  { value: "Campau / Banglatown", label: "Campau / Banglatown" },
-  { value: "Dexter Linwood", label: "Dexter Linwood" },
-  { value: "Farwell area", label: "Farwell area" },
-  { value: "Gratiot Town / Kettering area", label: "Gratiot Town / Kettering area" },
-  { value: "Gratiot / 7 Mile area", label: "Gratiot / 7 Mile area" },
-  { value: "Greater Corktown area", label: "Greater Corktown area" },
-  { value: "Greater Downtown area", label: "Greater Downtown area" },
-  { value: "Islandview / Greater Villages area", label: "Islandview / Greater Villages area" },
-  { value: "Jefferson Chalmers area", label: "Jefferson Chalmers area" },
-  { value: "Livernois / McNichols area", label: "Livernois / McNichols area" },
-  { value: "Morningside area", label: "Morningside area" },
-  { value: "North Campau area", label: "North Campau area" },
-  { value: "Northwest / Grand River area", label: "Northwest / Grand River area" },
-  { value: "Northwest University District area", label: "Northwest University District area" },
-  { value: "Palmer Park area", label: "Palmer Park area" },
-  { value: "Russell Woods / Nardin Park area", label: "Russell Woods / Nardin Park area" },
-  { value: "Southwest / Vernor area", label: "Southwest / Vernor area" },
-  { value: "Warrendale / Cody Rouge area", label: "Warrendale / Cody Rouge area" },
-  { value: "West End area", label: "West End area" },
-]
+const neighborhoodOptions: SelectOption[] = neighborhoodRegions.map((neighborhood) => {
+  return { value: neighborhood.name, label: neighborhood.name }
+})
+neighborhoodOptions.unshift({ value: "", label: "" })
 
 const regionOptions: SelectOption[] = [
   { value: "", label: "" },
@@ -84,7 +62,7 @@ const BuildingDetails = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, getValues, errors, clearErrors } = formMethods
+  const { register, control, getValues, errors, clearErrors, setValue } = formMethods
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
@@ -103,6 +81,11 @@ const BuildingDetails = ({
   const mapPinPosition = useWatch({
     control,
     name: "mapPinPosition",
+  })
+
+  const neighborhood: string = useWatch({
+    control,
+    name: "neighborhood",
   })
 
   const displayMapPreview = () => {
@@ -224,7 +207,13 @@ const BuildingDetails = ({
             keyPrefix="t"
             errorMessage={fieldMessage(errors?.neighborhood)}
             inputProps={{
-              onChange: () => clearErrors("neighborhood"),
+              onChange: () => {
+                clearErrors("neighborhood")
+                setValue(
+                  "region",
+                  neighborhoodRegions.find((regionMap) => regionMap.name === neighborhood)?.region
+                )
+              },
             }}
           />
         </ViewItem>
