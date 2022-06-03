@@ -132,6 +132,8 @@ const IconMap = {
 
 export type IconTypes = keyof typeof IconMap
 
+export type UniversalIconType = IconTypes | IconDefinition
+
 export type IconFill = "white" | "primary"
 
 export const IconFillColors = {
@@ -144,7 +146,7 @@ export type IconSize = "tiny" | "small" | "base" | "medium" | "large" | "xlarge"
 
 export interface IconProps {
   size: IconSize
-  symbol: IconTypes | IconDefinition
+  symbol: UniversalIconType
   className?: string
   fill?: string
   ariaHidden?: boolean
