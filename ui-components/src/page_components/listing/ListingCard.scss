@@ -1,4 +1,6 @@
 .listings-row {
+  --tags-flex-order: 0;
+
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -37,6 +39,14 @@
     @media (min-width: $screen-md) {
       align-items: flex-start;
       text-align: left;
+    }
+
+    .listings-row_tags {
+      order: var(--tags-flex-order);
+      display: inline-flex;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: flex-start;
     }
   }
 

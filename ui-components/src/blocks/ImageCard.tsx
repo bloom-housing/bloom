@@ -20,6 +20,7 @@ export interface ImageTag {
   text?: string
   iconType?: IconTypes
   iconColor?: string
+  styleType?: AppearanceStyleType
 }
 
 export interface ImageCardProps {
@@ -66,7 +67,10 @@ const ImageCard = (props: ImageCardProps) => {
         {props.tags?.map((tag, index) => {
           return (
             <React.Fragment key={index}>
-              <Tag styleType={AppearanceStyleType.warning} className={"mt-3 mr-2 ml-2"}>
+              <Tag
+                styleType={tag.styleType || AppearanceStyleType.warning}
+                className={"mt-3 mr-2 ml-2"}
+              >
                 {tag.iconType && (
                   <Icon
                     size={"medium"}

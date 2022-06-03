@@ -1,11 +1,16 @@
+import * as React from "react"
+import { AppearanceStyleType } from "../../.."
+import { BADGES } from "../../../.storybook/constants"
 import LinkButton from "../../actions/LinkButton"
 import Icon from "../../icons/Icon"
-import * as React from "react"
 import { ListingCard } from "./ListingCard"
 
 export default {
-  title: "Listing/ListingCard",
+  title: "Listing/ListingCard 🚩",
   component: ListingCard,
+  parameters: {
+    badges: [BADGES.GEN2],
+  },
 }
 
 const standardImageCardProps = {
@@ -298,6 +303,10 @@ export const detroitStyle = () => {
       --image-height: 340px;
     }
 
+    .listing-card-overrides .listings-row {
+      --tags-flex-order: 2;
+    }
+
     .listing-card-overrides .button {
       --normal-rounded: 60px;
       --normal-padding: 0.5rem 1rem;
@@ -320,7 +329,14 @@ export const detroitStyle = () => {
           imageCardProps={{
             imageUrl: "https://detroit-public-dev.netlify.app/images/detroitDefault.png",
             href: "listing-link",
-            tags: [{ iconType: "calendar", iconColor: "white", text: "Coming Soon Fall 2022" }],
+            tags: [
+              {
+                iconType: "calendar",
+                iconColor: "white",
+                text: "Coming Soon Fall 2022",
+                styleType: AppearanceStyleType.closed,
+              },
+            ],
           }}
           tableProps={{ ...standardTableProps }}
           footerButtons={[{ text: "See Details", href: "see-details-link" }]}
@@ -330,8 +346,13 @@ export const detroitStyle = () => {
           }}
           cardTags={[
             { text: "Tag 1 text" },
-            { text: "Tag 2 text" },
-            { text: "A tag with a longer name" },
+            { text: "Tag 2 text", styleType: AppearanceStyleType.info },
+            {
+              text: "A tag with a longer name",
+              iconType: "phone",
+              iconColor: "white",
+              styleType: AppearanceStyleType.primary,
+            },
           ]}
         />
         <style>{cssVarsOverride}</style>

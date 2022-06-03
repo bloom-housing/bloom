@@ -97,14 +97,18 @@ const ListingCard = (props: ListingCardProps) => {
 
   const getContentHeader = () => {
     return (
-      <>
+      <div className="listings-row_headers">
         {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
         {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
         {cardTags && cardTags?.length > 0 && (
-          <div className={"inline-flex flex-wrap justify-start w-full"}>
+          <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
               return (
-                <Tag styleType={AppearanceStyleType.warning} className={"mr-2 mb-2"} key={index}>
+                <Tag
+                  styleType={cardTag.styleType || AppearanceStyleType.warning}
+                  className={"mr-2 mb-2"}
+                  key={index}
+                >
                   {cardTag.iconType && (
                     <Icon
                       size={"medium"}
@@ -119,7 +123,7 @@ const ListingCard = (props: ListingCardProps) => {
             })}
           </div>
         )}
-      </>
+      </div>
     )
   }
 
@@ -170,7 +174,7 @@ const ListingCard = (props: ListingCardProps) => {
         <ImageCard {...imageCardProps} />
       </div>
       <div className="listings-row_content">
-        <div className={"listings-row_headers"}>{getContentHeader()}</div>
+        {getContentHeader()}
         {getContent()}
       </div>
     </article>
