@@ -153,7 +153,7 @@ export default function ListingsList() {
             case ListingStatus.pending:
               return t("t.draft")
             case ListingStatus.closed:
-              return t("t.closed")
+              return t("listings.closed")
             default:
               return ""
           }
