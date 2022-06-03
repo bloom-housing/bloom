@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import {
   Address,
   Listing,
+  ListingFeatures,
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,

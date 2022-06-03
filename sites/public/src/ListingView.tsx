@@ -9,6 +9,7 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingStatus,
+  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -390,7 +391,55 @@ export const ListingView = (props: ListingProps) => {
     </>
   )
 
+  const getWaitlist = () => {
+    const waitlistRow = [
+      {
+        text: t("listings.waitlist.openSlots"),
+        amount: listing.waitlistOpenSpots,
+        emphasized: true,
+      },
+    ]
+    const unitRow = [
+      {
+        text:
+          listing.unitsAvailable === 1 ? t("listings.availableUnit") : t("listings.availableUnits"),
+        amount: listing.unitsAvailable,
+        emphasized: true,
+      },
+    ]
+    return (
+      <QuantityRowSection
+        quantityRows={
+          listing.listingAvailability === ListingAvailability.openWaitlist ? waitlistRow : unitRow
+        }
+        strings={{
+          sectionTitle:
+            listing.listingAvailability === ListingAvailability.openWaitlist
+              ? t("listings.waitlist.isOpen")
+              : t("listings.availableUnits"),
+          description:
+            listing.listingAvailability === ListingAvailability.openWaitlist
+              ? t("listings.waitlist.submitForWaitlist")
+              : t("listings.availableUnitsDescription"),
+        }}
+      />
+    )
+  }
+
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
+
+  const getAccessibilityFeatures = () => {
+    let featuresExist = false
+    const features = Object.keys(listing?.features ?? {}).map((feature, index) => {
+      if (listing?.features[feature]) {
+        featuresExist = true
+        return <li key={index}>{t(`eligibility.accessibility.${feature}`)}</li>
+      }
+    })
+    return featuresExist ? <ul>{features}</ul> : null
+  }
+
+  const accessibilityFeatures = getAccessibilityFeatures()
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
@@ -480,29 +529,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
-          {!applicationsClosed && listing.isWaitlistOpen && (
-            <QuantityRowSection
-              quantityRows={[
-                {
-                  text: t("listings.waitlist.currentSize"),
-                  amount: listing.waitlistCurrentSize,
-                },
-                {
-                  text: t("listings.waitlist.openSlots"),
-                  amount: listing.waitlistOpenSpots,
-                  emphasized: true,
-                },
-                {
-                  text: t("listings.waitlist.finalSize"),
-                  amount: listing.waitlistMaxSize,
-                },
-              ]}
-              strings={{
-                sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-                description: t("listings.waitlist.submitAnApplication"),
-              }}
-            />
-          )}
+          {!applicationsClosed && getWaitlist()}
           {hasNonReferralMethods &&
           !applicationsClosed &&
           listing.status !== ListingStatus.closed ? (
@@ -626,29 +653,7 @@ export const ListingView = (props: ListingProps) => {
                   headerText={t("listings.openHouseEvent.header")}
                 />
               )}
-              {!applicationsClosed && listing.isWaitlistOpen && (
-                <QuantityRowSection
-                  quantityRows={[
-                    {
-                      text: t("listings.waitlist.currentSize"),
-                      amount: listing.waitlistCurrentSize,
-                    },
-                    {
-                      text: t("listings.waitlist.openSlots"),
-                      amount: listing.waitlistOpenSpots,
-                      emphasized: true,
-                    },
-                    {
-                      text: t("listings.waitlist.finalSize"),
-                      amount: listing.waitlistMaxSize,
-                    },
-                  ]}
-                  strings={{
-                    sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
-                    description: t("listings.waitlist.submitAnApplication"),
-                  }}
-                />
-              )}
+              {!applicationsClosed && getWaitlist()}
               {hasNonReferralMethods &&
                 !applicationsClosed &&
                 listing.status !== ListingStatus.closed &&
@@ -736,8 +741,14 @@ export const ListingView = (props: ListingProps) => {
               {listing.servicesOffered && (
                 <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
               )}
+              {accessibilityFeatures && (
+                <Description term={t("t.accessibility")} description={accessibilityFeatures} />
+              )}
               {listing.accessibility && (
-                <Description term={t("t.accessibility")} description={listing.accessibility} />
+                <Description
+                  term={t("t.additionalAccessibility")}
+                  description={listing.accessibility}
+                />
               )}
               <Description
                 term={t("t.unitFeatures")}

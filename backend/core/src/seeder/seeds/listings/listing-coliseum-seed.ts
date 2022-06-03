@@ -39,7 +39,6 @@ const coliseumProperty: PropertySeedType = {
     "Residential supportive services are provided to all residents on a volunteer basis.",
   smokingPolicy: "No Smoking",
   unitAmenities: null,
-  unitsAvailable: 46,
   yearBuilt: 2021,
 }
 
@@ -144,10 +143,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "AlamedaCountyTCAC2021",
       jurisdiction: alamedaJurisdiction,
-    })
-
-    const property = await this.propertyRepository.save({
-      ...coliseumProperty,
     })
 
     const coliseumUnits: Array<UnitSeedType> = [
@@ -934,6 +929,11 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         sqFeet: "1029",
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...coliseumProperty,
+      unitsAvailable: coliseumUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = coliseumUnits.map(
       (unit) => {

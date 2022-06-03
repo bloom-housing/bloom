@@ -1217,6 +1217,8 @@ export class ListingsService {
       orderBy?: any | null[]
       /**  */
       orderDir?: any | null[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1231,6 +1233,7 @@ export class ListingsService {
         view: params["view"],
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
+        search: params["search"],
       }
       let data = null
 
@@ -4998,6 +5001,53 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ListingFeatures {
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  mobility?: boolean
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -5121,6 +5171,9 @@ export interface Listing {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 
   /**  */
   id: string
@@ -5679,6 +5732,9 @@ export interface ListingCreate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface ListingEventUpdate {
@@ -6100,6 +6156,9 @@ export interface ListingUpdate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface PreferencesFilterParams {

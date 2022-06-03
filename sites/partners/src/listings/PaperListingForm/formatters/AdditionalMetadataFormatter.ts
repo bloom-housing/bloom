@@ -1,4 +1,5 @@
 import { ListingReviewOrder, ListingAvailability } from "@bloom-housing/backend-core/types"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {
@@ -52,5 +53,11 @@ export default class AdditionalMetadataFormatter extends Formatter {
     } else if (this.data.listingAvailabilityQuestion === "openWaitlist") {
       this.data.listingAvailability = ListingAvailability.openWaitlist
     }
+    this.data.features = listingFeatures.reduce((acc, current) => {
+      return {
+        ...acc,
+        [current]: this.data.listingFeatures && this.data.listingFeatures.indexOf(current) >= 0,
+      }
+    }, {})
   }
 }

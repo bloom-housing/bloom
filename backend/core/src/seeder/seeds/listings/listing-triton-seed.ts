@@ -30,7 +30,6 @@ const tritonProperty: PropertySeedType = {
   servicesOffered: null,
   smokingPolicy: "Non-Smoking",
   unitAmenities: "Washer and dryer, AC and Heater, Gas Stove",
-  unitsAvailable: 4,
   yearBuilt: 2021,
 }
 
@@ -114,10 +113,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "San Jose TCAC 2019",
       jurisdiction: alamedaJurisdiction,
-    })
-
-    const property = await this.propertyRepository.save({
-      ...tritonProperty,
     })
 
     const tritonUnits: Array<UnitSeedType> = [
@@ -207,6 +202,11 @@ export class ListingTritonSeed extends ListingDefaultSeed {
         sqFeet: "750",
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...tritonProperty,
+      unitsAvailable: tritonUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = tritonUnits.map(
       (unit) => {
