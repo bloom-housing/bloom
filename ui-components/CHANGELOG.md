@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.12...@bloom-housing/ui-components@4.4.1-alpha.13) (2022-06-04)
+
+
+### Features
+
+* **modal:** add option for fixed-height scrollable modal ([#2769](https://github.com/bloom-housing/bloom/issues/2769)) ([756582d](https://github.com/bloom-housing/bloom/commit/756582d4e36c2772a420c8bcbf9625bb6be66ad6))
+
+
+
+
+
 ## [4.4.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.11...@bloom-housing/ui-components@4.4.1-alpha.12) (2022-06-03)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
