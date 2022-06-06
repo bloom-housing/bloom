@@ -104,7 +104,10 @@
     color: var(--alert-appearance-label-color, var(--bloom-color-white));
 
     &:hover {
-      background-color: var(--alert-appearance-hover-background-color, var(--bloom-color-alert-dark));
+      background-color: var(
+        --alert-appearance-hover-background-color,
+        var(--bloom-color-alert-dark)
+      );
       border-color: var(--alert-appearance-hover-border-color, var(--bloom-color-alert-dark));
       color: var(--alert-appearance-hover-label-color, var(--bloom-color-white));
     }
@@ -116,7 +119,10 @@
     color: var(--warning-appearance-label-color, var(--bloom-color-gray-800));
 
     &:hover {
-      background-color: var(--warning-appearance-hover-background-color, var(--bloom-color-warn-dark));
+      background-color: var(
+        --warning-appearance-hover-background-color,
+        var(--bloom-color-warn-dark)
+      );
       border-color: var(--warning-appearance-hover-border-color, var(--bloom-color-warn-dark));
       color: var(--warning-appearance-hover-label-color, var(--bloom-color-white));
     }

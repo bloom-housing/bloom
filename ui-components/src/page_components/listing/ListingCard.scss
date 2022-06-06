@@ -18,7 +18,8 @@
   }
 }
 
-.listings-row_figure, .listings-row_content {
+.listings-row_figure,
+.listings-row_content {
   width: 100%;
   padding: var(--bloom-s3);
   padding-bottom: 0px;
@@ -63,7 +64,7 @@
   }
 
   .is-card-link::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;

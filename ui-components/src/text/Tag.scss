@@ -37,7 +37,10 @@
 
   &.is-warning {
     color: var(--warning-appearance-label-color, var(--bloom-color-white));
-    background-color: var(--warning-appearance-background-color, var(--bloom-color-accent-warm-dark));
+    background-color: var(
+      --warning-appearance-background-color,
+      var(--bloom-color-accent-warm-dark)
+    );
   }
 
   &.is-secondary {
@@ -53,31 +56,46 @@
 
     &.is-light-mode {
       color: var(--success-light-appearance-label-color, var(--bloom-color-gray-900));
-      background-color: var(--success-light-appearance-background-color, var(--bloom-color-success-light));
+      background-color: var(
+        --success-light-appearance-background-color,
+        var(--bloom-color-success-light)
+      );
     }
   }
 
   &.is-accent-cool {
     &:not(.is-light-mode) {
       color: var(--accent-cool-appearance-label-color, var(--bloom-color-white));
-      background-color: var(--accent-cool-appearance-background-color, var(--bloom-color-accent-cool-dark));
+      background-color: var(
+        --accent-cool-appearance-background-color,
+        var(--bloom-color-accent-cool-dark)
+      );
     }
 
     &.is-light-mode {
       color: var(--accent-cool-light-appearance-label-color, var(--bloom-color-gray-900));
-      background-color: var(--accent-cool-light-appearance-background-color, var(--bloom-color-accent-cool));
+      background-color: var(
+        --accent-cool-light-appearance-background-color,
+        var(--bloom-color-accent-cool)
+      );
     }
   }
 
   &.is-accent-warm {
     &:not(.is-light-mode) {
       color: var(--accent-warm-appearance-label-color, var(--bloom-color-white));
-      background-color: var(--accent-warm-appearance-background-color, var(--bloom-color-accent-warm-dark));
+      background-color: var(
+        --accent-warm-appearance-background-color,
+        var(--bloom-color-accent-warm-dark)
+      );
     }
 
     &.is-light-mode {
       color: var(--accent-warm-light-appearance-label-color, var(--bloom-color-gray-900));
-      background-color: var(--accent-warm-light-appearance-background-color, var(--bloom-color-accent-warm));
+      background-color: var(
+        --accent-warm-light-appearance-background-color,
+        var(--bloom-color-accent-warm)
+      );
     }
   }
 
