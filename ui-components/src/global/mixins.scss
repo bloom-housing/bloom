@@ -99,25 +99,26 @@
   }
 
   &.is-alert {
-    background-color: var(--bloom-color-alert);
-    border-color: var(--bloom-color-alert);
-    color: var(--bloom-color-white);
+    background-color: var(--alert-appearance-background-color, var(--bloom-color-alert));
+    border-color: var(--alert-appearance-border-color, var(--bloom-color-alert));
+    color: var(--alert-appearance-label-color, var(--bloom-color-white));
 
     &:hover {
-      background-color: var(--bloom-color-alert-dark);
-      border-color: var(--bloom-color-alert-dark);
+      background-color: var(--alert-appearance-hover-background-color, var(--bloom-color-alert-dark));
+      border-color: var(--alert-appearance-hover-border-color, var(--bloom-color-alert-dark));
+      color: var(--alert-appearance-hover-label-color, var(--bloom-color-white));
     }
   }
 
   &.is-warning {
-    background-color: var(--bloom-color-warn);
-    border-color: var(--bloom-color-warn);
-    color: var(--bloom-color-gray-800);
+    background-color: var(--warning-appearance-background-color, var(--bloom-color-warn));
+    border-color: var(--warning-appearance-border-color, var(--bloom-color-warn));
+    color: var(--warning-appearance-label-color, var(--bloom-color-gray-800));
 
     &:hover {
-      color: var(--bloom-color-white);
-      background-color: var(--bloom-color-warn-dark);
-      border-color: var(--bloom-color-warn-dark);
+      background-color: var(--warning-appearance-hover-background-color, var(--bloom-color-warn-dark));
+      border-color: var(--warning-appearance-hover-border-color, var(--bloom-color-warn-dark));
+      color: var(--warning-appearance-hover-label-color, var(--bloom-color-white));
     }
   }
 

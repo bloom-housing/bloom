@@ -28,9 +28,14 @@ const standardTableProps = {
   },
   data: [
     {
-      unitType: { content: "cellA" },
-      minimumIncome: { content: "cellB" },
-      rent: { content: "cellC" },
+      unitType: { content: "Row 1 cellA" },
+      minimumIncome: { content: "Row 1 cellB" },
+      rent: { content: <strong>Row 1 cellC</strong> },
+    },
+    {
+      unitType: { content: "Row 2 cellA" },
+      minimumIncome: { content: "Row 2 cellB" },
+      rent: { content: <strong>Row 2 cellC</strong> },
     },
   ],
   responsiveCollapse: true,
@@ -294,6 +299,11 @@ export const detroitStyle = () => {
       --primary-appearance-hover-label-color: var(--bloom-color-primary-dark);
       --outlined-appearance-hover-background-color: var(--bloom-color-primary);
       --outlined-appearance-hover-border-color: var(--bloom-color-primary);
+      --card-header-color: var(--bloom-color-primary-dark);
+    }
+
+    .listing-card-overrides table {
+      font-family: var(--bloom-font-sans);
     }
 
     .listing-card-overrides .image-card {
@@ -301,6 +311,11 @@ export const detroitStyle = () => {
       --tags-justify-desktop: flex-end;
       --border-radius: 24px;
       --image-height: 340px;
+      --normal-font-size: var(--bloom-font-size-base);
+    }
+    .listing-card-overrides .tag {
+      --normal-padding: var(--bloom-s2) var(--bloom-s3);
+      --label-weight: 700;
     }
 
     .listing-card-overrides .listings-row {
@@ -321,7 +336,7 @@ export const detroitStyle = () => {
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
       <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
         rel="stylesheet"
       ></link>
       <div className="listing-card-overrides">

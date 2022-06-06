@@ -3,12 +3,16 @@ import {
   AppearanceStyleType,
   AppearanceShadeType,
 } from "../global/AppearanceTypes"
+import { BADGES } from "../../.storybook/constants"
 import * as React from "react"
 import { Tag } from "./Tag"
 
 export default {
-  title: "Text/Tag",
+  title: "Text/Tag 🚩",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  parameters: {
+    badges: [BADGES.GEN2],
+  },
 }
 
 export const standard = () => <Tag>Tag</Tag>

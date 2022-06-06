@@ -41,6 +41,15 @@
   @media (min-width: $screen-sm) {
     --tags-justify: var(--tags-justify-desktop);
   }
+
+  .tag {
+    margin-top: var(--bloom-s3);
+    margin-inline: var(--bloom-s2);
+
+    .ui-icon {
+      margin-inline-end: var(--bloom-s2);
+    }
+  }
 }
 
 .image-card__placeholder {

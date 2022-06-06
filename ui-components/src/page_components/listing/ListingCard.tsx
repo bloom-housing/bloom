@@ -104,17 +104,12 @@ const ListingCard = (props: ListingCardProps) => {
           <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
               return (
-                <Tag
-                  styleType={cardTag.styleType || AppearanceStyleType.warning}
-                  className={"mr-2 mb-2"}
-                  key={index}
-                >
+                <Tag styleType={cardTag.styleType || AppearanceStyleType.warning} key={index}>
                   {cardTag.iconType && (
                     <Icon
                       size={"medium"}
                       symbol={cardTag.iconType}
                       fill={cardTag.iconColor ?? IconFillColors.primary}
-                      className={"mr-2"}
                     />
                   )}
                   {cardTag.text}

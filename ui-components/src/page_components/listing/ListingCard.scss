@@ -11,7 +11,6 @@
 
   &:first-of-type {
     margin-block-start: var(--bloom-s12);
-    color: var(--bloom-color-accent-cool-light);
   }
 
   @media (min-width: $screen-lg) {
@@ -47,6 +46,19 @@
       width: 100%;
       flex-wrap: wrap;
       justify-content: flex-start;
+
+      .tag {
+        margin-bottom: var(--bloom-s2);
+        margin-inline-end: var(--bloom-s2);
+
+        &:last-of-type {
+          margin-inline-end: 0;
+        }
+
+        .ui-icon {
+          margin-inline-end: var(--bloom-s2);
+        }
+      }
     }
   }
 
@@ -61,7 +73,7 @@
 }
 
 .listings-row_table {
-  margin-block-end: var(--bloom-s12);
+  margin-block-end: var(--bloom-s4);
 }
 
 .listings-row_footer {
