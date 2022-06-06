@@ -29,6 +29,10 @@ const Layout = (props) => {
       title: t("nav.users"),
       href: "/users",
     })
+    menuLinks.push({
+      title: t("t.settings"),
+      href: "/settings",
+    })
   }
   if (profile) {
     menuLinks.push({
