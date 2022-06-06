@@ -457,7 +457,7 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
       .set(...setAuthorization(user1AccessToken))
-      .expect(404)
+      .expect(500)
   })
 
   it(`should disallow users to delete their own applications`, async () => {

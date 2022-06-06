@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.15...@bloom-housing/partners@4.4.1-alpha.16) (2022-06-06)
+
+
+### Features
+
+* create table card component ([#2781](https://github.com/bloom-housing/bloom/issues/2781)) ([7cb3147](https://github.com/bloom-housing/bloom/commit/7cb31477268733b8b3d51dd77b2e33afb713ffbc))
+
+
+
+
+
+## [4.4.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.14...@bloom-housing/partners@4.4.1-alpha.15) (2022-06-04)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.13...@bloom-housing/partners@4.4.1-alpha.14) (2022-06-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.4.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.12...@bloom-housing/partners@4.4.1-alpha.13) (2022-06-02)
 
 **Note:** Version bump only for package @bloom-housing/partners
