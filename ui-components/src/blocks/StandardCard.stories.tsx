@@ -40,7 +40,6 @@ export const WithTable = () => (
   </StandardCard>
 )
 
-
 export const styleOverrides = () => {
   const cssVarsOverride = `
     .standard-card-overrides .standard-card {
