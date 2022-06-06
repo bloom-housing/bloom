@@ -12,10 +12,11 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NetworkStatus } from "./FormSignIn"
+import { RequestType } from "./FormSignInMFACode"
 
 export type FormSignInMFAProps = {
   control: FormSignInMFAControl
-  onSubmit: (data: unknown) => void
+  onSubmit: (data: { mfaType: RequestType }) => void
   networkError: NetworkStatus
   emailOnClick: () => void
   smsOnClick: () => void
