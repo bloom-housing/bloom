@@ -166,7 +166,6 @@ const Icon = (props: IconProps) => {
       <FontAwesomeIcon icon={props.symbol} />
     )
 
-  console.info(typeof props.symbol === "string", SpecificIcon)
   return typeof props.symbol === "string" ? (
     <span
       className={wrapperClasses.join(" ")}
