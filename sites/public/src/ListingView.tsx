@@ -35,9 +35,7 @@ import {
   StandardTable,
   SubmitApplication,
   TableHeaders,
-  UnitTables,
   QuantityRowSection,
-  getSummariesTable,
   t,
   EventType,
   StandardTableData,
@@ -52,6 +50,8 @@ import {
   getTimeRangeString,
   getCurrencyRange,
   getPostmarkString,
+  UnitTables,
+  getSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
