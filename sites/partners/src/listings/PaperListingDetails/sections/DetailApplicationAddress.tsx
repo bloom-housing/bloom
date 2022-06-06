@@ -155,6 +155,7 @@ const DetailApplicationAddress = () => {
           <ViewItem
             id="additionalApplicationSubmissionNotes"
             label={t("listings.additionalApplicationSubmissionNotes")}
+            dataTestId="additionalApplicationSubmissionNotes"
           >
             {getDetailFieldString(listing.additionalApplicationSubmissionNotes)}
           </ViewItem>

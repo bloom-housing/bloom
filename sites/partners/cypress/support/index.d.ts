@@ -3,6 +3,13 @@ type attachFileSubjectArgs = {
   subjectType: string
 }
 
+interface fillFromFieldOption {
+  byTestID?: boolean
+  fieldID: string
+  fixtureID?: string
+  hardcodedValue?: string
+}
+
 declare namespace Cypress {
   interface Chainable {
     /**
@@ -12,25 +19,14 @@ declare namespace Cypress {
     getByID(value: string): Chainable<Element>
     getByTestId(value: string): Chainable<Element>
     login(): Chainable
-    loginWithMfa(): Chainable
-    attachFile(command: string, optionalProcessingConfig: attachFileSubjectArgs): Chainable
     verifyAlertBox(): Chainable
-    fillPrimaryApplicant(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillAlternateContact(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillHouseholdMember(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillHouseholdDetails(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillHouseholdIncome(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillDemographics(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillTerms(value: Record<string, string>, submit: boolean): Chainable
-    verifyApplicationData(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    verifyPrimaryApplicant(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    verifyAlternateContact(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    verifyHouseholdMembers(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    verifyHouseholdDetails(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    verifyHouseholdIncome(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    verifyTerms(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
-    fillMailingAddress(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     signOut(): Chainable
+    fillFormFields(
+      fixture: string,
+      fieldsToType: fillFromFieldOption[],
+      fieldsToSelect: fillFromFieldOption[]
+    ): Chainable
+    verifyFormFields(fixture: string, verifyFormFields: fillFromFieldOption[]): Chainable
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
