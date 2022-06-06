@@ -3,15 +3,22 @@ import { Heading } from "../headers/Heading"
 import "./StandardCard.scss"
 
 export interface StandardCardProps {
+  className?: string
   title?: string
   children?: React.ReactNode
   footer?: React.ReactNode
   emptyStateMessage: string
 }
 
-const StandardCard = ({ title, children, footer, emptyStateMessage }: StandardCardProps) => {
+const StandardCard = ({
+  className = "",
+  title,
+  children,
+  footer,
+  emptyStateMessage,
+}: StandardCardProps) => {
   return (
-    <div className="standard-card">
+    <div className={`standard-card ${className}`}>
       <div className="standard-card__inner">
         {title && (
           <Heading className="standard-card__title" priority={3}>

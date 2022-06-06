@@ -1,18 +1,30 @@
+.standard-card {
+  --font-family: var(--bloom-font-alt-sans);
+  --border-radius: var(--bloom-rounded-lg);
+  --border-width: var(--bloom-border-1);
+  --border-color: var(--bloom-color-gray-500);
+  --title-color: var(--bloom-color-gray-900);
+  --background-color: var(--bloom-color-white);
+  --blank-color: var(--bloom-color-gray-750);
+  --blank-background: var(--bloom-color-gray-200);
+}
+
 .standard-card__inner {
   @apply overflow-hidden;
-  border-radius: var(--bloom-rounded-lg);
-  border: var(--bloom-border-1) solid var(--bloom-color-gray-500);
-  background-color: var(--bloom-color-white);
+  border-radius: var(--border-radius);
+  border: var(--border-width) solid var(--border-color);
+  background-color: var(--background-color);
 }
 
 .standard-card__title {
-  font-family: var(--bloom-font-alt-sans);
+  color: var(--title-color);
+  font-family: var(--font-family);
   padding: var(--bloom-s6) var(--bloom-s6) var(--bloom-s2) var(--bloom-s7);
 }
 
 .standard-card__blank {
-  color: var(--bloom-color-gray-750);
-  background-color: var(--bloom-color-gray-200);
+  color: var(--blank-color);
+  background-color: var(--blank-background);
   padding: var(--bloom-s3) var(--bloom-s7);
 }
 
