@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.15...@bloom-housing/ui-components@4.4.1-alpha.16) (2022-06-07)
+
+
+### Bug Fixes
+
+* changed aria-selected to aria-current issue [#698](https://github.com/bloom-housing/bloom/issues/698) ([bed1b23](https://github.com/bloom-housing/bloom/commit/bed1b23d63af134542f6760aa70d1ccac87940fa))
+
+
+### Features
+
+* **sidenav component:** update Prototype SideNav Component for Production Usage ([4ae5e5c](https://github.com/bloom-housing/bloom/commit/4ae5e5c159c7150a808df85b2aa47e443256eb5f)), closes [#698](https://github.com/bloom-housing/bloom/issues/698)
+
+
+
+
+
 ## [4.4.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.14...@bloom-housing/ui-components@4.4.1-alpha.15) (2022-06-07)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
