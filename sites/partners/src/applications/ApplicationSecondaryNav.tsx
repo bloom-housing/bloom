@@ -7,6 +7,7 @@ type ApplicationSecondaryNavProps = {
   listingId: string
   flagsQty: number
   children?: React.ReactChild
+  breadcrumbs?: React.ReactNode
 }
 
 const ApplicationSecondaryNav = ({
@@ -14,6 +15,7 @@ const ApplicationSecondaryNav = ({
   listingId,
   flagsQty,
   children,
+  breadcrumbs,
 }: ApplicationSecondaryNavProps) => {
   const router = useRouter()
   const currentPath = router?.asPath
@@ -52,7 +54,11 @@ const ApplicationSecondaryNav = ({
   }, [currentPath, tabNavElements])
 
   return (
-    <PageHeader title={title} tabNav={process.env.showDuplicates ? tabs : null}>
+    <PageHeader
+      title={title}
+      tabNav={process.env.showDuplicates ? tabs : null}
+      breadcrumbs={breadcrumbs}
+    >
       {children}
     </PageHeader>
   )

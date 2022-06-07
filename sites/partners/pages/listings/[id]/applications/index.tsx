@@ -11,6 +11,8 @@ import {
   SiteAlert,
   setSiteAlertMessage,
   useAgTable,
+  Breadcrumbs,
+  BreadcrumbLink,
 } from "@bloom-housing/ui-components"
 import {
   useSingleListingData,
@@ -132,6 +134,15 @@ const ApplicationsList = () => {
         title={listingName}
         listingId={listingId}
         flagsQty={flaggedApps?.meta?.totalFlagged}
+        breadcrumbs={
+          <Breadcrumbs>
+            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+            <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+            <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
+              {t("nav.applications")}
+            </BreadcrumbLink>
+          </Breadcrumbs>
+        }
       >
         {csvExportError && (
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">

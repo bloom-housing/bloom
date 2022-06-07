@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react"
-import { useRouter } from "next/router"
 import Head from "next/head"
 import axios from "axios"
 import {
@@ -7,9 +6,10 @@ import {
   PageHeader,
   t,
   Tag,
-  Button,
   AlertBox,
   SiteAlert,
+  Breadcrumbs,
+  BreadcrumbLink,
 } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -43,9 +43,6 @@ interface ListingProps {
 }
 
 export default function ListingDetail(props: ListingProps) {
-  const router = useRouter()
-  /* const listingId = router.query.id as string
-  const { listingDto, listingLoading } = useSingleListingData(listingId) */
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
@@ -98,17 +95,21 @@ export default function ListingDetail(props: ListingProps) {
                   <p className="font-sans text-base mt-1">{listing.id}</p>
                 </>
               }
+              breadcrumbs={
+                <Breadcrumbs>
+                  <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/listings/${listing.id}`} current>
+                    {listing.name}
+                  </BreadcrumbLink>
+                </Breadcrumbs>
+              }
             >
               <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
                 <SiteAlert type="success" timeout={5000} dismissable />
               </div>
             </PageHeader>
             <section className="border-t bg-white">
-              <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-                <Button inlineIcon="left" icon="arrowBack" onClick={() => router.push("/")}>
-                  {t("t.back")}
-                </Button>
-
+              <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
                 <div className="status-bar__status md:pl-4 md:w-3/12">{listingStatus}</div>
               </div>
             </section>

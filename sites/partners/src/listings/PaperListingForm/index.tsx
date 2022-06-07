@@ -287,15 +287,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       <LoadingOverlay isLoading={loading}>
         <>
           <StatusBar
-            backButton={
-              <Button
-                inlineIcon="left"
-                icon="arrowBack"
-                onClick={() => (editMode ? router.push(`/listings/${listing?.id}`) : router.back())}
-              >
-                {t("t.back")}
-              </Button>
-            }
+            // backButton={
+            //   <Button
+            //     inlineIcon="left"
+            //     icon="arrowBack"
+            //     onClick={() => (editMode ? router.push(`/listings/${listing?.id}`) : router.back())}
+            //   >
+            //     {t("t.back")}
+            //   </Button>
+            // }
             tagStyle={(() => {
               switch (listing?.status) {
                 case ListingStatus.active:
