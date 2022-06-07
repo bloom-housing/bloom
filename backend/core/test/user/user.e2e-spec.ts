@@ -280,9 +280,6 @@ describe("Applications", () => {
       firstName: "First",
       lastName: "Last",
       email: "test2@example.com",
-      jurisdictions: user2Profile.jurisdictions.map((jurisdiction) => ({
-        id: jurisdiction.id,
-      })),
       agreedToTermsOfService: false,
     }
     await supertest(app.getHttpServer())

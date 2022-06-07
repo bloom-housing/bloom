@@ -328,6 +328,7 @@ describe("Authz", () => {
         jurisdictions: [jurisdiction],
         confirmedAt: new Date(),
         mfaEnabled: false,
+        roles: {isJurisdictionalAdmin: true}
       }
 
       await usersRepository.save(createJurisdictionalAdminDto)
@@ -383,6 +384,7 @@ describe("Authz", () => {
         jurisdictions: [jurisdiction],
         confirmedAt: new Date(),
         mfaEnabled: false,
+        roles: {isJurisdictionalAdmin: true}
       }
 
       await usersRepository.save(createJurisdictionalAdminDto)
@@ -441,6 +443,7 @@ describe("Authz", () => {
         jurisdictions: [jurisdiction1],
         confirmedAt: new Date(),
         mfaEnabled: false,
+        roles: {isJurisdictionalAdmin: true}
       }
 
       await usersRepository.save(createJurisdictionalAdminDto)
@@ -481,6 +484,7 @@ describe("Authz", () => {
         jurisdictions: [jurisdiction1],
         confirmedAt: new Date(),
         mfaEnabled: false,
+        roles: {isJurisdictionalAdmin: true}
       }
 
       await usersRepository.save(createJurisdictionalAdminDto)

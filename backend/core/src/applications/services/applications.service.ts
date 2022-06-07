@@ -166,12 +166,16 @@ export class ApplicationsService {
   }
 
   async findOne(applicationId: string) {
-    const application = await this.repository.findOneOrFail({
+    const application = await this.repository.findOne({
       where: {
         id: applicationId,
       },
       relations: ["user"],
     })
+
+    if (!application) {
+      throw new NotFoundException()
+    }
 
     await this.authorizeUserAction(
       this.req.user,
