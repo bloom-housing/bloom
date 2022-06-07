@@ -30,7 +30,7 @@ const Layout = (props) => {
       href: "/users",
     })
   }
-  if (profile?.jurisdictions?.filter((jurisdiction) => jurisdiction.enablePartnerSettings).length) {
+  if (profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings)) {
     menuLinks.push({
       title: t("t.settings"),
       href: "/settings",
