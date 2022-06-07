@@ -29,6 +29,8 @@ const Layout = (props) => {
       title: t("nav.users"),
       href: "/users",
     })
+  }
+  if (profile?.jurisdictions?.filter((jurisdiction) => jurisdiction.enablePartnerSettings).length) {
     menuLinks.push({
       title: t("t.settings"),
       href: "/settings",
