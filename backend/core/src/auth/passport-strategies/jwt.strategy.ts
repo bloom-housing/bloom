@@ -39,7 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const userId = payload.sub
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ["leasingAgentInListings", "adminInJurisdictions"],
+      relations: ["leasingAgentInListings"],
     })
 
     if (UserService.isPasswordOutdated(user)) {

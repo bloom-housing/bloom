@@ -176,21 +176,6 @@ export class UserService {
       delete dto.password
     }
 
-    /**
-     * jurisdictions should be filtered based off of what the authContext user has
-     */
-    if ((this.req.user as User).jurisdictions) {
-      if (dto.jurisdictions) {
-        dto.jurisdictions = dto.jurisdictions.filter(
-          (jurisdiction) =>
-            (this.req.user as User).jurisdictions.findIndex((val) => val.id === jurisdiction.id) >
-            -1
-        )
-      }
-    } else {
-      delete dto.jurisdictions
-    }
-
     if (dto.newEmail && dto.appUrl) {
       user.confirmationToken = UserService.createConfirmationToken(user.id, dto.newEmail)
       const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)

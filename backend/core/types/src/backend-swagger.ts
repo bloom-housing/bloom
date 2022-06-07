@@ -3990,6 +3990,9 @@ export interface UserRoles {
   isAdmin?: boolean
 
   /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -4043,9 +4046,6 @@ export interface User {
 
   /**  */
   jurisdictions: Jurisdiction[]
-
-  /**  */
-  adminInJurisdictions?: Jurisdiction[]
 
   /**  */
   id: string
@@ -4161,9 +4161,6 @@ export interface UserBasic {
 
   /**  */
   leasingAgentInListings?: Id[]
-
-  /**  */
-  adminInJurisdictions?: Jurisdiction[]
 
   /**  */
   id: string
@@ -4288,9 +4285,6 @@ export interface UserUpdate {
   currentPassword?: string
 
   /**  */
-  jurisdictions: Id[]
-
-  /**  */
   leasingAgentInListings?: Id[]
 
   /**  */
@@ -4298,9 +4292,6 @@ export interface UserUpdate {
 
   /**  */
   appUrl?: string
-
-  /**  */
-  adminInJurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date

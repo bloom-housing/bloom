@@ -71,14 +71,4 @@ export class Jurisdiction extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   rentalAssistanceDefault: string
-
-  @ManyToMany(() => User, (admin) => admin.adminInJurisdictions, {
-    nullable: true,
-  })
-  @JoinTable()
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => User)
-  admins?: User[] | null
 }

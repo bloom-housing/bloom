@@ -62,29 +62,31 @@ export class AuthzService {
         })
       )
 
-      await Promise.all(
-        user?.adminInJurisdictions.map((adminInJurisdiction: Jurisdiction) => {
-          void e.addPermissionForUser(
-            user.id,
-            "application",
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
-          )
-          void e.addPermissionForUser(
-            user.id,
-            "listing",
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
-          )
+      if (user.roles?.isJurisdictionalAdmin) {
+        await Promise.all(
+          user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
+            void e.addPermissionForUser(
+              user.id,
+              "application",
+              `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+              `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+            )
+            void e.addPermissionForUser(
+              user.id,
+              "listing",
+              `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+              `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+            )
 
-          void e.addPermissionForUser(
-            user.id,
-            "user",
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.invite})`
-          )
-        })
-      )
+            void e.addPermissionForUser(
+              user.id,
+              "user",
+              `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+              `(${authzActions.read}|${authzActions.invite})`
+            )
+          })
+        )
+      }
     }
 
     return await e.enforce(user ? user.id : "anonymous", type, action, obj)

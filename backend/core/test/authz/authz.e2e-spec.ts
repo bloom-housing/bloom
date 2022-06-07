@@ -326,7 +326,6 @@ describe("Authz", () => {
         dob: new Date(),
         passwordHash: await passwordService.passwordToHash(password),
         jurisdictions: [jurisdiction],
-        adminInJurisdictions: [jurisdiction],
         confirmedAt: new Date(),
         mfaEnabled: false,
       }
@@ -382,7 +381,6 @@ describe("Authz", () => {
         dob: new Date(),
         passwordHash: await passwordService.passwordToHash(password),
         jurisdictions: [jurisdiction],
-        adminInJurisdictions: [jurisdiction],
         confirmedAt: new Date(),
         mfaEnabled: false,
       }
@@ -441,7 +439,6 @@ describe("Authz", () => {
         dob: new Date(),
         passwordHash: await passwordService.passwordToHash(password),
         jurisdictions: [jurisdiction1],
-        adminInJurisdictions: [jurisdiction1],
         confirmedAt: new Date(),
         mfaEnabled: false,
       }
@@ -482,7 +479,6 @@ describe("Authz", () => {
         dob: new Date(),
         passwordHash: await passwordService.passwordToHash(password),
         jurisdictions: [jurisdiction1],
-        adminInJurisdictions: [jurisdiction1],
         confirmedAt: new Date(),
         mfaEnabled: false,
       }

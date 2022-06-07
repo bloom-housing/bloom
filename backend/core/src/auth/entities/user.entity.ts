@@ -183,7 +183,4 @@ export class User {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   hitConfirmationURL?: Date | null
-
-  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.admins, { nullable: true })
-  adminInJurisdictions?: Jurisdiction[] | null
 }

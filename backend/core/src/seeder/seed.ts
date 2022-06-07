@@ -358,9 +358,11 @@ async function seed() {
       jurisdictions: [alamedaJurisdiction],
     })
   )
-  alamedaAdmin.adminInJurisdictions = [alamedaJurisdiction]
   await userRepo.save(alamedaAdmin)
   await userService.confirm({ token: alamedaAdmin.confirmationToken })
+
+  const alamedaAdminRoles: UserRoles = { user: alamedaAdmin, isPartner: false, isAdmin: false, isJurisdictionalAdmin: true }
+  await rolesRepo.save(alamedaAdminRoles)
 
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
 

@@ -9,7 +9,6 @@ import { IdNameDto } from "../../shared/dto/idName.dto"
 export class JurisdictionDto extends OmitType(Jurisdiction, [
   "preferences",
   "programs",
-  "admins",
 ] as const) {
   @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
