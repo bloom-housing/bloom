@@ -1,21 +1,16 @@
 export enum Region {
-  Downtown = "Downtown",
+  GreaterDowntown = "Greater Downtown",
   Eastside = "Eastside",
-  MidtownNewCenter = "Midtown - New Center",
   Southwest = "Southwest",
   Westside = "Westside",
 }
 
 // TODO(#674): Get official hosted images
 export const regionImageUrls: Map<Region, string> = new Map([
-  [Region.Downtown, "https://pbs.twimg.com/media/DSzZwQKVAAASkw_?format=jpg&name=large"],
+  [Region.GreaterDowntown, "https://pbs.twimg.com/media/DSzZwQKVAAASkw_?format=jpg&name=large"],
   [
     Region.Eastside,
     "https://d12kp1agyyb87s.cloudfront.net/wp-content/uploads/2019/10/image001.jpg",
-  ],
-  [
-    Region.MidtownNewCenter,
-    "https://cdn.pixabay.com/photo/2019/03/17/04/00/detroit-4060269_960_720.jpg",
   ],
   [
     Region.Southwest,
@@ -42,8 +37,8 @@ export const neighborhoodRegions: Neighborhood[] = [
   { name: "Farwell area", region: Region.Eastside },
   { name: "Gratiot Town / Kettering area", region: Region.Eastside },
   { name: "Gratiot / 7 Mile area", region: Region.Eastside },
-  { name: "Greater Corktown area", region: Region.Downtown },
-  { name: "Greater Downtown area", region: Region.Downtown },
+  { name: "Greater Corktown area", region: Region.GreaterDowntown },
+  { name: "Greater Downtown area", region: Region.GreaterDowntown },
   { name: "Islandview / Greater Villages area", region: Region.Eastside },
   { name: "Jefferson Chalmers area", region: Region.Eastside },
   { name: "Livernois / McNichols area", region: Region.Westside },

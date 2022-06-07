@@ -1,7 +1,6 @@
 export enum Region {
-  Downtown = "Downtown",
+  GreaterDowntown = "Greater Downtown",
   Eastside = "Eastside",
-  MidtownNewCenter = "Midtown - New Center",
   Southwest = "Southwest",
   Westside = "Westside",
 }

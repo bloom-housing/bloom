@@ -7102,9 +7102,8 @@ export enum ListingSeasonEnum {
 }
 
 export enum Region {
-  "Downtown" = "Downtown",
+  "Greater Downtown" = "Greater Downtown",
   "Eastside" = "Eastside",
-  "Midtown - New Center" = "Midtown - New Center",
   "Southwest" = "Southwest",
   "Westside" = "Westside",
 }

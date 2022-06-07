@@ -252,9 +252,9 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
-      const expectedRegionString = "Downtown,Eastside," // intentional extra and trailing commas for test
+      const expectedRegionString = "Greater Downtown,Eastside," // intentional extra and trailing commas for test
       // lowercased, trimmed spaces, filtered empty
-      const expectedRegionArray = ["Downtown", "Eastside"]
+      const expectedRegionArray = ["Greater Downtown", "Eastside"]
 
       const queryParams: ListingsQueryParams = {
         filter: [
@@ -280,9 +280,9 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
-      const neighborhoodString = "Downtown,Eastside," // intentional extra and trailing commas for test
+      const neighborhoodString = "Greater Downtown,Eastside," // intentional extra and trailing commas for test
       // lowercased, trimmed spaces, filtered empty
-      const expectedNeighborhoodArray = ["Downtown", "Eastside"]
+      const expectedNeighborhoodArray = ["Greater Downtown", "Eastside"]
 
       const queryParams: ListingsQueryParams = {
         filter: [

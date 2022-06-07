@@ -124,9 +124,8 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.SupportiveHousingfortheHomeless]?: string | number
   // region
   [FrontendListingFilterStateKeys.region]?: string
-  [FrontendListingFilterStateKeys.Downtown]?: string | boolean
+  [FrontendListingFilterStateKeys.GreaterDowntown]?: string | boolean
   [FrontendListingFilterStateKeys.Eastside]?: string | boolean
-  [FrontendListingFilterStateKeys.MidtownNewCenter]?: string | boolean
   [FrontendListingFilterStateKeys.Southwest]?: string | boolean
   [FrontendListingFilterStateKeys.Westside]?: string | boolean
   // accessibility

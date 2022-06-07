@@ -99,7 +99,7 @@ const FilterForm = (props: FilterFormProps) => {
     setRegionOptions(
       Object.entries(Region).map((elem) => ({
         value: elem[1],
-        label: elem[0] === "MidtownNewCenter" ? "Midtown" : elem[1],
+        label: elem[1],
       }))
     )
 
