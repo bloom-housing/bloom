@@ -5,7 +5,13 @@ import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts"
-import { t, AgPagination, AG_PER_PAGE_OPTIONS } from "@bloom-housing/ui-components"
+import {
+  t,
+  AgPagination,
+  AG_PER_PAGE_OPTIONS,
+  Breadcrumbs,
+  BreadcrumbLink,
+} from "@bloom-housing/ui-components"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
 import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 
@@ -47,10 +53,25 @@ const FlagsPage = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <ApplicationSecondaryNav
+      {/* <ApplicationSecondaryNav
         title={listingName}
         listingId={listingId}
         flagsQty={data?.meta?.totalFlagged}
+      /> */}
+
+      <ApplicationSecondaryNav
+        title={listingName}
+        listingId={listingId}
+        showTabs={true}
+        flagsQty={data?.meta?.totalFlagged}
+        breadcrumbs={
+          <Breadcrumbs>
+            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+            <BreadcrumbLink href={`/listings/${listingId}`} current>
+              {listingName}
+            </BreadcrumbLink>
+          </Breadcrumbs>
+        }
       />
 
       <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">

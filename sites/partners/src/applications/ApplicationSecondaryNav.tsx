@@ -5,7 +5,8 @@ import { useRouter } from "next/router"
 type ApplicationSecondaryNavProps = {
   title: string
   listingId: string
-  flagsQty: number
+  showTabs?: boolean
+  flagsQty?: number
   children?: React.ReactChild
   breadcrumbs?: React.ReactNode
 }
@@ -13,6 +14,7 @@ type ApplicationSecondaryNavProps = {
 const ApplicationSecondaryNav = ({
   title,
   listingId,
+  showTabs,
   flagsQty,
   children,
   breadcrumbs,
@@ -20,20 +22,30 @@ const ApplicationSecondaryNav = ({
   const router = useRouter()
   const currentPath = router?.asPath
 
-  const tabNavElements = useMemo(
-    () => [
+  const tabNavElements = useMemo(() => {
+    const elements = [
+      {
+        label: t("t.listingSingle"),
+        path: `/listings/${listingId}`,
+        content: undefined,
+      },
       {
         label: t("nav.applications"),
         path: `/listings/${listingId}/applications`,
+        content: undefined,
       },
-      {
+    ]
+
+    if (process.env.showDuplicates && typeof flagsQty === "number") {
+      elements.push({
         label: t("nav.flags"),
         path: `/listings/${listingId}/flags`,
         content: <>{flagsQty}</>,
-      },
-    ],
-    [flagsQty, listingId]
-  )
+      })
+    }
+
+    return elements
+  }, [flagsQty, listingId])
 
   const tabs = useMemo(() => {
     return (
@@ -54,11 +66,7 @@ const ApplicationSecondaryNav = ({
   }, [currentPath, tabNavElements])
 
   return (
-    <PageHeader
-      title={title}
-      tabNav={process.env.showDuplicates ? tabs : null}
-      breadcrumbs={breadcrumbs}
-    >
+    <PageHeader title={title} tabNav={showTabs ? tabs : null} breadcrumbs={breadcrumbs}>
       {children}
     </PageHeader>
   )

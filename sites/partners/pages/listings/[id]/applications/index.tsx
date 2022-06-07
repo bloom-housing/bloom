@@ -132,6 +132,7 @@ const ApplicationsList = () => {
 
       <ApplicationSecondaryNav
         title={listingName}
+        showTabs={true}
         listingId={listingId}
         flagsQty={flaggedApps?.meta?.totalFlagged}
         breadcrumbs={

@@ -3,7 +3,6 @@ import Head from "next/head"
 import axios from "axios"
 import {
   AppearanceStyleType,
-  PageHeader,
   t,
   Tag,
   AlertBox,
@@ -12,6 +11,7 @@ import {
   BreadcrumbLink,
 } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
+import { ApplicationSecondaryNav } from "../../../src/applications/ApplicationSecondaryNav"
 
 import ListingGuard from "../../../src/ListingGuard"
 import Layout from "../../../layouts"
@@ -37,6 +37,7 @@ import DetailApplicationDates from "../../../src/listings/PaperListingDetails/se
 import DetailPreferences from "../../../src/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../src/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
+import { useFlaggedApplicationsList } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -46,6 +47,12 @@ export default function ListingDetail(props: ListingProps) {
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
+
+  const { data: flaggedApps } = useFlaggedApplicationsList({
+    listingId: listing.id,
+    page: 1,
+    limit: 1,
+  })
 
   const listingStatus = useMemo(() => {
     switch (listing?.status) {
@@ -81,20 +88,11 @@ export default function ListingDetail(props: ListingProps) {
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
 
-            <PageHeader
-              className="relative"
-              title={
-                <>
-                  <p
-                    data-test-id="page-header-text"
-                    className="font-sans font-semibold uppercase text-3xl"
-                  >
-                    {listing.name}
-                  </p>
-
-                  <p className="font-sans text-base mt-1">{listing.id}</p>
-                </>
-              }
+            <ApplicationSecondaryNav
+              title={listing.name}
+              flagsQty={flaggedApps?.meta?.totalFlagged}
+              showTabs={listing.status !== ListingStatus.pending}
+              listingId={listing.id}
               breadcrumbs={
                 <Breadcrumbs>
                   <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
@@ -107,7 +105,8 @@ export default function ListingDetail(props: ListingProps) {
               <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
                 <SiteAlert type="success" timeout={5000} dismissable />
               </div>
-            </PageHeader>
+            </ApplicationSecondaryNav>
+
             <section className="border-t bg-white">
               <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
                 <div className="status-bar__status md:pl-4 md:w-3/12">{listingStatus}</div>
