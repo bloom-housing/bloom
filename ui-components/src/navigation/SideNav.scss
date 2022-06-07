@@ -3,23 +3,25 @@
   @apply rounded-lg;
 
   li {
-    &:first-of-type a {
+    &:first-of-type {
       @apply rounded-t-lg;
     }
 
-    &:last-of-type a {
+    &:last-of-type {
       @apply rounded-b-lg;
     }
 
     &.is-current {
-      @apply text-gray-900;
       cursor: pointer;
       @apply text-gray-900;
+      box-shadow: inset 3px 0px 0px 0px $tailwind-primary;
       @apply block;
       @apply px-4;
       @apply py-2;
+    }
+
+    &:not(:last-child) {
       @apply border-b;
-      @apply bg-primary-lighter;
     }
   }
 
@@ -28,8 +30,6 @@
     @apply block;
     @apply px-4;
     @apply py-2;
-    @apply border-b;
-
     &:hover {
       @apply bg-primary-lighter;
       @apply text-primary;

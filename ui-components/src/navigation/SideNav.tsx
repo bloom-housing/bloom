@@ -21,7 +21,7 @@ const SideNav = (props: SideNavProps) => {
         {props.navItems?.map((navItem: SideNavItemProps, index: number) => {
           if (navItem.current) {
             return (
-              <li className="is-current" key={index}>
+              <li className="is-current" key={index} aria-selected>
                 {navItem.label}
               </li>
             )

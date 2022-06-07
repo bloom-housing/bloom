@@ -19,8 +19,8 @@ export const Default = () => (
 export const Current = () => (
   <SideNav
     navItems={[
-      { label: "Nav Item 1", url: "#", current: false },
-      { label: "Nav Item 2", url: "#", current: true },
+      { label: "Nav Item 1", url: "#", current: true },
+      { label: "Nav Item 2", url: "#", current: false },
       { label: "Nav Item 3", url: "#", current: false },
     ]}
   />
