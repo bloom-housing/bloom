@@ -1,11 +1,14 @@
 import React, { useState } from "react"
-import { t } from "@bloom-housing/ui-components"
 
 type ExpandableContentProps = {
   children: React.ReactChild
+  strings: {
+    readMore?: string
+    readLess?: string
+  }
 }
 
-const ExpandableContent = ({ children }: ExpandableContentProps) => {
+const ExpandableContent = ({ children, strings }: ExpandableContentProps) => {
   const [isExpanded, setExpanded] = useState(false)
 
   return (
@@ -18,7 +21,7 @@ const ExpandableContent = ({ children }: ExpandableContentProps) => {
           setExpanded(!isExpanded)
         }}
       >
-        {t(isExpanded ? "t.readLess" : "t.readMore")}
+        {isExpanded ? strings.readLess : strings.readMore}
       </button>
 
       {isExpanded && <div className="mt-6">{children}</div>}

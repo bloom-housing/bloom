@@ -117,7 +117,7 @@ export * from "./src/page_components/listing/listing_sidebar/ReferralApplication
 export * from "./src/page_components/listing/listing_sidebar/ContactAddress"
 export * from "./src/page_components/listing/listing_sidebar/SubmitApplication"
 export * from "./src/page_components/listing/listing_sidebar/QuantityRowSection"
-export * from "./src/page_components/listing/listing_sidebar/WhatToExpect"
+export * from "./src/page_components/listing/listing_sidebar/ExpandableSection"
 export * from "./src/page_components/listing/listing_sidebar/events/DownloadLotteryResults"
 export * from "./src/page_components/listing/listing_sidebar/events/EventSection"
 export * from "./src/page_components/sign-in/FormTerms"
