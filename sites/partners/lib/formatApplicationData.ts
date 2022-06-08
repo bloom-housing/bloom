@@ -11,16 +11,14 @@ import {
   Accessibility,
 } from "@bloom-housing/backend-core/types"
 
-import {
-  TimeFieldPeriod,
-  mapPreferencesToApi,
-  mapApiToPreferencesForm,
-} from "@bloom-housing/ui-components"
+import { TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   fieldGroupObjectToArray,
   mapProgramsToApi,
   mapApiToProgramsPaperForm,
   adaFeatureKeys,
+  mapPreferencesToApi,
+  mapApiToPreferencesForm,
 } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
