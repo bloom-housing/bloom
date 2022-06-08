@@ -1,5 +1,5 @@
-$tooltip_padding: 8px;
-$tooltip_arrow_height: 9px;
+$tooltip_padding: 9px;
+$tooltip_arrow_height: 10px;
 
 .tooltip {
   @apply relative;
@@ -34,7 +34,7 @@ $tooltip_arrow_height: 9px;
     @apply w-0 h-0;
     @apply border-solid;
     @apply left-1/2;
-    bottom: -$tooltip_arrow_height;
+    bottom: -8px;
     transform: translateX(-50%);
     border-width: $tooltip_arrow_height 7px 0 7px;
     border-color: theme("colors.primary-dark") transparent transparent transparent;

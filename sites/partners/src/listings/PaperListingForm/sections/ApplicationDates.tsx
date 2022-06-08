@@ -60,7 +60,7 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
                 id="marketingSeason"
                 name="marketingSeason"
                 label={t("listings.marketingSection.date")}
-                defaultValue={listing.marketingSeason}
+                defaultValue={listing?.marketingSeason}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
@@ -71,7 +71,7 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
                 name={"marketingStartDate"}
                 id={"marketingStartDate"}
                 placeholder={t("account.settings.placeholders.year")}
-                defaultValue={listing.marketingDate ? dayjs(listing.marketingDate).year() : null}
+                defaultValue={listing?.marketingDate ? dayjs(listing.marketingDate).year() : null}
                 type={"number"}
                 register={register}
                 inputProps={{

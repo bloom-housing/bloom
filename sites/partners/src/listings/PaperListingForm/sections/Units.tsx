@@ -176,6 +176,7 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
               editSummary(unitsSummaries.length + 1)
               clearErrors("unitsSummaries")
             }}
+            dataTestId="addUnitsButton"
           >
             {t("listings.unitsSummary.add")}
           </Button>

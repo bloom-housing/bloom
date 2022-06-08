@@ -5,8 +5,6 @@ import {
   Field,
   Button,
   AppearanceStyleType,
-  FrontendListingFilterStateKeys,
-  ListingFilterState,
   GridSection,
   GridCell,
   AppearanceBorderType,
@@ -14,10 +12,14 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { Region } from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
+import {
+  listingFeatures,
+  Region,
+  FrontendListingFilterStateKeys,
+  ListingFilterState,
+} from "@bloom-housing/shared-helpers"
 
 interface FilterFormProps {
   onSubmit: (data: ListingFilterState) => void
@@ -97,7 +99,7 @@ const FilterForm = (props: FilterFormProps) => {
     setRegionOptions(
       Object.entries(Region).map((elem) => ({
         value: elem[1],
-        label: elem[0] === "MidtownNewCenter" ? "Midtown" : elem[1],
+        label: elem[1],
       }))
     )
 

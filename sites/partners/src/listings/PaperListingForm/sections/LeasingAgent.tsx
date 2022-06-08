@@ -52,6 +52,7 @@ const LeasingAgent = () => {
             inputProps={{
               onChange: () => clearErrors("leasingAgentName"),
             }}
+            dataTestId="leasingAgentName"
           />
           <Field
             label={t("t.email")}
@@ -64,6 +65,7 @@ const LeasingAgent = () => {
             inputProps={{
               onChange: () => clearErrors("leasingAgentEmail"),
             }}
+            dataTestId="leasingAgentEmail"
           />
           <PhoneField
             label={t("t.phone")}
@@ -75,6 +77,7 @@ const LeasingAgent = () => {
             control={control}
             controlClassName={"control"}
             required={true}
+            dataTestId="leasingAgentPhone"
           />
         </GridSection>
         <GridSection columns={2}>
@@ -85,6 +88,7 @@ const LeasingAgent = () => {
               id={"leasingAgentTitle"}
               placeholder={t("leasingAgent.title")}
               register={register}
+              dataTestId="leasingAgentTitle"
             />
             <Field
               label={t("leasingAgent.managementWebsite")}
@@ -104,6 +108,7 @@ const LeasingAgent = () => {
                   ? trigger("managementWebsite")
                   : clearErrors("managementWebsite")
               }
+              dataTestId="managementWebsite"
             />
           </GridSection>
           <Textarea
@@ -113,6 +118,7 @@ const LeasingAgent = () => {
             fullWidth={true}
             placeholder={t("leasingAgent.officeHoursPlaceholder")}
             register={register}
+            dataTestId="leasingAgentOfficeHours"
           />
         </GridSection>
         <GridSection columns={3} subtitle={"Leasing Agent Address"}>
@@ -128,6 +134,7 @@ const LeasingAgent = () => {
               inputProps={{
                 onChange: () => clearErrors("leasingAgentAddress"),
               }}
+              dataTestId="leasingAgentAddress.street"
             />
           </GridCell>
           <Field
@@ -136,6 +143,7 @@ const LeasingAgent = () => {
             id={"leasingAgentAddress.street2"}
             register={register}
             placeholder={t("application.contact.apt")}
+            dataTestId="leasingAgentAddress.street2"
           />
         </GridSection>
         <GridSection columns={7}>
@@ -151,6 +159,7 @@ const LeasingAgent = () => {
               inputProps={{
                 onChange: () => clearErrors("leasingAgentAddress"),
               }}
+              dataTestId="leasingAgentAddress.city"
             />
           </GridCell>
           <GridCell span={2}>
@@ -169,6 +178,7 @@ const LeasingAgent = () => {
                 inputProps={{
                   onChange: () => clearErrors("leasingAgentAddress"),
                 }}
+                dataTestId="leasingAgentAddress.state"
               />
             </ViewItem>
           </GridCell>
@@ -184,6 +194,7 @@ const LeasingAgent = () => {
               inputProps={{
                 onChange: () => clearErrors("leasingAgentAddress"),
               }}
+              dataTestId="leasingAgentAddress.zipCode"
             />
           </GridCell>
         </GridSection>

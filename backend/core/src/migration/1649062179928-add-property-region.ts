@@ -3,7 +3,7 @@ import { Region } from "../property/types/region-enum"
 
 export interface Neighborhood {
   name: string
-  region: Region
+  region: string
 }
 
 export class addPropertyRegion1649062179928 implements MigrationInterface {
@@ -12,34 +12,34 @@ export class addPropertyRegion1649062179928 implements MigrationInterface {
   // NOTE: imported from https://github.com/CityOfDetroit/bloom/blob/main/ui-components/src/helpers/regionNeighborhoodMap.ts
   //  Issue comment: https://github.com/CityOfDetroit/bloom/issues/1015#issuecomment-1068056607
   neighborhoods: Neighborhood[] = [
-    { name: "Airport Sub area", region: Region.Eastside },
-    { name: "Barton McFarland area", region: Region.Westside },
-    { name: "Boston-Edison/North End area", region: Region.Westside },
-    { name: "Boynton", region: Region.Southwest },
-    { name: "Campau/Banglatown", region: Region.Eastside },
-    { name: "Dexter Linwood", region: Region.Westside },
-    { name: "Farwell area", region: Region.Eastside },
-    { name: "Gratiot Town/Kettering area", region: Region.Eastside },
-    { name: "Gratiot/7 Mile area", region: Region.Eastside },
-    { name: "Greater Corktown area", region: Region.Downtown },
-    { name: "Greater Downtown area", region: Region.Downtown },
-    { name: "Greater Downtown area", region: Region.Downtown },
-    { name: "Islandview/Greater Villages area", region: Region.Eastside },
-    { name: "Islandview/Greater Villages area", region: Region.Eastside },
-    { name: "Islandview/Greater Villages area", region: Region.Westside },
-    { name: "Jefferson Chalmers area", region: Region.Eastside },
-    { name: "Livernois/McNichols area", region: Region.Westside },
-    { name: "Livernois/McNichols area", region: Region.Westside },
-    { name: "Morningside area", region: Region.Eastside },
-    { name: "North Campau area", region: Region.Eastside },
-    { name: "Northwest Grand River area", region: Region.Westside },
-    { name: "Northwest University District area", region: Region.Westside },
-    { name: "Palmer Park area", region: Region.Westside },
-    { name: "Russell Woods/Nardin Park area", region: Region.Westside },
-    { name: "Southwest/Vernor area", region: Region.Southwest },
-    { name: "Southwest/Vernor area", region: Region.Southwest },
-    { name: "Warrendale/Cody Rouge", region: Region.Westside },
-    { name: "West End area", region: Region.Eastside },
+    { name: "Airport Sub area", region: "Eastside" },
+    { name: "Barton McFarland area", region: "Westside" },
+    { name: "Boston-Edison/North End area", region: "Westside" },
+    { name: "Boynton", region: "Southwest" },
+    { name: "Campau/Banglatown", region: "Eastside" },
+    { name: "Dexter Linwood", region: "Westside" },
+    { name: "Farwell area", region: "Eastside" },
+    { name: "Gratiot Town/Kettering area", region: "Eastside" },
+    { name: "Gratiot/7 Mile area", region: "Eastside" },
+    { name: "Greater Corktown area", region: "Downtown" },
+    { name: "Greater Downtown area", region: "Downtown" },
+    { name: "Greater Downtown area", region: "Downtown" },
+    { name: "Islandview/Greater Villages area", region: "Eastside" },
+    { name: "Islandview/Greater Villages area", region: "Eastside" },
+    { name: "Islandview/Greater Villages area", region: "Westside" },
+    { name: "Jefferson Chalmers area", region: "Eastside" },
+    { name: "Livernois/McNichols area", region: "Westside" },
+    { name: "Livernois/McNichols area", region: "Westside" },
+    { name: "Morningside area", region: "Eastside" },
+    { name: "North Campau area", region: "Eastside" },
+    { name: "Northwest Grand River area", region: "Westside" },
+    { name: "Northwest University District area", region: "Westside" },
+    { name: "Palmer Park area", region: "Westside" },
+    { name: "Russell Woods/Nardin Park area", region: "Westside" },
+    { name: "Southwest/Vernor area", region: "Southwest" },
+    { name: "Southwest/Vernor area", region: "Southwest" },
+    { name: "Warrendale/Cody Rouge", region: "Westside" },
+    { name: "West End area", region: "Eastside" },
   ]
 
   public async up(queryRunner: QueryRunner): Promise<void> {

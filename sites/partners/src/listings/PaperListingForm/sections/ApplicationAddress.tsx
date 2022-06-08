@@ -761,6 +761,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               fullWidth={true}
               register={register}
               placeholder={t("t.addNotes")}
+              dataTestId="additionalApplicationSubmissionNotes"
             />
           </GridCell>
         </GridSection>

@@ -1,4 +1,4 @@
-import { encodeToFrontendFilterString, ListingFilterState } from "@bloom-housing/ui-components"
+import { encodeToFrontendFilterString, ListingFilterState } from "@bloom-housing/shared-helpers"
 import { AgeRangeType } from "./EligibilityContext"
 
 export function getFilterUrlLink(eligibilityRequirements) {

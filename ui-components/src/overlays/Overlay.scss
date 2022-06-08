@@ -5,9 +5,9 @@
   @apply left-0;
   @apply fixed;
   @apply w-screen;
-  @apply h-screen;
   @apply z-50;
   @apply flex;
+  height: 100%;
 
   &.is-backdrop:before {
     content: "";

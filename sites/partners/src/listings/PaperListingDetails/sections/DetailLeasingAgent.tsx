@@ -15,27 +15,39 @@ const DetailLeasingAgent = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem id="leasingAgentName" label={t("leasingAgent.name")}>
+          <ViewItem
+            id="leasingAgentName"
+            dataTestId="leasingAgentName"
+            label={t("leasingAgent.name")}
+          >
             {getDetailFieldString(listing.leasingAgentName)}
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem id="leasingAgentEmail" label={t("t.email")}>
+          <ViewItem id="leasingAgentEmail" dataTestId="leasingAgentEmail" label={t("t.email")}>
             {getDetailFieldString(listing.leasingAgentEmail)}
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem id="leasingAgentPhone" label={t("t.phone")}>
+          <ViewItem id="leasingAgentPhone" dataTestId="leasingAgentPhone" label={t("t.phone")}>
             {getDetailFieldString(listing.leasingAgentPhone)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem id="leasingAgentTitle" label={t("leasingAgent.title")}>
+          <ViewItem
+            id="leasingAgentTitle"
+            dataTestId="leasingAgentTitle"
+            label={t("leasingAgent.title")}
+          >
             {getDetailFieldString(listing.leasingAgentTitle)}
           </ViewItem>
-          <ViewItem id="managementWebsite" label={t("leasingAgent.managementWebsite")}>
+          <ViewItem
+            id="managementWebsite"
+            dataTestId="managementWebsite"
+            label={t("leasingAgent.managementWebsite")}
+          >
             {listing.managementWebsite ? (
               <a target="_blank" href={listing.managementWebsite}>
                 {getDetailFieldString(listing.managementWebsite)}
@@ -46,7 +58,11 @@ const DetailLeasingAgent = () => {
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem id="leasingAgentOfficeHours" label={t("leasingAgent.officeHours")}>
+          <ViewItem
+            id="leasingAgentOfficeHours"
+            dataTestId="leasingAgentOfficeHours"
+            label={t("leasingAgent.officeHours")}
+          >
             {getDetailFieldString(listing.leasingAgentOfficeHours)}
           </ViewItem>
         </GridCell>

@@ -146,6 +146,7 @@ const UnitsSummaryAmiForm = ({
                     }
                   },
                 }}
+                dataTestId="amiChartId"
               />
             </ViewItem>
           </GridCell>
@@ -159,6 +160,7 @@ const UnitsSummaryAmiForm = ({
                 register={register}
                 controlClassName="control"
                 options={amiPercentageOptions}
+                dataTestId="amiPercentage"
               />
             </ViewItem>
           </GridCell>
@@ -173,6 +175,7 @@ const UnitsSummaryAmiForm = ({
                 fieldGroupClassName="flex h-12 items-center"
                 error={errors?.monthlyRentDeterminationType !== undefined}
                 errorMessage={t("errors.requiredFieldError")}
+                dataTestId="monthlyRentDeterminationType"
               />
             </ViewItem>
           </GridCell>
@@ -189,6 +192,7 @@ const UnitsSummaryAmiForm = ({
                   type="number"
                   error={errors?.percentageOfIncomeValue !== undefined}
                   errorMessage={t("errors.requiredFieldError")}
+                  dataTestId="percentageOfIncomeValue"
                 />
               </ViewItem>
             ) : (
@@ -203,6 +207,7 @@ const UnitsSummaryAmiForm = ({
                   type="number"
                   error={errors?.flatRentValue !== undefined}
                   errorMessage={t("errors.requiredFieldError")}
+                  dataTestId="flatRentValue"
                 />
               </ViewItem>
             )}
@@ -214,6 +219,7 @@ const UnitsSummaryAmiForm = ({
           type="button"
           onClick={() => onFormSubmit()}
           styleType={AppearanceStyleType.primary}
+          dataTestId="saveAmi"
         >
           {t("t.save")}
         </Button>

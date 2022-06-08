@@ -9,7 +9,6 @@ import {
   ActionBlock,
   LinkButton,
   Icon,
-  encodeToFrontendFilterString,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
@@ -28,7 +27,8 @@ import moment from "moment"
 import {
   Region,
   regionImageUrls,
-} from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
+  encodeToFrontendFilterString,
+} from "@bloom-housing/shared-helpers"
 
 export default function Home({ latestListings }) {
   const showLatestListings = false // Disabled for now

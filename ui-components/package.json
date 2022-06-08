@@ -72,7 +72,6 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^4.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
-    "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
     "@types/markdown-to-jsx": "^6.11.2",
     "@types/node": "^12.12.67",
@@ -82,7 +81,6 @@
     "@types/react-text-mask": "^5.4.6",
     "@types/react-transition-group": "^4.4.0",
     "axios": "0.21.2",
-    "body-scroll-lock": "^3.1.5",
     "dayjs": "^1.10.7",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",

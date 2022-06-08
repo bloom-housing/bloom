@@ -3,7 +3,7 @@ import {
   ListingFilterKeys,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
-import { Region } from "./regionNeighborhoodMap"
+import { Region } from "./regions"
 
 // TODO(#629): Refactor filter state storage strategy
 // Currently, the knowledge of "what a filter is" is spread across multiple
@@ -124,9 +124,8 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.SupportiveHousingfortheHomeless]?: string | number
   // region
   [FrontendListingFilterStateKeys.region]?: string
-  [FrontendListingFilterStateKeys.Downtown]?: string | boolean
+  [FrontendListingFilterStateKeys.GreaterDowntown]?: string | boolean
   [FrontendListingFilterStateKeys.Eastside]?: string | boolean
-  [FrontendListingFilterStateKeys.MidtownNewCenter]?: string | boolean
   [FrontendListingFilterStateKeys.Southwest]?: string | boolean
   [FrontendListingFilterStateKeys.Westside]?: string | boolean
   // accessibility
