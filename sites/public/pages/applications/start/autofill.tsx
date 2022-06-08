@@ -27,7 +27,7 @@ export default () => {
   const router = useRouter()
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
-  const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
+  const { profile, applicationsService } = useContext(AuthContext)
   const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
 
@@ -73,9 +73,7 @@ export default () => {
 
   useEffect(() => {
     if (!profile || previousApplication) {
-      if (initialStateLoaded) {
-        onSubmit()
-      }
+      if (!previousApplication) onSubmit()
       return
     }
     void applicationsService
@@ -89,10 +87,11 @@ export default () => {
         if (res && res?.items?.length) {
           setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
         } else {
+          console.log("empty search")
           onSubmit()
         }
       })
-  }, [profile, previousApplication, applicationsService, initialStateLoaded, onSubmit])
+  }, [profile, previousApplication, applicationsService, onSubmit])
 
   return previousApplication ? (
     <FormsLayout>
