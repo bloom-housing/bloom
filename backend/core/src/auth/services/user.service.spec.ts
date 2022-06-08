@@ -225,7 +225,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
         jurisdictions: [],
-        roles: {}
+        roles: {},
       }
 
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)

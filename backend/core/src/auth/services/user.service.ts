@@ -576,9 +576,14 @@ export class UserService {
         // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
         await Promise.all(
           dto.jurisdictions.map(async (jurisdiction) => {
-            await this.authzService.canOrThrow(this.req.user, "user", authzActions.inviteJurisdictionalAdmin, {
-              jurisdictionId: jurisdiction.id,
-            })
+            await this.authzService.canOrThrow(
+              this.req.user,
+              "user",
+              authzActions.inviteJurisdictionalAdmin,
+              {
+                jurisdictionId: jurisdiction.id,
+              }
+            )
           })
         )
       }
@@ -601,5 +606,4 @@ export class UserService {
       )
     }
   }
-
 }

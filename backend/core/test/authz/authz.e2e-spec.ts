@@ -412,7 +412,7 @@ describe("Authz", () => {
         lastName: "Name",
         jurisdictions: [jurisdiction],
         leasingAgentInListings: [{ id: listingResponse.body.id }],
-        roles: {isPartner: true},
+        roles: { isPartner: true },
       }
 
       await supertest(app.getHttpServer())
@@ -512,7 +512,7 @@ describe("Authz", () => {
         lastName: "Name",
         jurisdictions: [jurisdiction2],
         leasingAgentInListings: [{ id: listingResponse.body.id }],
-        roles: {isPartner: true}
+        roles: { isPartner: true },
       }
 
       await supertest(app.getHttpServer())
@@ -540,7 +540,7 @@ describe("Authz", () => {
         jurisdictions: [jurisdiction1],
         confirmedAt: new Date(),
         mfaEnabled: false,
-        roles: {isJurisdictionalAdmin: true}
+        roles: { isJurisdictionalAdmin: true },
       }
 
       await usersRepository.save(createJurisdictionalAdminDto)
@@ -556,7 +556,7 @@ describe("Authz", () => {
         firstName: "Name",
         lastName: "Name",
         jurisdictions: [jurisdiction1],
-        roles: {isAdmin: true}
+        roles: { isAdmin: true },
       }
 
       await supertest(app.getHttpServer())
@@ -589,7 +589,7 @@ describe("Authz", () => {
         jurisdictions: [jurisdiction1],
         confirmedAt: new Date(),
         mfaEnabled: false,
-        roles: {isJurisdictionalAdmin: true}
+        roles: { isJurisdictionalAdmin: true },
       }
 
       await usersRepository.save(createJurisdictionalAdminDto)
@@ -605,7 +605,7 @@ describe("Authz", () => {
         firstName: "Name",
         lastName: "Name",
         jurisdictions: [jurisdiction1],
-        roles: {isJurisdictionalAdmin: true}
+        roles: { isJurisdictionalAdmin: true },
       }
 
       await supertest(app.getHttpServer())
