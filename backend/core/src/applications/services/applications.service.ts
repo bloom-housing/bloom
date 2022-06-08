@@ -370,7 +370,7 @@ export class ApplicationsService {
   ) {
     const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
 
-    let resource: T & { listingId: string; jurisdictionId: string } = {
+    const resource: T & { listingId: string; jurisdictionId: string } = {
       ...app,
       listingId,
       jurisdictionId,

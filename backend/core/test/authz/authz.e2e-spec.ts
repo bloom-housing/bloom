@@ -47,7 +47,9 @@ describe("Authz", () => {
 
   beforeAll(async () => {
     const testEmailService = {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       invite: async () => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       confirmation: async () => {},
     }
 
@@ -397,7 +399,7 @@ describe("Authz", () => {
       // use jurisdictional admin account to create new user and edit it
 
       const newListingCreateDto = makeTestListing(jurisdiction.id)
-      let listingResponse = await supertest(app.getHttpServer())
+      const listingResponse = await supertest(app.getHttpServer())
         .post(`/listings`)
         .send(newListingCreateDto)
         .set(...setAuthorization(jurisdictionalAdminAccessToken))
@@ -497,7 +499,7 @@ describe("Authz", () => {
       )
 
       const newListingCreateDto = makeTestListing(jurisdiction2.id)
-      let listingResponse = await supertest(app.getHttpServer())
+      const listingResponse = await supertest(app.getHttpServer())
         .post(`/listings`)
         .send(newListingCreateDto)
         .set(...setAuthorization(adminAccessToken))

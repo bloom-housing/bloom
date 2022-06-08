@@ -568,7 +568,7 @@ export class UserService {
 
   private async validateInviteActionPermissionsOrThrow(dto: UserInviteDto) {
     if (dto.roles.isAdmin) {
-      await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.inviteSuperAdmin, null)
+      await this.authzService.canOrThrow(this.req.user, "user", authzActions.inviteSuperAdmin, null)
     }
 
     if (dto.roles.isJurisdictionalAdmin) {
@@ -576,7 +576,7 @@ export class UserService {
         // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
         await Promise.all(
           dto.jurisdictions.map(async (jurisdiction) => {
-            await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.inviteJurisdictionalAdmin, {
+            await this.authzService.canOrThrow(this.req.user, "user", authzActions.inviteJurisdictionalAdmin, {
               jurisdictionId: jurisdiction.id,
             })
           })
@@ -591,11 +591,10 @@ export class UserService {
           return await this.listingRepository.getJurisdictionIdByListingId(listing.id)
         })
       )
-      console.log(jurisdictionsIds)
 
       await Promise.all(
         jurisdictionsIds.map(async (jurisdictionId) => {
-          await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invitePartner, {
+          await this.authzService.canOrThrow(this.req.user, "user", authzActions.invitePartner, {
             jurisdictionId,
           })
         })
