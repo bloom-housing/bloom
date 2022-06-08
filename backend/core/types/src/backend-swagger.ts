@@ -4340,6 +4340,17 @@ export interface PaginatedUserList {
   meta: PaginationMeta
 }
 
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
 export interface UserInvite {
   /**  */
   language?: Language
@@ -4349,6 +4360,9 @@ export interface UserInvite {
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  roles?: UserRolesCreate
 
   /**  */
   confirmedAt?: Date
