@@ -225,11 +225,12 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
         jurisdictions: [],
+        roles: {}
       }
 
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
       mockUserRepo.save = jest.fn().mockResolvedValue(user)
-      const savedUser = await service.invitePartnersPortalUser(user)
+      const savedUser = await service.invite(user)
       expect(savedUser).toBe(user)
 
       // Reset mockUserRepo.save

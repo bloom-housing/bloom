@@ -410,6 +410,7 @@ describe("Authz", () => {
         lastName: "Name",
         jurisdictions: [jurisdiction],
         leasingAgentInListings: [{ id: listingResponse.body.id }],
+        roles: {isPartner: true},
       }
 
       await supertest(app.getHttpServer())
@@ -509,12 +510,115 @@ describe("Authz", () => {
         lastName: "Name",
         jurisdictions: [jurisdiction2],
         leasingAgentInListings: [{ id: listingResponse.body.id }],
+        roles: {isPartner: true}
       }
 
       await supertest(app.getHttpServer())
         .post(`/user/invite`)
         .send(userInviteDto)
         .set("jurisdictionName", jurisdiction2.name)
+        .set(...setAuthorization(jurisdictionalAdminAccessToken))
+        .expect(403)
+    })
+
+    it("cannot add new super admins", async () => {
+      const jurisdiction1 = await jurisdictionsRepository.save({
+        name: `j-${uuid.v4()}`,
+        rentalAssistanceDefault: "",
+      })
+
+      const password = "abcdef"
+      const createJurisdictionalAdminDto: DeepPartial<User> = {
+        email: `j-admin-${uuid.v4()}@example.com`,
+        firstName: "first",
+        middleName: "mid",
+        lastName: "last",
+        dob: new Date(),
+        passwordHash: await passwordService.passwordToHash(password),
+        jurisdictions: [jurisdiction1],
+        confirmedAt: new Date(),
+        mfaEnabled: false,
+        roles: {isJurisdictionalAdmin: true}
+      }
+
+      await usersRepository.save(createJurisdictionalAdminDto)
+
+      const jurisdictionalAdminAccessToken = await getUserAccessToken(
+        app,
+        createJurisdictionalAdminDto.email,
+        password
+      )
+
+      const userInviteDto: UserInviteDto = {
+        email: `partner-${uuid.v4()}@example.com`,
+        firstName: "Name",
+        lastName: "Name",
+        jurisdictions: [jurisdiction1],
+        roles: {isAdmin: true}
+      }
+
+      await supertest(app.getHttpServer())
+        .post(`/user/invite`)
+        .send(userInviteDto)
+        .set("jurisdictionName", jurisdiction1.name)
+        .set(...setAuthorization(jurisdictionalAdminAccessToken))
+        .expect(403)
+    })
+
+    it("can add new jurisdictional admins to own jurisdiction but not other", async () => {
+      const jurisdiction1 = await jurisdictionsRepository.save({
+        name: `j-${uuid.v4()}`,
+        rentalAssistanceDefault: "",
+      })
+
+      const jurisdiction2 = await jurisdictionsRepository.save({
+        name: `j-${uuid.v4()}`,
+        rentalAssistanceDefault: "",
+      })
+
+      const password = "abcdef"
+      const createJurisdictionalAdminDto: DeepPartial<User> = {
+        email: `j-admin-${uuid.v4()}@example.com`,
+        firstName: "first",
+        middleName: "mid",
+        lastName: "last",
+        dob: new Date(),
+        passwordHash: await passwordService.passwordToHash(password),
+        jurisdictions: [jurisdiction1],
+        confirmedAt: new Date(),
+        mfaEnabled: false,
+        roles: {isJurisdictionalAdmin: true}
+      }
+
+      await usersRepository.save(createJurisdictionalAdminDto)
+
+      const jurisdictionalAdminAccessToken = await getUserAccessToken(
+        app,
+        createJurisdictionalAdminDto.email,
+        password
+      )
+
+      const userInviteDto: UserInviteDto = {
+        email: `partner-${uuid.v4()}@example.com`,
+        firstName: "Name",
+        lastName: "Name",
+        jurisdictions: [jurisdiction1],
+        roles: {isJurisdictionalAdmin: true}
+      }
+
+      await supertest(app.getHttpServer())
+        .post(`/user/invite`)
+        .send(userInviteDto)
+        .set("jurisdictionName", jurisdiction1.name)
+        .set(...setAuthorization(jurisdictionalAdminAccessToken))
+        .expect(201)
+
+      userInviteDto.jurisdictions = [jurisdiction2]
+
+      await supertest(app.getHttpServer())
+        .post(`/user/invite`)
+        .send(userInviteDto)
+        .set("jurisdictionName", jurisdiction1.name)
         .set(...setAuthorization(jurisdictionalAdminAccessToken))
         .expect(403)
     })

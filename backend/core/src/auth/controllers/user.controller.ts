@@ -148,7 +148,7 @@ export class UserController {
   @ApiOperation({ summary: "Invite user", operationId: "invite" })
   @UseInterceptors(ActivityLogInterceptor)
   async invite(@Body() dto: UserInviteDto): Promise<UserBasicDto> {
-    return mapTo(UserBasicDto, await this.userService.invitePartnersPortalUser(dto))
+    return mapTo(UserBasicDto, await this.userService.invite(dto))
   }
 
   @Get(`:id`)

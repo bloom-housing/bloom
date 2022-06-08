@@ -382,6 +382,7 @@ describe("Applications", () => {
       dob: new Date(),
       leasingAgentInListings: [{ id: listing.id }],
       jurisdictions: [{ id: jurisdiction.id }],
+      roles: {isPartner: true}
     }
 
     const mockInvite = jest.spyOn(testEmailService, "invite")

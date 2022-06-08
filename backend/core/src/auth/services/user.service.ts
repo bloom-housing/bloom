@@ -388,32 +388,13 @@ export class UserService {
     return this.authService.generateAccessToken(user)
   }
 
-  async invitePartnersPortalUser(dto: UserInviteDto) {
+  async invite(dto: UserInviteDto) {
     const password = crypto.randomBytes(8).toString("hex")
 
-    if (dto.leasingAgentInListings?.length) {
-      // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
-      const jurisdictionsIds = await Promise.all(
-        dto.leasingAgentInListings.map(async (listing) => {
-          return await this.listingRepository.getJurisdictionIdByListingId(listing.id)
-        })
-      )
-
-      await Promise.all(
-        jurisdictionsIds.map(async (jurisdictionId) => {
-          await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invite, {
-            jurisdictionId,
-          })
-        })
-      )
-    }
+    await this.validateInviteActionPermissionsOrThrow(dto)
 
     const user = await this._createUser({
       ...dto,
-      roles: {
-        isPartner: true,
-        isAdmin: false,
-      },
       passwordHash: await this.passwordService.passwordToHash(password),
       jurisdictions: dto.jurisdictions
         ? dto.jurisdictions
@@ -584,4 +565,42 @@ export class UserService {
       jurisdictionId: targetUser.id,
     })
   }
+
+  private async validateInviteActionPermissionsOrThrow(dto: UserInviteDto) {
+    if (dto.roles.isAdmin) {
+      await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.inviteSuperAdmin, null)
+    }
+
+    if (dto.roles.isJurisdictionalAdmin) {
+      if (dto.jurisdictions?.length) {
+        // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
+        await Promise.all(
+          dto.jurisdictions.map(async (jurisdiction) => {
+            await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.inviteJurisdictionalAdmin, {
+              jurisdictionId: jurisdiction.id,
+            })
+          })
+        )
+      }
+    }
+
+    if (dto.leasingAgentInListings?.length) {
+      // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
+      const jurisdictionsIds = await Promise.all(
+        dto.leasingAgentInListings.map(async (listing) => {
+          return await this.listingRepository.getJurisdictionIdByListingId(listing.id)
+        })
+      )
+      console.log(jurisdictionsIds)
+
+      await Promise.all(
+        jurisdictionsIds.map(async (jurisdictionId) => {
+          await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invitePartner, {
+            jurisdictionId,
+          })
+        })
+      )
+    }
+  }
+
 }

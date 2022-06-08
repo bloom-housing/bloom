@@ -77,12 +77,11 @@ export class AuthzService {
               `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
               `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
             )
-
             void e.addPermissionForUser(
               user.id,
               "user",
               `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-              `(${authzActions.read}|${authzActions.invite})`
+              `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
             )
           })
         )
