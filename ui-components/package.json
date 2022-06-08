@@ -70,6 +70,10 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^4.4.1-alpha.10",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
@@ -101,6 +105,7 @@
     "react-text-mask": "^5.4.3",
     "react-transition-group": "^4.4.1",
     "tailwindcss": "2.2.10",
+    "ts-jest": "^26.4.1",
     "typesafe-actions": "^5.1.0"
   },
   "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
