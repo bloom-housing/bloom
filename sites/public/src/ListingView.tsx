@@ -35,13 +35,11 @@ import {
   StandardTable,
   SubmitApplication,
   TableHeaders,
-  UnitTables,
   QuantityRowSection,
-  WhatToExpect,
-  getSummariesTable,
   t,
   EventType,
   StandardTableData,
+  ExpandableSection,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -52,6 +50,8 @@ import {
   getTimeRangeString,
   getCurrencyRange,
   getPostmarkString,
+  UnitTables,
+  getSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -682,7 +682,14 @@ export const ListingView = (props: ListingProps) => {
               </div>
             )}
             {lotterySection}
-            <WhatToExpect listing={listing} />
+            <ExpandableSection
+              content={listing.whatToExpect}
+              strings={{
+                title: t("whatToExpect.label"),
+                readMore: t("t.readMore"),
+                readLess: t("t.readLess"),
+              }}
+            />
             {!appOpenInFuture && (
               <Contact
                 sectionTitle={t("leasingAgent.contact")}

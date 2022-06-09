@@ -2,20 +2,13 @@ import dayjs from "dayjs"
 import {
   Address,
   Listing,
-  ListingFeatures,
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
   ListingAvailability,
 } from "@bloom-housing/backend-core/types"
-import {
-  t,
-  ListingCard,
-  ApplicationStatusType,
-  getSummariesTable,
-  StatusBarType,
-} from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import { t, ListingCard, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 

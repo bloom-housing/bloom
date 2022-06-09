@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
-  AuthContext,
   t,
   Form,
   AlertBox,
@@ -10,6 +9,7 @@ import {
   StatusBar,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import { HouseholdMember, Application, ApplicationStatus } from "@bloom-housing/backend-core/types"
 import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
