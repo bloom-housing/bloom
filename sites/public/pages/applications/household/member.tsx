@@ -16,7 +16,6 @@ import {
   FormOptions,
   ProgressNav,
   t,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import FormsLayout from "../../../layouts/forms"
@@ -30,6 +29,7 @@ import {
   pushGtmEvent,
   relationshipKeys,
   stateKeys,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 

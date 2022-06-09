@@ -19,7 +19,6 @@ export * from "./src/blocks/ViewItem"
 export * from "./src/blocks/StandardCard"
 
 /* Contexts */
-export * from "./src/authentication"
 export * from "./src/config"
 
 /* Footers */
@@ -85,11 +84,14 @@ export * from "./src/navigation/TabNav"
 export * from "./src/navigation/Tabs"
 
 /* Notifications */
+export * from "./src/notifications/AlertBox"
+export * from "./src/notifications/AlertNotice"
 export * from "./src/notifications/ApplicationStatus"
 export * from "./src/notifications/ErrorMessage"
+export * from "./src/notifications/SiteAlert"
 export * from "./src/notifications/StatusAside"
 export * from "./src/notifications/StatusMessage"
-export * from "./src/notifications"
+export * from "./src/notifications/alertTypes"
 
 /* Overlays */
 export * from "./src/overlays/Overlay"

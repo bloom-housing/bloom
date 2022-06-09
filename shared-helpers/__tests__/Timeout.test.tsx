@@ -1,7 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { LoggedInUserIdleTimeout } from "../../src/authentication/timeout"
-import { AuthContext } from "../../src/authentication/AuthContext"
+import { LoggedInUserIdleTimeout } from "../src/Timeout"
+import { AuthContext } from "../src/AuthContext"
 
 afterEach(cleanup)
 

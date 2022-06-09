@@ -11,7 +11,6 @@ import {
   FieldGroup,
   Select,
   useMutate,
-  AuthContext,
   AppearanceStyleType,
   AppearanceBorderType,
   emailRegex,
@@ -20,7 +19,7 @@ import {
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
-import { RoleOption, roleKeys } from "@bloom-housing/shared-helpers"
+import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import router from "next/router"
 
