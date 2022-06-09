@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.10...@bloom-housing/backend-core@4.4.1-alpha.11) (2022-06-09)
+
+
+### Features
+
+* add settings page to partners ([#2789](https://github.com/bloom-housing/bloom/issues/2789)) ([3869946](https://github.com/bloom-housing/bloom/commit/3869946a016510f53b20854a06c5f32187c4de79))
+
+
+
+
+
 ## [4.4.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.9...@bloom-housing/backend-core@4.4.1-alpha.10) (2022-06-03)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
