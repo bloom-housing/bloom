@@ -76,7 +76,7 @@ export class UserService {
       throw new NotFoundException()
     }
 
-    await this.authorizeUserAction(this.req.user, user, authzActions.read)
+    await this.authorizeUserAction(this.req.user as User, user, authzActions.read)
 
     return user
   }
@@ -568,7 +568,7 @@ export class UserService {
 
   private async validateInviteActionPermissionsOrThrow(dto: UserInviteDto) {
     if (dto.roles.isAdmin) {
-      await this.authzService.canOrThrow(this.req.user, "user", authzActions.inviteSuperAdmin, null)
+      await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.inviteSuperAdmin, null)
     }
 
     if (dto.roles.isJurisdictionalAdmin) {
@@ -577,7 +577,7 @@ export class UserService {
         await Promise.all(
           dto.jurisdictions.map(async (jurisdiction) => {
             await this.authzService.canOrThrow(
-              this.req.user,
+              this.req.user as User,
               "user",
               authzActions.inviteJurisdictionalAdmin,
               {
@@ -599,7 +599,7 @@ export class UserService {
 
       await Promise.all(
         jurisdictionsIds.map(async (jurisdictionId) => {
-          await this.authzService.canOrThrow(this.req.user, "user", authzActions.invitePartner, {
+          await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invitePartner, {
             jurisdictionId,
           })
         })
