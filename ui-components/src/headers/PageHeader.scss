@@ -3,6 +3,7 @@
   --background-color: var(--bloom-color-primary-lighter);
   --border-color: var(--bloom-color-gray-450);
   --text-color: inherit;
+  --text-font-family: var(--bloom-font-serif);
   --inverse-background-color: var(--bloom-color-primary-darker);
   --inverse-border-color: var(--bloom-color-primary);
   --inverse-text-color: var(--bloom-color-white);
@@ -45,6 +46,7 @@
 
 .page-header__title {
   text-align: center;
+  font-family: var(--text-font-family);
 
   @media (min-width: $screen-md) {
     font-size: var(--title-font-size);
@@ -53,5 +55,6 @@
 }
 
 .page-header__lead {
+  font-family: var(--text-font-family);
   max-width: var(--bloom-width-5xl);
 }
