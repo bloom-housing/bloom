@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import {
-  PageHeader,
+  PartnersHeader,
   t,
   Button,
   LocalizedLink,
@@ -135,7 +135,7 @@ export default function ListingsList() {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
-      <PageHeader title={t("nav.listings")} />
+      <PartnersHeader title={t("nav.listings")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <AgTable

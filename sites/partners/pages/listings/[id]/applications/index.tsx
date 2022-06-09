@@ -12,6 +12,7 @@ import {
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
+  PartnersHeader,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -19,7 +20,7 @@ import {
   useFlaggedApplicationsList,
   useApplicationsData,
 } from "../../../../lib/hooks"
-import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
+import { ListingStatusBar } from "../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import {
@@ -130,11 +131,16 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <ApplicationSecondaryNav
+      <PartnersHeader
         title={listingName}
-        showTabs={true}
         listingId={listingId}
-        flagsQty={flaggedApps?.meta?.totalFlagged}
+        tabs={{
+          show: true,
+          flagsQty: flaggedApps?.meta?.totalFlagged,
+          listingLabel: t("t.listingSingle"),
+          applicationsLabel: t("nav.applications"),
+          flagsLabel: t("nav.flags"),
+        }}
         breadcrumbs={
           <Breadcrumbs>
             <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
@@ -150,10 +156,12 @@ const ApplicationsList = () => {
             <SiteAlert type="alert" timeout={5000} dismissable />
           </div>
         )}
-      </ApplicationSecondaryNav>
+      </PartnersHeader>
+
+      <ListingStatusBar status={listingDto?.status} />
 
       <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
           <AgTable
             id="applications-table"
             pagination={{

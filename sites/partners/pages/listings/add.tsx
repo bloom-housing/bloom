@@ -1,6 +1,12 @@
 import React from "react"
 import Head from "next/head"
-import { PageHeader, SiteAlert, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import {
+  PartnersHeader,
+  SiteAlert,
+  t,
+  Breadcrumbs,
+  BreadcrumbLink,
+} from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
 import { MetaTags } from "../../src/MetaTags"
@@ -22,7 +28,7 @@ const NewListing = () => {
           description={metaDescription}
         />
 
-        <PageHeader
+        <PartnersHeader
           className="relative"
           title={t("listings.newListing")}
           breadcrumbs={
@@ -37,7 +43,7 @@ const NewListing = () => {
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
             <SiteAlert type="success" timeout={5000} dismissable />
           </div>
-        </PageHeader>
+        </PartnersHeader>
 
         <PaperListingForm />
       </Layout>
