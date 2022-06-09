@@ -159,6 +159,7 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
       jurisdictionId: listingDto.jurisdiction.id,
     })

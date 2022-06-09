@@ -76,6 +76,7 @@ export class UserService {
       throw new NotFoundException()
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     await this.authorizeUserAction(this.req.user as User, user, authzActions.read)
 
     return user
@@ -568,6 +569,7 @@ export class UserService {
 
   private async validateInviteActionPermissionsOrThrow(dto: UserInviteDto) {
     if (dto.roles.isAdmin) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.inviteSuperAdmin, null)
     }
 
@@ -599,6 +601,7 @@ export class UserService {
 
       await Promise.all(
         jurisdictionsIds.map(async (jurisdictionId) => {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.invitePartner, {
             jurisdictionId,
           })
