@@ -102,4 +102,34 @@ export class ListingFeatures extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   mobility?: boolean | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  barrierFreeUnitEntrance?: boolean | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  loweredLightSwitch?: boolean | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  barrierFreeBathroom?: boolean | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  wideDoorways?: boolean | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  loweredCabinets?: boolean | null
 }

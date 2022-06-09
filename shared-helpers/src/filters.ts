@@ -48,6 +48,11 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.Seniors62:
     case ListingFilterKeys.SupportiveHousingfortheHomeless:
     case ListingFilterKeys.Veterans:
+    case ListingFilterKeys.barrierFreeUnitEntrance:
+    case ListingFilterKeys.loweredLightSwitch:
+    case ListingFilterKeys.barrierFreeBathroom:
+    case ListingFilterKeys.wideDoorways:
+    case ListingFilterKeys.loweredCabinets:
       return EnumListingFilterParamsComparison["="]
     case ListingFilterKeys.minRent:
       return EnumListingFilterParamsComparison[">="]
@@ -145,6 +150,11 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.hearing]?: string | boolean
   [FrontendListingFilterStateKeys.mobility]?: string | boolean
   [FrontendListingFilterStateKeys.visual]?: string | boolean
+  [FrontendListingFilterStateKeys.barrierFreeUnitEntrance]?: string | boolean
+  [FrontendListingFilterStateKeys.loweredLightSwitch]?: string | boolean
+  [FrontendListingFilterStateKeys.barrierFreeBathroom]?: string | boolean
+  [FrontendListingFilterStateKeys.wideDoorways]?: string | boolean
+  [FrontendListingFilterStateKeys.loweredCabinets]?: string | boolean
   // favorites
   [FrontendListingFilterStateKeys.favorited]?: string | boolean
 

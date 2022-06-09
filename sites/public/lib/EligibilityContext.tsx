@@ -21,6 +21,11 @@ export enum AccessibilityFeatures {
   "grabBars" = "grabBars",
   "heatingInUnit" = "heatingInUnit",
   "acInUnit" = "acInUnit",
+  "barrierFreeUnitEntrance" = "barrierFreeUnitEntrance",
+  "loweredLightSwitch" = "loweredLightSwitch",
+  "barrierFreeBathroom" = "barrierFreeBathroom",
+  "wideDoorways" = "wideDoorways",
+  "loweredCabinets" = "loweredCabinets",
 }
 
 class EligibilityRequirements {
@@ -41,6 +46,11 @@ class EligibilityRequirements {
   heatingInUnit: boolean
   acInUnit: boolean
   completedSections: number
+  barrierFreeUnitEntrance: boolean
+  loweredLightSwitch: boolean
+  barrierFreeBathroom: boolean
+  wideDoorways: boolean
+  loweredCabinets: boolean
 
   constructor(
     age: AgeRangeType,
@@ -58,7 +68,12 @@ class EligibilityRequirements {
     rollInShower: boolean,
     grabBars: boolean,
     heatingInUnit: boolean,
-    acInUnit: boolean
+    acInUnit: boolean,
+    barrierFreeUnitEntrance: boolean,
+    loweredLightSwitch: boolean,
+    barrierFreeBathroom: boolean,
+    wideDoorways: boolean,
+    loweredCabinets: boolean
   ) {
     this.age = age
     this.householdSizeCount = householdSizeCount
@@ -77,6 +92,11 @@ class EligibilityRequirements {
     this.heatingInUnit = heatingInUnit
     this.acInUnit = acInUnit
     this.completedSections = 0
+    this.barrierFreeUnitEntrance = barrierFreeUnitEntrance
+    this.loweredLightSwitch = loweredLightSwitch
+    this.barrierFreeBathroom = barrierFreeBathroom
+    this.wideDoorways = wideDoorways
+    this.loweredCabinets = loweredCabinets
   }
 
   setAge(age: AgeRangeType) {
@@ -145,10 +165,35 @@ class EligibilityRequirements {
   setCompletedSections(numCompleted: number) {
     this.completedSections = numCompleted
   }
+
+  setBarrierFreeUnitEntrance(barrierFreeUnitEntrance: boolean) {
+    this.barrierFreeUnitEntrance = barrierFreeUnitEntrance
+  }
+
+  setLoweredLightSwitch(loweredLightSwitch: boolean) {
+    this.loweredLightSwitch = loweredLightSwitch
+  }
+
+  setBarrierFreeBathroom(barrierFreeBathroom: boolean) {
+    this.barrierFreeBathroom = barrierFreeBathroom
+  }
+
+  setWideDoorways(wideDoorways: boolean) {
+    this.wideDoorways = wideDoorways
+  }
+
+  setLoweredCabinets(loweredCabinets: boolean) {
+    this.loweredCabinets = loweredCabinets
+  }
 }
 
 export const blankEligibilityRequirements = () => {
   return new EligibilityRequirements(
+    null,
+    null,
+    null,
+    null,
+    null,
     null,
     null,
     null,

@@ -27,6 +27,11 @@ const EligibilityAccessibility = () => {
     eligibilityRequirements.setGrabBars(data.grabBars)
     eligibilityRequirements.setHeatingInUnit(data.heatingInUnit)
     eligibilityRequirements.setaAcInUnit(data.acInUnit)
+    eligibilityRequirements.setBarrierFreeUnitEntrance(data.barrierFreeUnitEntrance)
+    eligibilityRequirements.setLoweredLightSwitch(data.loweredLightSwitch)
+    eligibilityRequirements.setBarrierFreeBathroom(data.barrierFreeBathroom)
+    eligibilityRequirements.setWideDoorways(data.wideDoorways)
+    eligibilityRequirements.setLoweredCabinets(data.loweredCabinets)
   }
 
   return (
@@ -169,6 +174,61 @@ const EligibilityAccessibility = () => {
             label={t("eligibility.accessibility.acInUnit")}
             inputProps={{
               defaultChecked: eligibilityRequirements.acInUnit,
+            }}
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            register={formMethods.register}
+          />
+          <Field
+            id="barrierFreeUnitEntrance"
+            name="barrierFreeUnitEntrance"
+            type="checkbox"
+            label={t("eligibility.accessibility.barrierFreeUnitEntrance")}
+            inputProps={{
+              defaultChecked: eligibilityRequirements.barrierFreeUnitEntrance,
+            }}
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            register={formMethods.register}
+          />
+          <Field
+            id="loweredLightSwitch"
+            name="loweredLightSwitch"
+            type="checkbox"
+            label={t("eligibility.accessibility.loweredLightSwitch")}
+            inputProps={{
+              defaultChecked: eligibilityRequirements.loweredLightSwitch,
+            }}
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            register={formMethods.register}
+          />
+          <Field
+            id="barrierFreeBathroom"
+            name="barrierFreeBathroom"
+            type="checkbox"
+            label={t("eligibility.accessibility.barrierFreeBathroom")}
+            inputProps={{
+              defaultChecked: eligibilityRequirements.barrierFreeBathroom,
+            }}
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            register={formMethods.register}
+          />
+          <Field
+            id="wideDoorways"
+            name="wideDoorways"
+            type="checkbox"
+            label={t("eligibility.accessibility.wideDoorways")}
+            inputProps={{
+              defaultChecked: eligibilityRequirements.wideDoorways,
+            }}
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            register={formMethods.register}
+          />
+          <Field
+            id="loweredCabinets"
+            name="loweredCabinets"
+            type="checkbox"
+            label={t("eligibility.accessibility.loweredCabinets")}
+            inputProps={{
+              defaultChecked: eligibilityRequirements.loweredCabinets,
             }}
             // eslint-disable-next-line @typescript-eslint/unbound-method
             register={formMethods.register}

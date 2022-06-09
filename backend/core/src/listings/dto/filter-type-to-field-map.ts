@@ -73,4 +73,9 @@ export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   bedRoomSize: "",
   communityPrograms: "",
   accessibility: "",
+  barrierFreeUnitEntrance: "listing_features.barrierFreeUnitEntrance",
+  loweredLightSwitch: "listing_features.loweredLightSwitch",
+  barrierFreeBathroom: "listing_features.barrierFreeBathroom",
+  wideDoorways: "listing_features.wideDoorways",
+  loweredCabinets: "listing_features.loweredCabinets",
 }
