@@ -30,6 +30,12 @@ const Layout = (props) => {
       href: "/users",
     })
   }
+  if (profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings)) {
+    menuLinks.push({
+      title: t("t.settings"),
+      href: "/settings",
+    })
+  }
   if (profile) {
     menuLinks.push({
       title: t("nav.signOut"),
