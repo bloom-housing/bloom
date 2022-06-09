@@ -27,7 +27,7 @@ export default () => {
   const router = useRouter()
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
-  const { profile, applicationsService } = useContext(AuthContext)
+  const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
   const [submitted, setSubmitted] = useState(false)
   const [previousApplication, setPreviousApplication] = useState<Application>(null)
 
@@ -72,7 +72,7 @@ export default () => {
   }, [profile])
 
   useEffect(() => {
-    if (!previousApplication) {
+    if (!previousApplication && initialStateLoaded) {
       if (profile) {
         void applicationsService
           .list({
@@ -92,7 +92,7 @@ export default () => {
         onSubmit()
       }
     }
-  }, [profile, applicationsService, onSubmit, previousApplication])
+  }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])
 
   return previousApplication ? (
     <FormsLayout>

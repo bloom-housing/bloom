@@ -157,14 +157,17 @@ const reducer = createReducer(
           ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
       })
-
       return {
         ...rest,
         ...(refreshTimer && { refreshTimer }),
         accessToken: accessToken,
       }
     },
-    SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
+    SAVE_PROFILE: (state, { payload: user }) => ({
+      ...state,
+      profile: user,
+      initialStateLoaded: true,
+    }),
     START_LOADING: (state) => ({ ...state, loading: true }),
     END_LOADING: (state) => ({ ...state, loading: false }),
     SIGN_OUT: ({ storageType }) => {
@@ -225,6 +228,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       try {
         const profile = await userService?.userControllerProfile()
         if (profile) {
+          console.log(profile)
           dispatch(saveProfile(profile))
         }
       } finally {
