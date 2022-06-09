@@ -766,6 +766,7 @@
     "listings.streetAddressOrPOBox": "عنوان الشارع أو صندوق البريد",
     "listings.totalListings": "إجمالي القوائم",
     "listings.unitSummaryGroupMessage": "لكل نوع من أنواع الوحدات ، لا يمكنك تحقيق أكثر من حد الدخل المرتبط بحجم أسرتك ، كما هو موضح في جدول الحد الأقصى لدخل الأسرة أدناه.",
+    "listings.section8Message": "إذا كان لديك قسيمة اختيار الإسكان من القسم 8 ، فلن تنطبق متطلبات الدخل وستدفع الإيجار على أساس دخلك.",
     "listings.unitTypes.oneBdrm": "1 غرف نوم",
     "listings.unitTypes.twoBdrm": "2 غرف نوم",
     "listings.unitTypes.threeBdrm": "3 غرف نوم",

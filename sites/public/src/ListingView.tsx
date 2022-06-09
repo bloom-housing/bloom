@@ -412,6 +412,10 @@ export const ListingView = (props: ListingProps) => {
                 data={[{ data: groupedUnitData }]}
                 responsiveCollapse={true}
               />
+              <div className="text-sm leading-5 mt-4 invisible md:visible">
+                {" "}
+                {t("listings.section8Message")}
+              </div>
               {hmiData.length > 0 && (
                 <div className="text-sm leading-5 mt-4 invisible md:visible">
                   {t("listings.unitSummaryGroupMessage")}
