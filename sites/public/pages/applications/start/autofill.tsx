@@ -72,26 +72,27 @@ export default () => {
   }, [profile])
 
   useEffect(() => {
-    if (!profile || previousApplication) {
-      if (!previousApplication) onSubmit()
-      return
+    if (!previousApplication) {
+      if (profile) {
+        void applicationsService
+          .list({
+            userId: profile.id,
+            orderBy: "createdAt",
+            order: "DESC",
+            limit: 1,
+          })
+          .then((res) => {
+            if (res && res?.items?.length) {
+              setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
+            } else {
+              onSubmit()
+            }
+          })
+      } else {
+        onSubmit()
+      }
     }
-    void applicationsService
-      .list({
-        userId: profile.id,
-        orderBy: "createdAt",
-        order: "DESC",
-        limit: 1,
-      })
-      .then((res) => {
-        if (res && res?.items?.length) {
-          setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
-        } else {
-          console.log("empty search")
-          onSubmit()
-        }
-      })
-  }, [profile, previousApplication, applicationsService, onSubmit])
+  }, [profile, applicationsService, onSubmit, previousApplication])
 
   return previousApplication ? (
     <FormsLayout>
