@@ -578,12 +578,13 @@ export class UserService {
       )
     }
 
+    // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
     if (dto.roles.isJurisdictionalAdmin) {
       if (dto.jurisdictions?.length) {
         await Promise.all(
           dto.jurisdictions.map(async (jurisdiction) => {
             await this.authzService.canOrThrow(
-              // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
               this.req.user as User,
               "user",
               authzActions.inviteJurisdictionalAdmin,
