@@ -569,8 +569,8 @@ export class UserService {
 
   private async validateInviteActionPermissionsOrThrow(dto: UserInviteDto) {
     if (dto.roles.isAdmin) {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       await this.authzService.canOrThrow(
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         this.req.user as User,
         "user",
         authzActions.inviteSuperAdmin,
@@ -580,10 +580,10 @@ export class UserService {
 
     if (dto.roles.isJurisdictionalAdmin) {
       if (dto.jurisdictions?.length) {
-        // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
         await Promise.all(
           dto.jurisdictions.map(async (jurisdiction) => {
             await this.authzService.canOrThrow(
+              // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
               this.req.user as User,
               "user",
               authzActions.inviteJurisdictionalAdmin,
@@ -606,8 +606,8 @@ export class UserService {
 
       await Promise.all(
         jurisdictionsIds.map(async (jurisdictionId) => {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           await this.authzService.canOrThrow(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             this.req.user as User,
             "user",
             authzActions.invitePartner,
