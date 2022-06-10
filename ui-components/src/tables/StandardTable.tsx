@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
-import { Icon } from "../icons/Icon"
+import { Icon, IconFillColors } from "../icons/Icon"
 import { t } from "../helpers/translator"
+import { faGripLines } from "@fortawesome/free-solid-svg-icons"
 
 export interface TableHeadersOptions {
   name: string
@@ -155,9 +156,9 @@ export const StandardTable = (props: StandardTableProps) => {
         <Cell
           key={`${dataIndex}-draggable`}
           headerLabel={t("t.sort")}
-          className={`table__draggable-cell pl-5`}
+          className={`table__draggable-cell pl-7`}
         >
-          <Icon symbol={"draggable"} size={"medium"} />
+          <Icon symbol={faGripLines} size={"medium"} fill={IconFillColors.primary} />
         </Cell>
       )
     }

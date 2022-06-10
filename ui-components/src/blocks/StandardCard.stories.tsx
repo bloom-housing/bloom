@@ -5,7 +5,9 @@ import { BADGES } from "../../.storybook/constants"
 import { MinimalTable } from "../tables/MinimalTable"
 import { Button } from "../actions/Button"
 import StandardCardDocumentation from "./StandardCard.docs.mdx"
-import { mockData, mockHeaders } from "../tables/StandardTable.stories"
+import { TableHeaders, StandardTableData } from "../tables/StandardTable"
+import Icon, { IconFillColors } from "../icons/Icon"
+import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 
 export default {
   title: "Blocks/StandardCard  🚩",
@@ -28,14 +30,65 @@ export const Blank = () => (
   />
 )
 
+const mockHeadersWithStyling: TableHeaders = {
+  name: { name: "t.name", className: "pl-8" },
+  relationship: { name: "t.relationship", className: "pl-8" },
+  dob: {
+    name: "application.household.member.dateOfBirth",
+    className: "pl-8",
+  },
+  icons: { name: "", className: "pl-8" },
+}
+
+const iconContent = () => {
+  return (
+    <div className={"text-right mr-4 w-max"}>
+      <Icon
+        symbol={faPenToSquare}
+        size={"medium"}
+        fill={IconFillColors.primary}
+        className={"mr-5"}
+      />
+      <Icon symbol={faClone} size={"medium"} fill={IconFillColors.primary} className={"mr-5"} />
+      <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
+    </div>
+  )
+}
+const mockDataWithStyling: StandardTableData = [
+  {
+    name: { content: "Jim Halpert" },
+    relationship: { content: "Husband" },
+    dob: { content: "05/01/1985" },
+    icons: { content: iconContent() },
+  },
+  {
+    name: { content: "Michael Scott" },
+    relationship: { content: "Friend" },
+    dob: { content: "05/01/1975" },
+    icons: { content: iconContent() },
+  },
+]
+
+let i = 5
+while (i > 0) {
+  mockDataWithStyling.push(mockDataWithStyling[0])
+  mockDataWithStyling.push(mockDataWithStyling[1])
+  i--
+}
+
 export const WithTable = () => (
   <StandardCard
     title="Standard Card Title"
     emptyStateMessage="Add items to edit"
     footer={<Button>Add item</Button>}
   >
-    <div className="px-3">
-      <MinimalTable headers={mockHeaders} data={mockData} />
+    <div>
+      <MinimalTable
+        headers={mockHeadersWithStyling}
+        data={mockDataWithStyling}
+        cellClassName={"py-2"}
+        draggable={true}
+      />
     </div>
   </StandardCard>
 )
