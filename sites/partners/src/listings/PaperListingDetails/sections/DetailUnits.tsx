@@ -41,7 +41,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
           content: (
             <Button
               type="button"
-              className="font-semibold uppercase"
+              className="font-semibold uppercase my-0"
               onClick={() => setUnitDrawer(unit)}
               unstyled
             >
