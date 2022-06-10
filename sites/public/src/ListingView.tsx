@@ -371,7 +371,6 @@ export const ListingView = (props: ListingProps) => {
   })()
 
   const accessibilityFeatures = getAccessibilityFeatures()
-  console.log(listing)
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <div className="w-full md:w-2/3">
