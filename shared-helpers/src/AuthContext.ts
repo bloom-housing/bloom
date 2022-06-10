@@ -157,6 +157,7 @@ const reducer = createReducer(
           ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
       })
+
       return {
         ...rest,
         ...(refreshTimer && { refreshTimer }),
