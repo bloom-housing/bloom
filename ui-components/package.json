@@ -92,6 +92,7 @@
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",
     "nanoid": "^3.1.12",
+    "node-polyglot": "^2.4.0",
     "react": "^17.0.2",
     "react-accessible-accordion": "^3.3.5",
     "react-beautiful-dnd": "^13.1.0",
