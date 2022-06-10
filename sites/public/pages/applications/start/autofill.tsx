@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect, useCallback } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
-  AuthContext,
   AppearanceStyleType,
   Button,
   Form,
@@ -14,6 +13,7 @@ import {
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"

@@ -3,6 +3,108 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.26...@bloom-housing/partners@4.4.1-alpha.27) (2022-06-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.25...@bloom-housing/partners@4.4.1-alpha.26) (2022-06-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.24...@bloom-housing/partners@4.4.1-alpha.25) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.23...@bloom-housing/partners@4.4.1-alpha.24) (2022-06-09)
+
+
+### Features
+
+* add settings page to partners ([#2789](https://github.com/bloom-housing/bloom/issues/2789)) ([3869946](https://github.com/bloom-housing/bloom/commit/3869946a016510f53b20854a06c5f32187c4de79))
+
+
+
+
+
+## [4.4.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.22...@bloom-housing/partners@4.4.1-alpha.23) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.21...@bloom-housing/partners@4.4.1-alpha.22) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.20...@bloom-housing/partners@4.4.1-alpha.21) (2022-06-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.19...@bloom-housing/partners@4.4.1-alpha.20) (2022-06-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.18...@bloom-housing/partners@4.4.1-alpha.19) (2022-06-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.17...@bloom-housing/partners@4.4.1-alpha.18) (2022-06-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.16...@bloom-housing/partners@4.4.1-alpha.17) (2022-06-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.4.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.15...@bloom-housing/partners@4.4.1-alpha.16) (2022-06-06)
+
+
+### Features
+
+* create table card component ([#2781](https://github.com/bloom-housing/bloom/issues/2781)) ([7cb3147](https://github.com/bloom-housing/bloom/commit/7cb31477268733b8b3d51dd77b2e33afb713ffbc))
+
+
+
+
+
 ## [4.4.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.14...@bloom-housing/partners@4.4.1-alpha.15) (2022-06-04)
 
 **Note:** Version bump only for package @bloom-housing/partners

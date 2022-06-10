@@ -12,13 +12,12 @@ import {
   HouseholdSizeField,
   Form,
   ProgressNav,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 

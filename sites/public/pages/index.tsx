@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
-  AuthContext,
   AlertBox,
   LinkButton,
   Hero,
@@ -11,7 +10,7 @@ import {
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"

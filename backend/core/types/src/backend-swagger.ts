@@ -4029,6 +4029,9 @@ export interface Jurisdiction {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
 }
 
 export interface User {
@@ -4459,6 +4462,9 @@ export interface JurisdictionCreate {
   rentalAssistanceDefault: string
 
   /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4495,6 +4501,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
 
   /**  */
   programs: Id[]

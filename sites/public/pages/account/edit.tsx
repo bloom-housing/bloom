@@ -10,20 +10,18 @@ import {
   Field,
   FormCard,
   Icon,
-  AuthContext,
   Form,
   emailRegex,
   t,
   AlertBox,
   SiteAlert,
-  RequireLogin,
   AlertTypes,
   passwordRegex,
   DOBField,
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
 
