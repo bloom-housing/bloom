@@ -1,27 +1,26 @@
 .listings-row {
   --tags-flex-order: 0;
+  --inter-row-gap: var(--bloom-s12);
+  --max-width: var(--bloom-width-3xl);
+  --max-width-large-screen: var(--bloom-width-5xl);
+  --cell-padding: var(--bloom-s3);
 
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  max-width: var(--bloom-width-3xl);
-  margin: auto;
-  margin-block-end: var(--bloom-s12);
+  max-width: var(--max-width);
+  margin: var(--inter-row-gap) auto;
   position: relative;
 
-  &:first-of-type {
-    margin-block-start: var(--bloom-s12);
-  }
-
   @media (min-width: $screen-lg) {
-    max-width: var(--bloom-width-5xl);
+    --max-width: var(--max-width-large-screen);
   }
 }
 
 .listings-row_figure,
 .listings-row_content {
   width: 100%;
-  padding: var(--bloom-s3);
+  padding: var(--cell-padding);
   padding-bottom: 0px;
 
   @media (min-width: $screen-lg) {

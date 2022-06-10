@@ -4,12 +4,16 @@ import { ImageCard } from "./ImageCard"
 import { t } from "../helpers/translator"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { IconFillColors } from "../icons/Icon"
+import ImageCardDocumentation from "./ImageCard.docs.mdx"
 
 export default {
   title: "Blocks/Image Card 🚩",
   id: "blocks/image-card",
   decorators: [(storyFn: any) => <div style={{ maxWidth: "700px" }}>{storyFn()}</div>],
   parameters: {
+    docs: {
+      page: ImageCardDocumentation,
+    },
     badges: [BADGES.GEN2],
   },
 }

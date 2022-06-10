@@ -4,11 +4,16 @@ import { BADGES } from "../../../.storybook/constants"
 import LinkButton from "../../actions/LinkButton"
 import Icon from "../../icons/Icon"
 import { ListingCard } from "./ListingCard"
+import ListingCardDocumentation from "./ListingCard.docs.mdx"
 
 export default {
   title: "Listing/ListingCard 🚩",
+  id: "page-components/listing-card",
   component: ListingCard,
   parameters: {
+    docs: {
+      page: ListingCardDocumentation,
+    },
     badges: [BADGES.GEN2],
   },
 }

@@ -6,11 +6,16 @@ import {
 import { BADGES } from "../../.storybook/constants"
 import * as React from "react"
 import { Tag } from "./Tag"
+import TagDocumentation from "./Tag.docs.mdx"
 
 export default {
   title: "Text/Tag 🚩",
+  id: "text/tag",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
   parameters: {
+    docs: {
+      page: TagDocumentation,
+    },
     badges: [BADGES.GEN2],
   },
 }
