@@ -12,3 +12,9 @@ NODE_OPTIONS = "--max_old_space_size=4096"
 
 # reminder: URLs and fragments should *not* have a trailing /
 LISTINGS_QUERY = "/listings"
+
+[[redirects]]
+from = https://detroit-partners-prod.netlify.app/*
+to = https://partners.homeconnect.detroitmi.gov/:splat
+status = 301
+force = true
