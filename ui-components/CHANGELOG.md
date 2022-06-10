@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.23...@bloom-housing/ui-components@4.4.1-alpha.24) (2022-06-10)
+
+
+### Bug Fixes
+
+* remove backend dependency from ui-components ([#2804](https://github.com/bloom-housing/bloom/issues/2804)) ([aa41b56](https://github.com/bloom-housing/bloom/commit/aa41b5629bcc2c24ecc67de5efc0101970522bc0))
+
+
+
+
+
 ## [4.4.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.22...@bloom-housing/ui-components@4.4.1-alpha.23) (2022-06-09)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
