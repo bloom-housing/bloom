@@ -110,6 +110,7 @@ export const StandardTable = (props: StandardTableProps) => {
   }, [props.data])
 
   if (props.draggable) {
+    headerLabels.splice(0, 0, <th key={"header-draggable"}>{t("t.order")}</th>)
     headerLabels.splice(
       0,
       0,
@@ -154,7 +155,18 @@ export const StandardTable = (props: StandardTableProps) => {
         0,
         0,
         <Cell
-          key={`${dataIndex}-draggable`}
+          key={`${dataIndex}-order-draggable`}
+          headerLabel={t("t.sort")}
+          className={`pl-5 ${cellClassName ?? undefined}`}
+        >
+          {dataIndex + 1}
+        </Cell>
+      )
+      cols.splice(
+        0,
+        0,
+        <Cell
+          key={`${dataIndex}-sort-draggable`}
           headerLabel={t("t.sort")}
           className={`table__draggable-cell pl-7`}
         >

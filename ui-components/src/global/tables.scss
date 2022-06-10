@@ -102,6 +102,9 @@ table {
       @apply border-b;
       background: transparent;
     }
+    tr:last-child td {
+      @apply border-b-0;
+    }
   }
   &.is-flush-left {
     thead tr th:first-of-type {
@@ -366,6 +369,9 @@ tr.group-reserved td:first-of-type {
 table.td-plain {
   .table__thumbnail img {
     @apply -my-1;
+  }
+  .table__is-dragging {
+    @apply border-t;
   }
 }
 
