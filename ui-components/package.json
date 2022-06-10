@@ -69,7 +69,6 @@
     "webpack": "^4.44.2"
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^4.4.1-alpha.11",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
