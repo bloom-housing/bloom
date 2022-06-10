@@ -22,7 +22,7 @@ const PageHeader = (props: PageHeaderProps) => {
         <nav className="page-header__breadcrumbs">{props?.breadcrumbs}</nav>
 
         {props.title && (
-          <h1 data-test-id="page_header" className="page-header__title">
+          <h1 data-test-id="page-header" className="page-header__title">
             {props.title}
           </h1>
         )}
