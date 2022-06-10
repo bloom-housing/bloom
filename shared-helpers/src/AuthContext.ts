@@ -228,7 +228,6 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       try {
         const profile = await userService?.userControllerProfile()
         if (profile) {
-          console.log(profile)
           dispatch(saveProfile(profile))
         }
       } finally {
