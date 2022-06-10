@@ -322,7 +322,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   useEffect(() => {
     if (defaultUnit) {
       setValue("amiChart.id", defaultUnit.amiChart?.id)
-      setValue("priorityType.id", defaultUnit.priorityType?.id)
       setValue("unitType.id", defaultUnit.unitType?.id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -570,22 +569,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
               </GridCell>
             </>
           )}
-        </GridSection>
-        <GridSection title={t("t.accessibility")} columns={4} separator>
-          <GridCell>
-            <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
-              <Select
-                id="priorityType.id"
-                name="priorityType.id"
-                label={t("listings.unit.accessibilityPriorityType")}
-                placeholder={t("listings.unit.accessibilityPriorityType")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={options.unitPriorities}
-              />
-            </ViewItem>
-          </GridCell>
         </GridSection>
       </div>
       <div className="mt-6">
