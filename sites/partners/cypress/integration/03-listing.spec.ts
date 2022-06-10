@@ -140,7 +140,8 @@ describe("Listing Management Tests", () => {
       cy.get("#publishButton").contains("Publish").click()
 
       cy.get("#publishButtonConfirm").contains("Publish").click()
-      cy.get(".page-header__title").contains(listing["name"])
+      cy.get("[data-test-id=page-header]").should("be.visible")
+      cy.getByTestId("page-header").should("have.text", listing["name"])
     })
   })
 
