@@ -136,6 +136,12 @@ class Listing extends BaseEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   referralOpportunity?: boolean
 
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  section8Acceptance?: boolean
+
   // end application method booleans
 
   @Column("jsonb")

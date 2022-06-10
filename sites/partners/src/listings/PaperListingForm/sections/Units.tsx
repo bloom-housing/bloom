@@ -12,7 +12,7 @@ import {
   GridCell,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import UnitsSummaryForm from "../UnitsSummaryForm"
 import { FormListing, TempUnit, TempUnitsSummary } from "../formTypes"
 import { fieldHasError } from "../../../../lib/helpers"
@@ -33,7 +33,7 @@ type UnitProps = {
 const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordion }: UnitProps) => {
   const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
   const [summaryDeleteModal, setSummaryDeleteModal] = useState<number | null>(null)
-
+  console.log(listing)
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, errors, clearErrors } = formMethods
