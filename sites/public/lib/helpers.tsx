@@ -127,7 +127,6 @@ export const getListings = (listings) => {
         imageCardProps={{
           imageUrl:
             imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          href: `/listing/${listing.id}/${listing.urlSlug}`,
           tags: listing.reservedCommunityType
             ? [
                 {
@@ -148,7 +147,7 @@ export const getListings = (listings) => {
           { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
         ]}
         contentProps={{
-          contentHeader: { text: listing.name },
+          contentHeader: { text: listing.name, href: `/listing/${listing.id}/${listing.urlSlug}` },
           contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
           tableHeader: generateTableSubHeader(listing),
         }}

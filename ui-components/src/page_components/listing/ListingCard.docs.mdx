@@ -28,6 +28,8 @@ By setting `stackedTable` to true, the interior table component switches from `S
 
 <ArgsTable of={ListingCard} />
 
+**Note:** for accessbility reasons, if you have a link that should apply to the card as a whole, pass an `href` prop to the `contentHeader` key of `contentProps`. (If you previously passed `href` to `imageCardProps`, you should remove that.)
+
 ## Theming Variables
 
 You can apply CSS variables to the `.listings-row` selector to customize the appearance of the component.
