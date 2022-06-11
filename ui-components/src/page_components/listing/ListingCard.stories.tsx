@@ -99,7 +99,7 @@ export const WithHeaders = () => {
     <ListingCard
       imageCardProps={{ ...standardImageCardProps, href: undefined }}
       tableProps={{ ...standardTableProps }}
-      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      footerButtons={[{ text: "See Details", href: "see-details-link", ariaHidden: true }]}
       contentProps={{
         contentHeader: { text: "Optional content header", href: "listing-link" },
         contentSubheader: { text: "Optional content subheader" },

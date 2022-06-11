@@ -144,7 +144,11 @@ export const getListings = (listings) => {
           cellClassName: "px-5 py-3",
         }}
         footerButtons={[
-          { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
+          {
+            text: t("t.seeDetails"),
+            href: `/listing/${listing.id}/${listing.urlSlug}`,
+            ariaHidden: true,
+          },
         ]}
         contentProps={{
           contentHeader: { text: listing.name, href: `/listing/${listing.id}/${listing.urlSlug}` },

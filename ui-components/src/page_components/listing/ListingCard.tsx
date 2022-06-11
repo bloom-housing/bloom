@@ -21,6 +21,7 @@ export interface CardHeader {
 export interface FooterButton {
   href: string
   text: string
+  ariaHidden?: boolean
 }
 
 export interface ListingCardContentProps {
@@ -149,7 +150,11 @@ const ListingCard = (props: ListingCardProps) => {
             <div className={footerContainerClass ?? "listings-row_footer"}>
               {footerButtons?.map((footerButton, index) => {
                 return (
-                  <LinkButton href={footerButton.href} key={index}>
+                  <LinkButton
+                    href={footerButton.href}
+                    ariaHidden={footerButton.ariaHidden}
+                    key={index}
+                  >
                     {footerButton.text}
                   </LinkButton>
                 )
