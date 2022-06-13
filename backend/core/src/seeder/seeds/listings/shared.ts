@@ -181,6 +181,7 @@ export const defaultListing: ListingSeedType = {
   commonDigitalApplication: false,
   paperApplication: false,
   referralOpportunity: false,
+  section8Acceptance: null,
   applicationDueDate: getDate(10),
   applicationFee: "20",
   applicationOpenDate: getDate(-10),

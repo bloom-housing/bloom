@@ -115,6 +115,10 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   rentalAssistance: string
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  section8Acceptance: boolean
+
+  @Expose()
   @IsEnum(ListingReviewOrder, { groups: [ValidationsGroupsEnum.default] })
   reviewOrderType: ListingReviewOrder
 

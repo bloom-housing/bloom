@@ -40,6 +40,8 @@ const tritonListing: ListingSeedType = {
   digitalApplication: false,
   commonDigitalApplication: false,
   paperApplication: false,
+  section8Acceptance: null,
+
   referralOpportunity: false,
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,

@@ -48,6 +48,7 @@ const grandRivListing: ListingSeedType = {
   images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
+  section8Acceptance: null,
   referralOpportunity: undefined,
   depositMin: undefined,
   depositMax: undefined,
