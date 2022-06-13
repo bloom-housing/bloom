@@ -1,24 +1,11 @@
-{{!-- <h1>{{t "invite.hello"}} {{> user-name }}</h1>
-
-<p>
-    {{t "invite.inviteMessage" appOptions}}
-</p>
-<p>
-    {{t "invite.toCompleteAccountCreation"}}
-</p>
-<p>
-    <a href="{{confirmationUrl}}">{{t "invite.confirmMyAccount"}}</a>
-</p>
-{{> simple-footer }} --}}
-
 {{#> layout_default }}
     <h1>
         <span style="font-family: Arial, Helvetica, sans-serif; font-size: 24px">
-            Welcome to the Partners Portal
+            {{t "invite.hello"}}
         </span>
         <br />
 
-        /Name/
+        {{> user-name }}
     </h1>
 
     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
@@ -26,15 +13,16 @@
         <tr>
             <td align="left">
             <p>
-                <strong>Welcome to the Partners Portal at</strong> /PartnersUrl/.
-                <br /><br />
+                {{t "invite.inviteMessage" appOptions}}
+
+                {{!-- <br /><br />
                 You will now be able to manage listings and applications that you
                 are a part of from one centralized location.
                 <br /><br />
                 <strong
                 >To complete your account creation, please click the link
                 below:</strong
-                >
+                > --}}
             </p>
             </td>
         </tr>
@@ -47,29 +35,15 @@
             <td align="center">
             <a
                 class="btn btn-primary"
-                href="http://htmlemail.io"
+                href="{{confirmationUrl}}"
                 target="_blank"
                 style="color:white"
-                >Confirm my account</a
+                >
+                  {{t "invite.confirmMyAccount"}}
+                </a
             >
             </td>
         </tr>
         </tbody>
     </table>
-
-  {{!-- <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-    <tbody>
-      <tr>
-        <td align="center">
-          <a
-            class="btn btn-primary"
-            href="{{listingUrl}}"
-            target="_blank"
-            style="color:white"
-            >{{t "t.seeListing"}}
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table> --}}
 {{/layout_default }}
