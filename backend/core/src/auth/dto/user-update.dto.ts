@@ -13,7 +13,7 @@ import {
   Matches,
   MaxLength,
   ValidateIf,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
