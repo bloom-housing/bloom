@@ -42,13 +42,6 @@ const DetailAdditionalEligibility = () => {
           </ViewItem>
         </GridCell>
       </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <ViewItem id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
-            {getDetailFieldString(listing.rentalAssistance)}
-          </ViewItem>
-        </GridCell>
-      </GridSection>
       {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
         <GridSection columns={1}>
           <GridCell>
