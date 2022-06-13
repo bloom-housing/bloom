@@ -164,7 +164,11 @@ const reducer = createReducer(
         accessToken: accessToken,
       }
     },
-    SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
+    SAVE_PROFILE: (state, { payload: user }) => ({
+      ...state,
+      profile: user,
+      initialStateLoaded: true,
+    }),
     START_LOADING: (state) => ({ ...state, loading: true }),
     END_LOADING: (state) => ({ ...state, loading: false }),
     SIGN_OUT: ({ storageType }) => {
