@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.25...@bloom-housing/ui-components@4.4.1-alpha.26) (2022-06-13)
+
+
+### Features
+
+* **expandablecontent.tsx:** add classname prop ([0fc164d](https://github.com/bloom-housing/bloom/commit/0fc164dcf9a9b6df2511dd1eb09ca62c4e79fbb4)), closes [#2798](https://github.com/bloom-housing/bloom/issues/2798)
+
+
+
+
+
 ## [4.4.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.24...@bloom-housing/ui-components@4.4.1-alpha.25) (2022-06-10)
 
 
