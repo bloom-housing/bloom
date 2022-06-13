@@ -5,7 +5,6 @@ import { addressTypes } from "../formTypes"
 export default class BooleansFormatter extends Formatter {
   /** Format all of the Yes/No questions in the form */
   process() {
-    console.log(this.data)
     this.processBoolean("applicationDropOffAddressType", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&

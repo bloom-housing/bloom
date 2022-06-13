@@ -33,7 +33,6 @@ type UnitProps = {
 const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordion }: UnitProps) => {
   const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
   const [summaryDeleteModal, setSummaryDeleteModal] = useState<number | null>(null)
-  console.log(listing?.section8Acceptance)
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, errors, clearErrors } = formMethods
