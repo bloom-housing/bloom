@@ -35,6 +35,7 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "leasingAgentPhone",
   "name",
   "paperApplication",
+  "section8Acceptance",
   "referralOpportunity",
   "rentalAssistance",
   "reviewOrderType",

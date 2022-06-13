@@ -5,6 +5,7 @@ import { addressTypes } from "../formTypes"
 export default class BooleansFormatter extends Formatter {
   /** Format all of the Yes/No questions in the form */
   process() {
+    console.log(this.data)
     this.processBoolean("applicationDropOffAddressType", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
@@ -63,6 +64,10 @@ export default class BooleansFormatter extends Formatter {
     this.processBoolean("referralOpportunity", {
       when: this.data.referralOpportunityChoice === YesNoAnswer.Yes,
       falseCase: () => (this.data.referralOpportunityChoice === YesNoAnswer.No ? false : null),
+    })
+    this.processBoolean("section8Acceptance", {
+      when: this.data.section8Choice === YesNoAnswer.Yes,
+      falseCase: () => (this.data.section8Choice === YesNoAnswer.No ? false : null),
     })
   }
 }

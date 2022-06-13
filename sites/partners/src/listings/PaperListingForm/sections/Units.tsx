@@ -242,7 +242,7 @@ const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordio
         <GridCell>
           <p className="field-label m-8 mb-2 ml-0">{t("listings.section8AcceptanceQuestion")}</p>
           <FieldGroup
-            name="section8AcceptanceQuestion"
+            name="section8Choice"
             type="radio"
             register={register}
             fields={[
