@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.11...@bloom-housing/backend-core@4.4.1-alpha.12) (2022-06-13)
+
+
+### Bug Fixes
+
+* make isWaitlistOpen optional ([#2809](https://github.com/bloom-housing/bloom/issues/2809)) ([37c5a98](https://github.com/bloom-housing/bloom/commit/37c5a9803d7e88095d36a22c1e4d634b14d5f72a))
+
+
+
+
+
 ## [4.4.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.10...@bloom-housing/backend-core@4.4.1-alpha.11) (2022-06-09)
 
 
