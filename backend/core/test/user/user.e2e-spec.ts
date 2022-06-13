@@ -281,6 +281,7 @@ describe("Applications", () => {
       lastName: "Last",
       email: "test2@example.com",
       agreedToTermsOfService: false,
+      jurisdictions: [],
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)

@@ -1,6 +1,8 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
 import {
+  ArrayMinSize,
+  IsArray,
   IsDate,
   IsDefined,
   IsEmail,
@@ -11,7 +13,7 @@ import {
   Matches,
   MaxLength,
   ValidateIf,
-  ValidateNested,
+  ValidateNested
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
@@ -88,4 +90,11 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  jurisdictions: IdDto[]
 }

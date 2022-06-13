@@ -158,7 +158,13 @@ export class UserService {
     if (dto instanceof UserProfileUpdateDto) {
       await this.authorizeUserProfileAction(this.req.user, user, authzActions.update)
     } else {
-      await this.authorizeUserAction(this.req.user, user, authzActions.update)
+      await Promise.all(dto.jurisdictions.map(async jurisdiction => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.update, {
+          id: user.id,
+          jurisdictionId: jurisdiction.id
+        })
+      }))
     }
 
     let passwordHash
@@ -504,7 +510,7 @@ export class UserService {
       new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
         new Date() &&
       user.roles &&
-      (user.roles.isAdmin || user.roles.isPartner)
+      (user.roles.isAdmin || user.roles.isPartner || user.roles.isJurisdictionalAdmin)
     )
   }
 

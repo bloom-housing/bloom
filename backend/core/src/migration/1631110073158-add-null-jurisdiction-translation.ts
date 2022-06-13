@@ -6,7 +6,7 @@ export class addNullJurisdictionTranslation1631110073158 implements MigrationInt
       `SELECT language, translations from translations WHERE language = 'en' LIMIT 1`
     )
 
-    translations["invitePartner"] = {
+    translations["invite"] = {
       hello: "Welcome to the Partners Portal",
       inviteMessage:
         "Welcome to the Partners Portal on %{appUrl}. You will now be able to manage listings and applications that you are a part of from one centralized location.",
