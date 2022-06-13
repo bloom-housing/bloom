@@ -140,7 +140,7 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  section8Acceptance?: boolean
+  section8Acceptance?: boolean | null
 
   // end application method booleans
 

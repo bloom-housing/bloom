@@ -35,7 +35,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "leasingAgentPhone",
   "name",
   "paperApplication",
-  "section8Acceptance",
   "referralOpportunity",
   "rentalAssistance",
   "reviewOrderType",
@@ -114,10 +113,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   rentalAssistance: string
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  section8Acceptance: boolean
 
   @Expose()
   @IsEnum(ListingReviewOrder, { groups: [ValidationsGroupsEnum.default] })

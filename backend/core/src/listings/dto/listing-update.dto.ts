@@ -60,7 +60,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "result",
   "unitGroups",
   "referralApplication",
-  "section8Acceptance",
   "listingPreferences",
   "listingPrograms",
   "publishedAt",
