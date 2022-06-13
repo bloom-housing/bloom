@@ -411,7 +411,7 @@ export const ListingView = (props: ListingProps) => {
                 data={[{ data: groupedUnitData }]}
                 responsiveCollapse={true}
               />
-              {listing.rentalAssistance && (
+              {listing?.section8Acceptance && (
                 <div className="text-sm leading-5 mt-4 invisible md:visible">
                   {t("listings.section8Message")}
                 </div>
@@ -461,11 +461,15 @@ export const ListingView = (props: ListingProps) => {
                         <span className="custom-counter__subtitle">
                           {t("listings.forIncomeCalculations")}
                         </span>
-                        <br />
-                        <br />
-                        <span className="custom-counter__subtitle">
-                          {t("listings.section8Message")}
-                        </span>
+                        {listing?.section8Acceptance && (
+                          <>
+                            <br />
+                            <br />
+                            <span className="custom-counter__subtitle">
+                              {t("listings.section8Message")}
+                            </span>
+                          </>
+                        )}
                       </hgroup>
                     </header>
                     <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={false} />
