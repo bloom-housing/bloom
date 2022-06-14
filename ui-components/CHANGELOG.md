@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.25...@bloom-housing/ui-components@4.4.1-alpha.26) (2022-06-13)
+
+
+### Features
+
+* **expandablecontent.tsx:** add classname prop ([0fc164d](https://github.com/bloom-housing/bloom/commit/0fc164dcf9a9b6df2511dd1eb09ca62c4e79fbb4)), closes [#2798](https://github.com/bloom-housing/bloom/issues/2798)
+
+
+
+
+
+## [4.4.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.24...@bloom-housing/ui-components@4.4.1-alpha.25) (2022-06-10)
+
+
+### Bug Fixes
+
+* add missing dependency preventing build ([#2808](https://github.com/bloom-housing/bloom/issues/2808)) ([ca95792](https://github.com/bloom-housing/bloom/commit/ca95792249186c62ba546b13ff6564186c4a12af))
+
+
+
+
+
+## [4.4.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.23...@bloom-housing/ui-components@4.4.1-alpha.24) (2022-06-10)
+
+
+### Bug Fixes
+
+* remove backend dependency from ui-components ([#2804](https://github.com/bloom-housing/bloom/issues/2804)) ([aa41b56](https://github.com/bloom-housing/bloom/commit/aa41b5629bcc2c24ecc67de5efc0101970522bc0))
+
+
+
+
+
+## [4.4.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.22...@bloom-housing/ui-components@4.4.1-alpha.23) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [4.4.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.21...@bloom-housing/ui-components@4.4.1-alpha.22) (2022-06-09)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
