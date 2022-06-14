@@ -49,7 +49,7 @@ const coliseumListing: ListingSeedType = {
   digitalApplication: false,
   commonDigitalApplication: false,
   paperApplication: false,
-  section8acceptance: true,
+  section8Acceptance: true,
   referralOpportunity: false,
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
