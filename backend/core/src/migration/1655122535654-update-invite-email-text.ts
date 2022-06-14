@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
-
+import { Language } from "../shared/types/language-enum"
 export class updateInviteEmailText1655122535654 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const [{ language, translations }] = await queryRunner.query(
@@ -14,10 +14,7 @@ export class updateInviteEmailText1655122535654 implements MigrationInterface {
         toCompleteAccountCreation: "To complete your account creation, please click the link below:"
     }
 
-    await queryRunner.query(`INSERT INTO translations (language, translations) VALUES ($1, $2)`, [
-      language,
-      translations,
-    ])
+    await queryRunner.query(`UPDATE "translations" SET translations = ($1) where jurisdiction_id is NULL and language = ($2)`, [translations, Language.en])
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {}
