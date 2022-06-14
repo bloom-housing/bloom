@@ -86,7 +86,7 @@ table {
     }
 
     thead tr th {
-      @apply border-0;
+      @apply border-gray-450;
       @apply py-2;
       background: transparent;
     }
@@ -101,6 +101,9 @@ table {
     tr td {
       @apply border-b;
       background: transparent;
+    }
+    tr:last-child td {
+      @apply border-b-0;
     }
   }
   &.is-flush-left {
@@ -366,6 +369,9 @@ tr.group-reserved td:first-of-type {
 table.td-plain {
   .table__thumbnail img {
     @apply -my-1;
+  }
+  .table__is-dragging {
+    @apply border-t;
   }
 }
 
