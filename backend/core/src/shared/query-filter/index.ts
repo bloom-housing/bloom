@@ -13,6 +13,7 @@ import {
   addProgramFilter,
   addAccessibilityFilter,
   addRegionFilter,
+  addRentFilter,
 } from "./custom_filters"
 import { UserFilterKeys } from "../../auth/types/user-filter-keys"
 import { addIsPortalUserQuery } from "../../auth/filters/user-query-filter"
@@ -86,6 +87,12 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
           continue
         case ListingFilterKeys.region:
           addRegionFilter(qb, filterValue)
+          continue
+        case ListingFilterKeys.minRent:
+          addRentFilter(qb, filterValue, "<=", "minRent")
+          continue
+        case ListingFilterKeys.maxRent:
+          addRentFilter(qb, filterValue, ">=", "maxRent")
           continue
         //custom user filters
         case UserFilterKeys.isPortalUser:

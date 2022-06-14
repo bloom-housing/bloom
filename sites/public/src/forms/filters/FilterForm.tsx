@@ -269,7 +269,7 @@ const FilterForm = (props: FilterFormProps) => {
           <GridCell span={3}>
             <ViewItem
               className={"font-bold"}
-              label={t("publicFilter.communityPrograms")}
+              label={t("publicFilter.communityTypes")}
               labelStyling={"text-gray-750"}
             />
             <FieldGroup

@@ -105,3 +105,18 @@ export function addAccessibilityFilter(qb: WhereExpression, filterValue: string)
   qb.andWhere(`(${whereClause})`)
   return
 }
+
+export function addRentFilter(
+  qb: WhereExpression,
+  filterValue: string,
+  comparison: string,
+  filterName: string
+) {
+  if (filterValue) {
+    qb.andWhere(
+      `(amilevels.flat_rent_value ${comparison} :${filterName} OR amilevels.percentage_of_income_value IS NOT NULL)`,
+      { [filterName]: filterValue }
+    )
+  }
+  return
+}
