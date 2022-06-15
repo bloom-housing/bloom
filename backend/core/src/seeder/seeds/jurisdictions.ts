@@ -14,6 +14,7 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: true,
+    enableAccessibilityFeatures: false,
   },
   {
     name: "San Jose",
@@ -25,6 +26,7 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: null,
+    enableAccessibilityFeatures: false,
   },
   {
     name: "San Mateo",
@@ -36,6 +38,7 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: true,
+    enableAccessibilityFeatures: false,
   },
   {
     name: "Detroit",
@@ -47,6 +50,7 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: false,
+    enableAccessibilityFeatures: false,
   },
 ]
 

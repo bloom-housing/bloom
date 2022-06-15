@@ -2,9 +2,11 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
+  const { profile } = useContext(AuthContext)
 
   const getAccessibilityFeatures = () => {
     let featuresExist = false
@@ -20,6 +22,10 @@ const DetailBuildingFeatures = () => {
     })
     return featuresExist ? features : <>{t("t.none")}</>
   }
+
+  const enableAccessibilityFeatures = profile?.jurisdictions?.some(
+    (jurisdiction) => !!jurisdiction.enableAccessibilityFeatures
+  )
 
   return (
     <GridSection
@@ -70,13 +76,15 @@ const DetailBuildingFeatures = () => {
           </ViewItem>
         </GridCell>
       </GridSection>
-      <GridSection columns={1}>
-        <GridCell className={"m-h-1"}>
-          <ViewItem label={"Accessibility Features"}>
-            <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
-          </ViewItem>
-        </GridCell>
-      </GridSection>
+      {!enableAccessibilityFeatures ? null : (
+        <GridSection columns={1}>
+          <GridCell className={"m-h-1"}>
+            <ViewItem label={"Accessibility Features"}>
+              <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
+            </ViewItem>
+          </GridCell>
+        </GridSection>
+      )}
     </GridSection>
   )
 }
