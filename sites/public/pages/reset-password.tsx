@@ -43,7 +43,7 @@ const ResetPassword = () => {
     try {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
-      await router.push("/account/applications")
+      await router.push("/account/dashboard")
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {
