@@ -13,6 +13,7 @@ interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
 export interface CardHeader {
   customClass?: string
+  element?: React.ReactNode
   text: string
 }
 
@@ -81,6 +82,12 @@ const ListingCard = (props: ListingCardProps) => {
           {header.text}
         </Heading>
       )
+    } else if (header && header.element) {
+        return (
+        <Heading priority={priority} style={style} className={customClass}>
+          {header.element}
+        </Heading>
+        )
     } else {
       return <></>
     }
