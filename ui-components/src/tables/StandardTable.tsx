@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
-import { Icon } from "../icons/Icon"
+import { Icon, IconFillColors } from "../icons/Icon"
 import { t } from "../helpers/translator"
+import { faGripLines } from "@fortawesome/free-solid-svg-icons"
 
 export interface TableHeadersOptions {
   name: string
@@ -109,6 +110,7 @@ export const StandardTable = (props: StandardTableProps) => {
   }, [props.data])
 
   if (props.draggable) {
+    headerLabels.splice(0, 0, <th key={"header-draggable"}>{t("t.order")}</th>)
     headerLabels.splice(
       0,
       0,
@@ -153,11 +155,22 @@ export const StandardTable = (props: StandardTableProps) => {
         0,
         0,
         <Cell
-          key={`${dataIndex}-draggable`}
+          key={`${dataIndex}-order-draggable`}
           headerLabel={t("t.sort")}
-          className={`table__draggable-cell pl-5`}
+          className={`pl-5 ${cellClassName ?? undefined}`}
         >
-          <Icon symbol={"draggable"} size={"medium"} />
+          {dataIndex + 1}
+        </Cell>
+      )
+      cols.splice(
+        0,
+        0,
+        <Cell
+          key={`${dataIndex}-sort-draggable`}
+          headerLabel={t("t.sort")}
+          className={`table__draggable-cell pl-7`}
+        >
+          <Icon symbol={faGripLines} size={"medium"} fill={IconFillColors.primary} />
         </Cell>
       )
     }

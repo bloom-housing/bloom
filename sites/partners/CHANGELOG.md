@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.30...@bloom-housing/partners@4.4.1-alpha.31) (2022-06-14)
+
+
+### Features
+
+* actionable row component ([#2810](https://github.com/bloom-housing/bloom/issues/2810)) ([da10703](https://github.com/bloom-housing/bloom/commit/da107038d05b7efd601af70673666a125293ffef))
+
+
+
+
+
 ## [4.4.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.4.1-alpha.29...@bloom-housing/partners@4.4.1-alpha.30) (2022-06-13)
 
 **Note:** Version bump only for package @bloom-housing/partners

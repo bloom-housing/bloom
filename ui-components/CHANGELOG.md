@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.26...@bloom-housing/ui-components@4.4.1-alpha.27) (2022-06-14)
+
+
+### Features
+
+* actionable row component ([#2810](https://github.com/bloom-housing/bloom/issues/2810)) ([da10703](https://github.com/bloom-housing/bloom/commit/da107038d05b7efd601af70673666a125293ffef))
+
+
+
+
+
 ## [4.4.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.25...@bloom-housing/ui-components@4.4.1-alpha.26) (2022-06-13)
 
 

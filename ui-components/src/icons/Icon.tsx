@@ -140,6 +140,7 @@ export const IconFillColors = {
   white: "#ffffff",
   black: "#000000",
   primary: "#0077DA",
+  alert: "#b91c1c",
 }
 
 export type IconSize = "tiny" | "small" | "base" | "medium" | "large" | "xlarge" | "2xl" | "3xl"
