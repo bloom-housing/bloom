@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
-import { newEnforcer } from "casbin"
+import { Enforcer, newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
@@ -26,34 +26,68 @@ export class AuthzService {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     obj?: any
   ): Promise<boolean> {
-    const e = await newEnforcer(
+    let e = await newEnforcer(
       path.join(__dirname, "..", "authz_model.conf"),
       path.join(__dirname, "..", "authz_policy.csv")
     )
 
-    // Get User roles and add them to our enforcer
     if (user) {
-      if (user.roles?.isAdmin) {
-        await e.addRoleForUser(user.id, UserRoleEnum.admin)
-      }
-      if (user.roles?.isPartner) {
-        await e.addRoleForUser(user.id, UserRoleEnum.partner)
-      }
-      await e.addRoleForUser(user.id, UserRoleEnum.user)
+      e = await this.addUserPermissions(e, user)
+    }
 
-      // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
-      //  Permissions for a leasing agent on applications are there defined here programatically.
-      //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
-      //  User side this is expressed by 'leasingAgentInListings' property.
+    return await e.enforce(user ? user.id : "anonymous", type, action, obj)
+  }
+
+  private async addUserPermissions(enforcer: Enforcer, user: User): Promise<Enforcer> {
+    await enforcer.addRoleForUser(user.id, UserRoleEnum.user)
+
+    if (user.roles?.isAdmin) {
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.admin)
+      return enforcer
+    }
+
+    if (user.roles?.isJurisdictionalAdmin) {
+      await Promise.all(
+        user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
+          void enforcer.addPermissionForUser(
+            user.id,
+            "application",
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+          )
+          void enforcer.addPermissionForUser(
+            user.id,
+            "listing",
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+          )
+          void enforcer.addPermissionForUser(
+            user.id,
+            "user",
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
+          )
+        })
+      )
+      return enforcer
+    }
+
+    // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
+    //  Permissions for a leasing agent on applications are there defined here programatically.
+    //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
+    //  User side this is expressed by 'leasingAgentInListings' property.
+    if (user.roles?.isPartner) {
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.partner)
+
       await Promise.all(
         user?.leasingAgentInListings.map((leasingAgentInListing: Listing) => {
-          void e.addPermissionForUser(
+          void enforcer.addPermissionForUser(
             user.id,
             "application",
             `r.obj.listingId == '${leasingAgentInListing.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
-          void e.addPermissionForUser(
+          void enforcer.addPermissionForUser(
             user.id,
             "listing",
             `r.obj.id == '${leasingAgentInListing.id}'`,
@@ -61,34 +95,8 @@ export class AuthzService {
           )
         })
       )
-
-      if (user.roles?.isJurisdictionalAdmin) {
-        await Promise.all(
-          user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
-            void e.addPermissionForUser(
-              user.id,
-              "application",
-              `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-              `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
-            )
-            void e.addPermissionForUser(
-              user.id,
-              "listing",
-              `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-              `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
-            )
-            void e.addPermissionForUser(
-              user.id,
-              "user",
-              `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-              `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
-            )
-          })
-        )
-      }
     }
-
-    return await e.enforce(user ? user.id : "anonymous", type, action, obj)
+    return enforcer
   }
 
   /**
