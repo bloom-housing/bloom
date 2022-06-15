@@ -83,11 +83,11 @@ const ListingCard = (props: ListingCardProps) => {
         </Heading>
       )
     } else if (header && header.element) {
-        return (
+      return (
         <Heading priority={priority} style={style} className={customClass}>
           {header.element}
         </Heading>
-        )
+      )
     } else {
       return <></>
     }
