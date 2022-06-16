@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.12...@bloom-housing/backend-core@4.4.1-alpha.13) (2022-06-16)
+
+
+### Features
+
+* creating setting wall for accessibility feat ([#2817](https://github.com/bloom-housing/bloom/issues/2817)) ([d26cad4](https://github.com/bloom-housing/bloom/commit/d26cad463daf45995e5ed887a0132063d56c0ab5))
+
+
+
+
+
 ## [4.4.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.11...@bloom-housing/backend-core@4.4.1-alpha.12) (2022-06-13)
 
 

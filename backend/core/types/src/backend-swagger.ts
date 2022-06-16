@@ -4032,6 +4032,9 @@ export interface Jurisdiction {
 
   /**  */
   enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
 }
 
 export interface User {
@@ -4465,6 +4468,9 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4504,6 +4510,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
 
   /**  */
   programs: Id[]
