@@ -9,6 +9,7 @@ import {
   ArrayMaxSize,
   IsArray,
   ValidateNested,
+  IsBoolean,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Language } from "../../shared/types/language-enum"
@@ -70,4 +71,16 @@ export class Jurisdiction extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   rentalAssistanceDefault: string
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  enablePartnerSettings?: boolean | null
+
+  @Column({ type: "boolean", nullable: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  enableAccessibilityFeatures: boolean | null
 }

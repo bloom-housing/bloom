@@ -90,7 +90,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-red-700"
+            className="font-semibold uppercase text-red-700 my-0"
             onClick={() => {
               setCloudinaryData({
                 id: "",

@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from "react"
-import { AuthContext, RequireLogin, t, FormCard, dateToString } from "@bloom-housing/ui-components"
+import { t, FormCard, dateToString } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import FormsLayout from "../../../layouts/forms"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { useRouter } from "next/router"
+import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 
 export default () => {
   const router = useRouter()
@@ -48,7 +49,12 @@ export default () => {
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
         <FormsLayout>
           {noApplication && (
-            <FormCard header={t("account.application.error")}>
+            <FormCard
+              header={{
+                isVisible: true,
+                title: t("account.application.error"),
+              }}
+            >
               <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
               <a href={`applications`} className="button is-small">
                 {t("account.application.return")}
@@ -56,7 +62,12 @@ export default () => {
             </FormCard>
           )}
           {unauthorized && (
-            <FormCard header={t("account.application.error")}>
+            <FormCard
+              header={{
+                isVisible: true,
+                title: t("account.application.error"),
+              }}
+            >
               <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
               <a href={`applications`} className="button is-small">
                 {t("account.application.return")}
@@ -65,7 +76,12 @@ export default () => {
           )}
           {application && (
             <>
-              <FormCard header={t("account.application.confirmation")}>
+              <FormCard
+                header={{
+                  isVisible: true,
+                  title: t("account.application.confirmation"),
+                }}
+              >
                 <div className="py-2">
                   {listing && (
                     <Link

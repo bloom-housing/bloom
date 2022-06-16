@@ -85,7 +85,7 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700"
+                className="front-semibold uppercase text-red-700 my-0"
                 onClick={() => {
                   deleteItem(item, false)
                 }}
@@ -110,7 +110,7 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700"
+                className="front-semibold uppercase text-red-700 my-0"
                 onClick={() => {
                   deleteItem(item, true)
                 }}
@@ -130,7 +130,9 @@ const SelectAndOrder = ({
     if (draftListingData.length > 0 && dragOrder.length > 0) {
       const newDragOrder = []
       dragOrder.forEach((item) => {
-        newDragOrder.push(draftListingData.filter((draftItem) => draftItem.title === item.name)[0])
+        newDragOrder.push(
+          draftListingData.filter((draftItem) => draftItem.title === item.name.content)[0]
+        )
       })
       setDraftListingData(newDragOrder)
     }

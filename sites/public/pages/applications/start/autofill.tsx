@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect, useCallback } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
-  AuthContext,
   AppearanceStyleType,
   Button,
   Form,
@@ -14,6 +13,7 @@ import {
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
@@ -72,31 +72,36 @@ export default () => {
   }, [profile])
 
   useEffect(() => {
-    if (!profile || previousApplication) {
-      if (initialStateLoaded) {
+    if (!previousApplication && initialStateLoaded) {
+      if (profile) {
+        void applicationsService
+          .list({
+            userId: profile.id,
+            orderBy: "createdAt",
+            order: "DESC",
+            limit: 1,
+          })
+          .then((res) => {
+            if (res && res?.items?.length) {
+              setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
+            } else {
+              onSubmit()
+            }
+          })
+      } else {
         onSubmit()
       }
-      return
     }
-    void applicationsService
-      .list({
-        userId: profile.id,
-        orderBy: "createdAt",
-        order: "DESC",
-        limit: 1,
-      })
-      .then((res) => {
-        if (res && res?.items?.length) {
-          setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
-        } else {
-          onSubmit()
-        }
-      })
-  }, [profile, previousApplication, applicationsService, initialStateLoaded, onSubmit])
+  }, [profile, applicationsService, onSubmit, previousApplication, initialStateLoaded])
 
   return previousApplication ? (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

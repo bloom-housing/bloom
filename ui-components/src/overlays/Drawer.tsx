@@ -5,7 +5,7 @@ import { Overlay, OverlayProps } from "./Overlay"
 import { Tag } from "../text/Tag"
 import { AppearanceStyleType, AppearanceSizeType } from "../global/AppearanceTypes"
 import { AlertTypes } from "../notifications/alertTypes"
-import { AlertBox } from "../notifications"
+import { AlertBox } from "../notifications/AlertBox"
 import { nanoid } from "nanoid"
 
 export enum DrawerSide {

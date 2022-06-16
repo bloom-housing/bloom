@@ -1,6 +1,5 @@
 import { cleanup } from "@testing-library/react"
 import { getUniqueUnitTypes, sortUnitTypes } from "../src/unitTypes"
-import { UnitStatus } from "@bloom-housing/backend-core/types"
 
 afterEach(cleanup)
 
@@ -77,16 +76,13 @@ describe("unit type: getUniqueUnitTypes helper", () => {
   })
   it("should return empty array if all elements are invalid", () => {
     expect(
-      getUniqueUnitTypes([
-        { status: UnitStatus["available"], id: "", createdAt: new Date(), updatedAt: new Date() },
-      ])
+      getUniqueUnitTypes([{ id: "", createdAt: new Date(), updatedAt: new Date() }])
     ).toStrictEqual([])
   })
   it("should return 1 element if 1 valid element is passed in", () => {
     expect(
       getUniqueUnitTypes([
         {
-          status: UnitStatus["available"],
           id: "example id",
           createdAt: new Date(),
           updatedAt: new Date(),
