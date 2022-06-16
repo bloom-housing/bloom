@@ -13,7 +13,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, watch } = formMethods
+  const jurisdiction = watch("jurisdiction.id")
 
   const featureOptions = useMemo(() => {
     return listingFeatures.map((item) => ({
@@ -24,9 +25,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
     }))
   }, [register, props.existingFeatures])
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.some(
-    (jurisdiction) => !!jurisdiction.enableAccessibilityFeatures
-  )
+  const enableAccessibilityFeatures = profile?.jurisdictions?.find((j) => j.id === jurisdiction)
+    ?.enableAccessibilityFeatures
 
   return (
     <div>

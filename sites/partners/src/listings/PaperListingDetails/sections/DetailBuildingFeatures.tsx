@@ -23,9 +23,9 @@ const DetailBuildingFeatures = () => {
     return featuresExist ? features : <>{t("t.none")}</>
   }
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.some(
-    (jurisdiction) => !!jurisdiction.enableAccessibilityFeatures
-  )
+  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
+    (j) => j.id === listing.jurisdiction.id
+  )?.enableAccessibilityFeatures
 
   return (
     <GridSection

@@ -10,6 +10,7 @@ import {
   ApplicationMethodType,
   ListingStatus,
   ListingAvailability,
+  Jurisdiction,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -61,6 +62,7 @@ import { getGenericAddress, openInFuture } from "../lib/helpers"
 interface ListingProps {
   listing: Listing
   preview?: boolean
+  jurisdiction?: Jurisdiction
 }
 
 export const ListingView = (props: ListingProps) => {
@@ -748,7 +750,7 @@ export const ListingView = (props: ListingProps) => {
               {listing.servicesOffered && (
                 <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
               )}
-              {accessibilityFeatures && (
+              {accessibilityFeatures && props.jurisdiction?.enableAccessibilityFeatures && (
                 <Description term={t("t.accessibility")} description={accessibilityFeatures} />
               )}
               {listing.accessibility && (
