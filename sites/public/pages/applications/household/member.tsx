@@ -16,7 +16,6 @@ import {
   FormOptions,
   ProgressNav,
   t,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import FormsLayout from "../../../layouts/forms"
@@ -30,6 +29,7 @@ import {
   pushGtmEvent,
   relationshipKeys,
   stateKeys,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
@@ -116,7 +116,12 @@ const ApplicationMember = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

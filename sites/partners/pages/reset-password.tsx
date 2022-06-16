@@ -8,12 +8,12 @@ import {
   Form,
   FormCard,
   Icon,
-  AuthContext,
   t,
   AlertBox,
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {

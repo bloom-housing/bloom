@@ -10,7 +10,7 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import { InputType } from "../../src/shared/types/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
@@ -457,7 +457,7 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
       .set(...setAuthorization(user1AccessToken))
-      .expect(404)
+      .expect(500)
   })
 
   it(`should disallow users to delete their own applications`, async () => {

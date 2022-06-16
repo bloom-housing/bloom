@@ -1217,6 +1217,8 @@ export class ListingsService {
       orderBy?: any | null[]
       /**  */
       orderDir?: any | null[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1231,6 +1233,7 @@ export class ListingsService {
         view: params["view"],
         orderBy: params["orderBy"],
         orderDir: params["orderDir"],
+        search: params["search"],
       }
       let data = null
 
@@ -4026,6 +4029,9 @@ export interface Jurisdiction {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
 }
 
 export interface User {
@@ -4456,6 +4462,9 @@ export interface JurisdictionCreate {
   rentalAssistanceDefault: string
 
   /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4492,6 +4501,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
 
   /**  */
   programs: Id[]
@@ -4531,7 +4543,7 @@ export interface ListingsApiExtraModels {
   orderBy?: OrderByFieldsEnum[]
 
   /**  */
-  order?: EnumListingsApiExtraModelsOrder[]
+  orderDir?: OrderParam[]
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4876,9 +4888,6 @@ export interface UnitAmiChartOverride {
 
 export interface Unit {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -5001,6 +5010,53 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ListingFeatures {
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  mobility?: boolean
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -5019,6 +5075,9 @@ export interface Listing {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   showWaitlist: boolean
@@ -5121,6 +5180,9 @@ export interface Listing {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 
   /**  */
   id: string
@@ -5313,9 +5375,6 @@ export interface UnitAmiChartOverrideCreate {
 
 export interface UnitCreate {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -5457,6 +5516,9 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5679,6 +5741,9 @@ export interface ListingCreate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface ListingEventUpdate {
@@ -5728,9 +5793,6 @@ export interface UnitAmiChartOverrideUpdate {
 }
 
 export interface UnitUpdate {
-  /**  */
-  status: UnitStatus
-
   /**  */
   id?: string
 
@@ -5869,6 +5931,9 @@ export interface ListingUpdate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   id?: string
@@ -6100,6 +6165,9 @@ export interface ListingUpdate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface PreferencesFilterParams {
@@ -6625,10 +6693,12 @@ export enum OrderByFieldsEnum {
   "unitsAvailable" = "unitsAvailable",
   "marketingType" = "marketingType",
 }
-export enum EnumListingsApiExtraModelsOrder {
+
+export enum OrderParam {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
 }
@@ -6644,6 +6714,11 @@ export enum ListingReviewOrder {
   "firstComeFirstServe" = "firstComeFirstServe",
 }
 
+export enum ListingAvailability {
+  "availableUnits" = "availableUnits",
+  "openWaitlist" = "openWaitlist",
+}
+
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
@@ -6653,13 +6728,6 @@ export enum ListingEventType {
 export enum FormMetaDataType {
   "radio" = "radio",
   "checkbox" = "checkbox",
-}
-
-export enum UnitStatus {
-  "unknown" = "unknown",
-  "available" = "available",
-  "occupied" = "occupied",
-  "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate

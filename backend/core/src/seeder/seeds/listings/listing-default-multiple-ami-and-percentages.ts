@@ -3,7 +3,6 @@ import { getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitSeedType } from "./listings"
 import { CountyCode } from "../../../shared/types/county-code"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 
 export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed {
@@ -24,10 +23,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
-
     const multipleAMIUnits: Array<UnitSeedType> = [
       {
         amiChart: amiChartOne,
@@ -45,7 +40,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         numBedrooms: 1,
         number: null,
         sqFeet: "635",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChartTwo,
@@ -63,7 +57,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         numBedrooms: 1,
         number: null,
         sqFeet: "635",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChartOne,
@@ -81,7 +74,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChartTwo,
@@ -99,9 +91,13 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...getDefaultProperty(),
+      unitsAvailable: multipleAMIUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = multipleAMIUnits.map(
       (unit) => {

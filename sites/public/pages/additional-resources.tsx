@@ -8,10 +8,9 @@ import {
   InfoCard,
   PageHeader,
   MarkdownSection,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import { UserStatus } from "../lib/constants"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 
 const AdditionalResources = () => {
   const pageTitle = t("pageTitle.additionalResources")
