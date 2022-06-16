@@ -4294,6 +4294,9 @@ export interface UserUpdate {
   appUrl?: string
 
   /**  */
+  jurisdictions: Id[]
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
