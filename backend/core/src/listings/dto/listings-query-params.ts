@@ -81,7 +81,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     type: String,
     example: "search",
     required: false,
-    isArray: true,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
