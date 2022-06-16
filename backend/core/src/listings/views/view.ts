@@ -38,7 +38,7 @@ export class BaseListingView extends BaseView {
     return listings.map((listing) => ({
       ...listing,
       unitsSummarized: {
-        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units),
+        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units, listing),
       },
     }))
   }

@@ -10,7 +10,7 @@ try {
   // Pass
 }
 
-export = {
+export default {
   type: "postgres",
   url: process.env.TEST_DATABASE_URL || "postgres://localhost:5432/bloom_test",
   synchronize: true,

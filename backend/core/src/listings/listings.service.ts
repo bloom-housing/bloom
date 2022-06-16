@@ -9,7 +9,7 @@ import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.d
 import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
 import { summarizeUnits } from "../shared/units-transformations"
-import { Language } from "../../types"
+import { Language, ListingAvailability } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 import { ListingCreateDto } from "./dto/listing-create.dto"
@@ -121,6 +121,10 @@ export class ListingsService {
       )
     }
 
+    if (params.search) {
+      innerFilteredQuery.andWhere("listings.name ILIKE :search", { search: `%${params.search}%` })
+    }
+
     // TODO(avaleske): Typescript doesn't realize that the `paginate` bool is a
     // type guard, but it will in version 4.4. Once this codebase is upgraded to
     // v4.4, remove the extra type assertions on `params.limit` below.
@@ -208,13 +212,13 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
-    let availableUnits = 0
+    const availableUnits =
+      listingDto.listingAvailability === ListingAvailability.availableUnits
+        ? listingDto.units.length
+        : 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
         delete unit.id
-      }
-      if (unit.status === "available") {
-        availableUnits++
       }
     })
 
@@ -277,7 +281,7 @@ export class ListingsService {
       const amiCharts = await this.amiChartsRepository.find({
         where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
       })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
+      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts, listing)
     }
     return listing
   }

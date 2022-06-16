@@ -43,6 +43,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   canPaperApplicationsBePickedUp?: YesNoAnswer
   canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
+  listingFeatures?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
@@ -70,6 +71,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     year: string
   }
   reviewOrderQuestion?: string
+  listingAvailabilityQuestion?: string
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
   whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
@@ -113,6 +115,8 @@ export const formDefaults: FormListing = {
   displayWaitlistSize: false,
   events: [],
   images: [],
+  listingFeatures: [],
+  features: {},
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
@@ -153,6 +157,7 @@ export const formDefaults: FormListing = {
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: null,
+  listingAvailability: null,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
