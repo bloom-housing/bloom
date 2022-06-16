@@ -80,7 +80,7 @@ const ListingPhoto = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-red-700"
+            className="font-semibold uppercase text-red-700 my-0"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -120,7 +120,7 @@ const ListingPhoto = () => {
           <div className="flex">
             <Button
               type="button"
-              className="font-semibold uppercase"
+              className="font-semibold uppercase my-0"
               onClick={() => {
                 setDrawerState(true)
               }}
@@ -130,7 +130,7 @@ const ListingPhoto = () => {
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-red-700"
+              className="font-semibold uppercase text-red-700 my-0"
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePhoto()

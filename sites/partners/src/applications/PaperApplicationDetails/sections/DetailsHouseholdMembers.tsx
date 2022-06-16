@@ -49,7 +49,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase"
+            className="font-semibold uppercase my-0"
             onClick={() => setMembersDrawer(item)}
             unstyled
           >

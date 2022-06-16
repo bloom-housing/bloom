@@ -1,4 +1,4 @@
-import { AmiChart, Listing, ListingStatus, UnitStatus } from "./backend-swagger"
+import { AmiChart, Listing, ListingStatus } from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",
@@ -694,7 +694,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -717,7 +717,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -740,7 +740,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -763,7 +763,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -786,7 +786,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -809,7 +809,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -832,7 +832,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -855,7 +855,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -878,7 +878,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -901,7 +901,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -924,7 +924,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -947,7 +947,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -970,7 +970,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -993,7 +993,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1016,7 +1016,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1039,7 +1039,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1062,7 +1062,6 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.available,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1085,7 +1084,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1108,7 +1107,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1131,7 +1130,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1154,7 +1153,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1177,7 +1176,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1200,7 +1199,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1223,7 +1222,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1246,7 +1245,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1269,7 +1268,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1292,7 +1291,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1315,7 +1314,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1338,7 +1337,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1361,7 +1360,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1384,7 +1383,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1407,7 +1406,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1430,7 +1429,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1453,7 +1452,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1476,7 +1475,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1499,7 +1498,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1522,7 +1521,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1545,7 +1544,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1568,7 +1567,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1591,7 +1590,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1614,7 +1613,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "1104.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),

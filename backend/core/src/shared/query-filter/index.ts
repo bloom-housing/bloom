@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
+import { UserFilterKeys } from "../../auth/types/user-filter-keys"
+import { addIsPortalUserQuery } from "../../auth/filters/user-query-filter"
 
 export interface IBaseQueryFilter {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,11 +33,13 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
 ): void {
   for (const [index, filter] of filters.entries()) {
     const comparison = filter["$comparison"]
+    const includeNulls = filter["$include_nulls"]
     for (const filterKey in filter) {
       if (
         filter[filterKey] === undefined ||
         filter[filterKey] === null ||
-        filterKey === "$comparison"
+        filterKey === "$comparison" ||
+        filterKey === "$include_nulls"
       ) {
         continue
       }
@@ -43,23 +47,49 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       if (!(filterKey in filterTypeToFieldMap)) {
         throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       }
+
+      const filterValue = filter[filterKey]
+      // Handle custom filters here, before dropping into generic filter handler
+      switch (filterKey) {
+        //custom user filters
+        case UserFilterKeys.isPortalUser:
+          addIsPortalUserQuery(qb, filterValue)
+          continue
+      }
+
       const whereParameterName = `${filterKey}_${index}`
       const filterField = filterTypeToFieldMap[filterKey]
-      const filterValue = filter[filterKey]
       switch (comparison) {
         case Compare.IN:
-          qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {
-            [whereParameterName]: filterValue
-              .split(",")
-              .map((s) => s.trim().toLowerCase())
-              .filter((s) => s.length !== 0),
-          })
+          qb.andWhere(
+            `(LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})${
+              includeNulls ? ` OR ${filterField} IS NULL` : ""
+            })`,
+            {
+              [whereParameterName]: String(filterValue)
+                .split(",")
+                .map((s) => s.trim().toLowerCase())
+                .filter((s) => s.length !== 0),
+            }
+          )
           break
         case Compare["<>"]:
         case Compare["="]:
-        case Compare[">="]:
           qb.andWhere(
-            `LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})`,
+            `(LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})${
+              includeNulls ? ` OR ${filterField} IS NULL` : ""
+            })`,
+            {
+              [whereParameterName]: filterValue,
+            }
+          )
+          break
+        case Compare[">="]:
+        case Compare["<="]:
+          qb.andWhere(
+            `(${filterField} ${comparison} :${whereParameterName}${
+              includeNulls ? ` OR ${filterField} IS NULL` : ""
+            })`,
             {
               [whereParameterName]: filterValue,
             }

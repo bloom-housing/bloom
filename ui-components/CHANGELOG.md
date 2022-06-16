@@ -3,6 +3,279 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.26...@bloom-housing/ui-components@4.4.1-alpha.27) (2022-06-14)
+
+
+### Features
+
+* actionable row component ([#2810](https://github.com/bloom-housing/bloom/issues/2810)) ([da10703](https://github.com/bloom-housing/bloom/commit/da107038d05b7efd601af70673666a125293ffef))
+
+
+
+
+
+## [4.4.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.25...@bloom-housing/ui-components@4.4.1-alpha.26) (2022-06-13)
+
+
+### Features
+
+* **expandablecontent.tsx:** add classname prop ([0fc164d](https://github.com/bloom-housing/bloom/commit/0fc164dcf9a9b6df2511dd1eb09ca62c4e79fbb4)), closes [#2798](https://github.com/bloom-housing/bloom/issues/2798)
+
+
+
+
+
+## [4.4.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.24...@bloom-housing/ui-components@4.4.1-alpha.25) (2022-06-10)
+
+
+### Bug Fixes
+
+* add missing dependency preventing build ([#2808](https://github.com/bloom-housing/bloom/issues/2808)) ([ca95792](https://github.com/bloom-housing/bloom/commit/ca95792249186c62ba546b13ff6564186c4a12af))
+
+
+
+
+
+## [4.4.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.23...@bloom-housing/ui-components@4.4.1-alpha.24) (2022-06-10)
+
+
+### Bug Fixes
+
+* remove backend dependency from ui-components ([#2804](https://github.com/bloom-housing/bloom/issues/2804)) ([aa41b56](https://github.com/bloom-housing/bloom/commit/aa41b5629bcc2c24ecc67de5efc0101970522bc0))
+
+
+
+
+
+## [4.4.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.22...@bloom-housing/ui-components@4.4.1-alpha.23) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.21...@bloom-housing/ui-components@4.4.1-alpha.22) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.20...@bloom-housing/ui-components@4.4.1-alpha.21) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.19...@bloom-housing/ui-components@4.4.1-alpha.20) (2022-06-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.18...@bloom-housing/ui-components@4.4.1-alpha.19) (2022-06-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.17...@bloom-housing/ui-components@4.4.1-alpha.18) (2022-06-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.16...@bloom-housing/ui-components@4.4.1-alpha.17) (2022-06-07)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.15...@bloom-housing/ui-components@4.4.1-alpha.16) (2022-06-07)
+
+
+### Bug Fixes
+
+* changed aria-selected to aria-current issue [#698](https://github.com/bloom-housing/bloom/issues/698) ([bed1b23](https://github.com/bloom-housing/bloom/commit/bed1b23d63af134542f6760aa70d1ccac87940fa))
+
+
+### Features
+
+* **sidenav component:** update Prototype SideNav Component for Production Usage ([4ae5e5c](https://github.com/bloom-housing/bloom/commit/4ae5e5c159c7150a808df85b2aa47e443256eb5f)), closes [#698](https://github.com/bloom-housing/bloom/issues/698)
+
+
+
+
+
+## [4.4.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.14...@bloom-housing/ui-components@4.4.1-alpha.15) (2022-06-07)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.13...@bloom-housing/ui-components@4.4.1-alpha.14) (2022-06-06)
+
+
+### Features
+
+* create table card component ([#2781](https://github.com/bloom-housing/bloom/issues/2781)) ([7cb3147](https://github.com/bloom-housing/bloom/commit/7cb31477268733b8b3d51dd77b2e33afb713ffbc))
+
+
+
+
+
+## [4.4.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.12...@bloom-housing/ui-components@4.4.1-alpha.13) (2022-06-04)
+
+
+### Features
+
+* **modal:** add option for fixed-height scrollable modal ([#2769](https://github.com/bloom-housing/bloom/issues/2769)) ([756582d](https://github.com/bloom-housing/bloom/commit/756582d4e36c2772a420c8bcbf9625bb6be66ad6))
+
+
+
+
+
+## [4.4.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.11...@bloom-housing/ui-components@4.4.1-alpha.12) (2022-06-03)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.10...@bloom-housing/ui-components@4.4.1-alpha.11) (2022-06-02)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.9...@bloom-housing/ui-components@4.4.1-alpha.10) (2022-06-01)
+
+
+### Features
+
+* add accessibility building features to listing ([#2755](https://github.com/bloom-housing/bloom/issues/2755)) ([0c8dfb8](https://github.com/bloom-housing/bloom/commit/0c8dfb833d0ef6d4f4927636c9f01bae6f48e4f1))
+
+
+
+
+
+## [4.4.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.8...@bloom-housing/ui-components@4.4.1-alpha.9) (2022-05-31)
+
+
+### Features
+
+* load overly to partner listings grid ([#2621](https://github.com/bloom-housing/bloom/issues/2621)) ([4785f34](https://github.com/bloom-housing/bloom/commit/4785f344831f97dac2164224e32247619e5ac808))
+
+
+
+
+
+## [4.4.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.7...@bloom-housing/ui-components@4.4.1-alpha.8) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.6...@bloom-housing/ui-components@4.4.1-alpha.7) (2022-05-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.5...@bloom-housing/ui-components@4.4.1-alpha.6) (2022-05-26)
+
+
+### Bug Fixes
+
+* visual design bugs ([#2737](https://github.com/bloom-housing/bloom/issues/2737)) ([dbac685](https://github.com/bloom-housing/bloom/commit/dbac685cd1e4d276b57a1d961eb5707decbc248b))
+
+
+
+
+
+## [4.4.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.4...@bloom-housing/ui-components@4.4.1-alpha.5) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.3...@bloom-housing/ui-components@4.4.1-alpha.4) (2022-05-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.2...@bloom-housing/ui-components@4.4.1-alpha.3) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.1...@bloom-housing/ui-components@4.4.1-alpha.2) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.0...@bloom-housing/ui-components@4.4.1-alpha.1) (2022-05-25)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.4.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.3.1-alpha.2...@bloom-housing/ui-components@4.4.1-alpha.0) (2022-05-25)
+
+
+* 2022 05 24 sync master (#2754) ([f52781f](https://github.com/bloom-housing/bloom/commit/f52781fe18fbdad071d6e9a8a2b29877596c5492)), closes [#2754](https://github.com/bloom-housing/bloom/issues/2754) [#2753](https://github.com/bloom-housing/bloom/issues/2753) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+
+
+
+
+
 # [4.4.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.2.3...@bloom-housing/ui-components@4.4.0) (2022-05-24)
 
 

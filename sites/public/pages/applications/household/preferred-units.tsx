@@ -11,7 +11,6 @@ import {
   FormCard,
   ProgressNav,
   t,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -21,6 +20,7 @@ import {
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
@@ -72,7 +72,12 @@ const ApplicationPreferredUnits = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
