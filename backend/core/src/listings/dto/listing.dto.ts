@@ -1,7 +1,6 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import dayjs from "dayjs"
 import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -15,10 +14,10 @@ import { JurisdictionSlimDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import { ListingFeaturesDto } from "./listing-features.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { ListingImageDto } from "./listing-image.dto"
-import { IncomePeriod } from "../../applications/types/income-period-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -38,6 +37,7 @@ export class ListingDto extends OmitType(Listing, [
   "reservedCommunityType",
   "result",
   "unitsSummary",
+  "features",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -323,4 +323,9 @@ export class ListingDto extends OmitType(Listing, [
     { toClassOnly: true }
   )
   countyCode?: string
+
+  @Expose()
+  @Type(() => ListingFeaturesDto)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  features?: ListingFeaturesDto
 }

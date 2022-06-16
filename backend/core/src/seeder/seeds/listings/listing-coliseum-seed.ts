@@ -14,9 +14,9 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
+import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
@@ -39,7 +39,6 @@ const coliseumProperty: PropertySeedType = {
     "Residential supportive services are provided to all residents on a volunteer basis.",
   smokingPolicy: "No Smoking",
   unitAmenities: null,
-  unitsAvailable: 46,
   yearBuilt: 2021,
 }
 
@@ -111,6 +110,7 @@ const coliseumListing: ListingSeedType = {
   waitlistOpenSpots: 3000,
   isWaitlistOpen: true,
   whatToExpect: null,
+  listingAvailability: ListingAvailability.availableUnits,
 }
 
 export class ListingColiseumSeed extends ListingDefaultSeed {
@@ -145,10 +145,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...coliseumProperty,
-    })
-
     const coliseumUnits: Array<UnitSeedType> = [
       {
         amiChart: amiChart,
@@ -166,7 +162,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "486",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -184,7 +179,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "491",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -202,7 +196,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "491",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -220,7 +213,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "491",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -238,7 +230,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -256,7 +247,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -274,7 +264,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -292,7 +281,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -310,7 +298,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -328,7 +315,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -346,7 +332,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -364,7 +349,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -382,7 +366,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -400,7 +383,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -418,7 +400,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -436,7 +417,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -454,7 +434,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -472,7 +451,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -490,7 +468,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -508,7 +485,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -526,7 +502,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -544,7 +519,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -562,7 +536,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -580,7 +553,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -598,7 +570,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -616,7 +587,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -634,7 +604,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -652,7 +621,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -670,7 +638,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1080",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -688,7 +655,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -706,7 +672,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -724,7 +689,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -742,7 +706,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -760,7 +723,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -778,7 +740,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -796,7 +757,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -814,7 +774,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -832,7 +791,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -850,7 +808,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -868,7 +825,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -886,7 +842,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -904,7 +859,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -922,7 +876,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -940,7 +893,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -958,7 +910,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -976,9 +927,13 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...coliseumProperty,
+      unitsAvailable: coliseumUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = coliseumUnits.map(
       (unit) => {

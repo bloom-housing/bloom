@@ -106,8 +106,10 @@
 }
 
 .form-card__header_group {
+  @apply flex justify-center items-center;
   @apply bg-primary;
   @apply p-4;
+  @apply h-16;
 
   @screen md {
     @apply rounded-t-lg;

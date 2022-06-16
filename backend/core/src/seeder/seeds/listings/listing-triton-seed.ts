@@ -5,9 +5,9 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
+import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 
 const tritonProperty: PropertySeedType = {
   accessibility:
@@ -30,7 +30,6 @@ const tritonProperty: PropertySeedType = {
   servicesOffered: null,
   smokingPolicy: "Non-Smoking",
   unitAmenities: "Washer and dryer, AC and Heater, Gas Stove",
-  unitsAvailable: 4,
   yearBuilt: 2021,
 }
 
@@ -99,6 +98,7 @@ const tritonListing: ListingSeedType = {
   waitlistOpenSpots: 200,
   isWaitlistOpen: true,
   whatToExpect: null,
+  listingAvailability: ListingAvailability.availableUnits,
 }
 
 export class ListingTritonSeed extends ListingDefaultSeed {
@@ -113,10 +113,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "San Jose TCAC 2019",
       jurisdiction: alamedaJurisdiction,
-    })
-
-    const property = await this.propertyRepository.save({
-      ...tritonProperty,
     })
 
     const tritonUnits: Array<UnitSeedType> = [
@@ -136,7 +132,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "1100",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -154,7 +149,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -172,7 +166,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -190,7 +183,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -208,9 +200,13 @@ export class ListingTritonSeed extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...tritonProperty,
+      unitsAvailable: tritonUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = tritonUnits.map(
       (unit) => {
@@ -291,7 +287,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "1100",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -309,7 +304,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -327,7 +321,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -345,7 +338,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -363,7 +355,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
     ]
 

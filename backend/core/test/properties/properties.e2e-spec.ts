@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
