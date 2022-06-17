@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Application } from "./entities/application.entity"
 import { ApplicationsController } from "./applications.controller"
@@ -21,7 +21,7 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
 @Module({
   imports: [
     TypeOrmModule.forFeature([Application, Applicant, Address, Listing]),
-    AuthModule,
+    forwardRef(() => AuthModule),
     ActivityLogModule,
     SharedModule,
     ListingsModule,
