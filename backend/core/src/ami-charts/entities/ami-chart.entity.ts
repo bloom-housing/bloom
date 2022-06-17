@@ -6,7 +6,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
+import { Expose, Type } from "class-transformer"
+import { IsDate, IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartItem } from "./ami-chart-item.entity"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Entity()

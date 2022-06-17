@@ -1,15 +1,12 @@
 import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
 import { AuthContext } from "./AuthContext"
-import { ConfigContext } from "./ConfigContext"
-import {
-  NavigationContext,
-  Button,
-  Modal,
-  setSiteAlertMessage,
-  AlertTypes,
-  t,
-  AppearanceStyleType,
-} from "@bloom-housing/ui-components"
+import { ConfigContext, NavigationContext } from "../config"
+import { Button } from "../actions/Button"
+import { Modal } from "../overlays/Modal"
+import { setSiteAlertMessage } from "../notifications/SiteAlert"
+import { AlertTypes } from "../notifications/alertTypes"
+import { t } from "../helpers/translator"
+import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 const PROMPT_TIMEOUT = 60000
 const events = ["mousemove", "keypress", "scroll"]

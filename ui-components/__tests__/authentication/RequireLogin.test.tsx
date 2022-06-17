@@ -1,9 +1,9 @@
 import React from "react"
 import { render } from "@testing-library/react"
-import { RequireLogin } from "../src/RequireLogin"
-import { AuthContext } from "../src/AuthContext"
+import { RequireLogin } from "../../src/authentication/RequireLogin"
+import { AuthContext } from "../../src/authentication/AuthContext"
 import { User } from "@bloom-housing/backend-core/types"
-import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
+import { GenericRouter, NavigationContext } from "../../src/config/NavigationContext"
 
 // Helpers
 

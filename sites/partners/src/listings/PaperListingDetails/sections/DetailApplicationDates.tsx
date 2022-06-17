@@ -54,7 +54,7 @@ const DetailApplicationDates = () => {
                 <div className="flex">
                   <Button
                     type="button"
-                    className="front-semibold uppercase my-0"
+                    className="front-semibold uppercase"
                     onClick={() => setDrawer(event)}
                     unstyled
                   >

@@ -15,10 +15,9 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import { TempUnit } from "../formTypes"
-import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { ListingAvailability } from "@bloom-housing/backend-core/types"
+import { fieldHasError } from "../../../../lib/helpers"
 
 type UnitProps = {
   units: TempUnit[]
@@ -34,13 +33,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, reset, getValues, control } = formMethods
-  const listing = getValues()
-
-  const listingAvailability = useWatch({
-    control,
-    name: "listingAvailabilityQuestion",
-  })
+  const { register, errors, clearErrors, reset, getValues } = formMethods
 
   const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
@@ -51,6 +44,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     monthlyRent: "listings.unit.rent",
     sqFeet: "listings.unit.sqft",
     priorityType: "listings.unit.priorityType",
+    status: "listings.unit.status",
     action: "",
   }
 
@@ -109,12 +103,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
         priorityType: { content: unit.priorityType?.name },
+        status: { content: t(`listings.unit.statusOptions.${unit.status}`) },
         action: {
           content: (
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase my-0"
+                className="front-semibold uppercase"
                 onClick={() => editUnit(unit.tempId)}
                 unstyled
               >
@@ -122,7 +117,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700 my-0"
+                className="front-semibold uppercase text-red-700"
                 onClick={() => setUnitDeleteModal(unit.tempId)}
                 unstyled
               >
@@ -168,43 +163,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               fields={disableUnitsAccordionOptions}
               fieldClassName="m-0"
               fieldGroupClassName="flex h-12 items-center"
-            />
-          </GridCell>
-          <GridCell>
-            <ViewItem
-              label={t("listings.listingAvailabilityQuestion")}
-              className={`mb-1 ${
-                fieldHasError(errors?.listingAvailability) &&
-                listingAvailability === null &&
-                "text-alert"
-              }`}
-            />
-            <FieldGroup
-              name="listingAvailabilityQuestion"
-              type="radio"
-              register={register}
-              groupSubNote={t("listings.requiredToPublish")}
-              error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
-              errorMessage={fieldMessage(errors?.listingAvailability)}
-              fieldClassName="m-0"
-              fieldGroupClassName="flex h-12 items-center"
-              fields={[
-                {
-                  label: t("listings.availableUnits"),
-                  value: "availableUnits",
-                  id: "availableUnits",
-                  dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked:
-                    listing?.listingAvailability === ListingAvailability.availableUnits,
-                },
-                {
-                  label: t("listings.waitlist.open"),
-                  value: "openWaitlist",
-                  id: "openWaitlist",
-                  dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.listingAvailability === ListingAvailability.openWaitlist,
-                },
-              ]}
             />
           </GridCell>
         </GridSection>

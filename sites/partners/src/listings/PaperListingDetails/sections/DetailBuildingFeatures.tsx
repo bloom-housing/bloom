@@ -2,30 +2,9 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
-  const { profile } = useContext(AuthContext)
-
-  const getAccessibilityFeatures = () => {
-    let featuresExist = false
-    const features = Object.keys(listing?.features ?? {}).map((feature) => {
-      if (listing?.features[feature]) {
-        featuresExist = true
-        return (
-          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
-            {t(`eligibility.accessibility.${feature}`)}
-          </li>
-        )
-      }
-    })
-    return featuresExist ? features : <>{t("t.none")}</>
-  }
-
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
-    (j) => j.id === listing.jurisdiction.id
-  )?.enableAccessibilityFeatures
 
   return (
     <GridSection
@@ -50,7 +29,7 @@ const DetailBuildingFeatures = () => {
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="accessibility" label={t("t.additionalAccessibility")}>
+          <ViewItem id="accessibility" label={t("t.accessibility")}>
             {getDetailFieldString(listing.accessibility)}
           </ViewItem>
         </GridCell>
@@ -76,15 +55,6 @@ const DetailBuildingFeatures = () => {
           </ViewItem>
         </GridCell>
       </GridSection>
-      {!enableAccessibilityFeatures ? null : (
-        <GridSection columns={1}>
-          <GridCell className={"m-h-1"}>
-            <ViewItem label={"Accessibility Features"}>
-              <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
-            </ViewItem>
-          </GridCell>
-        </GridSection>
-      )}
     </GridSection>
   )
 }

@@ -20,7 +20,7 @@ export class OrderQueryParamValidator implements ValidatorConstraintInterface {
     return false
   }
 
-  defaultMessage() {
+  defaultMessage(args: ValidationArguments) {
     return "order array length must be equal to orderBy array length"
   }
 }

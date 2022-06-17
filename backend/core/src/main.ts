@@ -4,7 +4,7 @@ import { Logger } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { getConnection } from "typeorm"
 import { ConfigService } from "@nestjs/config"
-import dbOptions from "../ormconfig"
+import dbOptions = require("../ormconfig")
 
 let app
 async function bootstrap() {

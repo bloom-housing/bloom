@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { AuthContext } from "./AuthContext"
-import { NavigationContext } from "@bloom-housing/ui-components"
+import { NavigationContext } from "../config/NavigationContext"
 
 /**
  * Require a logged in user. Waits on initial load, then initiates a redirect to `redirectPath` if user is not

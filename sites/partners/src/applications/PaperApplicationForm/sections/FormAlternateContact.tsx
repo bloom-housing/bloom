@@ -141,6 +141,7 @@ const FormAlternateContact = () => {
         <FormAddress
           subtitle={t("application.contact.mailingAddress")}
           dataKey="application.alternateContact.mailingAddress"
+          type="alternate"
           register={register}
           stateKeys={stateKeys}
         />

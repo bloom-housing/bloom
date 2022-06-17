@@ -1,18 +1,16 @@
 import React from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/backend-core/types"
 import { AlertBox, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
 import { MetaTags } from "../../../src/MetaTags"
-import { fetchJurisdictionByName } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
-  jurisdiction: Jurisdiction
 }
 
 export default function ListingPage(props: ListingProps) {
@@ -39,7 +37,7 @@ export default function ListingPage(props: ListingProps) {
       >
         {t("listings.listingPreviewOnly")}
       </AlertBox>
-      <ListingView listing={listing} preview={false} jurisdiction={props.jurisdiction} />
+      <ListingView listing={listing} preview={false} />
     </Layout>
   )
 }
@@ -53,7 +51,5 @@ export async function getServerSideProps(context: { params: Record<string, strin
     return { notFound: true }
   }
 
-  const jurisdiction = fetchJurisdictionByName()
-
-  return { props: { listing: response.data, jurisdiction: await jurisdiction } }
+  return { props: { listing: response.data } }
 }

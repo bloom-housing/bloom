@@ -4,11 +4,11 @@ import {
   GridSection,
   ViewItem,
   Select,
+  applicationLanguageKeys,
   TimeField,
   DateField,
   DateFieldValues,
 } from "@bloom-housing/ui-components"
-import { applicationLanguageKeys } from "@bloom-housing/shared-helpers"
 import { useFormContext } from "react-hook-form"
 
 const FormApplicationData = () => {

@@ -11,17 +11,13 @@ import {
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import { NetworkStatus, FormSignInControl } from "./FormSignIn"
-
-export enum RequestType {
-  email = "email",
-  sms = "sms",
-}
+import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFACodeProps = {
   control: FormSignInControl
   onSubmit: (data: FormSignInMFACodeValues) => void
   networkError: NetworkStatus
-  mfaType: RequestType
+  mfaType: EnumRequestMfaCodeMfaType
   allowPhoneNumberEdit: boolean
   phoneNumber: string
   goBackToPhone: () => void
@@ -67,7 +63,7 @@ const FormSignInMFACode = ({
         <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
         <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
         <p className="form-card__sub-title">
-          {mfaType === RequestType.sms
+          {mfaType === EnumRequestMfaCodeMfaType.sms
             ? t("nav.signInMFA.haveSentCodeToPhone")
             : t("nav.signInMFA.haveSentCodeToEmail")}
         </p>

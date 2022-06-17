@@ -11,13 +11,13 @@ import { defaultAmiChart } from "../ami-charts/default-ami-chart"
 import { ListingEventCreateDto } from "../../../listings/dto/listing-event.dto"
 import { ListingEventType } from "../../../listings/types/listing-event-type-enum"
 import { AmiChart } from "../../../ami-charts/entities/ami-chart.entity"
+import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UserCreateDto } from "../../../auth/dto/user-create.dto"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
 import { FormMetaDataType } from "../../../applications/types/form-metadata/form-metadata"
-import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
@@ -120,6 +120,7 @@ export const defaultUnits: Array<UnitSeedType> = [
     numBedrooms: 1,
     number: null,
     sqFeet: "635",
+    status: UnitStatus.available,
   },
   {
     amiChart: defaultAmiChart as AmiChart,
@@ -137,6 +138,7 @@ export const defaultUnits: Array<UnitSeedType> = [
     numBedrooms: 2,
     number: null,
     sqFeet: "748",
+    status: UnitStatus.available,
   },
 ]
 
@@ -231,7 +233,6 @@ export const defaultListing: ListingSeedType = {
   isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: "Custom what to expect text",
-  listingAvailability: ListingAvailability.availableUnits,
 }
 
 // Preferences

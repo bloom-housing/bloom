@@ -12,6 +12,7 @@ import {
 import {
   IsBoolean,
   IsDate,
+  IsEnum,
   IsNumber,
   IsNumberString,
   IsOptional,
@@ -23,6 +24,8 @@ import { Expose, Type } from "class-transformer"
 import { Property } from "../../property/entities/property.entity"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { UnitStatus } from "../types/unit-status-enum"
+import { ApiProperty } from "@nestjs/swagger"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../../unit-rent-types/entities/unit-rent-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
@@ -126,6 +129,16 @@ class Unit {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   sqFeet?: string | null
+
+  @Column({
+    type: "enum",
+    enum: UnitStatus,
+    default: UnitStatus.unknown,
+  })
+  @Expose()
+  @IsEnum(UnitStatus, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: UnitStatus, enumName: "UnitStatus" })
+  status: UnitStatus
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()

@@ -75,7 +75,7 @@ Contributions to the core Bloom applications and services are welcomed. To help 
 
 ### Issue tracking
 
-Our development tasks are managed through GitHub issues and development in the vast majority of cases should be tied to an issue. Please feel free to submit issues even if you don't plan on implementing it yourself. Before creating an issue, check first to see if one already exists. When creating an issue, give it a descriptive title and include screenshots if relevant. Please don't start work on an issue without checking in with the Bloom team first as it may already be in development! You can tag us (@seanmalbert, @emilyjablonski, @yazeedloonat) to get started on an issue or ask any questions.
+Our development tasks are managed through GitHub issues and any development (in the vast majority of cases) should be tied to an issue. Please feel free to submit issues even if you don't plan on implementing it yourself. Before creating an issue, check first to see if one already exists. When creating an issue, give it a descriptive title and include screenshots if relevant. Please don't start work on an issue without checking in with the Bloom team first as it may already be in development! You can tag us (@seanmalbert, @emilyjablonski, @yazeedloonat) to get started on an issue or ask any questions.
 
 ### Committing, Versioning, and Releasing
 

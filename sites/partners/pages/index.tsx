@@ -1,19 +1,23 @@
-import React, { useMemo, useContext } from "react"
+import React, { useMemo, useContext, useState, useCallback, useEffect } from "react"
 import Head from "next/head"
 import {
   PageHeader,
   t,
+  AuthContext,
   Button,
   LocalizedLink,
-  AgTable,
-  useAgTable,
+  AgPagination,
+  AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
-import { ColDef, ColGroupDef } from "ag-grid-community"
-import { useListingsData } from "../lib/hooks"
+import { AgGridReact } from "ag-grid-react"
+import { GridOptions, ColumnState, ColumnApi } from "ag-grid-community"
+
+import { useListingsData, ColumnOrder } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
+
+const LISTING_COLUMN_STATE_KEY = "listing-column-state"
 class formatLinkCell {
   link: HTMLAnchorElement
 
@@ -65,17 +69,67 @@ export default function ListingsList() {
   const { profile } = useContext(AuthContext)
   const isAdmin = profile.roles?.isAdmin || false
 
-  const tableOptions = useAgTable()
+  const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
-  const gridComponents = {
-    ApplicationsLink,
-    formatLinkCell,
-    formatWaitlistStatus,
-    ListingsLink,
+  /* OrderBy columns */
+  const [sortOptions, setSortOptions] = useState<ColumnOrder[]>([])
+
+  // update table items order on sort change
+  const onSortChange = useCallback((columns: ColumnState[]) => {
+    const sortedColumns = columns.filter((col) => !!col.sort)
+
+    setSortOptions(() =>
+      sortedColumns.map((col) => ({
+        orderBy: col.colId,
+        orderDir: col.sort.toUpperCase(),
+      }))
+    )
+  }, [])
+
+  /* Pagination */
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+
+  // Load a table state on initial render & pagination change (because the new data comes from the API)
+  useEffect(() => {
+    const savedColumnState = sessionStorage.getItem(LISTING_COLUMN_STATE_KEY)
+
+    if (gridColumnApi && savedColumnState) {
+      const parsedState: ColumnState[] = JSON.parse(savedColumnState)
+
+      gridColumnApi.applyColumnState({
+        state: parsedState,
+        applyOrder: true,
+      })
+    }
+  }, [gridColumnApi, currentPage])
+
+  function saveColumnState(api: ColumnApi) {
+    const columnState = api.getColumnState()
+    const columnStateJSON = JSON.stringify(columnState)
+    sessionStorage.setItem(LISTING_COLUMN_STATE_KEY, columnStateJSON)
+  }
+
+  function onGridReady(params) {
+    setGridColumnApi(params.columnApi)
+  }
+
+  const gridOptions: GridOptions = {
+    onSortChanged: (params) => {
+      saveColumnState(params.columnApi)
+      onSortChange(params.columnApi.getColumnState())
+    },
+    onColumnMoved: (params) => saveColumnState(params.columnApi),
+    components: {
+      ApplicationsLink,
+      formatLinkCell,
+      formatWaitlistStatus,
+      ListingsLink,
+    },
   }
 
   const columnDefs = useMemo(() => {
-    const columns: (ColDef | ColGroupDef)[] = [
+    const columns = [
       {
         headerName: t("listings.listingName"),
         field: "name",
@@ -121,13 +175,15 @@ export default function ListingsList() {
     return columns
   }, [])
 
-  const { listingDtos, listingsLoading } = useListingsData({
-    page: tableOptions.pagination.currentPage,
-    limit: tableOptions.pagination.itemsPerPage,
-    search: tableOptions.filter.filterValue,
+  const { listingDtos, listingsLoading, listingsError } = useListingsData({
+    page: currentPage,
+    limit: itemsPerPage,
     userId: !isAdmin ? profile?.id : undefined,
-    sort: tableOptions.sort.sortOptions,
+    sort: sortOptions,
   })
+
+  if (listingsLoading) return "Loading..."
+  if (listingsError) return "An error has occurred."
 
   return (
     <Layout>
@@ -138,32 +194,9 @@ export default function ListingsList() {
       <PageHeader title={t("nav.listings")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <AgTable
-            id="listings-table"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-            }}
-            config={{
-              gridComponents,
-              columns: columnDefs,
-              totalItemsLabel: t("listings.totalListings"),
-            }}
-            data={{
-              items: listingDtos?.items,
-              loading: listingsLoading,
-              totalItems: listingDtos?.meta.totalItems,
-              totalPages: listingDtos?.meta.totalPages,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-            }}
-            sort={{
-              setSort: tableOptions.sort.setSortOptions,
-            }}
-            headerContent={
+          <div className="ag-theme-alpine ag-theme-bloom">
+            <div className="flex justify-between">
+              <div className="w-56"></div>
               <div className="flex-row">
                 {isAdmin && (
                   <LocalizedLink href={`/listings/add`}>
@@ -173,8 +206,35 @@ export default function ListingsList() {
                   </LocalizedLink>
                 )}
               </div>
-            }
-          />
+            </div>
+
+            <div className="applications-table mt-5">
+              <AgGridReact
+                onGridReady={onGridReady}
+                gridOptions={gridOptions}
+                multiSortKey="ctrl"
+                columnDefs={columnDefs}
+                rowData={listingDtos.items}
+                domLayout={"autoHeight"}
+                headerHeight={83}
+                rowHeight={58}
+                suppressPaginationPanel={true}
+                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
+                suppressScrollOnNewData={true}
+              ></AgGridReact>
+
+              <AgPagination
+                totalItems={listingDtos.meta.totalItems}
+                totalPages={listingDtos.meta.totalPages}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                quantityLabel={t("listings.totalListings")}
+                setCurrentPage={setCurrentPage}
+                setItemsPerPage={setItemsPerPage}
+                onPerPageChange={() => setCurrentPage(1)}
+              />
+            </div>
+          </div>
         </article>
       </section>
     </Layout>

@@ -12,14 +12,15 @@ import {
   Button,
   Form,
   numberOptions,
+  AuthContext,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "./formTypes"
 import {
   AmiChart,
   AmiChartItem,
   UnitAccessibilityPriorityType,
+  UnitStatus,
   UnitType,
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
@@ -44,6 +45,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const [loading, setLoading] = useState(true)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
+
+  const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
+    label: t(`listings.unit.statusOptions.${status}`),
+    value: status,
+  }))
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -127,6 +133,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
       setValue("rentType", getRentType(defaultUnit))
     }
+    setValue("status", "available")
     setLoading(false)
   }
 
@@ -238,6 +245,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     const formData = {
       createdAt: undefined,
       updatedAt: undefined,
+      status: UnitStatus.available,
       id: null,
       ...data,
     }
@@ -276,6 +284,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       })
       onClose(true, false, null)
       reset()
+      setValue("status", "available")
       setLoading(false)
     }
     if (action === "saveExit") {
@@ -430,6 +439,21 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 register={register}
                 readerOnly
                 type="number"
+              />
+            </ViewItem>
+          </GridCell>
+          <GridCell>
+            <ViewItem label={t("listings.unit.unitStatus")}>
+              <Select
+                id="status"
+                name="status"
+                label={t("listings.unit.unitStatus")}
+                placeholder={t("listings.unit.unitStatus")}
+                labelClassName="sr-only"
+                register={register}
+                controlClassName="control"
+                options={unitStatusOptions}
+                disabled
               />
             </ViewItem>
           </GridCell>

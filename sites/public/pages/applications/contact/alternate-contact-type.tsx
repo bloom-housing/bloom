@@ -13,13 +13,13 @@ import {
   FormCard,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import {
   altContactRelationshipKeys,
   OnClientSide,
   PageView,
   pushGtmEvent,
-  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -61,12 +61,7 @@ const ApplicationAlternateContactType = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -104,7 +99,6 @@ const ApplicationAlternateContactType = () => {
                 return (
                   <Fragment key={option}>
                     <Field
-                      className="mb-1"
                       key={option}
                       type="radio"
                       id={"type-" + option}

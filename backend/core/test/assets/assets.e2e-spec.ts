@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing"
 import { AssetsController } from "../../src/assets/assets.controller"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import dbOptions from "../../ormconfig.test"
+import dbOptions = require("../../ormconfig.test")
 import { Asset } from "../../src/assets/entities/asset.entity"
 import { UploadService } from "../../src/assets/services/upload.service"
 import { SharedModule } from "../../src/shared/shared.module"

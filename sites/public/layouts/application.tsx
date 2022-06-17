@@ -10,9 +10,9 @@ import {
   ExygyFooter,
   MenuLink,
   t,
+  AuthContext,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)

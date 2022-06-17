@@ -11,10 +11,10 @@ import {
   AppearanceStyleType,
   setSiteAlertMessage,
   useMutate,
+  AuthContext,
   AlertBox,
   Modal,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"

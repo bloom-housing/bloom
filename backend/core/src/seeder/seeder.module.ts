@@ -1,8 +1,8 @@
 import { DynamicModule, Module } from "@nestjs/common"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
-import dbOptions from "../../ormconfig"
-import testDbOptions from "../../ormconfig.test"
+import dbOptions = require("../../ormconfig")
+import testDbOptions = require("../../ormconfig.test")
 import { ThrottlerModule } from "@nestjs/throttler"
 import { SharedModule } from "../shared/shared.module"
 import { AuthModule } from "../auth/auth.module"

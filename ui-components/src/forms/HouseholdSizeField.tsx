@@ -1,8 +1,7 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
-import { AlertBox } from "../notifications/AlertBox"
-import { AlertNotice } from "../notifications/AlertNotice"
+import { AlertBox, AlertNotice } from "../notifications"
 import { UseFormMethods, FieldError } from "react-hook-form"
 
 export interface HouseholdSizeFieldProps {

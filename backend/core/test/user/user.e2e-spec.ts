@@ -8,7 +8,7 @@ import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions from "../../ormconfig.test"
+import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { UserDto } from "../../src/auth/dto/user.dto"

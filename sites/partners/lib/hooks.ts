@@ -2,7 +2,7 @@ import { useContext } from "react"
 import useSWR, { mutate } from "swr"
 import qs from "qs"
 
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "@bloom-housing/ui-components"
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
@@ -26,13 +26,10 @@ interface UseSingleApplicationDataProps extends PaginationProps {
   listingId: string
 }
 
-type UseUserListProps = PaginationProps & {
-  search?: string
-}
+type UseUserListProps = PaginationProps
 
 type UseListingsDataProps = PaginationProps & {
   userId?: string
-  search?: string
   sort?: ColumnOrder[]
 }
 
@@ -49,12 +46,10 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId, search = "", sort }: UseListingsDataProps) {
+export function useListingsData({ page, limit, userId, sort }: UseListingsDataProps) {
   const params = {
     page,
     limit,
-    filter: [],
-    search,
     view: "base",
   }
 
@@ -68,21 +63,16 @@ export function useListingsData({ page, limit, userId, search = "", sort }: UseL
   }
 
   // filter if logged user is an agent
-  if (userId) {
-    params.filter.push({
-      $comparison: EnumListingFilterParamsComparison["="],
-      leasingAgents: userId,
-    })
-
+  if (typeof userId !== undefined) {
     Object.assign(params, {
+      filter: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          leasingAgents: userId,
+        },
+      ],
       view: "base",
     })
-  }
-
-  if (search?.length < 3) {
-    delete params.search
-  } else {
-    Object.assign(params, { search })
   }
 
   const { listingsService } = useContext(AuthContext)
@@ -156,6 +146,21 @@ export function useApplicationsData(
 ) {
   const { applicationsService } = useContext(AuthContext)
 
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+  queryParams.append("page", currentPage.toString())
+  queryParams.append("limit", limit.toString())
+
+  if (delayedFilterValue) {
+    queryParams.append("search", delayedFilterValue)
+  }
+
+  if (orderBy) {
+    queryParams.append("orderBy", orderBy)
+    queryParams.append("order", order || EnumApplicationsApiExtraModelOrder.ASC)
+  }
+  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
+
   const params = {
     listingId,
     page: currentPage,
@@ -169,10 +174,6 @@ export function useApplicationsData(
   if (orderBy) {
     Object.assign(params, { orderBy, order: order || EnumApplicationsApiExtraModelOrder.ASC })
   }
-
-  const paramsString = qs.stringify(params)
-
-  const endpoint = `${process.env.backendApiBase}/applications?${paramsString}`
 
   const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
@@ -380,32 +381,29 @@ export function useReservedCommunityTypeList() {
   }
 }
 
-export function useUserList({ page, limit, search = "" }: UseUserListProps) {
-  const params = {
-    page,
-    limit,
-    filter: [
-      {
-        isPortalUser: true,
-        $comparison: EnumUserFilterParamsComparison["="],
-      },
-    ],
-    search,
-  }
-
-  if (search?.length < 3) {
-    delete params.search
-  } else {
-    Object.assign(params, { search })
-  }
-
-  const paramsString = qs.stringify(params)
+export function useUserList({ page, limit }: UseUserListProps) {
+  const queryParams = new URLSearchParams()
+  queryParams.append("page", page.toString())
+  queryParams.append("limit", limit.toString())
 
   const { userService } = useContext(AuthContext)
 
-  const fetcher = () => userService.list(params)
+  const fetcher = () =>
+    userService.list({
+      page,
+      limit,
+      filter: [
+        {
+          isPortalUser: true,
+          $comparison: EnumUserFilterParamsComparison["="],
+        },
+      ],
+    })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/user/list?${paramsString}`, fetcher)
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/user/list?${queryParams.toString()}`,
+    fetcher
+  )
 
   return {
     data,

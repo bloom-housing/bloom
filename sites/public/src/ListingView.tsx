@@ -9,8 +9,6 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingStatus,
-  ListingAvailability,
-  Jurisdiction,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -36,11 +34,13 @@ import {
   StandardTable,
   SubmitApplication,
   TableHeaders,
+  UnitTables,
   QuantityRowSection,
+  WhatToExpect,
+  getSummariesTable,
   t,
   EventType,
   StandardTableData,
-  ExpandableSection,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -51,8 +51,6 @@ import {
   getTimeRangeString,
   getCurrencyRange,
   getPostmarkString,
-  UnitTables,
-  getSummariesTable,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -62,7 +60,6 @@ import { getGenericAddress, openInFuture } from "../lib/helpers"
 interface ListingProps {
   listing: Listing
   preview?: boolean
-  jurisdiction?: Jurisdiction
 }
 
 export const ListingView = (props: ListingProps) => {
@@ -128,10 +125,7 @@ export const ListingView = (props: ListingProps) => {
   let groupedUnits: StandardTableData = []
 
   if (amiValues.length == 1) {
-    groupedUnits = getSummariesTable(
-      listing.unitsSummarized.byUnitTypeAndRent,
-      listing.listingAvailability
-    )
+    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)
@@ -393,55 +387,7 @@ export const ListingView = (props: ListingProps) => {
     </>
   )
 
-  const getWaitlist = () => {
-    const waitlistRow = [
-      {
-        text: t("listings.waitlist.openSlots"),
-        amount: listing.waitlistOpenSpots,
-        emphasized: true,
-      },
-    ]
-    const unitRow = [
-      {
-        text:
-          listing.unitsAvailable === 1 ? t("listings.availableUnit") : t("listings.availableUnits"),
-        amount: listing.unitsAvailable,
-        emphasized: true,
-      },
-    ]
-    return (
-      <QuantityRowSection
-        quantityRows={
-          listing.listingAvailability === ListingAvailability.openWaitlist ? waitlistRow : unitRow
-        }
-        strings={{
-          sectionTitle:
-            listing.listingAvailability === ListingAvailability.openWaitlist
-              ? t("listings.waitlist.isOpen")
-              : t("listings.availableUnits"),
-          description:
-            listing.listingAvailability === ListingAvailability.openWaitlist
-              ? t("listings.waitlist.submitForWaitlist")
-              : t("listings.availableUnitsDescription"),
-        }}
-      />
-    )
-  }
-
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
-
-  const getAccessibilityFeatures = () => {
-    let featuresExist = false
-    const features = Object.keys(listing?.features ?? {}).map((feature, index) => {
-      if (listing?.features[feature]) {
-        featuresExist = true
-        return <li key={index}>{t(`eligibility.accessibility.${feature}`)}</li>
-      }
-    })
-    return featuresExist ? <ul>{features}</ul> : null
-  }
-
-  const accessibilityFeatures = getAccessibilityFeatures()
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
@@ -493,9 +439,7 @@ export const ListingView = (props: ListingProps) => {
                 return parseInt(item.percent, 10) == percent
               })
 
-              groupedUnits = byAMI
-                ? getSummariesTable(byAMI.byUnitType, listing.listingAvailability)
-                : []
+              groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
               return (
                 <React.Fragment key={percent}>
@@ -531,7 +475,29 @@ export const ListingView = (props: ListingProps) => {
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
-          {!applicationsClosed && getWaitlist()}
+          {!applicationsClosed && listing.isWaitlistOpen && (
+            <QuantityRowSection
+              quantityRows={[
+                {
+                  text: t("listings.waitlist.currentSize"),
+                  amount: listing.waitlistCurrentSize,
+                },
+                {
+                  text: t("listings.waitlist.openSlots"),
+                  amount: listing.waitlistOpenSpots,
+                  emphasized: true,
+                },
+                {
+                  text: t("listings.waitlist.finalSize"),
+                  amount: listing.waitlistMaxSize,
+                },
+              ]}
+              strings={{
+                sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                description: t("listings.waitlist.submitAnApplication"),
+              }}
+            />
+          )}
           {hasNonReferralMethods &&
           !applicationsClosed &&
           listing.status !== ListingStatus.closed ? (
@@ -655,7 +621,29 @@ export const ListingView = (props: ListingProps) => {
                   headerText={t("listings.openHouseEvent.header")}
                 />
               )}
-              {!applicationsClosed && getWaitlist()}
+              {!applicationsClosed && listing.isWaitlistOpen && (
+                <QuantityRowSection
+                  quantityRows={[
+                    {
+                      text: t("listings.waitlist.currentSize"),
+                      amount: listing.waitlistCurrentSize,
+                    },
+                    {
+                      text: t("listings.waitlist.openSlots"),
+                      amount: listing.waitlistOpenSpots,
+                      emphasized: true,
+                    },
+                    {
+                      text: t("listings.waitlist.finalSize"),
+                      amount: listing.waitlistMaxSize,
+                    },
+                  ]}
+                  strings={{
+                    sectionTitle: t("listings.waitlist.unitsAndWaitlist"),
+                    description: t("listings.waitlist.submitAnApplication"),
+                  }}
+                />
+              )}
               {hasNonReferralMethods &&
                 !applicationsClosed &&
                 listing.status !== ListingStatus.closed &&
@@ -684,14 +672,7 @@ export const ListingView = (props: ListingProps) => {
               </div>
             )}
             {lotterySection}
-            <ExpandableSection
-              content={listing.whatToExpect}
-              strings={{
-                title: t("whatToExpect.label"),
-                readMore: t("t.readMore"),
-                readLess: t("t.readLess"),
-              }}
-            />
+            <WhatToExpect listing={listing} />
             {!appOpenInFuture && (
               <Contact
                 sectionTitle={t("leasingAgent.contact")}
@@ -750,14 +731,8 @@ export const ListingView = (props: ListingProps) => {
               {listing.servicesOffered && (
                 <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
               )}
-              {accessibilityFeatures && props.jurisdiction?.enableAccessibilityFeatures && (
-                <Description term={t("t.accessibility")} description={accessibilityFeatures} />
-              )}
               {listing.accessibility && (
-                <Description
-                  term={t("t.additionalAccessibility")}
-                  description={listing.accessibility}
-                />
+                <Description term={t("t.accessibility")} description={listing.accessibility} />
               )}
               <Description
                 term={t("t.unitFeatures")}

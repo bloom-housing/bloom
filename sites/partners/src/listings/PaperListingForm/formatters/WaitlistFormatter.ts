@@ -4,9 +4,7 @@ import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormType
 export default class WaitlistFormatter extends Formatter {
   /** Process all of the waitlist settings */
   process() {
-    const showWaitlist =
-      this.data.waitlistOpenQuestion === YesNoAnswer.Yes &&
-      this.data.listingAvailabilityQuestion === "openWaitlist"
+    const showWaitlist = this.data.waitlistOpenQuestion === YesNoAnswer.Yes
 
     this.processBoolean("isWaitlistOpen", {
       when: showWaitlist,

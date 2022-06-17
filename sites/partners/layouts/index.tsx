@@ -8,10 +8,10 @@ import {
   FooterSection,
   ExygyFooter,
   t,
+  AuthContext,
   MenuLink,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -28,12 +28,6 @@ const Layout = (props) => {
     menuLinks.push({
       title: t("nav.users"),
       href: "/users",
-    })
-  }
-  if (profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings)) {
-    menuLinks.push({
-      title: t("t.settings"),
-      href: "/settings",
     })
   }
   if (profile) {

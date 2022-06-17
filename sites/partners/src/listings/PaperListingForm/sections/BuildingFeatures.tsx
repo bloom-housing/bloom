@@ -1,32 +1,12 @@
-import React, { useMemo, useContext } from "react"
+import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, ViewItem, FieldGroup } from "@bloom-housing/ui-components"
-import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
-import { ListingFeatures } from "@bloom-housing/backend-core/types"
+import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
 
-type BuildingFeaturesProps = {
-  existingFeatures: ListingFeatures
-}
-
-const BuildingFeatures = (props: BuildingFeaturesProps) => {
+const BuildingFeatures = () => {
   const formMethods = useFormContext()
-  const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
-  const jurisdiction = watch("jurisdiction.id")
-
-  const featureOptions = useMemo(() => {
-    return listingFeatures.map((item) => ({
-      id: item,
-      label: t(`eligibility.accessibility.${item}`),
-      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
-      register,
-    }))
-  }, [register, props.existingFeatures])
-
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find((j) => j.id === jurisdiction)
-    ?.enableAccessibilityFeatures
+  const { register } = formMethods
 
   return (
     <div>
@@ -46,7 +26,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             maxLength={600}
           />
           <Textarea
-            label={t("t.additionalAccessibility")}
+            label={t("t.accessibility")}
             name={"accessibility"}
             id={"accessibility"}
             fullWidth={true}
@@ -90,19 +70,6 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             maxLength={600}
           />
         </GridSection>
-        {!enableAccessibilityFeatures ? null : (
-          <GridSection columns={1}>
-            <ViewItem label={t("listings.sections.accessibilityFeatures")}>
-              <FieldGroup
-                type="checkbox"
-                name="listingFeatures"
-                fields={featureOptions}
-                register={register}
-                fieldGroupClassName="grid grid-cols-3 mt-4"
-              />
-            </ViewItem>
-          </GridSection>
-        )}
       </GridSection>
     </div>
   )

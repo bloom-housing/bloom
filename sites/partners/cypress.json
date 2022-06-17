@@ -1,6 +1,6 @@
 {
   "baseUrl": "http://localhost:3001",
-  "defaultCommandTimeout": 50000,
+  "defaultCommandTimeout": 10000,
   "projectId": "bloom-partners-reference",
   "numTestsKeptInMemory": 0,
   "env": {

@@ -10,7 +10,6 @@ import {
   Listing,
   ListingFilterParams,
   OrderByFieldsEnum,
-  OrderParam,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -60,11 +59,9 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
 export async function fetchBaseListingData({
   additionalFilters,
   orderBy,
-  orderDir,
 }: {
   additionalFilters?: ListingFilterParams[]
-  orderBy?: OrderByFieldsEnum[]
-  orderDir?: OrderParam[]
+  orderBy?: OrderByFieldsEnum
 }) {
   let listings = []
   try {
@@ -87,8 +84,7 @@ export async function fetchBaseListingData({
       view: string
       limit: string
       filter: ListingFilterParams[]
-      orderBy?: OrderByFieldsEnum[]
-      orderDir?: OrderParam[]
+      orderBy?: OrderByFieldsEnum
     } = {
       view: "base",
       limit: "all",
@@ -96,9 +92,6 @@ export async function fetchBaseListingData({
     }
     if (orderBy) {
       params.orderBy = orderBy
-    }
-    if (orderDir) {
-      params.orderDir = orderDir
     }
     const response = await axios.get(process.env.listingServiceUrl, {
       params,
@@ -134,8 +127,7 @@ export async function fetchClosedListings() {
         status: EnumListingFilterParamsStatus.closed,
       },
     ],
-    orderBy: [OrderByFieldsEnum.mostRecentlyClosed],
-    orderDir: [OrderParam.DESC],
+    orderBy: OrderByFieldsEnum.mostRecentlyClosed,
   })
 }
 

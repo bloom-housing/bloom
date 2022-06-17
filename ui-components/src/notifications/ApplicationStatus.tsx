@@ -1,12 +1,12 @@
 import * as React from "react"
-import { Icon, IconFillColors, UniversalIconType } from "../icons/Icon"
+import { Icon, IconFillColors, IconTypes } from "../icons/Icon"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
   content: string
   iconColor?: string
-  iconType?: UniversalIconType
+  iconType?: IconTypes
   status?: ApplicationStatusType
   subContent?: string
   vivid?: boolean

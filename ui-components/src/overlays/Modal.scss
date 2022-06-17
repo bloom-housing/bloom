@@ -34,11 +34,6 @@
   &:last-of-type {
     @apply rounded-b;
   }
-
-  &.is-scrollable {
-    max-height: calc(100vh - 200px);
-    @apply overflow-y-auto;
-  }
 }
 
 .modal__footer {

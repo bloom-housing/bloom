@@ -5,10 +5,15 @@ import {
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
-  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
-import { t, ListingCard, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
-import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
+import {
+  t,
+  ListingCard,
+  ApplicationStatusType,
+  getSummariesTable,
+  StatusBarType,
+} from "@bloom-housing/ui-components"
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -44,13 +49,8 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-const getListingTableData = (
-  unitsSummarized: UnitsSummarized,
-  listingAvailability: ListingAvailability
-) => {
-  return unitsSummarized !== undefined
-    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingAvailability)
-    : []
+const getListingTableData = (unitsSummarized: UnitsSummarized) => {
+  return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
 }
 
 export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
@@ -105,15 +105,6 @@ export const getListings = (listings) => {
     minimumIncome: "t.minimumIncome",
     rent: "t.rent",
   }
-
-  const generateTableSubHeader = (listing) => {
-    if (listing.listingAvailability === ListingAvailability.availableUnits) {
-      return { text: t("listings.availableUnits") }
-    } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
-      return { text: t("listings.waitlist.open") }
-    }
-    return null
-  }
   return listings.map((listing: Listing, index) => {
     return (
       <ListingCard
@@ -134,7 +125,7 @@ export const getListings = (listings) => {
         }}
         tableProps={{
           headers: unitSummariesHeaders,
-          data: getListingTableData(listing.unitsSummarized, listing.listingAvailability),
+          data: getListingTableData(listing.unitsSummarized),
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
@@ -144,7 +135,7 @@ export const getListings = (listings) => {
         contentProps={{
           contentHeader: { text: listing.name },
           contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
-          tableHeader: generateTableSubHeader(listing),
+          tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
         }}
       />
     )

@@ -1,6 +1,5 @@
 import { createElement, useContext } from "react"
-import { t } from "@bloom-housing/ui-components"
-import { AuthContext, IdleTimeout } from "@bloom-housing/shared-helpers"
+import { IdleTimeout, AuthContext, t } from "@bloom-housing/ui-components"
 
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 

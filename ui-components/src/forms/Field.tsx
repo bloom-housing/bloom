@@ -74,16 +74,13 @@ const Field = (props: FieldProps) => {
     if (props.caps) labelClasses.push("field-label--caps")
     if (props.primary) labelClasses.push("text-primary")
     if (props.readerOnly) labelClasses.push("sr-only")
-    if (props.type === "checkbox" || props.type === "radio") {
-      labelClasses.push("font-semibold")
-    }
 
     return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
         {props.label}
       </label>
     )
-  }, [props.caps, props.primary, props.readerOnly, props.type, props.id, props.name, props.label])
+  }, [props.caps, props.primary, props.readerOnly, props.id, props.name, props.label])
 
   const idOrName = props.id || props.name
 

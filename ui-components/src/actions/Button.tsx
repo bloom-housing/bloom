@@ -1,14 +1,14 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
-import { Icon, IconSize, UniversalIconType } from "../icons/Icon"
+import { Icon, IconSize, IconTypes } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
   type?: "button" | "submit" | "reset"
   children: React.ReactNode
   onClick?: (e: React.MouseEvent) => void
-  icon?: UniversalIconType
+  icon?: IconTypes
   iconPlacement?: "left" | "right"
   iconSize?: IconSize
   // TODO: inlineIcon is deprecated

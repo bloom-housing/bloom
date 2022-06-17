@@ -10,12 +10,13 @@ import {
   t,
   Form,
   ProgressNav,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationSummary = () => {
@@ -37,12 +38,7 @@ const ApplicationSummary = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

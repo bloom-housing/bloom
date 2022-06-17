@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions from "../../ormconfig.test"
+import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
@@ -85,7 +85,6 @@ describe("Jurisdictions", () => {
         publicUrl: "",
         emailFromAddress: "",
         rentalAssistanceDefault: "",
-        enableAccessibilityFeatures: false,
       })
       .expect(201)
 
@@ -123,7 +122,6 @@ describe("Jurisdictions", () => {
         publicUrl: "",
         emailFromAddress: "",
         rentalAssistanceDefault: "",
-        enableAccessibilityFeatures: false,
       })
       .expect(201)
     expect(res.body).toHaveProperty("id")

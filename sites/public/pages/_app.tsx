@@ -2,13 +2,15 @@ import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
-import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
-  blankApplication,
-  LoggedInUserIdleTimeout,
-  ConfigProvider,
+  addTranslation,
+  GenericRouter,
+  NavigationContext,
   AuthProvider,
-} from "@bloom-housing/shared-helpers"
+  ConfigProvider,
+  LoggedInUserIdleTimeout,
+} from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext } from "../lib/AppSubmissionContext"
 import ApplicationConductor, {

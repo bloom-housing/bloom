@@ -1,4 +1,4 @@
-import { AmiChart, Listing, ListingReviewOrder, ListingStatus } from "./types"
+import { AmiChart, Listing, ListingReviewOrder, ListingStatus, UnitStatus } from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
 
@@ -380,7 +380,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -408,7 +408,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -436,7 +436,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -464,7 +464,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -492,7 +492,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -520,7 +520,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -548,7 +548,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -576,7 +576,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -604,7 +604,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -632,7 +632,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -660,7 +660,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -688,7 +688,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -716,7 +716,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -744,7 +744,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -772,7 +772,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -800,7 +800,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -828,7 +828,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -856,7 +856,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -884,7 +884,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -912,7 +912,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -940,7 +940,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -968,7 +968,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -996,7 +996,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1024,7 +1024,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1052,7 +1052,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1080,7 +1080,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1108,7 +1108,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1136,7 +1136,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1164,7 +1164,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1192,7 +1192,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1220,7 +1220,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1248,7 +1248,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1276,7 +1276,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1304,7 +1304,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1332,7 +1332,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1360,7 +1360,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1388,7 +1388,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1416,7 +1416,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1444,7 +1444,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1472,7 +1472,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),
@@ -1500,7 +1500,7 @@ export const ArcherListing: Listing = {
       number: null,
       priorityType: null,
       sqFeet: "285",
-
+      status: UnitStatus.occupied,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),

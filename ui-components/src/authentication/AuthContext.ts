@@ -21,7 +21,6 @@ import {
   EnumRequestMfaCodeMfaType,
   EnumLoginMfaType,
 } from "@bloom-housing/backend-core/types"
-import { NavigationContext } from "@bloom-housing/ui-components"
 import {
   createContext,
   createElement,
@@ -34,9 +33,10 @@ import {
 } from "react"
 import qs from "qs"
 import axiosStatic from "axios"
-import { ConfigContext } from "./ConfigContext"
+import { ConfigContext } from "../config/ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
+import { NavigationContext } from "../config/NavigationContext"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
@@ -164,11 +164,7 @@ const reducer = createReducer(
         accessToken: accessToken,
       }
     },
-    SAVE_PROFILE: (state, { payload: user }) => ({
-      ...state,
-      profile: user,
-      initialStateLoaded: true,
-    }),
+    SAVE_PROFILE: (state, { payload: user }) => ({ ...state, profile: user }),
     START_LOADING: (state) => ({ ...state, loading: true }),
     END_LOADING: (state) => ({ ...state, loading: false }),
     SIGN_OUT: ({ storageType }) => {

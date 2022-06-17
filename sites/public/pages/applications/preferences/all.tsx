@@ -6,30 +6,25 @@ import {
   FormCard,
   Field,
   t,
+  ExtraField,
   ExpandableContent,
   Button,
   AppearanceStyleType,
   resolveObject,
-  ProgressNav,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
-import FormBackLink from "../../../src/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
-import { FormMetadataExtraData, Preference } from "@bloom-housing/backend-core/types"
-import {
-  stateKeys,
-  OnClientSide,
-  PageView,
-  pushGtmEvent,
   mapPreferencesToApi,
   mapApiToPreferencesForm,
   getPreferenceOptionName,
   getExclusivePreferenceOptionName,
   getExclusiveKeys,
   setExclusive,
-  ExtraField,
+  ProgressNav,
   AuthContext,
-} from "@bloom-housing/shared-helpers"
+} from "@bloom-housing/ui-components"
+import FormsLayout from "../../../layouts/forms"
+import FormBackLink from "../../../src/forms/applications/FormBackLink"
+import { useFormConductor } from "../../../lib/hooks"
+import { FormMetadataExtraData, Preference } from "@bloom-housing/backend-core/types"
+import { stateKeys, OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesAll = () => {
@@ -234,7 +229,7 @@ const ApplicationPreferencesAll = () => {
 
         {!(description === false) && (
           <div className="ml-8 -mt-3 mb-5">
-            <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
+            <ExpandableContent>
               <p className="field-note mb-8">
                 {t(
                   `application.preferences.${preference.formMetadata.key}.${optionKey}.description`,
@@ -272,12 +267,7 @@ const ApplicationPreferencesAll = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={listing?.name}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

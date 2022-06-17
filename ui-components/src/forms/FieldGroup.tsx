@@ -94,7 +94,7 @@ const FieldGroup = ({
         <label
           htmlFor={item.id}
           className={`font-semibold ${fieldLabelClassName} ${
-            item.disabled && "text-gray-600 cursor-not-allowed"
+            item.disabled && "text-gray-600 cursor-default cursor-not-allowed"
           }`}
         >
           {item.label}
@@ -103,7 +103,7 @@ const FieldGroup = ({
 
         {item.description && (
           <div className="ml-8 -mt-1 mb-5">
-            <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
+            <ExpandableContent>
               <p className="field-note mb-2 -mt-2">{item.description}</p>
             </ExpandableContent>
           </div>

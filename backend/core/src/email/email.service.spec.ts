@@ -10,7 +10,7 @@ import { Translation } from "../translations/entities/translation.entity"
 import { Repository } from "typeorm"
 import { REQUEST } from "@nestjs/core"
 
-import dbOptions from "../../ormconfig.test"
+import dbOptions = require("../../ormconfig.test")
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"

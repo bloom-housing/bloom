@@ -88,7 +88,7 @@ const LotteryResults = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-red-700 my-0"
+            className="font-semibold uppercase text-red-700"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -126,7 +126,7 @@ const LotteryResults = () => {
           <div className="flex">
             <Button
               type="button"
-              className="font-semibold uppercase my-0"
+              className="font-semibold uppercase"
               onClick={() => {
                 setDrawerState(true)
               }}
@@ -136,7 +136,7 @@ const LotteryResults = () => {
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-red-700 my-0"
+              className="font-semibold uppercase text-red-700"
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePDF()

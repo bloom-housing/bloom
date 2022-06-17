@@ -8,7 +8,6 @@ import {
   AppearanceStyleType,
 } from "../global/AppearanceTypes"
 import ButtonDocumentation from "./Button.docs.mdx"
-import { faArrowsRotate, faCoffee, faTable } from "@fortawesome/free-solid-svg-icons"
 
 export default {
   title: "Actions/Button 🚩",
@@ -56,31 +55,6 @@ export const standard = () => {
       </Button>
 
       <p className="mt-10">Try out different styles with the Knobs below.</p>
-    </>
-  )
-}
-
-export const withFontAwesomeIcon = () => {
-  const iconSelect = select("Icon", ["coffee", "rotate", "table"], "rotate")
-
-  const iconsMap = {
-    coffee: faCoffee,
-    rotate: faArrowsRotate,
-    table: faTable,
-  }
-
-  return (
-    <>
-      <Button
-        icon={iconSelect ? iconsMap[iconSelect] : undefined}
-        iconSize="medium"
-        iconPlacement="left"
-        onClick={handleClick}
-      >
-        FontAwesome is awesome
-      </Button>
-
-      <p className="mt-10">Try out different icons with the Knobs below.</p>
     </>
   )
 }

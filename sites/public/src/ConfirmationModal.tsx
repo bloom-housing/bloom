@@ -2,12 +2,12 @@ import {
   AppearanceStyleType,
   Button,
   Modal,
+  AuthContext,
   t,
   Form,
   Field,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"

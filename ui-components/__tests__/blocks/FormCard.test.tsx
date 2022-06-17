@@ -6,16 +6,7 @@ afterEach(cleanup)
 
 describe("<FormCard>", () => {
   it("can render with a header", () => {
-    const { getByText } = render(
-      <FormCard
-        header={{
-          isVisible: true,
-          title: "Header Text",
-        }}
-      >
-        Children go here
-      </FormCard>
-    )
+    const { getByText } = render(<FormCard header={"Header Text"}>Children go here</FormCard>)
     expect(getByText("Header Text")).not.toBeNull()
   })
   it("can apply a custom class", () => {

@@ -1,16 +1,13 @@
 import React from "react"
 
 import { MinimalTable } from "./MinimalTable"
+import { StandardTableData, TableThumbnail } from "./StandardTable"
 import { preferenceData, preferenceHeaders, mockData, mockHeaders } from "./StandardTable.stories"
-import { TableHeaders, StandardTableData, TableThumbnail } from "../tables/StandardTable"
-import Icon, { IconFillColors } from "../icons/Icon"
-import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 
 export default {
   title: "Tables/MinimalTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
   component: MinimalTable,
-  excludeStories: ["mockHeadersWithStyling", "mockDataWithStyling"],
 }
 
 export const Default = () => <MinimalTable headers={mockHeaders} data={mockData} />
@@ -48,64 +45,6 @@ export const FlushRight = () => (
 
 export const Draggable = () => (
   <MinimalTable headers={preferenceHeaders} data={preferenceData} draggable={true} />
-)
-
-export const mockHeadersWithStyling: TableHeaders = {
-  name: { name: "t.name" },
-  relationship: { name: "t.relationship" },
-  dob: {
-    name: "application.household.member.dateOfBirth",
-  },
-  icons: { name: "" },
-}
-
-const iconContent = () => {
-  return (
-    <div className={"flex justify-end"}>
-      <div className={"w-max"}>
-        <span onClick={() => alert("edit")} className={"cursor-pointer"}>
-          <Icon
-            symbol={faPenToSquare}
-            size={"medium"}
-            fill={IconFillColors.primary}
-            className={"mr-5"}
-          />
-        </span>
-        <span onClick={() => alert("copy")} className={"cursor-pointer"}>
-          <Icon symbol={faClone} size={"medium"} fill={IconFillColors.primary} className={"mr-5"} />
-        </span>
-        <span onClick={() => alert("trash")} className={"cursor-pointer"}>
-          <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
-        </span>
-      </div>
-    </div>
-  )
-}
-
-export const mockDataWithStyling: StandardTableData = [
-  {
-    name: { content: "Jim Halpert" },
-    relationship: { content: "Husband" },
-    dob: { content: "05/01/1985" },
-    icons: { content: iconContent() },
-  },
-  {
-    name: { content: "Michael Scott" },
-    relationship: { content: "Friend" },
-    dob: { content: "05/01/1975" },
-    icons: { content: iconContent() },
-  },
-]
-
-let i = 5
-while (i > 0) {
-  mockDataWithStyling.push(mockDataWithStyling[0])
-  mockDataWithStyling.push(mockDataWithStyling[1])
-  i--
-}
-
-export const withIcons = () => (
-  <MinimalTable headers={mockHeadersWithStyling} data={mockDataWithStyling} draggable={true} />
 )
 
 Draggable.parameters = {

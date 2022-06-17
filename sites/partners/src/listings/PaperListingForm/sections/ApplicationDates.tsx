@@ -62,7 +62,7 @@ const ApplicationDates = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase my-0"
+                className="front-semibold uppercase"
                 onClick={() => setDrawerOpenHouse(event)}
                 unstyled
               >
@@ -70,7 +70,7 @@ const ApplicationDates = ({
               </Button>
               <Button
                 type="button"
-                className="font-semibold uppercase text-red-700 my-0"
+                className="font-semibold uppercase text-red-700"
                 onClick={() => setModalDeleteOpenHouse(event)}
                 unstyled
               >

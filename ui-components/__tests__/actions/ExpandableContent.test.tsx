@@ -9,11 +9,7 @@ describe("<ExpandableContent>", () => {
   const content = <div data-test-id={INNER_CONTENT_CLASS}>Sample content</div>
 
   it("renders content after button click", () => {
-    const { getByText, queryByTestId } = render(
-      <ExpandableContent strings={{ readMore: "read more", readLess: "read less" }}>
-        {content}
-      </ExpandableContent>
-    )
+    const { getByText, queryByTestId } = render(<ExpandableContent>{content}</ExpandableContent>)
 
     // Expand the content
     const expandButton = getByText("read more")
@@ -25,11 +21,7 @@ describe("<ExpandableContent>", () => {
   })
 
   it("collapses content after button click", () => {
-    const { getByText, queryByTestId } = render(
-      <ExpandableContent strings={{ readMore: "read more", readLess: "read less" }}>
-        {content}
-      </ExpandableContent>
-    )
+    const { getByText, queryByTestId } = render(<ExpandableContent>{content}</ExpandableContent>)
 
     // Expand the content
     const expandButton = getByText("read more")

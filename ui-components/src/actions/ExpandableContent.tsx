@@ -1,20 +1,15 @@
 import React, { useState } from "react"
+import { t } from "@bloom-housing/ui-components"
 
 type ExpandableContentProps = {
   children: React.ReactChild
-  strings: {
-    readMore?: string
-    readLess?: string
-  }
-  className?: string
 }
 
-const ExpandableContent = ({ children, strings, className }: ExpandableContentProps) => {
+const ExpandableContent = ({ children }: ExpandableContentProps) => {
   const [isExpanded, setExpanded] = useState(false)
-  const rootClassNames = className ? `${className}` : undefined
 
   return (
-    <div className={rootClassNames}>
+    <div>
       <button
         type="button"
         className="button is-unstyled m-0 no-underline has-toggle"
@@ -23,8 +18,9 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
           setExpanded(!isExpanded)
         }}
       >
-        {isExpanded ? strings.readLess : strings.readMore}
+        {t(isExpanded ? "t.readLess" : "t.readMore")}
       </button>
+
       {isExpanded && <div className="mt-6">{children}</div>}
     </div>
   )

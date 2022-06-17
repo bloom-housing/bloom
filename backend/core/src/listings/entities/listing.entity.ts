@@ -3,13 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
@@ -43,10 +41,8 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
-import { ListingAvailability } from "../types/listing-availability-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
-import { ListingFeatures } from "./listing-features.entity"
 import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
@@ -431,16 +427,6 @@ class Listing extends BaseEntity {
   })
   reviewOrderType?: ListingReviewOrder | null
 
-  @Column({ type: "enum", enum: ListingAvailability, nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ListingAvailability, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({
-    enum: ListingAvailability,
-    enumName: "ListingAvailability",
-  })
-  listingAvailability?: ListingAvailability | null
-
   @Expose()
   applicationConfig?: Record<string, unknown>
 
@@ -558,18 +544,6 @@ class Listing extends BaseEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   closedAt?: Date | null
-
-  @OneToOne(() => ListingFeatures, {
-    nullable: true,
-    eager: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingFeatures)
-  features?: ListingFeatures
 }
 
 export { Listing as default, Listing }

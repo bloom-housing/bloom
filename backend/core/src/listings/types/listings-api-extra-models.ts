@@ -18,11 +18,10 @@ export class ListingsApiExtraModels {
   @Expose()
   @ApiProperty({
     enum: OrderParam,
-    enumName: "OrderParam",
     example: '["DESC"]',
     default: '["DESC"]',
     required: false,
     isArray: true,
   })
-  orderDir: OrderParam
+  order: OrderParam
 }

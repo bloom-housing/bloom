@@ -11,6 +11,7 @@ import {
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserFilterParams } from "./user-filter-params"
+import { IsLength } from "../../shared/decorators/isLength.decorator"
 
 export class UserListQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()

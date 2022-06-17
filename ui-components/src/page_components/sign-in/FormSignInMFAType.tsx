@@ -12,13 +12,12 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NetworkStatus } from "./FormSignIn"
+import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFAProps = {
   control: FormSignInMFAControl
-  onSubmit: (data: unknown) => void
+  onSubmit: (data: FormSignInMFAValues) => void
   networkError: NetworkStatus
-  emailOnClick: () => void
-  smsOnClick: () => void
 }
 
 export type FormSignInMFAControl = {
@@ -28,12 +27,14 @@ export type FormSignInMFAControl = {
   setValue: UseFormMethods["setValue"]
 }
 
+export type FormSignInMFAValues = {
+  mfaType: EnumRequestMfaCodeMfaType
+}
+
 const FormSignInMFAType = ({
   onSubmit,
   networkError,
   control: { errors, register, handleSubmit, setValue },
-  emailOnClick,
-  smsOnClick,
 }: FormSignInMFAProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
@@ -75,7 +76,7 @@ const FormSignInMFAType = ({
             <Button
               styleType={AppearanceStyleType.accentCool}
               data-test-id="verify-by-email"
-              onClick={smsOnClick}
+              onClick={() => setValue("mfaType", EnumRequestMfaCodeMfaType.email)}
             >
               {t("nav.signInMFA.verifyByEmail")}
             </Button>
@@ -84,7 +85,7 @@ const FormSignInMFAType = ({
             <Button
               styleType={AppearanceStyleType.accentCool}
               data-test-id="verify-by-phone"
-              onClick={emailOnClick}
+              onClick={() => setValue("mfaType", EnumRequestMfaCodeMfaType.sms)}
             >
               {t("nav.signInMFA.verifyByPhone")}
             </Button>
