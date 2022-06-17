@@ -12,15 +12,17 @@ import {
   AlertBox,
   AppearanceStyleType,
   useMutate,
-  AuthContext,
   StatusBar,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../../../lib/hooks"
 import { getCols } from "../../../../../src/flags/applicationsCols"
 import {
   EnumApplicationFlaggedSetStatus,
   ApplicationFlaggedSet,
 } from "@bloom-housing/backend-core/types"
+
+/* TODO: refactor this component to use the AgTable if search and pagination are needed */
 
 const Flag = () => {
   const { applicationFlaggedSetsService } = useContext(AuthContext)

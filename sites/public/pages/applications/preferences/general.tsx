@@ -11,12 +11,11 @@ import {
   t,
   Form,
   ProgressNav,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesGeneral = () => {
@@ -44,7 +43,12 @@ const ApplicationPreferencesGeneral = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

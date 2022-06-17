@@ -8,7 +8,7 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import { Language } from "../../src/shared/types/language-enum"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { AssetsModule } from "../../src/assets/assets.module"
