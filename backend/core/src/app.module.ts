@@ -83,12 +83,12 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
+        AuthModule,
         AmiChartsModule,
         ApplicationFlaggedSetsModule,
         ApplicationMethodsModule,
         ApplicationsModule,
         AssetsModule,
-        AuthModule,
         JurisdictionsModule,
         ListingsModule,
         PaperApplicationsModule,
