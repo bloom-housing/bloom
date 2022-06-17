@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
-    "start": "node dist/src/main --debug",
+    "start": "node dist/src/main",
     "dev": "NODE_ENV=development nest start --watch --preserveWatchOutput",
     "debug": "nest start --debug --watch",
     "db:drop": "psql -c 'DROP DATABASE IF EXISTS bloom;'",
