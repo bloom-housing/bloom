@@ -118,8 +118,8 @@ const ListingCard = (props: ListingCardProps) => {
     return (
       <>
         <div className="listings-row_table">
-          {(contentProps?.tableHeader?.text || contentProps?.tableSubheader?.text) &&
-            (contentProps.contentHeader?.text || contentProps?.contentSubheader?.text) && (
+          {(contentProps?.tableHeader?.content || contentProps?.tableSubheader?.content) &&
+            (contentProps.contentHeader?.content || contentProps?.contentSubheader?.content) && (
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>
