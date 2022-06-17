@@ -50,6 +50,11 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         : "reviewOrderFCFS",
   })
 
+  const availabilityQuestion = useWatch({
+    control,
+    name: "listingAvailabilityQuestion",
+  })
+
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),
@@ -200,55 +205,31 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         )}
         <GridSection columns={2} className={"flex items-center"}>
           <GridCell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null && "text-alert"
-              }`}
-            >
-              {t("listings.waitlist.openQuestion")}
-            </p>
+            <p className={`field-label m-4 ml-0`}>{t("listings.waitlist.openQuestion")}</p>
             <FieldGroup
               name="waitlistOpenQuestion"
               type="radio"
-              groupSubNote={t("listings.requiredToPublish")}
               register={register}
-              error={fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null}
-              errorMessage={fieldMessage(errors?.isWaitlistOpen)}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
                   id: "waitlistOpenYes",
+                  disabled: availabilityQuestion === "availableUnits",
                   defaultChecked: listing && listing.isWaitlistOpen === true,
                 },
 
                 {
                   ...yesNoRadioOptions[1],
                   id: "waitlistOpenNo",
-                  defaultChecked: listing && listing.isWaitlistOpen === false,
+                  disabled: availabilityQuestion === "availableUnits",
+                  defaultChecked: !listing || (listing && listing.isWaitlistOpen === false),
                 },
               ]}
             />
           </GridCell>
         </GridSection>
-        {waitlistOpen === YesNoAnswer.Yes && (
+        {waitlistOpen === YesNoAnswer.Yes && availabilityQuestion === "openWaitlist" && (
           <GridSection columns={3}>
-            <Field
-              name="waitlistMaxSize"
-              id="waitlistMaxSize"
-              register={register}
-              label={t("listings.waitlist.maxSizeQuestion")}
-              placeholder={t("listings.waitlist.maxSize")}
-              type={"number"}
-              subNote={t("listings.recommended")}
-            />
-            <Field
-              name="waitlistCurrentSize"
-              id="waitlistCurrentSize"
-              register={register}
-              label={t("listings.waitlist.currentSizeQuestion")}
-              placeholder={t("listings.waitlist.currentSize")}
-              type={"number"}
-            />
             <Field
               name="waitlistOpenSpots"
               id="waitlistOpenSpots"

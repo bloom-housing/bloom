@@ -67,12 +67,6 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
             />
 
             <ViewItem
-              id="unit.unitStatus"
-              label={t("listings.unit.unitStatus")}
-              children={unit?.status || t("t.n/a")}
-            />
-
-            <ViewItem
               id="unit.minOccupancy"
               label={t("listings.unit.minOccupancy")}
               children={unit?.minOccupancy || t("t.n/a")}

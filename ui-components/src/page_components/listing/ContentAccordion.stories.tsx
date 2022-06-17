@@ -25,6 +25,17 @@ export const blueThemeBasic = () => {
   )
 }
 
+export const blueThemeBasicDisabled = () => {
+  return (
+    <ContentAccordion
+      customBarContent={barContent()}
+      customExpandedContent={expandedContent()}
+      accordionTheme={"blue"}
+      disableAccordion={true}
+    />
+  )
+}
+
 export const blueThemeFilled = () => {
   const customBarContent = () => {
     return (

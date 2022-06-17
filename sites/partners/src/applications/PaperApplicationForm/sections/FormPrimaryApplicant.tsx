@@ -234,7 +234,7 @@ const FormPrimaryApplicant = () => {
       <FormAddress
         subtitle={t("application.details.residenceAddress")}
         dataKey="application.applicant.address"
-        type="residence"
+        enableMailCheckbox={true}
         register={register}
         stateKeys={stateKeys}
       />
@@ -243,7 +243,6 @@ const FormPrimaryApplicant = () => {
         <FormAddress
           subtitle={t("application.contact.mailingAddress")}
           dataKey="application.mailingAddress"
-          type="mailing"
           register={register}
           stateKeys={stateKeys}
         />
@@ -253,7 +252,6 @@ const FormPrimaryApplicant = () => {
         <FormAddress
           subtitle={t("application.contact.workAddress")}
           dataKey="application.applicant.workAddress"
-          type="work"
           register={register}
           stateKeys={stateKeys}
         />

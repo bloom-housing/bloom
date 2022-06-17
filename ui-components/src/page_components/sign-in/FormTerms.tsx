@@ -1,6 +1,5 @@
-import React, { useContext, useCallback, useMemo } from "react"
+import React from "react"
 import {
-  AuthContext,
   AppearanceStyleType,
   Button,
   Field,
@@ -17,34 +16,17 @@ type FormTermsInValues = {
   agree: boolean
 }
 
-const FormTerms = () => {
-  const { profile, userProfileService, loadProfile } = useContext(AuthContext)
+export type FormTermsProps = {
+  onSubmit: () => void
+  terms?: string
+}
 
+const FormTerms = (props: FormTermsProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors } = useForm<FormTermsInValues>()
 
-  const onSubmit = useCallback(async () => {
-    if (!profile) return
-
-    const jurisdictionIds =
-      profile?.jurisdictions.map((item) => ({
-        id: item.id,
-      })) || []
-
-    await userProfileService?.update({
-      body: { ...profile, jurisdictions: jurisdictionIds, agreedToTermsOfService: true },
-    })
-
-    loadProfile?.("/")
-  }, [loadProfile, profile, userProfileService])
-
-  const jurisdictionTerms = useMemo(() => {
-    const jurisdiction = profile?.jurisdictions.find((jurisdiction) => jurisdiction.partnerTerms)
-    return jurisdiction ? jurisdiction.partnerTerms : ""
-  }, [profile])
-
   return (
-    <Form id="terms" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
+    <Form id="terms" className="mt-10" onSubmit={handleSubmit(props.onSubmit)}>
       <FormCard>
         <div className="form-card__lead text-center">
           <Icon size="2xl" symbol="settings" />
@@ -54,9 +36,9 @@ const FormTerms = () => {
           </p>
 
           <div className="overflow-y-auto max-h-96 mt-5 pr-4 text-left">
-            {jurisdictionTerms && (
+            {props.terms && (
               <MarkdownSection padding={false} fullwidth={true}>
-                <Markdown options={{ disableParsingRawHTML: false }}>{jurisdictionTerms}</Markdown>
+                <Markdown options={{ disableParsingRawHTML: false }}>{props.terms}</Markdown>
               </MarkdownSection>
             )}
           </div>
