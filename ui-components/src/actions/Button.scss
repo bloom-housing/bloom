@@ -145,6 +145,12 @@ button {
   }
 }
 
+button {
+  &.no-underline {
+    text-decoration:none !important;
+  }
+}
+
 .button__loader {
   position: absolute;
   top: 50%;

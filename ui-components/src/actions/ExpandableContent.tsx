@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import "./ExpandableContent.scss"
 
 type ExpandableContentProps = {
   children: React.ReactChild
@@ -17,7 +18,7 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
     <div className={rootClassNames}>
       <button
         type="button"
-        className="button is-unstyled m-0 no-underline has-toggle"
+        className="button is-unstyled expandable-content-button no-underline has-toggle"
         aria-expanded={isExpanded}
         onClick={() => {
           setExpanded(!isExpanded)
@@ -25,7 +26,7 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
       >
         {isExpanded ? strings.readLess : strings.readMore}
       </button>
-      {isExpanded && <div className="mt-6">{children}</div>}
+      {isExpanded && <div className="expandable-content-container">{children}</div>}
     </div>
   )
 }
