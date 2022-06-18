@@ -63,9 +63,9 @@ const Settings = () => {
         {data?.length ? (
           <MinimalTable
             headers={{
-              name: { name: "t.name" },
-              updated: { name: "t.updated" },
-              icons: { name: "" },
+              name: "t.name",
+              updated: "t.updated",
+              icons: "",
             }}
             cellClassName={"px-5 py-3"}
             data={data?.map((preference) => {
