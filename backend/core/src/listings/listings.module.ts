@@ -20,7 +20,6 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
       Preference,
       Unit,
       User,
-      Property,
       AmiChart,
       ListingFeatures,
     ]),
