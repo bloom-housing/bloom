@@ -26,7 +26,10 @@ import { ApplicationCsvExporterService } from "./services/application-csv-export
 import { ApplicationsService } from "./services/applications.service"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { PaginatedApplicationListQueryParams } from "./dto/paginated-application-list-query-params"
-import { ApplicationsCsvListQueryParams } from "./dto/applications-csv-list-query-params"
+import {
+  ApplicationsCsvListQueryParams,
+  RawApplicationsListQueryParams,
+} from "./dto/applications-csv-list-query-params"
 import { ApplicationsApiExtraModel } from "./types/applications-api-extra-model"
 import { PaginatedApplicationDto } from "./dto/paginated-application.dto"
 import { ApplicationCreateDto } from "./dto/application-create.dto"
@@ -72,6 +75,16 @@ export class ApplicationsController {
       applications,
       queryParams.includeDemographics
     )
+  }
+
+  @Get(`rawApplicationsList`)
+  @ApiOperation({ summary: "Raw list of applications", operationId: "rawApplicationsList" })
+  async rawApplicationsList(
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: RawApplicationsListQueryParams
+  ): Promise<any[]> {
+    queryParams.includeDemographics = true
+    return await this.applicationsService.rawListWithFlagged(queryParams)
   }
 
   @Post()
