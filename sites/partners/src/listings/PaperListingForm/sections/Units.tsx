@@ -114,7 +114,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase"
+                className="front-semibold uppercase my-0"
                 onClick={() => editUnit(unit.tempId)}
                 unstyled
               >
@@ -122,7 +122,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700"
+                className="front-semibold uppercase text-red-700 my-0"
                 onClick={() => setUnitDeleteModal(unit.tempId)}
                 unstyled
               >

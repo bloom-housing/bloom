@@ -16,6 +16,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
 import { OrderQueryParamValidator } from "../validators/order-query-param-validator"
+
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
   @ApiProperty({

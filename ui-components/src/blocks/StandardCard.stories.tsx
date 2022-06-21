@@ -3,9 +3,10 @@ import React from "react"
 import { StandardCard } from "./StandardCard"
 import { BADGES } from "../../.storybook/constants"
 import { MinimalTable } from "../tables/MinimalTable"
+import { mockDataWithStyling, mockHeadersWithStyling } from "../tables/MinimalTable.stories"
+
 import { Button } from "../actions/Button"
 import StandardCardDocumentation from "./StandardCard.docs.mdx"
-import { mockData, mockHeaders } from "../tables/StandardTable.stories"
 
 export default {
   title: "Blocks/StandardCard  🚩",
@@ -34,8 +35,8 @@ export const WithTable = () => (
     emptyStateMessage="Add items to edit"
     footer={<Button>Add item</Button>}
   >
-    <div className="px-3">
-      <MinimalTable headers={mockHeaders} data={mockData} />
+    <div>
+      <MinimalTable headers={mockHeadersWithStyling} data={mockDataWithStyling} draggable={true} />
     </div>
   </StandardCard>
 )

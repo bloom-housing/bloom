@@ -2,20 +2,13 @@ import dayjs from "dayjs"
 import {
   Address,
   Listing,
-  ListingFeatures,
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
   ListingAvailability,
 } from "@bloom-housing/backend-core/types"
-import {
-  t,
-  ListingCard,
-  ApplicationStatusType,
-  getSummariesTable,
-  StatusBarType,
-} from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import { t, ListingCard, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -115,9 +108,9 @@ export const getListings = (listings) => {
 
   const generateTableSubHeader = (listing) => {
     if (listing.listingAvailability === ListingAvailability.availableUnits) {
-      return { text: t("listings.availableUnits") }
+      return { content: t("listings.availableUnits") }
     } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
-      return { text: t("listings.waitlist.open") }
+      return { content: t("listings.waitlist.open") }
     }
     return null
   }
@@ -149,8 +142,8 @@ export const getListings = (listings) => {
           { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
         ]}
         contentProps={{
-          contentHeader: { text: listing.name },
-          contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
+          contentHeader: { content: listing.name },
+          contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
           tableHeader: generateTableSubHeader(listing),
         }}
       />

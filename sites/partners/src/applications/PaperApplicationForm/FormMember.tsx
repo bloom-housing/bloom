@@ -211,7 +211,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <FormAddress
             subtitle={t("application.details.residenceAddress")}
             dataKey="address"
-            type="residence-member"
             register={register}
             stateKeys={stateKeys}
           />
@@ -221,7 +220,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <FormAddress
             subtitle={t("application.contact.workAddress")}
             dataKey="workAddress"
-            type="work"
             register={register}
             stateKeys={stateKeys}
           />

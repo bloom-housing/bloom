@@ -103,7 +103,7 @@ const FieldGroup = ({
 
         {item.description && (
           <div className="ml-8 -mt-1 mb-5">
-            <ExpandableContent>
+            <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
               <p className="field-note mb-2 -mt-2">{item.description}</p>
             </ExpandableContent>
           </div>
