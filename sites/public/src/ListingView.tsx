@@ -413,7 +413,9 @@ export const ListingView = (props: ListingProps) => {
               />
               {listing?.section8Acceptance && (
                 <div className="text-sm leading-5 mt-4 invisible md:visible">
-                  {t("listings.section8Message")}
+                  {t("listings.section8MessageOpening")}
+                  <b>{t("listings.section8FullName")}</b>
+                  {t("listings.section8MessageClosing")}
                 </div>
               )}
             </>
@@ -466,7 +468,9 @@ export const ListingView = (props: ListingProps) => {
                             <br />
                             <br />
                             <span className="custom-counter__subtitle">
-                              {t("listings.section8Message")}
+                              {t("listings.section8MessageOpening")}
+                              <b>{t("listings.section8FullName")}</b>
+                              {t("listings.section8MessageClosing")}
                             </span>
                           </>
                         )}
