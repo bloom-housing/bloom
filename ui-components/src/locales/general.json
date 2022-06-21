@@ -1124,6 +1124,7 @@
   "listings.units": "Listing Units",
   "listings.unitsDescription": "Select the building units that are available through this listing.",
   "listings.unitTypesOrIndividual": "Do you want to show unit types or individual units?",
+  "listings.section8AcceptanceQuestion": "Do you accept Section 8 Housing Choice Vouchers?",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
   "listings.managerHasConfirmedInformation": "Property management staff or the owner has checked this listing to make sure the information is correct.",
   "listings.areaMedianIncome": "Eligibility for regulated affordable housing is based on the area median income, or AMI. To qualify for this housing, you often have to meet certain income requirements. These requirements are based on income levels relative to AMI.",

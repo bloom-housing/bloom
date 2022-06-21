@@ -5427,6 +5427,9 @@ export interface Listing {
   referralOpportunity?: boolean
 
   /**  */
+  section8Acceptance?: boolean
+
+  /**  */
   assets: AssetCreate[]
 
   /**  */
@@ -5895,6 +5898,9 @@ export interface ListingCreate {
 
   /**  */
   referralOpportunity?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
 
   /**  */
   assets: AssetCreate[]
@@ -6375,6 +6381,9 @@ export interface ListingUpdate {
 
   /**  */
   referralOpportunity?: boolean
+
+  /**  */
+  section8Acceptance?: boolean
 
   /**  */
   assets: AssetCreate[]

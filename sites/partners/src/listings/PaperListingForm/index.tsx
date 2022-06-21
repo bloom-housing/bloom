@@ -398,12 +398,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
                           />
                           <Units
+                            listing={listing}
                             units={units}
                             setUnits={setUnits}
                             unitsSummaries={unitsSummaries}
                             setSummaries={setUnitsSummaries}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                           />
+
                           <SelectAndOrder
                             addText={"Add Community Types"}
                             drawerTitle={"Add Community Types"}
