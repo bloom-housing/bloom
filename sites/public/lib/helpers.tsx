@@ -145,7 +145,10 @@ export const getListings = (listings) => {
           },
         ]}
         contentProps={{
-          contentHeader: { content: listing.name, href: `/listing/${listing.id}/${listing.urlSlug}` },
+          contentHeader: {
+            content: listing.name,
+            href: `/listing/${listing.id}/${listing.urlSlug}`,
+          },
           contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
           tableHeader: generateTableSubHeader(listing),
         }}
