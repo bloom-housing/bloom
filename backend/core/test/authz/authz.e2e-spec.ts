@@ -21,7 +21,6 @@ import { User } from "../../src/auth/entities/user.entity"
 import { PasswordService } from "../../src/auth/services/password.service"
 import { makeTestListing } from "../utils/make-test-listing"
 import { UserInviteDto } from "../../src/auth/dto/user-invite.dto"
-import { Translation } from "../../src/translations/entities/translation.entity"
 import { EmailService } from "../../src/email/email.service"
 import { getTestAppBody } from "../lib/get-test-app-body"
 
@@ -41,7 +40,6 @@ describe("Authz", () => {
   let jurisdictionsRepository: Repository<Jurisdiction>
   let usersRepository: Repository<User>
   let passwordService: PasswordService
-  let translationsRepository: Repository<Translation>
   let app1: ApplicationDto
   let listing1Id: string
 
@@ -76,7 +74,6 @@ describe("Authz", () => {
     applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))
     listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
     jurisdictionsRepository = app.get<Repository<Jurisdiction>>(getRepositoryToken(Jurisdiction))
-    translationsRepository = app.get<Repository<Translation>>(getRepositoryToken(Translation))
     usersRepository = app.get<Repository<User>>(getRepositoryToken(User))
     passwordService = app.get<PasswordService>(PasswordService)
 
@@ -92,7 +89,6 @@ describe("Authz", () => {
         .set(...setAuthorization(userAccessToken))
         .expect(201)
     ).body
-    console.log(app1)
   })
 
   describe("admin endpoints", () => {
@@ -317,6 +313,7 @@ describe("Authz", () => {
       const jurisdiction = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const password = "abcdef"
@@ -373,6 +370,7 @@ describe("Authz", () => {
       const jurisdiction = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const password = "abcdef"
@@ -428,11 +426,13 @@ describe("Authz", () => {
       const jurisdiction1 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const password = "abcdef"
@@ -469,11 +469,13 @@ describe("Authz", () => {
       const jurisdiction1 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const password = "abcdef"
@@ -527,6 +529,7 @@ describe("Authz", () => {
       const jurisdiction1 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const password = "abcdef"
@@ -571,11 +574,13 @@ describe("Authz", () => {
       const jurisdiction1 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
+        enableAccessibilityFeatures: false,
       })
 
       const password = "abcdef"
