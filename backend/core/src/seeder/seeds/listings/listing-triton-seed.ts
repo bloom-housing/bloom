@@ -8,6 +8,7 @@ import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
+import { classToClass } from "class-transformer"
 
 const tritonListing: ListingSeedType = {
   jurisdictionName: "Alameda",
@@ -204,7 +205,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
-      ...tritonListing,
+      ...classToClass(tritonListing),
       name: "Test: Triton 2",
       assets: getDefaultAssets(),
       listingPreferences: [
@@ -349,7 +350,7 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
-      ...tritonListing,
+      ...classToClass(tritonListing),
       name: "Test: Triton 1",
       applicationOpenDate: getDate(-5),
       assets: getDefaultAssets(),

@@ -19,8 +19,7 @@ const views: Views = {
       "jurisdiction.name",
       "reservedCommunityType.id",
       "reservedCommunityType.name",
-      "property.id",
-      "property.unitsAvailable",
+      "listings.unitsAvailable",
       ...getBaseAddressSelect(["buildingAddress"]),
       "units.id",
       "units.floor",
@@ -60,9 +59,8 @@ const views: Views = {
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
-      { join: "listings.property", alias: "property" },
-      { join: "property.buildingAddress", alias: "buildingAddress" },
-      { join: "property.units", alias: "units" },
+      { join: "listings.buildingAddress", alias: "buildingAddress" },
+      { join: "listings.units", alias: "units" },
       { join: "units.unitType", alias: "unitType" },
       { join: "units.amiChartOverride", alias: "amiChartOverride" },
       { join: "listings.reservedCommunityType", alias: "reservedCommunityType" },
@@ -85,9 +83,8 @@ views.partnerList = {
     "listings.status",
     "listings.waitlistMaxSize",
     "listings.waitlistCurrentSize",
-    "property.unitsAvailable",
-  ],
-  leftJoins: [{ join: "listings.property", alias: "property" }],
+    "listings.unitsAvailable",
+  ]
 }
 
 views.detail = {
@@ -205,9 +202,8 @@ views.full = {
     ["listings.leasingAgents", "leasingAgents"],
     ["listings.listingPreferences", "listingPreferences"],
     ["listingPreferences.preference", "listingPreferencesPreference"],
-    ["listings.property", "property"],
-    ["property.buildingAddress", "buildingAddress"],
-    ["property.units", "units"],
+    ["listings.buildingAddress", "buildingAddress"],
+    ["listings.units", "units"],
     ["units.amiChartOverride", "amiChartOverride"],
     ["units.unitType", "unitTypeRef"],
     ["units.unitRentType", "unitRentType"],

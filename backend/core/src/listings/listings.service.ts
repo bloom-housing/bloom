@@ -51,7 +51,7 @@ export class ListingsService {
       case OrderByFieldsEnum.waitlistOpen:
         return { orderBy: "listings.isWaitlistOpen", orderDir }
       case OrderByFieldsEnum.unitsAvailable:
-        return { orderBy: "property.unitsAvailable", orderDir }
+        return { orderBy: "listings.unitsAvailable", orderDir }
       case OrderByFieldsEnum.mostRecentlyClosed:
         return {
           orderBy: "listings.closedAt",
@@ -94,10 +94,9 @@ export class ListingsService {
     const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
-      .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
-      .leftJoin("property.buildingAddress", "buildingAddress")
-      .leftJoin("property.units", "units")
+      .leftJoin("listings.buildingAddress", "buildingAddress")
+      .leftJoin("listings.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
 
     const orderByConditions = ListingsService.buildOrderByConditions(params)
@@ -109,7 +108,7 @@ export class ListingsService {
       )
     }
 
-    innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
+    innerFilteredQuery.groupBy("listings.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
