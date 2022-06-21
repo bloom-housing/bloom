@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.0...@bloom-housing/ui-components@5.0.1-alpha.1) (2022-06-21)
+
+
+### Features
+
+* **listingcard:** add compatability for jsx elements in subheader ([#2821](https://github.com/bloom-housing/bloom/issues/2821)) ([77693dc](https://github.com/bloom-housing/bloom/commit/77693dcee60be8deba641595ed6ae5e141d14a51))
+
+
+### BREAKING CHANGES
+
+* **listingcard:** prop name change for header from "text" to "content"
+
+
+
+
+
 ## [5.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.4.1-alpha.27...@bloom-housing/ui-components@5.0.1-alpha.0) (2022-06-16)
 
 
