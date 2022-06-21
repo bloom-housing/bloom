@@ -86,6 +86,7 @@
     "@types/react-transition-group": "^4.4.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
+    "aria-autocomplete": "^1.4.0",
     "axios": "0.21.2",
     "body-scroll-lock": "^3.1.5",
     "dayjs": "^1.10.7",
