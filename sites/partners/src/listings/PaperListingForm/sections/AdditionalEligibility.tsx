@@ -44,17 +44,6 @@ const AdditionalEligibility = () => {
             register={register}
             maxLength={2000}
           />
-          <Textarea
-            label={t("listings.sections.rentalAssistanceTitle")}
-            name={"rentalAssistance"}
-            id={"rentalAssistance"}
-            fullWidth={true}
-            register={register}
-            errorMessage={fieldMessage(errors?.rentalAssistance)}
-            inputProps={{
-              onChange: () => clearErrors("rentalAssistance"),
-            }}
-          />
         </GridSection>
       </GridSection>
     </div>

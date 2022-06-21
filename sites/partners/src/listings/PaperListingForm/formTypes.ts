@@ -48,6 +48,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries" | "unitGr
   listingFeatures?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
+  section8Choice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
   dueDateQuestionChoice?: YesNoAnswer
   criteriaAttachType?: string

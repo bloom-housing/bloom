@@ -52,7 +52,6 @@ describe("Listing Management Tests", () => {
     { fieldID: "floorMax", byTestID: true },
     { fieldID: "bathroomMin", byTestID: true },
     { fieldID: "bathroomMax", byTestID: true },
-    { fieldID: "priorityType.id", byTestID: true },
   ]
 
   const amiFormFieldsToType = [{ fieldID: "flatRentValue", byTestID: true }]
@@ -80,7 +79,6 @@ describe("Listing Management Tests", () => {
     },
     { fieldID: "mailing-address-city", byTestID: true, fixtureID: "leasingAgentAddress.city" },
     { fieldID: "mailing-address-zip", byTestID: true, fixtureID: "leasingAgentAddress.zipCode" },
-    { fieldID: "additionalApplicationSubmissionNotes", byTestID: true },
     { fieldID: "postmark-date-field-month", byTestID: true },
     { fieldID: "postmark-date-field-day", byTestID: true },
     { fieldID: "postmark-date-field-year", byTestID: true },
@@ -140,7 +138,6 @@ describe("Listing Management Tests", () => {
     cy.get("#waitlistOpenNo").check()
     cy.get("#digitalApplicationChoiceYes").check()
     cy.get("#paperApplicationNo").check()
-    cy.get("#referralOpportunityNo").check()
     cy.get("#applicationsMailedInYes").check()
     cy.get("#mailInAnotherAddress").check()
     cy.get("#applicationsPickedUpNo").check()
@@ -203,7 +200,6 @@ describe("Listing Management Tests", () => {
     cy.get("#digitalApplication").contains("Yes")
     cy.getByID("digitalMethod.type").contains("No")
     cy.get("#paperApplication").contains("No")
-    cy.get("#referralOpportunity").contains("No")
     cy.getByID("applicationPickupQuestion").contains("No")
     cy.getByID("applicationMailingSection").contains("Yes")
     cy.get("#applicationDropOffQuestion").contains("No")

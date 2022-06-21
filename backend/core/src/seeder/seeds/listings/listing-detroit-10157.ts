@@ -45,6 +45,7 @@ const nccListing: ListingSeedType = {
   images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
+  section8Acceptance: false,
   referralOpportunity: undefined,
   depositMin: undefined,
   depositMax: undefined,

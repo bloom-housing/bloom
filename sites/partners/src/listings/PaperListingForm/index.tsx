@@ -398,23 +398,25 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
                           />
                           <Units
+                            listing={listing}
                             units={units}
                             setUnits={setUnits}
                             unitsSummaries={unitsSummaries}
                             setSummaries={setUnitsSummaries}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                           />
+
                           <SelectAndOrder
-                            addText={"Add programs"}
-                            drawerTitle={"Add programs"}
+                            addText={"Add Community Types"}
+                            drawerTitle={"Add Community Types"}
                             editText={"Edit programs"}
                             listingData={programs}
                             setListingData={setPrograms}
                             subtitle={
-                              "Tell us about any additional community programs related to this listing."
+                              "Tell us about any additional community types related to this listing."
                             }
-                            title={"Community Programs"}
-                            drawerButtonText={"Select programs"}
+                            title={"Community Types"}
+                            drawerButtonText={"Select Community Types"}
                             dataFetcher={useJurisdictionalProgramList}
                             formKey={"program"}
                             subNote={

@@ -607,22 +607,6 @@ const UnitsSummaryForm = ({
               </div>
             </GridCell>
           </GridSection>
-          <GridSection title={t("t.accessibility")} columns={4} separator>
-            <GridCell>
-              <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
-                <Select
-                  id="priorityType.id"
-                  name="priorityType.id"
-                  label={t("listings.unit.accessibilityPriorityType")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={options.unitPriorities}
-                  dataTestId="priorityType.id"
-                />
-              </ViewItem>
-            </GridCell>
-          </GridSection>
         </div>
         <div className="mt-6">
           <Button
