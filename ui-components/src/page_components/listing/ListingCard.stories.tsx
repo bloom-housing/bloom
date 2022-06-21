@@ -86,10 +86,10 @@ export const WithHeaders = () => {
       tableProps={{ ...standardTableProps }}
       footerButtons={[{ text: "See Details", href: "see-details-link" }]}
       contentProps={{
-        contentHeader: { text: "Optional content header" },
-        contentSubheader: { text: "Optional content subheader" },
-        tableHeader: { text: "Optional table header" },
-        tableSubheader: { text: "Optional table subheader" },
+        contentHeader: { content: "Optional content header" },
+        contentSubheader: { content: "Optional content subheader" },
+        tableHeader: { content: "Optional table header" },
+        tableSubheader: { content: "Optional table subheader" },
       }}
     />
   )
@@ -102,8 +102,8 @@ export const WithTags = () => {
       tableProps={{ ...standardTableProps }}
       footerButtons={[{ text: "See Details", href: "see-details-link" }]}
       contentProps={{
-        contentHeader: { text: "Optional content header" },
-        contentSubheader: { text: "Optional content subheader" },
+        contentHeader: { content: "Optional content header" },
+        contentSubheader: { content: "Optional content subheader" },
       }}
       cardTags={[
         { text: "Tag 1 text" },
@@ -121,10 +121,10 @@ export const WithTagsAndHeaders = () => {
       tableProps={{ ...standardTableProps }}
       footerButtons={[{ text: "See Details", href: "see-details-link" }]}
       contentProps={{
-        contentHeader: { text: "Optional content header" },
-        contentSubheader: { text: "Optional content subheader" },
-        tableHeader: { text: "Optional table header" },
-        tableSubheader: { text: "Optional table subheader" },
+        contentHeader: { content: "Optional content header" },
+        contentSubheader: { content: "Optional content subheader" },
+        tableHeader: { content: "Optional table header" },
+        tableSubheader: { content: "Optional table subheader" },
       }}
       cardTags={[
         { text: "Tag 1 text" },
@@ -141,10 +141,10 @@ export const WithHeadersContent = () => {
       tableProps={{ ...standardTableProps }}
       footerButtons={[{ text: "See Details", href: "see-details-link" }]}
       contentProps={{
-        contentHeader: { text: "Property Listing" },
-        contentSubheader: { text: "Street Address, Local City ST 12345" },
-        tableHeader: { text: "Open Waitlist & Available Units" },
-        tableSubheader: { text: "Includes priority units for mobility impairments" },
+        contentHeader: { content: "Property Listing" },
+        contentSubheader: { content: "Street Address, Local City ST 12345" },
+        tableHeader: { content: "Open Waitlist & Available Units" },
+        tableSubheader: { content: "Includes priority units for mobility impairments" },
       }}
     />
   )
@@ -227,8 +227,8 @@ export const MultipleFooterButtons = () => {
         { text: "Apply", href: "apply-link" },
       ]}
       contentProps={{
-        tableHeader: { text: "Optional table header" },
-        tableSubheader: { text: "Optional table subheader" },
+        tableHeader: { content: "Optional table header" },
+        tableSubheader: { content: "Optional table subheader" },
       }}
     />
   )
@@ -245,8 +245,8 @@ export const MultipleSpreadFooterButtons = () => {
       ]}
       footerContainerClass={"flex justify-between"}
       contentProps={{
-        tableHeader: { text: "Optional table header" },
-        tableSubheader: { text: "Optional table subheader" },
+        tableHeader: { content: "Optional table header" },
+        tableSubheader: { content: "Optional table subheader" },
       }}
     />
   )
@@ -271,8 +271,8 @@ export const CustomFooter = () => {
       footerContent={getCustomFooter()}
       footerContainerClass={"flex justify-between"}
       contentProps={{
-        tableHeader: { text: "Optional table header" },
-        tableSubheader: { text: "Optional table subheader" },
+        tableHeader: { content: "Optional table header" },
+        tableSubheader: { content: "Optional table subheader" },
       }}
     />
   )
