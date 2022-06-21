@@ -23,10 +23,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
-
     const multipleAMIUnits: Array<UnitSeedType> = [
       {
         amiChart: amiChartOne,
@@ -97,6 +93,11 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         sqFeet: "748",
       },
     ]
+
+    const property = await this.propertyRepository.save({
+      ...getDefaultProperty(),
+      unitsAvailable: multipleAMIUnits.length,
+    })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = multipleAMIUnits.map(
       (unit) => {

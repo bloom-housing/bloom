@@ -30,7 +30,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "developer",
   "digitalApplication",
   "images",
-  "isWaitlistOpen",
   "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
@@ -77,10 +76,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageUpdateDto)
   images: ListingImageUpdateDto[]
-
-  @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  isWaitlistOpen: boolean
 
   @Expose()
   @IsEnum(ListingAvailability, { groups: [ValidationsGroupsEnum.default] })

@@ -13,9 +13,9 @@ import { NavigationContext } from "../../config/NavigationContext"
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
 export interface CardHeader {
-  customClass?: string
-  text: string
+  content: string | React.ReactNode
   href?: string
+  customClass?: string
 }
 
 export interface FooterButton {
@@ -77,15 +77,15 @@ const ListingCard = (props: ListingCardProps) => {
     style?: HeaderType,
     customClass?: string
   ) => {
-    if (header && header.text) {
+    if (header && header.content) {
       return (
         <Heading priority={priority} style={style} className={customClass}>
           {header.href ? (
             <LinkComponent className="is-card-link" href={header.href}>
-              {header.text}
+              {header.content}
             </LinkComponent>
           ) : (
-            header.text
+            header.content
           )}
         </Heading>
       )
@@ -125,8 +125,8 @@ const ListingCard = (props: ListingCardProps) => {
     return (
       <>
         <div className="listings-row_table">
-          {(contentProps?.tableHeader?.text || contentProps?.tableSubheader?.text) &&
-            (contentProps.contentHeader?.text || contentProps?.contentSubheader?.text) && (
+          {(contentProps?.tableHeader?.content || contentProps?.tableSubheader?.content) &&
+            (contentProps.contentHeader?.content || contentProps?.contentSubheader?.content) && (
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>

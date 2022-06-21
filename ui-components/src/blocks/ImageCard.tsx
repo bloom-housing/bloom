@@ -6,19 +6,19 @@ import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
-import { Icon, IconFillColors, IconTypes } from "../icons/Icon"
+import { Icon, IconFillColors, UniversalIconType } from "../icons/Icon"
 
 export interface StatusBarType {
   status?: ApplicationStatusType
   content: string
   subContent?: string
   hideIcon?: boolean
-  iconType?: IconTypes
+  iconType?: UniversalIconType
 }
 
 export interface ImageTag {
   text?: string
-  iconType?: IconTypes
+  iconType?: UniversalIconType
   iconColor?: string
   styleType?: AppearanceStyleType
 }

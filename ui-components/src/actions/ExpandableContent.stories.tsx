@@ -8,4 +8,8 @@ export default {
 
 const content = <div>Sample Content</div>
 
-export const standard = () => <ExpandableContent>{content}</ExpandableContent>
+export const standard = () => (
+  <ExpandableContent strings={{ readMore: "read more", readLess: "read less" }}>
+    {content}
+  </ExpandableContent>
+)

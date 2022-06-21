@@ -43,6 +43,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   canPaperApplicationsBePickedUp?: YesNoAnswer
   canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
+  listingFeatures?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
@@ -114,6 +115,8 @@ export const formDefaults: FormListing = {
   displayWaitlistSize: false,
   events: [],
   images: [],
+  listingFeatures: [],
+  features: {},
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
