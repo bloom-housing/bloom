@@ -1,7 +1,12 @@
+.expandable-content{
+    --expandable-content-container-margin-top: var(--bloom-s6);
+    --expandable-content-button-margin: 0;
+}
+
 .expandable-content-button {
-    margin:0 !important;
+    margin:var(--expandable-content-button-margin) !important;
 }
 
 .expandable-content-container {
-    margin-top:var(--bloom-s6)
+    margin-top:var(--expandable-content-container-margin-top)
 }

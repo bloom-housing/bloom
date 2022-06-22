@@ -11,11 +11,12 @@ type ExpandableContentProps = {
 }
 
 const ExpandableContent = ({ children, strings, className }: ExpandableContentProps) => {
+  const classNames = ["expandable-content"]
+  if (className) classNames.push(...className.split(" "))
   const [isExpanded, setExpanded] = useState(false)
-  const rootClassNames = className ? `${className}` : undefined
 
   return (
-    <div className={rootClassNames}>
+    <div className={classNames}>
       <button
         type="button"
         className="button is-unstyled expandable-content-button no-underline has-toggle"
