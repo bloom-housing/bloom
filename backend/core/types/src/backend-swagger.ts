@@ -3990,6 +3990,9 @@ export interface UserRoles {
   isAdmin?: boolean
 
   /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -4288,9 +4291,6 @@ export interface UserUpdate {
   currentPassword?: string
 
   /**  */
-  jurisdictions: Id[]
-
-  /**  */
   leasingAgentInListings?: Id[]
 
   /**  */
@@ -4298,6 +4298,9 @@ export interface UserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -4351,6 +4354,9 @@ export interface UserRolesCreate {
   isAdmin?: boolean
 
   /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -4359,13 +4365,13 @@ export interface UserInvite {
   language?: Language
 
   /**  */
-  roles: CombinedRolesTypes
-
-  /**  */
   jurisdictions: Id[]
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  roles?: UserRolesCreate
 
   /**  */
   confirmedAt?: Date
@@ -6658,7 +6664,7 @@ export enum EnumJurisdictionLanguages {
   "zh" = "zh",
   "tl" = "tl",
 }
-export type CombinedRolesTypes = UserRolesCreate
+export type CombinedRolesTypes = UserRoles
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

@@ -12,6 +12,7 @@ import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
+import { ListingRepository } from "./repositories/listing.repository"
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
       User,
       Property,
       AmiChart,
+      ListingRepository,
       ListingFeatures,
     ]),
     AuthModule,

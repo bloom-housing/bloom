@@ -9,7 +9,6 @@ describe("AssetsController", () => {
   let controller: AssetsController
 
   beforeEach(async () => {
-    console.log("dbOptions = ", dbOptions)
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AssetsController],
       imports: [TypeOrmModule.forRoot(dbOptions), AuthModule],
