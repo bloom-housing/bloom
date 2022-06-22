@@ -7,10 +7,10 @@
       @apply ml-2;
     }
 
-     @media (max-width: $screen-sm){
+    @media (max-width: $screen-sm) {
       margin-left: 0px;
-      margin-top:var(--bloom-s3);
-     }
+      margin-top: var(--bloom-s3);
+    }
   }
 }
 
@@ -45,9 +45,9 @@
     margin-left: -2.65rem;
   }
 
-   @media (max-width: $screen-sm){
+  @media (max-width: $screen-sm) {
     margin-left: 0px;
-    float:none ;
+    float: none;
   }
 
   sup {
@@ -64,10 +64,9 @@
   @screen md {
     @apply ml-2;
   }
- @media (max-width: $screen-sm){
-      margin-left: 0px;
+  @media (max-width: $screen-sm) {
+    margin-left: 0px;
   }
-
 }
 
 .preferences-list__description {
