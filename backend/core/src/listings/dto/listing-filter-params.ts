@@ -310,6 +310,12 @@ export class ListingFilterParams extends BaseFilter {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.region]?: string;
 
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.section8Acceptance]?: boolean
