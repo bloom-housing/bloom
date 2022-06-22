@@ -16,7 +16,7 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
   const [isExpanded, setExpanded] = useState(false)
 
   return (
-    <div className={classNames}>
+    <div className={classNames.join(" ")}>
       <button
         type="button"
         className="button is-unstyled expandable-content-button no-underline has-toggle"
