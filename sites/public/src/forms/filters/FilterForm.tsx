@@ -20,7 +20,6 @@ import {
   FrontendListingFilterStateKeys,
   ListingFilterState,
 } from "@bloom-housing/shared-helpers"
-
 interface FilterFormProps {
   onSubmit: (data: ListingFilterState) => void
   onClose: (isOpen: boolean) => void
@@ -264,6 +263,19 @@ const FilterForm = (props: FilterFormProps) => {
               }}
             />
           </GridCell>
+          <GridCell>
+            <Field
+              id="section8Acceptance"
+              name="section8Acceptance"
+              type="checkbox"
+              label={t("eligibility.accessibility.loweredCabinets")}
+              inputProps={{
+                defaultChecked: localFilterState.section8Acceptance,
+              }}
+              // eslint-disable-next-line @typescript-eslint/unbound-method
+              register={register}
+            />
+          </GridCell>
         </GridSection>
         <GridSection columns={3} separator={true} className={"px-4"} wrapperClassName={"pt-4 mt-4"}>
           <GridCell span={3}>
@@ -368,6 +380,7 @@ const FilterForm = (props: FilterFormProps) => {
                 reset({
                   status: EnumListingFilterParamsStatus.active,
                   isVerified: "",
+                  section8Acceptance: "",
                   availability: "",
                   bedRoomSize: "",
                   minRent: "",

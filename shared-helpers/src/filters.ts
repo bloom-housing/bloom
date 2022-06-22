@@ -66,6 +66,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.availability:
     case ListingFilterKeys.zipcode:
       return EnumListingFilterParamsComparison["IN"]
+    case ListingFilterKeys.section8Acceptance:
     default: {
       const _exhaustiveCheck: any = filterKey
       return _exhaustiveCheck
@@ -155,6 +156,8 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.barrierFreeBathroom]?: string | boolean
   [FrontendListingFilterStateKeys.wideDoorways]?: string | boolean
   [FrontendListingFilterStateKeys.loweredCabinets]?: string | boolean
+  [FrontendListingFilterStateKeys.section8Acceptance]?: string | boolean
+
   // favorites
   [FrontendListingFilterStateKeys.favorited]?: string | boolean
 
