@@ -352,7 +352,7 @@ describe("Authz", () => {
         .expect(200)
       expect(listingResponse.body.name).toBe(newListingCreateDto.name)
 
-      const changeName = "new random name"
+      const changeName = "new changed name"
       listingResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listingResponse.body.id}`)
         .send({

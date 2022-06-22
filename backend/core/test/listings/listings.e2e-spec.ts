@@ -423,8 +423,6 @@ describe("Listings", () => {
       .get(`/listings?search=random`)
       .expect(200)
 
-    console.log({ listingsSearchResponse })
-
     expect(listingsSearchResponse.body.items.length).toBe(0)
 
     const listingResponse = await supertest(app.getHttpServer())
