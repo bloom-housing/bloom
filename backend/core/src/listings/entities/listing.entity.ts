@@ -18,7 +18,8 @@ import { User } from "../../auth/entities/user.entity"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
-  IsDate, IsDefined,
+  IsDate,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -26,7 +27,7 @@ import {
   IsString,
   IsUUID,
   MaxLength,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"

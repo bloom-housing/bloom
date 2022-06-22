@@ -102,7 +102,7 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
       (unit) => {
         return {
           ...unit,
-          listing: {id: newListing.id}
+          listing: { id: newListing.id },
         }
       }
     )

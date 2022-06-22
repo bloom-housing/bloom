@@ -22,7 +22,6 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-
     const newListing = await this.listingRepository.save({
       ...listing,
       name: "Test: Default, Multiple AMI",
@@ -33,7 +32,7 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
         return {
           ...unit,
           amiChart: index % 2 === 0 ? amiChartOne : amiChartTwo,
-          listing: {id: newListing.id},
+          listing: { id: newListing.id },
         }
       }
     )

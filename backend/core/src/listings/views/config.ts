@@ -84,7 +84,7 @@ views.partnerList = {
     "listings.waitlistMaxSize",
     "listings.waitlistCurrentSize",
     "listings.unitsAvailable",
-  ]
+  ],
 }
 
 views.detail = {

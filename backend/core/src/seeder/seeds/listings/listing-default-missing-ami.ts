@@ -115,11 +115,11 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
     const unitsToBeCreated: Array<Omit<
       UnitCreateDto,
       keyof BaseEntity
-      >> = missingAmiLevelsUnits.map((unit) => {
+    >> = missingAmiLevelsUnits.map((unit) => {
       return {
         ...unit,
         amiChart,
-        listing: {id: newListing.id},
+        listing: { id: newListing.id },
       }
     })
 

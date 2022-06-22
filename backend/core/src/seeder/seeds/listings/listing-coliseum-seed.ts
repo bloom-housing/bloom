@@ -977,7 +977,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         return {
           ...unit,
           amiChart,
-          listing: {id: listing.id}
+          listing: { id: listing.id },
         }
       }
     )

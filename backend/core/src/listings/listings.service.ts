@@ -193,7 +193,7 @@ export class ListingsService {
     listingDto.unitsAvailable = availableUnits
 
     Object.assign(listing, {
-      ...listingDto ,
+      ...listingDto,
       publishedAt:
         listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
           ? new Date()

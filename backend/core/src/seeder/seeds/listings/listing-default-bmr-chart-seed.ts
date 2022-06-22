@@ -36,7 +36,7 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
       return {
         ...unit,
         amiChart,
-        listing: {id: newListing.id}
+        listing: { id: newListing.id },
       }
     })
 
