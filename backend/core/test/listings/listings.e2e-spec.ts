@@ -90,7 +90,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    console.log(res.body.items)
+    console.log({ res })
     expect(res.body.items.length).toEqual(1)
   })
 
