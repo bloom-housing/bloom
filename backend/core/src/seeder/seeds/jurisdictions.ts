@@ -58,6 +58,7 @@ export async function createJurisdictions(app: INestApplicationContext) {
   const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)
   // some jurisdictions are added via previous migrations
   const jurisdictions = await jurisdictionService.list()
+  console.log({ jurisdictions })
   const toInsert = defaultJurisdictions.filter(
     (rec) => jurisdictions.findIndex((item) => item.name === rec.name) === -1
   )
