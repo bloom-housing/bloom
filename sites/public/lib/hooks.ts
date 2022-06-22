@@ -77,7 +77,6 @@ export function useListingsData(
   orderBy: OrderByFieldsEnum,
   view = "publicListings"
 ) {
-  console.log(filters)
   const { data, error } = useSWR(
     [`${process.env.listingServiceUrl}`, pageIndex, limit, filters, orderBy],
     listingsFetcher(view)

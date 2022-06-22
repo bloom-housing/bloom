@@ -142,7 +142,6 @@ export const ListingView = (props: ListingProps) => {
   if (!listing) {
     return <ErrorPage />
   }
-  console.log(listing)
   const oneLineAddress = <OneLineAddress address={getGenericAddress(listing.buildingAddress)} />
 
   const googleMapsHref =
