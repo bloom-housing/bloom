@@ -268,7 +268,7 @@ const FilterForm = (props: FilterFormProps) => {
               id="section8Acceptance"
               name={FrontendListingFilterStateKeys.section8Acceptance}
               type="checkbox"
-              label={t("eligibility.accessibility.loweredCabinets")}
+              label={t("listingFilters.section8")}
               inputProps={{
                 defaultChecked: localFilterState.section8Acceptance,
               }}
