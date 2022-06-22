@@ -61,7 +61,6 @@ export class ListingsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
-    console.log(queryParams)
     return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
   }
 

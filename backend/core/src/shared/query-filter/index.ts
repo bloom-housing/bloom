@@ -102,8 +102,6 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
 
       const whereParameterName = `${filterKey}_${index}`
       const filterField = filterTypeToFieldMap[filterKey]
-      console.log("comparison", comparison)
-      console.log("filter", filterField, filterKey)
 
       switch (comparison) {
         case Compare.IN:

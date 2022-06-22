@@ -57,7 +57,6 @@ export class ListingsService {
       .groupBy("listings.id")
 
     innerFilteredQuery = ListingsService.addOrderByToQb(innerFilteredQuery, params)
-    console.log(params.filter)
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
         params.filter,

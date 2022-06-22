@@ -263,7 +263,7 @@ const FilterForm = (props: FilterFormProps) => {
               }}
             />
           </GridCell>
-          <GridCell>
+          <GridCell span={2}>
             <Field
               id="section8Acceptance"
               name={FrontendListingFilterStateKeys.section8Acceptance}
@@ -272,6 +272,7 @@ const FilterForm = (props: FilterFormProps) => {
               inputProps={{
                 defaultChecked: localFilterState.section8Acceptance,
               }}
+              labelClassName={"text-gray-750 font-semibold"}
               // eslint-disable-next-line @typescript-eslint/unbound-method
               register={register}
             />
