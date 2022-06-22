@@ -6,6 +6,11 @@
     @screen md {
       @apply ml-2;
     }
+
+     @media (max-width: $screen-sm){
+      margin-left: 0px;
+      margin-top:var(--bloom-s3);
+     }
   }
 }
 
@@ -40,6 +45,11 @@
     margin-left: -2.65rem;
   }
 
+   @media (max-width: $screen-sm){
+    margin-left: 0px;
+    float:none ;
+  }
+
   sup {
     @apply font-normal;
     top: -0.35em;
@@ -47,17 +57,21 @@
 }
 
 .preferences-list__subtitle {
-  @apply text-gray-700;
+  @apply text-gray-750;
   @apply text-tiny;
   @apply ml-4;
 
   @screen md {
     @apply ml-2;
   }
+ @media (max-width: $screen-sm){
+      margin-left: 0px;
+  }
+
 }
 
 .preferences-list__description {
-  @apply text-gray-700;
+  @apply text-gray-750;
   @apply text-sm;
   @apply mt-3;
 }
