@@ -266,7 +266,7 @@ const FilterForm = (props: FilterFormProps) => {
           <GridCell>
             <Field
               id="section8Acceptance"
-              name="section8Acceptance"
+              name={FrontendListingFilterStateKeys.section8Acceptance}
               type="checkbox"
               label={t("eligibility.accessibility.loweredCabinets")}
               inputProps={{

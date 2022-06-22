@@ -53,6 +53,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.barrierFreeBathroom:
     case ListingFilterKeys.wideDoorways:
     case ListingFilterKeys.loweredCabinets:
+    case ListingFilterKeys.section8Acceptance:
       return EnumListingFilterParamsComparison["="]
     case ListingFilterKeys.minRent:
       return EnumListingFilterParamsComparison[">="]
@@ -66,7 +67,6 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.availability:
     case ListingFilterKeys.zipcode:
       return EnumListingFilterParamsComparison["IN"]
-    case ListingFilterKeys.section8Acceptance:
     default: {
       const _exhaustiveCheck: any = filterKey
       return _exhaustiveCheck
