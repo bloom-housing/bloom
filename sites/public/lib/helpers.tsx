@@ -121,7 +121,6 @@ export const getListings = (listings) => {
         imageCardProps={{
           imageUrl:
             imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          href: `/listing/${listing.id}/${listing.urlSlug}`,
           tags: listing.reservedCommunityType
             ? [
                 {
@@ -139,10 +138,17 @@ export const getListings = (listings) => {
           cellClassName: "px-5 py-3",
         }}
         footerButtons={[
-          { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
+          {
+            text: t("t.seeDetails"),
+            href: `/listing/${listing.id}/${listing.urlSlug}`,
+            ariaHidden: true,
+          },
         ]}
         contentProps={{
-          contentHeader: { content: listing.name },
+          contentHeader: {
+            content: listing.name,
+            href: `/listing/${listing.id}/${listing.urlSlug}`,
+          },
           contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
           tableHeader: generateTableSubHeader(listing),
         }}

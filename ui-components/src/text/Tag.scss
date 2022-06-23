@@ -1,94 +1,132 @@
 .tag {
-  @apply py-3;
-  @apply px-5;
-  @apply text-white;
-  @apply text-tiny;
-  @apply bg-primary;
-  @apply rounded-md;
-  @apply text-center;
+  /* Component Variables */
+  --normal-padding: var(--bloom-s3) var(--bloom-s5);
+  --normal-rounded: var(--bloom-rounded-md);
+  --normal-font-size: var(--bloom-font-size-tiny);
+  --normal-font-weight: normal;
+
+  --pill-padding: var(--bloom-s2) var(--bloom-s4);
+  --pill-rounded: var(--bloom-rounded-full);
+  --pill-font-size: var(--bloom-font-size-tiny);
+  --pill-font-weight: 600;
+  --pill-text-transform: uppercase;
+  --pill-letter-spacing: var(--bloom-letter-spacing-ultrawide);
+
+  --small-pill-padding: var(--bloom-s1) var(--bloom-s3);
+  --small-pill-font-size: var(--bloom-font-size-2xs);
+
+  /* Default Styles */
+  padding: var(--normal-padding);
+  border-radius: var(--normal-rounded);
+  font-size: var(--normal-font-size);
+  font-weight: var(--normal-font-weight);
+  color: var(--primary-appearance-label-color, var(--bloom-color-white));
+  font-family: var(--bloom-font-sans);
+  background-color: var(--primary-appearance-border-color, var(--bloom-color-primary));
+  text-align: center;
 
   &.is-pill {
-    @apply px-4;
-    @apply py-2;
-    @apply bg-primary-light;
-    @apply text-primary-dark;
-    @apply rounded-full;
-    @apply font-semibold;
-    @apply font-alt-sans;
-    @apply uppercase;
-    @apply tracking-ultrawide;
-    @apply inline;
-    @apply text-tiny;
-    @apply leading-4;
+    padding: var(--pill-padding);
+    background-color: var(--bloom-color-primary-light);
+    color: var(--bloom-color-primary-dark);
+    border-radius: var(--pill-rounded);
+    font-weight: var(--pill-font-weight);
+    font-family: var(--bloom-font-alt-sans);
+    text-transform: var(--pill-text-transform);
+    letter-spacing: var(--pill-letter-spacing);
+    display: inline;
+    font-size: var(--pill-font-size);
+    line-height: var(--bloom-line-height-4);
 
     &.is-small {
-      @apply text-2xs;
-      @apply py-1;
-      @apply px-3;
-      @apply leading-3;
+      font-size: var(--small-pill-font-size);
+      padding: var(--small-pill-padding);
+      line-height: var(--bloom-line-height-3);
     }
   }
 
   &.fill-container {
-    @apply w-full;
-    @apply inline-block;
+    width: 100%;
+    display: inline-block;
   }
 
   &.is-warning {
-    @apply bg-accent-warm-dark;
+    color: var(--warning-appearance-label-color, var(--bloom-color-white));
+    background-color: var(
+      --warning-appearance-background-color,
+      var(--bloom-color-accent-warm-dark)
+    );
   }
 
   &.is-secondary {
-    @apply text-white;
-    @apply bg-secondary;
+    color: var(--secondary-appearance-label-color, var(--bloom-color-white));
+    background-color: var(--secondary-appearance-background-color, var(--bloom-color-secondary));
   }
 
   &.is-success {
     &:not(.is-light-mode) {
-      @apply text-white;
-      @apply bg-success;
+      color: var(--success-appearance-label-color, var(--bloom-color-white));
+      background-color: var(--success-appearance-background-color, var(--bloom-color-success));
     }
+
     &.is-light-mode {
-      @apply text-gray-900;
-      @apply bg-success-light;
+      color: var(--success-light-appearance-label-color, var(--bloom-color-gray-900));
+      background-color: var(
+        --success-light-appearance-background-color,
+        var(--bloom-color-success-light)
+      );
     }
   }
 
   &.is-accent-cool {
     &:not(.is-light-mode) {
-      @apply text-white;
-      @apply bg-accent-cool-dark;
+      color: var(--accent-cool-appearance-label-color, var(--bloom-color-white));
+      background-color: var(
+        --accent-cool-appearance-background-color,
+        var(--bloom-color-accent-cool-dark)
+      );
     }
+
     &.is-light-mode {
-      @apply text-gray-900;
-      @apply bg-accent-cool;
+      color: var(--accent-cool-light-appearance-label-color, var(--bloom-color-gray-900));
+      background-color: var(
+        --accent-cool-light-appearance-background-color,
+        var(--bloom-color-accent-cool)
+      );
     }
   }
 
   &.is-accent-warm {
     &:not(.is-light-mode) {
-      @apply text-white;
-      @apply bg-accent-warm-dark;
+      color: var(--accent-warm-appearance-label-color, var(--bloom-color-white));
+      background-color: var(
+        --accent-warm-appearance-background-color,
+        var(--bloom-color-accent-warm-dark)
+      );
     }
+
     &.is-light-mode {
-      @apply text-gray-900;
-      @apply bg-accent-warm;
+      color: var(--accent-warm-light-appearance-label-color, var(--bloom-color-gray-900));
+      background-color: var(
+        --accent-warm-light-appearance-background-color,
+        var(--bloom-color-accent-warm)
+      );
     }
   }
 
   &.is-closed {
-    @apply text-white;
-    @apply bg-gray-750;
+    color: var(--closed-appearance-label-color, var(--bloom-color-white));
+    background-color: var(--closed-appearance-background-color, var(--bloom-color-gray-750));
   }
 
   &.is-info {
-    @apply text-gray-800;
-    @apply bg-warn-light;
+    color: var(--info-appearance-label-color, var(--bloom-color-gray-800));
+    background-color: var(--info-appearance-background-color, var(--bloom-color-warn-light));
   }
 
   &.is-small {
-    @apply text-sm;
-    @apply py-2;
-    @apply px-4;
+    font-size: var(--bloom-font-size-sm);
+    padding-block: var(--bloom-s2);
+    padding-inline: var(--bloom-s4);
   }
 }

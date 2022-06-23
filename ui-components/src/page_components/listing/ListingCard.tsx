@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useContext } from "react"
 import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
 import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
@@ -8,17 +8,20 @@ import { Tag } from "../../text/Tag"
 import { AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
+import { NavigationContext } from "../../config/NavigationContext"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
 export interface CardHeader {
-  customClass?: string
   content: string | React.ReactNode
+  href?: string
+  customClass?: string
 }
 
 export interface FooterButton {
   href: string
   text: string
+  ariaHidden?: boolean
 }
 
 export interface ListingCardContentProps {
@@ -28,14 +31,23 @@ export interface ListingCardContentProps {
   tableSubheader?: CardHeader
 }
 export interface ListingCardProps {
+  /** A list of tags to be rendered below the content header, a Tag component is rendered for each */
   cardTags?: ImageTag[]
+  /** Custom content rendered in the content section above the table */
   children?: React.ReactElement
+  /** An object containing fields that render optional headers above the content section's table */
   contentProps?: ListingCardContentProps
+  /** A list of buttons to render in the footer of the content section */
   footerButtons?: FooterButton[]
+  /** A class name applied to the footer container of the content section */
   footerContainerClass?: string
+  /** Custom content rendered below the content table */
   footerContent?: React.ReactNode
+  /** Prop interface for the ImageCard component */
   imageCardProps: ImageCardProps
+  /** Toggles on the StackedTable component in place of the default StandardTable component - they are functionally equivalent with differing UIs */
   stackedTable?: boolean
+  /** Prop interface for the StandardTable and StackedTable components */
   tableProps?: ListingCardTableProps
 }
 
@@ -44,17 +56,6 @@ export interface ListingCardProps {
  *
  * A component that renders an image with optional status bars below it,
  * and a content section associated with the image which can include titles, a table, and custom content
- *
- * @prop cardTags -A list of tags to be rendered below the content header, a Tag component is rendered for each
- * @prop children - Custom content rendered in the content section above the table
- * @prop footerButtons - A list of buttons to render in the footer of the content section
- * @prop footerContent - Custom content rendered below the content table
- * @prop footerContainerClass - A class name applied to the footer container of the content section
- * @prop imageCardProps - Prop interface for the ImageCard component
- * @prop stackedTable - Toggles on the StackedTable component in place of the default StandardTable component - they are functionally equivalent with differing UIs
- * @prop contentProps - An object containing fields that render optional headers above the content section's table
- * @prop tableProps - Prop interface for the StandardTable and StackedTable components
- *
  */
 const ListingCard = (props: ListingCardProps) => {
   const {
@@ -68,6 +69,7 @@ const ListingCard = (props: ListingCardProps) => {
     contentProps,
     tableProps,
   } = props
+  const { LinkComponent } = useContext(NavigationContext)
 
   const getHeader = (
     header: CardHeader | undefined,
@@ -78,7 +80,13 @@ const ListingCard = (props: ListingCardProps) => {
     if (header && header.content) {
       return (
         <Heading priority={priority} style={style} className={customClass}>
-          {header.content}
+          {header.href ? (
+            <LinkComponent className="is-card-link" href={header.href}>
+              {header.content}
+            </LinkComponent>
+          ) : (
+            header.content
+          )}
         </Heading>
       )
     } else {
@@ -88,20 +96,19 @@ const ListingCard = (props: ListingCardProps) => {
 
   const getContentHeader = () => {
     return (
-      <>
+      <div className="listings-row_headers">
         {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
         {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
         {cardTags && cardTags?.length > 0 && (
-          <div className={"inline-flex flex-wrap justify-start w-full"}>
+          <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
               return (
-                <Tag styleType={AppearanceStyleType.warning} className={"mr-2 mb-2"} key={index}>
+                <Tag styleType={cardTag.styleType || AppearanceStyleType.warning} key={index}>
                   {cardTag.iconType && (
                     <Icon
                       size={"medium"}
                       symbol={cardTag.iconType}
                       fill={cardTag.iconColor ?? IconFillColors.primary}
-                      className={"mr-2"}
                     />
                   )}
                   {cardTag.text}
@@ -110,7 +117,7 @@ const ListingCard = (props: ListingCardProps) => {
             })}
           </div>
         )}
-      </>
+      </div>
     )
   }
 
@@ -143,7 +150,11 @@ const ListingCard = (props: ListingCardProps) => {
             <div className={footerContainerClass ?? "listings-row_footer"}>
               {footerButtons?.map((footerButton, index) => {
                 return (
-                  <LinkButton href={footerButton.href} key={index}>
+                  <LinkButton
+                    href={footerButton.href}
+                    ariaHidden={footerButton.ariaHidden}
+                    key={index}
+                  >
                     {footerButton.text}
                   </LinkButton>
                 )
@@ -161,7 +172,7 @@ const ListingCard = (props: ListingCardProps) => {
         <ImageCard {...imageCardProps} />
       </div>
       <div className="listings-row_content">
-        <div className={"listings-row_headers"}>{getContentHeader()}</div>
+        {getContentHeader()}
         {getContent()}
       </div>
     </article>

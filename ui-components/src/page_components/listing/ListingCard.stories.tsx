@@ -1,11 +1,21 @@
+import * as React from "react"
+import { AppearanceStyleType } from "../../.."
+import { BADGES } from "../../../.storybook/constants"
 import LinkButton from "../../actions/LinkButton"
 import Icon from "../../icons/Icon"
-import * as React from "react"
 import { ListingCard } from "./ListingCard"
+import ListingCardDocumentation from "./ListingCard.docs.mdx"
 
 export default {
-  title: "Listing/ListingCard",
+  title: "Listing/ListingCard 🚩",
+  id: "page-components/listing-card",
   component: ListingCard,
+  parameters: {
+    docs: {
+      page: ListingCardDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 const standardImageCardProps = {
@@ -23,9 +33,14 @@ const standardTableProps = {
   },
   data: [
     {
-      unitType: { content: "cellA" },
-      minimumIncome: { content: "cellB" },
-      rent: { content: "cellC" },
+      unitType: { content: "Row 1 cellA" },
+      minimumIncome: { content: "Row 1 cellB" },
+      rent: { content: <strong>Row 1 cellC</strong> },
+    },
+    {
+      unitType: { content: "Row 2 cellA" },
+      minimumIncome: { content: "Row 2 cellB" },
+      rent: { content: <strong>Row 2 cellC</strong> },
     },
   ],
   responsiveCollapse: true,
@@ -82,11 +97,11 @@ export const withStackedTable = () => {
 export const WithHeaders = () => {
   return (
     <ListingCard
-      imageCardProps={{ ...standardImageCardProps }}
+      imageCardProps={{ ...standardImageCardProps, href: undefined }}
       tableProps={{ ...standardTableProps }}
-      footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+      footerButtons={[{ text: "See Details", href: "see-details-link", ariaHidden: true }]}
       contentProps={{
-        contentHeader: { content: "Optional content header" },
+        contentHeader: { content: "Optional content header", href: "listing-link" },
         contentSubheader: { content: "Optional content subheader" },
         tableHeader: { content: "Optional table header" },
         tableSubheader: { content: "Optional table subheader" },
@@ -275,5 +290,93 @@ export const CustomFooter = () => {
         tableSubheader: { content: "Optional table subheader" },
       }}
     />
+  )
+}
+
+export const detroitStyle = () => {
+  const cssVarsOverride = `
+    .listing-card-overrides {
+      --bloom-font-sans: Montserrat;
+      --bloom-font-alt-sans: var(--bloom-font-sans);
+      --bloom-color-primary: rgb(41,126,115);
+      --bloom-color-primary-dark: rgb(0,68,69);
+      --primary-appearance-hover-background-color: white;
+      --primary-appearance-hover-label-color: var(--bloom-color-primary-dark);
+      --outlined-appearance-hover-background-color: var(--bloom-color-primary);
+      --outlined-appearance-hover-border-color: var(--bloom-color-primary);
+      --card-header-color: var(--bloom-color-primary-dark);
+    }
+
+    .listing-card-overrides table {
+      font-family: var(--bloom-font-sans);
+    }
+
+    .listing-card-overrides .image-card {
+      --tags-justify-mobile: flex-end;
+      --tags-justify-desktop: flex-end;
+      --border-radius: 24px;
+      --image-height: 340px;
+      --normal-font-size: var(--bloom-font-size-base);
+    }
+    .listing-card-overrides .tag {
+      --normal-padding: var(--bloom-s2) var(--bloom-s3);
+      --label-weight: 700;
+    }
+
+    .listing-card-overrides .listings-row {
+      --tags-flex-order: 2;
+    }
+
+    .listing-card-overrides .button {
+      --normal-rounded: 60px;
+      --normal-padding: 0.5rem 1rem;
+      --normal-font-size: var(--bloom-font-size-base);
+      --label-letter-spacing: normal;
+      --label-transform: none;
+    }
+  `
+
+  return (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      ></link>
+      <div className="listing-card-overrides">
+        <ListingCard
+          imageCardProps={{
+            imageUrl: "https://detroit-public-dev.netlify.app/images/detroitDefault.png",
+            href: "listing-link",
+            tags: [
+              {
+                iconType: "calendar",
+                iconColor: "white",
+                text: "Coming Soon Fall 2022",
+                styleType: AppearanceStyleType.closed,
+              },
+            ],
+          }}
+          tableProps={{ ...standardTableProps }}
+          footerButtons={[{ text: "See Details", href: "see-details-link" }]}
+          contentProps={{
+            contentHeader: { text: "Optional content header" },
+            contentSubheader: { text: "Optional content subheader" },
+          }}
+          cardTags={[
+            { text: "Tag 1 text" },
+            { text: "Tag 2 text", styleType: AppearanceStyleType.info },
+            {
+              text: "A tag with a longer name",
+              iconType: "phone",
+              iconColor: "white",
+              styleType: AppearanceStyleType.primary,
+            },
+          ]}
+        />
+        <style>{cssVarsOverride}</style>
+      </div>
+    </>
   )
 }
