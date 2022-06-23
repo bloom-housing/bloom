@@ -15,6 +15,7 @@ const views: Views = {
       "listings.status",
       "listings.assets",
       "listings.isVerified",
+      "listings.section8Acceptance",
       "jurisdiction.id",
       "jurisdiction.name",
       "reservedCommunityType.id",

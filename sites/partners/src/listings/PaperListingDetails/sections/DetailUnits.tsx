@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 import { MinMax, MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"
@@ -64,19 +64,30 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   )
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.units")}
-      grid={false}
-      tinted
-      inset
-    >
-      {listing.unitGroups.length ? (
-        <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
-      ) : (
-        <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-      )}
-    </GridSection>
+    <>
+      <GridSection
+        className="bg-primary-lighter"
+        title={t("listings.units")}
+        grid={false}
+        tinted
+        inset
+      >
+        {listing.unitGroups.length ? (
+          <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
+        ) : (
+          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
+        )}
+        {listing.section8Acceptance !== null && (
+          <GridSection columns={3} className="pt-8">
+            <GridCell>
+              <ViewItem label={t("listings.section8AcceptanceQuestion")}>
+                {listing.section8Acceptance ? t("t.yes") : t("t.no")}
+              </ViewItem>
+            </GridCell>
+          </GridSection>
+        )}
+      </GridSection>
+    </>
   )
 }
 
