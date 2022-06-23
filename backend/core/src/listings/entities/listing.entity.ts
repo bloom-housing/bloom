@@ -53,6 +53,7 @@ import { ListingPreference } from "../../preferences/entities/listing-preference
 import { ListingImage } from "./listing-image.entity"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
 import { ListingSeasonEnum } from "../types/listing-season-enum"
+import { ListingUtilities } from "./listing-utilities.entity"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -622,6 +623,18 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
   features?: ListingFeatures
+
+  @OneToOne(() => ListingUtilities, {
+    nullable: true,
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingUtilities)
+  utilities?: ListingUtilities
 
   @Column({ type: "boolean", default: false, nullable: true })
   @Expose()

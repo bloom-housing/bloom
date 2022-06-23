@@ -35,8 +35,6 @@ import {
   WhatToExpect,
   t,
   ExpandableText,
-  PreferencesList,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -371,6 +369,45 @@ export const ListingView = (props: ListingProps) => {
 
   const accessibilityFeatures = getAccessibilityFeatures()
 
+  const getUtilitiesIncluded = () => {
+    let utilitiesExist = false
+    const utilitiesIncluded = Object.keys(listing?.utilities ?? {}).reduce(
+      (acc, current, index) => {
+        if (listing?.utilities[current]) {
+          utilitiesExist = true
+          acc.push(
+            <li key={index} className={"list-disc list-inside"}>
+              {t(`listings.utilities.${current}`)}
+            </li>
+          )
+        }
+        return acc
+      },
+      []
+    )
+    return utilitiesExist ? (
+      <div>
+        <div className="text-base">{t("listings.sections.utilities")}</div>
+        {utilitiesIncluded.length <= 4 ? (
+          <ul>{utilitiesIncluded}</ul>
+        ) : (
+          <div className="flex">
+            <ul className="float-left w-1/2">{utilitiesIncluded.slice(0, 4)}</ul>
+            <ul className="float-right w-1/2">{utilitiesIncluded.slice(4)}</ul>
+          </div>
+        )}
+      </div>
+    ) : null
+  }
+
+  const getFooterContent = () => {
+    const footerContent: (string | React.ReactNode)[] = []
+    const utilitiesDisplay = getUtilitiesIncluded()
+    if (utilitiesDisplay) footerContent.push(utilitiesDisplay)
+    if (listing?.costsNotIncluded) footerContent.push(listing.costsNotIncluded)
+    return footerContent
+  }
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <div className="w-full md:w-2/3">
@@ -604,7 +641,7 @@ export const ListingView = (props: ListingProps) => {
                   depositMin={listing.depositMin}
                   depositMax={listing.depositMax}
                   applicationFee={listing.applicationFee}
-                  costsNotIncluded={listing.costsNotIncluded}
+                  footerContent={getFooterContent()}
                   containerClass={"mt-4"}
                 />
               </div>

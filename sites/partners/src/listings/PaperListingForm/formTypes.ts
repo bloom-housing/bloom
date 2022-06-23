@@ -46,6 +46,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries" | "unitGr
   canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
   listingFeatures?: string[]
+  listingUtilities?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   section8Choice?: YesNoAnswer
@@ -121,7 +122,9 @@ export const formDefaults: FormListing = {
   events: [],
   images: [],
   listingFeatures: [],
+  listingUtilities: [],
   features: {},
+  utilities: {},
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
