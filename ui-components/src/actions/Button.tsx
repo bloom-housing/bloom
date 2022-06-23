@@ -19,6 +19,7 @@ export interface ButtonProps extends AppearanceProps {
   className?: string
   disabled?: boolean
   loading?: boolean
+  ariaHidden?: boolean
   ariaLabel?: string
   dataTestId?: string
   "data-test-id"?: string
@@ -75,6 +76,7 @@ const Button = (props: ButtonProps) => {
       className={buttonClasses.join(" ")}
       onClick={props.onClick}
       disabled={props.disabled || props.loading}
+      aria-hidden={props.ariaHidden}
       aria-label={props.ariaLabel}
       data-test-id={props.dataTestId || props["data-test-id"]}
     >

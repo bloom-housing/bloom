@@ -23,6 +23,7 @@ const LinkButton = (props: LinkButtonProps) => {
     return (
       <LinkComponent
         href={props.href}
+        aria-hidden={props.ariaHidden}
         className={buttonClasses.join(" ")}
         data-test-id={props.dataTestId}
       >
