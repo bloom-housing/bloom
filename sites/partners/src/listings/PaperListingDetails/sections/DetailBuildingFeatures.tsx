@@ -19,7 +19,7 @@ const DetailBuildingFeatures = () => {
         )
       }
     })
-    return featuresExist ? features : <>None</>
+    return featuresExist ? features : <>{t("t.none")}</>
   }
 
   return (

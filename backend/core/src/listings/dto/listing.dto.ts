@@ -16,6 +16,7 @@ import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitGroupDto } from "../../units-summary/dto/unit-group.dto"
 import { ListingFeaturesDto } from "./listing-features.dto"
+import { ListingUtilitiesDto } from "./listing-utilities.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { Column } from "typeorm"
@@ -41,6 +42,7 @@ export class ListingDto extends OmitType(Listing, [
   "result",
   "unitGroups",
   "features",
+  "utilities",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -358,4 +360,9 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => ListingFeaturesDto)
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   features?: ListingFeaturesDto
+
+  @Expose()
+  @Type(() => ListingUtilitiesDto)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  utilities?: ListingUtilitiesDto
 }

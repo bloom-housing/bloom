@@ -60,6 +60,17 @@ const listingSeed: ListingSeedType = {
     heatingInUnit: true,
     acInUnit: true,
   },
+  utilities: {
+    water: null,
+    gas: false,
+    trash: null,
+    sewer: false,
+    electricity: null,
+    cable: null,
+    phone: null,
+    internet: null,
+  },
+
   listingPreferences: [],
   jurisdictionName: "Detroit",
   marketingType: ListingMarketingTypeEnum.Marketing,

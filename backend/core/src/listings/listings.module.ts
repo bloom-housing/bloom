@@ -17,6 +17,7 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { UnitGroup } from "../units-summary/entities/unit-group.entity"
 import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { Program } from "../program/entities/program.entity"
+import { ListingUtilities } from "./entities/listing-utilities.entity"
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Program } from "../program/entities/program.entity"
       Property,
       AmiChart,
       ListingFeatures,
+      ListingUtilities,
       UnitGroup,
       UnitType,
       Program,

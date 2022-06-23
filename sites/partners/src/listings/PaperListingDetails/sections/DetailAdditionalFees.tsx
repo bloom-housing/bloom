@@ -5,6 +5,20 @@ import { getDetailFieldString } from "./helpers"
 
 const DetailAdditionalFees = () => {
   const listing = useContext(ListingContext)
+  const getUtilitiesIncluded = () => {
+    let utilitiesExist = false
+    const utilities = Object.keys(listing?.utilities ?? {}).map((utility) => {
+      if (listing?.utilities[utility]) {
+        utilitiesExist = true
+        return (
+          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+            {t(`listings.utilities.${utility}`)}
+          </li>
+        )
+      }
+    })
+    return utilitiesExist ? utilities : <>{t("t.none")}</>
+  }
 
   return (
     <GridSection
@@ -39,6 +53,13 @@ const DetailAdditionalFees = () => {
         <GridCell>
           <ViewItem id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
             {getDetailFieldString(listing.costsNotIncluded)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell className={"m-h-1"}>
+          <ViewItem label={t("listings.sections.utilities")}>
+            <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
           </ViewItem>
         </GridCell>
       </GridSection>

@@ -11,7 +11,14 @@ describe("<AdditionalFees>", () => {
         applicationFee={"30"}
         depositMin={"1140"}
         depositMax={"1500"}
-        costsNotIncluded={"Resident responsible for PG&E, internet and phone."}
+        footerContent={[
+          <ul>
+            <li key={0} className={"list-disc list-inside flex-nowrap"}>
+              Gas
+            </li>
+          </ul>,
+          "Resident responsible for PG&E, internet and phone.",
+        ]}
       />
     )
     expect(getByText("Additional Fees")).toBeTruthy()
@@ -23,5 +30,6 @@ describe("<AdditionalFees>", () => {
     expect(
       getByText("Resident responsible for PG&E, internet and phone.", { exact: false })
     ).toBeTruthy()
+    expect(getByText("Gas", { exact: false })).toBeTruthy()
   })
 })
