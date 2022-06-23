@@ -11,7 +11,12 @@ export interface AdditionalFeesProps {
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
-  if (!props.depositMin && !props.depositMax && !props.applicationFee && !props.footerContent) {
+  if (
+    !props.depositMin &&
+    !props.depositMax &&
+    !props.applicationFee &&
+    props.footerContent?.length === 0
+  ) {
     return <></>
   }
 
