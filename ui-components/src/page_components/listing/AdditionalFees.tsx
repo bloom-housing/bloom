@@ -5,13 +5,13 @@ export interface AdditionalFeesProps {
   depositMin?: string
   depositMax?: string
   applicationFee?: string
-  costsNotIncluded?: string
   depositHelperText?: string
+  footerContent?: (string | React.ReactNode)[]
   containerClass?: string
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
-  if (!props.depositMin && !props.depositMax && !props.applicationFee && !props.costsNotIncluded) {
+  if (!props.depositMin && !props.depositMax && !props.applicationFee && !props.footerContent) {
     return <></>
   }
 
@@ -28,7 +28,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
       <p className="info-card__title">{t("listings.sections.additionalFees")}</p>
       <div className="info-card__columns text-sm">
         {props.applicationFee && (
-          <div className="info-card__column">
+          <div className="info-card__column-2">
             <div className="text-base">{t("listings.applicationFee")}</div>
             <div className="text-xl font-bold">${props.applicationFee}</div>
             <div>{t("listings.applicationPerApplicantAgeDescription")}</div>
@@ -36,17 +36,21 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
           </div>
         )}
         {(props.depositMin || props.depositMax) && (
-          <div className="info-card__column">
+          <div className="info-card__column-2">
             <div className="text-base">{t("t.deposit")}</div>
             <div className="text-xl font-bold">{getDeposit()}</div>
             {props.depositHelperText && <div>{props.depositHelperText}</div>}
           </div>
         )}
       </div>
-
-      {props.costsNotIncluded && <p className="text-sm mt-6">{props.costsNotIncluded}</p>}
+      <div className="info-card__columns text-sm">
+        {props?.footerContent?.map((elem, idx) => (
+          <div key={`footer_info_${idx}`} className=" info-card__column-2">
+            {elem}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
-
 export { AdditionalFees as default, AdditionalFees }

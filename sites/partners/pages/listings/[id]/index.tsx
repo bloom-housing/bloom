@@ -49,7 +49,6 @@ export default function ListingDetail(props: ListingProps) {
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
-
   const listingStatus = useMemo(() => {
     switch (listing?.status) {
       case ListingStatus.active:

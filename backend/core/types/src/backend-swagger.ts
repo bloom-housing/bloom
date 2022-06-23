@@ -5266,6 +5266,32 @@ export interface ListingFeatures {
   loweredCabinets?: boolean
 }
 
+export interface ListingUtilities {
+  /**  */
+  water?: boolean
+
+  /**  */
+  gas?: boolean
+
+  /**  */
+  trash?: boolean
+
+  /**  */
+  sewer?: boolean
+
+  /**  */
+  electricity?: boolean
+
+  /**  */
+  cable?: boolean
+
+  /**  */
+  phone?: boolean
+
+  /**  */
+  internet?: boolean
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -5398,6 +5424,9 @@ export interface Listing {
 
   /**  */
   features?: ListingFeatures
+
+  /**  */
+  utilities?: ListingUtilities
 
   /**  */
   id: string
@@ -6051,6 +6080,9 @@ export interface ListingCreate {
 
   /**  */
   features?: ListingFeatures
+
+  /**  */
+  utilities?: ListingUtilities
 }
 
 export interface ListingEventUpdate {
@@ -6534,6 +6566,9 @@ export interface ListingUpdate {
 
   /**  */
   features?: ListingFeatures
+
+  /**  */
+  utilities?: ListingUtilities
 }
 
 export interface PreferencesFilterParams {
