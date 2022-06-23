@@ -34,7 +34,6 @@ import {
 } from "./seeds/listings/shared"
 import { UserCreateDto } from "../auth/dto/user-create.dto"
 import { AmiDefaultSanJose } from "./seeds/ami-charts/default-ami-chart-san-jose"
-import { AuthContext } from "../auth/types/auth-context"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { AmiDefaultMissingAMI } from "./seeds/ami-charts/missing-household-ami-levels"
 import { SeederModule } from "./seeder.module"
@@ -53,6 +52,7 @@ import { ApplicationMethodsService } from "../application-methods/application-me
 import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
+import { CountyCode } from "../shared/types/county-code"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -106,8 +106,7 @@ export async function createLeasingAgents(
           plainToClass(UserCreateDto, {
             ...leasingAgent,
             jurisdictions: [jurisdictions[0]],
-          }),
-          new AuthContext(null)
+          })
         )
     )
   )
@@ -246,8 +245,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-    }),
-    new AuthContext(null)
+    })
   )
 
   await userService.confirm({ token: user1.confirmationToken })
@@ -263,8 +261,7 @@ async function seed() {
       password: "ghijkl",
       passwordConfirmation: "ghijkl",
       jurisdictions: [jurisdictions[0]],
-    }),
-    new AuthContext(null)
+    })
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -280,8 +277,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-    }),
-    new AuthContext(null)
+    })
   )
 
   // create user with expired password
@@ -296,9 +292,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
-      roles: { isAdmin: false, isPartner: true },
-    }),
-    new AuthContext(null)
+    })
   )
 
   await userService.confirm({ token: userExpiredPassword.confirmationToken })
@@ -320,9 +314,11 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions,
-    }),
-    new AuthContext(null)
+    })
   )
+  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  await rolesRepo.save(roles)
+  await userService.confirm({ token: admin.confirmationToken })
 
   const mfaUser = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
@@ -335,9 +331,43 @@ async function seed() {
       password: "abcdef12",
       passwordConfirmation: "abcdef12",
       jurisdictions,
-    }),
-    new AuthContext(null)
+    })
   )
+  await userRepo.save(mfaUser)
+  await userRepo.save({
+    ...mfaUser,
+    mfaEnabled: true,
+    mfaCode: "123456",
+    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
+  })
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
+  await rolesRepo.save(mfaRoles)
+  await userService.confirm({ token: mfaUser.confirmationToken })
+
+  const alamedaJurisdiction = jurisdictions.filter((j) => j.name == CountyCode.alameda)[0]
+  const alamedaAdmin = await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "alameda-admin@example.com",
+      emailConfirmation: "alameda-admin@example.com",
+      firstName: "Alameda",
+      middleName: "Admin",
+      lastName: "MFA",
+      dob: new Date(),
+      password: "abcdef",
+      passwordConfirmation: "abcdef",
+      jurisdictions: [alamedaJurisdiction],
+    })
+  )
+  await userRepo.save(alamedaAdmin)
+  await userService.confirm({ token: alamedaAdmin.confirmationToken })
+
+  const alamedaAdminRoles: UserRoles = {
+    user: alamedaAdmin,
+    isPartner: false,
+    isAdmin: false,
+    isJurisdictionalAdmin: true,
+  }
+  await rolesRepo.save(alamedaAdminRoles)
 
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
 
@@ -352,20 +382,6 @@ async function seed() {
     }
   }
 
-  await userRepo.save(admin)
-  await userRepo.save({
-    ...mfaUser,
-    mfaEnabled: true,
-    mfaCode: "123456",
-    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
-  })
-  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
-  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
-  await rolesRepo.save(roles)
-  await rolesRepo.save(mfaRoles)
-
-  await userService.confirm({ token: admin.confirmationToken })
-  await userService.confirm({ token: mfaUser.confirmationToken })
   await app.close()
 }
 
