@@ -35,7 +35,10 @@ export class AuthzService {
       e = await this.addUserPermissions(e, user)
     }
 
-    return await e.enforce(user ? user.id : "anonymous", type, action, obj)
+    console.log("this is right before the error")
+    const res = await e.enforce(user ? user.id : "anonymous", type, action, obj)
+    console.log("this is right after the error")
+    return res
   }
 
   private async addUserPermissions(enforcer: Enforcer, user: User): Promise<Enforcer> {
@@ -64,7 +67,7 @@ export class AuthzService {
           void enforcer.addPermissionForUser(
             user.id,
             "user",
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `'${adminInJurisdiction.id}' == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
           )
         })
