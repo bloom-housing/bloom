@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useMemo } from "react"
 import AriaAutocomplete from "aria-autocomplete"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import "./MultiSelectField.scss"
+import { Icon } from "../icons/Icon"
 
 interface MultiSelectFieldProps {
   name: string
@@ -28,7 +29,7 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
         delay: 500, // debounce for a half-second
         inputClassName: "input",
         multiple: true,
-        placeholder: "Type to refine",
+        placeholder: props.placeholder,
         deleteOnBackspace: true,
         showAllControl: true,
         cssNameSpace: "multi-select-field",
@@ -46,17 +47,18 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
     const labelClasses = ["label"]
 
     return (
-      <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
+      <label className={labelClasses.join(" ")} htmlFor={props.id}>
         {props.label}
       </label>
     )
-  }, [props.id, props.name, props.label])
+  }, [props.id, props.label])
 
   return (
     <div className="field multi-select-field">
       {props.label && label}
       <div className="control">
-        <input ref={autocompleteRef} />
+        <Icon symbol="search" size="medium" />
+        <input id={props.id} ref={autocompleteRef} />
       </div>
     </div>
   )

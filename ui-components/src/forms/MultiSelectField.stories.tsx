@@ -50,7 +50,8 @@ export const standard = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <MultiSelectField
         dataSource={dataProvider}
-        label="Select Your Country"
+        label="Select one or more items"
+        placeholder="Type to search"
         id="the-value"
         name="the.value"
         register={register}
