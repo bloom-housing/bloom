@@ -265,5 +265,6 @@ export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, L
 export enum RoleOption {
   Administrator = "administrator",
   Partner = "partner",
+  JurisdictionalAdmin = "jurisdictionalAdmin",
 }
 export const roleKeys = Object.values(RoleOption)
