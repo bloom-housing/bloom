@@ -26,6 +26,7 @@ import { getListings } from "../../lib/helpers"
 
 const FilteredListingsPage = () => {
   const router = useRouter()
+
   /* Pagination */
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
   const [currentPage, setCurrentPage] = useState<number>(1)

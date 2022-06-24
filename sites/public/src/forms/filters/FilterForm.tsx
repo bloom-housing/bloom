@@ -20,6 +20,7 @@ import {
   FrontendListingFilterStateKeys,
   ListingFilterState,
 } from "@bloom-housing/shared-helpers"
+
 interface FilterFormProps {
   onSubmit: (data: ListingFilterState) => void
   onClose: (isOpen: boolean) => void
