@@ -1,18 +1,18 @@
 import React, { useMemo, useContext } from "react"
 import { PageHeader, TabNav, TabNavItem, AppearanceSizeType } from "@bloom-housing/ui-components"
 import { NavigationContext } from "../config/NavigationContext"
-import "./PartnersHeader.scss"
+import "./NavigationHeader.scss"
 
-type PartnersHeaderProps = {
+type NavigationHeaderProps = {
   className?: string
   title: React.ReactNode
   listingId?: string
-  tabs?: PartnersHeaderTabs
+  tabs?: NavigationHeaderTabs
   breadcrumbs?: React.ReactNode
   children?: React.ReactChild
 }
 
-type PartnersHeaderTabs = {
+type NavigationHeaderTabs = {
   show?: boolean
   flagsQty?: number
   listingLabel: string
@@ -20,25 +20,25 @@ type PartnersHeaderTabs = {
   flagsLabel: string
 }
 
-type PartnersHeaderTabsElement = {
+type NavigationHeaderTabsElement = {
   label: string
   path: string
   content: React.ReactNode | undefined
 }
 
-const PartnersHeader = ({
+const NavigationHeader = ({
   className,
   title,
   listingId,
   tabs,
   children,
   breadcrumbs,
-}: PartnersHeaderProps) => {
+}: NavigationHeaderProps) => {
   const navigation = useContext(NavigationContext)
   const currentPath = navigation.router.asPath
 
   const tabNavElements = useMemo(() => {
-    const elements: PartnersHeaderTabsElement[] = [
+    const elements: NavigationHeaderTabsElement[] = [
       {
         label: tabs?.listingLabel || "",
         path: `/listings/${listingId}`,
@@ -82,7 +82,7 @@ const PartnersHeader = ({
 
   return (
     <PageHeader
-      className={`partners-header ${className ?? ""}`}
+      className={`navigation-header ${className ?? ""}`}
       title={title}
       tabNav={tabs?.show ? tabNavItems : null}
       breadcrumbs={breadcrumbs}
@@ -92,4 +92,4 @@ const PartnersHeader = ({
   )
 }
 
-export { PartnersHeader as default, PartnersHeader }
+export { NavigationHeader as default, NavigationHeader }

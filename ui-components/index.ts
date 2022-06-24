@@ -129,7 +129,7 @@ export * from "./src/page_components/sign-in/FormSignInMFACode"
 export * from "./src/page_components/sign-in/FormSignInAddPhone"
 export * from "./src/page_components/sign-in/FormSignInErrorBox"
 export * from "./src/page_components/forgot-password/FormForgotPassword"
-export * from "./src/page_components/PartnersHeader"
+export * from "./src/page_components/NavigationHeader"
 
 /* Responsive Wrappers */
 export * from "./src/sections/ResponsiveWrappers"
