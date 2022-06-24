@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import {
-  PartnersHeader,
+  NavigationHeader,
   SiteAlert,
   t,
   Breadcrumbs,
@@ -24,7 +24,7 @@ const NewApplication = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PartnersHeader
+      <NavigationHeader
         className="relative"
         title={t("applications.newApplication")}
         breadcrumbs={
@@ -43,7 +43,7 @@ const NewApplication = () => {
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
           <SiteAlert type="success" timeout={5000} dismissable />
         </div>
-      </PartnersHeader>
+      </NavigationHeader>
 
       <PaperApplicationForm listingId={listingId} />
     </Layout>

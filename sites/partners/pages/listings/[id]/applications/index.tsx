@@ -12,7 +12,7 @@ import {
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
-  PartnersHeader,
+  NavigationHeader,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -131,7 +131,7 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PartnersHeader
+      <NavigationHeader
         title={listingName}
         listingId={listingId}
         tabs={{
@@ -156,7 +156,7 @@ const ApplicationsList = () => {
             <SiteAlert type="alert" timeout={5000} dismissable />
           </div>
         )}
-      </PartnersHeader>
+      </NavigationHeader>
 
       <ListingStatusBar status={listingDto?.status} />
 

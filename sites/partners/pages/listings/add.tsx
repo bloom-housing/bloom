@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import {
-  PartnersHeader,
+  NavigationHeader,
   SiteAlert,
   t,
   Breadcrumbs,
@@ -28,7 +28,7 @@ const NewListing = () => {
           description={metaDescription}
         />
 
-        <PartnersHeader
+        <NavigationHeader
           className="relative"
           title={t("listings.newListing")}
           breadcrumbs={
@@ -43,7 +43,7 @@ const NewListing = () => {
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
             <SiteAlert type="success" timeout={5000} dismissable />
           </div>
-        </PartnersHeader>
+        </NavigationHeader>
 
         <PaperListingForm />
       </Layout>

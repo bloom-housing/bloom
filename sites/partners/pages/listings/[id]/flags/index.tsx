@@ -11,7 +11,7 @@ import {
   AG_PER_PAGE_OPTIONS,
   Breadcrumbs,
   BreadcrumbLink,
-  PartnersHeader,
+  NavigationHeader,
 } from "@bloom-housing/ui-components"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
 
@@ -53,7 +53,7 @@ const FlagsPage = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PartnersHeader
+      <NavigationHeader
         title={listingName}
         listingId={listingId}
         tabs={{
@@ -66,8 +66,9 @@ const FlagsPage = () => {
         breadcrumbs={
           <Breadcrumbs>
             <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}`} current>
-              {listingName}
+            <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+            <BreadcrumbLink href={`/listings/${listingId}/flags`} current>
+              {t("nav.flags")}
             </BreadcrumbLink>
           </Breadcrumbs>
         }

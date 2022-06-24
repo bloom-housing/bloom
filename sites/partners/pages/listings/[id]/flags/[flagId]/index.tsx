@@ -8,7 +8,7 @@ import Layout from "../../../../../layouts/"
 import {
   t,
   Button,
-  PartnersHeader,
+  NavigationHeader,
   AlertBox,
   AppearanceStyleType,
   useMutate,
@@ -112,7 +112,7 @@ const Flag = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PartnersHeader
+      <NavigationHeader
         className="relative"
         title={
           <>

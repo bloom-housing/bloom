@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { PartnersHeader, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { NavigationHeader, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts"
 import PaperApplicationForm from "../../../src/applications/PaperApplicationForm/PaperApplicationForm"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
@@ -27,7 +27,7 @@ const NewApplication = () => {
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
-        <PartnersHeader
+        <NavigationHeader
           title={
             <>
               <p className="font-sans font-semibold uppercase text-3xl">

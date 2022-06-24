@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import axios from "axios"
-import { PartnersHeader, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { NavigationHeader, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 import Layout from "../../../layouts"
 import PaperListingForm from "../../../src/listings/PaperListingForm"
@@ -39,7 +39,7 @@ const EditListing = (props: { listing: Listing }) => {
             description={metaDescription}
           />
 
-          <PartnersHeader
+          <NavigationHeader
             title={
               <>
                 <p className="font-sans font-semibold uppercase text-3xl">

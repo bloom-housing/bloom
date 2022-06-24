@@ -7,7 +7,7 @@ import {
   SiteAlert,
   Breadcrumbs,
   BreadcrumbLink,
-  PartnersHeader,
+  NavigationHeader,
 } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import { ListingStatusBar } from "../../../src/listings/ListingStatusBar"
@@ -63,7 +63,7 @@ export default function ListingDetail(props: ListingProps) {
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
 
-            <PartnersHeader
+            <NavigationHeader
               title={listing.name}
               listingId={listing.id}
               tabs={{
@@ -85,7 +85,7 @@ export default function ListingDetail(props: ListingProps) {
               <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
                 <SiteAlert type="success" timeout={5000} dismissable />
               </div>
-            </PartnersHeader>
+            </NavigationHeader>
 
             <ListingStatusBar status={listing.status} />
 
