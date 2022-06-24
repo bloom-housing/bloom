@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useMemo } from "react"
-import AriaAutocomplete from "aria-autocomplete"
+import AriaAutocomplete, { IAriaAutocompleteOptions } from "aria-autocomplete"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import "./MultiSelectField.scss"
 import { Icon } from "../icons/Icon"
@@ -7,7 +7,7 @@ import { Icon } from "../icons/Icon"
 interface MultiSelectFieldProps {
   name: string
   placeholder?: string
-  dataSource: any
+  dataSource: string | string[] | any[] | Function | Promise<any[]>
   register: UseFormMethods["register"]
   validation?: RegisterOptions
   setValue: UseFormMethods["setValue"]
