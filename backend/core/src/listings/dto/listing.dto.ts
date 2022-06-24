@@ -18,6 +18,7 @@ import { ListingFeaturesDto } from "./listing-features.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { ListingImageDto } from "./listing-image.dto"
+import { ListingUtilitiesDto } from "./listing-utilities.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -38,6 +39,7 @@ export class ListingDto extends OmitType(Listing, [
   "result",
   "unitsSummary",
   "features",
+  "utilities",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -328,4 +330,9 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => ListingFeaturesDto)
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   features?: ListingFeaturesDto
+
+  @Expose()
+  @Type(() => ListingUtilitiesDto)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  utilities?: ListingUtilitiesDto
 }
