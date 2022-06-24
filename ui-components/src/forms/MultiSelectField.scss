@@ -63,7 +63,6 @@
   z-index: 99999;
   left: 0;
   margin: 0;
-  padding: 3px 0 !important;
   height: auto;
   min-height: 0;
   max-height: var(--list-height);
@@ -73,18 +72,17 @@
   background: var(--list-background-color);
   border: 1px solid var(--bloom-color-gray-700);
   border-radius: var(--bloom-rounded-sm);
+  font-size: var(--bloom-font-size-tiny);
 }
 
 .multi-select-field__list--has-results[aria-label]:before {
   content: attr(aria-label) !important;
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: block;
   width: 100%;
-  padding: 3px 10px 0;
-  font-size: 13px;
+  padding: var(--bloom-s1) var(--bloom-s2);
+  font-size: var(--bloom-font-size-sm);
+  color: var(--bloom-color-gray-750);
   text-align: right;
-  opacity: 0.5;
 }
 
 @media reader, speech, aural {
@@ -93,18 +91,14 @@
   }
 }
 
-.multi-select-field__list--has-results[aria-label] li:first-child {
-  margin-top: 20px;
-}
-
 .multi-select-field__option {
   display: block;
   border-top: 1px solid var(--bloom-color-gray-450);
   text-decoration: none;
   list-style: none;
   cursor: pointer;
-  padding: 7px 10px;
-  word-break: break-word;
+  padding: var(--bloom-s3) var(--bloom-s4);
+  overflow-wrap: break-word;
 }
 
 .multi-select-field__option:focus {
@@ -127,8 +121,7 @@
 
 .multi-select-field__option--no-results,
 .multi-select-field__option[aria-disabled='true'] {
-  opacity: 0.65 !important;
-  color: #434143 !important;
+  color: var(--bloom-color-gray-750) !important;
   cursor: not-allowed !important;
   text-decoration: none !important;
 }
@@ -194,7 +187,7 @@
 }
 
 .multi-select-field__wrapper--multiple .multi-select-field__input {
-  margin-bottom: 5px;
+  margin-bottom: var(--bloom-s0_5);
 }
 
 .multi-select-field__wrapper--loading:after {
@@ -210,14 +203,14 @@
   border-width: 2px;
   border-color: var(--bloom-color-primary) transparent var(--bloom-color-primary) transparent;
   box-sizing: border-box;
-  animation: lds-dual-ring 1.2s linear infinite;
+  animation: multi-select-loading-spinner 1.2s linear infinite;
 }
 
 .multi-select-field__wrapper--loading .multi-select-field__show-all {
   background-image: none;
 }
 
-@keyframes lds-dual-ring {
+@keyframes multi-select-loading-spinner {
   0% {
     transform: rotate(0deg);
   }

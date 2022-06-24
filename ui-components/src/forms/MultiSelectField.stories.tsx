@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react"
+import React, { useState } from "react"
 import MultiSelectField from "./MultiSelectField"
 import { useForm } from "react-hook-form"
 
@@ -53,7 +53,7 @@ export const standard = () => {
         label="Select one or more items"
         placeholder="Type to search"
         id="the-value"
-        name="the.value"
+        name="thevalue"
         register={register}
         setValue={setValue}
       />
