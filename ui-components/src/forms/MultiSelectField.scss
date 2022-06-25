@@ -6,7 +6,7 @@
 .multi-select-field {
   --field-height: 48px;
   --list-height: 325px;
-  --list-background-color: #fff; 
+  --list-background-color: #fff;
   --tag-hover-background-color: var(--bloom-color-primary-dark);
 
   .control input.input.multi-select-field__input {
@@ -114,13 +114,13 @@
   cursor: pointer;
 }
 
-.multi-select-field__option:hover[aria-disabled='true'],
-.multi-select-field__option--focused[aria-disabled='true'] {
+.multi-select-field__option:hover[aria-disabled="true"],
+.multi-select-field__option--focused[aria-disabled="true"] {
   background: #f5f5f5;
 }
 
 .multi-select-field__option--no-results,
-.multi-select-field__option[aria-disabled='true'] {
+.multi-select-field__option[aria-disabled="true"] {
   color: var(--bloom-color-gray-750) !important;
   cursor: not-allowed !important;
   text-decoration: none !important;
@@ -157,7 +157,7 @@
 }
 
 .multi-select-field__selected:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   right: 7px;
@@ -191,7 +191,7 @@
 }
 
 .multi-select-field__wrapper--loading:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
