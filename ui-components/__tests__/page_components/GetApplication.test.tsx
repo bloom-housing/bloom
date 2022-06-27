@@ -4,7 +4,7 @@ import {
   AllFields,
   Preview,
   OpenInFuture,
-  WithoutPaperAppFiles
+  WithoutPaperAppFiles,
 } from "../../src/page_components/listing/listing_sidebar/GetApplication.stories"
 
 afterEach(cleanup)
