@@ -4,6 +4,7 @@ import {
   AllFields,
   Preview,
   OpenInFuture,
+  WithoutPaperAppFiles
 } from "../../src/page_components/listing/listing_sidebar/GetApplication.stories"
 
 afterEach(cleanup)
@@ -20,6 +21,10 @@ describe("<Applications>", () => {
     expect(getByText("Pick up an application")).toBeTruthy()
     expect(getByText("Pick Up Address Street", { exact: false })).toBeTruthy()
     expect(getByText("Office Hours")).toBeTruthy()
+  })
+  it("do not render section when there is no paper application files and paper method is true", () => {
+    const { queryByTestId } = render(<WithoutPaperAppFiles />)
+    expect(queryByTestId("get-application-section")).toBeNull()
   })
   it("disables buttons in preview state", () => {
     const { getByText } = render(<Preview />)

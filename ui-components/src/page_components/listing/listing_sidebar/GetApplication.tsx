@@ -45,7 +45,7 @@ const GetApplication = (props: ApplicationsProps) => {
   if (!showSection) return null
 
   return (
-    <section className="aside-block">
+    <section className="aside-block" data-test-id="get-application-section">
       <h2 className="text-caps-underline">{t("listings.apply.howToApply")}</h2>
       {!props.applicationsOpen && (
         <p className="mb-5 text-gray-700">
