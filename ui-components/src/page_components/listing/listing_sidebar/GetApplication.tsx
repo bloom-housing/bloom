@@ -36,8 +36,13 @@ export interface ApplicationsProps {
 }
 /** Displays information regarding how to apply, including an online application link button, paper application downloads, and a paper application pickup address */
 const GetApplication = (props: ApplicationsProps) => {
+  const showSection =
+    props.onlineApplicationURL ||
+    (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
+
+  if (!showSection) return null
 
   return (
     <section className="aside-block">
@@ -67,7 +72,8 @@ const GetApplication = (props: ApplicationsProps) => {
           )}
         </>
       )}
-      {props.applicationsOpen && props.paperMethod && (
+
+      {props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length && (
         <>
           {props.onlineApplicationURL && <OrDivider bgColor="white" />}
           <div className="text-serif-lg">{t("listings.apply.getAPaperApplication")}</div>
