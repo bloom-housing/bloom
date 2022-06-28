@@ -111,6 +111,16 @@ const coliseumListing: ListingSeedType = {
   isWaitlistOpen: true,
   whatToExpect: null,
   listingAvailability: ListingAvailability.availableUnits,
+  utilities: {
+    water: null,
+    gas: true,
+    trash: null,
+    sewer: true,
+    electricity: true,
+    cable: null,
+    phone: false,
+    internet: null,
+  },
 }
 
 export class ListingColiseumSeed extends ListingDefaultSeed {
