@@ -42,7 +42,7 @@ export const defaultJurisdictions: (JurisdictionCreateDto & JurisdictionUpdateDt
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: true,
     enableAccessibilityFeatures: false,
-    enableUtilitiesIncluded: true,
+    enableUtilitiesIncluded: false,
   },
   {
     name: "Detroit",
@@ -63,9 +63,10 @@ export async function createJurisdictions(app: INestApplicationContext) {
   const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)
   // some jurisdictions are added via previous migrations
   const initialJurisdictions = await jurisdictionService.list()
-  // console.log("JKNFJNDKNJNDJDN")
   const toUpdate = []
   const toInsert = []
+  const unchanged = []
+  const totalFieldUpdates = []
 
   defaultJurisdictions.forEach((defaultJuris) => {
     const location = initialJurisdictions.findIndex((item) => item.name === defaultJuris.name)
@@ -75,31 +76,48 @@ export async function createJurisdictions(app: INestApplicationContext) {
       const jurisdictionKeys = Object.keys(defaultJuris)
       let keyIdx = 0
       let updateNeeded = false
-      while (!updateNeeded && keyIdx < jurisdictionKeys.length) {
+      const fieldUpdates = []
+      // comparison on each jurisdiction field to determine if update is required
+      while (keyIdx < jurisdictionKeys.length) {
         const currentKey = jurisdictionKeys[keyIdx]
         if (defaultJuris[currentKey] !== initialJurisdictions[location][currentKey]) {
-          toUpdate.push(initialJurisdictions[location])
+          fieldUpdates.push(currentKey)
           updateNeeded = true
-        } else {
-          keyIdx++
         }
+        keyIdx++
       }
+      if (updateNeeded) {
+        toUpdate.push(initialJurisdictions[location])
+        totalFieldUpdates.push(fieldUpdates)
+      } else unchanged.push(initialJurisdictions[location])
     }
   })
-
-  await Promise.all(
-    toUpdate.map(async (jurisdiction) => {
-      const jurisdictionUpdated = { ...jurisdiction, enableUtilitiesIncluded: true }
+  //updating existing jurisdiction flag
+  const updated = await Promise.all(
+    toUpdate.map(async (jurisdiction, idx) => {
+      const location = defaultJurisdictions.findIndex((def) => jurisdiction.name === def.name)
+      const objUpdates = {}
+      totalFieldUpdates[idx].forEach(
+        (fieldUpdate) => (objUpdates[fieldUpdate] = defaultJurisdictions[location][fieldUpdate])
+      )
+      const jurisdictionUpdated = {
+        ...jurisdiction,
+        ...objUpdates,
+      }
       return await jurisdictionService.update(jurisdictionUpdated)
     })
   )
-  const updatedJurisdictions = await jurisdictionService.list()
 
+  // inserting new jurisdictions
   const inserted = await Promise.all(
     toInsert.map(async (jurisdiction) => {
       return await jurisdictionService.create(jurisdiction)
     })
   )
+
+  const completeJurisdictions = [...unchanged, ...updated, ...inserted]
+  console.log(completeJurisdictions)
+
   // names are unique
-  return updatedJurisdictions.concat(inserted).sort((a, b) => (a.name < b.name ? -1 : 1))
+  return completeJurisdictions.sort((a, b) => (a.name < b.name ? -1 : 1))
 }
