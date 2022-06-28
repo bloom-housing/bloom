@@ -99,16 +99,6 @@ const tritonListing: ListingSeedType = {
   isWaitlistOpen: true,
   whatToExpect: null,
   listingAvailability: ListingAvailability.availableUnits,
-  utilities: {
-    water: true,
-    gas: true,
-    trash: null,
-    sewer: true,
-    electricity: true,
-    cable: null,
-    phone: false,
-    internet: null,
-  },
 }
 
 export class ListingTritonSeed extends ListingDefaultSeed {
@@ -245,6 +235,16 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       ...tritonListing,
       name: "Test: Triton 2",
       property: property,
+      utilities: {
+        water: true,
+        gas: true,
+        trash: null,
+        sewer: true,
+        electricity: true,
+        cable: null,
+        phone: false,
+        internet: true,
+      },
       assets: getDefaultAssets(),
       listingPreferences: [
         {
@@ -395,6 +395,16 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       ...tritonListing,
       name: "Test: Triton 1",
       property: property,
+      utilities: {
+        water: false,
+        gas: true,
+        trash: null,
+        sewer: true,
+        electricity: true,
+        cable: null,
+        phone: false,
+        internet: null,
+      },
       applicationOpenDate: getDate(-5),
       assets: getDefaultAssets(),
       events: [],
