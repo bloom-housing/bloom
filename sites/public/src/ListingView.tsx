@@ -449,9 +449,11 @@ export const ListingView = (props: ListingProps) => {
                 data={[{ data: groupedUnitData }]}
                 responsiveCollapse={true}
               />
-              {hmiData.length > 0 && (
+              {listing?.section8Acceptance && (
                 <div className="text-sm leading-5 mt-4 invisible md:visible">
-                  {t("listings.unitSummaryGroupMessage")}
+                  {t("listings.section8MessageOpening")}
+                  <b>{t("listings.section8FullName")}</b>
+                  {t("listings.section8MessageClosing")}
                 </div>
               )}
             </>
@@ -487,13 +489,33 @@ export const ListingView = (props: ListingProps) => {
             >
               <ul>
                 {hmiData?.length > 0 && (
-                  <ListSection
+                  <li
                     id="household_maximum_income_summary"
-                    title={t("listings.householdMaximumIncome")}
-                    subtitle={t("listings.forIncomeCalculations")}
+                    className="list-section custom-counter__item"
                   >
+                    <header className="list-section__header custom-counter__header">
+                      <hgroup>
+                        <h4 className="custom-counter__title">
+                          {t("listings.householdMaximumIncome")}
+                        </h4>
+                        <span className="custom-counter__subtitle">
+                          {t("listings.forIncomeCalculations")}
+                        </span>
+                        {listing?.section8Acceptance && (
+                          <>
+                            <br />
+                            <br />
+                            <span className="custom-counter__subtitle">
+                              {t("listings.section8MessageOpening")}
+                              <b>{t("listings.section8FullName")}</b>
+                              {t("listings.section8MessageClosing")}
+                            </span>
+                          </>
+                        )}
+                      </hgroup>
+                    </header>
                     <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={false} />
-                  </ListSection>
+                  </li>
                 )}
                 {occupancyData.length > 0 && (
                   <ListSection
