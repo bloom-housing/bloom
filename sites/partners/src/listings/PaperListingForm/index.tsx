@@ -354,7 +354,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     type="alert"
                   >
                     <span className="text-sm font-normal">
-                      Let us know that the listing data is accurate and up to date.{" "}
+                      {t("listings.dataUpToDate")}.{" "}
                       <a
                         className="decoration-blue-700 underline"
                         href="#"
@@ -368,7 +368,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           }
                         }}
                       >
-                        Verify your listing data.
+                        {t("listings.verifyData")}
                       </a>
                     </span>
                   </AlertBox>
@@ -383,8 +383,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         onSelect={(index) => setTabIndex(index)}
                       >
                         <TabList>
-                          <Tab>Listing Details</Tab>
-                          <Tab>Application Process</Tab>
+                          <Tab>{t("listing.details.title")}</Tab>
+                          <Tab>{t("listing.applicationProcess")}</Tab>
                         </TabList>
                         <TabPanel>
                           <ListingIntro jurisdictions={profile.jurisdictions} />
@@ -406,21 +406,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           />
 
                           <SelectAndOrder
-                            addText={"Add Community Types"}
-                            drawerTitle={"Add Community Types"}
-                            editText={"Edit programs"}
+                            addText={t("listings.addCommunityTypes")}
+                            drawerTitle={t("listings.addCommunityTypes")}
+                            editText={t("listings.editCommunities")}
                             listingData={programs}
                             setListingData={setPrograms}
-                            subtitle={
-                              "Tell us about any additional community types related to this listing."
-                            }
-                            title={"Community Types"}
-                            drawerButtonText={"Select Community Types"}
+                            subtitle={t("listings.sections.communityType.tellUs")}
+                            title={t("publicFilter.communityTypes")}
+                            drawerButtonText={t("listings.selectCommunityTypes")}
                             dataFetcher={useJurisdictionalProgramList}
                             formKey={"program"}
-                            subNote={
-                              "Please choose the populations your building serves, based on your building's financing and regulatory agreements."
-                            }
+                            subNote={`${t("listing.choosePopulations")}.`}
                           />
                           <AdditionalFees existingUtilities={listing?.utilities} />
                           <BuildingFeatures existingFeatures={listing?.features} />
@@ -438,7 +434,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                                 window.scrollTo({ top: 0, behavior: "smooth" })
                               }}
                             >
-                              Application Process
+                              {t("listings.applicationProcess")}
                             </Button>
                           </div>
                         </TabPanel>
@@ -459,7 +455,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                                 window.scrollTo({ top: 0, behavior: "smooth" })
                               }}
                             >
-                              Listing Details
+                              {t("listing.details.title")}
                             </Button>
                           </div>
                         </TabPanel>
