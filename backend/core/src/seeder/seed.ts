@@ -316,7 +316,7 @@ async function seed() {
       jurisdictions,
     })
   )
-  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  const roles: UserRoles = { user: admin, isPartner: false, isAdmin: true }
   await rolesRepo.save(roles)
   await userService.confirm({ token: admin.confirmationToken })
 
@@ -340,7 +340,7 @@ async function seed() {
     mfaCode: "123456",
     mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
   })
-  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: false, isAdmin: true }
   await rolesRepo.save(mfaRoles)
   await userService.confirm({ token: mfaUser.confirmationToken })
 

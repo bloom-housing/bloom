@@ -47,9 +47,9 @@ Cypress.Commands.add("loginAndAcceptTerms", () => {
   })
 })
 
-Cypress.Commands.add("login", () => {
+Cypress.Commands.add("login", (fix = "user") => {
   cy.visit("/")
-  cy.fixture("user").then((user) => {
+  cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
     cy.get(".button").contains("Sign In").click()

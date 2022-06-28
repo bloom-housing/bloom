@@ -35,10 +35,7 @@ export class AuthzService {
       e = await this.addUserPermissions(e, user)
     }
 
-    console.log("this is right before the error")
-    const res = await e.enforce(user ? user.id : "anonymous", type, action, obj)
-    console.log("this is right after the error")
-    return res
+    return await e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
   private async addUserPermissions(enforcer: Enforcer, user: User): Promise<Enforcer> {

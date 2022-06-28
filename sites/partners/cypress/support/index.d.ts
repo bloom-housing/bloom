@@ -12,7 +12,7 @@ declare namespace Cypress {
     getByID(value: string): Chainable<Element>
     getByTestId(value: string): Chainable<Element>
     loginAndAcceptTerms(): Chainable
-    login(): Chainable
+    login(fixture?: string): Chainable
     loginWithMfa(): Chainable
     attachFile(command: string, optionalProcessingConfig: attachFileSubjectArgs): Chainable
     verifyAlertBox(): Chainable

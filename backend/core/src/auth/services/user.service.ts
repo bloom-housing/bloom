@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -99,12 +100,14 @@ export class UserService {
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        distinctIDQB
+        distinctIDQB,
+        this.req.user
       )
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        qb
+        qb,
+        this.req.user
       )
     }
 
@@ -562,10 +565,25 @@ export class UserService {
   }
 
   private async authorizeUserAction(requestingUser, targetUser, action) {
+    if (requestingUser.roles?.isJurisdictionalAdmin) {
+      return this.authorizeJurisdictionalAdmin(requestingUser, targetUser)
+    }
     return await this.authzService.canOrThrow(requestingUser, "user", action, {
       id: targetUser.id,
       jurisdictionId: targetUser.id,
     })
+  }
+
+  private authorizeJurisdictionalAdmin(requestingUser, targetUser) {
+    // jurisdictional admins can't view super admins
+    if (targetUser.roles?.isAdmin) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+
+    const requesterJurisdictions = requestingUser.jurisdictions?.map((juris) => juris.id)
+    const targetJurisdictions = targetUser.jurisdictions?.map((juris) => juris.id)
+    // jurisdictional admins should only see a user if they share a jurisdiction
+    return requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
   }
 
   private async authorizeUserProfileAction(requestingUser, targetUser, action) {
