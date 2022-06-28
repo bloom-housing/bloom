@@ -115,15 +115,6 @@ export const isNullOrUndefined = (value: unknown): boolean => {
   return value === null || value === undefined
 }
 
-export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined => {
-  const lotteryEvents = listing?.events.filter(
-    (event) => event.type === ListingEventType.publicLottery
-  )
-  return lotteryEvents && lotteryEvents.length && lotteryEvents[0].startTime
-    ? lotteryEvents[0]
-    : null
-}
-
 export function arrayToFormOptions<T>(
   arr: T[],
   label: string,
