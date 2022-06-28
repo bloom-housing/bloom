@@ -75,26 +75,24 @@ export async function createJurisdictions(app: INestApplicationContext) {
       toInsert.push(defaultJuris)
     } else {
       const jurisdictionKeys = Object.keys(defaultJuris)
-      let keyIdx = 0
       let updateNeeded = false
       const fieldUpdates = []
       // comparison on each jurisdiction field to determine if update is required
-      while (keyIdx < jurisdictionKeys.length) {
-        const currentKey = jurisdictionKeys[keyIdx]
-        if (defaultJuris[currentKey] !== initialJurisdictions[location][currentKey]) {
+      jurisdictionKeys.forEach((currKey) => {
+        if (defaultJuris[currKey] !== initialJurisdictions[location][currKey]) {
           //store keys of updated fields
-          fieldUpdates.push(currentKey)
+          fieldUpdates.push(currKey)
           updateNeeded = true
         }
-        keyIdx++
-      }
+      })
       if (updateNeeded) {
         toUpdate.push(initialJurisdictions[location])
         totalFieldUpdates.push(fieldUpdates)
       } else unchanged.push(initialJurisdictions[location])
     }
   })
-  //updating existing jurisdiction flag
+
+  //updating existing jurisdictions
   const updated = await Promise.all(
     toUpdate.map(async (jurisdiction, idx) => {
       const location = defaultJurisdictions.findIndex((def) => jurisdiction.name === def.name)
@@ -120,6 +118,5 @@ export async function createJurisdictions(app: INestApplicationContext) {
 
   const completeJurisdictions = [...unchanged, ...updated, ...inserted]
 
-  // names are unique
   return completeJurisdictions.sort((a, b) => (a.name < b.name ? -1 : 1))
 }
