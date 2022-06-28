@@ -79,7 +79,7 @@ export async function createJurisdictions(app: INestApplicationContext) {
       // comparison on each jurisdiction field to determine if update is required
       while (!updateNeeded && keyIdx < activeKeys.length) {
         const currKey = activeKeys[keyIdx]
-        if (activeJuris[activeKeys[keyIdx]] !== existingJuris[currKey]) {
+        if (activeJuris[currKey] !== existingJuris[currKey]) {
           updateNeeded = true
         }
         keyIdx++
