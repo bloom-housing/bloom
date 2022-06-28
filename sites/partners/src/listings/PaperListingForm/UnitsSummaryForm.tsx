@@ -266,12 +266,12 @@ const UnitsSummaryForm = ({
       id: "true",
       label: t("listings.unitsSummary.open"),
       value: "true",
+      defaultChecked: true,
     },
     {
       id: "false",
       label: t("listings.unitsSummary.closed"),
       value: "false",
-      defaultChecked: true,
     },
   ]
 
