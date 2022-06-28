@@ -95,3 +95,6 @@ dump.rdb
 # csv import files
 backend/core/detroit-listings.csv
 backend/core/detroit-listings-units.csv
+
+# DB backups
+.dump
