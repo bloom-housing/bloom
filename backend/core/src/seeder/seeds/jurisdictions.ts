@@ -4,7 +4,7 @@ import { JurisdictionUpdateDto } from "../../jurisdictions/dto/jurisdiction-upda
 import { Language } from "../../shared/types/language-enum"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 
-export const defaultJurisdictions: (JurisdictionCreateDto & JurisdictionUpdateDto)[] = [
+export const activeJurisdictions: (JurisdictionCreateDto & JurisdictionUpdateDto)[] = [
   {
     name: "Alameda",
     preferences: [],
@@ -62,48 +62,39 @@ export const defaultJurisdictions: (JurisdictionCreateDto & JurisdictionUpdateDt
 export async function createJurisdictions(app: INestApplicationContext) {
   const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)
   // some jurisdictions are added via previous migrations
-  const initialJurisdictions = await jurisdictionService.list()
+  const baseJurisdictions = await jurisdictionService.list()
   const toUpdate = []
   const toInsert = []
   const unchanged = []
-  const totalFieldUpdates = []
 
   //classify which jurisdictions need to be added, updated or mantained
-  defaultJurisdictions.forEach((defaultJuris) => {
-    const location = initialJurisdictions.findIndex((item) => item.name === defaultJuris.name)
-    if (location === -1) {
-      toInsert.push(defaultJuris)
+  activeJurisdictions.forEach((activeJuris) => {
+    const existingJuris = baseJurisdictions.find((item) => item.name === activeJuris.name)
+    if (!existingJuris) {
+      toInsert.push(activeJuris)
     } else {
-      const jurisdictionKeys = Object.keys(defaultJuris)
+      const activeKeys = Object.keys(activeJuris)
       let updateNeeded = false
-      const fieldUpdates = []
+      let keyIdx = 0
       // comparison on each jurisdiction field to determine if update is required
-      jurisdictionKeys.forEach((currKey) => {
-        if (defaultJuris[currKey] !== initialJurisdictions[location][currKey]) {
-          //store keys of updated fields
-          fieldUpdates.push(currKey)
+      while (!updateNeeded && keyIdx < activeKeys.length) {
+        const currKey = activeKeys[keyIdx]
+        if (activeJuris[activeKeys[keyIdx]] !== existingJuris[currKey]) {
           updateNeeded = true
         }
-      })
-      if (updateNeeded) {
-        toUpdate.push(initialJurisdictions[location])
-        totalFieldUpdates.push(fieldUpdates)
-      } else unchanged.push(initialJurisdictions[location])
+        keyIdx++
+      }
+      updateNeeded ? toUpdate.push(existingJuris) : unchanged.push(existingJuris)
     }
   })
 
   //updating existing jurisdictions
   const updated = await Promise.all(
-    toUpdate.map(async (jurisdiction, idx) => {
-      const location = defaultJurisdictions.findIndex((def) => jurisdiction.name === def.name)
-      const updateObj = {}
-      totalFieldUpdates[idx].forEach(
-        // setting key value pairs based on default jurisdiction changes
-        (fieldUpdate) => (updateObj[fieldUpdate] = defaultJurisdictions[location][fieldUpdate])
-      )
+    toUpdate.map(async (jurisdiction) => {
+      const activeJuris = activeJurisdictions.find((def) => jurisdiction.name === def.name)
       const jurisdictionUpdated = {
         ...jurisdiction,
-        ...updateObj,
+        ...activeJuris,
       }
       return await jurisdictionService.update(jurisdictionUpdated)
     })
