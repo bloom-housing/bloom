@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.4...@bloom-housing/ui-components@5.0.1-alpha.5) (2022-06-27)
+
+
+### Bug Fixes
+
+* application due date sentence ([#2822](https://github.com/bloom-housing/bloom/issues/2822)) ([62a870e](https://github.com/bloom-housing/bloom/commit/62a870e3696849dc751e410282279e23071db544))
+
+
+
+
+
 ## [5.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.3...@bloom-housing/ui-components@5.0.1-alpha.4) (2022-06-23)
 
 
