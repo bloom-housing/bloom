@@ -15,9 +15,6 @@ export class addUtilities1656447572782 implements MigrationInterface {
       `ALTER TABLE "listings" ADD CONSTRAINT "UQ_61b80a947c9db249548ba3c73a5" UNIQUE ("utilities_id")`
     )
     await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_accessibility_features" DROP DEFAULT`
-    )
-    await queryRunner.query(
       `ALTER TABLE "listings" ADD CONSTRAINT "FK_61b80a947c9db249548ba3c73a5" FOREIGN KEY ("utilities_id") REFERENCES "listing_utilities"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
   }
@@ -25,9 +22,6 @@ export class addUtilities1656447572782 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `ALTER TABLE "listings" DROP CONSTRAINT "FK_61b80a947c9db249548ba3c73a5"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_accessibility_features" SET DEFAULT false`
     )
     await queryRunner.query(
       `ALTER TABLE "listings" DROP CONSTRAINT "UQ_61b80a947c9db249548ba3c73a5"`
