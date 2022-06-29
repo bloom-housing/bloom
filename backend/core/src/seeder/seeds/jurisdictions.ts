@@ -1,10 +1,9 @@
 import { INestApplicationContext } from "@nestjs/common"
 import { JurisdictionCreateDto } from "../../jurisdictions/dto/jurisdiction-create.dto"
-import { JurisdictionUpdateDto } from "../../jurisdictions/dto/jurisdiction-update.dto"
 import { Language } from "../../shared/types/language-enum"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 
-export const activeJurisdictions: (JurisdictionCreateDto & JurisdictionUpdateDto)[] = [
+export const activeJurisdictions: JurisdictionCreateDto[] = [
   {
     name: "Alameda",
     preferences: [],
