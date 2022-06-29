@@ -19,6 +19,7 @@ import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
   IsDate,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsNumber,
@@ -29,7 +30,6 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
-import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
@@ -52,6 +52,7 @@ import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decor
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 import { ListingImage } from "./listing-image.entity"
 import { ListingUtilities } from "./listing-utilities.entity"
+import { Unit } from "../../units/entities/unit.entity"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -143,10 +144,94 @@ class Listing extends BaseEntity {
   @Type(() => ListingEvent)
   events: ListingEvent[]
 
-  @ManyToOne(() => Property, { nullable: false, cascade: true })
+  @OneToMany(() => Unit, (unit) => unit.listing, { eager: true, cascade: true })
+  units: Unit[]
+
+  @Column({ type: "text", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  accessibility?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  amenities?: string | null
+
+  @OneToOne(() => Address, { eager: true, cascade: true })
+  @JoinColumn()
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  property: Property
+  @Type(() => Address)
+  buildingAddress: Address
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  buildingTotalUnits?: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  developer?: string | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  householdSizeMax?: number | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  householdSizeMin?: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  neighborhood?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  petPolicy?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  smokingPolicy?: string | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  unitsAvailable?: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  unitAmenities?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  servicesOffered?: string | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  yearBuilt?: number | null
 
   @OneToMany(() => Application, (application) => application.listing)
   @Expose()

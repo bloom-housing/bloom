@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.9...@bloom-housing/partners@5.0.1-alpha.10) (2022-06-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.8...@bloom-housing/partners@5.0.1-alpha.9) (2022-06-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.7...@bloom-housing/partners@5.0.1-alpha.8) (2022-06-28)
+
+
+### Bug Fixes
+
+* use lottery date in confirmation screen ([#2847](https://github.com/bloom-housing/bloom/issues/2847)) ([e4e9a7b](https://github.com/bloom-housing/bloom/commit/e4e9a7b0cb25abc4e412595e4c96c31f2fa857e0))
+
+
+
+
+
 ## [5.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.6...@bloom-housing/partners@5.0.1-alpha.7) (2022-06-27)
 
 **Note:** Version bump only for package @bloom-housing/partners
