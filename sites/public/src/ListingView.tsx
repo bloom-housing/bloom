@@ -459,7 +459,7 @@ export const ListingView = (props: ListingProps) => {
       },
       []
     )
-    return utilitiesExist ? (
+    return !utilitiesExist ? null : (
       <div>
         <div className="text-base">{t("listings.sections.utilities")}</div>
         {utilitiesIncluded.length <= 4 ? (
@@ -471,7 +471,7 @@ export const ListingView = (props: ListingProps) => {
           </div>
         )}
       </div>
-    ) : null
+    )
   }
 
   const getFooterContent = () => {
