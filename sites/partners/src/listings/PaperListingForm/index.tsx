@@ -384,7 +384,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       >
                         <TabList>
                           <Tab>{t("listing.details.title")}</Tab>
-                          <Tab>{t("listing.applicationProcess")}</Tab>
+                          <Tab>{t("listings.applicationProcess")}</Tab>
                         </TabList>
                         <TabPanel>
                           <ListingIntro jurisdictions={profile.jurisdictions} />
