@@ -35,11 +35,11 @@
 
 .info-card__columns {
   @apply flex;
+  @apply flex-wrap;
 }
 
 .info-card__column {
   @apply flex-1;
-  @apply flex-wrap;
 }
 .info-card__column-2 {
   flex: 1 1 100%;

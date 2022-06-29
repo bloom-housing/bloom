@@ -49,7 +49,7 @@ const AdditionalFees = ({
       {footerContent && footerContent?.length > 0 && (
         <div className="info-card__columns text-sm">
           {footerContent?.map((elem, idx) => (
-            <div key={`footer_info_${idx}`} className=" info-card__column-2">
+            <div key={`footer_info_${idx}`} className="info-card__column-2">
               {elem}
             </div>
           ))}
