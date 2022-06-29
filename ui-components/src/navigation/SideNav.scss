@@ -1,38 +1,54 @@
 .side-nav {
-  @apply border;
-  @apply rounded-lg;
+  --text-color:var(--bloom-color-gray-900);
+  --anchor-color:var(--bloom-color-gray-700);
+  --border:solid var(--bloom-border-1) var(--bloom-color-gray-450);
+  --rounded-lg:var(--bloom-rounded-lg);
+  --current-padding-x: var(--bloom-s4);
+  --current-padding-y: var(--bloom-s2);
+  --primary-color:var(--bloom-color-primary);
+  --primary-color-lighter:var(--bloom-color-primary-lighter);
+
+  border:var(--border);
+  border-radius:var(--rounded-lg);
 
   li {
     &:first-of-type {
-      @apply rounded-t-lg;
+      border-top-right-radius: var(--rounded-lg);
+      border-top-left-radius: var(--rounded-lg);
     }
 
     &:last-of-type {
-      @apply rounded-b-lg;
+      border-bottom-right-radius: var(--rounded-lg);
+      border-bottom-left-radius: var(--rounded-lg);
     }
 
     &.is-current {
+      display:block;
       cursor: pointer;
-      @apply text-gray-900;
-      box-shadow: inset 3px 0px 0px 0px $tailwind-primary;
-      @apply block;
-      @apply px-4;
-      @apply py-2;
+      color:var(--text-color);
+      box-shadow: inset 3px 0px 0px 0px var(--primary-color);
+      padding-left: var(--current-padding-x);
+      padding-right: var(--current-padding-x);
+      padding-top:  var(--current-padding-y);
+      padding-bottom:  var(--current-padding-y);
     }
 
     &:not(:last-child) {
-      @apply border-b;
+      border-bottom:var(--border)
     }
   }
 
   a {
-    @apply text-gray-700;
-    @apply block;
-    @apply px-4;
-    @apply py-2;
+    display:block;
+    color:var(--anchor-color);
+    padding-left: var(--current-padding-x);
+    padding-right: var(--current-padding-x);
+    padding-top:  var(--current-padding-y);
+    padding-bottom:  var(--current-padding-y);
+
     &:hover {
-      @apply bg-primary-lighter;
-      @apply text-primary;
+      background-color:var(--primary-color-lighter);
+      color:var(--primary-color);
     }
   }
 }
