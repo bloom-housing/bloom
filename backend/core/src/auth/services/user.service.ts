@@ -97,17 +97,19 @@ export class UserService {
     const qb = this.userRepository.getQb()
 
     if (params.filter) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const user = this.req.user as User
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
         distinctIDQB,
-        this.req.user
+        user
       )
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
         qb,
-        this.req.user
+        user
       )
     }
 
