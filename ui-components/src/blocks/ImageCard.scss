@@ -61,7 +61,7 @@
 
   @media (min-width: $screen-sm) {
     width: var(--bloom-width-2-3rd);
-    margin-block-start: var(--bloom-s8);
-    margin-inline-end: var(--bloom-s8);
+    padding-block-start: var(--bloom-s8);
+    padding-inline-end: var(--bloom-s8);
   }
 }
