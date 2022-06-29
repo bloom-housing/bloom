@@ -22,49 +22,49 @@ let service: ListingsService
 const mockListings = [
   {
     id: "asdf1",
-    property: { id: "test-property1", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf2",
-    property: { id: "test-property2", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf3",
-    property: { id: "test-property3", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf4",
-    property: { id: "test-property4", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf5",
-    property: { id: "test-property5", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf6",
-    property: { id: "test-property6", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf7",
-    property: { id: "test-property7", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
@@ -166,7 +166,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0))",
+        "(LOWER(CAST(listings.neighborhood as text)) = LOWER(:neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhood,
         }
@@ -194,7 +194,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
+        "(LOWER(CAST(listings.neighborhood as text)) IN (:...neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhoodArray,
         }

@@ -10,7 +10,7 @@ import { UnitAccessibilityPriorityTypeDto } from "../../unit-accessbility-priori
 import { UnitAmiChartOverrideDto } from "./unit-ami-chart-override.dto"
 
 export class UnitDto extends OmitType(Unit, [
-  "property",
+  "listing",
   "amiChart",
   "amiChartId",
   "unitType",
@@ -20,7 +20,7 @@ export class UnitDto extends OmitType(Unit, [
 ] as const) {
   @Exclude()
   @ApiHideProperty()
-  property
+  listing
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
