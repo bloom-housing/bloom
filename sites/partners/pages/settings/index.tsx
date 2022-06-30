@@ -64,6 +64,7 @@ const Settings = () => {
           <MinimalTable
             headers={{
               name: "t.name",
+              jurisdiction: "t.jurisdiction",
               updated: "t.updated",
               icons: "",
             }}
@@ -71,6 +72,11 @@ const Settings = () => {
             data={data?.map((preference) => {
               return {
                 name: { content: preference?.title },
+                jurisdiction: {
+                  content: preference?.jurisdictions?.reduce((acc, item, index) => {
+                    return `${acc}${index > 0 ? ", " : ""}${item.name}`
+                  }, ""),
+                },
                 updated: {
                   content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
                 },
