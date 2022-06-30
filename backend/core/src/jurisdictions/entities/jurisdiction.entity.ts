@@ -15,6 +15,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { Language } from "../../shared/types/language-enum"
 import { Expose, Type } from "class-transformer"
 import { Preference } from "../../preferences/entities/preference.entity"
+import { User } from "../../auth/entities/user.entity"
 
 @Entity({ name: "jurisdictions" })
 export class Jurisdiction extends AbstractEntity {
@@ -77,4 +78,10 @@ export class Jurisdiction extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   enablePartnerSettings?: boolean | null
+
+  @Column({ type: "boolean", nullable: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  enableAccessibilityFeatures: boolean | null
 }

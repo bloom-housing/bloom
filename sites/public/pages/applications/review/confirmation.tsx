@@ -20,6 +20,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  getLotteryEvent,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
@@ -35,11 +36,12 @@ const ApplicationConfirmation = () => {
   const reviewOrder = useMemo(() => {
     if (listing) {
       if (listing.reviewOrderType == ListingReviewOrder.lottery) {
+        const lotteryEvent = getLotteryEvent(listing)
         const lotteryText = []
-        if (listing.applicationDueDate) {
+        if (lotteryEvent?.startTime) {
           lotteryText.push(
             t("application.review.confirmation.eligibleApplicants.lotteryDate", {
-              lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
+              lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
             })
           )
         }

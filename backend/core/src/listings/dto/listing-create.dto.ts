@@ -37,20 +37,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "urlSlug",
   "showWaitlist",
   "units",
-  "accessibility",
-  "amenities",
   "buildingAddress",
-  "buildingTotalUnits",
-  "developer",
-  "householdSizeMax",
-  "householdSizeMin",
-  "neighborhood",
-  "petPolicy",
-  "smokingPolicy",
-  "unitsAvailable",
-  "unitAmenities",
-  "servicesOffered",
-  "yearBuilt",
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
@@ -126,75 +113,10 @@ export class ListingCreateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  accessibility?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amenities?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   buildingAddress?: AddressCreateDto | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  buildingTotalUnits?: number | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  developer?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMax?: number | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMin?: number | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  neighborhood?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  petPolicy?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  smokingPolicy?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  unitsAvailable?: number | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  unitAmenities?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  servicesOffered?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  yearBuilt?: number | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
