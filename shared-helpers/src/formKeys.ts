@@ -236,7 +236,7 @@ export const preferredUnit = [
   },
 ]
 
-export const bedroomKeys = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+export const bedroomKeys = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
 
 export const listingFeatures = [
   "wheelchairRamp",

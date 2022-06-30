@@ -44,8 +44,6 @@ const getTranslationString = (str: string) => {
     return "threePlus"
   } else if (str === "fourBdrm") {
     return "fourPlus"
-  } else if (str === "SRO") {
-    return "SROPlus"
   }
 }
 

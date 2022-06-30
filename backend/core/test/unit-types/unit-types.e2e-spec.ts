@@ -45,14 +45,7 @@ describe("UnitTypes", () => {
     expect(Array.isArray(res.body)).toBe(true)
 
     const unitTypes = res.body.map((unitType) => unitType.name)
-    for (const predefinedUnitType of [
-      "studio",
-      "oneBdrm",
-      "twoBdrm",
-      "threeBdrm",
-      "fourBdrm",
-      "SRO",
-    ]) {
+    for (const predefinedUnitType of ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]) {
       expect(unitTypes).toContain(predefinedUnitType)
     }
   })

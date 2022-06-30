@@ -84,7 +84,6 @@ enum BedroomFields {
   twoBdrm = "twoBdrm",
   threeBdrm = "threeBdrm",
   fourBdrm = "fourBdrm",
-  SRO = "SRO",
 }
 export const FrontendListingFilterStateKeys = {
   ...IncludedBackendKeys,
@@ -114,7 +113,6 @@ export interface ListingFilterState {
   // bedRoomSize
   [FrontendListingFilterStateKeys.bedRoomSize]?: string
   [FrontendListingFilterStateKeys.studio]?: string | boolean
-  [FrontendListingFilterStateKeys.SRO]?: string | boolean
   [FrontendListingFilterStateKeys.oneBdrm]?: string | boolean
   [FrontendListingFilterStateKeys.twoBdrm]?: string | boolean
   [FrontendListingFilterStateKeys.threeBdrm]?: string | boolean
