@@ -44,7 +44,8 @@ export class ListingsService {
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const innerFilteredQuery = this.listingRepository.createQueryBuilder("listings")
+    const innerFilteredQuery = this.listingRepository
+      .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .addFilters(params.filter)
       .addOrderConditions(params.orderBy, params.orderDir)
@@ -54,7 +55,8 @@ export class ListingsService {
 
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    const mainQuery = view.getViewQb()
+    const mainQuery = view
+      .getViewQb()
       .addInnerFilteredQuery(innerFilteredQuery)
       .addOrderConditions(params.orderBy, params.orderDir)
 

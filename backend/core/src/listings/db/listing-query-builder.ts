@@ -36,8 +36,11 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
   addOrderConditions(orderBy?: Array<OrderByFieldsEnum>, orderDir?: Array<OrderParam>) {
     let orderByConditionDataArray = []
     if (!orderDir || !orderBy) {
-      orderByConditionDataArray =  [
-        ListingsQueryBuilder.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC),
+      orderByConditionDataArray = [
+        ListingsQueryBuilder.getOrderByCondition(
+          OrderByFieldsEnum.applicationDates,
+          OrderParam.ASC
+        ),
       ]
     } else {
       for (let i = 0; i < orderDir.length; i++) {
@@ -48,11 +51,7 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     }
 
     for (const orderByCondition of orderByConditionDataArray) {
-      this.addOrderBy(
-        orderByCondition.orderBy,
-        orderByCondition.orderDir,
-        orderByCondition.nulls
-      )
+      this.addOrderBy(orderByCondition.orderBy, orderByCondition.orderDir, orderByCondition.nulls)
     }
 
     return this
@@ -88,23 +87,25 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
   }
 
   public async getManyPaginated(addUnitSummaryMap?: boolean): Promise<Pagination<Listing>> {
-
     let listings: Listing[], count: number
 
     if (this.innerFilteredQuery) {
       listings = await this.getMany()
       count = await this.innerFilteredQuery.getCount()
     } else {
-      [listings, count] = await this.getManyAndCount()
+      ;[listings, count] = await this.getManyAndCount()
     }
 
     if (addUnitSummaryMap) {
-      listings = listings.map((listing) => ({
-        ...listing,
-        unitsSummarized: {
-          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units, listing),
-        },
-      } as Listing))
+      listings = listings.map(
+        (listing) =>
+          ({
+            ...listing,
+            unitsSummarized: {
+              byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units, listing),
+            },
+          } as Listing)
+      )
     }
 
     const shouldPaginate = ListingsQueryBuilder.shouldPaginate(this.limitValue, this.pageValue)
@@ -173,5 +174,4 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
         )
     }
   }
-
 }
