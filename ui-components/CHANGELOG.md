@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.6...@bloom-housing/ui-components@5.0.1-alpha.7) (2022-07-02)
+
+
+### Bug Fixes
+
+* switch back to padding for image card leader ([#2851](https://github.com/bloom-housing/bloom/issues/2851)) ([c3fde4a](https://github.com/bloom-housing/bloom/commit/c3fde4adbff2bd116c4acaf39f609d3c0ed0638f))
+
+
+
+
+
 ## [5.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.5...@bloom-housing/ui-components@5.0.1-alpha.6) (2022-06-29)
 
 
