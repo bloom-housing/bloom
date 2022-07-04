@@ -100,9 +100,12 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
 
     const shouldPaginate = ListingsQueryBuilder.shouldPaginate(
       this.limitValue || this.innerFilteredQuery.limitValue,
-      this.pageValue || this.innerFilteredQuery.pageValue)
+      this.pageValue || this.innerFilteredQuery.pageValue
+    )
 
-    const itemsPerPage = shouldPaginate ? this.limitValue as number || this.innerFilteredQuery.limitValue as number : listings.length
+    const itemsPerPage = shouldPaginate
+      ? (this.limitValue as number) || (this.innerFilteredQuery.limitValue as number)
+      : listings.length
 
     const totalItems = shouldPaginate ? count : listings.length
     const paginationInfo = {
