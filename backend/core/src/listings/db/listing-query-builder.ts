@@ -93,7 +93,7 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
       listings = await this.getMany()
       count = await this.innerFilteredQuery.getCount()
     } else {
-      [listings, count] = await this.getManyAndCount()
+      ;[listings, count] = await this.getManyAndCount()
     }
 
     const shouldPaginate = ListingsQueryBuilder.shouldPaginate(this.limitValue, this.pageValue)

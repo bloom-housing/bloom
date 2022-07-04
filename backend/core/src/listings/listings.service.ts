@@ -72,12 +72,15 @@ export class ListingsService {
 
     return {
       ...listingsPaginated,
-      items: listingsPaginated.items.map((listing) => ({
-        ...listing,
-        unitsSummarized: {
-          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units, listing),
-        },
-      } as Listing)),
+      items: listingsPaginated.items.map(
+        (listing) =>
+          ({
+            ...listing,
+            unitsSummarized: {
+              byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units, listing),
+            },
+          } as Listing)
+      ),
     }
   }
 
