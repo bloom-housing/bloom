@@ -60,14 +60,11 @@ export class ListingsService {
 
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    const mainQuery = view
+    const listingsPaginated = await view
       .getViewQb()
       .addInnerFilteredQuery(innerFilteredQuery)
       .addOrderConditions(params.orderBy, params.orderDir)
-
-    const listingsPaginated = await mainQuery
       .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
-      .paginate(params.limit, params.page)
       .getManyPaginated()
 
     return {

@@ -1,10 +1,9 @@
 import Listing from "../entities/listing.entity"
-import { EntityRepository } from "typeorm"
+import { EntityRepository, Repository } from "typeorm"
 import { ListingsQueryBuilder } from "./listing-query-builder"
-import { GenericRepository } from "../../shared/db/generic.repository"
 
 @EntityRepository(Listing)
-export class ListingRepository extends GenericRepository<Listing> {
+export class ListingRepository extends Repository<Listing> {
   public async getJurisdictionIdByListingId(listingId: string | null): Promise<string | null> {
     if (!listingId) {
       return null

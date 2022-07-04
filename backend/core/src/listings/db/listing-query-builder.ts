@@ -18,7 +18,7 @@ type OrderByConditionData = {
 export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
   limitValue?: number | "all"
   pageValue?: number
-  innerFilteredQuery?: SelectQueryBuilder<Listing>
+  innerFilteredQuery?: ListingsQueryBuilder
   addUnitSummaryFlag?: boolean
 
   addFilters(filters?: ListingFilterParams[]) {
@@ -57,8 +57,10 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     return this
   }
 
-  public addSearchByListingNameCondition(searchName: string) {
-    this.andWhere(`${this.alias}.name ILIKE :search`, { search: `%${searchName}%` })
+  public addSearchByListingNameCondition(searchName?: string) {
+    if (searchName) {
+      this.andWhere(`${this.alias}.name ILIKE :search`, { search: `%${searchName}%` })
+    }
     return this
   }
 
@@ -76,9 +78,9 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     return this
   }
 
-  addInnerFilteredQuery(qb: SelectQueryBuilder<Listing>) {
+  addInnerFilteredQuery(qb: ListingsQueryBuilder) {
     this.innerFilteredQuery = qb
-    this.andWhere(`${this.alias}.id IN (" + qb.getQuery() + ")`)
+    this.andWhere(`${this.alias}.id IN (` + qb.getQuery() + ")")
     // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
     // (WHERE params are the values passed to andWhere() that TypeORM escapes
     // and substitues for the `:paramName` placeholders in the WHERE clause.)
@@ -96,12 +98,15 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
       ;[listings, count] = await this.getManyAndCount()
     }
 
-    const shouldPaginate = ListingsQueryBuilder.shouldPaginate(this.limitValue, this.pageValue)
-    const itemsPerPage = shouldPaginate ? (this.limitValue as number) : listings.length
+    const shouldPaginate = ListingsQueryBuilder.shouldPaginate(
+      this.limitValue || this.innerFilteredQuery.limitValue,
+      this.pageValue || this.innerFilteredQuery.pageValue)
+
+    const itemsPerPage = shouldPaginate ? this.limitValue as number || this.innerFilteredQuery.limitValue as number : listings.length
 
     const totalItems = shouldPaginate ? count : listings.length
     const paginationInfo = {
-      currentPage: shouldPaginate ? this.pageValue : 1,
+      currentPage: shouldPaginate ? this.pageValue || this.innerFilteredQuery.pageValue : 1,
       itemCount: listings.length,
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,

@@ -13,6 +13,8 @@ import { AuthzService } from "../../auth/services/authz.service"
 import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 
+/* eslint-disable @typescript-eslint/unbound-method */
+
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
