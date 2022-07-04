@@ -86,26 +86,14 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     return this
   }
 
-  public async getManyPaginated(addUnitSummaryMap?: boolean): Promise<Pagination<Listing>> {
+  public async getManyPaginated(): Promise<Pagination<Listing>> {
     let listings: Listing[], count: number
 
     if (this.innerFilteredQuery) {
       listings = await this.getMany()
       count = await this.innerFilteredQuery.getCount()
     } else {
-      ;[listings, count] = await this.getManyAndCount()
-    }
-
-    if (addUnitSummaryMap) {
-      listings = listings.map(
-        (listing) =>
-          ({
-            ...listing,
-            unitsSummarized: {
-              byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units, listing),
-            },
-          } as Listing)
-      )
+      [listings, count] = await this.getManyAndCount()
     }
 
     const shouldPaginate = ListingsQueryBuilder.shouldPaginate(this.limitValue, this.pageValue)

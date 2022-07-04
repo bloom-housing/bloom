@@ -49,7 +49,7 @@ import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
-import { ListingRepository } from "../../listings/repositories/listing.repository"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 dayjs.extend(advancedFormat)
 

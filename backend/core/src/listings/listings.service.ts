@@ -11,12 +11,10 @@ import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
 import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
-import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
-import { summarizeUnits } from "../shared/units-transformations"
+import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
 import { Language, ListingAvailability } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingsQueryParams } from "./dto/listings-query-params"
@@ -47,6 +45,13 @@ export class ListingsService {
     const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
+      // Those left joines are required for addFilters to work (see
+      // backend/core/src/listings/dto/filter-type-to-field-map.ts
+      .leftJoin("listings.leasingAgents", "leasingAgents")
+      .leftJoin("listings.buildingAddress", "buildingAddress")
+      .leftJoin("listings.units", "units")
+      .leftJoin("units.unitType", "unitTypeRef")
+      .leftJoin("listings.jurisdiction", "jurisdiction")
       .addFilters(params.filter)
       .addOrderConditions(params.orderBy, params.orderDir)
       .addSearchByListingNameCondition(params.search)
@@ -60,10 +65,20 @@ export class ListingsService {
       .addInnerFilteredQuery(innerFilteredQuery)
       .addOrderConditions(params.orderBy, params.orderDir)
 
-    const addUnitSummaryMap = true
-    return await mainQuery
+    const listingsPaginated = await mainQuery
       .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
-      .getManyPaginated(addUnitSummaryMap)
+      .paginate(params.limit, params.page)
+      .getManyPaginated()
+
+    return {
+      ...listingsPaginated,
+      items: listingsPaginated.items.map((listing) => ({
+        ...listing,
+        unitsSummarized: {
+          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units, listing),
+        },
+      } as Listing)),
+    }
   }
 
   async create(listingDto: ListingCreateDto) {

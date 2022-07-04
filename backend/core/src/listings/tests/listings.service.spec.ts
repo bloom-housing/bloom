@@ -2,7 +2,6 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { ListingsService } from "../listings.service"
-import { Listing } from "../entities/listing.entity"
 import { TranslationsService } from "../../translations/services/translations.service"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingsQueryParams } from "../dto/listings-query-params"
@@ -11,7 +10,8 @@ import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
 import { AuthzService } from "../../auth/services/authz.service"
-import { ListingRepository } from "../repositories/listing.repository"
+import { ListingRepository } from "../db/listing.repository"
+import { ListingsQueryBuilder } from "../db/listing-query-builder"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -84,6 +84,10 @@ const mockInnerQueryBuilder = {
   getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
   getQuery: jest.fn().mockReturnValue("innerQuery"),
   getCount: jest.fn().mockReturnValue(7),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderConditions: ListingsQueryBuilder.prototype.addOrderConditions,
+  addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
+  paginate: ListingsQueryBuilder.prototype.paginate,
 }
 const mockQueryBuilder = {
   select: jest.fn().mockReturnThis(),
@@ -94,6 +98,14 @@ const mockQueryBuilder = {
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
   getMany: jest.fn().mockReturnValue(mockListings),
+  offset: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderConditions: ListingsQueryBuilder.prototype.addOrderConditions,
+  addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
+  paginate: ListingsQueryBuilder.prototype.paginate,
+  addInnerFilteredQuery: ListingsQueryBuilder.prototype.addInnerFilteredQuery,
+  getManyPaginated: ListingsQueryBuilder.prototype.getManyPaginated,
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
