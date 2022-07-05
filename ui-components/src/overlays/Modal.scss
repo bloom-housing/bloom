@@ -6,7 +6,7 @@
   @apply border-solid;
   @apply border-gray-400;
   @apply bg-white;
-  @apply rounded-md;
+  @apply rounded;
   @apply shadow-md;
 
   @screen md {
@@ -14,12 +14,11 @@
   }
 }
 
-// Content containers
 .modal__header,
 .modal__inner,
 .modal__footer {
   @apply py-4;
-  @apply px-8;
+  @apply px-6;
 }
 
 .modal__header {
@@ -27,10 +26,18 @@
 }
 
 .modal__title {
-  @apply text-xl;
+  @apply pt-6;
+  @apply px-6;
+  font-size: var(--bloom-font-size-base-alt);
+  font-family: var(--bloom-font-sans);
 }
 
 .modal__inner {
+  @apply pt-6;
+  @apply pb-6;
+  padding-bottom: var(--bloom-s8);
+  padding-top: var(--bloom-s5);
+
   &:last-of-type {
     @apply rounded-b;
   }
@@ -39,16 +46,20 @@
     max-height: calc(100vh - 200px);
     @apply overflow-y-auto;
   }
+  p {
+    color: var(--bloom-color-gray-700);
+  }
 }
 
 .modal__footer {
   @apply rounded-b;
+  background-color: var(--bloom-color-primary-lighter);
 }
 
 .modal__close {
   @apply absolute;
-  top: 1.5rem;
-  right: 2rem;
+  top: var(--bloom-s5);
+  right: var(--bloom-s5);
   cursor: pointer;
 }
 

@@ -1,6 +1,6 @@
 import React, { useRef } from "react"
 import "./Modal.scss"
-import { Icon } from "../icons/Icon"
+import { Icon, IconFillColors } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
 import { nanoid } from "nanoid"
 
@@ -19,7 +19,7 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
 
 const ModalHeader = (props: { title: string; uniqueId?: string }) => (
   <>
-    <header className="modal__inner">
+    <header>
       <h1 className="modal__title" id={props.uniqueId}>
         {props.title}
       </h1>
@@ -28,7 +28,7 @@ const ModalHeader = (props: { title: string; uniqueId?: string }) => (
 )
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
-  <footer className="modal__footer bg-primary-lighter" data-testid="footer">
+  <footer className="modal__footer" data-testid="footer">
     <div className="flex flex-row-reverse gap-5">
       {props.actions.map((action: React.ReactNode, index: number) => (
         <div key={index}>{action}</div>
@@ -77,7 +77,7 @@ export const Modal = (props: ModalProps) => {
             onClick={props.onClose}
             tabIndex={0}
           >
-            <Icon size="medium" symbol="close" />
+            <Icon size="medium" symbol="close" fill={IconFillColors.primary} />
           </button>
         )}
       </div>
