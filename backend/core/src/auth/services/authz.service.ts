@@ -64,7 +64,7 @@ export class AuthzService {
           void enforcer.addPermissionForUser(
             user.id,
             "user",
-            `'${adminInJurisdiction.id}' == '${adminInJurisdiction.id}'`,
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
           )
         })
