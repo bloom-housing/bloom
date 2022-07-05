@@ -147,6 +147,7 @@ const Users = () => {
                   className="mx-1"
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
+                  dataTestId={"add-user"}
                 >
                   {t("users.addUser")}
                 </Button>
