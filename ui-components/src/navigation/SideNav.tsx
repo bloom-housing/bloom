@@ -20,8 +20,12 @@ const SideNav = (props: SideNavProps) => {
       <ul>
         {props.navItems?.map((navItem: SideNavItemProps, index: number) => {
           return (
-            <li className={navItem.current ? "is-current" : undefined} key={index}>
-              <LinkComponent href={navItem.url} aria-current={navItem.current ? "page" : undefined}>
+            <li key={index}>
+              <LinkComponent
+                className={navItem.current ? "is-current" : undefined}
+                href={navItem.url}
+                aria-current={navItem.current ? "page" : undefined}
+              >
                 {navItem.label}
               </LinkComponent>
             </li>

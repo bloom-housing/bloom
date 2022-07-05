@@ -12,25 +12,14 @@
   border-radius:var(--rounded-lg);
 
   li {
-    &:first-of-type {
+    &:first-of-type a {
       border-top-right-radius: var(--rounded-lg);
       border-top-left-radius: var(--rounded-lg);
     }
 
-    &:last-of-type {
+    &:last-of-type a {
       border-bottom-right-radius: var(--rounded-lg);
       border-bottom-left-radius: var(--rounded-lg);
-    }
-
-    &.is-current {
-      display:block;
-      cursor: pointer;
-      color:var(--text-color);
-      box-shadow: inset 3px 0px 0px 0px var(--primary-color);
-      padding-left: var(--current-padding-x);
-      padding-right: var(--current-padding-x);
-      padding-top:  var(--current-padding-y);
-      padding-bottom:  var(--current-padding-y);
     }
 
     &:not(:last-child) {
@@ -45,6 +34,13 @@
     padding-right: var(--current-padding-x);
     padding-top:  var(--current-padding-y);
     padding-bottom:  var(--current-padding-y);
+
+    &.is-current {
+      display:block;
+      cursor: pointer;
+      color:var(--text-color);
+      box-shadow: inset 3px 0px 0px 0px var(--primary-color);
+    }
 
     &:hover {
       background-color:var(--primary-color-lighter);

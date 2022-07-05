@@ -27,21 +27,4 @@ describe("<SideNav>", () => {
     expect(getByText("NavItem 2").closest("a")?.getAttribute("href")).toBe("/Two")
     expect(getByText("NavItem 3").closest("a")?.getAttribute("href")).toBe("/Three")
   })
-
-  it("does not render anchor tag with only current = true nav item", () => {
-    const { queryByText } = render(
-      <SideNav
-        navItems={[
-          {
-            url: "/One",
-            label: "NavItem 1",
-            current: true,
-          },
-        ]}
-      />
-    )
-
-    const anchorTag = queryByText("NavItem 1")?.closest("a")
-    expect(anchorTag).not.toBeInTheDocument()
-  })
 })
