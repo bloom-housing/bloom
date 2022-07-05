@@ -1,16 +1,21 @@
 .modal {
-  @apply relative;
-  @apply max-w-5xl;
-  @apply m-auto;
-  @apply border;
-  @apply border-solid;
-  @apply border-gray-400;
-  @apply bg-white;
-  @apply rounded-md;
-  @apply shadow-md;
+  --title-color: var(--bloom-color-gray-900);
+  --background-color: var(--bloom-color-white);
+  --footer-background-color: var(--bloom-color-primary-lighter);
+  --footer-align: normal;
+  --modal-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --modal-border: 1px solid var(--bloom-color-gray-400);
 
-  @screen md {
-    min-width: 32rem;
+  position: relative;
+  max-width: var(--bloom-width-5xl);
+  margin: auto;
+  border: var(--modal-border);
+  background-color: var(--background-color);
+  border-radius: var(--bloom-rounded-md);
+  box-shadow: var(--modal-shadow);
+
+  @media (min-width: $screen-md) {
+    min-width: var(--bloom-width-lg);
   }
 }
 
@@ -27,7 +32,8 @@
 }
 
 .modal__title {
-  @apply text-xl;
+  color: var(--title-color);
+  font-size: var(--bloom-font-size-xl);
 }
 
 .modal__inner {
@@ -42,7 +48,13 @@
 }
 
 .modal__footer {
-  @apply rounded-b;
+  background-color: var(--footer-background-color);
+  border-bottom-right-radius: var(--bloom-rounded);
+  border-bottom-left-radius: var(--bloom-rounded);
+  display: flex;
+  flex-direction: row-reverse;
+  gap: var(--bloom-s5);
+  justify-content: var(--footer-align);
 }
 
 .modal__close {

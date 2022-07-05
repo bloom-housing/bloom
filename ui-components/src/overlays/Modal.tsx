@@ -28,12 +28,10 @@ const ModalHeader = (props: { title: string; uniqueId?: string }) => (
 )
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
-  <footer className="modal__footer bg-primary-lighter" data-testid="footer">
-    <div className="flex flex-row-reverse gap-5">
-      {props.actions.map((action: React.ReactNode, index: number) => (
-        <div key={index}>{action}</div>
-      ))}
-    </div>
+  <footer className="modal__footer" data-testid="footer">
+    {props.actions.map((action: React.ReactNode, index: number) => (
+      <React.Fragment key={index}>{action}</React.Fragment>
+    ))}
   </footer>
 )
 
@@ -53,6 +51,7 @@ export const Modal = (props: ModalProps) => {
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
+      className={props.className}
       backdrop={props.backdrop}
       slim={props.slim}
       role={props.role ? props.role : "dialog"}
