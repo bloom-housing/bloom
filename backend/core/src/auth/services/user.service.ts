@@ -567,7 +567,7 @@ export class UserService {
   }
 
   private async authorizeUserAction(requestingUser, targetUser, action) {
-    if (requestingUser.roles?.isJurisdictionalAdmin) {
+    if (requestingUser?.roles?.isJurisdictionalAdmin) {
       return this.authorizeJurisdictionalAdmin(requestingUser, targetUser)
     }
     return await this.authzService.canOrThrow(requestingUser, "user", action, {
@@ -578,14 +578,18 @@ export class UserService {
 
   private authorizeJurisdictionalAdmin(requestingUser, targetUser) {
     // jurisdictional admins can't view super admins
-    if (targetUser.roles?.isAdmin) {
+    if (targetUser?.roles?.isAdmin) {
       throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
     }
 
     const requesterJurisdictions = requestingUser.jurisdictions?.map((juris) => juris.id)
     const targetJurisdictions = targetUser.jurisdictions?.map((juris) => juris.id)
     // jurisdictional admins should only see a user if they share a jurisdiction
-    return requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
+    const res = requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
+    if (!res) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+    return res
   }
 
   private async authorizeUserProfileAction(requestingUser, targetUser, action) {
