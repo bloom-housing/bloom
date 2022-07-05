@@ -37,6 +37,7 @@ const AdditionalDetails = () => {
         <GridSection columns={2}>
           <Textarea
             label={t("listings.specialNotes")}
+            note={t("listings.sections.additionalDetails.specialNotesHelper")}
             name={"specialNotes"}
             id={"specialNotes"}
             fullWidth={true}
