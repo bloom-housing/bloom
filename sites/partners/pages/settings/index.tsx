@@ -7,8 +7,7 @@ import {
   IconFillColors,
   LoadingOverlay,
   MinimalTable,
-  NavigationHeader
-  PageHeader,
+  NavigationHeader,
   SiteAlert,
   StandardCard,
   t,
