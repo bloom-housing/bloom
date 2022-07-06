@@ -1,6 +1,13 @@
-describe("User Mangement Tests", () => {
-  it("as admin user, should show all users regadless of jurisdiction", () => {
+describe("Admin User Mangement Tests", () => {
+  before(() => {
     cy.login()
+  })
+
+  after(() => {
+    cy.signOut()
+  })
+
+  it("as admin user, should show all users regadless of jurisdiction", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = [
@@ -25,11 +32,9 @@ describe("User Mangement Tests", () => {
     cy.get(`.ag-center-cols-container [row-id="4"] [col-id="roles"]`)
       .contains(rolesArray[4])
       .should("have.text", rolesArray[4])
-    cy.signOut()
   })
 
   it("as admin user, should be able to create new admin", () => {
-    cy.login()
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
@@ -62,11 +67,9 @@ describe("User Mangement Tests", () => {
     })
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
-    cy.signOut()
   })
 
   it("as admin user, should be able to create new jurisidictional admin", () => {
-    cy.login()
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
@@ -103,11 +106,9 @@ describe("User Mangement Tests", () => {
     })
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
-    cy.signOut()
   })
 
   it("as admin user, should be able to create new partner", () => {
-    cy.login()
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
@@ -143,23 +144,5 @@ describe("User Mangement Tests", () => {
     cy.getByTestId("listings_Alameda").last().click()
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
-    cy.signOut()
-  })
-
-  it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
-    cy.login("jurisdictionalAdmin")
-    cy.visit("/")
-    cy.getByTestId("Users-1").click()
-    const rolesArray = ["Partner", "Partner", "Jurisdictional Admin"]
-    cy.get(`.ag-center-cols-container [row-id="0"] [col-id="roles"]`)
-      .contains(rolesArray[0])
-      .should("have.text", rolesArray[0])
-    cy.get(`.ag-center-cols-container [row-id="1"] [col-id="roles"]`)
-      .contains(rolesArray[1])
-      .should("have.text", rolesArray[1])
-    cy.get(`.ag-center-cols-container [row-id="2"] [col-id="roles"]`)
-      .contains(rolesArray[2])
-      .should("have.text", rolesArray[2])
-    cy.signOut()
   })
 })

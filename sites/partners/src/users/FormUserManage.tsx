@@ -55,18 +55,22 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
 
-  const defaultValues: FormUserManageValues =
-    mode === "edit"
-      ? {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: determineUserRole(user.roles),
-          user_listings: user.leasingAgentInListings?.map((item) => item.id) ?? [],
-          jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
-          jurisdictions: user.jurisdictions.map((elem) => elem.id),
-        }
-      : {}
+  let defaultValues: FormUserManageValues = {}
+  if (mode === "edit") {
+    defaultValues = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: determineUserRole(user.roles),
+      user_listings: user.leasingAgentInListings?.map((item) => item.id) ?? [],
+      jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
+      jurisdictions: user.jurisdictions.map((elem) => elem.id),
+    }
+  } else if (profile?.roles?.isJurisdictionalAdmin) {
+    defaultValues = {
+      jurisdictions: [jurisdictionList[0].id],
+    }
+  }
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, getValues, trigger, setValue, watch } = useForm<FormUserManageValues>({
@@ -74,7 +78,6 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   })
 
   const jurisdictionOptions = useMemo(() => {
-    // get jurisdictions from backend instead
     return jurisdictionList.map((juris) => ({
       id: juris.id,
       label: juris.name,
@@ -97,11 +100,14 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       jurisdictionalizedListings[juris.id] = []
     })
     listings.forEach((listing) => {
-      jurisdictionalizedListings[listing.jurisdiction.id].push({
-        id: listing.id,
-        label: listing.name,
-        value: listing.id,
-      })
+      if (jurisdictionalizedListings[listing.jurisdiction.id]) {
+        // if the user has access to the jurisdiction
+        jurisdictionalizedListings[listing.jurisdiction.id].push({
+          id: listing.id,
+          label: listing.name,
+          value: listing.id,
+        })
+      }
     })
 
     Object.keys(jurisdictionalizedListings).forEach((key) => {
@@ -335,6 +341,160 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   const selectedRoles = watch("role")
   const selectedJurisdictions = watch("jurisdictions")
 
+  let jurisdictionAndListingSelection = null
+
+  if (profile?.roles?.isAdmin) {
+    if (selectedRoles === RoleOption.JurisdictionalAdmin) {
+      jurisdictionAndListingSelection = (
+        <GridSection title={t("t.jurisdiction")} columns={4}>
+          <GridCell>
+            <ViewItem>
+              <Select
+                id="jurisdictions"
+                name="jurisdictions"
+                label={t("t.jurisdiction")}
+                placeholder={t("t.jurisdiction")}
+                labelClassName="sr-only"
+                register={register}
+                controlClassName="control"
+                keyPrefix="users"
+                options={jurisdictionOptions}
+                error={!!errors?.jurisdictions}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
+              />
+            </ViewItem>
+          </GridCell>
+        </GridSection>
+      )
+    } else if (selectedRoles === RoleOption.Partner) {
+      jurisdictionAndListingSelection = (
+        <>
+          <GridSection title={t("t.jurisdiction")} columns={4}>
+            <GridCell>
+              <ViewItem>
+                <Field
+                  id="jurisdiction_all"
+                  name="jurisdiction_all"
+                  label={t("users.allJurisdictions")}
+                  register={register}
+                  type="checkbox"
+                  inputProps={{
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                      updateAllJurisdictionCheckboxes(e),
+                  }}
+                />
+
+                <FieldGroup
+                  name="jurisdictions"
+                  fields={jurisdictionOptions}
+                  type="checkbox"
+                  register={register}
+                  error={!!errors?.jurisdictions}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                  dataTestId={"jurisdictions"}
+                />
+              </ViewItem>
+            </GridCell>
+          </GridSection>
+          {selectedJurisdictions && (
+            <GridSection columns={4}>
+              {Object.keys(listingsOptions).map((key) => {
+                if (!selectedJurisdictions.includes(key)) {
+                  return null
+                }
+                const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)?.label
+                return (
+                  <GridCell key={`listings_${key}`}>
+                    <GridSection
+                      title={t("users.jurisdictionalizedListings", {
+                        jurisdiction: jurisdictionLabel,
+                      })}
+                      columns={1}
+                    >
+                      <GridCell>
+                        <ViewItem>
+                          <Field
+                            id={`listings_all_${key}`}
+                            name={`listings_all_${key}`}
+                            label={t("users.alljurisdictionalizedListings", {
+                              jurisdiction: jurisdictionLabel,
+                            })}
+                            register={register}
+                            type="checkbox"
+                            inputProps={{
+                              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                                updateAllCheckboxes(e, key),
+                            }}
+                          />
+
+                          <FieldGroup
+                            name="user_listings"
+                            fields={listingsOptions[key]}
+                            type="checkbox"
+                            register={register}
+                            error={!!errors?.user_listings}
+                            errorMessage={t("errors.requiredFieldError")}
+                            validation={{ required: true }}
+                            dataTestId={`listings_${jurisdictionLabel}`}
+                          />
+                        </ViewItem>
+                      </GridCell>
+                    </GridSection>
+                  </GridCell>
+                )
+              })}
+            </GridSection>
+          )}
+        </>
+      )
+    }
+  } else if (profile?.roles?.isJurisdictionalAdmin) {
+    if (selectedRoles === RoleOption.Partner && selectedJurisdictions) {
+      jurisdictionAndListingSelection = (
+        <GridSection title={t("nav.listings")} columns={1}>
+          {Object.keys(listingsOptions).map((key) => {
+            if (!selectedJurisdictions.includes(key)) {
+              return null
+            }
+            const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)?.label
+            return (
+              <GridCell key={`listings_${key}`}>
+                <ViewItem>
+                  <Field
+                    id={`listings_all_${key}`}
+                    name={`listings_all_${key}`}
+                    label={t("users.alljurisdictionalizedListings", {
+                      jurisdiction: jurisdictionLabel,
+                    })}
+                    register={register}
+                    type="checkbox"
+                    inputProps={{
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                        updateAllCheckboxes(e, key),
+                    }}
+                  />
+
+                  <FieldGroup
+                    name="user_listings"
+                    fields={listingsOptions[key]}
+                    type="checkbox"
+                    register={register}
+                    error={!!errors?.user_listings}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    dataTestId={`listings_${jurisdictionLabel}`}
+                  />
+                </ViewItem>
+              </GridCell>
+            )
+          })}
+        </GridSection>
+      )
+    }
+  }
+
   return (
     <>
       <Form onSubmit={() => false}>
@@ -424,7 +584,12 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                   register={register}
                   controlClassName="control"
                   keyPrefix="users"
-                  options={roleKeys}
+                  options={roleKeys.filter((elem) => {
+                    if (profile?.roles?.isJurisdictionalAdmin) {
+                      return elem !== RoleOption.Administrator
+                    }
+                    return true
+                  })}
                   error={!!errors?.role}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
@@ -432,112 +597,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
               </ViewItem>
             </GridCell>
           </GridSection>
-
-          {selectedRoles === RoleOption.JurisdictionalAdmin && (
-            <GridSection title={t("t.jurisdiction")} columns={4}>
-              <GridCell>
-                <ViewItem>
-                  <Select
-                    id="jurisdictions"
-                    name="jurisdictions"
-                    label={t("t.jurisdiction")}
-                    placeholder={t("t.jurisdiction")}
-                    labelClassName="sr-only"
-                    register={register}
-                    controlClassName="control"
-                    keyPrefix="users"
-                    options={jurisdictionOptions}
-                    error={!!errors?.jurisdictions}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
-                  />
-                </ViewItem>
-              </GridCell>
-            </GridSection>
-          )}
-
-          {selectedRoles !== RoleOption.Partner ? null : (
-            <>
-              <GridSection title={t("t.jurisdiction")} columns={4}>
-                <GridCell>
-                  <ViewItem>
-                    <Field
-                      id="jurisdiction_all"
-                      name="jurisdiction_all"
-                      label={t("users.allJurisdictions")}
-                      register={register}
-                      type="checkbox"
-                      inputProps={{
-                        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                          updateAllJurisdictionCheckboxes(e),
-                      }}
-                    />
-
-                    <FieldGroup
-                      name="jurisdictions"
-                      fields={jurisdictionOptions}
-                      type="checkbox"
-                      register={register}
-                      error={!!errors?.jurisdictions}
-                      errorMessage={t("errors.requiredFieldError")}
-                      validation={{ required: true }}
-                      dataTestId={"jurisdictions"}
-                    />
-                  </ViewItem>
-                </GridCell>
-              </GridSection>
-              {selectedJurisdictions && (
-                <GridSection columns={4}>
-                  {Object.keys(listingsOptions).map((key) => {
-                    if (!selectedJurisdictions.includes(key)) {
-                      return null
-                    }
-                    const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)
-                      ?.label
-                    return (
-                      <GridCell key={`listings_${key}`}>
-                        <GridSection
-                          title={t("users.jurisdictionalizedListings", {
-                            jurisdiction: jurisdictionLabel,
-                          })}
-                          columns={1}
-                        >
-                          <GridCell>
-                            <ViewItem>
-                              <Field
-                                id={`listings_all_${key}`}
-                                name={`listings_all_${key}`}
-                                label={t("users.alljurisdictionalizedListings", {
-                                  jurisdiction: jurisdictionLabel,
-                                })}
-                                register={register}
-                                type="checkbox"
-                                inputProps={{
-                                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                                    updateAllCheckboxes(e, key),
-                                }}
-                              />
-
-                              <FieldGroup
-                                name="user_listings"
-                                fields={listingsOptions[key]}
-                                type="checkbox"
-                                register={register}
-                                error={!!errors?.user_listings}
-                                errorMessage={t("errors.requiredFieldError")}
-                                validation={{ required: true }}
-                                dataTestId={`listings_${jurisdictionLabel}`}
-                              />
-                            </ViewItem>
-                          </GridCell>
-                        </GridSection>
-                      </GridCell>
-                    )
-                  })}
-                </GridSection>
-              )}
-            </>
-          )}
+          {jurisdictionAndListingSelection}
         </div>
 
         <div className="mt-6">
