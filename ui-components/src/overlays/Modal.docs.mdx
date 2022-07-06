@@ -1,0 +1,33 @@
+import { Canvas, Story, ArgsTable } from "@storybook/addon-docs"
+import { Swatch } from "../prototypes/Swatch"
+import { Modal } from "./Modal"
+
+# Modal
+
+The modal component renders a popup window with a background overlay containing content and footer actions.
+
+<Canvas>
+  <Story id="overlays-modal--basic-modal" />
+</Canvas>
+
+<br />
+<br />
+
+## Component Properties
+
+<ArgsTable of={Modal} />
+
+## Theming Variables
+
+You can apply CSS variables to the `.modal` selector to customize the appearance of the component.
+
+| Name                        | Type                                                | Description                                                                                                   | Default                                 |
+| --------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `--title-color`             | <Swatch colorVar="--bloom-color-gray-900" />        | Color for the modal title text                                                                                | `--bloom-color-gray-900`                |
+| `-title-font-size`          | Size                                                | Font size of the modal title                                                                                  | `--bloom-font-size-xl`                  |
+| `--background-color`        | <Swatch colorVar="--bloom-color-white" />           | Background color of the modal interior                                                                        | `--bloom-color-white`                   |
+| `--footer-background-color` | <Swatch colorVar="--bloom-color-primary-lighter" /> | Background color of the modal footer                                                                          | `--bloom-color-primary-lighter`         |
+| `--footer-justify`          | Flex Justification                                  | The alignment of buttons within the footer. Because of reverse flex ordering, the default looks right-aligned | `normal`                                |
+| `--modal-shadow`            | Box Shadow                                          | The shadow surrounding the modal                                                                              | (custom)                                |
+| `--modal-border`            | Border                                              | The border surrounding the modal                                                                              | `1px solid var(--bloom-color-gray-400)` |
+| `--modal-border-radius`     | Size                                                | The radius of the modal border                                                                                | `--bloom-rounded-md`                    |

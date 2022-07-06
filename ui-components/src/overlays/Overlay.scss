@@ -4,13 +4,13 @@
   --overlay-background-color: var(--bloom-color-gray-900);
   --overlay-opacity: 0.5;
 
-  @apply top-0;
-  @apply left-0;
-  @apply fixed;
-  @apply w-screen;
-  @apply h-screen;
-  @apply z-50;
-  @apply flex;
+  position: fixed;
+  display: flex;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
 
   &.is-backdrop:before {
     content: "";
@@ -34,6 +34,7 @@
       opacity: 0;
     }
   }
+
   &.overlay-effect-enter-active {
     .fixed-overlay__inner {
       opacity: 1;
@@ -48,14 +49,14 @@
 .fixed-overlay__inner {
   transition-property: transform, opacity;
   margin: auto;
-
-  @include transition-timing;
+  transition-duration: .25s;
+  transition-timing-function: cubic-bezier(0.475, 0.335, 0.43, 0.94);
 }
 
 .fixed-overlay__inner-slim {
   width: 90vw;
 
-  @screen md {
+  @media (min-width: $screen-md) {
     width: 75vw;
   }
 }

@@ -1,17 +1,19 @@
 .modal {
   --title-color: var(--bloom-color-gray-900);
+  --title-font-size: var(--bloom-font-size-xl);
   --background-color: var(--bloom-color-white);
   --footer-background-color: var(--bloom-color-primary-lighter);
-  --footer-align: normal;
+  --footer-justify: normal;
   --modal-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --modal-border: 1px solid var(--bloom-color-gray-400);
+  --modal-border-radius: var(--bloom-rounded-md);
 
   position: relative;
   max-width: var(--bloom-width-5xl);
   margin: auto;
   border: var(--modal-border);
   background-color: var(--background-color);
-  border-radius: var(--bloom-rounded-md);
+  border-radius: var(--modal-border-radius);
   box-shadow: var(--modal-shadow);
 
   @media (min-width: $screen-md) {
@@ -23,42 +25,43 @@
 .modal__header,
 .modal__inner,
 .modal__footer {
-  @apply py-4;
-  @apply px-8;
+  padding-block: var(--bloom-s4);
+  padding-inline: var(--bloom-s8);
 }
 
 .modal__header {
-  @apply pt-8;
+  padding-top: var(--bloom-s8);
 }
 
 .modal__title {
   color: var(--title-color);
-  font-size: var(--bloom-font-size-xl);
+  font-size: var(--title-font-size);
 }
 
 .modal__inner {
   &:last-of-type {
-    @apply rounded-b;
+    border-bottom-right-radius: var(--modal-border-radius);
+    border-bottom-left-radius: var(--modal-border-radius);
   }
 
   &.is-scrollable {
     max-height: calc(100vh - 200px);
-    @apply overflow-y-auto;
+    overflow-y: auto;
   }
 }
 
 .modal__footer {
   background-color: var(--footer-background-color);
-  border-bottom-right-radius: var(--bloom-rounded);
-  border-bottom-left-radius: var(--bloom-rounded);
+  border-bottom-right-radius: var(--modal-border-radius);
+  border-bottom-left-radius: var(--modal-border-radius);
   display: flex;
   flex-direction: row-reverse;
   gap: var(--bloom-s5);
-  justify-content: var(--footer-align);
+  justify-content: var(--footer-justify);
 }
 
 .modal__close {
-  @apply absolute;
+  position: absolute;
   top: 1.5rem;
   right: 2rem;
   cursor: pointer;
@@ -66,10 +69,10 @@
 
 // Loading container for modal
 .modal__loading {
-  @apply w-full;
-  @apply flex;
-  @apply text-center;
-  @apply items-center;
-  @apply justify-center;
-  min-height: 12rem;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--bloom-s48);
 }

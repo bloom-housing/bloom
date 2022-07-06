@@ -143,7 +143,7 @@ const ImageCard = (props: ImageCardProps) => {
           scrollable={true}
           onClose={() => setShowModal(!showModal)}
           className="image-card__overlay"
-          modalClassNames="image-card__overflow-modal"
+          modalClassNames="image-card__gallery-modal"
           actions={[
             <Button onClick={() => setShowModal(!showModal)}>
               {props.modalCloseLabel || "Close"}

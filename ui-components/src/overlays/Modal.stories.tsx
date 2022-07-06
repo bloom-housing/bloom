@@ -1,12 +1,21 @@
 import React, { useState } from "react"
+import { BADGES } from "../../.storybook/constants"
 import "./Modal.scss"
 import { Modal } from "./Modal"
 import { Button } from "../actions/Button"
 import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
+import ModalDocumentation from "./Modal.docs.mdx"
 
 export default {
-  title: "Overlays/Modal",
+  title: "Overlays/Modal 🚩",
+  id: "overlays/modal",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  parameters: {
+    docs: {
+      page: ModalDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 const noop = () => {

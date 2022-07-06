@@ -133,11 +133,11 @@
   }
 }
 
-.modal.image-card__overflow-modal {
+.modal.image-card__gallery-modal {
   --title-color: var(--bloom-color-gray-750);
   --background-color: transparent;
   --footer-background-color: transparent;
-  --footer-align: center;
+  --footer-justify: center;
   --modal-border: none;
   --modal-shadow: none;
 }
