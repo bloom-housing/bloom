@@ -37,15 +37,15 @@ export interface ImageCardProps {
   description?: string
   /** A link, used to wrap the entire component */
   href?: string
-  /** An image URL, used as the background image */
+  /** An image URL, used as the main image */
   imageUrl?: string
-  /** Alternatively, a number of images can be passed in */
+  /** Alternatively, a number of images can be passed in  */
   images?: ImageItem[]
   /** A list of status indicators, an ApplicationStatus component is rendered for each item at the bottom of the card */
   statuses?: StatusBarType[]
   /** A list of image tags, a Tag component is rendered for each over the image */
   tags?: ImageTag[]
-  /** The label text of the close button when the images modal is displayed */
+  /** The label text of the close button when the gallery modal is displayed */
   modalCloseLabel?: string
 }
 
