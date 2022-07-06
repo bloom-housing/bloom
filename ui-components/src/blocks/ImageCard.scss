@@ -37,7 +37,8 @@
         "Main Secondary-1";
     }
 
-    &.has-3-images, &.has-modal-overflow {
+    &.has-3-images,
+    &.has-modal-overflow {
       grid-template-areas:
         "Main Secondary-1"
         "Main Secondary-2";
