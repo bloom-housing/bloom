@@ -2,12 +2,18 @@ import React, { useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
-
+import { ListingStatusBar } from "../../../../src/listings/ListingStatusBar"
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts"
-import { t, AgPagination, AG_PER_PAGE_OPTIONS } from "@bloom-housing/ui-components"
+import {
+  t,
+  AgPagination,
+  AG_PER_PAGE_OPTIONS,
+  Breadcrumbs,
+  BreadcrumbLink,
+  NavigationHeader,
+} from "@bloom-housing/ui-components"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
-import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 
 const FlagsPage = () => {
   const router = useRouter()
@@ -47,15 +53,32 @@ const FlagsPage = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <ApplicationSecondaryNav
+      <NavigationHeader
         title={listingName}
         listingId={listingId}
-        flagsQty={data?.meta?.totalFlagged}
+        tabs={{
+          show: true,
+          flagsQty: data?.meta?.totalFlagged,
+          listingLabel: t("t.listingSingle"),
+          applicationsLabel: t("nav.applications"),
+          flagsLabel: t("nav.flags"),
+        }}
+        breadcrumbs={
+          <Breadcrumbs>
+            <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+            <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
+            <BreadcrumbLink href={`/listings/${listingId}/flags`} current>
+              {t("nav.flags")}
+            </BreadcrumbLink>
+          </Breadcrumbs>
+        }
       />
 
-      <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">
+      <ListingStatusBar status={listingDto?.status} />
+
+      <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto mt-2 pb-8 px-4 w-full">
         <div className="ag-theme-alpine ag-theme-bloom">
-          <div className="applications-table mt-5">
+          <div className="applications-table">
             <AgGridReact
               columnDefs={columns}
               rowData={data?.items}

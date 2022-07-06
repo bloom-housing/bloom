@@ -3,6 +3,7 @@
   --background-color: var(--bloom-color-primary-lighter);
   --border-color: var(--bloom-color-gray-450);
   --text-color: inherit;
+  --text-font-family: var(--bloom-font-serif);
   --inverse-background-color: var(--bloom-color-primary-darker);
   --inverse-border-color: var(--bloom-color-primary);
   --inverse-text-color: var(--bloom-color-white);
@@ -27,13 +28,25 @@
 }
 
 .page-header__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 0 var(--bloom-s5);
   margin: auto;
   max-width: var(--bloom-width-5xl);
+
+  @media (min-width: $screen-sm) {
+    align-items: flex-start;
+  }
+}
+
+.page-header__breadcrumbs {
+  margin-bottom: 10px;
 }
 
 .page-header__title {
   text-align: center;
+  font-family: var(--text-font-family);
 
   @media (min-width: $screen-md) {
     font-size: var(--title-font-size);
@@ -42,6 +55,6 @@
 }
 
 .page-header__lead {
-  margin: auto;
+  font-family: var(--text-font-family);
   max-width: var(--bloom-width-5xl);
 }
