@@ -1,9 +1,7 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitSeedType } from "./listings"
 import { CountyCode } from "../../../shared/types/county-code"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 
 export class ListingDefaultMissingAMI extends ListingDefaultSeed {
@@ -19,10 +17,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "Missing Household Ami Levels",
       jurisdiction: alamedaJurisdiction,
-    })
-
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
     })
 
     const missingAmiLevelsUnits: Array<UnitSeedType> = [
@@ -42,7 +36,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "1100",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -60,7 +53,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -78,7 +70,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -96,7 +87,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
       {
         amiChart: amiChart,
@@ -114,9 +104,13 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         number: null,
         priorityType: null,
         sqFeet: "750",
-        status: UnitStatus.occupied,
       },
     ]
+
+    const newListing = await this.listingRepository.save({
+      ...listing,
+      name: "Test: Default, Missing Household Levels in AMI",
+    })
 
     const unitsToBeCreated: Array<Omit<
       UnitCreateDto,
@@ -124,10 +118,8 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
     >> = missingAmiLevelsUnits.map((unit) => {
       return {
         ...unit,
-        property: {
-          id: property.id,
-        },
         amiChart,
+        listing: { id: newListing.id },
       }
     })
 
@@ -137,10 +129,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
 
     await this.unitsRepository.save(unitsToBeCreated)
 
-    return await this.listingRepository.save({
-      ...listing,
-      property: property,
-      name: "Test: Default, Missing Household Levels in AMI",
-    })
+    return newListing
   }
 }

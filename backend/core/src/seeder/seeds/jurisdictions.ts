@@ -13,6 +13,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     emailFromAddress: "Alameda: Housing Bay Area",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    enablePartnerSettings: true,
+    enableAccessibilityFeatures: false,
   },
   {
     name: "San Jose",
@@ -23,6 +25,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     emailFromAddress: "SJ: HousingBayArea.org",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    enablePartnerSettings: null,
+    enableAccessibilityFeatures: false,
   },
   {
     name: "San Mateo",
@@ -33,6 +37,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     emailFromAddress: "SMC: HousingBayArea.org",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    enablePartnerSettings: true,
+    enableAccessibilityFeatures: false,
   },
   {
     name: "Detroit",
@@ -43,6 +49,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     emailFromAddress: "Detroit Housing",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    enablePartnerSettings: false,
+    enableAccessibilityFeatures: false,
   },
 ]
 
@@ -50,6 +58,7 @@ export async function createJurisdictions(app: INestApplicationContext) {
   const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)
   // some jurisdictions are added via previous migrations
   const jurisdictions = await jurisdictionService.list()
+  console.log({ jurisdictions })
   const toInsert = defaultJurisdictions.filter(
     (rec) => jurisdictions.findIndex((item) => item.name === rec.name) === -1
   )

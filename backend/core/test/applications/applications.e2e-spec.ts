@@ -10,7 +10,7 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import { InputType } from "../../src/shared/types/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
@@ -23,6 +23,7 @@ import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import { EmailService } from "../../src/email/email.service"
 import { UserRepository } from "../../src/auth/repositories/user-repository"
+import { ListingRepository } from "../../src/listings/repositories/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -54,7 +55,13 @@ describe("Applications", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([Application, HouseholdMember, Listing, UserRepository]),
+        TypeOrmModule.forFeature([
+          Application,
+          HouseholdMember,
+          Listing,
+          UserRepository,
+          ListingRepository,
+        ]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 2,
@@ -450,10 +457,12 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
+
     await supertest(app.getHttpServer())
       .delete(`/applications/${createRes.body.id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+
     await supertest(app.getHttpServer())
       .get(`/applications/${createRes.body.id}`)
       .set(...setAuthorization(user1AccessToken))

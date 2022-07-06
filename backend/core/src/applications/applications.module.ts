@@ -17,10 +17,11 @@ import { CsvBuilder } from "./services/csv-builder.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { EmailModule } from "../email/email.module"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
+import { ListingRepository } from "../listings/repositories/listing.repository"
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Application, Applicant, Address, Listing]),
+    TypeOrmModule.forFeature([Application, Applicant, Address, Listing, ListingRepository]),
     AuthModule,
     ActivityLogModule,
     SharedModule,

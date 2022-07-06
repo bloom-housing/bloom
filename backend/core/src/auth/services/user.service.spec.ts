@@ -14,6 +14,8 @@ import { Application } from "../../applications/entities/application.entity"
 import { EmailService } from "../../email/email.service"
 import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
+import { UserRepository } from "../repositories/user-repository"
+import { ListingRepository } from "../../listings/repositories/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -22,15 +24,30 @@ declare const expect: jest.Expect
 
 describe("UserService", () => {
   let service: UserService
+  const mockUserRepoOrig = {
+    findOne: jest.fn(),
+    save: jest.fn(),
+  }
+
   const mockUserRepo = {
     findOne: jest.fn(),
     save: jest.fn(),
+    createQueryBuilder: jest.fn(),
     findByEmail: jest.fn(),
     findByResetToken: jest.fn(),
   }
+
   const mockApplicationRepo = {
     createQueryBuilder: jest.fn(),
     save: jest.fn(),
+  }
+
+  const mockListingRepository = {
+    findOne: jest.fn(),
+    save: jest.fn(),
+    createQueryBuilder: jest.fn(),
+    findByEmail: jest.fn(),
+    findByResetToken: jest.fn(),
   }
 
   beforeEach(async () => {
@@ -38,13 +55,22 @@ describe("UserService", () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        UserRepository,
         {
           provide: getRepositoryToken(User),
+          useValue: mockUserRepoOrig,
+        },
+        {
+          provide: getRepositoryToken(UserRepository),
           useValue: mockUserRepo,
         },
         {
           provide: getRepositoryToken(Application),
           useValue: mockApplicationRepo,
+        },
+        {
+          provide: getRepositoryToken(ListingRepository),
+          useValue: mockListingRepository,
         },
         {
           provide: EmailService,
@@ -94,7 +120,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
     })
@@ -111,7 +137,7 @@ describe("UserService", () => {
       }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(null)
       mockUserRepo.save = jest.fn().mockRejectedValue(new Error(USER_ERRORS.ERROR_SAVING.message))
-      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
       )
 
@@ -130,7 +156,7 @@ describe("UserService", () => {
         dob: new Date(),
       }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue({ ...user, confirmedAt: new Date() })
-      await expect(service._createUser(user, null)).rejects.toThrow(
+      await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 
@@ -167,7 +193,7 @@ describe("UserService", () => {
         dob: new Date(),
       }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
-      await expect(service._createUser(user, null)).rejects.toThrow(
+      await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 
@@ -198,13 +224,13 @@ describe("UserService", () => {
         firstName: "First",
         lastName: "Last",
         dob: new Date(),
-        roles: { isPartner: true },
         jurisdictions: [],
+        roles: {},
       }
 
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
       mockUserRepo.save = jest.fn().mockResolvedValue(user)
-      const savedUser = await service.invitePartnersPortalUser(user, null)
+      const savedUser = await service.invite(user)
       expect(savedUser).toBe(user)
 
       // Reset mockUserRepo.save
@@ -235,12 +261,11 @@ describe("UserService", () => {
         firstName: "First",
         lastName: "Last",
         dob: new Date(),
-        roles: { isPartner: true },
         jurisdictions: [],
       }
 
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(existingUser)
-      await expect(service._createUser(user, null)).rejects.toThrow(
+      await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 

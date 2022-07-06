@@ -22,9 +22,10 @@ import { Program } from "../../src/program/entities/program.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { makeTestListing } from "../utils/make-test-listing"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -50,6 +51,7 @@ describe("Listings", () => {
         TypeOrmModule.forFeature([Program]),
       ],
     }).compile()
+
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
@@ -81,13 +83,23 @@ describe("Listings", () => {
   it("should return the last page of paginated listings", async () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
-    const queryParams = {
-      limit: 15,
+    // query to get max number of listings
+    let queryParams = {
+      limit: 1,
+      page: 1,
+      view: "base",
+    }
+    let query = qs.stringify(queryParams)
+    let res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    const totalItems = res.body.meta.totalItems
+
+    queryParams = {
+      limit: totalItems - 1,
       page: 2,
       view: "base",
     }
-    const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    query = qs.stringify(queryParams)
+    res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toEqual(1)
   })
 
@@ -288,9 +300,7 @@ describe("Listings", () => {
   })
 
   it("defaults to sorting listings by applicationDueDate", async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/listings?limit=all&order=ASC`)
-      .expect(200)
+    const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
     const listings = res.body.items
 
     // The Coliseum seed has the soonest applicationDueDate (1 day in the future)
@@ -316,7 +326,7 @@ describe("Listings", () => {
 
   it("sorts listings by most recently updated when that orderBy param is set", async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/listings?orderBy=mostRecentlyUpdated&limit=all`)
+      .get(`/listings?orderBy[0]=mostRecentlyUpdated&orderDir[0]=DESC&limit=all`)
       .expect(200)
     for (let i = 0; i < res.body.items.length - 1; ++i) {
       const currentUpdatedAt = new Date(res.body.items[i].updatedAt)
@@ -334,7 +344,7 @@ describe("Listings", () => {
   it("sorts results within a page, and across sequential pages", async () => {
     // Get the first page of 5 results.
     const firstPage = await supertest(app.getHttpServer())
-      .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=1`)
+      .get(`/listings?orderBy[0]=mostRecentlyUpdated&orderDir[0]=DESC&limit=5&page=1`)
       .expect(200)
 
     // Verify that listings on the first page are ordered from most to least recently updated.
@@ -350,7 +360,7 @@ describe("Listings", () => {
 
     // Get the second page of 5 results
     const secondPage = await supertest(app.getHttpServer())
-      .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=2`)
+      .get(`/listings?orderBy[0]=mostRecentlyUpdated&orderDir[0]=DESC&limit=5&page=2`)
       .expect(200)
 
     // Verify that each of the listings on the second page was less recently updated than the last
@@ -400,6 +410,36 @@ describe("Listings", () => {
       .get(`/listings/${putResponse.body.id}`)
       .expect(200)
     expect(listingResponse2.body.listingPrograms.length).toBe(0)
+  })
+
+  it("should find listing by search", async () => {
+    const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+    const newListingCreateDto = makeTestListing(anyJurisdiction.id)
+
+    const newListingName = "random-name"
+    newListingCreateDto.name = newListingName
+
+    let listingsSearchResponse = await supertest(app.getHttpServer())
+      .get(`/listings?search=random`)
+      .expect(200)
+
+    expect(listingsSearchResponse.body.items.length).toBe(0)
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .post(`/listings`)
+      .send(newListingCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+    expect(listingResponse.body.name).toBe(newListingName)
+
+    listingsSearchResponse = await supertest(app.getHttpServer()).get(`/listings`).expect(200)
+    expect(listingsSearchResponse.body.items.length).toBeGreaterThan(1)
+
+    listingsSearchResponse = await supertest(app.getHttpServer())
+      .get(`/listings?search=random`)
+      .expect(200)
+
+    expect(listingsSearchResponse.body.items.length).toBe(1)
+    expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
   })
 
   afterEach(() => {

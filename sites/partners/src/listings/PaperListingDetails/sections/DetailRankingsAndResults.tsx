@@ -4,7 +4,7 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { getLotteryEvent } from "../../../../lib/helpers"
+import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
 
@@ -67,12 +67,6 @@ const DetailRankingsAndResults = () => {
       </GridSection>
       {listing.isWaitlistOpen && (
         <GridSection columns={3}>
-          <ViewItem id="waitlistMaxSize" label={t("listings.waitlist.maxSize")}>
-            {getDetailFieldNumber(listing.waitlistMaxSize)}
-          </ViewItem>
-          <ViewItem id="waitlistCurrentSize" label={t("listings.waitlist.currentSize")}>
-            {getDetailFieldNumber(listing.waitlistCurrentSize)}
-          </ViewItem>
           <ViewItem id="waitlistOpenSpots" label={t("listings.waitlist.openSize")}>
             {getDetailFieldNumber(listing.waitlistOpenSpots)}
           </ViewItem>

@@ -1,14 +1,14 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
-import { Icon, IconSize, IconTypes } from "../icons/Icon"
+import { Icon, IconSize, UniversalIconType } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
   type?: "button" | "submit" | "reset"
   children: React.ReactNode
   onClick?: (e: React.MouseEvent) => void
-  icon?: IconTypes
+  icon?: UniversalIconType
   iconPlacement?: "left" | "right"
   iconSize?: IconSize
   // TODO: inlineIcon is deprecated
@@ -19,6 +19,7 @@ export interface ButtonProps extends AppearanceProps {
   className?: string
   disabled?: boolean
   loading?: boolean
+  ariaHidden?: boolean
   ariaLabel?: string
   dataTestId?: string
   "data-test-id"?: string
@@ -75,6 +76,7 @@ const Button = (props: ButtonProps) => {
       className={buttonClasses.join(" ")}
       onClick={props.onClick}
       disabled={props.disabled || props.loading}
+      aria-hidden={props.ariaHidden}
       aria-label={props.ariaLabel}
       data-test-id={props.dataTestId || props["data-test-id"]}
     >

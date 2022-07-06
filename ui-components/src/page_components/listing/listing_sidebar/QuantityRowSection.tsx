@@ -17,6 +17,7 @@ export interface QuantityRowSectionProps {
 
 const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) => {
   const getRow = (row: QuantityRow) => {
+    if (row.amount === null) return null
     return (
       <li
         key={row.text}

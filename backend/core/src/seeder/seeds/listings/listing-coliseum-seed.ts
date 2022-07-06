@@ -1,4 +1,4 @@
-import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { ListingSeedType, UnitSeedType } from "./listings"
 import {
   getDate,
   getDefaultAssets,
@@ -14,34 +14,9 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
-
-const coliseumProperty: PropertySeedType = {
-  accessibility:
-    "Fifteen (15) units are designed for residents with mobility impairments per HUD/U.F.A.S. guidelines with one (1) of these units further designed for residents with auditory or visual impairments.  There are two (2) additional units with features for those with auditory or visual impairments.  All the other units are adaptable. Accessible features in the property include: * 36” wide entries and doorways * Kitchens built to the accessibility standards of the California Building Code, including appliance controls and switch outlets within reach, and work surfaces and storage at accessible heights * Bathrooms built to the accessibility standards of the California Building Code, including grab bars, flexible shower spray hose, switch outlets within reach, and in-tub seats. * Closet rods and shelves at mobility height. * Window blinds/shades able to be used without grasping or twisting * Units for the Hearing & Visually Impaired will have a horn & strobe for fire alarm and a flashing light doorbell. The 44 non-ADA units are built to Adaptable standards.",
-  amenities: "Community room, bike parking, courtyard off the community room, 2nd floor courtyard.",
-  buildingAddress: {
-    county: "Alameda",
-    city: "Oakland",
-    street: "3300 Hawley Street",
-    zipCode: "94621",
-    state: "CA",
-    latitude: 37.7549632,
-    longitude: -122.1968792,
-  },
-  buildingTotalUnits: 58,
-  developer: "Resources for Community Development",
-  neighborhood: "Coliseum",
-  petPolicy: "Permitted",
-  servicesOffered:
-    "Residential supportive services are provided to all residents on a volunteer basis.",
-  smokingPolicy: "No Smoking",
-  unitAmenities: null,
-  unitsAvailable: 46,
-  yearBuilt: 2021,
-}
+import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 
 const coliseumListing: ListingSeedType = {
   jurisdictionName: "Alameda",
@@ -66,6 +41,27 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  accessibility:
+    "Fifteen (15) units are designed for residents with mobility impairments per HUD/U.F.A.S. guidelines with one (1) of these units further designed for residents with auditory or visual impairments.  There are two (2) additional units with features for those with auditory or visual impairments.  All the other units are adaptable. Accessible features in the property include: * 36” wide entries and doorways * Kitchens built to the accessibility standards of the California Building Code, including appliance controls and switch outlets within reach, and work surfaces and storage at accessible heights * Bathrooms built to the accessibility standards of the California Building Code, including grab bars, flexible shower spray hose, switch outlets within reach, and in-tub seats. * Closet rods and shelves at mobility height. * Window blinds/shades able to be used without grasping or twisting * Units for the Hearing & Visually Impaired will have a horn & strobe for fire alarm and a flashing light doorbell. The 44 non-ADA units are built to Adaptable standards.",
+  amenities: "Community room, bike parking, courtyard off the community room, 2nd floor courtyard.",
+  buildingAddress: {
+    county: "Alameda",
+    city: "Oakland",
+    street: "3300 Hawley Street",
+    zipCode: "94621",
+    state: "CA",
+    latitude: 37.7549632,
+    longitude: -122.1968792,
+  },
+  buildingTotalUnits: 58,
+  developer: "Resources for Community Development",
+  neighborhood: "Coliseum",
+  petPolicy: "Permitted",
+  servicesOffered:
+    "Residential supportive services are provided to all residents on a volunteer basis.",
+  smokingPolicy: "No Smoking",
+  unitAmenities: null,
+  yearBuilt: 2021,
   images: [],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
@@ -111,6 +107,7 @@ const coliseumListing: ListingSeedType = {
   waitlistOpenSpots: 3000,
   isWaitlistOpen: true,
   whatToExpect: null,
+  listingAvailability: ListingAvailability.availableUnits,
 }
 
 export class ListingColiseumSeed extends ListingDefaultSeed {
@@ -145,10 +142,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...coliseumProperty,
-    })
-
     const coliseumUnits: Array<UnitSeedType> = [
       {
         amiChart: amiChart,
@@ -166,7 +159,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "486",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -184,7 +176,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "491",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -202,7 +193,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "491",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -220,7 +210,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 1,
         number: null,
         sqFeet: "491",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -238,7 +227,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -256,7 +244,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -274,7 +261,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -292,7 +278,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -310,7 +295,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -328,7 +312,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -346,7 +329,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -364,7 +346,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -382,7 +363,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -400,7 +380,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "785",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -418,7 +397,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -436,7 +414,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -454,7 +431,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -472,7 +448,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -490,7 +465,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -508,7 +482,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -526,7 +499,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -544,7 +516,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -562,7 +533,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -580,7 +550,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -598,7 +567,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -616,7 +584,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -634,7 +601,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 2,
         number: null,
         sqFeet: "748",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -652,7 +618,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -670,7 +635,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1080",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -688,7 +652,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -706,7 +669,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -724,7 +686,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -742,7 +703,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -760,7 +720,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -778,7 +737,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -796,7 +754,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -814,7 +771,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -832,7 +788,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -850,7 +805,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -868,7 +822,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -886,7 +839,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -904,7 +856,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -922,7 +873,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -940,7 +890,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -958,7 +907,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
       {
         amiChart: amiChart,
@@ -976,55 +924,14 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         numBedrooms: 3,
         number: null,
         sqFeet: "1029",
-        status: UnitStatus.available,
       },
     ]
-
-    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = coliseumUnits.map(
-      (unit) => {
-        return {
-          ...unit,
-          property: {
-            id: property.id,
-          },
-          amiChart,
-        }
-      }
-    )
-
-    // Assign priorityTypes
-    for (let i = 0; i < 3; i++) {
-      unitsToBeCreated[i].priorityType = priorityTypeMobilityAndMobilityWithHearingAndVisual
-    }
-    for (let i = 3; i < 14; i++) {
-      unitsToBeCreated[i].priorityType = priorityTypeMobilityAndHearingWithVisual
-    }
-    for (let i = 14; i < 27; i++) {
-      unitsToBeCreated[i].priorityType = priorityTypeMobilityAndHearing
-    }
-    for (let i = 27; i < 46; i++) {
-      unitsToBeCreated[i].priorityType = priorityMobility
-    }
-
-    // Assign unit types
-    for (let i = 0; i < 4; i++) {
-      unitsToBeCreated[i].unitType = unitTypeOneBdrm
-    }
-    for (let i = 4; i < 27; i++) {
-      unitsToBeCreated[i].unitType = unitTypeTwoBdrm
-    }
-    for (let i = 27; i < 46; i++) {
-      unitsToBeCreated[i].unitType = unitTypeThreeBdrm
-    }
-
-    await this.unitsRepository.save(unitsToBeCreated)
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...coliseumListing,
-      property: property,
       assets: getDefaultAssets(),
       listingPreferences: [
         {
@@ -1063,6 +970,45 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       ],
     }
 
-    return await this.listingRepository.save(listingCreateDto)
+    const listing = await this.listingRepository.save(listingCreateDto)
+
+    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = coliseumUnits.map(
+      (unit) => {
+        return {
+          ...unit,
+          amiChart,
+          listing: { id: listing.id },
+        }
+      }
+    )
+
+    // Assign priorityTypes
+    for (let i = 0; i < 3; i++) {
+      unitsToBeCreated[i].priorityType = priorityTypeMobilityAndMobilityWithHearingAndVisual
+    }
+    for (let i = 3; i < 14; i++) {
+      unitsToBeCreated[i].priorityType = priorityTypeMobilityAndHearingWithVisual
+    }
+    for (let i = 14; i < 27; i++) {
+      unitsToBeCreated[i].priorityType = priorityTypeMobilityAndHearing
+    }
+    for (let i = 27; i < 46; i++) {
+      unitsToBeCreated[i].priorityType = priorityMobility
+    }
+
+    // Assign unit types
+    for (let i = 0; i < 4; i++) {
+      unitsToBeCreated[i].unitType = unitTypeOneBdrm
+    }
+    for (let i = 4; i < 27; i++) {
+      unitsToBeCreated[i].unitType = unitTypeTwoBdrm
+    }
+    for (let i = 27; i < 46; i++) {
+      unitsToBeCreated[i].unitType = unitTypeThreeBdrm
+    }
+
+    await this.unitsRepository.save(unitsToBeCreated)
+
+    return listing
   }
 }

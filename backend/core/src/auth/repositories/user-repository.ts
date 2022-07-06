@@ -4,12 +4,17 @@ import { User } from "../entities/user.entity"
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   public getQb(): SelectQueryBuilder<User> {
-    return this.createQueryBuilder()
-      .from(User, "user")
+    return this.createQueryBuilder("user")
       .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
       .leftJoin("user.jurisdictions", "jurisdictions")
       .leftJoin("user.roles", "userRoles")
-      .select(["user", "jurisdictions", "userRoles", "leasingAgentInListings.id"])
+      .select([
+        "user",
+        "jurisdictions.id",
+        "userRoles",
+        "leasingAgentInListings.id",
+        "leasingAgentInListings.name",
+      ])
   }
 
   public async findByEmail(email: string) {

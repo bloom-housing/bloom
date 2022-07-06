@@ -30,6 +30,7 @@
 
   .footer-copyright {
     width: auto;
+    flex-shrink: 0;
     @screen lg {
       @apply text-left;
     }
@@ -45,7 +46,7 @@
       display: flex;
       align-items: flex-start;
       flex-wrap: wrap;
-      justify-content: end;
+      justify-content: flex-end;
     }
   }
 }

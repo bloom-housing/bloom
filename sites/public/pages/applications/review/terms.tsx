@@ -9,7 +9,6 @@ import {
   Button,
   FormCard,
   t,
-  AuthContext,
   FieldGroup,
   Form,
   AlertBox,
@@ -17,7 +16,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
@@ -86,7 +85,12 @@ const ApplicationTerms = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={listing?.name}>
+      <FormCard
+        header={{
+          isVisible: true,
+          title: listing?.name,
+        }}
+      >
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -107,8 +111,16 @@ const ApplicationTerms = () => {
 
         <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
+            {listing?.applicationDueDate && (
+              <Markdown options={{ disableParsingRawHTML: false }}>
+                {t("application.review.terms.textSubmissionDate", {
+                  applicationDueDate: applicationDueDate,
+                })}
+              </Markdown>
+            )}
+
             <Markdown options={{ disableParsingRawHTML: false }}>
-              {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
+              {t("application.review.terms.text")}
             </Markdown>
 
             <div className="mt-4">

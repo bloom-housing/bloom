@@ -1,7 +1,14 @@
 import { PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { Expose, Type } from "class-transformer"
 import { ApiProperty, getSchemaPath } from "@nestjs/swagger"
-import { ArrayMaxSize, IsArray, IsOptional, ValidateNested } from "class-validator"
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsOptional,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserFilterParams } from "./user-filter-params"
 
@@ -22,4 +29,15 @@ export class UserListQueryParams extends PaginationAllowsAllQueryParams {
   @Type(() => UserFilterParams)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   filter?: UserFilterParams[]
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "search",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  search?: string
 }

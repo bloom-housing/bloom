@@ -33,13 +33,14 @@ import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-v
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
+import { ListingsApiExtraModels } from "./types/listings-api-extra-models"
 
 @Controller("listings")
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
-@ApiExtraModels(ListingFilterParams)
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@ApiExtraModels(ListingFilterParams, ListingsApiExtraModels)
+@UseGuards(OptionalAuthGuard)
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {

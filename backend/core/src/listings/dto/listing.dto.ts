@@ -1,7 +1,6 @@
 import { Listing } from "../entities/listing.entity"
-import { Expose, plainToClass, Transform, Type } from "class-transformer"
+import { Expose, Transform, Type } from "class-transformer"
 import { IsDefined, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import dayjs from "dayjs"
 import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -15,10 +14,10 @@ import { JurisdictionSlimDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import { ListingFeaturesDto } from "./listing-features.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { ListingImageDto } from "./listing-image.dto"
-import { IncomePeriod } from "../../applications/types/income-period-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -34,10 +33,12 @@ export class ListingDto extends OmitType(Listing, [
   "leasingAgentAddress",
   "listingPreferences",
   "listingPrograms",
-  "property",
   "reservedCommunityType",
   "result",
   "unitsSummary",
+  "features",
+  "units",
+  "buildingAddress",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -133,167 +134,77 @@ export class ListingDto extends OmitType(Listing, [
 
   @Expose()
   @Type(() => UnitDto)
-  @Transform(
-    (value, obj: Listing) => {
-      return plainToClass(UnitDto, obj.property?.units)
-    },
-    { toClassOnly: true }
-  )
   units: UnitDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.accessibility
-    },
-    { toClassOnly: true }
-  )
   accessibility?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.amenities
-    },
-    { toClassOnly: true }
-  )
   amenities?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  @Transform(
-    (value, obj: Listing) => {
-      return plainToClass(AddressDto, obj.property.buildingAddress)
-    },
-    { toClassOnly: true }
-  )
   buildingAddress: AddressDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.buildingTotalUnits
-    },
-    { toClassOnly: true }
-  )
   buildingTotalUnits?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.developer
-    },
-    { toClassOnly: true }
-  )
   developer?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.householdSizeMax
-    },
-    { toClassOnly: true }
-  )
   householdSizeMax?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.householdSizeMin
-    },
-    { toClassOnly: true }
-  )
   householdSizeMin?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.neighborhood
-    },
-    { toClassOnly: true }
-  )
   neighborhood?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.petPolicy
-    },
-    { toClassOnly: true }
-  )
   petPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.smokingPolicy
-    },
-    { toClassOnly: true }
-  )
   smokingPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.unitsAvailable
-    },
-    { toClassOnly: true }
-  )
   unitsAvailable?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.unitAmenities
-    },
-    { toClassOnly: true }
-  )
   unitAmenities?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.servicesOffered
-    },
-    { toClassOnly: true }
-  )
   servicesOffered?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.yearBuilt
-    },
-    { toClassOnly: true }
-  )
   yearBuilt?: number | null
 
   @Expose()
@@ -323,4 +234,9 @@ export class ListingDto extends OmitType(Listing, [
     { toClassOnly: true }
   )
   countyCode?: string
+
+  @Expose()
+  @Type(() => ListingFeaturesDto)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  features?: ListingFeaturesDto
 }

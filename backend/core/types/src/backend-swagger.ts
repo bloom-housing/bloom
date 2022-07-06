@@ -1005,6 +1005,8 @@ export class UserService {
       limit?: number | "all"
       /**  */
       filter?: UserFilterParams[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -1012,7 +1014,12 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
       let data = null
 
       configs.data = data
@@ -1207,9 +1214,11 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
-      orderBy?: OrderByFieldsEnum
+      orderBy?: any | null[]
       /**  */
-      order?: string
+      orderDir?: any | null[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1223,7 +1232,8 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
-        order: params["order"],
+        orderDir: params["orderDir"],
+        search: params["search"],
       }
       let data = null
 
@@ -1637,214 +1647,6 @@ export class ProgramsService {
     return new Promise((resolve, reject) => {
       let url = basePath + "/programs/{programId}"
       url = url.replace("{programId}", params["programId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class PropertiesService {
-  /**
-   * List properties
-   */
-  list(options: IRequestOptions = {}): Promise<Property[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create property
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: PropertyCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Property> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update property
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: PropertyUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Property> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties/{propertyId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get property by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      propertyId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Property> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties/{propertyId}"
-      url = url.replace("{propertyId}", params["propertyId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete property by id
-   */
-  delete(
-    params: {
-      /**  */
-      propertyId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties/{propertyId}"
-      url = url.replace("{propertyId}", params["propertyId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class PropertyGroupsService {
-  /**
-   * List propertyGroups
-   */
-  list(options: IRequestOptions = {}): Promise<PropertyGroup[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create propertyGroup
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: PropertyGroupCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PropertyGroup> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update propertyGroup
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: PropertyGroupUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PropertyGroup> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups/{propertyGroupId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get propertyGroup by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      propertyGroupId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PropertyGroup> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups/{propertyGroupId}"
-      url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete propertyGroup by id
-   */
-  delete(
-    params: {
-      /**  */
-      propertyGroupId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups/{propertyGroupId}"
-      url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -3980,6 +3782,9 @@ export interface UserRoles {
   isAdmin?: boolean
 
   /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -4019,6 +3824,12 @@ export interface Jurisdiction {
 
   /**  */
   rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
 }
 
 export interface User {
@@ -4272,9 +4083,6 @@ export interface UserUpdate {
   currentPassword?: string
 
   /**  */
-  jurisdictions: Id[]
-
-  /**  */
   leasingAgentInListings?: Id[]
 
   /**  */
@@ -4282,6 +4090,9 @@ export interface UserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -4335,6 +4146,9 @@ export interface UserRolesCreate {
   isAdmin?: boolean
 
   /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -4343,13 +4157,13 @@ export interface UserInvite {
   language?: Language
 
   /**  */
-  roles: CombinedRolesTypes
-
-  /**  */
   jurisdictions: Id[]
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  roles?: UserRolesCreate
 
   /**  */
   confirmedAt?: Date
@@ -4449,6 +4263,12 @@ export interface JurisdictionCreate {
   rentalAssistanceDefault: string
 
   /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4487,6 +4307,12 @@ export interface JurisdictionUpdate {
   rentalAssistanceDefault: string
 
   /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4517,6 +4343,14 @@ export interface ListingFilterParams {
 
   /**  */
   jurisdiction?: string
+}
+
+export interface ListingsApiExtraModels {
+  /**  */
+  orderBy?: OrderByFieldsEnum[]
+
+  /**  */
+  orderDir?: OrderParam[]
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4861,9 +4695,6 @@ export interface UnitAmiChartOverride {
 
 export interface Unit {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -4986,6 +4817,53 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ListingFeatures {
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  mobility?: boolean
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -5004,6 +4882,9 @@ export interface Listing {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
+
+  /**  */
+  listingAvailability?: ListingAvailability
 
   /**  */
   showWaitlist: boolean
@@ -5106,6 +4987,9 @@ export interface Listing {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 
   /**  */
   id: string
@@ -5298,9 +5182,6 @@ export interface UnitAmiChartOverrideCreate {
 
 export interface UnitCreate {
   /**  */
-  status: UnitStatus
-
-  /**  */
   amiChart?: Id
 
   /**  */
@@ -5444,6 +5325,9 @@ export interface ListingCreate {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
+  listingAvailability?: ListingAvailability
+
+  /**  */
   applicationMethods: ApplicationMethodCreate[]
 
   /**  */
@@ -5474,46 +5358,7 @@ export interface ListingCreate {
   units: UnitCreate[]
 
   /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
   buildingAddress?: CombinedBuildingAddressTypes
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
 
   /**  */
   jurisdiction: Id
@@ -5550,6 +5395,45 @@ export interface ListingCreate {
 
   /**  */
   assets: AssetCreate[]
+
+  /**  */
+  accessibility?: string
+
+  /**  */
+  amenities?: string
+
+  /**  */
+  buildingTotalUnits?: number
+
+  /**  */
+  developer?: string
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  smokingPolicy?: string
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  servicesOffered?: string
+
+  /**  */
+  yearBuilt?: number
 
   /**  */
   applicationDueDate?: Date
@@ -5664,6 +5548,9 @@ export interface ListingCreate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface ListingEventUpdate {
@@ -5713,9 +5600,6 @@ export interface UnitAmiChartOverrideUpdate {
 }
 
 export interface UnitUpdate {
-  /**  */
-  status: UnitStatus
-
   /**  */
   id?: string
 
@@ -5856,6 +5740,9 @@ export interface ListingUpdate {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
+  listingAvailability?: ListingAvailability
+
+  /**  */
   id?: string
 
   /**  */
@@ -5895,46 +5782,7 @@ export interface ListingUpdate {
   units: UnitUpdate[]
 
   /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
   buildingAddress?: CombinedBuildingAddressTypes
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
 
   /**  */
   jurisdiction: Id
@@ -5971,6 +5819,45 @@ export interface ListingUpdate {
 
   /**  */
   assets: AssetCreate[]
+
+  /**  */
+  accessibility?: string
+
+  /**  */
+  amenities?: string
+
+  /**  */
+  buildingTotalUnits?: number
+
+  /**  */
+  developer?: string
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  smokingPolicy?: string
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  servicesOffered?: string
+
+  /**  */
+  yearBuilt?: number
 
   /**  */
   applicationDueDate?: Date
@@ -6085,6 +5972,9 @@ export interface ListingUpdate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface PreferencesFilterParams {
@@ -6166,201 +6056,6 @@ export interface ProgramUpdate {
 
   /**  */
   formMetadata?: FormMetadata
-
-  /**  */
-  id: string
-}
-
-export interface Property {
-  /**  */
-  units: Unit[]
-
-  /**  */
-  buildingAddress: Address
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
-}
-
-export interface PropertyCreate {
-  /**  */
-  buildingAddress: AddressUpdate
-
-  /**  */
-  units: UnitCreate[]
-
-  /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
-}
-
-export interface PropertyUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  buildingAddress: AddressUpdate
-
-  /**  */
-  units: UnitUpdate[]
-
-  /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
-}
-
-export interface PropertyGroup {
-  /**  */
-  properties: Id[]
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-}
-
-export interface PropertyGroupCreate {
-  /**  */
-  name: string
-
-  /**  */
-  properties: Id[]
-}
-
-export interface PropertyGroupUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  properties: Id[]
 
   /**  */
   id: string
@@ -6566,7 +6261,7 @@ export enum EnumJurisdictionLanguages {
   "zh" = "zh",
   "tl" = "tl",
 }
-export type CombinedRolesTypes = UserRolesCreate
+export type CombinedRolesTypes = UserRoles
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -6611,6 +6306,11 @@ export enum OrderByFieldsEnum {
   "marketingType" = "marketingType",
 }
 
+export enum OrderParam {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
+}
+
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
 }
@@ -6626,6 +6326,11 @@ export enum ListingReviewOrder {
   "firstComeFirstServe" = "firstComeFirstServe",
 }
 
+export enum ListingAvailability {
+  "availableUnits" = "availableUnits",
+  "openWaitlist" = "openWaitlist",
+}
+
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
@@ -6635,13 +6340,6 @@ export enum ListingEventType {
 export enum FormMetaDataType {
   "radio" = "radio",
   "checkbox" = "checkbox",
-}
-
-export enum UnitStatus {
-  "unknown" = "unknown",
-  "available" = "available",
-  "occupied" = "occupied",
-  "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate

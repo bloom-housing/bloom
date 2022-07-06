@@ -4,20 +4,19 @@ import {
   ListingSeedType,
   PreferenceSeedType,
   ProgramSeedType,
-  PropertySeedType,
   UnitSeedType,
 } from "./listings"
 import { defaultAmiChart } from "../ami-charts/default-ami-chart"
 import { ListingEventCreateDto } from "../../../listings/dto/listing-event.dto"
 import { ListingEventType } from "../../../listings/types/listing-event-type-enum"
 import { AmiChart } from "../../../ami-charts/entities/ami-chart.entity"
-import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UserCreateDto } from "../../../auth/dto/user-create.dto"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
 import { FormMetaDataType } from "../../../applications/types/form-metadata/form-metadata"
+import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
@@ -70,33 +69,6 @@ export const defaultAssets: Array<AssetDtoSeedType> = [
       "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
   },
 ]
-// Properties
-export function getDefaultProperty() {
-  return JSON.parse(JSON.stringify(defaultProperty))
-}
-
-export const defaultProperty: PropertySeedType = {
-  accessibility: "Custom accessibility text",
-  amenities: "Custom property amenities text",
-  buildingAddress: {
-    city: "San Francisco",
-    state: "CA",
-    street: "548 Market Street",
-    street2: "Suite #59930",
-    zipCode: "94104",
-    latitude: 37.789673,
-    longitude: -122.40151,
-  },
-  buildingTotalUnits: 100,
-  developer: "Developer",
-  neighborhood: "Custom neighborhood text",
-  petPolicy: "Custom pet text",
-  servicesOffered: "Custom services offered text",
-  smokingPolicy: "Custom smoking text",
-  unitAmenities: "Custom unit amenities text",
-  unitsAvailable: 2,
-  yearBuilt: 2021,
-}
 
 // Unit Sets
 export function getDefaultUnits() {
@@ -120,7 +92,6 @@ export const defaultUnits: Array<UnitSeedType> = [
     numBedrooms: 1,
     number: null,
     sqFeet: "635",
-    status: UnitStatus.available,
   },
   {
     amiChart: defaultAmiChart as AmiChart,
@@ -138,7 +109,6 @@ export const defaultUnits: Array<UnitSeedType> = [
     numBedrooms: 2,
     number: null,
     sqFeet: "748",
-    status: UnitStatus.available,
   },
 ]
 
@@ -173,6 +143,26 @@ export function getDefaultListing() {
 export const defaultListing: ListingSeedType = {
   jurisdictionName: "Alameda",
   countyCode: CountyCode.alameda,
+  accessibility: "Custom accessibility text",
+  amenities: "Custom property amenities text",
+  buildingAddress: {
+    city: "San Francisco",
+    state: "CA",
+    street: "548 Market Street",
+    street2: "Suite #59930",
+    zipCode: "94104",
+    latitude: 37.789673,
+    longitude: -122.40151,
+  },
+  buildingTotalUnits: 100,
+  developer: "Developer",
+  neighborhood: "Custom neighborhood text",
+  petPolicy: "Custom pet text",
+  servicesOffered: "Custom services offered text",
+  smokingPolicy: "Custom smoking text",
+  unitAmenities: "Custom unit amenities text",
+  unitsAvailable: 2,
+  yearBuilt: 2021,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
@@ -233,6 +223,7 @@ export const defaultListing: ListingSeedType = {
   isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: "Custom what to expect text",
+  listingAvailability: ListingAvailability.availableUnits,
 }
 
 // Preferences

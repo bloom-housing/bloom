@@ -1,22 +1,19 @@
-import React, { useMemo, useContext, useState } from "react"
+import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import {
   PageHeader,
   t,
-  AuthContext,
   Button,
   LocalizedLink,
-  AgPagination,
-  AG_PER_PAGE_OPTIONS,
+  AgTable,
+  useAgTable,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
-import { AgGridReact } from "ag-grid-react"
-import { GridOptions } from "ag-grid-community"
-
+import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
-
 class formatLinkCell {
   link: HTMLAnchorElement
 
@@ -29,6 +26,21 @@ class formatLinkCell {
 
   getGui() {
     return this.link
+  }
+}
+
+class formatWaitlistStatus {
+  text: HTMLSpanElement
+
+  init({ data }) {
+    const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
+
+    this.text = document.createElement("span")
+    this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+  }
+
+  getGui() {
+    return this.text
   }
 }
 
@@ -48,46 +60,26 @@ class ListingsLink extends formatLinkCell {
 }
 
 export default function ListingsList() {
+  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+
   const { profile } = useContext(AuthContext)
   const isAdmin = profile.roles?.isAdmin || false
 
-  /* Pagination */
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const tableOptions = useAgTable()
 
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
-
-  class formatWaitlistStatus {
-    text: HTMLSpanElement
-
-    init({ data }) {
-      const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
-
-      this.text = document.createElement("span")
-      this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
-    }
-
-    getGui() {
-      return this.text
-    }
-  }
-
-  const gridOptions: GridOptions = {
-    components: {
-      ApplicationsLink,
-      formatLinkCell,
-      formatWaitlistStatus,
-      ListingsLink,
-    },
+  const gridComponents = {
+    ApplicationsLink,
+    formatLinkCell,
+    formatWaitlistStatus,
+    ListingsLink,
   }
 
   const columnDefs = useMemo(() => {
-    const columns = [
+    const columns: (ColDef | ColGroupDef)[] = [
       {
         headerName: t("listings.listingName"),
         field: "name",
-        sortable: false,
+        sortable: true,
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
@@ -129,31 +121,49 @@ export default function ListingsList() {
     return columns
   }, [])
 
-  const { listingDtos, listingsLoading, listingsError } = useListingsData({
-    page: currentPage,
-    limit: itemsPerPage,
+  const { listingDtos, listingsLoading } = useListingsData({
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
+    search: tableOptions.filter.filterValue,
     userId: !isAdmin ? profile?.id : undefined,
+    sort: tableOptions.sort.sortOptions,
   })
-
-  if (listingsLoading) return "Loading..."
-  if (listingsError) return "An error has occurred."
 
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <MetaTags
-        title={t("nav.siteTitlePartners")}
-        image={metaImage}
-        description={metaDescription}
-      />
+      <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <PageHeader title={t("nav.listings")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <div className="ag-theme-alpine ag-theme-bloom">
-            <div className="flex justify-between">
-              <div className="w-56"></div>
+          <AgTable
+            id="listings-table"
+            pagination={{
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
+            }}
+            config={{
+              gridComponents,
+              columns: columnDefs,
+              totalItemsLabel: t("listings.totalListings"),
+            }}
+            data={{
+              items: listingDtos?.items,
+              loading: listingsLoading,
+              totalItems: listingDtos?.meta.totalItems,
+              totalPages: listingDtos?.meta.totalPages,
+            }}
+            search={{
+              setSearch: tableOptions.filter.setFilterValue,
+            }}
+            sort={{
+              setSort: tableOptions.sort.setSortOptions,
+            }}
+            headerContent={
               <div className="flex-row">
                 {isAdmin && (
                   <LocalizedLink href={`/listings/add`}>
@@ -163,33 +173,8 @@ export default function ListingsList() {
                   </LocalizedLink>
                 )}
               </div>
-            </div>
-
-            <div className="applications-table mt-5">
-              <AgGridReact
-                gridOptions={gridOptions}
-                columnDefs={columnDefs}
-                rowData={listingDtos.items}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressPaginationPanel={true}
-                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
-
-              <AgPagination
-                totalItems={listingDtos.meta.totalItems}
-                totalPages={listingDtos.meta.totalPages}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                quantityLabel={t("listings.totalListings")}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
-                onPerPageChange={() => setCurrentPage(1)}
-              />
-            </div>
-          </div>
+            }
+          />
         </article>
       </section>
     </Layout>

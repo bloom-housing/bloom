@@ -8,6 +8,7 @@ ignore = "/bin/false"
 NODE_VERSION = "14.17.6"
 YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
+NODE_OPTIONS = "--max_old_space_size=4096"
 
 # reminder: URLs and fragments should *not* have a trailing /
 LISTINGS_QUERY = "/listings"

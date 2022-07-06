@@ -11,17 +11,15 @@ import {
   FieldGroup,
   Select,
   useMutate,
-  AuthContext,
   AppearanceStyleType,
   AppearanceBorderType,
-  RoleOption,
-  roleKeys,
   emailRegex,
   setSiteAlertMessage,
   Tag,
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
+import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import router from "next/router"
 
@@ -125,7 +123,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       }
 
       return []
-    })() as string[]
+    })()
 
     const validation = await trigger()
 
@@ -365,7 +363,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                   register={register}
                   type="checkbox"
                   inputProps={{
-                    onChange: (e) => updateAllCheckboxes(e),
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateAllCheckboxes(e),
                   }}
                 />
 

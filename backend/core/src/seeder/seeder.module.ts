@@ -1,8 +1,8 @@
 import { DynamicModule, Module } from "@nestjs/common"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
-import dbOptions = require("../../ormconfig")
-import testDbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig"
+import testDbOptions from "../../ormconfig.test"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { SharedModule } from "../shared/shared.module"
 import { AuthModule } from "../auth/auth.module"
@@ -17,7 +17,6 @@ import { ReservedCommunityType } from "../reserved-community-type/entities/reser
 import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../unit-rent-types/entities/unit-rent-type.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { Property } from "../property/entities/property.entity"
 import { Unit } from "../units/entities/unit.entity"
 import { User } from "../auth/entities/user.entity"
 import { UserRoles } from "../auth/entities/user-roles.entity"
@@ -75,7 +74,6 @@ export class SeederModule {
           ReservedCommunityType,
           UnitRentType,
           AmiChart,
-          Property,
           Unit,
           User,
           UserRoles,

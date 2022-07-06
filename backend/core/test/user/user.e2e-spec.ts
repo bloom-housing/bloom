@@ -8,7 +8,7 @@ import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import supertest from "supertest"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { UserDto } from "../../src/auth/dto/user.dto"
@@ -280,10 +280,8 @@ describe("Applications", () => {
       firstName: "First",
       lastName: "Last",
       email: "test2@example.com",
-      jurisdictions: user2Profile.jurisdictions.map((jurisdiction) => ({
-        id: jurisdiction.id,
-      })),
       agreedToTermsOfService: false,
+      jurisdictions: [],
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
@@ -384,8 +382,8 @@ describe("Applications", () => {
       lastName: "Partner",
       dob: new Date(),
       leasingAgentInListings: [{ id: listing.id }],
-      roles: { isPartner: true },
       jurisdictions: [{ id: jurisdiction.id }],
+      roles: { isPartner: true },
     }
 
     const mockInvite = jest.spyOn(testEmailService, "invite")
@@ -555,22 +553,19 @@ describe("Applications", () => {
   })
 
   it("should allow filtering by isPartner user role", async () => {
-    const user = await userRepository._createUser(
-      {
-        dob: new Date(),
-        email: "michalp@airnauts.com",
-        firstName: "Michal",
-        jurisdictions: [],
-        language: Language.en,
-        lastName: "",
-        middleName: "",
-        roles: { isPartner: true, isAdmin: false },
-        updatedAt: undefined,
-        passwordHash: "abcd",
-        mfaEnabled: false,
-      },
-      null
-    )
+    const user = await userRepository._createUser({
+      dob: new Date(),
+      email: "michalp@airnauts.com",
+      firstName: "Michal",
+      jurisdictions: [],
+      language: Language.en,
+      lastName: "",
+      middleName: "",
+      roles: { isPartner: true, isAdmin: false },
+      updatedAt: undefined,
+      passwordHash: "abcd",
+      mfaEnabled: false,
+    })
 
     const filters = [
       {
@@ -594,22 +589,19 @@ describe("Applications", () => {
   })
 
   it("should get and delete a user by ID", async () => {
-    const user = await userRepository._createUser(
-      {
-        dob: new Date(),
-        email: "test+1@test.com",
-        firstName: "test",
-        jurisdictions: [],
-        language: Language.en,
-        lastName: "",
-        middleName: "",
-        roles: { isPartner: true, isAdmin: false },
-        updatedAt: undefined,
-        passwordHash: "abcd",
-        mfaEnabled: false,
-      },
-      null
-    )
+    const user = await userRepository._createUser({
+      dob: new Date(),
+      email: "test+1@test.com",
+      firstName: "test",
+      jurisdictions: [],
+      language: Language.en,
+      lastName: "",
+      middleName: "",
+      roles: { isPartner: true, isAdmin: false },
+      updatedAt: undefined,
+      passwordHash: "abcd",
+      mfaEnabled: false,
+    })
 
     const res = await supertest(app.getHttpServer())
       .get(`/user/${user.id}`)
@@ -631,22 +623,19 @@ describe("Applications", () => {
 
   it("should create and delete a user with existing application by ID", async () => {
     const listing = (await listingRepository.find({ take: 1 }))[0]
-    const user = await userRepository._createUser(
-      {
-        dob: new Date(),
-        email: "test+1@test.com",
-        firstName: "test",
-        jurisdictions: [],
-        language: Language.en,
-        lastName: "",
-        middleName: "",
-        roles: { isPartner: true, isAdmin: false },
-        updatedAt: undefined,
-        passwordHash: "abcd",
-        mfaEnabled: false,
-      },
-      null
-    )
+    const user = await userRepository._createUser({
+      dob: new Date(),
+      email: "test+1@test.com",
+      firstName: "test",
+      jurisdictions: [],
+      language: Language.en,
+      lastName: "",
+      middleName: "",
+      roles: { isPartner: true, isAdmin: false },
+      updatedAt: undefined,
+      passwordHash: "abcd",
+      mfaEnabled: false,
+    })
     const applicationUpdate = getTestAppBody(listing.id)
     const newApp = await applicationsRepository.save({
       ...applicationUpdate,
@@ -955,5 +944,56 @@ describe("Applications", () => {
       .post("/auth/login")
       .send({ email: userCreateDto.email, password: newPassword })
       .expect(201)
+  })
+
+  it("should not crash with empty search query param", async () => {
+    const usersRepository = app.get<UserRepository>(UserRepository)
+
+    const totalUsersCount = await usersRepository.count()
+
+    const allUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?search=`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(allUsersListRes.body.meta.totalItems).toBe(totalUsersCount)
+  })
+
+  it("should find user by email and assigned listing", async () => {
+    const searchableEmailAddress = "searchable-email@example.com"
+    const listing = (await listingRepository.find({ take: 1 }))[0]
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: searchableEmailAddress,
+      emailConfirmation: searchableEmailAddress,
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    let res = await supertest(app.getHttpServer())
+      .get(`/user/list?search=${searchableEmailAddress}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.items[0].email).toBe(searchableEmailAddress)
+
+    const userRepository = await app.resolve<UserRepository>(UserRepository)
+    const user = await userRepository.findByEmail(searchableEmailAddress)
+
+    user.leasingAgentInListings = [{ id: listing.id } as Listing]
+    await userRepository.save(user)
+
+    res = await supertest(app.getHttpServer())
+      .get(`/user/list?search=${listing.name}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.items.map((item) => item.email).includes(searchableEmailAddress)).toBe(true)
   })
 })

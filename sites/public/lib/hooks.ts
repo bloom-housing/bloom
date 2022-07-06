@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import qs from "qs"
 import { useRouter } from "next/router"
-import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
+import { ApplicationStatusProps, isInternalLink } from "@bloom-housing/ui-components"
 import {
   EnumListingFilterParamsComparison,
   EnumListingFilterParamsStatus,
@@ -10,6 +10,7 @@ import {
   Listing,
   ListingFilterParams,
   OrderByFieldsEnum,
+  OrderParam,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -59,9 +60,11 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
 export async function fetchBaseListingData({
   additionalFilters,
   orderBy,
+  orderDir,
 }: {
   additionalFilters?: ListingFilterParams[]
-  orderBy?: OrderByFieldsEnum
+  orderBy?: OrderByFieldsEnum[]
+  orderDir?: OrderParam[]
 }) {
   let listings = []
   try {
@@ -84,7 +87,8 @@ export async function fetchBaseListingData({
       view: string
       limit: string
       filter: ListingFilterParams[]
-      orderBy?: OrderByFieldsEnum
+      orderBy?: OrderByFieldsEnum[]
+      orderDir?: OrderParam[]
     } = {
       view: "base",
       limit: "all",
@@ -92,6 +96,9 @@ export async function fetchBaseListingData({
     }
     if (orderBy) {
       params.orderBy = orderBy
+    }
+    if (orderDir) {
+      params.orderDir = orderDir
     }
     const response = await axios.get(process.env.listingServiceUrl, {
       params,
@@ -127,7 +134,8 @@ export async function fetchClosedListings() {
         status: EnumListingFilterParamsStatus.closed,
       },
     ],
-    orderBy: OrderByFieldsEnum.mostRecentlyClosed,
+    orderBy: [OrderByFieldsEnum.mostRecentlyClosed],
+    orderDir: [OrderParam.DESC],
   })
 }
 

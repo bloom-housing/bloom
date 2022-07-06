@@ -22,6 +22,8 @@ import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
 import { UserRepository } from "./repositories/user-repository"
+import Listing from "../listings/entities/listing.entity"
+import { ListingRepository } from "../listings/repositories/listing.repository"
 
 @Module({
   imports: [
@@ -44,7 +46,7 @@ import { UserRepository } from "./repositories/user-repository"
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([RevokedToken, User, UserRepository, Application]),
+    TypeOrmModule.forFeature([RevokedToken, User, UserRepository, Application, ListingRepository]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,
