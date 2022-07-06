@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.3...@bloom-housing/backend-core@5.0.1-alpha.4) (2022-07-06)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [5.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.2...@bloom-housing/backend-core@5.0.1-alpha.3) (2022-06-29)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
