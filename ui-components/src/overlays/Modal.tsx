@@ -5,16 +5,16 @@ import { Overlay, OverlayProps } from "./Overlay"
 import { nanoid } from "nanoid"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {
-  title: string
   actions?: React.ReactNode[]
-  hideCloseIcon?: boolean
   children?: React.ReactNode
-  slim?: boolean
-  role?: string
-  modalClassNames?: string
-  innerClassNames?: string
   closeClassNames?: string
+  hideCloseIcon?: boolean
+  innerClassNames?: string
+  modalClassNames?: string
+  role?: string
   scrollable?: boolean
+  slim?: boolean
+  title: string
 }
 
 const ModalHeader = (props: { title: string; uniqueId?: string }) => (
@@ -61,11 +61,7 @@ export const Modal = (props: ModalProps) => {
         <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
 
         <section className={innerClassNames.join(" ")}>
-          {typeof props.children === "string" ? (
-            <p className="c-steel">{props.children}</p>
-          ) : (
-            props.children
-          )}
+          {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
         </section>
 
         {props.actions && <ModalFooter actions={props.actions} />}

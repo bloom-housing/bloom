@@ -1,74 +1,78 @@
 .modal {
-  @apply relative;
-  @apply max-w-5xl;
-  @apply m-auto;
-  @apply border;
-  @apply border-solid;
-  @apply border-gray-400;
-  @apply bg-white;
-  @apply rounded;
-  @apply shadow-md;
+  /* Component Variables */
+  --title-font-size: var(--bloom-font-size-base-alt);
+  --title-font-family: var(--bloom-font-sans);
+  --content-font-color: var(--bloom-color-gray-700);
+  --max-width: var(--bloom-width-5xl);
+  --desktop-min-width: var(--bloom-width-lg);
+  --footer-background-color: var(--bloom-color-primary-lighter);
+  --border-radius: var(--bloom-rounded);
 
-  @screen md {
-    min-width: 32rem;
+  position: relative;
+  max-width: var(--max-width);
+  margin: auto;
+  border: var(--bloom-border-1) solid var(--border-color);
+  background-color: var(--bloom-color-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--bloom-shadow-md);
+
+  @media (min-width: $screen-md) {
+    min-width: var(--desktop-min-width);
   }
 }
 
 .modal__header,
 .modal__inner,
 .modal__footer {
-  @apply py-4;
-  @apply px-6;
+  padding: var(--bloom-s4) var(--bloom-s6) var(--bloom-s4) var(--bloom-s6);
 }
 
 .modal__header {
-  @apply pt-8;
+  padding-top: var(--bloom-s8);
 }
 
 .modal__title {
-  @apply pt-6;
-  @apply px-6;
-  font-size: var(--bloom-font-size-base-alt);
-  font-family: var(--bloom-font-sans);
+  padding: var(--bloom-s6) var(--bloom-s6) 0 var(--bloom-s6);
+  font-size: var(--title-font-size);
+  font-family: var(--title-font-family);
 }
 
 .modal__inner {
-  @apply pt-6;
-  @apply pb-6;
+  padding-top: var(--bloom-s8);
   padding-bottom: var(--bloom-s8);
-  padding-top: var(--bloom-s5);
 
   &:last-of-type {
-    @apply rounded-b;
+    border-bottom-right-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
   }
 
   &.is-scrollable {
     max-height: calc(100vh - 200px);
-    @apply overflow-y-auto;
+    overflow-y: auto;
   }
   p {
-    color: var(--bloom-color-gray-700);
+    color: var(--content-font-color);
   }
 }
 
 .modal__footer {
-  @apply rounded-b;
-  background-color: var(--bloom-color-primary-lighter);
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+  background-color: var(--footer-background-color);
 }
 
 .modal__close {
-  @apply absolute;
+  position: absolute;
   top: var(--bloom-s5);
   right: var(--bloom-s5);
   cursor: pointer;
 }
 
-// Loading container for modal
 .modal__loading {
-  @apply w-full;
-  @apply flex;
-  @apply text-center;
-  @apply items-center;
-  @apply justify-center;
-  min-height: 12rem;
+  display: flex;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--bloom-s48);
 }
