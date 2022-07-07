@@ -29,7 +29,9 @@
   font-weight: var(--label-weight);
   line-height: var(--bloom-line-height-snug);
 
-  transition: all 200ms ease-out;
+  &.transition {
+    transition: all 200ms ease-out;
+  }
 
   &:focus {
     outline: none;
@@ -38,7 +40,9 @@
 
   &:hover {
     border-color: var(--bloom-color-primary-dark);
-    transition: all 200ms ease-in;
+    &.transition {
+      transition: all 200ms ease-in;
+    }
   }
 
   &:disabled {

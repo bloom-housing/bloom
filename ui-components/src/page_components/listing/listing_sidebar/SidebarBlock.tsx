@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Heading, HeaderType } from "../../../headers/Heading"
 
-export interface SidebarSectionProps {
+export interface SidebarBlockProps {
   children: React.ReactNode
   className?: string
   title?: string
@@ -9,13 +9,13 @@ export interface SidebarSectionProps {
   titleStyle?: HeaderType
 }
 
-const SidebarSection = ({
+const SidebarBlock = ({
   children,
   className,
   title,
   titlePriority,
   titleStyle,
-}: SidebarSectionProps) => {
+}: SidebarBlockProps) => {
   return (
     <section className={`aside-block ${className ? className : ""}`}>
       {title && (
@@ -28,4 +28,4 @@ const SidebarSection = ({
   )
 }
 
-export { SidebarSection as default, SidebarSection }
+export { SidebarBlock as default, SidebarBlock }

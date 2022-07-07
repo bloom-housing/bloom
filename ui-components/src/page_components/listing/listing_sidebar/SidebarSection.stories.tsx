@@ -1,15 +1,14 @@
 import * as React from "react"
-import OrDivider from "./OrDivider"
-import { SidebarSection } from "./SidebarSection"
+import { SidebarBlock } from "./SidebarBlock"
 
 export default {
-  title: "Listing Sidebar/Sidebar Section",
-  component: SidebarSection,
+  title: "Listing Sidebar/Sidebar Block",
+  component: SidebarBlock,
 }
 
 export const Default = () => {
   return (
-    <SidebarSection title={"Title"}>
+    <SidebarBlock title={"Title"}>
       <p>Content Paragraph 1</p>
       <p>Content Paragraph 2</p>
       <ul className={"list-disc ml-6"}>
@@ -17,14 +16,14 @@ export const Default = () => {
         <li>Second</li>
         <li>Third</li>
       </ul>
-    </SidebarSection>
+    </SidebarBlock>
   )
 }
 
 export const Styled = () => {
   return (
-    <SidebarSection title={"Title"} titleStyle={"sidebarSubHeader"} className={"bg-blue-200"}>
+    <SidebarBlock title={"Title"} titleStyle={"sidebarSubHeader"} className={"bg-blue-200"}>
       Content
-    </SidebarSection>
+    </SidebarBlock>
   )
 }
