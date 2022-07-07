@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.8...@bloom-housing/ui-components@5.0.1-alpha.9) (2022-07-07)
+
+
+### Features
+
+* populate jurisdictional preferences on settings page ([#2828](https://github.com/bloom-housing/bloom/issues/2828)) ([2ea5646](https://github.com/bloom-housing/bloom/commit/2ea5646a49dc6782fe0e83e942e1917929fde153))
+
+
+
+
+
 ## [5.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.7...@bloom-housing/ui-components@5.0.1-alpha.8) (2022-07-06)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
