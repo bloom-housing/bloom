@@ -38,6 +38,12 @@ const Layout = (props) => {
       href: "/additional-resources",
     },
   ]
+  if (process.env.housingCounselorServiceUrl) {
+    menuLinks.push({
+      title: t("pageTitle.getAssistance"),
+      href: process.env.housingCounselorServiceUrl,
+    })
+  }
   if (profile) {
     menuLinks.push({
       title: t("nav.myAccount"),

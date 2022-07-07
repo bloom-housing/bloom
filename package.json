@@ -1,6 +1,6 @@
 {
   "name": "bloom-housing",
-  "version": "2.0.0-pre-tailwind",
+  "version": "4.4.0",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
@@ -61,8 +61,8 @@
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@types/jest": "^26.0.14",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
     "commitizen": "^4.2.4",
     "concurrently": "^5.3.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -81,13 +81,19 @@
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.1",
-    "typescript": "^3.9.7",
+    "typescript": "^4.6.4",
     "wait-on": "^5.2.0"
   },
   "prettier": {
     "singleQuote": false,
     "printWidth": 100,
     "semi": false
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo '\n(1) Linting...\n----------' && lint-staged",
+      "commit-msg": "echo '\n(2) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------' && commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --max-warnings 0"

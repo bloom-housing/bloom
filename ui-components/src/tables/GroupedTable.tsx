@@ -1,12 +1,11 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { Cell, StandardTableProps } from "./StandardTable"
-import { Icon } from "../icons/Icon"
+import { Cell, StandardTableData, StandardTableProps } from "./StandardTable"
 
 export interface GroupedTableGroup {
   header?: string | React.ReactNode
   className?: string
-  data: Record<string, React.ReactNode>[]
+  data: StandardTableData
 }
 
 export interface GroupedTableProps extends Omit<StandardTableProps, "data"> {
@@ -49,16 +48,16 @@ export const GroupedTable = (props: GroupedTableProps) => {
       )
     }
 
-    groupData.forEach((row: Record<string, React.ReactNode>, groupDataIndex) => {
+    groupData.forEach((row, groupDataIndex) => {
       const rowKey = row["id"]
-        ? `row-${row["id"] as string}`
+        ? `row-${row["id"].content as string}`
         : process.env.NODE_ENV === "test"
         ? `groupedrow-${dataIndex}-${groupDataIndex}`
         : nanoid()
       const cols = Object.keys(headers).map((colKey, colIndex) => {
         const uniqKey = process.env.NODE_ENV === "test" ? `col-${colIndex}` : nanoid()
         const header = headers[colKey]
-        const cell = row[colKey]
+        const cell = row[colKey]?.content
         return (
           <Cell key={uniqKey} headerLabel={header} className={cellClassName}>
             {cell}

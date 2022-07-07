@@ -100,7 +100,7 @@ export class User {
   @Column("varchar", { nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsPhoneNumber(null, { groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber("US", { groups: [ValidationsGroupsEnum.default] })
   phoneNumber?: string
 
   @CreateDateColumn()
@@ -172,6 +172,11 @@ export class User {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   phoneNumberVerified?: boolean
+
+  @Column({ type: "bool", nullable: false, default: false })
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  agreedToTermsOfService: boolean
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()

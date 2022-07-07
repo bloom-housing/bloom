@@ -42,6 +42,11 @@
   @apply h-4;
 }
 
+.ui-md-large svg {
+  @apply w-6;
+  @apply h-6;
+}
+
 .ui-large svg {
   @apply w-8;
   @apply h-8;

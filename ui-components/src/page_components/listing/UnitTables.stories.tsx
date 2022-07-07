@@ -7,7 +7,7 @@ import Archer from "../../../__tests__/fixtures/archer.json"
 import { UnitGroupSummary, UnitType } from "@bloom-housing/backend-core/types"
 
 export default {
-  title: "Listing/Unit Summary Tables",
+  title: "Listing/Unit Tables",
 }
 
 const archer = Object.assign({}, Archer) as any
@@ -27,8 +27,7 @@ const summaries: {
   /* byUnitType: [
     {
       unitType: { name: "studio", numBedrooms: 1 } as UnitType,
-      totalAvailable: 0,
-      totalCount: 41,
+      totalAvailable: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: 10, max: 80 },
@@ -40,8 +39,7 @@ const summaries: {
   /* byUnitTypeWithoutFloor: [
     {
       unitType: { name: "studio", numBedrooms: 1 } as UnitType,
-      totalAvailable: 0,
-      totalCount: 41,
+      totalAvailable: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: 10, max: 80 },
@@ -55,8 +53,7 @@ const summaries: {
       byUnitType: [
         {
           unitType: { name: "studio", numBedrooms: 1 } as UnitType,
-          totalAvailable: 0,
-          totalCount: 24,
+          totalAvailable: 24,
           minIncomeRange: { min: "$2,208", max: "$2,208" },
           occupancyRange: { min: 1, max: 2 },
           rentAsPercentIncomeRange: { min: null, max: null },
@@ -71,8 +68,7 @@ const summaries: {
       byUnitType: [
         {
           unitType: { name: "studio", numBedrooms: 1 } as UnitType,
-          totalAvailable: 0,
-          totalCount: 16,
+          totalAvailable: 16,
           minIncomeRange: { min: "$1,438", max: "$1,438" },
           occupancyRange: { min: 1, max: 2 },
           rentAsPercentIncomeRange: { min: null, max: null },
@@ -92,15 +88,11 @@ const summaries: {
   },
 }
 
-export const unitsList = () => {
+export const unitListWithAccordion = () => {
   return <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
 }
 
-export const unitsListWithoutFloor = () => {
-  return <UnitTables units={archer.units} unitSummaries={summaries.byUnitTypeWithoutFloor} />
-}
-
-export const unitsListWithDisabledAccordion = () => {
+export const unitListWithDisabledAccordion = () => {
   return (
     <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} disableAccordion={true} />
   )
@@ -115,16 +107,16 @@ const unitSummariesHeaders = {
 }
 
 const amiValues = summaries.amiPercentages
-  .map((percent) => {
+  ?.map((percent) => {
     const percentInt = parseInt(percent, 10)
     return percentInt
   })
   .sort()
 
-export const unitsSummaries = () => {
+export const unitSummarySections = () => {
   return (
     <div>
-      {amiValues.map((percent, index) => {
+      {amiValues?.map((percent, index) => {
         const byAMI = summaries.byAMI.find((item: { percent: string }) => {
           return parseInt(item.percent, 10) == percent
         })

@@ -10,6 +10,8 @@ import {
   ListingFeatures,
   ListingMarketingTypeEnum,
   ListingProgram,
+  ListingStatus,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -23,6 +25,9 @@ import {
   IconFillColors,
   ImageTag,
   Tooltip,
+  StandardTableData,
+  StatusBarType,
+  ApplicationStatusType,
 } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
@@ -43,6 +48,13 @@ export const getGenericAddress = (bloomAddress: Address) => {
     : null
 }
 
+export const disableContactFormOption = (id: string, noPhone: boolean, noEmail: boolean) => {
+  if (id === "phone" || id === "text") {
+    return noPhone
+  }
+  return id === "email" && noEmail
+}
+
 export const openInFuture = (listing: Listing) => {
   const nowTime = dayjs()
   return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
@@ -51,6 +63,52 @@ export const openInFuture = (listing: Listing) => {
 const getListingCardSubtitle = (address: Address) => {
   const { street, city, state, zipCode } = address || {}
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
+}
+
+export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
+  let content = ""
+  let subContent = ""
+  let formattedDate = ""
+  let status = ApplicationStatusType.Open
+
+  if (openInFuture(listing)) {
+    const date = listing.applicationOpenDate
+    const openDate = dayjs(date)
+    formattedDate = openDate.format("MMM D, YYYY")
+    content = t("listings.applicationOpenPeriod")
+  } else {
+    if (listing.status === ListingStatus.closed) {
+      status = ApplicationStatusType.Closed
+      content = t("listings.applicationsClosed")
+    } else if (listing.applicationDueDate) {
+      const dueDate = dayjs(listing.applicationDueDate)
+      formattedDate = dueDate.format("MMM DD, YYYY")
+      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
+
+      // if due date is in future, listing is open
+      if (dayjs() < dueDate) {
+        content = t("listings.applicationDeadline")
+      } else {
+        status = ApplicationStatusType.Closed
+        content = t("listings.applicationsClosed")
+      }
+    }
+  }
+
+  if (formattedDate != "") {
+    content = content + `: ${formattedDate}`
+  }
+
+  if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
+    subContent = content
+    content = t("listings.applicationFCFS")
+  }
+
+  return {
+    status,
+    content,
+    subContent,
+  }
 }
 
 export const accessibilityFeaturesExist = (features: ListingFeatures) => {
@@ -198,7 +256,7 @@ export const intlToUsPhone = (intlPhoneNumber: string | null): string => {
 
 interface UnitSummaryTable {
   headers: TableHeaders
-  data: Record<string, React.ReactNode>[]
+  data: StandardTableData
 }
 
 export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
@@ -216,7 +274,7 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
       ),
     },
   }
-  let groupedUnitData: Record<string, React.ReactNode>[] = null
+  let groupedUnitData: StandardTableData = null
 
   // unit group summary
   groupedUnitData = listing?.unitSummaries?.unitGroupSummary?.map((group) => {
@@ -301,18 +359,22 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
     }
 
     return {
-      unitType: (
-        <>
-          {group.unitTypes
-            .map<React.ReactNode>((type) => (
-              <strong key={type}>{t(`listings.unitTypes.${type}`)}</strong>
-            ))
-            .reduce((acc, curr, index) => [acc, index !== 0 ? ", " : "", curr], [])}
-        </>
-      ),
-      rent: rent ?? t("listings.unitsSummary.notAvailable"),
-      availability: <strong>{availability ?? t("listings.unitsSummary.notAvailable")}</strong>,
-      ami: ami ?? t("listings.unitsSummary.notAvailable"),
+      unitType: {
+        content: (
+          <>
+            {group.unitTypes
+              .map<React.ReactNode>((type) => (
+                <strong key={type}>{t(`listings.unitTypes.${type}`)}</strong>
+              ))
+              .reduce((acc, curr, index) => [acc, index !== 0 ? ", " : "", curr], [])}
+          </>
+        ),
+      },
+      rent: { content: rent ?? t("listings.unitsSummary.notAvailable") },
+      availability: {
+        content: <strong>{availability ?? t("listings.unitsSummary.notAvailable")}</strong>,
+      },
+      ami: ami ?? { content: t("listings.unitsSummary.notAvailable") },
     }
   })
 
@@ -324,7 +386,7 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
 
 export const getHmiSummary = (listing: Listing): UnitSummaryTable => {
   let hmiHeaders: TableHeaders
-  let hmiData: Record<string, React.ReactNode>[] = null
+  let hmiData: StandardTableData = null
 
   if (listing.unitGroups !== undefined && listing.unitGroups.length > 0) {
     // hmi summary

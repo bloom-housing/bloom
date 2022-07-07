@@ -27,6 +27,7 @@ const listing = Object.assign({}, Archer) as any
 listing.applicationOpenDate = ""
 let days = 10
 listing.applicationDueDate = dayjs().add(days, "days").format()
+
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate)}
@@ -67,6 +68,7 @@ export const pastDue = () => (
 )
 
 listingPast.applicationDueDate = dayjs().subtract(days, "days").format()
+
 export const pastDueAndVivid = () => (
   <ApplicationStatus
     content={
@@ -90,6 +92,7 @@ export const pastDueWithIconColor = () => (
 const listing2 = Object.assign({}, Archer) as any
 days = 10
 listing2.applicationDueDate = dayjs().add(days, "days").format()
+
 export const openSoon = () => (
   <ApplicationStatus
     content={
@@ -102,6 +105,7 @@ export const openSoon = () => (
 const listing3 = Object.assign({}, Archer) as any
 days = 10
 listing3.applicationDueDate = dayjs().add(days, "days").format()
+
 export const openedAlready = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing3.applicationDueDate)}

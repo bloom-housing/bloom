@@ -77,7 +77,7 @@ const ListingsPage = ({ initialListings }) => {
             size={AppearanceSizeType.normal}
             icon="filter"
             iconPlacement="left"
-            iconSize="base"
+            iconSize="md-large"
             onClick={() => setFilterModalVisible(true)}
             passToIconClass={"ui-icon__filledBlack"}
           >

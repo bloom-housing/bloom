@@ -5,37 +5,38 @@ import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import { Field } from "./Field"
 import { t } from "../helpers/translator"
 
-interface FieldSingle {
-  id: string
-  label: string
-  value?: string
+export interface FieldSingle {
+  additionalText?: boolean
   dataTestId?: string
   defaultChecked?: boolean
-  description?: React.ReactNode
   defaultText?: string
+  description?: React.ReactNode
   disabled?: boolean
-  note?: string
+  id: string
   inputProps?: Record<string, unknown>
+  label: string
+  uniqueName?: boolean
+  note?: string
   subFields?: FieldSingle[]
   type?: string
-  additionalText?: boolean
+  value?: string
 }
 
 interface FieldGroupProps {
+  dataTestId?: string
   error?: boolean
   errorMessage?: string
-  name: string
-  type?: string
-  groupLabel?: string
+  fieldClassName?: string
+  fieldGroupClassName?: string
+  fieldLabelClassName?: string
   fields?: FieldSingle[]
+  groupLabel?: string
   groupNote?: string
   groupSubNote?: string
+  name: string
   register: UseFormMethods["register"]
+  type?: string
   validation?: RegisterOptions
-  fieldGroupClassName?: string
-  fieldClassName?: string
-  fieldLabelClassName?: string
-  dataTestId?: string
 }
 
 const FieldGroup = ({
@@ -57,7 +58,7 @@ const FieldGroup = ({
   // Always align two-option radio groups side by side
   if (fields?.length === 2) {
     fieldGroupClassName = `${fieldGroupClassName} flex`
-    fieldClassName = `${fieldClassName} flex-initial me-4`
+    fieldClassName = `${fieldClassName} flex-initial mr-4`
   }
 
   const [checkedInputs, setCheckedInputs] = useState<string[]>([])
@@ -70,12 +71,12 @@ const FieldGroup = ({
     return (
       <div key={item.value}>
         <input
-          aria-describedby={error ? `${name}-error` : name}
+          aria-describedby={`${name}-error`}
           aria-invalid={!!error || false}
           type={type}
           id={item.id}
           defaultValue={item.value || item.id}
-          name={subfieldsExist() ? `${name}-${item.value}` : name}
+          name={subfieldsExist() || item.uniqueName ? `${name}-${item.value}` : name}
           onClick={(e) => {
             // We cannot reliably target an individual checkbox in a field group since they have the same name, so we keep track on our own
             if (e.currentTarget.checked) {
@@ -152,7 +153,7 @@ const FieldGroup = ({
     )
   }
   return (
-    <>
+    <div>
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
@@ -176,7 +177,7 @@ const FieldGroup = ({
           {errorMessage}
         </ErrorMessage>
       )}
-    </>
+    </div>
   )
 }
 

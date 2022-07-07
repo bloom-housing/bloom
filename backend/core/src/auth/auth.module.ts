@@ -24,6 +24,7 @@ import { SmsMfaService } from "./services/sms-mfa.service"
 import { UserPreferencesController } from "./controllers/user-preferences.controller"
 import { UserPreferencesService } from "./services/user-preferences.services"
 import { UserPreferences } from "./entities/user-preferences.entity"
+import { UserRepository } from "./repositories/user-repository"
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { UserPreferences } from "./entities/user-preferences.entity"
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([RevokedToken, User, Application, UserPreferences]),
+    TypeOrmModule.forFeature([RevokedToken, User, UserRepository, Application, UserPreferences]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,

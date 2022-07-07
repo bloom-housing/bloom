@@ -804,6 +804,27 @@ export class UserService {
     })
   }
   /**
+   * Resend partner confirmation
+   */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-partner-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Verifies token is valid
    */
   isUserConfirmationTokenValid(
@@ -836,27 +857,6 @@ export class UserService {
   ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/resend-confirmation"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resend confirmation
-   */
-  resendPartnerConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/resend-partner-confirmation"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -1005,6 +1005,8 @@ export class UserService {
       limit?: number | "all"
       /**  */
       filter?: UserFilterParams[]
+      /**  */
+      search?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -1012,7 +1014,12 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
       let data = null
 
       configs.data = data
@@ -2574,13 +2581,7 @@ export interface Id {
   id: string
 }
 
-export interface Jurisdiction {
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-
+export interface AmiChart {
   /**  */
   id: string
 
@@ -2590,43 +2591,14 @@ export interface Jurisdiction {
   /**  */
   updatedAt: Date
 
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-}
-
-export interface AmiChart {
   /**  */
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Jurisdiction
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
   name: string
+
+  /**  */
+  jurisdiction: Id
 }
 
 export interface AmiChartCreate {
@@ -2634,13 +2606,22 @@ export interface AmiChartCreate {
   items: AmiChartItem[]
 
   /**  */
-  jurisdiction: Id
+  name: string
 
   /**  */
-  name: string
+  jurisdiction: Id
 }
 
 export interface AmiChartUpdate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+
   /**  */
   id?: string
 
@@ -2649,15 +2630,6 @@ export interface AmiChartUpdate {
 
   /**  */
   updatedAt?: Date
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  jurisdiction: Id
-
-  /**  */
-  name: string
 }
 
 export interface Address {
@@ -4084,6 +4056,41 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+}
+
 export interface UserPreferences {
   /**  */
   sendEmailNotifications?: boolean
@@ -4158,6 +4165,9 @@ export interface User {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 
   /**  */
   hitConfirmationURL?: Date
@@ -4278,15 +4288,10 @@ export interface UserBasic {
   phoneNumberVerified?: boolean
 
   /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
   hitConfirmationURL?: Date
-}
-
-export interface Confirm {
-  /**  */
-  token: string
-
-  /**  */
-  password?: string
 }
 
 export interface Email {
@@ -4300,6 +4305,14 @@ export interface Email {
 export interface Status {
   /**  */
   status: string
+}
+
+export interface Confirm {
+  /**  */
+  token: string
+
+  /**  */
+  password?: string
 }
 
 export interface ForgotPassword {
@@ -4391,6 +4404,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 
   /**  */
   hitConfirmationURL?: Date
@@ -4518,6 +4534,9 @@ export interface UserProfileUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
@@ -4680,6 +4699,14 @@ export interface ListingFilterParams {
 
   /**  */
   section8Acceptance?: boolean
+}
+
+export interface ListingsApiExtraModels {
+  /**  */
+  orderBy?: OrderByFieldsEnum[]
+
+  /**  */
+  order?: EnumListingsApiExtraModelsOrder[]
 }
 
 export interface FormMetadataExtraData {
@@ -6996,13 +7023,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -7075,6 +7096,13 @@ export enum EnumRequestMfaCodeMfaType {
   "sms" = "sms",
   "email" = "email",
 }
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
 export type CombinedRolesTypes = UserRolesCreate
 export type CombinedPreferencesTypes = UserPreferences
 export enum EnumUserFilterParamsComparison {
@@ -7116,11 +7144,6 @@ export enum EnumListingFilterParamsMarketingType {
   "Marketing" = "Marketing",
   "ComingSoon" = "ComingSoon",
 }
-export enum FormMetaDataType {
-  "radio" = "radio",
-  "checkbox" = "checkbox",
-}
-
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
@@ -7129,6 +7152,17 @@ export enum OrderByFieldsEnum {
   "name" = "name",
   "status" = "status",
   "verified" = "verified",
+  "waitlistOpen" = "waitlistOpen",
+  "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
+}
+export enum EnumListingsApiExtraModelsOrder {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
+}
+export enum FormMetaDataType {
+  "radio" = "radio",
+  "checkbox" = "checkbox",
 }
 
 export enum OrderDirEnum {

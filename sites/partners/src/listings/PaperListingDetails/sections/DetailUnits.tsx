@@ -50,14 +50,14 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         })
 
         return {
-          unitType: types.join(", "),
-          units: unit.totalCount,
-          amiRange: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
-          rentRange: formatRentRange(rentRange, percentIncomeRange),
-          occupancyRange: formatRange(unit.minOccupancy, unit.maxOccupancy, "", ""),
-          sqFeetRange: formatRange(unit.sqFeetMin, unit.sqFeetMax, "", ""),
-          bathRange: formatRange(unit.bathroomMin, unit.bathroomMax, "", ""),
-          action: null,
+          unitType: { content: types.join(", ") },
+          units: { content: unit.totalCount },
+          amiRange: { content: amiRange && formatRange(amiRange.min, amiRange.max, "", "%") },
+          rentRange: { content: formatRentRange(rentRange, percentIncomeRange) },
+          occupancyRange: { content: formatRange(unit.minOccupancy, unit.maxOccupancy, "", "") },
+          sqFeetRange: { content: formatRange(unit.sqFeetMin, unit.sqFeetMax, "", "") },
+          bathRange: { content: formatRange(unit.bathroomMin, unit.bathroomMax, "", "") },
+          action: { content: null },
         }
       }),
     [listing, setUnitDrawer]

@@ -1,5 +1,4 @@
-// The header logo should allow for a larger maximum height than the default
-// logo.
+/* Overrides the default ui-components styles with Detroit-specific styles. */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
 
 .navbar-logo .logo .logo__image {
@@ -30,7 +29,33 @@
   --ag-row-hover-color: #f2f2f2;
 }
 
-Button.button.is-primary:hover {
-  @apply bg-primary-light;
-  @apply text-black;
+:root {
+  --bloom-font-sans: [ "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif" ];
+  --bloom-font-alt-sans: [ "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana",
+    "sans-serif" ];
+  --bloom-color-accent-cool: "#297E73";
+  --bloom-color-gray-700: "#000000";
+  --bloom-color-gray-800: "#18252A";
+  --bloom-color-gray-950: "#000000";
+  --bloom-color-lush: "#feb70d";
+  --bloom-color-primary-dark: rgb(0, 68, 69);
+  --bloom-color-primary-darker: "#004445";
+  --bloom-color-primary-light: "#F2F2F2";
+  --bloom-color-primary-lighter: "#F2F2F2";
+  --bloom-color-primary: rgb(41, 126, 115);
+  --bloom-color-warn: "#feb70d";
+  --bloom-font-serif: var(--detroit-font-serif);
+  --primary-appearance-hover-background-color: white;
+  --primary-appearance-hover-label-color: var(--bloom-color-primary);
+  --primary-appearance-hover-border-color: var(--bloom-color-primary);
+  --outlined-appearance-hover-background-color: var(--bloom-color-primary-dark);
+  --outlined-appearance-hover-border-color: var(--bloom-color-primary-dark);
+}
+
+.button {
+  &:hover {
+    svg {
+      fill: var(--bloom-color-white);
+    }
+  }
 }

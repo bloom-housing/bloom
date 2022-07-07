@@ -127,7 +127,7 @@ const FilteredListingsPage = () => {
             size={AppearanceSizeType.normal}
             icon="filter"
             iconPlacement="left"
-            iconSize="base"
+            iconSize="md-large"
             onClick={() => setFilterModalVisible(true)}
           >
             {t("listingFilters.buttonTitle")}
@@ -146,6 +146,7 @@ const FilteredListingsPage = () => {
               icon="closeSmall"
               iconPlacement="right"
               iconClass="pl-2 me-0"
+              iconSize="small"
             >
               {t("listingFilters.resetButton")}
             </Button>

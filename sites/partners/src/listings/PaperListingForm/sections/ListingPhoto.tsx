@@ -11,6 +11,7 @@ import {
   GridCell,
   MinimalTable,
   TableThumbnail,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
@@ -65,75 +66,83 @@ const ListingPhoto = () => {
   /*
     Show a preview of the uploaded file within the photo drawer
   */
-  const previewTableRows = []
+  const previewTableRows: StandardTableData = []
   if (cloudinaryData.url != "") {
     previewTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img src={cloudinaryData.url} />
-        </TableThumbnail>
-      ),
-      fileName: cloudinaryData.id.split("/").slice(-1).join(),
-      actions: (
-        <Button
-          type="button"
-          className="font-semibold uppercase text-red-700"
-          onClick={() => {
-            setCloudinaryData({
-              id: "",
-              url: "",
-            })
-            setProgressValue(0)
-          }}
-          unstyled
-        >
-          {t("t.delete")}
-        </Button>
-      ),
+      preview: {
+        content: (
+          <TableThumbnail>
+            <img src={cloudinaryData.url} />
+          </TableThumbnail>
+        ),
+      },
+      fileName: { content: cloudinaryData.id.split("/").slice(-1).join() },
+      actions: {
+        content: (
+          <Button
+            type="button"
+            className="font-semibold uppercase text-red-700"
+            onClick={() => {
+              setCloudinaryData({
+                id: "",
+                url: "",
+              })
+              setProgressValue(0)
+            }}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        ),
+      },
     })
   }
 
   /*
     Show the selected photo in the listing form if its present
   */
-  const listingPhotoTableRows = []
+  const listingPhotoTableRows: StandardTableData = []
   if (listingFormPhoto?.image?.fileId && listingFormPhoto.image.fileId != "") {
     const listingPhotoUrl = listingFormPhoto.image.fileId.match(/https?:\/\//)
       ? listingFormPhoto.image.fileId
       : cloudinaryUrlFromId(listingFormPhoto.image.fileId)
 
     listingPhotoTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img src={listingPhotoUrl} />
-        </TableThumbnail>
-      ),
-      fileName: listingFormPhoto.image.fileId.split("/").slice(-1).join(),
-      actions: (
-        <div className="flex">
-          <Button
-            type="button"
-            className="font-semibold uppercase"
-            onClick={() => {
-              setDrawerState(true)
-            }}
-            unstyled
-          >
-            {t("t.edit")}
-          </Button>
-          <Button
-            type="button"
-            className="font-semibold uppercase text-red-700"
-            onClick={() => {
-              setCloudinaryData({ ...cloudinaryData, id: "" })
-              deletePhoto()
-            }}
-            unstyled
-          >
-            {t("t.delete")}
-          </Button>
-        </div>
-      ),
+      preview: {
+        content: (
+          <TableThumbnail>
+            <img src={listingPhotoUrl} />
+          </TableThumbnail>
+        ),
+      },
+      fileName: { content: listingFormPhoto.image.fileId.split("/").slice(-1).join() },
+      actions: {
+        content: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="font-semibold uppercase"
+              onClick={() => {
+                setDrawerState(true)
+              }}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => {
+                setCloudinaryData({ ...cloudinaryData, id: "" })
+                deletePhoto()
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      },
     })
   }
 

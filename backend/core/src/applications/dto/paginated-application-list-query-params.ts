@@ -6,6 +6,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { OrderByParam } from "../types/order-by-param"
 import { OrderParam } from "../types/order-param"
 
+import { IsLength } from "../../shared/decorators/isLength.decorator"
 export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
@@ -25,6 +26,10 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsLength("search", {
+    message: "Search must be at least 3 characters",
+    groups: [ValidationsGroupsEnum.default],
+  })
   search?: string
 
   @Expose()

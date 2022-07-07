@@ -217,30 +217,32 @@ const UnitsSummaryForm = ({
         }
 
         return {
-          amiChartName: selectedAmiChart?.label || "",
-          amiPercentage: `${ami.amiPercentage ? `${ami.amiPercentage}%` : ""}`,
-          monthlyRentDeterminationType: monthlyRentDeterminationType,
-          rentValue: rentValue,
-          action: (
-            <div className="flex-col">
-              <Button
-                type="button"
-                className="front-semibold uppercase m-1"
-                onClick={() => editAmi(ami.tempId)}
-                unstyled
-              >
-                {t("t.edit")}
-              </Button>
-              <Button
-                type="button"
-                className="front-semibold uppercase text-red-700 m-1"
-                onClick={() => setAmiDeleteModal(ami.tempId)}
-                unstyled
-              >
-                {t("t.delete")}
-              </Button>
-            </div>
-          ),
+          amiChartName: { content: selectedAmiChart?.label || "" },
+          amiPercentage: { content: `${ami.amiPercentage ? `${ami.amiPercentage}%` : ""}` },
+          monthlyRentDeterminationType: { content: monthlyRentDeterminationType },
+          rentValue: { content: rentValue },
+          action: {
+            content: (
+              <div className="flex-col">
+                <Button
+                  type="button"
+                  className="front-semibold uppercase m-1"
+                  onClick={() => editAmi(ami.tempId)}
+                  unstyled
+                >
+                  {t("t.edit")}
+                </Button>
+                <Button
+                  type="button"
+                  className="front-semibold uppercase text-red-700 m-1"
+                  onClick={() => setAmiDeleteModal(ami.tempId)}
+                  unstyled
+                >
+                  {t("t.delete")}
+                </Button>
+              </div>
+            ),
+          },
         }
       }),
     [current, options.amiCharts, editAmi, setAmiDeleteModal]

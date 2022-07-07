@@ -21,7 +21,6 @@ import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { Program } from "../../src/program/entities/program.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
-import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -36,13 +35,11 @@ describe("Listings", () => {
   let app: INestApplication
   let programsRepository: Repository<Program>
   let adminAccessToken: string
-  let jurisdictionsRepository: Repository<Jurisdiction>
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Jurisdiction]),
         ListingsModule,
         AssetsModule,
         ApplicationMethodsModule,
@@ -55,9 +52,6 @@ describe("Listings", () => {
     await app.init()
     programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-    jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
-      getRepositoryToken(Jurisdiction)
-    )
   })
 
   it("should return all listings", async () => {
@@ -89,39 +83,6 @@ describe("Listings", () => {
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toEqual(1)
-  })
-
-  it("should return listings with matching zipcodes", async () => {
-    const queryParams = {
-      limit: "all",
-      filter: [
-        {
-          $comparison: "IN",
-          zipcode: "94621,94404",
-        },
-      ],
-      view: "base",
-    }
-    const query = qs.stringify(queryParams)
-    await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-  })
-
-  it("should return listings with matching Alameda jurisdiction", async () => {
-    const jurisdictions = await jurisdictionsRepository.find()
-    const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
-    const queryParams = {
-      limit: "all",
-      filter: [
-        {
-          $comparison: "=",
-          jurisdiction: alameda.id,
-        },
-      ],
-      view: "base",
-    }
-    const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(20)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
@@ -255,47 +216,6 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.id).toBeDefined()
     expect(modifiedListing.events[0].file.fileId).toBe(listingEvent.file.fileId)
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
-  })
-
-  it("should add/overwrite and remove listing programs in existing listing", async () => {
-    const res = await supertest(app.getHttpServer())
-      .get("/listings?orderBy=applicationDates")
-      .expect(200)
-    const listing: ListingUpdateDto = { ...res.body.items[0] }
-    const newProgram = await programsRepository.save({
-      title: "TestTitle",
-      subtitle: "TestSubtitle",
-      description: "TestDescription",
-    })
-    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
-
-    const putResponse = await supertest(app.getHttpServer())
-      .put(`/listings/${listing.id}`)
-      .send(listing)
-      .set(...setAuthorization(adminAccessToken))
-      .expect(200)
-
-    const listingResponse = await supertest(app.getHttpServer())
-      .get(`/listings/${putResponse.body.id}`)
-      .expect(200)
-
-    expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
-    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
-    expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
-
-    await supertest(app.getHttpServer())
-      .put(`/listings/${listing.id}`)
-      .send({
-        ...putResponse.body,
-        listingPrograms: [],
-      })
-      .set(...setAuthorization(adminAccessToken))
-      .expect(200)
-
-    const listingResponse2 = await supertest(app.getHttpServer())
-      .get(`/listings/${putResponse.body.id}`)
-      .expect(200)
-    expect(listingResponse2.body.listingPrograms.length).toBe(0)
   })
 
   describe.skip("AMI Filter", () => {
@@ -569,6 +489,45 @@ describe("Listings", () => {
         secondPageListingUpdateTimestamp.getTime()
       )
     }
+  })
+
+  it("should add/overwrite and remove listing programs in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
+    const newProgram = await programsRepository.save({
+      title: "TestTitle",
+      subtitle: "TestSubtitle",
+      description: "TestDescription",
+    })
+    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+
+    expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
+    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
+    expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
+
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send({
+        ...putResponse.body,
+        listingPrograms: [],
+      })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse2 = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+    expect(listingResponse2.body.listingPrograms.length).toBe(0)
   })
 
   afterEach(() => {

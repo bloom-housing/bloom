@@ -8,15 +8,23 @@ afterEach(cleanup)
 
 describe("<ImageCard>", () => {
   it("renders title, subtitle, image and alt text", () => {
-    const { getByText, getByAltText } = render(
+    const { getByAltText } = render(
       <ImageCard imageUrl={"/images/listing.jpg"} description={"A description of the image"} />
     )
 
     expect(getByAltText("A description of the image")).not.toBeNull()
   })
   it("renders with a link", () => {
-    const { getByAltText } = render(<ImageCard imageUrl={"/images/listing.jpg"} href="/listings" />)
-    expect(getByAltText("").closest("a")?.getAttribute("href")).toBe("/listings")
+    const { getByAltText } = render(
+      <ImageCard
+        imageUrl={"/images/listing.jpg"}
+        href="/listings"
+        description={"A description of the image"}
+      />
+    )
+    expect(getByAltText("A description of the image").closest("a")?.getAttribute("href")).toBe(
+      "/listings"
+    )
   })
   it("renders with an application status bar", () => {
     const { getByText } = render(

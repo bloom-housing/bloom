@@ -69,6 +69,7 @@ const testListing: Listing = {} as Listing
 testListing.unitGroups = unitGroups as UnitGroup[]
 afterEach(cleanup)
 
+// Differs from core due to unit groups
 describe("occupancy formatting helpers", () => {
   describe("occupancyTable", () => {
     it("properly creates occupancy table", () => {

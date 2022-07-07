@@ -8,14 +8,15 @@ export type LangItem = {
 }
 
 export interface LanguageNavProps {
+  ariaLabel?: string
   languages: LangItem[]
 }
 
-const LanguageNav = ({ languages }: LanguageNavProps) => {
+const LanguageNav = ({ ariaLabel, languages }: LanguageNavProps) => {
   return (
     <div className="language-bar">
       <div className="language-bar__inner">
-        <nav className="language-nav">
+        <nav {...(ariaLabel ? { "aria-label": ariaLabel } : {})} className="language-nav">
           <ul className="language-nav__list">
             {languages.map((item) => (
               <li key={item.label}>

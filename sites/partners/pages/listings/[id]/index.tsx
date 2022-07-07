@@ -34,8 +34,8 @@ import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/
 import DetailApplicationTypes from "../../../src/listings/PaperListingDetails/sections/DetailApplicationTypes"
 import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
 import DetailApplicationDates from "../../../src/listings/PaperListingDetails/sections/DetailApplicationDates"
-import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
 import DetailVerification from "../../../src/listings/PaperListingDetails/sections/DetailVerification"
+import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
 
 interface ListingProps {
   listing: Listing

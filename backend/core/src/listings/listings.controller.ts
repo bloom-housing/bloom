@@ -39,7 +39,6 @@ import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-met
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
-@ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)

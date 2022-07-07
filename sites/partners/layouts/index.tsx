@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import {
-  LocalizedLink,
   SiteHeader,
   SiteFooter,
   FooterNav,
@@ -75,14 +74,7 @@ const Layout = (props) => {
               </a>
             </p>
           </FooterSection>
-          <FooterNav copyright={`City of Detroit © ${currentYear} • All Rights Reserved`}>
-            <LocalizedLink href={`${process.env.publicBaseUrl}/privacy`}>
-              {t("pageTitle.privacy")}
-            </LocalizedLink>{" "}
-            <LocalizedLink href={`${process.env.publicBaseUrl}/terms`}>
-              {t("pageTitle.terms")}
-            </LocalizedLink>
-          </FooterNav>
+          <FooterNav copyright={`City of Detroit © ${currentYear} • All Rights Reserved`} />
         </SiteFooter>
       </div>
     </div>

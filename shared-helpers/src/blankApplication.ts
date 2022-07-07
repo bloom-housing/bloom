@@ -80,6 +80,7 @@ export const blankApplication = {
     emailAddress: null,
     mailingAddress: {
       street: "",
+      street2: "",
       city: "",
       state: "",
       zipCode: "",

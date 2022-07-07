@@ -17,10 +17,10 @@ import {
   PreferencesService,
   JurisdictionsService,
   ProgramsService,
-  UserPreferencesService,
   RequestMfaCodeResponse,
   EnumRequestMfaCodeMfaType,
   EnumLoginMfaType,
+  UserPreferencesService,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -30,6 +30,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useCallback,
 } from "react"
 import qs from "qs"
 import axiosStatic from "axios"
@@ -52,6 +53,7 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
+  loadProfile: (redirect?: string) => void
   login: (
     email: string,
     password: string,
@@ -102,7 +104,7 @@ const saveToken = createAction("SAVE_TOKEN")<{
   accessToken: string
   dispatch: DispatchType
 }>()
-const saveProfile = createAction("SAVE_PROFILE")<User>()
+const saveProfile = createAction("SAVE_PROFILE")<User | null>()
 const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
 const signOut = createAction("SIGN_OUT")()
@@ -221,23 +223,30 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     }
   }, [apiUrl, storageType])
 
+  const loadProfile = useCallback(
+    async (redirect?: string) => {
+      try {
+        const profile = await userService?.userControllerProfile()
+        if (profile) {
+          dispatch(saveProfile(profile))
+        }
+      } finally {
+        dispatch(stopLoading())
+
+        if (redirect) {
+          router.push(redirect)
+        }
+      }
+    },
+    [userService, router]
+  )
+
   // Load our profile as soon as we have an access token available
   useEffect(() => {
     if (!state.profile && state.accessToken && !state.loading) {
-      const loadProfile = async () => {
-        dispatch(startLoading())
-        try {
-          const profile = await userService?.userControllerProfile()
-          if (profile) {
-            dispatch(saveProfile(profile))
-          }
-        } finally {
-          dispatch(stopLoading())
-        }
-      }
       void loadProfile()
     }
-  }, [state.profile, state.accessToken, apiUrl, userService, state.loading])
+  }, [state.profile, state.accessToken, apiUrl, userService, state.loading, loadProfile])
 
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
@@ -258,6 +267,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
     userPreferencesService: new UserPreferencesService(),
+    loadProfile,
     login: async (
       email,
       password,

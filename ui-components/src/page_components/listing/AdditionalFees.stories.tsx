@@ -4,6 +4,13 @@ import { AdditionalFees } from "./AdditionalFees"
 
 export default {
   title: "Listing/Additional Fees",
+  component: AdditionalFees,
+}
+
+const strings = {
+  sectionHeader: "Additional Fees",
+  deposit: "Deposit",
+  applicationFee: "Application Fee",
 }
 export const allFieldsAndFourFooterItems = () => {
   return (

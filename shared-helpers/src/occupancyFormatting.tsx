@@ -1,7 +1,8 @@
 import * as React from "react"
-import { t } from "@bloom-housing/ui-components"
+import { StandardTableData, t } from "@bloom-housing/ui-components"
 import { Listing, UnitType } from "@bloom-housing/backend-core/types"
 
+// Differs from core due to unit groups
 export const occupancyTable = (listing: Listing) => {
   const getOccupancyString = (min?: number, max?: number) => {
     if (!max && min) return min === 1 ? t("t.minPerson") : t("t.minPeople", { num: min })
@@ -30,19 +31,16 @@ export const occupancyTable = (listing: Listing) => {
     )
     .filter((unitGroup) => unitGroup.maxOccupancy || unitGroup.minOccupancy)
 
-  const tableRows = sortedUnitGroups?.reduce<{ [key: string]: string | JSX.Element }[]>(
-    (acc, curr) => {
-      const unitTypeString = getUnitTypeString(curr.unitType)
-      const occupancyString = getOccupancyString(curr.minOccupancy, curr.maxOccupancy)
-      if (occupancyString) {
-        acc.push({
-          unitType: unitTypeString,
-          occupancy: occupancyString,
-        })
-      }
-      return acc
-    },
-    []
-  )
+  const tableRows = sortedUnitGroups?.reduce<StandardTableData>((acc, curr) => {
+    const unitTypeString = getUnitTypeString(curr.unitType)
+    const occupancyString = getOccupancyString(curr.minOccupancy, curr.maxOccupancy)
+    if (occupancyString) {
+      acc.push({
+        unitType: { content: unitTypeString },
+        occupancy: { content: occupancyString },
+      })
+    }
+    return acc
+  }, [])
   return tableRows
 }

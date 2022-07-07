@@ -13,7 +13,7 @@ const DownloadLotteryResults = (props: DownloadLotteryResultsProps) => {
     <section className="aside-block text-center">
       <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
       {props.resultsDate && (
-        <p className="uppercase text-gray-750 text-tiny font-semibold pb-4">{props.resultsDate}</p>
+        <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">{props.resultsDate}</p>
       )}
       <a
         className="button is-primary w-full mb-2"

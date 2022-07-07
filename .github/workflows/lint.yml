@@ -5,7 +5,7 @@ on:
   # but only for the dev branch
   push:
     branches:
-      - main
+      - dev
   pull_request:
     branches:
       - main

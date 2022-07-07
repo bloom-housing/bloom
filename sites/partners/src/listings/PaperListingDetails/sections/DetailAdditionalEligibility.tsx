@@ -52,18 +52,22 @@ const DetailAdditionalEligibility = () => {
                 headers={{ preview: "t.preview", fileName: "t.fileName" }}
                 data={[
                   {
-                    preview: (
-                      <TableThumbnail>
-                        <img
-                          alt="PDF preview"
-                          src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
-                        />
-                      </TableThumbnail>
-                    ),
-                    fileName: `${listing.buildingSelectionCriteriaFile.fileId
-                      .split("/")
-                      .slice(-1)
-                      .join()}.pdf`,
+                    preview: {
+                      content: (
+                        <TableThumbnail>
+                          <img
+                            alt="PDF preview"
+                            src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
+                          />
+                        </TableThumbnail>
+                      ),
+                    },
+                    fileName: {
+                      content: `${listing.buildingSelectionCriteriaFile.fileId
+                        .split("/")
+                        .slice(-1)
+                        .join()}.pdf`,
+                    },
                   },
                 ]}
               />
@@ -73,7 +77,7 @@ const DetailAdditionalEligibility = () => {
                 headers={{ url: "t.url" }}
                 data={[
                   {
-                    url: listing.buildingSelectionCriteria,
+                    url: { content: listing.buildingSelectionCriteria },
                   },
                 ]}
               />

@@ -27,6 +27,7 @@ import {
   Draggable,
   Edit,
   Eligibility,
+  Envelope,
   Eye,
   Favorite,
   File,
@@ -95,6 +96,7 @@ const IconMap = {
   draggable: Draggable,
   edit: Edit,
   eligibility: Eligibility,
+  envelope: Envelope,
   eye: Eye,
   favorite: Favorite,
   file: File,
@@ -151,6 +153,7 @@ export type IconSize =
   | "small"
   | "base"
   | "medium"
+  | "md-large"
   | "large"
   | "xlarge"
   | "2xl"

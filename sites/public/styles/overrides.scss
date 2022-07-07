@@ -9,7 +9,6 @@
 
 $header-desktop-min-size: 1024px;
 
-@import "actions.scss";
 @import "blocks.scss";
 @import "forms.scss";
 @import "footers.scss";
@@ -59,5 +58,56 @@ $header-desktop-min-size: 1024px;
   margin-top: 10px;
   .field {
     margin-bottom: 3.5px;
+  }
+}
+
+:root {
+  --detroit-font-sans: [ "Montserrat", "Open Sans", "Helvetica", "Arial", "Verdana", "sans-serif" ];
+  --detroit-font-serif: [ "Montserrat", "Droid Serif", "Georgia", "Times", "serif" ];
+
+  --bloom-font-sans: var(--detroit-font-sans);
+  --bloom-font-alt-sans: var(--detroit-font-sans);
+  --bloom-color-accent-cool: "#297E73";
+  --bloom-color-gray-700: "#000000";
+  --bloom-color-gray-800: "#18252A";
+  --bloom-color-gray-950: "#000000";
+  --bloom-color-lush: "#feb70d";
+  --bloom-color-primary-dark: rgb(0, 68, 69);
+  --bloom-color-primary-darker: "#004445";
+  --bloom-color-primary-light: "#F2F2F2";
+  --bloom-color-primary-lighter: "#F2F2F2";
+  --bloom-color-primary: rgb(41, 126, 115);
+  --bloom-color-warn: "#feb70d";
+  --bloom-font-serif: var(--detroit-font-serif);
+  --primary-appearance-hover-background-color: white;
+  --primary-appearance-hover-label-color: var(--bloom-color-primary);
+  --primary-appearance-hover-border-color: var(--bloom-color-primary);
+  --outlined-appearance-hover-background-color: var(--bloom-color-primary);
+  --outlined-appearance-hover-border-color: var(--bloom-color-primary);
+}
+
+.button {
+  --normal-rounded: 60px;
+  --normal-padding: 0.5rem 1rem;
+  --normal-font-size: var(--bloom-font-size-base);
+  --label-letter-spacing: normal;
+  --label-transform: none;
+  &:hover {
+    svg {
+      fill: var(--bloom-color-white);
+    }
+  }
+  .ui-icon {
+    &.button__icon {
+      margin: 0 0.5rem 0 0;
+    }
+  }
+}
+
+.action-block {
+  .action-block__actions .button {
+    @media (max-width: 640px) {
+      @apply text-sm;
+    }
   }
 }

@@ -22,7 +22,7 @@ interface DashboardProps {
 
 function Dashboard(props: DashboardProps) {
   const { profile } = useContext(AuthContext)
-  const [alertMessage, setAlertMessage] = useState(null)
+  const [alertMessage, setAlertMessage] = useState<string | null>(null)
 
   useEffect(() => {
     if (profile) {
@@ -32,7 +32,12 @@ function Dashboard(props: DashboardProps) {
         status: UserStatus.LoggedIn,
       })
     }
-    setAlertMessage(props.router.query?.alert)
+    if (props.router.query?.alert) {
+      const alert = Array.isArray(props.router.query.alert)
+        ? props.router.query.alert[0]
+        : props.router.query.alert
+      setAlertMessage(alert)
+    }
   }, [props.router, profile])
 
   const closeAlert = () => {

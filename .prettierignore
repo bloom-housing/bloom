@@ -1,7 +1,6 @@
 **/*.hbs
 .github
 .travis.yml
-ui-components/src/locales
 ui-components/CHANGELOG.md
 sites/public/CHANGELOG.md
 sites/partners/CHANGELOG.md

@@ -117,7 +117,7 @@ const summaries: {
       { householdSize: 1, ami30: "$30,750", ami45: "$46,125" },
       { householdSize: 2, ami30: "$35,130", ami45: "$52,695" },
     ],
-  }
+  },
 }
 
 describe.skip("<UnitTables>", () => {

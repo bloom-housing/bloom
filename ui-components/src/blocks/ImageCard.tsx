@@ -21,6 +21,12 @@ export interface ImageTag {
   text?: string
   iconType?: IconTypes
   iconColor?: string
+}
+
+export interface ImageTag {
+  text?: string
+  iconType?: IconTypes
+  iconColor?: string
   styleType?: AppearanceStyleType
   tooltip?: ImageTagTooltip
 }

@@ -35,7 +35,7 @@ const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordio
   const [summaryDeleteModal, setSummaryDeleteModal] = useState<number | null>(null)
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors } = formMethods
+  const { errors, clearErrors, register, reset, getValues } = formMethods
   const { data: unitTypesData = [] } = useUnitTypeList()
 
   const unitTypeOptions = unitTypesData.map((unitType) => {
@@ -67,8 +67,9 @@ const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordio
     },
   ]
   useEffect(() => {
-    setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
-  }, [disableUnitsAccordion, setValue])
+    reset({ ...getValues(), disableUnitsAccordion: disableUnitsAccordion ? "true" : "false" })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const editSummary = useCallback(
     (tempId: number) => {
@@ -130,33 +131,37 @@ const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordio
         })
 
         return {
-          unitType: types.map((option) => option.label).join(", "),
-          units: summary.totalCount,
-          amiRange: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
-          rentRange: formatRentRange(rentRange, percentIncomeRange),
-          occupancyRange: formatRange(summary.minOccupancy, summary.maxOccupancy, "", ""),
-          sqFeetRange: formatRange(summary.sqFeetMin, summary.sqFeetMax, "", ""),
-          bathRange: formatRange(summary.bathroomMin, summary.bathroomMax, "", ""),
-          action: (
-            <div className="flex-col">
-              <Button
-                type="button"
-                className="front-semibold uppercase m-1"
-                onClick={() => editSummary(summary.tempId)}
-                unstyled
-              >
-                {t("t.edit")}
-              </Button>
-              <Button
-                type="button"
-                className="front-semibold uppercase text-red-700 m-1"
-                onClick={() => setSummaryDeleteModal(summary.tempId)}
-                unstyled
-              >
-                {t("t.delete")}
-              </Button>
-            </div>
-          ),
+          unitType: { content: types.map((option) => option.label).join(", ") },
+          units: { content: summary.totalCount },
+          amiRange: { content: amiRange && formatRange(amiRange.min, amiRange.max, "", "%") },
+          rentRange: { content: formatRentRange(rentRange, percentIncomeRange) },
+          occupancyRange: {
+            content: formatRange(summary.minOccupancy, summary.maxOccupancy, "", ""),
+          },
+          sqFeetRange: { content: formatRange(summary.sqFeetMin, summary.sqFeetMax, "", "") },
+          bathRange: { content: formatRange(summary.bathroomMin, summary.bathroomMax, "", "") },
+          action: {
+            content: (
+              <div className="flex-col">
+                <Button
+                  type="button"
+                  className="front-semibold uppercase m-1"
+                  onClick={() => editSummary(summary.tempId)}
+                  unstyled
+                >
+                  {t("t.edit")}
+                </Button>
+                <Button
+                  type="button"
+                  className="front-semibold uppercase text-red-700 m-1"
+                  onClick={() => setSummaryDeleteModal(summary.tempId)}
+                  unstyled
+                >
+                  {t("t.delete")}
+                </Button>
+              </div>
+            ),
+          },
         }
       }),
     [unitsSummaries, editSummary, unitTypeOptions]
@@ -181,6 +186,7 @@ const FormUnits = ({ listing, unitsSummaries, setSummaries, disableUnitsAccordio
             </div>
           ) : null}
           <Button
+            id="addUnitsButton"
             type="button"
             size={AppearanceSizeType.normal}
             styleType={fieldHasError(errors?.unitsSummaries) ? AppearanceStyleType.alert : null}

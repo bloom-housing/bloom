@@ -36,4 +36,24 @@
   li:last-child {
     @apply mb-4;
   }
+
+  &.markdown-informational {
+    font-size: 0.9em;
+    @apply text-gray-750;
+
+    h3 {
+      @apply font-sans;
+      @apply font-bold;
+      @apply text-base;
+      @apply text-black;
+    }
+
+    li {
+      @apply mb-4;
+    }
+
+    a {
+      @apply underline;
+    }
+  }
 }

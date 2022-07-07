@@ -45,6 +45,7 @@ const FormUserConfirm = () => {
   password.current = watch("password", "")
 
   const [isLoginLoading, setLoginLoading] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false)
   const [termsModal, setTermsModal] = useState(null)
   const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
   const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
@@ -57,7 +58,7 @@ const FormUserConfirm = () => {
   ]
 
   useEffect(() => {
-    if (token) {
+    if (!isSubmitting && token) {
       userService
         .isUserConfirmationTokenValid({ body: { token } })
         .then((res) => {
@@ -69,9 +70,10 @@ const FormUserConfirm = () => {
           setRerequestModalOpen(true)
         })
     }
-  }, [token, userService, setRerequestModalOpen])
+  }, [isSubmitting, token, userService])
 
   const onSubmit = async (data: FormUserConfirmFields) => {
+    setSubmitting(true)
     resetMutation()
 
     const body = {
@@ -96,9 +98,11 @@ const FormUserConfirm = () => {
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
         void router.push("/")
       } else {
+        setSubmitting(false)
         setRerequestModalOpen(true)
       }
     } catch (err) {
+      setSubmitting(false)
       console.error(err)
     }
   }
