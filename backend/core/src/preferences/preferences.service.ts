@@ -17,7 +17,7 @@ export class PreferencesService {
     const qb = this.repository
       .createQueryBuilder("preferences")
       .leftJoin("preferences.jurisdictions", "preferenceJurisdictions")
-      .select(["preferences", "preferenceJurisdictions.id"])
+      .select(["preferences", "preferenceJurisdictions.id", "preferenceJurisdictions.name"])
 
     if (params.filter) {
       addFilters<Array<PreferencesFilterParams>, typeof jurisdictionFilterTypeToFieldMap>(
