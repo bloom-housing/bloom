@@ -36,7 +36,7 @@ export class UserQueryFilter extends BaseQueryFilter {
 
 export function addIsPortalUserQuery(qb: WhereExpression, filterValue: string, user: User) {
   const userRolesColumnName = userFilterTypeToFieldMap[UserFilterKeys.isPortalUser]
-  if (filterValue == "true") {
+  if (filterValue === "true") {
     if (user.roles.isAdmin) {
       qb.andWhere(
         new Brackets((subQb) => {
@@ -62,7 +62,7 @@ export function addIsPortalUserQuery(qb: WhereExpression, filterValue: string, u
         })
       )
     }
-  } else if (filterValue == "false") {
+  } else if (filterValue === "false") {
     qb.andWhere(
       new Brackets((subQb) => {
         subQb.where(`${userRolesColumnName}.isPartner IS NULL`)
