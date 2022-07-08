@@ -6,28 +6,64 @@ export interface SideNavItemProps {
   current?: boolean
   url: string
   label: string
+  count?: number
+  childrenItems?: SideNavItemProps[]
 }
 
 export interface SideNavProps {
   navItems?: SideNavItemProps[]
+  className?: string
+}
+
+const ItemLabel = ({ item }: { item: SideNavItemProps }) => {
+  if (typeof item.count !== "undefined") {
+    return (
+      <>
+        <span>{item.label}</span>
+        <span>{item.count}</span>
+      </>
+    )
+  } else {
+    return <>{item.label}</>
+  }
 }
 
 const SideNav = (props: SideNavProps) => {
   const { LinkComponent } = React.useContext(NavigationContext)
 
+  const classNames = ["side-nav"]
+  if (props.className) classNames.push(props.className)
+
   return (
-    <nav className="side-nav" aria-label="Secondary navigation">
+    <nav className={classNames.join(" ")} aria-label="Secondary navigation">
       <ul>
         {props.navItems?.map((navItem: SideNavItemProps, index: number) => {
+          const hasCurrentChild = navItem.childrenItems?.some((item) => item.current)
           return (
             <li key={index}>
               <LinkComponent
-                className={navItem.current ? "is-current" : undefined}
                 href={navItem.url}
+                className={hasCurrentChild ? "has-current-child" : ""}
                 aria-current={navItem.current ? "page" : undefined}
               >
-                {navItem.label}
+                <ItemLabel item={navItem} />
               </LinkComponent>
+              {navItem.childrenItems && (
+                <ul>
+                  {navItem.childrenItems.map((childItem, childIndex) => {
+                    return (
+                      <li key={childIndex}>
+                        <LinkComponent
+                          href={childItem.url}
+                          aria-current={childItem.current ? "page" : undefined}
+                        >
+                          <ItemLabel item={childItem} />
+                        </LinkComponent>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
             </li>
           )
         })}
