@@ -4,16 +4,13 @@ import { User } from "../auth/entities/user.entity"
 import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing, Language } from "../../types"
-import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
+import { getRepositoryToken } from "@nestjs/typeorm"
 import { TranslationsService } from "../translations/services/translations.service"
 import { Translation } from "../translations/entities/translation.entity"
-import { Repository } from "typeorm"
 import { REQUEST } from "@nestjs/core"
 
-import dbOptions from "../../ormconfig.test"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
-import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { GeneratedListingTranslation } from "../translations/entities/generated-listing-translation.entity"
 import { GoogleTranslateService } from "../translations/services/google-translate.service"
 
@@ -33,64 +30,12 @@ const application = {
 }
 let sendMock
 
-describe("EmailService", () => {
-  let service: EmailService
-  let module: TestingModule
-  let sendGridService: SendGridService
+const translationRepositoryMock = {}
 
-  beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Translation, Jurisdiction, GeneratedListingTranslation]),
-        ConfigModule,
-        SendGridModule.forRoot({
-          apikey: "SG.fake",
-        }),
-      ],
-      providers: [
-        EmailService,
-        TranslationsService,
-        JurisdictionsService,
-        GoogleTranslateService,
-        JurisdictionResolverService,
-        {
-          provide: REQUEST,
-          useValue: {
-            get: () => {
-              return "Alameda"
-            },
-          },
-        },
-      ],
-    }).compile()
-
-    const jurisdictionService = await module.resolve<JurisdictionsService>(JurisdictionsService)
-    const jurisdiction = await jurisdictionService.findOne({ where: { name: "Alameda" } })
-
-    const translationsRepository = module.get<Repository<Translation>>(
-      getRepositoryToken(Translation)
-    )
-    await translationsRepository.createQueryBuilder().delete().execute()
-    const translationsService = await module.resolve<TranslationsService>(TranslationsService)
-
-    await translationsService.create({
-      jurisdiction: {
-        id: null,
-      },
-      language: Language.en,
-      translations: {
-        footer: {
-          footer: "Generic footer",
-          thankYou: "Thank you!",
-        },
-      },
-    })
-
-    await translationsService.create({
-      jurisdiction: {
-        id: jurisdiction.id,
-      },
+const translationServiceMock = {
+  getTranslationByLanguageAndJurisdictionOrDefaultEn: () => {
+    return {
+      jurisdictionId: "",
       language: Language.en,
       translations: {
         confirmation: {
@@ -145,7 +90,65 @@ describe("EmailService", () => {
           hello: "Hello",
         },
       },
-    })
+    }
+  },
+}
+
+const generatedListingTranslationRepositoryMock = {
+  findOne: jest.fn(),
+  save: jest.fn(),
+}
+
+describe("EmailService", () => {
+  let service: EmailService
+  let module: TestingModule
+  let sendGridService: SendGridService
+
+  beforeAll(async () => {
+    module = await Test.createTestingModule({
+      imports: [
+        ConfigModule,
+        SendGridModule.forRoot({
+          apikey: "SG.fake",
+        }),
+      ],
+      providers: [
+        EmailService,
+        {
+          provide: getRepositoryToken(Translation),
+          useValue: translationRepositoryMock,
+        },
+        {
+          provide: TranslationsService,
+          useValue: translationServiceMock,
+        },
+        {
+          provide: getRepositoryToken(GeneratedListingTranslation),
+          useValue: generatedListingTranslationRepositoryMock,
+        },
+        {
+          provide: JurisdictionsService,
+          useValue: {},
+        },
+        {
+          provide: JurisdictionResolverService,
+          useValue: {
+            getJurisdiction: () => ({
+              emailFromAddress: "myeamil@from",
+            }),
+          },
+        },
+        GoogleTranslateService,
+        {
+          provide: REQUEST,
+          useValue: {
+            get: () => {
+              return "Alameda"
+            },
+          },
+        },
+      ],
+    }).compile()
   })
 
   beforeEach(async () => {
