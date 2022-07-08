@@ -100,7 +100,7 @@ const Contact = ({
               {info.title}
             </Heading>
             <div className="text-gray-800 text-tiny markdown">{info.content}</div>
-           </React.Fragment>
+          </React.Fragment>
         )
       })}
     </section>
