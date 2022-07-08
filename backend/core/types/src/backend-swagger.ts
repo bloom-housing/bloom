@@ -4600,6 +4600,9 @@ export interface Preference {
   links?: PreferenceLink[]
 
   /**  */
+  jurisdictions?: IdName[]
+
+  /**  */
   id: string
 
   /**  */
@@ -6044,6 +6047,9 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata
+
+  /**  */
+  jurisdictions?: IdName[]
 }
 
 export interface PreferenceUpdate {
@@ -6061,6 +6067,9 @@ export interface PreferenceUpdate {
 
   /**  */
   formMetadata?: FormMetadata
+
+  /**  */
+  jurisdictions?: IdName[]
 
   /**  */
   id: string
