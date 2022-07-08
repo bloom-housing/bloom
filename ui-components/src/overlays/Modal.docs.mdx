@@ -11,12 +11,17 @@ The modal component displays a modal with a title and optional children typed as
 
 You can apply CSS variables to the `.modal` selector to customize the appearance of the component.
 
-| Name                        | Type  | Description                     | Default                         |
-| --------------------------- | ----- | ------------------------------- | ------------------------------- |
-| `--title-font-size`         | Size  | Title text size                 | `--bloom-font-size-base-alt`    |
-| `--title-font-family`       | Font  | Title font family               | `--bloom-font-sans`             |
-| `--content-font-color`      | Color | Title text color                | `--bloom-color-gray-700`        |
-| `--max-width`               | Size  | Modal max width                 | `--bloom-width-5xl`             |
-| `--desktop-min-width`       | Size  | Modal min width on desktop      | `--bloom-width-lg`              |
-| `--footer-background-color` | Color | Footer background color         | `--bloom-color-primary-lighter` |
-| `--border-radius`           | Size  | Border radius of modal, content | `--bloom-rounded`               |
+| Name                        | Type               | Description                     | Default                                                   |
+| --------------------------- | ------------------ | ------------------------------- | --------------------------------------------------------- |
+| `--title-color`             | Color              | Title text color                | <Swatch colorVar="--bloom-color-gray-900" />              |
+| `--title-font-size`         | Size               | Title text size                 | `--bloom-font-size-base-alt`                              |
+| `--title-font-family`       | Font               | Title font family               | `--bloom-font-sans`                                       |
+| `--content-font-color`      | Color              | Title text color                | <Swatch colorVar="--bloom-color-gray-700" />              |
+| `--max-width`               | Size               | Modal max width                 | `--bloom-width-5xl`                                       |
+| `--desktop-min-width`       | Size               | Modal min width on desktop      | `--bloom-width-lg`                                        |
+| `--footer-background-color` | Color              | Footer background color         | <Swatch colorVar="--bloom-color-primary-lighter" />       |
+| `--border-radius`           | Size               | Border radius of modal, content | `--bloom-rounded`                                         |
+| `--background-color`        | Color              | Border radius of modal, content | <Swatch colorVar="--bloom-color-white" />                 |
+| `--modal-shadow`            | Box Shadow         | Border radius of modal, content | `--bloom-shadow-md`                                       |
+| `--modal-border`            | Border             | Border radius of modal, content | `var(--bloom-border-1) solid var(--bloom-color-gray-400)` |
+| `--footer-justify`          | Flex Justification | Border radius of modal, content | `normal`                                                  |
