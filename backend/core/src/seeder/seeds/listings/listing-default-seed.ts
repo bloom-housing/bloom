@@ -5,7 +5,6 @@ import {
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
-  getDefaultProperty,
   getDefaultUnits,
   getDisabilityOrMentalIllnessProgram,
   getDisplaceePreference,
@@ -21,7 +20,6 @@ import { UnitAccessibilityPriorityType } from "../../../unit-accessbility-priori
 import { UnitType } from "../../../unit-types/entities/unit-type.entity"
 import { ReservedCommunityType } from "../../../reserved-community-type/entities/reserved-community-type.entity"
 import { AmiChart } from "../../../ami-charts/entities/ami-chart.entity"
-import { Property } from "../../../property/entities/property.entity"
 import { Unit } from "../../../units/entities/unit.entity"
 import { User } from "../../../auth/entities/user.entity"
 import { ApplicationMethod } from "../../../application-methods/entities/application-method.entity"
@@ -43,7 +41,6 @@ export class ListingDefaultSeed {
     @InjectRepository(ReservedCommunityType)
     protected readonly reservedTypeRepository: Repository<ReservedCommunityType>,
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
-    @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
     @InjectRepository(User) protected readonly userRepository: Repository<User>,
     @InjectRepository(ApplicationMethod)
@@ -71,28 +68,6 @@ export class ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
-
-    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = getDefaultUnits().map(
-      (unit) => {
-        return {
-          ...unit,
-          property: {
-            id: property.id,
-          },
-          amiChart,
-        }
-      }
-    )
-
-    unitsToBeCreated[0].priorityType = priorityTypeMobilityAndHearing
-    unitsToBeCreated[1].priorityType = priorityTypeMobilityAndHearing
-    unitsToBeCreated[0].unitType = unitTypeOneBdrm
-    unitsToBeCreated[1].unitType = unitTypeTwoBdrm
-    const newUnits = await this.unitsRepository.save(unitsToBeCreated)
-
     const defaultImage = await this.assetsRepository.save(getDefaultAssets()[0])
 
     const listingCreateDto: Omit<
@@ -100,20 +75,8 @@ export class ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...getDefaultListing(),
-      amiChartOverrides: [
-        {
-          unit: { id: newUnits[0].id },
-          items: [
-            {
-              percentOfAmi: 80,
-              householdSize: 1,
-              income: 777777,
-            },
-          ],
-        },
-      ],
+
       name: "Test: Default, Two Preferences",
-      property: property,
       assets: getDefaultAssets(),
       listingPreferences: [
         {
@@ -174,6 +137,42 @@ export class ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     }
 
-    return await this.listingRepository.save(listingCreateDto)
+    let listing = await this.listingRepository.save(listingCreateDto)
+
+    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = getDefaultUnits().map(
+      (unit) => {
+        return {
+          ...unit,
+          listing: {
+            id: listing.id,
+          },
+          amiChart,
+        }
+      }
+    )
+
+    unitsToBeCreated[0].priorityType = priorityTypeMobilityAndHearing
+    unitsToBeCreated[1].priorityType = priorityTypeMobilityAndHearing
+    unitsToBeCreated[0].unitType = unitTypeOneBdrm
+    unitsToBeCreated[1].unitType = unitTypeTwoBdrm
+    const newUnits = await this.unitsRepository.save(unitsToBeCreated)
+
+    listing = await this.listingRepository.save({
+      ...listing,
+      amiChartOverrides: [
+        {
+          unit: { id: newUnits[0].id },
+          items: [
+            {
+              percentOfAmi: 80,
+              householdSize: 1,
+              income: 777777,
+            },
+          ],
+        },
+      ],
+    })
+
+    return listing
   }
 }
