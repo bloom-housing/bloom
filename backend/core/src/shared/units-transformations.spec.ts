@@ -39,6 +39,7 @@ describe("Unit Transformations", () => {
         emailFromAddress: "email from address",
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       },
     }
 

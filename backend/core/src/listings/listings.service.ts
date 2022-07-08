@@ -9,10 +9,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
-import { plainToClass } from "class-transformer"
 import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
-import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
 import { summarizeUnits } from "../shared/units-transformations"
@@ -60,10 +58,9 @@ export class ListingsService {
     const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
-      .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
-      .leftJoin("property.buildingAddress", "buildingAddress")
-      .leftJoin("property.units", "units")
+      .leftJoin("listings.buildingAddress", "buildingAddress")
+      .leftJoin("listings.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
 
     const orderByConditions = ListingsService.buildOrderByConditions(params)
@@ -75,7 +72,7 @@ export class ListingsService {
       )
     }
 
-    innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
+    innerFilteredQuery.groupBy("listings.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -168,7 +165,6 @@ export class ListingsService {
       ...listingDto,
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
-      property: plainToClass(PropertyCreateDto, listingDto),
     })
 
     return await listing.save()
@@ -197,7 +193,7 @@ export class ListingsService {
     listingDto.unitsAvailable = availableUnits
 
     Object.assign(listing, {
-      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      ...listingDto,
       publishedAt:
         listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
           ? new Date()
@@ -206,17 +202,6 @@ export class ListingsService {
         listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
           ? new Date()
           : listing.closedAt,
-      property: plainToClass(
-        PropertyUpdateDto,
-        {
-          // NOTE: Create a property out of fields encapsulated in listingDto
-          ...listingDto,
-          // NOTE: Since we use the entire listingDto to create a property object the listing ID
-          //  would overwrite propertyId fetched from DB
-          id: listing.property.id,
-        },
-        { excludeExtraneousValues: true }
-      ),
     })
 
     return await this.listingRepository.save(listing)
@@ -272,11 +257,11 @@ export class ListingsService {
   }
 
   private async addUnitsSummarized(listing: Listing) {
-    if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
+    if (Array.isArray(listing.units) && listing.units.length > 0) {
       const amiCharts = await this.amiChartsRepository.find({
-        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
+        where: { id: In(listing.units.map((unit) => unit.amiChartId)) },
       })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts, listing)
+      listing.unitsSummarized = summarizeUnits(listing.units, amiCharts, listing)
     }
     return listing
   }
