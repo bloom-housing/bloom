@@ -97,6 +97,16 @@ const tritonListing: ListingSeedType = {
   isWaitlistOpen: true,
   whatToExpect: null,
   listingAvailability: ListingAvailability.availableUnits,
+  utilities: {
+    water: true,
+    gas: true,
+    trash: null,
+    sewer: true,
+    electricity: false,
+    cable: null,
+    phone: true,
+    internet: null,
+  },
 }
 
 export class ListingTritonSeed extends ListingDefaultSeed {

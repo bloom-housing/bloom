@@ -86,6 +86,7 @@ describe("Jurisdictions", () => {
         emailFromAddress: "",
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
       .expect(201)
 
@@ -124,6 +125,7 @@ describe("Jurisdictions", () => {
         emailFromAddress: "",
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
       .expect(201)
     expect(res.body).toHaveProperty("id")

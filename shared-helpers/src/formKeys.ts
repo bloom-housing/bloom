@@ -267,3 +267,14 @@ export enum RoleOption {
   Partner = "partner",
 }
 export const roleKeys = Object.values(RoleOption)
+
+export const listingUtilities = [
+  "water",
+  "gas",
+  "trash",
+  "sewer",
+  "electricity",
+  "cable",
+  "phone",
+  "internet",
+]

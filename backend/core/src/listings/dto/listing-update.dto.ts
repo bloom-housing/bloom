@@ -4,9 +4,7 @@ import {
   ArrayMaxSize,
   IsDate,
   IsDefined,
-  IsNumber,
   IsOptional,
-  IsString,
   IsUUID,
   ValidateNested,
 } from "class-validator"

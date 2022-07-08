@@ -1,5 +1,5 @@
 import { ListingReviewOrder, ListingAvailability } from "@bloom-housing/backend-core/types"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
+import { listingFeatures, listingUtilities } from "@bloom-housing/shared-helpers"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {
@@ -57,6 +57,12 @@ export default class AdditionalMetadataFormatter extends Formatter {
       return {
         ...acc,
         [current]: this.data.listingFeatures && this.data.listingFeatures.indexOf(current) >= 0,
+      }
+    }, {})
+    this.data.utilities = listingUtilities.reduce((acc, current) => {
+      return {
+        ...acc,
+        [current]: this.data.listingUtilities && this.data.listingUtilities.indexOf(current) >= 0,
       }
     }, {})
   }
