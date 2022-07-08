@@ -10,16 +10,14 @@ describe("Admin User Mangement Tests", () => {
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
-    const rolesArray = ["Partner", "Partner", "Jurisdictional Admin"]
-    cy.get(`.ag-center-cols-container [row-id="0"] [col-id="roles"]`)
-      .contains(rolesArray[0])
-      .should("have.text", rolesArray[0])
-    cy.get(`.ag-center-cols-container [row-id="1"] [col-id="roles"]`)
-      .contains(rolesArray[1])
-      .should("have.text", rolesArray[1])
-    cy.get(`.ag-center-cols-container [row-id="2"] [col-id="roles"]`)
-      .contains(rolesArray[2])
-      .should("have.text", rolesArray[2])
+    const rolesArray = ["Partner", "Jurisdictional Admin"]
+    cy.getByTestId("ag-page-size").select("100")
+
+    const regex = new RegExp(`${rolesArray.join("|")}`, "g")
+
+    cy.get(`.ag-center-cols-container [col-id="roles"]`).each((role) => {
+      cy.wrap(role).contains(regex)
+    })
   })
 
   it("as jurisdictional admin user, should be able to create new jurisidictional admin", () => {
