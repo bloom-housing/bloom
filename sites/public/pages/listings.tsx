@@ -75,11 +75,11 @@ const ListingsPage = ({ initialListings }) => {
           <Button
             className="mx-5 bg-lush border-lush text-black"
             size={AppearanceSizeType.normal}
-            icon="filter"
+            icon="search"
             iconPlacement="left"
             iconSize="md-large"
             onClick={() => setFilterModalVisible(true)}
-            passToIconClass={"ui-icon__filledBlack"}
+            iconColor={"black"}
           >
             {t("listingFilters.buttonTitle")}
           </Button>
