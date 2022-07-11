@@ -16,7 +16,7 @@ describe("User Mangement Tests", () => {
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
-    cy.login("jurisdictionalAdmin")
+    cy.loginAndAcceptTerms("jurisdictionalAdmin")
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Jurisdictional Admin"]
