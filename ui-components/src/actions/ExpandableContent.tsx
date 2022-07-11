@@ -15,6 +15,7 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
 
   return (
     <div className={rootClassNames}>
+      {isExpanded && <div>{children}</div>}
       <button
         type="button"
         className="button is-unstyled m-0 no-underline has-toggle"
@@ -25,7 +26,6 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
       >
         {isExpanded ? strings.readLess : strings.readMore}
       </button>
-      {isExpanded && <div className="mt-6">{children}</div>}
     </div>
   )
 }

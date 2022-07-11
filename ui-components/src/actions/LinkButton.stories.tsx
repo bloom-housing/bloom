@@ -36,3 +36,19 @@ export const RegularCase = () => (
     LinkButton (Normal Case)
   </LinkButton>
 )
+
+export const ExternalSameTab = () => (
+  <LinkButton href="https://www.google.com">LinkButton</LinkButton>
+)
+
+export const ExternalNewTabIcon = () => (
+  <LinkButton href="https://www.google.com" newTabIcon={true} newTab={true}>
+    LinkButton
+  </LinkButton>
+)
+
+export const UnstyledExternalNewTabIcon = () => (
+  <LinkButton href="https://www.google.com" newTabIcon={true} newTab={true} unstyled={true}>
+    LinkButton
+  </LinkButton>
+)
