@@ -10,7 +10,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     languages: [Language.en],
     programs: [],
     publicUrl: "",
-    emailFromAddress: "Alameda: Housing Bay Area",
+    emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: true,
@@ -23,7 +23,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     languages: [Language.en],
     programs: [],
     publicUrl: "",
-    emailFromAddress: "SJ: HousingBayArea.org",
+    emailFromAddress: "SJ: HousingBayArea.org <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: null,
@@ -36,7 +36,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     languages: [Language.en],
     programs: [],
     publicUrl: "",
-    emailFromAddress: "SMC: HousingBayArea.org",
+    emailFromAddress: "SMC: HousingBayArea.org <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: true,
@@ -49,7 +49,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     languages: [Language.en],
     programs: [],
     publicUrl: "",
-    emailFromAddress: "Detroit Housing",
+    emailFromAddress: "Detroit Housing <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: false,
