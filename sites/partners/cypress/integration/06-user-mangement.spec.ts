@@ -4,7 +4,7 @@ describe("User Mangement Tests", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Administrator", "Jurisdictional Admin"]
-    cy.getByTestId("ag-page-size").select("100")
+    cy.getByTestId("ag-page-size").select("100", { force: true })
 
     const regex = new RegExp(`${rolesArray.join("|")}`, "g")
 
@@ -16,11 +16,11 @@ describe("User Mangement Tests", () => {
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
-    cy.loginAndAcceptTerms("jurisdictionalAdmin")
+    cy.login("jurisdictionalAdmin")
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Jurisdictional Admin"]
-    cy.getByTestId("ag-page-size").select("100")
+    cy.getByTestId("ag-page-size").select("100", { force: true })
 
     const regex = new RegExp(`${rolesArray.join("|")}`, "g")
 
