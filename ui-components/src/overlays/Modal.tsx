@@ -8,6 +8,7 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   actions?: React.ReactNode[]
   children?: React.ReactNode
   closeClassNames?: string
+  closeIconColor?: string
   hideCloseIcon?: boolean
   innerClassNames?: string
   modalClassNames?: string
@@ -73,7 +74,11 @@ export const Modal = (props: ModalProps) => {
             onClick={props.onClose}
             tabIndex={0}
           >
-            <Icon size="medium" symbol="close" fill={IconFillColors.primary} />
+            <Icon
+              size="medium"
+              symbol="close"
+              fill={props.closeIconColor ?? IconFillColors.primary}
+            />
           </button>
         )}
       </div>
