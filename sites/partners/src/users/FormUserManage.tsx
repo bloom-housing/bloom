@@ -441,7 +441,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                     id="jurisdictions"
                     name="jurisdictions"
                     label={t("t.jurisdiction")}
-                    placeholder={t("t.jurisdiction")}
+                    placeholder={t("t.selectOne")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -575,17 +575,6 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
               loading={isResendConfirmationLoading}
             >
               {t("users.resendInvite")}
-            </Button>
-          )}
-
-          {mode === "add" && (
-            <Button
-              type="button"
-              onClick={() => onDrawerClose()}
-              styleType={AppearanceStyleType.secondary}
-              border={AppearanceBorderType.borderless}
-            >
-              {t("t.cancel")}
             </Button>
           )}
 
