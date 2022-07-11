@@ -81,7 +81,7 @@ const ListingsPage = ({ initialListings }) => {
             onClick={() => setFilterModalVisible(true)}
             iconColor={"black"}
           >
-            {t("listingFilters.buttonTitle")}
+            {t("listingFilters.buttonTitleExtended")}
           </Button>
         </h3>
       </div>
