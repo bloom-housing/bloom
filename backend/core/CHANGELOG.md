@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.7...@bloom-housing/backend-core@5.0.1-alpha.8) (2022-07-11)
+
+
+### Bug Fixes
+
+* fix email from address ([#2875](https://github.com/bloom-housing/bloom/issues/2875)) ([ea69c92](https://github.com/bloom-housing/bloom/commit/ea69c9201cf7b3d57b8751bf1c0d3662f2d991aa))
+
+
+
+
+
 ## [5.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.6...@bloom-housing/backend-core@5.0.1-alpha.7) (2022-07-08)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
