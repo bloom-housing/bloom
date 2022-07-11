@@ -31,6 +31,27 @@ export const AllFields = () => {
   )
 }
 
+export const WithoutPaperAppFiles = () => {
+  return (
+    <GetApplication
+      applicationsOpen={true}
+      applicationsOpenDate={"November 20th, 2021"}
+      paperApplications={[]}
+      paperMethod={true}
+      postmarkedApplicationsReceivedByDate={"November 30th, 2021"}
+      applicationPickUpAddressOfficeHours={"M-F 9am-5pm"}
+      applicationPickUpAddress={{
+        city: "City",
+        state: "State",
+        street2: "Street 2",
+        street: "Pick Up Address Street",
+        zipCode: "90210",
+      }}
+      preview={false}
+    />
+  )
+}
+
 export const Preview = () => {
   return (
     <GetApplication

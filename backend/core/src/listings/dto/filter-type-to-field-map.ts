@@ -4,7 +4,7 @@ import { ListingFilterKeys } from "../../.."
 export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
   status: "listings.status",
   name: "listings.name",
-  neighborhood: "property.neighborhood",
+  neighborhood: "listings.neighborhood",
   bedrooms: "unitTypeRef.num_bedrooms",
   zipcode: "buildingAddress.zipCode",
   leasingAgents: "leasingAgents.id",

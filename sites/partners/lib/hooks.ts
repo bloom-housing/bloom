@@ -312,7 +312,7 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
     preferencesService.list({
       filter: [
         {
-          $comparison: EnumPreferencesFilterParamsComparison["="],
+          $comparison: EnumPreferencesFilterParamsComparison["IN"],
           jurisdiction: jurisdictionId,
         },
       ],

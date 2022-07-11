@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.9...@bloom-housing/ui-components@5.0.1-alpha.10) (2022-07-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.8...@bloom-housing/ui-components@5.0.1-alpha.9) (2022-07-07)
+
+
+### Features
+
+* populate jurisdictional preferences on settings page ([#2828](https://github.com/bloom-housing/bloom/issues/2828)) ([2ea5646](https://github.com/bloom-housing/bloom/commit/2ea5646a49dc6782fe0e83e942e1917929fde153))
+
+
+
+
+
+## [5.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.7...@bloom-housing/ui-components@5.0.1-alpha.8) (2022-07-06)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.6...@bloom-housing/ui-components@5.0.1-alpha.7) (2022-07-02)
+
+
+### Bug Fixes
+
+* switch back to padding for image card leader ([#2851](https://github.com/bloom-housing/bloom/issues/2851)) ([c3fde4a](https://github.com/bloom-housing/bloom/commit/c3fde4adbff2bd116c4acaf39f609d3c0ed0638f))
+
+
+
+
+
+## [5.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.5...@bloom-housing/ui-components@5.0.1-alpha.6) (2022-06-29)
+
+
+### Bug Fixes
+
+* hide apply section if there is no data ([#2846](https://github.com/bloom-housing/bloom/issues/2846)) ([5fcaf58](https://github.com/bloom-housing/bloom/commit/5fcaf58acc8cc083c738f53a23beba4e567b2994))
+
+
+
+
+
 ## [5.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.4...@bloom-housing/ui-components@5.0.1-alpha.5) (2022-06-27)
 
 

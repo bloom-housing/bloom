@@ -268,3 +268,14 @@ export enum RoleOption {
   JurisdictionalAdmin = "jurisdictionalAdmin",
 }
 export const roleKeys = Object.values(RoleOption)
+
+export const listingUtilities = [
+  "water",
+  "gas",
+  "trash",
+  "sewer",
+  "electricity",
+  "cable",
+  "phone",
+  "internet",
+]

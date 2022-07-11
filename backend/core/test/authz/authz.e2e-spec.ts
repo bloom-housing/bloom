@@ -314,6 +314,7 @@ describe("Authz", () => {
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const password = "abcdef"
@@ -371,6 +372,7 @@ describe("Authz", () => {
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const password = "abcdef"
@@ -427,12 +429,14 @@ describe("Authz", () => {
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const password = "abcdef"
@@ -470,12 +474,14 @@ describe("Authz", () => {
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const password = "abcdef"
@@ -530,6 +536,7 @@ describe("Authz", () => {
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const password = "abcdef"
@@ -575,12 +582,14 @@ describe("Authz", () => {
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const jurisdiction2 = await jurisdictionsRepository.save({
         name: `j-${uuid.v4()}`,
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       })
 
       const password = "abcdef"
