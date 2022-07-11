@@ -1,10 +1,14 @@
 import React, { useState } from "react"
-import { withKnobs, text, select, boolean } from "@storybook/addon-knobs"
+import { withKnobs, text, boolean } from "@storybook/addon-knobs"
 import { BADGES } from "../../.storybook/constants"
 import "./Modal.scss"
 import { Modal } from "./Modal"
 import { Button } from "../actions/Button"
-import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
+import {
+  AppearanceBorderType,
+  AppearanceSizeType,
+  AppearanceStyleType,
+} from "../global/AppearanceTypes"
 import ModalDocumentation from "./Modal.docs.mdx"
 
 export default {
@@ -101,7 +105,11 @@ export const TransparentOverlayModal = () => (
     ariaDescription={text("Aria Description", "Modal Description")}
     hideCloseIcon={true}
     actions={[
-      <Button onClick={noop} styleType={AppearanceStyleType.primary}>
+      <Button
+        onClick={noop}
+        styleType={AppearanceStyleType.primary}
+        size={AppearanceSizeType.small}
+      >
         {text("Action 2 Label", "Submit")}
       </Button>,
       <Button

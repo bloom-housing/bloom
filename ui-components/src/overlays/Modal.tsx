@@ -30,7 +30,7 @@ const ModalHeader = (props: { title: string; uniqueId?: string }) => (
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
   <footer className="modal__footer" data-testid="footer">
-    <div className="flex flex-row-reverse gap-5">
+    <div className="flex flex-row-reverse gap-5 items-center">
       {props.actions.map((action: React.ReactNode, index: number) => (
         <div key={index}>{action}</div>
       ))}
