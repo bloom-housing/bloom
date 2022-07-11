@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.10...@bloom-housing/ui-components@5.0.1-alpha.11) (2022-07-11)
+
+
+### Bug Fixes
+
+* ux updates and bug fixes for sidebar components ([#2859](https://github.com/bloom-housing/bloom/issues/2859)) ([1bd3b36](https://github.com/bloom-housing/bloom/commit/1bd3b36415ff55be88ea5ada6184de2c232f2da5))
+
+
+
+
+
 ## [5.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.9...@bloom-housing/ui-components@5.0.1-alpha.10) (2022-07-08)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
