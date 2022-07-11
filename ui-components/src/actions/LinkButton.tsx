@@ -24,11 +24,13 @@ const LinkButton = (props: LinkButtonProps) => {
         className={buttonClasses.join(" ")}
         data-test-id={props.dataTestId}
         target={props.newTab ? "_blank" : "_self"}
-        aria-label={props.newTabIcon ? "Opens in a new tab" : ""}
       >
         {buttonInner(props)}
         {props.newTabIcon && (
-          <Icon symbol={faUpRightFromSquare} size={"small"} className={"ml-2"} />
+          <>
+            <Icon symbol={faUpRightFromSquare} size={"small"} className={"ml-2"} />
+            <span className="sr-only">{"Opens in a new tab"}</span>
+          </>
         )}
       </a>
     )
