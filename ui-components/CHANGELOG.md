@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.11...@bloom-housing/ui-components@5.0.1-alpha.12) (2022-07-11)
+
+
+### Bug Fixes
+
+* resolve key warning in contact component ([fe1070a](https://github.com/bloom-housing/bloom/commit/fe1070acdbb7b927d9466f583d2f301127de114f))
+
+
+
+
+
 ## [5.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.10...@bloom-housing/ui-components@5.0.1-alpha.11) (2022-07-11)
 
 
