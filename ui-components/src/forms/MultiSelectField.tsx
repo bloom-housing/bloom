@@ -6,11 +6,12 @@ import { Icon } from "../icons/Icon"
 
 interface MultiSelectFieldProps {
   name: string
-  placeholder?: string
   dataSource: string | string[] | any[] | Function | Promise<any[]>
   register: UseFormMethods["register"]
-  validation?: RegisterOptions
+  getValues: UseFormMethods["getValues"]
   setValue: UseFormMethods["setValue"]
+  placeholder?: string
+  validation?: RegisterOptions
   label?: string
   id?: string
   dataTestId?: string
@@ -24,6 +25,7 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
 
   useEffect(() => {
     if (autocompleteRef.current) {
+      autocompleteRef.current.value = props.getValues(name)
       AriaAutocomplete(autocompleteRef.current, {
         source: props.dataSource,
         delay: 500, // debounce for a half-second
@@ -56,7 +58,7 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
   return (
     <div className="field multi-select-field">
       {props.label && label}
-      <div className="control">
+      <div className="control" data-test-id={props.dataTestId}>
         <Icon symbol="search" size="medium" />
         <input id={props.id} ref={autocompleteRef} />
       </div>
