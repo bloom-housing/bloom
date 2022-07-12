@@ -1,5 +1,4 @@
 import * as React from "react"
-
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { ApplicationStatus } from "./ApplicationStatus"
@@ -77,6 +76,16 @@ export const pastDueAndVivid = () => (
     status={ApplicationStatusType.Closed}
     vivid={true}
   />
+)
+
+export const pastDueWithStyles = () => (
+    <ApplicationStatus
+        className={text("className","place-content-center")}
+        content={
+            t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
+        }
+        status={ApplicationStatusType.Closed}
+    />
 )
 
 export const pastDueWithIconColor = () => (
