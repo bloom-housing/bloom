@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.13...@bloom-housing/ui-components@5.0.1-alpha.14) (2022-07-12)
+
+
+### Features
+
+* **preferencelist:** vertically align content at $md bp ([8dc7867](https://github.com/bloom-housing/bloom/commit/8dc786768fe3e2c82e8e345e418148751971a1c2)), closes [#2827](https://github.com/bloom-housing/bloom/issues/2827)
+
+
+
+
+
 ## [5.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.12...@bloom-housing/ui-components@5.0.1-alpha.13) (2022-07-12)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
