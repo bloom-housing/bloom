@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.13...@bloom-housing/ui-components@5.0.1-alpha.14) (2022-07-12)
+
+
+### Features
+
+* **preferencelist:** vertically align content at $md bp ([8dc7867](https://github.com/bloom-housing/bloom/commit/8dc786768fe3e2c82e8e345e418148751971a1c2)), closes [#2827](https://github.com/bloom-housing/bloom/issues/2827)
+
+
+
+
+
+## [5.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.12...@bloom-housing/ui-components@5.0.1-alpha.13) (2022-07-12)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.11...@bloom-housing/ui-components@5.0.1-alpha.12) (2022-07-11)
+
+
+### Bug Fixes
+
+* resolve key warning in contact component ([fe1070a](https://github.com/bloom-housing/bloom/commit/fe1070acdbb7b927d9466f583d2f301127de114f))
+
+
+
+
+
+## [5.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.10...@bloom-housing/ui-components@5.0.1-alpha.11) (2022-07-11)
+
+
+### Bug Fixes
+
+* ux updates and bug fixes for sidebar components ([#2859](https://github.com/bloom-housing/bloom/issues/2859)) ([1bd3b36](https://github.com/bloom-housing/bloom/commit/1bd3b36415ff55be88ea5ada6184de2c232f2da5))
+
+
+
+
+
 ## [5.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.9...@bloom-housing/ui-components@5.0.1-alpha.10) (2022-07-08)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

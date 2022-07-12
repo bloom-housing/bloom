@@ -2,7 +2,7 @@
   .info-card__title {
     @apply mb-0;
 
-    @media (max-width: $screen-sm) {
+    @media (max-width: $screen-md) {
       margin-left: 0px;
       margin-top: var(--bloom-s3);
     }
@@ -40,7 +40,7 @@
     margin-left: -3rem;
   }
 
-  @media (max-width: $screen-sm) {
+  @media (max-width: $screen-md) {
     margin-left: 0px;
     float: none;
   }
@@ -55,7 +55,7 @@
   @apply text-gray-750;
   @apply text-tiny;
 
-  @media (max-width: $screen-sm) {
+  @media (max-width: $screen-md) {
     margin-left: 0px;
   }
 }
