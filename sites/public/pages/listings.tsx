@@ -70,7 +70,7 @@ const ListingsPage = ({ initialListings }) => {
       </Drawer>
 
       <div className={"bg-gray-300"}>
-        <h3 className="max-w-5xl flex flex-wrap justify-between container mx-auto text-3xl text-primary-darker font-bold px-4 py-8">
+        <h3 className="max-w-5xl flex flex-wrap justify-between container mx-auto text-3xl text-primary-darker font-bold px-4 py-8  gap-y-2">
           {t("listingFilters.allRentals")}
           <Button
             className="bg-lush border-lush text-black"
