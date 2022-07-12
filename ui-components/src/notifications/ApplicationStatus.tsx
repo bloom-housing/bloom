@@ -58,13 +58,13 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
       bgColor = "bg-primary"
   }
 
-  const classNames = ['application-status', textSize, textColor, bgColor]
+  const classNames = ["application-status", textSize, textColor, bgColor]
   if (className) {
     classNames.push(className)
   }
 
   return (
-    <div className={classNames.join(' ')}>
+    <div className={classNames.join(" ")}>
       {icon}
       <span>
         {content}

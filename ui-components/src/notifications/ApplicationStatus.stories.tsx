@@ -79,13 +79,13 @@ export const pastDueAndVivid = () => (
 )
 
 export const pastDueWithStyles = () => (
-    <ApplicationStatus
-        className={text("className","place-content-center")}
-        content={
-            t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
-        }
-        status={ApplicationStatusType.Closed}
-    />
+  <ApplicationStatus
+    className={text("className", "place-content-center")}
+    content={
+      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
+    }
+    status={ApplicationStatusType.Closed}
+  />
 )
 
 export const pastDueWithIconColor = () => (
