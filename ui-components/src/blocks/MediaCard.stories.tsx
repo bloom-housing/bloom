@@ -11,4 +11,6 @@ export default {
   },
 }
 
-export const testing = () => <MediaCard title="Done" />
+export const testing = () => (
+  <MediaCard title="Testing Title" videoURL="https://www.youtube.com/embed/dQw4w9WgXcQ" />
+)
