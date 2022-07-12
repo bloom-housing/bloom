@@ -23,6 +23,7 @@ import { useListingsData } from "../../lib/hooks"
 import { EnumListingFilterParamsStatus, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import FilterForm from "../../src/forms/filters/FilterForm"
 import { getListings } from "../../lib/helpers"
+import { faSliders } from "@fortawesome/free-solid-svg-icons"
 
 const FilteredListingsPage = () => {
   const router = useRouter()
@@ -125,7 +126,7 @@ const FilteredListingsPage = () => {
         <div className="flex container content-center max-w-5xl px-4 mx-auto pb-6">
           <Button
             size={AppearanceSizeType.normal}
-            icon="filter"
+            icon={faSliders}
             iconPlacement="left"
             iconSize="md-large"
             onClick={() => setFilterModalVisible(true)}
