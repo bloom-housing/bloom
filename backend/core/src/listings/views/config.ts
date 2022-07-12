@@ -56,6 +56,15 @@ const views: Views = {
       "listingImagesImage.label",
       "listingPreferencesPreference.id",
       "listings.listingAvailability",
+      "utilities.id",
+      "utilities.water",
+      "utilities.gas",
+      "utilities.trash",
+      "utilities.sewer",
+      "utilities.electricity",
+      "utilities.cable",
+      "utilities.phone",
+      "utilities.internet",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
@@ -71,6 +80,7 @@ const views: Views = {
       { join: "listings.features", alias: "features" },
       { join: "listings.listingPrograms", alias: "listingPrograms" },
       { join: "listingPrograms.program", alias: "listingProgramsProgram" },
+      { join: "listings.utilities", alias: "utilities" },
     ],
   },
 }
@@ -168,6 +178,7 @@ views.detail = {
     "listingPreferencesPreference.ordinal",
     "listingPreferencesPreference.links",
     "listingPreferencesPreference.formMetadata",
+    "listings.utilities",
   ],
   leftJoins: [
     ...views.base.leftJoins,
@@ -216,6 +227,7 @@ views.full = {
     ["listingPrograms.program", "listingProgramsProgram"],
     ["listings.images", "listingImages"],
     ["listingImages.image", "listingImagesImage"],
+    ["listings.utilities", "listing_utilities"],
   ],
 }
 

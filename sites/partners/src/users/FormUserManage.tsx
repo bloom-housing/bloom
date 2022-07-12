@@ -132,6 +132,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
     const roles = (() => ({
       isAdmin: role.includes(RoleOption.Administrator),
       isPartner: role.includes(RoleOption.Partner),
+      isJurisdictionalAdmin: role.includes(RoleOption.JurisdictionalAdmin),
     }))()
 
     const leasingAgentInListings = user_listings?.map((id) => ({ id })) || []

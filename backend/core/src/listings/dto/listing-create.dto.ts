@@ -1,13 +1,6 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import {
-  ArrayMaxSize,
-  IsDefined,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
+import { ArrayMaxSize, IsDefined, IsOptional, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto } from "../../shared/dto/address.dto"

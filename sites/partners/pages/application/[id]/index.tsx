@@ -3,16 +3,16 @@ import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   AppearanceStyleType,
-  PageHeader,
+  NavigationHeader,
   t,
   Tag,
-  Button,
   AlertBox,
   SiteAlert,
+  Breadcrumbs,
+  BreadcrumbLink,
 } from "@bloom-housing/ui-components"
+import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useSingleApplicationData } from "../../../lib/hooks"
-
 import Layout from "../../../layouts"
 import { ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
@@ -36,6 +36,11 @@ export default function ApplicationsList() {
   const router = useRouter()
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
+
+  {
+    /* TODO: add listing name in a listing response */
+  }
+  const { listingDto } = useSingleListingData(application?.listing.id)
 
   const { applicationsService } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState(false)
@@ -83,7 +88,7 @@ export default function ApplicationsList() {
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
-        <PageHeader
+        <NavigationHeader
           className="relative"
           title={
             <>
@@ -96,21 +101,27 @@ export default function ApplicationsList() {
               </p>
             </>
           }
+          breadcrumbs={
+            <Breadcrumbs>
+              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${application?.listing?.id}`}>
+                {listingDto?.name}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications`}>
+                {t("nav.applications")}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/application/${application.id}`} current>
+                {application.confirmationCode}
+              </BreadcrumbLink>
+            </Breadcrumbs>
+          }
         >
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
             <SiteAlert type="success" timeout={5000} dismissable />
           </div>
-        </PageHeader>
+        </NavigationHeader>
         <section className="border-t bg-white">
-          <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => router.push(`/listings/${application.listing.id}/applications`)}
-            >
-              {t("t.back")}
-            </Button>
-
+          <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
             <div className="status-bar__status md:pl-4 md:w-3/12">{applicationStatus}</div>
           </div>
         </section>

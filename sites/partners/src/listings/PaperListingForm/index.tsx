@@ -287,15 +287,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       <LoadingOverlay isLoading={loading}>
         <>
           <StatusBar
-            backButton={
-              <Button
-                inlineIcon="left"
-                icon="arrowBack"
-                onClick={() => (editMode ? router.push(`/listings/${listing?.id}`) : router.back())}
-              >
-                {t("t.back")}
-              </Button>
-            }
             tagStyle={(() => {
               switch (listing?.status) {
                 case ListingStatus.active:
@@ -376,12 +367,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             dataFetcher={useJurisdictionalProgramList}
                             formKey={"program"}
                           />
-                          <AdditionalFees />
+                          <AdditionalFees existingUtilities={listing?.utilities} />{" "}
                           <BuildingFeatures existingFeatures={listing?.features} />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
-
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               type="button"
