@@ -8,7 +8,6 @@ import {
   LoadingOverlay,
   StatusBar,
   AppearanceStyleType,
-  Button,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
@@ -156,17 +155,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     <LoadingOverlay isLoading={loading}>
       <>
         <StatusBar
-          backButton={
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() =>
-                editMode ? router.push(`/application/${application.id}`) : router.back()
-              }
-            >
-              {t("t.back")}
-            </Button>
-          }
           tagStyle={
             application?.status == ApplicationStatus.submitted
               ? AppearanceStyleType.success

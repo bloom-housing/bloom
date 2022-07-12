@@ -4,25 +4,26 @@ import { AppearanceProps, classNamesForAppearanceTypes } from "../global/Appeara
 import { Icon, IconSize, UniversalIconType } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
-  id?: string
-  type?: "button" | "submit" | "reset"
+  "data-test-id"?: string
+  ariaHidden?: boolean
+  ariaLabel?: string
   children: React.ReactNode
-  onClick?: (e: React.MouseEvent) => void
+  className?: string
+  dataTestId?: string
+  disabled?: boolean
+  fullWidth?: boolean
   icon?: UniversalIconType
   iconPlacement?: "left" | "right"
   iconSize?: IconSize
+  id?: string
   // TODO: inlineIcon is deprecated
-  inlineIcon?: "left" | "right"
   inline?: boolean
-  unstyled?: boolean
-  fullWidth?: boolean
-  className?: string
-  disabled?: boolean
+  inlineIcon?: "left" | "right"
   loading?: boolean
-  ariaHidden?: boolean
-  ariaLabel?: string
-  dataTestId?: string
-  "data-test-id"?: string
+  onClick?: (e: React.MouseEvent) => void
+  transition?: boolean
+  type?: "button" | "submit" | "reset"
+  unstyled?: boolean
 }
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
@@ -36,6 +37,7 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   if (props.fullWidth) classNames.push("is-fullwidth")
   if (props.className) classNames.push(props.className)
   if (props.loading) classNames.push("is-loading")
+  if (props.transition) classNames.push("transition")
   return classNames
 }
 

@@ -11,7 +11,6 @@ const listingPreferences = [
     ordinal: 1,
     links: [],
     title: "Title 1",
-    subtitle: "Subtitle 1",
     description: "Description 1",
   },
   {
