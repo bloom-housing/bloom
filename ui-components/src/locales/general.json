@@ -948,6 +948,7 @@
   "users.accountConfirmed": "Account confirmed",
   "users.confirmationSent": "Confirmation sent",
   "users.inviteSent": "Invite sent",
+  "users.jurisdictionalAdmin": "Jurisdictional Admin",
   "users.userDeleted": "User deleted",
   "users.userUpdated": "User updated",
   "welcome.allApplicationClosed": "All applications are currently closed, but you can view closed listings.",
