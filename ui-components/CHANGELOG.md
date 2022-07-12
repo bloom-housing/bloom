@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.14...@bloom-housing/ui-components@5.0.1-alpha.15) (2022-07-12)
+
+
+### Features
+
+* modal styling updates ([#2857](https://github.com/bloom-housing/bloom/issues/2857)) ([4faf6de](https://github.com/bloom-housing/bloom/commit/4faf6de448a7fff8d4fa1a7a1144674ace311732))
+
+
+
+
+
 ## [5.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.13...@bloom-housing/ui-components@5.0.1-alpha.14) (2022-07-12)
 
 
