@@ -259,7 +259,6 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }
@@ -280,7 +279,6 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }
@@ -307,7 +305,6 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }, [createUserBody, onDrawerClose, updateUser, userService, user])
@@ -327,7 +324,6 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         .finally(() => {
           onDrawerClose()
           setDeleteModalActive(false)
-          void router.reload()
         })
     )
   }

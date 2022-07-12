@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
+import { useSWRConfig } from "swr"
 import {
   NavigationHeader,
   AgTable,
@@ -21,6 +22,7 @@ type UserDrawerValue = {
 }
 
 const Users = () => {
+  const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
 
   const tableOptions = useAgTable()
@@ -93,7 +95,7 @@ const Users = () => {
     ]
   }, [])
 
-  const { data: userList, loading, error } = useUserList({
+  const { data: userList, loading, error, cacheKey } = useUserList({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
@@ -167,7 +169,10 @@ const Users = () => {
           mode={userDrawer?.type}
           user={userDrawer?.user}
           listings={listingDtos?.items}
-          onDrawerClose={() => setUserDrawer(null)}
+          onDrawerClose={() => {
+            setUserDrawer(null)
+            void mutate(cacheKey)
+          }}
         />
       </Drawer>
     </Layout>
