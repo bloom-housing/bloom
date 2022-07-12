@@ -5,8 +5,7 @@ import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
-import { t } from "../helpers/translator"
-import { Icon, IconFillColors, IconTypes } from "../icons/Icon"
+import { Icon, IconFillColors, IconTypes, UniversalIconType } from "../icons/Icon"
 import { Tooltip, TooltipProps } from "../blocks/Tooltip"
 
 export interface StatusBarType {
@@ -14,13 +13,7 @@ export interface StatusBarType {
   content: string
   subContent?: string
   hideIcon?: boolean
-  iconType?: IconTypes
-}
-
-export interface ImageTag {
-  text?: string
-  iconType?: IconTypes
-  iconColor?: string
+  iconType?: UniversalIconType
 }
 
 export interface ImageTag {
