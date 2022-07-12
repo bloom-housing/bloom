@@ -35,7 +35,7 @@
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
-    "electron": "^13.1.7",
+    "electron": "^15.5.5",
     "nanoid": "^3.1.12",
     "next": "^11.1.1",
     "next-plugin-custom-babel-config": "^1.0.2",
