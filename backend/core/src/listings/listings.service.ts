@@ -1,11 +1,16 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Scope,
+} from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
-import { plainToClass } from "class-transformer"
 import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
-import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
 import { summarizeUnits } from "../shared/units-transformations"
@@ -20,6 +25,12 @@ import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 import { OrderParam } from "../applications/types/order-param"
+import { authzActions } from "../auth/enum/authz-actions.enum"
+import { ListingRepository } from "./repositories/listing.repository"
+import { AuthzService } from "../auth/services/authz.service"
+import { Request as ExpressRequest } from "express"
+import { REQUEST } from "@nestjs/core"
+import { User } from "../auth/entities/user.entity"
 
 type OrderByConditionData = {
   orderBy: string
@@ -27,67 +38,18 @@ type OrderByConditionData = {
   nulls?: "NULLS LAST" | "NULLS FIRST"
 }
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
   constructor(
-    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
+    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
-    private readonly translationService: TranslationsService
+    private readonly translationService: TranslationsService,
+    private readonly authzService: AuthzService,
+    @Inject(REQUEST) private req: ExpressRequest
   ) {}
 
   private getFullyJoinedQueryBuilder() {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
-  }
-
-  private static getOrderByCondition(
-    orderBy: OrderByFieldsEnum,
-    orderDir: OrderParam
-  ): OrderByConditionData {
-    switch (orderBy) {
-      case OrderByFieldsEnum.mostRecentlyUpdated:
-        return { orderBy: "listings.updated_at", orderDir }
-      case OrderByFieldsEnum.status:
-        return { orderBy: "listings.status", orderDir }
-      case OrderByFieldsEnum.name:
-        return { orderBy: "listings.name", orderDir }
-      case OrderByFieldsEnum.waitlistOpen:
-        return { orderBy: "listings.isWaitlistOpen", orderDir }
-      case OrderByFieldsEnum.unitsAvailable:
-        return { orderBy: "property.unitsAvailable", orderDir }
-      case OrderByFieldsEnum.mostRecentlyClosed:
-        return {
-          orderBy: "listings.closedAt",
-          orderDir,
-          nulls: "NULLS LAST",
-        }
-      case OrderByFieldsEnum.marketingType:
-        return { orderBy: "listings.marketingType", orderDir }
-      case OrderByFieldsEnum.applicationDates:
-      case undefined:
-        // Default to ordering by applicationDates (i.e. applicationDueDate
-        // and applicationOpenDate) if no orderBy param is specified.
-        return { orderBy: "listings.applicationDueDate", orderDir }
-      default:
-        throw new HttpException(
-          `OrderBy parameter not recognized or not yet implemented.`,
-          HttpStatus.NOT_IMPLEMENTED
-        )
-    }
-  }
-
-  private static buildOrderByConditions(params: ListingsQueryParams): Array<OrderByConditionData> {
-    if (!params.orderDir || !params.orderBy) {
-      return [
-        ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC),
-      ]
-    }
-    const orderByConditionDataArray = []
-    for (let i = 0; i < params.orderDir.length; i++) {
-      orderByConditionDataArray.push(
-        ListingsService.getOrderByCondition(params.orderBy[i], params.orderDir[i])
-      )
-    }
-    return orderByConditionDataArray
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
@@ -96,10 +58,9 @@ export class ListingsService {
     const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
-      .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
-      .leftJoin("property.buildingAddress", "buildingAddress")
-      .leftJoin("property.units", "units")
+      .leftJoin("listings.buildingAddress", "buildingAddress")
+      .leftJoin("listings.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
 
     const orderByConditions = ListingsService.buildOrderByConditions(params)
@@ -111,7 +72,7 @@ export class ListingsService {
       )
     }
 
-    innerFilteredQuery.groupBy("listings.id").addGroupBy("property.id")
+    innerFilteredQuery.groupBy("listings.id")
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -195,12 +156,17 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
+      jurisdictionId: listingDto.jurisdiction.id,
+    })
+
     const listing = this.listingRepository.create({
       ...listingDto,
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
-      property: plainToClass(PropertyCreateDto, listingDto),
     })
+
     return await listing.save()
   }
 
@@ -212,6 +178,9 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
+
+    await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.update)
+
     const availableUnits =
       listingDto.listingAvailability === ListingAvailability.availableUnits
         ? listingDto.units.length
@@ -221,10 +190,10 @@ export class ListingsService {
         delete unit.id
       }
     })
-
     listingDto.unitsAvailable = availableUnits
+
     Object.assign(listing, {
-      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      ...listingDto,
       publishedAt:
         listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
           ? new Date()
@@ -233,17 +202,6 @@ export class ListingsService {
         listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
           ? new Date()
           : listing.closedAt,
-      property: plainToClass(
-        PropertyUpdateDto,
-        {
-          // NOTE: Create a property out of fields encapsulated in listingDto
-          ...listingDto,
-          // NOTE: Since we use the entire listingDto to create a property object the listing ID
-          //  would overwrite propertyId fetched from DB
-          id: listing.property.id,
-        },
-        { excludeExtraneousValues: true }
-      ),
     })
 
     return await this.listingRepository.save(listing)
@@ -253,6 +211,9 @@ export class ListingsService {
     const listing = await this.listingRepository.findOneOrFail({
       where: { id: listingId },
     })
+
+    await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.delete)
+
     return await this.listingRepository.remove(listing)
   }
 
@@ -264,6 +225,7 @@ export class ListingsService {
         "listingPreferences.ordinal": "ASC",
       })
       .getOne()
+
     if (!result) {
       throw new NotFoundException()
     }
@@ -276,16 +238,6 @@ export class ListingsService {
     return result
   }
 
-  private async addUnitsSummarized(listing: Listing) {
-    if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
-      const amiCharts = await this.amiChartsRepository.find({
-        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
-      })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts, listing)
-    }
-    return listing
-  }
-
   @Interval(1000 * 60 * 60)
   public async changeOverdueListingsStatusCron() {
     const listings = await this.listingRepository
@@ -295,11 +247,87 @@ export class ListingsService {
       .andWhere(`listings.applicationDueDate IS NOT NULL`)
       .andWhere(`listings.applicationDueDate < NOW()`)
       .getMany()
+
     for (const listing of listings) {
       listing.status = ListingStatus.closed
       listing.closedAt = new Date()
     }
 
     await this.listingRepository.save(listings)
+  }
+
+  private async addUnitsSummarized(listing: Listing) {
+    if (Array.isArray(listing.units) && listing.units.length > 0) {
+      const amiCharts = await this.amiChartsRepository.find({
+        where: { id: In(listing.units.map((unit) => unit.amiChartId)) },
+      })
+      listing.unitsSummarized = summarizeUnits(listing.units, amiCharts, listing)
+    }
+    return listing
+  }
+
+  private static getOrderByCondition(
+    orderBy: OrderByFieldsEnum,
+    orderDir: OrderParam
+  ): OrderByConditionData {
+    switch (orderBy) {
+      case OrderByFieldsEnum.mostRecentlyUpdated:
+        return { orderBy: "listings.updated_at", orderDir }
+      case OrderByFieldsEnum.status:
+        return { orderBy: "listings.status", orderDir }
+      case OrderByFieldsEnum.name:
+        return { orderBy: "listings.name", orderDir }
+      case OrderByFieldsEnum.waitlistOpen:
+        return { orderBy: "listings.isWaitlistOpen", orderDir }
+      case OrderByFieldsEnum.unitsAvailable:
+        return { orderBy: "property.unitsAvailable", orderDir }
+      case OrderByFieldsEnum.mostRecentlyClosed:
+        return {
+          orderBy: "listings.closedAt",
+          orderDir,
+          nulls: "NULLS LAST",
+        }
+      case OrderByFieldsEnum.marketingType:
+        return { orderBy: "listings.marketingType", orderDir }
+      case OrderByFieldsEnum.applicationDates:
+      case undefined:
+        // Default to ordering by applicationDates (i.e. applicationDueDate
+        // and applicationOpenDate) if no orderBy param is specified.
+        return { orderBy: "listings.applicationDueDate", orderDir }
+      default:
+        throw new HttpException(
+          `OrderBy parameter not recognized or not yet implemented.`,
+          HttpStatus.NOT_IMPLEMENTED
+        )
+    }
+  }
+
+  private static buildOrderByConditions(params: ListingsQueryParams): Array<OrderByConditionData> {
+    if (!params.orderDir || !params.orderBy) {
+      return [
+        ListingsService.getOrderByCondition(OrderByFieldsEnum.applicationDates, OrderParam.ASC),
+      ]
+    }
+
+    const orderByConditionDataArray = []
+    for (let i = 0; i < params.orderDir.length; i++) {
+      orderByConditionDataArray.push(
+        ListingsService.getOrderByCondition(params.orderBy[i], params.orderDir[i])
+      )
+    }
+
+    return orderByConditionDataArray
+  }
+
+  private async authorizeUserActionForListingId(user, listingId: string, action) {
+    /**
+     * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
+     */
+    const jurisdictionId = await this.listingRepository.getJurisdictionIdByListingId(listingId)
+
+    return await this.authzService.canOrThrow(user, "listing", action, {
+      id: listingId,
+      jurisdictionId,
+    })
   }
 }

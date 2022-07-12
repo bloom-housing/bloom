@@ -1,5 +1,5 @@
-import { ListingCreateDto } from "../../../src/listings/dto/listing-create.dto"
-import { ListingReviewOrder, ListingStatus } from "../../../types"
+import { ListingCreateDto } from "../../src/listings/dto/listing-create.dto"
+import { ListingReviewOrder, ListingStatus } from "../../types"
 import { BaseEntity } from "typeorm"
 
 export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, keyof BaseEntity> {

@@ -3,6 +3,87 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.8...@bloom-housing/backend-core@5.0.1-alpha.9) (2022-07-12)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.7...@bloom-housing/backend-core@5.0.1-alpha.8) (2022-07-11)
+
+
+### Bug Fixes
+
+* fix email from address ([#2875](https://github.com/bloom-housing/bloom/issues/2875)) ([ea69c92](https://github.com/bloom-housing/bloom/commit/ea69c9201cf7b3d57b8751bf1c0d3662f2d991aa))
+
+
+
+
+
+## [5.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.6...@bloom-housing/backend-core@5.0.1-alpha.7) (2022-07-08)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.5...@bloom-housing/backend-core@5.0.1-alpha.6) (2022-07-07)
+
+
+### Features
+
+* populate jurisdictional preferences on settings page ([#2828](https://github.com/bloom-housing/bloom/issues/2828)) ([2ea5646](https://github.com/bloom-housing/bloom/commit/2ea5646a49dc6782fe0e83e942e1917929fde153))
+
+
+
+
+
+## [5.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.4...@bloom-housing/backend-core@5.0.1-alpha.5) (2022-07-06)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.3...@bloom-housing/backend-core@5.0.1-alpha.4) (2022-07-06)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.2...@bloom-housing/backend-core@5.0.1-alpha.3) (2022-06-29)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.1...@bloom-housing/backend-core@5.0.1-alpha.2) (2022-06-22)
+
+
+### Features
+
+* **backend:** add jurisdictional admin relation ([#2764](https://github.com/bloom-housing/bloom/issues/2764)) ([8f951f9](https://github.com/bloom-housing/bloom/commit/8f951f9a4239bb5aad179cc5567f208d34533a45)), closes [#2767](https://github.com/bloom-housing/bloom/issues/2767) [#2787](https://github.com/bloom-housing/bloom/issues/2787) [#2769](https://github.com/bloom-housing/bloom/issues/2769) [#2781](https://github.com/bloom-housing/bloom/issues/2781)
+
+
+
+
+
+## [5.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.0...@bloom-housing/backend-core@5.0.1-alpha.1) (2022-06-17)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [5.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.4.1-alpha.13...@bloom-housing/backend-core@5.0.1-alpha.0) (2022-06-16)
 
 

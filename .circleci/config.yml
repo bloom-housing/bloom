@@ -6,8 +6,8 @@ executors:
   standard-node:
     docker:
       - image: "cimg/node:14.17.6"
-      - image: "circleci/redis:6.2.1-alpine"
-      - image: "circleci/postgres:12.3-postgis"
+      - image: "cimg/redis:6.2.6"
+      - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
           # Never do this in production or with any sensitive / non-test data:
@@ -16,8 +16,8 @@ executors:
   cypress-node:
     docker:
       - image: "cypress/base:14.17.0"
-      - image: "circleci/redis:6.2.1-alpine"
-      - image: "circleci/postgres:12.3-postgis"
+      - image: "cimg/redis:6.2.6"
+      - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
           # Never do this in production or with any sensitive / non-test data:

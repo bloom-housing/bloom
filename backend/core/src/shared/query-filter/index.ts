@@ -3,13 +3,15 @@ import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
 import { UserFilterKeys } from "../../auth/types/user-filter-keys"
 import { addIsPortalUserQuery } from "../../auth/filters/user-query-filter"
+import { User } from "../../auth/entities/user.entity"
 
 export interface IBaseQueryFilter {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addFilters<FilterParams extends any[], FilterFieldMap>(
     filters: FilterParams,
     filterTypeToFieldMap: FilterFieldMap,
-    qb: WhereExpression
+    qb: WhereExpression,
+    user?: User
   )
 }
 
@@ -29,7 +31,8 @@ export interface IBaseQueryFilter {
 export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
   filters: FilterParams,
   filterTypeToFieldMap: FilterFieldMap,
-  qb: WhereExpression
+  qb: WhereExpression,
+  user?: User
 ): void {
   for (const [index, filter] of filters.entries()) {
     const comparison = filter["$comparison"]
@@ -53,7 +56,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       switch (filterKey) {
         //custom user filters
         case UserFilterKeys.isPortalUser:
-          addIsPortalUserQuery(qb, filterValue)
+          addIsPortalUserQuery(qb, filterValue, user)
           continue
       }
 

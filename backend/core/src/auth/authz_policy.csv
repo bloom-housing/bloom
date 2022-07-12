@@ -1,12 +1,12 @@
 p, admin, application, true, .*
 p, user, application, true, submit
-p, user, application, !r.obj || (r.sub == r.obj.userId), read
+p, user, application, r.sub == r.obj.userId, read
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*
 p, admin, userProfile, true, .*
-p, user, user, !!r.obj && (r.sub == r.obj.id), read
-p, user, userProfile, !!r.obj && (r.sub == r.obj.id), (read|update)
+p, user, user, r.sub == r.obj.id, read
+p, user, userProfile, r.sub == r.obj.id, (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*

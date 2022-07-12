@@ -10,11 +10,9 @@ dayjs.extend(customParseFormat)
 import {
   ApplicationSubmissionType,
   AssetsService,
-  ListingEventType,
-  ListingEvent,
   IncomePeriod,
 } from "@bloom-housing/backend-core/types"
-import { TempUnit, FormListing } from "../src/listings/PaperListingForm/formTypes"
+import { TempUnit } from "../src/listings/PaperListingForm/formTypes"
 import { FieldError } from "react-hook-form"
 
 type DateTimePST = {
@@ -113,15 +111,6 @@ export const getRentType = (unit: TempUnit): string | null => {
 
 export const isNullOrUndefined = (value: unknown): boolean => {
   return value === null || value === undefined
-}
-
-export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined => {
-  const lotteryEvents = listing?.events.filter(
-    (event) => event.type === ListingEventType.publicLottery
-  )
-  return lotteryEvents && lotteryEvents.length && lotteryEvents[0].startTime
-    ? lotteryEvents[0]
-    : null
 }
 
 export function arrayToFormOptions<T>(
