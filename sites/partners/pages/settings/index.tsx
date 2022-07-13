@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import Head from "next/head"
 import {
   AppearanceSizeType,
@@ -21,12 +21,14 @@ import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-sv
 import Layout from "../../layouts"
 import { useJurisdictionalPreferenceList } from "../../lib/hooks"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
+import { Preference } from "@bloom-housing/backend-core"
 
 const Settings = () => {
   const { profile } = useContext(AuthContext)
 
   const [deleteModal, setDeleteModal] = useState(false)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState(false)
+  const [preferenceDrawerData, setPreferenceDrawerData] = useState(undefined)
 
   const { data, loading } = useJurisdictionalPreferenceList(
     profile?.jurisdictions?.reduce((acc, curr) => {
@@ -34,11 +36,23 @@ const Settings = () => {
     }, "")
   )
 
-  const iconContent = () => {
+  useEffect(() => {
+    if (!preferenceDrawerOpen) {
+      setPreferenceDrawerData(undefined)
+    }
+  }, [preferenceDrawerOpen])
+
+  const iconContent = (preference: Preference) => {
     return (
       <div className={"flex justify-end"}>
         <div className={"w-max"}>
-          <span onClick={() => setPreferenceDrawerOpen(true)} className={"cursor-pointer"}>
+          <span
+            onClick={() => {
+              setPreferenceDrawerData(preference)
+              setPreferenceDrawerOpen(true)
+            }}
+            className={"cursor-pointer"}
+          >
             <Icon
               symbol={faPenToSquare}
               size={"medium"}
@@ -86,7 +100,7 @@ const Settings = () => {
                 updated: {
                   content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
                 },
-                icons: { content: iconContent() },
+                icons: { content: iconContent(preference) },
               }
             })}
           />
@@ -157,7 +171,7 @@ const Settings = () => {
       <PreferenceDrawer
         drawerOpen={preferenceDrawerOpen}
         setDrawerOpen={setPreferenceDrawerOpen}
-        defaultValues={undefined}
+        defaultValues={preferenceDrawerData}
       />
     </>
   )

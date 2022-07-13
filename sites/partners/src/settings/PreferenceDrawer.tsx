@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -17,7 +17,7 @@ import {
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../applications/PaperApplicationForm/FormTypes"
-import { Jurisdiction } from "@bloom-housing/backend-core"
+import { Jurisdiction, Preference } from "@bloom-housing/backend-core"
 
 type PreferenceOption = {
   title: string
@@ -39,15 +39,22 @@ type PreferenceForm = {
 }
 
 type PreferenceDrawerProps = {
-  defaultValues: PreferenceForm | undefined
+  defaultValues: Preference | undefined
   drawerOpen: boolean
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) => {
+const PreferenceDrawer = ({ defaultValues, drawerOpen, setDrawerOpen }: PreferenceDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<boolean | null>(null)
+  const [draftPreferenceData, setDraftPreferenceData] = useState<Preference | undefined>(null)
 
   const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    setDraftPreferenceData(defaultValues)
+  }, [defaultValues])
+
+  console.log(defaultValues)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm()
@@ -72,6 +79,11 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
       value: YesNoAnswer.No,
     },
   ]
+
+  const hideFromListing =
+    draftPreferenceData && draftPreferenceData.formMetadata
+      ? draftPreferenceData.formMetadata.hideFromListing
+      : undefined
 
   return (
     <>
@@ -98,6 +110,7 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                   type="text"
                   readerOnly
                   dataTestId={"preference-title"}
+                  defaultValue={draftPreferenceData?.title}
                 />
               </ViewItem>
             </GridCell>
@@ -112,6 +125,7 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 placeholder={t("settings.preferenceDescription")}
                 register={register}
                 dataTestId={"preference-description"}
+                defaultValue={draftPreferenceData?.description}
               />
             </GridCell>
           </GridSection>
@@ -160,7 +174,20 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 name="showOnListingQuestion"
                 type="radio"
                 register={register}
-                fields={yesNoOptions}
+                fields={[
+                  {
+                    id: YesNoAnswer.Yes,
+                    label: t("t.yes"),
+                    value: YesNoAnswer.Yes,
+                    defaultChecked: !!hideFromListing ? !hideFromListing : true,
+                  },
+                  {
+                    id: YesNoAnswer.No,
+                    label: t("t.no"),
+                    value: YesNoAnswer.No,
+                    defaultChecked: !!hideFromListing ? hideFromListing : false,
+                  },
+                ]}
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
                 dataTestId={"preference-show-on-listing"}
@@ -180,6 +207,11 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                   keyPrefix={"jurisdictions"}
                   options={jurisdictionOptions}
                   dataTestId={"preference-jurisdiction"}
+                  defaultValue={
+                    draftPreferenceData?.jurisdictions?.length
+                      ? draftPreferenceData.jurisdictions[0].id
+                      : ""
+                  }
                 />
               </ViewItem>
             </GridCell>
