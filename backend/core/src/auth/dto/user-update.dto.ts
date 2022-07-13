@@ -20,6 +20,7 @@ import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { UserDto } from "./user.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { UserRolesOnly } from "../entities/user-roles.entity"
 
 export class UserUpdateDto extends OmitType(UserDto, [
   "id",
@@ -97,4 +98,8 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdictions: IdDto[]
+
+  @Expose()
+  @Type(() => UserRolesOnly)
+  roles: UserRolesOnly
 }

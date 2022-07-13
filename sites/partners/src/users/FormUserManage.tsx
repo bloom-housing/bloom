@@ -419,7 +419,14 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                   register={register}
                   controlClassName="control"
                   keyPrefix="users"
-                  options={roleKeys}
+                  options={roleKeys
+                    .filter((elem) => {
+                      if (profile?.roles?.isJurisdictionalAdmin) {
+                        return elem !== RoleOption.Administrator
+                      }
+                      return true
+                    })
+                    .sort((a, b) => (a < b ? -1 : 1))}
                   error={!!errors?.role}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
