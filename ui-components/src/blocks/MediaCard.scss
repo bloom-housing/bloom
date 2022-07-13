@@ -3,16 +3,16 @@
   @apply w-64;
 }
 .media-block {
-  @apply py-10;
+  @apply py-6;
   @apply w-full;
-  background-color: green;
+  background-color: #1a5049;
 }
 
 .media-description {
   @apply p-6;
 }
 .media-card__title {
-  @apply text-gray-800;
+  color: #1a5049;
   @apply font-sans;
   @apply font-bold;
   @apply text-sm;
@@ -20,7 +20,6 @@
 }
 
 .media-card__subtitle {
-  @apply pt-4;
+  @apply pt-6;
   @apply text-sm;
-  // @apply text-gray-700;
 }

@@ -1,14 +1,9 @@
 import * as React from "react"
-import { BADGES } from "../../.storybook/constants"
 import { MediaCard } from "./MediaCard"
 
 export default {
   title: "Media Card 🚩",
   id: "blocks/media-card",
-  decorators: [(storyFn: any) => <div style={{ maxWidth: "700px" }}>{storyFn()}</div>],
-  parameters: {
-    badges: [BADGES.GEN2],
-  },
 }
 
 export const testing = () => (
