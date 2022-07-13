@@ -21,7 +21,6 @@ import {
 } from "@bloom-housing/ui-components"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
-import router from "next/router"
 
 type FormUserManageProps = {
   mode: "add" | "edit"
