@@ -14,8 +14,11 @@ export class ApplicationFlaggedSetsCronjobBoostrapService {
       null,
       {
         repeat: {
-          every: +config.get<string>("AFS_PROCESSING_INTERVAL_MS")
-        }
+          cron: config.get<string>("AFS_PROCESSING_CRON_STRING")
+        },
+        // NOTE: This is not unique on purpose because Bull will not add a job twice with an ID
+        //  which already exists.
+        id: "afs-process"
       })
   }
 }

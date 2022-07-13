@@ -13,6 +13,7 @@ import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { ListingRepository } from "./repositories/listing.repository"
 import { ListingUtilities } from "./entities/listing-utilities.entity"
+import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ListingUtilities } from "./entities/listing-utilities.entity"
     AuthModule,
     TranslationsModule,
     ActivityLogModule,
+    ApplicationFlaggedSetsModule,
   ],
   providers: [ListingsService],
   exports: [ListingsService],

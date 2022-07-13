@@ -8,7 +8,6 @@ import { ListingsModule } from "../listings/listings.module"
 import { Address } from "../shared/entities/address.entity"
 import { Applicant } from "./entities/applicant.entity"
 import { ApplicationsSubmissionController } from "./applications-submission.controller"
-import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 import { TranslationsModule } from "../translations/translations.module"
 import { Listing } from "../listings/entities/listing.entity"
 import { ScheduleModule } from "@nestjs/schedule"
@@ -26,7 +25,6 @@ import { ListingRepository } from "../listings/repositories/listing.repository"
     ActivityLogModule,
     SharedModule,
     ListingsModule,
-    ApplicationFlaggedSetsModule,
     TranslationsModule,
     EmailModule,
     ScheduleModule.forRoot(),

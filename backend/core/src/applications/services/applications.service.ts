@@ -14,7 +14,6 @@ import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
 import crypto from "crypto"
-import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/application-flagged-sets.service"
 import { AuthzService } from "../../auth/services/authz.service"
 import { ListingsService } from "../../listings/listings.service"
 import { Application } from "../entities/application.entity"
@@ -32,7 +31,6 @@ import { ListingRepository } from "../../listings/repositories/listing.repositor
 export class ApplicationsService {
   constructor(
     @Inject(REQUEST) private req: ExpressRequest,
-    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
     private readonly authzService: AuthzService,
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
@@ -215,11 +213,6 @@ export class ApplicationsService {
 
         const newApplication = await applicationsRepository.save(application)
 
-        await this.applicationFlaggedSetsService.onApplicationUpdate(
-          application,
-          transactionalEntityManager
-        )
-
         return await applicationsRepository.findOne({ id: newApplication.id })
       }
     )
@@ -290,10 +283,6 @@ export class ApplicationsService {
           ...applicationCreateDto,
           confirmationCode: ApplicationsService.generateConfirmationCode(),
         })
-        await this.applicationFlaggedSetsService.onApplicationSave(
-          application,
-          transactionalEntityManager
-        )
         return await applicationsRepository.findOne({ id: application.id })
       }
     )
