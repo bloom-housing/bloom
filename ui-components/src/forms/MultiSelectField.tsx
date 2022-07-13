@@ -1,12 +1,27 @@
 import React, { useRef, useEffect, useMemo } from "react"
-import { IAriaAutocompleteOptions } from "aria-autocomplete"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import "./MultiSelectField.scss"
 import { Icon } from "../icons/Icon"
 
-interface MultiSelectFieldProps {
+export interface MultiSelectFieldItem {
+  value: string
+  label: string
+}
+
+export type MultiSelectDataSourceParams<T> = (
+  query: string,
+  render: (toRender: MultiSelectFieldItem[]) => void,
+  isFirstCall: boolean
+) => T
+
+export interface MultiSelectFieldProps {
   name: string
-  dataSource: string | string[] | any[] | Function | Promise<any[]>
+  dataSource:
+    | string
+    | string[]
+    | MultiSelectFieldItem[]
+    | MultiSelectDataSourceParams<MultiSelectFieldItem[]>
+    | MultiSelectDataSourceParams<Promise<MultiSelectFieldItem[]>>
   register: UseFormMethods["register"]
   getValues: UseFormMethods["getValues"]
   setValue: UseFormMethods["setValue"]
@@ -27,6 +42,8 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
     // We need to dynamically import the aria-autocomplete control only on the
     // client-side, because of its use of `window` and other browser-only
     // capabilities (and it doesn't really make sense to SSR the control anyway)
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     ;(async () => {
       if (autocompleteRef.current) {
         autocompleteRef.current.value = props.getValues(name)
@@ -49,7 +66,7 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
         })
       }
     })()
-  }, [autocompleteRef, name, setValue, props.dataSource])
+  }, [autocompleteRef, name, setValue, props])
 
   const label = useMemo(() => {
     const labelClasses = ["label"]

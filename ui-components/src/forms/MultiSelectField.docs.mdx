@@ -28,17 +28,17 @@ Items for a multi-select field should be an array of key-value pairs, where `val
 Whereas a data provider function would look something like this:
 
 ```js
-const dataProvider = async (
-  query: string,
-  render: (toRender: any[]) => void, // this second argument can safely be ignored
-  isFirstCall: boolean
+const dataProvider: MultiSelectDataSourceParams<Promise<MultiSelectFieldItem[]>> = async (
+  query,
+  _render,
+  isFirstCall
 ) => {
   let results
 
   if (isFirstCall && query !== "undefined") { // true if the field is being initialized with default selections
-    // fetch necessary results here looking at `query`. Note that you may want to `.split(",")` the query
+    // await fetch necessary results here looking at `query`. Note that you may want to `.split(",")` the query
   } else {
-    // fetch results here based on the `query` from the user's input
+    // await fetch results here based on the `query` from the user's input
   }
 
   return results.map(item => {

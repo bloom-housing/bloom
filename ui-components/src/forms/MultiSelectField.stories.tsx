@@ -1,6 +1,9 @@
 import React, { useState } from "react"
 import { BADGES } from "../../.storybook/constants"
-import MultiSelectField from "./MultiSelectField"
+import MultiSelectField, {
+  MultiSelectDataSourceParams,
+  MultiSelectFieldItem,
+} from "./MultiSelectField"
 import { useForm } from "react-hook-form"
 import MultiSelectFieldDocumentation from "./MultiSelectField.docs.mdx"
 
@@ -22,10 +25,10 @@ export default {
 
 const later = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
 
-const dataProvider = async (
-  query: string,
-  render: (toRender: any[]) => void,
-  isFirstCall: boolean
+const dataProvider: MultiSelectDataSourceParams<Promise<MultiSelectFieldItem[]>> = async (
+  query,
+  _render,
+  isFirstCall
 ) => {
   if (isFirstCall && query !== "undefined") {
     return query.split(",").map((item) => {
