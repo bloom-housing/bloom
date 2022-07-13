@@ -79,7 +79,7 @@ const ListingsPage = ({ initialListings }) => {
             iconPlacement="left"
             iconSize="md-large"
             onClick={() => setFilterModalVisible(true)}
-            iconColor={"black"}
+            passToIconClass={"ui-icon__filledBlack"}
           >
             {t("listingFilters.buttonTitleExtended")}
           </Button>
