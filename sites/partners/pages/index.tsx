@@ -47,7 +47,7 @@ class formatWaitlistStatus {
 class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications/all`)
     this.link.setAttribute("data-test-id", "listing-status-cell")
   }
 }

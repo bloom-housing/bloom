@@ -31,7 +31,7 @@ const NewApplication = () => {
           <Breadcrumbs>
             <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
             <BreadcrumbLink href={`/listings/${listingId}`}>{listing?.name}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications`}>
+            <BreadcrumbLink href={`/listings/${listingId}/applications/all`}>
               {t("nav.applications")}
             </BreadcrumbLink>
             <BreadcrumbLink href={`/listings/${listingId}/applications/add`} current>
