@@ -46,7 +46,7 @@ const NavigationHeader = ({
       },
       {
         label: tabs?.applicationsLabel || "",
-        path: `/listings/${listingId}/applications`,
+        path: `/listings/${listingId}/applications/all`,
         content: undefined,
       },
     ]
