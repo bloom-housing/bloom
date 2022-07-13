@@ -39,7 +39,7 @@ type PreferenceForm = {
 }
 
 type PreferenceDrawerProps = {
-  defaultValues: PreferenceForm
+  defaultValues: PreferenceForm | undefined
   drawerOpen: boolean
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -141,8 +141,8 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
             <GridCell>
               <ViewItem label={t("settings.preferenceOptOutLabel")}>
                 <Field
-                  id="title"
-                  name="title"
+                  id="optOutTitle"
+                  name="optOutTitle"
                   label={t("settings.preferenceOptOutLabel")}
                   placeholder={t("settings.preferenceOptOutLabel")}
                   register={register}
@@ -245,7 +245,7 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                   id="optionURL"
                   name="optionURL"
                   label={t("t.url")}
-                  placeholder={t("t.url")}
+                  placeholder={"https://"}
                   register={register}
                   type="text"
                   readerOnly
@@ -278,31 +278,6 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 register={register}
                 dataTestId={"preference-option-collect-address"}
                 controlClassName={"font-normal"}
-              />
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3}>
-            <GridCell span={2}>
-              <p className="field-label m-4 ml-0">{t("settings.preferenceExclusiveQuestion")}</p>
-              <FieldGroup
-                name="multiSelectQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    label: t("settings.preferenceMultiSelect"),
-                    value: "multiSelect",
-                    id: "multiSelect",
-                    defaultChecked: false,
-                  },
-                  {
-                    label: t("settings.preferenceExclusive"),
-                    value: "exclusive",
-                    id: "exclusive",
-                    defaultChecked: false,
-                  },
-                ]}
-                dataTestId={"preference-option-multiselect"}
               />
             </GridCell>
           </GridSection>

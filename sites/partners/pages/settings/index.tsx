@@ -154,7 +154,11 @@ const Settings = () => {
       >
         {t("settings.preferenceDelete")}
       </Modal>
-      <PreferenceDrawer drawerOpen={preferenceDrawerOpen} setDrawerOpen={setPreferenceDrawerOpen} />
+      <PreferenceDrawer
+        drawerOpen={preferenceDrawerOpen}
+        setDrawerOpen={setPreferenceDrawerOpen}
+        defaultValues={undefined}
+      />
     </>
   )
 }
