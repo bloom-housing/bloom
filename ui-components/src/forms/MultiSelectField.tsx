@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useMemo } from "react"
-import AriaAutocomplete, { IAriaAutocompleteOptions } from "aria-autocomplete"
+import { IAriaAutocompleteOptions } from "aria-autocomplete"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import "./MultiSelectField.scss"
 import { Icon } from "../icons/Icon"
@@ -24,25 +24,31 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
   register({ name }, props.validation)
 
   useEffect(() => {
-    if (autocompleteRef.current) {
-      autocompleteRef.current.value = props.getValues(name)
-      AriaAutocomplete(autocompleteRef.current, {
-        source: props.dataSource,
-        delay: 500, // debounce for a half-second
-        inputClassName: "input",
-        multiple: true,
-        placeholder: props.placeholder,
-        deleteOnBackspace: true,
-        showAllControl: true,
-        cssNameSpace: "multi-select-field",
-        onChange: (selected) => {
-          setValue(
-            name,
-            selected.map((item) => item.value)
-          )
-        },
-      })
-    }
+    // We need to dynamically import the aria-autocomplete control only on the
+    // client-side, because of its use of `window` and other browser-only
+    // capabilities (and it doesn't really make sense to SSR the control anyway)
+    ;(async () => {
+      if (autocompleteRef.current) {
+        autocompleteRef.current.value = props.getValues(name)
+        const AriaAutocomplete = (await import("aria-autocomplete")).default
+        AriaAutocomplete(autocompleteRef.current, {
+          source: props.dataSource,
+          delay: 500, // debounce for a half-second
+          inputClassName: "input",
+          multiple: true,
+          placeholder: props.placeholder,
+          deleteOnBackspace: true,
+          showAllControl: true,
+          cssNameSpace: "multi-select-field",
+          onChange: (selected) => {
+            setValue(
+              name,
+              selected.map((item) => item.value)
+            )
+          },
+        })
+      }
+    })()
   }, [autocompleteRef, name, setValue, props.dataSource])
 
   const label = useMemo(() => {
