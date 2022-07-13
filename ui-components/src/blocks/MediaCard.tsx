@@ -25,20 +25,21 @@ const MediaCard = (props: MediaCardProps) => {
   }
   return (
     <div className={wrapperClasses.join(" ")}>
-      <iframe
-        src={props.videoURL}
-        frameBorder="0"
-        allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        title={props.title}
-      />
-      <div className="media-container"></div>
-      <div>
-        <h3 className="info-card__title">{props.title}</h3>
-        {props.subtitle && <span className={"text-sm text-gray-700"}>{props.subtitle}</span>}
+      <div className="media-block" />
+      <div className="media-description">
+        <h3 className="media-card__title">{props.title}</h3>
+        <div className={"media-card__subtitle"}>{props.subtitle}</div>
       </div>
     </div>
   )
 }
+
+// ;<iframe
+//   src={props.videoURL}
+//   frameBorder="0"
+//   allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+//   allowFullScreen
+//   title={props.title}
+// />
 
 export { MediaCard as default, MediaCard }

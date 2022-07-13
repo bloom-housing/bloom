@@ -1,12 +1,26 @@
 .media-card {
-  @apply p-6;
-  @apply rounded;
-  @apply border;
   @apply bg-gray-450;
-  @apply mb-4;
-  @apply w-1/2;
+  @apply w-64;
 }
-.media-container {
-  background-color: gray;
-  @apply border-4;
+.media-block {
+  @apply py-10;
+  @apply w-full;
+  background-color: green;
+}
+
+.media-description {
+  @apply p-6;
+}
+.media-card__title {
+  @apply text-gray-800;
+  @apply font-sans;
+  @apply font-bold;
+  @apply text-sm;
+  @apply tracking-wide;
+}
+
+.media-card__subtitle {
+  @apply pt-4;
+  @apply text-sm;
+  // @apply text-gray-700;
 }
