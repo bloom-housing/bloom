@@ -12,5 +12,9 @@ export default {
 }
 
 export const testing = () => (
-  <MediaCard title="Testing Title" videoURL="https://www.youtube.com/embed/dQw4w9WgXcQ" />
+  <MediaCard
+    title="What is Affordable Housing?"
+    subtitle="List of affordable housing opportunities, subsidized homes, and other housing resources."
+    videoURL="https://www.youtube.com/embed/dQw4w9WgXcQ"
+  />
 )

@@ -1,4 +1,12 @@
 .media-card {
-  @apply p-8;
+  @apply p-6;
+  @apply rounded;
+  @apply border;
+  @apply bg-gray-450;
+  @apply mb-4;
+  @apply w-1/2;
+}
+.media-container {
+  background-color: gray;
   @apply border-4;
 }
