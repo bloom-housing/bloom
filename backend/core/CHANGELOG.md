@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.9...@bloom-housing/backend-core@5.0.1-alpha.10) (2022-07-13)
+
+
+### Features
+
+* **backend:** refactor listings query building ([#2855](https://github.com/bloom-housing/bloom/issues/2855)) ([2888d11](https://github.com/bloom-housing/bloom/commit/2888d118c51307a885e6fc0d424eab7940d21b3d))
+
+
+
+
+
 ## [5.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.8...@bloom-housing/backend-core@5.0.1-alpha.9) (2022-07-12)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
