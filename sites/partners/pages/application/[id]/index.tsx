@@ -107,7 +107,7 @@ export default function ApplicationsList() {
               <BreadcrumbLink href={`/listings/${application?.listing?.id}`}>
                 {listingDto?.name}
               </BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications`}>
+              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications/all`}>
                 {t("nav.applications")}
               </BreadcrumbLink>
               <BreadcrumbLink href={`/application/${application.id}`} current>

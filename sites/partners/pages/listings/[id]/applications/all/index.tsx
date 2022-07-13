@@ -122,7 +122,7 @@ const ApplicationsList = () => {
           <Breadcrumbs>
             <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
             <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
+            <BreadcrumbLink href={`/listings/${listingId}/applications/all`} current>
               {t("nav.applications")}
             </BreadcrumbLink>
           </Breadcrumbs>
