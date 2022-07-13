@@ -14,7 +14,6 @@ import {
   AppearanceStyleType,
   AppearanceBorderType,
   emailRegex,
-  setSiteAlertMessage,
   Tag,
   AppearanceSizeType,
   Modal,
@@ -27,6 +26,12 @@ type FormUserManageProps = {
   user?: User
   listings: Listing[]
   onDrawerClose: () => void
+  setAlertMessage: React.Dispatch<
+    React.SetStateAction<{
+      type: string
+      message: string
+    }>
+  >
 }
 
 type FormUserManageValues = {
@@ -48,7 +53,13 @@ const determineUserRole = (roles: UserRolesCreate) => {
   return RoleOption.Partner
 }
 
-const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
+const FormUserManage = ({
+  mode,
+  user,
+  listings,
+  onDrawerClose,
+  setAlertMessage,
+}: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
   const jurisdictionList = profile.jurisdictions
 
@@ -247,13 +258,13 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           body,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.inviteSent`), "success")
+          setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
         })
         .catch((e) => {
           if (e?.response?.status === 409) {
-            setSiteAlertMessage(t(`errors.alert.emailConflict`), "alert")
+            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
           } else {
-            setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
           }
         })
         .finally(() => {
@@ -271,10 +282,10 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       userService
         .resendPartnerConfirmation({ body })
         .then(() => {
-          setSiteAlertMessage(t(`users.confirmationSent`), "success")
+          setAlertMessage({ message: t(`users.confirmationSent`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
@@ -297,16 +308,16 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           body,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.userUpdated`), "success")
+          setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
         })
     )
-  }, [createUserBody, onDrawerClose, updateUser, userService, user])
+  }, [createUserBody, onDrawerClose, updateUser, userService, user, setAlertMessage])
 
   const onDelete = () => {
     void deleteUser(() =>
@@ -315,10 +326,10 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           id: user.id,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.userDeleted`), "success")
+          setAlertMessage({ message: t(`users.userDeleted`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()

@@ -7,7 +7,10 @@ type SiteAlertProps = {
   dismissable?: boolean
   type?: AlertTypes
   className?: string
-  reload?: Date
+  alertMessage?: {
+    type: AlertTypes
+    message: string
+  }
 }
 
 export const setSiteAlertMessage = (message: string, type: AlertTypes) => {
@@ -26,10 +29,17 @@ export const SiteAlert = ({
   dismissable = true,
   type = "alert",
   className,
-  reload,
+  alertMessage,
 }: SiteAlertProps) => {
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState("")
+  /**
+    * We use 2 useEffects here 1 for if we are consuming what is stored in sessionStorage
+    * and another for if the message is passed in as a prop
+
+    * this gives the ability for the SiteAlert to "survive" a re-render, or if no re-render will occur 
+    * for the SiteAlert to simply render itself
+  **/
 
   useEffect(() => {
     let timeoutRef: number
@@ -46,13 +56,25 @@ export const SiteAlert = ({
       }
     }
     return () => clearTimeout(timeoutRef)
-  }, [timeout, type, reload])
+  }, [timeout, type])
+
+  useEffect(() => {
+    let timeoutRef: number
+    if (alertMessage?.message) {
+      setMessage(alertMessage?.message)
+      setOpen(true)
+      if (timeout) {
+        timeoutRef = (setTimeout(() => setOpen(false), timeout) as unknown) as number
+      }
+    }
+    return () => clearTimeout(timeoutRef)
+  }, [alertMessage, timeout])
 
   return open ? (
     <AlertBox
       onClose={dismissable ? () => setOpen(false) : undefined}
       className={className}
-      type={type}
+      type={alertMessage?.type ?? type}
     >
       {message}
     </AlertBox>

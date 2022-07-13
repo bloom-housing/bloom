@@ -10,6 +10,7 @@ import {
   t,
   Drawer,
   SiteAlert,
+  AlertTypes,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
@@ -24,7 +25,10 @@ type UserDrawerValue = {
 const Users = () => {
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
-
+  const [alertMessage, setAlertMessage] = useState({
+    type: "alert" as AlertTypes,
+    message: undefined,
+  })
   const tableOptions = useAgTable()
 
   const columns = useMemo(() => {
@@ -115,8 +119,7 @@ const Users = () => {
 
       <NavigationHeader className="relative" title={t("nav.users")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert type="success" timeout={5000} dismissable reload={new Date()} />
-          <SiteAlert type="alert" timeout={5000} dismissable reload={new Date()} />
+          <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} />
         </div>
       </NavigationHeader>
 
@@ -173,6 +176,7 @@ const Users = () => {
             setUserDrawer(null)
             void mutate(cacheKey)
           }}
+          setAlertMessage={setAlertMessage}
         />
       </Drawer>
     </Layout>
