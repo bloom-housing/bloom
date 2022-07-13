@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.15...@bloom-housing/ui-components@5.0.1-alpha.16) (2022-07-13)
+
+
+### Bug Fixes
+
+* add classname prop for custom styling onto application status component ([#2888](https://github.com/bloom-housing/bloom/issues/2888)) ([fedcaa4](https://github.com/bloom-housing/bloom/commit/fedcaa4e4bf537d0207f7d0ecfaf5078879e1fad))
+
+
+
+
+
 ## [5.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.14...@bloom-housing/ui-components@5.0.1-alpha.15) (2022-07-12)
 
 
