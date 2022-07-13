@@ -101,5 +101,5 @@ export class UserUpdateDto extends OmitType(UserDto, [
 
   @Expose()
   @Type(() => UserRolesOnly)
-  roles: UserRolesOnly
+  roles?: UserRolesOnly
 }

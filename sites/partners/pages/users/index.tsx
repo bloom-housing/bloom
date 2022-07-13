@@ -115,8 +115,8 @@ const Users = () => {
 
       <NavigationHeader className="relative" title={t("nav.users")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert type="success" timeout={5000} dismissable />
-          <SiteAlert type="alert" timeout={5000} dismissable />
+          <SiteAlert type="success" timeout={5000} dismissable reload={new Date()} />
+          <SiteAlert type="alert" timeout={5000} dismissable reload={new Date()} />
         </div>
       </NavigationHeader>
 

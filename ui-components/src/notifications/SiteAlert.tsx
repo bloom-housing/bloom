@@ -7,6 +7,7 @@ type SiteAlertProps = {
   dismissable?: boolean
   type?: AlertTypes
   className?: string
+  reload?: Date
 }
 
 export const setSiteAlertMessage = (message: string, type: AlertTypes) => {
@@ -25,6 +26,7 @@ export const SiteAlert = ({
   dismissable = true,
   type = "alert",
   className,
+  reload,
 }: SiteAlertProps) => {
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState("")
@@ -44,7 +46,7 @@ export const SiteAlert = ({
       }
     }
     return () => clearTimeout(timeoutRef)
-  }, [timeout, type])
+  }, [timeout, type, reload])
 
   return open ? (
     <AlertBox
