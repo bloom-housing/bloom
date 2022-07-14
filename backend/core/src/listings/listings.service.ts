@@ -86,6 +86,13 @@ export class ListingsService {
       innerFilteredQuery.andWhere("listings.name ILIKE :search", { search: `%${params.search}%` })
     }
 
+    const user = this.req.user as User
+    if (user?.roles?.isJurisdictionalAdmin) {
+      innerFilteredQuery.andWhere("listings.jurisdiction_id IN (:...jurisdiction)", {
+        jurisdiction: user.jurisdictions.map((elem) => elem.id),
+      })
+    }
+
     // TODO(avaleske): Typescript doesn't realize that the `paginate` bool is a
     // type guard, but it will in version 4.4. Once this codebase is upgraded to
     // v4.4, remove the extra type assertions on `params.limit` below.

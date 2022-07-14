@@ -10,6 +10,11 @@ export class AuthzGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest()
     const authUser = req.user
+
+    if (authUser?.roles?.isAdmin || authUser?.roles?.isJurisdictionalAdmin) {
+      return true
+    }
+
     const type = this.reflector.getAllAndOverride<string>("authz_type", [
       context.getClass(),
       context.getHandler(),

@@ -63,7 +63,7 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile.roles?.isAdmin || false
+  const isAdmin = profile.roles?.isAdmin || profile.roles?.isJurisdictionalAdmin || false
 
   const tableOptions = useAgTable()
 
