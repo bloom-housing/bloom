@@ -19,10 +19,10 @@ import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
-} from "../../../../../lib/hooks"
-import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
-import Layout from "../../../../../layouts"
-import { getColDefs } from "../../../../../src/applications/ApplicationsColDefs"
+} from "../../../../lib/hooks"
+import { ListingStatusBar } from "../../../../src/listings/ListingStatusBar"
+import Layout from "../../../../layouts"
+import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
@@ -145,7 +145,7 @@ const ApplicationsList = () => {
           <Breadcrumbs>
             <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
             <BreadcrumbLink href={`/listings/${listingId}`}>{listingName}</BreadcrumbLink>
-            <BreadcrumbLink href={`/listings/${listingId}/applications/all`} current>
+            <BreadcrumbLink href={`/listings/${listingId}/applications`} current>
               {t("nav.applications")}
             </BreadcrumbLink>
           </Breadcrumbs>
