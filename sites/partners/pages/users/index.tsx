@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import {
-  PageHeader,
+  NavigationHeader,
   AgTable,
   useAgTable,
   Button,
@@ -61,7 +61,7 @@ const Users = () => {
         headerName: t("t.role"),
         field: "roles",
         valueFormatter: ({ value }) => {
-          const { isAdmin, isPartner } = value || {}
+          const { isAdmin, isPartner, isJurisdictionalAdmin } = value || {}
 
           const roles = []
 
@@ -71,6 +71,10 @@ const Users = () => {
 
           if (isPartner) {
             roles.push(t("users.partner"))
+          }
+
+          if (isJurisdictionalAdmin) {
+            roles.push(t("users.jurisdictionalAdmin"))
           }
 
           return roles.join(", ")
@@ -107,12 +111,12 @@ const Users = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PageHeader className="relative" title={t("nav.users")}>
+      <NavigationHeader className="relative" title={t("nav.users")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
           <SiteAlert type="success" timeout={5000} dismissable />
           <SiteAlert type="alert" timeout={5000} dismissable />
         </div>
-      </PageHeader>
+      </NavigationHeader>
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

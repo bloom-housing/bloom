@@ -1,25 +1,26 @@
 import React, { useRef } from "react"
 import "./Modal.scss"
-import { Icon } from "../icons/Icon"
+import { Icon, IconFillColors } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
 import { nanoid } from "nanoid"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {
-  title: string
   actions?: React.ReactNode[]
-  hideCloseIcon?: boolean
   children?: React.ReactNode
-  slim?: boolean
-  role?: string
-  modalClassNames?: string
-  innerClassNames?: string
   closeClassNames?: string
+  closeIconColor?: string
+  hideCloseIcon?: boolean
+  innerClassNames?: string
+  modalClassNames?: string
+  role?: string
   scrollable?: boolean
+  slim?: boolean
+  title: string
 }
 
 const ModalHeader = (props: { title: string; uniqueId?: string }) => (
   <>
-    <header className="modal__inner">
+    <header>
       <h1 className="modal__title" id={props.uniqueId}>
         {props.title}
       </h1>
@@ -60,11 +61,7 @@ export const Modal = (props: ModalProps) => {
         <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
 
         <section className={innerClassNames.join(" ")}>
-          {typeof props.children === "string" ? (
-            <p className="c-steel">{props.children}</p>
-          ) : (
-            props.children
-          )}
+          {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
         </section>
 
         {props.actions && <ModalFooter actions={props.actions} />}
@@ -76,7 +73,11 @@ export const Modal = (props: ModalProps) => {
             onClick={props.onClose}
             tabIndex={0}
           >
-            <Icon size="medium" symbol="close" />
+            <Icon
+              size="medium"
+              symbol="close"
+              fill={props.closeIconColor ?? IconFillColors.primary}
+            />
           </button>
         )}
       </div>

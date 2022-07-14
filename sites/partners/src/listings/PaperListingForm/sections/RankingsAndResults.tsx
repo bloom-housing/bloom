@@ -27,7 +27,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, errors } = formMethods
+  const { register, watch, control } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing)
 

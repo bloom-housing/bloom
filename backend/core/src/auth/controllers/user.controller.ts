@@ -19,6 +19,7 @@ import { defaultValidationPipeOptions } from "../../shared/default-validation-pi
 import { UserService } from "../services/user.service"
 import { OptionalAuthGuard } from "../guards/optional-auth.guard"
 import { AuthzGuard } from "../guards/authz.guard"
+import { AdminOrJurisdictionalAdminGuard } from "../guards/admin-or-jurisidictional-admin.guard"
 import { UserDto } from "../dto/user.dto"
 import { mapTo } from "../../shared/mapTo"
 import { StatusDto } from "../../shared/dto/status.dto"
@@ -134,7 +135,7 @@ export class UserController {
   }
 
   @Get("/list")
-  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   @ApiExtraModels(UserFilterParams)
   @ApiOperation({ summary: "List users", operationId: "list" })
   async list(@Query() queryParams: UserListQueryParams): Promise<PaginatedUserListDto> {

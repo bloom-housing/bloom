@@ -10,11 +10,9 @@ dayjs.extend(customParseFormat)
 import {
   ApplicationSubmissionType,
   AssetsService,
-  ListingEventType,
-  ListingEvent,
   IncomePeriod,
 } from "@bloom-housing/backend-core/types"
-import { TempUnit, FormListing } from "../src/listings/PaperListingForm/formTypes"
+import { TempUnit } from "../src/listings/PaperListingForm/formTypes"
 import { FieldError } from "react-hook-form"
 
 type DateTimePST = {

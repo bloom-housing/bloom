@@ -1,9 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { AssetsController } from "./assets.controller"
-import { AuthModule } from "../auth/auth.module"
-import dbOptions from "../../ormconfig.test"
-import { TypeOrmModule } from "@nestjs/typeorm"
 import { AssetsService } from "./services/assets.service"
+import { AuthzService } from "../auth/services/authz.service"
 
 describe("AssetsController", () => {
   let controller: AssetsController
@@ -11,8 +9,16 @@ describe("AssetsController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AssetsController],
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule],
-      providers: [{ provide: AssetsService, useValue: {} }],
+      providers: [
+        {
+          provide: AuthzService,
+          useValue: {},
+        },
+        {
+          provide: AssetsService,
+          useValue: {},
+        },
+      ],
     }).compile()
 
     controller = module.get<AssetsController>(AssetsController)

@@ -26,7 +26,7 @@ import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../../unit-rent-types/entities/unit-rent-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { UnitAmiChartOverride } from "../../units/entities/unit-ami-chart-override.entity"
-import Listing from "../../listings/entities/listing.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "units" })
 class Unit {

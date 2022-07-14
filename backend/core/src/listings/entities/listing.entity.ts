@@ -51,7 +51,8 @@ import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 import { ListingImage } from "./listing-image.entity"
-import Unit from "../../units/entities/unit.entity"
+import { ListingUtilities } from "./listing-utilities.entity"
+import { Unit } from "../../units/entities/unit.entity"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -655,6 +656,18 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
   features?: ListingFeatures
+
+  @OneToOne(() => ListingUtilities, {
+    nullable: true,
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingUtilities)
+  utilities?: ListingUtilities
 }
 
 export { Listing as default, Listing }

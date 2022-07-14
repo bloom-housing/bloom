@@ -24,7 +24,7 @@ const Layout = (props) => {
       href: "/",
     })
   }
-  if (profile?.roles?.isAdmin) {
+  if (profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) {
     menuLinks.push({
       title: t("nav.users"),
       href: "/users",

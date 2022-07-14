@@ -1,10 +1,9 @@
-import { SelectQueryBuilder } from "typeorm"
 import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations"
-import { Listing } from "../entities/listing.entity"
 import { views } from "./config"
 import { View, BaseView } from "../../views/base.view"
+import { ListingsQueryBuilder } from "../db/listing-query-builder"
 
-export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
+export function getView(qb: ListingsQueryBuilder, view?: string) {
   switch (views[view]) {
     case views.base:
       return new BaseListingView(qb)
@@ -17,14 +16,14 @@ export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
 }
 
 export class BaseListingView extends BaseView {
-  qb: SelectQueryBuilder<Listing>
+  qb: ListingsQueryBuilder
   view: View
-  constructor(qb: SelectQueryBuilder<Listing>) {
+  constructor(qb: ListingsQueryBuilder) {
     super(qb)
     this.view = views.base
   }
 
-  getViewQb(): SelectQueryBuilder<Listing> {
+  getViewQb(): ListingsQueryBuilder {
     this.qb.select(this.view.select)
 
     this.view.leftJoins.forEach((join) => {
@@ -45,19 +44,19 @@ export class BaseListingView extends BaseView {
 }
 
 export class DetailView extends BaseListingView {
-  constructor(qb: SelectQueryBuilder<Listing>) {
+  constructor(qb: ListingsQueryBuilder) {
     super(qb)
     this.view = views.detail
   }
 }
 
 export class FullView extends BaseListingView {
-  constructor(qb: SelectQueryBuilder<Listing>) {
+  constructor(qb: ListingsQueryBuilder) {
     super(qb)
     this.view = views.full
   }
 
-  getViewQb(): SelectQueryBuilder<Listing> {
+  getViewQb(): ListingsQueryBuilder {
     this.view.leftJoinAndSelect.forEach((tuple) => this.qb.leftJoinAndSelect(...tuple))
 
     return this.qb
