@@ -83,6 +83,7 @@ export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/TabNav"
 export * from "./src/navigation/Tabs"
 export * from "./src/navigation/Breadcrumbs"
+export * from "./src/navigation/SideNav"
 
 /* Notifications */
 export * from "./src/notifications/AlertBox"

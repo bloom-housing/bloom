@@ -9,6 +9,7 @@ export interface SideNavItemProps {
 }
 
 export interface SideNavProps {
+  className?: string
   navItems?: SideNavItemProps[]
 }
 
@@ -16,7 +17,7 @@ const SideNav = (props: SideNavProps) => {
   const { LinkComponent } = React.useContext(NavigationContext)
 
   return (
-    <nav className="side-nav" aria-label="Secondary navigation">
+    <nav className={`side-nav ${props.className}`} aria-label="Secondary navigation">
       <ul>
         {props.navItems?.map((navItem: SideNavItemProps, index: number) => {
           if (navItem.current) {
