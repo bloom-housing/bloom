@@ -9,7 +9,6 @@ export interface MediaCardProps {
   title?: string
   videoURL?: string
   subtitle?: string
-  //   externalHref?: string
   className?: string
   children?: React.ReactNode
 }
@@ -50,11 +49,11 @@ const MediaCard = (props: MediaCardProps) => {
           innerClassNames="media-modal-inner"
         >
           <iframe
+            title={props.title}
             src={props.videoURL}
             frameBorder="0"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; "
             allowFullScreen
-            title={props.title}
           />
         </Modal>
       )}
