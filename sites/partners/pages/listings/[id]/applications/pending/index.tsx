@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import Head from "next/head"
@@ -13,20 +13,12 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
+  SideNav,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  useSingleListingData,
-  useFlaggedApplicationsList,
-  useApplicationsData,
-} from "../../../../../lib/hooks"
+import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
-import { getColDefs } from "../../../../../src/applications/ApplicationsColDefs"
-import {
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
-} from "@bloom-housing/backend-core/types"
 
 const ApplicationsList = () => {
   const { applicationsService } = useContext(AuthContext)
@@ -40,7 +32,6 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
-  const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
@@ -48,14 +39,37 @@ const ApplicationsList = () => {
     limit: 1,
   })
 
-  const { applications, appsMeta, appsLoading, appsError } = useApplicationsData(
-    tableOptions.pagination.currentPage,
-    tableOptions.filter.filterValue,
-    tableOptions.pagination.itemsPerPage,
-    listingId,
-    tableOptions.sort.sortOptions?.[0]?.orderBy as EnumApplicationsApiExtraModelOrderBy,
-    tableOptions.sort.sortOptions?.[0]?.orderDir as EnumApplicationsApiExtraModelOrder
-  )
+  const columns = [
+    {
+      headerName: t("applications.duplicates.duplicateGroup"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      cellRenderer: "formatLinkCell",
+    },
+    {
+      headerName: t("applications.duplicates.primaryApplicant"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+    },
+    {
+      headerName: t("t.rule"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+    },
+    {
+      headerName: t("applications.pendingReview"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "right",
+    },
+  ]
 
   class formatLinkCell {
     linkWithId: HTMLSpanElement
@@ -102,28 +116,9 @@ const ApplicationsList = () => {
     setCsvExportLoading(false)
   }
 
-  // get the highest value from householdSize and limit to 6
-  const maxHouseholdSize = useMemo(() => {
-    let max = 1
-
-    applications?.forEach((item) => {
-      if (item.householdSize > max) {
-        max = item.householdSize
-      }
-    })
-
-    return max < 6 ? max : 6
-  }, [applications])
-
-  const columnDefs = useMemo(() => {
-    return getColDefs(maxHouseholdSize, countyCode)
-  }, [maxHouseholdSize, countyCode])
-
   const gridComponents = {
     formatLinkCell,
   }
-
-  if (!applications || appsError) return "An error has occurred."
 
   return (
     <Layout>
@@ -164,9 +159,25 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+        <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+          <SideNav
+            className="w-full md:w-72"
+            navItems={[
+              {
+                label: t("applications.allApplications"),
+                url: `/listings/${listingId}/applications`,
+              },
+              {
+                label: t("applications.pendingReview"),
+                url: `/listings/${listingId}/applications/pending`,
+                current: true,
+              },
+              { label: t("t.resolved"), url: `/listings/${listingId}/applications/resolved` },
+            ]}
+          />
           <AgTable
             id="applications-table"
+            className="w-full"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,
               setPerPage: tableOptions.pagination.setItemsPerPage,
@@ -175,14 +186,14 @@ const ApplicationsList = () => {
             }}
             config={{
               gridComponents,
-              columns: columnDefs,
+              columns,
               totalItemsLabel: t("applications.totalApplications"),
             }}
             data={{
-              items: applications,
-              loading: appsLoading,
-              totalItems: appsMeta?.totalItems,
-              totalPages: appsMeta?.totalPages,
+              items: [],
+              loading: false,
+              totalItems: 0,
+              totalPages: 0,
             }}
             search={{
               setSearch: tableOptions.filter.setFilterValue,
