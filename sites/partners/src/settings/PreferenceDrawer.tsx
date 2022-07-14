@@ -127,18 +127,6 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
           </Button>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
-              <ViewItem label={t("settings.preferenceOptOut")} className="mb-1" />
-              <FieldGroup
-                name="optOutQuestion"
-                type="radio"
-                register={register}
-                fields={yesNoOptions}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                dataTestId={"preference-opt-out"}
-              />
-            </GridCell>
-            <GridCell>
               <ViewItem label={t("settings.preferenceOptOutLabel")}>
                 <Field
                   id="optOutTitle"
@@ -149,6 +137,7 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                   type="text"
                   readerOnly
                   dataTestId={"preference-opt-out-label"}
+                  defaultValue={t("application.preferences.dontWantSingular")}
                 />
               </ViewItem>
             </GridCell>
