@@ -117,7 +117,15 @@ const ImageCard = (props: ImageCardProps) => {
             />
           ) : props.images && displayedImages ? (
             displayedImages.map((image, index) => (
-              <img key={index} src={image.thumbnailUrl || image.mobileUrl || image.url} />
+              <img
+                key={index}
+                src={image.thumbnailUrl || image.mobileUrl || image.url}
+                alt={
+                  image.description
+                    ? image.description
+                    : `${props.description || ""} - photo ${index + 1}`
+                }
+              />
             ))
           ) : (
             <div className={"image-card__placeholder"} />
@@ -126,6 +134,7 @@ const ImageCard = (props: ImageCardProps) => {
             <>
               {props.images && props.images.length > 3 && <Icon symbol="plus" size="xlarge" />}
               <button
+                data-test-id="open-modal-button"
                 onClick={() => {
                   setShowModal(true)
                 }}
