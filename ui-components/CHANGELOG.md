@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.16...@bloom-housing/ui-components@5.0.1-alpha.17) (2022-07-15)
+
+
+### Features
+
+* creating users as admin ([#2856](https://github.com/bloom-housing/bloom/issues/2856)) ([dd946d1](https://github.com/bloom-housing/bloom/commit/dd946d1777b4678e89832da527768180f474d129))
+
+
+
+
+
 ## [5.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.15...@bloom-housing/ui-components@5.0.1-alpha.16) (2022-07-13)
 
 

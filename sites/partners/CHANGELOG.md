@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.24...@bloom-housing/partners@5.0.1-alpha.25) (2022-07-15)
+
+
+### Features
+
+* creating users as admin ([#2856](https://github.com/bloom-housing/bloom/issues/2856)) ([dd946d1](https://github.com/bloom-housing/bloom/commit/dd946d1777b4678e89832da527768180f474d129))
+
+
+
+
+
 ## [5.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.23...@bloom-housing/partners@5.0.1-alpha.24) (2022-07-13)
 
 **Note:** Version bump only for package @bloom-housing/partners
