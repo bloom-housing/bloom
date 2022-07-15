@@ -5,6 +5,7 @@ import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
   content: string
+  className?: string
   iconColor?: string
   iconType?: UniversalIconType
   status?: ApplicationStatusType
@@ -16,6 +17,7 @@ export interface ApplicationStatusProps {
 const ApplicationStatus = (props: ApplicationStatusProps) => {
   let bgColor = ""
   const {
+    className,
     content,
     iconColor,
     iconType = "clock",
@@ -56,8 +58,13 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
       bgColor = "bg-primary"
   }
 
+  const classNames = ["application-status", textSize, textColor, bgColor]
+  if (className) {
+    classNames.push(className)
+  }
+
   return (
-    <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
+    <div className={classNames.join(" ")}>
       {icon}
       <span>
         {content}
