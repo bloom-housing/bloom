@@ -1,11 +1,12 @@
 .side-nav {
-  --anchor-color: var(--bloom-color-gray-700);
   --border: solid var(--bloom-border-1) var(--bloom-color-gray-450);
   --border-radius: var(--bloom-rounded-lg);
   --current-padding-inline: var(--bloom-s6);
   --current-padding-block: var(--bloom-s4);
+  --link-color: var(--bloom-color-gray-700);
   --current-selection-color: var(--bloom-color-gray-900);
-  --hover-label-color: var(--bloom-color-primary);
+  --selection-parent-accent: var(--bloom-color-gray-450);
+  --hover-link-color: var(--bloom-color-primary);
   --hover-background-color: var(--bloom-color-primary-lighter);
 
   border: var(--border);
@@ -34,7 +35,7 @@
   a {
     display: flex;
     justify-content: space-between;
-    color: var(--anchor-color);
+    color: var(--link-color);
     padding-inline: var(--current-padding-inline);
     padding-block: var(--current-padding-block);
 
@@ -43,7 +44,7 @@
     }
 
     &[aria-current]:not(:focus) {
-      box-shadow: inset 3px 0px 0px 0px var(--hover-label-color);
+      box-shadow: inset 3px 0px 0px 0px var(--hover-link-color);
     }
 
     &.has-current-child {
@@ -51,20 +52,21 @@
     }
 
     &.has-current-child:not(:focus) {
-      box-shadow: inset 3px 0px 0px 0px var(--bloom-color-gray-450);
+      box-shadow: inset 3px 0px 0px 0px var(--selection-parent-accent);
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: var(--hover-background-color);
-      color: var(--hover-label-color);
+      color: var(--hover-link-color);
     }
 
     span:last-of-type {
-      color: var(--anchor-color);
+      color: var(--link-color);
     }
   }
 
   ul ul a {
-    padding-inline-start: calc(var(--current-padding-inline) + var(--bloom-s4));
+    padding-inline-start: calc(var(--current-padding-inline) + var(--current-padding-block));
   }
 }
