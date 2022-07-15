@@ -54,6 +54,7 @@
   "applications.newApplication": "New Application",
   "applications.allApplications": "All applications",
   "applications.pendingReview": "Pending Review",
+  "applications.scanForDuplicates": "Scan for duplicates",
   "applications.table.additionalPhoneType": "Additional Phone Type",
   "applications.table.altContactAgency": "Alt Contact Agency",
   "applications.table.altContactCity": "Alt Contact City",
