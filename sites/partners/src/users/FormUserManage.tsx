@@ -14,20 +14,24 @@ import {
   AppearanceStyleType,
   AppearanceBorderType,
   emailRegex,
-  setSiteAlertMessage,
   Tag,
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
-import router from "next/router"
 
 type FormUserManageProps = {
   mode: "add" | "edit"
   user?: User
   listings: Listing[]
   onDrawerClose: () => void
+  setAlertMessage: React.Dispatch<
+    React.SetStateAction<{
+      type: string
+      message: string
+    }>
+  >
 }
 
 type FormUserManageValues = {
@@ -49,7 +53,13 @@ const determineUserRole = (roles: UserRolesCreate) => {
   return RoleOption.Partner
 }
 
-const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
+const FormUserManage = ({
+  mode,
+  user,
+  listings,
+  onDrawerClose,
+  setAlertMessage,
+}: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
   const jurisdictionList = profile.jurisdictions
 
@@ -254,18 +264,17 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           body,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.inviteSent`), "success")
+          setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
         })
         .catch((e) => {
           if (e?.response?.status === 409) {
-            setSiteAlertMessage(t(`errors.alert.emailConflict`), "alert")
+            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
           } else {
-            setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
           }
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }
@@ -279,14 +288,13 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       userService
         .resendPartnerConfirmation({ body })
         .then(() => {
-          setSiteAlertMessage(t(`users.confirmationSent`), "success")
+          setAlertMessage({ message: t(`users.confirmationSent`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }
@@ -306,17 +314,16 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           body,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.userUpdated`), "success")
+          setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
-  }, [createUserBody, onDrawerClose, updateUser, userService, user])
+  }, [createUserBody, onDrawerClose, updateUser, userService, user, setAlertMessage])
 
   const onDelete = () => {
     void deleteUser(() =>
@@ -325,15 +332,14 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           id: user.id,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.userDeleted`), "success")
+          setAlertMessage({ message: t(`users.userDeleted`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
           setDeleteModalActive(false)
-          void router.reload()
         })
     )
   }
@@ -584,12 +590,14 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                   register={register}
                   controlClassName="control"
                   keyPrefix="users"
-                  options={roleKeys.filter((elem) => {
-                    if (profile?.roles?.isJurisdictionalAdmin) {
-                      return elem !== RoleOption.Administrator
-                    }
-                    return true
-                  })}
+                  options={roleKeys
+                    .filter((elem) => {
+                      if (profile?.roles?.isJurisdictionalAdmin) {
+                        return elem !== RoleOption.Administrator
+                      }
+                      return true
+                    })
+                    .sort((a, b) => (a < b ? -1 : 1))}
                   error={!!errors?.role}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}

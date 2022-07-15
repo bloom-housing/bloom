@@ -405,9 +405,12 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
 
   const fetcher = () => userService.list(params)
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/user/list?${paramsString}`, fetcher)
+  const cacheKey = `${process.env.backendApiBase}/user/list?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
 
   return {
+    cacheKey,
     data,
     loading: !error && !data,
     error,
