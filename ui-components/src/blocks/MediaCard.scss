@@ -1,6 +1,6 @@
 .media-card {
   @apply bg-gray-450;
-  @apply w-64;
+  @apply w-1/5;
   @apply rounded;
   @apply border-none;
 }
@@ -32,7 +32,8 @@
   @apply rounded-sm;
   @apply border-none;
   min-width: 50vw;
-
+  --max-width: var(--bloom-width-3xl);
+  --max-width-large-screen: var(--bloom-width-5xl);
   header {
     @apply px-6;
     h1 {

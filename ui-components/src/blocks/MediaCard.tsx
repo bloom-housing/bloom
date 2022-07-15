@@ -1,9 +1,9 @@
 import * as React from "react"
 import { useState } from "react"
+import { Modal } from "../.."
 import "./MediaCard.scss"
 import { Icon } from "../icons/Icon"
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons"
-import { Modal } from "../.."
 
 export interface MediaCardProps {
   title?: string
@@ -20,10 +20,12 @@ export interface MediaCardProps {
  */
 const MediaCard = (props: MediaCardProps) => {
   const [openMediaModal, setOpenMediaModal] = useState(false)
+  const youtubeA11y = "?cc_load_policy=1&cc_lang_pref=en&origin=http://localhost:3000/"
   const wrapperClasses = ["media-card"]
   if (props.className) {
     wrapperClasses.push(props.className)
   }
+  console.log(props.videoURL + youtubeA11y)
   return (
     <div className={wrapperClasses.join(" ")}>
       <div className="media-block">
@@ -52,7 +54,7 @@ const MediaCard = (props: MediaCardProps) => {
             title={props.title}
             src={props.videoURL}
             frameBorder="0"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; "
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; cc_load_policy; disablekb;"
             allowFullScreen
           />
         </Modal>
