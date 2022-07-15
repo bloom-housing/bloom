@@ -1,36 +1,34 @@
-import React, { useState, useContext } from "react"
+import React from "react"
 import { useRouter } from "next/router"
-import dayjs from "dayjs"
 import Head from "next/head"
 import {
   AgTable,
   t,
   Button,
-  LocalizedLink,
   SiteAlert,
-  setSiteAlertMessage,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
   SideNav,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
+import {
+  useSingleListingData,
+  useFlaggedApplicationsList,
+  useApplicationsExport,
+} from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 
 const ApplicationsList = () => {
-  const { applicationsService } = useContext(AuthContext)
   const router = useRouter()
+  const listingId = router.query.id as string
+
+  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(listingId)
 
   const tableOptions = useAgTable()
 
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
-
   /* Data Fetching */
-  const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
   const { data: flaggedApps } = useFlaggedApplicationsList({
@@ -89,31 +87,6 @@ const ApplicationsList = () => {
     getGui() {
       return this.linkWithId
     }
-  }
-
-  const onExport = async () => {
-    setCsvExportError(false)
-    setCsvExportLoading(true)
-
-    try {
-      const content = await applicationsService.listAsCsv({
-        listingId,
-      })
-
-      const now = new Date()
-      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
-
-      const blob = new Blob([content], { type: "text/csv" })
-      const fileLink = document.createElement("a")
-      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
-      fileLink.href = URL.createObjectURL(blob)
-      fileLink.click()
-    } catch (err) {
-      setCsvExportError(true)
-      setSiteAlertMessage(err.response.data.error, "alert")
-    }
-
-    setCsvExportLoading(false)
   }
 
   const gridComponents = {
@@ -175,50 +148,49 @@ const ApplicationsList = () => {
               { label: t("t.resolved"), url: `/listings/${listingId}/applications/resolved` },
             ]}
           />
-          <AgTable
-            id="applications-table"
-            className="w-full"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-            }}
-            config={{
-              gridComponents,
-              columns,
-              totalItemsLabel: t("applications.totalApplications"),
-            }}
-            data={{
-              items: [],
-              loading: false,
-              totalItems: 0,
-              totalPages: 0,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-            }}
-            sort={{
-              setSort: tableOptions.sort.setSortOptions,
-            }}
-            headerContent={
-              <div className="flex-row">
-                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
-                  <Button
-                    className="mx-1"
-                    onClick={() => false}
-                    dataTestId={"addApplicationButton"}
-                  >
-                    {t("applications.addApplication")}
+          <div className="w-full">
+            <AgTable
+              id="applications-table"
+              className="w-full"
+              pagination={{
+                perPage: tableOptions.pagination.itemsPerPage,
+                setPerPage: tableOptions.pagination.setItemsPerPage,
+                currentPage: tableOptions.pagination.currentPage,
+                setCurrentPage: tableOptions.pagination.setCurrentPage,
+              }}
+              config={{
+                gridComponents,
+                columns,
+                totalItemsLabel: t("applications.totalApplications"),
+              }}
+              data={{
+                items: [],
+                loading: false,
+                totalItems: 0,
+                totalPages: 0,
+              }}
+              search={{
+                setSearch: tableOptions.filter.setFilterValue,
+              }}
+              sort={{
+                setSort: tableOptions.sort.setSortOptions,
+              }}
+              headerContent={
+                <div className="flex-row">
+                  <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
+                    {t("t.export")}
                   </Button>
-                </LocalizedLink>
+                </div>
+              }
+            />
 
-                <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
-                  {t("t.export")}
-                </Button>
+            <div className="flex flex-row justify-end">
+              <div className="mt-5">
+                <span>Last Updated 06/17/22 at 9:00am</span>
+                <Button className="mx-1 ml-5">{t("applications.scanForDuplicates")}</Button>
               </div>
-            }
-          />
+            </div>
+          </div>
         </article>
       </section>
     </Layout>

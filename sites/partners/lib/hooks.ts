@@ -486,7 +486,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, listingId])
+  }, [applicationsService, includeDemographics, listingId])
 
   return {
     onExport,
