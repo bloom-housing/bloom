@@ -280,6 +280,7 @@
   "nav.flags": "Flags",
   "nav.siteTitlePartners": "Partners Portal",
   "nav.users": "Users",
+  "settings.preferenceDelete": "Deleting a preference cannot be undone.",
   "t.add": "Add",
   "t.addItem": "Add item",
   "t.addItemsToEdit": "Add items to edit",

@@ -22,8 +22,7 @@ import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
 import { UserRepository } from "./repositories/user-repository"
-import Listing from "../listings/entities/listing.entity"
-import { ListingRepository } from "../listings/repositories/listing.repository"
+import { ListingRepository } from "../listings/db/listing.repository"
 
 @Module({
   imports: [

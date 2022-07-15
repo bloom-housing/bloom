@@ -1,13 +1,17 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import Head from "next/head"
 import {
   AppearanceSizeType,
+  AppearanceStyleType,
+  AppearanceBorderType,
   Button,
   Icon,
   IconFillColors,
   LoadingOverlay,
   MinimalTable,
   NavigationHeader,
+  Modal,
+  PageHeader,
   SiteAlert,
   StandardCard,
   t,
@@ -20,6 +24,8 @@ import { useJurisdictionalPreferenceList } from "../../lib/hooks"
 
 const Settings = () => {
   const { profile } = useContext(AuthContext)
+
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const { data, loading } = useJurisdictionalPreferenceList(
     profile?.jurisdictions?.reduce((acc, curr) => {
@@ -47,7 +53,7 @@ const Settings = () => {
               className={"mr-5"}
             />
           </span>
-          <span onClick={() => alert("trash")} className={"cursor-pointer"}>
+          <span onClick={() => setDeleteModal(true)} className={"cursor-pointer"}>
             <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
           </span>
         </div>
@@ -91,32 +97,63 @@ const Settings = () => {
   }
 
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
-      </Head>
+    <>
+      <Layout>
+        <Head>
+          <title>{t("nav.siteTitlePartners")}</title>
+        </Head>
 
-      <NavigationHeader className="relative" title={t("t.settings")}>
-        <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert type="success" timeout={5000} dismissable />
-          <SiteAlert type="alert" timeout={5000} dismissable />
-        </div>
-      </NavigationHeader>
+        <NavigationHeader className="relative" title={t("t.settings")}>
+          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
+            <SiteAlert type="success" timeout={5000} dismissable />
+            <SiteAlert type="alert" timeout={5000} dismissable />
+          </div>
+        </NavigationHeader>
 
-      <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <LoadingOverlay isLoading={loading}>
-            <StandardCard
-              title={t("t.preferences")}
-              emptyStateMessage={t("t.none")}
-              footer={<Button size={AppearanceSizeType.small}>{t("t.addItem")}</Button>}
-            >
-              {getCardContent()}
-            </StandardCard>
-          </LoadingOverlay>
-        </article>
-      </section>
-    </Layout>
+        <section>
+          <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+            <LoadingOverlay isLoading={loading}>
+              <StandardCard
+                title={t("t.preferences")}
+                emptyStateMessage={t("t.none")}
+                footer={<Button size={AppearanceSizeType.small}>{t("t.addItem")}</Button>}
+              >
+                {getCardContent()}
+              </StandardCard>
+            </LoadingOverlay>
+          </article>
+        </section>
+      </Layout>
+      <Modal
+        open={!!deleteModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.closeThisListing")}
+        onClose={() => setDeleteModal(false)}
+        actions={[
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.alert}
+            onClick={() => {
+              setDeleteModal(false)
+            }}
+          >
+            {t("t.delete")}
+          </Button>,
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setDeleteModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("settings.preferenceDelete")}
+      </Modal>
+    </>
   )
 }
 

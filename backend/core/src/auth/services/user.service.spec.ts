@@ -15,7 +15,7 @@ import { EmailService } from "../../email/email.service"
 import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { UserRepository } from "../repositories/user-repository"
-import { ListingRepository } from "../../listings/repositories/listing.repository"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

@@ -50,7 +50,7 @@ import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
-import { ListingRepository } from "../../listings/repositories/listing.repository"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 dayjs.extend(advancedFormat)
 
@@ -93,7 +93,8 @@ export class UserService {
     const distinctIDQB = this.userRepository.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
-    distinctIDQB.orderBy("user.id")
+    distinctIDQB.orderBy("user.firstName")
+    distinctIDQB.addOrderBy("user.lastName")
     const qb = this.userRepository.getQb()
 
     if (params.filter) {
@@ -135,6 +136,9 @@ export class UserService {
     qb.andWhere("user.id IN (:...distinctIDs)", {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
+
+    qb.orderBy("user.firstName")
+    qb.addOrderBy("user.lastName")
 
     const result = distinctIDResult.items.length ? await qb.getMany() : []
     /**
