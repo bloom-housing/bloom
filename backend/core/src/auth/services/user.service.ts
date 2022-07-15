@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -49,7 +50,7 @@ import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
-import { ListingRepository } from "../../listings/repositories/listing.repository"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 dayjs.extend(advancedFormat)
 
@@ -92,19 +93,24 @@ export class UserService {
     const distinctIDQB = this.userRepository.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
-    distinctIDQB.orderBy("user.id")
+    distinctIDQB.orderBy("user.firstName")
+    distinctIDQB.addOrderBy("user.lastName")
     const qb = this.userRepository.getQb()
 
     if (params.filter) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const user = this.req.user as User
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        distinctIDQB
+        distinctIDQB,
+        user
       )
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        qb
+        qb,
+        user
       )
     }
 
@@ -130,6 +136,9 @@ export class UserService {
     qb.andWhere("user.id IN (:...distinctIDs)", {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
+
+    qb.orderBy("user.firstName")
+    qb.addOrderBy("user.lastName")
 
     const result = distinctIDResult.items.length ? await qb.getMany() : []
     /**
@@ -562,10 +571,29 @@ export class UserService {
   }
 
   private async authorizeUserAction(requestingUser, targetUser, action) {
+    if (requestingUser?.roles?.isJurisdictionalAdmin) {
+      return this.authorizeJurisdictionalAdmin(requestingUser, targetUser)
+    }
     return await this.authzService.canOrThrow(requestingUser, "user", action, {
       id: targetUser.id,
       jurisdictionId: targetUser.id,
     })
+  }
+
+  private authorizeJurisdictionalAdmin(requestingUser, targetUser) {
+    // jurisdictional admins can't view super admins
+    if (targetUser?.roles?.isAdmin) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+
+    const requesterJurisdictions = requestingUser.jurisdictions?.map((juris) => juris.id)
+    const targetJurisdictions = targetUser.jurisdictions?.map((juris) => juris.id)
+    // jurisdictional admins should only see a user if they share a jurisdiction
+    const res = requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
+    if (!res) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+    return res
   }
 
   private async authorizeUserProfileAction(requestingUser, targetUser, action) {

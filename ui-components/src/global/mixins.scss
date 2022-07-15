@@ -93,7 +93,7 @@
         --success-appearance-hover-background-color,
         var(--bloom-color-success-dark)
       );
-      border-color: var(--success-appearance-hover-border-color, var(--bloom-color-success));
+      border-color: var(--success-appearance-hover-border-color, var(--bloom-color-success-dark));
       color: var(--success-appearance-hover-label-color, var(--bloom-color-white));
     }
   }
@@ -129,7 +129,7 @@
   }
 
   &.is-borderless {
-    color: var(--bloom-color-primary-darker);
+    color: var(--bloom-color-primary);
     border-color: transparent;
     background: transparent;
 
@@ -152,7 +152,7 @@
       --outlined-appearance-hover-background-color,
       var(--bloom-color-primary-dark)
     );
-    border-color: var(--outlined-appearance-hover-border-color, var(--bloom-color-primary));
+    border-color: var(--outlined-appearance-hover-border-color, var(--bloom-color-primary-dark));
     color: var(--outlined-appearance-hover-label-color, var(--bloom-color-white));
   }
 

@@ -29,6 +29,10 @@
   font-weight: var(--label-weight);
   line-height: var(--bloom-line-height-snug);
 
+  &.transition {
+    transition: all 200ms ease-out;
+  }
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px var(--bloom-color-accent-cool);
@@ -36,6 +40,9 @@
 
   &:hover {
     border-color: var(--bloom-color-primary-dark);
+    &.transition {
+      transition: all 200ms ease-in;
+    }
   }
 
   &:disabled {
@@ -52,6 +59,7 @@
     &:hover {
       background-color: var(--bloom-color-gray-700);
       color: var(--bloom-color-white);
+      border-color: var(--bloom-color-gray-700);
     }
   }
 

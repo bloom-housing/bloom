@@ -2,7 +2,6 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { ListingsService } from "../listings.service"
-import { Listing } from "../entities/listing.entity"
 import { TranslationsService } from "../../translations/services/translations.service"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingsQueryParams } from "../dto/listings-query-params"
@@ -11,7 +10,10 @@ import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
 import { AuthzService } from "../../auth/services/authz.service"
-import { ListingRepository } from "../repositories/listing.repository"
+import { ListingRepository } from "../db/listing.repository"
+import { ListingsQueryBuilder } from "../db/listing-query-builder"
+
+/* eslint-disable @typescript-eslint/unbound-method */
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -22,49 +24,49 @@ let service: ListingsService
 const mockListings = [
   {
     id: "asdf1",
-    property: { id: "test-property1", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf2",
-    property: { id: "test-property2", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf3",
-    property: { id: "test-property3", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf4",
-    property: { id: "test-property4", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf5",
-    property: { id: "test-property5", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf6",
-    property: { id: "test-property6", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf7",
-    property: { id: "test-property7", units: [] },
+    units: [],
     preferences: [],
     status: "closed",
     unitsSummarized: { byUnitTypeAndRent: [] },
@@ -84,6 +86,10 @@ const mockInnerQueryBuilder = {
   getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
   getQuery: jest.fn().mockReturnValue("innerQuery"),
   getCount: jest.fn().mockReturnValue(7),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderConditions: ListingsQueryBuilder.prototype.addOrderConditions,
+  addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
+  paginate: ListingsQueryBuilder.prototype.paginate,
 }
 const mockQueryBuilder = {
   select: jest.fn().mockReturnThis(),
@@ -94,6 +100,14 @@ const mockQueryBuilder = {
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
   getMany: jest.fn().mockReturnValue(mockListings),
+  offset: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderConditions: ListingsQueryBuilder.prototype.addOrderConditions,
+  addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
+  paginate: ListingsQueryBuilder.prototype.paginate,
+  addInnerFilteredQuery: ListingsQueryBuilder.prototype.addInnerFilteredQuery,
+  getManyPaginated: ListingsQueryBuilder.prototype.getManyPaginated,
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
@@ -166,7 +180,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0))",
+        "(LOWER(CAST(listings.neighborhood as text)) = LOWER(:neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhood,
         }
@@ -194,7 +208,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
+        "(LOWER(CAST(listings.neighborhood as text)) IN (:...neighborhood_0))",
         {
           neighborhood_0: expectedNeighborhoodArray,
         }
