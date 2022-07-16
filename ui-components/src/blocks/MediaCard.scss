@@ -1,66 +1,44 @@
 .media-card {
-  @apply bg-gray-450;
-  @apply w-1/5;
-  @apply rounded;
-  @apply border-none;
-}
-.media-block {
-  @apply py-6;
-  @apply w-full;
-  @apply rounded;
-  background-color: #1a5049;
+  --title-color: var(--bloom-color-primary-dark);
+  --title-font-size: var(--bloom-font-size-base);
+  --title-font-family: var(--bloom-font-sans);
+  --subtitle-font-size: var(--bloom-font-size-tiny);
+  --content-bg-color: var(--bloom-color-gray-200);
+  --card-border: var(--bloom-border-1) solid var(--bloom-color-gray-450);
+  --card-border-rounded: var(--bloom-rounded);
+  --card-padding: var(--bloom-s6);
+  --max-width: var(--bloom-width-lg);
+  --background-color: var(--bloom-color-white);
+
+  max-width: var(--max-width);
+  border: var(--card-border);
+  border-radius: var(--card-border-rounded);
+  background-color: var(--content-bg-color);
+  max-width: var(--max-width);
 }
 
-.media-description {
-  @apply p-6;
+.media-card__header {
+  padding-top: var(--card-padding);
+  padding-bottom: var(--card-padding);
+  border-top-right-radius: calc(var(--card-border-rounded) - var(--bloom-border-1));
+  border-top-left-radius: calc(var(--card-border-rounded) - var(--bloom-border-1));
+  background-color: var(--title-color);
 }
+
+.media-card__body {
+  padding: var(--card-padding);
+}
+
 .media-card__title {
-  color: #1a5049;
-  @apply font-sans;
+  color: var(--title-color);
+  font-size: var(--title-font-size);
+  font-family: var(--title-font-family);
   @apply font-bold;
-  @apply text-sm;
   @apply tracking-wide;
   @apply cursor-pointer;
 }
 
 .media-card__subtitle {
-  @apply pt-6;
-  @apply text-sm;
-}
-
-.media-modal {
-  @apply rounded-sm;
-  @apply border-none;
-  min-width: 50vw;
-  --max-width: var(--bloom-width-3xl);
-  --max-width-large-screen: var(--bloom-width-5xl);
-  // header {
-  //   @apply px-6;
-  //   h1 {
-  //     @apply pr-4;
-  //     @apply text-sm;
-  //     @screen md {
-  //       @apply text-xl;
-  //     }
-  //   }
-  // }
-  // button {
-  //   top: 0.75rem;
-  //   right: 0.75rem;
-  //   margin-left: 1rem;
-  // }
-}
-
-.media-modal-iframe {
-  padding-top: 56.25% !important;
-  position: relative;
-  overflow: hidden;
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+  padding-top: var(--card-padding);
+  font-size: var(--subtitle-font-size);
 }

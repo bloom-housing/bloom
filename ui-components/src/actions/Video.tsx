@@ -9,7 +9,7 @@ export interface VideoProps {
 }
 
 const Video = (props: VideoProps) => {
-  const youtubeA11y = `?cc_load_policy=1&cc_lang_pref=${props.ccLang}&origin=`
+  const youtubeA11y = `?disablekb=1&cc_load_policy=1&cc_lang_pref=${props.ccLang}`
   return (
     <div className="video">
       <iframe

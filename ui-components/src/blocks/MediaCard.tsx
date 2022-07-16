@@ -7,8 +7,7 @@ export interface MediaCardProps {
   subtitle?: string
   className?: string
   icon?: UniversalIconType
-  bgColor?: string
-  clickFunction?: () => void
+  handleClick?: () => void
 }
 
 /**
@@ -18,23 +17,21 @@ export interface MediaCardProps {
  */
 const MediaCard = (props: MediaCardProps) => {
   const wrapperClasses = ["media-card"]
-  if (props.className) {
-    wrapperClasses.push(props.className)
-  }
+  if (props.className) wrapperClasses.push(props.className)
   return (
     <div className={wrapperClasses.join(" ")}>
-      <div className="media-block">
+      <div className="media-card__header">
         {props.icon && (
           <div className="flex justify-center">
-            <span onClick={props.clickFunction} className={"cursor-pointer"}>
+            <span onClick={props.handleClick} className={"cursor-pointer"}>
               <Icon symbol={props.icon} size="2xl" fill="white" />
             </span>
           </div>
         )}
       </div>
 
-      <div className="media-description">
-        <a className="w-min" onClick={props.clickFunction}>
+      <div className="media-card__body">
+        <a className="w-min" onClick={props.handleClick}>
           <h3 className="media-card__title">{props.title}</h3>
         </a>
         <div className={"media-card__subtitle"}>{props.subtitle}</div>
