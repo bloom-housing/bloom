@@ -50,7 +50,7 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
         const AriaAutocomplete = (await import("aria-autocomplete")).default
         AriaAutocomplete(autocompleteRef.current, {
           source: props.dataSource,
-          delay: 500, // debounce for a half-second
+          delay: 300, // debounce for 300ms
           inputClassName: "input",
           multiple: true,
           placeholder: props.placeholder,

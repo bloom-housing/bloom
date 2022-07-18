@@ -39,7 +39,7 @@ const dataProvider: MultiSelectDataSourceParams<Promise<MultiSelectFieldItem[]>>
     })
   }
 
-  await later(500)
+  await later(100)
 
   let customTypeahead =
     query.toString().length > 0
@@ -104,6 +104,39 @@ export const withPreviousSelections = () => {
         placeholder="Type to search"
         id="the-value"
         name="nested.thevalue"
+        register={register}
+        getValues={getValues}
+        setValue={setValue}
+      />
+      <button type="submit" className="button">
+        View Output
+      </button>
+      <output style={{ display: "block", marginBlockStart: "2rem" }}>{formOutput}</output>
+    </form>
+  )
+}
+
+const staticData: MultiSelectFieldItem[] = []
+for (let i = 0; i < 100; i++) {
+  staticData.push({
+    value: `item${i + 1}`,
+    label: `Item ${i + 1} in a long list`,
+  })
+}
+
+export const withStaticData = () => {
+  const [formOutput, setFormOutput] = useState("")
+  const { register, handleSubmit, getValues, setValue } = useForm()
+  const onSubmit = (data: Record<string, any>) => setFormOutput(JSON.stringify(data))
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <MultiSelectField
+        dataSource={staticData}
+        label="Select one or more items"
+        placeholder="Type to search"
+        id="the-value"
+        name="selectedOptions"
         register={register}
         getValues={getValues}
         setValue={setValue}
