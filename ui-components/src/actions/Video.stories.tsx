@@ -2,7 +2,7 @@ import * as React from "react"
 import { Video } from "./Video"
 
 export default {
-  title: "Video 🚩",
+  title: "Actions/Video 🚩",
   id: "actions/video",
   decorators: [(storyFn: any) => <div style={{ maxWidth: "700px" }}>{storyFn()}</div>],
 }
