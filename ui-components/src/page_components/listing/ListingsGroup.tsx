@@ -1,13 +1,13 @@
 import React, { useState } from "react"
 import { Button } from "../../actions/Button"
-import { Icon, IconTypes } from "../../icons/Icon"
+import { Icon, UniversalIconType } from "../../icons/Icon"
 import "./ListingsGroup.scss"
 
 export interface ListingsGroupProps {
   children?: React.ReactNode
   header: string
   hideButtonText: string
-  icon?: IconTypes
+  icon?: UniversalIconType
   info?: string
   listingsCount: number
   showButtonText: string

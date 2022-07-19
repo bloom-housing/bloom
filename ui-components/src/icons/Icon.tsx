@@ -1,4 +1,6 @@
 import * as React from "react"
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import "./Icon.scss"
 import {
   Accessible,
@@ -142,6 +144,8 @@ const IconMap = {
 
 export type IconTypes = keyof typeof IconMap
 
+export type UniversalIconType = IconTypes | IconDefinition
+
 export type IconFill = "white" | "primary"
 
 export const IconFillColors = {
@@ -164,7 +168,7 @@ export type IconSize =
 
 export interface IconProps {
   size: IconSize
-  symbol: IconTypes
+  symbol: UniversalIconType
   className?: string
   fill?: string
   ariaHidden?: boolean
@@ -179,9 +183,14 @@ const Icon = (props: IconProps) => {
   if (props.className) wrapperClasses.push(props.className)
   if (props.symbol == "spinner") wrapperClasses.push("spinner-animation")
 
-  const SpecificIcon = IconMap[props.symbol]
+  const SpecificIcon =
+    typeof props.symbol === "string" ? (
+      IconMap[props.symbol as string]
+    ) : (
+      <FontAwesomeIcon icon={props.symbol} />
+    )
 
-  return (
+  return typeof props.symbol === "string" ? (
     <span
       className={wrapperClasses.join(" ")}
       aria-hidden={props.ariaHidden}
@@ -192,6 +201,15 @@ const Icon = (props: IconProps) => {
         fill={props.fill ? props.fill : undefined}
         className={props.iconClass ?? undefined}
       />
+    </span>
+  ) : (
+    <span
+      className={wrapperClasses.join(" ")}
+      aria-hidden={props.ariaHidden}
+      data-test-id={props.dataTestId ?? null}
+      style={{ color: props.fill }}
+    >
+      {SpecificIcon}
     </span>
   )
 }

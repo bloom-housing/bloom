@@ -70,18 +70,18 @@ const ListingsPage = ({ initialListings }) => {
       </Drawer>
 
       <div className={"bg-gray-300"}>
-        <h3 className="max-w-5xl container mx-auto text-3xl text-primary-darker font-bold px-4 py-8">
+        <h3 className="max-w-5xl flex sm:flex-row flex-col justify-between container mx-auto text-3xl text-primary-darker font-bold px-4 py-8  gap-y-2">
           {t("listingFilters.allRentals")}
           <Button
-            className="mx-5 bg-lush border-lush text-black"
+            className="bg-lush border-lush text-black"
             size={AppearanceSizeType.normal}
-            icon="filter"
+            icon="search"
             iconPlacement="left"
             iconSize="md-large"
             onClick={() => setFilterModalVisible(true)}
             passToIconClass={"ui-icon__filledBlack"}
           >
-            {t("listingFilters.buttonTitle")}
+            {t("listingFilters.buttonTitleExtended")}
           </Button>
         </h3>
       </div>

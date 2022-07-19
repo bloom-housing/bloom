@@ -1421,6 +1421,7 @@
   "listingFilters.allRentals": "All rentals",
   "listingFilters.buttonTitle": "Filter",
   "listingFilters.buttonTitleWithNumber": "Filter (%{number})",
+  "listingFilters.buttonTitleExtended": "Find listings for you",
   "listingFilters.loading": "Loading...",
   "listingFilters.rentalsFound": "%{smart_count} rental found |||| %{smart_count} rentals found",
   "listingFilters.resetButton": "Reset",
