@@ -18,14 +18,13 @@ import {
   IsBoolean,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { PreferenceLink } from "../types/preference-link"
 import { ApiProperty } from "@nestjs/swagger"
-import { ListingPreference } from "./listing-preference.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
-import { ListingPreferenceOption } from "../../applications/types/listing-preference-option"
+import { MultiselectLink } from "../types/multiselect-link"
+import { MultiselectOption } from "../types/multiselect-option"
 
-@Entity({ name: "preferences" })
-class Preference {
+@Entity({ name: "listing_multiselect_questions" })
+class MultiselectQuestion {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -66,15 +65,15 @@ class Preference {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceLink)
-  @ApiProperty({ type: [PreferenceLink] })
-  links?: PreferenceLink[] | null
+  @Type(() => MultiselectLink)
+  @ApiProperty({ type: [MultiselectLink] })
+  links?: MultiselectLink[] | null
 
-  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.preference)
+  @OneToMany(() => MultiselectQuestion, (question) => question.listingMultiselectQuestions)
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreference)
-  listingPreferences: ListingPreference[]
+  @Type(() => MultiselectQuestion)
+  listingMultiselectQuestions: MultiselectQuestion[]
 
   @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.preferences)
   @Expose()
@@ -85,9 +84,9 @@ class Preference {
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreferenceOption)
-  @ApiProperty({ type: [ListingPreferenceOption], nullable: true })
-  options: ListingPreferenceOption[]
+  @Type(() => ListingMultiselectOption)
+  @ApiProperty({ type: [ListingMultiselectOption], nullable: true })
+  options: ListingMultiselectOption[]
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -102,4 +101,4 @@ class Preference {
   hideFromListing?: boolean
 }
 
-export { Preference as default, Preference }
+export { ListingMultiselectQuestion as default, ListingMultiselectQuestion }
