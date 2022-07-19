@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.17...@bloom-housing/ui-components@5.0.1-alpha.18) (2022-07-19)
+
+
+### Features
+
+* visuals for add preference, preference option drawers ([#2877](https://github.com/bloom-housing/bloom/issues/2877)) ([8611034](https://github.com/bloom-housing/bloom/commit/8611034845b45ce4d4e4eb44e790ac2adec0ba94))
+
+
+
+
+
 ## [5.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.16...@bloom-housing/ui-components@5.0.1-alpha.17) (2022-07-15)
 
 
