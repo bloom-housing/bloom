@@ -30,20 +30,14 @@ const Layout = (props) => {
       href: "/listings",
     },
     {
+      title: t("pageTitle.getAssistance"),
+      href: "/get-assistance",
+    },
+    {
       title: t("pageTitle.about"),
       href: "/about",
     },
-    {
-      title: t("pageTitle.resources"),
-      href: "/additional-resources",
-    },
   ]
-  if (process.env.housingCounselorServiceUrl) {
-    menuLinks.push({
-      title: t("pageTitle.getAssistance"),
-      href: process.env.housingCounselorServiceUrl,
-    })
-  }
   if (profile) {
     menuLinks.push({
       title: t("nav.myAccount"),
