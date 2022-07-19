@@ -1,5 +1,4 @@
 import React from "react"
-import { createClassDeclaration } from "typescript"
 import "./Video.scss"
 
 enum VideoSource {
