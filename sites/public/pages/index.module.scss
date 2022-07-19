@@ -1,24 +1,76 @@
-.latest-listings {
-  padding: 24px 0 0 0;
+.section-container {
+  max-width: 1600px;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  @apply mx-auto;
 }
 
-.regions {
-  padding: 24px 0;
+.title {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    @screen sm {
+      font-size: 2rem;
+      line-height: 2.25rem;
+    }
+  }
+  svg {
+    padding: 0 0.5rem 0 0;
+    fill: $tailwind-primary;
+    height: 2rem;
+    width: 2rem;
+    @screen sm {
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+  }
+}
+
+.cards-container {
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @screen lg {
+    flex-direction: row;
+    align-items: unset;
+  }
+  :last-child {
+    @apply pb-0;
+  }
+}
+
+.region-background {
+  padding-top: 1rem;
+  width: 100%;
+  background-color: #f7f7f7;
 }
 
 .region {
-  @apply bg-primary;
-  background-size: cover;
-  background-position: 50% 50%;
-  border-radius: 14px 14px 2px 2px;
-  height: 130px;
-  margin: 0 33px 2.2rem 0;
-  position: relative;
-  width: 209px;
-
-  @screen sm {
-    height: 170px;
-    width: 278px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 48rem;
+  min-height: 100%;
+  overflow: hidden;
+  @apply px-4;
+  @apply pb-6;
+  @screen lg {
+    width: 25%;
+    @apply pb-0;
+  }
+  img {
+    object-fit: cover;
+    border-radius: 24px 24px 0 0;
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 3/2;
+    @apply pb-2;
   }
 }
 .region:hover {
@@ -26,14 +78,18 @@
 }
 
 .region__text {
-  bottom: -2rem;
+  display: flex;
+  justify-content: center;
   font-size: 1.3rem;
   font-weight: 700;
-  line-height: 1rem;
-  max-width: 236px;
+  line-height: 1.3rem;
+  max-width: 278px;
   overflow: hidden;
-  position: absolute;
   text-overflow: ellipsis;
   white-space: nowrap;
   @apply text-primary-dark;
+}
+
+.latest-listings {
+  padding: 24px 0 0 0;
 }
