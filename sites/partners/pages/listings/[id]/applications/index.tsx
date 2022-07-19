@@ -139,21 +139,8 @@ const ApplicationsList = () => {
 
       <section>
         <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-          <SideNav
-            className="w-full md:w-72"
-            navItems={[
-              {
-                label: t("applications.allApplications"),
-                url: `/listings/${listingId}/applications`,
-                current: true,
-              },
-              {
-                label: t("applications.pendingReview"),
-                url: `/listings/${listingId}/applications/pending`,
-              },
-              { label: t("t.resolved"), url: `/listings/${listingId}/applications/resolved` },
-            ]}
-          />
+          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
+
           <AgTable
             className="w-full"
             id="applications-table"
