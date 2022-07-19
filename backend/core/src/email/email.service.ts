@@ -311,4 +311,21 @@ export class EmailService {
       })
     )
   }
+
+  async portalAccountUpdate(user: User, appUrl: string) {
+    void (await this.loadTranslations(
+      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
+      user.language || Language.en
+    ))
+    const jurisdiction = await this.getUserJurisdiction(user)
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t("invite.portalAccountUpdate"),
+      this.template("portal-account-update")({
+        user,
+        appUrl,
+      })
+    )
+  }
 }
