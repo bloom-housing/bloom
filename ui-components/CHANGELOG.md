@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.18...@bloom-housing/ui-components@5.0.1-alpha.19) (2022-07-19)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [5.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.17...@bloom-housing/ui-components@5.0.1-alpha.18) (2022-07-19)
 
 

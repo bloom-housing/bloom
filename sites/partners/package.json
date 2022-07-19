@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "5.0.1-alpha.26",
+  "version": "5.0.1-alpha.27",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^5.0.1-alpha.12",
-    "@bloom-housing/shared-helpers": "^5.0.1-alpha.25",
-    "@bloom-housing/ui-components": "^5.0.1-alpha.18",
+    "@bloom-housing/shared-helpers": "^5.0.1-alpha.26",
+    "@bloom-housing/ui-components": "^5.0.1-alpha.19",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
