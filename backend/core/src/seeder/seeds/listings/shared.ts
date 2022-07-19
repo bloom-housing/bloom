@@ -15,7 +15,6 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
-import { FormMetaDataType } from "../../../applications/types/form-metadata/form-metadata"
 import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 export const getDate = (days: number) => {
   const someDate = new Date()
@@ -243,19 +242,8 @@ export const liveWorkPreference: PreferenceSeedType = {
       url: "https://www.example.com",
     },
   ],
-  formMetadata: {
-    key: "liveWork",
-    options: [
-      {
-        key: "live",
-        extraData: [],
-      },
-      {
-        key: "work",
-        extraData: [],
-      },
-    ],
-  },
+  optOutText: "I don't want this preference",
+  options: [{ title: "Live in County" }, { title: "Work in County" }],
 }
 export function getDisplaceePreference(jurisdictionName) {
   const preference = { ...displaceePreference }
@@ -310,46 +298,29 @@ export function getPbvPreference(jurisdictionName) {
 
 export const pbvPreference: PreferenceSeedType = {
   title: "Housing Authority Project-Based Voucher",
-  subtitle: "",
   description:
     "You are currently applying to be in a general applicant waiting list. Of the total apartments available in this application process, several have Project-Based Vouchers for rental subsidy assistance from the Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Housing Authority.",
   links: [],
-  formMetadata: {
-    key: "PBV",
-    customSelectText: "Please select any of the following that apply to you",
-    hideGenericDecline: true,
-    hideFromListing: true,
-    options: [
-      {
-        key: "residency",
-        extraData: [],
-      },
-      {
-        key: "family",
-        extraData: [],
-      },
-      {
-        key: "veteran",
-        extraData: [],
-      },
-      {
-        key: "homeless",
-        extraData: [],
-      },
-      {
-        key: "noneApplyButConsider",
-        exclusive: true,
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "doNotConsider",
-        exclusive: true,
-        description: false,
-        extraData: [],
-      },
-    ],
-  },
+  hideFromListing: true,
+  optOutText: "Do not consider me",
+  options: [
+    {
+      title: "Residency",
+    },
+    {
+      title: "Family",
+    },
+    {
+      title: "Veteran",
+    },
+    {
+      title: "Homeless",
+    },
+    {
+      title: "None apply but consider me",
+      exclusive: true,
+    },
+  ],
 }
 
 export function getHopwaPreference(jurisdictionName) {

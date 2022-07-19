@@ -4,6 +4,7 @@ import {
   getDefaultAssets,
   getHopwaPreference,
   getLiveWorkPreference,
+  getDisplaceePreference,
   getPbvPreference,
   getServedInMilitaryProgram,
   getTayProgram,
@@ -961,6 +962,12 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
             title: getHopwaPreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 3,
+        },
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getDisplaceePreference(alamedaJurisdiction.name).title,
+          }),
+          ordinal: 4,
         },
       ],
       events: [],
