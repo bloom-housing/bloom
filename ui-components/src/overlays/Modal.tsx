@@ -12,21 +12,26 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   hideCloseIcon?: boolean
   innerClassNames?: string
   modalClassNames?: string
+  headerClassNames?: string
   role?: string
   scrollable?: boolean
   slim?: boolean
   title: string
 }
 
-const ModalHeader = (props: { title: string; uniqueId?: string }) => (
-  <>
-    <header>
-      <h1 className="modal__title" id={props.uniqueId}>
-        {props.title}
-      </h1>
-    </header>
-  </>
-)
+const ModalHeader = (props: { title: string; uniqueId?: string; className?: string }) => {
+  const classNames = ["modal__title"]
+  if (props.className) classNames.push(props.className)
+  return (
+    <>
+      <header className="modal__header">
+        <h1 className={classNames.join(" ")} id={props.uniqueId}>
+          {props.title}
+        </h1>
+      </header>
+    </>
+  )
+}
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
   <footer className="modal__footer" data-testid="footer">
@@ -58,7 +63,11 @@ export const Modal = (props: ModalProps) => {
       role={props.role ? props.role : "dialog"}
     >
       <div className={modalClassNames.join(" ")}>
-        <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
+        <ModalHeader
+          title={props.title}
+          uniqueId={uniqueIdRef.current}
+          className={props.headerClassNames}
+        />
 
         <section className={innerClassNames.join(" ")}>
           {typeof props.children === "string" ? <p>{props.children}</p> : props.children}

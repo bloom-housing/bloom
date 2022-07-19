@@ -78,7 +78,8 @@
       width: 100%;
     }
 
-    .ui-icon {
+    .image-card__more-images {
+      font-weight: bold;
       grid-area: Secondary-2;
       position: absolute;
       top: 0;
@@ -86,6 +87,7 @@
       right: 0;
       bottom: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -137,13 +139,9 @@
 .modal.image-card__gallery-modal {
   --title-color: var(--bloom-color-gray-750);
   --background-color: transparent;
+  --content-padding-block: var(--bloom-s2) var(--bloom-s4);
   --footer-background-color: transparent;
   --footer-justify: center;
   --modal-border: none;
   --modal-shadow: none;
-}
-
-.fixed-overlay.image-card__overlay {
-  --overlay-background-color: white;
-  --overlay-opacity: 0.8;
 }

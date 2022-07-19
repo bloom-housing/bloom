@@ -71,6 +71,8 @@ export const fourImages = () => (
       },
     ]}
     modalCloseLabel="Back to listing"
+    moreImagesLabel="images"
+    moreImagesDescription="more images for 'Property Name'"
   />
 )
 

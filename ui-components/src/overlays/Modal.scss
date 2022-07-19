@@ -4,6 +4,7 @@
   --title-font-size: var(--bloom-font-size-base-alt);
   --title-font-family: var(--bloom-font-sans);
   --content-font-color: var(--bloom-color-gray-700);
+  --content-padding-block: var(--bloom-s5) var(--bloom-s8);
   --max-width: var(--bloom-width-5xl);
   --desktop-min-width: var(--bloom-width-lg);
   --footer-background-color: var(--bloom-color-primary-lighter);
@@ -26,26 +27,21 @@
   }
 }
 
-.modal__header,
-.modal__inner,
-.modal__footer {
-  padding-block: var(--bloom-s4);
-  padding-inline: var(--bloom-s6);
-}
-
 .modal__header {
-  padding-top: var(--bloom-s8);
+  min-height: var(--bloom-s14);
 }
 
 .modal__title {
-  padding: var(--bloom-s6) var(--bloom-s6) 0 var(--bloom-s6);
+  padding-block: var(--bloom-s6) var(--bloom-s3);
+  padding-inline: var(--bloom-s6);
   color: var(--title-color);
   font-size: var(--title-font-size);
   font-family: var(--title-font-family);
 }
 
 .modal__inner {
-  padding-block: var(--bloom-s8);
+  padding-block: var(--content-padding-block);
+  padding-inline: var(--bloom-s6);
 
   &:last-of-type {
     border-bottom-right-radius: var(--border-radius);
@@ -63,6 +59,8 @@
 }
 
 .modal__footer {
+  padding-block: var(--bloom-s4);
+  padding-inline: var(--bloom-s6);
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
   background-color: var(--footer-background-color);

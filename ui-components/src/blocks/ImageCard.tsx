@@ -47,6 +47,12 @@ export interface ImageCardProps {
   tags?: ImageTag[]
   /** The label text of the close button when the gallery modal is displayed */
   modalCloseLabel?: string
+  /** The title text of the gallery modal, only for screen readers */
+  modalAriaTitle?: string
+  /** The label of the more images area of the images grid  */
+  moreImagesLabel?: string
+  /** The aria label of the clickable region of the images grid */
+  moreImagesDescription?: string
 }
 
 /**
@@ -132,8 +138,21 @@ const ImageCard = (props: ImageCardProps) => {
           )}
           {props.images && props.images.length > 1 && (
             <>
-              {props.images && props.images.length > 3 && <Icon symbol="plus" size="xlarge" />}
+              {props.images && props.images.length > 3 && (
+                <div className="image-card__more-images">
+                  <Icon symbol="plus" size="xlarge" />
+                  {props.moreImagesLabel && (
+                    <span>
+                      {props.images.length - 2} {props.moreImagesLabel}
+                    </span>
+                  )}
+                </div>
+              )}
               <button
+                aria-label={
+                  props.moreImagesDescription &&
+                  `${props.images.length - 2} ${props.moreImagesDescription}`
+                }
                 data-test-id="open-modal-button"
                 onClick={() => {
                   setShowModal(true)
@@ -147,12 +166,13 @@ const ImageCard = (props: ImageCardProps) => {
       {props.images && props.images.length > 1 && (
         <Modal
           open={showModal}
-          title="Gallery"
-          ariaDescription="Full set of listing images"
+          title={props.modalAriaTitle || "Images"}
           scrollable={true}
           onClose={() => setShowModal(!showModal)}
           className="image-card__overlay"
           modalClassNames="image-card__gallery-modal"
+          headerClassNames="sr-only"
+          closeIconColor={IconFillColors.white}
           actions={[
             <Button onClick={() => setShowModal(!showModal)}>
               {props.modalCloseLabel || "Close"}
