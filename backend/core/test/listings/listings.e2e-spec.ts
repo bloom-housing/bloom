@@ -21,9 +21,7 @@ import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { Program } from "../../src/program/entities/program.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

@@ -9,7 +9,7 @@ import { AmiChart } from "../src/ami-charts/entities/ami-chart.entity"
 import { HUD2021 } from "../src/seeder/seeds/ami-charts/HUD2021"
 import { MSHDA2021 } from "../src/seeder/seeds/ami-charts/MSHDA2021"
 import { MonthlyRentDeterminationType } from "../src/units-summary/types/monthly-rent-determination.enum"
-import dbOptions = require("../ormconfig")
+import dbOptions from "../ormconfig"
 
 type AmiChartNameType = "MSHDA" | "HUD"
 
