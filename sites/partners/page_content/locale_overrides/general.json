@@ -221,6 +221,7 @@
   "listings.sections.communityTypeSubtitle": "Are there any requirements that applicants need to meet?",
   "listings.sections.communityType.tellUs": "Tell us about any additional community types related to this listing.",
   "listings.sections.costsNotIncluded": "Costs Not Included",
+  "listings.costsNotIncludedHelper": "Please list any costs that are not included in the rent.",
   "listings.sections.depositHelperText": "Deposit Helper Text",
   "listings.sections.housingPreferencesSubtext": "Tell us about any preferences that will be used to rank qualifying applicants.",
   "listings.sections.introSubtitle": "Let's get started with some basic information about your listing.",

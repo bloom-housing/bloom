@@ -85,6 +85,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
             aria-describedby={"costsNotIncluded"}
             fullWidth={true}
             register={register}
+            note={t("listings.costsNotIncludedHelper")}
           />
         </GridSection>
         <GridSection columns={1}>
