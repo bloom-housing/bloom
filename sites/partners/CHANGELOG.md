@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.29...@bloom-housing/partners@5.0.1-alpha.30) (2022-07-20)
+
+
+### Features
+
+* creating users as juris admin ([#2863](https://github.com/bloom-housing/bloom/issues/2863)) ([bc0aede](https://github.com/bloom-housing/bloom/commit/bc0aede7c622d3ffe4c2aa0f0ce7826bc97af9bf))
+
+
+
+
+
 ## [5.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.28...@bloom-housing/partners@5.0.1-alpha.29) (2022-07-20)
 
 **Note:** Version bump only for package @bloom-housing/partners
