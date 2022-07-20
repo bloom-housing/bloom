@@ -51,6 +51,7 @@
   "application.details.workInRegion": "Work in Region",
   "applications.duplicates.duplicateGroup": "Duplicate group",
   "applications.duplicates.primaryApplicant": "Primary applicant",
+  "applications.namedob": "Name + DOB",
   "applications.newApplication": "New Application",
   "applications.allApplications": "All applications",
   "applications.pendingReview": "Pending Review",
