@@ -11,7 +11,7 @@ import {
 // NOTE: This script relies on any logged-in users having permission to create
 // listings and properties (defined in backend/core/src/auth/authz_policy.csv)
 
-const preferencesService = new client.PreferencesService()
+const multiselectQuestionsService = new client.MultiselectQuestionsService()
 const listingsService = new client.ListingsService()
 const authService = new client.AuthService()
 const unitTypesService = new client.UnitTypesService()

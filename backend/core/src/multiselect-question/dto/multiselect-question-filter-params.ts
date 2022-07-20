@@ -3,9 +3,9 @@ import { Expose } from "class-transformer"
 import { ApiProperty } from "@nestjs/swagger"
 import { IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { ProgramFilterKeys } from "./program-filter-keys"
+import { MultiselectQuestionFilterKeys } from "./multiselect-question-filter-keys"
 
-export class ProgramsFilterParams extends BaseFilter {
+export class MultiselectQuestionsFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
@@ -14,5 +14,5 @@ export class ProgramsFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ProgramFilterKeys.jurisdiction]?: string
+  [MultiselectQuestionFilterKeys.jurisdiction]?: string
 }

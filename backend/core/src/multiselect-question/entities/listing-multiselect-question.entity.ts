@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm"
-import { MultiselectQuestion } from "./multiselect-question.entity.entity"
+import { MultiselectQuestion } from "./multiselect-question.entity"
 import { Expose, Type } from "class-transformer"
 import { IsNumber, IsOptional } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -7,7 +7,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "listing_multiselect_questions" })
 export class ListingMultiselectQuestion {
-  @ManyToOne(() => Listing, (listing) => listing.listingPreferences, {
+  @ManyToOne(() => Listing, (listing) => listing.listingMultiselectQuestions, {
     primary: true,
     orphanedRowAction: "delete",
   })

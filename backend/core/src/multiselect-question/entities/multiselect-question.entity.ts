@@ -16,14 +16,16 @@ import {
   ValidateNested,
   ArrayMaxSize,
   IsBoolean,
+  IsEnum,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { MultiselectLink } from "../types/multiselect-link"
 import { MultiselectOption } from "../types/multiselect-option"
+import { ApplicationSection } from "../types/multiselect-application-section-enum"
 
-@Entity({ name: "listing_multiselect_questions" })
+@Entity({ name: "multiselect_questions" })
 class MultiselectQuestion {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
@@ -47,13 +49,13 @@ class MultiselectQuestion {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  title?: string | null
+  text?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  subtitle?: string | null
+  subText?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -75,7 +77,7 @@ class MultiselectQuestion {
   @Type(() => MultiselectQuestion)
   listingMultiselectQuestions: MultiselectQuestion[]
 
-  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.preferences)
+  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.multiselectQuestions)
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
@@ -84,9 +86,9 @@ class MultiselectQuestion {
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingMultiselectOption)
-  @ApiProperty({ type: [ListingMultiselectOption], nullable: true })
-  options: ListingMultiselectOption[]
+  @Type(() => MultiselectOption)
+  @ApiProperty({ type: [MultiselectOption], nullable: true })
+  options: MultiselectOption[]
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -99,6 +101,15 @@ class MultiselectQuestion {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   hideFromListing?: boolean
+
+  @Column({
+    type: "enum",
+    enum: ApplicationSection,
+  })
+  @Expose()
+  @IsEnum(ApplicationSection, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ApplicationSection, enumName: "ApplicationSection" })
+  applicationSection: ApplicationSection
 }
 
-export { ListingMultiselectQuestion as default, ListingMultiselectQuestion }
+export { MultiselectQuestion as default, MultiselectQuestion }

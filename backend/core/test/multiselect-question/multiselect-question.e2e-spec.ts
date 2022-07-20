@@ -9,9 +9,10 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { ProgramsModule } from "../../src/program/programs.module"
-import { ProgramCreateDto } from "../../src/program/dto/program-create.dto"
+import { MultiselectQuestionsModule } from "../../src/multiselect-question/multiselect-question.module"
+import { MultiselectQuestionCreateDto } from "../../src/multiselect-question/dto/multiselect-question-create.dto"
 import { EmailService } from "../../src/email/email.service"
+import { ApplicationSection } from "../../src/multiselect-question/types/multiselect-application-section-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -19,7 +20,7 @@ import { EmailService } from "../../src/email/email.service"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("Programs", () => {
+describe("MultiselectQuestions", () => {
   let app: INestApplication
   let adminAccessToken: string
 
@@ -28,7 +29,7 @@ describe("Programs", () => {
     const testEmailService = { confirmation: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, ProgramsModule],
+      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, MultiselectQuestionsModule],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -39,34 +40,38 @@ describe("Programs", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
-  it(`should return programs`, async () => {
+  it(`should return questions`, async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/programs`)
+      .get(`/multiselect-questions`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(res.body)).toBe(true)
   })
 
-  it(`should create and return a new program`, async () => {
-    const newProgram: ProgramCreateDto = {
-      title: "title",
+  it(`should create and return a new question`, async () => {
+    const newQuestion: MultiselectQuestionCreateDto = {
+      text: "title",
       description: "description",
-      subtitle: "subtitle",
+      subText: "subtitle",
+      options: [],
+      applicationSection: ApplicationSection.preference,
     }
     const res = await supertest(app.getHttpServer())
-      .post(`/programs`)
+      .post(`/multiselect-questions`)
       .set(...setAuthorization(adminAccessToken))
-      .send(newProgram)
+      .send(newQuestion)
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body.id).toBe(res.body.id)
-    expect(res.body.title).toBe(newProgram.title)
+    expect(res.body.text).toBe(newQuestion.text)
 
-    const getById = await supertest(app.getHttpServer()).get(`/programs/${res.body.id}`).expect(200)
+    const getById = await supertest(app.getHttpServer())
+      .get(`/multiselect-questions/${res.body.id}`)
+      .expect(200)
     expect(getById.body.id).toBe(res.body.id)
-    expect(getById.body.title).toBe(newProgram.title)
+    expect(getById.body.text).toBe(newQuestion.text)
   })
 
   afterEach(() => {
