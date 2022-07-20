@@ -1,6 +1,13 @@
-describe("User Mangement Tests", () => {
-  it("as admin user, should show all users regardless of jurisdiction", () => {
+describe("Admin User Mangement Tests", () => {
+  before(() => {
     cy.login()
+  })
+
+  after(() => {
+    cy.signOut()
+  })
+
+  it("as admin user, should show all users regadless of jurisdiction", () => {
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Administrator", "Jurisdictional Admin"]
@@ -11,12 +18,9 @@ describe("User Mangement Tests", () => {
     cy.get(`.ag-center-cols-container [col-id="roles"]`).each((role) => {
       cy.wrap(role).contains(regex)
     })
-
-    cy.signOut()
   })
 
   it("as admin user, should be able to create new admin", () => {
-    cy.login()
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
@@ -49,11 +53,9 @@ describe("User Mangement Tests", () => {
     })
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
-    cy.signOut()
   })
 
   it("as admin user, should be able to create new jurisidictional admin", () => {
-    cy.login()
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
@@ -90,11 +92,9 @@ describe("User Mangement Tests", () => {
     })
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
-    cy.signOut()
   })
 
   it("as admin user, should be able to create new partner", () => {
-    cy.login()
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
@@ -130,21 +130,5 @@ describe("User Mangement Tests", () => {
     cy.getByTestId("listings_Alameda").last().click()
     cy.getByTestId("invite-user").click()
     cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
-    cy.signOut()
-  })
-
-  it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
-    cy.login("jurisdictionalAdmin")
-    cy.visit("/")
-    cy.getByTestId("Users-1").click()
-    const rolesArray = ["Partner", "Jurisdictional Admin"]
-    cy.getByTestId("ag-page-size").select("100", { force: true })
-
-    const regex = new RegExp(`${rolesArray.join("|")}`, "g")
-
-    cy.get(`.ag-center-cols-container [col-id="roles"]`).each((role) => {
-      cy.wrap(role).contains(regex)
-    })
-    cy.signOut()
   })
 })
