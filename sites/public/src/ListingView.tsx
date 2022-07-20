@@ -135,34 +135,36 @@ export const ListingProcess = (props: ListingProcessProps) => {
         content={listing.whatToExpect}
         expandableContent={listing.whatToExpectAdditionalText}
       />
-      {!appOpenInFuture && (
-        <Contact
-          sectionTitle={t("leasingAgent.contact")}
-          additionalInformation={
-            listing.leasingAgentOfficeHours
-              ? [
-                  {
-                    title: t("leasingAgent.officeHours"),
-                    content: listing.leasingAgentOfficeHours,
-                  },
-                ]
-              : undefined
-          }
-          contactAddress={listing.leasingAgentAddress}
-          contactEmail={listing.leasingAgentEmail}
-          contactName={listing.leasingAgentName}
-          contactPhoneNumber={
-            listing.leasingAgentPhone ? `${t("t.call")} ${listing.leasingAgentPhone}` : undefined
-          }
-          contactPhoneNumberNote={t("leasingAgent.dueToHighCallVolume")}
-          contactTitle={listing.leasingAgentTitle}
-          strings={{
-            email: t("t.email"),
-            website: t("t.website"),
-            getDirections: t("t.getDirections"),
-          }}
-        />
-      )}
+
+      {!appOpenInFuture &&
+        (listing.leasingAgentName || listing.leasingAgentEmail || listing.leasingAgentPhone) && (
+          <Contact
+            sectionTitle={t("leasingAgent.contact")}
+            additionalInformation={
+              listing.leasingAgentOfficeHours
+                ? [
+                    {
+                      title: t("leasingAgent.officeHours"),
+                      content: listing.leasingAgentOfficeHours,
+                    },
+                  ]
+                : undefined
+            }
+            contactAddress={listing.leasingAgentAddress}
+            contactEmail={listing.leasingAgentEmail}
+            contactName={listing.leasingAgentName}
+            contactPhoneNumber={
+              listing.leasingAgentPhone ? `${t("t.call")} ${listing.leasingAgentPhone}` : undefined
+            }
+            contactPhoneNumberNote={t("leasingAgent.dueToHighCallVolume")}
+            contactTitle={listing.leasingAgentTitle}
+            strings={{
+              email: t("t.email"),
+              website: t("t.website"),
+              getDirections: t("t.getDirections"),
+            }}
+          />
+        )}
       {listing.neighborhood && (
         <section className="hidden md:block aside-block">
           <h4 className="text-caps-underline">{t("listings.sections.neighborhoodTitle")}</h4>
