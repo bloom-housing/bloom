@@ -9,6 +9,7 @@ module.exports = {
       md: "768px",
       lg: "1200px",
       xl: "1280px",
+      "2xl": "1440px",
       print: { raw: "print" },
     },
     fontSize: {

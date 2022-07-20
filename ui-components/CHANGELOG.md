@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.21...@bloom-housing/ui-components@5.0.1-alpha.22) (2022-07-20)
+
+
+### Features
+
+* creating users as juris admin ([#2863](https://github.com/bloom-housing/bloom/issues/2863)) ([bc0aede](https://github.com/bloom-housing/bloom/commit/bc0aede7c622d3ffe4c2aa0f0ce7826bc97af9bf))
+
+
+
+
+
+## [5.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.20...@bloom-housing/ui-components@5.0.1-alpha.21) (2022-07-20)
+
+
+### Bug Fixes
+
+* allow jsx in expandable section ([#2902](https://github.com/bloom-housing/bloom/issues/2902)) ([93ae489](https://github.com/bloom-housing/bloom/commit/93ae489196ad96a9f68247ff2b5cc3fbe0f347d2))
+
+
+
+
+
+## [5.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.19...@bloom-housing/ui-components@5.0.1-alpha.20) (2022-07-20)
+
+
+### Bug Fixes
+
+* render html address properly ([#2897](https://github.com/bloom-housing/bloom/issues/2897)) ([87a759a](https://github.com/bloom-housing/bloom/commit/87a759a68c35d1c47ec4fbbec6c947a63993d27c))
+
+
+
+
+
+## [5.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.18...@bloom-housing/ui-components@5.0.1-alpha.19) (2022-07-19)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.17...@bloom-housing/ui-components@5.0.1-alpha.18) (2022-07-19)
+
+
+### Features
+
+* visuals for add preference, preference option drawers ([#2877](https://github.com/bloom-housing/bloom/issues/2877)) ([8611034](https://github.com/bloom-housing/bloom/commit/8611034845b45ce4d4e4eb44e790ac2adec0ba94))
+
+
+
+
+
 ## [5.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.16...@bloom-housing/ui-components@5.0.1-alpha.17) (2022-07-15)
 
 
