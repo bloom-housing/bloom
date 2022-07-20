@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.19...@bloom-housing/ui-components@5.0.1-alpha.20) (2022-07-20)
+
+
+### Bug Fixes
+
+* render html address properly ([#2897](https://github.com/bloom-housing/bloom/issues/2897)) ([87a759a](https://github.com/bloom-housing/bloom/commit/87a759a68c35d1c47ec4fbbec6c947a63993d27c))
+
+
+
+
+
 ## [5.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.18...@bloom-housing/ui-components@5.0.1-alpha.19) (2022-07-19)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
