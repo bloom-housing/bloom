@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { AssetsController } from "./assets.controller"
 import { AuthModule } from "../auth/auth.module"
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { AssetsService } from "./services/assets.service"
 

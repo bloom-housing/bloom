@@ -21,7 +21,7 @@ import { Listing } from "../../src/listings/entities/listing.entity"
 import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
+import dbOptions from "../../ormconfig.test"
 import { EmailService } from "../../src/email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest

@@ -3,7 +3,7 @@ import CsvReadableStream from "csv-reader"
 import { Connection, DeepPartial } from "typeorm"
 import { Listing } from "../src/listings/entities/listing.entity"
 import { Jurisdiction } from "../src/jurisdictions/entities/jurisdiction.entity"
-import dbOptions = require("../ormconfig")
+import dbOptions from "../ormconfig"
 import { Program } from "../src/program/entities/program.entity"
 import { AddressCreateDto } from "../src/shared/dto/address.dto"
 
