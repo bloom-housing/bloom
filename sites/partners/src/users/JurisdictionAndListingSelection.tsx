@@ -53,6 +53,55 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
     }
   }
 
+  const ListingSection = (renderTitle = false) => {
+    return Object.keys(listingsOptions).map((key) => {
+      if (!selectedJurisdictions.includes(key)) {
+        return null
+      }
+      const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)?.label
+      return (
+        <GridCell key={`listings_${key}`}>
+          <GridSection
+            title={
+              renderTitle
+                ? t("users.jurisdictionalizedListings", {
+                    jurisdiction: jurisdictionLabel,
+                  })
+                : ""
+            }
+            columns={1}
+          >
+            <GridCell>
+              <Field
+                id={`listings_all_${key}`}
+                name={`listings_all_${key}`}
+                label={t("users.alljurisdictionalizedListings", {
+                  jurisdiction: jurisdictionLabel,
+                })}
+                register={register}
+                type="checkbox"
+                inputProps={{
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateAllCheckboxes(e, key),
+                }}
+              />
+
+              <FieldGroup
+                name="user_listings"
+                fields={listingsOptions[key]}
+                type="checkbox"
+                register={register}
+                error={!!errors?.user_listings}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
+                dataTestId={`listings_${jurisdictionLabel}`}
+              />
+            </GridCell>
+          </GridSection>
+        </GridCell>
+      )
+    })
+  }
+
   if (profile?.roles?.isAdmin) {
     if (selectedRoles === RoleOption.JurisdictionalAdmin) {
       return (
@@ -104,53 +153,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
               />
             </GridCell>
           </GridSection>
-          {selectedJurisdictions && (
-            <GridSection columns={4}>
-              {Object.keys(listingsOptions).map((key) => {
-                if (!selectedJurisdictions.includes(key)) {
-                  return null
-                }
-                const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)?.label
-                return (
-                  <GridCell key={`listings_${key}`}>
-                    <GridSection
-                      title={t("users.jurisdictionalizedListings", {
-                        jurisdiction: jurisdictionLabel,
-                      })}
-                      columns={1}
-                    >
-                      <GridCell>
-                        <Field
-                          id={`listings_all_${key}`}
-                          name={`listings_all_${key}`}
-                          label={t("users.alljurisdictionalizedListings", {
-                            jurisdiction: jurisdictionLabel,
-                          })}
-                          register={register}
-                          type="checkbox"
-                          inputProps={{
-                            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                              updateAllCheckboxes(e, key),
-                          }}
-                        />
-
-                        <FieldGroup
-                          name="user_listings"
-                          fields={listingsOptions[key]}
-                          type="checkbox"
-                          register={register}
-                          error={!!errors?.user_listings}
-                          errorMessage={t("errors.requiredFieldError")}
-                          validation={{ required: true }}
-                          dataTestId={`listings_${jurisdictionLabel}`}
-                        />
-                      </GridCell>
-                    </GridSection>
-                  </GridCell>
-                )
-              })}
-            </GridSection>
-          )}
+          {selectedJurisdictions && <GridSection columns={4}>{ListingSection(true)}</GridSection>}
         </>
       )
     }
@@ -158,40 +161,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
     if (selectedRoles === RoleOption.Partner && selectedJurisdictions) {
       return (
         <GridSection title={t("nav.listings")} columns={1}>
-          {Object.keys(listingsOptions).map((key) => {
-            if (!selectedJurisdictions.includes(key)) {
-              return null
-            }
-            const jurisdictionLabel = jurisdictionOptions.find((elem) => elem.id === key)?.label
-            return (
-              <GridCell key={`listings_${key}`}>
-                <Field
-                  id={`listings_all_${key}`}
-                  name={`listings_all_${key}`}
-                  label={t("users.alljurisdictionalizedListings", {
-                    jurisdiction: jurisdictionLabel,
-                  })}
-                  register={register}
-                  type="checkbox"
-                  inputProps={{
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-                      updateAllCheckboxes(e, key),
-                  }}
-                />
-
-                <FieldGroup
-                  name="user_listings"
-                  fields={listingsOptions[key]}
-                  type="checkbox"
-                  register={register}
-                  error={!!errors?.user_listings}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  dataTestId={`listings_${jurisdictionLabel}`}
-                />
-              </GridCell>
-            )
-          })}
+          {ListingSection()}
         </GridSection>
       )
     }
