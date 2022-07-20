@@ -4,6 +4,7 @@ export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
 export * from "./src/actions/ExpandableContent"
+export * from "./src/actions/Video"
 
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
@@ -17,6 +18,7 @@ export * from "./src/blocks/InfoCard"
 export * from "./src/blocks/StatusBar"
 export * from "./src/blocks/ViewItem"
 export * from "./src/blocks/StandardCard"
+export * from "./src/blocks/MediaCard"
 
 /* Contexts */
 export * from "./src/config"
