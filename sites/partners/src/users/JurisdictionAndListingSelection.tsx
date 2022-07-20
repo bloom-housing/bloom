@@ -71,7 +71,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
             }
             columns={1}
           >
-            <GridCell>
+            <GridCell ariaLabel={`${jurisdictionLabel} Listing Selection`}>
               <Field
                 id={`listings_all_${key}`}
                 name={`listings_all_${key}`}
@@ -101,12 +101,12 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
       )
     })
   }
-  // test commit
+
   if (profile?.roles?.isAdmin) {
     if (selectedRoles === RoleOption.JurisdictionalAdmin) {
       return (
         <GridSection title={t("t.jurisdiction")} columns={4}>
-          <GridCell>
+          <GridCell ariaLabel="Jurisdiction Selection">
             <Select
               id="jurisdictions"
               name="jurisdictions"
@@ -128,7 +128,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
       return (
         <>
           <GridSection title={t("t.jurisdiction")} columns={4}>
-            <GridCell>
+            <GridCell ariaLabel="Jurisdiction Selection">
               <Field
                 id="jurisdiction_all"
                 name="jurisdiction_all"
