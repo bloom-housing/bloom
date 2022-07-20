@@ -14,7 +14,7 @@ const GridCell = (props: GridCellProps) => {
   if (props.className) gridCellClasses.push(props.className)
 
   return (
-    <article aria-aria-label={props.ariaLabel ?? ""} className={gridCellClasses.join(" ")}>
+    <article aria-label={props.ariaLabel ?? ""} className={gridCellClasses.join(" ")}>
       {props.children}
     </article>
   )
