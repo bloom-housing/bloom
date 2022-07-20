@@ -8,7 +8,7 @@ export interface MediaCardProps {
   subtitle?: string
   className?: string
   icon?: UniversalIconType
-  handleClick?: () => void
+  handleClick: () => void
 }
 
 /**
@@ -21,18 +21,15 @@ const MediaCard = (props: MediaCardProps) => {
   if (props.className) wrapperClasses.push(props.className)
   return (
     <div className={wrapperClasses.join(" ")}>
-      <div className="media-card__header">
-        <div className="media-card__icon-container">
-          <span onClick={props.handleClick}>
+      <span onClick={props.handleClick}>
+        <div className="media-card__header">
+          <div className="media-card__icon-container">
             <Icon symbol={props.icon ?? faCirclePlay} size="2xl" fill="white" />
-          </span>
+          </div>
         </div>
-      </div>
-
+      </span>
       <div className="media-card__body">
-        <a onClick={props.handleClick}>
-          <h3 className="media-card__title">{props.title}</h3>
-        </a>
+        <h3 className="media-card__title">{props.title}</h3>
         <div className={"media-card__subtitle"}>{props.subtitle}</div>
       </div>
     </div>

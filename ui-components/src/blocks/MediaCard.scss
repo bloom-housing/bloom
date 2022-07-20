@@ -23,14 +23,12 @@
   border-top-right-radius: calc(var(--card-border-rounded) - var(--bloom-border-1));
   border-top-left-radius: calc(var(--card-border-rounded) - var(--bloom-border-1));
   background-color: var(--title-color);
+  cursor: pointer;
 }
 
 .media-card__icon-container {
   display: flex;
   justify-content: center;
-  > span {
-    cursor: pointer;
-  }
 }
 
 .media-card__body {
@@ -43,7 +41,6 @@
   font-family: var(--title-font-family);
   letter-spacing: var(--title-font-spacing);
   font-weight: 700;
-  cursor: pointer;
 }
 
 .media-card__subtitle {
