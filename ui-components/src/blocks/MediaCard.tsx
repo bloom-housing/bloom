@@ -11,11 +11,6 @@ export interface MediaCardProps {
   handleClick: () => void
 }
 
-/**
- * @component MediaCard
- *
- * A component that renders an image with optional tags at top and status bars below it
- */
 const MediaCard = (props: MediaCardProps) => {
   const wrapperClasses = ["media-card"]
   if (props.className) wrapperClasses.push(props.className)
