@@ -22,15 +22,15 @@ const MediaCard = (props: MediaCardProps) => {
   return (
     <div className={wrapperClasses.join(" ")}>
       <div className="media-card__header">
-        <div className="flex justify-center">
-          <span onClick={props.handleClick} className={"cursor-pointer"}>
+        <div className="media-card__icon-container">
+          <span onClick={props.handleClick}>
             <Icon symbol={props.icon ?? faCirclePlay} size="2xl" fill="white" />
           </span>
         </div>
       </div>
 
       <div className="media-card__body">
-        <a className="w-min" onClick={props.handleClick}>
+        <a onClick={props.handleClick}>
           <h3 className="media-card__title">{props.title}</h3>
         </a>
         <div className={"media-card__subtitle"}>{props.subtitle}</div>

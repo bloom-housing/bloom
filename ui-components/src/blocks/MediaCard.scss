@@ -2,6 +2,7 @@
   --title-color: var(--bloom-color-primary-dark);
   --title-font-size: var(--bloom-font-size-base);
   --title-font-family: var(--bloom-font-sans);
+  --title-font-spacing: var(--bloom-letter-spacing-wide);
   --subtitle-font-size: var(--bloom-font-size-tiny);
   --content-bg-color: var(--bloom-color-gray-200);
   --card-border: var(--bloom-border-1) solid var(--bloom-color-gray-450);
@@ -24,6 +25,14 @@
   background-color: var(--title-color);
 }
 
+.media-card__icon-container {
+  display: flex;
+  justify-content: center;
+  > span {
+    cursor: pointer;
+  }
+}
+
 .media-card__body {
   padding: var(--card-padding);
 }
@@ -32,9 +41,9 @@
   color: var(--title-color);
   font-size: var(--title-font-size);
   font-family: var(--title-font-family);
-  @apply font-bold;
-  @apply tracking-wide;
-  @apply cursor-pointer;
+  letter-spacing: var(--title-font-spacing);
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .media-card__subtitle {
