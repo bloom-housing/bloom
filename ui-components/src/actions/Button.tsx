@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
-import { Icon, IconSize, UniversalIconType, IconFillColors } from "../icons/Icon"
+import { Icon, IconSize, UniversalIconType } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
@@ -52,7 +52,7 @@ export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
           size={props.iconSize ?? iconSize}
           symbol={props.icon}
           iconClass={props.passToIconClass}
-          fill={props.iconColor ?? IconFillColors.primary}
+          fill={props.iconColor}
         />
         <span className="button__content">{props.children}</span>
       </>
@@ -64,7 +64,7 @@ export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
           size={props.iconSize ?? iconSize}
           symbol={props.icon}
           iconClass={props.passToIconClass}
-          fill={props.iconColor ?? IconFillColors.primary}
+          fill={props.iconColor}
         />
       </>
     )
