@@ -52,6 +52,8 @@ const NavigationHeader = ({
         activePaths: [
           `/listings/${listingId}/applications`,
           `/listings/${listingId}/applications/pending`,
+          `/listings/${listingId}/applications/pending?type=name_dob`,
+          `/listings/${listingId}/applications/pending?type=email`,
           `/listings/${listingId}/applications/resolved`,
         ],
         content: undefined,
