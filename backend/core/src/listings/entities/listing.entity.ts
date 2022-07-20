@@ -47,12 +47,11 @@ import { ListingAvailability } from "../types/listing-availability-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingFeatures } from "./listing-features.entity"
-import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
-import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 import { ListingImage } from "./listing-image.entity"
 import { ListingUtilities } from "./listing-utilities.entity"
 import { Unit } from "../../units/entities/unit.entity"
+import { ListingMultiselectQuestion } from "../..//multiselect-question/entities/listing-multiselect-question.entity"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -81,14 +80,18 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalApplicationSubmissionNotes?: string | null
 
-  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.listing, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(
+    () => ListingMultiselectQuestion,
+    (listingMultiselectQuestion) => listingMultiselectQuestion.listing,
+    {
+      cascade: true,
+      eager: true,
+    }
+  )
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreference)
-  listingPreferences: ListingPreference[]
+  @Type(() => ListingMultiselectQuestion)
+  listingMultiselectQuestions: ListingMultiselectQuestion[]
 
   @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()
@@ -620,16 +623,6 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
-
-  @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.listing, {
-    cascade: true,
-    eager: true,
-  })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingProgram)
-  listingPrograms?: ListingProgram[]
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()

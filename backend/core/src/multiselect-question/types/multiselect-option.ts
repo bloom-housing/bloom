@@ -1,44 +1,33 @@
 import { Expose, Type } from "class-transformer"
-import {
-  ArrayMaxSize,
-  IsBoolean,
-  IsOptional,
-  IsString,
-  MaxLength,
-  ValidateNested,
-} from "class-validator"
+import { IsBoolean, IsOptional, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { FormMetadataExtraData } from "./form-metadata/form-metadata-extra-data"
 import { ApiProperty } from "@nestjs/swagger"
-import { PreferenceLink } from "../../preferences/types/preference-link"
+import { MultiselectLink } from "./multiselect-link"
 
 export class MultiselectOption {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  title: string
+  text: string
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   description?: string
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => FormMetadataExtraData)
-  @ApiProperty({ type: [FormMetadataExtraData], required: false })
-  extraData?: FormMetadataExtraData[] | null
+  @Type(() => MultiselectLink)
+  @ApiProperty({ type: [MultiselectLink] })
+  links?: MultiselectLink[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceLink)
-  @ApiProperty({ type: [PreferenceLink] })
-  links?: PreferenceLink[] | null
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  collectAddress?: boolean
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

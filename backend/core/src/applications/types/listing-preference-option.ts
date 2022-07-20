@@ -10,7 +10,7 @@ import {
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { FormMetadataExtraData } from "./form-metadata/form-metadata-extra-data"
 import { ApiProperty } from "@nestjs/swagger"
-import { PreferenceLink } from "../../preferences/types/preference-link"
+import { MultiselectLink } from "../../multiselect-question/types/multiselect-link"
 
 export class ListingPreferenceOption {
   @Expose()
@@ -36,9 +36,9 @@ export class ListingPreferenceOption {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceLink)
-  @ApiProperty({ type: [PreferenceLink] })
-  links?: PreferenceLink[] | null
+  @Type(() => MultiselectLink)
+  @ApiProperty({ type: [MultiselectLink] })
+  links?: MultiselectLink[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

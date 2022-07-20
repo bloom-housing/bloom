@@ -1,15 +1,17 @@
+import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, ValidateNested } from "class-validator"
-import { OmitType } from "@nestjs/swagger"
-import { ProgramDto } from "./program.dto"
-import { ListingProgram } from "../entities/listing-program.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { IdDto } from "../../shared/dto/id.dto"
+import { ListingMultiselectQuestionDto } from "./listing-multiselect-question.dto"
 
-export class ListingProgramDto extends OmitType(ListingProgram, ["listing", "program"] as const) {
+export class ListingMultiselectQuestionUpdateDto extends OmitType(ListingMultiselectQuestionDto, [
+  "multiselectQuestion",
+] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ProgramDto)
-  program: ProgramDto
+  @Type(() => IdDto)
+  multiselectQuestion: IdDto
 }
