@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.20...@bloom-housing/ui-components@5.0.1-alpha.21) (2022-07-20)
+
+
+### Bug Fixes
+
+* allow jsx in expandable section ([#2902](https://github.com/bloom-housing/bloom/issues/2902)) ([93ae489](https://github.com/bloom-housing/bloom/commit/93ae489196ad96a9f68247ff2b5cc3fbe0f347d2))
+
+
+
+
+
 ## [5.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.19...@bloom-housing/ui-components@5.0.1-alpha.20) (2022-07-20)
 
 
