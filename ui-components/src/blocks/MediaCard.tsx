@@ -4,7 +4,7 @@ import { Icon, UniversalIconType } from "../icons/Icon"
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons"
 
 export interface MediaCardProps {
-  title?: string
+  title: string
   subtitle?: string
   className?: string
   icon?: UniversalIconType

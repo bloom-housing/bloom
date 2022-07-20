@@ -7,7 +7,17 @@ export default {
   decorators: [(storyFn: any) => <div style={{ maxWidth: "313px" }}>{storyFn()}</div>],
 }
 
-export const withIconPrimary = () => (
+export const withTitleAndSubtitle = () => (
+  <MediaCard
+    title="What is Affordable Housing?"
+    subtitle="List of affordable housing opportunities, subsidized homes, and other housing resources."
+    handleClick={() => alert("Open Video")}
+  />
+)
+export const withJustTitle = () => (
+  <MediaCard title="What is Affordable Housing?" handleClick={() => alert("Open Video")} />
+)
+export const withCustomIcon = () => (
   <MediaCard
     title="What is Affordable Housing?"
     subtitle="List of affordable housing opportunities, subsidized homes, and other housing resources."
