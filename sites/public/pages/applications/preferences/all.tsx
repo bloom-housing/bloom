@@ -15,7 +15,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { FormMetadataExtraData, Preference } from "@bloom-housing/backend-core/types"
+import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import {
   stateKeys,
   OnClientSide,
@@ -36,7 +36,9 @@ const ApplicationPreferencesAll = () => {
   const clientLoaded = OnClientSide()
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("preferencesAll")
-  const preferences = listing?.listingPreferences
+  const preferences = listing?.listingMultiselectQuestions.filter(
+    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preference
+  )
   const [page, setPage] = useState(conductor.navigatedThroughBack ? preferences.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
   const preferencesByPage = preferences?.filter((item) => {
@@ -84,15 +86,18 @@ const ApplicationPreferencesAll = () => {
   */
   const preferenceCheckboxIds = useMemo(() => {
     return preferencesByPage?.reduce((acc, item) => {
-      const preferenceName = item.preference.formMetadata?.key
-      const optionPaths = item.preference.formMetadata?.options
-        ? item.preference.formMetadata.options.map((option) => {
-            return getPreferenceOptionName(option.key, preferenceName)
+      const preferenceName = item.multiselectQuestion.text
+      const optionPaths = item.multiselectQuestion.options
+        ? item.multiselectQuestion.options.map((option) => {
+            return getPreferenceOptionName(option.text, preferenceName)
           })
         : []
-      if (item.preference.formMetadata && !item.preference.formMetadata?.hideGenericDecline) {
-        optionPaths.push(getExclusivePreferenceOptionName(item?.preference.formMetadata?.key))
-      }
+
+      optionPaths.push(
+        getExclusivePreferenceOptionName(
+          item?.multiselectQuestion.optOutText ?? "I don't want this preference"
+        )
+      )
 
       Object.assign(acc, {
         [preferenceName]: optionPaths,
@@ -137,7 +142,7 @@ const ApplicationPreferencesAll = () => {
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     preferencesByPage?.forEach((listingPreference) =>
-      listingPreference.preference?.formMetadata?.options.forEach((option) => {
+      listingPreference.multiselectQuestion?.options.forEach((option) => {
         keys.push(
           getPreferenceOptionName(option.key, listingPreference.preference?.formMetadata?.key)
         )

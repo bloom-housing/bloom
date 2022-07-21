@@ -227,22 +227,6 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
   return { options: preferencesFormData, none: noneValues }
 }
 
-/*
-  It generates checkbox name in proper prefrences structure
-*/
-export const getPreferenceOptionName = (key: string, metaKey: string, noneOption?: boolean) => {
-  if (noneOption) return getExclusivePreferenceOptionName(key)
-  else return getNormalPreferenceOptionName(metaKey, key)
-}
-
-export const getNormalPreferenceOptionName = (metaKey: string, key: string) => {
-  return `${PREFERENCES_FORM_PATH}.${metaKey}.${key}.claimed`
-}
-
-export const getExclusivePreferenceOptionName = (key: string | undefined) => {
-  return `${PREFERENCES_NONE_FORM_PATH}.${key}-none`
-}
-
 export type ExclusiveKey = {
   optionKey: string
   preferenceKey: string | undefined
