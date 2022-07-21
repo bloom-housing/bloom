@@ -148,9 +148,9 @@ export class ListingsService {
     const qb = getView(this.listingRepository.createQueryBuilder("listings"), view).getViewQb()
     const result = await qb
       .where("listings.id = :id", { id: listingId })
-      .orderBy({
-        "listingPreferences.ordinal": "ASC", // TODO: this is weird, don't know why we cared about preferences here
-      })
+      // .orderBy({
+      //   "listingPreferences.ordinal": "ASC", // TODO: this is weird, don't know why we cared about preferences here
+      // })
       .getOne()
 
     if (!result) {

@@ -11,7 +11,7 @@ import {
 // NOTE: This script relies on any logged-in users having permission to create
 // listings and properties (defined in backend/core/src/auth/authz_policy.csv)
 
-// const multiselectQuestionsService = new client.MultiselectQuestionsService()
+const multiselectQuestionsService = new client.MultiselectQuestionsService()
 const listingsService = new client.ListingsService()
 const authService = new client.AuthService()
 const unitTypesService = new client.UnitTypesService()
@@ -163,7 +163,7 @@ export async function importListing(
   listing = reformatListing(listing, relationsKeys)
 
   // Upload new entities.
-  // listing = await uploadEntity("multiselectQuestions", multiselectQuestionsService, listing)
+  listing = await uploadEntity("multiselectQuestions", multiselectQuestionsService, listing)
   listing = await uploadEntity("applicationMethods", applicationMethodsService, listing)
 
   // Look up the reserved community type by name, or create it if it doesn't yet exist.

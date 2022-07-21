@@ -1,7 +1,7 @@
 import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication } from "@bloom-housing/shared-helpers"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 
 export const retrieveApplicationConfig = (listing: Listing) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
@@ -67,7 +67,12 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   }
 
   // conditionally add preferences
-  if (listing.listingPreferences.length) {
+  if (
+    listing.listingMultiselectQuestions.filter(
+      (question) =>
+        question.multiselectQuestion.applicationSection === ApplicationSection.preference
+    ).length
+  ) {
     config.sections.push("preferences")
     config.steps.push(
       {
