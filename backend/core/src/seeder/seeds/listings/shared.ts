@@ -2,8 +2,7 @@
 import {
   AssetDtoSeedType,
   ListingSeedType,
-  PreferenceSeedType,
-  ProgramSeedType,
+  MultiselectQuestionSeedType,
   UnitSeedType,
 } from "./listings"
 import { defaultAmiChart } from "../ami-charts/default-ami-chart"
@@ -16,11 +15,14 @@ import { ListingReviewOrder } from "../../../listings/types/listing-review-order
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
 import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
+import { ApplicationSection } from "../../../multiselect-question/types/multiselect-application-section-enum"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
   return someDate
 }
+
+//TODO: Actually add all the right strings to the preferences and programs now that we aren't using keys
 
 export enum PriorityTypes {
   mobility = "Mobility",
@@ -206,8 +208,7 @@ export const defaultListing: ListingSeedType = {
   leasingAgentOfficeHours: "Custom leasing agent office hours",
   leasingAgentPhone: "(415) 992-7251",
   leasingAgentTitle: "Leasing Agent Title",
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   name: "Default Listing Seed",
   postmarkedApplicationsReceivedByDate: null,
   programRules: "Custom program rules text",
@@ -228,13 +229,13 @@ export const defaultListing: ListingSeedType = {
 // Preferences
 export function getLiveWorkPreference(jurisdictionName) {
   const preference = { ...liveWorkPreference }
-  preference.title += ` - ${jurisdictionName}`
+  preference.text += ` - ${jurisdictionName}`
   return preference
 }
 
-export const liveWorkPreference: PreferenceSeedType = {
-  title: "Live/Work in County",
-  subtitle: "Live/Work in County subtitle",
+export const liveWorkPreference: MultiselectQuestionSeedType = {
+  text: "Live/Work in County",
+  subText: "Live/Work in County subtitle",
   description: "At least one household member lives or works in County",
   links: [
     {
@@ -243,81 +244,58 @@ export const liveWorkPreference: PreferenceSeedType = {
     },
   ],
   optOutText: "I don't want this preference",
-  options: [{ title: "Live in County" }, { title: "Work in County" }],
+  options: [{ text: "Live in County" }, { text: "Work in County" }],
+  applicationSection: ApplicationSection.preference,
 }
+
 export function getDisplaceePreference(jurisdictionName) {
   const preference = { ...displaceePreference }
-  preference.title += ` - ${jurisdictionName}`
+  preference.text += ` - ${jurisdictionName}`
   return preference
 }
 
-export const displaceePreference: PreferenceSeedType = {
-  title: "Displacee Tenant Housing",
-  subtitle: "Displacee Tenant Housing subtitle",
+export const displaceePreference: MultiselectQuestionSeedType = {
+  text: "Displacee Tenant Housing",
+  subText: "Displacee Tenant Housing subtitle",
   description:
     "At least one member of my household was displaced from a residential property due to redevelopment activity by Housing Authority or City.",
   links: [],
-  formMetadata: {
-    key: "displacedTenant",
-    options: [
-      {
-        key: "general",
-        extraData: [
-          {
-            key: "name",
-            type: InputType.text,
-          },
-          {
-            key: "address",
-            type: InputType.address,
-          },
-        ],
-      },
-      {
-        key: "missionCorridor",
-        extraData: [
-          {
-            key: "name",
-            type: InputType.text,
-          },
-          {
-            key: "address",
-            type: InputType.address,
-          },
-        ],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.preference,
+  options: [
+    { text: "General", collectAddress: true },
+    { text: "Mission Corridor", collectAddress: true },
+  ],
 }
 
 export function getPbvPreference(jurisdictionName) {
   const preference = { ...pbvPreference }
-  preference.title += ` - ${jurisdictionName}`
+  preference.text += ` - ${jurisdictionName}`
   return preference
 }
 
-export const pbvPreference: PreferenceSeedType = {
-  title: "Housing Authority Project-Based Voucher",
+export const pbvPreference: MultiselectQuestionSeedType = {
+  text: "Housing Authority Project-Based Voucher",
   description:
     "You are currently applying to be in a general applicant waiting list. Of the total apartments available in this application process, several have Project-Based Vouchers for rental subsidy assistance from the Housing Authority. With that subsidy, tenant households pay 30% of their income as rent. These tenants are required to verify their income annually with the property manager as well as the Housing Authority.",
   links: [],
   hideFromListing: true,
   optOutText: "Do not consider me",
+  applicationSection: ApplicationSection.preference,
   options: [
     {
-      title: "Residency",
+      text: "Residency",
     },
     {
-      title: "Family",
+      text: "Family",
     },
     {
-      title: "Veteran",
+      text: "Veteran",
     },
     {
-      title: "Homeless",
+      text: "Homeless",
     },
     {
-      title: "None apply but consider me",
+      text: "None apply but consider me",
       exclusive: true,
     },
   ],
@@ -325,35 +303,25 @@ export const pbvPreference: PreferenceSeedType = {
 
 export function getHopwaPreference(jurisdictionName) {
   const preference = { ...hopwaPreference }
-  preference.title += ` - ${jurisdictionName}`
+  preference.text += ` - ${jurisdictionName}`
   return preference
 }
 
-export const hopwaPreference: PreferenceSeedType = {
-  title: "Housing Opportunities for Persons with AIDS",
-  subtitle: "",
+export const hopwaPreference: MultiselectQuestionSeedType = {
+  text: "Housing Opportunities for Persons with AIDS",
+  subText: "",
   description:
     "There are apartments set-aside for households eligible for the HOPWA program (Housing Opportunities for Persons with AIDS), which are households where a person has been medically diagnosed with HIV/AIDS. These apartments also have Project-Based Section rental subsidies (tenant pays 30% of household income).",
   links: [],
-  formMetadata: {
-    key: "HOPWA",
-    customSelectText:
-      "Please indicate if you are interested in applying for one of these HOPWA apartments",
-    hideGenericDecline: true,
-    hideFromListing: true,
-    options: [
-      {
-        key: "hopwa",
-        extraData: [],
-      },
-      {
-        key: "doNotConsider",
-        exclusive: true,
-        description: false,
-        extraData: [],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.preference,
+  hideFromListing: true,
+  options: [
+    {
+      text: "HOPWA",
+      exclusive: true,
+    },
+    { text: "Do not consider me", exclusive: true },
+  ],
 }
 
 // programs
@@ -366,149 +334,75 @@ export function getFlatRentAndRentBasedOnIncomeProgram() {
   return JSON.parse(JSON.stringify(flatRentAndRentBasedOnIncomeProgram))
 }
 
-export const servedInMilitaryProgram: ProgramSeedType = {
-  title: "Veteran",
-  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+export const servedInMilitaryProgram: MultiselectQuestionSeedType = {
+  text: "Veteran",
+  subText: "Should your application be chosen, be prepared to provide supporting documentation.",
   description: "Have you or anyone in your household served in the US military?",
-  formMetadata: {
-    key: "servedInMilitary",
-    options: [
-      {
-        key: "servedInMilitary",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "doNotConsider",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "preferNotToSay",
-        description: false,
-        extraData: [],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.program,
+  options: [
+    { text: "Served in Military", exclusive: true },
+    { text: "Do not consider me", exclusive: true },
+    { text: "Prefer not to say", exclusive: true },
+  ],
 }
 
-export const flatRentAndRentBasedOnIncomeProgram: ProgramSeedType = {
-  title: "Flat Rent & Rent Based on Income",
-  subtitle:
+export const flatRentAndRentBasedOnIncomeProgram: MultiselectQuestionSeedType = {
+  text: "Flat Rent & Rent Based on Income",
+  subText:
     "This property includes two types of affordable housing programs. You can choose to apply for one or both programs. Each program will have its own applicant list. Your choice will tell us which list(s) to put your name on. Additional information on each of the two types of housing opportunities are below.",
   description: "Do you want to apply for apartments with flat rent and rent based on income?",
-  formMetadata: {
-    key: "rentBasedOnIncome",
-    type: FormMetaDataType.checkbox,
-    options: [
-      {
-        key: "flatRent",
-        description: true,
-        extraData: [],
-      },
-      {
-        key: "30Percent",
-        description: true,
-        extraData: [],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.program,
+  options: [{ text: "Flat Rent" }, { text: "30% Income" }],
 }
 
 export function getTayProgram() {
   return JSON.parse(JSON.stringify(tayProgram))
 }
 
-export const tayProgram: ProgramSeedType = {
-  title: "Transition Age Youth",
-  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+export const tayProgram: MultiselectQuestionSeedType = {
+  text: "Transition Age Youth",
+  subText: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
     "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
-  formMetadata: {
-    key: "tay",
-    options: [
-      {
-        key: "tay",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "doNotConsider",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "preferNotToSay",
-        description: false,
-        extraData: [],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.program,
+  options: [
+    { text: "TAY", exclusive: true },
+    { text: "Do not consider", exclusive: true },
+    { text: "Prefer not to say", exclusive: true },
+  ],
 }
 
 export function getDisabilityOrMentalIllnessProgram() {
   return JSON.parse(JSON.stringify(disabilityOrMentalIllnessProgram))
 }
 
-export const disabilityOrMentalIllnessProgram: ProgramSeedType = {
-  title: "Developmental Disability",
-  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+export const disabilityOrMentalIllnessProgram: MultiselectQuestionSeedType = {
+  text: "Developmental Disability",
+  subText: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
     "Do you or anyone in your household have a developmental disability or mental illness?",
-  formMetadata: {
-    key: "disabilityOrMentalIllness",
-    options: [
-      {
-        key: "disabilityOrMentalIllness",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "doNotConsider",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "preferNotToSay",
-        description: false,
-        extraData: [],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.program,
+  options: [
+    { text: "Disability or mental illness", exclusive: true },
+    { text: "Do not consider", exclusive: true },
+    { text: "Prefer not to say", exclusive: true },
+  ],
 }
 
 export function getHousingSituationProgram() {
   return JSON.parse(JSON.stringify(housingSituationProgram))
 }
 
-export const housingSituationProgram: ProgramSeedType = {
-  title: "Housing Situation",
-  subtitle: "",
+export const housingSituationProgram: MultiselectQuestionSeedType = {
+  text: "Housing Situation",
+  subText: "",
   description:
     "Thinking about the past 30 days, do either of these describe your housing situation?",
-  formMetadata: {
-    key: "housingSituation",
-    options: [
-      {
-        key: "notPermanent",
-        description: true,
-        extraData: [],
-      },
-      {
-        key: "homeless",
-        description: true,
-        extraData: [],
-      },
-      {
-        key: "doNotConsider",
-        description: false,
-        extraData: [],
-      },
-      {
-        key: "preferNotToSay",
-        description: false,
-        extraData: [],
-      },
-    ],
-  },
+  applicationSection: ApplicationSection.program,
+  options: [
+    { text: "Not permanent", exclusive: true },
+    { text: "Homeless", exclusive: true },
+    { text: "Do not consider", exclusive: true },
+    { text: "Prefer not to say", exclusive: true },
+  ],
 }

@@ -7,7 +7,7 @@ export class ListingDefaultNoPreferenceSeed extends ListingDefaultSeed {
     return await this.listingRepository.save({
       ...listing,
       name: "Test: Default, No Preferences",
-      listingPreferences: [],
+      listingMultiselectQuestions: [],
       applicationDueDate: getDate(5),
       applicationOpenDate: getDate(-5),
     })

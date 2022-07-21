@@ -162,7 +162,8 @@ const applicationCreateDtoTemplate: Omit<
     street2: "street2",
     zipCode: "zip code",
   },
-  preferences: [
+  // TODO: Oh no we might have to change how it is stored on apps too since this is using keys...
+  multiselectQuestions: [
     {
       key: "liveWork",
       claimed: true,

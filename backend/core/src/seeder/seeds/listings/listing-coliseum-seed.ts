@@ -90,8 +90,7 @@ const coliseumListing: ListingSeedType = {
     "Tuesdays & Thursdays, 9:00am to 5:00pm | Persons with disabilities who are unable to access the on-line application may request a Reasonable Accommodation by calling (510) 649-5739 for assistance. A TDD line is available at (415) 345-4470.",
   leasingAgentPhone: "(510) 625-1632",
   leasingAgentTitle: "Property Manager",
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
@@ -944,47 +943,45 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
     > = {
       ...coliseumListing,
       assets: getDefaultAssets(),
-      listingPreferences: [
+      listingMultiselectQuestions: [
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getPbvPreference(alamedaJurisdiction.name).title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getPbvPreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 2,
         },
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getHopwaPreference(alamedaJurisdiction.name).title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getHopwaPreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 3,
         },
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getDisplaceePreference(alamedaJurisdiction.name).title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getDisplaceePreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 4,
         },
-      ],
-      events: [],
-      listingPrograms: [
         {
-          program: await this.programsRepository.findOneOrFail({
-            title: getServedInMilitaryProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getServedInMilitaryProgram().text,
           }),
           ordinal: 1,
         },
         {
-          program: await this.programsRepository.findOneOrFail({
-            title: getTayProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getTayProgram().text,
           }),
           ordinal: 2,
         },
       ],
+      events: [],
     }
 
     const listing = await this.listingRepository.save(listingCreateDto)

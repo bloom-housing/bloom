@@ -9,7 +9,7 @@ import { ResourceAction } from "../auth/decorators/resource-action.decorator"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { ThrottlerGuard } from "@nestjs/throttler"
-import { applicationPreferenceApiExtraModels } from "./types/application-preference-api-extra-models"
+import { applicationMultiselectQuestionApiExtraModels } from "./types/application-multiselect-question-api-extra-models"
 import { authzActions } from "../auth/enum/authz-actions.enum"
 import { ApplicationsService } from "./services/applications.service"
 import { ApplicationCreateDto } from "./dto/application-create.dto"
@@ -25,7 +25,7 @@ import { ApplicationCreateDto } from "./dto/application-create.dto"
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.applicants],
   })
 )
-@ApiExtraModels(...applicationPreferenceApiExtraModels)
+@ApiExtraModels(...applicationMultiselectQuestionApiExtraModels)
 export class ApplicationsSubmissionController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 

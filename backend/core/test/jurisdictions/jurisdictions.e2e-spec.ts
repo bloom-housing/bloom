@@ -11,9 +11,8 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
 import { Repository } from "typeorm"
-import { Program } from "../../src/program/entities/program.entity"
 import { Language } from "../../src/shared/types/language-enum"
-import { Preference } from "../../src/preferences/entities/preference.entity"
+import { MultiselectQuestion } from "../../src/multiselect-question/entities/multiselect-question.entity"
 import { EmailService } from "../../src/email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -25,8 +24,7 @@ jest.setTimeout(30000)
 describe("Jurisdictions", () => {
   let app: INestApplication
   let adminAccesstoken: string
-  let preferencesRepository: Repository<Preference>
-  let programsRepository: Repository<Program>
+  let multiselectQuestionsRepository: Repository<MultiselectQuestion>
 
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -39,7 +37,7 @@ describe("Jurisdictions", () => {
         TypeOrmModule.forRoot(dbOptions),
         AuthModule,
         JurisdictionsModule,
-        TypeOrmModule.forFeature([Preference, Program]),
+        TypeOrmModule.forFeature([MultiselectQuestion]),
       ],
     })
       .overrideProvider(EmailService)
@@ -49,8 +47,9 @@ describe("Jurisdictions", () => {
     app = applicationSetup(app)
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-    preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
-    programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
+    multiselectQuestionsRepository = app.get<Repository<MultiselectQuestion>>(
+      getRepositoryToken(MultiselectQuestion)
+    )
   })
 
   it(`should return jurisdictions`, async () => {
@@ -61,18 +60,17 @@ describe("Jurisdictions", () => {
     expect(Array.isArray(res.body)).toBe(true)
   })
 
-  it(`should create and return a new jurisdiction with a preference`, async () => {
-    const newPreference = await preferencesRepository.save({
-      title: "TestTitle",
-      subtitle: "TestSubtitle",
+  it(`should create and return a new jurisdiction with a preference and a program`, async () => {
+    const newPreference = await multiselectQuestionsRepository.save({
+      text: "TestTitle",
+      subText: "TestSubtitle",
       description: "TestDescription",
       links: [],
     })
-    const newProgram = await programsRepository.save({
-      question: "TestQuestion",
-      subtitle: "TestSubtitle",
+    const newProgram = await multiselectQuestionsRepository.save({
+      text: "TestQuestion",
+      subText: "TestSubtitle",
       description: "TestDescription",
-      subdescription: "TestDescription",
     })
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
@@ -80,8 +78,7 @@ describe("Jurisdictions", () => {
       .send({
         name: "test",
         languages: [Language.en],
-        preferences: [newPreference],
-        programs: [newProgram],
+        multiselectQuestions: [newPreference, newProgram],
         publicUrl: "",
         emailFromAddress: "",
         rentalAssistanceDefault: "",
@@ -94,22 +91,16 @@ describe("Jurisdictions", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("name")
-    expect(res.body).toHaveProperty("preferences")
+    expect(res.body).toHaveProperty("multiselectQuestions")
     expect(res.body.name).toBe("test")
-    expect(Array.isArray(res.body.preferences)).toBe(true)
-    expect(res.body.preferences.length).toBe(1)
-    expect(res.body.preferences[0].id).toBe(newPreference.id)
-    expect(res.body).toHaveProperty("programs")
-    expect(Array.isArray(res.body.programs)).toBe(true)
-    expect(res.body.programs.length).toBe(1)
-    expect(res.body.programs[0].id).toBe(newProgram.id)
-
+    expect(Array.isArray(res.body.multiselectQuestions)).toBe(true)
+    expect(res.body.multiselectQuestions.length).toBe(2)
+    expect(res.body.multiselectQuestions[0].id).toBe(newPreference.id)
+    expect(res.body.multiselectQuestions[1].id).toBe(newProgram.id)
     const getById = await supertest(app.getHttpServer())
       .get(`/jurisdictions/${res.body.id}`)
       .expect(200)
     expect(getById.body.name).toBe("test")
-    expect(getById.body.preferences[0].id).toBe(newPreference.id)
-    expect(getById.body.programs[0].id).toBe(newProgram.id)
   })
 
   it(`should create and return a new jurisdiction by name`, async () => {
@@ -120,7 +111,7 @@ describe("Jurisdictions", () => {
         name: "test2",
         programs: [],
         languages: [Language.en],
-        preferences: [],
+        multiselectQuestions: [],
         publicUrl: "",
         emailFromAddress: "",
         rentalAssistanceDefault: "",
