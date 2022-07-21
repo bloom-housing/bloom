@@ -13,14 +13,9 @@ p, admin, asset, true, .*
 p, jurisdictionAdmin, asset, true, .*
 p, partner, asset, true, .*
 
-p, admin, program, true, .*
-p, jurisdictionAdmin, program, true, .*
-p, partner, program, true, .*
-p, anonymous, program, true, read
-
-p, admin, preference, true, .*
-p, jurisdictionAdmin, preference, true, .*
-p, partner, preference, true, .*
+p, admin, multiselectQuestion, true, .*
+p, partner, multiselectQuestion, true, .*
+p, anonymous, multiselectQuestion, true, read
 
 p, admin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*

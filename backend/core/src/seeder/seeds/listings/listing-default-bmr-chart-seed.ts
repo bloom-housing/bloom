@@ -29,7 +29,7 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
     const newListing = await this.listingRepository.save({
       ...listing,
       name: "Test: Default, BMR Chart",
-      preferences: [],
+      listingMultiselectQuestions: [],
     })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = bmrUnits.map((unit) => {

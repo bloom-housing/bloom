@@ -23,7 +23,7 @@ import { UserRoles } from "../auth/entities/user-roles.entity"
 import { ListingColiseumSeed } from "../seeder/seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOnePreferenceSeed } from "../seeder/seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "../seeder/seeds/listings/listing-default-no-preference-seed"
-import { Preference } from "../preferences/entities/preference.entity"
+import { MultiselectQuestion } from "../multiselect-question/entities/multiselect-question.entity"
 import { ListingDefaultFCFSSeed } from "../seeder/seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultOpenSoonSeed } from "../seeder/seeds/listings/listing-default-open-soon"
 import {
@@ -44,7 +44,6 @@ import { ListingDefaultLotteryPending } from "./seeds/listings/listing-default-l
 import { ListingDefaultMissingAMI } from "../seeder/seeds/listings/listing-default-missing-ami"
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
-import { Program } from "../program/entities/program.entity"
 import { AmiChartDefaultSeed } from "../seeder/seeds/ami-charts/default-ami-chart"
 import { AmiDefaultMissingAMI } from "../seeder/seeds/ami-charts/missing-household-ami-levels"
 import { AmiDefaultTriton } from "../seeder/seeds/ami-charts/triton-ami-chart"
@@ -68,7 +67,7 @@ export class SeederModule {
         TypeOrmModule.forFeature([
           Asset,
           Listing,
-          Preference,
+          MultiselectQuestion,
           UnitAccessibilityPriorityType,
           UnitType,
           ReservedCommunityType,
@@ -80,7 +79,6 @@ export class SeederModule {
           ApplicationMethod,
           PaperApplication,
           Jurisdiction,
-          Program,
         ]),
         ThrottlerModule.forRoot({
           ttl: 60,

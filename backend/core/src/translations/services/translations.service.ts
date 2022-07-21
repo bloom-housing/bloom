@@ -95,10 +95,10 @@ export class TranslationsService extends AbstractServiceFactory<
       pathsToFilter.push(`events[${i}].label`)
     }
 
-    for (let i = 0; i < listing.listingPreferences.length; i++) {
-      pathsToFilter.push(`listingPreferences[${i}].preference.title`)
-      pathsToFilter.push(`listingPreferences[${i}].preference.description`)
-      pathsToFilter.push(`listingPreferences[${i}].preference.subtitle`)
+    for (let i = 0; i < listing.listingMultiselectQuestions.length; i++) {
+      pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.text`)
+      pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.description`)
+      pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.subText`)
     }
 
     const listingPathsAndValues: { [key: string]: any } = {}

@@ -6,9 +6,8 @@ import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions
 export const activeJurisdictions: JurisdictionCreateDto[] = [
   {
     name: "Alameda",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
@@ -19,9 +18,8 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
   },
   {
     name: "San Jose",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "SJ: HousingBayArea.org <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
@@ -32,9 +30,8 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
   },
   {
     name: "San Mateo",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "SMC: HousingBayArea.org <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
@@ -45,9 +42,8 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
   },
   {
     name: "Detroit",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "Detroit Housing <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:

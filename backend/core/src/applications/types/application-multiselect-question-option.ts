@@ -8,7 +8,7 @@ import { AddressInput } from "./form-metadata/address-input"
 import { FormMetadataExtraData } from "./form-metadata/form-metadata-extra-data"
 import { InputType } from "../../shared/types/input-type"
 
-export class ApplicationPreferenceOption {
+export class ApplicationMultiselectQuestionOption {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })

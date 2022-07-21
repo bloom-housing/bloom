@@ -149,7 +149,7 @@ export class ListingsService {
     const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
-        "listingPreferences.ordinal": "ASC",
+        "listingPreferences.ordinal": "ASC", // TODO: this is weird, don't know why we cared about preferences here
       })
       .getOne()
 

@@ -1,6 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
-import { Program } from "../../program/entities/program.entity"
 import {
   IsString,
   MaxLength,
