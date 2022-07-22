@@ -46,8 +46,8 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     ;(async () => {
       if (autocompleteRef.current) {
-        autocompleteRef.current.value = props.getValues(name)
         const AriaAutocomplete = (await import("aria-autocomplete")).default
+        autocompleteRef.current.value = props.getValues(name)
         AriaAutocomplete(autocompleteRef.current, {
           source: props.dataSource,
           delay: 300, // debounce for 300ms
@@ -83,7 +83,7 @@ const MultiSelectField = (props: MultiSelectFieldProps) => {
       {props.label && label}
       <div className="control" data-test-id={props.dataTestId}>
         <Icon symbol="search" size="medium" />
-        <input id={props.id} ref={autocompleteRef} />
+        <input id={props.id} ref={autocompleteRef} className="input" />
       </div>
     </div>
   )

@@ -9,7 +9,8 @@
   --list-background-color: var(--bloom-color-white);
   --tag-hover-background-color: var(--bloom-color-primary-dark);
 
-  .control input.input.multi-select-field__input {
+  .control input.input {
+    margin-block-end: var(--bloom-s1);
     padding-inline: calc(var(--field-height) - var(--bloom-s3));
   }
 
@@ -131,7 +132,7 @@
 }
 
 .multi-select-field__option--no-results {
-  margin-top: 0 !important;
+  margin-block-start: 0 !important;
   background: transparent !important;
 }
 
@@ -196,10 +197,6 @@
 .multi-select-field__selected--delete-all:hover,
 .multi-select-field__selected--delete-all:focus {
   background: var(--bloom-color-alert-dark);
-}
-
-.multi-select-field__wrapper--multiple .multi-select-field__input {
-  margin-bottom: var(--bloom-s1);
 }
 
 .multi-select-field__wrapper--loading:after {
