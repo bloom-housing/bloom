@@ -37,11 +37,13 @@ export * from "./src/forms/PhoneField"
 export * from "./src/forms/PhoneMask"
 export * from "./src/forms/HouseholdMemberForm"
 export * from "./src/forms/HouseholdSizeField"
+export * from "./src/forms/MultiSelectField"
 export * from "./src/forms/FieldGroup"
 export * from "./src/forms/Select"
 export * from "./src/forms/Form"
 export * from "./src/forms/Textarea"
 export * from "./src/forms/TimeField"
+
 /* Global */
 export * from "./src/global/AppearanceTypes"
 export * from "./src/global/ApplicationStatusType"
