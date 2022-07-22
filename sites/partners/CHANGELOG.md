@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.31...@bloom-housing/partners@5.0.1-alpha.32) (2022-07-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.30...@bloom-housing/partners@5.0.1-alpha.31) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.29...@bloom-housing/partners@5.0.1-alpha.30) (2022-07-20)
+
+
+### Features
+
+* creating users as juris admin ([#2863](https://github.com/bloom-housing/bloom/issues/2863)) ([bc0aede](https://github.com/bloom-housing/bloom/commit/bc0aede7c622d3ffe4c2aa0f0ce7826bc97af9bf))
+
+
+
+
+
+## [5.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.28...@bloom-housing/partners@5.0.1-alpha.29) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.27...@bloom-housing/partners@5.0.1-alpha.28) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.26...@bloom-housing/partners@5.0.1-alpha.27) (2022-07-19)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.25...@bloom-housing/partners@5.0.1-alpha.26) (2022-07-19)
+
+
+### Features
+
+* visuals for add preference, preference option drawers ([#2877](https://github.com/bloom-housing/bloom/issues/2877)) ([8611034](https://github.com/bloom-housing/bloom/commit/8611034845b45ce4d4e4eb44e790ac2adec0ba94))
+
+
+
+
+
 ## [5.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.0.1-alpha.24...@bloom-housing/partners@5.0.1-alpha.25) (2022-07-15)
 
 
