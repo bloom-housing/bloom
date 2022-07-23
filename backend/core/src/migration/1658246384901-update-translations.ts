@@ -10,7 +10,7 @@ export class updateTranslations1658246384901 implements MigrationInterface {
         WHERE language = 'en';
         
         UPDATE translations 
-        SET translations = jsonb_set(translations, '{invite, userUpdateNewListings}', '"You have been added to new listings on Partners Portal. Click below to see:"') 
+        SET translations = jsonb_set(translations, '{invite, userUpdateNewListings}', '"You have been added to new listings on the Partners Portal. Click below to see:"') 
         WHERE language = 'en';
         
         UPDATE translations 

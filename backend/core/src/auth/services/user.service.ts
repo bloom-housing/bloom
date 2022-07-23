@@ -448,7 +448,8 @@ export class UserService {
     ) {
       await this.emailService.portalAccountUpdate(
         user,
-        this.configService.get("PARTNERS_PORTAL_URL")
+        this.configService.get("PARTNERS_PORTAL_URL"),
+        existingUser
       )
     } else {
       await this.emailService.invite(
