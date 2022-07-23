@@ -12,9 +12,9 @@ export class updateProgressNavTranslations1658539336427 implements MigrationInte
 
     generalTranslation = generalTranslation["0"]["translations"]
 
-    generalTranslation.applicationReceived = "Application <br />received"
-    generalTranslation.applicationsClosed = "Application <br />closed"
-    generalTranslation.applicationsRanked = "Application <br />ranked"
+    generalTranslation.confirmation.applicationReceived = "Application <br />received"
+    generalTranslation.confirmation.applicationsClosed = "Application <br />closed"
+    generalTranslation.confirmation.applicationsRanked = "Application <br />ranked"
 
     await queryRunner.query(
       `UPDATE "translations" SET translations = ($1) where jurisdiction_id IS NULL and language = ($2)`,
