@@ -42,7 +42,8 @@ export const Note = () => {
     {
       dateString: "November 22, 2022",
       timeString: "10:00am - 11:00am",
-      note: "Virtual lottery (not in person). We will post a link to the virtual lottery on February 23rd. Check back then.",
+      note:
+        "Virtual lottery (not in person). We will post a link to the virtual lottery on February 23rd. Check back then.",
     },
   ]
   return <EventSection events={events} headerText={"Lottery"} sectionHeader={true} />
