@@ -11,6 +11,7 @@ import { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT, UserStatus } from "../../lib/constants"
 import { pushGtmEvent, PageView, AuthContext } from "@bloom-housing/shared-helpers"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -68,7 +69,12 @@ const ApplicationView = () => {
         <FormSummaryDetails
           listing={listing}
           application={application}
-          hidePreferences={listing?.listingPreferences.length === 0}
+          hidePreferences={
+            listing?.listingMultiselectQuestions.filter(
+              (question) =>
+                question.multiselectQuestion.applicationSection === ApplicationSection.preference
+            ).length === 0
+          }
           editMode={false}
         />
 

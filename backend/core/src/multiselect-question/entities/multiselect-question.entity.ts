@@ -83,12 +83,14 @@ class MultiselectQuestion {
   @Type(() => Jurisdiction)
   jurisdictions: Jurisdiction[]
 
+  @Column({ type: "jsonb", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectOption)
-  @ApiProperty({ type: [MultiselectOption], nullable: true })
-  options: MultiselectOption[]
+  @ApiProperty({ type: [MultiselectOption] })
+  options?: MultiselectOption[] | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -96,6 +98,7 @@ class MultiselectQuestion {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   optOutText?: string | null
 
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

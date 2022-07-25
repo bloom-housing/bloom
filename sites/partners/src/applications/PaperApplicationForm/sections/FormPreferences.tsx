@@ -95,16 +95,16 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
         />
         {watchPreferences[optionName] &&
           extraData?.map((extra) => (
-            <ExtraField
-              key={extra.key}
-              metaKey={preference.formMetadata.key}
-              optionKey={optionKey}
-              extraKey={extra.key}
-              type={extra.type}
-              register={register}
-              hhMembersOptions={hhMembersOptions}
-              stateKeys={stateKeys}
-            />
+            <div className="pb-4">
+              <FormAddress
+                subtitle={t("application.preferences.options.address")}
+                dataKey={FIELD_NAME}
+                register={register}
+                errors={errors}
+                required={true}
+                stateKeys={stateKeys}
+              />
+            </div>
           ))}
       </React.Fragment>
     )

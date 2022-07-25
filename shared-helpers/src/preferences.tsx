@@ -1,10 +1,8 @@
 import * as React from "react"
 import {
   InputType,
-  ApplicationPreference,
-  FormMetadataOptions,
-  Preference,
-  ListingPreference,
+  MultiselectQuestion,
+  MultiselectOption,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -26,95 +24,6 @@ type ExtraFieldProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hhMembersOptions?: SelectOption[]
   stateKeys: string[]
-}
-
-/*
-  Path to the preferences from listing object
-*/
-const PREFERENCES_FORM_PATH = "application.preferences.options"
-const PREFERENCES_NONE_FORM_PATH = "application.preferences.none"
-
-/*
-  It generates inner fields for preferences form
-*/
-export const ExtraField = ({
-  metaKey,
-  optionKey,
-  extraKey,
-  type,
-  register,
-  errors,
-  hhMembersOptions,
-  stateKeys,
-}: ExtraFieldProps) => {
-  const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
-
-  return (
-    <div className="my-4" key={FIELD_NAME}>
-      {(() => {
-        if (type === InputType.text) {
-          return (
-            <Field
-              id={FIELD_NAME}
-              name={FIELD_NAME}
-              type="text"
-              label={t(`application.preferences.options.${extraKey}`)}
-              register={register}
-              validation={{ required: true }}
-              error={!!resolveObject(FIELD_NAME, errors)}
-              errorMessage={t("errors.requiredFieldError")}
-            />
-          )
-        } else if (type === InputType.address) {
-          return (
-            <div className="pb-4">
-              <FormAddress
-                subtitle={t("application.preferences.options.address")}
-                dataKey={FIELD_NAME}
-                register={register}
-                errors={errors}
-                required={true}
-                stateKeys={stateKeys}
-              />
-            </div>
-          )
-        } else if (type === InputType.hhMemberSelect) {
-          if (!hhMembersOptions)
-            return (
-              <Field
-                id={FIELD_NAME}
-                name={FIELD_NAME}
-                type="text"
-                label={t(`application.preferences.options.${extraKey}`)}
-                register={register}
-                validation={{ required: true }}
-                error={!!resolveObject(FIELD_NAME, errors)}
-                errorMessage={t("errors.requiredFieldError")}
-              />
-            )
-
-          return (
-            <>
-              <Select
-                id={FIELD_NAME}
-                name={FIELD_NAME}
-                label={t(`application.preferences.options.${extraKey}`)}
-                register={register}
-                controlClassName="control"
-                placeholder={t("t.selectOne")}
-                options={hhMembersOptions}
-                validation={{ required: true }}
-                error={!!resolveObject(FIELD_NAME, errors)}
-                errorMessage={t("errors.requiredFieldError")}
-              />
-            </>
-          )
-        }
-
-        return <></>
-      })()}
-    </div>
-  )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -231,66 +140,43 @@ export type ExclusiveKey = {
   optionKey: string
   preferenceKey: string | undefined
 }
-/*
-  Create an array of all exclusive keys from a preference set
-*/
-export const getExclusiveKeys = (preferences: ListingPreference[]) => {
-  const exclusive: ExclusiveKey[] = []
-  preferences?.forEach((listingPreference) => {
-    listingPreference.preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
-      if (option.exclusive)
-        exclusive.push({
-          optionKey: getPreferenceOptionName(
-            option.key,
-            listingPreference.preference?.formMetadata?.key ?? ""
-          ),
-          preferenceKey: listingPreference.preference?.formMetadata?.key,
-        })
-    })
-    if (!listingPreference.preference?.formMetadata?.hideGenericDecline)
-      exclusive.push({
-        optionKey: getExclusivePreferenceOptionName(
-          listingPreference.preference?.formMetadata?.key
-        ),
-        preferenceKey: listingPreference.preference?.formMetadata?.key,
-      })
+
+export const getExclusiveKeys = (preference: MultiselectQuestion) => {
+  const exclusive: string[] = []
+  preference?.options?.forEach((option: MultiselectOption) => {
+    if (option.exclusive) exclusive.push(option.text)
   })
+  if (preference?.optOutText) exclusive.push(preference.optOutText)
   return exclusive
 }
 
-const uncheckPreference = (
-  metaKey: string,
-  options: FormMetadataOptions[] | undefined,
+const uncheckOptions = (
+  options: MultiselectOption[] | undefined,
   setValue: (key: string, value: boolean) => void
 ) => {
   options?.forEach((option) => {
-    setValue(getPreferenceOptionName(option.key, metaKey), false)
+    setValue(option.text, false)
   })
 }
 
 /*
-  Set the value of an exclusive checkbox, unchecking all the appropriate boxes in response to the value
+  Set the value of an exclusive checkbox, unchecking all other boxes
 */
 export const setExclusive = (
-  value: boolean,
+  exclusiveValue: boolean,
   setValue: (key: string, value: boolean) => void,
-  exclusiveKeys: ExclusiveKey[],
-  key: string,
-  preference: Preference
+  exclusiveKeys: string[],
+  exclusiveName: string,
+  allOptions: MultiselectOption[]
 ) => {
-  if (value) {
+  if (exclusiveValue) {
     // Uncheck all other keys if setting an exclusive key to true
-    uncheckPreference(
-      preference?.formMetadata?.key ?? "",
-      preference?.formMetadata?.options,
-      setValue
-    )
-    setValue(key ?? "", true)
+    uncheckOptions(allOptions, setValue)
+    setValue(exclusiveName, true)
   } else {
-    // Uncheck all exclusive keys if setting a normal key to true
-    exclusiveKeys.forEach((thisKey) => {
-      if (thisKey.preferenceKey === preference?.formMetadata?.key)
-        setValue(thisKey.optionKey, false)
+    // Uncheck all exclusive keys if setting a multiselect key to true
+    exclusiveKeys.forEach((exclusiveOption) => {
+      setValue(exclusiveOption, false)
     })
   }
 }
