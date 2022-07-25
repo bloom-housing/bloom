@@ -51,7 +51,7 @@ export class ListingsService {
       .paginate(params.limit, params.page)
       .groupBy("listings.id")
 
-    const user = this.req?.user as User
+    const user = this.req?.user
     if (user?.roles?.isJurisdictionalAdmin) {
       innerFilteredQuery.andWhere("listings.jurisdiction_id IN (:...jurisdiction)", {
         jurisdiction: user.jurisdictions.map((elem) => elem.id),

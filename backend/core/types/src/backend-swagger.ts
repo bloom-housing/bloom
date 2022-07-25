@@ -450,6 +450,27 @@ export class ApplicationsService {
     })
   }
   /**
+   * Delete application by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List applications as csv
    */
   listAsCsv(
@@ -537,28 +558,6 @@ export class ApplicationsService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete application by id
-   */
-  delete(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -804,6 +803,27 @@ export class UserService {
     })
   }
   /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Resend confirmation
    */
   resendPartnerConfirmation(
@@ -965,28 +985,6 @@ export class UserService {
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = null
 
@@ -4063,6 +4061,17 @@ export interface UpdatePassword {
   token: string
 }
 
+export interface UserRolesOnly {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
 export interface UserUpdate {
   /**  */
   language?: Language
@@ -4096,6 +4105,9 @@ export interface UserUpdate {
 
   /**  */
   jurisdictions: Id[]
+
+  /**  */
+  roles?: UserRolesOnly
 
   /**  */
   confirmedAt?: Date

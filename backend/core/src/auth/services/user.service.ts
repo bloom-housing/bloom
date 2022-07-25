@@ -576,7 +576,6 @@ export class UserService {
     }
     return await this.authzService.canOrThrow(requestingUser, "user", action, {
       id: targetUser.id,
-      jurisdictionId: targetUser.id,
     })
   }
 
@@ -590,6 +589,7 @@ export class UserService {
     const targetJurisdictions = targetUser.jurisdictions?.map((juris) => juris.id)
     // jurisdictional admins should only see a user if they share a jurisdiction
     const res = requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
+
     if (!res) {
       throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
     }

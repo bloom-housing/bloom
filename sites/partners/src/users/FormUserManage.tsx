@@ -287,7 +287,9 @@ const FormUserManage = ({
     void deleteUser(() =>
       userService
         .delete({
-          id: user.id,
+          body: {
+            id: user.id,
+          },
         })
         .then(() => {
           setAlertMessage({ message: t(`users.userDeleted`), type: "success" })
