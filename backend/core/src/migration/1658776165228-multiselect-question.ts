@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class multiselectQuestion1658772008921 implements MigrationInterface {
-    name = 'multiselectQuestion1658772008921'
+export class multiselectQuestion1658776165228 implements MigrationInterface {
+    name = 'multiselectQuestion1658776165228'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "public"."multiselect_questions_application_section_enum" AS ENUM('program', 'preference')`);

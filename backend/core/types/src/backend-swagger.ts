@@ -4375,16 +4375,19 @@ export interface MultiselectOption {
   text: string
 
   /**  */
-  description: string
+  ordinal: number
 
   /**  */
-  links: MultiselectLink[]
+  description?: string
 
   /**  */
-  collectAddress: boolean
+  links?: MultiselectLink[]
 
   /**  */
-  exclusive: boolean
+  collectAddress?: boolean
+
+  /**  */
+  exclusive?: boolean
 }
 
 export interface MultiselectQuestion {

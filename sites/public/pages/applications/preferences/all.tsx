@@ -130,18 +130,23 @@ const ApplicationPreferencesAll = () => {
   }, [preference])
 
   const watchPreferences = watch(allOptionFieldNames)
+  console.log({ watchPreferences })
 
   if (!clientLoaded || !preferenceCheckboxIds) {
     return null
   }
 
   console.log({ preferenceCheckboxIds })
+  console.log({ errors })
 
   const getOption = (option: MultiselectOption, preference: MultiselectQuestion) => {
-    // const rootClassName = option.ordinal === preferences.length ? "mb-5" : "mb-5 border-b"
     return (
-      <div className={"mb-5"} key={option.text}>
-        <div className={`mb-5 field ${resolveObject(option.text, errors) ? "error" : ""}`}>
+      <div className={`mb-5 ${option.ordinal !== 1 ? "border-t pt-5" : ""}`} key={option.text}>
+        <div
+          className={`mb-5 field ${
+            resolveObject(option.text.replace(/'/g, ""), errors) ? "error" : ""
+          }`}
+        >
           <Field
             id={option.text}
             name={option.text}
@@ -162,7 +167,8 @@ const ApplicationPreferencesAll = () => {
             validation={{
               validate: {
                 somethingIsChecked: (value) =>
-                  value || !!preferenceCheckboxIds.find((option) => getValues(option)),
+                  preference.optOutText &&
+                  (value || !!preferenceCheckboxIds.find((option) => getValues(option))),
               },
             }}
             dataTestId={"app-preference-option"}
@@ -189,7 +195,7 @@ const ApplicationPreferencesAll = () => {
           <div className="pb-4">
             <FormAddress
               subtitle={t("application.preferences.options.address")}
-              dataKey={option.text}
+              dataKey={`${option.text}-address`}
               register={register}
               errors={errors}
               required={true}
@@ -248,9 +254,11 @@ const ApplicationPreferencesAll = () => {
               <fieldset>
                 <legend className="field-label--caps mb-4">{preference?.text}</legend>
                 <p className="field-note mb-8">{preference?.description}</p>
-                {preference?.options?.map((option) => {
-                  return getOption(option, preference)
-                })}
+                {preference?.options
+                  ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                  .map((option) => {
+                    return getOption(option, preference)
+                  })}
                 {preference?.optOutText &&
                   getOption(
                     {
@@ -259,6 +267,7 @@ const ApplicationPreferencesAll = () => {
                       links: [],
                       collectAddress: false,
                       exclusive: true,
+                      ordinal: preference.options.length,
                     },
                     preference
                   )}

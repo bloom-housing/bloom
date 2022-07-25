@@ -244,7 +244,10 @@ export const liveWorkPreference: MultiselectQuestionSeedType = {
     },
   ],
   optOutText: "I don't want this preference",
-  options: [{ text: "Live in County" }, { text: "Work in County" }],
+  options: [
+    { text: "Live in County", ordinal: 1 },
+    { text: "Work in County", ordinal: 2 },
+  ],
   applicationSection: ApplicationSection.preference,
 }
 
@@ -262,8 +265,8 @@ export const displaceePreference: MultiselectQuestionSeedType = {
   links: [],
   applicationSection: ApplicationSection.preference,
   options: [
-    { text: "General", collectAddress: true },
-    { text: "Mission Corridor", collectAddress: true },
+    { text: "General", collectAddress: true, ordinal: 2 },
+    { text: "Mission Corridor", collectAddress: true, ordinal: 1 },
   ],
 }
 
@@ -284,18 +287,23 @@ export const pbvPreference: MultiselectQuestionSeedType = {
   options: [
     {
       text: "Residency",
+      ordinal: 1,
     },
     {
       text: "Family",
+      ordinal: 2,
     },
     {
       text: "Veteran",
+      ordinal: 3,
     },
     {
       text: "Homeless",
+      ordinal: 4,
     },
     {
       text: "None apply but consider me",
+      ordinal: 5,
       exclusive: true,
     },
   ],
@@ -319,8 +327,9 @@ export const hopwaPreference: MultiselectQuestionSeedType = {
     {
       text: "HOPWA",
       exclusive: true,
+      ordinal: 1,
     },
-    { text: "Do not consider me", exclusive: true },
+    { text: "Do not consider me", exclusive: true, ordinal: 2 },
   ],
 }
 
@@ -340,9 +349,9 @@ export const servedInMilitaryProgram: MultiselectQuestionSeedType = {
   description: "Have you or anyone in your household served in the US military?",
   applicationSection: ApplicationSection.program,
   options: [
-    { text: "Served in Military", exclusive: true },
-    { text: "Do not consider me", exclusive: true },
-    { text: "Prefer not to say", exclusive: true },
+    { text: "Served in Military", exclusive: true, ordinal: 1 },
+    { text: "Do not consider me", exclusive: true, ordinal: 2 },
+    { text: "Prefer not to say", exclusive: true, ordinal: 3 },
   ],
 }
 
@@ -352,7 +361,10 @@ export const flatRentAndRentBasedOnIncomeProgram: MultiselectQuestionSeedType = 
     "This property includes two types of affordable housing programs. You can choose to apply for one or both programs. Each program will have its own applicant list. Your choice will tell us which list(s) to put your name on. Additional information on each of the two types of housing opportunities are below.",
   description: "Do you want to apply for apartments with flat rent and rent based on income?",
   applicationSection: ApplicationSection.program,
-  options: [{ text: "Flat Rent" }, { text: "30% Income" }],
+  options: [
+    { text: "Flat Rent", ordinal: 1 },
+    { text: "30% Income", ordinal: 2 },
+  ],
 }
 
 export function getTayProgram() {
@@ -366,9 +378,9 @@ export const tayProgram: MultiselectQuestionSeedType = {
     "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
   applicationSection: ApplicationSection.program,
   options: [
-    { text: "TAY", exclusive: true },
-    { text: "Do not consider", exclusive: true },
-    { text: "Prefer not to say", exclusive: true },
+    { text: "TAY", exclusive: true, ordinal: 1 },
+    { text: "Do not consider", exclusive: true, ordinal: 2 },
+    { text: "Prefer not to say", exclusive: true, ordinal: 3 },
   ],
 }
 
@@ -383,9 +395,9 @@ export const disabilityOrMentalIllnessProgram: MultiselectQuestionSeedType = {
     "Do you or anyone in your household have a developmental disability or mental illness?",
   applicationSection: ApplicationSection.program,
   options: [
-    { text: "Disability or mental illness", exclusive: true },
-    { text: "Do not consider", exclusive: true },
-    { text: "Prefer not to say", exclusive: true },
+    { text: "Disability or mental illness", exclusive: true, ordinal: 1 },
+    { text: "Do not consider", exclusive: true, ordinal: 2 },
+    { text: "Prefer not to say", exclusive: true, ordinal: 3 },
   ],
 }
 
@@ -400,9 +412,9 @@ export const housingSituationProgram: MultiselectQuestionSeedType = {
     "Thinking about the past 30 days, do either of these describe your housing situation?",
   applicationSection: ApplicationSection.program,
   options: [
-    { text: "Not permanent", exclusive: true },
-    { text: "Homeless", exclusive: true },
-    { text: "Do not consider", exclusive: true },
-    { text: "Prefer not to say", exclusive: true },
+    { text: "Not permanent", exclusive: true, ordinal: 1 },
+    { text: "Homeless", exclusive: true, ordinal: 2 },
+    { text: "Do not consider", exclusive: true, ordinal: 4 },
+    { text: "Prefer not to say", exclusive: true, ordinal: 3 },
   ],
 }
