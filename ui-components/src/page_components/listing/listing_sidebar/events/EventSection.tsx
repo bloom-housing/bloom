@@ -13,7 +13,7 @@ type EventSectionProps = {
   events: EventType[]
   headerText?: string
   sectionHeader?: boolean
-  dateClassName: string
+  dateClassName?: string
 }
 
 const EventSection = (props: EventSectionProps) => {
