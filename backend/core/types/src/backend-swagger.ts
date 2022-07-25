@@ -4392,7 +4392,7 @@ export interface MultiselectQuestion {
   links?: MultiselectLink[]
 
   /**  */
-  options: MultiselectOption[]
+  options?: MultiselectOption[]
 
   /**  */
   hideFromListing?: boolean
@@ -5821,7 +5821,7 @@ export interface MultiselectQuestionCreate {
   links?: MultiselectLink[]
 
   /**  */
-  options: MultiselectOption[]
+  options?: MultiselectOption[]
 
   /**  */
   hideFromListing?: boolean
@@ -5850,7 +5850,7 @@ export interface MultiselectQuestionUpdate {
   links?: MultiselectLink[]
 
   /**  */
-  options: MultiselectOption[]
+  options?: MultiselectOption[]
 
   /**  */
   hideFromListing?: boolean

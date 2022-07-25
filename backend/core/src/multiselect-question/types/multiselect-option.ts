@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { IsBoolean, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { MultiselectLink } from "./multiselect-link"
@@ -34,4 +34,9 @@ export class MultiselectOption {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   exclusive?: boolean
+
+  @Expose()
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  ordinal: number
 }
