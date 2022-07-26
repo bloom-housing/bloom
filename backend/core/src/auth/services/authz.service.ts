@@ -36,12 +36,11 @@ export class AuthzService {
 
     if (user) {
       e = await this.addUserPermissions(e, user)
-    }
 
-    // add jurisdictions to user object to access
-    if (type === "user" && obj.id) {
-      const accessedUser = await this.userRepository.findById(obj.id)
-      obj.jurisdictions = accessedUser.jurisdictions.map((jurisdiction) => jurisdiction.id)
+      if (type === "user" && obj.id && !obj.jurisdictionId) {
+        const accessedUser = await this.userRepository.findById(obj.id)
+        obj.jurisdictionId = accessedUser.jurisdictions.map((jurisdiction) => jurisdiction.id)[0]
+      }
     }
 
     return await e.enforce(user ? user.id : "anonymous", type, action, obj)
@@ -58,15 +57,6 @@ export class AuthzService {
     if (user.roles?.isJurisdictionalAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin)
 
-      void enforcer.addPermissionForUser(
-        user.id,
-        "user",
-        `r.obj.jurisdictions in '(${user.jurisdictions
-          .map((jurisdiction) => jurisdiction.id)
-          .join(",")})'`,
-        `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin}|${authzActions.update}|${authzActions.delete})`
-      )
-
       await Promise.all(
         user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
           void enforcer.addPermissionForUser(
@@ -80,6 +70,12 @@ export class AuthzService {
             "listing",
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
+          )
+          void enforcer.addPermissionForUser(
+            user.id,
+            "user",
+            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
+            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin}|${authzActions.update}|${authzActions.delete})`
           )
         })
       )

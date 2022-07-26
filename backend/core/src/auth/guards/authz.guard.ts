@@ -31,6 +31,8 @@ export class AuthzGuard implements CanActivate {
       //  This prevents a security hole where user specifies params.id different than dto.id to pass authorization
       //  but actually edits a different resource
       resource = ["GET"].includes(req.method) ? { id: req.params.id } : { id: req.body.id }
+    } else if (req.body.id) {
+      resource = { id: req.body.id }
     }
 
     return this.authzService.can(authUser, type, action, resource)
