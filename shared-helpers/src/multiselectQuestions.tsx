@@ -23,27 +23,26 @@ import { stateKeys } from "./formKeys"
 
 // Get a field name for an application multiselect question
 export const fieldName = (
-  preferenceName: string,
+  questionName: string,
   applicationSection: ApplicationSection,
   optionName?: string
 ) => {
-  return `application.${applicationSection}.${preferenceName.replace(/'/g, "")}${
+  return `application.${applicationSection}.${questionName.replace(/'/g, "")}${
     optionName ? `.${optionName.replace(/'/g, "")}` : ""
   }`
 }
 
-// Get an array of option field name strings for all options within a single preference that are exclusive
+// Get an array of option field name strings for all options within a single question that are exclusive
 export const getExclusiveKeys = (
-  preference: MultiselectQuestion,
+  question: MultiselectQuestion,
   applicationSection: ApplicationSection
 ): string[] => {
   const exclusive: string[] = []
-  preference?.options?.forEach((option: MultiselectOption) => {
-    if (option.exclusive)
-      exclusive.push(fieldName(preference.text, applicationSection, option.text))
+  question?.options?.forEach((option: MultiselectOption) => {
+    if (option.exclusive) exclusive.push(fieldName(question.text, applicationSection, option.text))
   })
-  if (preference?.optOutText)
-    exclusive.push(fieldName(preference.text, applicationSection, preference.optOutText))
+  if (question?.optOutText)
+    exclusive.push(fieldName(question.text, applicationSection, question.optOutText))
   return exclusive
 }
 
@@ -108,7 +107,7 @@ export const getRadioFields = (
   options: MultiselectOption[],
   errors: UseFormMethods["errors"],
   register: UseFormMethods["register"],
-  preference: MultiselectQuestion,
+  question: MultiselectQuestion,
   applicationSection: ApplicationSection
 ) => {
   return (
@@ -117,8 +116,8 @@ export const getRadioFields = (
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
         type={"radio"}
-        name={preference?.text}
-        error={errors[preference?.text]}
+        name={question?.text}
+        error={errors[question?.text]}
         errorMessage={t("errors.selectAnOption")}
         register={register}
         validation={{ required: true }}
@@ -307,16 +306,15 @@ export const mapRadiosToApi = (
 
 export const mapCheckboxesToApi = (
   formData: { [name: string]: boolean },
-  preference: MultiselectQuestion,
+  question: MultiselectQuestion,
   applicationSection: ApplicationSection
 ): ApplicationMultiselectQuestion => {
-  console.log("mapPreferenceToApi")
-  const data = formData["application"][applicationSection][preference.text.replace(/'/g, "")]
+  const data = formData["application"][applicationSection][question.text.replace(/'/g, "")]
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
 
-  const preferenceOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
+  const questionOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
     .filter((option) => !Object.keys(data[option]).length)
     .map((key) => {
       const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
@@ -331,8 +329,75 @@ export const mapCheckboxesToApi = (
     })
 
   return {
-    key: preference.text ?? "",
+    key: question.text ?? "",
     claimed,
-    options: preferenceOptions,
+    options: questionOptions,
   }
+}
+
+export const mapApiToMultiselectForm = (
+  applicationQuestions: ApplicationMultiselectQuestion[],
+  listingQuestions: ListingMultiselectQuestion[],
+  applicationSection: ApplicationSection
+) => {
+  const questionsFormData = { application: { [applicationSection]: {} } }
+
+  const applicationQuestionsWithTypes: {
+    question: ApplicationMultiselectQuestion
+    inputType: string
+  }[] = applicationQuestions.map((question) => {
+    return {
+      question,
+      inputType: getInputType(
+        listingQuestions.filter(
+          (listingQuestion) => listingQuestion.multiselectQuestion.text === question.key
+        )[0].multiselectQuestion.options ?? []
+      ),
+    }
+  })
+
+  applicationQuestionsWithTypes.forEach((appQuestion) => {
+    let options = {}
+
+    const question = appQuestion.question
+    /**
+     * Checkbox fields expect the following format
+     * QuestionName: {
+     *    OptionName1: true
+     *    OptionName2: false
+     *    OptionName1-address: {
+     *      street: "",
+     *      city: "",
+     *      ...
+     *    }
+     * }
+     */
+    if (appQuestion.inputType === "checkbox") {
+      options = question.options.reduce((acc, curr) => {
+        const claimed = curr.checked
+
+        if (appQuestion.inputType === "checkbox") {
+          acc[curr.key] = claimed
+          if (curr.extraData?.length) {
+            acc[`${curr.key}-address`] = curr.extraData[0].value
+          }
+        }
+
+        return acc
+      }, {})
+
+      questionsFormData["application"][applicationSection][question.key] = options
+    }
+
+    /**
+     * Radio fields expect the following format
+     * QuestionName: OptionName
+     */
+    if (appQuestion.inputType === "radio") {
+      const selectedRadio = question.options.filter((option) => !!option.checked)[0]
+      questionsFormData[question?.key] = selectedRadio?.key
+    }
+  })
+
+  return { ...questionsFormData }
 }
