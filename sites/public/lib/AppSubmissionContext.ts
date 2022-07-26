@@ -70,7 +70,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   if (
     listing.listingMultiselectQuestions.filter(
       (question) =>
-        question.multiselectQuestion.applicationSection === ApplicationSection.preference
+        question.multiselectQuestion.applicationSection === ApplicationSection.preferences
     ).length
   ) {
     config.sections.push("preferences")

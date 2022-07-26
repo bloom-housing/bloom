@@ -46,10 +46,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const { listingDto } = useSingleListingData(listingId)
 
   const preferences = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preference
+    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preferences
   )
   const programs = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.program
+    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.programs
   )
   const units = listingDto?.units
 

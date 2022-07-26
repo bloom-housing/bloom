@@ -54,7 +54,7 @@ describe("MultiselectQuestions", () => {
       description: "description",
       subText: "subtitle",
       options: [],
-      applicationSection: ApplicationSection.preference,
+      applicationSection: ApplicationSection.preferences,
     }
     const res = await supertest(app.getHttpServer())
       .post(`/multiselect-questions`)

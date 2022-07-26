@@ -6,6 +6,7 @@ import {
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
   ApplicationSection,
+  ListingMultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -16,47 +17,73 @@ import {
   resolveObject,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { getInputType } from "./multiselectQuestions"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mapApiToPreferencesForm = (
-  preferences: ApplicationMultiselectQuestion[],
-  fieldType: string
+  applicationPreferences: ApplicationMultiselectQuestion[],
+  listingPreferences: ListingMultiselectQuestion[],
+  applicationSection: ApplicationSection
 ) => {
-  const preferencesFormData = {}
+  const preferencesFormData = { application: { [applicationSection]: {} } }
 
-  console.log("api to form!!!")
-  console.log({ preferences })
-  preferences.forEach((item) => {
-    // console.log({ item })
-    const options = item.options.reduce((acc, curr) => {
-      // extraData which comes from the API is an array, in the form we expect an object
-      // const extraData =
-      //   curr?.extraData?.reduce((extraAcc, extraCurr) => {
-      //     Object.assign(extraAcc, {
-      //       [extraCurr.key]: extraCurr.value,
-      //     })
-      //     return extraAcc
-      //   }, {}) || {}
-
-      // each form option has "claimed" property - it's "checked" property in the API
-      const claimed = curr.checked
-
-      Object.assign(acc, {
-        [curr.key]: claimed,
-      })
-
-      if (curr.extraData?.length) {
-        Object.assign(acc, {
-          [`${curr.key}-address`]: curr.extraData[0].value,
-        })
-      }
-      return acc
-    }, {})
-
-    Object.assign(preferencesFormData, {
-      [item.key]: options,
-    })
+  const applicationPreferencesWithTypes: {
+    preference: ApplicationMultiselectQuestion
+    inputType: string
+  }[] = applicationPreferences.map((pref) => {
+    return {
+      preference: pref,
+      inputType: getInputType(
+        listingPreferences.filter(
+          (listingPref) => listingPref.multiselectQuestion.text === pref.key
+        )[0].multiselectQuestion.options ?? []
+      ),
+    }
   })
+
+  applicationPreferencesWithTypes.forEach((pref) => {
+    let options = {}
+
+    /**
+     * Checkbox fields expect the following format
+     * PreferenceName: {
+     *    OptionName1: true
+     *    OptionName2: false
+     *    OptionName1-address: {
+     *      street: "",
+     *      city: "",
+     *      ...
+     *    }
+     * }
+     */
+    if (pref.inputType === "checkbox") {
+      options = pref.preference.options.reduce((acc, curr) => {
+        const claimed = curr.checked
+
+        if (pref.inputType === "checkbox") {
+          acc[curr.key] = claimed
+          if (curr.extraData?.length) {
+            acc[`${curr.key}-address`] = curr.extraData[0].value
+          }
+        }
+
+        return acc
+      }, {})
+
+      preferencesFormData["application"][applicationSection][pref.preference.key] = options
+    }
+
+    /**
+     * Radio fields expect the following format
+     * PreferenceName: OptionName
+     */
+    if (pref.inputType === "radio") {
+      const selectedRadio = pref.preference.options.filter((option) => !!option.checked)[0]
+      preferencesFormData[pref?.preference?.key] = selectedRadio?.key
+    }
+  })
+
+  console.log({ preferencesFormData })
 
   return { ...preferencesFormData }
 }
