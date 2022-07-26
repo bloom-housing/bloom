@@ -2600,7 +2600,10 @@ export interface Application {
   income?: string
 
   /**  */
-  multiselectQuestions: ApplicationMultiselectQuestion[]
+  preferences: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3177,7 +3180,10 @@ export interface ApplicationCreate {
   income?: string
 
   /**  */
-  multiselectQuestions: ApplicationMultiselectQuestion[]
+  preferences: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3509,7 +3515,10 @@ export interface ApplicationUpdate {
   income?: string
 
   /**  */
-  multiselectQuestions: ApplicationMultiselectQuestion[]
+  preferences: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
 
   /**  */
   acceptedTerms?: boolean
@@ -4416,7 +4425,7 @@ export interface MultiselectQuestion {
   updatedAt: Date
 
   /**  */
-  text?: string
+  text: string
 
   /**  */
   subText?: string
@@ -5833,7 +5842,7 @@ export interface MultiselectQuestionCreate {
   applicationSection: ApplicationSection
 
   /**  */
-  text?: string
+  text: string
 
   /**  */
   subText?: string
@@ -5865,7 +5874,7 @@ export interface MultiselectQuestionUpdate {
   id: string
 
   /**  */
-  text?: string
+  text: string
 
   /**  */
   subText?: string

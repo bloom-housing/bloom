@@ -1,15 +1,15 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, FieldGroup } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { FormMetaDataType, ListingProgram } from "@bloom-housing/backend-core/types"
-import { getProgramOptionName } from "@bloom-housing/shared-helpers"
+// import { FormMetaDataType, ListingProgram } from "@bloom-housing/backend-core/types"
+import { getInputType } from "@bloom-housing/shared-helpers"
+import { ListingMultiselectQuestion } from "@bloom-housing/backend-core"
 
 type FormProgramsProps = {
-  county: string
-  programs: ListingProgram[]
+  programs: ListingMultiselectQuestion[]
 }
 
-const FormPrograms = ({ county, programs }: FormProgramsProps) => {
+const FormPrograms = ({ programs }: FormProgramsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -19,29 +19,21 @@ const FormPrograms = ({ county, programs }: FormProgramsProps) => {
     <GridSection title={t("application.details.programs")} separator grid={false}>
       <GridSection columns={2}>
         {programs?.map((listingProgram) => {
-          const metaKey = listingProgram.program?.formMetadata?.key
-
           return (
-            <GridCell key={listingProgram.program.id}>
-              <ViewItem
-                label={t(`application.programs.${metaKey}.summary`, {
-                  county,
-                })}
-              >
+            <GridCell key={listingProgram.multiselectQuestion.text}>
+              <ViewItem label={listingProgram.multiselectQuestion.text}>
                 <fieldset>
                   <FieldGroup
                     fieldGroupClassName="grid grid-cols-1"
                     fieldClassName="ml-0"
-                    type={listingProgram?.program.formMetadata?.type || FormMetaDataType.radio}
-                    name={`application.programs.${listingProgram?.program.formMetadata?.key}`}
+                    type={getInputType(listingProgram.multiselectQuestion.options)}
+                    name={`application.programs.${listingProgram.multiselectQuestion.text}`}
                     register={register}
-                    fields={listingProgram?.program.formMetadata?.options?.map((option) => {
+                    fields={listingProgram.multiselectQuestion.options?.map((option) => {
                       return {
-                        id: `${listingProgram?.program.formMetadata?.key}-${option.key}`,
-                        label: t(
-                          getProgramOptionName(option.key, listingProgram?.program.formMetadata.key)
-                        ),
-                        value: option.key,
+                        id: `${listingProgram?.multiselectQuestion.text}-${option.text}`,
+                        label: option.text,
+                        value: option.text,
                       }
                     })}
                   />

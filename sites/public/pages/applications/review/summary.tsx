@@ -17,6 +17,7 @@ import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetai
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationSummary = () => {
   const { profile } = useContext(AuthContext)
@@ -60,7 +61,12 @@ const ApplicationSummary = () => {
         <FormSummaryDetails
           application={application}
           listing={listing}
-          hidePreferences={listing?.listingPreferences.length === 0}
+          hidePreferences={
+            listing?.listingMultiselectQuestions.filter(
+              (question) =>
+                question.multiselectQuestion.applicationSection === ApplicationSection.preference
+            ).length === 0
+          }
           editMode
         />
 

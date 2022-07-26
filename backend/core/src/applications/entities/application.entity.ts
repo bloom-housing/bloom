@@ -221,7 +221,15 @@ export class Application extends AbstractEntity {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMultiselectQuestion)
-  multiselectQuestions: ApplicationMultiselectQuestion[]
+  preferences: ApplicationMultiselectQuestion[]
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationMultiselectQuestion)
+  programs?: ApplicationMultiselectQuestion[]
 
   @Column({ enum: ApplicationStatus })
   @Expose()

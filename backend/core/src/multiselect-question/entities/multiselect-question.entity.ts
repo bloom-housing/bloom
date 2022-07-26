@@ -45,11 +45,10 @@ class MultiselectQuestion {
   @Type(() => Date)
   updatedAt: Date
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text", nullable: false })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  text?: string | null
+  text: string
 
   @Column({ type: "text", nullable: true })
   @Expose()
