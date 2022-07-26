@@ -459,7 +459,8 @@ describe("Applications", () => {
       .expect(201)
 
     await supertest(app.getHttpServer())
-      .delete(`/applications/${createRes.body.id}`)
+      .delete(`/applications`)
+      .send({ id: createRes.body.id })
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
 
@@ -477,7 +478,8 @@ describe("Applications", () => {
       .set(...setAuthorization(user1AccessToken))
       .expect(201)
     await supertest(app.getHttpServer())
-      .delete(`/applications/${createRes.body.id}`)
+      .delete(`/applications`)
+      .send({ id: createRes.body.id })
       .set(...setAuthorization(user1AccessToken))
       .expect(403)
   })

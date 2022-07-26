@@ -47,6 +47,8 @@ export class AuthzService {
     }
 
     if (user.roles?.isJurisdictionalAdmin) {
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin)
+
       await Promise.all(
         user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
           void enforcer.addPermissionForUser(
@@ -65,7 +67,7 @@ export class AuthzService {
             user.id,
             "user",
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
+            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin}|${authzActions.update}|${authzActions.delete})`
           )
         })
       )

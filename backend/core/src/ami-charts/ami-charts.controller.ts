@@ -20,6 +20,7 @@ import { AmiChartsService } from "./ami-charts.service"
 import { AmiChartCreateDto, AmiChartDto, AmiChartUpdateDto } from "./dto/ami-chart.dto"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { AmiChartListQueryParams } from "./dto/ami-chart-list-query-params"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/amiCharts")
 @ApiTags("amiCharts")
@@ -54,9 +55,9 @@ export class AmiChartsController {
     return mapTo(AmiChartDto, await this.amiChartsService.findOne({ where: { id: amiChartId } }))
   }
 
-  @Delete(`:amiChartId`)
+  @Delete()
   @ApiOperation({ summary: "Delete amiChart by id", operationId: "delete" })
-  async delete(@Param("amiChartId") amiChartId: string): Promise<void> {
-    return await this.amiChartsService.delete(amiChartId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.amiChartsService.delete(dto.id)
   }
 }

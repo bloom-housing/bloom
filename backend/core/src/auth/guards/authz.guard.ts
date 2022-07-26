@@ -24,14 +24,13 @@ export class AuthzGuard implements CanActivate {
       httpMethodsToAction[req.method]
 
     let resource
+
     if (req.params.id) {
       // NOTE: implicit assumption that if request.params contains an ID it also means that for requests other
       //  than GET and DELETE body also contains one too and it should be the same
       //  This prevents a security hole where user specifies params.id different than dto.id to pass authorization
       //  but actually edits a different resource
-      resource = ["GET", "DELETE"].includes(req.method)
-        ? { id: req.params.id }
-        : { id: req.body.id }
+      resource = ["GET"].includes(req.method) ? { id: req.params.id } : { id: req.body.id }
     }
 
     return this.authzService.can(authUser, type, action, resource)

@@ -125,8 +125,10 @@ export default function ListingsList() {
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
-    userId: !isAdmin ? profile?.id : undefined,
+    userId: profile?.id,
     sort: tableOptions.sort.sortOptions,
+    roles: profile?.roles,
+    userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
   return (
