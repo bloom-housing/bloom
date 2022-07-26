@@ -1,4 +1,4 @@
 export enum ApplicationSection {
-  program = "program",
-  preference = "preference",
+  programs = "programs",
+  preferences = "preferences",
 }

@@ -17,97 +17,15 @@ import {
   FormAddress,
 } from "@bloom-housing/ui-components"
 
-type ExtraFieldProps = {
-  metaKey: string
-  optionKey: string
-  extraKey: string
-  type: InputType
-  register: UseFormMethods["register"]
-  errors?: UseFormMethods["errors"]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  hhMembersOptions?: SelectOption[]
-  stateKeys: string[]
-}
-
-type PreferenceForm = {
-  [name: string]: boolean
-}
-
-export const mapRadiosToApi = (
-  data: { [name: string]: string },
-  question: MultiselectQuestion
-): ApplicationMultiselectQuestion => {
-  if (Object.keys(data).length === 0) {
-    return {
-      key: "",
-      claimed: false,
-      options: [],
-    }
-  }
-
-  const [key, value] = Object.entries(data)[0]
-  const options = []
-
-  options.push({
-    key: value,
-    checked: true,
-    extraData: [],
-  })
-  question?.options?.forEach((option) => {
-    if (option.text !== value) {
-      options.push({
-        key: option.text,
-        checked: false,
-        extraData: [],
-      })
-    }
-  })
-
-  return {
-    key,
-    claimed: true,
-    options,
-  }
-}
-
-export const mapCheckboxesToApi = (
-  formData: PreferenceForm,
-  preference: MultiselectQuestion,
-  applicationSection: ApplicationSection
-): ApplicationMultiselectQuestion => {
-  console.log("mapPreferenceToApi")
-  const data = formData["application"][applicationSection][preference.text.replace(/'/g, "")]
-  const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
-
-  const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
-
-  const preferenceOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
-    .filter((option) => !Object.keys(data[option]).length)
-    .map((key) => {
-      const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
-
-      return {
-        key,
-        checked: data[key] === true,
-        extraData: addressData.length
-          ? [{ type: InputType.address, key, value: data[addressData[0]] }]
-          : [],
-      }
-    })
-
-  return {
-    key: preference.text ?? "",
-    claimed,
-    options: preferenceOptions,
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mapApiToPreferencesForm = (preferences: ApplicationMultiselectQuestion[]) => {
+export const mapApiToPreferencesForm = (
+  preferences: ApplicationMultiselectQuestion[],
+  fieldType: string
+) => {
   const preferencesFormData = {}
 
-  console.log("api to form")
-  // console.log({ preferences })
+  console.log("api to form!!!")
+  console.log({ preferences })
   preferences.forEach((item) => {
     // console.log({ item })
     const options = item.options.reduce((acc, curr) => {
@@ -140,7 +58,7 @@ export const mapApiToPreferencesForm = (preferences: ApplicationMultiselectQuest
     })
   })
 
-  return preferencesFormData
+  return { ...preferencesFormData }
 }
 
 export type ExclusiveKey = {

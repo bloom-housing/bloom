@@ -6167,8 +6167,8 @@ export enum ListingEventType {
 }
 
 export enum ApplicationSection {
-  "program" = "program",
-  "preference" = "preference",
+  "programs" = "programs",
+  "preferences" = "preferences",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
