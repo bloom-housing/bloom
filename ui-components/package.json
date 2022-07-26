@@ -91,7 +91,7 @@
     "axios": "0.21.2",
     "body-scroll-lock": "^3.1.5",
     "dayjs": "^1.10.7",
-    "dompurify": "^2.3.10",
+    "isomorphic-dompurify": "^0.20.0",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",
     "nanoid": "^3.1.12",

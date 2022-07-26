@@ -1,5 +1,5 @@
 import * as React from "react"
-import DOMPurify from "dompurify"
+import DOMPurify from "isomorphic-dompurify"
 
 export interface Address {
   city?: string

@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
 import { Enforcer, newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
@@ -6,9 +7,11 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoleEnum } from "../enum/user-role-enum"
 import { authzActions } from "../enum/authz-actions.enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { UserRepository } from "../repositories/user-repository"
 
 @Injectable()
 export class AuthzService {
+  constructor(@InjectRepository(UserRepository) private readonly userRepository: UserRepository) {}
   /**
    * Check whether this is an authorized action based on the authz rules.
    * @param user User making the request. If not specified, the request will be authorized against a user with role
@@ -35,6 +38,12 @@ export class AuthzService {
       e = await this.addUserPermissions(e, user)
     }
 
+    // add jurisdictions to user object to access
+    if (type === "user" && obj.id) {
+      const accessedUser = await this.userRepository.findById(obj.id)
+      obj.jurisdictions = accessedUser.jurisdictions.map((jurisdiction) => jurisdiction.id)
+    }
+
     return await e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
@@ -49,6 +58,15 @@ export class AuthzService {
     if (user.roles?.isJurisdictionalAdmin) {
       await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin)
 
+      void enforcer.addPermissionForUser(
+        user.id,
+        "user",
+        `r.obj.jurisdictions in '(${user.jurisdictions
+          .map((jurisdiction) => jurisdiction.id)
+          .join(",")})'`,
+        `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin}|${authzActions.update}|${authzActions.delete})`
+      )
+
       await Promise.all(
         user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
           void enforcer.addPermissionForUser(
@@ -62,12 +80,6 @@ export class AuthzService {
             "listing",
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
-          )
-          void enforcer.addPermissionForUser(
-            user.id,
-            "user",
-            `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin}|${authzActions.update}|${authzActions.delete})`
           )
         })
       )
