@@ -27,29 +27,33 @@ import {
   OnClientSide,
   PageView,
   pushGtmEvent,
-  mapPreferencesToApi,
+  mapCheckboxesToApi,
   mapApiToPreferencesForm,
   setExclusive,
   AuthContext,
   getExclusiveKeys,
-  preferenceFieldName,
+  fieldName,
+  getCheckboxOption,
+  getAllOptions,
+  getPageQuestion,
+  getInputType,
+  getRadioFields,
+  mapRadiosToApi,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import { check } from "prettier"
 
 const ApplicationPreferencesAll = () => {
   const clientLoaded = OnClientSide()
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("preferencesAll")
+
   const preferences = listing?.listingMultiselectQuestions.filter(
     (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preference
   )
   const [page, setPage] = useState(conductor.navigatedThroughBack ? preferences.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
-  const ordinalPreferences = preferences?.filter((item) => {
-    return item.ordinal === page
-  })
-
-  const preference = ordinalPreferences?.length ? ordinalPreferences[0].multiselectQuestion : null
+  const preference = getPageQuestion(preferences, page)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
@@ -58,16 +62,11 @@ const ApplicationPreferencesAll = () => {
     },
   })
 
-  console.log(mapApiToPreferencesForm(applicationPreferences))
-  console.log(getValues())
-
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(preference))
-
-  let preferenceSetInputType = "checkbox"
-  if (
-    preference?.options?.filter((option) => option.exclusive).length === preference?.options?.length
+  const [exclusiveKeys, setExclusiveKeys] = useState(
+    getExclusiveKeys(preference, ApplicationSection.preference)
   )
-    preferenceSetInputType = "radio"
+
+  const preferenceSetInputType = getInputType(preference?.options)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -77,34 +76,28 @@ const ApplicationPreferencesAll = () => {
     })
   }, [profile])
 
-  /*
-    Required to keep the form up to date before submitting this section if you're moving between pages
-  */
+  // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
     reset({
       application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
     })
-    setExclusiveKeys(getExclusiveKeys(preference))
+    setExclusiveKeys(getExclusiveKeys(preference, ApplicationSection.preference))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationPreferences, reset])
 
-  const preferenceCheckboxIds = useMemo(() => {
-    const optionPaths =
-      preference?.options?.map((option) => preferenceFieldName(preference.text, option.text)) ?? []
-    if (preference?.optOutText) {
-      optionPaths.push(preferenceFieldName(preference?.text, preference?.optOutText))
-    }
-    return optionPaths
+  const allOptionNames = useMemo(() => {
+    return getAllOptions(preference, ApplicationSection.preference)
   }, [preference])
 
-  /*
-    Submits the form
-  */
   const onSubmit = (data) => {
-    const body = mapPreferencesToApi(data, preference)
+    console.log({ data })
+    const body =
+      preferenceSetInputType === "checkbox"
+        ? mapCheckboxesToApi(data, preference, ApplicationSection.preference)
+        : mapRadiosToApi(data, preference)
     console.log({ body })
     if (preferences.length > 1 && body) {
-      // If we've got more than one preference, save the data in segments
+      // If there is more than one question, save the data in segments
       const currentPreferences = conductor.currentStep.application.preferences.filter(
         (preference) => {
           return preference.key !== body.key
@@ -127,103 +120,25 @@ const ApplicationPreferencesAll = () => {
     conductor.routeToNextOrReturnUrl()
   }
 
-  const allOptionFieldNames = useMemo(() => {
-    return preference?.options?.map((option) => {
-      return preferenceFieldName(preference.text, option.text)
-    })
-  }, [preference])
+  const watchPreferences = watch(allOptionNames)
 
-  const watchPreferences = watch(allOptionFieldNames)
-
-  if (!clientLoaded || !preferenceCheckboxIds) {
+  if (!clientLoaded || !allOptionNames) {
     return null
   }
 
-  const getOption = (option: MultiselectOption, preference: MultiselectQuestion) => {
-    return (
-      <div className={`mb-5 ${option.ordinal !== 1 ? "border-t pt-5" : ""}`} key={option.text}>
-        <div
-          className={`mb-5 field ${
-            resolveObject(preferenceFieldName(preference.text, option.text), errors) ? "error" : ""
-          }`}
-        >
-          <Field
-            id={option.text}
-            name={preferenceFieldName(preference.text, option.text)}
-            type={preferenceSetInputType}
-            label={option.text}
-            register={register}
-            inputProps={{
-              onChange: (e) => {
-                if (e.target.checked) {
-                  void trigger()
-                }
-                if (option.exclusive && e.target.checked)
-                  setExclusive(
-                    true,
-                    setValue,
-                    exclusiveKeys,
-                    preferenceFieldName(preference.text, option.text),
-                    preference?.options?.map((option) =>
-                      preferenceFieldName(preference.text, option.text)
-                    )
-                  )
-                if (!option.exclusive)
-                  setExclusive(
-                    false,
-                    setValue,
-                    exclusiveKeys,
-                    preferenceFieldName(preference.text, option.text),
-                    preference?.options?.map((option) =>
-                      preferenceFieldName(preference.text, option.text)
-                    )
-                  )
-              },
-            }}
-            validation={{
-              validate: {
-                somethingIsChecked: (value) => {
-                  if (preferenceSetInputType === "radio" || preference.optOutText) {
-                    return value || !!preferenceCheckboxIds.find((option) => getValues(option))
-                  }
-                },
-              },
-            }}
-            dataTestId={"app-preference-option"}
-          />
-        </div>
-
-        {option.description && (
-          <div className="ml-8 -mt-5 mb-5">
-            <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
-              <p className="field-note mb-2">
-                {option.description}
-                <br />
-                {option?.links?.map((link) => (
-                  <a key={link.url} className="block pt-2" href={link.url}>
-                    {link.title}
-                  </a>
-                ))}
-              </p>
-            </ExpandableContent>
-          </div>
-        )}
-
-        {watchPreferences[preferenceFieldName(preference.text, option.text)] &&
-          option.collectAddress && (
-            <div className="pb-4">
-              <FormAddress
-                subtitle={t("application.preferences.options.address")}
-                dataKey={preferenceFieldName(preference.text, `${option.text}-address`)}
-                register={register}
-                errors={errors}
-                required={true}
-                stateKeys={stateKeys}
-                data-test-id={"app-preference-extra-field"}
-              />
-            </div>
-          )}
-      </div>
+  const checkboxOption = (option: MultiselectOption) => {
+    return getCheckboxOption(
+      option,
+      preference,
+      ApplicationSection.preference,
+      errors,
+      register,
+      trigger,
+      setValue,
+      getValues,
+      exclusiveKeys,
+      allOptionNames,
+      watchPreferences
     )
   }
 
@@ -270,27 +185,34 @@ const ApplicationPreferencesAll = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div key={preference?.id}>
             <div className={`form-card__group px-0`}>
-              <fieldset>
-                <legend className="field-label--caps mb-4">{preference?.text}</legend>
-                <p className="field-note mb-8">{preference?.description}</p>
-                {preference?.options
-                  ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                  .map((option) => {
-                    return getOption(option, preference)
-                  })}
-                {preference?.optOutText &&
-                  getOption(
-                    {
+              {preferenceSetInputType === "checkbox" ? (
+                <fieldset>
+                  <legend className="field-label--caps mb-4">{preference?.text}</legend>
+                  <p className="field-note mb-8">{preference?.description}</p>
+                  {preference?.options
+                    ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                    .map((option) => {
+                      return checkboxOption(option)
+                    })}
+                  {preference?.optOutText &&
+                    checkboxOption({
                       text: preference.optOutText,
                       description: null,
                       links: [],
                       collectAddress: false,
                       exclusive: true,
                       ordinal: preference.options.length,
-                    },
-                    preference
-                  )}
-              </fieldset>
+                    })}
+                </fieldset>
+              ) : (
+                getRadioFields(
+                  preference.options,
+                  errors,
+                  register,
+                  preference,
+                  ApplicationSection.preference
+                )
+              )}
             </div>
           </div>
 
