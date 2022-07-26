@@ -1,5 +1,5 @@
 import * as React from "react"
-import DOMPurify from "isomorphic-dompurify"
+import sanitizeHtml from "sanitize-html"
 
 export interface Address {
   city?: string
@@ -22,7 +22,7 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
   return (
     <span
       dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(
+        __html: sanitizeHtml(
           `
             ${address.placeName ? `${address.placeName} <br />` : ""}
             ${address.street || ""} ${address.street2 || ""}
