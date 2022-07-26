@@ -23,6 +23,7 @@ import { PreferenceCreateDto } from "./dto/preference-create.dto"
 import { PreferenceUpdateDto } from "./dto/preference-update.dto"
 import { PreferencesListQueryParams } from "./dto/preferences-list-query-params"
 import { PreferencesFilterParams } from "./dto/preferences-filter-params"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/preferences")
 @ApiTags("preferences")
@@ -61,9 +62,9 @@ export class PreferencesController {
     )
   }
 
-  @Delete(`:preferenceId`)
+  @Delete()
   @ApiOperation({ summary: "Delete preference by id", operationId: "delete" })
-  async delete(@Param("preferenceId") preferenceId: string): Promise<void> {
-    await this.preferencesService.delete(preferenceId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    await this.preferencesService.delete(dto.id)
   }
 }

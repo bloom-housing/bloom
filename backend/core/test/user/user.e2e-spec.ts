@@ -611,8 +611,9 @@ describe("Applications", () => {
     expect(res.body.email).toBe(user.email)
 
     await supertest(app.getHttpServer())
-      .delete(`/user/${user.id}`)
+      .delete(`/user`)
       .set(...setAuthorization(adminAccessToken))
+      .send({ id: user.id })
       .expect(200)
 
     await supertest(app.getHttpServer())
@@ -644,8 +645,9 @@ describe("Applications", () => {
     })
 
     await supertest(app.getHttpServer())
-      .delete(`/user/${user.id}`)
+      .delete(`/user`)
       .set(...setAuthorization(adminAccessToken))
+      .send({ id: user.id })
       .expect(200)
 
     const application = await applicationsRepository.findOneOrFail({

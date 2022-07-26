@@ -23,6 +23,7 @@ import { ProgramCreateDto } from "./dto/program-create.dto"
 import { ProgramUpdateDto } from "./dto/program-update.dto"
 import { ProgramsFilterParams } from "./dto/programs-filter-params"
 import { ProgramsListQueryParams } from "./dto/programs-list-query-params"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/programs")
 @ApiTags("programs")
@@ -58,9 +59,9 @@ export class ProgramsController {
     return mapTo(ProgramDto, await this.programsService.findOne({ where: { id: programId } }))
   }
 
-  @Delete(`:programId`)
+  @Delete()
   @ApiOperation({ summary: "Delete program by id", operationId: "delete" })
-  async delete(@Param("programId") programId: string): Promise<void> {
-    await this.programsService.delete(programId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    await this.programsService.delete(dto.id)
   }
 }
