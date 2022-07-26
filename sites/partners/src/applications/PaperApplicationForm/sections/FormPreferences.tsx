@@ -5,47 +5,33 @@ import {
   GridSection,
   ViewItem,
   GridCell,
-  SelectOption,
+  FormAddress,
 } from "@bloom-housing/ui-components"
 
 import { useFormContext } from "react-hook-form"
+import { stateKeys, getInputType } from "@bloom-housing/shared-helpers"
 import {
-  stateKeys,
-  setExclusive,
-  getExclusiveKeys,
-  getExclusivePreferenceOptionName,
-  getPreferenceOptionName,
-  ExtraField,
-} from "@bloom-housing/shared-helpers"
-import {
-  Preference,
-  FormMetadataExtraData,
-  ListingPreference,
+  ListingMultiselectQuestion,
+  MultiselectOption,
+  MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 
 type FormPreferencesProps = {
-  county: string
-  preferences: ListingPreference[]
-  hhMembersOptions?: SelectOption[]
+  preferences: ListingMultiselectQuestion[]
 }
 
-const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferencesProps) => {
+const FormPreferences = ({ preferences }: FormPreferencesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = formMethods
-
-  const hasMetaData = useMemo(() => {
-    return !!preferences?.filter((listingPreference) => listingPreference.preference?.formMetadata)
-      ?.length
-  }, [preferences])
+  const { register, setValue, watch, getValues } = formMethods
 
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     preferences?.forEach((listingPreference) =>
-      listingPreference.preference?.formMetadata?.options.forEach((option) =>
+      listingPreference.multiselectQuestion.options.forEach((option) =>
         keys.push(
-          getPreferenceOptionName(option.key, listingPreference.preference?.formMetadata.key)
+          `application.preferences.${listingPreference.multiselectQuestion.text}.${option.text}`
         )
       )
     )
@@ -55,57 +41,33 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
 
   const watchPreferences = watch(allOptionFieldNames)
 
-  const exclusiveKeys = getExclusiveKeys(preferences)
-
-  if (!hasMetaData) {
-    return null
-  }
-
   const getOption = (
-    optionKey: string | null,
-    optionName: string,
-    exclusive: boolean,
-    extraData: FormMetadataExtraData[],
-    preference: Preference,
-    label?: string
+    option: MultiselectOption,
+    preference: MultiselectQuestion,
+    inputType: string
   ) => {
     return (
-      <React.Fragment key={optionKey}>
+      <React.Fragment key={option.text}>
         <Field
-          id={optionName}
-          name={optionName}
-          type="checkbox"
-          label={
-            label ??
-            t(`application.preferences.${preference?.formMetadata?.key}.${optionKey}.label`, {
-              county,
-            })
-          }
+          id={option.text}
+          name={`application.preferences.${preference.text}.${option.text.replace(/'/g, "")}`}
+          type={inputType}
+          label={option.text}
           register={register}
-          inputProps={{
-            onChange: (e) => {
-              if (exclusive && e.target.checked) {
-                setExclusive(true, setValue, exclusiveKeys, optionName, preference)
-              }
-              if (!exclusive) {
-                setExclusive(false, setValue, exclusiveKeys, optionName, preference)
-              }
-            },
-          }}
         />
-        {watchPreferences[optionName] &&
-          extraData?.map((extra) => (
+        {watchPreferences[`application.preferences.${preference.text}.${option.text}`] &&
+          option.collectAddress && (
             <div className="pb-4">
               <FormAddress
                 subtitle={t("application.preferences.options.address")}
-                dataKey={FIELD_NAME}
+                dataKey={`application.preferences.${preference.text}.${option.text}-address`}
                 register={register}
-                errors={errors}
                 required={true}
                 stateKeys={stateKeys}
+                data-test-id={"app-preference-extra-field"}
               />
             </div>
-          ))}
+          )}
       </React.Fragment>
     )
   }
@@ -114,40 +76,30 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
         {preferences?.map((listingPreference) => {
-          const metaKey = listingPreference.preference?.formMetadata?.key
-
           return (
-            <GridCell key={listingPreference.preference.id}>
-              <ViewItem
-                label={t(`application.preferences.${metaKey}.title`, {
-                  county,
-                })}
-              >
+            <GridCell key={listingPreference.multiselectQuestion.text}>
+              <ViewItem label={listingPreference.multiselectQuestion.text}>
                 <fieldset className="mt-4">
-                  {listingPreference.preference?.formMetadata?.options?.map((option) => {
+                  {listingPreference.multiselectQuestion.options?.map((option) => {
                     return getOption(
-                      option.key,
-                      getPreferenceOptionName(
-                        option.key,
-                        listingPreference.preference?.formMetadata?.key
-                      ),
-                      option.exclusive,
-                      option.extraData,
-                      listingPreference.preference
+                      option,
+                      listingPreference.multiselectQuestion,
+                      getInputType(listingPreference.multiselectQuestion.options)
                     )
                   })}
 
-                  {listingPreference.preference?.formMetadata &&
-                    !listingPreference.preference.formMetadata.hideGenericDecline &&
+                  {listingPreference.multiselectQuestion?.optOutText &&
                     getOption(
-                      null,
-                      getExclusivePreferenceOptionName(
-                        listingPreference.preference?.formMetadata?.key
-                      ),
-                      true,
-                      [],
-                      listingPreference.preference,
-                      t("application.preferences.dontWant")
+                      {
+                        text: listingPreference.multiselectQuestion.optOutText,
+                        description: null,
+                        links: [],
+                        collectAddress: false,
+                        exclusive: true,
+                        ordinal: listingPreference.multiselectQuestion.options.length,
+                      },
+                      listingPreference.multiselectQuestion,
+                      getInputType(listingPreference.multiselectQuestion.options)
                     )}
                 </fieldset>
               </ViewItem>

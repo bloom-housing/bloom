@@ -32,6 +32,7 @@ import {
   setExclusive,
   AuthContext,
   getExclusiveKeys,
+  preferenceFieldName,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
@@ -52,10 +53,13 @@ const ApplicationPreferencesAll = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
-    // defaultValues: {
-    //   application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
-    // },
+    defaultValues: {
+      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+    },
   })
+
+  console.log(mapApiToPreferencesForm(applicationPreferences))
+  console.log(getValues())
 
   const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(preference))
 
@@ -73,23 +77,22 @@ const ApplicationPreferencesAll = () => {
     })
   }, [profile])
 
-  console.log({ preference })
-
   /*
     Required to keep the form up to date before submitting this section if you're moving between pages
   */
   useEffect(() => {
-    // reset({
-    //   application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
-    // })
+    reset({
+      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+    })
     setExclusiveKeys(getExclusiveKeys(preference))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationPreferences, reset])
 
   const preferenceCheckboxIds = useMemo(() => {
-    const optionPaths = preference?.options?.map((option) => option.text) ?? []
+    const optionPaths =
+      preference?.options?.map((option) => preferenceFieldName(preference.text, option.text)) ?? []
     if (preference?.optOutText) {
-      optionPaths.push(preference?.optOutText)
+      optionPaths.push(preferenceFieldName(preference?.text, preference?.optOutText))
     }
     return optionPaths
   }, [preference])
@@ -98,20 +101,21 @@ const ApplicationPreferencesAll = () => {
     Submits the form
   */
   const onSubmit = (data) => {
-    // const body = mapPreferencesToApi(data)
-    // if (preferences.length > 1 && body) {
-    //   // If we've got more than one preference, save the data in segments
-    //   const currentPreferences = conductor.currentStep.application.preferences.filter(
-    //     (preference) => {
-    //       return preference.key !== body[0].key
-    //     }
-    //   )
-    //   conductor.currentStep.save([...currentPreferences, body[0]])
-    //   setApplicationPreferences([...currentPreferences, body[0]])
-    // } else {
-    //   // Otherwise, submit all at once
-    //   conductor.currentStep.save(body)
-    // }
+    const body = mapPreferencesToApi(data, preference)
+    console.log({ body })
+    if (preferences.length > 1 && body) {
+      // If we've got more than one preference, save the data in segments
+      const currentPreferences = conductor.currentStep.application.preferences.filter(
+        (preference) => {
+          return preference.key !== body.key
+        }
+      )
+      conductor.currentStep.save([...currentPreferences, body])
+      setApplicationPreferences([...currentPreferences, body])
+    } else {
+      // Otherwise, submit all at once
+      conductor.currentStep.save(body)
+    }
     // Update to the next page if we have more pages
     if (page !== preferences.length) {
       setPage(page + 1)
@@ -125,31 +129,27 @@ const ApplicationPreferencesAll = () => {
 
   const allOptionFieldNames = useMemo(() => {
     return preference?.options?.map((option) => {
-      return option.text
+      return preferenceFieldName(preference.text, option.text)
     })
   }, [preference])
 
   const watchPreferences = watch(allOptionFieldNames)
-  console.log({ watchPreferences })
 
   if (!clientLoaded || !preferenceCheckboxIds) {
     return null
   }
-
-  console.log({ preferenceCheckboxIds })
-  console.log({ errors })
 
   const getOption = (option: MultiselectOption, preference: MultiselectQuestion) => {
     return (
       <div className={`mb-5 ${option.ordinal !== 1 ? "border-t pt-5" : ""}`} key={option.text}>
         <div
           className={`mb-5 field ${
-            resolveObject(option.text.replace(/'/g, ""), errors) ? "error" : ""
+            resolveObject(preferenceFieldName(preference.text, option.text), errors) ? "error" : ""
           }`}
         >
           <Field
             id={option.text}
-            name={option.text}
+            name={preferenceFieldName(preference.text, option.text)}
             type={preferenceSetInputType}
             label={option.text}
             register={register}
@@ -159,16 +159,34 @@ const ApplicationPreferencesAll = () => {
                   void trigger()
                 }
                 if (option.exclusive && e.target.checked)
-                  setExclusive(true, setValue, exclusiveKeys, option.text, preference?.options)
+                  setExclusive(
+                    true,
+                    setValue,
+                    exclusiveKeys,
+                    preferenceFieldName(preference.text, option.text),
+                    preference?.options?.map((option) =>
+                      preferenceFieldName(preference.text, option.text)
+                    )
+                  )
                 if (!option.exclusive)
-                  setExclusive(false, setValue, exclusiveKeys, option.text, preference?.options)
+                  setExclusive(
+                    false,
+                    setValue,
+                    exclusiveKeys,
+                    preferenceFieldName(preference.text, option.text),
+                    preference?.options?.map((option) =>
+                      preferenceFieldName(preference.text, option.text)
+                    )
+                  )
               },
             }}
             validation={{
               validate: {
-                somethingIsChecked: (value) =>
-                  preference.optOutText &&
-                  (value || !!preferenceCheckboxIds.find((option) => getValues(option))),
+                somethingIsChecked: (value) => {
+                  if (preferenceSetInputType === "radio" || preference.optOutText) {
+                    return value || !!preferenceCheckboxIds.find((option) => getValues(option))
+                  }
+                },
               },
             }}
             dataTestId={"app-preference-option"}
@@ -191,19 +209,20 @@ const ApplicationPreferencesAll = () => {
           </div>
         )}
 
-        {watchPreferences[option.text] && option.collectAddress && (
-          <div className="pb-4">
-            <FormAddress
-              subtitle={t("application.preferences.options.address")}
-              dataKey={`${option.text}-address`}
-              register={register}
-              errors={errors}
-              required={true}
-              stateKeys={stateKeys}
-              data-test-id={"app-preference-extra-field"}
-            />
-          </div>
-        )}
+        {watchPreferences[preferenceFieldName(preference.text, option.text)] &&
+          option.collectAddress && (
+            <div className="pb-4">
+              <FormAddress
+                subtitle={t("application.preferences.options.address")}
+                dataKey={preferenceFieldName(preference.text, `${option.text}-address`)}
+                register={register}
+                errors={errors}
+                required={true}
+                stateKeys={stateKeys}
+                data-test-id={"app-preference-extra-field"}
+              />
+            </div>
+          )}
       </div>
     )
   }

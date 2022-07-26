@@ -7,7 +7,7 @@ import {
   ApplicationStatus,
   AddressUpdate,
   HouseholdMember,
-  Program,
+  MultiselectQuestion,
   Accessibility,
 } from "@bloom-housing/backend-core/types"
 
@@ -68,7 +68,7 @@ type mapFormToApiProps = {
   data: FormData
   listingId: string
   editMode: boolean
-  programs: Program[]
+  programs: MultiselectQuestion[]
 }
 
 /*

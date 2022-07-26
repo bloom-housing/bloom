@@ -1,7 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
 import { getUniqueUnitTypes, getProgramOptionName } from "@bloom-housing/shared-helpers"
-import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
+import {
+  Address,
+  AllExtraDataTypes,
+  ApplicationMultiselectQuestion,
+  ApplicationMultiselectQuestionOption,
+  InputType,
+  Listing,
+} from "@bloom-housing/backend-core/types"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,20 +83,10 @@ const FormSummaryDetails = ({
   const preferenceHelperText = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
     return extraData.reduce((acc, item, i) => {
-      if (
-        item.type === InputType.text ||
-        (item.type === InputType.hhMemberSelect && typeof item.value === "string")
-      ) {
-        acc += `${item.value.toString()}`
-        if (i + 1 < extraData.length) {
-          acc += ", "
-        }
-      }
-
       if (item.type === InputType.address && typeof item.value === "object") {
         acc += `
-          ${item.value.street},
-          ${item.value.street2 ?? ""},
+          ${item.value.street}${!item.value.street2 && ","}
+          ${item.value.street2 ? `${item.value.street2},` : ""}
           ${item.value.city},
           ${item.value.state}
           ${item.value.zipCode}
@@ -387,19 +384,19 @@ const FormSummaryDetails = ({
                 <>
                   {application.preferences
                     .filter((item) => item.claimed === true)
-                    .map((preference) =>
+                    .map((preference: ApplicationMultiselectQuestion) =>
                       preference.options
                         .filter((item) => item.checked === true)
-                        .map((option, index) => (
+                        .map((option: ApplicationMultiselectQuestionOption, index) => (
                           <ViewItem
-                            label={t("application.preferences.youHaveClaimed")}
+                            label={`${t("application.preferences.youHaveClaimed")} ${
+                              preference.key
+                            }`}
                             helper={preferenceHelperText(option?.extraData)}
                             key={index}
                             data-test-id={"app-summary-preference"}
                           >
-                            {t(`application.preferences.${preference.key}.${option.key}.label`, {
-                              county: listing?.countyCode,
-                            })}
+                            {option.key}
                           </ViewItem>
                         ))
                     )}

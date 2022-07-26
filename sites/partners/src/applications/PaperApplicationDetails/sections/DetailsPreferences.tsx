@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
-import { InputType, AddressCreate } from "@bloom-housing/backend-core/types"
+import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 
@@ -14,18 +14,10 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
   const application = useContext(ApplicationContext)
 
-  const listingPreferences = listingDto?.listingPreferences
+  const listingPreferences = listingDto?.listingMultiselectQuestions.filter(
+    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preference
+  )
   const preferences = application?.preferences
-
-  const hasMetaData = useMemo(() => {
-    return !!listingPreferences?.filter(
-      (listingPreference) => listingPreference.preference?.formMetadata
-    )?.length
-  }, [listingPreferences])
-
-  if (!hasMetaData) {
-    return null
-  }
 
   return (
     <GridSection
@@ -35,20 +27,16 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
       columns={2}
     >
       {listingPreferences?.map((listingPreference) => {
-        const metaKey = listingPreference?.preference?.formMetadata?.key
-        const optionDetails = preferences.find((item) => item.key === metaKey)
-
         return (
-          <GridCell key={listingPreference.preference.id}>
-            <ViewItem
-              label={t(`application.preferences.${metaKey}.title`, {
-                county: listingDto?.countyCode,
-              })}
-            >
+          <GridCell key={listingPreference.multiselectQuestion.text}>
+            <ViewItem label={listingPreference.multiselectQuestion.text}>
               {(() => {
-                if (!optionDetails?.claimed) return t("t.none")
+                const appPreference = preferences.filter(
+                  (pref) => pref.key === listingPreference.multiselectQuestion.text
+                )[0]
+                if (!appPreference.claimed) return t("t.none")
 
-                const options = optionDetails.options.filter((option) => option.checked)
+                const options = appPreference.options.filter((option) => option.checked)
 
                 return options.map((option) => {
                   const extra = option.extraData?.map((extra) => {
@@ -90,11 +78,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
                   return (
                     <div key={option.key}>
-                      <p>
-                        {t(`application.preferences.${metaKey}.${option.key}.label`, {
-                          county: listingDto?.countyCode,
-                        })}
-                      </p>
+                      <p>{option.key}</p>
                       <div className="my-5">{extra}</div>
                     </div>
                   )
