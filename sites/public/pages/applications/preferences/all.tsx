@@ -49,24 +49,29 @@ const ApplicationPreferencesAll = () => {
   const { conductor, application, listing } = useFormConductor("preferencesAll")
 
   const preferences = listing?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preference
+    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preferences
   )
   const [page, setPage] = useState(conductor.navigatedThroughBack ? preferences.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
   const preference = getPageQuestion(preferences, page)
 
+  const preferenceSetInputType = getInputType(preference?.options)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
     defaultValues: {
-      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+      application: {
+        [ApplicationSection.preferences]: mapApiToPreferencesForm(
+          applicationPreferences,
+          preferenceSetInputType
+        ),
+      },
     },
   })
 
   const [exclusiveKeys, setExclusiveKeys] = useState(
-    getExclusiveKeys(preference, ApplicationSection.preference)
+    getExclusiveKeys(preference, ApplicationSection.preferences)
   )
-
-  const preferenceSetInputType = getInputType(preference?.options)
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -79,21 +84,26 @@ const ApplicationPreferencesAll = () => {
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
     reset({
-      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+      application: {
+        [ApplicationSection.preferences]: mapApiToPreferencesForm(
+          applicationPreferences,
+          preferenceSetInputType
+        ),
+      },
     })
-    setExclusiveKeys(getExclusiveKeys(preference, ApplicationSection.preference))
+    setExclusiveKeys(getExclusiveKeys(preference, ApplicationSection.preferences))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationPreferences, reset])
 
   const allOptionNames = useMemo(() => {
-    return getAllOptions(preference, ApplicationSection.preference)
+    return getAllOptions(preference, ApplicationSection.preferences)
   }, [preference])
 
   const onSubmit = (data) => {
     console.log({ data })
     const body =
       preferenceSetInputType === "checkbox"
-        ? mapCheckboxesToApi(data, preference, ApplicationSection.preference)
+        ? mapCheckboxesToApi(data, preference, ApplicationSection.preferences)
         : mapRadiosToApi(data, preference)
     console.log({ body })
     if (preferences.length > 1 && body) {
@@ -130,7 +140,7 @@ const ApplicationPreferencesAll = () => {
     return getCheckboxOption(
       option,
       preference,
-      ApplicationSection.preference,
+      ApplicationSection.preferences,
       errors,
       register,
       trigger,
@@ -206,11 +216,11 @@ const ApplicationPreferencesAll = () => {
                 </fieldset>
               ) : (
                 getRadioFields(
-                  preference.options,
+                  preference?.options,
                   errors,
                   register,
                   preference,
-                  ApplicationSection.preference
+                  ApplicationSection.preferences
                 )
               )}
             </div>

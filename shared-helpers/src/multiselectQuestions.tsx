@@ -118,18 +118,18 @@ export const getRadioFields = (
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
         type={"radio"}
-        name={preference.text}
-        error={errors[preference.text]}
+        name={preference?.text}
+        error={errors[preference?.text]}
         errorMessage={t("errors.selectAnOption")}
         register={register}
         validation={{ required: true }}
         dataTestId={"app-program-option"}
         fields={options?.map((option) => {
           return {
-            id: option.text,
-            label: option.text,
-            value: option.text,
-            description: option.description,
+            id: option?.text,
+            label: option?.text,
+            value: option?.text,
+            description: option?.description,
             //   defaultChecked: programData?.options?.find((item) => item.key === option.key)?.checked,
           }
         })}
@@ -224,7 +224,7 @@ export const getCheckboxOption = (
         {getCheckboxField(
           option,
           question,
-          ApplicationSection.preference,
+          applicationSection,
           errors,
           register,
           trigger,
@@ -267,4 +267,73 @@ export const getCheckboxOption = (
       )}
     </div>
   )
+}
+
+export const mapRadiosToApi = (
+  data: { [name: string]: string },
+  question: MultiselectQuestion
+): ApplicationMultiselectQuestion => {
+  if (Object.keys(data).length === 0) {
+    return {
+      key: "",
+      claimed: false,
+      options: [],
+    }
+  }
+
+  const [key, value] = Object.entries(data)[0]
+  const options = []
+
+  options.push({
+    key: value,
+    checked: true,
+    extraData: [],
+  })
+  question?.options?.forEach((option) => {
+    if (option.text !== value) {
+      options.push({
+        key: option.text,
+        checked: false,
+        extraData: [],
+      })
+    }
+  })
+
+  return {
+    key,
+    claimed: true,
+    options,
+  }
+}
+
+export const mapCheckboxesToApi = (
+  formData: { [name: string]: boolean },
+  preference: MultiselectQuestion,
+  applicationSection: ApplicationSection
+): ApplicationMultiselectQuestion => {
+  console.log("mapPreferenceToApi")
+  const data = formData["application"][applicationSection][preference.text.replace(/'/g, "")]
+  const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
+
+  const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
+
+  const preferenceOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
+    .filter((option) => !Object.keys(data[option]).length)
+    .map((key) => {
+      const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
+
+      return {
+        key,
+        checked: data[key] === true,
+        extraData: addressData.length
+          ? [{ type: InputType.address, key, value: data[addressData[0]] }]
+          : [],
+      }
+    })
+
+  return {
+    key: preference.text ?? "",
+    claimed,
+    options: preferenceOptions,
+  }
 }
