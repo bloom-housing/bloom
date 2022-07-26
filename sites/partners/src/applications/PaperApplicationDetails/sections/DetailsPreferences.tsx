@@ -15,7 +15,7 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
   const application = useContext(ApplicationContext)
 
   const listingPreferences = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preference
+    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preferences
   )
   const preferences = application?.preferences
 

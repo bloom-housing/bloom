@@ -59,14 +59,11 @@ const ApplicationPreferencesAll = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
-    defaultValues: {
-      application: {
-        [ApplicationSection.preferences]: mapApiToPreferencesForm(
-          applicationPreferences,
-          preferenceSetInputType
-        ),
-      },
-    },
+    defaultValues: mapApiToPreferencesForm(
+      applicationPreferences,
+      preferences,
+      ApplicationSection.preferences
+    ),
   })
 
   const [exclusiveKeys, setExclusiveKeys] = useState(
@@ -83,14 +80,9 @@ const ApplicationPreferencesAll = () => {
 
   // Required to keep the form up to date before submitting this section if you're moving between pages
   useEffect(() => {
-    reset({
-      application: {
-        [ApplicationSection.preferences]: mapApiToPreferencesForm(
-          applicationPreferences,
-          preferenceSetInputType
-        ),
-      },
-    })
+    reset(
+      mapApiToPreferencesForm(applicationPreferences, preferences, ApplicationSection.preferences)
+    )
     setExclusiveKeys(getExclusiveKeys(preference, ApplicationSection.preferences))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationPreferences, reset])

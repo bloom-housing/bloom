@@ -64,7 +64,7 @@ const ApplicationSummary = () => {
           hidePreferences={
             listing?.listingMultiselectQuestions.filter(
               (question) =>
-                question.multiselectQuestion.applicationSection === ApplicationSection.preference
+                question.multiselectQuestion.applicationSection === ApplicationSection.preferences
             ).length === 0
           }
           editMode

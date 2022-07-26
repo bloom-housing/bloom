@@ -24,13 +24,12 @@ import { stateKeys } from "./formKeys"
 // Get a field name for an application multiselect question
 export const fieldName = (
   preferenceName: string,
-  optionName: string,
-  applicationSection: ApplicationSection
+  applicationSection: ApplicationSection,
+  optionName?: string
 ) => {
-  return `application.${applicationSection}.${preferenceName.replace(
-    /'/g,
-    ""
-  )}.${optionName.replace(/'/g, "")}`
+  return `application.${applicationSection}.${preferenceName.replace(/'/g, "")}${
+    optionName ? `.${optionName.replace(/'/g, "")}` : ""
+  }`
 }
 
 // Get an array of option field name strings for all options within a single preference that are exclusive
@@ -41,10 +40,10 @@ export const getExclusiveKeys = (
   const exclusive: string[] = []
   preference?.options?.forEach((option: MultiselectOption) => {
     if (option.exclusive)
-      exclusive.push(fieldName(preference.text, option.text, applicationSection))
+      exclusive.push(fieldName(preference.text, applicationSection, option.text))
   })
   if (preference?.optOutText)
-    exclusive.push(fieldName(preference.text, preference.optOutText, applicationSection))
+    exclusive.push(fieldName(preference.text, applicationSection, preference.optOutText))
   return exclusive
 }
 
@@ -97,10 +96,10 @@ export const getAllOptions = (
   applicationSection: ApplicationSection
 ) => {
   const optionPaths =
-    question?.options?.map((option) => fieldName(question.text, option.text, applicationSection)) ??
+    question?.options?.map((option) => fieldName(question.text, applicationSection, option.text)) ??
     []
   if (question?.optOutText) {
-    optionPaths.push(fieldName(question?.text, question?.optOutText, applicationSection))
+    optionPaths.push(fieldName(question?.text, applicationSection, question?.optOutText))
   }
   return optionPaths
 }
@@ -170,7 +169,7 @@ const getCheckboxField = (
               exclusiveKeys,
               optionFieldName,
               question?.options?.map((option) =>
-                fieldName(question.text, option.text, applicationSection)
+                fieldName(question.text, applicationSection, option.text)
               ) ?? []
             )
           }
@@ -181,7 +180,7 @@ const getCheckboxField = (
               exclusiveKeys,
               optionFieldName,
               question?.options?.map((option) =>
-                fieldName(question.text, option.text, applicationSection)
+                fieldName(question.text, applicationSection, option.text)
               ) ?? []
             )
           }
@@ -217,7 +216,7 @@ export const getCheckboxOption = (
     [x: string]: any
   }
 ) => {
-  const optionFieldName = fieldName(question.text, option.text, applicationSection)
+  const optionFieldName = fieldName(question.text, applicationSection, option.text)
   return (
     <div className={`mb-5 ${option.ordinal !== 1 ? "border-t pt-5" : ""}`} key={option.text}>
       <div className={`mb-5 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
@@ -256,7 +255,7 @@ export const getCheckboxOption = (
         <div className="pb-4">
           <FormAddress
             subtitle={t("application.preferences.options.address")}
-            dataKey={fieldName(question.text, `${option.text}-address`, applicationSection)}
+            dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
             register={register}
             errors={errors}
             required={true}

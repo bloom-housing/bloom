@@ -171,7 +171,7 @@ export const ListingView = (props: ListingProps) => {
 
   const listingPreferences = listing?.listingMultiselectQuestions.filter(
     (listingPref) =>
-      listingPref.multiselectQuestion.applicationSection === ApplicationSection.preference &&
+      listingPref.multiselectQuestion.applicationSection === ApplicationSection.preferences &&
       !listingPref.multiselectQuestion.hideFromListing
   )
 
