@@ -11,7 +11,7 @@ export class AuthzGuard implements CanActivate {
     const req = context.switchToHttp().getRequest()
     const authUser = req.user
 
-    if (authUser?.roles?.isAdmin || authUser?.roles?.isJurisdictionalAdmin) {
+    if (authUser?.roles?.isAdmin) {
       return true
     }
 

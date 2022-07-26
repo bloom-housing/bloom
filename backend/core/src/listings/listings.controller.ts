@@ -40,7 +40,7 @@ import { IdDto } from "../shared/dto/id.dto"
 @ApiBearerAuth()
 @ResourceType("listing")
 @ApiExtraModels(ListingFilterParams, ListingsApiExtraModels)
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard)
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
