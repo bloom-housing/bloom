@@ -33,6 +33,7 @@ import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-v
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
 import { ListingsApiExtraModels } from "./types/listings-api-extra-models"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -92,10 +93,10 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Delete(`:id`)
+  @Delete()
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  async delete(@Param("id") listingId: string) {
-    await this.listingsService.delete(listingId)
+  async delete(@Body() dto: IdDto) {
+    await this.listingsService.delete(dto.id)
   }
 }

@@ -146,12 +146,11 @@ describe("Authz", () => {
     it(`should not allow normal/anonymous user to DELETE to admin only endpoints`, async () => {
       for (const endpoint of adminOnlyEndpoints) {
         // anonymous
-        await supertest(app.getHttpServer())
-          .delete(endpoint + `/${uuidv4()}`)
-          .expect(403)
+        await supertest(app.getHttpServer()).delete(endpoint).send({ id: uuidv4() }).expect(403)
         // logged in normal user
         await supertest(app.getHttpServer())
-          .delete(endpoint + `/${uuidv4()}`)
+          .delete(endpoint)
+          .send({ id: uuidv4() })
           .set(...setAuthorization(userAccessToken))
           .expect(403)
       }
@@ -249,11 +248,13 @@ describe("Authz", () => {
     it(`should not allow normal/anonymous user to DELETE listings`, async () => {
       // anonymous
       await supertest(app.getHttpServer())
-        .delete(listingsEndpoint + `/${listing1Id}`)
+        .delete(listingsEndpoint)
+        .send({ id: listing1Id })
         .expect(403)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .delete(listingsEndpoint + `/${listing1Id}`)
+        .delete(listingsEndpoint)
+        .send({ id: listing1Id })
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })

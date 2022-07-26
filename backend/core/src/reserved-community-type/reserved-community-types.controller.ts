@@ -24,6 +24,7 @@ import {
 } from "./dto/reserved-community-type.dto"
 import { ReservedCommunityTypesService } from "./reserved-community-types.service"
 import { ReservedCommunityTypeListQueryParams } from "./dto/reserved-community-type-list-query-params"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("reservedCommunityTypes")
 @ApiTags("reservedCommunityTypes")
@@ -78,9 +79,9 @@ export class ReservedCommunityTypesController {
     )
   }
 
-  @Delete(`:reservedCommunityTypeId`)
+  @Delete()
   @ApiOperation({ summary: "Delete reservedCommunityType by id", operationId: "delete" })
-  async delete(@Param("reservedCommunityTypeId") reservedCommunityTypeId: string): Promise<void> {
-    return await this.reservedCommunityTypesService.delete(reservedCommunityTypeId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.reservedCommunityTypesService.delete(dto.id)
   }
 }
