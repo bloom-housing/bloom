@@ -83,6 +83,7 @@ views.partnerList = {
     ...getBaseAddressSelect(["buildingAddress"]),
     "listings.status",
     "listings.isVerified",
+    "listings.updatedAt",
   ],
   leftJoins: [
     { join: "listings.property", alias: "property" },

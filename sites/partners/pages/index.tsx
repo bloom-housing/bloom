@@ -17,6 +17,7 @@ import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
 import { ListingStatus, OrderByFieldsEnum, OrderDirEnum } from "@bloom-housing/backend-core/types"
+import dayjs from "dayjs"
 
 const COLUMN_STATE_KEY = "column-state"
 
@@ -125,7 +126,7 @@ export default function ListingsList() {
         unSortIcon: true,
         sort: "asc",
         filter: false,
-        width: 450,
+        width: 350,
         minWidth: 100,
         cellRenderer: "formatLinkCell",
       },
@@ -134,7 +135,7 @@ export default function ListingsList() {
         field: "buildingAddress.street",
         sortable: false,
         filter: false,
-        width: 495,
+        width: 350,
         minWidth: 100,
         valueFormatter: ({ value }) => (value ? value : t("t.none")),
       },
@@ -168,6 +169,13 @@ export default function ListingsList() {
         width: 150,
         minWidth: 100,
         valueFormatter: ({ value }) => (value ? t("t.yes") : t("t.no")),
+      },
+      {
+        headerName: t("listing.lastUpdated"),
+        field: "updatedAt",
+        sortable: true,
+        filter: false,
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
       },
     ]
     return columns

@@ -166,6 +166,7 @@
   "listings.firstComeFirstServe": "First come first serve",
   "listings.isDigitalApplication": "Is there a digital application?",
   "listings.isPaperApplication": "Is there a paper application?",
+  "listing.lastUpdated": "Last updated",
   "listings.latitude": "Latitude",
   "listings.leasingAgentAddress": "Leasing Agent Address",
   "listings.listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal.",
