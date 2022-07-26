@@ -325,11 +325,8 @@ export class EmailService {
   }
 
   async portalAccountUpdate(user: User, appUrl: string, existingUser: User) {
-    void (await this.loadTranslations(
-      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
-      user.language || Language.en
-    ))
     const jurisdiction = await this.getUserJurisdiction(user, existingUser)
+    void (await this.loadTranslations(jurisdiction, user.language || Language.en))
     await this.send(
       user.email,
       jurisdiction.emailFromAddress,
