@@ -19,7 +19,6 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/sw
 import { ListingDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
-import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Language } from "../shared/types/language-enum"
@@ -40,7 +39,7 @@ import { ListingsApiExtraModels } from "./types/listings-api-extra-models"
 @ApiBearerAuth()
 @ResourceType("listing")
 @ApiExtraModels(ListingFilterParams, ListingsApiExtraModels)
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard)
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {

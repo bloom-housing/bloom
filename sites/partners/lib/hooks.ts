@@ -68,7 +68,7 @@ export function useListingsData({
     search,
     view: "base",
   }
-  console.log("roles = ", roles)
+
   if (sort) {
     Object.assign(params, {
       orderBy: sort?.filter((item) => item.orderBy).map((item) => item.orderBy),

@@ -1,13 +1,9 @@
 p, admin, application, true, .*
-# adds/restricts permssions in service
-p, jurisdictionAdmin, application, true, .*
 p, user, application, true, submit
 p, user, application, r.sub == r.obj.userId, read
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*
-# adds/restricts permssions in service
-p, jurisdictionAdmin, user, true, .*
 p, admin, userProfile, true, .*
 p, user, user, r.sub == r.obj.id, read
 p, user, userProfile, r.sub == r.obj.id, (read|update)
@@ -61,7 +57,6 @@ p, jurisdictionAdmin, jurisdiction, true, read
 p, anonymous, jurisdiction, true, read
 
 p, admin, listing, true, .*
-p, jurisdictionAdmin, listing, true, .*
 p, anonymous, listing, true, read
 
 p, admin, reservedCommunityType, true, .*

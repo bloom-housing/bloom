@@ -200,11 +200,13 @@ describe("Authz", () => {
       // anonymous
       const applications = await applicationsRepository.find({ take: 1 })
       await supertest(app.getHttpServer())
-        .delete(applicationsEndpoint + `/${applications[0].id}`)
+        .delete(applicationsEndpoint)
+        .send({ id: applications[0].id })
         .expect(403)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .delete(applicationsEndpoint + `/${applications[0].id}`)
+        .delete(applicationsEndpoint)
+        .send({ id: applications[0].id })
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
