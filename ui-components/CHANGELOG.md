@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.25...@bloom-housing/ui-components@5.0.1-alpha.26) (2022-07-26)
+
+
+### Features
+
+* **eventsection:** allow EventSection to lowercase date ([246a13e](https://github.com/bloom-housing/bloom/commit/246a13e50d3b5bd464cdedde708f6c89b4f1db47)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+* **eventsection:** fix prop name; update story instance name ([ec1337b](https://github.com/bloom-housing/bloom/commit/ec1337ba2344d539767e70ec9e7766cf70f92033)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+* **eventsection:** make dateClassname optional ([5daa884](https://github.com/bloom-housing/bloom/commit/5daa884979457a5dc4ee9801fac22d5131b4d5d8)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+
+
+
+
+
 ## [5.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.24...@bloom-housing/ui-components@5.0.1-alpha.25) (2022-07-26)
 
 
