@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "5.0.1-alpha.33",
+  "version": "5.0.1-alpha.34",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -26,8 +26,8 @@
     "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start"
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^5.0.1-alpha.13",
-    "@bloom-housing/shared-helpers": "^5.0.1-alpha.32",
+    "@bloom-housing/backend-core": "^5.0.1-alpha.14",
+    "@bloom-housing/shared-helpers": "^5.0.1-alpha.33",
     "@bloom-housing/ui-components": "^5.0.1-alpha.24",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
