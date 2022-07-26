@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.26...@bloom-housing/ui-components@5.0.1-alpha.27) (2022-07-26)
+
+
+### Features
+
+* **listsection:** modify props to allow react children for list section subtitle ([ed07255](https://github.com/bloom-housing/bloom/commit/ed0725505961277aa0f293ec1e2b49330080df49))
+
+
+
+
+
 ## [5.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.25...@bloom-housing/ui-components@5.0.1-alpha.26) (2022-07-26)
 
 
