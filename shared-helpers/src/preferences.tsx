@@ -5,6 +5,7 @@ import {
   MultiselectOption,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
+  ApplicationSection,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -32,11 +33,50 @@ type PreferenceForm = {
   [name: string]: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mapPreferencesToApi = (
-  data: PreferenceForm,
-  preference: MultiselectQuestion
+export const mapRadiosToApi = (
+  data: { [name: string]: string },
+  question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
+  if (Object.keys(data).length === 0) {
+    return {
+      key: "",
+      claimed: false,
+      options: [],
+    }
+  }
+
+  const [key, value] = Object.entries(data)[0]
+  const options = []
+
+  options.push({
+    key: value,
+    checked: true,
+    extraData: [],
+  })
+  question?.options?.forEach((option) => {
+    if (option.text !== value) {
+      options.push({
+        key: option.text,
+        checked: false,
+        extraData: [],
+      })
+    }
+  })
+
+  return {
+    key,
+    claimed: true,
+    options,
+  }
+}
+
+export const mapCheckboxesToApi = (
+  formData: PreferenceForm,
+  preference: MultiselectQuestion,
+  applicationSection: ApplicationSection
+): ApplicationMultiselectQuestion => {
+  console.log("mapPreferenceToApi")
+  const data = formData["application"][applicationSection][preference.text.replace(/'/g, "")]
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
@@ -106,55 +146,4 @@ export const mapApiToPreferencesForm = (preferences: ApplicationMultiselectQuest
 export type ExclusiveKey = {
   optionKey: string
   preferenceKey: string | undefined
-}
-
-export const preferenceFieldName = (preferenceName: string, optionName: string) => {
-  return `application.preferences.${preferenceName.replace(/'/g, "")}.${optionName.replace(
-    /'/g,
-    ""
-  )}`
-}
-
-export const getExclusiveKeys = (preference: MultiselectQuestion) => {
-  const exclusive: string[] = []
-  preference?.options?.forEach((option: MultiselectOption) => {
-    if (option.exclusive) exclusive.push(preferenceFieldName(preference.text, option.text))
-  })
-  if (preference?.optOutText)
-    exclusive.push(preferenceFieldName(preference.text, preference.optOutText))
-  return exclusive
-}
-
-const uncheckOptions = (options: string[], setValue: (key: string, value: boolean) => void) => {
-  options?.forEach((option) => {
-    setValue(option, false)
-  })
-}
-
-/*
-  Set the value of an exclusive checkbox, unchecking all other boxes
-*/
-export const setExclusive = (
-  exclusiveValue: boolean,
-  setValue: (key: string, value: boolean) => void,
-  exclusiveKeys: string[],
-  exclusiveName: string,
-  allOptions: string[]
-) => {
-  if (exclusiveValue) {
-    // Uncheck all other keys if setting an exclusive key to true
-    uncheckOptions(allOptions, setValue)
-    setValue(exclusiveName, true)
-  } else {
-    // Uncheck all exclusive keys if setting a multiselect key to true
-    exclusiveKeys.forEach((exclusiveOption) => {
-      setValue(exclusiveOption, false)
-    })
-  }
-}
-
-export const getInputType = (options: MultiselectOption[]) => {
-  return options?.filter((option) => option.exclusive).length === options?.length
-    ? "radio"
-    : "checkbox"
 }
