@@ -485,6 +485,8 @@
   "authentication.createAccount.resendAnEmailTo": "Resend an email to",
   "authentication.createAccount.resendEmailInfo": "Please click on the link in the email we send you within 24 hours in order to complete account creation.",
   "authentication.createAccount.resendTheEmail": "Resend the email",
+  "authentication.forgotPassword.passwordConfirmation": "Password Confirmation",
+  "authentication.forgotPassword.enterNewLoginPassword": "Please enter new login password",
   "authentication.forgotPassword.changePassword": "Change Password",
   "authentication.forgotPassword.errors.emailNotFound": "Email not found. Please make sure your email has an account with us and is confirmed.",
   "authentication.forgotPassword.errors.tokenExpired": "Reset password token expired. Please request for a new one.",
