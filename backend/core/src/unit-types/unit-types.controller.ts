@@ -18,6 +18,7 @@ import {
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { UnitTypesService } from "./unit-types.service"
 import { UnitTypeCreateDto, UnitTypeDto, UnitTypeUpdateDto } from "./dto/unit-type.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("unitTypes")
 @ApiTags("unitTypes")
@@ -52,9 +53,9 @@ export class UnitTypesController {
     return mapTo(UnitTypeDto, await this.unitTypesService.findOne({ where: { id: unitTypeId } }))
   }
 
-  @Delete(`:unitTypeId`)
+  @Delete()
   @ApiOperation({ summary: "Delete unitType by id", operationId: "delete" })
-  async delete(@Param("unitTypeId") unitTypeId: string): Promise<void> {
-    return await this.unitTypesService.delete(unitTypeId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.unitTypesService.delete(dto.id)
   }
 }

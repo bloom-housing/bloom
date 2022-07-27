@@ -20,6 +20,7 @@ import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { UnitCreateDto } from "./dto/unit-create.dto"
 import { UnitUpdateDto } from "./dto/unit-update.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/units")
 @ApiTags("units")
@@ -54,9 +55,9 @@ export class UnitsController {
     return mapTo(UnitDto, await this.unitsService.findOne({ where: { id: unitId } }))
   }
 
-  @Delete(`:unitId`)
+  @Delete()
   @ApiOperation({ summary: "Delete unit by id", operationId: "delete" })
-  async delete(@Param("unitId") unitId: string): Promise<void> {
-    return await this.unitsService.delete(unitId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.unitsService.delete(dto.id)
   }
 }

@@ -53,7 +53,6 @@ describe("ApplicationFlaggedSets", () => {
     const testEmailService = {
       confirmation: async () => {},
     }
-    console.log("dbOptions = ", dbOptions)
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [

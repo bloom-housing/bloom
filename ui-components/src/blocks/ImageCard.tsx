@@ -20,27 +20,26 @@ export interface ImageTag {
   text?: string
   iconType?: UniversalIconType
   iconColor?: string
+  styleType?: AppearanceStyleType
 }
 
 export interface ImageCardProps {
+  /** A description of the image, used as alt text */
   description?: string
+  /** A link, used to wrap the entire component */
   href?: string
+  /** An image URL, used as the background image */
   imageUrl?: string
+  /** A list of status indicators, an ApplicationStatus component is rendered for each item at the bottom of the card */
   statuses?: StatusBarType[]
+  /** A list of image tags, a Tag component is rendered for each over the image */
   tags?: ImageTag[]
 }
 
 /**
  * @component ImageCard
  *
- * A component that renders an image with optional status bars below it
- *
- * @prop description - A description of the image, used as alt text
- * @prop href - A link, used to wrap the entire component
- * @prop imageUrl - An image URL, used as a background image
- * @prop statuses - A list of status indicators, an ApplicationStatus component is rendered for each item at the bottom of the card
- * @prop tags - A list of image tags, a Tag component is rendered for each over the image
- *
+ * A component that renders an image with optional tags at top and status bars below it
  */
 const ImageCard = (props: ImageCardProps) => {
   const getStatuses = () => {
@@ -61,18 +60,17 @@ const ImageCard = (props: ImageCardProps) => {
   }
 
   const image = (
-    <div className="image-card__wrapper">
+    <div className="image-card">
       <div className="image-card-tag__wrapper">
         {props.tags?.map((tag, index) => {
           return (
             <React.Fragment key={index}>
-              <Tag styleType={AppearanceStyleType.warning} className={"mt-3 mr-2 ml-2"}>
+              <Tag styleType={tag.styleType || AppearanceStyleType.warning}>
                 {tag.iconType && (
                   <Icon
                     size={"medium"}
                     symbol={tag.iconType}
                     fill={tag.iconColor ?? IconFillColors.primary}
-                    className={"mr-2"}
                   />
                 )}
                 {tag.text}
@@ -81,7 +79,7 @@ const ImageCard = (props: ImageCardProps) => {
           )
         })}
       </div>
-      <figure className="image-card">
+      <figure className="image-card__inner">
         {props.imageUrl ? (
           <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />
         ) : (

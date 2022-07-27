@@ -5,6 +5,7 @@ export interface GridCellProps {
   children: React.ReactNode
   span?: number
   className?: string
+  ariaLabel?: string
 }
 
 const GridCell = (props: GridCellProps) => {
@@ -12,7 +13,11 @@ const GridCell = (props: GridCellProps) => {
   if (props.span) gridCellClasses.push(`md:col-span-${props.span}`)
   if (props.className) gridCellClasses.push(props.className)
 
-  return <article className={gridCellClasses.join(" ")}>{props.children}</article>
+  return (
+    <article aria-label={props.ariaLabel ?? ""} className={gridCellClasses.join(" ")}>
+      {props.children}
+    </article>
+  )
 }
 
 export interface GridSectionProps {

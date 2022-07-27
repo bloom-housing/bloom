@@ -16,8 +16,8 @@ import {
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../formTypes"
-import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
@@ -27,7 +27,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, errors } = formMethods
+  const { register, watch, control } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing)
 
