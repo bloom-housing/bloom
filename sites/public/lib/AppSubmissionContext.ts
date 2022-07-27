@@ -49,6 +49,23 @@ export const retrieveApplicationConfig = (listing: Listing) => {
         name: "adaHouseholdMembers",
       },
       {
+        name: "vouchersSubsidies",
+      },
+      {
+        name: "income",
+      },
+    ],
+  }
+
+  // conditionally add programs
+  if (
+    listing.listingMultiselectQuestions.filter(
+      (question) => question.multiselectQuestion.applicationSection === ApplicationSection.programs
+    ).length
+  ) {
+    config.sections.push("programs")
+    config.steps.push(
+      {
         name: "householdChanges",
       },
       {
@@ -56,14 +73,8 @@ export const retrieveApplicationConfig = (listing: Listing) => {
       },
       {
         name: "programs",
-      },
-      {
-        name: "vouchersSubsidies",
-      },
-      {
-        name: "income",
-      },
-    ],
+      }
+    )
   }
 
   // conditionally add preferences
