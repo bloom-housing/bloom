@@ -6,7 +6,7 @@ import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 export const retrieveApplicationConfig = (listing: Listing) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   const config = {
-    sections: ["you", "household", "income"],
+    sections: ["you", "household"],
     languages: ["en", "es", "zh", "vi", "tl"],
     steps: [
       {
@@ -49,10 +49,10 @@ export const retrieveApplicationConfig = (listing: Listing) => {
         name: "adaHouseholdMembers",
       },
       {
-        name: "vouchersSubsidies",
+        name: "householdChanges",
       },
       {
-        name: "income",
+        name: "householdStudent",
       },
     ],
   }
@@ -64,18 +64,21 @@ export const retrieveApplicationConfig = (listing: Listing) => {
     ).length
   ) {
     config.sections.push("programs")
-    config.steps.push(
-      {
-        name: "householdChanges",
-      },
-      {
-        name: "householdStudent",
-      },
-      {
-        name: "programs",
-      }
-    )
+    config.steps.push({
+      name: "programs",
+    })
   }
+
+  config.sections.push("income")
+
+  config.steps.push(
+    {
+      name: "vouchersSubsidies",
+    },
+    {
+      name: "income",
+    }
+  )
 
   // conditionally add preferences
   if (

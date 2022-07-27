@@ -5,38 +5,39 @@ import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/bac
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
 
-type DetailsPreferencesProps = {
+type DetailsMultiselectQuestionsProps = {
   listingId: string
+  applicationSection: ApplicationSection
+  title: string
 }
 
-const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
+const DetailsMultiselectQuestions = ({
+  title,
+  applicationSection,
+  listingId,
+}: DetailsMultiselectQuestionsProps) => {
   const { listingDto } = useSingleListingData(listingId)
 
   const application = useContext(ApplicationContext)
 
-  const listingPreferences = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preferences
+  const listingQuestions = listingDto?.listingMultiselectQuestions.filter(
+    (question) => question.multiselectQuestion.applicationSection === applicationSection
   )
-  const preferences = application?.preferences
+  const questions = application[applicationSection]
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("application.details.preferences")}
-      inset
-      columns={2}
-    >
-      {listingPreferences?.map((listingPreference) => {
+    <GridSection className="bg-primary-lighter" title={title} inset columns={2}>
+      {listingQuestions?.map((listingQuestion) => {
         return (
-          <GridCell key={listingPreference.multiselectQuestion.text}>
-            <ViewItem label={listingPreference.multiselectQuestion.text}>
+          <GridCell key={listingQuestion.multiselectQuestion.text}>
+            <ViewItem label={listingQuestion.multiselectQuestion.text}>
               {(() => {
-                const appPreference = preferences.filter(
-                  (pref) => pref.key === listingPreference.multiselectQuestion.text
+                const appQuestion = questions.filter(
+                  (question) => question.key === listingQuestion.multiselectQuestion.text
                 )[0]
-                if (!appPreference.claimed) return t("t.none")
+                if (!appQuestion.claimed) return t("t.none")
 
-                const options = appPreference.options.filter((option) => option.checked)
+                const options = appQuestion.options.filter((option) => option.checked)
 
                 return options.map((option) => {
                   const extra = option.extraData?.map((extra) => {
@@ -92,4 +93,4 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
   )
 }
 
-export { DetailsPreferences as default, DetailsPreferences }
+export { DetailsMultiselectQuestions as default, DetailsMultiselectQuestions }

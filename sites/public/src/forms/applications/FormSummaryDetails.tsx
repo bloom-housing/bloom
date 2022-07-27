@@ -104,7 +104,8 @@ const FormSummaryDetails = ({
     applicationSection: ApplicationSection,
     appLink: string,
     header: string,
-    emptyText?: string
+    emptyText?: string,
+    className?: string
   ) => {
     return (
       <>
@@ -112,7 +113,10 @@ const FormSummaryDetails = ({
           {header}
           {editMode && <EditLink href={appLink} />}
         </h3>
-        <div id={applicationSection} className="form-card__group border-b mx-0">
+        <div
+          id={applicationSection}
+          className={`form-card__group mx-0 ${className ? className : ""}`}
+        >
           {emptyText ? (
             <p className="field-note text-black">{emptyText}</p>
           ) : (
@@ -124,7 +128,7 @@ const FormSummaryDetails = ({
                     .filter((item) => item.checked === true)
                     .map((option: ApplicationMultiselectQuestionOption, index) => (
                       <ViewItem
-                        label={`${t("application.preferences.youHaveClaimed")} ${question.key}`}
+                        label={question.key}
                         helper={multiselectQuestionAddress(option?.extraData)}
                         key={index}
                         data-test-id={"app-summary-preference"}
@@ -367,19 +371,6 @@ const FormSummaryDetails = ({
               </Fragment>
             ))}
           </ViewItem>
-          {application.programs
-            .filter((item) => item.claimed === true)
-            .map((program) =>
-              program.options
-                .filter((item) => item.checked === true)
-                .map((option, index) => (
-                  <ViewItem label={t(`application.programs.${program.key}.summary`)} key={index}>
-                    {t(getProgramOptionName(option.key, program.key), {
-                      county: listing?.countyCode,
-                    })}
-                  </ViewItem>
-                ))
-            )}
           <ViewItem id="householdChanges" label={t("application.household.expectingChanges.title")}>
             {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
           </ViewItem>
@@ -388,12 +379,24 @@ const FormSummaryDetails = ({
           </ViewItem>
         </div>
 
+        {!hidePrograms &&
+          multiselectQuestionSection(
+            ApplicationSection.programs,
+            "/applications/programs/programs",
+            t("t.programs"),
+            application.programs.filter((item) => item.claimed == true).length == 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.countyCode,
+                })} ${t("application.preferences.general.preamble")}`
+              : null
+          )}
+
         <h3 className="form--card__sub-header">
           {t("t.income")}
           {editMode && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
-        <div className="form-card__group border-b mx-0">
+        <div className="form-card__group mx-0">
           <ViewItem
             data-test-id={"app-summary-income-vouchers"}
             id="incomeVouchers"
@@ -418,19 +421,8 @@ const FormSummaryDetails = ({
               ? `${t("application.preferences.general.title", {
                   county: listing?.countyCode,
                 })} ${t("application.preferences.general.preamble")}`
-              : null
-          )}
-
-        {!hidePrograms &&
-          multiselectQuestionSection(
-            ApplicationSection.programs,
-            "/applications/programs/programs",
-            t("t.programs"),
-            application.programs.filter((item) => item.claimed == true).length == 0
-              ? `${t("application.preferences.general.title", {
-                  county: listing?.countyCode,
-                })} ${t("application.preferences.general.preamble")}`
-              : null
+              : null,
+            "border-b"
           )}
       </div>
     </>

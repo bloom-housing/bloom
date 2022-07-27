@@ -28,7 +28,7 @@ const ApplicationTerms = () => {
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const currentPageSection = 5
+  const currentPageSection = 6
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
