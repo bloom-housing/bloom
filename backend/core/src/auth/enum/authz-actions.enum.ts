@@ -6,4 +6,7 @@ export enum authzActions {
   submit = "submit",
   confirm = "confirm",
   invite = "invite",
+  invitePartner = "invitePartner",
+  inviteJurisdictionalAdmin = "inviteJurisdictionalAdmin",
+  inviteSuperAdmin = "inviteSuperAdmin",
 }

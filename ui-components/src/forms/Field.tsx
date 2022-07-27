@@ -74,7 +74,7 @@ const Field = (props: FieldProps) => {
     if (props.caps) labelClasses.push("field-label--caps")
     if (props.primary) labelClasses.push("text-primary")
     if (props.readerOnly) labelClasses.push("sr-only")
-    if (props.type === "checkbox" || props.type === "radio") {
+    if (props.type === "radio") {
       labelClasses.push("font-semibold")
     }
 
