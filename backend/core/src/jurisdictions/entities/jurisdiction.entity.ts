@@ -83,4 +83,10 @@ export class Jurisdiction extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   enableAccessibilityFeatures: boolean | null
+
+  @Column({ type: "boolean", nullable: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  enableUtilitiesIncluded: boolean | null
 }

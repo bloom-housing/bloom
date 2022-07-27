@@ -6,7 +6,7 @@ export default {
   title: "Actions/Expandable Content",
 }
 
-const content = <div>Sample Content</div>
+const content = <div className={"mb-2"}>Sample Content</div>
 
 export const standard = () => (
   <ExpandableContent strings={{ readMore: "read more", readLess: "read less" }}>

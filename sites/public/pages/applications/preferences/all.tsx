@@ -233,9 +233,9 @@ const ApplicationPreferencesAll = () => {
         </div>
 
         {!(description === false) && (
-          <div className="ml-8 -mt-3 mb-5">
+          <div className="ml-8 -mt-5 mb-5">
             <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
-              <p className="field-note mb-8">
+              <p className="field-note mb-2">
                 {t(
                   `application.preferences.${preference.formMetadata.key}.${optionKey}.description`,
                   { county: listing?.countyCode }

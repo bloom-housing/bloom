@@ -19,7 +19,6 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/sw
 import { ListingDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
-import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Language } from "../shared/types/language-enum"
@@ -34,13 +33,14 @@ import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-v
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
 import { ListingsApiExtraModels } from "./types/listings-api-extra-models"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("listings")
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
 @ApiExtraModels(ListingFilterParams, ListingsApiExtraModels)
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard)
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
@@ -93,10 +93,10 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Delete(`:id`)
+  @Delete()
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  async delete(@Param("id") listingId: string) {
-    await this.listingsService.delete(listingId)
+  async delete(@Body() dto: IdDto) {
+    await this.listingsService.delete(dto.id)
   }
 }

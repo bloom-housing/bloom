@@ -1,38 +1,72 @@
 .side-nav {
-  @apply border;
-  @apply rounded-lg;
+  --border: solid var(--bloom-border-1) var(--bloom-color-gray-450);
+  --border-radius: var(--bloom-rounded-lg);
+  --current-padding-inline: var(--bloom-s6);
+  --current-padding-block: var(--bloom-s4);
+  --link-color: var(--bloom-color-gray-700);
+  --current-selection-color: var(--bloom-color-gray-900);
+  --selection-parent-accent: var(--bloom-color-gray-450);
+  --hover-link-color: var(--bloom-color-primary);
+  --hover-background-color: var(--bloom-color-primary-lighter);
 
-  li {
-    &:first-of-type {
-      @apply rounded-t-lg;
+  border: var(--border);
+  border-radius: var(--border-radius);
+
+  & > ul {
+    & > li:first-child > a {
+      border-top-right-radius: var(--border-radius);
+      border-top-left-radius: var(--border-radius);
     }
 
-    &:last-of-type {
-      @apply rounded-b-lg;
+    & > li:last-child > a {
+      border-bottom-right-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
     }
 
-    &.is-current {
-      cursor: pointer;
-      @apply text-gray-900;
-      box-shadow: inset 3px 0px 0px 0px $tailwind-primary;
-      @apply block;
-      @apply px-4;
-      @apply py-2;
-    }
-
-    &:not(:last-child) {
-      @apply border-b;
+    & > li > ul > li:first-child {
+      border-top: var(--border);
     }
   }
 
+  li:not(:last-child) {
+    border-bottom: var(--border);
+  }
+
   a {
-    @apply text-gray-700;
-    @apply block;
-    @apply px-4;
-    @apply py-2;
-    &:hover {
-      @apply bg-primary-lighter;
-      @apply text-primary;
+    display: flex;
+    justify-content: space-between;
+    color: var(--link-color);
+    padding-inline: var(--current-padding-inline);
+    padding-block: var(--current-padding-block);
+
+    &[aria-current] {
+      color: var(--current-selection-color);
     }
+
+    &[aria-current]:not(:focus) {
+      box-shadow: inset 3px 0px 0px 0px var(--hover-link-color);
+    }
+
+    &.has-current-child {
+      color: var(--current-selection-color);
+    }
+
+    &.has-current-child:not(:focus) {
+      box-shadow: inset 3px 0px 0px 0px var(--selection-parent-accent);
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--hover-background-color);
+      color: var(--hover-link-color);
+    }
+
+    span:last-of-type {
+      color: var(--link-color);
+    }
+  }
+
+  ul ul a {
+    padding-inline-start: calc(var(--current-padding-inline) + var(--current-padding-block));
   }
 }

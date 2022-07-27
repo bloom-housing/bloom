@@ -1,0 +1,10 @@
+{
+  "email": "alameda-admin@example.com",
+  "emailConfirmation": "alameda-admin@example.com",
+  "firstName": "Alameda",
+  "middleName": "Admin",
+  "lastName": "MFA",
+  "dob": "1980-01-01",
+  "password": "abcdef",
+  "passwordConfirmation": "abcdef"
+}

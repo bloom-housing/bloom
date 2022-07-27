@@ -141,39 +141,41 @@ h1.title {
 }
 
 .card-header {
-  @apply font-alt-sans;
-  @apply font-semibold;
-  @apply text-blue-700;
-  @apply text-3xl;
-  @apply mb-3;
-  @apply leading-tight;
+  font-family: var(--card-header-font-family, var(--bloom-font-alt-sans));
+  font-weight: var(--card-header-font-weight, 600);
+  color: var(--card-header-color, var(--bloom-color-blue-700));
+  font-size: var(--card-header-font-size, var(--bloom-font-size-3xl));
+  margin-block: var(--card-header-margin-block, 0 var(--bloom-s3));
+  line-height: var(--card-header-line-height, var(--bloom-line-height-tight));
 }
 
 .card-subheader {
-  @apply font-alt-sans;
-  @apply text-black;
-  @apply text-base;
-  @apply mb-3;
+  font-family: var(--card-subheader-font-family, var(--bloom-font-alt-sans));
+  font-weight: var(--card-subheader-font-weight, normal);
+  color: var(--card-subheader-color, var(--bloom-color-black));
+  font-size: var(--card-subheader-font-size, var(--bloom-font-size-base));
+  margin-block: var(--card-subheader-margin-block, 0 var(--bloom-s3));
 }
 
 .table-header {
-  @apply font-alt-sans;
-  @apply font-semibold;
-  @apply text-gray-800;
-  @apply text-sm;
-  @apply mb-1;
+  font-family: var(--table-header-font-family, var(--bloom-font-alt-sans));
+  font-weight: var(--table-header-font-weight, 600);
+  color: var(--table-header-color, var(--bloom-color-gray-800));
+  font-size: var(--table-header-font-size, var(--bloom-font-size-sm));
+  margin-block: var(--table-header-margin-block, 0 var(--bloom-s1));
 }
 
 .table-subheader {
-  @apply font-alt-sans;
-  @apply text-gray-750;
-  @apply text-sm;
-  @apply mb-3;
+  font-family: var(--table-subheader-font-family, var(--bloom-font-alt-sans));
+  font-weight: var(--table-subheader-font-weight, normal);
+  color: var(--table-subheader-color, var(--bloom-color-gray-750));
+  font-size: var(--table-subheader-font-size, var(--bloom-font-size-sm));
+  margin-block: var(--table-header-margin-block, 0 var(--bloom-s3));
 }
 
 .category-header {
-  @apply font-alt-sans;
-  @apply font-semibold;
-  @apply text-gray-700;
-  @apply text-sm;
+  font-family: var(--category-header-font-family, var(--bloom-font-alt-sans));
+  font-weight: var(--category-header-font-weight, 600);
+  color: var(--category-header-color, var(--bloom-color-gray-700));
+  font-size: var(--category-header-font-size, var(--bloom-font-size-sm));
 }

@@ -10,7 +10,14 @@ describe("<AdditionalFees>", () => {
       <AdditionalFees
         applicationFee={"$30"}
         deposit={"$1140 - $1500"}
-        costsNotIncluded={"Resident responsible for PG&E, internet and phone."}
+        footerContent={[
+          <ul>
+            <li key={0} className={"list-disc list-inside flex-nowrap"}>
+              Gas
+            </li>
+          </ul>,
+          "Resident responsible for PG&E, internet and phone.",
+        ]}
         strings={{
           sectionHeader: "Additional Fees",
           deposit: "Deposit",
@@ -33,5 +40,6 @@ describe("<AdditionalFees>", () => {
     expect(getByText("Due at interview")).toBeTruthy()
     expect(getByText("or one month's rent")).toBeTruthy()
     expect(getByText("May be higher for lower credit scores")).toBeTruthy()
+    expect(getByText("Gas", { exact: false })).toBeTruthy()
   })
 })

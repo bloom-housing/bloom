@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
@@ -24,8 +24,11 @@ const ResetPassword = () => {
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, watch } = useForm()
   const [requestError, setRequestError] = useState<string>()
+
+  const passwordValue = useRef({})
+  passwordValue.current = watch("password", "")
 
   const onSubmit = async (data: { password: string; passwordConfirmation: string }) => {
     const { password, passwordConfirmation } = data
@@ -64,20 +67,24 @@ const ResetPassword = () => {
             <Field
               caps={true}
               name="password"
-              label="Password"
+              label={t("authentication.createAccount.password")}
               validation={{ required: true }}
               error={errors.password}
-              errorMessage="Please enter new login password"
+              errorMessage={t("authentication.forgotPassword.enterNewLoginPassword")}
               register={register}
               type="password"
             />
             <Field
               caps={true}
               name="passwordConfirmation"
-              label="Password Confirmation"
-              validation={{ required: true }}
-              error={errors.password}
-              errorMessage="Password confirmation does not match"
+              label={t("authentication.forgotPassword.passwordConfirmation")}
+              validation={{
+                validate: (value) =>
+                  value === passwordValue.current ||
+                  t("authentication.createAccount.errors.passwordMismatch"),
+              }}
+              error={errors.passwordConfirmation}
+              errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
               register={register}
               type="password"
             />

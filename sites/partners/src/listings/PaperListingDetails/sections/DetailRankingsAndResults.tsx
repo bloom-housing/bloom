@@ -4,7 +4,7 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { getLotteryEvent } from "../../../../lib/helpers"
+import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
 

@@ -18,7 +18,6 @@ import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/ap
 import { AuthzService } from "../../auth/services/authz.service"
 import { ListingsService } from "../../listings/listings.service"
 import { Application } from "../entities/application.entity"
-import { Listing } from "../../listings/entities/listing.entity"
 import { authzActions } from "../../auth/enum/authz-actions.enum"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
@@ -27,6 +26,7 @@ import { PaginatedApplicationListQueryParams } from "../dto/paginated-applicatio
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -37,22 +37,30 @@ export class ApplicationsService {
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
-    @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
+    @InjectRepository(ListingRepository) private readonly listingsRepository: ListingRepository
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
     const qb = this._getQb(params)
     const result = await qb.getMany()
+
     await Promise.all(
       result.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        await this.authorizeUserAction(
+          this.req.user,
+          application,
+          application.listingId,
+          authzActions.read
+        )
       })
     )
+
     return result
   }
 
   public async rawListWithFlagged(params: ApplicationsCsvListQueryParams) {
     await this.authorizeCSVExport(this.req.user, params.listingId)
+
     const qb = this._getQb(params)
     qb.leftJoin(
       "application_flagged_set_applications_applications",
@@ -98,9 +106,15 @@ export class ApplicationsService {
 
     await Promise.all(
       result.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        await this.authorizeUserAction(
+          this.req.user,
+          application,
+          application.listingId,
+          authzActions.read
+        )
       })
     )
+
     return {
       ...applicationIDResult,
       items: result,
@@ -109,11 +123,13 @@ export class ApplicationsService {
 
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
+
     const listing = await this.listingsRepository
       .createQueryBuilder("listings")
       .where(`listings.id = :listingId`, { listingId: applicationCreateDto.listing.id })
-      .select("listings.applicationDueDate")
+      .select(["listings.applicationDueDate", "listings.id"])
       .getOne()
+
     if (
       listing &&
       listing.applicationDueDate &&
@@ -121,7 +137,14 @@ export class ApplicationsService {
     ) {
       throw new BadRequestException("Listing is not open for application submission.")
     }
-    await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
+
+    await this.authorizeUserAction(
+      this.req.user,
+      applicationCreateDto,
+      listing.id,
+      authzActions.submit
+    )
+
     return await this._create(
       {
         ...applicationCreateDto,
@@ -132,18 +155,35 @@ export class ApplicationsService {
   }
 
   async create(applicationCreateDto: ApplicationCreateDto) {
-    await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
+    await this.authorizeUserAction(
+      this.req.user,
+      applicationCreateDto,
+      applicationCreateDto.listing.id,
+      authzActions.create
+    )
+
     return this._create(applicationCreateDto, false)
   }
 
   async findOne(applicationId: string) {
-    const application = await this.repository.findOneOrFail({
+    const application = await this.repository.findOne({
       where: {
         id: applicationId,
       },
       relations: ["user"],
     })
-    await this.authorizeUserAction(this.req.user, application, authzActions.read)
+
+    if (!application) {
+      throw new NotFoundException()
+    }
+
+    await this.authorizeUserAction(
+      this.req.user,
+      application,
+      application.listingId,
+      authzActions.read
+    )
+
     return application
   }
 
@@ -151,10 +191,18 @@ export class ApplicationsService {
     const application = await this.repository.findOne({
       where: { id: applicationUpdateDto.id },
     })
+
     if (!application) {
       throw new NotFoundException()
     }
-    await this.authorizeUserAction(this.req.user, application, authzActions.update)
+
+    await this.authorizeUserAction(
+      this.req.user,
+      application,
+      application.listingId,
+      authzActions.update
+    )
+
     assignDefined(application, {
       ...applicationUpdateDto,
       id: application.id,
@@ -164,7 +212,9 @@ export class ApplicationsService {
       "SERIALIZABLE",
       async (transactionalEntityManager) => {
         const applicationsRepository = transactionalEntityManager.getRepository(Application)
+
         const newApplication = await applicationsRepository.save(application)
+
         await this.applicationFlaggedSetsService.onApplicationUpdate(
           application,
           transactionalEntityManager
@@ -176,8 +226,19 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
-    const application = await this.findOne(applicationId)
-    await this.authorizeUserAction(this.req.user, application, authzActions.delete)
+    const application = await this.repository.findOne({ id: applicationId })
+
+    if (!application) {
+      throw new NotFoundException()
+    }
+
+    await this.authorizeUserAction(
+      this.req.user,
+      application,
+      application.listingId,
+      authzActions.delete
+    )
+
     return await this.repository.softRemove({ id: applicationId })
   }
 
@@ -216,6 +277,7 @@ export class ApplicationsService {
         paramsMap[paramKey](qb, params)
       }
     })
+
     return qb
   }
 
@@ -303,21 +365,17 @@ export class ApplicationsService {
   private async authorizeUserAction<T extends Application | ApplicationCreateDto>(
     user,
     app: T,
+    listingId: string,
     action
   ) {
-    let resource: T = app
+    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
 
-    if (app instanceof Application) {
-      resource = {
-        ...app,
-        listing_id: app.listingId,
-      }
-    } else if (app instanceof ApplicationCreateDto) {
-      resource = {
-        ...app,
-        listing_id: app.listing.id,
-      }
+    const resource: T & { listingId: string; jurisdictionId: string } = {
+      ...app,
+      listingId,
+      jurisdictionId,
     }
+
     return this.authzService.canOrThrow(user, "application", action, resource)
   }
 
@@ -325,8 +383,11 @@ export class ApplicationsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
+    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
+
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
       id: listingId,
+      jurisdictionId,
     })
   }
 

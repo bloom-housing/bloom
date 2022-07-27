@@ -81,13 +81,13 @@ export class TranslationsService extends AbstractServiceFactory<
       "requiredDocuments",
       "specialNotes",
       "whatToExpect",
-      "property.accessibility",
-      "property.amenities",
-      "property.neighborhood",
-      "property.petPolicy",
-      "property.servicesOffered",
-      "property.smokingPolicy",
-      "property.unitAmenities",
+      "accessibility",
+      "amenities",
+      "neighborhood",
+      "petPolicy",
+      "servicesOffered",
+      "smokingPolicy",
+      "unitAmenities",
     ]
 
     for (let i = 0; i < listing.events.length; i++) {

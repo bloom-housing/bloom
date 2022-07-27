@@ -13,7 +13,10 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
   const { profile } = useContext(AuthContext)
 
   const leasingAgentInListingsIds = profile.leasingAgentInListings.map((item) => item.id)
-  const hasPrivileges = profile.roles?.isAdmin || leasingAgentInListingsIds.includes(listingId)
+  const hasPrivileges =
+    profile.roles?.isAdmin ||
+    profile.roles?.isJurisdictionalAdmin ||
+    leasingAgentInListingsIds.includes(listingId)
 
   if (hasPrivileges) {
     return children
