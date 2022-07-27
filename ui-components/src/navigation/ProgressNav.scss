@@ -9,7 +9,7 @@
 
 .progress-nav__item {
   @apply text-2xs;
-  @apply px-2;
+  @apply px-1;
   @apply py-3;
   @apply relative;
   @apply text-center;
@@ -22,6 +22,7 @@
   @screen md {
     @apply text-sm;
     @apply p-0;
+    @apply px-2;
   }
 
   &:before {

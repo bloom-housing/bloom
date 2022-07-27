@@ -34,12 +34,18 @@ export interface ApplicationMultiselectQuestionStepProps {
   applicationSection: ApplicationSection
   applicationStep: string
   applicationSectionNumber: number
+  strings?: {
+    title?: string
+    subTitle?: string
+    selectText?: string
+  }
 }
 
 const ApplicationMultiselectQuestionStep = ({
   applicationSection,
   applicationStep,
   applicationSectionNumber,
+  strings,
 }: ApplicationMultiselectQuestionStepProps) => {
   const clientLoaded = OnClientSide()
   const { profile } = useContext(AuthContext)
@@ -158,10 +164,8 @@ const ApplicationMultiselectQuestionStep = ({
         />
 
         <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t(`application.${applicationSection}.title`)}
-          </h2>
-          <p className="field-note mt-5">{t(`application.${applicationSection}.preamble`)}</p>
+          <h2 className="form-card__title is-borderless">{strings?.title ?? question?.text}</h2>
+          <p className="field-note mt-5">{strings?.subTitle ?? question?.subText}</p>
         </div>
 
         {!!Object.keys(errors).length && (
@@ -171,7 +175,11 @@ const ApplicationMultiselectQuestionStep = ({
         )}
 
         <div className="form-card__group px-0 pb-0">
-          <p className="field-note">{t(`application.${applicationSection}.selectBelow`)}</p>
+          <p className="field-note">
+            {strings?.selectText ?? questionSetInputType === "radio"
+              ? t("t.pleaseSelectOne")
+              : t("errors.selectAllThatApply")}
+          </p>
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit)}>

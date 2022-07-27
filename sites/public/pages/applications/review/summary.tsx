@@ -67,6 +67,12 @@ const ApplicationSummary = () => {
                 question.multiselectQuestion.applicationSection === ApplicationSection.preferences
             ).length === 0
           }
+          hidePrograms={
+            listing?.listingMultiselectQuestions.filter(
+              (question) =>
+                question.multiselectQuestion.applicationSection === ApplicationSection.programs
+            ).length === 0
+          }
           editMode
         />
 
