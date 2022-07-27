@@ -26,3 +26,13 @@ export class ApplicationsCsvListQueryParams extends OmitType(PaginatedApplicatio
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeDemographics?: boolean
 }
+
+export class RawApplicationsListQueryParams extends OmitType(ApplicationsCsvListQueryParams, [
+  "search",
+  "userId",
+  "orderBy",
+  "order",
+  "markedAsDuplicate",
+  "page",
+  "limit",
+]) {}

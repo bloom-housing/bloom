@@ -111,8 +111,16 @@ const ApplicationTerms = () => {
 
         <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager-row">
+            {listing?.applicationDueDate && (
+              <Markdown options={{ disableParsingRawHTML: false }}>
+                {t("application.review.terms.textSubmissionDate", {
+                  applicationDueDate: applicationDueDate,
+                })}
+              </Markdown>
+            )}
+
             <Markdown options={{ disableParsingRawHTML: false }}>
-              {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
+              {t("application.review.terms.text")}
             </Markdown>
 
             <div className="mt-4">

@@ -33,10 +33,10 @@ describe("<ListingCard>", () => {
         cardTags={[{ text: "card tag 1" }, { text: "card tag 2" }]}
         footerButtons={[{ text: "see details", href: `see-details-link` }]}
         contentProps={{
-          contentHeader: { text: "title" },
-          contentSubheader: { text: "subtitle" },
-          tableHeader: { text: "optional table header" },
-          tableSubheader: { text: "optional table subheader" },
+          contentHeader: { content: "title" },
+          contentSubheader: { content: "subtitle" },
+          tableHeader: { content: "optional table header" },
+          tableSubheader: { content: "optional table subheader" },
         }}
       >
         <div>child content</div>
@@ -66,8 +66,8 @@ describe("<ListingCard>", () => {
           href: "listing-link",
         }}
         contentProps={{
-          contentHeader: { text: "title" },
-          contentSubheader: { text: "subtitle" },
+          contentHeader: { content: "title" },
+          contentSubheader: { content: "subtitle" },
         }}
       />
     )

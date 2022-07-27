@@ -7,11 +7,12 @@ import { Unit } from "../units/entities/unit.entity"
 import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
 import { User } from "../auth/entities/user.entity"
-import { Property } from "../property/entities/property.entity"
 import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
+import { ListingRepository } from "./db/listing.repository"
+import { ListingUtilities } from "./entities/listing-utilities.entity"
 
 @Module({
   imports: [
@@ -20,9 +21,10 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
       Preference,
       Unit,
       User,
-      Property,
       AmiChart,
+      ListingRepository,
       ListingFeatures,
+      ListingUtilities,
     ]),
     AuthModule,
     TranslationsModule,

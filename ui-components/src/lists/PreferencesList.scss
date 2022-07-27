@@ -1,10 +1,10 @@
 .preferences-list__item {
   .info-card__title {
     @apply mb-0;
-    @apply ml-4;
 
-    @screen md {
-      @apply ml-2;
+    @media (max-width: $screen-md) {
+      margin-left: 0px;
+      margin-top: var(--bloom-s3);
     }
   }
 }
@@ -37,7 +37,12 @@
   width: 2.5rem;
 
   @screen md {
-    margin-left: -2.65rem;
+    margin-left: -3rem;
+  }
+
+  @media (max-width: $screen-md) {
+    margin-left: 0px;
+    float: none;
   }
 
   sup {
@@ -47,17 +52,16 @@
 }
 
 .preferences-list__subtitle {
-  @apply text-gray-700;
+  @apply text-gray-750;
   @apply text-tiny;
-  @apply ml-4;
 
-  @screen md {
-    @apply ml-2;
+  @media (max-width: $screen-md) {
+    margin-left: 0px;
   }
 }
 
 .preferences-list__description {
-  @apply text-gray-700;
+  @apply text-gray-750;
   @apply text-sm;
   @apply mt-3;
 }

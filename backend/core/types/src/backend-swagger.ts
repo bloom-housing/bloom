@@ -89,594 +89,6 @@ export class PagedResult<T> implements IPagedResult<T> {
 // customer definition
 // empty
 
-export class AmiChartsService {
-  /**
-   * List amiCharts
-   */
-  list(
-    params: {
-      /**  */
-      jurisdictionName?: string
-      /**  */
-      jurisdictionId?: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        jurisdictionName: params["jurisdictionName"],
-        jurisdictionId: params["jurisdictionId"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create amiChart
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: AmiChartCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update amiChart
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: AmiChartUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts/{amiChartId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get amiChart by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      amiChartId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<AmiChart> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts/{amiChartId}"
-      url = url.replace("{amiChartId}", params["amiChartId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete amiChart by id
-   */
-  delete(
-    params: {
-      /**  */
-      amiChartId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/amiCharts/{amiChartId}"
-      url = url.replace("{amiChartId}", params["amiChartId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ApplicationFlaggedSetsService {
-  /**
-   * List application flagged sets
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number
-      /**  */
-      listingId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PaginatedApplicationFlaggedSet> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        listingId: params["listingId"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Retrieve application flagged set by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      afsId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationFlaggedSet> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/{afsId}"
-      url = url.replace("{afsId}", params["afsId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resolve application flagged set
-   */
-  resolve(
-    params: {
-      /** requestBody */
-      body?: ApplicationFlaggedSetResolve
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationFlaggedSet> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/resolve"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ApplicationMethodsService {
-  /**
-   * List applicationMethods
-   */
-  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create applicationMethod
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ApplicationMethodCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update applicationMethod
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ApplicationMethodUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods/{applicationMethodId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get applicationMethod by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      applicationMethodId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ApplicationMethod> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods/{applicationMethodId}"
-      url = url.replace("{applicationMethodId}", params["applicationMethodId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete applicationMethod by id
-   */
-  delete(
-    params: {
-      /**  */
-      applicationMethodId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods/{applicationMethodId}"
-      url = url.replace("{applicationMethodId}", params["applicationMethodId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ApplicationsService {
-  /**
-   * List applications
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number
-      /**  */
-      listingId?: string
-      /**  */
-      search?: string
-      /**  */
-      userId?: string
-      /**  */
-      orderBy?: string
-      /**  */
-      order?: string
-      /**  */
-      markedAsDuplicate?: boolean
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PaginatedApplication> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        listingId: params["listingId"],
-        search: params["search"],
-        userId: params["userId"],
-        orderBy: params["orderBy"],
-        order: params["order"],
-        markedAsDuplicate: params["markedAsDuplicate"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create application
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ApplicationCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * List applications as csv
-   */
-  listAsCsv(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number
-      /**  */
-      search?: string
-      /**  */
-      userId?: string
-      /**  */
-      orderBy?: string
-      /**  */
-      order?: string
-      /**  */
-      markedAsDuplicate?: boolean
-      /**  */
-      listingId: string
-      /**  */
-      includeDemographics?: boolean
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/csv"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        search: params["search"],
-        userId: params["userId"],
-        orderBy: params["orderBy"],
-        order: params["order"],
-        markedAsDuplicate: params["markedAsDuplicate"],
-        listingId: params["listingId"],
-        includeDemographics: params["includeDemographics"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get application by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update application by id
-   */
-  update(
-    params: {
-      /**  */
-      id: string
-      /** requestBody */
-      body?: ApplicationUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete application by id
-   */
-  delete(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Submit application
-   */
-  submit(
-    params: {
-      /** requestBody */
-      body?: ApplicationCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Application> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/submit"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class AssetsService {
-  /**
-   * Create asset
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: AssetCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/assets"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * List assets
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PaginatedAssets> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/assets"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"] }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create presigned upload metadata
-   */
-  createPresignedUploadMetadata(
-    params: {
-      /** requestBody */
-      body?: CreatePresignedUploadMetadata
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<CreatePresignedUploadMetadataResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/assets/presigned-upload-metadata"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get asset by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      assetId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Asset> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/assets/{assetId}"
-      url = url.replace("{assetId}", params["assetId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
 export class AuthService {
   /**
    * Login
@@ -797,6 +209,27 @@ export class UserService {
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
       configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
       let data = params.body
 
       configs.data = data
@@ -973,28 +406,6 @@ export class UserService {
     })
   }
   /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * List users
    */
   list(
@@ -1073,6 +484,617 @@ export class UserProfileService {
   }
 }
 
+export class AmiChartsService {
+  /**
+   * List amiCharts
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionName?: string
+      /**  */
+      jurisdictionId?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        jurisdictionName: params["jurisdictionName"],
+        jurisdictionId: params["jurisdictionId"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create amiChart
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AmiChartCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete amiChart by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update amiChart
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AmiChartUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts/{amiChartId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get amiChart by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      amiChartId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/amiCharts/{amiChartId}"
+      url = url.replace("{amiChartId}", params["amiChartId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class ApplicationFlaggedSetsService {
+  /**
+   * List application flagged sets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retrieve application flagged set by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      afsId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{afsId}"
+      url = url.replace("{afsId}", params["afsId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resolve application flagged set
+   */
+  resolve(
+    params: {
+      /** requestBody */
+      body?: ApplicationFlaggedSetResolve
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/resolve"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class ApplicationMethodsService {
+  /**
+   * List applicationMethods
+   */
+  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create applicationMethod
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ApplicationMethodCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete applicationMethod by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update applicationMethod
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ApplicationMethodUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods/{applicationMethodId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get applicationMethod by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      applicationMethodId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods/{applicationMethodId}"
+      url = url.replace("{applicationMethodId}", params["applicationMethodId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class ApplicationsService {
+  /**
+   * List applications
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
+      listingId?: string
+      /**  */
+      search?: string
+      /**  */
+      userId?: string
+      /**  */
+      orderBy?: string
+      /**  */
+      order?: string
+      /**  */
+      markedAsDuplicate?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        search: params["search"],
+        userId: params["userId"],
+        orderBy: params["orderBy"],
+        order: params["order"],
+        markedAsDuplicate: params["markedAsDuplicate"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create application
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete application by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List applications as csv
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
+      search?: string
+      /**  */
+      userId?: string
+      /**  */
+      orderBy?: string
+      /**  */
+      order?: string
+      /**  */
+      markedAsDuplicate?: boolean
+      /**  */
+      listingId: string
+      /**  */
+      includeDemographics?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        search: params["search"],
+        userId: params["userId"],
+        orderBy: params["orderBy"],
+        order: params["order"],
+        markedAsDuplicate: params["markedAsDuplicate"],
+        listingId: params["listingId"],
+        includeDemographics: params["includeDemographics"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Raw list of applications
+   */
+  rawApplicationsList(
+    params: {
+      /**  */
+      listingId: string
+      /**  */
+      includeDemographics?: boolean
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<object[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/rawApplicationsList"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        listingId: params["listingId"],
+        includeDemographics: params["includeDemographics"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get application by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update application by id
+   */
+  update(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ApplicationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Submit application
+   */
+  submit(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/submit"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class AssetsService {
+  /**
+   * Create asset
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AssetCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List assets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAssets> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create presigned upload metadata
+   */
+  createPresignedUploadMetadata(
+    params: {
+      /** requestBody */
+      body?: CreatePresignedUploadMetadata
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<CreatePresignedUploadMetadataResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/presigned-upload-metadata"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get asset by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      assetId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/{assetId}"
+      url = url.replace("{assetId}", params["assetId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -1103,6 +1125,27 @@ export class JurisdictionsService {
       let url = basePath + "/jurisdictions"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete jurisdiction by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -1146,28 +1189,6 @@ export class JurisdictionsService {
       url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete jurisdiction by id
-   */
-  delete(
-    params: {
-      /**  */
-      jurisdictionId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/jurisdictions/{jurisdictionId}"
-      url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = null
 
@@ -1263,6 +1284,27 @@ export class ListingsService {
     })
   }
   /**
+   * Delete listing by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listing by id
    */
   retrieve(
@@ -1310,28 +1352,6 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete listing by id
-   */
-  delete(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class PaperApplicationsService {
@@ -1364,6 +1384,27 @@ export class PaperApplicationsService {
       let url = basePath + "/paperApplications"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete paperApplication by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/paperApplications"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -1407,28 +1448,6 @@ export class PaperApplicationsService {
       url = url.replace("{paperApplicationId}", params["paperApplicationId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete paperApplication by id
-   */
-  delete(
-    params: {
-      /**  */
-      paperApplicationId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/paperApplications/{paperApplicationId}"
-      url = url.replace("{paperApplicationId}", params["paperApplicationId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = null
 
@@ -1482,6 +1501,27 @@ export class PreferencesService {
     })
   }
   /**
+   * Delete preference by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/preferences"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update preference
    */
   update(
@@ -1517,28 +1557,6 @@ export class PreferencesService {
       url = url.replace("{preferenceId}", params["preferenceId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete preference by id
-   */
-  delete(
-    params: {
-      /**  */
-      preferenceId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences/{preferenceId}"
-      url = url.replace("{preferenceId}", params["preferenceId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = null
 
@@ -1592,6 +1610,27 @@ export class ProgramsService {
     })
   }
   /**
+   * Delete program by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update program
    */
   update(
@@ -1627,236 +1666,6 @@ export class ProgramsService {
       url = url.replace("{programId}", params["programId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete program by id
-   */
-  delete(
-    params: {
-      /**  */
-      programId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-      url = url.replace("{programId}", params["programId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class PropertiesService {
-  /**
-   * List properties
-   */
-  list(options: IRequestOptions = {}): Promise<Property[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create property
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: PropertyCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Property> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update property
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: PropertyUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Property> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties/{propertyId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get property by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      propertyId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Property> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties/{propertyId}"
-      url = url.replace("{propertyId}", params["propertyId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete property by id
-   */
-  delete(
-    params: {
-      /**  */
-      propertyId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/properties/{propertyId}"
-      url = url.replace("{propertyId}", params["propertyId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class PropertyGroupsService {
-  /**
-   * List propertyGroups
-   */
-  list(options: IRequestOptions = {}): Promise<PropertyGroup[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create propertyGroup
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: PropertyGroupCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PropertyGroup> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update propertyGroup
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: PropertyGroupUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PropertyGroup> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups/{propertyGroupId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get propertyGroup by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      propertyGroupId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PropertyGroup> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups/{propertyGroupId}"
-      url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete propertyGroup by id
-   */
-  delete(
-    params: {
-      /**  */
-      propertyGroupId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/propertyGroups/{propertyGroupId}"
-      url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = null
 
@@ -1910,6 +1719,27 @@ export class ReservedCommunityTypesService {
     })
   }
   /**
+   * Delete reservedCommunityType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Update reservedCommunityType
    */
   update(
@@ -1952,28 +1782,6 @@ export class ReservedCommunityTypesService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete reservedCommunityType by id
-   */
-  delete(
-    params: {
-      /**  */
-      reservedCommunityTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes/{reservedCommunityTypeId}"
-      url = url.replace("{reservedCommunityTypeId}", params["reservedCommunityTypeId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class TranslationsService {
@@ -2006,6 +1814,27 @@ export class TranslationsService {
       let url = basePath + "/translations"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete translation by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/translations"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -2056,28 +1885,6 @@ export class TranslationsService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete translation by id
-   */
-  delete(
-    params: {
-      /**  */
-      translationId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/translations/{translationId}"
-      url = url.replace("{translationId}", params["translationId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class UnitsService {
@@ -2110,6 +1917,27 @@ export class UnitsService {
       let url = basePath + "/units"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete unit by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/units"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -2160,28 +1988,6 @@ export class UnitsService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete unit by id
-   */
-  delete(
-    params: {
-      /**  */
-      unitId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/units/{unitId}"
-      url = url.replace("{unitId}", params["unitId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class UnitTypesService {
@@ -2214,6 +2020,27 @@ export class UnitTypesService {
       let url = basePath + "/unitTypes"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete unitType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -2264,28 +2091,6 @@ export class UnitTypesService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete unitType by id
-   */
-  delete(
-    params: {
-      /**  */
-      unitTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes/{unitTypeId}"
-      url = url.replace("{unitTypeId}", params["unitTypeId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class UnitRentTypesService {
@@ -2318,6 +2123,27 @@ export class UnitRentTypesService {
       let url = basePath + "/unitRentTypes"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete unitRentType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitRentTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -2368,28 +2194,6 @@ export class UnitRentTypesService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete unitRentType by id
-   */
-  delete(
-    params: {
-      /**  */
-      unitRentTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitRentTypes/{unitRentTypeId}"
-      url = url.replace("{unitRentTypeId}", params["unitRentTypeId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class UnitAccessibilityPriorityTypesService {
@@ -2422,6 +2226,27 @@ export class UnitAccessibilityPriorityTypesService {
       let url = basePath + "/unitAccessibilityPriorityTypes"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete unitAccessibilityPriorityType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitAccessibilityPriorityTypes"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -2475,31 +2300,592 @@ export class UnitAccessibilityPriorityTypesService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Delete unitAccessibilityPriorityType by id
-   */
-  delete(
-    params: {
-      /**  */
-      unitAccessibilityPriorityTypeId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}"
-      url = url.replace(
-        "{unitAccessibilityPriorityTypeId}",
-        params["unitAccessibilityPriorityTypeId"] + ""
-      )
+}
 
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+export interface UserErrorExtraModel {
+  /**  */
+  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
+}
 
-      let data = null
+export interface Login {
+  /**  */
+  email: string
 
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
+  /**  */
+  password: string
+
+  /**  */
+  mfaCode?: string
+
+  /**  */
+  mfaType?: EnumLoginMfaType
+}
+
+export interface LoginResponse {
+  /**  */
+  accessToken: string
+}
+
+export interface Token {}
+
+export interface RequestMfaCode {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+
+  /**  */
+  mfaType: EnumRequestMfaCodeMfaType
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface RequestMfaCodeResponse {
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+}
+
+export interface GetMfaInfo {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+}
+
+export interface GetMfaInfoResponse {
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  isMfaEnabled: boolean
+
+  /**  */
+  mfaUsedInThePast: boolean
+}
+
+export interface IdName {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+}
+
+export interface Id {
+  /**  */
+  id: string
+}
+
+export interface UserRoles {
+  /**  */
+  user: Id
+
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+}
+
+export interface User {
+  /**  */
+  language?: Language
+
+  /**  */
+  leasingAgentInListings?: IdName[]
+
+  /**  */
+  roles?: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  id: string
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+}
+
+export interface UserCreate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password: string
+
+  /**  */
+  passwordConfirmation: string
+
+  /**  */
+  emailConfirmation: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: Id[]
+
+  /**  */
+  email: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles: UserRoles
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+}
+
+export interface Email {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface Status {
+  /**  */
+  status: string
+}
+
+export interface Confirm {
+  /**  */
+  token: string
+
+  /**  */
+  password?: string
+}
+
+export interface ForgotPassword {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string
+
+  /**  */
+  passwordConfirmation: string
+
+  /**  */
+  token: string
+}
+
+export interface UserRolesOnly {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  id?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  roles?: UserRolesOnly
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+}
+
+export interface UserFilterParams {
+  /**  */
+  $comparison: EnumUserFilterParamsComparison
+
+  /**  */
+  isPartner?: boolean
+
+  /**  */
+  isPortalUser?: boolean
+}
+
+export interface PaginationMeta {
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+}
+
+export interface PaginatedUserList {
+  /**  */
+  items: User[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserInvite {
+  /**  */
+  language?: Language
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  roles?: UserRolesCreate
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface AmiChartItem {
@@ -2511,11 +2897,6 @@ export interface AmiChartItem {
 
   /**  */
   income: number
-}
-
-export interface Id {
-  /**  */
-  id: string
 }
 
 export interface AmiChart {
@@ -3283,23 +3664,6 @@ export interface ApplicationsApiExtraModel {
   order?: EnumApplicationsApiExtraModelOrder
 }
 
-export interface PaginationMeta {
-  /**  */
-  currentPage: number
-
-  /**  */
-  itemCount: number
-
-  /**  */
-  itemsPerPage: number
-
-  /**  */
-  totalItems: number
-
-  /**  */
-  totalPages: number
-}
-
 export interface PaginatedApplication {
   /**  */
   items: Application[]
@@ -3901,547 +4265,6 @@ export interface PaginatedAssets {
   meta: PaginationMeta
 }
 
-export interface UserErrorExtraModel {
-  /**  */
-  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
-}
-
-export interface Login {
-  /**  */
-  email: string
-
-  /**  */
-  password: string
-
-  /**  */
-  mfaCode?: string
-
-  /**  */
-  mfaType?: EnumLoginMfaType
-}
-
-export interface LoginResponse {
-  /**  */
-  accessToken: string
-}
-
-export interface Token {}
-
-export interface RequestMfaCode {
-  /**  */
-  email: string
-
-  /**  */
-  password: string
-
-  /**  */
-  mfaType: EnumRequestMfaCodeMfaType
-
-  /**  */
-  phoneNumber?: string
-}
-
-export interface RequestMfaCodeResponse {
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-}
-
-export interface GetMfaInfo {
-  /**  */
-  email: string
-
-  /**  */
-  password: string
-}
-
-export interface GetMfaInfoResponse {
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  isMfaEnabled: boolean
-
-  /**  */
-  mfaUsedInThePast: boolean
-}
-
-export interface IdName {
-  /**  */
-  id: string
-
-  /**  */
-  name: string
-}
-
-export interface UserRoles {
-  /**  */
-  user: Id
-
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface Jurisdiction {
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-}
-
-export interface User {
-  /**  */
-  language?: Language
-
-  /**  */
-  leasingAgentInListings?: IdName[]
-
-  /**  */
-  roles?: CombinedRolesTypes
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  id: string
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-}
-
-export interface UserCreate {
-  /**  */
-  language?: Language
-
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  emailConfirmation: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions?: Id[]
-
-  /**  */
-  email: string
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-}
-
-export interface UserBasic {
-  /**  */
-  language?: Language
-
-  /**  */
-  roles: UserRoles
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  id: string
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-}
-
-export interface Email {
-  /**  */
-  email: string
-
-  /**  */
-  appUrl?: string
-}
-
-export interface Status {
-  /**  */
-  status: string
-}
-
-export interface Confirm {
-  /**  */
-  token: string
-
-  /**  */
-  password?: string
-}
-
-export interface ForgotPassword {
-  /**  */
-  email: string
-
-  /**  */
-  appUrl?: string
-}
-
-export interface ForgotPasswordResponse {
-  /**  */
-  message: string
-}
-
-export interface UpdatePassword {
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  token: string
-}
-
-export interface UserUpdate {
-  /**  */
-  language?: Language
-
-  /**  */
-  id?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-}
-
-export interface UserFilterParams {
-  /**  */
-  $comparison: EnumUserFilterParamsComparison
-
-  /**  */
-  isPartner?: boolean
-
-  /**  */
-  isPortalUser?: boolean
-}
-
-export interface PaginatedUserList {
-  /**  */
-  items: User[]
-
-  /**  */
-  meta: PaginationMeta
-}
-
-export interface UserRolesCreate {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface UserInvite {
-  /**  */
-  language?: Language
-
-  /**  */
-  roles: CombinedRolesTypes
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-}
-
-export interface UserProfileUpdate {
-  /**  */
-  language?: Language
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  id: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  agreedToTermsOfService: boolean
-}
-
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -4469,6 +4292,9 @@ export interface JurisdictionCreate {
 
   /**  */
   enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
 
   /**  */
   programs: Id[]
@@ -4513,6 +4339,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
 
   /**  */
   programs: Id[]
@@ -4793,6 +4622,9 @@ export interface Preference {
   links?: PreferenceLink[]
 
   /**  */
+  jurisdictions?: IdName[]
+
+  /**  */
   id: string
 
   /**  */
@@ -5066,6 +4898,32 @@ export interface ListingFeatures {
   mobility?: boolean
 }
 
+export interface ListingUtilities {
+  /**  */
+  water?: boolean
+
+  /**  */
+  gas?: boolean
+
+  /**  */
+  trash?: boolean
+
+  /**  */
+  sewer?: boolean
+
+  /**  */
+  electricity?: boolean
+
+  /**  */
+  cable?: boolean
+
+  /**  */
+  phone?: boolean
+
+  /**  */
+  internet?: boolean
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -5192,6 +5050,9 @@ export interface Listing {
 
   /**  */
   features?: ListingFeatures
+
+  /**  */
+  utilities?: ListingUtilities
 
   /**  */
   id: string
@@ -5560,46 +5421,7 @@ export interface ListingCreate {
   units: UnitCreate[]
 
   /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
   buildingAddress?: CombinedBuildingAddressTypes
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
 
   /**  */
   jurisdiction: Id
@@ -5636,6 +5458,45 @@ export interface ListingCreate {
 
   /**  */
   assets: AssetCreate[]
+
+  /**  */
+  accessibility?: string
+
+  /**  */
+  amenities?: string
+
+  /**  */
+  buildingTotalUnits?: number
+
+  /**  */
+  developer?: string
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  smokingPolicy?: string
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  servicesOffered?: string
+
+  /**  */
+  yearBuilt?: number
 
   /**  */
   applicationDueDate?: Date
@@ -5753,6 +5614,9 @@ export interface ListingCreate {
 
   /**  */
   features?: ListingFeatures
+
+  /**  */
+  utilities?: ListingUtilities
 }
 
 export interface ListingEventUpdate {
@@ -5984,46 +5848,7 @@ export interface ListingUpdate {
   units: UnitUpdate[]
 
   /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
   buildingAddress?: CombinedBuildingAddressTypes
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
 
   /**  */
   jurisdiction: Id
@@ -6060,6 +5885,45 @@ export interface ListingUpdate {
 
   /**  */
   assets: AssetCreate[]
+
+  /**  */
+  accessibility?: string
+
+  /**  */
+  amenities?: string
+
+  /**  */
+  buildingTotalUnits?: number
+
+  /**  */
+  developer?: string
+
+  /**  */
+  householdSizeMax?: number
+
+  /**  */
+  householdSizeMin?: number
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  petPolicy?: string
+
+  /**  */
+  smokingPolicy?: string
+
+  /**  */
+  unitsAvailable?: number
+
+  /**  */
+  unitAmenities?: string
+
+  /**  */
+  servicesOffered?: string
+
+  /**  */
+  yearBuilt?: number
 
   /**  */
   applicationDueDate?: Date
@@ -6177,6 +6041,9 @@ export interface ListingUpdate {
 
   /**  */
   features?: ListingFeatures
+
+  /**  */
+  utilities?: ListingUtilities
 }
 
 export interface PreferencesFilterParams {
@@ -6202,6 +6069,9 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata
+
+  /**  */
+  jurisdictions?: IdName[]
 }
 
 export interface PreferenceUpdate {
@@ -6219,6 +6089,9 @@ export interface PreferenceUpdate {
 
   /**  */
   formMetadata?: FormMetadata
+
+  /**  */
+  jurisdictions?: IdName[]
 
   /**  */
   id: string
@@ -6258,201 +6131,6 @@ export interface ProgramUpdate {
 
   /**  */
   formMetadata?: FormMetadata
-
-  /**  */
-  id: string
-}
-
-export interface Property {
-  /**  */
-  units: Unit[]
-
-  /**  */
-  buildingAddress: Address
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
-}
-
-export interface PropertyCreate {
-  /**  */
-  buildingAddress: AddressUpdate
-
-  /**  */
-  units: UnitCreate[]
-
-  /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
-}
-
-export interface PropertyUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  buildingAddress: AddressUpdate
-
-  /**  */
-  units: UnitUpdate[]
-
-  /**  */
-  accessibility?: string
-
-  /**  */
-  amenities?: string
-
-  /**  */
-  buildingTotalUnits?: number
-
-  /**  */
-  developer?: string
-
-  /**  */
-  householdSizeMax?: number
-
-  /**  */
-  householdSizeMin?: number
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  petPolicy?: string
-
-  /**  */
-  smokingPolicy?: string
-
-  /**  */
-  unitsAvailable?: number
-
-  /**  */
-  unitAmenities?: string
-
-  /**  */
-  servicesOffered?: string
-
-  /**  */
-  yearBuilt?: number
-}
-
-export interface PropertyGroup {
-  /**  */
-  properties: Id[]
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-}
-
-export interface PropertyGroupCreate {
-  /**  */
-  name: string
-
-  /**  */
-  properties: Id[]
-}
-
-export interface PropertyGroupUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  properties: Id[]
 
   /**  */
   id: string
@@ -6578,7 +6256,46 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
+}
+export enum EnumLoginMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum EnumRequestMfaCodeMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum Language {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
+export type CombinedRolesTypes = UserRoles
+export enum EnumUserFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -6588,14 +6305,6 @@ export enum ApplicationStatus {
   "draft" = "draft",
   "submitted" = "submitted",
   "removed" = "removed",
-}
-
-export enum Language {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
 }
 
 export enum ApplicationSubmissionType {
@@ -6632,39 +6341,6 @@ export enum EnumApplicationsApiExtraModelOrderBy {
 export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
-}
-export enum EnumUserErrorExtraModelUserErrorMessages {
-  "accountConfirmed" = "accountConfirmed",
-  "accountNotConfirmed" = "accountNotConfirmed",
-  "errorSaving" = "errorSaving",
-  "emailNotFound" = "emailNotFound",
-  "tokenExpired" = "tokenExpired",
-  "tokenMissing" = "tokenMissing",
-  "emailInUse" = "emailInUse",
-  "passwordOutdated" = "passwordOutdated",
-}
-export enum EnumLoginMfaType {
-  "sms" = "sms",
-  "email" = "email",
-}
-export enum EnumRequestMfaCodeMfaType {
-  "sms" = "sms",
-  "email" = "email",
-}
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
-export type CombinedRolesTypes = UserRolesCreate
-export enum EnumUserFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {
   "en" = "en",

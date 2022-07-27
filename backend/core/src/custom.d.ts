@@ -3,7 +3,7 @@
 declare global {
   declare module "express-serve-static-core" {
     export interface Request {
-      user?: import("./user/entities/user.entity").User
+      user?: import("./auth/entities/user.entity").User
     }
   }
 }

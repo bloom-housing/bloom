@@ -204,6 +204,12 @@ export const loading = () => (
   </Button>
 )
 
+export const transitions = () => (
+  <Button onClick={handleClick} transition={true}>
+    With Transitions
+  </Button>
+)
+
 // TODO: replace with tailwind markup, if it matters
 export const inaccessible = () => (
   <button style={{ backgroundColor: "red", color: "darkRed" }}>Inaccessible button</button>

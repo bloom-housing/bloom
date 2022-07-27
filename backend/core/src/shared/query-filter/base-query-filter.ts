@@ -2,6 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common"
 import { Compare } from "../dto/filter.dto"
 import { WhereExpression } from "typeorm"
 import { IBaseQueryFilter } from "./index"
+import { User } from "../../auth/entities/user.entity"
 
 export class BaseQueryFilter implements IBaseQueryFilter {
   protected static _shouldSkipKey(filter, filterKey) {
@@ -76,7 +77,8 @@ export class BaseQueryFilter implements IBaseQueryFilter {
   addFilters<FilterParams extends any[], FilterFieldMap>(
     filters: FilterParams,
     filterTypeToFieldMap: FilterFieldMap,
-    qb: WhereExpression
+    qb: WhereExpression,
+    user?: User
   ) {
     for (const [index, filter] of filters.entries()) {
       for (const filterKey in filter) {

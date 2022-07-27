@@ -26,11 +26,15 @@ import { ApplicationCsvExporterService } from "./services/application-csv-export
 import { ApplicationsService } from "./services/applications.service"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { PaginatedApplicationListQueryParams } from "./dto/paginated-application-list-query-params"
-import { ApplicationsCsvListQueryParams } from "./dto/applications-csv-list-query-params"
+import {
+  ApplicationsCsvListQueryParams,
+  RawApplicationsListQueryParams,
+} from "./dto/applications-csv-list-query-params"
 import { ApplicationsApiExtraModel } from "./types/applications-api-extra-model"
 import { PaginatedApplicationDto } from "./dto/paginated-application.dto"
 import { ApplicationCreateDto } from "./dto/application-create.dto"
 import { ApplicationUpdateDto } from "./dto/application-update.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -74,6 +78,16 @@ export class ApplicationsController {
     )
   }
 
+  @Get(`rawApplicationsList`)
+  @ApiOperation({ summary: "Raw list of applications", operationId: "rawApplicationsList" })
+  async rawApplicationsList(
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: RawApplicationsListQueryParams
+  ): Promise<any[]> {
+    queryParams.includeDemographics = true
+    return await this.applicationsService.rawListWithFlagged(queryParams)
+  }
+
   @Post()
   @ApiOperation({ summary: "Create application", operationId: "create" })
   async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
@@ -97,9 +111,10 @@ export class ApplicationsController {
     return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto))
   }
 
-  @Delete(`:id`)
+  // codegen generate unusable code for this, if we don't have a body
+  @Delete()
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Param("id") applicationId: string) {
-    await this.applicationsService.delete(applicationId)
+  async delete(@Body() dto: IdDto) {
+    await this.applicationsService.delete(dto.id)
   }
 }

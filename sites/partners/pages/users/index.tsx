@@ -1,14 +1,16 @@
 import React, { useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
+import { useSWRConfig } from "swr"
 import {
-  PageHeader,
+  NavigationHeader,
   AgTable,
   useAgTable,
   Button,
   t,
   Drawer,
   SiteAlert,
+  AlertTypes,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
@@ -21,8 +23,12 @@ type UserDrawerValue = {
 }
 
 const Users = () => {
+  const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
-
+  const [alertMessage, setAlertMessage] = useState({
+    type: "alert" as AlertTypes,
+    message: undefined,
+  })
   const tableOptions = useAgTable()
 
   const columns = useMemo(() => {
@@ -61,7 +67,7 @@ const Users = () => {
         headerName: t("t.role"),
         field: "roles",
         valueFormatter: ({ value }) => {
-          const { isAdmin, isPartner } = value || {}
+          const { isAdmin, isPartner, isJurisdictionalAdmin } = value || {}
 
           const roles = []
 
@@ -71,6 +77,10 @@ const Users = () => {
 
           if (isPartner) {
             roles.push(t("users.partner"))
+          }
+
+          if (isJurisdictionalAdmin) {
+            roles.push(t("users.jurisdictionalAdmin"))
           }
 
           return roles.join(", ")
@@ -89,7 +99,7 @@ const Users = () => {
     ]
   }, [])
 
-  const { data: userList, loading, error } = useUserList({
+  const { data: userList, loading, error, cacheKey } = useUserList({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
@@ -107,12 +117,11 @@ const Users = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PageHeader className="relative" title={t("nav.users")}>
+      <NavigationHeader className="relative" title={t("nav.users")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert type="success" timeout={5000} dismissable />
-          <SiteAlert type="alert" timeout={5000} dismissable />
+          <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} />
         </div>
-      </PageHeader>
+      </NavigationHeader>
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -143,6 +152,7 @@ const Users = () => {
                   className="mx-1"
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
+                  dataTestId={"add-user"}
                 >
                   {t("users.addUser")}
                 </Button>
@@ -162,7 +172,11 @@ const Users = () => {
           mode={userDrawer?.type}
           user={userDrawer?.user}
           listings={listingDtos?.items}
-          onDrawerClose={() => setUserDrawer(null)}
+          onDrawerClose={() => {
+            setUserDrawer(null)
+            void mutate(cacheKey)
+          }}
+          setAlertMessage={setAlertMessage}
         />
       </Drawer>
     </Layout>

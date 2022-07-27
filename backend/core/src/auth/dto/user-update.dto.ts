@@ -1,6 +1,8 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
 import {
+  ArrayMinSize,
+  IsArray,
   IsDate,
   IsDefined,
   IsEmail,
@@ -18,6 +20,7 @@ import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { UserDto } from "./user.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { UserRolesOnly } from "../entities/user-roles.entity"
 
 export class UserUpdateDto extends OmitType(UserDto, [
   "id",
@@ -71,12 +74,6 @@ export class UserUpdateDto extends OmitType(UserDto, [
   currentPassword?: string
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  jurisdictions: IdDto[]
-
-  @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -94,4 +91,15 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
+
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  jurisdictions: IdDto[]
+
+  @Expose()
+  @Type(() => UserRolesOnly)
+  roles?: UserRolesOnly
 }

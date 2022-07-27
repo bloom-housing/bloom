@@ -1,6 +1,8 @@
 import {
   BadRequestException,
   HttpException,
+  HttpStatus,
+  Inject,
   Injectable,
   NotFoundException,
   Scope,
@@ -20,7 +22,6 @@ import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 
-import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { EmailDto } from "../dto/email.dto"
@@ -32,8 +33,6 @@ import { ConfigService } from "@nestjs/config"
 import { authzActions } from "../enum/authz-actions.enum"
 import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
-import { Listing } from "../../listings/entities/listing.entity"
-import { UserRoles } from "../entities/user-roles.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
@@ -48,6 +47,10 @@ import { UserFilterParams } from "../dto/user-filter-params"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { UserRepository } from "../repositories/user-repository"
+import { REQUEST } from "@nestjs/core"
+import { Request as ExpressRequest } from "express"
+import { UserProfileUpdateDto } from "../dto/user-profile.dto"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 dayjs.extend(advancedFormat)
 
@@ -55,6 +58,7 @@ dayjs.extend(advancedFormat)
 export class UserService {
   constructor(
     @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
+    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(Application) private readonly applicationsRepository: Repository<Application>,
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,
@@ -62,30 +66,24 @@ export class UserService {
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
     private readonly jurisdictionResolverService: JurisdictionResolverService,
-    private readonly smsMfaService: SmsMfaService
+    private readonly smsMfaService: SmsMfaService,
+    @Inject(REQUEST) private req: ExpressRequest
   ) {}
 
   public async findById(id: string) {
     const user = await this.userRepository.findById(id)
+
     if (!user) {
       throw new NotFoundException()
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    await this.authorizeUserAction(this.req.user as User, user, authzActions.read)
+
     return user
   }
 
-  public static isPasswordOutdated(user: User) {
-    return (
-      new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
-        new Date() &&
-      user.roles &&
-      (user.roles.isAdmin || user.roles.isPartner)
-    )
-  }
-
-  public async list(
-    params: UserListQueryParams,
-    authContext: AuthContext
-  ): Promise<Pagination<User>> {
+  public async list(params: UserListQueryParams): Promise<Pagination<User>> {
     const options = {
       limit: params.limit === "all" ? undefined : params.limit,
       page: params.page || 10,
@@ -95,19 +93,24 @@ export class UserService {
     const distinctIDQB = this.userRepository.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
-    distinctIDQB.orderBy("user.id")
+    distinctIDQB.orderBy("user.firstName")
+    distinctIDQB.addOrderBy("user.lastName")
     const qb = this.userRepository.getQb()
 
     if (params.filter) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const user = this.req.user as User
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        distinctIDQB
+        distinctIDQB,
+        user
       )
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        qb
+        qb,
+        user
       )
     }
 
@@ -134,6 +137,9 @@ export class UserService {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
 
+    qb.orderBy("user.firstName")
+    qb.addOrderBy("user.lastName")
+
     const result = distinctIDResult.items.length ? await qb.getMany() : []
     /**
      * admin are the only ones that can access all users
@@ -141,7 +147,7 @@ export class UserService {
      */
     await Promise.all(
       result.map(async (user) => {
-        await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
+        await this.authorizeUserAction(this.req.user, user, authzActions.read)
       })
     )
 
@@ -151,8 +157,27 @@ export class UserService {
     }
   }
 
-  async update(dto: UserUpdateDto, authContext: AuthContext) {
+  async update(dto: UserUpdateDto | UserProfileUpdateDto) {
     const user = await this.findById(dto.id)
+
+    if (!user) {
+      throw new NotFoundException()
+    }
+
+    if (dto instanceof UserProfileUpdateDto) {
+      await this.authorizeUserProfileAction(this.req.user, user, authzActions.update)
+    } else {
+      await Promise.all(
+        dto.jurisdictions.map(async (jurisdiction) => {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          await this.authzService.canOrThrow(this.req.user as User, "user", authzActions.update, {
+            id: user.id,
+            jurisdictionId: jurisdiction.id,
+          })
+        })
+      )
+    }
+
     let passwordHash
     let passwordUpdatedAt
     if (dto.password) {
@@ -167,20 +192,6 @@ export class UserService {
       passwordHash = await this.passwordService.passwordToHash(dto.password)
       passwordUpdatedAt = new Date()
       delete dto.password
-    }
-
-    /**
-     * jurisdictions should be filtered based off of what the authContext user has
-     */
-    if (authContext.user.jurisdictions) {
-      if (dto.jurisdictions) {
-        dto.jurisdictions = dto.jurisdictions.filter(
-          (jurisdiction) =>
-            authContext.user.jurisdictions.findIndex((val) => val.id === jurisdiction.id) > -1
-        )
-      }
-    } else {
-      delete dto.jurisdictions
     }
 
     if (dto.newEmail && dto.appUrl) {
@@ -261,20 +272,6 @@ export class UserService {
     }
   }
 
-  private async setHitConfirmationURl(user: User, token: string) {
-    if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
-    }
-
-    if (user.confirmationToken !== token) {
-      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
-    }
-    user.hitConfirmationURL = new Date()
-    await this.userRepository.save({
-      ...user,
-    })
-  }
-
   public async isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
       const token = decode(dto.token, process.env.APP_SECRET)
@@ -291,15 +288,6 @@ export class UserService {
       }
       return false
     }
-  }
-
-  private static createConfirmationToken(userId: string, email: string) {
-    const payload = {
-      id: userId,
-      email,
-      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
-    }
-    return encode(payload, process.env.APP_SECRET)
   }
 
   public async resendPublicConfirmation(dto: EmailDto) {
@@ -325,14 +313,6 @@ export class UserService {
     }
   }
 
-  private static getPublicConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}?token=${user.confirmationToken}`
-  }
-
-  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
-  }
-
   public async connectUserWithExistingApplications(user: User) {
     const applications = await this.applicationsRepository
       .createQueryBuilder("applications")
@@ -348,13 +328,12 @@ export class UserService {
     await this.applicationsRepository.save(applications)
   }
 
-  public async _createUser(dto: DeepPartial<User>, authContext: AuthContext) {
+  public async _createUser(dto: DeepPartial<User>, storedUser?: User) {
     if (dto.confirmedAt) {
-      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
-        ...dto,
-      })
+      await this.authorizeUserAction(this.req.user, dto, authzActions.confirm)
     }
-    const existingUser = await this.userRepository.findByEmail(dto.email)
+
+    const existingUser = storedUser ?? (await this.userRepository.findByEmail(dto.email))
 
     if (existingUser) {
       if (!existingUser.roles && dto.roles) {
@@ -368,6 +347,21 @@ export class UserService {
             UserService.createConfirmationToken(existingUser.id, existingUser.email),
           confirmedAt: null,
         })
+      } else if (
+        existingUser?.roles?.isPartner &&
+        dto?.roles?.isPartner &&
+        this.jurisdictionsMismatch(dto, existingUser)
+      ) {
+        // recreating a partner with jurisdiction mismatch -> giving partner a new jurisdiction
+        return await this.userRepository.save({
+          ...existingUser,
+          jurisdictions: [...existingUser.jurisdictions, ...dto.jurisdictions],
+          leasingAgentInListings: [
+            ...existingUser.leasingAgentInListings,
+            ...dto.leasingAgentInListings,
+          ],
+          roles: dto.roles,
+        })
       } else {
         // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
         throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
@@ -378,22 +372,15 @@ export class UserService {
     return await this.userRepository.save(newUser)
   }
 
-  public async createPublicUser(
-    dto: UserCreateDto,
-    authContext: AuthContext,
-    sendWelcomeEmail = false
-  ) {
-    const newUser = await this._createUser(
-      {
-        ...dto,
-        passwordHash: await this.passwordService.passwordToHash(dto.password),
-        jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as Jurisdiction[])
-          : [await this.jurisdictionResolverService.getJurisdiction()],
-        mfaEnabled: false,
-      },
-      authContext
-    )
+  public async createPublicUser(dto: UserCreateDto, sendWelcomeEmail = false) {
+    const newUser = await this._createUser({
+      ...dto,
+      passwordHash: await this.passwordService.passwordToHash(dto.password),
+      jurisdictions: dto.jurisdictions
+        ? (dto.jurisdictions as Jurisdiction[])
+        : [await this.jurisdictionResolverService.getJurisdiction()],
+      mfaEnabled: false,
+    })
     if (sendWelcomeEmail) {
       const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, newUser)
       await this.emailService.welcome(newUser, dto.appUrl, confirmationUrl)
@@ -434,49 +421,56 @@ export class UserService {
     return this.authService.generateAccessToken(user)
   }
 
-  async invitePartnersPortalUser(dto: UserInviteDto, authContext: AuthContext) {
+  async invite(dto: UserInviteDto) {
     const password = crypto.randomBytes(8).toString("hex")
+
+    await this.validateInviteActionPermissionsOrThrow(dto)
+
+    const existingUser = await this.userRepository.findByEmail(dto.email)
+
     const user = await this._createUser(
       {
         ...dto,
         passwordHash: await this.passwordService.passwordToHash(password),
-        leasingAgentInListings: dto.leasingAgentInListings as Listing[],
-        roles: dto.roles as UserRoles,
         jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as Jurisdiction[])
+          ? dto.jurisdictions
           : [await this.jurisdictionResolverService.getJurisdiction()],
         mfaEnabled: true,
       },
-      authContext
+      existingUser
     )
 
-    await this.emailService.invite(
-      user,
-      this.configService.get("PARTNERS_PORTAL_URL"),
-      UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
-    )
+    if (
+      existingUser &&
+      existingUser?.roles?.isPartner &&
+      dto?.roles?.isPartner &&
+      this.jurisdictionsMismatch(dto, existingUser)
+    ) {
+      await this.emailService.portalAccountUpdate(
+        user,
+        this.configService.get("PARTNERS_PORTAL_URL"),
+        existingUser
+      )
+    } else {
+      await this.emailService.invite(
+        user,
+        this.configService.get("PARTNERS_PORTAL_URL"),
+        UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+      )
+    }
     return user
   }
 
   async delete(userId: string) {
     const user = await this.userRepository.findOne({ id: userId })
+
     if (!user) {
       throw new NotFoundException()
     }
+
+    await this.authorizeUserAction(this.req.user, user, authzActions.delete)
+
     await this.userRepository.remove(user)
-  }
-
-  generateMfaCode() {
-    let out = ""
-    const characters = "0123456789"
-    for (let i = 0; i < this.configService.get<number>("MFA_CODE_LENGTH"); i++) {
-      out += characters.charAt(Math.floor(Math.random() * characters.length))
-    }
-    return out
-  }
-
-  private static hasUsedMfaInThePast(user: User): boolean {
-    return !!user.mfaCodeUpdatedAt
   }
 
   async getMfaInfo(getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
@@ -553,5 +547,154 @@ export class UserService {
           phoneNumber: user.phoneNumber,
           phoneNumberVerified: user.phoneNumberVerified,
         }
+  }
+
+  public static isPasswordOutdated(user: User) {
+    return (
+      new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
+        new Date() &&
+      user.roles &&
+      (user.roles.isAdmin || user.roles.isPartner || user.roles.isJurisdictionalAdmin)
+    )
+  }
+
+  private generateMfaCode() {
+    let out = ""
+    const characters = "0123456789"
+    for (let i = 0; i < this.configService.get<number>("MFA_CODE_LENGTH"); i++) {
+      out += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return out
+  }
+
+  private static hasUsedMfaInThePast(user: User): boolean {
+    return !!user.mfaCodeUpdatedAt
+  }
+
+  private static createConfirmationToken(userId: string, email: string) {
+    const payload = {
+      id: userId,
+      email,
+      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
+    }
+    return encode(payload, process.env.APP_SECRET)
+  }
+
+  private static getPublicConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}?token=${user.confirmationToken}`
+  }
+
+  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
+  }
+
+  private async setHitConfirmationURl(user: User, token: string) {
+    if (!user) {
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+
+    if (user.confirmationToken !== token) {
+      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
+    }
+    user.hitConfirmationURL = new Date()
+
+    await this.userRepository.save({
+      ...user,
+    })
+  }
+
+  private async authorizeUserAction(requestingUser, targetUser, action) {
+    if (requestingUser?.roles?.isJurisdictionalAdmin) {
+      return this.authorizeJurisdictionalAdmin(requestingUser, targetUser)
+    }
+    return await this.authzService.canOrThrow(requestingUser, "user", action, {
+      id: targetUser.id,
+    })
+  }
+
+  private authorizeJurisdictionalAdmin(requestingUser, targetUser) {
+    // jurisdictional admins can't view super admins
+    if (targetUser?.roles?.isAdmin) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+
+    const requesterJurisdictions = requestingUser.jurisdictions?.map((juris) => juris.id)
+    const targetJurisdictions = targetUser.jurisdictions?.map((juris) => juris.id)
+    // jurisdictional admins should only see a user if they share a jurisdiction
+    const res = requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
+
+    if (!res) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+    return res
+  }
+
+  private async authorizeUserProfileAction(requestingUser, targetUser, action) {
+    return await this.authzService.canOrThrow(requestingUser, "userProfile", action, {
+      id: targetUser.id,
+      jurisdictionId: targetUser.id,
+    })
+  }
+
+  private async validateInviteActionPermissionsOrThrow(dto: UserInviteDto) {
+    if (dto.roles.isAdmin) {
+      await this.authzService.canOrThrow(
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        this.req.user as User,
+        "user",
+        authzActions.inviteSuperAdmin,
+        null
+      )
+    }
+
+    // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
+    if (dto.roles.isJurisdictionalAdmin) {
+      if (dto.jurisdictions?.length) {
+        await Promise.all(
+          dto.jurisdictions.map(async (jurisdiction) => {
+            await this.authzService.canOrThrow(
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+              this.req.user as User,
+              "user",
+              authzActions.inviteJurisdictionalAdmin,
+              {
+                jurisdictionId: jurisdiction.id,
+              }
+            )
+          })
+        )
+      }
+    }
+
+    if (dto.leasingAgentInListings?.length) {
+      // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
+      const jurisdictionsIds = await Promise.all(
+        dto.leasingAgentInListings.map(async (listing) => {
+          return await this.listingRepository.getJurisdictionIdByListingId(listing.id)
+        })
+      )
+
+      await Promise.all(
+        jurisdictionsIds.map(async (jurisdictionId) => {
+          await this.authzService.canOrThrow(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            this.req.user as User,
+            "user",
+            authzActions.invitePartner,
+            {
+              jurisdictionId,
+            }
+          )
+        })
+      )
+    }
+  }
+
+  private jurisdictionsMismatch(incomingUser: DeepPartial<User>, existingUser: User | undefined) {
+    // verify that there is a jurisdictional difference between the incoming user and the existing user
+    return incomingUser?.jurisdictions?.some(
+      (incomingJuris) =>
+        !existingUser?.jurisdictions?.some((existingJuris) => existingJuris.id === incomingJuris.id)
+    )
   }
 }

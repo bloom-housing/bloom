@@ -18,6 +18,7 @@ import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-
 import { TranslationCreateDto, TranslationDto, TranslationUpdateDto } from "./dto/translation.dto"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { TranslationsService } from "./services/translations.service"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/translations")
 @ApiTags("translations")
@@ -55,9 +56,9 @@ export class TranslationsController {
     )
   }
 
-  @Delete(`:translationId`)
+  @Delete()
   @ApiOperation({ summary: "Delete translation by id", operationId: "delete" })
-  async delete(@Param("translationId") translationId: string): Promise<void> {
-    return await this.translationsService.delete(translationId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.translationsService.delete(dto.id)
   }
 }

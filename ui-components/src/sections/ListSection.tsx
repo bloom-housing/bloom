@@ -3,7 +3,7 @@ import "./ListSection.scss"
 
 export interface ListSectionProps {
   title: string
-  subtitle: string
+  subtitle: string | React.ReactNode
   children?: React.ReactNode
 }
 
