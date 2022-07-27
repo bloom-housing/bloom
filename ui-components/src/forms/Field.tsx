@@ -120,11 +120,7 @@ const Field = (props: FieldProps) => {
       </div>
       {props.subNote && <p className="field-sub-note">{props.subNote}</p>}
       {props.errorMessage && (
-        <ErrorMessage
-          id={`${idOrName}-error`}
-          error={props.error}
-          className="mt-2 inline-block leading-5"
-        >
+        <ErrorMessage id={`${idOrName}-error`} error={props.error}>
           {props.errorMessage}
         </ErrorMessage>
       )}
