@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.27...@bloom-housing/ui-components@5.0.1-alpha.28) (2022-07-27)
+
+
+### Bug Fixes
+
+* fix password confirmation validation in the reset password form ([23064fe](https://github.com/bloom-housing/bloom/commit/23064fe8135ee9f531bac41b1b1f7e0ce771905a))
+
+
+
+
+
 ## [5.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.26...@bloom-housing/ui-components@5.0.1-alpha.27) (2022-07-26)
 
 
