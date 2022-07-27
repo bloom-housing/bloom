@@ -22,7 +22,7 @@ import { ApplicationSection } from "@bloom-housing/backend-core"
 const ApplicationSummary = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("summary")
-  const currentPageSection = 5
+  const currentPageSection = 6
 
   /* Form Handler */
   const { handleSubmit } = useForm()

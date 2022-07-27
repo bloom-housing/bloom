@@ -22,7 +22,7 @@ const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
   const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
-  const currentPageSection = 4
+  const currentPageSection = 5
 
   /* Form Handler */
   const { handleSubmit } = useForm()

@@ -32,7 +32,7 @@ import { UserStatus } from "../../../lib/constants"
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("demographics")
-  const currentPageSection = 5
+  const currentPageSection = 6
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method

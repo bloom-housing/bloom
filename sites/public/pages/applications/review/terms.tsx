@@ -39,7 +39,7 @@ const ApplicationTerms = () => {
     const acceptedTerms = data.agree === "agree"
     conductor.currentStep.save({ acceptedTerms })
     application.acceptedTerms = acceptedTerms
-    application.completedSections = 5
+    application.completedSections = 6
     applicationsService
       .submit({
         body: {
