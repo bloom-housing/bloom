@@ -1,7 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
 import { getUniqueUnitTypes, getProgramOptionName } from "@bloom-housing/shared-helpers"
-import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
+import {
+  Address,
+  AllExtraDataTypes,
+  ApplicationProgram,
+  InputType,
+  Listing,
+} from "@bloom-housing/backend-core/types"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -330,7 +336,7 @@ const FormSummaryDetails = ({
             ))}
           </ViewItem>
           {application.programs
-            .filter((item) => item.claimed === true)
+            .filter((item: ApplicationProgram) => item.claimed === true && item.key !== "HOPWA")
             .map((program) =>
               program.options
                 .filter((item) => item.checked === true)
