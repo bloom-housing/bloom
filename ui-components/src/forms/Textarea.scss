@@ -6,6 +6,7 @@
   @apply p-2;
   @apply text-gray-900;
   @apply bg-gray-200;
+  @apply align-top;
   font-size: 1rem;
 }
 
@@ -26,6 +27,8 @@
   @apply text-xs;
   @apply text-alert;
   @apply block;
+  @apply leading-5;
+  @apply mt-2
 }
 
 .textarea-label {
