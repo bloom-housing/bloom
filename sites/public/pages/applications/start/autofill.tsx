@@ -123,6 +123,7 @@ export default () => {
           listing={listing}
           editMode={false}
           hidePreferences={true}
+          hidePrograms={true}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager" data-test-id={"application-initial-page"}>

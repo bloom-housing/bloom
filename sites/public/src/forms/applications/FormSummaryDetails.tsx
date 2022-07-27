@@ -6,6 +6,7 @@ import {
   AllExtraDataTypes,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
+  ApplicationSection,
   InputType,
   Listing,
 } from "@bloom-housing/backend-core/types"
@@ -16,6 +17,7 @@ type FormSummaryDetailsProps = {
   listing: Listing
   editMode?: boolean
   hidePreferences?: boolean
+  hidePrograms?: boolean
 }
 
 const EditLink = (props: { href: string }) => (
@@ -57,6 +59,7 @@ const FormSummaryDetails = ({
   listing,
   editMode = false,
   hidePreferences = false,
+  hidePrograms = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -80,7 +83,7 @@ const FormSummaryDetails = ({
     }
   }
 
-  const preferenceHelperText = (extraData?: AllExtraDataTypes[]) => {
+  const multiselectQuestionAddress = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
     return extraData.reduce((acc, item, i) => {
       if (item.type === InputType.address && typeof item.value === "object") {
@@ -95,6 +98,46 @@ const FormSummaryDetails = ({
 
       return acc
     }, "")
+  }
+
+  const multiselectQuestionSection = (
+    applicationSection: ApplicationSection,
+    appLink: string,
+    header: string,
+    emptyText?: string
+  ) => {
+    return (
+      <>
+        <h3 className="form--card__sub-header">
+          {header}
+          {editMode && <EditLink href={appLink} />}
+        </h3>
+        <div id={applicationSection} className="form-card__group border-b mx-0">
+          {emptyText ? (
+            <p className="field-note text-black">{emptyText}</p>
+          ) : (
+            <>
+              {application[applicationSection]
+                .filter((item) => item.claimed === true)
+                .map((question: ApplicationMultiselectQuestion) =>
+                  question.options
+                    .filter((item) => item.checked === true)
+                    .map((option: ApplicationMultiselectQuestionOption, index) => (
+                      <ViewItem
+                        label={`${t("application.preferences.youHaveClaimed")} ${question.key}`}
+                        helper={multiselectQuestionAddress(option?.extraData)}
+                        key={index}
+                        data-test-id={"app-summary-preference"}
+                      >
+                        {option.key}
+                      </ViewItem>
+                    ))
+                )}
+            </>
+          )}
+        </div>
+      </>
+    )
   }
 
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
@@ -366,45 +409,29 @@ const FormSummaryDetails = ({
           )}
         </div>
 
-        {!hidePreferences && (
-          <>
-            <h3 className="form--card__sub-header">
-              {t("t.preferences")}
-              {editMode && <EditLink href="/applications/preferences/all" />}
-            </h3>
-            <div id="preferences" className="form-card__group border-b mx-0">
-              {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
-                <p className="field-note text-black">
-                  {t("application.preferences.general.title", {
-                    county: listing?.countyCode,
-                  })}{" "}
-                  {t("application.preferences.general.preamble")}
-                </p>
-              ) : (
-                <>
-                  {application.preferences
-                    .filter((item) => item.claimed === true)
-                    .map((preference: ApplicationMultiselectQuestion) =>
-                      preference.options
-                        .filter((item) => item.checked === true)
-                        .map((option: ApplicationMultiselectQuestionOption, index) => (
-                          <ViewItem
-                            label={`${t("application.preferences.youHaveClaimed")} ${
-                              preference.key
-                            }`}
-                            helper={preferenceHelperText(option?.extraData)}
-                            key={index}
-                            data-test-id={"app-summary-preference"}
-                          >
-                            {option.key}
-                          </ViewItem>
-                        ))
-                    )}
-                </>
-              )}
-            </div>
-          </>
-        )}
+        {!hidePreferences &&
+          multiselectQuestionSection(
+            ApplicationSection.preferences,
+            "/applications/preferences/all",
+            t("t.preferences"),
+            application.preferences.filter((item) => item.claimed == true).length == 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.countyCode,
+                })} ${t("application.preferences.general.preamble")}`
+              : null
+          )}
+
+        {!hidePrograms &&
+          multiselectQuestionSection(
+            ApplicationSection.programs,
+            "/applications/programs/programs",
+            t("t.programs"),
+            application.programs.filter((item) => item.claimed == true).length == 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.countyCode,
+                })} ${t("application.preferences.general.preamble")}`
+              : null
+          )}
       </div>
     </>
   )
