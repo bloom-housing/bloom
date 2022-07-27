@@ -8,7 +8,7 @@ const ApplicationPrograms = () => {
     <ApplicationMultiselectQuestionStep
       applicationSection={ApplicationSection.programs}
       applicationStep={"programs"}
-      applicationSectionNumber={4}
+      applicationSectionNumber={3}
     />
   )
 }

@@ -55,7 +55,7 @@ const ApplicationIncome = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageSection = 3
+  const currentPageSection = 4
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method

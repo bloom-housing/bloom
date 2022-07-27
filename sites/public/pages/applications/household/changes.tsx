@@ -1,5 +1,5 @@
 /*
-2.5 Household Student
+2.5 Expecting Household Changes
 */
 import {
   AppearanceStyleType,
@@ -19,22 +19,23 @@ import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housin
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 
-const ApplicationHouseholdStudent = () => {
+const ApplicationHouseholdChanges = () => {
   const { profile } = useContext(AuthContext)
-  const { conductor, application, listing } = useFormConductor("householdStudent")
-  const currentPageSection = 4
+  const { conductor, application, listing } = useFormConductor("householdChanges")
+  const currentPageSection = 2
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm<Record<string, any>>({
-    defaultValues: { householdStudent: application.householdStudent?.toString() },
+    defaultValues: { householdExpectingChanges: application.householdExpectingChanges?.toString() },
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    const { householdStudent } = data
+    const { householdExpectingChanges } = data
     conductor.currentStep.save({
-      householdStudent: householdStudent === "true",
+      householdExpectingChanges: householdExpectingChanges === "true",
     })
+    conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
 
@@ -42,14 +43,14 @@ const ApplicationHouseholdStudent = () => {
     window.scrollTo(0, 0)
   }
 
-  const householdStudentValues = [
+  const householdChangesValues = [
     {
-      id: "householdStudentYes",
+      id: "householdChangesYes",
       value: "true",
       label: t("t.yes"),
     },
     {
-      id: "householdStudentNo",
+      id: "householdChangesNo",
       value: "false",
       label: t("t.no"),
     },
@@ -58,7 +59,7 @@ const ApplicationHouseholdStudent = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: "Application - Household Student",
+      pageTitle: "Application - Expecting Household Changes",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
@@ -86,7 +87,7 @@ const ApplicationHouseholdStudent = () => {
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
-            {t("application.household.householdStudent.question")}
+            {t("application.household.expectingChanges.question")}
           </h2>
 
           <p className="field-note mt-5">{t("application.household.genericSubtitle")}</p>
@@ -100,19 +101,21 @@ const ApplicationHouseholdStudent = () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div
-            className={`form-card__group field text-lg ${errors.householdStudent ? "error" : ""}`}
+            className={`form-card__group field text-lg ${
+              errors.expectingHouseholdChanges ? "error" : ""
+            }`}
           >
             <fieldset>
               <p className="field-note mb-4">{t("t.pleaseSelectYesNo")}</p>
               <FieldGroup
                 type="radio"
-                name="householdStudent"
-                error={errors.householdStudent}
+                name="householdExpectingChanges"
+                error={errors.householdExpectingChanges}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}
                 validation={{ required: true }}
-                fields={householdStudentValues}
-                dataTestId={"app-student"}
+                fields={householdChangesValues}
+                dataTestId={"app-expecting-changes"}
               />
             </fieldset>
           </div>
@@ -134,4 +137,4 @@ const ApplicationHouseholdStudent = () => {
   )
 }
 
-export default ApplicationHouseholdStudent
+export default ApplicationHouseholdChanges

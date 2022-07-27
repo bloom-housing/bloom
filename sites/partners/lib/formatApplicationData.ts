@@ -9,16 +9,18 @@ import {
   HouseholdMember,
   MultiselectQuestion,
   Accessibility,
+  ApplicationSection,
+  Listing,
 } from "@bloom-housing/backend-core/types"
 
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   fieldGroupObjectToArray,
   mapProgramsToApi,
-  mapApiToProgramsPaperForm,
   adaFeatureKeys,
-  mapPreferencesToApi,
-  mapApiToPreferencesForm,
+  mapApiToMultiselectForm,
+  mapCheckboxesToApi,
+  mapRadiosToApi,
 } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
@@ -129,7 +131,8 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     }
   })()
 
-  const preferences = mapPreferencesToApi(data)
+  // TO DO idk
+  const preferences = mapCheckboxesToApi(data.application.preferences, ) mapPreferencesToApi(data)
   const programsForm = data.application.programs
     ? Object.entries(data.application.programs).reduce((acc, curr) => {
         if (curr[1]) {
@@ -245,7 +248,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
   Format data which comes from the API into correct react-hook-form format.
 */
 
-export const mapApiToForm = (applicationData: ApplicationUpdate) => {
+export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listing) => {
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate)).utc()
     : null
@@ -296,8 +299,16 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const preferences = mapApiToPreferencesForm(applicationData.preferences)
-  const programs = mapApiToProgramsPaperForm(applicationData.programs)
+  const preferences = mapApiToMultiselectForm(
+    applicationData.preferences,
+    listing.listingMultiselectQuestions,
+    ApplicationSection.preferences
+  )
+  const programs = mapApiToMultiselectForm(
+    applicationData.programs,
+    listing.listingMultiselectQuestions,
+    ApplicationSection.programs
+  )
 
   const application: ApplicationTypes = (() => {
     const {

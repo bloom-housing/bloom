@@ -53,7 +53,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   )
   const units = listingDto?.units
 
-  const defaultValues = editMode ? mapApiToForm(application) : {}
+  const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
 
   console.log({ defaultValues })
 
@@ -208,11 +208,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       applicationAccessibilityFeatures={application?.accessibility}
                     />
 
-                    <FormPreferences preferences={preferences} />
-
                     <FormPrograms programs={programs} />
 
                     <FormHouseholdIncome />
+
+                    <FormPreferences preferences={preferences} />
 
                     <FormDemographics formValues={application?.demographics} />
 
