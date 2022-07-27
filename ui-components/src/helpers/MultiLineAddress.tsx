@@ -30,8 +30,7 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
             ${address.city}
             ${address.city && (address.state || address.zipCode) ? "," : ""} ${address.state} ${` `}
             ${address.zipCode}
-          `,
-          { USE_PROFILES: { html: true } }
+          `
         ),
       }}
     />
