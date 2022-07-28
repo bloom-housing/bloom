@@ -25,18 +25,6 @@ export class UnitUpdateDto extends OmitType(UnitDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   amiChart?: IdDto

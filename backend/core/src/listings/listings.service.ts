@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Scope,
+} from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
@@ -40,7 +47,7 @@ export class ListingsService {
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
     @Inject(REQUEST) private req: ExpressRequest,
-    private readonly afsService: ApplicationFlaggedSetsService,
+    private readonly afsService: ApplicationFlaggedSetsService
   ) {}
 
   private getFullyJoinedQueryBuilder() {

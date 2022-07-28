@@ -116,7 +116,6 @@ export class AppModule {
         UnitTypesModule,
         UnitRentTypesModule,
         UnitAccessibilityPriorityTypesModule,
-
       ],
     }
   }

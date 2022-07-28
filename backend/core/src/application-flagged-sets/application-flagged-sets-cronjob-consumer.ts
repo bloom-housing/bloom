@@ -1,11 +1,10 @@
 import { Process, Processor } from "@nestjs/bull"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
-import { Brackets, Repository, SelectQueryBuilder } from "typeorm"
+import { Brackets, LessThan, MoreThanOrEqual, Repository, SelectQueryBuilder } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
 import { InjectRepository } from "@nestjs/typeorm"
 import { ListingRepository } from "../listings/repositories/listing.repository"
-import { ListingStatus } from "../listings/types/listing-status-enum"
 import Listing from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
@@ -16,99 +15,142 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
-    @InjectRepository(Application) private readonly applicationRepository: Repository<Application>,
+    @InjectRepository(Application) private readonly applicationRepository: Repository<Application>
   ) {}
 
-  @Process({concurrency: 1})
+  @Process({ concurrency: 1 })
   async process() {
-    console.log("AFS processing has started")
-
     const rules = [Rule.nameAndDOB, Rule.email]
-    const activeListings = await this.listingRepository.find({
-      where: { status: ListingStatus.active },
-    })
+    const outOfDateListings = await this.listingRepository
+      .createQueryBuilder("listings")
+      .where("listings.lastApplicationUpdateAt IS NOT NULL")
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where("listings.afsLastRunAt IS NULL").orWhere(
+            "listings.afsLastRunAt <= listings.lastApplicationUpdateAt"
+          )
+        })
+      )
+      .getMany()
 
-    console.log(`Found ${activeListings.length} active listings`)
-
-    for (const activeListing of activeListings) {
-      console.log(`Processing AFSes for Listing \"${activeListing.name}\"`)
-      await this.removeAllAFSesForListing(activeListing)
-
-      for (const rule of rules) {
-        await this.generateAFSesForListingRule(activeListing, rule)
+    for (const outOfDateListing of outOfDateListings) {
+      try {
+        for (const rule of rules) {
+          await this.generateAFSesForListingRule(outOfDateListing, rule)
+        }
+      } catch (e) {
+        console.error(e)
       }
-    }
-  }
 
-  private async removeAllAFSesForListing(listing: Listing) {
-    const afses = await this.afsRepository.find({ where: { listing } })
-    await this.afsRepository.remove(afses)
+      outOfDateListing.afsLastRunAt = new Date()
+      await this.listingRepository.save(outOfDateListing)
+    }
   }
 
   private async generateAFSesForListingRule(listing: Listing, rule: Rule) {
-    const applications = await this.applicationRepository.find({ where: { listing } })
-    for(const application of applications) {
-      await this.updateApplicationFlaggedSetsForRule(application, rule)
+    const newApplications = await this.applicationRepository.find({
+      where: { listing, createdAt: MoreThanOrEqual(listing.afsLastRunAt) },
+    })
+
+    for (const newApplication of newApplications) {
+      await this.addApplication(newApplication, rule)
+    }
+
+    const existingApplications = await this.applicationRepository.find({
+      where: {
+        listing,
+        createdAt: LessThan(listing.afsLastRunAt),
+        updatedAt: MoreThanOrEqual(listing.afsLastRunAt),
+      },
+    })
+
+    for (const existingApplication of existingApplications) {
+      await this.updateApplication(existingApplication, rule)
     }
   }
 
-  async updateApplicationFlaggedSetsForRule(
-    newApplication: Application,
-    rule: Rule
-  ) {
-    const applicationsMatchingRule = await this.fetchDuplicatesMatchingRule(
-      newApplication,
-      rule
-    )
+  async updateApplication(application: Application, rule: Rule) {
+    application.markedAsDuplicate = false
+    await this.applicationRepository.save(application)
 
-    const visitedAfses = []
+    let afses = await this.afsRepository
+      .createQueryBuilder("afs")
+      .leftJoin("afs.applications", "applications")
+      .select(["afs", "applications.id"])
+      .where(`afs.listing_id = :listingId`, { listingId: application.listingId })
+      .getMany()
+
+    afses = afses.filter((afs) => afs.applications.map((app) => app.id).includes(application.id))
+
+    const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
+    const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
+
+    for (const afs of afses) {
+      afs.status = FlaggedSetStatus.flagged
+      afs.resolvedTime = null
+      afs.resolvingUser = null
+
+      const applicationIndex = afs.applications.findIndex((app) => app.id === application.id)
+
+      if (applicationIndex == -1) {
+        continue
+      }
+
+      afs.applications.splice(applicationIndex, 1)
+
+      if (afs.applications.length > 1) {
+        afsesToBeSaved.push(afs)
+      } else {
+        afsesToBeRemoved.push(afs)
+      }
+    }
+
+    await this.afsRepository.save(afsesToBeSaved)
+    await this.afsRepository.remove(afsesToBeRemoved)
+
+    await this.addApplication(application, rule)
+  }
+
+  async addApplication(newApplication: Application, rule: Rule) {
+    const applicationsMatchingRule = await this.fetchDuplicatesMatchingRule(newApplication, rule)
+
+    if (applicationsMatchingRule.length == 0) {
+      return
+    }
 
     const afses = await this.afsRepository
       .createQueryBuilder("afs")
       .leftJoin("afs.applications", "applications")
       .select(["afs", "applications.id"])
-      .where(`afs.listing_id = :listingId`, { listingId: newApplication.listing.id })
-      .andWhere(`rule = :rule`, { rule })
+      .where(`afs.ruleKey = :ruleKey`, { ruleKey: this.getRuleKeyForRule(newApplication, rule) })
       .getMany()
 
-    for (const matchedApplication of applicationsMatchingRule) {
-      const afsesMatchingRule = afses.filter((afs) =>
-        afs.applications.map((app) => app.id).includes(matchedApplication.id)
-      )
+    if (afses.length == 0) {
+      await this.afsRepository.save({
+        rule: rule,
+        ruleKey: this.getRuleKeyForRule(newApplication, rule),
+        resolvedTime: null,
+        resolvingUser: null,
+        status: FlaggedSetStatus.flagged,
+        applications: [newApplication, ...applicationsMatchingRule],
+        listing: { id: newApplication.listingId },
+      })
+    } else if (afses.length == 1) {
+      const afs = afses[0]
 
-      if (afsesMatchingRule.length === 0) {
-        await this.afsRepository.save({
-          rule: rule,
-          resolvedTime: null,
-          resolvingUser: null,
-          status: FlaggedSetStatus.flagged,
-          applications: [newApplication, matchedApplication],
-          listing: newApplication.listing,
-        })
-      } else if (afsesMatchingRule.length === 1) {
-        for (const afs of afsesMatchingRule) {
-          if (visitedAfses.includes(afs.id)) {
-            return
-          }
-
-          visitedAfses.push(afs.id)
-          afs.applications.push(newApplication)
-
-          await this.afsRepository.save(afs)
-        }
-      } else {
-        console.error(
-          "There should be up to one AFS matching a rule for given application, " +
-          "probably a logic error when creating AFSes"
-        )
+      if (!afs.applications.map((app) => app.id).includes(newApplication.id)) {
+        afs.applications.push(newApplication)
+        await this.afsRepository.save(afs)
       }
+    } else {
+      console.error(
+        "There should be up to one AFS matching a rule for given application, " +
+          "probably a logic error when creating AFSes"
+      )
     }
   }
 
-  private async fetchDuplicatesMatchingRule(
-    application: Application,
-    rule: Rule
-  ) {
+  private async fetchDuplicatesMatchingRule(application: Application, rule: Rule) {
     switch (rule) {
       case Rule.nameAndDOB:
         return await this.fetchDuplicatesMatchingNameAndDOBRule(application)
@@ -117,9 +159,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     }
   }
 
-  private async fetchDuplicatesMatchingEmailRule(
-    newApplication: Application
-  ) {
+  private async fetchDuplicatesMatchingEmailRule(newApplication: Application) {
     return await this.applicationRepository.find({
       select: ["id"],
       where: (qb: SelectQueryBuilder<Application>) => {
@@ -127,7 +167,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
           id: newApplication.id,
         })
           .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id,
+            listingId: newApplication.listingId,
           })
           .andWhere("Application__applicant.emailAddress = :emailAddress", {
             emailAddress: newApplication.applicant.emailAddress,
@@ -137,9 +177,20 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     })
   }
 
-  private async fetchDuplicatesMatchingNameAndDOBRule(
-    newApplication: Application
-  ) {
+  private getRuleKeyForRule(newApplication: Application, rule: Rule): string {
+    if (rule == Rule.email) {
+      return `${newApplication.listingId}-email-${newApplication.applicant.emailAddress}`
+    } else if (rule == Rule.nameAndDOB) {
+      return (
+        `${newApplication.listingId}-nameAndDOB-${newApplication.applicant.firstName}-${newApplication.applicant.lastName}-${newApplication.applicant.birthMonth}-` +
+        `${newApplication.applicant.birthDay}-${newApplication.applicant.birthYear}`
+      )
+    } else {
+      throw new Error("Invalid rule")
+    }
+  }
+
+  private async fetchDuplicatesMatchingNameAndDOBRule(newApplication: Application) {
     const firstNames = [
       newApplication.applicant.firstName,
       ...newApplication.householdMembers.map((householdMember) => householdMember.firstName),
@@ -172,7 +223,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
           id: newApplication.id,
         })
           .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id,
+            listingId: newApplication.listingId,
           })
           .andWhere("Application.status = :status", { status: "submitted" })
           .andWhere(

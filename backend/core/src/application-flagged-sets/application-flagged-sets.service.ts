@@ -2,24 +2,13 @@ import { BadRequestException, Inject, Injectable, NotFoundException, Scope } fro
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import {
-  Brackets,
-  DeepPartial,
-  EntityManager,
-  getManager,
-  getMetadataArgsStorage,
-  In,
-  QueryRunner,
-  Repository,
-  SelectQueryBuilder,
-} from "typeorm"
+import { getManager, Repository } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { User } from "../auth/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
-import { Rule } from "./types/rule-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
@@ -36,7 +25,7 @@ export class ApplicationFlaggedSetsService {
     private readonly applicationsRepository: Repository<Application>,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
-    @InjectQueue(AFSProcessingQueueNames.afsProcessing) private afsProcessingQueue: Queue,
+    @InjectQueue(AFSProcessingQueueNames.afsProcessing) private afsProcessingQueue: Queue
   ) {}
   async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
     const results = await paginate<ApplicationFlaggedSet>(

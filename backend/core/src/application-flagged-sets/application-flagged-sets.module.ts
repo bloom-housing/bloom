@@ -28,7 +28,7 @@ import { ListingRepository } from "../listings/repositories/listing.repository"
             port: +redisUrl.port,
           },
         }
-      }
+      },
     }),
     BullModule.registerQueue({
       name: AFSProcessingQueueNames.afsProcessing,
@@ -41,6 +41,10 @@ import { ListingRepository } from "../listings/repositories/listing.repository"
     ApplicationFlaggedSetsCronjobBoostrapService,
     ApplicationFlaggedSetsCronjobConsumer,
   ],
-  exports: [ApplicationFlaggedSetsService, ApplicationFlaggedSetsCronjobBoostrapService, ApplicationFlaggedSetsCronjobConsumer],
+  exports: [
+    ApplicationFlaggedSetsService,
+    ApplicationFlaggedSetsCronjobBoostrapService,
+    ApplicationFlaggedSetsCronjobConsumer,
+  ],
 })
 export class ApplicationFlaggedSetsModule {}

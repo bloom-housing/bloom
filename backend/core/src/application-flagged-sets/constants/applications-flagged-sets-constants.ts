@@ -1,3 +1,3 @@
 export enum AFSProcessingQueueNames {
-  afsProcessing = "afs-processing"
+  afsProcessing = "afs-processing",
 }
