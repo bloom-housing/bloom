@@ -45,7 +45,6 @@ export type ApplicationTypes = {
     otherType?: string
     mailingAddress: Address
   }
-
   applicant: {
     firstName?: string
     middleName?: string

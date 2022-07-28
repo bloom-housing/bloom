@@ -35,9 +35,9 @@ const DetailsMultiselectQuestions = ({
                 const appQuestion = questions.filter(
                   (question) => question.key === listingQuestion.multiselectQuestion.text
                 )[0]
-                if (!appQuestion.claimed) return t("t.none")
+                if (!appQuestion?.claimed) return t("t.none")
 
-                const options = appQuestion.options.filter((option) => option.checked)
+                const options = appQuestion?.options?.filter((option) => option.checked)
 
                 return options.map((option) => {
                   const extra = option.extraData?.map((extra) => {
