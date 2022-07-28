@@ -21,6 +21,7 @@ import {
   mapApiToMultiselectForm,
   mapCheckboxesToApi,
   mapRadiosToApi,
+  getInputType,
 } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
@@ -71,13 +72,20 @@ type mapFormToApiProps = {
   listingId: string
   editMode: boolean
   programs: MultiselectQuestion[]
+  preferences: MultiselectQuestion[]
 }
 
 /*
   Format data which comes from react-hook-form into correct API format.
 */
 
-export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToApiProps) => {
+export const mapFormToApi = ({
+  data,
+  listingId,
+  editMode,
+  programs,
+  preferences,
+}: mapFormToApiProps) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -131,18 +139,61 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     }
   })()
 
-  // TO DO idk
-  const preferences = mapCheckboxesToApi(data.application.preferences, ) mapPreferencesToApi(data)
-  const programsForm = data.application.programs
-    ? Object.entries(data.application.programs).reduce((acc, curr) => {
-        if (curr[1]) {
-          Object.assign(acc, { [curr[0]]: curr[1] })
-        }
-        return acc
-      }, {})
-    : {}
+  console.log({ preferences })
 
-  const programsData = mapProgramsToApi(programs, programsForm)
+  const preferencesData = preferences.map((pref: MultiselectQuestion) => {
+    const inputType = getInputType(pref.options)
+    if (inputType === "checkbox") {
+      return mapCheckboxesToApi(data, pref, ApplicationSection.preferences)
+    }
+    if (inputType === "radio") {
+      return mapRadiosToApi({ [pref.text]: data.application.preferences[pref.text] }, pref)
+    }
+  })
+  console.log({ preferencesData })
+  console.log({ programs })
+
+  console.log({ data })
+
+  const programsData = programs.map((program: MultiselectQuestion) => {
+    console.log({ program })
+    const inputType = getInputType(program.options)
+    console.log({ inputType })
+    if (inputType === "checkbox") {
+      return mapCheckboxesToApi(data, program, ApplicationSection.programs)
+    }
+    if (inputType === "radio") {
+      return mapRadiosToApi({ [program.text]: data.application.programs[program.text] }, program)
+    }
+  })
+
+  console.log({ programsData })
+  // const preferences = Object.entries(data.application.preferences)?.reduce((acc, curr) => {
+  //   if (Object.keys(curr).length) {
+  //     return { ...acc, ...mapCheckboxesToApi(curr[1], curr[0]) }
+  //   } else {
+  //     return { ...acc, ...mapRadiosToApi(curr[1], null) }
+  //   }
+  // }, {})
+
+  // const programs = Object.entries(data.application.programs)?.reduce((acc, curr) => {
+  //   if (Object.keys(curr).length) {
+  //     return { ...acc, ...mapCheckboxesToApi(curr[1], curr[0]) }
+  //   } else {
+  //     return { ...acc, ...mapRadiosToApi(curr[1], null) }
+  //   }
+  // }, {})
+
+  // const programsForm = data.application.programs
+  //   ? Object.entries(data.application.programs).reduce((acc, curr) => {
+  //       if (curr[1]) {
+  //         Object.assign(acc, { [curr[0]]: curr[1] })
+  //       }
+  //       return acc
+  //     }, {})
+  //   : {}
+
+  // const programsData = mapProgramsToApi(programs, programsForm)
 
   // additional phone
   const {
@@ -225,7 +276,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     accessibility,
     householdExpectingChanges,
     householdStudent,
-    preferences,
+    preferences: preferencesData,
     programs: programsData,
     income,
     incomePeriod,
@@ -241,6 +292,8 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     householdSize,
   }
 
+  console.log({ result })
+
   return result
 }
 
@@ -249,6 +302,9 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
 */
 
 export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listing) => {
+  console.log("HERE!")
+  console.log(applicationData)
+  console.log(listing)
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate)).utc()
     : null
@@ -301,14 +357,15 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
 
   const preferences = mapApiToMultiselectForm(
     applicationData.preferences,
-    listing.listingMultiselectQuestions,
+    listing?.listingMultiselectQuestions,
     ApplicationSection.preferences
-  )
+  ).application.preferences
+
   const programs = mapApiToMultiselectForm(
     applicationData.programs,
-    listing.listingMultiselectQuestions,
+    listing?.listingMultiselectQuestions,
     ApplicationSection.programs
-  )
+  ).application.programs
 
   const application: ApplicationTypes = (() => {
     const {

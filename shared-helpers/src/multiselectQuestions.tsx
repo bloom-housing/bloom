@@ -105,10 +105,9 @@ export const getAllOptions = (
 
 export const getRadioFields = (
   options: MultiselectOption[],
-  errors: UseFormMethods["errors"],
   register: UseFormMethods["register"],
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  errors?: UseFormMethods["errors"]
 ) => {
   return (
     <fieldset>
@@ -117,10 +116,10 @@ export const getRadioFields = (
         fieldClassName="ml-0"
         type={"radio"}
         name={question?.text}
-        error={errors[question?.text]}
-        errorMessage={t("errors.selectAnOption")}
+        error={errors && errors[question?.text]}
+        errorMessage={errors && t("errors.selectAnOption")}
         register={register}
-        validation={{ required: true }}
+        validation={{ required: !!errors }}
         dataTestId={"app-program-option"}
         fields={options?.map((option) => {
           return {
@@ -128,7 +127,6 @@ export const getRadioFields = (
             label: option?.text,
             value: option?.text,
             description: option?.description,
-            //   defaultChecked: programData?.options?.find((item) => item.key === option.key)?.checked,
           }
         })}
       />
@@ -140,14 +138,13 @@ const getCheckboxField = (
   option: MultiselectOption,
   question: MultiselectQuestion,
   applicationSection: ApplicationSection,
-  errors: UseFormMethods["errors"],
   register: UseFormMethods["register"],
-  trigger: UseFormMethods["trigger"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
-  exclusiveKeys: string[],
   allOptions: string[],
-  optionFieldName: string
+  optionFieldName: string,
+  trigger?: UseFormMethods["trigger"],
+  exclusiveKeys?: string[]
 ) => {
   return (
     <Field
@@ -158,10 +155,10 @@ const getCheckboxField = (
       register={register}
       inputProps={{
         onChange: (e: any) => {
-          if (e.target.checked) {
+          if (e.target.checked && trigger) {
             void trigger()
           }
-          if (option.exclusive && e.target.checked) {
+          if (option.exclusive && e.target.checked && exclusiveKeys) {
             setExclusive(
               true,
               setValue,
@@ -172,7 +169,7 @@ const getCheckboxField = (
               ) ?? []
             )
           }
-          if (!option.exclusive) {
+          if (!option.exclusive && exclusiveKeys) {
             setExclusive(
               false,
               setValue,
@@ -188,7 +185,7 @@ const getCheckboxField = (
       validation={{
         validate: {
           somethingIsChecked: (value) => {
-            if (question.optOutText) {
+            if (question.optOutText && trigger) {
               return value || !!allOptions.find((option) => getValues(option))
             }
           },
@@ -204,16 +201,16 @@ export const getCheckboxOption = (
   option: MultiselectOption,
   question: MultiselectQuestion,
   applicationSection: ApplicationSection,
-  errors: UseFormMethods["errors"],
   register: UseFormMethods["register"],
-  trigger: UseFormMethods["trigger"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
-  exclusiveKeys: string[],
   allOptions: string[],
   watchFields: {
     [x: string]: any
-  }
+  },
+  errors?: UseFormMethods["errors"],
+  trigger?: UseFormMethods["trigger"],
+  exclusiveKeys?: string[]
 ) => {
   const optionFieldName = fieldName(question.text, applicationSection, option.text)
   return (
@@ -223,14 +220,13 @@ export const getCheckboxOption = (
           option,
           question,
           applicationSection,
-          errors,
           register,
-          trigger,
           setValue,
           getValues,
-          exclusiveKeys,
           allOptions,
-          optionFieldName
+          optionFieldName,
+          trigger,
+          exclusiveKeys
         )}
       </div>
 
@@ -268,7 +264,7 @@ export const getCheckboxOption = (
 }
 
 export const mapRadiosToApi = (
-  data: { [name: string]: string },
+  data: { [name: string]: any },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
   if (Object.keys(data).length === 0) {
@@ -305,7 +301,7 @@ export const mapRadiosToApi = (
 }
 
 export const mapCheckboxesToApi = (
-  formData: { [name: string]: boolean },
+  formData: { [name: string]: any },
   question: MultiselectQuestion,
   applicationSection: ApplicationSection
 ): ApplicationMultiselectQuestion => {
@@ -349,9 +345,9 @@ export const mapApiToMultiselectForm = (
     return {
       question,
       inputType: getInputType(
-        listingQuestions.filter(
-          (listingQuestion) => listingQuestion.multiselectQuestion.text === question.key
-        )[0].multiselectQuestion.options ?? []
+        listingQuestions?.filter(
+          (listingQuestion) => listingQuestion?.multiselectQuestion?.text === question.key
+        )[0].multiselectQuestion?.options ?? []
       ),
     }
   })
@@ -395,7 +391,7 @@ export const mapApiToMultiselectForm = (
      */
     if (appQuestion.inputType === "radio") {
       const selectedRadio = question.options.filter((option) => !!option.checked)[0]
-      questionsFormData[question?.key] = selectedRadio?.key
+      questionsFormData["application"][applicationSection][question?.key] = selectedRadio?.key
     }
   })
 

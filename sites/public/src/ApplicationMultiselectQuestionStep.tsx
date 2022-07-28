@@ -127,14 +127,14 @@ const ApplicationMultiselectQuestionStep = ({
       option,
       question,
       applicationSection,
-      errors,
       register,
-      trigger,
       setValue,
       getValues,
-      exclusiveKeys,
       allOptionNames,
-      watchQuestions
+      watchQuestions,
+      errors,
+      trigger,
+      exclusiveKeys
     )
   }
 
@@ -205,7 +205,7 @@ const ApplicationMultiselectQuestionStep = ({
                     })}
                 </fieldset>
               ) : (
-                getRadioFields(question?.options, errors, register, question, applicationSection)
+                getRadioFields(question?.options, register, question, errors)
               )}
             </div>
           </div>

@@ -24,11 +24,12 @@ import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
 import { FormHouseholdMembers } from "./sections/FormHouseholdMembers"
 import { FormHouseholdDetails } from "./sections/FormHouseholdDetails"
-import { FormPreferences } from "./sections/FormPreferences"
+// import { FormMultiselectQuestions } from "./sections/FormMultiselectQuestions"
 import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
 import { FormPrograms } from "./sections/FormPrograms"
+import { FormMultiselectQuestions } from "./sections/FormMultiselectQuestions"
 
 import { Aside } from "../Aside"
 import { FormTypes } from "./FormTypes"
@@ -113,6 +114,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       listingId,
       editMode,
       programs: programs.map((item) => item.multiselectQuestion),
+      preferences: preferences.map((item) => item.multiselectQuestion),
     })
 
     try {
@@ -161,6 +163,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     }
   }
 
+  console.log(listingDto)
+
+  console.log(application)
+
   return (
     <LoadingOverlay isLoading={loading}>
       <>
@@ -208,11 +214,19 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       applicationAccessibilityFeatures={application?.accessibility}
                     />
 
-                    <FormPrograms programs={programs} />
+                    <FormMultiselectQuestions
+                      questions={programs}
+                      applicationSection={ApplicationSection.programs}
+                      sectionTitle={t("application.details.programs")}
+                    />
 
                     <FormHouseholdIncome />
 
-                    <FormPreferences preferences={preferences} />
+                    <FormMultiselectQuestions
+                      questions={preferences}
+                      applicationSection={ApplicationSection.preferences}
+                      sectionTitle={t("application.details.preferences")}
+                    />
 
                     <FormDemographics formValues={application?.demographics} />
 
