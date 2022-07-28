@@ -91,7 +91,7 @@ const ApplicationMultiselectQuestionStep = ({
     const body =
       questionSetInputType === "checkbox"
         ? mapCheckboxesToApi(data, question, applicationSection)
-        : mapRadiosToApi(data, question)
+        : mapRadiosToApi(data.application.programs, question)
     if (questions.length > 1 && body) {
       // If there is more than one question, save the data in segments
       const currentQuestions = conductor.currentStep.application[applicationSection].filter(
@@ -205,7 +205,7 @@ const ApplicationMultiselectQuestionStep = ({
                     })}
                 </fieldset>
               ) : (
-                getRadioFields(question?.options, register, question, errors)
+                getRadioFields(question?.options, register, question, applicationSection, errors)
               )}
             </div>
           </div>

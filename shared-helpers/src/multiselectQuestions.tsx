@@ -27,8 +27,8 @@ export const fieldName = (
   applicationSection: ApplicationSection,
   optionName?: string
 ) => {
-  return `application.${applicationSection}.${questionName.replace(/'/g, "")}${
-    optionName ? `.${optionName.replace(/'/g, "")}` : ""
+  return `application.${applicationSection}.${questionName?.replace(/'/g, "")}${
+    optionName ? `.${optionName?.replace(/'/g, "")}` : ""
   }`
 }
 
@@ -107,6 +107,7 @@ export const getRadioFields = (
   options: MultiselectOption[],
   register: UseFormMethods["register"],
   question: MultiselectQuestion,
+  applicationSection: ApplicationSection,
   errors?: UseFormMethods["errors"]
 ) => {
   return (
@@ -115,7 +116,7 @@ export const getRadioFields = (
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
         type={"radio"}
-        name={question?.text}
+        name={fieldName(question?.text, applicationSection)}
         error={errors && errors[question?.text]}
         errorMessage={errors && t("errors.selectAnOption")}
         register={register}
@@ -123,7 +124,7 @@ export const getRadioFields = (
         dataTestId={"app-program-option"}
         fields={options?.map((option) => {
           return {
-            id: option?.text,
+            id: `${question?.text}-${option?.text}`,
             label: option?.text,
             value: option?.text,
             description: option?.description,
@@ -267,6 +268,7 @@ export const mapRadiosToApi = (
   data: { [name: string]: any },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
+  console.log({ data })
   if (Object.keys(data).length === 0) {
     return {
       key: "",
@@ -342,6 +344,8 @@ export const mapApiToMultiselectForm = (
     question: ApplicationMultiselectQuestion
     inputType: string
   }[] = applicationQuestions.map((question) => {
+    console.log(listingQuestions)
+    console.log(question)
     return {
       question,
       inputType: getInputType(
