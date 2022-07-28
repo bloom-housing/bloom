@@ -1,6 +1,6 @@
 import { Listing } from "@bloom-housing/backend-core/types"
 import { cleanup } from "@testing-library/react"
-import { cloudinaryUrlFromId, imageUrlFromListing } from "../src/photos"
+import { cloudinaryUrlFromId, CLOUDINARY_BUILDING_LABEL, imageUrlFromListing } from "../src/photos"
 
 afterEach(cleanup)
 
@@ -32,7 +32,7 @@ describe("photos helper", () => {
           ordinal: 0,
           image: {
             fileId: "1234",
-            label: "cloudinaryBuilding",
+            label: CLOUDINARY_BUILDING_LABEL,
           },
         },
       ],
