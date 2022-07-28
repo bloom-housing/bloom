@@ -24,8 +24,8 @@ import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
   ListingEventType,
-  Preference,
-  Program,
+  ApplicationSection,
+  MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import { AlertErrorType, FormListing, TempEvent, TempUnit, formDefaults } from "./formTypes"
 import ListingDataPipeline from "./ListingDataPipeline"
@@ -73,16 +73,28 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(
-    listing?.listingPreferences.map((listingPref) => {
-      return { ...listingPref.preference }
-    }) ?? []
+  const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
+    listing?.listingMultiselectQuestions
+      .filter(
+        (question) =>
+          question.multiselectQuestion.applicationSection === ApplicationSection.preferences
+      )
+      .map((listingPref) => {
+        return { ...listingPref.multiselectQuestion }
+      }) ?? []
   )
-  const [programs, setPrograms] = useState<Program[]>(
-    listing?.listingPrograms.map((program) => {
-      return program.program
-    }) ?? []
+  const [programs, setPrograms] = useState<MultiselectQuestion[]>(
+    listing?.listingMultiselectQuestions
+      .filter(
+        (question) =>
+          question.multiselectQuestion.applicationSection === ApplicationSection.programs
+      )
+      .map((program) => {
+        return program.multiselectQuestion
+      }) ?? []
   )
+
+  console.log({ listing })
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,

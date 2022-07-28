@@ -318,6 +318,7 @@ export function useJurisdiction(jurisdictionId: string) {
   }
 }
 
+//TODO need a multiselect fetcher that can filter on application section
 export function useJurisdictionalPreferenceList(jurisdictionId: string) {
   const { preferencesService } = useContext(AuthContext)
   const fetcher = () =>

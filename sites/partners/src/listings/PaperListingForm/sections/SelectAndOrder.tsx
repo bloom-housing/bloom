@@ -11,9 +11,9 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { Preference, Program } from "@bloom-housing/backend-core/types"
+import { MultiselectQuestion } from "@bloom-housing/backend-core/types"
 
-type SelectAndOrderSection = Preference | Program
+type SelectAndOrderSection = MultiselectQuestion
 
 type SelectAndOrderProps = {
   listingData: SelectAndOrderSection[]
@@ -67,7 +67,7 @@ const SelectAndOrder = ({
         fetchedData.map((item) => {
           setValue(
             `${formKey}.${item.id}`,
-            editedListingData.some((existingItem) => existingItem.title === item.title)
+            editedListingData.some((existingItem) => existingItem.text === item.text)
           )
         })
       }
@@ -79,7 +79,7 @@ const SelectAndOrder = ({
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
-        name: { content: item.title },
+        name: { content: item.text },
         action: {
           content: (
             <div className="flex">
@@ -104,7 +104,7 @@ const SelectAndOrder = ({
     () =>
       listingData.map((item, index) => ({
         order: { content: index + 1 },
-        name: { content: item.title },
+        name: { content: item.text },
         action: {
           content: (
             <div className="flex">
@@ -131,7 +131,7 @@ const SelectAndOrder = ({
       const newDragOrder = []
       dragOrder.forEach((item) => {
         newDragOrder.push(
-          draftListingData.filter((draftItem) => draftItem.title === item.name.content)[0]
+          draftListingData.filter((draftItem) => draftItem.text === item.name.content)[0]
         )
       })
       setDraftListingData(newDragOrder)
@@ -142,6 +142,8 @@ const SelectAndOrder = ({
   const jurisdiction: string = watch("jurisdiction.id")
 
   const { data: fetchedData = [] } = dataFetcher(jurisdiction)
+
+  console.log({ fetchedData })
 
   const formTableHeaders = {
     order: "t.order",
@@ -239,11 +241,11 @@ const SelectAndOrder = ({
                       id={`${formKey}.${item.id}`}
                       name={`${formKey}.${item.id}`}
                       type="checkbox"
-                      label={item.title}
+                      label={item.text}
                       register={register}
                       inputProps={{
                         defaultChecked: draftListingData.some(
-                          (existingItem) => existingItem.title === item.title
+                          (existingItem) => existingItem.text === item.text
                         ),
                       }}
                     />

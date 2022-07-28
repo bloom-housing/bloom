@@ -5,12 +5,14 @@ import Formatter from "./Formatter"
 export default class AdditionalMetadataFormatter extends Formatter {
   /** Format a final set of various values */
   process() {
-    this.data.listingPreferences = this.metadata.preferences.map((preference, index) => {
-      return { preference, ordinal: index + 1 }
+    const preferences = this.metadata.preferences.map((preference, index) => {
+      return { multiselectQuestion: preference, ordinal: index + 1 }
     })
-    this.data.listingPrograms = this.metadata.programs.map((program, index) => {
-      return { program: { ...program }, ordinal: index + 1 }
+    const programs = this.metadata.programs.map((program, index) => {
+      return { multiselectQuestion: program, ordinal: index + 1 }
     })
+
+    this.data.listingMultiselectQuestions = { ...preferences, ...programs }
 
     if (this.data.buildingAddress) {
       this.data.buildingAddress = {
