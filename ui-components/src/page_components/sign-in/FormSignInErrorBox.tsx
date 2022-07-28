@@ -24,7 +24,11 @@ const FormSignInErrorBox = ({ networkStatus, errors, errorMessageId }: FormSignI
       )}
 
       {networkStatus.content?.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={`form-sign-in-${errorMessageId}-error`} error={!!networkStatus.content}>
+        <ErrorMessage
+          id={`form-sign-in-${errorMessageId}-error`}
+          error={!!networkStatus.content}
+          className="block mt-0 leading-normal"
+        >
           <AlertBox type={"alert"} inverted onClose={() => networkStatus.reset()}>
             {networkStatus.content.title}
           </AlertBox>
