@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import {
   t,
@@ -27,13 +27,22 @@ const ListingPhotos = () => {
   const { fields, append, remove } = useFieldArray({
     name: "images",
   })
-
   const listingFormPhotos: ListingImage[] = watch("images").sort(
     (imageA, imageB) => imageA.ordinal - imageB.ordinal
   )
 
+  const saveImageFields = (images: ListingImage[]) => {
+    remove(fields.map((item, index) => index))
+    images.forEach((item, index) => {
+      append({
+        ordinal: index,
+        image: item.image,
+      })
+    })
+  }
+
   /*
-    Set state for the drawer, upload progress, and more
+    Set state for the drawer, upload progress, images in the drawer, and more
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
@@ -41,19 +50,24 @@ const ListingPhotos = () => {
     id: "",
     url: "",
   })
+  const [drawerImages, setDrawerImages] = useState<ListingImage[]>([])
 
   const resetDrawerState = () => {
     setDrawerState(false)
+    setDrawerImages([])
   }
 
   const savePhoto = useCallback(() => {
-    append({
-      ordinal: listingFormPhotos.length,
-      image: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL },
-    })
+    setDrawerImages([
+      ...drawerImages,
+      {
+        ordinal: drawerImages.length,
+        image: { fileId: latestUpload.id, label: CLOUDINARY_BUILDING_LABEL },
+      },
+    ])
     setLatestUpload({ id: "", url: "" })
     setProgressValue(0)
-  }, [append, listingFormPhotos, latestUpload])
+  }, [drawerImages, latestUpload])
 
   useEffect(() => {
     if (latestUpload.id != "") {
@@ -79,39 +93,45 @@ const ListingPhotos = () => {
   /*
     Show a re-orderable list of uploaded images within the drawer
   */
-  const drawerTableRows: StandardTableData = listingFormPhotos.map((item, index) => {
-    const image = item.image as Asset
-    return {
-      ordinal: {
-        content: item.ordinal + 1,
-      },
-      preview: {
-        content: (
-          <TableThumbnail>
-            <img src={getUrlForListingImage(image)} />
-          </TableThumbnail>
-        ),
-      },
-      fileName: { content: image.fileId.split("/").slice(-1).join() },
-      primary: {
-        content: index == 0 ? t("listings.sections.primaryPhoto") : "",
-      },
-      actions: {
-        content: (
-          <Button
-            type="button"
-            className="font-semibold uppercase text-red-700"
-            onClick={() => {
-              remove(index)
-            }}
-            unstyled
-          >
-            {t("t.delete")}
-          </Button>
-        ),
-      },
-    }
-  })
+  const drawerTableRows: StandardTableData = useMemo(() => {
+    return drawerImages.map((item, index) => {
+      const image = item.image as Asset
+      return {
+        ordinal: {
+          content: item.ordinal + 1,
+        },
+        preview: {
+          content: (
+            <TableThumbnail>
+              <img src={getUrlForListingImage(image)} />
+            </TableThumbnail>
+          ),
+        },
+        fileName: { content: image.fileId.split("/").slice(-1).join() },
+        primary: {
+          content: index == 0 ? t("listings.sections.primaryPhoto") : "",
+        },
+        actions: {
+          content: (
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => {
+                const filteredImages = drawerImages.filter((item, i2) => i2 != index)
+                filteredImages.forEach((item, i2) => {
+                  item.ordinal = i2
+                })
+                setDrawerImages(filteredImages)
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          ),
+        },
+      }
+    })
+  }, [drawerImages])
 
   /*
     Show list of images in the main listing form
@@ -136,7 +156,7 @@ const ListingPhotos = () => {
             type="button"
             className="font-semibold uppercase text-red-700"
             onClick={() => {
-              remove(index)
+              saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
             }}
             unstyled
           >
@@ -200,6 +220,7 @@ const ListingPhotos = () => {
               styleType={fieldHasError(errors?.images) ? AppearanceStyleType.alert : null}
               onClick={() => {
                 setDrawerState(true)
+                setDrawerImages([...listingFormPhotos])
                 clearErrors("images")
               }}
             >
@@ -212,6 +233,7 @@ const ListingPhotos = () => {
         <span className={"text-sm text-alert"}>{errors?.images?.nested?.message}</span>
       )}
 
+      {/* Image management and upload drawer */}
       <Drawer
         open={drawerState}
         title={t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
@@ -221,6 +243,7 @@ const ListingPhotos = () => {
           <Button
             key={0}
             onClick={() => {
+              saveImageFields(drawerImages)
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
@@ -231,24 +254,20 @@ const ListingPhotos = () => {
         ]}
       >
         <section className="border rounded-md p-8 bg-white">
-          {listingFormPhotos.length > 0 && (
+          {drawerImages.length > 0 && (
             <div className="mb-10">
               <MinimalTable
                 draggable={true}
                 setData={(newData) => {
-                  const updatedFields = newData.map((item: Record<string, StandardTableCell>) => {
-                    return fields.find(
-                      (field) =>
-                        field.image.fileId.split("/").slice(-1).join() == item.fileName.content
-                    )
-                  })
-                  remove(fields.map((item, index) => index))
-                  updatedFields.forEach((item, index) => {
-                    append({
-                      ordinal: index,
-                      image: item.image,
+                  setDrawerImages(
+                    newData.map((item: Record<string, StandardTableCell>, index) => {
+                      const foundImage = drawerImages.find(
+                        (field) =>
+                          field.image.fileId.split("/").slice(-1).join() == item.fileName.content
+                      )
+                      return { ...foundImage, ordinal: index }
                     })
-                  })
+                  )
                 }}
                 headers={drawerTableHeaders}
                 data={drawerTableRows}
