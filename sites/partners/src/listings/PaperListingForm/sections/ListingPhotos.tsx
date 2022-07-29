@@ -76,7 +76,7 @@ const ListingPhotos = () => {
   }, [latestUpload, savePhoto])
 
   /*
-    Set up table headers
+    Show list of images in the main listing form
   */
   const photoTableHeaders = {
     preview: "t.preview",
@@ -85,57 +85,6 @@ const ListingPhotos = () => {
     actions: "",
   }
 
-  const drawerTableHeaders = {
-    ordinal: "t.order",
-    ...photoTableHeaders,
-  }
-
-  /*
-    Show a re-orderable list of uploaded images within the drawer
-  */
-  const drawerTableRows: StandardTableData = useMemo(() => {
-    return drawerImages.map((item, index) => {
-      const image = item.image as Asset
-      return {
-        ordinal: {
-          content: item.ordinal + 1,
-        },
-        preview: {
-          content: (
-            <TableThumbnail>
-              <img src={getUrlForListingImage(image)} />
-            </TableThumbnail>
-          ),
-        },
-        fileName: { content: image.fileId.split("/").slice(-1).join() },
-        primary: {
-          content: index == 0 ? t("listings.sections.primaryPhoto") : "",
-        },
-        actions: {
-          content: (
-            <Button
-              type="button"
-              className="font-semibold uppercase text-red-700"
-              onClick={() => {
-                const filteredImages = drawerImages.filter((item, i2) => i2 != index)
-                filteredImages.forEach((item, i2) => {
-                  item.ordinal = i2
-                })
-                setDrawerImages(filteredImages)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          ),
-        },
-      }
-    })
-  }, [drawerImages])
-
-  /*
-    Show list of images in the main listing form
-  */
   const listingPhotoTableRows: StandardTableData = []
   listingFormPhotos.forEach((image, index) => {
     listingPhotoTableRows.push({
@@ -166,6 +115,75 @@ const ListingPhotos = () => {
       },
     })
   })
+
+  /*
+    Show a re-orderable list of uploaded images within the drawer
+  */
+
+  const drawerTableHeaders = {
+    ordinal: "t.order",
+    ...photoTableHeaders,
+  }
+
+  const drawerTableRows: StandardTableData = useMemo(() => {
+    return drawerImages.map((item, index) => {
+      const image = item.image as Asset
+      return {
+        ordinal: {
+          content: item.ordinal + 1,
+        },
+        preview: {
+          content: (
+            <TableThumbnail>
+              <img src={getUrlForListingImage(image)} />
+            </TableThumbnail>
+          ),
+        },
+        fileName: { content: image.fileId.split("/").slice(-1).join() },
+        primary: {
+          content:
+            index == 0 ? (
+              t("listings.sections.primaryPhoto")
+            ) : (
+              <Button
+                unstyled
+                className="ml-0"
+                onClick={() => {
+                  const resortedImages = [
+                    drawerImages[index],
+                    ...drawerImages.filter((item, i2) => i2 != index),
+                  ]
+                  resortedImages.forEach((item, i2) => {
+                    item.ordinal = i2
+                  })
+                  setDrawerImages(resortedImages)
+                }}
+              >
+                {t("t.makePrimaryPhoto")}
+              </Button>
+            ),
+        },
+        actions: {
+          content: (
+            <Button
+              type="button"
+              className="font-semibold uppercase text-red-700"
+              onClick={() => {
+                const filteredImages = drawerImages.filter((item, i2) => i2 != index)
+                filteredImages.forEach((item, i2) => {
+                  item.ordinal = i2
+                })
+                setDrawerImages(filteredImages)
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          ),
+        },
+      }
+    })
+  }, [drawerImages])
 
   /*
     Pass the file for the dropzone callback along to the uploader
