@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.1...@bloom-housing/ui-components@5.1.1-alpha.2) (2022-08-01)
+
+
+### Features
+
+* **errormessage:** add classname to errormessage; apply styles to Field ([b63be81](https://github.com/bloom-housing/bloom/commit/b63be81f2fa5fc523b5804842d0eb4781ed32054)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **errormessage:** add text color ([74adf72](https://github.com/bloom-housing/bloom/commit/74adf72fcd625ad14c51815dce54d3e7beae5e11)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **forms.scss:** apply styling change to error-message class ([2c30044](https://github.com/bloom-housing/bloom/commit/2c300441c580464be1b69f861b5080e74242166e)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **formsigninerrorbox:** add classnames to undo changes ([fa7e9f7](https://github.com/bloom-housing/bloom/commit/fa7e9f7e235e4a6b750d67d7338bebaace202519)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **textarea:** apply lineheight and margin to textarea ([afbe5e4](https://github.com/bloom-housing/bloom/commit/afbe5e49c081bc85da1d4718e2ea1e6b8cc295b0)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+
+
+
+
+
 ## [5.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.0...@bloom-housing/ui-components@5.1.1-alpha.1) (2022-08-01)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
