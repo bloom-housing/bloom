@@ -102,7 +102,7 @@ describe("Listing Management Tests", () => {
     cy.get("a > .button").contains("Add Listing").click()
     cy.contains("New Listing")
 
-    cy.getByID("addPhotoButton").contains("Add Photo").click()
+    cy.getByTestId("add-photos-button").contains("Add Photo").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {

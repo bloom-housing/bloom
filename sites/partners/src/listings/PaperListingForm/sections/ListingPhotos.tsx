@@ -241,6 +241,7 @@ const ListingPhotos = () => {
                 setDrawerImages([...listingFormPhotos])
                 clearErrors("images")
               }}
+              data-test-id="add-photos-button"
             >
               {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
             </Button>
