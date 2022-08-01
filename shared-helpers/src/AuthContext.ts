@@ -154,7 +154,6 @@ const reducer = createReducer(
         headers: {
           language: state.language,
           jurisdictionName: process.env.jurisdictionName,
-          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
       })
 
