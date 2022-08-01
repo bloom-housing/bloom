@@ -26,14 +26,14 @@ import { ListingRepository } from "../listings/db/listing.repository"
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: "jwt" }),
+    PassportModule.register({ defaultStrategy: "jwt", session: false }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("APP_SECRET"),
         signOptions: {
-          expiresIn: "10m",
+          expiresIn: "1d",
         },
       }),
     }),

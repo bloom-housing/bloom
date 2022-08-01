@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from "passport-jwt"
+import { Request } from "express"
 import { PassportStrategy } from "@nestjs/passport"
 import { HttpException, Injectable, UnauthorizedException } from "@nestjs/common"
-import { Request } from "express"
 import { ConfigService } from "@nestjs/config"
 import { AuthService } from "../services/auth.service"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -9,11 +9,7 @@ import { User } from "../entities/user.entity"
 import { Repository } from "typeorm"
 import { UserService } from "../services/user.service"
 import { USER_ERRORS } from "../user-errors"
-
-function extractTokenFromAuthHeader(req: Request) {
-  const authHeader = req.get("Authorization")
-  return authHeader.split(" ")[1]
-}
+import { TOKEN_COOKIE_NAME } from "../constants"
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -23,7 +19,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private configService: ConfigService
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        JwtStrategy.extractJwt,
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
       passReqToCallback: true,
       ignoreExpiration: false,
       secretOrKey: configService.get<string>("APP_SECRET"),
@@ -31,7 +31,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(req, payload) {
-    const rawToken = extractTokenFromAuthHeader(req)
+    console.log("validate token", payload)
+
+    const rawToken = JwtStrategy.extractJwt(req)
+
     const isRevoked = await this.authService.isRevokedToken(rawToken)
     if (isRevoked) {
       throw new UnauthorizedException()
@@ -50,5 +53,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     return user
+  }
+
+  private static extractJwt(req: Request): string | null {
+    if (
+      req.cookies &&
+      TOKEN_COOKIE_NAME in req.cookies &&
+      req.cookies?.[TOKEN_COOKIE_NAME].length > 0
+    ) {
+      return req.cookies[TOKEN_COOKIE_NAME]
+    }
+
+    return null
   }
 }

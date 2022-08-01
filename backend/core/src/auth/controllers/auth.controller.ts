@@ -1,6 +1,7 @@
 import {
   Controller,
   Request,
+  Response,
   Post,
   UseGuards,
   UsePipes,
@@ -22,6 +23,7 @@ import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { UserErrorExtraModel } from "../user-errors"
 import { TokenDto } from "../dto/token.dto"
+import { TOKEN_COOKIE_NAME } from "../constants"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -37,18 +39,22 @@ export class AuthController {
   @Post("login")
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: "Login", operationId: "login" })
-  login(@Request() req): LoginResponseDto {
+  login(@Request() req, @Response({ passthrough: true }) res): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return mapTo(LoginResponseDto, { accessToken })
+
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, { httpOnly: true })
+    return mapTo(LoginResponseDto, { success: true })
   }
 
   @UseGuards(DefaultAuthGuard)
   @Post("token")
   @ApiBody({ type: TokenDto })
   @ApiOperation({ summary: "Token", operationId: "token" })
-  token(@Request() req): LoginResponseDto {
+  token(@Request() req, @Response({ passthrough: true }) res): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
-    return mapTo(LoginResponseDto, { accessToken })
+
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, { httpOnly: true })
+    return mapTo(LoginResponseDto, { success: true })
   }
 
   @Post("request-mfa-code")
