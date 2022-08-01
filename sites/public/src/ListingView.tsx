@@ -476,7 +476,13 @@ export const ListingView = (props: ListingProps) => {
       <div className="w-full md:w-2/3">
         <header className="image-card--leader">
           <ImageCard
-            imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+            // imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+            images={[
+              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
+              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
+              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
+              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
+            ]}
             tags={getImageCardTag(listing)}
           />
           <div className="py-3 mx-3">
