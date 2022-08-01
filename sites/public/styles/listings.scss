@@ -11,7 +11,7 @@
 
 .listings-row_figure {
   .image-card {
-    background-color: initial;
+    --default-background-color: transparent;
   }
 
   .image-card img {
@@ -137,7 +137,10 @@
     border-radius: 24px 24px 0 0;
     padding: 0;
   }
-  .image-card img {
+  .image-card {
+    --default-background-color: transparent;
+  }
+  img {
     border-radius: 24px 24px 0 0;
   }
 }
