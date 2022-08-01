@@ -266,7 +266,9 @@ const ListingPhotos = () => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
-            data-test-id={!latestUpload.url ? "listing-photo-empty" : "listing-photo-uploaded"}
+            data-test-id={
+              drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"
+            }
           >
             Save
           </Button>,
