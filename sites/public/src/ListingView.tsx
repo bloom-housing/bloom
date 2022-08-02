@@ -599,7 +599,7 @@ export const ListingView = (props: ListingProps) => {
                 >
                   <ExpandableText
                     className="text-sm text-gray-700"
-                    markdownOptions={{ disableParsingRawHTML: true }}
+                    markdownProps={{ disableParsingRawHTML: true }}
                     strings={{
                       readMore: t("t.more"),
                       readLess: t("t.less"),
@@ -653,7 +653,7 @@ export const ListingView = (props: ListingProps) => {
                     <InfoCard title={t("listings.creditHistory")}>
                       <ExpandableText
                         className="text-sm text-gray-700"
-                        markdownOptions={{ disableParsingRawHTML: true }}
+                        markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
                           readMore: t("t.more"),
                           readLess: t("t.less"),
@@ -667,7 +667,7 @@ export const ListingView = (props: ListingProps) => {
                     <InfoCard title={t("listings.rentalHistory")}>
                       <ExpandableText
                         className="text-sm text-gray-700"
-                        markdownOptions={{ disableParsingRawHTML: true }}
+                        markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
                           readMore: t("t.more"),
                           readLess: t("t.less"),
@@ -681,7 +681,7 @@ export const ListingView = (props: ListingProps) => {
                     <InfoCard title={t("listings.criminalBackground")}>
                       <ExpandableText
                         className="text-sm text-gray-700"
-                        markdownOptions={{ disableParsingRawHTML: true }}
+                        markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
                           readMore: t("t.more"),
                           readLess: t("t.less"),
