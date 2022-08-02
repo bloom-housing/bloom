@@ -18,3 +18,8 @@ const longText =
 export const standard = () => <ExpandableText>{longText}</ExpandableText>
 export const expanded = () => <ExpandableText expand={true}>{longText}</ExpandableText>
 export const noExpansion = () => <ExpandableText>Short text</ExpandableText>
+export const html = () => (
+  <ExpandableText>{`Go to <a href="http://www.google.com" target="_blank">Google</a>. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been \
+  the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley \
+  of type and scrambled it to make a type specimen book. It has survived not only five centuries`}</ExpandableText>
+)
