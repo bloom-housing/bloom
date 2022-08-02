@@ -31,7 +31,7 @@ const getText = (text: string, expanded: boolean, maxLength: number) => {
 const moreLessButton = (
   expanded: boolean,
   setExpanded: (newValue: boolean) => void,
-  strings: ExpandableTextProps.strings
+  strings: ExpandableTextProps["strings"]
 ) => {
   return (
     <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
@@ -51,7 +51,7 @@ const ExpandableText = (props: ExpandableTextProps) => {
     button = moreLessButton(expanded, setExpanded, props.strings)
   }
   return (
-    <div className={`expandable-text ${props.className}`}>
+    <div className={`expandable-text ${props?.className}`}>
       {" "}
       <Markdown
         children={getText(props.children, expanded, maxLength)}
