@@ -17,14 +17,6 @@ const EditListing = (props: { listing: Listing }) => {
 
   if (!listing) return false
 
-  /**
-   * purposely leaving out the assets fallback, so when this gets to production
-   * a user can easily see the old asset on the detail, but not here, so we can upload it properly (this should only apply to older listings)
-   */
-  if (listing.images.length === 0) {
-    listing.images = [{ ordinal: 0, image: { fileId: "", label: "" } }]
-  }
-
   return (
     <ListingContext.Provider value={listing}>
       <ListingGuard>
