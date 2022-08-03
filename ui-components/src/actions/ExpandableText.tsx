@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import Markdown from "markdown-to-jsx"
+import Markdown, { MarkdownOptions } from "markdown-to-jsx"
 import "./ExpandableText.scss"
 
 export interface ExpandableTextProps {
@@ -11,9 +11,7 @@ export interface ExpandableTextProps {
     readMore?: string
     readLess?: string
   }
-  markdownProps?: {
-    disableParsingRawHTML: boolean
-  }
+  markdownProps?: MarkdownOptions
 }
 
 const getText = (text: string, expanded: boolean, maxLength: number) => {
@@ -55,9 +53,7 @@ const ExpandableText = (props: ExpandableTextProps) => {
       {" "}
       <Markdown
         children={getText(props.children, expanded, maxLength)}
-        options={{
-          disableParsingRawHTML: props.markdownProps?.disableParsingRawHTML,
-        }}
+        options={props.markdownProps}
       />
       {button}
     </div>
