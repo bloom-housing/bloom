@@ -8,8 +8,8 @@ export interface ExpandableTextProps {
   maxLength?: number
   className?: string
   strings: {
-    readMore?: string
-    readLess?: string
+    readMore: string
+    readLess: string
   }
   markdownProps?: MarkdownOptions
 }
