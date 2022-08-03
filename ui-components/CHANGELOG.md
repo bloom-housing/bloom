@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.2...@bloom-housing/ui-components@5.1.1-alpha.3) (2022-08-03)
+
+
+### Bug Fixes
+
+* **expandabletext:** add required strings to expandable text ([03bbc46](https://github.com/bloom-housing/bloom/commit/03bbc46b4f8f910efef0a1f984717da0a65794ed))
+* **expandabletext:** fix stories with passing req prop ([057d8fe](https://github.com/bloom-housing/bloom/commit/057d8feb038e07bb3d6784d1d6d4d068ba72460c)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+* **expandabletext:** fix tests; remove test prop ([28af8fc](https://github.com/bloom-housing/bloom/commit/28af8fc319190c50b2751d29c251e472e48e6971))
+* option typing with import ([dc195f8](https://github.com/bloom-housing/bloom/commit/dc195f8acb8850bab11eafc80a2cea3f8b6e0de5))
+
+
+### Features
+
+* **expandabletext:** fix a broken ci check; fix a prop name ([e839c81](https://github.com/bloom-housing/bloom/commit/e839c811b237164b1cd26bbc888db512f66bc6b0))
+* **expandabletext:** fix type usage ([1a406fe](https://github.com/bloom-housing/bloom/commit/1a406fe7c19639e28bb1fdc19fd9e58a25c8bfd1)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+* **expandabletext:** remove translations;pass markdown props through component ([e21e88a](https://github.com/bloom-housing/bloom/commit/e21e88a5be527ec860b3515c1dc545a186713e06)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+
+
+### BREAKING CHANGES
+
+* **expandabletext:** In uses of ExpandableText component, the translations are now being passed down
+instead of done within the component. Any options for the Markdown component used within
+ExpandableText also needs to be passed
+
+
+
+
+
 ## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.1...@bloom-housing/ui-components@5.1.1-alpha.2) (2022-08-01)
 
 
