@@ -14,10 +14,10 @@ const StepHeader = ({
   stepTitle = t("stepHeader.defaultLabel"),
 }: StepHeaderProps) => {
   return (
-    <div className="flex">
+    <div className="step-header">
       <div className="circle-number">{currentStep}</div>
       <div>{`out of ${totalSteps}`}</div>
-      <div className="step-label">{stepTitle}</div>
+      <div className="step-title">{stepTitle}</div>
     </div>
   )
 }
