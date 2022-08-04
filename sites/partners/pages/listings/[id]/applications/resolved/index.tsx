@@ -10,7 +10,6 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
-  SideNav,
 } from "@bloom-housing/ui-components"
 import {
   useSingleListingData,
@@ -19,7 +18,7 @@ import {
 } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
-import { ApplicationsSideNav } from '../../../../../src/applications/ApplicationsSideNav'
+import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -134,7 +133,7 @@ const ApplicationsList = () => {
 
       <section>
         <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-        <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
+          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
 
           <div className="w-full">
             <AgTable

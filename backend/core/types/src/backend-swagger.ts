@@ -234,6 +234,35 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Meta information for application flagged sets
+   */
+  meta(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSetMeta> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/meta"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List application flagged sets
    */
   list(
