@@ -1,6 +1,13 @@
 .circle-number {
-  border-width: 1px;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
   border-radius: 50%;
+  text-align: center;
+  background-color: var(--bloom-color-primary);
+  color: var(--bloom-color-white);
+  width: var(--bloom-s6);
+  height: var(--bloom-s6);
+  margin-right: var(--bloom-s1_5);
+}
+.step-label {
+  font-weight: bold;
+  margin-left: var(--bloom-s1_5);
 }
