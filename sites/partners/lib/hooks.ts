@@ -146,6 +146,31 @@ export function useFlaggedApplicationsList({
     error,
   }
 }
+
+export function useFlaggedApplicationsMeta(listingId: string) {
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
+
+  const params = {
+    listingId,
+  }
+
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+
+  const endpoint = `${
+    process.env.backendApiBase
+  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
+
+  const fetcher = () => applicationFlaggedSetsService.meta(params)
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    error,
+  }
+}
+
 export function useApplicationsData(
   currentPage: number,
   delayedFilterValue: string,

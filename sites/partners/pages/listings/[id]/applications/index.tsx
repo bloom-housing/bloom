@@ -10,7 +10,7 @@ import {
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
-  NavigationHeader
+  NavigationHeader,
 } from "@bloom-housing/ui-components"
 import {
   useSingleListingData,
@@ -25,7 +25,7 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
 } from "@bloom-housing/backend-core/types"
-import { ApplicationsSideNav } from '../../../../src/applications/ApplicationsSideNav'
+import { ApplicationsSideNav } from "../../../../src/applications/ApplicationsSideNav"
 
 const ApplicationsList = () => {
   const router = useRouter()

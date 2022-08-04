@@ -21,6 +21,7 @@ import { User } from "../auth/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { Rule } from "./types/rule-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
+import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 
@@ -363,5 +364,61 @@ export class ApplicationFlaggedSetsService {
           )
       },
     })
+  }
+
+  async meta(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    const allQB = this.applicationsRepository.createQueryBuilder("afs")
+    allQB.select("SUM(1) as totalCount")
+    allQB.where("afs.listing_id = :listingId", { listingId: queryParams.listingId })
+
+    const resolvedQB = this.afsRepository.createQueryBuilder("afs")
+    resolvedQB.select("SUM(1) as totalResolvedCount")
+    resolvedQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
+    resolvedQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.resolved })
+
+    const pendingQB = this.afsRepository.createQueryBuilder("afs")
+    pendingQB.select("SUM(1) as totalPendingCount")
+    pendingQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
+    pendingQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
+
+    const pendingNameQB = this.afsRepository.createQueryBuilder("afs")
+    pendingNameQB.select("SUM(1) as totalNamePendingCount")
+    pendingNameQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
+    pendingNameQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
+    pendingNameQB.andWhere("afs.rule = :rule", { rule: Rule.nameAndDOB })
+
+    const pendingEmailQB = this.afsRepository.createQueryBuilder("afs")
+    pendingEmailQB.select("SUM(1) as totalEmailPendingCount")
+    pendingEmailQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
+    pendingEmailQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
+    pendingEmailQB.andWhere("afs.rule = :rule", { rule: Rule.email })
+
+    const results = await Promise.all(
+      [allQB, resolvedQB, pendingQB, pendingNameQB, pendingEmailQB].map(
+        async (query) => await query.getRawOne()
+      )
+    )
+
+    const res: ApplicationFlaggedSetMeta = {}
+
+    results.forEach((elem) => {
+      if ("totalcount" in elem) {
+        res.totalCount = elem.totalcount
+      }
+      if ("totalresolvedcount" in elem) {
+        res.totalResolvedCount = elem.totalresolvedcount
+      }
+      if ("totalpendingcount" in elem) {
+        res.totalPendingCount = elem.totalpendingcount
+      }
+      if ("totalnamependingcount" in elem) {
+        res.totalNamePendingCount = elem.totalnamependingcount
+      }
+      if ("totalemailpendingcount" in elem) {
+        res.totalEmailPendingCount = elem.totalemailpendingcount
+      }
+    })
+
+    return res
   }
 }

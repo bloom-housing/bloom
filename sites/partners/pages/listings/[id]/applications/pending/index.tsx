@@ -10,7 +10,6 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
-  SideNav,
 } from "@bloom-housing/ui-components"
 import {
   useSingleListingData,
@@ -19,7 +18,7 @@ import {
 } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
-import { ApplicationsSideNav } from '../../../../../src/applications/ApplicationsSideNav'
+import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 
 const ApplicationsList = () => {
   const router = useRouter()
