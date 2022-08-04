@@ -3,7 +3,7 @@ import * as React from "react"
 import { StepHeader } from "./StepHeader"
 
 export default {
-  title: "Headers/Step Header",
+  title: "Headers/Step Header 🚩",
 }
 
 export const defaultTitle = () => <StepHeader currentStep={1} totalSteps={4} />
