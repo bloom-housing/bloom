@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.2...@bloom-housing/public@5.1.1-alpha.3) (2022-08-03)
+
+
+### Features
+
+* **expandabletext:** fix a broken ci check; fix a prop name ([e839c81](https://github.com/bloom-housing/bloom/commit/e839c811b237164b1cd26bbc888db512f66bc6b0))
+* **expandabletext:** remove translations;pass markdown props through component ([e21e88a](https://github.com/bloom-housing/bloom/commit/e21e88a5be527ec860b3515c1dc545a186713e06)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+
+
+### BREAKING CHANGES
+
+* **expandabletext:** In uses of ExpandableText component, the translations are now being passed down
+instead of done within the component. Any options for the Markdown component used within
+ExpandableText also needs to be passed
+
+
+
+
+
+## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.1...@bloom-housing/public@5.1.1-alpha.2) (2022-08-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.0...@bloom-housing/public@5.1.1-alpha.1) (2022-08-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [5.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.38...@bloom-housing/public@5.1.1-alpha.0) (2022-07-27)
 
 
