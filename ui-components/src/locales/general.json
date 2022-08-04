@@ -842,6 +842,7 @@
   "states.WI": "Wisconsin",
   "states.WV": "West Virginia",
   "states.WY": "Wyoming",
+  "stepHeader.defaultLabel": "Items",
   "t.accessibility": "Accessibility",
   "t.additionalAccessibility": "Additional Accessibility",
   "t.additionalPhone": "Additional Phone",
