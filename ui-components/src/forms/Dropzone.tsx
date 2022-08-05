@@ -11,12 +11,15 @@ interface DropzoneProps {
   accept?: string | string[]
   progress?: number
   className?: string
+  maxFiles?: number
 }
 
 const Dropzone = (props: DropzoneProps) => {
   const { uploader } = props
   const classNames = ["field"]
   if (props.className) classNames.push(props.className)
+
+  const maxFiles = props.maxFiles || 1
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -27,7 +30,8 @@ const Dropzone = (props: DropzoneProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: props.accept,
-    maxFiles: 1,
+    maxFiles: maxFiles > 1 ? maxFiles : undefined,
+    multiple: maxFiles > 1 ? true : false,
   })
 
   const dropzoneClasses = ["dropzone", "control"]
