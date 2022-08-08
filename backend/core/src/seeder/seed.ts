@@ -376,8 +376,8 @@ async function seed() {
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
       await Promise.all([
-        await makeNewApplication(app, listing, unitTypes, user1),
-        await makeNewApplication(app, listing, unitTypes, user2),
+        await makeNewApplication(app, listing, unitTypes, user1, i),
+        await makeNewApplication(app, listing, unitTypes, user2, i),
       ])
     }
   }
