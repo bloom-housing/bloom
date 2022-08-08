@@ -9,10 +9,8 @@
     background-color: var(--bloom-color-primary);
     color: var(--bloom-color-white);
     border-radius: 50%;
-    min-width: var(--bloom-s5);
-    min-height: var(--bloom-s5);
-    padding: var(--bloom-s1);
-    aspect-ratio: 1 / 1;
+    min-width: var(--bloom-s6);
+    height: var(--bloom-s6);
     margin-right: var(--bloom-s1_5);
   }
   .step-title {

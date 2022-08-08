@@ -16,7 +16,7 @@ const StepHeader = ({
   return (
     <div className="step-header">
       <div className="circle-number">{currentStep}</div>
-      <div>{`out of ${totalSteps}`}</div>
+      <div>{`of ${totalSteps}`}</div>
       <div className="step-title">{stepTitle}</div>
     </div>
   )
