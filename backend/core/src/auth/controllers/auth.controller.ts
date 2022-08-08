@@ -42,7 +42,13 @@ export class AuthController {
   login(@Request() req, @Response({ passthrough: true }) res): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
 
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, { httpOnly: true })
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, {
+      httpOnly: true,
+      // secure: true,
+      // sameSite: true,
+      domain: "localhost",
+      maxAge: 86400000,
+    })
     return mapTo(LoginResponseDto, { success: true })
   }
 
@@ -53,7 +59,13 @@ export class AuthController {
   token(@Request() req, @Response({ passthrough: true }) res): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
 
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, { httpOnly: true })
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, {
+      httpOnly: true,
+      // secure: true,
+      // sameSite: true,
+      domain: "localhost",
+      maxAge: 86400000,
+    })
     return mapTo(LoginResponseDto, { success: true })
   }
 

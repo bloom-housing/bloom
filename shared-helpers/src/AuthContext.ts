@@ -144,13 +144,14 @@ const reducer = createReducer(
       }
 
       // Save off the token in local storage for persistence across reloads.
-      setToken(state.storageType, accessToken)
+      // setToken(state.storageType, accessToken)
 
-      const refreshTimer = scheduleTokenRefresh(accessToken, (newAccessToken) =>
-        dispatch(saveToken({ apiUrl, accessToken: newAccessToken, dispatch }))
-      )
+      // const refreshTimer = scheduleTokenRefresh(accessToken, (newAccessToken) =>
+      //   dispatch(saveToken({ apiUrl, accessToken: newAccessToken, dispatch }))
+      // )
       serviceOptions.axios = axiosStatic.create({
         baseURL: apiUrl,
+        withCredentials: true,
         headers: {
           language: state.language,
           jurisdictionName: process.env.jurisdictionName,
@@ -159,8 +160,8 @@ const reducer = createReducer(
 
       return {
         ...rest,
-        ...(refreshTimer && { refreshTimer }),
-        accessToken: accessToken,
+        // ...(refreshTimer && { refreshTimer }),
+        // accessToken: accessToken,
       }
     },
     SAVE_PROFILE: (state, { payload: user }) => ({
@@ -195,6 +196,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   useEffect(() => {
     serviceOptions.axios = axiosStatic.create({
       baseURL: apiUrl,
+      withCredentials: true,
       headers: {
         language: router.locale,
         jurisdictionName: process.env.jurisdictionName,
@@ -208,20 +210,20 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   }, [router, apiUrl, state.accessToken, router.locale])
 
   // On initial load/reload, check localStorage to see if we have a token available
-  useEffect(() => {
-    const accessToken = getToken(storageType)
-    if (accessToken) {
-      const ttl = getTokenTtl(accessToken)
+  // useEffect(() => {
+  //   const accessToken = getToken(storageType)
+  //   if (accessToken) {
+  //     const ttl = getTokenTtl(accessToken)
 
-      if (ttl > 0) {
-        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
-      } else {
-        dispatch(signOut())
-      }
-    } else {
-      dispatch(signOut())
-    }
-  }, [apiUrl, storageType])
+  //     if (ttl > 0) {
+  //       dispatch(saveToken({ accessToken, apiUrl, dispatch }))
+  //     } else {
+  //       dispatch(signOut())
+  //     }
+  //   } else {
+  //     dispatch(signOut())
+  //   }
+  // }, [apiUrl, storageType])
 
   const loadProfile = useCallback(
     async (redirect?: string) => {
@@ -278,7 +280,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       try {
         const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
-          dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
+          // dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
           const profile = await userService?.userControllerProfile()
           if (profile) {
             dispatch(saveProfile(profile))

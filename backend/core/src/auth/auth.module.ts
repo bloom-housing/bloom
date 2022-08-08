@@ -26,7 +26,7 @@ import { ListingRepository } from "../listings/db/listing.repository"
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: "jwt", session: false }),
+    PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

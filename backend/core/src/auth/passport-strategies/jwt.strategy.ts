@@ -19,11 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private configService: ConfigService
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        JwtStrategy.extractJwt,
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ]),
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      jwtFromRequest: JwtStrategy.extractJwt,
       passReqToCallback: true,
       ignoreExpiration: false,
       secretOrKey: configService.get<string>("APP_SECRET"),
@@ -31,8 +28,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(req, payload) {
-    console.log("validate token", payload)
-
     const rawToken = JwtStrategy.extractJwt(req)
 
     const isRevoked = await this.authService.isRevokedToken(rawToken)
@@ -40,6 +35,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException()
     }
     const userId = payload.sub
+
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ["leasingAgentInListings"],
