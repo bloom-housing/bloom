@@ -4,14 +4,15 @@ import "./StepHeader.scss"
 export interface StepHeaderProps {
   currentStep: number
   totalSteps: number
+  stepPreposition: string
   stepTitle: string
 }
 
-const StepHeader = ({ currentStep, totalSteps, stepTitle }: StepHeaderProps) => {
+const StepHeader = ({ currentStep, totalSteps, stepPreposition, stepTitle }: StepHeaderProps) => {
   return (
     <div className="step-header">
       <div className="circle-number">{currentStep}</div>
-      <div>{`of ${totalSteps}`}</div>
+      <div>{`${stepPreposition} ${totalSteps}`}</div>
       <div className="step-title">{stepTitle}</div>
     </div>
   )
