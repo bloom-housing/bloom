@@ -15,7 +15,7 @@ const ResourceLinkCard = (props: ResourceLinkCardProps) => {
 
   return (
     <div className="border-b">
-      <div className="my-6 px-5 md:my-12">
+      <div className="py-6 px-5 md:py-8">
         <Icon
           fill="black"
           size="xlarge"
