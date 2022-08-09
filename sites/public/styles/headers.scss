@@ -1,6 +1,4 @@
 .site-header {
-  @apply pb-10;
-
   .navbar-notice-hide {
     display: none;
   }
@@ -227,6 +225,9 @@
         }
       }
     }
+  }
+  .navbar-mobile-dropdown {
+    margin-bottom: 1.5rem;
   }
 
   .navbar-mobile-dropdown-container .navbar-mobile-dropdown .navbar-mobile-dropdown-item {
