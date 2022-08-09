@@ -22,7 +22,7 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
   return (
     <span
       dangerouslySetInnerHTML={{
-       __html: DOMPurify.sanitize(
+        __html: DOMPurify.sanitize(
           `
             ${address.placeName ? `${address.placeName} <br />` : ""}
             ${address.street || ""} ${address.street2 || ""}
@@ -31,7 +31,7 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
             ${address.city && (address.state || address.zipCode) ? "," : ""} ${address.state} ${` `}
             ${address.zipCode}
           `,
-         { USE_PROFILES: { html: true } }
+          { USE_PROFILES: { html: true } }
         ),
       }}
     />
