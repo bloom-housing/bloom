@@ -10,6 +10,7 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import {
   useSingleListingData,
@@ -19,6 +20,7 @@ import {
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
+import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -31,6 +33,7 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
+  const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -79,9 +82,10 @@ const ApplicationsList = () => {
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
 
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
+      !isListingOpen &&
+        this.linkWithId.addEventListener("click", function () {
+          void router.push(`/application/${applicationId}`)
+        })
     }
 
     getGui() {
@@ -133,9 +137,22 @@ const ApplicationsList = () => {
 
       <section>
         <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
+          <ApplicationsSideNav
+            className="w-full md:w-72"
+            listingId={listingId}
+            listingOpen={isListingOpen}
+          />
 
           <div className="w-full">
+            {isListingOpen && (
+              <AlertBox type="notice" className="mb-3" closeable>
+                Preview applications that are pending review. Duplicates can be resolved when
+                applications close
+                {listingDto?.applicationDueDate &&
+                  ` on ${formatDateTime(listingDto.applicationDueDate, true)}`}
+                .
+              </AlertBox>
+            )}
             <AgTable
               id="applications-table"
               className="w-full"

@@ -6,6 +6,7 @@ import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
 import { text, withKnobs } from "@storybook/addon-knobs"
+import formatDateTime from "@bloom-housing/shared-helpers/src/DateFormat"
 
 dayjs.extend(advancedFormat)
 
@@ -13,13 +14,6 @@ export default {
   component: ApplicationStatus,
   title: "Notifications/Application Status",
   decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
-}
-
-function formatDateTime(date: Date, showTime?: boolean) {
-  return (
-    dayjs(date).format("MMMM D, YYYY") +
-    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mmA") : "")
-  )
 }
 
 const listing = Object.assign({}, Archer) as any
