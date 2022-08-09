@@ -152,7 +152,7 @@ export * from "./src/tables/GroupedTable"
 export * from "./src/tables/MinimalTable"
 export * from "./src/tables/StackedTable"
 export * from "./src/tables/CategoryTable"
-
+export * from "./src/tables/AgTable"
 /* Text */
 export * from "./src/text/Description"
 export * from "./src/text/Message"

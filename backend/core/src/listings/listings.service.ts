@@ -57,7 +57,10 @@ export class ListingsService {
       .groupBy("listings.id")
 
     innerFilteredQuery = ListingsService.addOrderByToQb(innerFilteredQuery, params)
-
+    innerFilteredQuery = ListingsService.addSearchByListingNameCondition(
+      innerFilteredQuery,
+      params.search
+    )
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
         params.filter,
@@ -314,6 +317,16 @@ export class ListingsService {
     return { programs, unitTypes }
   }
 
+  private static addSearchByListingNameCondition(
+    qb: SelectQueryBuilder<Listing>,
+    searchName?: string
+  ) {
+    if (searchName) {
+      qb.andWhere(`${qb.alias}.name ILIKE :search`, { search: `%${searchName}%` })
+    }
+    return qb
+  }
+
   private static addOrderByToQb(qb: SelectQueryBuilder<Listing>, params: ListingsQueryParams) {
     switch (params.orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
@@ -348,6 +361,12 @@ export class ListingsService {
       case OrderByFieldsEnum.verified:
         qb.orderBy({
           "listings.isVerified": params.orderDir ?? "ASC",
+          "listings.name": "ASC",
+        })
+        break
+      case OrderByFieldsEnum.updatedAt:
+        qb.orderBy({
+          "listings.updatedAt": params.orderDir ?? "ASC",
           "listings.name": "ASC",
         })
         break

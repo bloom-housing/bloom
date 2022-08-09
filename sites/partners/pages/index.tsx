@@ -1,124 +1,73 @@
-import React, { useMemo, useContext, useEffect, useRef, useState, useCallback } from "react"
+import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import {
-  PageHeader,
   t,
-  AuthContext,
   Button,
   LocalizedLink,
-  AgPagination,
-  AG_PER_PAGE_OPTIONS,
-  LoadingOverlay,
+  AgTable,
+  AuthContext,
+  useAgTable,
+  PageHeader,
 } from "@bloom-housing/ui-components"
-import { AgGridReact } from "ag-grid-react"
-import { ColumnApi, ColumnState, GridOptions } from "ag-grid-community"
-import { useRouter } from "next/router"
+import dayjs from "dayjs"
+import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
-import { ListingStatus, OrderByFieldsEnum, OrderDirEnum } from "@bloom-housing/backend-core/types"
-import dayjs from "dayjs"
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 
-const COLUMN_STATE_KEY = "column-state"
+class formatLinkCell {
+  link: HTMLAnchorElement
 
-type ListingListSortOptions = {
-  orderBy: OrderByFieldsEnum
-  orderDir: OrderDirEnum
+  init(params) {
+    this.link = document.createElement("a")
+    this.link.classList.add("text-blue-700")
+    this.link.innerText = params.valueFormatted || params.value
+    this.link.setAttribute("href", `/listings/${params.data.id}/`)
+  }
+
+  getGui() {
+    return this.link
+  }
+}
+
+class formatWaitlistStatus {
+  text: HTMLSpanElement
+
+  init({ data }) {
+    const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
+
+    this.text = document.createElement("span")
+    this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+  }
+
+  getGui() {
+    return this.text
+  }
+}
+class ListingsLink extends formatLinkCell {
+  init(params) {
+    super.init(params)
+    this.link.setAttribute("href", `/listings/${params.data.id}`)
+  }
 }
 
 export default function ListingsList() {
+  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+
   const { profile } = useContext(AuthContext)
   const isAdmin = profile.roles?.isAdmin || false
 
-  const router = useRouter()
+  const tableOptions = useAgTable()
 
-  const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
-
-  /* Pagination */
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
-  const [currentPage, setCurrentPage] = useState<number>(1)
-
-  /* OrderBy columns */
-  const [sortOptions, setSortOptions] = useState<ListingListSortOptions>({
-    orderBy: OrderByFieldsEnum.name,
-    orderDir: OrderDirEnum.ASC,
-  })
-
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
-
-  function saveColumnState(api: ColumnApi) {
-    const columnState = api.getColumnState()
-    const columnStateJSON = JSON.stringify(columnState)
-    sessionStorage.setItem(COLUMN_STATE_KEY, columnStateJSON)
+  const gridComponents = {
+    formatLinkCell,
+    formatWaitlistStatus,
+    ListingsLink,
   }
-
-  function onGridReady(params) {
-    setGridColumnApi(params.columnApi)
-  }
-
-  class formatLinkCell {
-    link: HTMLAnchorElement
-
-    init(params) {
-      this.link = document.createElement("a")
-      this.link.classList.add("text-blue-700")
-      this.link.innerText = params.valueFormatted || params.value
-      this.link.addEventListener("click", function () {
-        void saveColumnState(params.columnApi)
-        void router.push(`/listings/${params.data.id}`)
-      })
-    }
-
-    getGui() {
-      return this.link
-    }
-  }
-
-  class formatWaitlistStatus {
-    text: HTMLSpanElement
-
-    init({ data }) {
-      const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
-
-      this.text = document.createElement("span")
-      this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
-    }
-
-    getGui() {
-      return this.text
-    }
-  }
-
-  /* Grid Functionality and Formatting */
-  // update table items order on sort change
-  const initialLoadOnSort = useRef<boolean>(false)
-  const onSortChange = useCallback((columns: ColumnState[]) => {
-    // prevent multiple fetch on initial render
-    if (!initialLoadOnSort.current) {
-      initialLoadOnSort.current = true
-      return
-    }
-
-    const sortedBy = columns.find((col) => col.sort)
-    const { colId, sort } = sortedBy || {}
-
-    let col = colId
-    if (colId === "isVerified") {
-      col = "verified"
-    }
-    const allowedSortColIds: string[] = Object.values(OrderByFieldsEnum)
-    if (allowedSortColIds.includes(col)) {
-      const name = OrderByFieldsEnum[col]
-      setSortOptions({
-        orderBy: name,
-        orderDir: sort.toUpperCase() as OrderDirEnum,
-      })
-    }
-  }, [])
 
   const columnDefs = useMemo(() => {
-    const columns = [
+    const columns: (ColDef | ColGroupDef)[] = [
       {
         headerName: t("listings.listingName"),
         field: "name",
@@ -162,7 +111,7 @@ export default function ListingsList() {
       },
       {
         headerName: t("listings.verified"),
-        field: "isVerified",
+        field: "verified",
         sortable: true,
         unSortIcon: true,
         filter: false,
@@ -182,64 +131,50 @@ export default function ListingsList() {
   }, [])
 
   const { listingDtos, listingsLoading } = useListingsData({
-    page: currentPage,
-    limit: itemsPerPage,
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
+    search: tableOptions.filter.filterValue,
     listingIds: !isAdmin
       ? profile?.leasingAgentInListings?.map((listing) => listing.id)
       : undefined,
-    orderBy: sortOptions.orderBy,
-    orderDir: sortOptions.orderDir,
+    sort: tableOptions.sort.sortOptions,
     view: "partnerList",
   })
-
-  const gridOptions: GridOptions = {
-    onSortChanged: (params) => {
-      saveColumnState(params.columnApi)
-      onSortChange(params.columnApi.getColumnState())
-    },
-    components: {
-      formatLinkCell,
-      formatWaitlistStatus,
-    },
-    suppressNoRowsOverlay: listingsLoading,
-  }
-
-  /* Pagination */
-  // reset page to 1 when user change limit
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [itemsPerPage])
-
-  /* Data Performance */
-  // Load a table state on initial render & pagination change (because the new data comes from the API)
-  useEffect(() => {
-    const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
-    if (gridColumnApi && savedColumnState) {
-      const parsedState: ColumnState[] = JSON.parse(savedColumnState)
-
-      gridColumnApi.applyColumnState({
-        state: parsedState,
-        applyOrder: true,
-      })
-    }
-  }, [gridColumnApi, currentPage])
-
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <MetaTags
-        title={t("nav.siteTitlePartners")}
-        image={metaImage}
-        description={metaDescription}
-      />
+      <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <PageHeader title={t("nav.listings")} className={"md:pt-16"} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <div className="ag-theme-alpine ag-theme-bloom">
-            <div className="flex justify-between">
-              <div className="w-56"></div>
+          <AgTable
+            id="listings-table"
+            pagination={{
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
+            }}
+            config={{
+              gridComponents,
+              columns: columnDefs,
+              totalItemsLabel: t("listings.totalListings"),
+            }}
+            data={{
+              items: listingDtos?.items,
+              loading: listingsLoading,
+              totalItems: listingDtos?.meta.totalItems,
+              totalPages: listingDtos?.meta.totalPages,
+            }}
+            search={{
+              setSearch: tableOptions.filter.setFilterValue,
+            }}
+            sort={{
+              setSort: tableOptions.sort.setSortOptions,
+            }}
+            headerContent={
               <div className="flex-row">
                 {isAdmin && (
                   <LocalizedLink href={`/listings/add`}>
@@ -249,40 +184,8 @@ export default function ListingsList() {
                   </LocalizedLink>
                 )}
               </div>
-            </div>
-
-            <div className="applications-table mt-5">
-              <LoadingOverlay isLoading={listingsLoading}>
-                <AgGridReact
-                  onGridReady={onGridReady}
-                  gridOptions={gridOptions}
-                  defaultColDef={{
-                    resizable: true,
-                  }}
-                  columnDefs={columnDefs}
-                  rowData={listingDtos?.items}
-                  domLayout={"autoHeight"}
-                  headerHeight={83}
-                  rowHeight={58}
-                  suppressPaginationPanel={true}
-                  paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                  suppressScrollOnNewData={true}
-                ></AgGridReact>
-              </LoadingOverlay>
-
-              <AgPagination
-                totalItems={listingDtos?.meta?.totalItems}
-                totalPages={listingDtos?.meta?.totalPages}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                quantityLabel={t("listings.totalListings")}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
-                onPerPageChange={() => setCurrentPage(1)}
-                includeBorder={true}
-              />
-            </div>
-          </div>
+            }
+          />
         </article>
       </section>
     </Layout>

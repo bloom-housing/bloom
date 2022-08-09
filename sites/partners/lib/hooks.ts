@@ -26,8 +26,14 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 }
 
 type UseUserListProps = PaginationProps
+export interface ColumnOrder {
+  orderBy: string
+  orderDir: string
+}
 
 type UseListingsDataProps = PaginationProps & {
+  search?: string
+  sort?: ColumnOrder[]
   listingIds?: string[]
   view?: string
 }
@@ -48,17 +54,16 @@ export function useSingleListingData(listingId: string) {
 export function useListingsData({
   page,
   limit,
+  search,
   listingIds,
-  orderBy,
-  orderDir,
+  sort,
   view = "base",
 }: UseListingsDataProps) {
   const params = {
     page,
     limit,
+    search,
     view,
-    orderBy,
-    orderDir: OrderDirEnum.ASC,
   }
 
   // filter if logged user is an agent
@@ -73,10 +78,20 @@ export function useListingsData({
     })
   }
 
-  if (orderBy) {
-    Object.assign(params, { orderBy, orderDir })
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
   }
 
+  if (sort) {
+    Object.assign(params, {
+      orderBy: sort?.filter((item) => item.orderBy).map((item) => item.orderBy)[0],
+    })
+    Object.assign(params, {
+      orderDir: sort?.filter((item) => item.orderDir).map((item) => item.orderDir)[0],
+    })
+  }
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingsService.list(params)
 
@@ -115,7 +130,6 @@ export function useApplicationsData(
   }
 
   const paramsString = qs.stringify(params)
-
   const endpoint = `${process.env.backendApiBase}/applications?${paramsString}`
 
   const fetcher = () => applicationsService.list(params)

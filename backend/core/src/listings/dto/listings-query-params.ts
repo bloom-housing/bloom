@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
+  MinLength,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
@@ -65,4 +66,18 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderDirEnum, { groups: [ValidationsGroupsEnum.default] })
   orderDir?: OrderDirEnum
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "search",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MinLength(3, {
+    message: "Search must be at least 3 characters",
+    groups: [ValidationsGroupsEnum.default],
+  })
+  search?: string
 }

@@ -6,4 +6,5 @@ export enum OrderByFieldsEnum {
   name = "name",
   status = "status",
   verified = "verified",
+  updatedAt = "updatedAt",
 }
