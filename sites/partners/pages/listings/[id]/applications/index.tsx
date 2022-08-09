@@ -43,6 +43,7 @@ const ApplicationsList = () => {
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
+  const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -68,9 +69,10 @@ const ApplicationsList = () => {
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
 
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
+      !isListingOpen &&
+        this.linkWithId.addEventListener("click", function () {
+          void router.push(`/application/${applicationId}`)
+        })
     }
 
     getGui() {
@@ -138,8 +140,11 @@ const ApplicationsList = () => {
 
       <section>
         <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
-
+          <ApplicationsSideNav
+            className="w-full md:w-72"
+            listingId={listingId}
+            listingOpen={isListingOpen}
+          />
           <AgTable
             className="w-full"
             id="applications-table"
