@@ -13,6 +13,9 @@ import Layout from "../layouts/application"
 import RenderIf from "../src/RenderIf"
 import sidebarContent from "../page_content/resources/sidebar.md"
 import { useRouter } from "next/router"
+import Resource from "../src/Resource"
+import housingGlossary from "../page_content/resources/housing_glossary.md"
+import homeConnectTutorial from "../page_content/resources/home_connect_tutorial.md"
 
 export default function HousingBasics() {
   const [openModal, setOpenModal] = useState<boolean>(false)
@@ -77,6 +80,12 @@ export default function HousingBasics() {
                 />
               </div>
             </InfoCardGrid>
+            <MarkdownSection padding={false}>
+              <InfoCardGrid title={t("basicsCard.sectionTitle")}>
+                <Resource>{housingGlossary}</Resource>
+                <Resource>{homeConnectTutorial}</Resource>
+              </InfoCardGrid>
+            </MarkdownSection>
           </div>
           <aside className="pt-4 pb-10 md:w-4/12 md:pl-4 md:py-0 md:border-s">
             <MarkdownSection>
