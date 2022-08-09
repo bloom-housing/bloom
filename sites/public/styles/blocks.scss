@@ -26,3 +26,17 @@
 .action-block.has-bold-header .action-block__header {
   font-weight: 600;
 }
+
+.media-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 1rem;
+  row-gap: 2rem;
+  .media-grid__cell {
+    width: 100%;
+    @screen md {
+      width: calc(50% - 0.5rem);
+    }
+  }
+}

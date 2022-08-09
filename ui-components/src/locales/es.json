@@ -538,6 +538,7 @@
   "nav.siteTitle": "Portal de viviendas",
   "pageDescription.listing": "Haga su solicitud de vivienda de precio accesible en %{listingName} en %{regionName}, construida en sociedad con Exygy.",
   "pageDescription.welcome": "Busque y haga su solicitud de vivienda de precio accesible en el Portal de vivienda de %{regionName}",
+  "pageDescription.housingBasics": "Sabemos que encontrar vivienda puede ser un proceso difícil e intimidante. En esta página puede encontrar varios recursos que lo ayudarán a obtener información sobre viviendas asequibles y el proceso de solicitud para estas propiedades.",
   "pageTitle.about": "Acerca de",
   "pageTitle.resources": "Recursos",
   "pageTitle.additionalResources": "Más oportunidades de vivienda",
@@ -550,6 +551,7 @@
   "pageTitle.welcomeEnglish": "Bienvenidos",
   "pageTitle.welcomeSpanish": "Bienvenido",
   "pageTitle.welcomeVietnamese": "Tiếng Việt",
+  "pageTitle.housingBasics": "Conceptos básicos sobre las viviendas asequibles",
   "progressNav.current": "Paso actual: ",
   "progressNav.srHeading": "Progreso",
   "publicFilter.confirmedListings": "Ofertas confirmadas",
@@ -704,6 +706,8 @@
   "welcome.viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda",
   "welcome.viewAdditionalHousingTruncated": "Ver oportunidades y recursos",
   "welcome.comingSoonButton": "Ver todas las próximas novedades",
+  "welcome.learnMore": "Obtener más información",
+  "welcome.learnHousingBasics": "Conozca cómo puede calificar y solicitar una vivienda asequible",
   "whatToExpect.default": "Los solicitantes serán contactados por el agente de la propiedad en orden de clasificación hasta que se hayan llenado todas las vacantes. Toda la información que usted ha proporcionado será verificada y su elegibilidad será confirmada. Su solicitud será retirada de la lista de espera si usted hizo alguna declaración fraudulenta. Si nos es imposible verificar una preferencia de vivienda que usted haya solicitado, no recibirá la preferencia pero no será penalizado de ninguna otra manera. Si su solicitud fuera elegida, esté preparado para llenar una solicitud más detallada y proporcionar los documentos de apoyo requeridos.",
   "whatToExpect.label": "Lo que puede esperar"
 }

@@ -33,10 +33,6 @@ import landBankAuthority from "../page_content/resources/land_bank_authority.md"
 import projectCleanSlate from "../page_content/resources/project_clean_slate.md"
 import civilRightsInclusionOpportunity from "../page_content/resources/civil_rights_inclusion_opportunity.md"
 import housingRelocationAssistance from "../page_content/resources/housing_relocation_assistance.md"
-import videoAffordableHousing from "../page_content/resources/video_affordable_housing.md"
-import videoIncomeRestrictions from "../page_content/resources/video_income_restrictions.md"
-import videoHousingApplication from "../page_content/resources/video_housing_application.md"
-import videoHousingWaitlists from "../page_content/resources/video_housing_waitlists.md"
 import sidebarContent from "../page_content/resources/sidebar.md"
 
 const AdditionalResources = () => {
@@ -89,10 +85,6 @@ const AdditionalResources = () => {
                 <Resource>{projectCleanSlate}</Resource>
                 <Resource>{civilRightsInclusionOpportunity}</Resource>
                 <Resource>{housingRelocationAssistance}</Resource>
-                <Resource>{videoAffordableHousing}</Resource>
-                <Resource>{videoIncomeRestrictions}</Resource>
-                <Resource>{videoHousingApplication}</Resource>
-                <Resource>{videoHousingWaitlists}</Resource>
               </InfoCardGrid>
             </MarkdownSection>
           </div>

@@ -166,7 +166,7 @@ export default function Home({ latestListings, comingSoonListings }) {
           <ActionBlock
             className="flex-1 has-bold-header"
             header={t("welcome.signUp")}
-            icon={<Icon size="3xl" symbol="mailThin" />}
+            icon={<Icon size="2xl" symbol="envelopeThin" />}
             actions={[
               <LinkButton
                 key={"sign-up"}
@@ -184,10 +184,20 @@ export default function Home({ latestListings, comingSoonListings }) {
           <ActionBlock
             className="flex-1 has-bold-header"
             header={t("welcome.seeMoreOpportunitiesTruncated")}
-            icon={<Icon size="3xl" symbol="building" />}
+            icon={<Icon size="2xl" symbol="houseThin" />}
             actions={[
               <LinkButton href="/additional-resources" key={"additional-resources"}>
                 {t("welcome.viewAdditionalHousingTruncated")}
+              </LinkButton>,
+            ]}
+          />
+          <ActionBlock
+            className="flex-1 has-bold-header"
+            header={t("welcome.learnHousingBasics")}
+            icon={<Icon size="2xl" symbol={"circleQuestionThin"} />}
+            actions={[
+              <LinkButton href="/housing-basics" key={"housing-basics"}>
+                {t("welcome.learnMore")}
               </LinkButton>,
             ]}
           />

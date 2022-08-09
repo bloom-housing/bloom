@@ -36,7 +36,10 @@ $header-desktop-min-size: 1024px;
     @screen md {
       > :nth-child(2) {
         border-left-width: 0;
-        border-inline-start-width: 1px;
+        border-inline-width: 1px;
+      }
+      .action-block__header {
+        font-size: (var(--bloom-font-size-base-alt));
       }
     }
   }

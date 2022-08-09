@@ -19,5 +19,15 @@
   "listingFilters.resetButton": "Ver Todos los Listados",
   "pageDescription.resources": "El Departamento de Vivienda y Revitalización de la Ciudad de Detroit ha compilado una lista de recursos para ayudarlo a encontrar y mantener su vivienda. Al final de esta página, también encontrará cuatro videos breves donde podrá obtener más información sobre el proceso de solicitud de vivienda asequible.",
   "pageDescription.additionalResources": "El Departamento de Vivienda y Revitalización de la ciudad de Detroit ha compilado una lista de recursos para ayudarle a encontrar y mantener su vivienda.",
-  "pageTitle.additionalResources": "Recursos de vivienda adicionales"
+  "pageTitle.additionalResources": "Recursos de vivienda adicionales",
+  "basicsVideo.sectionTitle": "Tutoriales en video sobre las viviendas asequibles",
+  "basicsVideo.sectionSubtitle": "En los siguientes videos, producidos por Google.org, podrá aprender los conceptos básicos sobre las viviendas asequibles y conocer los requisitos de ingresos para solicitar viviendas, los procesos clave de solicitud de viviendas y las listas de espera de propiedades.",
+  "basicsVideo.affordableHousing": "Detroit Home Connect: ¿Qué es la vivienda asequible?",
+  "basicsVideo.affordableHousingSubtitle": "En este video, conozca los diferentes tipos de viviendas asequibles disponibles en Detroit.",
+  "basicsVideo.application": "Detroit Home Connect: La Solicitud de Vivienda Asequible",
+  "basicsVideo.applicationSubtitle": "En este video, conozca los documentos comunes que puede necesitar para completar una solicitud de vivienda asequible.",
+  "basicsVideo.waitlist": "Detroit Home Connect: Listas de espera para viviendas asequibles",
+  "basicsVideo.waitlistSubtitle": "En este video, conozca la importancia de ingresar a las listas de espera de viviendas asequibles, que le permitirán acceder a las unidades a medida que estén disponibles.",
+  "basicsVideo.incomeRestrictions": "Detroit Home Connect: Comprensión de las restricciones de ingresos",
+  "basicsVideo.incomeRestrictionsSubtitle": "En este video, conozca los requisitos de ingresos para una vivienda asequible pagada con recursos gubernamentales."
 }
