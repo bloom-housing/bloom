@@ -2,6 +2,7 @@
   --number-color: var(--bloom-color-white);
   --circle-color: var(--bloom-color-primary);
   --circle-size: var(--bloom-s6);
+  --circle-x-padding: var(--bloom-s0_5);
   --title-spacing: var(--bloom-s1_5);
   display: flex;
   flex-wrap: wrap;
@@ -11,6 +12,7 @@
   color: var(--number-color);
   min-width: var(--circle-size);
   height: var(--circle-size);
+  padding: 0rem var(--circle-x-padding);
   margin-right: var(--title-spacing);
   border-radius: 50%;
   text-align: center;
