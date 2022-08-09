@@ -4,8 +4,8 @@ footer.site-footer > .footer-row:first-of-type {
 }
 
 .footer-sections {
-  padding: 2rem 0;
-  max-width: 1024px;
+  padding: 2rem 1.25rem;
+  @apply max-w-5xl;
   margin: auto;
 }
 
@@ -40,7 +40,7 @@ footer.site-footer img {
   .footer-sections {
     display: flex;
     justify-content: space-between;
-    padding: 1.5rem 1.5rem;
+    padding: 1.5rem 1.25rem;
   }
 
   .footer-sections > * {
@@ -85,7 +85,7 @@ footer.site-footer img {
 
 @screen lg {
   .footer-sections {
-    padding: 2.25rem 4rem;
+    padding: 2.25rem 1.25rem;
   }
 
   .footer-sock .footer-copyright {

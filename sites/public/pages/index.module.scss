@@ -32,6 +32,7 @@
 
 .cards-container {
   padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -70,7 +71,7 @@
     height: 100%;
     width: 100%;
     aspect-ratio: 3/2;
-    @apply pb-2;
+    @apply pb-4;
   }
 }
 .region:hover {
