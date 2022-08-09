@@ -22,6 +22,7 @@ import {
   UnitRentTypeUpdateDto,
 } from "./dto/unit-rent-type.dto"
 import { UnitRentTypesService } from "./unit-rent-types.service"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("unitRentTypes")
 @ApiTags("unitRentTypes")
@@ -59,9 +60,9 @@ export class UnitRentTypesController {
     )
   }
 
-  @Delete(`:unitRentTypeId`)
+  @Delete()
   @ApiOperation({ summary: "Delete unitRentType by id", operationId: "delete" })
-  async delete(@Param("unitRentTypeId") unitRentTypeId: string): Promise<void> {
-    return await this.unitRentTypesService.delete(unitRentTypeId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.unitRentTypesService.delete(dto.id)
   }
 }

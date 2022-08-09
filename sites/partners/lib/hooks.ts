@@ -10,6 +10,7 @@ import {
   EnumPreferencesFilterParamsComparison,
   EnumProgramsFilterParamsComparison,
   EnumUserFilterParamsComparison,
+  UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
 import { setSiteAlertMessage } from "@bloom-housing/ui-components"
 export interface PaginationProps {
@@ -34,6 +35,8 @@ type UseListingsDataProps = PaginationProps & {
   userId?: string
   search?: string
   sort?: ColumnOrder[]
+  roles?: UserRolesOnly
+  userJurisidctionIds?: string[]
 }
 
 export function useSingleListingData(listingId: string) {
@@ -49,7 +52,15 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData({ page, limit, userId, search = "", sort }: UseListingsDataProps) {
+export function useListingsData({
+  page,
+  limit,
+  userId,
+  search = "",
+  sort,
+  roles,
+  userJurisidctionIds,
+}: UseListingsDataProps) {
   const params = {
     page,
     limit,
@@ -68,14 +79,15 @@ export function useListingsData({ page, limit, userId, search = "", sort }: UseL
   }
 
   // filter if logged user is an agent
-  if (userId) {
+  if (roles?.isPartner) {
     params.filter.push({
       $comparison: EnumListingFilterParamsComparison["="],
       leasingAgents: userId,
     })
-
-    Object.assign(params, {
-      view: "base",
+  } else if (roles?.isJurisdictionalAdmin) {
+    params.filter.push({
+      $comparison: EnumListingFilterParamsComparison.IN,
+      jurisdiction: userJurisidctionIds[0],
     })
   }
 

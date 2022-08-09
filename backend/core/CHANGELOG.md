@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.14...@bloom-housing/backend-core@5.0.1-alpha.15) (2022-07-27)
+
+
+### Bug Fixes
+
+* preview and juri admin perms for user access ([#2914](https://github.com/bloom-housing/bloom/issues/2914)) ([2db1fdb](https://github.com/bloom-housing/bloom/commit/2db1fdba2fcb366acfc436c3f58b1651550d2367))
+
+
+
+
+
+## [5.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.13...@bloom-housing/backend-core@5.0.1-alpha.14) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.12...@bloom-housing/backend-core@5.0.1-alpha.13) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [5.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.11...@bloom-housing/backend-core@5.0.1-alpha.12) (2022-07-19)
 
 

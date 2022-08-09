@@ -1,11 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  NotFoundException,
-  Scope,
-} from "@nestjs/common"
+import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
@@ -57,6 +50,14 @@ export class ListingsService {
       .addSearchByListingNameCondition(params.search)
       .paginate(params.limit, params.page)
       .groupBy("listings.id")
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    const user = this.req?.user as User
+    if (user?.roles?.isJurisdictionalAdmin) {
+      innerFilteredQuery.andWhere("listings.jurisdiction_id IN (:...jurisdiction)", {
+        jurisdiction: user.jurisdictions.map((elem) => elem.id),
+      })
+    }
 
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 

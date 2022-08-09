@@ -64,11 +64,23 @@ export class EmailService {
     )
   }
 
-  private async getUserJurisdiction(user?: User) {
+  private async getUserJurisdiction(user?: User, existingUser?: User) {
     let jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     if (!jurisdiction && user?.jurisdictions) {
+      let whereClause = { id: user.jurisdictions[0].id }
+      if (existingUser?.jurisdictions) {
+        // if we are updating an existing user, narrow jurisdictions down to new jurisdictions only
+        const newJuris = user.jurisdictions.filter(
+          (juris) =>
+            !existingUser.jurisdictions.some((preExistingJuris) => preExistingJuris.id === juris.id)
+        )
+        if (newJuris.length) {
+          whereClause = { id: newJuris[0].id }
+        }
+      }
+
       jurisdiction = await this.jurisdictionService.findOne({
-        where: { id: user.jurisdictions[0].id },
+        where: whereClause,
       })
     }
     return jurisdiction
@@ -308,6 +320,20 @@ export class EmailService {
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl },
+      })
+    )
+  }
+
+  async portalAccountUpdate(user: User, appUrl: string, existingUser: User) {
+    const jurisdiction = await this.getUserJurisdiction(user, existingUser)
+    void (await this.loadTranslations(jurisdiction, user.language || Language.en))
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t("invite.portalAccountUpdate"),
+      this.template("portal-account-update")({
+        user,
+        appUrl,
       })
     )
   }

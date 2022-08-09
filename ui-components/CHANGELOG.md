@@ -3,6 +3,112 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.28...@bloom-housing/ui-components@5.0.1-alpha.29) (2022-07-27)
+
+
+### Bug Fixes
+
+* preview and juri admin perms for user access ([#2914](https://github.com/bloom-housing/bloom/issues/2914)) ([2db1fdb](https://github.com/bloom-housing/bloom/commit/2db1fdba2fcb366acfc436c3f58b1651550d2367))
+
+
+
+
+
+## [5.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.27...@bloom-housing/ui-components@5.0.1-alpha.28) (2022-07-27)
+
+
+### Bug Fixes
+
+* fix password confirmation validation in the reset password form ([23064fe](https://github.com/bloom-housing/bloom/commit/23064fe8135ee9f531bac41b1b1f7e0ce771905a))
+
+
+
+
+
+## [5.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.26...@bloom-housing/ui-components@5.0.1-alpha.27) (2022-07-26)
+
+
+### Features
+
+* **listsection:** modify props to allow react children for list section subtitle ([ed07255](https://github.com/bloom-housing/bloom/commit/ed0725505961277aa0f293ec1e2b49330080df49))
+
+
+
+
+
+## [5.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.25...@bloom-housing/ui-components@5.0.1-alpha.26) (2022-07-26)
+
+
+### Features
+
+* **eventsection:** allow EventSection to lowercase date ([246a13e](https://github.com/bloom-housing/bloom/commit/246a13e50d3b5bd464cdedde708f6c89b4f1db47)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+* **eventsection:** fix prop name; update story instance name ([ec1337b](https://github.com/bloom-housing/bloom/commit/ec1337ba2344d539767e70ec9e7766cf70f92033)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+* **eventsection:** make dateClassname optional ([5daa884](https://github.com/bloom-housing/bloom/commit/5daa884979457a5dc4ee9801fac22d5131b4d5d8)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+
+
+
+
+
+## [5.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.24...@bloom-housing/ui-components@5.0.1-alpha.25) (2022-07-26)
+
+
+### Bug Fixes
+
+* **component:** allow modals to scroll for iphone ([#2905](https://github.com/bloom-housing/bloom/issues/2905)) ([e1d89d1](https://github.com/bloom-housing/bloom/commit/e1d89d1c7a4b4924f72a00014ae920be4edf99b6))
+
+
+
+
+
+## [5.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.23...@bloom-housing/ui-components@5.0.1-alpha.24) (2022-07-22)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.22...@bloom-housing/ui-components@5.0.1-alpha.23) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.21...@bloom-housing/ui-components@5.0.1-alpha.22) (2022-07-20)
+
+
+### Features
+
+* creating users as juris admin ([#2863](https://github.com/bloom-housing/bloom/issues/2863)) ([bc0aede](https://github.com/bloom-housing/bloom/commit/bc0aede7c622d3ffe4c2aa0f0ce7826bc97af9bf))
+
+
+
+
+
+## [5.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.20...@bloom-housing/ui-components@5.0.1-alpha.21) (2022-07-20)
+
+
+### Bug Fixes
+
+* allow jsx in expandable section ([#2902](https://github.com/bloom-housing/bloom/issues/2902)) ([93ae489](https://github.com/bloom-housing/bloom/commit/93ae489196ad96a9f68247ff2b5cc3fbe0f347d2))
+
+
+
+
+
+## [5.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.19...@bloom-housing/ui-components@5.0.1-alpha.20) (2022-07-20)
+
+
+### Bug Fixes
+
+* render html address properly ([#2897](https://github.com/bloom-housing/bloom/issues/2897)) ([87a759a](https://github.com/bloom-housing/bloom/commit/87a759a68c35d1c47ec4fbbec6c947a63993d27c))
+
+
+
+
+
 ## [5.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.18...@bloom-housing/ui-components@5.0.1-alpha.19) (2022-07-19)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

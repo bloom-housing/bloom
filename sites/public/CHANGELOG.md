@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.37...@bloom-housing/public@5.0.1-alpha.38) (2022-07-27)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.36...@bloom-housing/public@5.0.1-alpha.37) (2022-07-27)
+
+
+### Bug Fixes
+
+* fix password confirmation validation in the reset password form ([23064fe](https://github.com/bloom-housing/bloom/commit/23064fe8135ee9f531bac41b1b1f7e0ce771905a))
+
+
+
+
+
+## [5.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.35...@bloom-housing/public@5.0.1-alpha.36) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.34...@bloom-housing/public@5.0.1-alpha.35) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.33...@bloom-housing/public@5.0.1-alpha.34) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.32...@bloom-housing/public@5.0.1-alpha.33) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.31...@bloom-housing/public@5.0.1-alpha.32) (2022-07-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.30...@bloom-housing/public@5.0.1-alpha.31) (2022-07-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.29...@bloom-housing/public@5.0.1-alpha.30) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.28...@bloom-housing/public@5.0.1-alpha.29) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.27...@bloom-housing/public@5.0.1-alpha.28) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.26...@bloom-housing/public@5.0.1-alpha.27) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [5.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.25...@bloom-housing/public@5.0.1-alpha.26) (2022-07-19)
 
 **Note:** Version bump only for package @bloom-housing/public

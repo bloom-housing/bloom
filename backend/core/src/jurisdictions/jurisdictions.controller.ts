@@ -20,6 +20,7 @@ import { JurisdictionsService } from "./services/jurisdictions.service"
 import { JurisdictionDto } from "./dto/jurisdiction.dto"
 import { JurisdictionCreateDto } from "./dto/jurisdiction-create.dto"
 import { JurisdictionUpdateDto } from "./dto/jurisdiction-update.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("jurisdictions")
 @ApiTags("jurisdictions")
@@ -68,9 +69,9 @@ export class JurisdictionsController {
     )
   }
 
-  @Delete(`:jurisdictionId`)
+  @Delete()
   @ApiOperation({ summary: "Delete jurisdiction by id", operationId: "delete" })
-  async delete(@Param("jurisdictionId") jurisdictionId: string): Promise<void> {
-    return await this.jurisdictionsService.delete(jurisdictionId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.jurisdictionsService.delete(dto.id)
   }
 }
