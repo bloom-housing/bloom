@@ -94,7 +94,7 @@ const LeasingAgent = () => {
               label={t("leasingAgent.managementWebsite")}
               name={"managementWebsite"}
               id={"managementWebsite"}
-              placeholder={t("leasingAgent.managementWebsite")}
+              placeholder={t("leasingAgent.managementWebsitePlaceholder")}
               register={register}
               validation={{
                 validate: (value) =>

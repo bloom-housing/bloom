@@ -729,6 +729,7 @@
   "leasingAgent.officeHours": "Office Hours",
   "leasingAgent.officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday",
   "leasingAgent.managementWebsite": "Company Website",
+  "leasingAgent.managementWebsitePlaceholder": "https://www.google.com",
   "listings.error": "There was an issue submitting the form.",
   "listings.fieldError": "Please resolve any errors before saving or publishing your listing.",
   "listings.closeThisListing": "Do you really want to close this listing?",
