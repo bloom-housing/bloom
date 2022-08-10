@@ -107,7 +107,6 @@
     "react-tabs": "^3.2.2",
     "react-text-mask": "^5.4.3",
     "react-transition-group": "^4.4.1",
-    "sanitize-html": "^2.7.1",
     "tailwindcss": "2.2.10",
     "ts-jest": "^26.4.1",
     "typesafe-actions": "^5.1.0"

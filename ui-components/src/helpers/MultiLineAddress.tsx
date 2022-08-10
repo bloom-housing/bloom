@@ -1,5 +1,5 @@
 import * as React from "react"
-import sanitizeHtml from "sanitize-html"
+import Markdown from "markdown-to-jsx"
 
 export interface Address {
   city?: string
@@ -20,19 +20,15 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
   if (!address) return null
 
   return (
-    <span
-      dangerouslySetInnerHTML={{
-        __html: sanitizeHtml(
-          `
-            ${address.placeName ? `${address.placeName} <br />` : ""}
-            ${address.street || ""} ${address.street2 || ""}
-            ${address.street || address.street2 ? `<br />` : ""}
-            ${address.city}
-            ${address.city && (address.state || address.zipCode) ? "," : ""} ${address.state} ${` `}
-            ${address.zipCode}
-          `
-        ),
-      }}
+    <Markdown
+      options={{ disableParsingRawHTML: false }}
+      children={`<span>${address.placeName ? `${address.placeName} <br />` : ""}
+     ${address.street || ""} ${address.street2 || ""}
+     ${address.street || address.street2 ? `<br />` : ""}
+     ${address.city}
+     ${address.city && (address.state || address.zipCode) ? "," : ""} ${address.state} ${` `} ${
+        address.zipCode
+      }</span>`}
     />
   )
 }
