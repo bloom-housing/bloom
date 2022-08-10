@@ -34,15 +34,12 @@ const FormUserConfirm = () => {
   const { mutate, isLoading: isConfirmLoading, isError, reset: resetMutation } = useMutate<
     LoginResponse
   >()
-  const { userService } = useContext(AuthContext)
-  // const { loginWithToken } = useContext(AuthContext)
-
+  const { userService, loadProfile, loading } = useContext(AuthContext)
   const token = router.query?.token as string
 
   const password = useRef({})
   password.current = watch("password", "")
 
-  const [isLoginLoading, setLoginLoading] = useState(false)
   const [isSubmitting, setSubmitting] = useState(false)
   const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
   const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
@@ -78,23 +75,13 @@ const FormUserConfirm = () => {
         })
       )
 
-      // TODO: fetch profile
-
-      // const { accessToken } = response || {}
-
-      // if (accessToken) {
-      //   setLoginLoading(true)
-      //   await loginWithToken(accessToken)
-      //   setLoginLoading(false)
-
-      //   setSiteAlertMessage(t(`users.accountConfirmed`), "success")
-      //   void router.push("/")
-      // } else {
-      //   setSubmitting(false)
-      //   setRerequestModalOpen(true)
-      // }
+      if (response) {
+        loadProfile("/");
+        setSiteAlertMessage(t(`users.accountConfirmed`), "success")
+      }
     } catch (err) {
       setSubmitting(false)
+      setRerequestModalOpen(true)
       console.error(err)
     }
   }
@@ -190,7 +177,7 @@ const FormUserConfirm = () => {
                 type="submit"
                 styleType={AppearanceStyleType.primary}
                 className={"items-center"}
-                loading={isConfirmLoading || isLoginLoading}
+                loading={isConfirmLoading || loading}
               >
                 {t("users.confirmAccount")}
               </Button>
