@@ -4,7 +4,10 @@
   @apply table;
   @apply m-0;
   @apply p-0;
+  @apply pr-2;
   @apply w-full;
+  border-spacing: 1rem;
+  table-layout: fixed;
 }
 
 .progress-nav__item {
@@ -99,4 +102,20 @@
     @apply relative;
     z-index: 3;
   }
+}
+
+.progress-nav__bar-item {
+  @apply text-2xs;
+  @apply px-2;
+  @apply py-3;
+  @apply relative;
+  // @apply text-center;
+  @apply uppercase;
+  @apply table-cell;
+  @apply whitespace-nowrap;
+  @apply float-none;
+  max-width: 20%;
+  border-top-width: 1rem;
+
+  // padding-left: 0.5rem;
 }
