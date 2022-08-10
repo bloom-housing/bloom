@@ -16,7 +16,6 @@ import {
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   fieldGroupObjectToArray,
-  mapProgramsToApi,
   adaFeatureKeys,
   mapApiToMultiselectForm,
   mapCheckboxesToApi,

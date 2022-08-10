@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes, getProgramOptionName } from "@bloom-housing/shared-helpers"
+import { getUniqueUnitTypes } from "@bloom-housing/shared-helpers"
 import {
   Address,
   AllExtraDataTypes,
@@ -87,7 +87,7 @@ const FormSummaryDetails = ({
 
   const multiselectQuestionAddress = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
-    return extraData.reduce((acc, item, i) => {
+    return extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
         acc += `
           ${item.value.street}${!item.value.street2 && ","}

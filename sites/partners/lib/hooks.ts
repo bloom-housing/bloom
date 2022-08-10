@@ -330,7 +330,7 @@ export function useJurisdictionalMultiselectQuestionList(
   }
   params.filter.push({
     $comparison: EnumMultiselectQuestionsFilterParamsComparison["IN"],
-    jurisdiction: !!jurisdictionId ? jurisdictionId : undefined,
+    jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
   })
   if (applicationSection) {
     params.filter.push({
