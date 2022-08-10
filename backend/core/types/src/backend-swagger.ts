@@ -1443,7 +1443,7 @@ export class MultiselectQuestionsService {
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselect-questions"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { filter: params["filter"] }
@@ -1464,7 +1464,7 @@ export class MultiselectQuestionsService {
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselect-questions"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -1485,7 +1485,7 @@ export class MultiselectQuestionsService {
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselect-questions/{multiselectQuestionId}"
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -1506,7 +1506,7 @@ export class MultiselectQuestionsService {
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselect-questions/{multiselectQuestionId}"
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
       url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
@@ -1528,7 +1528,7 @@ export class MultiselectQuestionsService {
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselect-questions/{multiselectQuestionId}"
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
       url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)

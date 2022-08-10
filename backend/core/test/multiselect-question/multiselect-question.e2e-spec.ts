@@ -42,7 +42,7 @@ describe("MultiselectQuestions", () => {
 
   it(`should return questions`, async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/multiselect-questions`)
+      .get(`/multiselectQuestions`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(res.body)).toBe(true)
@@ -57,7 +57,7 @@ describe("MultiselectQuestions", () => {
       applicationSection: ApplicationSection.preferences,
     }
     const res = await supertest(app.getHttpServer())
-      .post(`/multiselect-questions`)
+      .post(`/multiselectQuestions`)
       .set(...setAuthorization(adminAccessToken))
       .send(newQuestion)
       .expect(201)
@@ -68,7 +68,7 @@ describe("MultiselectQuestions", () => {
     expect(res.body.text).toBe(newQuestion.text)
 
     const getById = await supertest(app.getHttpServer())
-      .get(`/multiselect-questions/${res.body.id}`)
+      .get(`/multiselectQuestions/${res.body.id}`)
       .expect(200)
     expect(getById.body.id).toBe(res.body.id)
     expect(getById.body.text).toBe(newQuestion.text)

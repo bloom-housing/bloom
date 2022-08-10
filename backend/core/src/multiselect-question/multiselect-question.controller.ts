@@ -25,10 +25,10 @@ import { MultiselectQuestionsListQueryParams } from "../multiselect-question/dto
 import { MultiselectQuestionsFilterParams } from "../multiselect-question/dto/multiselect-question-filter-params"
 import { IdDto } from "../shared/dto/id.dto"
 
-@Controller("/multiselect-questions")
-@ApiTags("multiselect-questions")
+@Controller("/multiselectQuestions")
+@ApiTags("multiselectQuestions")
 @ApiBearerAuth()
-@ResourceType("multiselect-question")
+@ResourceType("multiselectQuestion")
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class MultiselectQuestionsController {
