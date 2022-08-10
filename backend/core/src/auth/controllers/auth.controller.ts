@@ -7,6 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
   Body,
+  Get
 } from "@nestjs/common"
 import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
@@ -16,6 +17,7 @@ import { LoginDto } from "../dto/login.dto"
 import { mapTo } from "../../shared/mapTo"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
 import { LoginResponseDto } from "../dto/login-response.dto"
+import { LogoutResponseDto } from "../dto/logout-response.dto"
 import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
 import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
 import { UserService } from "../services/user.service"
@@ -23,7 +25,7 @@ import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { UserErrorExtraModel } from "../user-errors"
 import { TokenDto } from "../dto/token.dto"
-import { TOKEN_COOKIE_NAME } from "../constants"
+import { TOKEN_COOKIE_NAME, TOKEN_COOKIE_MAXAGE } from "../constants"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -44,10 +46,9 @@ export class AuthController {
 
     res.cookie(TOKEN_COOKIE_NAME, accessToken, {
       httpOnly: true,
-      // secure: true,
-      // sameSite: true,
-      domain: "localhost",
-      maxAge: 86400000,
+      secure: true,
+      sameSite: true,
+      maxAge: TOKEN_COOKIE_MAXAGE,
     })
     return mapTo(LoginResponseDto, { success: true })
   }
@@ -61,12 +62,20 @@ export class AuthController {
 
     res.cookie(TOKEN_COOKIE_NAME, accessToken, {
       httpOnly: true,
-      // secure: true,
-      // sameSite: true,
-      domain: "localhost",
-      maxAge: 86400000,
+      secure: true,
+      sameSite: true,
+      maxAge: TOKEN_COOKIE_MAXAGE,
     })
     return mapTo(LoginResponseDto, { success: true })
+  }
+
+  @UseGuards(DefaultAuthGuard)
+  @Get("logout")
+  @ApiOperation({ summary: "Logout", operationId: "logout" })
+  logout(@Response({ passthrough: true }) res): LogoutResponseDto {
+    res.cookie(TOKEN_COOKIE_NAME, '', { expires: new Date() });
+
+    return mapTo(LogoutResponseDto, { success: true })
   }
 
   @Post("request-mfa-code")

@@ -718,6 +718,21 @@ export class AuthService {
     })
   }
   /**
+   * Logout
+   */
+  logout(options: IRequestOptions = {}): Promise<LogoutResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/logout"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Request mfa code
    */
   requestMfaCode(
@@ -3696,10 +3711,15 @@ export interface Login {
 
 export interface LoginResponse {
   /**  */
-  accessToken: string
+  success: boolean
 }
 
 export interface Token {}
+
+export interface LogoutResponse {
+  /**  */
+  success: boolean
+}
 
 export interface RequestMfaCode {
   /**  */
