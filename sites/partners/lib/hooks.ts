@@ -98,6 +98,7 @@ export function useListingsData({
   }
 
   const { listingsService } = useContext(AuthContext)
+  //
 
   const fetcher = () => listingsService.list(params)
 
@@ -322,20 +323,30 @@ export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
   applicationSection?: ApplicationSection
 ) {
+  console.log("dataFetcher")
+  console.log({ applicationSection })
   const { multiselectQuestionsService } = useContext(AuthContext)
-  const fetcher = () =>
-    multiselectQuestionsService.list({
-      filter: [
-        {
-          $comparison: EnumMultiselectQuestionsFilterParamsComparison["IN"],
-          jurisdiction: jurisdictionId,
-          applicationSection,
-        },
-      ],
+
+  const params = {
+    filter: [],
+  }
+  params.filter.push({
+    $comparison: EnumMultiselectQuestionsFilterParamsComparison["IN"],
+    jurisdiction: !!jurisdictionId ? jurisdictionId : undefined,
+  })
+  if (applicationSection) {
+    params.filter.push({
+      $comparison: EnumMultiselectQuestionsFilterParamsComparison["="],
+      applicationSection,
     })
+  }
+
+  const paramsString = qs.stringify(params)
+
+  const fetcher = () => multiselectQuestionsService.list(params)
 
   const { data, error } = useSWR(
-    `${process.env.backendApiBase}/multiselectQuestions/${jurisdictionId}`,
+    `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
     fetcher
   )
 

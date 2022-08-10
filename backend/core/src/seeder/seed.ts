@@ -134,11 +134,11 @@ export async function createMultiselectQuestions(
       getPbvPreference(jurisdiction.name),
       getHopwaPreference(jurisdiction.name),
       getDisplaceePreference(jurisdiction.name),
-      getServedInMilitaryProgram(),
-      getTayProgram(),
-      getDisabilityOrMentalIllnessProgram(),
-      getHousingSituationProgram(),
-      getFlatRentAndRentBasedOnIncomeProgram()
+      getServedInMilitaryProgram(jurisdiction.name),
+      getTayProgram(jurisdiction.name),
+      getDisabilityOrMentalIllnessProgram(jurisdiction.name),
+      getHousingSituationProgram(jurisdiction.name),
+      getFlatRentAndRentBasedOnIncomeProgram(jurisdiction.name)
     )
   })
 

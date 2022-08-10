@@ -13,7 +13,6 @@ import { UserCreateDto } from "../../../auth/dto/user-create.dto"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
-import { InputType } from "../../../shared/types/input-type"
 import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 import { ApplicationSection } from "../../../multiselect-question/types/multiselect-application-section-enum"
 export const getDate = (days: number) => {
@@ -335,12 +334,16 @@ export const hopwaPreference: MultiselectQuestionSeedType = {
 
 // programs
 
-export function getServedInMilitaryProgram() {
-  return JSON.parse(JSON.stringify(servedInMilitaryProgram))
+export function getServedInMilitaryProgram(jurisdictionName) {
+  const program = { ...servedInMilitaryProgram }
+  program.text += ` - ${jurisdictionName}`
+  return program
 }
 
-export function getFlatRentAndRentBasedOnIncomeProgram() {
-  return JSON.parse(JSON.stringify(flatRentAndRentBasedOnIncomeProgram))
+export function getFlatRentAndRentBasedOnIncomeProgram(jurisdictionName) {
+  const program = { ...flatRentAndRentBasedOnIncomeProgram }
+  program.text += ` - ${jurisdictionName}`
+  return program
 }
 
 export const servedInMilitaryProgram: MultiselectQuestionSeedType = {
@@ -367,8 +370,10 @@ export const flatRentAndRentBasedOnIncomeProgram: MultiselectQuestionSeedType = 
   ],
 }
 
-export function getTayProgram() {
-  return JSON.parse(JSON.stringify(tayProgram))
+export function getTayProgram(jurisdictionName) {
+  const program = { ...tayProgram }
+  program.text += ` - ${jurisdictionName}`
+  return program
 }
 
 export const tayProgram: MultiselectQuestionSeedType = {
@@ -384,8 +389,10 @@ export const tayProgram: MultiselectQuestionSeedType = {
   ],
 }
 
-export function getDisabilityOrMentalIllnessProgram() {
-  return JSON.parse(JSON.stringify(disabilityOrMentalIllnessProgram))
+export function getDisabilityOrMentalIllnessProgram(jurisdictionName) {
+  const program = { ...disabilityOrMentalIllnessProgram }
+  program.text += ` - ${jurisdictionName}`
+  return program
 }
 
 export const disabilityOrMentalIllnessProgram: MultiselectQuestionSeedType = {
@@ -401,8 +408,10 @@ export const disabilityOrMentalIllnessProgram: MultiselectQuestionSeedType = {
   ],
 }
 
-export function getHousingSituationProgram() {
-  return JSON.parse(JSON.stringify(housingSituationProgram))
+export function getHousingSituationProgram(jurisdictionName) {
+  const program = { ...housingSituationProgram }
+  program.text += ` - ${jurisdictionName}`
+  return program
 }
 
 export const housingSituationProgram: MultiselectQuestionSeedType = {
