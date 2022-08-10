@@ -12,7 +12,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
       return { multiselectQuestion: program, ordinal: index + 1 }
     })
 
-    this.data.listingMultiselectQuestions = { ...preferences, ...programs }
+    this.data.listingMultiselectQuestions = [...preferences, ...programs]
 
     if (this.data.buildingAddress) {
       this.data.buildingAddress = {
