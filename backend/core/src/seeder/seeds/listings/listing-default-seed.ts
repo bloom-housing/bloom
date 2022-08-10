@@ -29,6 +29,7 @@ import { Program } from "../../../program/entities/program.entity"
 import { CountyCode } from "../../../shared/types/county-code"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Asset } from "../../../assets/entities/asset.entity"
+import dayjs from "dayjs"
 
 export class ListingDefaultSeed {
   constructor(
@@ -77,6 +78,7 @@ export class ListingDefaultSeed {
       ...getDefaultListing(),
 
       name: "Test: Default, Two Preferences",
+      publishedAt: dayjs(new Date()).subtract(1, "hour"),
       assets: getDefaultAssets(),
       listingPreferences: [
         {
