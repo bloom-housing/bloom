@@ -25,7 +25,8 @@ import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { UserErrorExtraModel } from "../user-errors"
 import { TokenDto } from "../dto/token.dto"
-import { TOKEN_COOKIE_NAME, TOKEN_COOKIE_MAXAGE } from "../constants"
+import { TOKEN_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from "../constants"
+import { Response as ExpressResponse } from "express"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -41,32 +42,22 @@ export class AuthController {
   @Post("login")
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: "Login", operationId: "login" })
-  login(@Request() req, @Response({ passthrough: true }) res): LoginResponseDto {
+  login(@Request() req, @Response({ passthrough: true }) res: ExpressResponse): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
 
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: true,
-      maxAge: TOKEN_COOKIE_MAXAGE,
-    })
-    return mapTo(LoginResponseDto, { success: true })
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
+    return mapTo(LoginResponseDto, { status: "ok" })
   }
 
   @UseGuards(DefaultAuthGuard)
   @Post("token")
   @ApiBody({ type: TokenDto })
   @ApiOperation({ summary: "Token", operationId: "token" })
-  token(@Request() req, @Response({ passthrough: true }) res): LoginResponseDto {
+  token(@Request() req, @Response({ passthrough: true }) res: ExpressResponse): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
 
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: true,
-      maxAge: TOKEN_COOKIE_MAXAGE,
-    })
-    return mapTo(LoginResponseDto, { success: true })
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
+    return mapTo(LoginResponseDto, { status: "ok" })
   }
 
   @UseGuards(DefaultAuthGuard)
@@ -75,7 +66,7 @@ export class AuthController {
   logout(@Response({ passthrough: true }) res): LogoutResponseDto {
     res.cookie(TOKEN_COOKIE_NAME, '', { expires: new Date() });
 
-    return mapTo(LogoutResponseDto, { success: true })
+    return mapTo(LogoutResponseDto, { status: "ok" })
   }
 
   @Post("request-mfa-code")

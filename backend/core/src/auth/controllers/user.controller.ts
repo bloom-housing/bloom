@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   Request,
+  Response,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -41,7 +42,8 @@ import { DefaultAuthGuard } from "../guards/default.guard"
 import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
 import { IdDto } from "../../shared/dto/id.dto"
-
+import { TOKEN_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from "../constants"
+import { Response as ExpressResponse } from "express"
 @Controller("user")
 @ApiBearerAuth()
 @ApiTags("user")
@@ -108,9 +110,11 @@ export class UserController {
 
   @Put("confirm")
   @ApiOperation({ summary: "Confirm email", operationId: "confirm" })
-  async confirm(@Body() dto: ConfirmDto): Promise<LoginResponseDto> {
+  async confirm(@Body() dto: ConfirmDto, @Response() res: ExpressResponse): Promise<LoginResponseDto> {
     const accessToken = await this.userService.confirm(dto)
-    return mapTo(LoginResponseDto, { accessToken })
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
+
+    return mapTo(LoginResponseDto, { status: "ok" })
   }
 
   @Put("forgot-password")
@@ -122,9 +126,10 @@ export class UserController {
 
   @Put("update-password")
   @ApiOperation({ summary: "Update Password", operationId: "update-password" })
-  async updatePassword(@Body() dto: UpdatePasswordDto): Promise<LoginResponseDto> {
+  async updatePassword(@Body() dto: UpdatePasswordDto, @Response() res: ExpressResponse): Promise<LoginResponseDto> {
     const accessToken = await this.userService.updatePassword(dto)
-    return mapTo(LoginResponseDto, { accessToken })
+    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
+    return mapTo(LoginResponseDto, { status: "ok" })
   }
 
   @Put(":id")
