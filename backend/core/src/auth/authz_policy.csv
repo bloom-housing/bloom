@@ -17,6 +17,13 @@ p, admin, multiselectQuestion, true, .*
 p, partner, multiselectQuestion, true, .*
 p, anonymous, multiselectQuestion, true, read
 
+p, admin, program, true, .*
+p, partner, program, true, .*
+p, anonymous, program, true, read
+
+p, admin, preference, true, .*
+p, partner, preference, true, .*
+
 p, admin, applicationMethod, true, .*
 p, jurisdictionAdmin, applicationMethod, true, .*
 p, partner, applicationMethod, true, read

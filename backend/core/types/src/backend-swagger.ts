@@ -5826,6 +5826,9 @@ export interface MultiselectQuestionsFilterParams {
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  applicationSection?: string
 }
 
 export interface MultiselectQuestionCreate {

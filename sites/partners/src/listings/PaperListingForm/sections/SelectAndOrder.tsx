@@ -11,7 +11,7 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { MultiselectQuestion } from "@bloom-housing/backend-core/types"
+import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -25,16 +25,19 @@ type SelectAndOrderProps = {
   drawerTitle: string
   drawerButtonText: string
   dataFetcher: (
-    jurisdiction?: string
+    jurisdiction?: string,
+    applicationSection?: ApplicationSection
   ) => {
     data: SelectAndOrderSection[]
     loading: boolean
     error: any
   }
   formKey: string
+  applicationSection: ApplicationSection
 }
 
 const SelectAndOrder = ({
+  applicationSection,
   listingData,
   setListingData,
   title,
@@ -141,7 +144,7 @@ const SelectAndOrder = ({
 
   const jurisdiction: string = watch("jurisdiction.id")
 
-  const { data: fetchedData = [] } = dataFetcher(jurisdiction)
+  const { data: fetchedData = [] } = dataFetcher(jurisdiction, applicationSection)
 
   console.log({ fetchedData })
 
