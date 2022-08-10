@@ -268,7 +268,6 @@ export const mapRadiosToApi = (
   data: { [name: string]: any },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
-  console.log({ data })
   if (Object.keys(data).length === 0) {
     return {
       key: "",
@@ -344,8 +343,6 @@ export const mapApiToMultiselectForm = (
     question: ApplicationMultiselectQuestion
     inputType: string
   }[] = applicationQuestions.map((question) => {
-    console.log(listingQuestions)
-    console.log(question)
     return {
       question,
       inputType: getInputType(

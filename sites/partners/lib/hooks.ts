@@ -323,8 +323,6 @@ export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
   applicationSection?: ApplicationSection
 ) {
-  console.log("dataFetcher")
-  console.log({ applicationSection })
   const { multiselectQuestionsService } = useContext(AuthContext)
 
   const params = {

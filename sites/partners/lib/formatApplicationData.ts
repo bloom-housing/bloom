@@ -139,8 +139,6 @@ export const mapFormToApi = ({
     }
   })()
 
-  console.log({ preferences })
-
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
     const inputType = getInputType(pref.options)
     if (inputType === "checkbox") {
@@ -150,15 +148,9 @@ export const mapFormToApi = ({
       return mapRadiosToApi({ [pref.text]: data.application.preferences[pref.text] }, pref)
     }
   })
-  console.log({ preferencesData })
-  console.log({ programs })
-
-  console.log({ data })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    console.log({ program })
     const inputType = getInputType(program.options)
-    console.log({ inputType })
     if (inputType === "checkbox") {
       return mapCheckboxesToApi(data, program, ApplicationSection.programs)
     }
@@ -167,7 +159,6 @@ export const mapFormToApi = ({
     }
   })
 
-  console.log({ programsData })
   // const preferences = Object.entries(data.application.preferences)?.reduce((acc, curr) => {
   //   if (Object.keys(curr).length) {
   //     return { ...acc, ...mapCheckboxesToApi(curr[1], curr[0]) }
@@ -292,8 +283,6 @@ export const mapFormToApi = ({
     householdSize,
   }
 
-  console.log({ result })
-
   return result
 }
 
@@ -302,9 +291,6 @@ export const mapFormToApi = ({
 */
 
 export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listing) => {
-  console.log("HERE!")
-  console.log(applicationData)
-  console.log(listing)
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate)).utc()
     : null

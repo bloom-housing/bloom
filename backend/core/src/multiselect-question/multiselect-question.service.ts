@@ -26,9 +26,6 @@ export class MultiselectQuestionsService {
         "multiselectQuestionJurisdictions.name",
       ])
 
-    console.log({ params })
-    console.log(params.filter)
-
     if (params.filter) {
       addFilters<Array<MultiselectQuestionsFilterParams>, typeof jurisdictionFilterTypeToFieldMap>(
         params.filter,
@@ -37,7 +34,6 @@ export class MultiselectQuestionsService {
       )
     }
 
-    console.log(qb.getQueryAndParameters())
     return qb.getMany()
   }
 

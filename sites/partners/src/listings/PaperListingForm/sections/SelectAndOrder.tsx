@@ -54,8 +54,6 @@ const SelectAndOrder = ({
   const [draftListingData, setDraftListingData] = useState<SelectAndOrderSection[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
 
-  console.log({ applicationSection })
-
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues, watch, setValue } = formMethods
@@ -147,8 +145,6 @@ const SelectAndOrder = ({
   const jurisdiction: string = watch("jurisdiction.id")
 
   const { data: fetchedData = [] } = dataFetcher(jurisdiction, applicationSection)
-
-  console.log({ fetchedData })
 
   const formTableHeaders = {
     order: "t.order",

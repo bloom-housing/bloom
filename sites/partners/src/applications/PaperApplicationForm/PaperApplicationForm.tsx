@@ -56,8 +56,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
 
-  console.log({ defaultValues })
-
   const formMethods = useForm<FormTypes>({
     defaultValues,
   })
@@ -162,10 +160,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       setAlert("api")
     }
   }
-
-  console.log(listingDto)
-
-  console.log(application)
 
   return (
     <LoadingOverlay isLoading={loading}>
