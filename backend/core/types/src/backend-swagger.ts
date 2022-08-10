@@ -1475,17 +1475,17 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Update multiselect question
+   * Delete multiselect question by id
    */
   delete(
     params: {
       /** requestBody */
-      body?: MultiselectQuestionUpdate
+      body?: Id
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<MultiselectQuestion> {
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -1496,18 +1496,17 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Get multiselect question by id
+   * Update multiselect question
    */
   update(
     params: {
-      /**  */
-      multiselectQuestionId: string
+      /** requestBody */
+      body?: MultiselectQuestionUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
-      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -1518,7 +1517,7 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Delete multiselect question by id
+   * Get multiselect question by id
    */
   retrieve(
     params: {
@@ -1526,7 +1525,7 @@ export class MultiselectQuestionsService {
       multiselectQuestionId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
       url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
