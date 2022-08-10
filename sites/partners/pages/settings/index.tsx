@@ -19,8 +19,8 @@ import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import Layout from "../../layouts"
-import { useJurisdictionalPreferenceList } from "../../lib/hooks"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
+import { useJurisdictionalPreferenceList } from "../../lib/hooks"
 
 const Settings = () => {
   const { profile } = useContext(AuthContext)

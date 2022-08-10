@@ -92,31 +92,31 @@ export class ListingDefaultSeed {
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram().text,
+            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram().text,
+            text: getTayProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisabilityOrMentalIllnessProgram().text,
+            text: getDisabilityOrMentalIllnessProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 3,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getHousingSituationProgram().text,
+            text: getHousingSituationProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 4,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getFlatRentAndRentBasedOnIncomeProgram().text,
+            text: getFlatRentAndRentBasedOnIncomeProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 5,
         },

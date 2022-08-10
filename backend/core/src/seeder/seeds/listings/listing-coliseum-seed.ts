@@ -970,13 +970,13 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram().text,
+            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram().text,
+            text: getTayProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 2,
         },

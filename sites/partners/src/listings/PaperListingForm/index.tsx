@@ -89,8 +89,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         (question) =>
           question.multiselectQuestion.applicationSection === ApplicationSection.programs
       )
-      .map((program) => {
-        return program.multiselectQuestion
+      .map((listingProg) => {
+        return { ...listingProg.multiselectQuestion }
       }) ?? []
   )
 
@@ -381,7 +381,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             formKey={"program"}
                             applicationSection={ApplicationSection.programs}
                           />
-                          <AdditionalFees existingUtilities={listing?.utilities} />{" "}
+                          <AdditionalFees existingUtilities={listing?.utilities} />
                           <BuildingFeatures existingFeatures={listing?.features} />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
