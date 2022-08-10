@@ -35,7 +35,7 @@ const FormUserConfirm = () => {
     LoginResponse
   >()
   const { userService } = useContext(AuthContext)
-  const { loginWithToken } = useContext(AuthContext)
+  // const { loginWithToken } = useContext(AuthContext)
 
   const token = router.query?.token as string
 
@@ -78,19 +78,21 @@ const FormUserConfirm = () => {
         })
       )
 
-      const { accessToken } = response || {}
+      // TODO: fetch profile
 
-      if (accessToken) {
-        setLoginLoading(true)
-        await loginWithToken(accessToken)
-        setLoginLoading(false)
+      // const { accessToken } = response || {}
 
-        setSiteAlertMessage(t(`users.accountConfirmed`), "success")
-        void router.push("/")
-      } else {
-        setSubmitting(false)
-        setRerequestModalOpen(true)
-      }
+      // if (accessToken) {
+      //   setLoginLoading(true)
+      //   await loginWithToken(accessToken)
+      //   setLoginLoading(false)
+
+      //   setSiteAlertMessage(t(`users.accountConfirmed`), "success")
+      //   void router.push("/")
+      // } else {
+      //   setSubmitting(false)
+      //   setRerequestModalOpen(true)
+      // }
     } catch (err) {
       setSubmitting(false)
       console.error(err)
