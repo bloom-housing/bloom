@@ -22,7 +22,6 @@ export class MultiselectQuestionsService {
       .leftJoin("multiselectQuestions.jurisdictions", "multiselectQuestionJurisdictions")
       .select([
         "multiselectQuestions",
-        "multiselectQuestions.applicationSection",
         "multiselectQuestionJurisdictions.id",
         "multiselectQuestionJurisdictions.name",
       ])

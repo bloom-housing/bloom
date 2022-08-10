@@ -309,7 +309,7 @@ export function useMultiselectQuestionList() {
   const { multiselectQuestionsService } = useContext(AuthContext)
   const fetcher = () => multiselectQuestionsService.list()
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/multiselect-questions`, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/multiselectQuestions`, fetcher)
 
   return {
     data,
@@ -335,7 +335,7 @@ export function useJurisdictionalMultiselectQuestionList(
     })
 
   const { data, error } = useSWR(
-    `${process.env.backendApiBase}/multiselect-questions/${jurisdictionId}`,
+    `${process.env.backendApiBase}/multiselectQuestions/${jurisdictionId}`,
     fetcher
   )
 
