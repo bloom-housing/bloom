@@ -27,9 +27,13 @@ const ProgressNavItem = (props: {
 
   return (
     <li className={`progress-nav__item ${bgColor}`}>
-      <a aria-disabled={bgColor === "is-disabled"} href={"#"}>
-        {srText}
+      <a
+        aria-disabled={bgColor === "is-disabled"}
+        aria-current={bgColor === "is-active"}
+        href={"#"}
+      >
         {props.label}
+        {srText}
       </a>
     </li>
   )
@@ -42,9 +46,9 @@ const ProgressNav = (props: {
   mounted: boolean
 }) => {
   return (
-    <div>
+    <div aria-label="progress">
       <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
-      <ul className={!props.mounted ? "invisible" : "progress-nav"}>
+      <ol className={!props.mounted ? "invisible" : "progress-nav"}>
         {props.labels.map((label, i) => (
           <ProgressNavItem
             key={label}
@@ -56,7 +60,7 @@ const ProgressNav = (props: {
             mounted={props.mounted}
           />
         ))}
-      </ul>
+      </ol>
     </div>
   )
 }
