@@ -40,7 +40,6 @@ export class MultiselectQuestionsController {
   async list(
     @Query() queryParams: MultiselectQuestionsListQueryParams
   ): Promise<MultiselectQuestionDto[]> {
-    console.log({ queryParams })
     return mapTo(MultiselectQuestionDto, await this.multiselectQuestionsService.list(queryParams))
   }
 

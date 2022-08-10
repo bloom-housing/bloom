@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react"
 import Head from "next/head"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -20,7 +21,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
-import { useJurisdictionalPreferenceList } from "../../lib/hooks"
+import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 
 const Settings = () => {
   const { profile } = useContext(AuthContext)
@@ -28,10 +29,11 @@ const Settings = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState(false)
 
-  const { data, loading } = useJurisdictionalPreferenceList(
+  const { data, loading } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.reduce((acc, curr) => {
       return `${acc}${","}${curr.id}`
-    }, "")
+    }, ""),
+    ApplicationSection.preferences
   )
 
   const iconContent = () => {
@@ -77,7 +79,7 @@ const Settings = () => {
             cellClassName={"px-5 py-3"}
             data={data?.map((preference) => {
               return {
-                name: { content: preference?.title },
+                name: { content: preference?.text },
                 jurisdiction: {
                   content: preference?.jurisdictions?.reduce((acc, item, index) => {
                     return `${acc}${index > 0 ? ", " : ""}${item.name}`

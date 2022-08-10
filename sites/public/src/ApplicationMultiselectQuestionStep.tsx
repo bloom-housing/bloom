@@ -87,7 +87,6 @@ const ApplicationMultiselectQuestionStep = ({
   }, [question])
 
   const onSubmit = (data) => {
-    console.log({ data })
     const body =
       questionSetInputType === "checkbox"
         ? mapCheckboxesToApi(data, question, applicationSection)
