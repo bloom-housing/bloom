@@ -49,7 +49,7 @@ import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
+import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -362,8 +362,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             subtitle={t("listings.sections.housingPreferencesSubtext")}
                             title={t("listings.sections.housingPreferencesTitle")}
                             drawerButtonText={t("listings.selectPreferences")}
-                            dataFetcher={useJurisdictionalPreferenceList}
+                            dataFetcher={useJurisdictionalMultiselectQuestionList}
                             formKey={"preference"}
+                            applicationSection={ApplicationSection.preferences}
                           />
                           <SelectAndOrder
                             addText={"Add program"}
@@ -376,8 +377,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             }
                             title={"Housing Programs"}
                             drawerButtonText={"Select programs"}
-                            dataFetcher={useJurisdictionalProgramList}
+                            dataFetcher={useJurisdictionalMultiselectQuestionList}
                             formKey={"program"}
+                            applicationSection={ApplicationSection.programs}
                           />
                           <AdditionalFees existingUtilities={listing?.utilities} />{" "}
                           <BuildingFeatures existingFeatures={listing?.features} />

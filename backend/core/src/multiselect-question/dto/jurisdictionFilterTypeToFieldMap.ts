@@ -2,4 +2,5 @@ import { MultiselectQuestionFilterKeys } from "./multiselect-question-filter-key
 
 export const jurisdictionFilterTypeToFieldMap: Record<MultiselectQuestionFilterKeys, string> = {
   jurisdiction: "multiselectQuestionJurisdictions.id",
+  applicationSection: "multiselectQuestions.applicationSection",
 }
