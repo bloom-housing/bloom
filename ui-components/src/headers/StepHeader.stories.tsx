@@ -8,17 +8,18 @@ export default {
   title: "Headers/Step Header 🚩",
 }
 
-export const baseDynamicUsage = () => {
+export const basicDynamic = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
   return (
-    <div className="flex gap-x-4">
+    <div className="flex-col">
       <StepHeader
         currentStep={currentStep}
         totalSteps={4}
         stepPreposition={"of"}
         stepLabeling={["Start", "Mid 1", "Mid 2", "End"]}
       />
-      <Button onClick={() => setCurrentStep(currentStep + 1)}>increment</Button>
+      <Button onClick={() => setCurrentStep(currentStep - 1)}>Previous</Button>
+      <Button onClick={() => setCurrentStep(currentStep + 1)}>Next</Button>
     </div>
   )
 }
