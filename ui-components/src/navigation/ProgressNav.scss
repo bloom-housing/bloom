@@ -1,6 +1,6 @@
 .progress-nav {
-  @apply table;
-  @apply w-full;
+  display: table;
+  width: 100%;
 }
 
 .progress-nav-bar {
@@ -9,32 +9,30 @@
 }
 
 .progress-nav__dot-item {
-  @apply text-2xs;
-  @apply px-2;
-  @apply py-3;
-  @apply relative;
-  @apply text-center;
-  @apply uppercase;
-  @apply table-cell;
-  @apply whitespace-nowrap;
-  @apply float-none;
+  font-size: var(--bloom-font-size-2xs);
+  padding: 0.75rem 0.5rem;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  display: table-cell;
+  white-space: nowrap;
+  float: none;
   max-width: 20%;
 
   @screen md {
-    @apply text-sm;
-    @apply p-0;
+    font-size: var(--bloom-font-size-sm);
+    padding: 0rem;
   }
 
   &:before {
-    @apply absolute;
-    @apply h-3;
-    @apply w-3;
-    @apply bg-lush;
-    @apply border-solid;
-    @apply border;
-    @apply border-white;
-    @apply rounded-full;
-    @apply top-0;
+    position: absolute;
+    height: 0.75rem;
+    width: 0.75rem;
+    // @apply bg-lush;
+    border-style: solid;
+    border-radius: 50%;
+    border-color: var(--bloom-color-white);
+    top: 0;
     left: 50%;
     content: "";
     transform: translateX(-50%);
@@ -42,7 +40,7 @@
   }
 
   &:after {
-    @apply absolute;
+    position: absolute;
     @apply bg-gray-450;
     @apply w-full;
     @apply left-0;
