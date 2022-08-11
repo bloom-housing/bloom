@@ -110,11 +110,12 @@ export class UserController {
 
   @Put("confirm")
   @ApiOperation({ summary: "Confirm email", operationId: "confirm" })
-  async confirm(@Body() dto: ConfirmDto, @Response() res: ExpressResponse): Promise<LoginResponseDto> {
+  async confirm(@Body() dto: ConfirmDto, @Response({ passthrough: true }) res: ExpressResponse): Promise<StatusDto> {
     const accessToken = await this.userService.confirm(dto)
+
     res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
 
-    return mapTo(LoginResponseDto, { status: "ok" })
+    return mapTo(StatusDto, { status: "ok" })
   }
 
   @Put("forgot-password")
@@ -129,7 +130,7 @@ export class UserController {
   async updatePassword(@Body() dto: UpdatePasswordDto, @Response() res: ExpressResponse): Promise<LoginResponseDto> {
     const accessToken = await this.userService.updatePassword(dto)
     res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
-    return mapTo(LoginResponseDto, { status: "ok" })
+    return mapTo(LoginResponseDto, { success: true })
   }
 
   @Put(":id")
