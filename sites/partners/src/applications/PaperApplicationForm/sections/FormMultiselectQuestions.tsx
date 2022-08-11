@@ -45,7 +45,7 @@ const FormMultiselectQuestions = ({
     )
 
     return keys
-  }, [questions])
+  }, [questions, applicationSection])
 
   const watchQuestions = watch(allOptionFieldNames)
 

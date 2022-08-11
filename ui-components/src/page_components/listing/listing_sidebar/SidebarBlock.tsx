@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Heading, HeaderType, HeadingProps } from "../../../headers/Heading"
+import { Heading, HeadingProps } from "../../../headers/Heading"
 
 export interface SidebarBlockProps extends Omit<HeadingProps, "children" | "className"> {
   children: React.ReactNode

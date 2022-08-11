@@ -12,8 +12,6 @@ import { UseFormMethods } from "react-hook-form"
 import {
   t,
   Field,
-  Select,
-  SelectOption,
   resolveObject,
   FormAddress,
   ExpandableContent,
@@ -155,7 +153,7 @@ const getCheckboxField = (
       label={option.text}
       register={register}
       inputProps={{
-        onChange: (e: any) => {
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           if (e.target.checked && trigger) {
             void trigger()
           }

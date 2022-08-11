@@ -18,7 +18,7 @@ import { ListingEventType } from "../../src/listings/types/listing-event-type-en
 import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
-import { Program } from "../../src/program/entities/program.entity"
+import { MultiselectQuestion } from "../../src//multiselect-question/entities/multiselect-question.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
@@ -35,7 +35,7 @@ jest.setTimeout(30000)
 
 describe("Listings", () => {
   let app: INestApplication
-  let programsRepository: Repository<Program>
+  let questionRepository: Repository<MultiselectQuestion>
   let adminAccessToken: string
   let jurisdictionsRepository: Repository<Jurisdiction>
 
@@ -48,14 +48,16 @@ describe("Listings", () => {
         AssetsModule,
         ApplicationMethodsModule,
         PaperApplicationsModule,
-        TypeOrmModule.forFeature([Program]),
+        TypeOrmModule.forFeature([MultiselectQuestion]),
       ],
     }).compile()
 
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
-    programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
+    questionRepository = app.get<Repository<MultiselectQuestion>>(
+      getRepositoryToken(MultiselectQuestion)
+    )
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
@@ -376,12 +378,12 @@ describe("Listings", () => {
   it("should add/overwrite and remove listing programs in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     const listing: ListingUpdateDto = { ...res.body.items[0] }
-    const newProgram = await programsRepository.save({
+    const newProgram = await questionRepository.save({
       title: "TestTitle",
       subtitle: "TestSubtitle",
       description: "TestDescription",
     })
-    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
+    listing.listingMultiselectQuestions = [{ multiselectQuestion: newProgram, ordinal: 1 }]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
