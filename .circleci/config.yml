@@ -165,7 +165,7 @@ workflows:
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
-          store_artifacts: true
+          store_artifacts: false
       - cypress/run:
           name: "cypress-partners"
           requires:
@@ -177,4 +177,4 @@ workflows:
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3001"
-          store_artifacts: true
+          store_artifacts: false
