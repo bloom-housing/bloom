@@ -158,33 +158,6 @@ export const mapFormToApi = ({
     }
   })
 
-  // const preferences = Object.entries(data.application.preferences)?.reduce((acc, curr) => {
-  //   if (Object.keys(curr).length) {
-  //     return { ...acc, ...mapCheckboxesToApi(curr[1], curr[0]) }
-  //   } else {
-  //     return { ...acc, ...mapRadiosToApi(curr[1], null) }
-  //   }
-  // }, {})
-
-  // const programs = Object.entries(data.application.programs)?.reduce((acc, curr) => {
-  //   if (Object.keys(curr).length) {
-  //     return { ...acc, ...mapCheckboxesToApi(curr[1], curr[0]) }
-  //   } else {
-  //     return { ...acc, ...mapRadiosToApi(curr[1], null) }
-  //   }
-  // }, {})
-
-  // const programsForm = data.application.programs
-  //   ? Object.entries(data.application.programs).reduce((acc, curr) => {
-  //       if (curr[1]) {
-  //         Object.assign(acc, { [curr[0]]: curr[1] })
-  //       }
-  //       return acc
-  //     }, {})
-  //   : {}
-
-  // const programsData = mapProgramsToApi(programs, programsForm)
-
   // additional phone
   const {
     additionalPhoneNumber: additionalPhoneNumberData,

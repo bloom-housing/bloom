@@ -98,7 +98,6 @@ export function useListingsData({
   }
 
   const { listingsService } = useContext(AuthContext)
-  //
 
   const fetcher = () => listingsService.list(params)
 
