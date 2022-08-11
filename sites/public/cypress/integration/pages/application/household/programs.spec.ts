@@ -1,5 +1,5 @@
-describe("applications/household/programs", function () {
-  const route = "/applications/household/programs"
+describe("applications/programs/programs", function () {
+  const route = "/applications/programs/programs"
 
   beforeEach(() => {
     cy.visit(route)

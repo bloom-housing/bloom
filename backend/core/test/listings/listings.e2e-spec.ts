@@ -26,7 +26,7 @@ import { makeTestListing } from "../utils/make-test-listing"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import dbOptions from "../../ormconfig.test"
-import { MultiselectQuestionDto } from "src/multiselect-question/dto/multiselect-question.dto"
+import { MultiselectQuestionDto } from "../../src/multiselect-question/dto/multiselect-question.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
