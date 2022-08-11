@@ -15,3 +15,13 @@ export const Default = () => (
     mounted={true}
   />
 )
+
+export const barStyle = () => (
+  <ProgressNav
+    currentPageSection={2}
+    completedSections={1}
+    labels={["You", "Household", "Income", "Preferences", "Review"]}
+    mounted={true}
+    style={"bar"}
+  />
+)

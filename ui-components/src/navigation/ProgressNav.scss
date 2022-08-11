@@ -1,16 +1,14 @@
 .progress-nav {
-  // @include clearfix;
-  @apply list-none;
   @apply table;
-  @apply m-0;
-  @apply p-0;
-  @apply pr-2;
   @apply w-full;
-  border-spacing: 1rem;
+}
+
+.progress-nav-bar {
+  border-spacing: 0.125rem;
   table-layout: fixed;
 }
 
-.progress-nav__item {
+.progress-nav__dot-item {
   @apply text-2xs;
   @apply px-2;
   @apply py-3;
@@ -105,22 +103,24 @@
 }
 
 .progress-nav__bar-item {
-  @apply text-2xs;
-  @apply px-2;
-  @apply py-3;
+  font-size: var(--bloom-font-size-base);
+  padding-top: 0.5rem;
+  padding-left: 0.125rem;
   @apply relative;
-  // @apply text-center;
-  @apply uppercase;
   @apply table-cell;
   @apply whitespace-nowrap;
   @apply float-none;
   max-width: 20%;
   border-top-width: 1rem;
-  border-top-color: green;
+  border-top-color: var(--bloom-primary);
   &.is-active {
-    border-top-color: var(--bloom-primary);
+    border-top-color: var(--bloom-color-primary);
+    font-weight: 600;
   }
   &.is-disabled {
-    border-top-color: var(--bloom-color-gray-400);
+    border-top-color: var(--bloom-color-gray-450);
+  }
+  a {
+    color: var(--bloom-color-primary-darker);
   }
 }

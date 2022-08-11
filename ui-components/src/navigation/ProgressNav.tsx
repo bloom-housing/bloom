@@ -8,6 +8,7 @@ const ProgressNavItem = (props: {
   completedSections: number
   label: string
   mounted: boolean
+  style: string
 }) => {
   let bgColor = "is-disabled"
   if (props.mounted) {
@@ -26,7 +27,7 @@ const ProgressNavItem = (props: {
     )
 
   return (
-    <li className={`progress-nav__bar-item ${bgColor}`}>
+    <li className={`progress-nav__${props.style}-item ${bgColor}`}>
       <a
         aria-disabled={bgColor === "is-disabled"}
         aria-current={bgColor === "is-active"}
@@ -44,20 +45,21 @@ const ProgressNav = (props: {
   completedSections: number
   labels: string[]
   mounted: boolean
+  style?: string
 }) => {
   return (
     <div aria-label="progress">
       <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
-      <ol className={!props.mounted ? "invisible" : "progress-nav"}>
+      <ol className={!props.mounted ? "invisible" : `progress-nav progress-nav-${props.style}`}>
         {props.labels.map((label, i) => (
           <ProgressNavItem
             key={label}
-            // Sections are 1-indexed
             section={i + 1}
             currentPageSection={props.currentPageSection}
             completedSections={props.completedSections}
             label={label}
             mounted={props.mounted}
+            style={props.style ?? "dot"}
           />
         ))}
       </ol>
