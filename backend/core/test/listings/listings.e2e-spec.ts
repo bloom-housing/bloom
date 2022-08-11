@@ -9,7 +9,7 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
-import { Language } from "../../types"
+import { ApplicationSection, Language } from "../../types"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
@@ -26,6 +26,7 @@ import { makeTestListing } from "../utils/make-test-listing"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import dbOptions from "../../ormconfig.test"
+import { MultiselectQuestionDto } from "src/multiselect-question/dto/multiselect-question.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -378,10 +379,11 @@ describe("Listings", () => {
   it("should add/overwrite and remove listing programs in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     const listing: ListingUpdateDto = { ...res.body.items[0] }
-    const newProgram = await questionRepository.save({
-      title: "TestTitle",
-      subtitle: "TestSubtitle",
+    const newProgram: MultiselectQuestionDto = await questionRepository.save({
+      text: "TestTitle",
+      subText: "TestSubtitle",
       description: "TestDescription",
+      applicationSection: ApplicationSection.programs,
     })
     listing.listingMultiselectQuestions = [{ multiselectQuestion: newProgram, ordinal: 1 }]
 
@@ -395,15 +397,19 @@ describe("Listings", () => {
       .get(`/listings/${putResponse.body.id}`)
       .expect(200)
 
-    expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
-    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
-    expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
+    expect(listingResponse.body.listingMultiselectQuestions[0].multiselectQuestion.id).toBe(
+      newProgram.id
+    )
+    expect(listingResponse.body.listingMultiselectQuestions[0].multiselectQuestion.text).toBe(
+      newProgram.text
+    )
+    expect(listingResponse.body.listingMultiselectQuestions[0].ordinal).toBe(1)
 
     await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send({
         ...putResponse.body,
-        listingPrograms: [],
+        listingMultiselectQuestions: [],
       })
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
@@ -411,7 +417,7 @@ describe("Listings", () => {
     const listingResponse2 = await supertest(app.getHttpServer())
       .get(`/listings/${putResponse.body.id}`)
       .expect(200)
-    expect(listingResponse2.body.listingPrograms.length).toBe(0)
+    expect(listingResponse2.body.listingMultiselectQuestions.length).toBe(0)
   })
 
   it("should find listing by search", async () => {
