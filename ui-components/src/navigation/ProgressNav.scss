@@ -116,6 +116,11 @@
   @apply float-none;
   max-width: 20%;
   border-top-width: 1rem;
-
-  // padding-left: 0.5rem;
+  border-top-color: green;
+  &.is-active {
+    border-top-color: var(--bloom-primary);
+  }
+  &.is-disabled {
+    border-top-color: var(--bloom-color-gray-400);
+  }
 }
