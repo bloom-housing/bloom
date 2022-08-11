@@ -1,11 +1,19 @@
 import { useState } from "@storybook/addons"
 import * as React from "react"
 import { Button } from "../.."
-
+import { BADGES } from "../../.storybook/constants"
 import { StepHeader } from "./StepHeader"
+import StepHeaderDocumentation from "./StepHeader.docs.mdx"
 
 export default {
   title: "Headers/Step Header 🚩",
+  id: "headers/step-header",
+  parameters: {
+    docs: {
+      page: StepHeaderDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 export const basicDynamic = () => {

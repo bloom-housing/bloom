@@ -7,7 +7,7 @@
   --font-mobile-size: var(--bloom-font-size-base);
   --circle-x-padding: var(--bloom-s0_5);
   --title-spacing: var(--bloom-s1_5);
-  --title-font-weight: 600;
+  --label-font-weight: 600;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -36,5 +36,5 @@
 
 .step-header__title {
   margin-left: var(--title-spacing);
-  font-weight: var(--title-font-weight);
+  font-weight: var(--label-font-weight);
 }
