@@ -50,7 +50,7 @@ const ProgressNav = (props: {
   return (
     <div aria-label="progress">
       <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
-      <ol className={!props.mounted ? "invisible" : `progress-nav progress-nav-${props.style}`}>
+      <ol className={!props.mounted ? "invisible" : `progress-nav progress-nav__${props.style}`}>
         {props.labels.map((label, i) => (
           <ProgressNavItem
             key={label}

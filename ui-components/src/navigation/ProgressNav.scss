@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.progress-nav-bar {
+.progress-nav__bar {
   border-spacing: 0.125rem;
   table-layout: fixed;
 }
@@ -102,7 +102,7 @@
 }
 
 .progress-nav__bar-item {
-  font-size: var(--bloom-font-size-base);
+  font-size: var(--bloom-font-size-2xs);
   padding-top: 0.5rem;
   padding-left: 0.125rem;
   position: relative;
@@ -112,6 +112,9 @@
   max-width: 20%;
   border-top-width: 1rem;
   border-top-color: var(--bloom-primary);
+  @screen md {
+    font-size: var(--bloom-font-size-base);
+  }
   &.is-active {
     border-top-color: var(--bloom-color-primary);
     font-weight: 600;
