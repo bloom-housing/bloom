@@ -28,7 +28,7 @@
     position: absolute;
     height: 0.75rem;
     width: 0.75rem;
-    // @apply bg-lush;
+    background-color: var(--bloom-color-lush);
     border-style: solid;
     border-radius: 50%;
     border-color: var(--bloom-color-white);
@@ -41,9 +41,9 @@
 
   &:after {
     position: absolute;
-    @apply bg-gray-450;
-    @apply w-full;
-    @apply left-0;
+    background-color: var(--bloom-color-gray-450);
+    width: 100%;
+    left: 0;
     top: 0.4rem;
     content: "";
     height: 1px;
@@ -57,45 +57,46 @@
 
   &:last-of-type {
     &:after {
-      @apply left-auto;
+      left: auto;
       right: 50%;
     }
   }
 
   &.is-active {
     &:before {
-      @apply h-3;
-      @apply w-3;
-      @apply bg-primary;
-      @apply top-0;
+      height: 0.75rem;
+      width: 0.75rem;
+      background-color: var(--bloom-color-primary);
+      top: 0;
     }
 
     a {
-      @apply text-black;
-      @apply font-bold;
+      color: var(--bloom-color-black);
+      font-weight: bold;
     }
   }
 
   &.is-disabled {
     &:before {
-      @apply h-3;
-      @apply w-3;
-      @apply bg-gray-450;
-      @apply top-0;
+      height: 0.75rem;
+      width: 0.75rem;
+      background-color: var(--bloom-color-gray-450);
+      top: 0;
     }
 
     a {
-      @apply pointer-events-none;
-      @apply cursor-default;
+      pointer-events: none;
+      cursor: default;
     }
   }
 
   a {
     @apply pt-4;
-    @apply pl-1;
-    @apply text-gray-700;
-    @apply block;
-    @apply relative;
+    padding-top: 1rem;
+    padding-left: 0.25rem;
+    color: var(--bloom-color-gray-700);
+    display: block;
+    position: relative;
     z-index: 3;
   }
 }
@@ -104,10 +105,10 @@
   font-size: var(--bloom-font-size-base);
   padding-top: 0.5rem;
   padding-left: 0.125rem;
-  @apply relative;
-  @apply table-cell;
-  @apply whitespace-nowrap;
-  @apply float-none;
+  position: relative;
+  display: table-cell;
+  white-space: nowrap;
+  float: none;
   max-width: 20%;
   border-top-width: 1rem;
   border-top-color: var(--bloom-primary);
