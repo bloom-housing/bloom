@@ -1,4 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
+import generalTranslations from "../../../../ui-components/src/locales/general.json"
+import partnerTranslations from "../../../../sites/partners/page_content/locale_overrides/general.json"
+import publicTranslations from "../../../../sites/public/page_content/locale_overrides/general.json"
 
 export class multiselectQuestion1658871879940 implements MigrationInterface {
   name = "multiselectQuestion1658871879940"
@@ -49,6 +52,68 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" ADD CONSTRAINT "FK_ab91e5d403a6cf21656f7d5ae20" FOREIGN KEY ("multiselect_questions_id") REFERENCES "multiselect_questions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
+
+    // begin migration from programs and prefences
+    const preferences = await queryRunner.query(`
+            SELECT 
+                p.created_at,
+                p.updated_at,
+                p.title,
+                p.subtitle,
+                p.description,
+                p.links,
+                p.form_metadata,
+                j.name,
+                j.id
+            FROM preferences p
+                LEFT JOIN jurisdictions_preferences_preferences jp ON jp.preferences_id = p.id
+                LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
+        `)
+
+    for (let i = 0; i < preferences.length; i++) {
+      const pref = preferences[i]
+      const { optOutText, options } = this.resolveOptionValues(pref.form_metadata)
+      const res = await queryRunner.query(`
+            INSERT INTO multiselect_questions (
+                created_at,
+                updated_at,
+                text,
+                sub_text,
+                description,
+                links,
+                hide_from_listing,
+                opt_out_text,
+                options,
+                application_section
+            )
+            SELECT 
+                '${new Date(pref.created_at).toISOString()}',
+                '${new Date(pref.updated_at).toISOString()}',
+                '${pref.title}',
+                '${pref.subtitle}',
+                '${pref.description}',
+                ${pref.links ? "'pref.links'" : "null"},
+                ${this.resolveHideFromListings(pref)},
+                ${optOutText},
+                ${options},
+                'preferences'
+            RETURNING id
+        `)
+
+      await queryRunner.query(`
+            INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
+            SELECT
+                '${res[0].id}',
+                '${pref.id}';
+            
+            INSERT INTO listing_multiselect_questions(multiselect_question_id, listing_id)
+            SELECT
+                '${res[0].id}',
+                listing_id
+            FROM listing_preferences
+            WHERE preference_id = '${pref.id}';
+        `)
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -87,5 +152,74 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "listing_multiselect_questions"`)
     await queryRunner.query(`DROP TABLE "multiselect_questions"`)
     await queryRunner.query(`DROP TYPE "public"."multiselect_questions_application_section_enum"`)
+  }
+
+  private resolveHideFromListings(pref): string {
+    if ("hideFromListing" in pref.form_metadata) {
+      if (pref.form_metadata.hideFromListing) {
+        return "true"
+      }
+      return "false"
+    }
+    return "null"
+  }
+
+  private resolveOptionValues(formMetaData) {
+    let optOutText = "null"
+    const options = []
+    let shouldPush = true
+
+    formMetaData.options.forEach((option, index) => {
+      const toPush: Record<string, any> = {
+        ordinal: index,
+        text: this.getTranslated(formMetaData.key, `${option.key}.label`),
+      }
+
+      if (
+        option.exclusive &&
+        (formMetaData.hideGenericDecline || formMetaData.type === "checkbox") &&
+        index !== formMetaData.options.length - 1
+      ) {
+        // for all but the last exlusive option push into options array
+        toPush.exclusive = true
+      } else if (
+        option.exclusive &&
+        (formMetaData.hideGenericDecline || formMetaData.type === "checkbox") &&
+        index === formMetaData.options.length - 1
+      ) {
+        // for the last exclusive option add as optOutText
+        optOutText = this.getTranslated(formMetaData.key, `${option.key}.label`)
+        shouldPush = false
+      }
+
+      if (option.description) {
+        toPush.description = this.getTranslated(formMetaData.key, `${option.key}.description`)
+      }
+
+      if (option?.extraData.some((extraData) => extraData.type === "address")) {
+        toPush.collectAddress = true
+      }
+
+      if (shouldPush) {
+        options.push(toPush)
+      } else {
+        shouldPush = true
+      }
+    })
+
+    return { optOutText, options: options.length ? `'${JSON.stringify(options)}'` : "null" }
+  }
+
+  private getTranslated(prefKey, translationKey) {
+    const searchKey = `application.preferences.${prefKey}.${translationKey}`
+
+    if (publicTranslations[searchKey]) {
+      return publicTranslations[searchKey]
+    } else if (partnerTranslations[searchKey]) {
+      return partnerTranslations[searchKey]
+    } else if (generalTranslations[searchKey]) {
+      return generalTranslations[searchKey]
+    }
+    return "no translation"
   }
 }
