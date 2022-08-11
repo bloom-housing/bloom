@@ -63,11 +63,15 @@ export class ListingDefaultSanJoseSeed {
 
       name: "Test: Default, Two Preferences (San Jose)",
       assets: getDefaultAssets(),
-      preferences: [
-        //TODO
-        getLiveWorkPreference(alamedaJurisdiction.name),
-        { ...getDisplaceePreference(alamedaJurisdiction.name), ordinal: 2 },
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestion: getLiveWorkPreference(alamedaJurisdiction.name),
+        },
+        {
+          multiselectQuestion: { ...getDisplaceePreference(alamedaJurisdiction.name), ordinal: 2 },
+        },
       ],
+
       events: getDefaultListingEvents(),
       jurisdictionName: "San Jose",
     }

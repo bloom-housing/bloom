@@ -21,8 +21,6 @@ export const getDate = (days: number) => {
   return someDate
 }
 
-//TODO: Actually add all the right strings to the preferences and programs now that we aren't using keys
-
 export enum PriorityTypes {
   mobility = "Mobility",
   hearing = "Hearing",
