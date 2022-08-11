@@ -14,6 +14,8 @@ import { Repository } from "typeorm"
 import { Language } from "../../src/shared/types/language-enum"
 import { MultiselectQuestion } from "../../src/multiselect-question/entities/multiselect-question.entity"
 import { EmailService } from "../../src/email/email.service"
+import { ApplicationSection } from "../../src/multiselect-question/types/multiselect-application-section-enum"
+import { MultiselectQuestionDto } from "../../src/multiselect-question/dto/multiselect-question.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -61,16 +63,18 @@ describe("Jurisdictions", () => {
   })
 
   it(`should create and return a new jurisdiction with a preference and a program`, async () => {
-    const newPreference = await multiselectQuestionsRepository.save({
-      text: "TestTitle",
-      subText: "TestSubtitle",
-      description: "TestDescription",
+    const newPreference: MultiselectQuestionDto = await multiselectQuestionsRepository.save({
+      text: "Preference Text",
+      subText: "Preferece Subtext",
+      description: "Preference Description",
       links: [],
+      applicationSection: ApplicationSection.preferences,
     })
-    const newProgram = await multiselectQuestionsRepository.save({
-      text: "TestQuestion",
-      subText: "TestSubtitle",
-      description: "TestDescription",
+    const newProgram: MultiselectQuestionDto = await multiselectQuestionsRepository.save({
+      text: "Program Text",
+      subText: "Program Subtext",
+      description: "Program Description",
+      applicationSection: ApplicationSection.programs,
     })
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
