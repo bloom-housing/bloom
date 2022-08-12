@@ -18,7 +18,7 @@ const DetailAdditionalFees = () => {
       if (listing?.utilities[utility]) {
         utilitiesExist = true
         return (
-          <li className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
+          <li key={utility} className={"list-disc mx-5 mb-1 md:w-1/3 w-full grow"}>
             {t(`listings.utilities.${utility}`)}
           </li>
         )
