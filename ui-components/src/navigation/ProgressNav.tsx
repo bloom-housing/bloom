@@ -47,10 +47,12 @@ const ProgressNav = (props: {
   mounted: boolean
   style?: string
 }) => {
+  let navClasses = "progress-nav"
+  if (props.style === "bar") navClasses += " progress-nav__bar"
   return (
     <div aria-label="progress">
       <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
-      <ol className={!props.mounted ? "invisible" : `progress-nav progress-nav__${props.style}`}>
+      <ol className={!props.mounted ? "invisible" : navClasses}>
         {props.labels.map((label, i) => (
           <ProgressNavItem
             key={label}
