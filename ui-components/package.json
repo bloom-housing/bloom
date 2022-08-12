@@ -85,7 +85,6 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-text-mask": "^5.4.6",
     "@types/react-transition-group": "^4.4.0",
-    "@types/sanitize-html": "^2.6.2",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
     "aria-autocomplete": "^1.4.0",
