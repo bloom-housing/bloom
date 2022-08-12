@@ -53,7 +53,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" ADD CONSTRAINT "FK_ab91e5d403a6cf21656f7d5ae20" FOREIGN KEY ("multiselect_questions_id") REFERENCES "multiselect_questions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
 
-    // begin migration from programs and prefences
+    // begin migration from prefences
     const preferences = await queryRunner.query(`
             SELECT 
                 p.created_at,
@@ -72,7 +72,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
 
     for (let i = 0; i < preferences.length; i++) {
       const pref = preferences[i]
-      const { optOutText, options } = this.resolveOptionValues(pref.form_metadata)
+      const { optOutText, options } = this.resolveOptionValues(pref.form_metadata, "preferences")
       const res = await queryRunner.query(`
             INSERT INTO multiselect_questions (
                 created_at,
@@ -113,6 +113,67 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
             FROM listing_preferences
             WHERE preference_id = '${pref.id}';
         `)
+    }
+
+    // begin migration from programs
+    const programs = await queryRunner.query(`
+            SELECT 
+                p.created_at,
+                p.updated_at,
+                p.title,
+                p.subtitle,
+                p.description,
+                p.form_metadata,
+                j.name,
+                j.id
+            FROM programs p
+                LEFT JOIN jurisdictions_programs_programs jp ON jp.programs_id = p.id
+                LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
+        `)
+    console.log("133:", programs)
+    for (let i = 0; i < programs.length; i++) {
+      const prog = programs[i]
+      const { optOutText, options } = this.resolveOptionValues(prog.form_metadata, "programs")
+      const res = await queryRunner.query(`
+                INSERT INTO multiselect_questions (
+                    created_at,
+                    updated_at,
+                    text,
+                    sub_text,
+                    description,
+                    links,
+                    hide_from_listing,
+                    opt_out_text,
+                    options,
+                    application_section
+                )
+                SELECT 
+                    '${new Date(prog.created_at).toISOString()}',
+                    '${new Date(prog.updated_at).toISOString()}',
+                    '${prog.title}',
+                    '${prog.subtitle}',
+                    '${prog.description}',
+                    null,
+                    ${this.resolveHideFromListings(prog)},
+                    ${optOutText},
+                    ${options},
+                    'programs'
+                RETURNING id
+            `)
+
+      await queryRunner.query(`
+                INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
+                SELECT
+                    '${res[0].id}',
+                    '${prog.id}';
+                
+                INSERT INTO listing_multiselect_questions(multiselect_question_id, listing_id)
+                SELECT
+                    '${res[0].id}',
+                    listing_id
+                FROM listing_programs
+                WHERE program_id = '${prog.id}';
+            `)
     }
   }
 
@@ -164,7 +225,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     return "null"
   }
 
-  private resolveOptionValues(formMetaData) {
+  private resolveOptionValues(formMetaData, type) {
     let optOutText = "null"
     const options = []
     let shouldPush = true
@@ -172,7 +233,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     formMetaData.options.forEach((option, index) => {
       const toPush: Record<string, any> = {
         ordinal: index,
-        text: this.getTranslated(formMetaData.key, `${option.key}.label`),
+        text: this.getTranslated(type, formMetaData.key, `${option.key}.label`),
       }
 
       if (
@@ -188,12 +249,12 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
         index === formMetaData.options.length - 1
       ) {
         // for the last exclusive option add as optOutText
-        optOutText = this.getTranslated(formMetaData.key, `${option.key}.label`)
+        optOutText = this.getTranslated(type, formMetaData.key, `${option.key}.label`)
         shouldPush = false
       }
 
       if (option.description) {
-        toPush.description = this.getTranslated(formMetaData.key, `${option.key}.description`)
+        toPush.description = this.getTranslated(type, formMetaData.key, `${option.key}.description`)
       }
 
       if (option?.extraData.some((extraData) => extraData.type === "address")) {
@@ -210,8 +271,8 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     return { optOutText, options: options.length ? `'${JSON.stringify(options)}'` : "null" }
   }
 
-  private getTranslated(prefKey, translationKey) {
-    const searchKey = `application.preferences.${prefKey}.${translationKey}`
+  private getTranslated(type = "preferences", prefKey, translationKey) {
+    const searchKey = `application.${type}.${prefKey}.${translationKey}`
 
     if (publicTranslations[searchKey]) {
       return publicTranslations[searchKey]
