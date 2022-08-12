@@ -19,8 +19,8 @@ export interface MultiLineAddressProps {
 const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
   if (!address) return null
 
-  const makeHtmlString = (address) => {
-    const str = ""
+  const makeHtmlString = (address: Address) => {
+    let str = ""
 
     if (address.placeName) {
       str = str += `${address.placeName} <br />`
