@@ -1,15 +1,25 @@
 .progress-nav {
+  --completed-step-color: var(--bloom-color-primary-darker);
+  --active-step-color: var(--bloom-color-primary);
+  --future-step-color: var(--bloom-color-gray-450);
+  --step-font-color: var(--bloom-color-primary-darker);
+  --dot-size: var(--bloom-s3);
+  --dot-font-size-desktop: var(--bloom-font-size-sm);
+  --dot-font-size-mobile: var(--bloom-font-size-2xs);
+  --dot-label-padding-top: var(--bloom-s4);
+  --dot-label-padding-left: var(--bloom-s2);
+  --dot-line-color: var(--bloom-color-gray-450);
+  --bar-font-size: var(--bloom-font-size-base);
+  --bar-label-padding-top: var(--bloom-s2);
+  --bar-label-padding-left: var(--bloom-s0_5);
+  --bar-spacing: var(--bloom-s0_5);
+  --bar-height: var(--bloom-s4);
   display: table;
   width: 100%;
 }
 
-.progress-nav__bar {
-  border-spacing: 0.125rem;
-  table-layout: fixed;
-}
-
 .progress-nav__dot-item {
-  font-size: var(--bloom-font-size-2xs);
+  font-size: var(--dot-font-size-mobile);
   padding: 0.75rem 0.5rem;
   position: relative;
   text-align: center;
@@ -18,20 +28,17 @@
   white-space: nowrap;
   float: none;
   max-width: 20%;
-
   @media (min-width: $screen-md) {
-    font-size: var(--bloom-font-size-sm);
+    font-size: var(--dot-font-size-desktop);
     padding: 0rem;
   }
 
   &:before {
     position: absolute;
-    height: 0.75rem;
-    width: 0.75rem;
-    background-color: var(--bloom-color-lush);
-    border-style: solid;
+    height: var(--dot-size);
+    width: var(--dot-size);
+    background-color: var(--completed-step-color);
     border-radius: 50%;
-    border-color: var(--bloom-color-white);
     top: 0;
     left: 50%;
     content: "";
@@ -41,7 +48,7 @@
 
   &:after {
     position: absolute;
-    background-color: var(--bloom-color-gray-450);
+    background-color: var(--dot-line-color);
     width: 100%;
     left: 0;
     top: 0.4rem;
@@ -62,26 +69,29 @@
     }
   }
 
+  a {
+    padding-top: var(--dot-label-padding-top);
+    padding-left: var(--dot-label-padding-left);
+    color: var(--step-font-color);
+    display: block;
+    position: relative;
+    z-index: 3;
+  }
+
   &.is-active {
     &:before {
-      height: 0.75rem;
-      width: 0.75rem;
-      background-color: var(--bloom-color-primary);
-      top: 0;
+      background-color: var(--active-step-color);
     }
 
     a {
-      color: var(--bloom-color-black);
+      color: var(--step-font-color);
       font-weight: bold;
     }
   }
 
   &.is-disabled {
     &:before {
-      height: 0.75rem;
-      width: 0.75rem;
-      background-color: var(--bloom-color-gray-450);
-      top: 0;
+      background-color: var(--future-step-color);
     }
 
     a {
@@ -89,38 +99,33 @@
       cursor: default;
     }
   }
+}
 
-  a {
-    padding-top: 1 rem;
-    padding-top: 1rem;
-    padding-left: 0.25rem;
-    color: var(--bloom-color-gray-700);
-    display: block;
-    position: relative;
-    z-index: 3;
-  }
+.progress-nav__bar {
+  border-spacing: var(--bar-spacing);
+  table-layout: fixed;
 }
 
 .progress-nav__bar-item {
   font-size: 0;
-  padding-top: 0.5rem;
-  padding-left: 0.125rem;
+  padding-top: var(--bar-label-padding-top);
+  padding-left: var(--bar-label-padding-left);
   position: relative;
   display: table-cell;
   white-space: nowrap;
   float: none;
   max-width: 20%;
-  border-top-width: 1rem;
-  border-top-color: var(--bloom-primary);
+  border-top-width: var(--bar-height);
+  border-top-color: var(--completed-step-color);
   @media (min-width: $screen-md) {
     font-size: var(--bloom-font-size-base);
   }
   &.is-active {
-    border-top-color: var(--bloom-color-primary);
+    border-top-color: var(--active-step-color);
     font-weight: 600;
   }
   &.is-disabled {
-    border-top-color: var(--bloom-color-gray-450);
+    border-top-color: var(--future-step-color);
   }
   a {
     color: var(--bloom-color-primary-darker);
