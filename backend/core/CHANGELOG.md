@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.0...@bloom-housing/backend-core@5.1.1-alpha.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* fix for big timeout on flagged set ([#2946](https://github.com/bloom-housing/bloom/issues/2946)) ([82645b7](https://github.com/bloom-housing/bloom/commit/82645b7593b08ed735b48e6b4e23d669784f6e96))
+
+
+
+
+
 ## [5.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.0.1-alpha.15...@bloom-housing/backend-core@5.1.1-alpha.0) (2022-07-27)
 
 
