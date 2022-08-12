@@ -19,16 +19,28 @@ export interface MultiLineAddressProps {
 const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
   if (!address) return null
 
+  const makeHtmlString = (address) => {
+    const str = ""
+
+    if (address.placeName) {
+      str = str += `${address.placeName} <br />`
+    }
+
+    if (address.street || address.street2) {
+      str = str += `${address.street || ""} ${address.street2 || ""} <br />`
+    }
+
+    if (address.city || address.state || address.zipCode) {
+      str = str += `${address.city && `${address.city} ,`} ${address.state} ${address.zipCode}`
+    }
+
+    return str
+  }
+
   return (
     <Markdown
       options={{ disableParsingRawHTML: false }}
-      children={`<span>${address.placeName ? `${address.placeName} <br />` : ""}
-     ${address.street || ""} ${address.street2 || ""}
-     ${address.street || address.street2 ? `<br />` : ""}
-     ${address.city}
-     ${address.city && (address.state || address.zipCode) ? "," : ""} ${address.state} ${` `} ${
-        address.zipCode
-      }</span>`}
+      children={`<span>${makeHtmlString(address)}</span>`}
     />
   )
 }
