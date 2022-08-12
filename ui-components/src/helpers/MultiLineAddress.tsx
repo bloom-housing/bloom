@@ -23,15 +23,15 @@ const MultiLineAddress = ({ address }: MultiLineAddressProps) => {
     let str = ""
 
     if (address.placeName) {
-      str = str += `${address.placeName} <br />`
+      str += `${address.placeName} <br />`
     }
 
     if (address.street || address.street2) {
-      str = str += `${address.street || ""} ${address.street2 || ""} <br />`
+      str += `${address.street || ""} ${address.street2 || ""} <br />`
     }
 
     if (address.city || address.state || address.zipCode) {
-      str = str += `${address.city && `${address.city} ,`} ${address.state} ${address.zipCode}`
+      str += `${address.city && `${address.city} ,`} ${address.state} ${address.zipCode}`
     }
 
     return str
