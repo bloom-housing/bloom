@@ -19,7 +19,7 @@
   float: none;
   max-width: 20%;
 
-  @screen md {
+  @media (min-width: $screen-md) {
     font-size: var(--bloom-font-size-sm);
     padding: 0rem;
   }
@@ -91,7 +91,7 @@
   }
 
   a {
-    @apply pt-4;
+    padding-top: 1 rem;
     padding-top: 1rem;
     padding-left: 0.25rem;
     color: var(--bloom-color-gray-700);
@@ -112,7 +112,7 @@
   max-width: 20%;
   border-top-width: 1rem;
   border-top-color: var(--bloom-primary);
-  @screen md {
+  @media (min-width: $screen-md) {
     font-size: var(--bloom-font-size-base);
   }
   &.is-active {
