@@ -1,8 +1,10 @@
 .progress-nav {
   --completed-step-color: var(--bloom-color-primary-darker);
+  --completed-step-font-color: var(--bloom-color-primary-darker);
   --active-step-color: var(--bloom-color-primary);
+  --active-step-font-color: var(--bloom-color-primary-darker);
   --future-step-color: var(--bloom-color-gray-450);
-  --step-font-color: var(--bloom-color-primary-darker);
+  --future-step-font-color: var(--bloom-color-gray-750);
   --dot-size: var(--bloom-s3);
   --dot-font-size-desktop: var(--bloom-font-size-sm);
   --dot-font-size-mobile: var(--bloom-font-size-2xs);
@@ -72,7 +74,7 @@
   a {
     padding-top: var(--dot-label-padding-top);
     padding-left: var(--dot-label-padding-left);
-    color: var(--step-font-color);
+    color: var(--completed-step-font-color);
     display: block;
     position: relative;
     z-index: 3;
@@ -84,7 +86,7 @@
     }
 
     a {
-      color: var(--step-font-color);
+      color: var(--active-step-font-color);
       font-weight: bold;
     }
   }
@@ -95,6 +97,7 @@
     }
 
     a {
+      color: var(--future-step-font-color);
       pointer-events: none;
       cursor: default;
     }
@@ -122,12 +125,18 @@
   }
   &.is-active {
     border-top-color: var(--active-step-color);
-    font-weight: 600;
+    a {
+      font-weight: 600;
+      color: var(--active-step-font-color);
+    }
   }
   &.is-disabled {
     border-top-color: var(--future-step-color);
+    a {
+      color: var(--future-step-font-color);
+    }
   }
   a {
-    color: var(--bloom-color-primary-darker);
+    color: var(--completed-step-font-color);
   }
 }
