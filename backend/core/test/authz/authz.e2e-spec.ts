@@ -31,7 +31,7 @@ describe("Authz", () => {
   let userAccessToken: string
   let adminAccessToken: string
   let userProfile: UserDto
-  const adminOnlyEndpoints = ["multiselectQuestions", "/units", "/translations"]
+  const adminOnlyEndpoints = ["/units", "/translations"]
   const applicationsEndpoint = "/applications"
   const listingsEndpoint = "/listings"
   const userEndpoint = "/user"
