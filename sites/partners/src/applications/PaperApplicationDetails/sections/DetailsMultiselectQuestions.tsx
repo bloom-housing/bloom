@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
@@ -20,9 +21,8 @@ const DetailsMultiselectQuestions = ({
 
   const application = useContext(ApplicationContext)
 
-  const listingQuestions = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === applicationSection
-  )
+  const listingQuestions = listingSectionQuestions(listingDto, applicationSection)
+
   const questions = application[applicationSection]
 
   return (

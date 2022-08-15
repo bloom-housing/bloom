@@ -301,7 +301,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
                   href={menuLink.href}
                   key={`${menuLink.title}-${index}`}
-                  data-test-id={`${menuLink.title}-${index}`}
+                  data-test-id={`${menuLink.title}`}
                 >
                   {menuContent}
                 </LinkComponent>
