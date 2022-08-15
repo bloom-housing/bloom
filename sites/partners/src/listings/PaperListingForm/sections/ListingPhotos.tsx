@@ -97,7 +97,7 @@ const ListingPhotos = () => {
       },
       fileName: { content: image.image.fileId.split("/").slice(-1).join() },
       primary: {
-        content: index == 0 ? "Primary photo" : "",
+        content: index == 0 ? t("listings.sections.primaryPhoto") : "",
       },
       actions: {
         content: (
@@ -270,7 +270,7 @@ const ListingPhotos = () => {
               drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"
             }
           >
-            Save
+            {t("t.save")}
           </Button>,
         ]}
       >
