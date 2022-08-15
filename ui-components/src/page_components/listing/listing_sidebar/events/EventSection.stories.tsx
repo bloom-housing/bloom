@@ -132,3 +132,8 @@ export const FragmentNote = () => {
     </>
   )
 }
+
+export const TitleCapitalizedDate = () => {
+  const events: EventType[] = [{ dateString: "July 22, 2022" }]
+  return <EventSection events={events} headerText={"Lottery Results"} dateClassName="normal-case" />
+}

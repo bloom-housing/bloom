@@ -11,7 +11,6 @@ import {
   MinimalTable,
   NavigationHeader,
   Modal,
-  PageHeader,
   SiteAlert,
   StandardCard,
   t,
@@ -21,11 +20,13 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import Layout from "../../layouts"
 import { useJurisdictionalPreferenceList } from "../../lib/hooks"
+import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
 
 const Settings = () => {
   const { profile } = useContext(AuthContext)
 
   const [deleteModal, setDeleteModal] = useState(false)
+  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState(false)
 
   const { data, loading } = useJurisdictionalPreferenceList(
     profile?.jurisdictions?.reduce((acc, curr) => {
@@ -37,7 +38,7 @@ const Settings = () => {
     return (
       <div className={"flex justify-end"}>
         <div className={"w-max"}>
-          <span onClick={() => alert("edit")} className={"cursor-pointer"}>
+          <span onClick={() => setPreferenceDrawerOpen(true)} className={"cursor-pointer"}>
             <Icon
               symbol={faPenToSquare}
               size={"medium"}
@@ -153,6 +154,11 @@ const Settings = () => {
       >
         {t("settings.preferenceDelete")}
       </Modal>
+      <PreferenceDrawer
+        drawerOpen={preferenceDrawerOpen}
+        setDrawerOpen={setPreferenceDrawerOpen}
+        defaultValues={undefined}
+      />
     </>
   )
 }

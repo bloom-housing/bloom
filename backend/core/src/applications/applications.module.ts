@@ -16,7 +16,7 @@ import { CsvBuilder } from "./services/csv-builder.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { EmailModule } from "../email/email.module"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
-import { ListingRepository } from "../listings/repositories/listing.repository"
+import { ListingRepository } from "../listings/db/listing.repository"
 
 @Module({
   imports: [

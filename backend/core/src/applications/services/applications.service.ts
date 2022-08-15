@@ -25,8 +25,8 @@ import { PaginatedApplicationListQueryParams } from "../dto/paginated-applicatio
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
-import { ListingRepository } from "../../listings/repositories/listing.repository"
-import Listing from "../../listings/entities/listing.entity"
+import { ListingRepository } from "../../listings/db/listing.repository"
+import { Listing } from "../../listings/entities/listing.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {

@@ -1,6 +1,7 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
+import * as uuid from "uuid"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions from "../../ormconfig.test"
@@ -18,7 +19,9 @@ import { ThrottlerModule } from "@nestjs/throttler"
 import { User } from "../../src/auth/entities/user.entity"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { Listing } from "../../src/listings/entities/listing.entity"
+import { makeTestListing } from "../utils/make-test-listing"
+import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { getUserAccessToken } from "../utils/get-user-access-token"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -26,13 +29,13 @@ import { Listing } from "../../src/listings/entities/listing.entity"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("Programs", () => {
+describe("Activiy", () => {
   let app: INestApplication
   let adminId: string
   let adminAccessToken: string
   let activityLogsRepository: Repository<ActivityLog>
   let applicationsRepository: Repository<Application>
-  let listingsRepository: Repository<Listing>
+  let jurisdictionsRepository: Repository<Jurisdiction>
 
   beforeAll(async () => {
     /* eslint-enable @typescript-eslint/no-empty-function */
@@ -62,7 +65,7 @@ describe("Programs", () => {
     adminId = (await userRepository.findOne({ email: "admin@example.com" })).id
     activityLogsRepository = app.get<Repository<ActivityLog>>(getRepositoryToken(ActivityLog))
     applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))
-    listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+    jurisdictionsRepository = app.get<Repository<Jurisdiction>>(getRepositoryToken(Jurisdiction))
 
     const listingsRes = await supertest(app.getHttpServer())
       .get("/listings?limit=all&view=full")
@@ -114,27 +117,38 @@ describe("Programs", () => {
   })
 
   it(`should capture listing status as activity log metadata`, async () => {
-    const testListing = (await listingsRepository.find({ take: 1 }))[0]
+    const jurisdiction = await jurisdictionsRepository.save({
+      name: `j-${uuid.v4()}`,
+      rentalAssistanceDefault: "",
+      enableAccessibilityFeatures: false,
+      enableUtilitiesIncluded: false,
+    })
 
-    const listingGetRes = await supertest(app.getHttpServer())
-      .get(`/listings/${testListing.id}`)
-      .expect(200)
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    const newListingCreateDto = makeTestListing(jurisdiction.id)
+    const listingResponse = await supertest(app.getHttpServer())
+      .post(`/listings`)
+      .send(newListingCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
 
     await supertest(app.getHttpServer())
-      .put(`/listings/${testListing.id}`)
+      .put(`/listings/${listingResponse.body.id}`)
       .send({
-        ...listingGetRes.body,
+        ...listingResponse.body,
       })
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
 
     const activityLogs = await activityLogsRepository.find({ relations: ["user"] })
-    expect(activityLogs.length).toBe(1)
-    expect(activityLogs[0].recordId).toBe(testListing.id)
+
+    expect(activityLogs.length).toBe(2)
+    expect(activityLogs[0].recordId).toBe(listingResponse.body.id)
     expect(activityLogs[0].user.id).toBe(adminId)
-    expect(activityLogs[0].action).toBe(authzActions.update)
+    expect(activityLogs.some((log) => log.action === authzActions.create)).toBe(true)
+    expect(activityLogs.some((log) => log.action === authzActions.update)).toBe(true)
     expect(activityLogs[0].module).toBe("listing")
-    expect(activityLogs[0].metadata).toStrictEqual({ status: listingGetRes.body.status })
+    expect(activityLogs[0].metadata).toStrictEqual({ status: listingResponse.body.status })
   })
 
   afterAll(async () => {

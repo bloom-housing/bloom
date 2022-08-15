@@ -18,7 +18,7 @@ export const getFlagSetCols = () => [
       const { applicant } = data?.applications?.[0]
       const rule = data?.rule
 
-      const firstApplicant = `${applicant.firstName} ${applicant.lastName}`
+      const firstApplicant = `${applicant?.firstName} ${applicant?.lastName}`
 
       return (
         <Link
@@ -39,7 +39,7 @@ export const getFlagSetCols = () => [
       if (!value) return ""
 
       const uniqueNames = value
-        .map((item) => [item.applicant.firstName, item.applicant.lastName])
+        .map((item) => [item.applicant?.firstName, item.applicant?.lastName])
         .reduce((acc, curr) => {
           const includesName = acc.filter((item) => item[0] === curr[0] && item[1] === curr[1])
             .length

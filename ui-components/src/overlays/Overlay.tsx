@@ -16,6 +16,7 @@ export type OverlayProps = {
   children: React.ReactNode
   slim?: boolean
   role?: string
+  scrollable?: boolean
 }
 
 const OverlayInner = (props: OverlayProps) => {
@@ -68,6 +69,7 @@ export const Overlay = (props: OverlayProps) => {
 
   // disable body scrolling when the overlay is open
   useEffect(() => {
+    if (props.scrollable) return
     if (!(overlayRoot && elForPortal)) return
 
     props.open ? disableBodyScroll(elForPortal) : enableBodyScroll(elForPortal)

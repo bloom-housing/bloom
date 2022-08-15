@@ -10,8 +10,12 @@ import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
 import { AuthzService } from "../../auth/services/authz.service"
-import { ListingRepository } from "../repositories/listing.repository"
 import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/application-flagged-sets.service"
+import { ListingRepository } from "../db/listing.repository"
+import { ListingsQueryBuilder } from "../db/listing-query-builder"
+import { UserRepository } from "../../auth/repositories/user-repository"
+
+/* eslint-disable @typescript-eslint/unbound-method */
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -84,6 +88,10 @@ const mockInnerQueryBuilder = {
   getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
   getQuery: jest.fn().mockReturnValue("innerQuery"),
   getCount: jest.fn().mockReturnValue(7),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderConditions: ListingsQueryBuilder.prototype.addOrderConditions,
+  addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
+  paginate: ListingsQueryBuilder.prototype.paginate,
 }
 const mockQueryBuilder = {
   select: jest.fn().mockReturnThis(),
@@ -94,11 +102,27 @@ const mockQueryBuilder = {
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
   getMany: jest.fn().mockReturnValue(mockListings),
+  offset: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderConditions: ListingsQueryBuilder.prototype.addOrderConditions,
+  addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
+  paginate: ListingsQueryBuilder.prototype.paginate,
+  addInnerFilteredQuery: ListingsQueryBuilder.prototype.addInnerFilteredQuery,
+  getManyPaginated: ListingsQueryBuilder.prototype.getManyPaginated,
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   count: jest.fn().mockReturnValue(100),
   save: jest.fn(),
+}
+
+const mockUserRepo = {
+  findOne: jest.fn(),
+  save: jest.fn(),
+  createQueryBuilder: jest.fn(),
+  findByEmail: jest.fn(),
+  findByResetToken: jest.fn(),
 }
 
 describe("ListingsService", () => {
@@ -113,9 +137,14 @@ describe("ListingsService", () => {
           useValue: { scheduleAfsProcessing: jest.fn() },
         },
         AuthzService,
+        UserRepository,
         {
           provide: getRepositoryToken(ListingRepository),
           useValue: mockListingsRepo,
+        },
+        {
+          provide: getRepositoryToken(UserRepository),
+          useValue: mockUserRepo,
         },
         {
           provide: getRepositoryToken(AmiChart),

@@ -1,9 +1,10 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { InjectQueue } from "@nestjs/bull"
+import { Queue } from "bull"
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { getManager, Repository } from "typeorm"
-import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
@@ -12,9 +13,7 @@ import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
-import { InjectQueue } from "@nestjs/bull"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
-import { Queue } from "bull"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -28,26 +27,51 @@ export class ApplicationFlaggedSetsService {
     @InjectQueue(AFSProcessingQueueNames.afsProcessing) private afsProcessingQueue: Queue
   ) {}
   async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
-    const results = await paginate<ApplicationFlaggedSet>(
-      this.afsRepository,
-      { limit: queryParams.limit, page: queryParams.page },
-      {
-        relations: ["listing", "applications"],
-        where: {
-          ...(queryParams.listingId && { listingId: queryParams.listingId }),
-        },
-      }
-    )
-    const countTotalFlagged = await this.afsRepository.count({
-      where: {
-        status: FlaggedSetStatus.flagged,
-        ...(queryParams.listingId && { listingId: queryParams.listingId }),
-      },
-    })
+    const innerQuery = this.afsRepository
+      .createQueryBuilder("afs")
+      .select("afs.id")
+      .where("afs.listingId = :listingId", { listingId: queryParams.listingId })
+      .orderBy("afs.id", "DESC")
+      .offset((queryParams.page - 1) * queryParams.limit)
+      .limit(queryParams.limit)
+
+    const outerQuery = this.afsRepository
+      .createQueryBuilder("afs")
+      .select([
+        "afs.id",
+        "afs.rule",
+        "afs.status",
+        "afs.listingId",
+        "listing.id",
+        "applications.id",
+        "applicant.firstName",
+        "applicant.lastName",
+      ])
+      .leftJoin("afs.listing", "listing")
+      .leftJoin("afs.applications", "applications")
+      .leftJoin("applications.applicant", "applicant")
+      .orderBy("afs.id", "DESC")
+      .where(`afs.id IN (` + innerQuery.getQuery() + ")")
+      .setParameters(innerQuery.getParameters())
+
+    const items = await outerQuery.getMany()
+    const count = await innerQuery.getCount()
+
+    const paginationInfo = {
+      currentPage: queryParams.page,
+      itemCount: items.length,
+      itemsPerPage: queryParams.limit,
+      totalItems: count,
+      totalPages: Math.ceil(count / queryParams.limit),
+    }
+
+    innerQuery.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
+    const countTotalFlagged = await innerQuery.getCount()
+
     return {
-      ...results,
+      items,
       meta: {
-        ...results.meta,
+        ...paginationInfo,
         totalFlagged: countTotalFlagged,
       },
     }

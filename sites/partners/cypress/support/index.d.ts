@@ -3,6 +3,8 @@ type attachFileSubjectArgs = {
   subjectType: string
 }
 
+type fieldObj = { id: string; fieldKey: string }
+
 declare namespace Cypress {
   interface Chainable {
     /**
@@ -32,6 +34,13 @@ declare namespace Cypress {
     verifyTerms(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     fillMailingAddress(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     signOut(): Chainable
+    fillFields(
+      obj: Record<string, string>,
+      fieldsToType: fieldObj[],
+      fieldsToSelect: fieldObj[],
+      fieldsToClick: fieldObj[],
+      fieldsToSkip: string[]
+    ): Chainable
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
