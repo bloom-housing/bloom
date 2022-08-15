@@ -1,8 +1,8 @@
 import { useState } from "@storybook/addons"
 import * as React from "react"
-import { Button } from "../.."
 import { BADGES } from "../../.storybook/constants"
 import { StepHeader } from "./StepHeader"
+import { Button } from "../actions/Button"
 import StepHeaderDocumentation from "./StepHeader.docs.mdx"
 
 export default {
@@ -19,15 +19,23 @@ export default {
 export const basicDynamic = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
   return (
-    <div className="flex-col">
-      <StepHeader
-        currentStep={currentStep}
-        totalSteps={4}
-        stepPreposition={"of"}
-        stepLabeling={["Start", "Mid 1", "Mid 2", "End"]}
-      />
-      <Button onClick={() => setCurrentStep(currentStep - 1)}>Previous</Button>
-      <Button onClick={() => setCurrentStep(currentStep + 1)}>Next</Button>
+    <div>
+      <div className="flex-col pb-4">
+        <StepHeader
+          currentStep={currentStep}
+          totalSteps={4}
+          stepPreposition={"of"}
+          stepLabeling={["Start", "Mid 1", "Mid 2", "End"]}
+        />
+      </div>
+      <div>
+        <Button iconSize="small" onClick={() => setCurrentStep(currentStep - 1)}>
+          Previous
+        </Button>
+        <Button iconSize="small" onClick={() => setCurrentStep(currentStep + 1)}>
+          Next
+        </Button>
+      </div>
     </div>
   )
 }
