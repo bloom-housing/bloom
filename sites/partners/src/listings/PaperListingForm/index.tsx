@@ -19,7 +19,7 @@ import {
   TabPanel,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
@@ -74,24 +74,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
-    listing?.listingMultiselectQuestions
-      .filter(
-        (question) =>
-          question.multiselectQuestion.applicationSection === ApplicationSection.preferences
-      )
-      .map((listingPref) => {
-        return { ...listingPref.multiselectQuestion }
-      }) ?? []
+    listingSectionQuestions(listing, ApplicationSection.preferences).map((listingPref) => {
+      return { ...listingPref.multiselectQuestion }
+    }) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
-    listing?.listingMultiselectQuestions
-      .filter(
-        (question) =>
-          question.multiselectQuestion.applicationSection === ApplicationSection.programs
-      )
-      .map((listingProg) => {
-        return { ...listingProg.multiselectQuestion }
-      }) ?? []
+    listingSectionQuestions(listing, ApplicationSection.programs).map((listingProg) => {
+      return { ...listingProg.multiselectQuestion }
+    }) ?? []
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({

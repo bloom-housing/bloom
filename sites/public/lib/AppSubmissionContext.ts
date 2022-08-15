@@ -1,6 +1,6 @@
 import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
-import { blankApplication } from "@bloom-housing/shared-helpers"
+import { blankApplication, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 
 export const retrieveApplicationConfig = (listing: Listing) => {
@@ -58,11 +58,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   }
 
   // conditionally add programs
-  if (
-    listing.listingMultiselectQuestions.filter(
-      (question) => question.multiselectQuestion.applicationSection === ApplicationSection.programs
-    ).length
-  ) {
+  if (listingSectionQuestions(listing, ApplicationSection.programs).length) {
     config.sections.push("programs")
     config.steps.push({
       name: "programs",
@@ -81,12 +77,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   )
 
   // conditionally add preferences
-  if (
-    listing.listingMultiselectQuestions.filter(
-      (question) =>
-        question.multiselectQuestion.applicationSection === ApplicationSection.preferences
-    ).length
-  ) {
+  if (listingSectionQuestions(listing, ApplicationSection.preferences).length) {
     config.sections.push("preferences")
     config.steps.push(
       {

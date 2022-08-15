@@ -7,6 +7,7 @@ import {
   ApplicationMultiselectQuestionOption,
   ApplicationSection,
   ListingMultiselectQuestion,
+  Listing,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -18,6 +19,16 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "./formKeys"
+
+export const listingSectionQuestions = (
+  listing: Listing,
+  applicationSection: ApplicationSection
+) => {
+  return listing.listingMultiselectQuestions.filter(
+    (question) =>
+      question.multiselectQuestion.applicationSection === ApplicationSection[applicationSection]
+  )
+}
 
 // Get a field name for an application multiselect question
 export const fieldName = (
@@ -266,7 +277,7 @@ export const mapRadiosToApi = (
   data: { [name: string]: any },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
-  if (Object.keys(data).length === 0) {
+  if (Object.keys(data)?.length === 0) {
     return {
       key: "",
       claimed: false,

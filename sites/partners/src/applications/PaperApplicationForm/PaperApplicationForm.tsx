@@ -9,7 +9,7 @@ import {
   StatusBar,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   HouseholdMember,
@@ -44,12 +44,10 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
 
-  const preferences = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.preferences
-  )
-  const programs = listingDto?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === ApplicationSection.programs
-  )
+  const preferences = listingSectionQuestions(listingDto, ApplicationSection.preferences)
+
+  const programs = listingSectionQuestions(listingDto, ApplicationSection.programs)
+
   const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}

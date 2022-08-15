@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from "react"
 import { t, GridSection, MinimalTable, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ApplicationSection } from "@bloom-housing/backend-core"
+import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 
 const DetailPrograms = () => {
   const listing = useContext(ListingContext)
@@ -14,11 +15,7 @@ const DetailPrograms = () => {
 
   const programsTableData = useMemo(
     () =>
-      listing?.listingMultiselectQuestions
-        .filter(
-          (question) =>
-            question.multiselectQuestion.applicationSection === ApplicationSection.programs
-        )
+      listingSectionQuestions(listing, ApplicationSection.programs)
         .sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
           order: { content: index + 1 },

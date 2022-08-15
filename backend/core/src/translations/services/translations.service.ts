@@ -99,6 +99,22 @@ export class TranslationsService extends AbstractServiceFactory<
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.text`)
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.description`)
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.subText`)
+      for (
+        let j = 0;
+        j < listing.listingMultiselectQuestions[i].multiselectQuestion.options.length;
+        j++
+      ) {
+        console.log(
+          "pushing",
+          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].text`
+        )
+        pathsToFilter.push(
+          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].text`
+        )
+        pathsToFilter.push(
+          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].description`
+        )
+      }
     }
 
     const listingPathsAndValues: { [key: string]: any } = {}

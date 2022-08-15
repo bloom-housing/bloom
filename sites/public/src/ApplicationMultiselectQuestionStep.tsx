@@ -27,6 +27,7 @@ import {
   getInputType,
   getRadioFields,
   mapRadiosToApi,
+  listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 
@@ -51,9 +52,7 @@ const ApplicationMultiselectQuestionStep = ({
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor(applicationStep)
 
-  const questions = listing?.listingMultiselectQuestions.filter(
-    (question) => question.multiselectQuestion.applicationSection === applicationSection
-  )
+  const questions = listingSectionQuestions(listing, applicationSection)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? questions.length : 1)
   const [applicationQuestions, setApplicationQuestions] = useState(application[applicationSection])
   const question = getPageQuestion(questions, page)
@@ -90,7 +89,7 @@ const ApplicationMultiselectQuestionStep = ({
     const body =
       questionSetInputType === "checkbox"
         ? mapCheckboxesToApi(data, question, applicationSection)
-        : mapRadiosToApi(data.application.programs, question)
+        : mapRadiosToApi(data.application[applicationSection], question)
     if (questions.length > 1 && body) {
       // If there is more than one question, save the data in segments
       const currentQuestions = conductor.currentStep.application[applicationSection].filter(
@@ -173,7 +172,7 @@ const ApplicationMultiselectQuestionStep = ({
           </AlertBox>
         )}
 
-        <div className="form-card__group px-0 pb-0">
+        <div className="form-card__group pb-0">
           <p className="field-note">
             {strings?.selectText ?? questionSetInputType === "radio"
               ? t("t.pleaseSelectOne")
@@ -183,7 +182,7 @@ const ApplicationMultiselectQuestionStep = ({
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div key={question?.id}>
-            <div className={`form-card__group px-0`}>
+            <div className={`form-card__group`}>
               {questionSetInputType === "checkbox" ? (
                 <fieldset>
                   <legend className="field-label--caps mb-4">{question?.text}</legend>

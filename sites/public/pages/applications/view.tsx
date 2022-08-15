@@ -10,7 +10,12 @@ import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT, UserStatus } from "../../lib/constants"
-import { pushGtmEvent, PageView, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  pushGtmEvent,
+  PageView,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationView = () => {
@@ -70,17 +75,9 @@ const ApplicationView = () => {
           listing={listing}
           application={application}
           hidePreferences={
-            listing?.listingMultiselectQuestions.filter(
-              (question) =>
-                question.multiselectQuestion.applicationSection === ApplicationSection.preferences
-            ).length === 0
+            listingSectionQuestions(listing, ApplicationSection.preferences).length === 0
           }
-          hidePrograms={
-            listing?.listingMultiselectQuestions.filter(
-              (question) =>
-                question.multiselectQuestion.applicationSection === ApplicationSection.programs
-            ).length === 0
-          }
+          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs).length === 0}
           editMode={false}
         />
 

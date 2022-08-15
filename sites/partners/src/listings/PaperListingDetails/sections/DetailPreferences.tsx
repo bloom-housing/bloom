@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from "react"
 import { t, GridSection, MinimalTable, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ApplicationSection } from "@bloom-housing/backend-core"
+import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 
 const DetailPreferences = () => {
   const listing = useContext(ListingContext)
@@ -14,16 +15,13 @@ const DetailPreferences = () => {
 
   const preferenceTableData = useMemo(
     () =>
-      listing?.listingMultiselectQuestions
-        .filter(
-          (question) =>
-            question.multiselectQuestion.applicationSection === ApplicationSection.preferences
-        )
-        .map((listingPreference, index) => ({
+      listingSectionQuestions(listing, ApplicationSection.preferences).map(
+        (listingPreference, index) => ({
           order: { content: index + 1 },
           name: { content: listingPreference.multiselectQuestion.text },
           description: { content: listingPreference.multiselectQuestion.description },
-        })),
+        })
+      ),
     [listing]
   )
 
