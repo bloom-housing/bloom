@@ -13,7 +13,7 @@ const ApplicationPreferencesAll = () => {
       applicationSection={ApplicationSection.preferences}
       applicationStep={"preferencesAll"}
       applicationSectionNumber={
-        listingSectionQuestions(listing, ApplicationSection.programs).length ? 5 : 4
+        listingSectionQuestions(listing, ApplicationSection.programs)?.length ? 5 : 4
       }
       strings={{
         title: t("application.preferences.title"),

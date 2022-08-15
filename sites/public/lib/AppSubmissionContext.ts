@@ -58,7 +58,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   }
 
   // conditionally add programs
-  if (listingSectionQuestions(listing, ApplicationSection.programs).length) {
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) {
     config.sections.push("programs")
     config.steps.push({
       name: "programs",
@@ -77,7 +77,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   )
 
   // conditionally add preferences
-  if (listingSectionQuestions(listing, ApplicationSection.preferences).length) {
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length) {
     config.sections.push("preferences")
     config.steps.push(
       {

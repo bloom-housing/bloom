@@ -61,7 +61,7 @@ const ApplicationIncome = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs).length
+  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
     ? 4
     : 3
 

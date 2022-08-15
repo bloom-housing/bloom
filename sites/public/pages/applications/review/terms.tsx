@@ -36,8 +36,8 @@ const ApplicationTerms = () => {
   const [submitting, setSubmitting] = useState(false)
 
   let currentPageSection = 4
-  if (listingSectionQuestions(listing, ApplicationSection.programs).length) currentPageSection += 1
-  if (listingSectionQuestions(listing, ApplicationSection.preferences).length)
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
     currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
