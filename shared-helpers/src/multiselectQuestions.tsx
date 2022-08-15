@@ -24,7 +24,7 @@ export const listingSectionQuestions = (
   listing: Listing,
   applicationSection: ApplicationSection
 ) => {
-  return listing.listingMultiselectQuestions.filter(
+  return listing?.listingMultiselectQuestions?.filter(
     (question) =>
       question.multiselectQuestion.applicationSection === ApplicationSection[applicationSection]
   )
