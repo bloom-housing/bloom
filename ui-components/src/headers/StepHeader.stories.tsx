@@ -3,6 +3,7 @@ import * as React from "react"
 import { BADGES } from "../../.storybook/constants"
 import { StepHeader } from "./StepHeader"
 import { Button } from "../actions/Button"
+import { AppearanceSizeType } from "../.."
 import StepHeaderDocumentation from "./StepHeader.docs.mdx"
 
 export default {
@@ -20,7 +21,7 @@ export const basicDynamic = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
   return (
     <div>
-      <div className="flex-col pb-4">
+      <div className="pb-4">
         <StepHeader
           currentStep={currentStep}
           totalSteps={4}
@@ -28,11 +29,11 @@ export const basicDynamic = () => {
           stepLabeling={["Start", "Mid 1", "Mid 2", "End"]}
         />
       </div>
-      <div>
-        <Button iconSize="small" onClick={() => setCurrentStep(currentStep - 1)}>
+      <div className="flex gap-x-2">
+        <Button size={AppearanceSizeType.small} onClick={() => setCurrentStep(currentStep - 1)}>
           Previous
         </Button>
-        <Button iconSize="small" onClick={() => setCurrentStep(currentStep + 1)}>
+        <Button size={AppearanceSizeType.small} onClick={() => setCurrentStep(currentStep + 1)}>
           Next
         </Button>
       </div>
