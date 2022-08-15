@@ -215,6 +215,8 @@ export class ApplicationFlaggedSetsService {
       limit?: number
       /**  */
       listingId: string
+      /**  */
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationFlaggedSetMeta> {
@@ -226,6 +228,7 @@ export class ApplicationFlaggedSetsService {
         page: params["page"],
         limit: params["limit"],
         listingId: params["listingId"],
+        view: params["view"],
       }
       let data = null
 
@@ -273,6 +276,8 @@ export class ApplicationFlaggedSetsService {
       limit?: number
       /**  */
       listingId: string
+      /**  */
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplicationFlaggedSet> {
@@ -284,6 +289,7 @@ export class ApplicationFlaggedSetsService {
         page: params["page"],
         limit: params["limit"],
         listingId: params["listingId"],
+        view: params["view"],
       }
       let data = null
 

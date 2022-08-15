@@ -27,6 +27,10 @@ interface UseSingleApplicationDataProps extends PaginationProps {
   listingId: string
 }
 
+interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataProps {
+  view?: string
+}
+
 type UseUserListProps = PaginationProps & {
   search?: string
 }
@@ -130,7 +134,8 @@ export function useFlaggedApplicationsList({
   listingId,
   page,
   limit,
-}: UseSingleApplicationDataProps) {
+  view,
+}: UseSingleFlaggedApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const params = {
@@ -147,6 +152,10 @@ export function useFlaggedApplicationsList({
     Object.assign(params, limit)
   }
 
+  if (view) {
+    queryParams.append("view", view)
+    Object.assign(params, { view })
+  }
   const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
