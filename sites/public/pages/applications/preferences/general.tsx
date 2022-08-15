@@ -30,7 +30,7 @@ const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
   const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs).length
+  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
     ? 5
     : 4
 

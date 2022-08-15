@@ -30,7 +30,7 @@ import { ApplicationSection } from "@bloom-housing/backend-core"
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs).length
+  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
     ? 4
     : 3
   /* Form Handler */

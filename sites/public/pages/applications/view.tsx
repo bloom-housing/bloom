@@ -77,9 +77,9 @@ const ApplicationView = () => {
           listing={listing}
           application={application}
           hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences).length === 0
+            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
           }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs).length === 0}
+          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
           editMode={false}
         />
 

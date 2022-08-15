@@ -29,8 +29,8 @@ const ApplicationSummary = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("summary")
   let currentPageSection = 4
-  if (listingSectionQuestions(listing, ApplicationSection.programs).length) currentPageSection += 1
-  if (listingSectionQuestions(listing, ApplicationSection.preferences).length)
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
     currentPageSection += 1
 
   /* Form Handler */
@@ -71,9 +71,9 @@ const ApplicationSummary = () => {
           application={application}
           listing={listing}
           hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences).length === 0
+            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
           }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs).length === 0}
+          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
           editMode
         />
 
