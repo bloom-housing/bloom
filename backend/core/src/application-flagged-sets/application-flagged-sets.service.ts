@@ -23,6 +23,7 @@ import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-r
 import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
+import { View } from "./types/view-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -42,6 +43,20 @@ export class ApplicationFlaggedSetsService {
       .orderBy("afs.id", "DESC")
       .offset((queryParams.page - 1) * queryParams.limit)
       .limit(queryParams.limit)
+
+    if (queryParams.view) {
+      if (queryParams.view === View.pending) {
+        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.flagged })
+      } else if (queryParams.view === View.pendingNameAndDoB) {
+        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.flagged })
+        innerQuery.andWhere("rule = :rule", { rule: Rule.nameAndDOB })
+      } else if (queryParams.view === View.pendingEmail) {
+        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.flagged })
+        innerQuery.andWhere("rule = :rule", { rule: Rule.email })
+      } else if (queryParams.view === View.resolved) {
+        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.resolved })
+      }
+    }
 
     const outerQuery = this.afsRepository
       .createQueryBuilder("afs")
