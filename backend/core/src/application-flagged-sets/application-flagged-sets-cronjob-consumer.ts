@@ -4,8 +4,8 @@ import { Brackets, LessThan, MoreThanOrEqual, Repository, SelectQueryBuilder } f
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
 import { InjectRepository } from "@nestjs/typeorm"
-import { ListingRepository } from "../listings/repositories/listing.repository"
-import Listing from "../listings/entities/listing.entity"
+import { ListingRepository } from "../listings/db/listing.repository"
+import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 

@@ -22,7 +22,7 @@ import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 import dbOptions from "../../ormconfig.test"
 import { EmailService } from "../../src/email/email.service"
 import { ApplicationFlaggedSetsCronjobConsumer } from "../../src/application-flagged-sets/application-flagged-sets-cronjob-consumer"
-import { ListingRepository } from "../../src/listings/repositories/listing.repository"
+import { ListingRepository } from "../../src/listings/db/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -40,7 +40,6 @@ describe("ApplicationFlaggedSets", () => {
   let afsProcessingService: ApplicationFlaggedSetsCronjobConsumer
   let listing1Id: string
   let updateApplication
-  let getApplication
   let getAfsesForListingId
 
   const setupDb = async () => {
@@ -107,15 +106,6 @@ describe("ApplicationFlaggedSets", () => {
         await supertest(app.getHttpServer())
           .put(`/applications/${application.id}`)
           .send(application)
-          .set(...setAuthorization(adminAccessToken))
-          .expect(200)
-      ).body
-    }
-
-    getApplication = async (id: string) => {
-      return (
-        await supertest(app.getHttpServer())
-          .get(`/applications/${id}`)
           .set(...setAuthorization(adminAccessToken))
           .expect(200)
       ).body

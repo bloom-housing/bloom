@@ -11,7 +11,7 @@ import { BullModule } from "@nestjs/bull"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
 import { ConfigService } from "@nestjs/config"
 import { SharedModule } from "../shared/shared.module"
-import { ListingRepository } from "../listings/repositories/listing.repository"
+import { ListingRepository } from "../listings/db/listing.repository"
 
 @Module({
   imports: [
