@@ -2335,6 +2335,12 @@ export interface AmiChartUpdate {
 
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 }
 
 export interface Address {
@@ -2765,9 +2771,6 @@ export interface ApplicationFlaggedSet {
   rule: string
 
   /**  */
-  ruleKey: string
-
-  /**  */
   resolvedTime?: Date
 
   /**  */
@@ -2923,6 +2926,12 @@ export interface AssetUpdate {
   id?: string
 
   /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
   fileId: string
 
   /**  */
@@ -2937,6 +2946,12 @@ export interface PaperApplicationUpdate {
   id?: string
 
   /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
   file?: CombinedFileTypes
 }
 
@@ -2946,6 +2961,12 @@ export interface ApplicationMethodUpdate {
 
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 
   /**  */
   paperApplications?: PaperApplicationUpdate[]
@@ -3552,6 +3573,12 @@ export interface ApplicationUpdate {
   id?: string
 
   /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
   deletedAt?: Date
 
   /**  */
@@ -4040,6 +4067,12 @@ export interface UserUpdate {
   email?: string
 
   /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
   password?: string
 
   /**  */
@@ -4247,6 +4280,12 @@ export interface JurisdictionCreate {
 export interface JurisdictionUpdate {
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 
   /**  */
   name: string
@@ -5132,12 +5171,6 @@ export interface Listing {
 
   /**  */
   closedAt?: Date
-
-  /**  */
-  afsLastRunAt?: Date
-
-  /**  */
-  lastApplicationUpdateAt?: Date
 }
 
 export interface PaginatedListing {
@@ -5551,9 +5584,6 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
-  lastApplicationUpdateAt?: Date
-
-  /**  */
   countyCode?: string
 
   /**  */
@@ -5569,6 +5599,12 @@ export interface ListingEventUpdate {
 
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 
   /**  */
   file?: AssetUpdate
@@ -5594,12 +5630,24 @@ export interface UnitAmiChartOverrideUpdate {
   id?: string
 
   /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
   items: AmiChartItem[]
 }
 
 export interface UnitUpdate {
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 
   /**  */
   amiChart?: Id
@@ -5736,6 +5784,12 @@ export interface ListingUpdate {
 
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 
   /**  */
   applicationMethods: ApplicationMethodUpdate[]
@@ -5957,9 +6011,6 @@ export interface ListingUpdate {
   customMapPin?: boolean
 
   /**  */
-  lastApplicationUpdateAt?: Date
-
-  /**  */
   countyCode?: string
 
   /**  */
@@ -6121,6 +6172,12 @@ export interface TranslationUpdate {
 
   /**  */
   id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
 
   /**  */
   translations: object

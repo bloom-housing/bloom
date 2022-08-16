@@ -1,7 +1,7 @@
 import { OmitType } from "@nestjs/swagger"
 import { ListingEvent } from "../entities/listing-event.entity"
 import { Expose, Type } from "class-transformer"
-import { IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { AssetCreateDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 
@@ -29,6 +29,18 @@ export class ListingEventUpdateDto extends OmitType(ListingEventDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  createdAt?: Date
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  updatedAt?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

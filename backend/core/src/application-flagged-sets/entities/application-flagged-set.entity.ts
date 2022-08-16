@@ -18,11 +18,6 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   rule: string
 
-  @Column({ enum: Rule, nullable: false, unique: true })
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  ruleKey: string
-
   @Column({ type: "timestamptz", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
