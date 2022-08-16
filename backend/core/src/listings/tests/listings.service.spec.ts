@@ -10,7 +10,6 @@ import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
 import { AuthzService } from "../../auth/services/authz.service"
-import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/application-flagged-sets.service"
 import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { UserRepository } from "../../auth/repositories/user-repository"
@@ -132,10 +131,6 @@ describe("ListingsService", () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ListingsService,
-        {
-          provide: ApplicationFlaggedSetsService,
-          useValue: { scheduleAfsProcessing: jest.fn() },
-        },
         AuthzService,
         UserRepository,
         {
