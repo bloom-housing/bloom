@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
@@ -34,7 +34,10 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
-  const isListingOpen = listingDto?.status === "active"
+  const [isListingOpen, setIsListingOpen] = useState(true)
+  useEffect(() => {
+    listingDto?.status && setIsListingOpen(listingDto?.status === "active")
+  }, [listingDto?.status])
   let view = "pending"
   if (type && type === "name_dob") {
     view = "pendingNameAndDoB"
@@ -96,27 +99,33 @@ const ApplicationsList = () => {
     },
   ]
 
-  class formatLinkCell {
+  class formatEnabledCell {
     linkWithId: HTMLSpanElement
-
     init(params) {
       const applicationId = params.data.id
-
       this.linkWithId = document.createElement("button")
-      this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
-
-      !isListingOpen &&
-        this.linkWithId.addEventListener("click", function () {
-          void router.push(`/application/${applicationId}`)
-        })
+      this.linkWithId.classList.add("text-blue-700")
+      this.linkWithId.addEventListener("click", function () {
+        void router.push(`/application/${applicationId}`)
+      })
     }
-
     getGui() {
       return this.linkWithId
     }
   }
-
+  class formatDisabledCell {
+    disabledLink: HTMLSpanElement
+    init(params) {
+      this.disabledLink = document.createElement("button")
+      this.disabledLink.innerText = params.value
+      this.disabledLink.classList.add("text-gray-750")
+    }
+    getGui() {
+      return this.disabledLink
+    }
+  }
+  const formatLinkCell = isListingOpen ? formatDisabledCell : formatEnabledCell
   const gridComponents = {
     formatLinkCell,
   }
