@@ -101,7 +101,7 @@ const ApplicationMultiselectQuestionStep = ({
       setApplicationQuestions([...currentQuestions, body])
     } else {
       // Otherwise, submit all at once
-      conductor.currentStep.save(body)
+      conductor.currentStep.save([body])
     }
     // Update to the next page if we have more pages
     if (page !== questions.length) {
