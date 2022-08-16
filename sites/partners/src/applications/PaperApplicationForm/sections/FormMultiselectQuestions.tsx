@@ -34,10 +34,6 @@ const FormMultiselectQuestions = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
 
-  if (questions?.length === 0) {
-    return <></>
-  }
-
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     questions?.forEach((listingQuestion) =>
@@ -50,6 +46,10 @@ const FormMultiselectQuestions = ({
 
     return keys
   }, [questions, applicationSection])
+
+  if (questions?.length === 0) {
+    return <></>
+  }
 
   const watchQuestions = watch(allOptionFieldNames)
 
