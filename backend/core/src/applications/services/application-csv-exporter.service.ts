@@ -97,7 +97,7 @@ export class ApplicationCsvExporterService {
               extraString += `${capitalizeFirstLetter(extra.key)}: ${extra.value as string}, `
             } else if (extra.type === "address") {
               extraString += `${(extra.value as AddressCreateDto).street}, ${
-                !!(extra.value as AddressCreateDto).street2
+                (extra.value as AddressCreateDto).street2
                   ? `${(extra.value as AddressCreateDto).street2},`
                   : ""
               }
