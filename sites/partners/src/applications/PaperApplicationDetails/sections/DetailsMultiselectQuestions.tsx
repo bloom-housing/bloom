@@ -29,11 +29,11 @@ const DetailsMultiselectQuestions = ({
     <GridSection className="bg-primary-lighter" title={title} inset columns={2}>
       {listingQuestions?.map((listingQuestion) => {
         return (
-          <GridCell key={listingQuestion.multiselectQuestion.text}>
-            <ViewItem label={listingQuestion.multiselectQuestion.text}>
+          <GridCell key={listingQuestion?.multiselectQuestion.text}>
+            <ViewItem label={listingQuestion?.multiselectQuestion.text}>
               {(() => {
-                const appQuestion = questions.filter(
-                  (question) => question.key === listingQuestion.multiselectQuestion.text
+                const appQuestion = questions?.filter(
+                  (question) => question.key === listingQuestion?.multiselectQuestion.text
                 )[0]
                 if (!appQuestion?.claimed) return t("t.none")
 

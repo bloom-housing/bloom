@@ -19,18 +19,18 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
       <GridSection columns={2}>
         {programs?.map((listingProgram) => {
           return (
-            <GridCell key={listingProgram.multiselectQuestion.text}>
-              <ViewItem label={listingProgram.multiselectQuestion.text}>
+            <GridCell key={listingProgram?.multiselectQuestion?.text}>
+              <ViewItem label={listingProgram?.multiselectQuestion?.text}>
                 <fieldset>
                   <FieldGroup
                     fieldGroupClassName="grid grid-cols-1"
                     fieldClassName="ml-0"
-                    type={getInputType(listingProgram.multiselectQuestion.options)}
-                    name={`application.programs.${listingProgram.multiselectQuestion.text}`}
+                    type={getInputType(listingProgram?.multiselectQuestion?.options)}
+                    name={`application.programs.${listingProgram?.multiselectQuestion?.text}`}
                     register={register}
-                    fields={listingProgram.multiselectQuestion.options?.map((option) => {
+                    fields={listingProgram?.multiselectQuestion?.options?.map((option) => {
                       return {
-                        id: `${listingProgram?.multiselectQuestion.text}-${option.text}`,
+                        id: `${listingProgram?.multiselectQuestion?.text}-${option.text}`,
                         label: option.text,
                         value: option.text,
                       }

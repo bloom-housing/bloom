@@ -19,8 +19,8 @@ const DetailPrograms = () => {
         .sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
           order: { content: index + 1 },
-          name: { content: program.multiselectQuestion.text },
-          description: { content: program.multiselectQuestion.description },
+          name: { content: program?.multiselectQuestion?.text },
+          description: { content: program?.multiselectQuestion?.description },
         })),
     [listing]
   )
