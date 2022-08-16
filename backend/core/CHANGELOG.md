@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.3...@bloom-housing/backend-core@5.1.1-alpha.4) (2022-08-16)
+
+
+### Reverts
+
+* Revert "feat(backend): add bull job scheduler for afs processing (#2889)" (#2960) ([d790b17](https://github.com/bloom-housing/bloom/commit/d790b17d9c2cabb57a5fff4abb23da420d904d0c)), closes [#2889](https://github.com/bloom-housing/bloom/issues/2889) [#2960](https://github.com/bloom-housing/bloom/issues/2960)
+
+
+
+
+
 ## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.2...@bloom-housing/backend-core@5.1.1-alpha.3) (2022-08-16)
 
 
