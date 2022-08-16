@@ -7,14 +7,18 @@ export enum ButtonGroupSpacing {
 }
 
 export interface ButtonGroupProps {
+  /** Pass either Button components in, or fragments which can contain one or more buttons */
   columns: React.ReactNodeArray
+  /** Between spacing pushes the columns far apart, even spacing keeps them closer together */
   spacing?: ButtonGroupSpacing
+  /** When true, buttons will collapse to a single column on small screens and go full-width */
   fullwidthMobile?: boolean
+  /** When true, the flex ordering of columns will reverse (aka RTL) */
   reversed?: boolean
 }
 
 const ButtonGroup = ({
-  spacing = "between",
+  spacing = ButtonGroupSpacing.between,
   columns,
   fullwidthMobile,
   reversed,

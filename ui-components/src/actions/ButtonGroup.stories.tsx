@@ -1,11 +1,20 @@
 import * as React from "react"
+import { BADGES } from "../../.storybook/constants"
 import { AppearanceStyleType } from "../.."
 import Button from "./Button"
+import ButtonGroupDocumentation from "./ButtonGroup.docs.mdx"
 
 import { ButtonGroup, ButtonGroupSpacing } from "./ButtonGroup"
 
 export default {
-  title: "Actions/Button Group",
+  title: "Actions/Button Group 🚩",
+  id: "actions-button-group",
+  parameters: {
+    docs: {
+      page: ButtonGroupDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 export const twoColumns = () => (
@@ -65,7 +74,10 @@ export const oneColumnCenter = () => (
 export const twoColumnsFullwidthMobile = () => (
   <ButtonGroup
     columns={[
-      <Button>Previous</Button>,
+      <>
+        <Button>Previous</Button>
+        <Button styleType={AppearanceStyleType.warning}>Another Action</Button>
+      </>,
       <Button styleType={AppearanceStyleType.primary}>Next</Button>,
     ]}
     fullwidthMobile={true}
