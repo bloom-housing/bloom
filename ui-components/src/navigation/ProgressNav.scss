@@ -12,7 +12,7 @@
   --dot-font-size-desktop: var(--bloom-font-size-sm);
   --dot-font-size-mobile: var(--bloom-font-size-2xs);
   --dot-line-color: var(--bloom-color-gray-450);
-  --dot-font-weight: 700;
+  --dot-active-font-weight: 700;
   --dot-text-transform: none;
 
   --bar-height: var(--bloom-s4);
@@ -20,7 +20,7 @@
   --bar-label-padding-top: var(--bloom-s2);
   --bar-label-padding-left: var(--bloom-s0_5);
   --bar-font-size: var(--bloom-font-size-base);
-  --bar-font-weight: 600;
+  --bar-active-font-weight: 600;
   --bar-text-transform: none;
 
   display: table;
@@ -94,7 +94,7 @@
 
     a {
       color: var(--active-step-font-color);
-      font-weight: var(--dot-font-weight);
+      font-weight: var(--dot-active-font-weight);
     }
   }
 
@@ -117,6 +117,7 @@
 }
 
 .progress-nav__bar-item {
+  // drop the labels on mobile view
   font-size: 0;
   padding-top: var(--bar-label-padding-top);
   padding-left: var(--bar-label-padding-left);
@@ -134,7 +135,7 @@
   &.is-active {
     border-top-color: var(--active-step-color);
     a {
-      font-weight: var(--bar-font-weight);
+      font-weight: var(--bar-active-font-weight);
       color: var(--active-step-font-color);
     }
   }
