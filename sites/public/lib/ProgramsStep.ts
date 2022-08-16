@@ -4,7 +4,7 @@ import StepDefinition from "./StepDefinition"
 export default class ProgramsStep extends StepDefinition {
   skipStep() {
     return !this.conductor.listing?.listingMultiselectQuestions.filter(
-      (question) => question.multiselectQuestion.applicationSection === "programs"
+      (question) => question?.multiselectQuestion?.applicationSection === "programs"
     ).length
   }
 

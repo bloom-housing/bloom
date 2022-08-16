@@ -18,8 +18,8 @@ const DetailPreferences = () => {
       listingSectionQuestions(listing, ApplicationSection.preferences).map(
         (listingPreference, index) => ({
           order: { content: index + 1 },
-          name: { content: listingPreference.multiselectQuestion.text },
-          description: { content: listingPreference.multiselectQuestion.description },
+          name: { content: listingPreference?.multiselectQuestion?.text },
+          description: { content: listingPreference?.multiselectQuestion?.description },
         })
       ),
     [listing]

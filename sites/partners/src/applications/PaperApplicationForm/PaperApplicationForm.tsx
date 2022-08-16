@@ -107,8 +107,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       data: formData,
       listingId,
       editMode,
-      programs: programs.map((item) => item.multiselectQuestion),
-      preferences: preferences.map((item) => item.multiselectQuestion),
+      programs: programs.map((item) => item?.multiselectQuestion),
+      preferences: preferences.map((item) => item?.multiselectQuestion),
     })
 
     try {

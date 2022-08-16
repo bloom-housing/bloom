@@ -3,7 +3,7 @@ import StepDefinition from "./StepDefinition"
 export default class PreferencesAllStep extends StepDefinition {
   skipStep() {
     return !this.conductor.listing?.listingMultiselectQuestions.filter(
-      (question) => question.multiselectQuestion.applicationSection === "preferences"
+      (question) => question?.multiselectQuestion?.applicationSection === "preferences"
     ).length
   }
 

@@ -37,9 +37,9 @@ const FormMultiselectQuestions = ({
   const allOptionFieldNames = useMemo(() => {
     const keys = []
     questions?.forEach((listingQuestion) =>
-      listingQuestion.multiselectQuestion.options.forEach((option) =>
+      listingQuestion?.multiselectQuestion.options.forEach((option) =>
         keys.push(
-          fieldName(listingQuestion.multiselectQuestion.text, applicationSection, option.text)
+          fieldName(listingQuestion?.multiselectQuestion.text, applicationSection, option.text)
         )
       )
     )
@@ -103,7 +103,7 @@ const FormMultiselectQuestions = ({
     <GridSection title={sectionTitle} separator grid={false}>
       <GridSection columns={2}>
         {questions?.map((listingQuestion) => {
-          const question = listingQuestion.multiselectQuestion
+          const question = listingQuestion?.multiselectQuestion
           const inputType = getInputType(question.options)
           return (
             <GridCell key={question.text}>

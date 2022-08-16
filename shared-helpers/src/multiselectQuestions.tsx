@@ -26,7 +26,7 @@ export const listingSectionQuestions = (
 ) => {
   return listing?.listingMultiselectQuestions?.filter(
     (question) =>
-      question.multiselectQuestion.applicationSection === ApplicationSection[applicationSection]
+      question?.multiselectQuestion?.applicationSection === ApplicationSection[applicationSection]
   )
 }
 
@@ -95,7 +95,7 @@ export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: n
     return item.ordinal === page
   })
 
-  return ordinalQuestions?.length ? ordinalQuestions[0].multiselectQuestion : null
+  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestion : null
 }
 
 // Get all option field names for a question, including the potential opt out option

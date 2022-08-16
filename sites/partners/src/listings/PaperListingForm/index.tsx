@@ -75,12 +75,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
     listingSectionQuestions(listing, ApplicationSection.preferences).map((listingPref) => {
-      return { ...listingPref.multiselectQuestion }
+      return { ...listingPref?.multiselectQuestion }
     }) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
     listingSectionQuestions(listing, ApplicationSection.programs).map((listingProg) => {
-      return { ...listingProg.multiselectQuestion }
+      return { ...listingProg?.multiselectQuestion }
     }) ?? []
   )
 

@@ -179,10 +179,10 @@ export const ListingView = (props: ListingProps) => {
     return listingPreferences.map((listingPref, index) => {
       return {
         ordinal: index + 1,
-        links: listingPref.multiselectQuestion.links,
-        title: listingPref.multiselectQuestion.text,
-        subtitle: listingPref.multiselectQuestion.subText,
-        description: listingPref.multiselectQuestion.description,
+        links: listingPref?.multiselectQuestion?.links,
+        title: listingPref?.multiselectQuestion?.text,
+        subtitle: listingPref?.multiselectQuestion?.subText,
+        description: listingPref?.multiselectQuestion?.description,
       }
     })
   }
