@@ -41,7 +41,8 @@
 }
 
 .button-group.has-fullwidth-mobile-buttons {
-  &, & .button-group__column {
+  &,
+  & .button-group__column {
     @media (max-width: $screen-sm) {
       flex-direction: column;
 
