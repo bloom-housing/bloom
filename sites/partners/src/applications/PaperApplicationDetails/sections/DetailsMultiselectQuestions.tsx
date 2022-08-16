@@ -23,6 +23,10 @@ const DetailsMultiselectQuestions = ({
 
   const listingQuestions = listingSectionQuestions(listingDto, applicationSection)
 
+  if (listingQuestions?.length === 0) {
+    return <></>
+  }
+
   const questions = application[applicationSection]
 
   return (
