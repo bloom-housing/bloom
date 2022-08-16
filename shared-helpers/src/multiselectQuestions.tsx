@@ -277,22 +277,17 @@ export const mapRadiosToApi = (
   data: { [name: string]: any },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
-  if (Object.keys(data)?.length === 0) {
-    return {
-      key: "",
-      claimed: false,
-      options: [],
-    }
+  const [key, value] = Object.entries(data)[0]
+  const options: any = []
+
+  if (value) {
+    options.push({
+      key: value,
+      checked: true,
+      extraData: [],
+    })
   }
 
-  const [key, value] = Object.entries(data)[0]
-  const options = []
-
-  options.push({
-    key: value,
-    checked: true,
-    extraData: [],
-  })
   question?.options?.forEach((option) => {
     if (option.text !== value) {
       options.push({
@@ -305,7 +300,7 @@ export const mapRadiosToApi = (
 
   return {
     key,
-    claimed: true,
+    claimed: Object.keys(data)?.length !== 0,
     options,
   }
 }
@@ -351,18 +346,18 @@ export const mapApiToMultiselectForm = (
   const applicationQuestionsWithTypes: {
     question: ApplicationMultiselectQuestion
     inputType: string
-  }[] = applicationQuestions.map((question) => {
+  }[] = applicationQuestions?.map((question) => {
     return {
       question,
       inputType: getInputType(
         listingQuestions?.filter(
           (listingQuestion) => listingQuestion?.multiselectQuestion?.text === question.key
-        )[0].multiselectQuestion?.options ?? []
+        )[0]?.multiselectQuestion?.options ?? []
       ),
     }
   })
 
-  applicationQuestionsWithTypes.forEach((appQuestion) => {
+  applicationQuestionsWithTypes?.forEach((appQuestion) => {
     let options = {}
 
     const question = appQuestion.question

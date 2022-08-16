@@ -313,17 +313,19 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const preferences = mapApiToMultiselectForm(
-    applicationData.preferences,
-    listing?.listingMultiselectQuestions,
-    ApplicationSection.preferences
-  ).application.preferences
+  const preferences =
+    mapApiToMultiselectForm(
+      applicationData.preferences,
+      listing?.listingMultiselectQuestions,
+      ApplicationSection.preferences
+    ).application.preferences ?? []
 
-  const programs = mapApiToMultiselectForm(
-    applicationData.programs,
-    listing?.listingMultiselectQuestions,
-    ApplicationSection.programs
-  ).application.programs
+  const programs =
+    mapApiToMultiselectForm(
+      applicationData.programs,
+      listing?.listingMultiselectQuestions,
+      ApplicationSection.programs
+    ).application.programs ?? []
 
   const application: ApplicationTypes = (() => {
     const {

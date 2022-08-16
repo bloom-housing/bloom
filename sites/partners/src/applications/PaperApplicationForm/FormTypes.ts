@@ -56,8 +56,8 @@ export type ApplicationTypes = {
     phoneNumberType?: string
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  preferences: Record<string, any>
-  programs: Record<string, string>
+  preferences?: Record<string, any>
+  programs?: Record<string, string>
 }
 
 export type FormTypes = {
