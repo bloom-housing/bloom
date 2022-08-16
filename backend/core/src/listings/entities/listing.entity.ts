@@ -668,6 +668,20 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingUtilities)
   utilities?: ListingUtilities
+
+  @Column({ type: "timestamptz", nullable: true, default: "1970-01-01" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  afsLastRunAt?: Date | null
+
+  @Column({ type: "timestamptz", nullable: true, default: "1970-01-01" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  lastApplicationUpdateAt?: Date | null
 }
 
 export { Listing as default, Listing }

@@ -19,6 +19,7 @@ import { AuthzService } from "../auth/services/authz.service"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
+import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -27,7 +28,8 @@ export class ListingsService {
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
-    @Inject(REQUEST) private req: ExpressRequest
+    @Inject(REQUEST) private req: ExpressRequest,
+    private readonly afsService: ApplicationFlaggedSetsService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -118,6 +120,10 @@ export class ListingsService {
       }
     })
     listingDto.unitsAvailable = availableUnits
+
+    if (listing.status == ListingStatus.active && listingDto.status == ListingStatus.closed) {
+      await this.afsService.scheduleAfsProcessing()
+    }
 
     Object.assign(listing, {
       ...listingDto,
