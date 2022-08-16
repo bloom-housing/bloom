@@ -66,7 +66,6 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     }
 
     const existingApplications = await this.applicationRepository.find({
-      select: ["listingId"],
       where: {
         listing: {
           id: listing.id,
