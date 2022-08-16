@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.2...@bloom-housing/backend-core@5.1.1-alpha.3) (2022-08-16)
+
+
+### Features
+
+* adds includeDemographics if admin ([#2955](https://github.com/bloom-housing/bloom/issues/2955)) ([173b417](https://github.com/bloom-housing/bloom/commit/173b417dd87335788ba7f8bcd4ab260e96d9e573))
+
+
+
+
+
 ## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.1...@bloom-housing/backend-core@5.1.1-alpha.2) (2022-08-16)
 
 
