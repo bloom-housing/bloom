@@ -23,6 +23,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     const rules = [Rule.nameAndDOB, Rule.email]
     const outOfDateListings = await this.listingRepository
       .createQueryBuilder("listings")
+      .select(["listings.id", "listings.afsLastRunAt"])
       .where("listings.lastApplicationUpdateAt IS NOT NULL")
       .andWhere(
         new Brackets((qb) => {
@@ -47,9 +48,17 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     }
   }
 
-  private async generateAFSesForListingRule(listing: Listing, rule: Rule) {
+  private async generateAFSesForListingRule(
+    listing: Pick<Listing, "id" | "afsLastRunAt">,
+    rule: Rule
+  ) {
     const newApplications = await this.applicationRepository.find({
-      where: { listing, createdAt: MoreThanOrEqual(listing.afsLastRunAt) },
+      where: {
+        listing: {
+          id: listing.id,
+        },
+        createdAt: MoreThanOrEqual(listing.afsLastRunAt),
+      },
     })
 
     for (const newApplication of newApplications) {
@@ -57,8 +66,11 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     }
 
     const existingApplications = await this.applicationRepository.find({
+      select: ["listingId"],
       where: {
-        listing,
+        listing: {
+          id: listing.id,
+        },
         createdAt: LessThan(listing.afsLastRunAt),
         updatedAt: MoreThanOrEqual(listing.afsLastRunAt),
       },
