@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.4...@bloom-housing/ui-components@5.1.1-alpha.5) (2022-08-16)
+
+
+### Bug Fixes
+
+* ensure listing card link region covers image tags ([#2943](https://github.com/bloom-housing/bloom/issues/2943)) ([ebc8d48](https://github.com/bloom-housing/bloom/commit/ebc8d48556b587a4ad8fc9bc294be54b69e88462))
+
+
+
+
+
 ## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.3...@bloom-housing/ui-components@5.1.1-alpha.4) (2022-08-12)
 
 
