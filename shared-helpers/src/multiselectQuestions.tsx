@@ -130,13 +130,13 @@ export const getRadioFields = (
         errorMessage={errors && t("errors.selectAnOption")}
         register={register}
         validation={{ required: !!errors }}
-        dataTestId={"app-program-option"}
         fields={options?.map((option) => {
           return {
             id: `${question?.text}-${option?.text}`,
             label: option?.text,
             value: option?.text,
             description: option?.description,
+            dataTestId: "app-question-option",
           }
         })}
       />
