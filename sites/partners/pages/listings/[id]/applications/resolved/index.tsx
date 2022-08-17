@@ -32,7 +32,7 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
-  const { data: flaggedApps } = useFlaggedApplicationsList({
+  const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
     listingId,
     page: 1,
     limit: 1,
@@ -49,7 +49,7 @@ const ApplicationsList = () => {
         listingId={listingId}
         tabs={{
           show: true,
-          flagsQty: flaggedApps?.meta?.totalFlagged,
+          flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
           flagsLabel: t("nav.flags"),
@@ -96,10 +96,10 @@ const ApplicationsList = () => {
                 totalItemsLabel: t("applications.totalApplications"),
               }}
               data={{
-                items: [],
-                loading: false,
-                totalItems: 0,
-                totalPages: 0,
+                items: flaggedAppsData.items,
+                loading: flaggedAppsLoading,
+                totalItems: flaggedAppsData.meta.totalItems,
+                totalPages: flaggedAppsData.meta.totalPages,
               }}
               search={{
                 setSearch: tableOptions.filter.setFilterValue,
