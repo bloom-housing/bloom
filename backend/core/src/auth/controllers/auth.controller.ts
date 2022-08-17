@@ -7,7 +7,7 @@ import {
   UsePipes,
   ValidationPipe,
   Body,
-  Get
+  Get,
 } from "@nestjs/common"
 import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
@@ -64,7 +64,7 @@ export class AuthController {
   @Get("logout")
   @ApiOperation({ summary: "Logout", operationId: "logout" })
   logout(@Response({ passthrough: true }) res): LogoutResponseDto {
-    res.cookie(TOKEN_COOKIE_NAME, '', { expires: new Date() });
+    res.cookie(TOKEN_COOKIE_NAME, "", { expires: new Date() })
 
     return mapTo(LogoutResponseDto, { status: "ok" })
   }
