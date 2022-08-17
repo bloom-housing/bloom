@@ -478,7 +478,11 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn) =
   cy.step14Income(application)
   cy.window().then((win) => {
     const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
-    if (listing.listingPreferences.length > 0) {
+    if (
+      listing.listingMultiselectQuestions?.filter(
+        (question) => question.applicationSection === "preferences"
+      )?.length > 0
+    ) {
       if (application.preferences.length > 0) {
         cy.step15SelectPreferences(application)
       } else {

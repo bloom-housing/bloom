@@ -16,7 +16,7 @@ const DetailPrograms = () => {
   const programsTableData = useMemo(
     () =>
       listingSectionQuestions(listing, ApplicationSection.programs)
-        .sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
+        ?.sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
           order: { content: index + 1 },
           name: { content: program?.multiselectQuestion?.text },
