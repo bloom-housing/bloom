@@ -44,8 +44,6 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      {console.log(flaggedAppsData)}
-
       <NavigationHeader
         title={listingName}
         listingId={listingId}
