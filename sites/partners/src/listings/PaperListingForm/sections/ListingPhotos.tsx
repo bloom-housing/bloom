@@ -217,11 +217,9 @@ const ListingPhotos = () => {
         title={t("listings.sections.photoTitle")}
         description={t("listings.sections.photoSubtitle")}
       >
-        {
-          <span className={"text-tiny text-gray-800 block mb-2"}>
-            {t("listings.sections.photoTitle")}
-          </span>
-        }
+        <span className={"text-tiny text-gray-800 block mb-2"}>
+          {t("listings.sections.photoTitle")}
+        </span>
         <GridSection columns={1} tinted inset>
           <GridCell>
             {listingFormPhotos.length > 0 && (
@@ -258,25 +256,12 @@ const ListingPhotos = () => {
         title={t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
         onClose={() => resetDrawerState()}
         ariaDescription="Form with photo upload dropzone"
-        actions={[
-          <Button
-            key={0}
-            onClick={() => {
-              saveImageFields(drawerImages)
-              resetDrawerState()
-            }}
-            styleType={AppearanceStyleType.primary}
-            data-test-id={
-              drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"
-            }
-          >
-            {t("t.save")}
-          </Button>,
-        ]}
       >
         <section className="border rounded-md p-8 bg-white">
+          <h2 className="text-lg mb-8">{t("listings.listingPhoto")}</h2>
           {drawerImages.length > 0 && (
             <div className="mb-10">
+              <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
               <MinimalTable
                 draggable={true}
                 setData={(newData) => {
@@ -304,6 +289,18 @@ const ListingPhotos = () => {
             progress={progressValue}
           />
         </section>
+        <Button
+          type="button"
+          className={"mt-4"}
+          onClick={() => {
+            saveImageFields(drawerImages)
+            resetDrawerState()
+          }}
+          styleType={AppearanceStyleType.primary}
+          data-test-id={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
+        >
+          {t("t.save")}
+        </Button>
       </Drawer>
     </>
   )
