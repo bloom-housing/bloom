@@ -19,6 +19,7 @@ import {
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
+import { tableColumns, getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -36,62 +37,6 @@ const ApplicationsList = () => {
     page: 1,
     limit: 1,
   })
-
-  const columns = [
-    {
-      headerName: t("applications.duplicates.duplicateGroup"),
-      field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-      cellRenderer: "formatLinkCell",
-    },
-    {
-      headerName: t("applications.duplicates.primaryApplicant"),
-      field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-    },
-    {
-      headerName: t("t.rule"),
-      field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-    },
-    {
-      headerName: t("applications.pendingReview"),
-      field: "",
-      sortable: false,
-      filter: false,
-      pinned: "right",
-    },
-  ]
-
-  class formatLinkCell {
-    linkWithId: HTMLSpanElement
-
-    init(params) {
-      const applicationId = params.data.id
-
-      this.linkWithId = document.createElement("button")
-      this.linkWithId.classList.add("text-blue-700")
-      this.linkWithId.innerText = params.value
-
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
-    }
-
-    getGui() {
-      return this.linkWithId
-    }
-  }
-
-  const gridComponents = {
-    formatLinkCell,
-  }
 
   return (
     <Layout>
@@ -146,8 +91,8 @@ const ApplicationsList = () => {
                 setCurrentPage: tableOptions.pagination.setCurrentPage,
               }}
               config={{
-                gridComponents,
-                columns,
+                gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
+                columns: tableColumns,
                 totalItemsLabel: t("applications.totalApplications"),
               }}
               data={{

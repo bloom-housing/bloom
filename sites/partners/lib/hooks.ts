@@ -143,6 +143,7 @@ export function useFlaggedApplicationsList({
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
@@ -167,6 +168,7 @@ export function useFlaggedApplicationsMeta(listingId: string) {
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
