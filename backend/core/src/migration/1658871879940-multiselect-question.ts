@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
-import generalTranslations from "../../../../ui-components/src/locales/general.json"
+// importing these causes issue with build command compiling to dist, because it changes the expected structure, so we need to find an alternative to providing these
+/* import generalTranslations from "../../../../ui-components/src/locales/general.json"
 import partnerTranslations from "../../../../sites/partners/page_content/locale_overrides/general.json"
-import publicTranslations from "../../../../sites/public/page_content/locale_overrides/general.json"
+import publicTranslations from "../../../../sites/public/page_content/locale_overrides/general.json" */
 
 export class multiselectQuestion1658871879940 implements MigrationInterface {
   name = "multiselectQuestion1658871879940"
@@ -274,13 +275,13 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
   private getTranslated(type = "preferences", prefKey, translationKey) {
     const searchKey = `application.${type}.${prefKey}.${translationKey}`
 
-    if (publicTranslations[searchKey]) {
+    /* if (publicTranslations[searchKey]) {
       return publicTranslations[searchKey]
     } else if (partnerTranslations[searchKey]) {
       return partnerTranslations[searchKey]
     } else if (generalTranslations[searchKey]) {
       return generalTranslations[searchKey]
-    }
+    } */
     return "no translation"
   }
 }
