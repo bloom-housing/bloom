@@ -1,11 +1,9 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
-// importing these causes issue with build command compiling to dist, because it changes the expected structure, so we need to find an alternative to providing these
-/* import generalTranslations from "../../../../ui-components/src/locales/general.json"
-import partnerTranslations from "../../../../sites/partners/page_content/locale_overrides/general.json"
-import publicTranslations from "../../../../sites/public/page_content/locale_overrides/general.json" */
+import https from "https"
 
 export class multiselectQuestion1658871879940 implements MigrationInterface {
   name = "multiselectQuestion1658871879940"
+  translations = {}
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -54,6 +52,59 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" ADD CONSTRAINT "FK_ab91e5d403a6cf21656f7d5ae20" FOREIGN KEY ("multiselect_questions_id") REFERENCES "multiselect_questions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
 
+    const translationURLs = [
+      {
+        url:
+          "https://raw.githubusercontent.com/bloom-housing/bloom/dev/ui-components/src/locales/general.json",
+        key: "generalCore",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/partners/page_content/locale_overrides/general.json",
+        key: "generalPartners",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/bloom-housing/bloom/dev/sites/public/page_content/locale_overrides/general.json",
+        key: "generalPublic",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/housingbayarea/bloom/dev/ui-components/src/locales/general.json",
+        key: "hbaCore",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/housingbayarea/bloom/dev/sites/partners/page_content/locale_overrides/general.json",
+        key: "hbaPartners",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/housingbayarea/bloom/dev/sites/public/page_content/locale_overrides/general.json",
+        key: "hbaPublic",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/ui-components/src/locales/general.json",
+        key: "detroitCore",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/partners/page_content/locale_overrides/general.json",
+        key: "detroitPartners",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/public/page_content/locale_overrides/general.json",
+        key: "detroitPublic",
+      },
+    ]
+
+    for (let i = 0; i < translationURLs.length; i++) {
+      const { url, key } = translationURLs[i]
+      this.translations[key] = await this.getTranslationFile(url)
+    }
+
     // begin migration from prefences
     const preferences = await queryRunner.query(`
             SELECT 
@@ -73,7 +124,11 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
 
     for (let i = 0; i < preferences.length; i++) {
       const pref = preferences[i]
-      const { optOutText, options } = this.resolveOptionValues(pref.form_metadata, "preferences")
+      const { optOutText, options } = this.resolveOptionValues(
+        pref.form_metadata,
+        "preferences",
+        pref.name
+      )
       const res = await queryRunner.query(`
             INSERT INTO multiselect_questions (
                 created_at,
@@ -131,10 +186,14 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
                 LEFT JOIN jurisdictions_programs_programs jp ON jp.programs_id = p.id
                 LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
         `)
-    console.log("133:", programs)
+
     for (let i = 0; i < programs.length; i++) {
       const prog = programs[i]
-      const { optOutText, options } = this.resolveOptionValues(prog.form_metadata, "programs")
+      const { optOutText, options } = this.resolveOptionValues(
+        prog.form_metadata,
+        "programs",
+        prog.name
+      )
       const res = await queryRunner.query(`
                 INSERT INTO multiselect_questions (
                     created_at,
@@ -226,7 +285,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     return "null"
   }
 
-  private resolveOptionValues(formMetaData, type) {
+  private resolveOptionValues(formMetaData, type, juris) {
     let optOutText = "null"
     const options = []
     let shouldPush = true
@@ -234,7 +293,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     formMetaData.options.forEach((option, index) => {
       const toPush: Record<string, any> = {
         ordinal: index,
-        text: this.getTranslated(type, formMetaData.key, `${option.key}.label`),
+        text: this.getTranslated(type, formMetaData.key, `${option.key}.label`, juris),
       }
 
       if (
@@ -250,12 +309,17 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
         index === formMetaData.options.length - 1
       ) {
         // for the last exclusive option add as optOutText
-        optOutText = this.getTranslated(type, formMetaData.key, `${option.key}.label`)
+        optOutText = this.getTranslated(type, formMetaData.key, `${option.key}.label`, juris)
         shouldPush = false
       }
 
       if (option.description) {
-        toPush.description = this.getTranslated(type, formMetaData.key, `${option.key}.description`)
+        toPush.description = this.getTranslated(
+          type,
+          formMetaData.key,
+          `${option.key}.description`,
+          juris
+        )
       }
 
       if (option?.extraData.some((extraData) => extraData.type === "address")) {
@@ -272,16 +336,59 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     return { optOutText, options: options.length ? `'${JSON.stringify(options)}'` : "null" }
   }
 
-  private getTranslated(type = "preferences", prefKey, translationKey) {
+  private getTranslated(type, prefKey, translationKey, juris) {
     const searchKey = `application.${type}.${prefKey}.${translationKey}`
 
-    /* if (publicTranslations[searchKey]) {
-      return publicTranslations[searchKey]
-    } else if (partnerTranslations[searchKey]) {
-      return partnerTranslations[searchKey]
-    } else if (generalTranslations[searchKey]) {
-      return generalTranslations[searchKey]
-    } */
+    if (juris === "Detroit") {
+      if (this.translations["detroitPublic"][searchKey]) {
+        return this.translations["detroitPublic"][searchKey]
+      } else if (this.translations["detroitPartners"][searchKey]) {
+        return this.translations["detroitPartners"][searchKey]
+      } else if (this.translations["detroitCore"][searchKey]) {
+        return this.translations["detroitCore"][searchKey]
+      }
+    }
+
+    if (this.translations["hbaPublic"][searchKey]) {
+      return this.translations["hbaPublic"][searchKey]
+    } else if (this.translations["hbaPartners"][searchKey]) {
+      return this.translations["hbaPartners"][searchKey]
+    } else if (this.translations["hbaCore"][searchKey]) {
+      return this.translations["hbaCore"][searchKey]
+    } else if (this.translations["generalPublic"][searchKey]) {
+      return this.translations["generalPublic"][searchKey]
+    } else if (this.translations["generalPartners"][searchKey]) {
+      return this.translations["generalPartners"][searchKey]
+    } else if (this.translations["generalCore"][searchKey]) {
+      return this.translations["generalCore"][searchKey]
+    }
     return "no translation"
+  }
+
+  private getTranslationFile(url) {
+    return new Promise((resolve, reject) =>
+      https
+        .get(url, (res) => {
+          let body = ""
+
+          res.on("data", (chunk) => {
+            body += chunk
+          })
+
+          res.on("end", () => {
+            try {
+              let json = JSON.parse(body)
+              resolve(json)
+            } catch (error) {
+              console.error(error.message)
+              reject("parsing broke")
+            }
+          })
+        })
+        .on("error", (error) => {
+          console.error(error.message)
+          reject("getting broke")
+        })
+    )
   }
 }
