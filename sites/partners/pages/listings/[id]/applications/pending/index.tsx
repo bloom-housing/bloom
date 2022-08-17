@@ -34,9 +34,9 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
-  const [isListingOpen, setIsListingOpen] = useState(true)
+  const [isListingOpen, setIsListingOpen] = useState(null)
   useEffect(() => {
-    listingDto?.status && setIsListingOpen(listingDto?.status === "active")
+    listingDto?.status && setIsListingOpen(listingDto.status === "active")
   }, [listingDto?.status])
   let view = "pending"
   if (type && type === "name_dob") {
@@ -125,9 +125,9 @@ const ApplicationsList = () => {
       return this.disabledLink
     }
   }
-  const formatLinkCell = isListingOpen ? formatDisabledCell : formatEnabledCell
+
   const gridComponents = {
-    formatLinkCell,
+    formatLinkCell: isListingOpen ? formatDisabledCell : formatEnabledCell,
   }
 
   return (
@@ -186,40 +186,42 @@ const ApplicationsList = () => {
                 .
               </AlertBox>
             )}
-            <AgTable
-              id="applications-table"
-              className="w-full"
-              pagination={{
-                perPage: tableOptions.pagination.itemsPerPage,
-                setPerPage: tableOptions.pagination.setItemsPerPage,
-                currentPage: tableOptions.pagination.currentPage,
-                setCurrentPage: tableOptions.pagination.setCurrentPage,
-              }}
-              config={{
-                gridComponents,
-                columns,
-                totalItemsLabel: t("applications.totalApplications"),
-              }}
-              data={{
-                items: flaggedApps?.items ?? [],
-                loading: false,
-                totalItems: flaggedApps?.meta?.totalItems ?? 0,
-                totalPages: flaggedApps?.meta?.totalPages ?? 0,
-              }}
-              search={{
-                setSearch: tableOptions.filter.setFilterValue,
-              }}
-              sort={{
-                setSort: tableOptions.sort.setSortOptions,
-              }}
-              headerContent={
-                <div className="flex-row">
-                  <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
-                    {t("t.export")}
-                  </Button>
-                </div>
-              }
-            />
+            {isListingOpen !== null && (
+              <AgTable
+                id="applications-table"
+                className="w-full"
+                pagination={{
+                  perPage: tableOptions.pagination.itemsPerPage,
+                  setPerPage: tableOptions.pagination.setItemsPerPage,
+                  currentPage: tableOptions.pagination.currentPage,
+                  setCurrentPage: tableOptions.pagination.setCurrentPage,
+                }}
+                config={{
+                  gridComponents,
+                  columns,
+                  totalItemsLabel: t("applications.totalApplications"),
+                }}
+                data={{
+                  items: flaggedApps?.items ?? [],
+                  loading: false,
+                  totalItems: flaggedApps?.meta?.totalItems ?? 0,
+                  totalPages: flaggedApps?.meta?.totalPages ?? 0,
+                }}
+                search={{
+                  setSearch: tableOptions.filter.setFilterValue,
+                }}
+                sort={{
+                  setSort: tableOptions.sort.setSortOptions,
+                }}
+                headerContent={
+                  <div className="flex-row">
+                    <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
+                      {t("t.export")}
+                    </Button>
+                  </div>
+                }
+              />
+            )}
 
             <div className="flex flex-row justify-end">
               <div className="mt-5">
