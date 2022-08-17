@@ -2,13 +2,15 @@ import React from "react"
 import "./ProgressNav.scss"
 import { t } from "../helpers/translator"
 
+type ProgressNavStyle = "bar" | "dot"
+
 const ProgressNavItem = (props: {
   section: number
   currentPageSection: number
   completedSections: number
   label: string
   mounted: boolean
-  style: string
+  style: ProgressNavStyle
 }) => {
   let bgColor = "is-disabled"
   if (props.mounted) {
@@ -45,7 +47,7 @@ const ProgressNav = (props: {
   completedSections: number
   labels: string[]
   mounted: boolean
-  style?: string
+  style?: ProgressNavStyle
 }) => {
   let navClasses = "progress-nav"
   if (props.style === "bar") navClasses += " progress-nav__bar"
