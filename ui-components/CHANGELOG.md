@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.5...@bloom-housing/ui-components@5.1.1-alpha.6) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.4...@bloom-housing/ui-components@5.1.1-alpha.5) (2022-08-16)
+
+
+### Bug Fixes
+
+* ensure listing card link region covers image tags ([#2943](https://github.com/bloom-housing/bloom/issues/2943)) ([ebc8d48](https://github.com/bloom-housing/bloom/commit/ebc8d48556b587a4ad8fc9bc294be54b69e88462))
+
+
+
+
+
+## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.3...@bloom-housing/ui-components@5.1.1-alpha.4) (2022-08-12)
+
+
+### Bug Fixes
+
+* clean up str variable assignment ([7db94e8](https://github.com/bloom-housing/bloom/commit/7db94e81d65eb7ff7314a435f7d34a93af22049e))
+* fix changing const ([c5b37a9](https://github.com/bloom-housing/bloom/commit/c5b37a9106aab902f11e2a8034ea835c46c53d53))
+* fix html string errors ([1548c60](https://github.com/bloom-housing/bloom/commit/1548c6085b882e8b894bc17d96a096553bf7eccf))
+* remove types from removed dep ([4cd5e14](https://github.com/bloom-housing/bloom/commit/4cd5e148a29b6081f7337f26ed8e9e477e2737a4))
+* replace usage of sanitize-html ([aad2f94](https://github.com/bloom-housing/bloom/commit/aad2f949ae6386d1e460b959808501be1b8c0f06))
+
+
+
+
+
 ## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.2...@bloom-housing/ui-components@5.1.1-alpha.3) (2022-08-03)
 
 

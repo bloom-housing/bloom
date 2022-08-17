@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.10...@bloom-housing/partners@5.1.1-alpha.11) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.9...@bloom-housing/partners@5.1.1-alpha.10) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.8...@bloom-housing/partners@5.1.1-alpha.9) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.7...@bloom-housing/partners@5.1.1-alpha.8) (2022-08-16)
+
+
+### Features
+
+* adds includeDemographics if admin ([#2955](https://github.com/bloom-housing/bloom/issues/2955)) ([173b417](https://github.com/bloom-housing/bloom/commit/173b417dd87335788ba7f8bcd4ab260e96d9e573))
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.6...@bloom-housing/partners@5.1.1-alpha.7) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.5...@bloom-housing/partners@5.1.1-alpha.6) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.4...@bloom-housing/partners@5.1.1-alpha.5) (2022-08-12)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.3...@bloom-housing/partners@5.1.1-alpha.4) (2022-08-12)
+
+
+### Bug Fixes
+
+* fix for big timeout on flagged set ([#2946](https://github.com/bloom-housing/bloom/issues/2946)) ([82645b7](https://github.com/bloom-housing/bloom/commit/82645b7593b08ed735b48e6b4e23d669784f6e96))
+
+
+
+
+
 ## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.2...@bloom-housing/partners@5.1.1-alpha.3) (2022-08-03)
 
 **Note:** Version bump only for package @bloom-housing/partners
