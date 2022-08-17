@@ -317,11 +317,11 @@ Cypress.Commands.add("step12Programs", (application) => {
   application.programs.forEach((program) => {
     if (!program.claimed) {
       // Selects the last instance, which is decline
-      cy.getByTestId("app-program-option").check()
+      cy.getByTestId("app-question-option").check()
     } else {
       program.options.forEach((option, index) => {
         if (option.checked) {
-          cy.getByTestId("app-program-option").eq(index).check()
+          cy.getByTestId("app-question-option").eq(index).check()
         }
       })
     }
@@ -388,12 +388,12 @@ Cypress.Commands.add("step15SelectPreferences", (application) => {
   application.preferences.forEach((preference) => {
     if (!preference.claimed) {
       // Selects the last instance, which is decline
-      cy.getByTestId("app-preference-option").check()
+      cy.getByTestId("app-question-option").check()
     } else {
       preferenceClaimed = true
       preference.options.forEach((option, index) => {
         if (option.checked) {
-          cy.getByTestId("app-preference-option").eq(index).check()
+          cy.getByTestId("app-question-option").eq(index).check()
         }
       })
     }
