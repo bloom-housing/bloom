@@ -480,7 +480,7 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn) =
     const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
     if (
       listing.listingMultiselectQuestions?.filter(
-        (question) => question.applicationSection === "preferences"
+        (question) => question.multiselectQuestion.applicationSection === "preferences"
       )?.length > 0
     ) {
       if (application.preferences.length > 0) {
