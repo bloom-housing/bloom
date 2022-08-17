@@ -344,7 +344,7 @@ Cypress.Commands.add("step10Changes", (application) => {
   cy.isNextRouteValid("householdExpectingChanges")
 })
 
-Cypress.Commands.add("step11Student", (application) => {
+Cypress.Commands.add("step11Student", (application, programsExist) => {
   if (application.householdStudent) {
     cy.getByTestId("app-student").eq(0).check()
   } else {
@@ -354,7 +354,7 @@ Cypress.Commands.add("step11Student", (application) => {
 
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.isNextRouteValid("householdStudent")
+  cy.isNextRouteValid("householdStudent", !programsExist ? 1 : 0)
 })
 
 Cypress.Commands.add("step13IncomeVouchers", (application) => {
@@ -386,17 +386,13 @@ Cypress.Commands.add("step14Income", (application) => {
 Cypress.Commands.add("step15SelectPreferences", (application) => {
   let preferenceClaimed = false
   application.preferences.forEach((preference) => {
-    if (!preference.claimed) {
-      // Selects the last instance, which is decline
-      cy.getByTestId("app-question-option").check()
-    } else {
-      preferenceClaimed = true
-      preference.options.forEach((option, index) => {
-        if (option.checked) {
-          cy.getByTestId("app-question-option").eq(index).check()
-        }
-      })
-    }
+    preferenceClaimed = true
+    preference.options.forEach((option, index) => {
+      if (option.checked) {
+        cy.getByTestId("app-question-option").eq(index).check()
+      }
+    })
+
     cy.goNext()
   })
   if (preferenceClaimed) {
@@ -470,19 +466,28 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn) =
   cy.step8PreferredUnits(application)
   cy.step9Accessibility(application)
   cy.step10Changes(application)
-  cy.step11Student(application)
-  if (application.programs.length > 0) {
-    cy.step12Programs(application)
-  }
-  cy.step13IncomeVouchers(application)
-  cy.step14Income(application)
+
   cy.window().then((win) => {
     const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
-    if (
-      listing.listingMultiselectQuestions?.filter(
-        (question) => question.multiselectQuestion.applicationSection === "preferences"
-      )?.length > 0
-    ) {
+    const listingQuestionSectionExists = (sectionTitle) => {
+      return (
+        listing.listingMultiselectQuestions?.filter(
+          (question) => question.multiselectQuestion.applicationSection === sectionTitle
+        )?.length > 0
+      )
+    }
+    const programsExist = listingQuestionSectionExists("programs")
+    const preferencesExist = listingQuestionSectionExists("preferences")
+
+    cy.step11Student(application, programsExist)
+
+    if (programsExist) {
+      cy.step12Programs(application)
+    }
+
+    cy.step13IncomeVouchers(application)
+    cy.step14Income(application)
+    if (preferencesExist) {
       if (application.preferences.length > 0) {
         cy.step15SelectPreferences(application)
       } else {

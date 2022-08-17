@@ -267,6 +267,20 @@ export const coliseumApplication: Application = {
         },
       ],
     },
+    {
+      key: "displaceeHousing",
+      claimed: false,
+      options: [
+        {
+          key: "mission",
+          checked: false,
+        },
+        {
+          key: "general",
+          checked: false,
+        },
+      ],
+    },
   ],
   programs: [
     {
