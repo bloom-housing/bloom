@@ -400,17 +400,17 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
 
           res.on("end", () => {
             try {
-              let json = JSON.parse(body)
+              const json = JSON.parse(body)
               resolve(json)
             } catch (error) {
-              console.error(error.message)
-              reject("parsing broke")
+              console.error("on end error:", error.message)
+              reject(`parsing broke: ${url}`)
             }
           })
         })
         .on("error", (error) => {
-          console.error(error.message)
-          reject("getting broke")
+          console.error("on error error:", error.message)
+          reject(`getting broke: ${url}`)
         })
     )
   }
