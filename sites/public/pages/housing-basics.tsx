@@ -15,7 +15,6 @@ import sidebarContent from "../page_content/resources/sidebar.md"
 import { useRouter } from "next/router"
 import Resource from "../src/Resource"
 import housingGlossary from "../page_content/resources/housing_glossary.md"
-import homeConnectTutorial from "../page_content/resources/home_connect_tutorial.md"
 
 export default function HousingBasics() {
   const [openModal, setOpenModal] = useState<boolean>(false)
@@ -39,7 +38,7 @@ export default function HousingBasics() {
         open={openModal}
         onClose={() => setOpenModal(false)}
         title={currentVideoTitle}
-        modalClassNames={"border-none max-w-3xl"}
+        modalClassNames={"media-modal"}
         innerClassNames={"p-0"}
       >
         <Video label={currentVideoTitle} videoId={currentVideoID} ccLang={language} />
@@ -78,12 +77,17 @@ export default function HousingBasics() {
                   handleClick={() => updateModal(t("basicsVideo.waitlist"), "CZ8UVjdCcA8")}
                   className={"media-grid__cell"}
                 />
+                <MediaCard
+                  title={t("basicsVideo.residentTutorial")}
+                  subtitle={t("basicsVideo.residentTutorialSubtitle")}
+                  handleClick={() => updateModal(t("basicsVideo.residentTutorial"), "Flc5EIqO6ak")}
+                  className={"media-grid__cell"}
+                />
               </div>
             </InfoCardGrid>
             <MarkdownSection padding={false}>
               <InfoCardGrid title={t("basicsCard.sectionTitle")}>
                 <Resource>{housingGlossary}</Resource>
-                <Resource>{homeConnectTutorial}</Resource>
               </InfoCardGrid>
             </MarkdownSection>
           </div>

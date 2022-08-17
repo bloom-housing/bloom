@@ -30,6 +30,7 @@
   @screen md {
     @apply flex;
     @apply flex-wrap;
+    column-gap: 1rem;
   }
 
   .info-card {
@@ -38,8 +39,7 @@
     }
 
     @screen md {
-      width: calc(50% - 1rem);
-      margin-right: 1rem;
+      width: calc(50% - 0.5rem);
     }
   }
 }

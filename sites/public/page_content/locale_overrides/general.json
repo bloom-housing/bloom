@@ -23,7 +23,7 @@
   "errors.minGreaterThanMaxRentError": "Min Rent must be less than or equal to Max Rent",
   "errors.maxLessThanMinRentError": "Max Rent must be greater than or equal to Min Rent",
   "basicsVideo.sectionTitle": "Affordable Housing Video Tutorials",
-  "basicsVideo.sectionSubtitle": "In the following videos, produced by Google.org, you can learn the basics about affordable housing, as well as understand more about income requirements to apply for properties, key housing application processes, and property waitlists.",
+  "basicsVideo.sectionSubtitle": "In the following videos, you can learn the basics about affordable housing, as well as understand more about income requirements to apply for properties, key housing application processes, and property waitlists.",
   "basicsVideo.affordableHousing": "Detroit Home Connect: What is Affordable Housing?",
   "basicsVideo.affordableHousingSubtitle": "In this video, learn about the different types of affordable housing available in Detroit.",
   "basicsVideo.application": "Detroit Home Connect: The Affordable Housing Application",
@@ -32,5 +32,7 @@
   "basicsVideo.waitlistSubtitle": "In this video, learn about the importance of getting on affordable housing waitlists, which will get you in line for units as they become available.",
   "basicsVideo.incomeRestrictions": "Detroit Home Connect: Understanding Income Restrictions",
   "basicsVideo.incomeRestrictionsSubtitle": "In this video, learn about income requirements for affordable housing that is paid for by governmental resources.",
+  "basicsVideo.residentTutorial": "Detroit Home Connect Resident Tutorial",
+  "basicsVideo.residentTutorialSubtitle": "Learn how to use the City's affordable housing locator, Detroit Home Connect, to understand affordable housing options in the City.",
   "basicsCard.sectionTitle": "Learn more about the basics of affordable housing"
 }

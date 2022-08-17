@@ -66,3 +66,11 @@
     padding: 1rem 3rem;
   }
 }
+
+.media-modal {
+  border: none;
+  max-width: none;
+  @media (min-width: $screen-md) {
+    width: 48rem;
+  }
+}
