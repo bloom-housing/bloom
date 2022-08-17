@@ -12,6 +12,7 @@ export interface ExpandableTextProps {
     readLess: string
   }
   markdownProps?: MarkdownOptions
+  buttonClassName?: string
 }
 
 const getText = (text: string, expanded: boolean, maxLength: number) => {
@@ -29,10 +30,16 @@ const getText = (text: string, expanded: boolean, maxLength: number) => {
 const moreLessButton = (
   expanded: boolean,
   setExpanded: (newValue: boolean) => void,
-  strings: ExpandableTextProps["strings"]
+  strings: ExpandableTextProps["strings"],
+  buttonClassName: ExpandableTextProps["buttonClassName"]
 ) => {
+  const classes = ["button-toggle"]
+  if (buttonClassName) {
+    classes.push(buttonClassName)
+  }
+
   return (
-    <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
+    <span className={classes.join(" ")} onClick={() => setExpanded(!expanded)}>
       {expanded ? strings?.readLess : strings?.readMore}
     </span>
   )
@@ -46,7 +53,7 @@ const ExpandableText = (props: ExpandableTextProps) => {
   if (!props.children) return null
 
   if (props.children.length > maxLength) {
-    button = moreLessButton(expanded, setExpanded, props.strings)
+    button = moreLessButton(expanded, setExpanded, props.strings, props.buttonClassName)
   }
   return (
     <div className={`expandable-text ${props?.className}`}>
