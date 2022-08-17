@@ -15,7 +15,7 @@ const DetailPreferences = () => {
 
   const preferenceTableData = useMemo(
     () =>
-      listingSectionQuestions(listing, ApplicationSection.preferences).map(
+      listingSectionQuestions(listing, ApplicationSection.preferences)?.map(
         (listingPreference, index) => ({
           order: { content: index + 1 },
           name: { content: listingPreference?.multiselectQuestion?.text },
