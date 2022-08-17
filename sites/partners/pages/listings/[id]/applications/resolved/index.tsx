@@ -19,6 +19,7 @@ import {
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
+import { tableColumns, getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -162,8 +163,8 @@ const ApplicationsList = () => {
                 setCurrentPage: tableOptions.pagination.setCurrentPage,
               }}
               config={{
-                gridComponents,
-                columns,
+                gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
+                columns: tableColumns,
                 totalItemsLabel: t("applications.totalApplications"),
               }}
               data={{

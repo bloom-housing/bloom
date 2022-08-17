@@ -21,6 +21,7 @@ import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
+import { tableColumns, getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -136,12 +137,14 @@ const ApplicationsList = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
+      {console.log(flaggedAppsData)}
+
       <NavigationHeader
         title={listingName}
         listingId={listingId}
         tabs={{
           show: true,
-          flagsQty: flaggedApps?.meta?.totalFlagged,
+          flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
           flagsLabel: t("nav.flags"),

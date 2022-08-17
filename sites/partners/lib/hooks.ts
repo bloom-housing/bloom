@@ -214,6 +214,7 @@ export function useFlaggedApplicationsMeta(listingId: string) {
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
