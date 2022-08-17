@@ -30,7 +30,11 @@ const ProgressNavItem = (props: {
 
   return (
     <li className={`progress-nav__${props.style}-item ${bgColor}`}>
-      <a aria-disabled={bgColor === "is-disabled"} aria-current={bgColor === "is-active"}>
+      <a
+        aria-disabled={bgColor === "is-disabled"}
+        aria-current={bgColor === "is-active"}
+        tabIndex={0}
+      >
         {props.label}
         {srText}
       </a>

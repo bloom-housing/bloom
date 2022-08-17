@@ -85,6 +85,8 @@
     color: var(--completed-step-font-color);
     display: block;
     position: relative;
+    pointer-events: none;
+    cursor: default;
     z-index: 3;
   }
 
@@ -106,8 +108,6 @@
 
     a {
       color: var(--future-step-font-color);
-      pointer-events: none;
-      cursor: default;
     }
   }
 }
