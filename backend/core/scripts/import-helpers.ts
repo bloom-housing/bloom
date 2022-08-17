@@ -150,7 +150,7 @@ export async function importListing(
   serviceOptions.axios = axios.create({
     baseURL: apiUrl,
     withCredentials: true,
-    timeout: 10000
+    timeout: 10000,
   })
   const unitTypes = await unitTypesService.list()
   const priorityTypes = await unitAccessibilityPriorityTypesService.list()

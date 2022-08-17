@@ -76,7 +76,7 @@ const FormUserConfirm = () => {
       )
 
       if (response) {
-        loadProfile("/");
+        loadProfile("/")
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
       }
     } catch (err) {

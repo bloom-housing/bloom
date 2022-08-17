@@ -45,7 +45,7 @@ export function applicationSetup(app: INestApplication) {
   // TODO: update with proper values!
   app.enableCors({
     origin: "http://localhost:3001",
-    credentials: true
+    credentials: true,
   })
   app.use(logger)
   app.useGlobalFilters(new CatchAllFilter(httpAdapter))
