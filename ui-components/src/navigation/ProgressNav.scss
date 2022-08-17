@@ -37,7 +37,6 @@
   display: table-cell;
   white-space: nowrap;
   float: none;
-  max-width: 20%;
   @media (min-width: $screen-md) {
     font-size: var(--dot-font-size-desktop);
     padding: 0rem;
