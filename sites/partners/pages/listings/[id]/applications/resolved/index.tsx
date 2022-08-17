@@ -19,7 +19,7 @@ import {
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
-import { tableColumns, getLinkCellFormatter } from "../../../../../src/applications/helpers"
+import { getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -32,7 +32,7 @@ const ApplicationsList = () => {
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
-  const { data: flaggedApps } = useFlaggedApplicationsList({
+  const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
     listingId,
     page: 1,
     limit: 1,
@@ -86,29 +86,52 @@ const ApplicationsList = () => {
     },
   ]
 
-  class formatLinkCell {
-    linkWithId: HTMLSpanElement
+  const columns = [
+    {
+      headerName: t("applications.duplicates.duplicateGroup"),
+      field: "id",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      cellRenderer: "formatLinkCell",
+      valueGetter: ({ data }) => {
+        if (!data?.applications?.length) return ""
+        const applicant = data.applications[0]?.applicant
 
-    init(params) {
-      const applicationId = params.data.id
+        return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
+      },
+    },
+    {
+      headerName: t("applications.duplicates.primaryApplicant"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      valueGetter: ({ data }) => {
+        if (!data?.applications?.length) return ""
+        const applicant = data.applications[0]?.applicant
 
-      this.linkWithId = document.createElement("button")
-      this.linkWithId.classList.add("text-blue-700")
-      this.linkWithId.innerText = params.value
-
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
-    }
-
-    getGui() {
-      return this.linkWithId
-    }
-  }
-
-  const gridComponents = {
-    formatLinkCell,
-  }
+        return `${applicant.firstName} ${applicant.lastName}`
+      },
+    },
+    {
+      headerName: t("applications.pendingReview"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      valueGetter: ({ data }) => {
+        return `${data?.applications?.length ?? 0}`
+      },
+    },
+    {
+      headerName: t("t.rule"),
+      field: "rule",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+    },
+  ]
 
   return (
     <Layout>
@@ -121,7 +144,7 @@ const ApplicationsList = () => {
         listingId={listingId}
         tabs={{
           show: true,
-          flagsQty: flaggedApps?.meta?.totalFlagged,
+          flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
           flagsLabel: t("nav.flags"),
@@ -164,14 +187,14 @@ const ApplicationsList = () => {
               }}
               config={{
                 gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
-                columns: tableColumns,
+                columns: columns,
                 totalItemsLabel: t("applications.totalApplications"),
               }}
               data={{
-                items: flaggedApps?.items ?? [],
-                loading: false,
-                totalItems: flaggedApps?.meta?.totalItems ?? 0,
-                totalPages: flaggedApps?.meta?.totalPages ?? 0,
+                items: flaggedAppsData?.items ?? [],
+                loading: flaggedAppsLoading,
+                totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
               }}
               search={{
                 setSearch: tableOptions.filter.setFilterValue,
