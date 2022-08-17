@@ -98,6 +98,21 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           "https://raw.githubusercontent.com/CityOfDetroit/bloom/dev/sites/public/page_content/locale_overrides/general.json",
         key: "detroitPublic",
       },
+      {
+        url:
+          "https://raw.githubusercontent.com/housingbayarea/bloom/0.3_alameda/sites/public/page_content/locale_overrides/general.json",
+        key: "alamedaPublic",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/housingbayarea/bloom/0.3_smc/sites/public/page_content/locale_overrides/general.json",
+        key: "smcPublic",
+      },
+      {
+        url:
+          "https://raw.githubusercontent.com/housingbayarea/bloom/san-jose/sites/public/page_content/locale_overrides/general.json",
+        key: "sjPublic",
+      },
     ]
 
     for (let i = 0; i < translationURLs.length; i++) {
@@ -347,15 +362,23 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       } else if (this.translations["detroitCore"][searchKey]) {
         return this.translations["detroitCore"][searchKey]
       }
+    } else if (["Alameda", "San Mateo", "San Jose"].includes(juris)) {
+      if (juris === "Alameda" && this.translations["alamedaPublic"][searchKey]) {
+        return this.translations["alamedaPublic"][searchKey]
+      } else if (juris === "San Mateo" && this.translations["smcPublic"][searchKey]) {
+        return this.translations["smcPublic"][searchKey]
+      } else if (juris === "San Jose" && this.translations["sjPublic"][searchKey]) {
+        return this.translations["sjPublic"][searchKey]
+      } else if (this.translations["hbaPublic"][searchKey]) {
+        return this.translations["hbaPublic"][searchKey]
+      } else if (this.translations["hbaPartners"][searchKey]) {
+        return this.translations["hbaPartners"][searchKey]
+      } else if (this.translations["hbaCore"][searchKey]) {
+        return this.translations["hbaCore"][searchKey]
+      }
     }
 
-    if (this.translations["hbaPublic"][searchKey]) {
-      return this.translations["hbaPublic"][searchKey]
-    } else if (this.translations["hbaPartners"][searchKey]) {
-      return this.translations["hbaPartners"][searchKey]
-    } else if (this.translations["hbaCore"][searchKey]) {
-      return this.translations["hbaCore"][searchKey]
-    } else if (this.translations["generalPublic"][searchKey]) {
+    if (this.translations["generalPublic"][searchKey]) {
       return this.translations["generalPublic"][searchKey]
     } else if (this.translations["generalPartners"][searchKey]) {
       return this.translations["generalPartners"][searchKey]
