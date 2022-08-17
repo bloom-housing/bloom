@@ -341,7 +341,7 @@ export const mapApiToMultiselectForm = (
   listingQuestions: ListingMultiselectQuestion[],
   applicationSection: ApplicationSection
 ) => {
-  const questionsFormData = { application: { [applicationSection]: {} } }
+  const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
 
   const applicationQuestionsWithTypes: {
     question: ApplicationMultiselectQuestion
@@ -358,7 +358,7 @@ export const mapApiToMultiselectForm = (
   })
 
   applicationQuestionsWithTypes?.forEach((appQuestion) => {
-    let options = {}
+    let options = Object.create(null)
 
     const question = appQuestion.question
     /**
