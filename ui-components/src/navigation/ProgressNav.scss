@@ -1,8 +1,8 @@
 .progress-nav {
-  --completed-step-color: var(--bloom-color-primary-darker);
-  --completed-step-font-color: var(--bloom-color-primary-darker);
+  --completed-step-color: var(--bloom-color-gray-850);
+  --completed-step-font-color: var(--bloom-color-gray-850);
   --active-step-color: var(--bloom-color-primary);
-  --active-step-font-color: var(--bloom-color-primary-darker);
+  --active-step-font-color: var(--bloom-color-gray-900);
   --future-step-color: var(--bloom-color-gray-450);
   --future-step-font-color: var(--bloom-color-gray-750);
 
@@ -13,7 +13,7 @@
   --dot-font-size-desktop: var(--bloom-font-size-base);
   --dot-font-size-mobile: var(--bloom-font-size-2xs);
   --dot-line-color: var(--bloom-color-gray-450);
-  --dot-active-font-weight: 600;
+  --dot-active-font-weight: bold;
   --dot-text-transform: capitalize;
 
   --bar-height: var(--bloom-s4);
@@ -21,7 +21,7 @@
   --bar-label-padding-top: var(--bloom-s2);
   --bar-label-padding-left: var(--bloom-s0_5);
   --bar-font-size: var(--bloom-font-size-base);
-  --bar-active-font-weight: 600;
+  --bar-active-font-weight: bold;
   --bar-text-transform: capitalize;
 
   display: table;
