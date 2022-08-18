@@ -276,6 +276,21 @@ export class ApplicationFlaggedSetsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Trigger the duplicate check process
+   */
+  process(options: IRequestOptions = {}): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ApplicationMethodsService {

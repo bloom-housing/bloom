@@ -1,5 +1,5 @@
-import { Rule } from "src/application-flagged-sets/types/rule-enum"
 import { MigrationInterface, QueryRunner } from "typeorm"
+import { Rule } from "../application-flagged-sets/types/rule-enum"
 
 export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationInterface {
   name = "addAfsRelatedPropertiesToListing1658992843452"
