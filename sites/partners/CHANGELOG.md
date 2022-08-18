@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.11...@bloom-housing/partners@5.1.1-alpha.12) (2022-08-18)
+
+
+### Bug Fixes
+
+* **paperlistform:** adjust padding on add listing form ([#2945](https://github.com/bloom-housing/bloom/issues/2945)) ([b8b8846](https://github.com/bloom-housing/bloom/commit/b8b8846b6bd8c2b3e830dbf471a3a186efd9e773))
+
+
+
+
+
 ## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.10...@bloom-housing/partners@5.1.1-alpha.11) (2022-08-16)
 
 **Note:** Version bump only for package @bloom-housing/partners
