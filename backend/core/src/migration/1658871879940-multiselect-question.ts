@@ -131,7 +131,6 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
                 LEFT JOIN jurisdictions_programs_programs jp ON jp.programs_id = p.id
                 LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
         `)
-    console.log("133:", programs)
     for (let i = 0; i < programs.length; i++) {
       const prog = programs[i]
       const { optOutText, options } = this.resolveOptionValues(prog.form_metadata, "programs")

@@ -35,7 +35,6 @@ const translationRepositoryMock = {}
 
 const translationServiceMock = {
   getTranslationByLanguageAndJurisdictionOrDefaultEn: (language) => {
-    // console.log("foooo = ", language, jurisdiction)
     return language === "es"
       ? {
           jurisdictionId: "",
