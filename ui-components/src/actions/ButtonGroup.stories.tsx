@@ -49,7 +49,7 @@ export const oneColumnRight = () => (
   />
 )
 
-export const oneColumnRightReversed = () => (
+export const oneColumnReversed = () => (
   <ButtonGroup
     columns={[
       <>

@@ -18,6 +18,19 @@
   flex-wrap: wrap;
   gap: var(--inner-button-gap);
 
+  & > .button-group__column {
+    display: flex;
+    gap: var(--inner-button-gap);
+
+    .button {
+      @media (max-width: $screen-sm) {
+        --normal-rounded: var(--small-rounded);
+        --normal-padding: var(--small-padding);
+        --normal-font-size: var(--small-font-size);
+      }
+    }
+  }
+
   &.has-between-spacing {
     justify-content: space-between;
   }
@@ -25,37 +38,24 @@
   &.has-even-spacing {
     justify-content: space-evenly;
   }
-}
 
-.button-group__column {
-  display: flex;
-  gap: var(--inner-button-gap);
+  &.has-fullwidth-mobile-buttons {
+    &,
+    & > .button-group__column {
+      @media (max-width: $screen-sm) {
+        flex-direction: column;
 
-  .button {
-    @media (max-width: $screen-sm) {
-      --normal-rounded: var(--small-rounded);
-      --normal-padding: var(--small-padding);
-      --normal-font-size: var(--small-font-size);
-    }
-  }
-}
-
-.button-group.has-fullwidth-mobile-buttons {
-  &,
-  & .button-group__column {
-    @media (max-width: $screen-sm) {
-      flex-direction: column;
-
-      .button {
-        width: 100%;
+        .button {
+          width: 100%;
+        }
       }
     }
   }
-}
 
-.button-group.is-reversed {
-  &,
-  & .button-group__column {
-    flex-direction: row-reverse;
+  &.is-reversed {
+    &,
+    & > .button-group__column {
+      flex-direction: row-reverse;
+    }
   }
 }

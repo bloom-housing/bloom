@@ -30,8 +30,10 @@ const ButtonGroup = ({
 
   return (
     <div className={classNames.join(" ")}>
-      {columns.map((column) => (
-        <div className="button-group__column">{column}</div>
+      {columns.map((column, index) => (
+        <div key={index} className="button-group__column">
+          {column}
+        </div>
       ))}
     </div>
   )
