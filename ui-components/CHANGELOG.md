@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.6...@bloom-housing/ui-components@5.1.1-alpha.7) (2022-08-18)
+
+
+### Bug Fixes
+
+* image width fix for tablet screen sizes ([#2970](https://github.com/bloom-housing/bloom/issues/2970)) ([feac019](https://github.com/bloom-housing/bloom/commit/feac019b25a476221a7ad77518d1fa185a75b27f))
+
+
+
+
+
 ## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.5...@bloom-housing/ui-components@5.1.1-alpha.6) (2022-08-16)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
