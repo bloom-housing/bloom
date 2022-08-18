@@ -104,10 +104,6 @@ export class TranslationsService extends AbstractServiceFactory<
         j < listing.listingMultiselectQuestions[i].multiselectQuestion.options.length;
         j++
       ) {
-        console.log(
-          "pushing",
-          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].text`
-        )
         pathsToFilter.push(
           `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].text`
         )

@@ -3,7 +3,6 @@ import dayjs from "dayjs"
 import { CsvBuilder, KeyNumber } from "./csv-builder.service"
 import { getBirthday } from "../../shared/utils/get-birthday"
 import { formatBoolean } from "../../shared/utils/format-boolean"
-import { capitalizeFirstLetter } from "../../shared/utils/capitalize-first-letter"
 import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 
@@ -81,27 +80,22 @@ export class ApplicationCsvExporterService {
 
     return items.reduce((obj, preference) => {
       const root = preference.key
-      const claimedString = ""
+      let claimedString = ""
       const extraData = {}
       preference.options.forEach((option) => {
         if (option.checked) {
-          claimedString.concat(`${option.key}, `)
+          claimedString = claimedString.concat(`${option.key}, `)
         }
         if (option.extraData?.length) {
-          const extraKey = `${root}: ${option.key} - ${option.extraData
-            .map((obj) => obj.key)
-            .join(" and ")}`
+          const extraKey = `${root}: ${option.key} - Address`
           let extraString = ""
           option.extraData.forEach((extra) => {
-            if (extra.type === "text") {
-              extraString += `${capitalizeFirstLetter(extra.key)}: ${extra.value as string}, `
-            } else if (extra.type === "address") {
+            if (extra.type === "address") {
               extraString += `${(extra.value as AddressCreateDto).street}, ${
                 (extra.value as AddressCreateDto).street2
                   ? `${(extra.value as AddressCreateDto).street2},`
                   : ""
-              }
-              ${(extra.value as AddressCreateDto).city}, ${
+              } ${(extra.value as AddressCreateDto).city}, ${
                 (extra.value as AddressCreateDto).state
               }, ${(extra.value as AddressCreateDto).zipCode}`
             }
@@ -204,7 +198,7 @@ export class ApplicationCsvExporterService {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),
           },
           Preference: this.buildMultiselectQuestion(app.application_preferences, preferenceKeys),
-          Program: this.buildMultiselectQuestion(app.application_programs, preferenceKeys),
+          Program: this.buildMultiselectQuestion(app.application_programs, programKeys),
           "Household Size": app.application_household_size,
           "Household Members": {
             [app.householdMembers_id]: this.mapHouseholdMembers(app),
