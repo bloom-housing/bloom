@@ -24,19 +24,25 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
       FROM application_flagged_set_applications_applications
     `)
     for (const afsa of afsas) {
-      const afs = await queryRunner.query(`
+      const afs = await queryRunner.query(
+        `
         SELECT id, listing_id, rule, rule_key
         FROM application_flagged_set
         WHERE id = $1
-      `, [afsa.application_flagged_set_id]);
+      `,
+        [afsa.application_flagged_set_id]
+      )
       if (afs.rule_key !== null) continue
 
-      const applicant = await queryRunner.query(`
+      const applicant = await queryRunner.query(
+        `
         SELECT applicant.email_address, applicant.first_name, applicant.last_name, applicant.birth_month, applicant.birth_day, applicant.birth_year 
         FROM applicant
         INNER JOIN applications on applications.applicant_id = applicant.id
         WHERE applications.id = $1
-      `, [afsa.applications_id])
+      `,
+        [afsa.applications_id]
+      )
 
       let ruleKey: String | null = null
 
@@ -44,15 +50,19 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
       if (afs.rule === Rule.email) {
         ruleKey = `${afs.lisitng_id}-email-${applicant.email_address}`
       } else if (afs.rule === Rule.nameAndDOB) {
-        ruleKey = `${afs.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
-        `${applicant.birth_day}-${applicant.birth_year}`
+        ruleKey =
+          `${afs.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
+          `${applicant.birth_day}-${applicant.birth_year}`
       }
 
       // set rule_key
-      await queryRunner.query(`
+      await queryRunner.query(
+        `
         UPDATE application_flagged_set
         SET rule_key = $1
-        WHERE id = $2`, [ruleKey, afsa.application_flagged_set_id])
+        WHERE id = $2`,
+        [ruleKey, afsa.application_flagged_set_id]
+      )
     }
   }
 
