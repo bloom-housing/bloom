@@ -95,9 +95,9 @@ const FormForgotPassword = ({
               </Button>
             </div>
             <div className="text-center mt-6">
-              <a href="#" onClick={() => router.back()}>
+              <Button onClick={() => router.back()} unstyled={true}>
                 {t("t.cancel")}
-              </a>
+              </Button>
             </div>
           </section>
         </Form>

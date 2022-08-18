@@ -79,7 +79,7 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"
           notice={
-            <a href="" target="_blank" className={"cursor-pointer"}>
+            <a href="/" target="_blank" className={"cursor-pointer"}>
               {t("nav.getFeedback")}
             </a>
           }
@@ -102,12 +102,8 @@ const Layout = (props) => {
 
       <SiteFooter>
         <FooterNav copyright={t("footer.copyright")}>
-          <Link href="/privacy">
-            <a>{t("pageTitle.privacy")}</a>
-          </Link>
-          <Link href="/disclaimer">
-            <a>{t("pageTitle.disclaimer")}</a>
-          </Link>
+          <Link href="/privacy">{t("pageTitle.privacy")}</Link>
+          <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
         </FooterNav>
         <FooterSection className="bg-black" small>
           <ExygyFooter />

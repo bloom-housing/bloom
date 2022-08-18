@@ -14,7 +14,6 @@ describe("<GridSection>", () => {
       <GridSection
         title={"Title"}
         subtitle={"Subtitle"}
-        edit={"Edit"}
         tinted={true}
         grid={true}
         columns={2}
