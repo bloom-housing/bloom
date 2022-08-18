@@ -95,21 +95,40 @@ export class TranslationsService extends AbstractServiceFactory<
       pathsToFilter.push(`events[${i}].label`)
     }
 
-    for (let i = 0; i < listing.listingMultiselectQuestions.length; i++) {
+    for (let i = 0; i < listing.listingMultiselectQuestions?.length; i++) {
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.text`)
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.description`)
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.subText`)
+      pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.optOutText`)
       for (
         let j = 0;
-        j < listing.listingMultiselectQuestions[i].multiselectQuestion.options.length;
+        j < listing.listingMultiselectQuestions[i].multiselectQuestion.links?.length;
         j++
       ) {
         pathsToFilter.push(
-          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].text`
+          `listingMultiselectQuestions[${i}].multiselectQuestion.links[${j}].title`
+        )
+      }
+      for (
+        let k = 0;
+        k < listing.listingMultiselectQuestions[i].multiselectQuestion.options?.length;
+        k++
+      ) {
+        pathsToFilter.push(
+          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${k}].text`
         )
         pathsToFilter.push(
-          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${j}].description`
+          `listingMultiselectQuestions[${i}].multiselectQuestion.options[${k}].description`
         )
+        for (
+          let l = 0;
+          l < listing.listingMultiselectQuestions[i].multiselectQuestion.options[k].links?.length;
+          l++
+        ) {
+          pathsToFilter.push(
+            `listingMultiselectQuestions[${i}].multiselectQuestion.options[${k}].links[${l}].title`
+          )
+        }
       }
     }
 
