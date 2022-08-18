@@ -71,6 +71,7 @@ export class ListingDefaultSanJoseSeed {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
             text: getLiveWorkPreference(alamedaJurisdiction.name).text,
           }),
+          ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
