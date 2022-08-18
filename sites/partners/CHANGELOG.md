@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.13...@bloom-housing/partners@5.1.1-alpha.14) (2022-08-18)
+
+
+### Features
+
+* **lottery:** add edit lottery results functionality ([#2954](https://github.com/bloom-housing/bloom/issues/2954)) ([e6cb314](https://github.com/bloom-housing/bloom/commit/e6cb314e28a0e80fecbe3e6085737ce4f93eb4ef))
+
+
+
+
+
 ## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.12...@bloom-housing/partners@5.1.1-alpha.13) (2022-08-18)
 
 **Note:** Version bump only for package @bloom-housing/partners
