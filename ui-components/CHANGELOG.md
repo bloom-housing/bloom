@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.7...@bloom-housing/ui-components@5.1.1-alpha.8) (2022-08-18)
+
+
+### Features
+
+* **expandabletext:** add classname to expandable text button ([#2965](https://github.com/bloom-housing/bloom/issues/2965)) ([6d4b8a7](https://github.com/bloom-housing/bloom/commit/6d4b8a7132825c1aa3abcc0368529557cb3d2647))
+
+
+
+
+
 ## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.6...@bloom-housing/ui-components@5.1.1-alpha.7) (2022-08-18)
 
 
