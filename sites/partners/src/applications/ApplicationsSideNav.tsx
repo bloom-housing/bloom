@@ -21,7 +21,7 @@ const ApplicationsSideNav = ({ className, listingId }: ApplicationsSideNavProps)
       label: t("applications.pendingReview"),
       url: `/listings/${listingId}/applications/pending`,
       count: data?.totalPendingCount || 0,
-      childrenItems: [
+      /* childrenItems: [
         {
           label: t("applications.namedob"),
           url: `/listings/${listingId}/applications/pending?type=name_dob`,
@@ -32,7 +32,7 @@ const ApplicationsSideNav = ({ className, listingId }: ApplicationsSideNavProps)
           url: `/listings/${listingId}/applications/pending?type=email`,
           count: data?.totalEmailPendingCount || 0,
         },
-      ],
+      ], */
     },
     {
       label: t("t.resolved"),
