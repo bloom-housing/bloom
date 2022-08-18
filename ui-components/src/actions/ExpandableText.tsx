@@ -33,7 +33,7 @@ const moreLessButton = (
   strings: ExpandableTextProps["strings"],
   buttonClassName: ExpandableTextProps["buttonClassName"]
 ) => {
-  const classes = ["button-toggle ml-1"]
+  const classes = ["button-toggle ml-4"]
   if (buttonClassName) {
     classes.push(buttonClassName)
   }
