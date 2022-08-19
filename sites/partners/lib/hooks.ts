@@ -1,7 +1,7 @@
-import { useContext } from "react"
+import { useCallback, useContext, useState } from "react"
 import useSWR, { mutate } from "swr"
 import qs from "qs"
-
+import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationSection,
@@ -12,7 +12,7 @@ import {
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
-
+import { setSiteAlertMessage } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -155,9 +155,36 @@ export function useFlaggedApplicationsList({
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
+
+export function useFlaggedApplicationsMeta(listingId: string) {
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
+
+  const params = {
+    listingId,
+  }
+
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+
+  const endpoint = `${
+    process.env.backendApiBase
+  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
+
+  const fetcher = () => applicationFlaggedSetsService.meta(params)
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useApplicationsData(
   currentPage: number,
   delayedFilterValue: string,
@@ -401,5 +428,44 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
     data,
     loading: !error && !data,
     error,
+  }
+}
+
+export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
+  const { applicationsService } = useContext(AuthContext)
+
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
+
+  const onExport = useCallback(async () => {
+    setCsvExportError(false)
+    setCsvExportLoading(true)
+
+    try {
+      const content = await applicationsService.listAsCsv({
+        listingId,
+        includeDemographics,
+      })
+
+      const now = new Date()
+      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
+
+      const blob = new Blob([content], { type: "text/csv" })
+      const fileLink = document.createElement("a")
+      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
+      fileLink.href = URL.createObjectURL(blob)
+      fileLink.click()
+    } catch (err) {
+      setCsvExportError(true)
+      setSiteAlertMessage(err.response.data.error, "alert")
+    }
+
+    setCsvExportLoading(false)
+  }, [applicationsService, listingId])
+
+  return {
+    onExport,
+    csvExportLoading,
+    csvExportError,
   }
 }

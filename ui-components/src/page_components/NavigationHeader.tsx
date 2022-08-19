@@ -23,6 +23,7 @@ type NavigationHeaderTabs = {
 type NavigationHeaderTabsElement = {
   label: string
   path: string
+  activePaths: string[]
   content: React.ReactNode | undefined
 }
 
@@ -42,11 +43,19 @@ const NavigationHeader = ({
       {
         label: tabs?.listingLabel || "",
         path: `/listings/${listingId}`,
+        activePaths: [`/listings/${listingId}`],
         content: undefined,
       },
       {
         label: tabs?.applicationsLabel || "",
         path: `/listings/${listingId}/applications`,
+        activePaths: [
+          `/listings/${listingId}/applications`,
+          `/listings/${listingId}/applications/pending`,
+          `/listings/${listingId}/applications/pending?type=name_dob`,
+          `/listings/${listingId}/applications/pending?type=email`,
+          `/listings/${listingId}/applications/resolved`,
+        ],
         content: undefined,
       },
     ]
@@ -55,6 +64,7 @@ const NavigationHeader = ({
       elements.push({
         label: tabs.flagsLabel,
         path: `/listings/${listingId}/flags`,
+        activePaths: [`/listings/${listingId}/flags`],
         content: <>{tabs.flagsQty}</>,
       })
     }
@@ -69,7 +79,7 @@ const NavigationHeader = ({
           <TabNavItem
             key={tab.path}
             tagContent={tab?.content}
-            current={tab.path === currentPath}
+            current={tab.activePaths.includes(currentPath)}
             href={tab.path}
             tagSize={AppearanceSizeType.small}
           >
