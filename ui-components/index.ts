@@ -52,6 +52,7 @@ export * from "./src/global/ApplicationStatusType"
 export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
+export * from "./src/headers/StepHeader"
 export * from "./src/headers/Heading"
 
 /* Helpers */
@@ -87,6 +88,7 @@ export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/TabNav"
 export * from "./src/navigation/Tabs"
 export * from "./src/navigation/Breadcrumbs"
+export * from "./src/navigation/SideNav"
 
 /* Notifications */
 export * from "./src/notifications/AlertBox"

@@ -3,6 +3,103 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.15...@bloom-housing/partners@5.1.1-alpha.16) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.14...@bloom-housing/partners@5.1.1-alpha.15) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.13...@bloom-housing/partners@5.1.1-alpha.14) (2022-08-18)
+
+
+### Features
+
+* **lottery:** add edit lottery results functionality ([#2954](https://github.com/bloom-housing/bloom/issues/2954)) ([e6cb314](https://github.com/bloom-housing/bloom/commit/e6cb314e28a0e80fecbe3e6085737ce4f93eb4ef))
+
+
+
+
+
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.12...@bloom-housing/partners@5.1.1-alpha.13) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.11...@bloom-housing/partners@5.1.1-alpha.12) (2022-08-18)
+
+
+### Bug Fixes
+
+* **paperlistform:** adjust padding on add listing form ([#2945](https://github.com/bloom-housing/bloom/issues/2945)) ([b8b8846](https://github.com/bloom-housing/bloom/commit/b8b8846b6bd8c2b3e830dbf471a3a186efd9e773))
+
+
+
+
+
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.10...@bloom-housing/partners@5.1.1-alpha.11) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.9...@bloom-housing/partners@5.1.1-alpha.10) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.8...@bloom-housing/partners@5.1.1-alpha.9) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.7...@bloom-housing/partners@5.1.1-alpha.8) (2022-08-16)
+
+
+### Features
+
+* adds includeDemographics if admin ([#2955](https://github.com/bloom-housing/bloom/issues/2955)) ([173b417](https://github.com/bloom-housing/bloom/commit/173b417dd87335788ba7f8bcd4ab260e96d9e573))
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.6...@bloom-housing/partners@5.1.1-alpha.7) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.5...@bloom-housing/partners@5.1.1-alpha.6) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.4...@bloom-housing/partners@5.1.1-alpha.5) (2022-08-12)
 
 **Note:** Version bump only for package @bloom-housing/partners

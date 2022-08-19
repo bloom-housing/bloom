@@ -205,6 +205,35 @@ export class AmiChartsService {
 
 export class ApplicationFlaggedSetsService {
   /**
+   * Meta information for application flagged sets
+   */
+  meta(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
+      listingId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSetMeta> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/meta"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List application flagged sets
    */
   list(
@@ -2350,6 +2379,23 @@ export interface AmiChartUpdate {
 
   /**  */
   id?: string
+}
+
+export interface ApplicationFlaggedSetMeta {
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalResolvedCount?: number
+
+  /**  */
+  totalPendingCount?: number
+
+  /**  */
+  totalNamePendingCount?: number
+
+  /**  */
+  totalEmailPendingCount?: number
 }
 
 export interface Address {
@@ -6306,6 +6352,7 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "mostRecentlyPublished" = "mostRecentlyPublished",
   "name" = "name",
   "waitlistOpen" = "waitlistOpen",
   "status" = "status",

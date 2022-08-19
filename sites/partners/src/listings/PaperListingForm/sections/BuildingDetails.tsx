@@ -208,55 +208,59 @@ const BuildingDetails = ({
           />
           <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
-        <ViewItem
-          label={t("application.contact.state")}
-          className={"mb-0"}
-          error={fieldHasError(errors?.buildingAddress?.state)}
-        >
-          <Select
-            id={`buildingAddress.state`}
-            name={`buildingAddress.state`}
-            error={
-              !!getAddressErrorMessage(
+        <GridCell>
+          <ViewItem
+            label={t("application.contact.state")}
+            className={"mb-0"}
+            error={fieldHasError(errors?.buildingAddress?.state)}
+          >
+            <Select
+              id={`buildingAddress.state`}
+              name={`buildingAddress.state`}
+              error={
+                !!getAddressErrorMessage(
+                  "buildingAddress.state",
+                  fieldMessage(errors?.buildingAddress?.state)
+                )
+              }
+              errorMessage={getAddressErrorMessage(
                 "buildingAddress.state",
                 fieldMessage(errors?.buildingAddress?.state)
+              )}
+              label={t("application.contact.state")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={stateKeys}
+              keyPrefix="states"
+              inputProps={{
+                onChange: () => clearErrors("buildingAddress"),
+              }}
+            />
+          </ViewItem>
+        </GridCell>
+        <GridCell>
+          <Field
+            label={t("application.contact.zip")}
+            name={"buildingAddress.zipCode"}
+            id={"buildingAddress.zipCode"}
+            placeholder={t("application.contact.zip")}
+            error={
+              !!getAddressErrorMessage(
+                "buildingAddress.zipCode",
+                fieldMessage(errors?.buildingAddress?.zipCode)
               )
             }
             errorMessage={getAddressErrorMessage(
-              "buildingAddress.state",
-              fieldMessage(errors?.buildingAddress?.state)
+              "buildingAddress.zipCode",
+              fieldMessage(errors?.buildingAddress?.zipCode)
             )}
-            label={t("application.contact.state")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={stateKeys}
-            keyPrefix="states"
             inputProps={{
               onChange: () => clearErrors("buildingAddress"),
             }}
+            register={register}
           />
-        </ViewItem>
-        <Field
-          label={t("application.contact.zip")}
-          name={"buildingAddress.zipCode"}
-          id={"buildingAddress.zipCode"}
-          placeholder={t("application.contact.zip")}
-          error={
-            !!getAddressErrorMessage(
-              "buildingAddress.zipCode",
-              fieldMessage(errors?.buildingAddress?.zipCode)
-            )
-          }
-          errorMessage={getAddressErrorMessage(
-            "buildingAddress.zipCode",
-            fieldMessage(errors?.buildingAddress?.zipCode)
-          )}
-          inputProps={{
-            onChange: () => clearErrors("buildingAddress"),
-          }}
-          register={register}
-        />
+        </GridCell>
         <GridCell span={2}>
           <Field
             label={t("listings.yearBuilt")}

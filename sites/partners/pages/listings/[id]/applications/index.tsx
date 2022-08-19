@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
-import dayjs from "dayjs"
 import Head from "next/head"
 import {
   AgTable,
@@ -8,7 +7,6 @@ import {
   Button,
   LocalizedLink,
   SiteAlert,
-  setSiteAlertMessage,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
@@ -19,6 +17,7 @@ import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
+  useApplicationsExport,
 } from "../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
@@ -27,18 +26,21 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
 } from "@bloom-housing/backend-core/types"
+import { ApplicationsSideNav } from "../../../../src/applications/ApplicationsSideNav"
 
 const ApplicationsList = () => {
-  const { applicationsService } = useContext(AuthContext)
+  const { profile } = useContext(AuthContext)
   const router = useRouter()
+  const listingId = router.query.id as string
 
   const tableOptions = useAgTable()
 
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
+  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
+    listingId,
+    profile?.roles?.isAdmin ?? false
+  )
 
   /* Data Fetching */
-  const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
@@ -75,31 +77,6 @@ const ApplicationsList = () => {
     getGui() {
       return this.linkWithId
     }
-  }
-
-  const onExport = async () => {
-    setCsvExportError(false)
-    setCsvExportLoading(true)
-
-    try {
-      const content = await applicationsService.listAsCsv({
-        listingId,
-      })
-
-      const now = new Date()
-      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
-
-      const blob = new Blob([content], { type: "text/csv" })
-      const fileLink = document.createElement("a")
-      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
-      fileLink.href = URL.createObjectURL(blob)
-      fileLink.click()
-    } catch (err) {
-      setCsvExportError(true)
-      setSiteAlertMessage(err.response.data.error, "alert")
-    }
-
-    setCsvExportLoading(false)
   }
 
   // get the highest value from householdSize and limit to 6
@@ -161,8 +138,11 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+        <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
+
           <AgTable
+            className="w-full"
             id="applications-table"
             pagination={{
               perPage: tableOptions.pagination.itemsPerPage,
