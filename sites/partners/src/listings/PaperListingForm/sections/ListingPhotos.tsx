@@ -264,6 +264,7 @@ const ListingPhotos = () => {
               <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
               <MinimalTable
                 draggable={true}
+                flushLeft={true}
                 setData={(newData) => {
                   setDrawerImages(
                     newData.map((item: Record<string, StandardTableCell>, index) => {
@@ -280,14 +281,20 @@ const ListingPhotos = () => {
               ></MinimalTable>
             </div>
           )}
-          <Dropzone
-            id="listing-photo-upload"
-            label={t("t.uploadFile")}
-            helptext={t("listings.sections.photoHelperText")}
-            uploader={photoUploader}
-            accept="image/*"
-            progress={progressValue}
-          />
+          {drawerImages.length < 3 ? (
+            <Dropzone
+              id="listing-photo-upload"
+              label={t("t.uploadFile")}
+              helptext={t("listings.sections.photoHelperText")}
+              uploader={photoUploader}
+              accept="image/*"
+              progress={progressValue}
+            />
+          ) : (
+            <p className="field-note text-gray-750">
+              Note: the maximum of 10 images have been uploaded.
+            </p>
+          )}
         </section>
         <Button
           type="button"
