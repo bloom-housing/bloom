@@ -65,7 +65,7 @@ export default function Home(props: IndexProps) {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
+      <Hero title={"Testing"} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
