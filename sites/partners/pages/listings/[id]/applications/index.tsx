@@ -12,6 +12,7 @@ import {
   BreadcrumbLink,
   NavigationHeader,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,
