@@ -5,6 +5,7 @@ import { getBirthday } from "../../shared/utils/get-birthday"
 import { formatBoolean } from "../../shared/utils/format-boolean"
 import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
+import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationCsvExporterService {
@@ -203,8 +204,10 @@ export class ApplicationCsvExporterService {
           "Household Members": {
             [app.householdMembers_id]: this.mapHouseholdMembers(app),
           },
-          "Marked As Duplicate": formatBoolean(app.application_marked_as_duplicate),
-          "Flagged As Duplicate": formatBoolean(app.flagged),
+          "Marked As Duplicate": formatBoolean(
+            app.application_review_status === ApplicationReviewStatus.duplicate
+          ), // if "duplicate" then "marked as duplicate" is true else false
+          "Flagged As Duplicate": formatBoolean(app.flagged), // if in "flagged" set then "flagged as duplicate" is true
           ...demographics,
         }
         /**
