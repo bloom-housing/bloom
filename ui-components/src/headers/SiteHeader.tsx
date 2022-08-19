@@ -322,7 +322,6 @@ const SiteHeader = (props: SiteHeaderProps) => {
                     }
                   }}
                   key={`${menuLink.title}-${index}`}
-                  role={"button"}
                 >
                   {menuContent}
                 </button>
