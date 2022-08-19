@@ -136,7 +136,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
       .where(`afs.ruleKey = :ruleKey`, { ruleKey: this.getRuleKeyForRule(newApplication, rule) })
       .getMany()
 
-    if (afses.length == 0) {
+    if (afses.length === 0) {
       await this.afsRepository.save({
         rule: rule,
         ruleKey: this.getRuleKeyForRule(newApplication, rule),
@@ -146,7 +146,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
         applications: [newApplication, ...applicationsMatchingRule],
         listing: { id: newApplication.listingId },
       })
-    } else if (afses.length == 1) {
+    } else if (afses.length === 1) {
       const afs = afses[0]
 
       if (!afs.applications.map((app) => app.id).includes(newApplication.id)) {

@@ -121,7 +121,7 @@ export class ListingsService {
     })
     listingDto.unitsAvailable = availableUnits
 
-    if (listing.status == ListingStatus.active && listingDto.status == ListingStatus.closed) {
+    if (listing.status == ListingStatus.active && listingDto.status === ListingStatus.closed) {
       await this.afsService.scheduleAfsProcessing()
     }
 

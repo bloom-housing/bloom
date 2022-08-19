@@ -20,20 +20,12 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
 
     // set rule_key for existing afses
     const afsas = await queryRunner.query(`
-      SELECT application_flagged_set_id, applications_id
-      FROM application_flagged_set_applications_applications
+      SELECT afsas.application_flagged_set_id, afsas.applications_id, afs.listing_id, afs.rule, afs.rule_key
+      FROM application_flagged_set_applications_applications afsas
+      INNER JOIN application_flagged_set afs ON afs.id = afsas.application_flagged_set_id
+      WHERE afs.rule_key IS NULL
     `)
     for (const afsa of afsas) {
-      const afs = await queryRunner.query(
-        `
-        SELECT id, listing_id, rule, rule_key
-        FROM application_flagged_set
-        WHERE id = $1
-      `,
-        [afsa.application_flagged_set_id]
-      )
-      if (afs.rule_key !== null) continue
-
       const applicant = await queryRunner.query(
         `
         SELECT applicant.email_address, applicant.first_name, applicant.last_name, applicant.birth_month, applicant.birth_day, applicant.birth_year 
@@ -47,11 +39,11 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
       let ruleKey: String | null = null
 
       // get application info needed for key
-      if (afs.rule === Rule.email) {
-        ruleKey = `${afs.lisitng_id}-email-${applicant.email_address}`
-      } else if (afs.rule === Rule.nameAndDOB) {
+      if (afsas.rule === Rule.email) {
+        ruleKey = `${afsas.lisitng_id}-email-${applicant.email_address}`
+      } else if (afsas.rule === Rule.nameAndDOB) {
         ruleKey =
-          `${afs.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
+          `${afsas.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
           `${applicant.birth_day}-${applicant.birth_year}`
       }
 
