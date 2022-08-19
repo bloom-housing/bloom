@@ -281,6 +281,7 @@
   "nav.siteTitlePartners": "Partners Portal",
   "nav.users": "Users",
   "settings.preference": "Preference",
+  "settings.preferenceAdd": "Add Preference",
   "settings.preferenceAddOption": "Add Preference Option",
   "settings.preferenceCollectAddress": "Collect the applicant address",
   "settings.preferenceDelete": "Deleting a preference cannot be undone.",

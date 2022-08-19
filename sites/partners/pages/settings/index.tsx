@@ -1,13 +1,11 @@
 import React, { useContext, useState } from "react"
 import Head from "next/head"
-import { ApplicationSection } from "@bloom-housing/backend-core"
+import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
   AppearanceBorderType,
   Button,
-  Icon,
-  IconFillColors,
   LoadingOverlay,
   MinimalTable,
   NavigationHeader,
@@ -18,16 +16,29 @@ import {
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
+import ManageIconSection from "../../src/settings/ManageIconSection"
+import { MultiselectOption } from "@bloom-housing/backend-core/types/src/backend-swagger"
+
+export type PreferenceDrawerType = {
+  type: "add" | "edit"
+  preference?: MultiselectQuestion
+}
+
+export type OptionDrawerType = {
+  type: "add" | "edit"
+  option?: MultiselectOption
+}
 
 const Settings = () => {
   const { profile } = useContext(AuthContext)
 
   const [deleteModal, setDeleteModal] = useState(false)
-  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState(false)
+  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<PreferenceDrawerType | null>(
+    null
+  )
 
   const { data, loading } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.reduce((acc, curr) => {
@@ -35,34 +46,6 @@ const Settings = () => {
     }, ""),
     ApplicationSection.preferences
   )
-
-  const iconContent = () => {
-    return (
-      <div className={"flex justify-end"}>
-        <div className={"w-max"}>
-          <span onClick={() => setPreferenceDrawerOpen(true)} className={"cursor-pointer"}>
-            <Icon
-              symbol={faPenToSquare}
-              size={"medium"}
-              fill={IconFillColors.primary}
-              className={"mr-5"}
-            />
-          </span>
-          <span onClick={() => alert("copy")} className={"cursor-pointer"}>
-            <Icon
-              symbol={faClone}
-              size={"medium"}
-              fill={IconFillColors.primary}
-              className={"mr-5"}
-            />
-          </span>
-          <span onClick={() => setDeleteModal(true)} className={"cursor-pointer"}>
-            <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
-          </span>
-        </div>
-      </div>
-    )
-  }
 
   const getCardContent = () => {
     if (!loading && data?.length === 0) return null
@@ -88,7 +71,15 @@ const Settings = () => {
                 updated: {
                   content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
                 },
-                icons: { content: iconContent() },
+                icons: {
+                  content: (
+                    <ManageIconSection
+                      onCopy={() => alert("copy")}
+                      onEdit={() => setPreferenceDrawerOpen({ type: "edit", preference })}
+                      onDelete={() => setDeleteModal(true)}
+                    />
+                  ),
+                },
               }
             })}
           />
@@ -119,7 +110,16 @@ const Settings = () => {
               <StandardCard
                 title={t("t.preferences")}
                 emptyStateMessage={t("t.none")}
-                footer={<Button size={AppearanceSizeType.small}>{t("t.addItem")}</Button>}
+                footer={
+                  <Button
+                    size={AppearanceSizeType.small}
+                    onClick={() => {
+                      setPreferenceDrawerOpen({ type: "add", preference: null })
+                    }}
+                  >
+                    {t("t.addItem")}
+                  </Button>
+                }
               >
                 {getCardContent()}
               </StandardCard>
@@ -157,9 +157,9 @@ const Settings = () => {
         {t("settings.preferenceDelete")}
       </Modal>
       <PreferenceDrawer
-        drawerOpen={preferenceDrawerOpen}
+        drawer={preferenceDrawerOpen}
+        drawerOpen={!!preferenceDrawerOpen}
         setDrawerOpen={setPreferenceDrawerOpen}
-        defaultValues={undefined}
       />
     </>
   )
