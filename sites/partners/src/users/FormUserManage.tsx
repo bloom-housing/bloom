@@ -174,7 +174,7 @@ const FormUserManage = ({
       }
 
       return []
-    })() as string[]
+    })()
 
     const validation = await trigger()
 
