@@ -22,6 +22,7 @@ import { ApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
 import { PaginatedApplicationFlaggedSetDto } from "./dto/paginated-application-flagged-set.dto"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
+import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 
 @Controller("/applicationFlaggedSets")
 @ApiTags("applicationFlaggedSets")
@@ -35,6 +36,14 @@ import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-applicati
 )
 export class ApplicationFlaggedSetsController {
   constructor(private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService) {}
+
+  @Get("meta")
+  @ApiOperation({ summary: "Meta information for application flagged sets", operationId: "meta" })
+  async meta(
+    @Query() queryParams: PaginatedApplicationFlaggedSetQueryParams
+  ): Promise<ApplicationFlaggedSetMeta> {
+    return await this.applicationFlaggedSetsService.meta(queryParams)
+  }
 
   @Get()
   @ApiOperation({ summary: "List application flagged sets", operationId: "list" })

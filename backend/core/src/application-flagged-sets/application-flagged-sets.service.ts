@@ -20,6 +20,7 @@ import { User } from "../auth/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { Rule } from "./types/rule-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
+import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 
@@ -387,5 +388,65 @@ export class ApplicationFlaggedSetsService {
           )
       },
     })
+  }
+
+  async meta(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    const constructQuery = (params: {
+      listingId: string
+      status?: FlaggedSetStatus
+      rule?: Rule
+    }): SelectQueryBuilder<ApplicationFlaggedSet> => {
+      const query = this.afsRepository.createQueryBuilder("afs")
+      query
+        .select("SUM(1) as value")
+        .where("afs.listing_id = :listingId", { listingId: params.listingId })
+      if (params.status) {
+        query.andWhere("afs.status = :status", { status: params.status })
+      }
+      if (params.rule) {
+        query.andWhere("afs.rule = :rule", { rule: params.rule })
+      }
+      return query
+    }
+    const allQB = this.applicationsRepository.createQueryBuilder("afs")
+    allQB.select("SUM(1) as value")
+    allQB.where("afs.listing_id = :listingId", { listingId: queryParams.listingId })
+    const resolvedQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.resolved,
+    })
+    const pendingQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.flagged,
+    })
+    const pendingNameQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.flagged,
+      rule: Rule.nameAndDOB,
+    })
+    const pendingEmailQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.flagged,
+      rule: Rule.email,
+    })
+    const [
+      totalCount,
+      totalResolvedCount,
+      totalPendingCount,
+      totalNamePendingCount,
+      totalEmailPendingCount,
+    ] = await Promise.all(
+      [allQB, resolvedQB, pendingQB, pendingNameQB, pendingEmailQB].map(
+        async (query) => await query.getRawOne()
+      )
+    )
+    const res: ApplicationFlaggedSetMeta = {
+      totalCount: totalCount.value,
+      totalResolvedCount: totalResolvedCount.value,
+      totalPendingCount: totalPendingCount.value,
+      totalNamePendingCount: totalNamePendingCount.value,
+      totalEmailPendingCount: totalEmailPendingCount.value,
+    }
+    return res
   }
 }
