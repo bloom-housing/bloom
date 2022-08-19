@@ -18,7 +18,6 @@ const ApplicationPreferencesAll = () => {
       strings={{
         title: t("application.preferences.title"),
         subTitle: t("application.preferences.preamble"),
-        selectText: t("application.preferences.selectBelow"),
       }}
     />
   )

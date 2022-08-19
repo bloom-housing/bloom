@@ -174,7 +174,7 @@ const ApplicationMultiselectQuestionStep = ({
 
         <div className="form-card__group pb-0">
           <p className="field-note">
-            {strings?.selectText ?? questionSetInputType === "radio"
+            {strings?.selectText ?? (questionSetInputType === "radio" || !!question.optOutText)
               ? t("t.pleaseSelectOne")
               : t("errors.selectAllThatApply")}
           </p>
