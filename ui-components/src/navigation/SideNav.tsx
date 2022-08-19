@@ -11,8 +11,8 @@ export interface SideNavItemProps {
 }
 
 export interface SideNavProps {
-  navItems?: SideNavItemProps[]
   className?: string
+  navItems?: SideNavItemProps[]
 }
 
 const ItemLabel = ({ item }: { item: SideNavItemProps }) => {
