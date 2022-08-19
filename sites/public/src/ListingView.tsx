@@ -234,26 +234,6 @@ export const ListingView = (props: ListingProps) => {
     })
   }
 
-  const shouldShowFeaturesDetail = () => {
-    return (
-      listing.neighborhood ||
-      listing.yearBuilt ||
-      listing.smokingPolicy ||
-      listing.petPolicy ||
-      listing.amenities ||
-      listing.unitAmenities ||
-      listing.servicesOffered ||
-      listing.accessibility ||
-      // props for UnitTables
-      (listing.units && listing.units.length > 0) ||
-      // props for AdditionalFees
-      listing.depositMin ||
-      listing.depositMax ||
-      listing.applicationFee ||
-      listing.costsNotIncluded
-    )
-  }
-
   let lotterySection
   if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
     lotterySection = (
@@ -827,69 +807,59 @@ export const ListingView = (props: ListingProps) => {
           subtitle={t("listings.sections.featuresSubtitle")}
           desktopClass="bg-primary-lighter"
         >
-          {!shouldShowFeaturesDetail() ? (
-            t("errors.noData")
-          ) : (
-            <div className="listing-detail-panel">
-              <dl className="column-definition-list">
-                {listing.neighborhood && (
-                  <Description term={t("t.neighborhood")} description={listing.neighborhood} />
-                )}
-                {listing.yearBuilt && (
-                  <Description term={t("t.built")} description={listing.yearBuilt} />
-                )}
-                {listing.smokingPolicy && (
-                  <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
-                )}
-                {listing.petPolicy && (
-                  <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
-                )}
-                {listing.amenities && (
-                  <Description term={t("t.propertyAmenities")} description={listing.amenities} />
-                )}
-                {listing.unitAmenities && (
-                  <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
-                )}
-                {listing.servicesOffered && (
-                  <Description
-                    term={t("t.servicesOffered")}
-                    description={listing.servicesOffered}
+          <div className="listing-detail-panel">
+            <dl className="column-definition-list">
+              {listing.neighborhood && (
+                <Description term={t("t.neighborhood")} description={listing.neighborhood} />
+              )}
+              {listing.yearBuilt && (
+                <Description term={t("t.built")} description={listing.yearBuilt} />
+              )}
+              {listing.smokingPolicy && (
+                <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
+              )}
+              {listing.petPolicy && (
+                <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
+              )}
+              {listing.amenities && (
+                <Description term={t("t.propertyAmenities")} description={listing.amenities} />
+              )}
+              {listing.unitAmenities && (
+                <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
+              )}
+              {listing.servicesOffered && (
+                <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
+              )}
+              {listing.accessibility && (
+                <Description term={t("t.accessibility")} description={listing.accessibility} />
+              )}
+              <Description
+                term={t("t.unitFeatures")}
+                description={
+                  <UnitTables
+                    units={listing.units}
+                    unitSummaries={listing?.unitsSummarized?.byUnitType}
+                    disableAccordion={listing.disableUnitsAccordion}
                   />
-                )}
-                {listing.accessibility && (
-                  <Description term={t("t.accessibility")} description={listing.accessibility} />
-                )}
-                <Description
-                  term={t("t.unitFeatures")}
-                  description={
-                    <UnitTables
-                      units={listing.units}
-                      unitSummaries={listing?.unitsSummarized?.byUnitType}
-                      disableAccordion={listing.disableUnitsAccordion}
-                    />
-                  }
-                />
-              </dl>
-              <AdditionalFees
-                deposit={getCurrencyRange(
-                  parseInt(listing.depositMin),
-                  parseInt(listing.depositMax)
-                )}
-                applicationFee={`$${listing.applicationFee}`}
-                footerContent={getFooterContent()}
-                strings={{
-                  sectionHeader: t("listings.sections.additionalFees"),
-                  applicationFee: t("listings.applicationFee"),
-                  deposit: t("t.deposit"),
-                  applicationFeeSubtext: [
-                    t("listings.applicationPerApplicantAgeDescription"),
-                    t("listings.applicationFeeDueAt"),
-                  ],
-                  depositSubtext: [listing.depositHelperText],
-                }}
+                }
               />
-            </div>
-          )}
+            </dl>
+            <AdditionalFees
+              deposit={getCurrencyRange(parseInt(listing.depositMin), parseInt(listing.depositMax))}
+              applicationFee={`$${listing.applicationFee}`}
+              footerContent={getFooterContent()}
+              strings={{
+                sectionHeader: t("listings.sections.additionalFees"),
+                applicationFee: t("listings.applicationFee"),
+                deposit: t("t.deposit"),
+                applicationFeeSubtext: [
+                  t("listings.applicationPerApplicantAgeDescription"),
+                  t("listings.applicationFeeDueAt"),
+                ],
+                depositSubtext: [listing.depositHelperText],
+              }}
+            />
+          </div>
         </ListingDetailItem>
 
         <ListingDetailItem
