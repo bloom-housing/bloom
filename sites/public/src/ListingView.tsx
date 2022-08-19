@@ -805,7 +805,6 @@ export const ListingView = (props: ListingProps) => {
           imageSrc="/images/listing-features.svg"
           title={t("listings.sections.featuresTitle")}
           subtitle={t("listings.sections.featuresSubtitle")}
-          desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
             <dl className="column-definition-list">
