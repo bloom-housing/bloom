@@ -297,6 +297,7 @@ const SelectAndOrder = ({
         ariaDescription={drawerButtonText}
         onClose={() => {
           setSelectDrawer(null)
+          setOpenPreviews([])
         }}
         className={"drawer__small"}
       >
@@ -341,6 +342,7 @@ const SelectAndOrder = ({
             })
             setDraftListingData(formItems)
             setSelectDrawer(null)
+            setOpenPreviews([])
           }}
         >
           {t("t.save")}
