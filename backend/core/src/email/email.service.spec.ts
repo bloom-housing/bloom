@@ -240,7 +240,13 @@ describe("EmailService", () => {
       // TODO Remove BaseEntity from inheritance from all entities
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      await service.confirmation(listing, application, "http://localhost:3000")
+      await service.confirmation(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { ...listing, reviewOrderType: ListingReviewOrder.firstComeFirstServe },
+        application,
+        "http://localhost:3000"
+      )
 
       expect(sendMock).toHaveBeenCalled()
       const emailMock = sendMock.mock.calls[0][0]

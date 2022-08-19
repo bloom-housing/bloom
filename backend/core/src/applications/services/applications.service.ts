@@ -14,7 +14,6 @@ import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
 import crypto from "crypto"
-import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/application-flagged-sets.service"
 import { AuthzService } from "../../auth/services/authz.service"
 import { ListingsService } from "../../listings/listings.service"
 import { Application } from "../entities/application.entity"
@@ -27,12 +26,12 @@ import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 import { ListingRepository } from "../../listings/db/listing.repository"
+import { Listing } from "../../listings/entities/listing.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
   constructor(
     @Inject(REQUEST) private req: ExpressRequest,
-    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
     private readonly authzService: AuthzService,
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
@@ -208,21 +207,22 @@ export class ApplicationsService {
       id: application.id,
     })
 
-    return await this.repository.manager.transaction(
+    const app = await this.repository.manager.transaction(
       "SERIALIZABLE",
       async (transactionalEntityManager) => {
         const applicationsRepository = transactionalEntityManager.getRepository(Application)
 
         const newApplication = await applicationsRepository.save(application)
 
-        await this.applicationFlaggedSetsService.onApplicationUpdate(
-          application,
-          transactionalEntityManager
+        await this.updateListingApplicationEditTimestamp(
+          newApplication.listingId,
+          transactionalEntityManager.getRepository(Listing)
         )
 
         return await applicationsRepository.findOne({ id: newApplication.id })
       }
     )
+    return app
   }
 
   async delete(applicationId: string) {
@@ -238,6 +238,8 @@ export class ApplicationsService {
       application.listingId,
       authzActions.delete
     )
+
+    await this.updateListingApplicationEditTimestamp(application.listingId)
 
     return await this.repository.softRemove({ id: applicationId })
   }
@@ -286,14 +288,17 @@ export class ApplicationsService {
       "SERIALIZABLE",
       async (transactionalEntityManager) => {
         const applicationsRepository = transactionalEntityManager.getRepository(Application)
+
         const application = await applicationsRepository.save({
           ...applicationCreateDto,
           confirmationCode: ApplicationsService.generateConfirmationCode(),
         })
-        await this.applicationFlaggedSetsService.onApplicationSave(
-          application,
-          transactionalEntityManager
+
+        await this.updateListingApplicationEditTimestamp(
+          application.listingId,
+          transactionalEntityManager.getRepository(Listing)
         )
+
         return await applicationsRepository.findOne({ id: application.id })
       }
     )
@@ -393,5 +398,14 @@ export class ApplicationsService {
 
   public static generateConfirmationCode(): string {
     return crypto.randomBytes(4).toString("hex").toUpperCase()
+  }
+
+  private async updateListingApplicationEditTimestamp(
+    listingId: string,
+    repository: Repository<Listing> = this.listingsRepository
+  ) {
+    const listing = await repository.findOne({ where: { id: listingId } })
+    listing.lastApplicationUpdateAt = new Date()
+    await repository.save(listing)
   }
 }
