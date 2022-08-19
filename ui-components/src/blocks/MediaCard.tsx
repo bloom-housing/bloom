@@ -16,7 +16,11 @@ const MediaCard = (props: MediaCardProps) => {
   if (props.className) wrapperClasses.push(props.className)
   return (
     <div className={wrapperClasses.join(" ")}>
-      <button onClick={props.handleClick} className={"media-card__header-container"}>
+      <button
+        onClick={props.handleClick}
+        className={"media-card__header-container"}
+        aria-label={"Launch video"}
+      >
         <div className="media-card__header">
           <div className="media-card__icon-container">
             <Icon symbol={props.icon ?? faCirclePlay} size="2xl" fill="white" />
