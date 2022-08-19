@@ -4,7 +4,7 @@ import { Queue } from "bull"
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { getManager, Repository } from "typeorm"
+import { getManager, Repository, SelectQueryBuilder } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
@@ -15,6 +15,7 @@ import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dt
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
+import { Rule } from "./types/rule-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
