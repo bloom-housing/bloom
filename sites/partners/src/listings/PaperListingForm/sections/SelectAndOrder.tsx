@@ -255,26 +255,28 @@ const SelectAndOrder = ({
               })
             : t("listings.selectJurisdiction")}
         </div>
-        <Button
-          id="addPreferenceSaveButton"
-          type="button"
-          className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
-          onClick={() => {
-            const formData = getValues()
-            const formItems = []
-            fetchedData.forEach((uniqueItem) => {
-              if (formData[formKey][uniqueItem.id]) {
-                formItems.push(uniqueItem)
-              }
-            })
-            setDraftListingData(formItems)
-            setSelectDrawer(null)
-          }}
-        >
-          {t("t.save")}
-        </Button>
+        {jurisdiction && (
+          <Button
+            id="addPreferenceSaveButton"
+            type="button"
+            className={"mt-4"}
+            styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.normal}
+            onClick={() => {
+              const formData = getValues()
+              const formItems = []
+              fetchedData.forEach((uniqueItem) => {
+                if (formData[formKey] && formData[formKey][uniqueItem.id]) {
+                  formItems.push(uniqueItem)
+                }
+              })
+              setDraftListingData(formItems)
+              setSelectDrawer(null)
+            }}
+          >
+            {t("t.save")}
+          </Button>
+        )}
       </Drawer>
     </>
   )

@@ -36,9 +36,9 @@ const DetailsMultiselectQuestions = ({
           <GridCell key={listingQuestion?.multiselectQuestion.text}>
             <ViewItem label={listingQuestion?.multiselectQuestion.text}>
               {(() => {
-                const appQuestion = questions?.filter(
+                const appQuestion = questions?.find(
                   (question) => question.key === listingQuestion?.multiselectQuestion.text
-                )[0]
+                )
                 if (!appQuestion?.claimed) return t("t.none")
 
                 const options = appQuestion?.options?.filter((option) => option.checked)
