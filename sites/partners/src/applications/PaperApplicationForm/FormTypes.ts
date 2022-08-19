@@ -1,5 +1,5 @@
 import { DateFieldValues, DOBFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
-import { Language, IncomePeriod } from "@bloom-housing/backend-core/types"
+import { Language, IncomePeriod, ApplicationReviewStatus } from "@bloom-housing/backend-core/types"
 
 export type Address = {
   street: string
@@ -57,6 +57,7 @@ export type ApplicationTypes = {
   }
   preferences?: Record<string, string | unknown>
   programs?: Record<string, string | unknown>
+  reviewStatus?: ApplicationReviewStatus
 }
 
 export type FormTypes = {
