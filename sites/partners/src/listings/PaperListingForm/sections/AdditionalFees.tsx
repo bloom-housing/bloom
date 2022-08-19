@@ -1,6 +1,14 @@
 import React, { useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Field, Textarea, FieldGroup, ViewItem } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  Field,
+  Textarea,
+  FieldGroup,
+  ViewItem,
+  GridCell,
+} from "@bloom-housing/ui-components"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import { ListingUtilities } from "@bloom-housing/backend-core/types"
@@ -77,22 +85,26 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
           />
         </GridSection>
         <GridSection columns={2}>
-          <Textarea
-            label={t("listings.sections.depositHelperText")}
-            name={"depositHelperText"}
-            id={"depositHelperText"}
-            aria-describedby={"depositHelperText"}
-            fullWidth={true}
-            register={register}
-          />
-          <Textarea
-            label={t("listings.sections.costsNotIncluded")}
-            name={"costsNotIncluded"}
-            id={"costsNotIncluded"}
-            aria-describedby={"costsNotIncluded"}
-            fullWidth={true}
-            register={register}
-          />
+          <GridCell>
+            <Textarea
+              label={t("listings.sections.depositHelperText")}
+              name={"depositHelperText"}
+              id={"depositHelperText"}
+              aria-describedby={"depositHelperText"}
+              fullWidth={true}
+              register={register}
+            />
+          </GridCell>
+          <GridCell>
+            <Textarea
+              label={t("listings.sections.costsNotIncluded")}
+              name={"costsNotIncluded"}
+              id={"costsNotIncluded"}
+              aria-describedby={"costsNotIncluded"}
+              fullWidth={true}
+              register={register}
+            />
+          </GridCell>
         </GridSection>
         {enableUtilitiesIncluded && (
           <GridSection columns={1}>

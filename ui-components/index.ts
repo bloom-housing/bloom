@@ -4,6 +4,7 @@ export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
 export * from "./src/actions/ExpandableContent"
+export * from "./src/actions/Video"
 
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
@@ -17,6 +18,7 @@ export * from "./src/blocks/InfoCard"
 export * from "./src/blocks/StatusBar"
 export * from "./src/blocks/ViewItem"
 export * from "./src/blocks/StandardCard"
+export * from "./src/blocks/MediaCard"
 
 /* Contexts */
 export * from "./src/config"
@@ -35,11 +37,13 @@ export * from "./src/forms/PhoneField"
 export * from "./src/forms/PhoneMask"
 export * from "./src/forms/HouseholdMemberForm"
 export * from "./src/forms/HouseholdSizeField"
+export * from "./src/forms/MultiSelectField"
 export * from "./src/forms/FieldGroup"
 export * from "./src/forms/Select"
 export * from "./src/forms/Form"
 export * from "./src/forms/Textarea"
 export * from "./src/forms/TimeField"
+
 /* Global */
 export * from "./src/global/AppearanceTypes"
 export * from "./src/global/ApplicationStatusType"
@@ -48,6 +52,7 @@ export * from "./src/global/ApplicationStatusType"
 export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
+export * from "./src/headers/StepHeader"
 export * from "./src/headers/Heading"
 
 /* Helpers */

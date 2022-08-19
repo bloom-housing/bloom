@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
 import { Enforcer, newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
@@ -6,9 +7,11 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoleEnum } from "../enum/user-role-enum"
 import { authzActions } from "../enum/authz-actions.enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { UserRepository } from "../repositories/user-repository"
 
 @Injectable()
 export class AuthzService {
+  constructor(@InjectRepository(UserRepository) private readonly userRepository: UserRepository) {}
   /**
    * Check whether this is an authorized action based on the authz rules.
    * @param user User making the request. If not specified, the request will be authorized against a user with role
@@ -33,6 +36,11 @@ export class AuthzService {
 
     if (user) {
       e = await this.addUserPermissions(e, user)
+
+      if (type === "user" && obj?.id && !obj?.jurisdictionId) {
+        const accessedUser = await this.userRepository.findById(obj.id)
+        obj.jurisdictionId = accessedUser.jurisdictions.map((jurisdiction) => jurisdiction.id)[0]
+      }
     }
 
     return await e.enforce(user ? user.id : "anonymous", type, action, obj)
@@ -47,6 +55,8 @@ export class AuthzService {
     }
 
     if (user.roles?.isJurisdictionalAdmin) {
+      await enforcer.addRoleForUser(user.id, UserRoleEnum.jurisdictionAdmin)
+
       await Promise.all(
         user.jurisdictions.map((adminInJurisdiction: Jurisdiction) => {
           void enforcer.addPermissionForUser(
@@ -65,7 +75,7 @@ export class AuthzService {
             user.id,
             "user",
             `r.obj.jurisdictionId == '${adminInJurisdiction.id}'`,
-            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin})`
+            `(${authzActions.read}|${authzActions.invitePartner}|${authzActions.inviteJurisdictionalAdmin}|${authzActions.update}|${authzActions.delete})`
           )
         })
       )

@@ -9,6 +9,7 @@ import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 import { classToClass } from "class-transformer"
+import dayjs from "dayjs"
 
 const tritonListing: ListingSeedType = {
   jurisdictionName: "Alameda",
@@ -217,6 +218,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     > = {
       ...classToClass(tritonListing),
       name: "Test: Triton 2",
+      publishedAt: dayjs(new Date()).subtract(2.5, "hour"),
       assets: getDefaultAssets(),
       listingPreferences: [
         {

@@ -1,6 +1,6 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
+import { t, GridSection, Textarea, GridCell } from "@bloom-housing/ui-components"
 
 const AdditionalDetails = () => {
   const formMethods = useFormContext()
@@ -11,12 +11,12 @@ const AdditionalDetails = () => {
   return (
     <div>
       <GridSection
-        grid={false}
+        columns={2}
         separator
         title={t("listings.sections.additionalDetails")}
         description={t("listings.sections.additionalDetailsSubtitle")}
       >
-        <GridSection columns={2}>
+        <GridCell>
           <Textarea
             label={t("listings.requiredDocuments")}
             name={"requiredDocuments"}
@@ -25,6 +25,8 @@ const AdditionalDetails = () => {
             register={register}
             maxLength={2000}
           />
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("listings.importantProgramRules")}
             name={"programRules"}
@@ -33,8 +35,8 @@ const AdditionalDetails = () => {
             register={register}
             maxLength={600}
           />
-        </GridSection>
-        <GridSection columns={2}>
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("listings.specialNotes")}
             name={"specialNotes"}
@@ -43,7 +45,7 @@ const AdditionalDetails = () => {
             register={register}
             maxLength={600}
           />
-        </GridSection>
+        </GridCell>
       </GridSection>
     </div>
   )

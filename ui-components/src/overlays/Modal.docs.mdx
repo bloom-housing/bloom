@@ -1,13 +1,23 @@
 import { Canvas, Story, ArgsTable } from "@storybook/addon-docs"
+import { Swatch } from "../prototypes/Swatch"
 import { Modal } from "./Modal"
 
 # Modal
 
 The modal component displays a modal with a title and optional children typed as either a string or JSX. The modal includes a number of other optional settings.
 
+<Canvas>
+  <Story id="overlays-modal--basic-modal" />
+</Canvas>
+
+<br />
+<br />
+
 ## Component Properties
 
 <ArgsTable of={Modal} />
+
+## Theming Variables
 
 You can apply CSS variables to the `.modal` selector to customize the appearance of the component.
 

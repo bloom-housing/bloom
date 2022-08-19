@@ -12,6 +12,7 @@ import { OrderParam } from "../../applications/types/order-param"
 import { AuthzService } from "../../auth/services/authz.service"
 import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
+import { UserRepository } from "../../auth/repositories/user-repository"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -115,6 +116,14 @@ const mockListingsRepo = {
   save: jest.fn(),
 }
 
+const mockUserRepo = {
+  findOne: jest.fn(),
+  save: jest.fn(),
+  createQueryBuilder: jest.fn(),
+  findByEmail: jest.fn(),
+  findByResetToken: jest.fn(),
+}
+
 describe("ListingsService", () => {
   beforeEach(async () => {
     process.env.APP_SECRET = "SECRET"
@@ -123,9 +132,14 @@ describe("ListingsService", () => {
       providers: [
         ListingsService,
         AuthzService,
+        UserRepository,
         {
           provide: getRepositoryToken(ListingRepository),
           useValue: mockListingsRepo,
+        },
+        {
+          provide: getRepositoryToken(UserRepository),
+          useValue: mockUserRepo,
         },
         {
           provide: getRepositoryToken(AmiChart),

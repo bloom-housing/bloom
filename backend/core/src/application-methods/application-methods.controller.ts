@@ -22,6 +22,7 @@ import {
   ApplicationMethodDto,
   ApplicationMethodUpdateDto,
 } from "./dto/application-method.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("applicationMethods")
 @ApiTags("applicationMethods")
@@ -71,9 +72,9 @@ export class ApplicationMethodsController {
     )
   }
 
-  @Delete(`:applicationMethodId`)
+  @Delete()
   @ApiOperation({ summary: "Delete applicationMethod by id", operationId: "delete" })
-  async delete(@Param("applicationMethodId") applicationMethodId: string): Promise<void> {
-    return await this.applicationMethodsService.delete(applicationMethodId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.applicationMethodsService.delete(dto.id)
   }
 }

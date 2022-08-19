@@ -5,7 +5,7 @@ export class AdminOrJurisdictionalAdminGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest()
     const authUser = req.user
-    if (authUser?.roles?.isAdmin || authUser.roles?.isJurisdictionalAdmin) {
+    if (authUser?.roles?.isAdmin || authUser?.roles?.isJurisdictionalAdmin) {
       return true
     }
     return false
