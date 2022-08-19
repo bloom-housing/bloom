@@ -38,7 +38,7 @@ const Settings = () => {
     return (
       <div className={"flex justify-end"}>
         <div className={"w-max"}>
-          <button onClick={() => setPreferenceDrawerOpen(true)} className={"cursor-pointer"}>
+          <button onClick={() => setPreferenceDrawerOpen(true)}>
             <Icon
               symbol={faPenToSquare}
               size={"medium"}
@@ -46,7 +46,7 @@ const Settings = () => {
               className={"mr-5"}
             />
           </button>
-          <button onClick={() => alert("copy")} className={"cursor-pointer"}>
+          <button onClick={() => alert("copy")}>
             <Icon
               symbol={faClone}
               size={"medium"}
@@ -54,7 +54,7 @@ const Settings = () => {
               className={"mr-5"}
             />
           </button>
-          <button onClick={() => setDeleteModal(true)} className={"cursor-pointer"}>
+          <button onClick={() => setDeleteModal(true)}>
             <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
           </button>
         </div>
