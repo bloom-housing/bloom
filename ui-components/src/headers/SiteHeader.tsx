@@ -322,7 +322,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                     }
                   }}
                   key={`${menuLink.title}-${index}`}
-                  role={"menuitem"}
+                  role={"button"}
                 >
                   {menuContent}
                 </button>
@@ -342,7 +342,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 data-test-id={`${menuLink.title}-${index}`}
-                role={"menuitem"}
+                role={"button"}
               >
                 {menuContent}
               </span>

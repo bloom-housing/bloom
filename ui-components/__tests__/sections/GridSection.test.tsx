@@ -32,7 +32,6 @@ describe("<GridSection>", () => {
     expect(getByText("Child2")).toBeTruthy()
     expect(getByText("Child3")).toBeTruthy()
     expect(getByText("Title")).toBeTruthy()
-    expect(getByText("Edit")).toBeTruthy()
     expect(getByText("Subtitle")).toBeTruthy()
     expect(container.getElementsByClassName("custom-class").length).toBe(1)
     expect(container.getElementsByClassName("custom-class2").length).toBe(1)

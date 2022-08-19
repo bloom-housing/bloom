@@ -133,18 +133,14 @@ const ApplicationConfirmation = () => {
           )}
 
           <div className="form-card__pager-row py-6">
-            <span className="lined text-tiny">
-              <Link data-test-id={"app-confirmation-browse"} href="/listings">
-                {t("application.review.confirmation.browseMore")}
-              </Link>
+            <span className="lined text-tiny" data-test-id={"app-confirmation-browse"}>
+              <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
             </span>
           </div>
 
           <div className="form-card__pager-row py-6 border-t">
-            <span className="lined text-tiny">
-              <Link href="/applications/view" data-test-id={"app-confirmation-print"}>
-                {t("application.review.confirmation.print")}
-              </Link>
+            <span className="lined text-tiny" data-test-id={"app-confirmation-print"}>
+              <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
             </span>
           </div>
         </div>
