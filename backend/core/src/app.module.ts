@@ -42,10 +42,17 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
-  // TODO: update with proper values!
-  app.enableCors({
-    origin: "http://localhost:3001",
-    credentials: true,
+  const allowList = process.env.CORS_ORIGINS
+  app.enableCors((req, cb) => {
+    const options = {
+      credentials: true,
+      origin: false,
+    }
+
+    if (allowList.indexOf(req.header("Origin")) !== -1) {
+      options.origin = true
+    }
+    cb(null, options)
   })
   app.use(logger)
   app.useGlobalFilters(new CatchAllFilter(httpAdapter))
