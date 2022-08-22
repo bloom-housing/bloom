@@ -169,56 +169,6 @@ export function useFlaggedApplicationsList({
   }
 }
 
-export function useFlaggedApplicationsMeta(listingId: string) {
-  const { applicationFlaggedSetsService } = useContext(AuthContext)
-
-  const params = {
-    listingId,
-  }
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-
-  const endpoint = `${
-    process.env.backendApiBase
-  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
-
-  const fetcher = () => applicationFlaggedSetsService.meta(params)
-
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
-export function useFlaggedApplicationsMeta(listingId: string) {
-  const { applicationFlaggedSetsService } = useContext(AuthContext)
-
-  const params = {
-    listingId,
-  }
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-
-  const endpoint = `${
-    process.env.backendApiBase
-  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
-
-  const fetcher = () => applicationFlaggedSetsService.meta(params)
-
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
 export function useApplicationsData(
   currentPage: number,
   delayedFilterValue: string,
@@ -258,6 +208,31 @@ export function useApplicationsData(
     appsMeta,
     appsLoading: !error && !data,
     appsError: error,
+  }
+}
+
+export function useFlaggedApplicationsMeta(listingId: string) {
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
+
+  const params = {
+    listingId,
+  }
+
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+
+  const endpoint = `${
+    process.env.backendApiBase
+  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
+
+  const fetcher = () => applicationFlaggedSetsService.meta(params)
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
   }
 }
 export function useSingleFlaggedApplication(afsId: string) {

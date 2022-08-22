@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
@@ -22,7 +22,6 @@ import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
-import { tableColumns, getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
@@ -51,10 +50,10 @@ const ApplicationsList = () => {
     view = "pendingEmail"
   }
 
-  const { data: flaggedApps } = useFlaggedApplicationsList({
+  const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
     listingId,
-    page: 1,
-    limit: 1,
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
     view,
   })
 
@@ -208,10 +207,10 @@ const ApplicationsList = () => {
                   totalItemsLabel: t("applications.totalApplications"),
                 }}
                 data={{
-                  items: flaggedApps?.items ?? [],
-                  loading: false,
-                  totalItems: flaggedApps?.meta?.totalItems ?? 0,
-                  totalPages: flaggedApps?.meta?.totalPages ?? 0,
+                  items: flaggedAppsData?.items ?? [],
+                  loading: flaggedAppsLoading,
+                  totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                  totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
                 }}
                 search={{
                   setSearch: tableOptions.filter.setFilterValue,

@@ -91,53 +91,6 @@ const ApplicationsList = () => {
     },
   ]
 
-  const columns = [
-    {
-      headerName: t("applications.duplicates.duplicateGroup"),
-      field: "id",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-      cellRenderer: "formatLinkCell",
-      valueGetter: ({ data }) => {
-        if (!data?.applications?.length) return ""
-        const applicant = data.applications[0]?.applicant
-
-        return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
-      },
-    },
-    {
-      headerName: t("applications.duplicates.primaryApplicant"),
-      field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-      valueGetter: ({ data }) => {
-        if (!data?.applications?.length) return ""
-        const applicant = data.applications[0]?.applicant
-
-        return `${applicant.firstName} ${applicant.lastName}`
-      },
-    },
-    {
-      headerName: t("applications.pendingReview"),
-      field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-      valueGetter: ({ data }) => {
-        return `${data?.applications?.length ?? 0}`
-      },
-    },
-    {
-      headerName: t("t.rule"),
-      field: "rule",
-      sortable: false,
-      filter: false,
-      pinned: "left",
-    },
-  ]
-
   return (
     <Layout>
       <Head>
