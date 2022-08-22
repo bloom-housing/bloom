@@ -123,132 +123,148 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     // begin migration from prefences
     const preferences = await queryRunner.query(`
             SELECT 
+                p.id,
                 p.created_at,
                 p.updated_at,
                 p.title,
                 p.subtitle,
                 p.description,
                 p.links,
-                p.form_metadata,
-                j.name,
-                j.id
+                p.form_metadata
             FROM preferences p
-                LEFT JOIN jurisdictions_preferences_preferences jp ON jp.preferences_id = p.id
-                LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
         `)
 
     for (let i = 0; i < preferences.length; i++) {
       const pref = preferences[i]
+      const jurisInfo = await queryRunner.query(`
+            SELECT
+              j.id,
+              j.name
+            FROM jurisdictions_preferences_preferences jp
+              JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+            LIMIT 1
+        `)
       const { optOutText, options } = this.resolveOptionValues(
         pref.form_metadata,
         "preferences",
-        pref.name
+        jurisInfo?.length ? jurisInfo[0].name : ""
       )
       const res = await queryRunner.query(`
-            INSERT INTO multiselect_questions (
-                created_at,
-                updated_at,
-                text,
-                sub_text,
-                description,
-                links,
-                hide_from_listing,
-                opt_out_text,
-                options,
-                application_section
-            )
-            SELECT 
-                '${new Date(pref.created_at).toISOString()}',
-                '${new Date(pref.updated_at).toISOString()}',
-                '${pref.title}',
-                '${pref.subtitle}',
-                '${pref.description}',
-                ${pref.links ? "'pref.links'" : "null"},
-                ${this.resolveHideFromListings(pref)},
-                ${optOutText},
-                ${options},
-                'preferences'
-            RETURNING id
-        `)
-
+          INSERT INTO multiselect_questions (
+              created_at,
+              updated_at,
+              text,
+              sub_text,
+              description,
+              links,
+              hide_from_listing,
+              opt_out_text,
+              options,
+              application_section
+          )
+          SELECT 
+              '${new Date(pref.created_at).toISOString()}',
+              '${new Date(pref.updated_at).toISOString()}',
+              '${this.handleQuotes(pref.title)}',
+              '${this.handleQuotes(pref.subtitle)}',
+              '${this.handleQuotes(pref.description)}',
+              ${pref.links ? `'${JSON.stringify(pref.links)}'` : "null"},
+              ${this.resolveHideFromListings(pref)},
+              ${optOutText ? `'${this.handleQuotes(optOutText)}'` : "null"},
+              ${options},
+              'preferences'
+          RETURNING id
+      `)
       await queryRunner.query(`
-            INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
-            SELECT
-                '${res[0].id}',
-                '${pref.id}';
-            
-            INSERT INTO listing_multiselect_questions(multiselect_question_id, listing_id)
-            SELECT
-                '${res[0].id}',
-                listing_id
-            FROM listing_preferences
-            WHERE preference_id = '${pref.id}';
-        `)
+          INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
+          SELECT
+            '${res[0].id}',
+            jp.jurisdictions_id
+          FROM jurisdictions_preferences_preferences jp 
+          WHERE jp.preferences_id = '${pref.id}';
+      
+          INSERT INTO listing_multiselect_questions(ordinal, multiselect_question_id, listing_id)
+          SELECT
+              ordinal,
+              '${res[0].id}',
+              listing_id
+          FROM listing_preferences
+          WHERE preference_id = '${pref.id}';
+      `)
     }
 
     // begin migration from programs
     const programs = await queryRunner.query(`
-            SELECT 
-                p.created_at,
-                p.updated_at,
-                p.title,
-                p.subtitle,
-                p.description,
-                p.form_metadata,
-                j.name,
-                j.id
-            FROM programs p
-                LEFT JOIN jurisdictions_programs_programs jp ON jp.programs_id = p.id
-                LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
-        `)
+      SELECT 
+          p.id,
+          p.created_at,
+          p.updated_at,
+          p.title,
+          p.subtitle,
+          p.description,
+          p.form_metadata
+      FROM programs p
+    `)
 
     for (let i = 0; i < programs.length; i++) {
       const prog = programs[i]
+      const jurisInfo = await queryRunner.query(`
+            SELECT
+              j.id,
+              j.name
+            FROM jurisdictions_programs_programs jp
+              JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+            LIMIT 1
+        `)
+
       const { optOutText, options } = this.resolveOptionValues(
         prog.form_metadata,
         "programs",
-        prog.name
+        jurisInfo?.length ? jurisInfo[0].name : ""
       )
       const res = await queryRunner.query(`
-                INSERT INTO multiselect_questions (
-                    created_at,
-                    updated_at,
-                    text,
-                    sub_text,
-                    description,
-                    links,
-                    hide_from_listing,
-                    opt_out_text,
-                    options,
-                    application_section
-                )
-                SELECT 
-                    '${new Date(prog.created_at).toISOString()}',
-                    '${new Date(prog.updated_at).toISOString()}',
-                    '${prog.title}',
-                    '${prog.subtitle}',
-                    '${prog.description}',
-                    null,
-                    ${this.resolveHideFromListings(prog)},
-                    ${optOutText},
-                    ${options},
-                    'programs'
-                RETURNING id
-            `)
+          INSERT INTO multiselect_questions (
+              created_at,
+              updated_at,
+              text,
+              sub_text,
+              description,
+              links,
+              hide_from_listing,
+              opt_out_text,
+              options,
+              application_section
+          )
+          SELECT
+              '${new Date(prog.created_at).toISOString()}',
+              '${new Date(prog.updated_at).toISOString()}',
+              '${this.handleQuotes(prog.title)}',
+              '${this.handleQuotes(prog.subtitle)}',
+              '${this.handleQuotes(prog.description)}',
+              null,
+              ${this.resolveHideFromListings(prog)},
+              ${optOutText ? `'${this.handleQuotes(optOutText)}'` : "null"},
+              ${options},
+              'programs'
+          RETURNING id
+      `)
 
       await queryRunner.query(`
-                INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
-                SELECT
-                    '${res[0].id}',
-                    '${prog.id}';
-                
-                INSERT INTO listing_multiselect_questions(multiselect_question_id, listing_id)
-                SELECT
-                    '${res[0].id}',
-                    listing_id
-                FROM listing_programs
-                WHERE program_id = '${prog.id}';
-            `)
+          INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
+          SELECT
+              '${res[0].id}',
+              jp.jurisdictions_id
+          FROM jurisdictions_programs_programs jp
+          WHERE jp.programs_id = '${prog.id}';
+
+          INSERT INTO listing_multiselect_questions(ordinal, multiselect_question_id, listing_id)
+          SELECT
+              ordinal,
+              '${res[0].id}',
+              listing_id
+          FROM listing_programs
+          WHERE program_id = '${prog.id}';
+      `)
     }
   }
 
@@ -301,14 +317,19 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
   }
 
   private resolveOptionValues(formMetaData, type, juris) {
-    let optOutText = "null"
+    let optOutText = null
     const options = []
     let shouldPush = true
 
     formMetaData.options.forEach((option, index) => {
       const toPush: Record<string, any> = {
         ordinal: index,
-        text: this.getTranslated(type, formMetaData.key, `${option.key}.label`, juris),
+        text: this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.label`,
+          juris
+        ),
       }
 
       if (
@@ -324,7 +345,12 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
         index === formMetaData.options.length - 1
       ) {
         // for the last exclusive option add as optOutText
-        optOutText = this.getTranslated(type, formMetaData.key, `${option.key}.label`, juris)
+        optOutText = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.label`,
+          juris
+        )
         shouldPush = false
       }
 
@@ -332,7 +358,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
         toPush.description = this.getTranslated(
           type,
           formMetaData.key,
-          `${option.key}.description`,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.description`,
           juris
         )
       }
@@ -352,38 +378,41 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
   }
 
   private getTranslated(type, prefKey, translationKey, juris) {
-    const searchKey = `application.${type}.${prefKey}.${translationKey}`
+    let searchKey = `application.${type}.${prefKey}.${translationKey}`
+    if (translationKey === "preferNotToSay") {
+      searchKey = "t.preferNotToSay"
+    }
 
     if (juris === "Detroit") {
       if (this.translations["detroitPublic"][searchKey]) {
-        return this.translations["detroitPublic"][searchKey]
+        return this.handleQuotes(this.translations["detroitPublic"][searchKey])
       } else if (this.translations["detroitPartners"][searchKey]) {
-        return this.translations["detroitPartners"][searchKey]
+        return this.handleQuotes(this.translations["detroitPartners"][searchKey])
       } else if (this.translations["detroitCore"][searchKey]) {
-        return this.translations["detroitCore"][searchKey]
+        return this.handleQuotes(this.translations["detroitCore"][searchKey])
       }
     } else if (["Alameda", "San Mateo", "San Jose"].includes(juris)) {
       if (juris === "Alameda" && this.translations["alamedaPublic"][searchKey]) {
-        return this.translations["alamedaPublic"][searchKey]
+        return this.handleQuotes(this.translations["alamedaPublic"][searchKey])
       } else if (juris === "San Mateo" && this.translations["smcPublic"][searchKey]) {
-        return this.translations["smcPublic"][searchKey]
+        return this.handleQuotes(this.translations["smcPublic"][searchKey])
       } else if (juris === "San Jose" && this.translations["sjPublic"][searchKey]) {
-        return this.translations["sjPublic"][searchKey]
+        return this.handleQuotes(this.translations["sjPublic"][searchKey])
       } else if (this.translations["hbaPublic"][searchKey]) {
-        return this.translations["hbaPublic"][searchKey]
+        return this.handleQuotes(this.translations["hbaPublic"][searchKey])
       } else if (this.translations["hbaPartners"][searchKey]) {
-        return this.translations["hbaPartners"][searchKey]
+        return this.handleQuotes(this.translations["hbaPartners"][searchKey])
       } else if (this.translations["hbaCore"][searchKey]) {
-        return this.translations["hbaCore"][searchKey]
+        return this.handleQuotes(this.translations["hbaCore"][searchKey])
       }
     }
 
     if (this.translations["generalPublic"][searchKey]) {
-      return this.translations["generalPublic"][searchKey]
+      return this.handleQuotes(this.translations["generalPublic"][searchKey])
     } else if (this.translations["generalPartners"][searchKey]) {
-      return this.translations["generalPartners"][searchKey]
+      return this.handleQuotes(this.translations["generalPartners"][searchKey])
     } else if (this.translations["generalCore"][searchKey]) {
-      return this.translations["generalCore"][searchKey]
+      return this.handleQuotes(this.translations["generalCore"][searchKey])
     }
     return "no translation"
   }
@@ -413,5 +442,13 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           reject(`getting broke: ${url}`)
         })
     )
+  }
+
+  private handleQuotes(str) {
+    if (!str) {
+      return str
+    }
+    const regEx = new RegExp("'", "g")
+    return str.replace(regEx, "''")
   }
 }
