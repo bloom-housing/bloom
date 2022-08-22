@@ -20,25 +20,15 @@ import Layout from "../../layouts"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../src/settings/ManageIconSection"
-import { MultiselectOption } from "@bloom-housing/backend-core/types/src/backend-swagger"
 
-export type PreferenceDrawerType = {
-  type: "add" | "edit"
-  preference?: MultiselectQuestion
-}
-
-export type OptionDrawerType = {
-  type: "add" | "edit"
-  option?: MultiselectOption
-}
+export type DrawerType = "add" | "edit"
 
 const Settings = () => {
-  const { profile } = useContext(AuthContext)
+  const { profile, multiselectQuestionsService } = useContext(AuthContext)
 
   const [deleteModal, setDeleteModal] = useState(false)
-  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<PreferenceDrawerType | null>(
-    null
-  )
+  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
+  const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
 
   const { data, loading } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.reduce((acc, curr) => {
@@ -60,28 +50,41 @@ const Settings = () => {
               icons: "",
             }}
             cellClassName={"px-5 py-3"}
-            data={data?.map((preference) => {
-              return {
-                name: { content: preference?.text },
-                jurisdiction: {
-                  content: preference?.jurisdictions?.reduce((acc, item, index) => {
-                    return `${acc}${index > 0 ? ", " : ""}${item.name}`
-                  }, ""),
-                },
-                updated: {
-                  content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
-                },
-                icons: {
-                  content: (
-                    <ManageIconSection
-                      onCopy={() => alert("copy")}
-                      onEdit={() => setPreferenceDrawerOpen({ type: "edit", preference })}
-                      onDelete={() => setDeleteModal(true)}
-                    />
-                  ),
-                },
-              }
-            })}
+            data={data
+              ?.sort((a, b) => {
+                const aChar = a.jurisdictions[0].name[0]
+                const bChar = b.jurisdictions[0].name[0]
+                return aChar < bChar ? -1 : aChar > bChar ? 1 : 0
+              })
+              .map((preference) => {
+                return {
+                  name: { content: preference?.text },
+                  jurisdiction: {
+                    content: preference?.jurisdictions?.reduce((acc, item, index) => {
+                      return `${acc}${index > 0 ? ", " : ""}${item.name}`
+                    }, ""),
+                  },
+                  updated: {
+                    content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
+                  },
+                  icons: {
+                    content: (
+                      <ManageIconSection
+                        onCopy={() =>
+                          multiselectQuestionsService.create({
+                            body: preference,
+                          })
+                        }
+                        onEdit={() => {
+                          setQuestionData(preference)
+                          setPreferenceDrawerOpen("edit")
+                        }}
+                        onDelete={() => setDeleteModal(true)}
+                      />
+                    ),
+                  },
+                }
+              })}
           />
         ) : (
           <div className={"ml-5 mb-5"}>{t("t.none")}</div>
@@ -114,7 +117,8 @@ const Settings = () => {
                   <Button
                     size={AppearanceSizeType.small}
                     onClick={() => {
-                      setPreferenceDrawerOpen({ type: "add", preference: null })
+                      setQuestionData(null)
+                      setPreferenceDrawerOpen("add")
                     }}
                   >
                     {t("t.addItem")}
@@ -157,10 +161,11 @@ const Settings = () => {
         {t("settings.preferenceDelete")}
       </Modal>
       <PreferenceDrawer
-        type={preferenceDrawerOpen?.type}
-        initialData={preferenceDrawerOpen?.preference}
         drawerOpen={!!preferenceDrawerOpen}
+        questionData={questionData}
         setDrawerOpen={setPreferenceDrawerOpen}
+        setQuestionData={setQuestionData}
+        drawerType={preferenceDrawerOpen}
       />
     </>
   )
