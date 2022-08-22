@@ -130,20 +130,24 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
                 p.subtitle,
                 p.description,
                 p.links,
-                p.form_metadata,
-                j.name,
-                j.id as jurisID
+                p.form_metadata
             FROM preferences p
-                LEFT JOIN jurisdictions_preferences_preferences jp ON jp.preferences_id = p.id
-                LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
         `)
 
     for (let i = 0; i < preferences.length; i++) {
       const pref = preferences[i]
+      const jurisInfo = await queryRunner.query(`
+            SELECT
+              j.id,
+              j.name
+            FROM jurisdictions_preferences_preferences jp
+              JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+            LIMIT 1
+        `)
       const { optOutText, options } = this.resolveOptionValues(
         pref.form_metadata,
         "preferences",
-        pref.name
+        jurisInfo?.length ? jurisInfo[0].name : ""
       )
       const res = await queryRunner.query(`
           INSERT INTO multiselect_questions (
@@ -171,18 +175,17 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
               'preferences'
           RETURNING id
       `)
-
-      if (pref.jurisID) {
-        await queryRunner.query(`
-            INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
-            SELECT
-                '${res[0].id}',
-                '${pref.jurisID}';
-        `)
-      }
       await queryRunner.query(`
-          INSERT INTO listing_multiselect_questions(multiselect_question_id, listing_id)
+          INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
           SELECT
+            '${res[0].id}',
+            jp.jurisdictions_id
+          FROM jurisdictions_preferences_preferences jp 
+          WHERE jp.preferences_id = '${pref.id}';
+      
+          INSERT INTO listing_multiselect_questions(ordinal, multiselect_question_id, listing_id)
+          SELECT
+              ordinal,
               '${res[0].id}',
               listing_id
           FROM listing_preferences
@@ -199,20 +202,25 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           p.title,
           p.subtitle,
           p.description,
-          p.form_metadata,
-          j.name,
-          j.id as jurisID
+          p.form_metadata
       FROM programs p
-          LEFT JOIN jurisdictions_programs_programs jp ON jp.programs_id = p.id
-          LEFT JOIN jurisdictions j ON j.id = jp.jurisdictions_id
     `)
 
     for (let i = 0; i < programs.length; i++) {
       const prog = programs[i]
+      const jurisInfo = await queryRunner.query(`
+            SELECT
+              j.id,
+              j.name
+            FROM jurisdictions_programs_programs jp
+              JOIN jurisdictions j ON jp.jurisdictions_id = j.id
+            LIMIT 1
+        `)
+
       const { optOutText, options } = this.resolveOptionValues(
         prog.form_metadata,
         "programs",
-        prog.name
+        jurisInfo?.length ? jurisInfo[0].name : ""
       )
       const res = await queryRunner.query(`
           INSERT INTO multiselect_questions (
@@ -241,17 +249,17 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           RETURNING id
       `)
 
-      if (prog.jurisID) {
-        await queryRunner.query(`
+      await queryRunner.query(`
           INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
           SELECT
               '${res[0].id}',
-              '${prog.jurisID}';
-        `)
-      }
-      await queryRunner.query(`
-          INSERT INTO listing_multiselect_questions(multiselect_question_id, listing_id)
+              jp.jurisdictions_id
+          FROM jurisdictions_programs_programs jp
+          WHERE jp.programs_id = '${prog.id}';
+
+          INSERT INTO listing_multiselect_questions(ordinal, multiselect_question_id, listing_id)
           SELECT
+              ordinal,
               '${res[0].id}',
               listing_id
           FROM listing_programs
