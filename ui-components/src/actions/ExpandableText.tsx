@@ -39,9 +39,9 @@ const moreLessButton = (
   }
 
   return (
-    <span className={classes.join(" ")} onClick={() => setExpanded(!expanded)}>
+    <button className={classes.join(" ")} onClick={() => setExpanded(!expanded)}>
       {expanded ? strings?.readLess : strings?.readMore}
-    </span>
+    </button>
   )
 }
 

@@ -4,6 +4,7 @@ Total pre-tax household income from all sources
 */
 import React, { useContext, useEffect, useState } from "react"
 import { Listing } from "@bloom-housing/backend-core/types"
+import Link from "next/link"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -162,7 +163,7 @@ const ApplicationIncome = () => {
                 {t(`application.financial.income.validationError.instruction2`)}
               </p>
               <p>
-                <a href="#">{t("pageTitle.getAssistance")}</a>
+                <Link href={`/get-assistance`}>{t("pageTitle.getAssistance")}</Link>
               </p>
             </AlertNotice>
           </>
