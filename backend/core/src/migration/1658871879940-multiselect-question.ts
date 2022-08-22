@@ -324,7 +324,12 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     formMetaData.options.forEach((option, index) => {
       const toPush: Record<string, any> = {
         ordinal: index,
-        text: this.getTranslated(type, formMetaData.key, `${option.key}.label`, juris),
+        text: this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.label`,
+          juris
+        ),
       }
 
       if (
@@ -340,7 +345,12 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
         index === formMetaData.options.length - 1
       ) {
         // for the last exclusive option add as optOutText
-        optOutText = this.getTranslated(type, formMetaData.key, `${option.key}.label`, juris)
+        optOutText = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.label`,
+          juris
+        )
         shouldPush = false
       }
 
@@ -348,7 +358,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
         toPush.description = this.getTranslated(
           type,
           formMetaData.key,
-          `${option.key}.description`,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.description`,
           juris
         )
       }
@@ -368,7 +378,10 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
   }
 
   private getTranslated(type, prefKey, translationKey, juris) {
-    const searchKey = `application.${type}.${prefKey}.${translationKey}`
+    let searchKey = `application.${type}.${prefKey}.${translationKey}`
+    if (translationKey === "preferNotToSay") {
+      searchKey = "t.preferNotToSay"
+    }
 
     if (juris === "Detroit") {
       if (this.translations["detroitPublic"][searchKey]) {

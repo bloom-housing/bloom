@@ -350,8 +350,8 @@ export const servedInMilitaryProgram: MultiselectQuestionSeedType = {
   description: "Have you or anyone in your household served in the US military?",
   applicationSection: ApplicationSection.programs,
   options: [
-    { text: "Served in Military", exclusive: true, ordinal: 1 },
-    { text: "Do not consider me", exclusive: true, ordinal: 2 },
+    { text: "Yes", exclusive: true, ordinal: 1 },
+    { text: "No", exclusive: true, ordinal: 2 },
     { text: "Prefer not to say", exclusive: true, ordinal: 3 },
   ],
 }
