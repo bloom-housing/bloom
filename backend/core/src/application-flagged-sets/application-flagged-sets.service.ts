@@ -406,58 +406,62 @@ export class ApplicationFlaggedSetsService {
   }
 
   async meta(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    const constructQuery = (params: {
+      listingId: string
+      status?: FlaggedSetStatus
+      rule?: Rule
+    }): SelectQueryBuilder<ApplicationFlaggedSet> => {
+      const query = this.afsRepository.createQueryBuilder("afs")
+      query
+        .select("SUM(1) as value")
+        .where("afs.listing_id = :listingId", { listingId: params.listingId })
+      if (params.status) {
+        query.andWhere("afs.status = :status", { status: params.status })
+      }
+      if (params.rule) {
+        query.andWhere("afs.rule = :rule", { rule: params.rule })
+      }
+      return query
+    }
     const allQB = this.applicationsRepository.createQueryBuilder("afs")
-    allQB.select("SUM(1) as totalCount")
+    allQB.select("SUM(1) as value")
     allQB.where("afs.listing_id = :listingId", { listingId: queryParams.listingId })
-
-    const resolvedQB = this.afsRepository.createQueryBuilder("afs")
-    resolvedQB.select("SUM(1) as totalResolvedCount")
-    resolvedQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
-    resolvedQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.resolved })
-
-    const pendingQB = this.afsRepository.createQueryBuilder("afs")
-    pendingQB.select("SUM(1) as totalPendingCount")
-    pendingQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
-    pendingQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
-
-    const pendingNameQB = this.afsRepository.createQueryBuilder("afs")
-    pendingNameQB.select("SUM(1) as totalNamePendingCount")
-    pendingNameQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
-    pendingNameQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
-    pendingNameQB.andWhere("afs.rule = :rule", { rule: Rule.nameAndDOB })
-
-    const pendingEmailQB = this.afsRepository.createQueryBuilder("afs")
-    pendingEmailQB.select("SUM(1) as totalEmailPendingCount")
-    pendingEmailQB.where("afs.listingId = :listingId", { listingId: queryParams.listingId })
-    pendingEmailQB.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
-    pendingEmailQB.andWhere("afs.rule = :rule", { rule: Rule.email })
-
-    const results = await Promise.all(
+    const resolvedQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.resolved,
+    })
+    const pendingQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.flagged,
+    })
+    const pendingNameQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.flagged,
+      rule: Rule.nameAndDOB,
+    })
+    const pendingEmailQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.flagged,
+      rule: Rule.email,
+    })
+    const [
+      totalCount,
+      totalResolvedCount,
+      totalPendingCount,
+      totalNamePendingCount,
+      totalEmailPendingCount,
+    ] = await Promise.all(
       [allQB, resolvedQB, pendingQB, pendingNameQB, pendingEmailQB].map(
         async (query) => await query.getRawOne()
       )
     )
-
-    const res: ApplicationFlaggedSetMeta = {}
-
-    results.forEach((elem) => {
-      if ("totalcount" in elem) {
-        res.totalCount = elem.totalcount
-      }
-      if ("totalresolvedcount" in elem) {
-        res.totalResolvedCount = elem.totalresolvedcount
-      }
-      if ("totalpendingcount" in elem) {
-        res.totalPendingCount = elem.totalpendingcount
-      }
-      if ("totalnamependingcount" in elem) {
-        res.totalNamePendingCount = elem.totalnamependingcount
-      }
-      if ("totalemailpendingcount" in elem) {
-        res.totalEmailPendingCount = elem.totalemailpendingcount
-      }
-    })
-
+    const res: ApplicationFlaggedSetMeta = {
+      totalCount: totalCount.value,
+      totalResolvedCount: totalResolvedCount.value,
+      totalPendingCount: totalPendingCount.value,
+      totalNamePendingCount: totalNamePendingCount.value,
+      totalEmailPendingCount: totalEmailPendingCount.value,
+    }
     return res
   }
 }

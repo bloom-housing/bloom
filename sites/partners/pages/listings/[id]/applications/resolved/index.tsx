@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
@@ -11,6 +11,7 @@ import {
   BreadcrumbLink,
   NavigationHeader,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,
@@ -19,22 +20,27 @@ import {
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
+import { getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
+  const { profile } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
-  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(listingId)
+  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
+    listingId,
+    profile?.roles?.isAdmin ?? false
+  )
 
   const tableOptions = useAgTable()
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
-  const { data: flaggedApps } = useFlaggedApplicationsList({
+  const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
     listingId,
-    page: 1,
-    limit: 1,
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
     view: "resolved",
   })
 
@@ -85,30 +91,6 @@ const ApplicationsList = () => {
     },
   ]
 
-  class formatLinkCell {
-    linkWithId: HTMLSpanElement
-
-    init(params) {
-      const applicationId = params.data.id
-
-      this.linkWithId = document.createElement("button")
-      this.linkWithId.classList.add("text-blue-700")
-      this.linkWithId.innerText = params.value
-
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
-    }
-
-    getGui() {
-      return this.linkWithId
-    }
-  }
-
-  const gridComponents = {
-    formatLinkCell,
-  }
-
   return (
     <Layout>
       <Head>
@@ -120,7 +102,7 @@ const ApplicationsList = () => {
         listingId={listingId}
         tabs={{
           show: true,
-          flagsQty: flaggedApps?.meta?.totalFlagged,
+          flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
           flagsLabel: t("nav.flags"),
@@ -162,15 +144,15 @@ const ApplicationsList = () => {
                 setCurrentPage: tableOptions.pagination.setCurrentPage,
               }}
               config={{
-                gridComponents,
-                columns,
+                gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
+                columns: columns,
                 totalItemsLabel: t("applications.totalApplications"),
               }}
               data={{
-                items: flaggedApps?.items ?? [],
-                loading: false,
-                totalItems: flaggedApps?.meta?.totalItems ?? 0,
-                totalPages: flaggedApps?.meta?.totalPages ?? 0,
+                items: flaggedAppsData.items,
+                loading: flaggedAppsLoading,
+                totalItems: flaggedAppsData.meta.totalItems,
+                totalPages: flaggedAppsData.meta.totalPages,
               }}
               search={{
                 setSearch: tableOptions.filter.setFilterValue,

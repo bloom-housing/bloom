@@ -35,7 +35,7 @@ const ApplicationsSideNav = ({
       url: `/listings/${listingId}/applications/pending`,
       count: data?.totalPendingCount || 0,
       childrenItems: [
-        {
+        /* {
           label: t("applications.namedob"),
           url: `/listings/${listingId}/applications/pending?type=name_dob`,
           count: data?.totalNamePendingCount || 0,
@@ -44,7 +44,7 @@ const ApplicationsSideNav = ({
           label: t("t.email"),
           url: `/listings/${listingId}/applications/pending?type=email`,
           count: data?.totalEmailPendingCount || 0,
-        },
+        }, */
       ],
     },
   ]

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
@@ -12,6 +12,7 @@ import {
   BreadcrumbLink,
   NavigationHeader,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,
@@ -28,12 +29,16 @@ import {
 import { ApplicationsSideNav } from "../../../../src/applications/ApplicationsSideNav"
 
 const ApplicationsList = () => {
+  const { profile } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
 
   const tableOptions = useAgTable()
 
-  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(listingId)
+  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
+    listingId,
+    profile?.roles?.isAdmin ?? false
+  )
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
@@ -12,6 +12,7 @@ import {
   NavigationHeader,
   AlertBox,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,
@@ -23,11 +24,15 @@ import { ApplicationsSideNav } from "../../../../../src/applications/Application
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
 
 const ApplicationsList = () => {
+  const { profile } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
   const type = router.query.type as string
 
-  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(listingId)
+  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
+    listingId,
+    profile?.roles?.isAdmin ?? false
+  )
 
   const tableOptions = useAgTable()
 
@@ -45,10 +50,10 @@ const ApplicationsList = () => {
     view = "pendingEmail"
   }
 
-  const { data: flaggedApps } = useFlaggedApplicationsList({
+  const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
     listingId,
-    page: 1,
-    limit: 1,
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
     view,
   })
 
@@ -141,7 +146,7 @@ const ApplicationsList = () => {
         listingId={listingId}
         tabs={{
           show: true,
-          flagsQty: flaggedApps?.meta?.totalFlagged,
+          flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
           flagsLabel: t("nav.flags"),
@@ -202,10 +207,10 @@ const ApplicationsList = () => {
                   totalItemsLabel: t("applications.totalApplications"),
                 }}
                 data={{
-                  items: flaggedApps?.items ?? [],
-                  loading: false,
-                  totalItems: flaggedApps?.meta?.totalItems ?? 0,
-                  totalPages: flaggedApps?.meta?.totalPages ?? 0,
+                  items: flaggedAppsData?.items ?? [],
+                  loading: flaggedAppsLoading,
+                  totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                  totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
                 }}
                 search={{
                   setSearch: tableOptions.filter.setFilterValue,
@@ -223,12 +228,12 @@ const ApplicationsList = () => {
               />
             )}
 
-            <div className="flex flex-row justify-end">
+            {/* <div className="flex flex-row justify-end">
               <div className="mt-5">
                 <span>Last Updated 06/17/22 at 9:00am</span>
                 <Button className="mx-1 ml-5">{t("applications.scanForDuplicates")}</Button>
               </div>
-            </div>
+            </div> */}
           </div>
         </article>
       </section>

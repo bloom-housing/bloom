@@ -164,6 +164,7 @@ export function useFlaggedApplicationsList({
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
@@ -188,6 +189,7 @@ export function useFlaggedApplicationsMeta(listingId: string) {
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
@@ -463,7 +465,7 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
   }
 }
 
-export const useApplicationsExport = (listingId: string) => {
+export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
   const { applicationsService } = useContext(AuthContext)
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
@@ -476,6 +478,7 @@ export const useApplicationsExport = (listingId: string) => {
     try {
       const content = await applicationsService.listAsCsv({
         listingId,
+        includeDemographics,
       })
 
       const now = new Date()
@@ -492,7 +495,7 @@ export const useApplicationsExport = (listingId: string) => {
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, listingId])
+  }, [applicationsService, includeDemographics, listingId])
 
   return {
     onExport,

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -17,6 +17,7 @@ import {
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -38,6 +39,22 @@ const LotteryResults = (props: LotteryResultsProps) => {
   })
 
   const listingEvents = watch("events")
+  const uploadedPDF = listingEvents.find(
+    (event: ListingEvent) => event.type === ListingEventType.lotteryResults
+  )
+
+  useEffect(() => {
+    if (uploadedPDF) {
+      setCloudinaryData({ url: cloudinaryUrlFromId(uploadedPDF.file?.fileId), id: uploadedPDF.id })
+      // Don't allow a new one to be uploaded if one already exists so setting progress to 100%
+      setProgressValue(100)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const title = uploadedPDF
+    ? "listings.sections.lotteryResultsEdit"
+    : "listings.sections.lotteryResultsAdd"
 
   const resetDrawerState = () => {
     showDrawer(false)
@@ -53,16 +70,18 @@ const LotteryResults = (props: LotteryResultsProps) => {
       updatedEvents.splice(lotteryIndex, 1)
     }
 
-    const newEvent: ListingEventCreate = {
-      type: ListingEventType.lotteryResults,
-      startTime: new Date(),
-      file: {
-        fileId: cloudinaryData.id,
-        label: "cloudinaryPDF",
-      },
+    if (cloudinaryData.id) {
+      const newEvent: ListingEventCreate = {
+        type: ListingEventType.lotteryResults,
+        startTime: new Date(),
+        file: {
+          fileId: cloudinaryData.id,
+          label: "cloudinaryPDF",
+        },
+      }
+      updatedEvents.push(newEvent as ListingEvent)
     }
 
-    updatedEvents.push(newEvent as ListingEvent)
     submitCallback({ events: updatedEvents })
   }
 
@@ -117,7 +136,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
   return (
     <Drawer
       open={drawerState}
-      title="Add Results"
+      title={t(title)}
       onClose={() => resetDrawerState()}
       ariaDescription="Form to upload lottery results"
       actions={[
@@ -129,7 +148,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
           }}
           styleType={AppearanceStyleType.primary}
         >
-          {t("t.post")}
+          {progressValue === 100 ? t("t.post") : t("t.save")}
         </Button>,
         <Button
           key={1}
