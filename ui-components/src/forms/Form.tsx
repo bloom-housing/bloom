@@ -13,6 +13,7 @@ const Form = ({ id, children, className, onSubmit }: FormProps) => {
   }
 
   return (
+    // eslint-disable-next-line  jsx-a11y/no-noninteractive-element-interactions
     <form id={id} className={className} onSubmit={onSubmit} onKeyPress={onKeyPress} noValidate>
       {children}
     </form>

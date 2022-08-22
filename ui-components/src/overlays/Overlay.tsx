@@ -39,6 +39,9 @@ const OverlayInner = (props: OverlayProps) => {
       onClick={(e) => {
         if (e.target === e.currentTarget) closeHandler()
       }}
+      onKeyPress={(e) => {
+        if (e.key === "Escape") closeHandler()
+      }}
     >
       <div className={`fixed-overlay__inner ${props.slim ? "fixed-overlay__inner-slim" : ""}`}>
         <FocusLock>{props.children}</FocusLock>
