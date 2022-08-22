@@ -495,7 +495,7 @@
   "authentication.forgotPassword.sendEmail": "Send email",
   "authentication.forgotPassword.success": "We've sent you an email. You'll receive an email with a link to reset your password.",
   "authentication.signIn.accountHasBeenLocked": "For security reasons, this account has been locked.",
-  "authentication.signIn.afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
+  "authentication.signIn.afterFailedAttempts": "For security reasons, after %{count} failed attempts, you’ll have to wait 30 minutes before trying again.",
   "authentication.signIn.changeYourPassword": "You can change your password",
   "authentication.signIn.enterLoginEmail": "Please enter your login email",
   "authentication.signIn.enterLoginPassword": "Please enter your login password",

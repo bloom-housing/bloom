@@ -28,7 +28,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
     super()
   }
 
-  async validate(req: Request): Promise<any> {
+  async validate(req: Request): Promise<User> {
     const validationPipe = new ValidationPipe(defaultValidationPipeOptions)
     const loginDto: LoginDto = await validationPipe.transform(req.body, {
       type: "body",
@@ -43,23 +43,24 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
     if (user) {
       if (user.lastLoginAt) {
         const retryAfter = new Date(
-          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           user.lastLoginAt.getTime() + this.configService.get<number>("AUTH_LOCK_LOGIN_COOLDOWN_MS")
         )
         if (
           user.failedLoginAttemptsCount >=
-            this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
-          retryAfter > new Date()
+          this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS")
         ) {
-          throw new HttpException(
-            {
-              statusCode: HttpStatus.TOO_MANY_REQUESTS,
-              error: "Too Many Requests",
-              message: "Failed login attempts exceeded.",
-              retryAfter,
-            },
-            429
-          )
+          user.failedLoginAttemptsCount = 0
+          if (retryAfter > new Date()) {
+            throw new HttpException(
+              {
+                statusCode: HttpStatus.TOO_MANY_REQUESTS,
+                error: "Too Many Requests",
+                message: "Failed login attempts exceeded.",
+                retryAfter,
+              },
+              429
+            )
+          }
         }
       }
 
@@ -82,9 +83,10 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
       let mfaAuthSuccessful = true
       if (validPassword && user.mfaEnabled) {
         if (!loginDto.mfaCode || !user.mfaCode || !user.mfaCodeUpdatedAt) {
+          user.failedLoginAttemptsCount = 0
+          await this.userRepository.save(user)
           throw new UnauthorizedException({ name: "mfaCodeIsMissing" })
-        }
-        if (
+        } else if (
           new Date(
             user.mfaCodeUpdatedAt.getTime() + this.configService.get<number>("MFA_CODE_VALID_MS")
           ) < new Date() ||
@@ -106,12 +108,26 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
         user.failedLoginAttemptsCount += 1
       }
 
+      user.lastLoginAt = new Date()
       await this.userRepository.save(user)
 
-      if (validPassword && mfaAuthSuccessful) {
+      if (!validPassword) {
+        throw new UnauthorizedException({
+          failureCountRemaining:
+            this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") +
+            1 -
+            user.failedLoginAttemptsCount,
+        })
+      } else if (mfaAuthSuccessful) {
         return user
-      } else if (validPassword && user.mfaEnabled && !mfaAuthSuccessful) {
-        throw new UnauthorizedException({ message: "mfaUnauthorized" })
+      } else if (user.mfaEnabled) {
+        throw new UnauthorizedException({
+          message: "mfaUnauthorized",
+          failureCountRemaining:
+            this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") +
+            1 -
+            user.failedLoginAttemptsCount,
+        })
       }
     }
 
