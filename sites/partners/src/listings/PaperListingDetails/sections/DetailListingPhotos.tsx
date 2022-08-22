@@ -34,7 +34,7 @@ const DetailListingPhoto = () => {
       },
       fileName: { content: image.fileId.split("/").slice(-1).join() },
       primary: {
-        content: index == 0 ? t("listings.sections.primaryPhoto") : "",
+        content: index == 0 ? t("listings.sections.photo.primaryPhoto") : "",
       },
     }
   })

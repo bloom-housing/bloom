@@ -97,7 +97,7 @@ const ListingPhotos = () => {
       },
       fileName: { content: image.image.fileId.split("/").slice(-1).join() },
       primary: {
-        content: index == 0 ? t("listings.sections.primaryPhoto") : "",
+        content: index == 0 ? t("listings.sections.photo.primaryPhoto") : "",
       },
       actions: {
         content: (
@@ -143,7 +143,7 @@ const ListingPhotos = () => {
         primary: {
           content:
             index == 0 ? (
-              t("listings.sections.primaryPhoto")
+              t("listings.sections.photo.primaryPhoto")
             ) : (
               <Button
                 unstyled
@@ -281,19 +281,17 @@ const ListingPhotos = () => {
               ></MinimalTable>
             </div>
           )}
-          {drawerImages.length < 3 ? (
+          {drawerImages.length < 10 ? (
             <Dropzone
               id="listing-photo-upload"
               label={t("t.uploadFile")}
-              helptext={t("listings.sections.photoHelperText")}
+              helptext={t("listings.sections.photo.helperText")}
               uploader={photoUploader}
               accept="image/*"
               progress={progressValue}
             />
           ) : (
-            <p className="field-note text-gray-750">
-              Note: the maximum of 10 images have been uploaded.
-            </p>
+            <p className="field-note text-gray-750">{t("listings.sections.photo.maximumUpload")}</p>
           )}
         </section>
         <Button
