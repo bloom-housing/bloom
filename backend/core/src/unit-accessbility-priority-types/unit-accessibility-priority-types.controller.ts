@@ -22,6 +22,7 @@ import {
   UnitAccessibilityPriorityTypeDto,
   UnitAccessibilityPriorityTypeUpdateDto,
 } from "./dto/unit-accessibility-priority-type.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("unitAccessibilityPriorityTypes")
 @ApiTags("unitAccessibilityPriorityTypes")
@@ -78,11 +79,9 @@ export class UnitAccessibilityPriorityTypesController {
     )
   }
 
-  @Delete(`:unitAccessibilityPriorityTypeId`)
+  @Delete()
   @ApiOperation({ summary: "Delete unitAccessibilityPriorityType by id", operationId: "delete" })
-  async delete(
-    @Param("unitAccessibilityPriorityTypeId") unitAccessibilityPriorityTypeId: string
-  ): Promise<void> {
-    return await this.unitAccessibilityPriorityTypesService.delete(unitAccessibilityPriorityTypeId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.unitAccessibilityPriorityTypesService.delete(dto.id)
   }
 }

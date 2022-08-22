@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "5.0.1-alpha.24",
+  "version": "5.1.1-alpha.9",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Shared user interface components for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/ui-components",
@@ -91,7 +91,6 @@
     "axios": "0.21.2",
     "body-scroll-lock": "^3.1.5",
     "dayjs": "^1.10.7",
-    "dompurify": "^2.3.10",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",
     "nanoid": "^3.1.12",

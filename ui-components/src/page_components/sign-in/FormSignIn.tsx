@@ -88,7 +88,7 @@ const FormSignIn = ({
 
           <aside className="float-right text-tiny font-semibold">
             <LinkComponent href="/forgot-password">
-              <a>{t("authentication.signIn.forgotPassword")}</a>
+              {t("authentication.signIn.forgotPassword")}
             </LinkComponent>
           </aside>
 

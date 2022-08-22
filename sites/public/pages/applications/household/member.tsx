@@ -431,15 +431,15 @@ const ApplicationMember = () => {
                   </Button>
                 </div>
                 <div className="form-card__pager-row py-8">
-                  <a
+                  <Button
                     id="cancel-add"
-                    href="#"
-                    className="lined text-tiny"
+                    className="lined text-tiny mt-0"
                     onClick={deleteMember}
+                    unstyled={true}
                     data-test-id={"app-household-member-cancel"}
                   >
                     {cancelText}
-                  </a>
+                  </Button>
                 </div>
               </div>
             </Form>

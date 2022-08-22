@@ -31,7 +31,7 @@ export type FormSignInMFAControl = {
 const FormSignInMFAType = ({
   onSubmit,
   networkError,
-  control: { errors, register, handleSubmit, setValue },
+  control: { errors, register, handleSubmit },
   emailOnClick,
   smsOnClick,
 }: FormSignInMFAProps) => {
