@@ -46,7 +46,7 @@ const Dropzone = (props: DropzoneProps) => {
       <label htmlFor={props.id} className="label">
         {props.label}
       </label>
-      {props.helptext && <p className="view-item__label mt-2 mb-4">{props.helptext}</p>}
+      {props.helptext && <p className="dropzone__helptext">{props.helptext}</p>}
       {props.progress && props.progress === 100 ? (
         <></>
       ) : props.progress && props.progress > 0 ? (
