@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect, useMemo } from "react"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -9,80 +9,134 @@ import {
   GridCell,
   GridSection,
   Select,
-  SelectOption,
   Textarea,
   ViewItem,
   t,
+  MinimalTable,
+  StandardTableData,
+  ErrorMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../applications/PaperApplicationForm/FormTypes"
-import { Jurisdiction } from "@bloom-housing/backend-core"
-
-type PreferenceOption = {
-  title: string
-  description: string
-  URL?: string
-  linkTitle?: string
-  collectAddress?: boolean
-  exclusive: boolean
-}
-
-type PreferenceForm = {
-  title: string
-  description: string
-  options: PreferenceOption[]
-  optOut: boolean
-  showOnListing: boolean
-  optOutLabel?: string
-  jurisdiction: Jurisdiction
-}
+import {
+  ApplicationSection,
+  MultiselectOption,
+  MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
+} from "@bloom-housing/backend-core"
+import ManageIconSection from "./ManageIconSection"
+import { DrawerType } from "../../pages/settings"
 
 type PreferenceDrawerProps = {
-  defaultValues: PreferenceForm | undefined
   drawerOpen: boolean
-  setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+  questionData: MultiselectQuestion
+  setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
+  drawerType: DrawerType
+  onDrawerClose: () => void
+  saveQuestion: (
+    formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
+    requestType: DrawerType
+  ) => void
+  isLoading: boolean
 }
 
-const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) => {
-  const [optionDrawerOpen, setOptionDrawerOpen] = useState<boolean | null>(null)
+type OptionForm = {
+  collectAddress: boolean
+  optionDescription: string
+  optionLinkTitle: string
+  optionTitle: string
+  optionUrl: string
+}
+
+const PreferenceDrawer = ({
+  drawerType,
+  questionData,
+  setQuestionData,
+  drawerOpen,
+  onDrawerClose,
+  saveQuestion,
+  isLoading,
+}: PreferenceDrawerProps) => {
+  const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
+  const [optionData, setOptionData] = useState<MultiselectOption>(null)
+  const [dragOrder, setDragOrder] = useState([])
 
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = useForm()
+  const { register, getValues, trigger, errors, clearErrors, setError } = useForm()
 
-  const jurisdictionOptions: SelectOption[] = [
-    { label: "", value: "" },
-    ...profile.jurisdictions.map((jurisdiction) => ({
-      label: jurisdiction.name,
-      value: jurisdiction.id,
-    })),
-  ]
+  // Update local state with dragged state
+  useEffect(() => {
+    if (questionData?.options?.length > 0 && dragOrder?.length > 0) {
+      const newDragOrder = []
+      dragOrder.forEach((item, index) => {
+        newDragOrder.push({
+          ...questionData?.options?.filter((draftItem) => draftItem.text === item.name.content)[0],
+          ordinal: index + 1,
+        })
+      })
+      setQuestionData({ ...questionData, options: newDragOrder })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dragOrder])
 
-  const yesNoOptions = [
-    {
-      id: YesNoAnswer.Yes,
-      label: t("t.yes"),
-      value: YesNoAnswer.Yes,
-    },
-    {
-      id: YesNoAnswer.No,
-      label: t("t.no"),
-      value: YesNoAnswer.No,
-    },
-  ]
+  const draggableTableData: StandardTableData = useMemo(
+    () =>
+      questionData?.options
+        ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
+        .map((item) => ({
+          name: { content: item.text },
+          description: { content: item.description },
+          action: {
+            content: (
+              <ManageIconSection
+                onCopy={() => {
+                  const draftOptions = [...questionData.options]
+                  draftOptions.push({ ...item, ordinal: questionData.options.length + 1 })
+                  setQuestionData({ ...questionData, options: draftOptions })
+                }}
+                onEdit={() => {
+                  setOptionData(item)
+                  setOptionDrawerOpen("edit")
+                }}
+                onDelete={() => {
+                  console.log(questionData)
+                  setQuestionData({
+                    ...questionData,
+                    options: questionData.options
+                      .filter((option) => option.ordinal !== item.ordinal)
+                      .map((option, index) => {
+                        return { ...option, ordinal: index + 1 }
+                      }),
+                  })
+                }}
+              />
+            ),
+          },
+        })),
+    [questionData, setQuestionData]
+  )
+
+  const drawerTitle =
+    drawerType === "add" ? t("settings.preferenceAdd") : t("settings.preferenceEdit")
+
+  const selectDrawerTitle = optionData
+    ? t("settings.preferenceEditOption")
+    : t("settings.preferenceAddOption")
 
   return (
     <>
       <Drawer
         open={!!drawerOpen}
-        title={t("settings.preferenceEdit")}
-        ariaDescription={t("settings.preferenceEdit")}
+        title={drawerTitle}
+        ariaDescription={drawerTitle}
         onClose={() => {
-          if (!optionDrawerOpen) {
-            setDrawerOpen(null)
-          }
+          clearErrors()
+          clearErrors("questions")
+          onDrawerClose()
         }}
       >
         <div className="border rounded-md p-8 bg-white">
@@ -90,14 +144,21 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
             <GridCell span={2}>
               <ViewItem label={t("t.title")}>
                 <Field
-                  id="title"
-                  name="title"
+                  id="text"
+                  name="text"
                   label={t("t.title")}
                   placeholder={t("t.title")}
                   register={register}
                   type="text"
                   readerOnly
                   dataTestId={"preference-title"}
+                  defaultValue={questionData?.text}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                  error={errors.text}
+                  inputProps={{
+                    onChange: () => clearErrors("text"),
+                  }}
                 />
               </ViewItem>
             </GridCell>
@@ -112,32 +173,86 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 placeholder={t("settings.preferenceDescription")}
                 register={register}
                 dataTestId={"preference-description"}
+                defaultValue={questionData?.description}
               />
             </GridCell>
           </GridSection>
-          <Button
-            type="button"
-            size={AppearanceSizeType.small}
-            onClick={() => {
-              setOptionDrawerOpen(true)
-            }}
-            dataTestId={"preference-add-option-button"}
-          >
-            {t("settings.preferenceAddOption")}
-          </Button>
+          {questionData?.options?.length > 0 && (
+            <div className="mb-5">
+              <MinimalTable
+                headers={{
+                  name: "t.name",
+                  description: "t.descriptionTitle",
+                  action: "",
+                }}
+                data={draggableTableData}
+                draggable={true}
+                setData={setDragOrder}
+              />
+            </div>
+          )}
           <GridSection columns={3} className={"mt-4"}>
+            <div className={"flex flex-col"}>
+              <Button
+                type="button"
+                size={AppearanceSizeType.small}
+                styleType={
+                  errors["questions"] ? AppearanceStyleType.alert : AppearanceStyleType.primary
+                }
+                onClick={() => {
+                  clearErrors("questions")
+                  setOptionData(null)
+                  setOptionDrawerOpen("add")
+                }}
+                dataTestId={"preference-add-option-button"}
+              >
+                {t("settings.preferenceAddOption")}
+              </Button>
+              {errors["questions"] && (
+                <ErrorMessage error={true}>{errors["questions"].message}</ErrorMessage>
+              )}
+            </div>
+          </GridSection>
+          <GridSection columns={3} className={"mt-4"}>
+            {/* <GridCell>
+              <ViewItem label={"Can you opt out?"} className="mb-1" />
+              <FieldGroup
+                name="canYouOptOutQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    id: YesNoAnswer.Yes,
+                    label: t("t.yes"),
+                    value: YesNoAnswer.Yes,
+                    defaultChecked: !!questionData.optOutText,
+                  },
+                  {
+                    id: YesNoAnswer.No,
+                    label: t("t.no"),
+                    value: YesNoAnswer.No,
+                    defaultChecked: !questionData.optOutText,
+                  },
+                ]}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+                dataTestId={"preference-can-you-opt-out"}
+              />
+            </GridCell> */}
             <GridCell>
               <ViewItem label={t("settings.preferenceOptOutLabel")}>
-                <Field
-                  id="optOutTitle"
-                  name="optOutTitle"
+                <Field //TODO: Add "can you opt out"
+                  id="optOutText"
+                  name="optOutText"
                   label={t("settings.preferenceOptOutLabel")}
                   placeholder={t("settings.preferenceOptOutLabel")}
                   register={register}
                   type="text"
                   readerOnly
                   dataTestId={"preference-opt-out-label"}
-                  defaultValue={t("application.preferences.dontWantSingular")}
+                  defaultValue={
+                    questionData?.optOutText ?? t("application.preferences.dontWantSingular")
+                  }
                 />
               </ViewItem>
             </GridCell>
@@ -149,7 +264,20 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 name="showOnListingQuestion"
                 type="radio"
                 register={register}
-                fields={yesNoOptions}
+                fields={[
+                  {
+                    id: YesNoAnswer.Yes,
+                    label: t("t.yes"),
+                    value: YesNoAnswer.Yes,
+                    defaultChecked: !questionData?.hideFromListing,
+                  },
+                  {
+                    id: YesNoAnswer.No,
+                    label: t("t.no"),
+                    value: YesNoAnswer.No,
+                    defaultChecked: questionData?.hideFromListing || !questionData,
+                  },
+                ]}
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
                 dataTestId={"preference-show-on-listing"}
@@ -160,15 +288,32 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
             <GridCell span={1}>
               <ViewItem label={t("t.jurisdiction")}>
                 <Select
-                  id={"jurisdiction.id"}
-                  name={"jurisdiction.id"}
+                  id={"jurisdictionId"}
+                  name={"jurisdictionId"}
                   label={t("t.jurisdiction")}
                   labelClassName="sr-only"
                   register={register}
                   controlClassName={"control"}
                   keyPrefix={"jurisdictions"}
-                  options={jurisdictionOptions}
+                  options={[
+                    { label: "", value: "" },
+                    ...profile.jurisdictions.map((jurisdiction) => ({
+                      label: jurisdiction.name,
+                      value: jurisdiction.id,
+                    })),
+                  ]}
                   dataTestId={"preference-jurisdiction"}
+                  defaultValue={
+                    questionData?.jurisdictions?.length > 0
+                      ? questionData.jurisdictions[0].id
+                      : null
+                  }
+                  errorMessage={t("errors.requiredFieldError")}
+                  error={errors.jurisdictionId}
+                  validation={{ required: true }}
+                  inputProps={{
+                    onChange: () => clearErrors("jurisdictionId"),
+                  }}
                 />
               </ViewItem>
             </GridCell>
@@ -179,8 +324,30 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
-          onClick={() => {
-            setDrawerOpen(null)
+          loading={isLoading}
+          onClick={async () => {
+            const validation = await trigger()
+            if (!questionData || !questionData?.options?.length) {
+              setError("questions", { message: t("errors.requiredFieldError") })
+              return
+            }
+            if (!validation) return
+            const formValues = getValues()
+
+            const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
+              applicationSection: ApplicationSection.preferences,
+              text: formValues.text,
+              description: formValues.description,
+              hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
+              optOutText: formValues.optOutText,
+              options: questionData?.options,
+              jurisdictions: [
+                profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+              ],
+            }
+            clearErrors()
+            clearErrors("questions")
+            saveQuestion(formattedQuestionData, drawerType)
           }}
           dataTestId={"preference-save-button"}
         >
@@ -190,8 +357,8 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
 
       <Drawer
         open={!!optionDrawerOpen}
-        title={t("settings.preferenceOptionEdit")}
-        ariaDescription={t("settings.preferenceOptionEdit")}
+        title={selectDrawerTitle}
+        ariaDescription={drawerTitle}
         onClose={() => {
           setOptionDrawerOpen(null)
         }}
@@ -210,6 +377,14 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                   type="text"
                   readerOnly
                   dataTestId={"preference-option-title"}
+                  defaultValue={optionData?.text}
+                  errorMessage={t("errors.requiredFieldError")}
+                  error={!!errors["optionTitle"]}
+                  inputProps={{
+                    onChange: () => {
+                      clearErrors("optionTitle")
+                    },
+                  }}
                 />
               </ViewItem>
             </GridCell>
@@ -224,6 +399,7 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 fullWidth={true}
                 register={register}
                 dataTestId={"preference-option-description"}
+                defaultValue={optionData?.description}
               />
             </GridCell>
           </GridSection>
@@ -231,14 +407,15 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
             <GridCell>
               <ViewItem label={t("t.url")}>
                 <Field
-                  id="optionURL"
-                  name="optionURL"
+                  id="optionUrl"
+                  name="optionUrl"
                   label={t("t.url")}
                   placeholder={"https://"}
                   register={register}
                   type="text"
                   readerOnly
                   dataTestId={"preference-option-URL"}
+                  defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
                 />
               </ViewItem>
             </GridCell>
@@ -253,13 +430,14 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                   type="text"
                   readerOnly
                   dataTestId={"preference-option-link-title"}
+                  defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
                 />
               </ViewItem>
             </GridCell>
           </GridSection>
           <GridSection columns={3} className={"mt-8"}>
             <GridCell>
-              <Field
+              <Field //TODO: Add "exclusive"
                 type="checkbox"
                 id="collectAddress"
                 name="collectAddress"
@@ -267,6 +445,9 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
                 register={register}
                 dataTestId={"preference-option-collect-address"}
                 controlClassName={"font-normal"}
+                inputProps={{
+                  defaultChecked: optionData?.collectAddress,
+                }}
               />
             </GridCell>
           </GridSection>
@@ -276,7 +457,42 @@ const PreferenceDrawer = ({ drawerOpen, setDrawerOpen }: PreferenceDrawerProps) 
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
-          onClick={() => {
+          onClick={async () => {
+            const formData = getValues() as OptionForm
+            await trigger()
+            if (!formData.optionTitle || formData.optionTitle === "") {
+              setError("optionTitle", { message: t("errors.requiredFieldError") })
+              return
+            }
+            const existingOptionData = questionData?.options?.find(
+              (option) => optionData?.text === option.text
+            )
+
+            const newOptionData: MultiselectOption = {
+              text: formData.optionTitle,
+              description: formData.optionDescription,
+              links: formData.optionUrl
+                ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
+                : [],
+              ordinal:
+                existingOptionData?.ordinal ?? questionData?.options?.length
+                  ? questionData?.options.length + 1
+                  : 1,
+              collectAddress: formData.collectAddress,
+            }
+            let newOptions = []
+
+            if (existingOptionData) {
+              newOptions = questionData.options.map((option) =>
+                option.ordinal === existingOptionData.ordinal ? newOptionData : option
+              )
+            } else {
+              newOptions = questionData?.options
+                ? [...questionData.options, newOptionData]
+                : [newOptionData]
+            }
+
+            setQuestionData({ ...questionData, options: newOptions })
             setOptionDrawerOpen(null)
           }}
           dataTestId={"preference-option-save"}
