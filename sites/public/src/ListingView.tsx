@@ -484,6 +484,7 @@ export const ListingView = (props: ListingProps) => {
               { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
             ]}
             tags={getImageCardTag(listing)}
+            modalCloseLabel={t("t.backToListing")}
           />
           <div className="py-3 mx-3">
             <Heading priority={1} style={"cardHeader"}>

@@ -7,6 +7,7 @@
   --content-padding-block: var(--bloom-s5) var(--bloom-s8);
   --max-width: var(--bloom-width-5xl);
   --desktop-min-width: var(--bloom-width-lg);
+  --scroll-max-height: var(calc(100vh - 200px));
   --footer-background-color: var(--bloom-color-primary-lighter);
   --border-radius: var(--bloom-rounded);
   --background-color: var(--bloom-color-white);
@@ -49,7 +50,7 @@
   }
 
   &.is-scrollable {
-    max-height: calc(100vh - 200px);
+    max-height: var(--scroll-max-height);
     overflow-y: auto;
   }
   p {
