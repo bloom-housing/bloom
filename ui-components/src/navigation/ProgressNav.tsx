@@ -33,7 +33,6 @@ const ProgressNavItem = (props: {
       <span
         aria-disabled={bgColor === "is-disabled"}
         aria-current={bgColor === "is-active"}
-        tabIndex={0}
         className={"progress-nav__item-container"}
       >
         {props.label}
