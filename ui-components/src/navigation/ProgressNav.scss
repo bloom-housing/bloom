@@ -131,18 +131,18 @@
   }
   &.is-active {
     border-top-color: var(--active-step-color);
-    a {
+    .progress-nav__item-container {
       font-weight: var(--bar-active-font-weight);
       color: var(--active-step-font-color);
     }
   }
   &.is-disabled {
     border-top-color: var(--future-step-color);
-    a {
+    .progress-nav__item-container {
       color: var(--future-step-font-color);
     }
   }
-  a {
+  .progress-nav__item-container {
     color: var(--completed-step-font-color);
   }
 }
