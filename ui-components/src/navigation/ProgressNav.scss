@@ -77,8 +77,7 @@
       right: 50%;
     }
   }
-
-  a {
+  .progress-nav__item-container {
     padding-top: var(--dot-label-padding-top);
     padding-left: var(--dot-label-padding-left);
     color: var(--completed-step-font-color);
@@ -93,8 +92,7 @@
     &:before {
       background-color: var(--active-step-color);
     }
-
-    a {
+    .progress-nav__item-container {
       color: var(--active-step-font-color);
       font-weight: var(--dot-active-font-weight);
     }
@@ -104,8 +102,7 @@
     &:before {
       background-color: var(--future-step-color);
     }
-
-    a {
+    .progress-nav__item-container {
       color: var(--future-step-font-color);
     }
   }
