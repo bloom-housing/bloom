@@ -12,17 +12,27 @@ import {
   Form,
   ProgressNav,
 } from "@bloom-housing/ui-components"
+import { ApplicationSection } from "@bloom-housing/backend-core"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)
   const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
-  const currentPageSection = 4
+  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+    ? 5
+    : 4
 
   /* Form Handler */
   const { handleSubmit } = useForm()

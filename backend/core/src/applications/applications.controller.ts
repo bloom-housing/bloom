@@ -20,7 +20,7 @@ import { mapTo } from "../shared/mapTo"
 import { ApplicationDto } from "./dto/application.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { applicationPreferenceApiExtraModels } from "./types/application-preference-api-extra-models"
+import { applicationMultiselectQuestionApiExtraModels } from "./types/application-multiselect-question-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
@@ -45,7 +45,7 @@ import { IdDto } from "../shared/dto/id.dto"
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceApiExtraModels, ApplicationsApiExtraModel)
+@ApiExtraModels(...applicationMultiselectQuestionApiExtraModels, ApplicationsApiExtraModel)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,

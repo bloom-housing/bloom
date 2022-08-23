@@ -11,6 +11,7 @@ import {
   ListingStatus,
   ListingAvailability,
   Jurisdiction,
+  ApplicationSection,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -168,26 +169,25 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
+  const listingPreferences = listing?.listingMultiselectQuestions.filter(
+    (listingPref) =>
+      listingPref.multiselectQuestion.applicationSection === ApplicationSection.preferences &&
+      !listingPref.multiselectQuestion.hideFromListing
+  )
+
   const getPreferenceData = () => {
-    return listing.listingPreferences
-      .filter((listingPref) => {
-        return (
-          !listingPref.preference.formMetadata ||
-          !listingPref.preference.formMetadata.hideFromListing
-        )
-      })
-      .map((listingPref, index) => {
-        return {
-          ordinal: index + 1,
-          links: listingPref.preference.links,
-          title: listingPref.preference.title,
-          subtitle: listingPref.preference.subtitle,
-          description: listingPref.preference.description,
-        }
-      })
+    return listingPreferences.map((listingPref, index) => {
+      return {
+        ordinal: index + 1,
+        links: listingPref?.multiselectQuestion?.links,
+        title: listingPref?.multiselectQuestion?.text,
+        subtitle: listingPref?.multiselectQuestion?.subText,
+        description: listingPref?.multiselectQuestion?.description,
+      }
+    })
   }
 
-  if (listing.listingPreferences && listing.listingPreferences.length > 0) {
+  if (listingPreferences && listingPreferences?.length > 0) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}

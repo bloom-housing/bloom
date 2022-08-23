@@ -14,7 +14,7 @@ import {
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts"
-import { ApplicationStatus } from "@bloom-housing/backend-core/types"
+import { ApplicationSection, ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
@@ -26,8 +26,7 @@ import { DetailsPrimaryApplicant } from "../../../src/applications/PaperApplicat
 import { DetailsAlternateContact } from "../../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
 import { DetailsHouseholdMembers } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
 import { DetailsHouseholdDetails } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
-import { DetailsPreferences } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
-import { DetailsPrograms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrograms"
+import { DetailsMultiselectQuestions } from "../../../src/applications/PaperApplicationDetails/sections/DetailsMultiselectQuestions"
 import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../src/applications/Aside"
@@ -151,11 +150,19 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails />
 
-                <DetailsPreferences listingId={application?.listing?.id} />
-
-                <DetailsPrograms listingId={application?.listing?.id} />
+                <DetailsMultiselectQuestions
+                  listingId={application?.listing?.id}
+                  applicationSection={ApplicationSection.programs}
+                  title={t("application.details.programs")}
+                />
 
                 <DetailsHouseholdIncome />
+
+                <DetailsMultiselectQuestions
+                  listingId={application?.listing?.id}
+                  applicationSection={ApplicationSection.preferences}
+                  title={t("application.details.preferences")}
+                />
 
                 <DetailsTerms />
               </div>

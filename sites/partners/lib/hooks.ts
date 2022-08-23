@@ -4,11 +4,11 @@ import qs from "qs"
 
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  ApplicationSection,
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
-  EnumPreferencesFilterParamsComparison,
-  EnumProgramsFilterParamsComparison,
+  EnumMultiselectQuestionsFilterParamsComparison,
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
@@ -286,19 +286,6 @@ export function useUnitTypeList() {
   }
 }
 
-export function usePreferenceList() {
-  const { preferencesService } = useContext(AuthContext)
-  const fetcher = () => preferencesService.list()
-
-  const { data, error } = useSWR(`${process.env.backendApiBase}/preferences`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
 export function useJurisdiction(jurisdictionId: string) {
   const { jurisdictionsService } = useContext(AuthContext)
   const fetcher = () =>
@@ -318,22 +305,11 @@ export function useJurisdiction(jurisdictionId: string) {
   }
 }
 
-export function useJurisdictionalPreferenceList(jurisdictionId: string) {
-  const { preferencesService } = useContext(AuthContext)
-  const fetcher = () =>
-    preferencesService.list({
-      filter: [
-        {
-          $comparison: EnumPreferencesFilterParamsComparison["IN"],
-          jurisdiction: jurisdictionId,
-        },
-      ],
-    })
+export function useMultiselectQuestionList() {
+  const { multiselectQuestionsService } = useContext(AuthContext)
+  const fetcher = () => multiselectQuestionsService.list()
 
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/preferences/${jurisdictionId}`,
-    fetcher
-  )
+  const { data, error } = useSWR(`${process.env.backendApiBase}/multiselectQuestions`, fetcher)
 
   return {
     data,
@@ -342,33 +318,32 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
   }
 }
 
-export function useProgramList() {
-  const { programsService } = useContext(AuthContext)
-  const fetcher = () => programsService.list()
+export function useJurisdictionalMultiselectQuestionList(
+  jurisdictionId: string,
+  applicationSection?: ApplicationSection
+) {
+  const { multiselectQuestionsService } = useContext(AuthContext)
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
+  const params = {
+    filter: [],
   }
-}
-
-export function useJurisdictionalProgramList(jurisdictionId: string) {
-  const { programsService } = useContext(AuthContext)
-  const fetcher = () =>
-    programsService.list({
-      filter: [
-        {
-          $comparison: EnumProgramsFilterParamsComparison["="],
-          jurisdiction: jurisdictionId,
-        },
-      ],
+  params.filter.push({
+    $comparison: EnumMultiselectQuestionsFilterParamsComparison["IN"],
+    jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
+  })
+  if (applicationSection) {
+    params.filter.push({
+      $comparison: EnumMultiselectQuestionsFilterParamsComparison["="],
+      applicationSection,
     })
+  }
+
+  const paramsString = qs.stringify(params)
+
+  const fetcher = () => multiselectQuestionsService.list(params)
 
   const { data, error } = useSWR(
-    `${process.env.backendApiBase}/programs/${jurisdictionId}`,
+    `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
     fetcher
   )
 

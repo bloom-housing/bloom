@@ -91,7 +91,7 @@ export default class ApplicationConductor {
       url: "/applications/household/student",
     },
     programs: {
-      url: "/applications/household/programs",
+      url: "/applications/programs/programs",
       definition: ProgramsStep,
     },
     vouchersSubsidies: {
