@@ -83,14 +83,6 @@ const PreferenceDrawer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  useEffect(() => {
-    clearErrors()
-    clearErrors("questions")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  console.log(questionData.options)
-
   const draggableTableData: StandardTableData = useMemo(
     () =>
       questionData?.options?.map((item) => ({
@@ -122,7 +114,7 @@ const PreferenceDrawer = ({
           ),
         },
       })),
-    [questionData]
+    [questionData, setQuestionData]
   )
 
   const drawerTitle =
@@ -201,6 +193,9 @@ const PreferenceDrawer = ({
               <Button
                 type="button"
                 size={AppearanceSizeType.small}
+                styleType={
+                  errors["questions"] ? AppearanceStyleType.alert : AppearanceStyleType.primary
+                }
                 onClick={() => {
                   clearErrors("questions")
                   setOptionData(null)
@@ -356,7 +351,12 @@ const PreferenceDrawer = ({
                   dataTestId={"preference-option-title"}
                   defaultValue={optionData?.text}
                   errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
+                  error={!!errors["optionTitle"]}
+                  inputProps={{
+                    onChange: () => {
+                      clearErrors("optionTitle")
+                    },
+                  }}
                 />
               </ViewItem>
             </GridCell>
@@ -429,13 +429,17 @@ const PreferenceDrawer = ({
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
-          onClick={() => {
+          onClick={async () => {
             const formData = getValues() as OptionForm
+            await trigger()
+            if (!formData.optionTitle || formData.optionTitle === "") {
+              setError("optionTitle", { message: t("errors.requiredFieldError") })
+              return
+            }
             const existingOptionData = questionData?.options?.find(
               (option) => optionData?.text === option.text
             )
 
-            console.log({ formData })
             const newOptionData: MultiselectOption = {
               text: formData.optionTitle,
               description: formData.optionDescription,
@@ -448,7 +452,6 @@ const PreferenceDrawer = ({
                   : 1,
               collectAddress: formData.collectAddress,
             }
-            console.log({ newOptionData })
             let newOptions = []
 
             if (existingOptionData) {
@@ -460,8 +463,6 @@ const PreferenceDrawer = ({
                 ? [...questionData.options, newOptionData]
                 : [newOptionData]
             }
-
-            console.log({ newOptions })
 
             setQuestionData({ ...questionData, options: newOptions })
             setOptionDrawerOpen(null)

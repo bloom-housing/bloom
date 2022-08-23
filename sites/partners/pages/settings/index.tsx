@@ -135,8 +135,8 @@ const Settings = () => {
             cellClassName={"px-5 py-3"}
             data={data
               ?.sort((a, b) => {
-                const aChar = a.jurisdictions[0].name[0]
-                const bChar = b.jurisdictions[0].name[0]
+                const aChar = a.jurisdictions[0].name.toUpperCase()
+                const bChar = b.jurisdictions[0].name.toUpperCase()
                 if (aChar === bChar)
                   return a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0
                 return aChar < bChar ? -1 : aChar > bChar ? 1 : 0
