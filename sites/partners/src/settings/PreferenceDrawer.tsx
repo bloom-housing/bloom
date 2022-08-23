@@ -182,6 +182,38 @@ const PreferenceDrawer = ({
               />
             </GridCell>
           </GridSection>
+          <GridSection columns={3} className={"mt-4 mb-6"}>
+            <GridCell>
+              <ViewItem label={t("t.url")}>
+                <Field
+                  id="preferenceUrl"
+                  name="preferenceUrl"
+                  label={t("t.url")}
+                  placeholder={"https://"}
+                  register={register}
+                  type="text"
+                  readerOnly
+                  dataTestId={"preference-link"}
+                  defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
+                />
+              </ViewItem>
+            </GridCell>
+            <GridCell>
+              <ViewItem label={t("settings.preferenceLinkTitle")}>
+                <Field
+                  id="preferenceLinkTitle"
+                  name="preferenceLinkTitle"
+                  label={t("settings.preferenceLinkTitle")}
+                  placeholder={t("settings.preferenceLinkTitle")}
+                  register={register}
+                  type="text"
+                  readerOnly
+                  dataTestId={"preference-link-title"}
+                  defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].title : ""}
+                />
+              </ViewItem>
+            </GridCell>
+          </GridSection>
           {questionData?.options?.length > 0 && (
             <div className="mb-5">
               <MinimalTable
@@ -230,7 +262,7 @@ const PreferenceDrawer = ({
                     id: YesNoAnswer.Yes,
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
-                    defaultChecked: questionData === null || !!questionData?.optOutText,
+                    defaultChecked: questionData === null || questionData?.optOutText !== null,
                   },
                   {
                     id: YesNoAnswer.No,
@@ -356,6 +388,9 @@ const PreferenceDrawer = ({
               jurisdictions: [
                 profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
               ],
+              links: formValues.preferenceUrl
+                ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+                : [],
             }
             clearErrors()
             clearErrors("questions")
@@ -426,7 +461,7 @@ const PreferenceDrawer = ({
                   register={register}
                   type="text"
                   readerOnly
-                  dataTestId={"preference-option-URL"}
+                  dataTestId={"preference-option-link"}
                   defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
                 />
               </ViewItem>
