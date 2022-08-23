@@ -4,7 +4,7 @@ import { Icon, IconFillColors } from "@bloom-housing/ui-components"
 
 type IconContentProps = {
   onCopy: () => void
-  onDelete: () => void
+  onDelete?: () => void
   onEdit: () => void
 }
 
@@ -21,11 +21,18 @@ const ManageIconSection = (props: IconContentProps) => {
           />
         </span>
         <span onClick={props.onCopy} className={"cursor-pointer"}>
-          <Icon symbol={faClone} size={"medium"} fill={IconFillColors.primary} className={"mr-5"} />
+          <Icon
+            symbol={faClone}
+            size={"medium"}
+            fill={IconFillColors.primary}
+            className={`${props.onDelete && "mr-5"}`}
+          />
         </span>
-        <span onClick={props.onDelete} className={"cursor-pointer"}>
-          <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
-        </span>
+        {props.onDelete && (
+          <span onClick={props.onDelete} className={"cursor-pointer"}>
+            <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
+          </span>
+        )}
       </div>
     </div>
   )

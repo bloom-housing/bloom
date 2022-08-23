@@ -211,6 +211,31 @@ const PreferenceDrawer = ({
             </div>
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
+            {/* <GridCell>
+              <ViewItem label={"Can you opt out?"} className="mb-1" />
+              <FieldGroup
+                name="canYouOptOutQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    id: YesNoAnswer.Yes,
+                    label: t("t.yes"),
+                    value: YesNoAnswer.Yes,
+                    defaultChecked: !!questionData.optOutText,
+                  },
+                  {
+                    id: YesNoAnswer.No,
+                    label: t("t.no"),
+                    value: YesNoAnswer.No,
+                    defaultChecked: !questionData.optOutText,
+                  },
+                ]}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+                dataTestId={"preference-can-you-opt-out"}
+              />
+            </GridCell> */}
             <GridCell>
               <ViewItem label={t("settings.preferenceOptOutLabel")}>
                 <Field //TODO: Add "can you opt out"

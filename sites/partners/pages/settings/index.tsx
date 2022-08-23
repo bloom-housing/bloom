@@ -160,7 +160,6 @@ const Settings = () => {
                           setQuestionData(preference)
                           setPreferenceDrawerOpen("edit")
                         }}
-                        onDelete={() => setDeleteModal(preference.id)}
                       />
                     ),
                   },
