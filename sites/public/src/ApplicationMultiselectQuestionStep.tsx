@@ -163,7 +163,6 @@ const ApplicationMultiselectQuestionStep = ({
 
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{strings?.title ?? question?.text}</h2>
-          <p className="field-note mt-5">{strings?.subTitle ?? question?.subText}</p>
         </div>
 
         {!!Object.keys(errors).length && (
