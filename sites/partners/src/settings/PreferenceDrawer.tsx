@@ -104,10 +104,12 @@ const PreferenceDrawer = ({
                   draftOptions.push({ ...item, ordinal: questionData.options.length + 1 })
                   setQuestionData({ ...questionData, options: draftOptions })
                 }}
+                copyTestId={`option-copy-icon: ${item.text}`}
                 onEdit={() => {
                   setOptionData(item)
                   setOptionDrawerOpen("edit")
                 }}
+                editTestId={`option-edit-icon: ${item.text}`}
                 onDelete={() => {
                   setQuestionData({
                     ...questionData,
@@ -263,12 +265,14 @@ const PreferenceDrawer = ({
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
                     defaultChecked: questionData === null || questionData?.optOutText !== null,
+                    dataTestId: "opt-out-question-yes",
                   },
                   {
                     id: YesNoAnswer.No,
                     label: t("t.no"),
                     value: YesNoAnswer.No,
                     defaultChecked: questionData && questionData?.optOutText === null,
+                    dataTestId: "opt-out-question-no",
                   },
                 ]}
                 fieldClassName="m-0"
@@ -309,12 +313,14 @@ const PreferenceDrawer = ({
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
                     defaultChecked: questionData === null || !questionData?.hideFromListing,
+                    dataTestId: "show-on-listing-question-yes",
                   },
                   {
                     id: YesNoAnswer.No,
                     label: t("t.no"),
                     value: YesNoAnswer.No,
                     defaultChecked: questionData?.hideFromListing,
+                    dataTestId: "show-on-listing-question-no",
                   },
                 ]}
                 fieldClassName="m-0"
@@ -511,12 +517,14 @@ const PreferenceDrawer = ({
                     label: t("settings.preferenceMultiSelect"),
                     value: "multiselect",
                     defaultChecked: optionData === null || !optionData?.exclusive,
+                    dataTestId: "exclusive-question-multiselect",
                   },
                   {
                     id: "exclusive",
                     label: t("settings.preferenceExclusive"),
                     value: "exclusive",
                     defaultChecked: optionData?.exclusive,
+                    dataTestId: "exclusive-question-exclusive",
                   },
                 ]}
                 fieldClassName="m-0"

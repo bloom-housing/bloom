@@ -130,10 +130,12 @@ const Settings = () => {
                     content: (
                       <ManageIconSection
                         onCopy={() => saveQuestion(preference, "add")}
+                        copyTestId={`preference-copy-icon: ${preference.text}`}
                         onEdit={() => {
                           setQuestionData(preference)
                           setPreferenceDrawerOpen("edit")
                         }}
+                        editTestId={`preference-edit-icon: ${preference.text}`}
                       />
                     ),
                   },
@@ -173,6 +175,8 @@ const Settings = () => {
                       setQuestionData(null)
                       setPreferenceDrawerOpen("add")
                     }}
+                    dataTestId={"preference-add-item"}
+                    disabled={loading}
                   >
                     {t("t.addItem")}
                   </Button>

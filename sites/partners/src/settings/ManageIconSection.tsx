@@ -4,15 +4,23 @@ import { Icon, IconFillColors } from "@bloom-housing/ui-components"
 
 type IconContentProps = {
   onCopy: () => void
+  copyTestId: string
   onDelete?: () => void
+  deleteTestId?: string
   onEdit: () => void
+  editTestId: string
 }
 
 const ManageIconSection = (props: IconContentProps) => {
   return (
     <div className={"flex justify-end"}>
       <div className={"w-max"}>
-        <button onClick={props.onEdit} className={"cursor-pointer"} aria-label={"Edit"}>
+        <button
+          onClick={props.onEdit}
+          className={"cursor-pointer"}
+          aria-label={"Edit"}
+          data-test-id={props.editTestId}
+        >
           <Icon
             symbol={faPenToSquare}
             size={"medium"}
@@ -20,7 +28,12 @@ const ManageIconSection = (props: IconContentProps) => {
             className={"mr-5"}
           />
         </button>
-        <button onClick={props.onCopy} className={"cursor-pointer"} aria-label={"Copy"}>
+        <button
+          onClick={props.onCopy}
+          className={"cursor-pointer"}
+          aria-label={"Copy"}
+          data-test-id={props.copyTestId}
+        >
           <Icon
             symbol={faClone}
             size={"medium"}
@@ -29,7 +42,12 @@ const ManageIconSection = (props: IconContentProps) => {
           />
         </button>
         {props.onDelete && (
-          <button onClick={props.onDelete} className={"cursor-pointer"} aria-label={"Delete"}>
+          <button
+            onClick={props.onDelete}
+            className={"cursor-pointer"}
+            aria-label={"Delete"}
+            data-test-id={props.deleteTestId}
+          >
             <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
           </button>
         )}
