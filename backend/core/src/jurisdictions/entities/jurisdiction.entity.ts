@@ -68,21 +68,18 @@ export class Jurisdiction extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   rentalAssistanceDefault: string
 
-  @Column({ type: "boolean", nullable: true })
+  @Column({ type: "boolean", nullable: false, default: false })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   enablePartnerSettings?: boolean | null
 
-  @Column({ type: "boolean", nullable: false })
+  @Column({ type: "boolean", nullable: false, default: false })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   enableAccessibilityFeatures: boolean | null
 
-  @Column({ type: "boolean", nullable: false })
+  @Column({ type: "boolean", nullable: false, default: false })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   enableUtilitiesIncluded: boolean | null
 }
