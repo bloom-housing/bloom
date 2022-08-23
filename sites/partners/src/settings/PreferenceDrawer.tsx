@@ -17,7 +17,7 @@ import {
   ErrorMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { YesNoAnswer } from "../applications/PaperApplicationForm/FormTypes"
 import {
   ApplicationSection,
@@ -66,7 +66,12 @@ const PreferenceDrawer = ({
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, trigger, errors, clearErrors, setError } = useForm()
+  const { register, getValues, trigger, errors, clearErrors, setError, control } = useForm()
+
+  const optOutQuestion = useWatch({
+    control,
+    name: "canYouOptOutQuestion",
+  })
 
   // Update local state with dragged state
   useEffect(() => {
@@ -214,8 +219,8 @@ const PreferenceDrawer = ({
             </div>
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
-            {/* <GridCell>
-              <ViewItem label={"Can you opt out?"} className="mb-1" />
+            <GridCell>
+              <ViewItem label={t("settings.preferenceOptOut")} className="mb-1" />
               <FieldGroup
                 name="canYouOptOutQuestion"
                 type="radio"
@@ -225,37 +230,39 @@ const PreferenceDrawer = ({
                     id: YesNoAnswer.Yes,
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
-                    defaultChecked: !!questionData.optOutText,
+                    defaultChecked: questionData === null || !!questionData?.optOutText,
                   },
                   {
                     id: YesNoAnswer.No,
                     label: t("t.no"),
                     value: YesNoAnswer.No,
-                    defaultChecked: !questionData.optOutText,
+                    defaultChecked: questionData && questionData?.optOutText === null,
                   },
                 ]}
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
                 dataTestId={"preference-can-you-opt-out"}
               />
-            </GridCell> */}
-            <GridCell>
-              <ViewItem label={t("settings.preferenceOptOutLabel")}>
-                <Field //TODO: Add "can you opt out"
-                  id="optOutText"
-                  name="optOutText"
-                  label={t("settings.preferenceOptOutLabel")}
-                  placeholder={t("settings.preferenceOptOutLabel")}
-                  register={register}
-                  type="text"
-                  readerOnly
-                  dataTestId={"preference-opt-out-label"}
-                  defaultValue={
-                    questionData?.optOutText ?? t("application.preferences.dontWantSingular")
-                  }
-                />
-              </ViewItem>
             </GridCell>
+            {optOutQuestion === YesNoAnswer.Yes && (
+              <GridCell>
+                <ViewItem label={t("settings.preferenceOptOutLabel")}>
+                  <Field
+                    id="optOutText"
+                    name="optOutText"
+                    label={t("settings.preferenceOptOutLabel")}
+                    placeholder={t("settings.preferenceOptOutLabel")}
+                    register={register}
+                    type="text"
+                    readerOnly
+                    dataTestId={"preference-opt-out-label"}
+                    defaultValue={
+                      questionData?.optOutText ?? t("application.preferences.dontWantSingular")
+                    }
+                  />
+                </ViewItem>
+              </GridCell>
+            )}
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
@@ -269,13 +276,13 @@ const PreferenceDrawer = ({
                     id: YesNoAnswer.Yes,
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
-                    defaultChecked: !questionData?.hideFromListing,
+                    defaultChecked: questionData === null || !questionData?.hideFromListing,
                   },
                   {
                     id: YesNoAnswer.No,
                     label: t("t.no"),
                     value: YesNoAnswer.No,
-                    defaultChecked: questionData?.hideFromListing || !questionData,
+                    defaultChecked: questionData?.hideFromListing,
                   },
                 ]}
                 fieldClassName="m-0"
@@ -339,7 +346,12 @@ const PreferenceDrawer = ({
               text: formValues.text,
               description: formValues.description,
               hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
-              optOutText: formValues.optOutText,
+              optOutText:
+                optOutQuestion === YesNoAnswer.Yes &&
+                formValues.optOutText &&
+                formValues.optOutText !== ""
+                  ? formValues.optOutText
+                  : null,
               options: questionData?.options,
               jurisdictions: [
                 profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),

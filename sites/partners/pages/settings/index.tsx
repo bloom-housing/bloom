@@ -10,13 +10,10 @@ import {
 } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
-  AppearanceStyleType,
-  AppearanceBorderType,
   Button,
   LoadingOverlay,
   MinimalTable,
   NavigationHeader,
-  Modal,
   SiteAlert,
   StandardCard,
   t,
@@ -39,9 +36,7 @@ const Settings = () => {
 
   const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
   const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
-  const { mutate: deleteQuestion, isLoading: isDeleteLoading } = useMutate()
 
-  const [deleteModal, setDeleteModal] = useState<string | null>(null)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
   const [alertMessage, setAlertMessage] = useState({
@@ -97,27 +92,6 @@ const Settings = () => {
           })
       )
     }
-  }
-
-  const onDelete = (questionId: string) => {
-    void deleteQuestion(() =>
-      multiselectQuestionsService //TODO: How should we safeguard this? Atm doesn't work: "update or delete on table "multiselect_questions" violates foreign key constraint "FK_ab91e5d403a6cf21656f7d5ae20" on table "jurisdictions_multiselect_questions_multiselect_questions"
-        .delete({
-          body: {
-            id: questionId,
-          },
-        })
-        .then(() => {
-          setAlertMessage({ message: t(`settings.preferenceAlertDeleted`), type: "success" })
-        })
-        .catch(() => {
-          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
-        })
-        .finally(() => {
-          setPreferenceDrawerOpen(null)
-          void mutate(cacheKey)
-        })
-    )
   }
 
   const getCardContent = () => {
@@ -210,36 +184,6 @@ const Settings = () => {
           </article>
         </section>
       </Layout>
-      <Modal
-        open={!!deleteModal}
-        title={t("t.areYouSure")}
-        ariaDescription={t("listings.closeThisListing")}
-        onClose={() => setDeleteModal(null)}
-        actions={[
-          <Button
-            type="button"
-            styleType={AppearanceStyleType.alert}
-            onClick={() => {
-              onDelete(deleteModal)
-            }}
-            loading={isDeleteLoading}
-          >
-            {t("t.delete")}
-          </Button>,
-          <Button
-            type="button"
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
-            onClick={() => {
-              setDeleteModal(null)
-            }}
-          >
-            {t("t.cancel")}
-          </Button>,
-        ]}
-      >
-        {t("settings.preferenceDelete")}
-      </Modal>
       <PreferenceDrawer
         drawerOpen={!!preferenceDrawerOpen}
         questionData={questionData}
