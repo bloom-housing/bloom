@@ -242,7 +242,21 @@ export const liveWorkPreference: MultiselectQuestionSeedType = {
   ],
   optOutText: "I don't want this preference",
   options: [
-    { text: "Live in County", ordinal: 1 },
+    {
+      text: "Live in County",
+      ordinal: 1,
+      description: "A description of the option.",
+      links: [
+        {
+          title: "Link Title",
+          url: "https://www.example.com",
+        },
+        {
+          title: "Link Title",
+          url: "https://www.example.com",
+        },
+      ],
+    },
     { text: "Work in County", ordinal: 2 },
   ],
   applicationSection: ApplicationSection.preferences,
@@ -262,8 +276,23 @@ export const displaceePreference: MultiselectQuestionSeedType = {
   links: [],
   applicationSection: ApplicationSection.preferences,
   options: [
-    { text: "General", collectAddress: true, ordinal: 2 },
-    { text: "Mission Corridor", collectAddress: true, ordinal: 1 },
+    {
+      text: "General",
+      collectAddress: true,
+      ordinal: 2,
+      links: [
+        {
+          title: "Link Title",
+          url: "https://www.example.com",
+        },
+      ],
+    },
+    {
+      text: "Mission Corridor",
+      collectAddress: true,
+      ordinal: 1,
+      description: "A description of the option.",
+    },
   ],
 }
 
