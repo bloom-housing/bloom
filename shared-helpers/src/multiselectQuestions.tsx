@@ -168,27 +168,18 @@ const getCheckboxField = (
           if (e.target.checked && trigger) {
             void trigger()
           }
+          const allOptions =
+            question?.options?.map((option) =>
+              fieldName(question.text, applicationSection, option.text)
+            ) ?? []
+          if (question.optOutText) {
+            allOptions.push(fieldName(question.text, applicationSection, question.optOutText))
+          }
           if (option.exclusive && e.target.checked && exclusiveKeys) {
-            setExclusive(
-              true,
-              setValue,
-              exclusiveKeys,
-              optionFieldName,
-              question?.options?.map((option) =>
-                fieldName(question.text, applicationSection, option.text)
-              ) ?? []
-            )
+            setExclusive(true, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
           if (!option.exclusive && exclusiveKeys) {
-            setExclusive(
-              false,
-              setValue,
-              exclusiveKeys,
-              optionFieldName,
-              question?.options?.map((option) =>
-                fieldName(question.text, applicationSection, option.text)
-              ) ?? []
-            )
+            setExclusive(false, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
         },
       }}

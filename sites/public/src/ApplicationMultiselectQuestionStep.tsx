@@ -173,7 +173,7 @@ const ApplicationMultiselectQuestionStep = ({
 
         <div className="form-card__group pb-0">
           <p className="field-note">
-            {strings?.selectText ?? (questionSetInputType === "radio" || !!question.optOutText)
+            {strings?.selectText ?? questionSetInputType === "radio"
               ? t("t.pleaseSelectOne")
               : t("errors.selectAllThatApply")}
           </p>
@@ -186,11 +186,9 @@ const ApplicationMultiselectQuestionStep = ({
                 <fieldset>
                   <legend className="field-label--caps mb-4">{question?.text}</legend>
                   <p className="field-note mb-8">{question?.description}</p>
-                  {question?.options
-                    ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                    .map((option) => {
-                      return checkboxOption(option)
-                    })}
+                  {question?.options.map((option) => {
+                    return checkboxOption(option)
+                  })}
                   {question?.optOutText &&
                     checkboxOption({
                       text: question.optOutText,
