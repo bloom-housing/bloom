@@ -109,7 +109,6 @@ const PreferenceDrawer = ({
                   setOptionDrawerOpen("edit")
                 }}
                 onDelete={() => {
-                  console.log(questionData)
                   setQuestionData({
                     ...questionData,
                     options: questionData.options
@@ -505,8 +504,13 @@ const PreferenceDrawer = ({
               return
             }
             const existingOptionData = questionData?.options?.find(
-              (option) => optionData?.text === option.text
+              (option) => optionData?.ordinal === option.ordinal
             )
+
+            const getNewOrdinal = () => {
+              if (existingOptionData) return existingOptionData.ordinal
+              return questionData?.options?.length ? questionData?.options.length + 1 : 1
+            }
 
             const newOptionData: MultiselectOption = {
               text: formData.optionTitle,
@@ -514,10 +518,7 @@ const PreferenceDrawer = ({
               links: formData.optionUrl
                 ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
                 : [],
-              ordinal:
-                existingOptionData?.ordinal ?? questionData?.options?.length
-                  ? questionData?.options.length + 1
-                  : 1,
+              ordinal: getNewOrdinal(),
               collectAddress: formData.collectAddress,
               exclusive: formData.exclusiveQuestion === "exclusive",
             }
