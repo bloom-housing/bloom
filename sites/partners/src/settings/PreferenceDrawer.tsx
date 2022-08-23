@@ -15,7 +15,6 @@ import {
   MinimalTable,
   StandardTableData,
   ErrorMessage,
-  useMutate,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
@@ -36,12 +35,11 @@ type PreferenceDrawerProps = {
   setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
   drawerType: DrawerType
   onDrawerClose: () => void
-  setAlertMessage: React.Dispatch<
-    React.SetStateAction<{
-      type: string
-      message: string
-    }>
-  >
+  saveQuestion: (
+    formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
+    requestType: DrawerType
+  ) => void
+  isLoading: boolean
 }
 
 type OptionForm = {
@@ -58,16 +56,14 @@ const PreferenceDrawer = ({
   setQuestionData,
   drawerOpen,
   onDrawerClose,
-  setAlertMessage,
+  saveQuestion,
+  isLoading,
 }: PreferenceDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
   const [dragOrder, setDragOrder] = useState([])
 
-  const { profile, multiselectQuestionsService } = useContext(AuthContext)
-
-  const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
-  const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
+  const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues, trigger, errors, clearErrors, setError } = useForm()
@@ -89,8 +85,11 @@ const PreferenceDrawer = ({
 
   useEffect(() => {
     clearErrors()
+    clearErrors("questions")
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  console.log(questionData.options)
 
   const draggableTableData: StandardTableData = useMemo(
     () =>
@@ -100,12 +99,25 @@ const PreferenceDrawer = ({
         action: {
           content: (
             <ManageIconSection
-              onCopy={() => alert("copy")}
+              onCopy={() => {
+                const draftOptions = [...questionData.options]
+                draftOptions.push({ ...item, ordinal: questionData.options.length + 1 })
+                setQuestionData({ ...questionData, options: draftOptions })
+              }}
               onEdit={() => {
                 setOptionData(item)
                 setOptionDrawerOpen("edit")
               }}
-              onDelete={() => alert("delete")}
+              onDelete={() => {
+                setQuestionData({
+                  ...questionData,
+                  options: questionData.options
+                    .filter((option) => option.ordinal !== item.ordinal)
+                    .map((option, index) => {
+                      return { ...option, ordinal: index + 1 }
+                    }),
+                })
+              }}
             />
           ),
         },
@@ -120,44 +132,6 @@ const PreferenceDrawer = ({
     ? t("settings.preferenceEditOption")
     : t("settings.preferenceAddOption")
 
-  const saveQuestion = (formattedData: MultiselectQuestionUpdate | MultiselectQuestionCreate) => {
-    if (drawerType === "edit") {
-      void updateQuestion(() =>
-        multiselectQuestionsService
-          .update({
-            body: { ...formattedData, id: questionData.id },
-          })
-          .then(() => {
-            setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
-          })
-          .catch((e) => {
-            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
-            console.log(e)
-          })
-          .finally(() => {
-            onDrawerClose()
-          })
-      )
-    } else {
-      void createQuestion(() =>
-        multiselectQuestionsService
-          .create({
-            body: formattedData,
-          })
-          .then(() => {
-            setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
-          })
-          .catch((e) => {
-            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
-            console.log(e)
-          })
-          .finally(() => {
-            onDrawerClose()
-          })
-      )
-    }
-  }
-
   return (
     <>
       <Drawer
@@ -166,6 +140,7 @@ const PreferenceDrawer = ({
         ariaDescription={drawerTitle}
         onClose={() => {
           clearErrors()
+          clearErrors("questions")
           onDrawerClose()
         }}
       >
@@ -227,6 +202,7 @@ const PreferenceDrawer = ({
                 type="button"
                 size={AppearanceSizeType.small}
                 onClick={() => {
+                  clearErrors("questions")
                   setOptionData(null)
                   setOptionDrawerOpen("add")
                 }}
@@ -304,7 +280,11 @@ const PreferenceDrawer = ({
                     })),
                   ]}
                   dataTestId={"preference-jurisdiction"}
-                  defaultValue={questionData ? questionData.jurisdictions[0].id : null}
+                  defaultValue={
+                    questionData?.jurisdictions?.length > 0
+                      ? questionData.jurisdictions[0].id
+                      : null
+                  }
                   errorMessage={t("errors.requiredFieldError")}
                   error={errors.jurisdictionId}
                   validation={{ required: true }}
@@ -321,11 +301,12 @@ const PreferenceDrawer = ({
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
-          loading={isCreateLoading || isUpdateLoading}
+          loading={isLoading}
           onClick={async () => {
             const validation = await trigger()
             if (!questionData || !questionData?.options?.length) {
               setError("questions", { message: t("errors.requiredFieldError") })
+              return
             }
             if (!validation) return
             const formValues = getValues()
@@ -341,8 +322,9 @@ const PreferenceDrawer = ({
                 profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
               ],
             }
-
-            saveQuestion(formattedQuestionData)
+            clearErrors()
+            clearErrors("questions")
+            saveQuestion(formattedQuestionData, drawerType)
           }}
           dataTestId={"preference-save-button"}
         >
@@ -436,7 +418,7 @@ const PreferenceDrawer = ({
                 dataTestId={"preference-option-collect-address"}
                 controlClassName={"font-normal"}
                 inputProps={{
-                  defaultChecked: true,
+                  defaultChecked: optionData?.collectAddress,
                 }}
               />
             </GridCell>

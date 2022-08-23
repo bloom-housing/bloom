@@ -2,7 +2,12 @@ import React, { useContext, useState } from "react"
 import Head from "next/head"
 import { useSWRConfig } from "swr"
 
-import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core"
+import {
+  ApplicationSection,
+  MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
+} from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -16,6 +21,7 @@ import {
   StandardCard,
   t,
   AlertTypes,
+  useMutate,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -31,7 +37,11 @@ const Settings = () => {
 
   const { profile, multiselectQuestionsService } = useContext(AuthContext)
 
-  const [deleteModal, setDeleteModal] = useState(false)
+  const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
+  const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
+  const { mutate: deleteQuestion, isLoading: isDeleteLoading } = useMutate()
+
+  const [deleteModal, setDeleteModal] = useState<string | null>(null)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
   const [alertMessage, setAlertMessage] = useState({
@@ -45,6 +55,70 @@ const Settings = () => {
     }, ""),
     ApplicationSection.preferences
   )
+
+  const saveQuestion = (
+    formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
+    requestType: DrawerType
+  ) => {
+    if (requestType === "edit") {
+      void updateQuestion(() =>
+        multiselectQuestionsService
+          .update({
+            body: { ...formattedData, id: questionData.id },
+          })
+          .then(() => {
+            setAlertMessage({ message: t(`settings.preferenceAlertUpdated`), type: "success" })
+          })
+          .catch((e) => {
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setPreferenceDrawerOpen(null)
+            void mutate(cacheKey)
+          })
+      )
+    } else {
+      void createQuestion(() =>
+        multiselectQuestionsService
+          .create({
+            body: formattedData,
+          })
+          .then(() => {
+            setAlertMessage({ message: t(`settings.preferenceAlertCreated`), type: "success" })
+          })
+          .catch((e) => {
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setPreferenceDrawerOpen(null)
+            void mutate(cacheKey)
+          })
+      )
+    }
+  }
+
+  const onDelete = (questionId: string) => {
+    void deleteQuestion(() =>
+      multiselectQuestionsService //TODO: How should we safeguard this? Atm doesn't work: "update or delete on table "multiselect_questions" violates foreign key constraint "FK_ab91e5d403a6cf21656f7d5ae20" on table "jurisdictions_multiselect_questions_multiselect_questions"
+        .delete({
+          body: {
+            id: questionId,
+          },
+        })
+        .then(() => {
+          setAlertMessage({ message: t(`settings.preferenceAlertDeleted`), type: "success" })
+        })
+        .catch(() => {
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+        })
+        .finally(() => {
+          setPreferenceDrawerOpen(null)
+          void mutate(cacheKey)
+        })
+    )
+  }
 
   const getCardContent = () => {
     if (!loading && data?.length === 0) return null
@@ -63,6 +137,8 @@ const Settings = () => {
               ?.sort((a, b) => {
                 const aChar = a.jurisdictions[0].name[0]
                 const bChar = b.jurisdictions[0].name[0]
+                if (aChar === bChar)
+                  return a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0
                 return aChar < bChar ? -1 : aChar > bChar ? 1 : 0
               })
               .map((preference) => {
@@ -79,16 +155,12 @@ const Settings = () => {
                   icons: {
                     content: (
                       <ManageIconSection
-                        onCopy={() =>
-                          multiselectQuestionsService.create({
-                            body: preference,
-                          })
-                        }
+                        onCopy={() => saveQuestion(preference, "add")}
                         onEdit={() => {
                           setQuestionData(preference)
                           setPreferenceDrawerOpen("edit")
                         }}
-                        onDelete={() => setDeleteModal(true)}
+                        onDelete={() => setDeleteModal(preference.id)}
                       />
                     ),
                   },
@@ -143,14 +215,15 @@ const Settings = () => {
         open={!!deleteModal}
         title={t("t.areYouSure")}
         ariaDescription={t("listings.closeThisListing")}
-        onClose={() => setDeleteModal(false)}
+        onClose={() => setDeleteModal(null)}
         actions={[
           <Button
             type="button"
             styleType={AppearanceStyleType.alert}
             onClick={() => {
-              setDeleteModal(false)
+              onDelete(deleteModal)
             }}
+            loading={isDeleteLoading}
           >
             {t("t.delete")}
           </Button>,
@@ -159,7 +232,7 @@ const Settings = () => {
             styleType={AppearanceStyleType.primary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
-              setDeleteModal(false)
+              setDeleteModal(null)
             }}
           >
             {t("t.cancel")}
@@ -177,7 +250,8 @@ const Settings = () => {
           setPreferenceDrawerOpen(null)
           void mutate(cacheKey)
         }}
-        setAlertMessage={setAlertMessage}
+        saveQuestion={saveQuestion}
+        isLoading={isCreateLoading || isUpdateLoading}
       />
     </>
   )
