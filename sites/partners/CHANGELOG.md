@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.19...@bloom-housing/partners@5.1.1-alpha.20) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
 ## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.18...@bloom-housing/partners@5.1.1-alpha.19) (2022-08-23)
 
 **Note:** Version bump only for package @bloom-housing/partners
