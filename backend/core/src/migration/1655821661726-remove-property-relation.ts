@@ -24,22 +24,26 @@ export class removePropertyRelation1655821661726 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "listings" ADD "year_built" integer`)
     await queryRunner.query(`ALTER TABLE "listings" ADD "building_address_id" uuid`)
 
-    await queryRunner.query(`UPDATE listings 
-            SET accessibility = property.accessibility, 
-            amenities = property.amenities,
-            building_total_units = property.building_total_units,
-            developer = property.developer,
-            household_size_max = property.household_size_max,
-            household_size_min = property.household_size_min,
-            neighborhood = property.neighborhood,
-            pet_policy = property.pet_policy,
-            smoking_policy = property.smoking_policy,
-            units_available = property.units_available,
-            unit_amenities = property.unit_amenities,
-            services_offered = property.services_offered,
-            year_built = property.year_built,
-            building_address_id = property.building_address_id
-            FROM property INNER JOIN listings l ON l.property_id = property.id`)
+    await queryRunner.query(`
+      UPDATE listings l
+      SET 
+        accessibility = property.accessibility, 
+        amenities = property.amenities,
+        building_total_units = property.building_total_units,
+        developer = property.developer,
+        household_size_max = property.household_size_max,
+        household_size_min = property.household_size_min,
+        neighborhood = property.neighborhood,
+        pet_policy = property.pet_policy,
+        smoking_policy = property.smoking_policy,
+        units_available = property.units_available,
+        unit_amenities = property.unit_amenities,
+        services_offered = property.services_offered,
+        year_built = property.year_built,
+        building_address_id = property.building_address_id
+      FROM property 
+      WHERE l.property_id = property.id
+    `)
 
     await queryRunner.query(`ALTER TABLE "units" ADD COLUMN "listing_id" uuid`)
 

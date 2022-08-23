@@ -1,5 +1,5 @@
 import * as React from "react"
-import Heading from "../../../../headers/Heading"
+import { Heading } from "../../../../headers/Heading"
 
 export type EventType = {
   timeString?: string

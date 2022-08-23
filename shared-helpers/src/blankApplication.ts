@@ -2,8 +2,7 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
   Language,
-  ApplicationPreference,
-  ApplicationProgram,
+  ApplicationMultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 
 export const blankApplication = {
@@ -105,8 +104,8 @@ export const blankApplication = {
     sexualOrientation: "",
     howDidYouHear: [],
   },
-  preferences: [] as ApplicationPreference[],
-  programs: [] as ApplicationProgram[],
+  preferences: [] as ApplicationMultiselectQuestion[],
+  programs: [] as ApplicationMultiselectQuestion[],
   confirmationCode: "",
   id: "",
 }

@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.10...@bloom-housing/ui-components@5.1.1-alpha.11) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.9...@bloom-housing/ui-components@5.1.1-alpha.10) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.8...@bloom-housing/ui-components@5.1.1-alpha.9) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.7...@bloom-housing/ui-components@5.1.1-alpha.8) (2022-08-18)
+
+
+### Features
+
+* **expandabletext:** add classname to expandable text button ([#2965](https://github.com/bloom-housing/bloom/issues/2965)) ([6d4b8a7](https://github.com/bloom-housing/bloom/commit/6d4b8a7132825c1aa3abcc0368529557cb3d2647))
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.6...@bloom-housing/ui-components@5.1.1-alpha.7) (2022-08-18)
+
+
+### Bug Fixes
+
+* image width fix for tablet screen sizes ([#2970](https://github.com/bloom-housing/bloom/issues/2970)) ([feac019](https://github.com/bloom-housing/bloom/commit/feac019b25a476221a7ad77518d1fa185a75b27f))
+
+
+
+
+
 ## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.5...@bloom-housing/ui-components@5.1.1-alpha.6) (2022-08-16)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

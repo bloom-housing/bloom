@@ -208,6 +208,8 @@
   "listings.sections.introTitle": "Listing Intro",
   "listings.sections.leasingAgentSubtitle": "Provide details about the leasing agent who will be managing the application process.",
   "listings.sections.leasingAgentTitle": "Leasing Agent",
+  "listings.sections.lotteryResultsAdd": "Add Results",
+  "listings.sections.lotteryResultsEdit": "Edit Results",
   "listings.sections.lotteryResultsHelperText": "Upload Results",
   "listings.sections.openHouse": "Open House",
   "listings.sections.photoSubtitle": "Upload an image for the listing that will be used as a preview.",

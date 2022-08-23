@@ -142,7 +142,7 @@
 .image-card--leader {
   width: 100%;
 
-  @media (min-width: $screen-sm) {
+  @media (min-width: $screen-md) {
     width: var(--bloom-width-2-3rd);
     padding-block-start: var(--bloom-s8);
     padding-inline-end: var(--bloom-s8);

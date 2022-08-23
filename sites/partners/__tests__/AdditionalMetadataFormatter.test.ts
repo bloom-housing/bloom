@@ -1,4 +1,3 @@
-import { Preference, ReservedCommunityType } from "@bloom-housing/backend-core/types"
 import { LatitudeLongitude } from "@bloom-housing/ui-components"
 import AdditionalMetadataFormatter from "../src/listings/PaperListingForm/formatters/AdditionalMetadataFormatter"
 import { FormListing, FormMetadata } from "../src/listings/PaperListingForm/formTypes"
@@ -20,18 +19,18 @@ describe("AdditionalMetadataFormatter", () => {
       latLong,
       preferences: [
         {
-          title: "Preference 1",
+          text: "Preference 1",
         },
         {
-          title: "Preference 2",
+          text: "Preference 2",
         },
       ],
       programs: [],
     } as FormMetadata
 
-    expect(formatData(fixtureData, metadata).listingPreferences).toEqual([
-      { preference: { title: "Preference 1" }, ordinal: 1 },
-      { preference: { title: "Preference 2" }, ordinal: 2 },
+    expect(formatData(fixtureData, metadata).listingMultiselectQuestions).toEqual([
+      { multiselectQuestion: { text: "Preference 1" }, ordinal: 1 },
+      { multiselectQuestion: { text: "Preference 2" }, ordinal: 2 },
     ])
   })
 
