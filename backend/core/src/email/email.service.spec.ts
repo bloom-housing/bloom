@@ -56,9 +56,12 @@ const translationServiceMock = {
             confirmation: {
               gotYourConfirmationNumber: "We got your application for",
               yourConfirmationNumber: "Your Confirmation Number", // UPDATED
-              applicationReceived: "Application <br />received",
-              applicationsClosed: "Application <br />closed",
-              applicationsRanked: "Application <br />ranked",
+              applicationReceived:
+                'Application <br />received<span class="sr-only"> completed</span>',
+              applicationsClosed:
+                'Application <br />closed<span class="sr-only"> not completed</span>',
+              applicationsRanked:
+                'Application <br />ranked<span class="sr-only"> not completed</span>',
               whatHappensNext: "What happens next?",
               applicationPeriodCloses:
                 "JURISDICTION: Once the application period closes, the property manager will begin processing applications.",
