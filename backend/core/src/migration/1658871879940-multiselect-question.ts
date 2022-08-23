@@ -25,25 +25,10 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       `CREATE INDEX "IDX_ab91e5d403a6cf21656f7d5ae2" ON "jurisdictions_multiselect_questions_multiselect_questions" ("multiselect_questions_id") `
     )
     await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_accessibility_features" DROP DEFAULT`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_utilities_included" DROP DEFAULT`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" DROP CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD CONSTRAINT "UQ_e5d5291cd6ab92cbec304aab905" UNIQUE ("building_address_id")`
-    )
-    await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" ADD CONSTRAINT "FK_d123697625fe564c2bae54dcecf" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
     await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" ADD CONSTRAINT "FK_92adcb35f2f14e316b4cb12a84e" FOREIGN KEY ("multiselect_question_id") REFERENCES "multiselect_questions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905" FOREIGN KEY ("building_address_id") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
     await queryRunner.query(
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" ADD CONSTRAINT "FK_3f7126f5da7c0368aea2f9459c0" FOREIGN KEY ("jurisdictions_id") REFERENCES "jurisdictions"("id") ON DELETE CASCADE ON UPDATE CASCADE`
@@ -276,25 +261,10 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" DROP CONSTRAINT "FK_3f7126f5da7c0368aea2f9459c0"`
     )
     await queryRunner.query(
-      `ALTER TABLE "listings" DROP CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905"`
-    )
-    await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" DROP CONSTRAINT "FK_92adcb35f2f14e316b4cb12a84e"`
     )
     await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" DROP CONSTRAINT "FK_d123697625fe564c2bae54dcecf"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" DROP CONSTRAINT "UQ_e5d5291cd6ab92cbec304aab905"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905" FOREIGN KEY ("building_address_id") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_utilities_included" SET DEFAULT false`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_accessibility_features" SET DEFAULT false`
     )
     await queryRunner.query(`DROP INDEX "public"."IDX_ab91e5d403a6cf21656f7d5ae2"`)
     await queryRunner.query(`DROP INDEX "public"."IDX_3f7126f5da7c0368aea2f9459c"`)
