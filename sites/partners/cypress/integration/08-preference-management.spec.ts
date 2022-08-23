@@ -40,10 +40,10 @@ describe("Preference Management Tests", () => {
       .should("have.text", "Preference Created")
 
     // Verify
-    cy.getByTestId("preference-edit-icon: Preference TitleG").should("be.enabled")
-    cy.getByTestId("preference-edit-icon: Preference TitleG").click()
+    cy.getByTestId("preference-edit-icon: Preference Title").should("be.enabled")
+    cy.getByTestId("preference-edit-icon: Preference Title").click()
 
-    cy.getByTestId("preference-title").should("have.value", "Preference TitleG")
+    cy.getByTestId("preference-title").should("have.value", "Preference Title")
     cy.getByTestId("preference-description").should("have.value", "Preference Description")
     cy.getByTestId("preference-link").should("have.value", "https://www.example.com")
     cy.getByTestId("preference-link-title").should("have.value", "Preference Link Title")

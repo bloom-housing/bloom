@@ -17,7 +17,7 @@ import {
   ErrorMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../applications/PaperApplicationForm/FormTypes"
 import {
   ApplicationSection,
@@ -67,12 +67,19 @@ const PreferenceDrawer = ({
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, trigger, errors, clearErrors, setError, control } = useForm()
+  const { register, getValues, trigger, errors, clearErrors, setError, watch, setValue } = useForm()
 
-  const optOutQuestion = useWatch({
-    control,
-    name: "canYouOptOutQuestion",
-  })
+  useEffect(() => {
+    if (!optOutQuestion) {
+      setValue(
+        "canYouOptOutQuestion",
+        questionData?.optOutText !== null ? YesNoAnswer.Yes : YesNoAnswer.No
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionData])
+
+  const optOutQuestion = watch("canYouOptOutQuestion")
 
   // Update local state with dragged state
   useEffect(() => {
@@ -261,14 +268,14 @@ const PreferenceDrawer = ({
                 register={register}
                 fields={[
                   {
-                    id: YesNoAnswer.Yes,
+                    id: "optOutYes",
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
                     defaultChecked: questionData === null || questionData?.optOutText !== null,
                     dataTestId: "opt-out-question-yes",
                   },
                   {
-                    id: YesNoAnswer.No,
+                    id: "optOutNo",
                     label: t("t.no"),
                     value: YesNoAnswer.No,
                     defaultChecked: questionData && questionData?.optOutText === null,
@@ -309,14 +316,14 @@ const PreferenceDrawer = ({
                 register={register}
                 fields={[
                   {
-                    id: YesNoAnswer.Yes,
+                    id: "showOnListingYes",
                     label: t("t.yes"),
                     value: YesNoAnswer.Yes,
                     defaultChecked: questionData === null || !questionData?.hideFromListing,
                     dataTestId: "show-on-listing-question-yes",
                   },
                   {
-                    id: YesNoAnswer.No,
+                    id: "showOnListingNo",
                     label: t("t.no"),
                     value: YesNoAnswer.No,
                     defaultChecked: questionData?.hideFromListing,
