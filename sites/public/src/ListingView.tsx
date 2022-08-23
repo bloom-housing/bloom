@@ -181,7 +181,6 @@ export const ListingView = (props: ListingProps) => {
         ordinal: index + 1,
         links: listingPref?.multiselectQuestion?.links,
         title: listingPref?.multiselectQuestion?.text,
-        subtitle: listingPref?.multiselectQuestion?.subText,
         description: listingPref?.multiselectQuestion?.description,
       }
     })
