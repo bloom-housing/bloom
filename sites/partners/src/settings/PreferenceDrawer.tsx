@@ -497,7 +497,7 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection columns={3} className={"mt-8"}>
             <GridCell>
-              <Field //TODO: Add "exclusive"
+              <Field
                 type="checkbox"
                 id="collectAddress"
                 name="collectAddress"

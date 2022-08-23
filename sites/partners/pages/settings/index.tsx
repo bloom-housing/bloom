@@ -113,7 +113,7 @@ const Settings = () => {
                 const bChar = b.text.toUpperCase()
                 if (aChar === bChar)
                   return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
-                return aChar < bChar ? -1 : aChar > bChar ? 1 : 0
+                return aChar.localeCompare(bChar)
               })
               .map((preference) => {
                 return {
