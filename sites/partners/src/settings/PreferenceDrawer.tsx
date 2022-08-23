@@ -44,6 +44,7 @@ type PreferenceDrawerProps = {
 
 type OptionForm = {
   collectAddress: boolean
+  exclusiveQuestion: "exclusive" | "multiselect"
   optionDescription: string
   optionLinkTitle: string
   optionTitle: string
@@ -463,6 +464,33 @@ const PreferenceDrawer = ({
               />
             </GridCell>
           </GridSection>
+          <GridSection>
+            <GridCell>
+              <ViewItem label={t("settings.preferenceExclusiveQuestion")} className="mb-1" />
+              <FieldGroup
+                name="exclusiveQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    id: "multiselect",
+                    label: t("settings.preferenceMultiSelect"),
+                    value: "multiselect",
+                    defaultChecked: optionData === null || !optionData?.exclusive,
+                  },
+                  {
+                    id: "exclusive",
+                    label: t("settings.preferenceExclusive"),
+                    value: "exclusive",
+                    defaultChecked: optionData?.exclusive,
+                  },
+                ]}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+                dataTestId={"preference-exclusive-question"}
+              />
+            </GridCell>
+          </GridSection>
         </div>
         <Button
           type="button"
@@ -491,6 +519,7 @@ const PreferenceDrawer = ({
                   ? questionData?.options.length + 1
                   : 1,
               collectAddress: formData.collectAddress,
+              exclusive: formData.exclusiveQuestion === "exclusive",
             }
             let newOptions = []
 
