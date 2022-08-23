@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react"
 import Head from "next/head"
+import { useSWRConfig } from "swr"
+
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
@@ -13,6 +15,7 @@ import {
   SiteAlert,
   StandardCard,
   t,
+  AlertTypes,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -24,13 +27,19 @@ import ManageIconSection from "../../src/settings/ManageIconSection"
 export type DrawerType = "add" | "edit"
 
 const Settings = () => {
+  const { mutate } = useSWRConfig()
+
   const { profile, multiselectQuestionsService } = useContext(AuthContext)
 
   const [deleteModal, setDeleteModal] = useState(false)
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
+  const [alertMessage, setAlertMessage] = useState({
+    type: "alert" as AlertTypes,
+    message: undefined,
+  })
 
-  const { data, loading } = useJurisdictionalMultiselectQuestionList(
+  const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.reduce((acc, curr) => {
       return `${acc}${","}${curr.id}`
     }, ""),
@@ -102,8 +111,7 @@ const Settings = () => {
 
         <NavigationHeader className="relative" title={t("t.settings")}>
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="success" timeout={5000} dismissable />
-            <SiteAlert type="alert" timeout={5000} dismissable />
+            <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} />
           </div>
         </NavigationHeader>
 
@@ -163,9 +171,13 @@ const Settings = () => {
       <PreferenceDrawer
         drawerOpen={!!preferenceDrawerOpen}
         questionData={questionData}
-        setDrawerOpen={setPreferenceDrawerOpen}
         setQuestionData={setQuestionData}
         drawerType={preferenceDrawerOpen}
+        onDrawerClose={() => {
+          setPreferenceDrawerOpen(null)
+          void mutate(cacheKey)
+        }}
+        setAlertMessage={setAlertMessage}
       />
     </>
   )

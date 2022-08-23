@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect, useMemo } from "react"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -9,13 +9,13 @@ import {
   GridCell,
   GridSection,
   Select,
-  SelectOption,
   Textarea,
   ViewItem,
   t,
   MinimalTable,
   StandardTableData,
   ErrorMessage,
+  useMutate,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
@@ -27,16 +27,21 @@ import {
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
 } from "@bloom-housing/backend-core"
-import { useMemo } from "react"
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings"
 
 type PreferenceDrawerProps = {
   drawerOpen: boolean
   questionData: MultiselectQuestion
-  setDrawerOpen: React.Dispatch<React.SetStateAction<"add" | "edit">>
   setQuestionData: React.Dispatch<React.SetStateAction<MultiselectQuestion>>
   drawerType: DrawerType
+  onDrawerClose: () => void
+  setAlertMessage: React.Dispatch<
+    React.SetStateAction<{
+      type: string
+      message: string
+    }>
+  >
 }
 
 type OptionForm = {
@@ -52,13 +57,17 @@ const PreferenceDrawer = ({
   questionData,
   setQuestionData,
   drawerOpen,
-  setDrawerOpen,
+  onDrawerClose,
+  setAlertMessage,
 }: PreferenceDrawerProps) => {
   const [optionDrawerOpen, setOptionDrawerOpen] = useState<DrawerType | null>(null)
   const [optionData, setOptionData] = useState<MultiselectOption>(null)
   const [dragOrder, setDragOrder] = useState([])
 
   const { profile, multiselectQuestionsService } = useContext(AuthContext)
+
+  const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
+  const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues, trigger, errors, clearErrors, setError } = useForm()
@@ -80,6 +89,7 @@ const PreferenceDrawer = ({
 
   useEffect(() => {
     clearErrors()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const draggableTableData: StandardTableData = useMemo(
@@ -110,6 +120,44 @@ const PreferenceDrawer = ({
     ? t("settings.preferenceEditOption")
     : t("settings.preferenceAddOption")
 
+  const saveQuestion = (formattedData: MultiselectQuestionUpdate | MultiselectQuestionCreate) => {
+    if (drawerType === "edit") {
+      void updateQuestion(() =>
+        multiselectQuestionsService
+          .update({
+            body: { ...formattedData, id: questionData.id },
+          })
+          .then(() => {
+            setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
+          })
+          .catch((e) => {
+            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            onDrawerClose()
+          })
+      )
+    } else {
+      void createQuestion(() =>
+        multiselectQuestionsService
+          .create({
+            body: formattedData,
+          })
+          .then(() => {
+            setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
+          })
+          .catch((e) => {
+            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            onDrawerClose()
+          })
+      )
+    }
+  }
+
   return (
     <>
       <Drawer
@@ -118,7 +166,7 @@ const PreferenceDrawer = ({
         ariaDescription={drawerTitle}
         onClose={() => {
           clearErrors()
-          setDrawerOpen(null)
+          onDrawerClose()
         }}
       >
         <div className="border rounded-md p-8 bg-white">
@@ -273,6 +321,7 @@ const PreferenceDrawer = ({
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
+          loading={isCreateLoading || isUpdateLoading}
           onClick={async () => {
             const validation = await trigger()
             if (!questionData || !questionData?.options?.length) {
@@ -293,16 +342,7 @@ const PreferenceDrawer = ({
               ],
             }
 
-            if (drawerType === "edit") {
-              multiselectQuestionsService.update({
-                body: { ...formattedQuestionData, id: questionData.id },
-              })
-            } else {
-              multiselectQuestionsService.create({
-                body: formattedQuestionData,
-              })
-            }
-            setDrawerOpen(null)
+            saveQuestion(formattedQuestionData)
           }}
           dataTestId={"preference-save-button"}
         >

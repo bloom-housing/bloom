@@ -342,12 +342,12 @@ export function useJurisdictionalMultiselectQuestionList(
 
   const fetcher = () => multiselectQuestionsService.list(params)
 
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/multiselectQuestions?${paramsString}`,
-    fetcher
-  )
+  const cacheKey = `${process.env.backendApiBase}/multiselectQuestions/list?${paramsString}`
+
+  const { data, error } = useSWR(cacheKey, fetcher)
 
   return {
+    cacheKey,
     data,
     loading: !error && !data,
     error,
