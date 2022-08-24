@@ -9,6 +9,7 @@ import {
   Button,
   ImageCard,
   LinkButton,
+  ActionBlock,
   FormCard,
   ProgressNav,
   t,
@@ -153,22 +154,37 @@ const ApplicationChooseLanguage = () => {
           </div>
 
           {initialStateLoaded && !profile && (
-            <div className="form-card__pager-row primary px-4 border-t border-gray-450">
-              <h2 className="form-card__title w-full border-none pt-0 mt-0">
-                {t("account.haveAnAccount")}
-              </h2>
+            <>
+              <div className="form-card__pager-row primary px-4 border-t border-gray-450">
+                <h2 className="form-card__title w-full border-none pt-0 mt-0">
+                  {t("account.haveAnAccount")}
+                </h2>
 
-              <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
+                <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
 
-              <div>
-                <LinkButton
-                  href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                  dataTestId={"app-choose-language-sign-in-button"}
-                >
-                  {t("nav.signIn")}
-                </LinkButton>
+                <div>
+                  <LinkButton
+                    href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                    dataTestId={"app-choose-language-sign-in-button"}
+                  >
+                    {t("nav.signIn")}
+                  </LinkButton>
+                </div>
               </div>
-            </div>
+              <ActionBlock
+                className="border-t border-gray-450"
+                header={t("authentication.createAccount.noAccount")}
+                background="primary-lighter"
+                actions={[
+                  <LinkButton
+                    href={"/create-account"}
+                    dataTestId={"app-choose-language-create-account-button"}
+                  >
+                    {t("account.createAccount")}
+                  </LinkButton>,
+                ]}
+              />
+            </>
           )}
         </div>
       </FormCard>
