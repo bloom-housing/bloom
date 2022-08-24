@@ -160,4 +160,7 @@
   @media (min-width: $screen-md) {
     --scroll-max-height: calc(80vh - 200px);
   }
+  svg {
+    @apply sr-only;
+  }
 }

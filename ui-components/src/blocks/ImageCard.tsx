@@ -172,7 +172,6 @@ const ImageCard = (props: ImageCardProps) => {
           className="image-card__overlay"
           modalClassNames="image-card__gallery-modal"
           headerClassNames="sr-only"
-          closeIconColor={IconFillColors.white}
           actions={[
             <Button onClick={() => setShowModal(!showModal)}>
               {props.modalCloseLabel || "Close"}
