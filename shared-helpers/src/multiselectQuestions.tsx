@@ -219,8 +219,8 @@ export const getCheckboxOption = (
 ) => {
   const optionFieldName = fieldName(question.text, applicationSection, option.text)
   return (
-    <div className={`mb-5 ${option.ordinal !== 1 ? "border-t" : ""}`} key={option.text}>
-      <div className={`mb-5 pt-6 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
+    <div className={`mb-5 ${option.ordinal !== 1 ? "border-t pt-5" : ""}`} key={option.text}>
+      <div className={`mb-5 field ${resolveObject(optionFieldName, errors) ? "error" : ""}`}>
         {getCheckboxField(
           option,
           question,
@@ -236,18 +236,15 @@ export const getCheckboxOption = (
       </div>
 
       {option.description && (
-        <div className="ml-8 mb-5">
-          <ExpandableContent
-            strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}
-            className={"-mt-5"}
-          >
+        <div className="ml-8 -mt-5 mb-5">
+          <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
             <p className="field-note mb-2">
               {option.description}
               <br />
               {option?.links?.map((link) => (
                 <a
                   key={link.url}
-                  className="text-sm text-blue-600 underline"
+                  className="block pt-2 text-blue-600 underline"
                   href={link.url}
                   target={"_blank"}
                   rel="noreferrer noopener"
