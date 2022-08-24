@@ -41,8 +41,8 @@ export const parameters = {
   badgesConfig: {
     [BADGES.GEN2]: {
       styles: {
-        backgroundColor: "#e41d3d",
-        borderColor: "#b21d38",
+        backgroundColor: "#0077da",
+        borderColor: "#0077da",
         color: "#fff",
       },
       title: "2nd Generation",

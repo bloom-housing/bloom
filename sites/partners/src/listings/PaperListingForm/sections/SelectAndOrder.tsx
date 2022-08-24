@@ -11,9 +11,10 @@ import {
   StandardTableData,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { Preference, Program } from "@bloom-housing/backend-core/types"
+import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
+import LinkComponent from "../../../LinkComponent"
 
-type SelectAndOrderSection = Preference | Program
+type SelectAndOrderSection = MultiselectQuestion
 
 type SelectAndOrderProps = {
   listingData: SelectAndOrderSection[]
@@ -25,16 +26,19 @@ type SelectAndOrderProps = {
   drawerTitle: string
   drawerButtonText: string
   dataFetcher: (
-    jurisdiction?: string
+    jurisdiction?: string,
+    applicationSection?: ApplicationSection
   ) => {
     data: SelectAndOrderSection[]
     loading: boolean
     error: any
   }
   formKey: string
+  applicationSection: ApplicationSection
 }
 
 const SelectAndOrder = ({
+  applicationSection,
   listingData,
   setListingData,
   title,
@@ -50,6 +54,7 @@ const SelectAndOrder = ({
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
   const [draftListingData, setDraftListingData] = useState<SelectAndOrderSection[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
+  const [openPreviews, setOpenPreviews] = useState<number[]>([])
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -67,7 +72,7 @@ const SelectAndOrder = ({
         fetchedData.map((item) => {
           setValue(
             `${formKey}.${item.id}`,
-            editedListingData.some((existingItem) => existingItem.title === item.title)
+            editedListingData.some((existingItem) => existingItem.text === item.text)
           )
         })
       }
@@ -79,7 +84,7 @@ const SelectAndOrder = ({
   const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
-        name: { content: item.title },
+        name: { content: item.text },
         action: {
           content: (
             <div className="flex">
@@ -104,7 +109,7 @@ const SelectAndOrder = ({
     () =>
       listingData.map((item, index) => ({
         order: { content: index + 1 },
-        name: { content: item.title },
+        name: { content: item.text },
         action: {
           content: (
             <div className="flex">
@@ -131,7 +136,7 @@ const SelectAndOrder = ({
       const newDragOrder = []
       dragOrder.forEach((item) => {
         newDragOrder.push(
-          draftListingData.filter((draftItem) => draftItem.title === item.name.content)[0]
+          draftListingData.filter((draftItem) => draftItem.text === item.name.content)[0]
         )
       })
       setDraftListingData(newDragOrder)
@@ -141,7 +146,7 @@ const SelectAndOrder = ({
 
   const jurisdiction: string = watch("jurisdiction.id")
 
-  const { data: fetchedData = [] } = dataFetcher(jurisdiction)
+  const { data: fetchedData = [] } = dataFetcher(jurisdiction, applicationSection)
 
   const formTableHeaders = {
     order: "t.order",
@@ -152,6 +157,72 @@ const SelectAndOrder = ({
   const draggableTableHeaders = {
     name: "t.name",
     action: "",
+  }
+
+  const getPreviewSection = (
+    previewShown: boolean,
+    optionIndex: number,
+    item: MultiselectQuestion
+  ) => {
+    const getInfoSection = (option, index) => {
+      const isNotLastItem = index < item.options.length - 1
+      return (
+        <div key={index} className={isNotLastItem ? "mb-5" : "mb-1"}>
+          <div className={"font-semibold mb-1 text-gray-800"}>
+            <span>{option.text}</span>
+          </div>
+          {option.description && (
+            <div
+              className={`${
+                !option.links?.length && isNotLastItem ? "mb-5" : "mb-1"
+              } text-gray-750`}
+            >
+              {option.description}
+            </div>
+          )}
+
+          {option.links?.length > 0 && (
+            <div className={`${isNotLastItem ? "mb-5" : "mb-1"}`}>
+              {option.links.map((link, linkIndex) => {
+                return (
+                  <span className={"underline"} key={linkIndex}>
+                    <LinkComponent href={link.url} target={"_blank"} className={"mr-3"}>
+                      {link.title}
+                    </LinkComponent>
+                  </span>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )
+    }
+    return (
+      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-tiny">
+        <div>
+          <button
+            onClick={() => {
+              const newPreviews = previewShown
+                ? openPreviews.filter((previewIndex) => previewIndex !== optionIndex)
+                : [...openPreviews, optionIndex]
+              setOpenPreviews(newPreviews)
+            }}
+          >
+            <span className={"text-blue-600 underline"}>
+              {previewShown ? t("t.hide") : t("t.previewLowercase")}
+            </span>
+          </button>
+          {previewShown && (
+            <div className={"bg-blue-200 mt-2 p-4"}>
+              {getInfoSection(item, -1)}
+              {item.options.map((option, index) => {
+                return getInfoSection(option, index)
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -226,52 +297,58 @@ const SelectAndOrder = ({
         ariaDescription={drawerButtonText}
         onClose={() => {
           setSelectDrawer(null)
+          setOpenPreviews([])
         }}
-        className={"w-auto"}
+        className={"drawer__small"}
       >
         <div className="border rounded-md p-8 bg-white">
           {jurisdiction
             ? fetchedData.map((item, index) => {
+                const previewShown = openPreviews.some((preview) => preview === index)
                 return (
-                  <GridSection columns={1} key={index}>
+                  <GridSection columns={1} key={index} className={"md:-mb-6"}>
                     <Field
                       className={"font-semibold"}
                       id={`${formKey}.${item.id}`}
                       name={`${formKey}.${item.id}`}
                       type="checkbox"
-                      label={item.title}
+                      label={item.text}
                       register={register}
                       inputProps={{
                         defaultChecked: draftListingData.some(
-                          (existingItem) => existingItem.title === item.title
+                          (existingItem) => existingItem.text === item.text
                         ),
                       }}
                     />
+                    {getPreviewSection(previewShown, index, item)}
                   </GridSection>
                 )
               })
             : t("listings.selectJurisdiction")}
         </div>
-        <Button
-          id="addPreferenceSaveButton"
-          type="button"
-          className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
-          onClick={() => {
-            const formData = getValues()
-            const formItems = []
-            fetchedData.forEach((uniqueItem) => {
-              if (formData[formKey][uniqueItem.id]) {
-                formItems.push(uniqueItem)
-              }
-            })
-            setDraftListingData(formItems)
-            setSelectDrawer(null)
-          }}
-        >
-          {t("t.save")}
-        </Button>
+        {jurisdiction && (
+          <Button
+            id="addPreferenceSaveButton"
+            type="button"
+            className={"mt-4"}
+            styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.normal}
+            onClick={() => {
+              const formData = getValues()
+              const formItems = []
+              fetchedData.forEach((uniqueItem) => {
+                if (formData[formKey] && formData[formKey][uniqueItem.id]) {
+                  formItems.push(uniqueItem)
+                }
+              })
+              setDraftListingData(formItems)
+              setSelectDrawer(null)
+              setOpenPreviews([])
+            }}
+          >
+            {t("t.save")}
+          </Button>
+        )}
       </Drawer>
     </>
   )

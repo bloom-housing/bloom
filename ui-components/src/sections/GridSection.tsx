@@ -22,7 +22,6 @@ const GridCell = (props: GridCellProps) => {
 
 export interface GridSectionProps {
   title?: React.ReactNode
-  edit?: string
   subtitle?: string
   description?: string
   tinted?: boolean
@@ -67,11 +66,6 @@ const GridSection = (props: GridSectionProps) => {
       {(props.title || props.subtitle) && (
         <header className={headerClasses.join(" ")}>
           {props.title && <h2 className="grid-section__title">{props.title}</h2>}
-          {props.edit && (
-            <span className="ml-auto">
-              <a className="edit-link">{props.edit}</a>
-            </span>
-          )}
           {props.subtitle && <h3 className={subtitleClasses.join(" ")}>{props.subtitle}</h3>}
           {props.description && (
             <span className={"grid-section__description"}>{props.description}</span>

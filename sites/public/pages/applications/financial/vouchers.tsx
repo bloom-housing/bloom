@@ -16,15 +16,23 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
-  const currentPageSection = 3
-
+  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+    ? 4
+    : 3
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm({

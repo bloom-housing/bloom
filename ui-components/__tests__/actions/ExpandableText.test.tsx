@@ -7,33 +7,49 @@ afterEach(cleanup)
 describe("<ExpandableText>", () => {
   it("renders full text if below max length", () => {
     const content = "This is a sentence that has 42 characters!"
-    const { getByText, queryByText } = render(<ExpandableText>{content}</ExpandableText>)
+    const { getByText, queryByText } = render(
+      <ExpandableText strings={{ readMore: "More", readLess: "Less" }}>{content}</ExpandableText>
+    )
     expect(getByText(content)).not.toBeNull()
     expect(queryByText("...")).toBeNull()
   })
 
   it("renders cutoff point if text is above max length", () => {
     const content = "This is a sentence that has 42 characters!"
-    const { getByText } = render(<ExpandableText maxLength={30}>{content}</ExpandableText>)
+    const { getByText } = render(
+      <ExpandableText strings={{ readMore: "More", readLess: "Less" }} maxLength={30}>
+        {content}
+      </ExpandableText>
+    )
     expect(getByText(`${content.substring(0, 30)}...`)).not.toBeNull()
   })
 
   it("if cutoff point is a space, move cutoff point one index to the left", () => {
     const content = "This is a sentence that has 42 characters!"
-    const { getByText } = render(<ExpandableText maxLength={8}>{content}</ExpandableText>)
+    const { getByText } = render(
+      <ExpandableText strings={{ readMore: "More", readLess: "Less" }} maxLength={8}>
+        {content}
+      </ExpandableText>
+    )
     expect(getByText(`${content.substring(0, 7)}...`)).not.toBeNull()
   })
 
   it("cuts off mid-word if the text has no spaces", () => {
     const content = "Thissentencehasnospacesatall."
-    const { getByText } = render(<ExpandableText maxLength={8}>{content}</ExpandableText>)
+    const { getByText } = render(
+      <ExpandableText strings={{ readMore: "More", readLess: "Less" }} maxLength={8}>
+        {content}
+      </ExpandableText>
+    )
     expect(getByText(`${content.substring(0, 8)}...`)).not.toBeNull()
   })
 
   it("hitting the expand/contract button adds and removes the extra characters", () => {
     const content = "This is a sentence that has 42 characters!"
     const { getByText, queryByText } = render(
-      <ExpandableText maxLength={30}>{content}</ExpandableText>
+      <ExpandableText strings={{ readMore: "More", readLess: "Less" }} maxLength={30}>
+        {content}
+      </ExpandableText>
     )
     expect(queryByText(content)).toBeNull()
     expect(getByText(`${content.substring(0, 30)}...`)).not.toBeNull()

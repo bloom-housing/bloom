@@ -7,18 +7,20 @@ import {
   ApplicationStatus,
   AddressUpdate,
   HouseholdMember,
-  Program,
+  MultiselectQuestion,
   Accessibility,
+  ApplicationSection,
+  Listing,
 } from "@bloom-housing/backend-core/types"
 
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   fieldGroupObjectToArray,
-  mapProgramsToApi,
-  mapApiToProgramsPaperForm,
   adaFeatureKeys,
-  mapPreferencesToApi,
-  mapApiToPreferencesForm,
+  mapApiToMultiselectForm,
+  mapCheckboxesToApi,
+  mapRadiosToApi,
+  getInputType,
 } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
@@ -68,14 +70,21 @@ type mapFormToApiProps = {
   data: FormData
   listingId: string
   editMode: boolean
-  programs: Program[]
+  programs: MultiselectQuestion[]
+  preferences: MultiselectQuestion[]
 }
 
 /*
   Format data which comes from react-hook-form into correct API format.
 */
 
-export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToApiProps) => {
+export const mapFormToApi = ({
+  data,
+  listingId,
+  editMode,
+  programs,
+  preferences,
+}: mapFormToApiProps) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -129,17 +138,25 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     }
   })()
 
-  const preferences = mapPreferencesToApi(data)
-  const programsForm = data.application.programs
-    ? Object.entries(data.application.programs).reduce((acc, curr) => {
-        if (curr[1]) {
-          Object.assign(acc, { [curr[0]]: curr[1] })
-        }
-        return acc
-      }, {})
-    : {}
+  const preferencesData = preferences.map((pref: MultiselectQuestion) => {
+    const inputType = getInputType(pref.options)
+    if (inputType === "checkbox") {
+      return mapCheckboxesToApi(data, pref, ApplicationSection.preferences)
+    }
+    if (inputType === "radio") {
+      return mapRadiosToApi({ [pref.text]: data.application.preferences[pref.text] }, pref)
+    }
+  })
 
-  const programsData = mapProgramsToApi(programs, programsForm)
+  const programsData = programs.map((program: MultiselectQuestion) => {
+    const inputType = getInputType(program.options)
+    if (inputType === "checkbox") {
+      return mapCheckboxesToApi(data, program, ApplicationSection.programs)
+    }
+    if (inputType === "radio") {
+      return mapRadiosToApi({ [program.text]: data.application.programs[program.text] }, program)
+    }
+  })
 
   // additional phone
   const {
@@ -222,7 +239,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     accessibility,
     householdExpectingChanges,
     householdStudent,
-    preferences,
+    preferences: preferencesData,
     programs: programsData,
     income,
     incomePeriod,
@@ -245,7 +262,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
   Format data which comes from the API into correct react-hook-form format.
 */
 
-export const mapApiToForm = (applicationData: ApplicationUpdate) => {
+export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listing) => {
   const submissionDate = applicationData.submissionDate
     ? dayjs(new Date(applicationData.submissionDate)).utc()
     : null
@@ -296,8 +313,19 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const preferences = mapApiToPreferencesForm(applicationData.preferences)
-  const programs = mapApiToProgramsPaperForm(applicationData.programs)
+  const preferences =
+    mapApiToMultiselectForm(
+      applicationData.preferences,
+      listing?.listingMultiselectQuestions,
+      ApplicationSection.preferences
+    ).application.preferences ?? []
+
+  const programs =
+    mapApiToMultiselectForm(
+      applicationData.programs,
+      listing?.listingMultiselectQuestions,
+      ApplicationSection.programs
+    ).application.programs ?? []
 
   const application: ApplicationTypes = (() => {
     const {

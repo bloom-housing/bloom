@@ -11,6 +11,7 @@ import {
   ListingStatus,
   ListingAvailability,
   Jurisdiction,
+  ApplicationSection,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -168,26 +169,24 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
+  const listingPreferences = listing?.listingMultiselectQuestions.filter(
+    (listingPref) =>
+      listingPref.multiselectQuestion.applicationSection === ApplicationSection.preferences &&
+      !listingPref.multiselectQuestion.hideFromListing
+  )
+
   const getPreferenceData = () => {
-    return listing.listingPreferences
-      .filter((listingPref) => {
-        return (
-          !listingPref.preference.formMetadata ||
-          !listingPref.preference.formMetadata.hideFromListing
-        )
-      })
-      .map((listingPref, index) => {
-        return {
-          ordinal: index + 1,
-          links: listingPref.preference.links,
-          title: listingPref.preference.title,
-          subtitle: listingPref.preference.subtitle,
-          description: listingPref.preference.description,
-        }
-      })
+    return listingPreferences.map((listingPref, index) => {
+      return {
+        ordinal: index + 1,
+        links: listingPref?.multiselectQuestion?.links,
+        title: listingPref?.multiselectQuestion?.text,
+        description: listingPref?.multiselectQuestion?.description,
+      }
+    })
   }
 
-  if (listing.listingPreferences && listing.listingPreferences.length > 0) {
+  if (listingPreferences && listingPreferences?.length > 0) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}
@@ -597,7 +596,14 @@ export const ListingView = (props: ListingProps) => {
                   title={t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)}
                   subtitle={t("listings.allUnits")}
                 >
-                  <ExpandableText className="text-sm text-gray-700">
+                  <ExpandableText
+                    className="text-sm text-gray-700"
+                    markdownProps={{ disableParsingRawHTML: true }}
+                    strings={{
+                      readMore: t("t.more"),
+                      readLess: t("t.less"),
+                    }}
+                  >
                     {listing.reservedCommunityDescription}
                   </ExpandableText>
                 </InfoCard>
@@ -644,21 +650,42 @@ export const ListingView = (props: ListingProps) => {
                 <>
                   {listing.creditHistory && (
                     <InfoCard title={t("listings.creditHistory")}>
-                      <ExpandableText className="text-sm text-gray-700">
+                      <ExpandableText
+                        className="text-sm text-gray-700"
+                        markdownProps={{ disableParsingRawHTML: true }}
+                        strings={{
+                          readMore: t("t.more"),
+                          readLess: t("t.less"),
+                        }}
+                      >
                         {listing.creditHistory}
                       </ExpandableText>
                     </InfoCard>
                   )}
                   {listing.rentalHistory && (
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <ExpandableText className="text-sm text-gray-700">
+                      <ExpandableText
+                        className="text-sm text-gray-700"
+                        markdownProps={{ disableParsingRawHTML: true }}
+                        strings={{
+                          readMore: t("t.more"),
+                          readLess: t("t.less"),
+                        }}
+                      >
                         {listing.rentalHistory}
                       </ExpandableText>
                     </InfoCard>
                   )}
                   {listing.criminalBackground && (
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <ExpandableText className="text-sm text-gray-700">
+                      <ExpandableText
+                        className="text-sm text-gray-700"
+                        markdownProps={{ disableParsingRawHTML: true }}
+                        strings={{
+                          readMore: t("t.more"),
+                          readLess: t("t.less"),
+                        }}
+                      >
                         {listing.criminalBackground}
                       </ExpandableText>
                     </InfoCard>
