@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.22...@bloom-housing/partners@5.1.1-alpha.23) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.21...@bloom-housing/partners@5.1.1-alpha.22) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.20...@bloom-housing/partners@5.1.1-alpha.21) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.19...@bloom-housing/partners@5.1.1-alpha.20) (2022-08-23)
 
 

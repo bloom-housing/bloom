@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.10...@bloom-housing/backend-core@5.1.1-alpha.11) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.9...@bloom-housing/backend-core@5.1.1-alpha.10) (2022-08-23)
+
+
+### Bug Fixes
+
+* Migration hotfix 2 ([#2990](https://github.com/bloom-housing/bloom/issues/2990)) ([a213238](https://github.com/bloom-housing/bloom/commit/a213238944cd23c36f55264c2a4a489f79d99702))
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.8...@bloom-housing/backend-core@5.1.1-alpha.9) (2022-08-23)
+
+
+### Bug Fixes
+
+* update to get migration to run on dev ([#2987](https://github.com/bloom-housing/bloom/issues/2987)) ([f52ff59](https://github.com/bloom-housing/bloom/commit/f52ff59bbe345fab7b45656fd27dcdb11cc79d57))
+
+
+
+
+
 ## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.7...@bloom-housing/backend-core@5.1.1-alpha.8) (2022-08-23)
 
 

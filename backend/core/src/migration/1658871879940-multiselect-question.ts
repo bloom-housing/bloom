@@ -25,25 +25,10 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       `CREATE INDEX "IDX_ab91e5d403a6cf21656f7d5ae2" ON "jurisdictions_multiselect_questions_multiselect_questions" ("multiselect_questions_id") `
     )
     await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_accessibility_features" DROP DEFAULT`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_utilities_included" DROP DEFAULT`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" DROP CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD CONSTRAINT "UQ_e5d5291cd6ab92cbec304aab905" UNIQUE ("building_address_id")`
-    )
-    await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" ADD CONSTRAINT "FK_d123697625fe564c2bae54dcecf" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
     await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" ADD CONSTRAINT "FK_92adcb35f2f14e316b4cb12a84e" FOREIGN KEY ("multiselect_question_id") REFERENCES "multiselect_questions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905" FOREIGN KEY ("building_address_id") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
     await queryRunner.query(
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" ADD CONSTRAINT "FK_3f7126f5da7c0368aea2f9459c0" FOREIGN KEY ("jurisdictions_id") REFERENCES "jurisdictions"("id") ON DELETE CASCADE ON UPDATE CASCADE`
@@ -147,9 +132,11 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       const { optOutText, options } = this.resolveOptionValues(
         pref.form_metadata,
         "preferences",
-        jurisInfo?.length ? jurisInfo[0].name : ""
+        jurisInfo?.length ? jurisInfo[0].name : "",
+        true
       )
-      const res = await queryRunner.query(`
+      const res = await queryRunner.query(
+        `
           INSERT INTO multiselect_questions (
               created_at,
               updated_at,
@@ -165,16 +152,18 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           SELECT 
               '${new Date(pref.created_at).toISOString()}',
               '${new Date(pref.updated_at).toISOString()}',
-              '${this.handleQuotes(pref.title)}',
-              '${this.handleQuotes(pref.subtitle)}',
-              '${this.handleQuotes(pref.description)}',
+              $1,
+              $2,
+              $3,
               ${pref.links ? `'${JSON.stringify(pref.links)}'` : "null"},
               ${this.resolveHideFromListings(pref)},
-              ${optOutText ? `'${this.handleQuotes(optOutText)}'` : "null"},
-              ${options},
+              $4,
+              $5,
               'preferences'
           RETURNING id
-      `)
+      `,
+        [pref.title, pref.subtitle, pref.description, optOutText ?? null, options]
+      )
       await queryRunner.query(`
           INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
           SELECT
@@ -220,9 +209,11 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       const { optOutText, options } = this.resolveOptionValues(
         prog.form_metadata,
         "programs",
-        jurisInfo?.length ? jurisInfo[0].name : ""
+        jurisInfo?.length ? jurisInfo[0].name : "",
+        false
       )
-      const res = await queryRunner.query(`
+      const res = await queryRunner.query(
+        `
           INSERT INTO multiselect_questions (
               created_at,
               updated_at,
@@ -238,16 +229,18 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           SELECT
               '${new Date(prog.created_at).toISOString()}',
               '${new Date(prog.updated_at).toISOString()}',
-              '${this.handleQuotes(prog.title)}',
-              '${this.handleQuotes(prog.subtitle)}',
-              '${this.handleQuotes(prog.description)}',
+              $1,
+              $2,
+              $3,
               null,
               ${this.resolveHideFromListings(prog)},
-              ${optOutText ? `'${this.handleQuotes(optOutText)}'` : "null"},
-              ${options},
+              $4,
+              $5,
               'programs'
           RETURNING id
-      `)
+      `,
+        [prog.title, prog.subtitle, prog.description, optOutText ?? null, options]
+      )
 
       await queryRunner.query(`
           INSERT INTO jurisdictions_multiselect_questions_multiselect_questions(multiselect_questions_id, jurisdictions_id)
@@ -276,25 +269,10 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       `ALTER TABLE "jurisdictions_multiselect_questions_multiselect_questions" DROP CONSTRAINT "FK_3f7126f5da7c0368aea2f9459c0"`
     )
     await queryRunner.query(
-      `ALTER TABLE "listings" DROP CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905"`
-    )
-    await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" DROP CONSTRAINT "FK_92adcb35f2f14e316b4cb12a84e"`
     )
     await queryRunner.query(
       `ALTER TABLE "listing_multiselect_questions" DROP CONSTRAINT "FK_d123697625fe564c2bae54dcecf"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" DROP CONSTRAINT "UQ_e5d5291cd6ab92cbec304aab905"`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD CONSTRAINT "FK_e5d5291cd6ab92cbec304aab905" FOREIGN KEY ("building_address_id") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_utilities_included" SET DEFAULT false`
-    )
-    await queryRunner.query(
-      `ALTER TABLE "jurisdictions" ALTER COLUMN "enable_accessibility_features" SET DEFAULT false`
     )
     await queryRunner.query(`DROP INDEX "public"."IDX_ab91e5d403a6cf21656f7d5ae2"`)
     await queryRunner.query(`DROP INDEX "public"."IDX_3f7126f5da7c0368aea2f9459c"`)
@@ -316,14 +294,14 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
     return "null"
   }
 
-  private resolveOptionValues(formMetaData, type, juris) {
+  private resolveOptionValues(formMetaData, type, juris, isForPreferences) {
     let optOutText = null
     const options = []
     let shouldPush = true
 
     formMetaData.options.forEach((option, index) => {
       const toPush: Record<string, any> = {
-        ordinal: index,
+        ordinal: index + 1,
         text: this.getTranslated(
           type,
           formMetaData.key,
@@ -333,6 +311,12 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       }
 
       if (
+        !isForPreferences &&
+        (!formMetaData.type || formMetaData.type !== "checkbox") &&
+        index !== formMetaData.options.length - 1
+      ) {
+        toPush.exclusive = true
+      } else if (
         option.exclusive &&
         (formMetaData.hideGenericDecline || formMetaData.type === "checkbox") &&
         index !== formMetaData.options.length - 1
@@ -342,6 +326,19 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       } else if (
         option.exclusive &&
         (formMetaData.hideGenericDecline || formMetaData.type === "checkbox") &&
+        index === formMetaData.options.length - 1
+      ) {
+        // for the last exclusive option add as optOutText
+        optOutText = this.getTranslated(
+          type,
+          formMetaData.key,
+          option.key === "preferNotToSay" ? "preferNotToSay" : `${option.key}.label`,
+          juris
+        )
+        shouldPush = false
+      } else if (
+        !isForPreferences &&
+        (!formMetaData.type || formMetaData.type !== "checkbox") &&
         index === formMetaData.options.length - 1
       ) {
         // for the last exclusive option add as optOutText
@@ -374,7 +371,7 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
       }
     })
 
-    return { optOutText, options: options.length ? `'${JSON.stringify(options)}'` : "null" }
+    return { optOutText, options: options.length ? JSON.stringify(options) : "null" }
   }
 
   private getTranslated(type, prefKey, translationKey, juris) {
@@ -385,34 +382,34 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
 
     if (juris === "Detroit") {
       if (this.translations["detroitPublic"][searchKey]) {
-        return this.handleQuotes(this.translations["detroitPublic"][searchKey])
+        return this.translations["detroitPublic"][searchKey]
       } else if (this.translations["detroitPartners"][searchKey]) {
-        return this.handleQuotes(this.translations["detroitPartners"][searchKey])
+        return this.translations["detroitPartners"][searchKey]
       } else if (this.translations["detroitCore"][searchKey]) {
-        return this.handleQuotes(this.translations["detroitCore"][searchKey])
+        return this.translations["detroitCore"][searchKey]
       }
     } else if (["Alameda", "San Mateo", "San Jose"].includes(juris)) {
       if (juris === "Alameda" && this.translations["alamedaPublic"][searchKey]) {
-        return this.handleQuotes(this.translations["alamedaPublic"][searchKey])
+        return this.translations["alamedaPublic"][searchKey]
       } else if (juris === "San Mateo" && this.translations["smcPublic"][searchKey]) {
-        return this.handleQuotes(this.translations["smcPublic"][searchKey])
+        return this.translations["smcPublic"][searchKey]
       } else if (juris === "San Jose" && this.translations["sjPublic"][searchKey]) {
-        return this.handleQuotes(this.translations["sjPublic"][searchKey])
+        return this.translations["sjPublic"][searchKey]
       } else if (this.translations["hbaPublic"][searchKey]) {
-        return this.handleQuotes(this.translations["hbaPublic"][searchKey])
+        return this.translations["hbaPublic"][searchKey]
       } else if (this.translations["hbaPartners"][searchKey]) {
-        return this.handleQuotes(this.translations["hbaPartners"][searchKey])
+        return this.translations["hbaPartners"][searchKey]
       } else if (this.translations["hbaCore"][searchKey]) {
-        return this.handleQuotes(this.translations["hbaCore"][searchKey])
+        return this.translations["hbaCore"][searchKey]
       }
     }
 
     if (this.translations["generalPublic"][searchKey]) {
-      return this.handleQuotes(this.translations["generalPublic"][searchKey])
+      return this.translations["generalPublic"][searchKey]
     } else if (this.translations["generalPartners"][searchKey]) {
-      return this.handleQuotes(this.translations["generalPartners"][searchKey])
+      return this.translations["generalPartners"][searchKey]
     } else if (this.translations["generalCore"][searchKey]) {
-      return this.handleQuotes(this.translations["generalCore"][searchKey])
+      return this.translations["generalCore"][searchKey]
     }
     return "no translation"
   }
@@ -442,13 +439,5 @@ export class multiselectQuestion1658871879940 implements MigrationInterface {
           reject(`getting broke: ${url}`)
         })
     )
-  }
-
-  private handleQuotes(str) {
-    if (!str) {
-      return str
-    }
-    const regEx = new RegExp("'", "g")
-    return str.replace(regEx, "''")
   }
 }
