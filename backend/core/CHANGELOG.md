@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.14...@bloom-housing/backend-core@5.1.1-alpha.15) (2022-08-24)
+
+
+### Bug Fixes
+
+* updates translation migration files ([#2995](https://github.com/bloom-housing/bloom/issues/2995)) ([09a63e1](https://github.com/bloom-housing/bloom/commit/09a63e1d281757467dadb2777662279cc97ba070))
+
+
+
+
+
 ## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.13...@bloom-housing/backend-core@5.1.1-alpha.14) (2022-08-24)
 
 
