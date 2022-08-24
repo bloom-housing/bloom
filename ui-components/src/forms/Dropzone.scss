@@ -15,3 +15,10 @@
 .dropzone__progress {
   max-width: 250px;
 }
+
+.dropzone__helptext {
+  margin-block: var(--bloom-s2) var(--bloom-s4);
+  color: var(--bloom-color-gray-700);
+  font-family: var(--bloom-font-alt-sans);
+  font-size: var(--bloom-font-size-sm);
+}

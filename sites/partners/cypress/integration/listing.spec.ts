@@ -102,21 +102,51 @@ describe("Listing Management Tests", () => {
     cy.get("a > .button").contains("Add Listing").click()
     cy.contains("New Listing")
 
-    cy.getByID("addPhotoButton").contains("Add Photo").click()
+    // Test photo upload
+    cy.getByTestId("add-photos-button").contains("Add Photo").click()
     cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {
         subjectType: "drag-n-drop",
       }
     )
+    cy.getByTestId("drawer-photos-table").contains(
+      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+    )
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    cy.getByTestId("photos-table").contains(
+      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+    )
+
+    cy.getByTestId("add-photos-button").contains("Edit Photos").click()
+    cy.getByTestId("dropzone-input").attachFile(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+      {
+        subjectType: "drag-n-drop",
+      }
+    )
+    cy.getByTestId("drawer-photos-table").contains(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
+    )
+    cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    cy.getByTestId("photos-table").contains(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
+    )
+    cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
+    cy.getByTestId("photos-table")
+      .get("tbody > tr:nth-of-type(2)")
+      .should("not.contain", "Primary photo")
+
+    // Fill out a bunch of fields
     cy.fillFormFields("listing", listingDetailsFieldsToType, listingDetailsFieldsToSelect)
 
+    // Add units
     cy.getByTestId("addUnitsButton").contains("Add unit group").click()
     cy.get(`[data-testid="unitTypeCheckBox"]`).first().click()
     cy.get(`[data-testid="openWaitListQuestion"]`).last().click()
     cy.fillFormFields("listing", unitFormFieldsToType, unitFormFieldsToSelect)
 
+    // Add AMI data
     cy.getByTestId("openAmiDrawer").contains("Add AMI level").click()
     cy.fillFormFields("listing", amiFormFieldsToType, amiFormFieldsToSelect)
     cy.getByTestId("saveAmi").click()
@@ -220,7 +250,7 @@ describe("Listing Management Tests", () => {
       )
     })
 
-    // try editting the listing
+    // try editing the listing
     cy.fixture("listing").then((listing) => {
       cy.getByTestId("listingEditButton").contains("Edit").click()
       cy.getByTestId("nameField").type(" (Edited)")
