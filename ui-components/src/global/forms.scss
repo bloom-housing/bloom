@@ -326,9 +326,12 @@ input[type="number"] {
 }
 
 .error-message {
+  display: inline-block;
   @apply text-sm;
   @apply text-red-700;
   @apply tracking-wide;
+  @apply leading-5;
+  @apply mt-2;
 }
 
 .field-sub-note {

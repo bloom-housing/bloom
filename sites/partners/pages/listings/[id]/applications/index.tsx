@@ -29,7 +29,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 
 const ApplicationsList = () => {
-  const { applicationsService } = useContext(AuthContext)
+  const { applicationsService, profile } = useContext(AuthContext)
   const router = useRouter()
 
   const tableOptions = useAgTable()
@@ -84,6 +84,7 @@ const ApplicationsList = () => {
     try {
       const content = await applicationsService.listAsCsv({
         listingId,
+        includeDemographics: profile?.roles?.isAdmin ?? false,
       })
 
       const now = new Date()

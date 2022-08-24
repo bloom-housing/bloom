@@ -24,11 +24,11 @@ import { Unit } from "../../../units/entities/unit.entity"
 import { User } from "../../../auth/entities/user.entity"
 import { ApplicationMethod } from "../../../application-methods/entities/application-method.entity"
 import { Jurisdiction } from "../../../jurisdictions/entities/jurisdiction.entity"
-import { Preference } from "../../../preferences/entities/preference.entity"
-import { Program } from "../../../program/entities/program.entity"
+import { MultiselectQuestion } from "../../../multiselect-question/entities/multiselect-question.entity"
 import { CountyCode } from "../../../shared/types/county-code"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Asset } from "../../../assets/entities/asset.entity"
+import dayjs from "dayjs"
 
 export class ListingDefaultSeed {
   constructor(
@@ -47,10 +47,8 @@ export class ListingDefaultSeed {
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
     @InjectRepository(Jurisdiction)
     protected readonly jurisdictionRepository: Repository<Jurisdiction>,
-    @InjectRepository(Preference)
-    protected readonly preferencesRepository: Repository<Preference>,
-    @InjectRepository(Program)
-    protected readonly programsRepository: Repository<Program>,
+    @InjectRepository(MultiselectQuestion)
+    protected readonly multiselectQuestionsRepository: Repository<MultiselectQuestion>,
     @InjectRepository(Asset) protected readonly assetsRepository: Repository<Asset>
   ) {}
 
@@ -77,56 +75,53 @@ export class ListingDefaultSeed {
       ...getDefaultListing(),
 
       name: "Test: Default, Two Preferences",
+      publishedAt: dayjs(new Date()).subtract(1, "hour"),
       assets: getDefaultAssets(),
-      listingPreferences: [
+      listingMultiselectQuestions: [
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
-          }),
-          ordinal: 1,
-          page: 1,
-        },
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getDisplaceePreference(alamedaJurisdiction.name).title,
-          }),
-          ordinal: 2,
-          page: 1,
-        },
-      ],
-      events: getDefaultListingEvents(),
-      listingPrograms: [
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getServedInMilitaryProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
-          program: await this.programsRepository.findOneOrFail({
-            title: getTayProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getDisplaceePreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 2,
         },
         {
-          program: await this.programsRepository.findOneOrFail({
-            title: getDisabilityOrMentalIllnessProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 1,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getTayProgram(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 2,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getDisabilityOrMentalIllnessProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 3,
         },
         {
-          program: await this.programsRepository.findOneOrFail({
-            title: getHousingSituationProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getHousingSituationProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 4,
         },
         {
-          program: await this.programsRepository.findOneOrFail({
-            title: getFlatRentAndRentBasedOnIncomeProgram().title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getFlatRentAndRentBasedOnIncomeProgram(alamedaJurisdiction.name).text,
           }),
           ordinal: 5,
         },
       ],
+      events: getDefaultListingEvents(),
       images: [
         {
           image: defaultImage,

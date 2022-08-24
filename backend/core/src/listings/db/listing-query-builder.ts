@@ -1,4 +1,4 @@
-import Listing from "../entities/listing.entity"
+import { Listing } from "../entities/listing.entity"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { ListingFilterParams } from "../dto/listing-filter-params"
@@ -7,7 +7,6 @@ import { filterTypeToFieldMap } from "../dto/filter-type-to-field-map"
 import { OrderParam } from "../../applications/types/order-param"
 import { SelectQueryBuilder } from "typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations"
 
 type OrderByConditionData = {
   orderBy: string
@@ -153,6 +152,12 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
       case OrderByFieldsEnum.mostRecentlyClosed:
         return {
           orderBy: "listings.closedAt",
+          orderDir,
+          nulls: "NULLS LAST",
+        }
+      case OrderByFieldsEnum.mostRecentlyPublished:
+        return {
+          orderBy: "listings.publishedAt",
           orderDir,
           nulls: "NULLS LAST",
         }

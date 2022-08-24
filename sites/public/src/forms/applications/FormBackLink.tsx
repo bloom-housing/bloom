@@ -3,9 +3,9 @@ import { OnClientSide } from "@bloom-housing/shared-helpers"
 
 const FormBackLink = (props: { url: string; onClick: () => void; custom?: boolean }) => {
   return (
-    <p className="form-card__back" onClick={props.onClick}>
+    <p className="form-card__back">
       {props.custom ? (
-        <Button inlineIcon="left" icon="arrowBack">
+        <Button inlineIcon="left" icon="arrowBack" onClick={props.onClick}>
           {t("t.back")}
         </Button>
       ) : (

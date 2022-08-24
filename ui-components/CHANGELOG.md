@@ -3,6 +3,179 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.11...@bloom-housing/ui-components@5.1.1-alpha.12) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.10...@bloom-housing/ui-components@5.1.1-alpha.11) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.9...@bloom-housing/ui-components@5.1.1-alpha.10) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.8...@bloom-housing/ui-components@5.1.1-alpha.9) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.7...@bloom-housing/ui-components@5.1.1-alpha.8) (2022-08-18)
+
+
+### Features
+
+* **expandabletext:** add classname to expandable text button ([#2965](https://github.com/bloom-housing/bloom/issues/2965)) ([6d4b8a7](https://github.com/bloom-housing/bloom/commit/6d4b8a7132825c1aa3abcc0368529557cb3d2647))
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.6...@bloom-housing/ui-components@5.1.1-alpha.7) (2022-08-18)
+
+
+### Bug Fixes
+
+* image width fix for tablet screen sizes ([#2970](https://github.com/bloom-housing/bloom/issues/2970)) ([feac019](https://github.com/bloom-housing/bloom/commit/feac019b25a476221a7ad77518d1fa185a75b27f))
+
+
+
+
+
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.5...@bloom-housing/ui-components@5.1.1-alpha.6) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.4...@bloom-housing/ui-components@5.1.1-alpha.5) (2022-08-16)
+
+
+### Bug Fixes
+
+* ensure listing card link region covers image tags ([#2943](https://github.com/bloom-housing/bloom/issues/2943)) ([ebc8d48](https://github.com/bloom-housing/bloom/commit/ebc8d48556b587a4ad8fc9bc294be54b69e88462))
+
+
+
+
+
+## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.3...@bloom-housing/ui-components@5.1.1-alpha.4) (2022-08-12)
+
+
+### Bug Fixes
+
+* clean up str variable assignment ([7db94e8](https://github.com/bloom-housing/bloom/commit/7db94e81d65eb7ff7314a435f7d34a93af22049e))
+* fix changing const ([c5b37a9](https://github.com/bloom-housing/bloom/commit/c5b37a9106aab902f11e2a8034ea835c46c53d53))
+* fix html string errors ([1548c60](https://github.com/bloom-housing/bloom/commit/1548c6085b882e8b894bc17d96a096553bf7eccf))
+* remove types from removed dep ([4cd5e14](https://github.com/bloom-housing/bloom/commit/4cd5e148a29b6081f7337f26ed8e9e477e2737a4))
+* replace usage of sanitize-html ([aad2f94](https://github.com/bloom-housing/bloom/commit/aad2f949ae6386d1e460b959808501be1b8c0f06))
+
+
+
+
+
+## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.2...@bloom-housing/ui-components@5.1.1-alpha.3) (2022-08-03)
+
+
+### Bug Fixes
+
+* **expandabletext:** add required strings to expandable text ([03bbc46](https://github.com/bloom-housing/bloom/commit/03bbc46b4f8f910efef0a1f984717da0a65794ed))
+* **expandabletext:** fix stories with passing req prop ([057d8fe](https://github.com/bloom-housing/bloom/commit/057d8feb038e07bb3d6784d1d6d4d068ba72460c)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+* **expandabletext:** fix tests; remove test prop ([28af8fc](https://github.com/bloom-housing/bloom/commit/28af8fc319190c50b2751d29c251e472e48e6971))
+* option typing with import ([dc195f8](https://github.com/bloom-housing/bloom/commit/dc195f8acb8850bab11eafc80a2cea3f8b6e0de5))
+
+
+### Features
+
+* **expandabletext:** fix a broken ci check; fix a prop name ([e839c81](https://github.com/bloom-housing/bloom/commit/e839c811b237164b1cd26bbc888db512f66bc6b0))
+* **expandabletext:** fix type usage ([1a406fe](https://github.com/bloom-housing/bloom/commit/1a406fe7c19639e28bb1fdc19fd9e58a25c8bfd1)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+* **expandabletext:** remove translations;pass markdown props through component ([e21e88a](https://github.com/bloom-housing/bloom/commit/e21e88a5be527ec860b3515c1dc545a186713e06)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+
+
+### BREAKING CHANGES
+
+* **expandabletext:** In uses of ExpandableText component, the translations are now being passed down
+instead of done within the component. Any options for the Markdown component used within
+ExpandableText also needs to be passed
+
+
+
+
+
+## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.1...@bloom-housing/ui-components@5.1.1-alpha.2) (2022-08-01)
+
+
+### Features
+
+* **errormessage:** add classname to errormessage; apply styles to Field ([b63be81](https://github.com/bloom-housing/bloom/commit/b63be81f2fa5fc523b5804842d0eb4781ed32054)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **errormessage:** add text color ([74adf72](https://github.com/bloom-housing/bloom/commit/74adf72fcd625ad14c51815dce54d3e7beae5e11)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **forms.scss:** apply styling change to error-message class ([2c30044](https://github.com/bloom-housing/bloom/commit/2c300441c580464be1b69f861b5080e74242166e)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **formsigninerrorbox:** add classnames to undo changes ([fa7e9f7](https://github.com/bloom-housing/bloom/commit/fa7e9f7e235e4a6b750d67d7338bebaace202519)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **textarea:** apply lineheight and margin to textarea ([afbe5e4](https://github.com/bloom-housing/bloom/commit/afbe5e49c081bc85da1d4718e2ea1e6b8cc295b0)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+
+
+
+
+
+## [5.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.0...@bloom-housing/ui-components@5.1.1-alpha.1) (2022-08-01)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.29...@bloom-housing/ui-components@5.1.1-alpha.0) (2022-07-27)
+
+
+* 2022-07-26 sync master (#2917) ([6f0dd1d](https://github.com/bloom-housing/bloom/commit/6f0dd1df4d2df12e0e94cb339c9232531a37f2a2)), closes [#2917](https://github.com/bloom-housing/bloom/issues/2917) [#2753](https://github.com/bloom-housing/bloom/issues/2753) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+
+
+
+
+
 # [5.1.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@5.0.0...@bloom-housing/ui-components@5.1.0) (2022-07-27)
 
 

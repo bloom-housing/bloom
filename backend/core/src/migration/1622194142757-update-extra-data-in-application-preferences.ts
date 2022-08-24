@@ -1,5 +1,4 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
-import { ApplicationPreference } from "../applications/entities/application-preferences.entity"
 
 export class updateExtraDataInApplicationPreferences1622194142757 implements MigrationInterface {
   name = "updateExtraDataInApplicationPreferences1622194142757"
@@ -7,7 +6,7 @@ export class updateExtraDataInApplicationPreferences1622194142757 implements Mig
   public async up(queryRunner: QueryRunner): Promise<void> {
     const result: Array<{
       id: string
-      preferences: Array<ApplicationPreference>
+      preferences: Array<any>
     }> = await queryRunner.query("SELECT id, preferences from applications")
     // NOTE: Find every option in preferences where extraData is
     //  either undefined or null and replace it with an empty array
