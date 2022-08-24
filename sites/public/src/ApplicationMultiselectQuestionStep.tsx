@@ -136,6 +136,18 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
+  const allOptions = [...question?.options]
+  if (question?.optOutText) {
+    allOptions.push({
+      text: question?.optOutText,
+      description: null,
+      links: [],
+      collectAddress: false,
+      exclusive: true,
+      ordinal: question.options.length + 1,
+    })
+  }
+
   return (
     <FormsLayout>
       <FormCard
@@ -161,8 +173,9 @@ const ApplicationMultiselectQuestionStep = ({
           custom={page !== 1}
         />
 
-        <div className="form-card__lead border-b">
+        <div className="form-card__lead border-b flex flex-col items-center">
           <h2 className="form-card__title is-borderless">{strings?.title ?? question?.text}</h2>
+          {strings?.subTitle && <p className="field-note mt-6">{strings?.subTitle}</p>}
         </div>
 
         {!!Object.keys(errors).length && (
@@ -186,21 +199,13 @@ const ApplicationMultiselectQuestionStep = ({
                 <fieldset>
                   <legend className="field-label--caps mb-4">{question?.text}</legend>
                   <p className="field-note mb-8">{question?.description}</p>
-                  {question?.options.map((option) => {
+
+                  {allOptions.map((option) => {
                     return checkboxOption(option)
                   })}
-                  {question?.optOutText &&
-                    checkboxOption({
-                      text: question.optOutText,
-                      description: null,
-                      links: [],
-                      collectAddress: false,
-                      exclusive: true,
-                      ordinal: question.options.length,
-                    })}
                 </fieldset>
               ) : (
-                getRadioFields(question?.options, register, question, applicationSection, errors)
+                getRadioFields(allOptions, register, question, applicationSection, errors)
               )}
             </div>
           </div>

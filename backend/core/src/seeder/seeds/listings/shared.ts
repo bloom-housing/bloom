@@ -236,7 +236,7 @@ export const liveWorkPreference: MultiselectQuestionSeedType = {
   description: "At least one household member lives or works in County",
   links: [
     {
-      title: "Link Title",
+      title: "Live/Work in County Link Title",
       url: "https://www.example.com",
     },
   ],
@@ -248,11 +248,7 @@ export const liveWorkPreference: MultiselectQuestionSeedType = {
       description: "A description of the option.",
       links: [
         {
-          title: "Link Title",
-          url: "https://www.example.com",
-        },
-        {
-          title: "Link Title",
+          title: "Live in County Link Title",
           url: "https://www.example.com",
         },
       ],
@@ -282,7 +278,7 @@ export const displaceePreference: MultiselectQuestionSeedType = {
       ordinal: 2,
       links: [
         {
-          title: "Link Title",
+          title: "General Link Title",
           url: "https://www.example.com",
         },
       ],
@@ -378,10 +374,10 @@ export const servedInMilitaryProgram: MultiselectQuestionSeedType = {
   subText: "Should your application be chosen, be prepared to provide supporting documentation.",
   description: "Have you or anyone in your household served in the US military?",
   applicationSection: ApplicationSection.programs,
+  optOutText: "Prefer not to say",
   options: [
     { text: "Yes", exclusive: true, ordinal: 1 },
     { text: "No", exclusive: true, ordinal: 2 },
-    { text: "Prefer not to say", exclusive: true, ordinal: 3 },
   ],
 }
 

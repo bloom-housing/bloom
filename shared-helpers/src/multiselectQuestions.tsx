@@ -121,6 +121,10 @@ export const getRadioFields = (
 ) => {
   return (
     <fieldset>
+      {applicationSection === ApplicationSection.preferences && (
+        <legend className="field-label--caps mb-4">{question?.text}</legend>
+      )}
+      <p className="field-note mb-8">{question?.description}</p>
       <FieldGroup
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
@@ -238,7 +242,12 @@ export const getCheckboxOption = (
               {option.description}
               <br />
               {option?.links?.map((link) => (
-                <a key={link.url} className="block pt-2" href={link.url}>
+                <a
+                  key={link.url}
+                  className="block pt-2 text-blue-600 underline"
+                  href={link.url}
+                  target={"_blank"}
+                >
                   {link.title}
                 </a>
               ))}
