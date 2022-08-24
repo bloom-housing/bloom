@@ -1483,11 +1483,11 @@ export class MultiselectQuestionsService {
       body?: Id
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/multiselectQuestions"
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
 
@@ -1605,27 +1605,6 @@ export class ReservedCommunityTypesService {
     })
   }
   /**
-   * Delete reservedCommunityType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: Id
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/reservedCommunityTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Update reservedCommunityType
    */
   update(
@@ -1641,6 +1620,28 @@ export class ReservedCommunityTypesService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get reservedCommunityType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      reservedCommunityTypeId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/reservedCommunityTypes/{reservedCommunityTypeId}"
+      url = url.replace("{reservedCommunityTypeId}", params["reservedCommunityTypeId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1913,27 +1914,6 @@ export class UnitTypesService {
     })
   }
   /**
-   * Delete unitType by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: Id
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/unitTypes"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Update unitType
    */
   update(
@@ -1949,6 +1929,28 @@ export class UnitTypesService {
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get unitType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitTypeId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/unitTypes/{unitTypeId}"
+      url = url.replace("{unitTypeId}", params["unitTypeId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -4408,9 +4410,6 @@ export interface MultiselectQuestion {
 
   /**  */
   applicationSection: ApplicationSection
-
-  /**  */
-  jurisdictions?: IdName[]
 
   /**  */
   jurisdictions?: IdName[]
