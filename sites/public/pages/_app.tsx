@@ -1,7 +1,9 @@
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
-import { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
+import ReactDOM from "react-dom"
+import axe from "@axe-core/react"
 import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
   blankApplication,
@@ -62,6 +64,12 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       document.body.dataset.customScriptsLoaded = "true"
     }
   })
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      void axe(React, ReactDOM, 1000)
+    }
+  }, [])
 
   return (
     <NavigationContext.Provider

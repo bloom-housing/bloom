@@ -58,7 +58,7 @@ const TabNav = (props: { children: React.ReactNode; className?: string }) => {
   }
 
   return (
-    <nav className={classes.join(" ")}>
+    <nav className={classes.join(" ")} aria-label={"Secondary navigation"}>
       <ul role="tablist" aria-label="Secondary navigation">
         {props.children}
       </ul>

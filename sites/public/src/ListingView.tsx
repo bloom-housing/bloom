@@ -499,6 +499,7 @@ export const ListingView = (props: ListingProps) => {
                 ]
               : undefined
           }
+          description={listing.name}
         />
         <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
           <Heading priority={1} style={"cardHeader"} className={"text-black"}>

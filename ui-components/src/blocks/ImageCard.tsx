@@ -64,20 +64,24 @@ const ImageCard = (props: ImageCardProps) => {
   const [showModal, setShowModal] = useState(false)
 
   const getStatuses = () => {
-    return props.statuses?.map((status, index) => {
+    const statuses = props.statuses?.map((status, index) => {
       return (
-        <aside className="image-card__status" aria-label={status.content} key={index}>
-          <ApplicationStatus
-            status={status.status}
-            content={status.content}
-            subContent={status.subContent}
-            withIcon={!status.hideIcon}
-            iconType={status.iconType}
-            vivid
-          />
-        </aside>
+        <ApplicationStatus
+          status={status.status}
+          content={status.content}
+          subContent={status.subContent}
+          withIcon={!status.hideIcon}
+          iconType={status.iconType}
+          vivid
+          key={index}
+        />
       )
     })
+    return (
+      <aside className="image-card__status" aria-label={`${props.description} Statuses`}>
+        {statuses}
+      </aside>
+    )
   }
 
   const innerClasses = ["image-card__inner"]
