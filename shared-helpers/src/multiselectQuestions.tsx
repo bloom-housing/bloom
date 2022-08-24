@@ -236,8 +236,11 @@ export const getCheckboxOption = (
       </div>
 
       {option.description && (
-        <div className="ml-8 -mt-5 mb-5">
-          <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
+        <div className="ml-8 mb-5">
+          <ExpandableContent
+            strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}
+            className={"-mt-5"}
+          >
             <p className="field-note mb-2">
               {option.description}
               <br />
