@@ -223,7 +223,7 @@ const ListingPhotos = () => {
         <GridSection columns={1} tinted inset>
           <GridCell>
             {listingFormPhotos.length > 0 && (
-              <div className="mb-5">
+              <div className="mb-5" data-test-id="photos-table">
                 <MinimalTable
                   headers={photoTableHeaders}
                   data={listingPhotoTableRows}
@@ -260,7 +260,7 @@ const ListingPhotos = () => {
         <section className="border rounded-md p-8 bg-white">
           <h2 className="text-lg mb-8">{t("listings.listingPhoto")}</h2>
           {drawerImages.length > 0 && (
-            <div className="mb-10">
+            <div className="mb-10" data-test-id="drawer-photos-table">
               <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
               <MinimalTable
                 draggable={true}
