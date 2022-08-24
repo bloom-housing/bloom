@@ -18,6 +18,7 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
+import { AdminOrJurisdictionalAdminGuard } from "../auth/guards/admin-or-jurisidictional-admin.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { MultiselectQuestionCreateDto } from "../multiselect-question/dto/multiselect-question-create.dto"
 import { MultiselectQuestionUpdateDto } from "../multiselect-question/dto/multiselect-question-update.dto"
@@ -45,6 +46,7 @@ export class MultiselectQuestionsController {
 
   @Post()
   @ApiOperation({ summary: "Create multiselect question", operationId: "create" })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async create(
     @Body() multiselectQuestion: MultiselectQuestionCreateDto
   ): Promise<MultiselectQuestionDto> {
@@ -56,6 +58,7 @@ export class MultiselectQuestionsController {
 
   @Put(`:multiselectQuestionId`)
   @ApiOperation({ summary: "Update multiselect question", operationId: "update" })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async update(
     @Body() multiselectQuestion: MultiselectQuestionUpdateDto
   ): Promise<MultiselectQuestionDto> {
@@ -78,6 +81,7 @@ export class MultiselectQuestionsController {
 
   @Delete()
   @ApiOperation({ summary: "Delete multiselect question by id", operationId: "delete" })
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   async delete(@Body() dto: IdDto): Promise<void> {
     await this.multiselectQuestionsService.delete(dto.id)
   }
