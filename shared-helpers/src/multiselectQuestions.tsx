@@ -121,6 +121,10 @@ export const getRadioFields = (
 ) => {
   return (
     <fieldset>
+      {applicationSection === ApplicationSection.preferences && (
+        <legend className="field-label--caps mb-4">{question?.text}</legend>
+      )}
+      <p className="field-note mb-8">{question?.description}</p>
       <FieldGroup
         fieldGroupClassName="grid grid-cols-1"
         fieldClassName="ml-0"
@@ -168,27 +172,18 @@ const getCheckboxField = (
           if (e.target.checked && trigger) {
             void trigger()
           }
+          const allOptions =
+            question?.options?.map((option) =>
+              fieldName(question.text, applicationSection, option.text)
+            ) ?? []
+          if (question.optOutText) {
+            allOptions.push(fieldName(question.text, applicationSection, question.optOutText))
+          }
           if (option.exclusive && e.target.checked && exclusiveKeys) {
-            setExclusive(
-              true,
-              setValue,
-              exclusiveKeys,
-              optionFieldName,
-              question?.options?.map((option) =>
-                fieldName(question.text, applicationSection, option.text)
-              ) ?? []
-            )
+            setExclusive(true, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
           if (!option.exclusive && exclusiveKeys) {
-            setExclusive(
-              false,
-              setValue,
-              exclusiveKeys,
-              optionFieldName,
-              question?.options?.map((option) =>
-                fieldName(question.text, applicationSection, option.text)
-              ) ?? []
-            )
+            setExclusive(false, setValue, exclusiveKeys, optionFieldName, allOptions)
           }
         },
       }}
@@ -247,7 +242,13 @@ export const getCheckboxOption = (
               {option.description}
               <br />
               {option?.links?.map((link) => (
-                <a key={link.url} className="block pt-2" href={link.url}>
+                <a
+                  key={link.url}
+                  className="block pt-2 text-blue-600 underline"
+                  href={link.url}
+                  target={"_blank"}
+                  rel="noreferrer noopener"
+                >
                   {link.title}
                 </a>
               ))}

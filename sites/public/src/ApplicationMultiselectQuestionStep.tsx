@@ -136,6 +136,18 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
+  const allOptions = question ? [...question?.options] : []
+  if (question?.optOutText) {
+    allOptions.push({
+      text: question?.optOutText,
+      description: null,
+      links: [],
+      collectAddress: false,
+      exclusive: true,
+      ordinal: question.options.length + 1,
+    })
+  }
+
   return (
     <FormsLayout>
       <FormCard
@@ -161,9 +173,9 @@ const ApplicationMultiselectQuestionStep = ({
           custom={page !== 1}
         />
 
-        <div className="form-card__lead border-b">
+        <div className="form-card__lead border-b flex flex-col items-center">
           <h2 className="form-card__title is-borderless">{strings?.title ?? question?.text}</h2>
-          <p className="field-note mt-5">{strings?.subTitle ?? question?.subText}</p>
+          {strings?.subTitle && <p className="field-note mt-6">{strings?.subTitle}</p>}
         </div>
 
         {!!Object.keys(errors).length && (
@@ -174,7 +186,7 @@ const ApplicationMultiselectQuestionStep = ({
 
         <div className="form-card__group pb-0">
           <p className="field-note">
-            {strings?.selectText ?? (questionSetInputType === "radio" || !!question.optOutText)
+            {strings?.selectText ?? questionSetInputType === "radio"
               ? t("t.pleaseSelectOne")
               : t("errors.selectAllThatApply")}
           </p>
@@ -187,23 +199,13 @@ const ApplicationMultiselectQuestionStep = ({
                 <fieldset>
                   <legend className="field-label--caps mb-4">{question?.text}</legend>
                   <p className="field-note mb-8">{question?.description}</p>
-                  {question?.options
-                    ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
-                    .map((option) => {
-                      return checkboxOption(option)
-                    })}
-                  {question?.optOutText &&
-                    checkboxOption({
-                      text: question.optOutText,
-                      description: null,
-                      links: [],
-                      collectAddress: false,
-                      exclusive: true,
-                      ordinal: question.options.length,
-                    })}
+
+                  {allOptions.map((option) => {
+                    return checkboxOption(option)
+                  })}
                 </fieldset>
               ) : (
-                getRadioFields(question?.options, register, question, applicationSection, errors)
+                getRadioFields(allOptions, register, question, applicationSection, errors)
               )}
             </div>
           </div>
