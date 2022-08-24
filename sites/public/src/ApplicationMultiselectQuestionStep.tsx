@@ -136,7 +136,7 @@ const ApplicationMultiselectQuestionStep = ({
     )
   }
 
-  const allOptions = [...question?.options]
+  const allOptions = question ? [...question?.options] : []
   if (question?.optOutText) {
     allOptions.push({
       text: question?.optOutText,
