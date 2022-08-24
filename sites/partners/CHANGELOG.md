@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.25...@bloom-housing/partners@5.1.1-alpha.26) (2022-08-24)
+
+
+### Bug Fixes
+
+* styling precedence issues in preferences ([#2994](https://github.com/bloom-housing/bloom/issues/2994)) ([f043c38](https://github.com/bloom-housing/bloom/commit/f043c386009fab85039bb684618b4de1fc5493f7))
+
+
+
+
+
 ## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.24...@bloom-housing/partners@5.1.1-alpha.25) (2022-08-24)
 
 
