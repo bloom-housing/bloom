@@ -247,6 +247,7 @@ export const getCheckboxOption = (
                   className="block pt-2 text-blue-600 underline"
                   href={link.url}
                   target={"_blank"}
+                  rel="noreferrer noopener"
                 >
                   {link.title}
                 </a>
