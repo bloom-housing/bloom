@@ -12,6 +12,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
+import LinkComponent from "../../../LinkComponent"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -53,6 +54,7 @@ const SelectAndOrder = ({
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
   const [draftListingData, setDraftListingData] = useState<SelectAndOrderSection[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
+  const [openPreviews, setOpenPreviews] = useState<number[]>([])
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -157,6 +159,72 @@ const SelectAndOrder = ({
     action: "",
   }
 
+  const getPreviewSection = (
+    previewShown: boolean,
+    optionIndex: number,
+    item: MultiselectQuestion
+  ) => {
+    const getInfoSection = (option, index) => {
+      const isNotLastItem = index < item.options.length - 1
+      return (
+        <div key={index} className={isNotLastItem ? "mb-5" : "mb-1"}>
+          <div className={"font-semibold mb-1 text-gray-800"}>
+            <span>{option.text}</span>
+          </div>
+          {option.description && (
+            <div
+              className={`${
+                !option.links?.length && isNotLastItem ? "mb-5" : "mb-1"
+              } text-gray-750`}
+            >
+              {option.description}
+            </div>
+          )}
+
+          {option.links?.length > 0 && (
+            <div className={`${isNotLastItem ? "mb-5" : "mb-1"}`}>
+              {option.links.map((link, linkIndex) => {
+                return (
+                  <span className={"underline"} key={linkIndex}>
+                    <LinkComponent href={link.url} target={"_blank"} className={"mr-3"}>
+                      {link.title}
+                    </LinkComponent>
+                  </span>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )
+    }
+    return (
+      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-tiny">
+        <div>
+          <button
+            onClick={() => {
+              const newPreviews = previewShown
+                ? openPreviews.filter((previewIndex) => previewIndex !== optionIndex)
+                : [...openPreviews, optionIndex]
+              setOpenPreviews(newPreviews)
+            }}
+          >
+            <span className={"text-blue-600 underline"}>
+              {previewShown ? t("t.hide") : t("t.previewLowercase")}
+            </span>
+          </button>
+          {previewShown && (
+            <div className={"bg-blue-200 mt-2 p-4"}>
+              {getInfoSection(item, -1)}
+              {item.options.map((option, index) => {
+                return getInfoSection(option, index)
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       <GridSection title={title} description={subtitle} grid={false} separator>
@@ -229,14 +297,16 @@ const SelectAndOrder = ({
         ariaDescription={drawerButtonText}
         onClose={() => {
           setSelectDrawer(null)
+          setOpenPreviews([])
         }}
-        className={"w-auto"}
+        className={"drawer__small"}
       >
         <div className="border rounded-md p-8 bg-white">
           {jurisdiction
             ? fetchedData.map((item, index) => {
+                const previewShown = openPreviews.some((preview) => preview === index)
                 return (
-                  <GridSection columns={1} key={index}>
+                  <GridSection columns={1} key={index} className={"md:-mb-6"}>
                     <Field
                       className={"font-semibold"}
                       id={`${formKey}.${item.id}`}
@@ -250,6 +320,7 @@ const SelectAndOrder = ({
                         ),
                       }}
                     />
+                    {getPreviewSection(previewShown, index, item)}
                   </GridSection>
                 )
               })
@@ -272,6 +343,7 @@ const SelectAndOrder = ({
               })
               setDraftListingData(formItems)
               setSelectDrawer(null)
+              setOpenPreviews([])
             }}
           >
             {t("t.save")}
