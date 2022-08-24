@@ -119,12 +119,19 @@ describe("Listing Management Tests", () => {
     )
 
     cy.getByTestId("add-photos-button").contains("Edit Photos").click()
-    cy.getByTestId("dropzone-input").attachFile("test-listing.jpg", {
-      subjectType: "drag-n-drop",
-    })
-    cy.getByTestId("drawer-photos-table").contains("test-listing")
+    cy.getByTestId("dropzone-input").attachFile(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+      {
+        subjectType: "drag-n-drop",
+      }
+    )
+    cy.getByTestId("drawer-photos-table").contains(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
+    )
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table").contains("test-listing")
+    cy.getByTestId("photos-table").contains(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
+    )
     cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
     cy.getByTestId("photos-table")
       .get("tbody > tr:nth-of-type(2)")
