@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.22...@bloom-housing/public@5.1.1-alpha.23) (2022-08-24)
+
+
+### Features
+
+* adds the ability to manage preference for partner admins ([#2985](https://github.com/bloom-housing/bloom/issues/2985)) ([0f1f470](https://github.com/bloom-housing/bloom/commit/0f1f470f00f4ef95a2e35a921701339fb813f1f5))
+
+
+
+
+
 ## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.21...@bloom-housing/public@5.1.1-alpha.22) (2022-08-24)
 
 **Note:** Version bump only for package @bloom-housing/public

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.12...@bloom-housing/backend-core@5.1.1-alpha.13) (2022-08-24)
+
+
+### Features
+
+* adds the ability to manage preference for partner admins ([#2985](https://github.com/bloom-housing/bloom/issues/2985)) ([0f1f470](https://github.com/bloom-housing/bloom/commit/0f1f470f00f4ef95a2e35a921701339fb813f1f5))
+
+
+
+
+
 ## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.11...@bloom-housing/backend-core@5.1.1-alpha.12) (2022-08-24)
 
 
