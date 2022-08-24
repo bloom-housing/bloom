@@ -162,7 +162,7 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   amenities?: string | null
 
-  @OneToOne(() => Address, { eager: true, cascade: true })
+  @ManyToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
