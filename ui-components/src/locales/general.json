@@ -864,6 +864,7 @@
   "listings.monthlyIncomeRange": "%{from} to %{to} per month",
   "listings.moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",
   "listings.moreImagesLabel": "images",
+  "listings.moreImagesAltDescription": "more images for ",
   "listings.newListing": "New Listing",
   "listings.noAvailableUnits": "There are no available units at this time.",
   "listings.noOpenListings": "No listings currently have open applications.",
