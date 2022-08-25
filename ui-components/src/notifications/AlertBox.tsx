@@ -7,6 +7,7 @@ import "./AlertBox.scss"
 
 export interface AlertBoxProps {
   type?: AlertTypes
+  customIcon?: IconTypes
   closeable?: boolean
   onClose?: () => void
   children: ReactNode
@@ -50,7 +51,7 @@ const AlertBox = (props: AlertBoxProps) => {
           <span className="alert-box__icon">
             <Icon
               size="medium"
-              symbol={icons[props.type || "alert"]}
+              symbol={props.customIcon ?? icons[props.type || "alert"]}
               fill={props.inverted ? IconFillColors.white : undefined}
               ariaHidden={true}
             />
