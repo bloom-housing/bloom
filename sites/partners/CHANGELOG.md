@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.0...@bloom-housing/partners@6.0.0) (2022-08-25)
+
+
+### Bug Fixes
+
+* fix for big timeout on flagged set ([#2946](https://github.com/bloom-housing/bloom/issues/2946)) ([7c6e6c6](https://github.com/bloom-housing/bloom/commit/7c6e6c68daba9d506eb4d534c68b7a65a597aa0a))
+
+
+* 2022-08-24 release (#2993) ([6f1deac](https://github.com/bloom-housing/bloom/commit/6f1deac5370fa8286b051b09431d153d22901b3a)), closes [#2993](https://github.com/bloom-housing/bloom/issues/2993) [#2821](https://github.com/bloom-housing/bloom/issues/2821) [#2764](https://github.com/bloom-housing/bloom/issues/2764) [#2767](https://github.com/bloom-housing/bloom/issues/2767) [#2787](https://github.com/bloom-housing/bloom/issues/2787) [#2769](https://github.com/bloom-housing/bloom/issues/2769) [#2781](https://github.com/bloom-housing/bloom/issues/2781) [#2827](https://github.com/bloom-housing/bloom/issues/2827) [Issue#2827](https://github.com/Issue/issues/2827) [#2788](https://github.com/bloom-housing/bloom/issues/2788) [#2842](https://github.com/bloom-housing/bloom/issues/2842) [#2822](https://github.com/bloom-housing/bloom/issues/2822) [#2847](https://github.com/bloom-housing/bloom/issues/2847) [#2830](https://github.com/bloom-housing/bloom/issues/2830) [#2788](https://github.com/bloom-housing/bloom/issues/2788) [#2842](https://github.com/bloom-housing/bloom/issues/2842) [#2827](https://github.com/bloom-housing/bloom/issues/2827) [Issue#2827](https://github.com/Issue/issues/2827) [#2822](https://github.com/bloom-housing/bloom/issues/2822) [#2846](https://github.com/bloom-housing/bloom/issues/2846) [#2851](https://github.com/bloom-housing/bloom/issues/2851) [#2594](https://github.com/bloom-housing/bloom/issues/2594) [#2812](https://github.com/bloom-housing/bloom/issues/2812) [#2799](https://github.com/bloom-housing/bloom/issues/2799) [#2828](https://github.com/bloom-housing/bloom/issues/2828) [#2843](https://github.com/bloom-housing/bloom/issues/2843) [#2827](https://github.com/bloom-housing/bloom/issues/2827) [#2875](https://github.com/bloom-housing/bloom/issues/2875) [#2859](https://github.com/bloom-housing/bloom/issues/2859) [#2848](https://github.com/bloom-housing/bloom/issues/2848) [#2785](https://github.com/bloom-housing/bloom/issues/2785)
+
+
+### BREAKING CHANGES
+
+* prop name change for header from "text" to "content"
+
+* chore(release): version
+
+ - @bloom-housing/shared-helpers@5.0.1-alpha.2
+ - @bloom-housing/partners@5.0.1-alpha.2
+ - @bloom-housing/public@5.0.1-alpha.2
+ - @bloom-housing/ui-components@5.0.1-alpha.1
+
+
+
+
+
 ## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.24...@bloom-housing/partners@5.1.1-alpha.25) (2022-08-24)
 
 
