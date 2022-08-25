@@ -123,6 +123,8 @@ export async function fetchOpenListings() {
         status: EnumListingFilterParamsStatus.active,
       },
     ],
+    orderBy: [OrderByFieldsEnum.mostRecentlyPublished],
+    orderDir: [OrderParam.DESC],
   })
 }
 

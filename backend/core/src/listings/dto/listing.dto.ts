@@ -15,8 +15,7 @@ import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingFeaturesDto } from "./listing-features.dto"
-import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
-import { ListingProgramDto } from "../../program/dto/listing-program.dto"
+import { ListingMultiselectQuestionDto } from "../../multiselect-question/dto/listing-multiselect-question.dto"
 import { ListingImageDto } from "./listing-image.dto"
 import { ListingUtilitiesDto } from "./listing-utilities.dto"
 
@@ -32,8 +31,7 @@ export class ListingDto extends OmitType(Listing, [
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
-  "listingPreferences",
-  "listingPrograms",
+  "listingMultiselectQuestions",
   "reservedCommunityType",
   "result",
   "unitsSummary",
@@ -98,17 +96,10 @@ export class ListingDto extends OmitType(Listing, [
   leasingAgents?: UserBasicDto[] | null
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingProgramDto)
-  listingPrograms?: ListingProgramDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreferenceDto)
-  listingPreferences: ListingPreferenceDto[]
+  @Type(() => ListingMultiselectQuestionDto)
+  listingMultiselectQuestions: ListingMultiselectQuestionDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

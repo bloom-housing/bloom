@@ -9,7 +9,7 @@
 
 .progress-nav__item {
   @apply text-2xs;
-  @apply px-2;
+  @apply px-1;
   @apply py-3;
   @apply relative;
   @apply text-center;
@@ -22,6 +22,7 @@
   @screen md {
     @apply text-sm;
     @apply p-0;
+    @apply px-2;
   }
 
   &:before {
@@ -71,7 +72,7 @@
       @apply top-0;
     }
 
-    a {
+    .progress-nav__item-container {
       @apply text-black;
       @apply font-bold;
     }
@@ -85,13 +86,13 @@
       @apply top-0;
     }
 
-    a {
+    .progress-nav__item-container {
       @apply pointer-events-none;
       @apply cursor-default;
     }
   }
 
-  a {
+  .progress-nav__item-container {
     @apply pt-4;
     @apply pl-1;
     @apply text-gray-700;

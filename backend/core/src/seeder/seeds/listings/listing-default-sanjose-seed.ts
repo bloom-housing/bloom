@@ -21,6 +21,7 @@ import { ApplicationMethod } from "../../../application-methods/entities/applica
 import { Jurisdiction } from "../../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../../shared/types/county-code"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
+import { MultiselectQuestion } from "../../../multiselect-question/entities/multiselect-question.entity"
 
 export class ListingDefaultSanJoseSeed {
   constructor(
@@ -38,7 +39,9 @@ export class ListingDefaultSanJoseSeed {
     @InjectRepository(ApplicationMethod)
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
     @InjectRepository(Jurisdiction)
-    protected readonly jurisdictionRepository: Repository<Jurisdiction>
+    protected readonly jurisdictionRepository: Repository<Jurisdiction>,
+    @InjectRepository(MultiselectQuestion)
+    protected readonly multiselectQuestionsRepository: Repository<MultiselectQuestion>
   ) {}
 
   async seed() {
@@ -63,10 +66,21 @@ export class ListingDefaultSanJoseSeed {
 
       name: "Test: Default, Two Preferences (San Jose)",
       assets: getDefaultAssets(),
-      preferences: [
-        getLiveWorkPreference(alamedaJurisdiction.name),
-        { ...getDisplaceePreference(alamedaJurisdiction.name), ordinal: 2 },
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 1,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 2,
+        },
       ],
+
       events: getDefaultListingEvents(),
       jurisdictionName: "San Jose",
     }

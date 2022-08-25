@@ -69,7 +69,6 @@
 
   @screen print {
     @apply py-2;
-    @apply px-0;
   }
 }
 
@@ -87,13 +86,7 @@
 }
 
 .form-card__group {
-  @screen md {
-    @apply px-8;
-  }
-
-  @screen print {
-    @apply px-0;
-  }
+  @apply px-8;
 }
 
 .form-card__header {

@@ -286,7 +286,6 @@ export const ArcherListing: Listing = {
   creditHistory:
     "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   depositMin: "1140.0",
-  listingPrograms: [],
   programRules:
     "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
   // TODO confirm not used anywhere
@@ -332,7 +331,7 @@ export const ArcherListing: Listing = {
   leasingAgentOfficeHours: "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
   leasingAgentPhone: "(408) 217-8562",
   leasingAgentTitle: "",
-  listingPreferences: [],
+  listingMultiselectQuestions: [],
   rentalAssistance: "Custom rental assistance",
   rentalHistory:
     "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",

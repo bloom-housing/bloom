@@ -89,401 +89,6 @@ export class PagedResult<T> implements IPagedResult<T> {
 // customer definition
 // empty
 
-export class AuthService {
-  /**
-   * Login
-   */
-  login(
-    params: {
-      /** requestBody */
-      body?: Login
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/login"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Token
-   */
-  token(
-    params: {
-      /** requestBody */
-      body?: Token
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/token"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Request mfa code
-   */
-  requestMfaCode(
-    params: {
-      /** requestBody */
-      body?: RequestMfaCode
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<RequestMfaCodeResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/request-mfa-code"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get mfa info
-   */
-  getMfaInfo(
-    params: {
-      /** requestBody */
-      body?: GetMfaInfo
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<GetMfaInfoResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/mfa-info"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UserService {
-  /**
-   *
-   */
-  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create user
-   */
-  create(
-    params: {
-      /**  */
-      noWelcomeEmail?: boolean
-      /** requestBody */
-      body?: UserCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UserBasic> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: Id
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resend confirmation
-   */
-  resendPartnerConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/resend-partner-confirmation"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Verifies token is valid
-   */
-  isUserConfirmationTokenValid(
-    params: {
-      /** requestBody */
-      body?: Confirm
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/is-confirmation-token-valid"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Resend confirmation
-   */
-  resendConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/resend-confirmation"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Confirm email
-   */
-  confirm(
-    params: {
-      /** requestBody */
-      body?: Confirm
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/confirm"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Forgot Password
-   */
-  forgotPassword(
-    params: {
-      /** requestBody */
-      body?: ForgotPassword
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ForgotPasswordResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/forgot-password"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update Password
-   */
-  updatePassword(
-    params: {
-      /** requestBody */
-      body?: UpdatePassword
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/update-password"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get user by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      id: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * List users
-   */
-  list(
-    params: {
-      /**  */
-      page?: number
-      /**  */
-      limit?: number | "all"
-      /**  */
-      filter?: UserFilterParams[]
-      /**  */
-      search?: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<PaginatedUserList> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/list"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        page: params["page"],
-        limit: params["limit"],
-        filter: params["filter"],
-        search: params["search"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Invite user
-   */
-  invite(
-    params: {
-      /** requestBody */
-      body?: UserInvite
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UserBasic> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/invite"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class UserProfileService {
-  /**
-   * Update profile user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserProfileUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/userProfile/{id}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
 export class AmiChartsService {
   /**
    * List amiCharts
@@ -911,32 +516,6 @@ export class ApplicationsService {
     })
   }
   /**
-   * Raw list of applications
-   */
-  rawApplicationsList(
-    params: {
-      /**  */
-      listingId: string
-      /**  */
-      includeDemographics?: boolean
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<object[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/rawApplicationsList"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = {
-        listingId: params["listingId"],
-        includeDemographics: params["includeDemographics"],
-      }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Get application by id
    */
   retrieve(
@@ -1088,6 +667,401 @@ export class AssetsService {
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class AuthService {
+  /**
+   * Login
+   */
+  login(
+    params: {
+      /** requestBody */
+      body?: Login
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/login"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Token
+   */
+  token(
+    params: {
+      /** requestBody */
+      body?: Token
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/token"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Request mfa code
+   */
+  requestMfaCode(
+    params: {
+      /** requestBody */
+      body?: RequestMfaCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<RequestMfaCodeResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/request-mfa-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get mfa info
+   */
+  getMfaInfo(
+    params: {
+      /** requestBody */
+      body?: GetMfaInfo
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GetMfaInfoResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/mfa-info"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create user
+   */
+  create(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean
+      /** requestBody */
+      body?: UserCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user"
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-partner-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Verifies token is valid
+   */
+  isUserConfirmationTokenValid(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/is-confirmation-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
+  resendConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Confirm email
+   */
+  confirm(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/confirm"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: ForgotPassword
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ForgotPasswordResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/forgot-password"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/update-password"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * List users
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      filter?: UserFilterParams[]
+      /**  */
+      search?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedUserList> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/list"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        search: params["search"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Invite user
+   */
+  invite(
+    params: {
+      /** requestBody */
+      body?: UserInvite
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/invite"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1457,19 +1431,19 @@ export class PaperApplicationsService {
   }
 }
 
-export class PreferencesService {
+export class MultiselectQuestionsService {
   /**
-   * List preferences
+   * List multiselect questions
    */
   list(
     params: {
       /**  */
-      filter?: PreferencesFilterParams[]
+      filter?: MultiselectQuestionsFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference[]> {
+  ): Promise<MultiselectQuestion[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { filter: params["filter"] }
@@ -1480,17 +1454,17 @@ export class PreferencesService {
     })
   }
   /**
-   * Create preference
+   * Create multiselect question
    */
   create(
     params: {
       /** requestBody */
-      body?: PreferenceCreate
+      body?: MultiselectQuestionCreate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -1501,7 +1475,7 @@ export class PreferencesService {
     })
   }
   /**
-   * Delete preference by id
+   * Delete multiselect question by id
    */
   delete(
     params: {
@@ -1511,7 +1485,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -1522,17 +1496,17 @@ export class PreferencesService {
     })
   }
   /**
-   * Update preference
+   * Update multiselect question
    */
   update(
     params: {
       /** requestBody */
-      body?: PreferenceUpdate
+      body?: MultiselectQuestionUpdate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences/{preferenceId}"
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -1543,127 +1517,18 @@ export class PreferencesService {
     })
   }
   /**
-   * Get preference by id
+   * Get multiselect question by id
    */
   retrieve(
     params: {
       /**  */
-      preferenceId: string
+      multiselectQuestionId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences/{preferenceId}"
-      url = url.replace("{preferenceId}", params["preferenceId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ProgramsService {
-  /**
-   * List programs
-   */
-  list(
-    params: {
-      /**  */
-      filter?: ProgramsFilterParams[]
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { filter: params["filter"] }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create program
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ProgramCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete program by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: Id
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update program
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ProgramUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get program by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      programId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-      url = url.replace("{programId}", params["programId"] + "")
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
+      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -2302,6 +2167,1383 @@ export class UnitAccessibilityPriorityTypesService {
   }
 }
 
+export interface AmiChartItem {
+  /**  */
+  percentOfAmi: number
+
+  /**  */
+  householdSize: number
+
+  /**  */
+  income: number
+}
+
+export interface Id {
+  /**  */
+  id: string
+}
+
+export interface AmiChart {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+}
+
+export interface AmiChartCreate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+}
+
+export interface AmiChartUpdate {
+  /**  */
+  items: AmiChartItem[]
+
+  /**  */
+  name: string
+
+  /**  */
+  jurisdiction: Id
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+}
+
+export interface Address {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  placeName?: string
+
+  /**  */
+  city: string
+
+  /**  */
+  county?: string
+
+  /**  */
+  state: string
+
+  /**  */
+  street: string
+
+  /**  */
+  street2?: string
+
+  /**  */
+  zipCode: string
+
+  /**  */
+  latitude?: number
+
+  /**  */
+  longitude?: number
+}
+
+export interface Applicant {
+  /**  */
+  address: Address
+
+  /**  */
+  workAddress: Address
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  workInRegion?: string
+}
+
+export interface AlternateContact {
+  /**  */
+  mailingAddress: Address
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  type?: string
+
+  /**  */
+  otherType?: string
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  agency?: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  emailAddress?: string
+}
+
+export interface Accessibility {
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface Demographics {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  ethnicity?: string
+
+  /**  */
+  gender?: string
+
+  /**  */
+  sexualOrientation?: string
+
+  /**  */
+  howDidYouHear: string[]
+
+  /**  */
+  race?: string[]
+}
+
+export interface HouseholdMember {
+  /**  */
+  address: Address
+
+  /**  */
+  workAddress: Address
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  orderId?: number
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  sameAddress?: string
+
+  /**  */
+  relationship?: string
+
+  /**  */
+  workInRegion?: string
+}
+
+export interface UnitType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface ApplicationMultiselectQuestionOption {
+  /**  */
+  key: string
+
+  /**  */
+  checked: boolean
+
+  /**  */
+  extraData?: AllExtraDataTypes[]
+}
+
+export interface ApplicationMultiselectQuestion {
+  /**  */
+  key: string
+
+  /**  */
+  claimed: boolean
+
+  /**  */
+  options: ApplicationMultiselectQuestionOption[]
+}
+
+export interface Application {
+  /**  */
+  incomePeriod?: IncomePeriod
+
+  /**  */
+  status: ApplicationStatus
+
+  /**  */
+  language?: Language
+
+  /**  */
+  submissionType: ApplicationSubmissionType
+
+  /**  */
+  applicant: Applicant
+
+  /**  */
+  listing: Id
+
+  /**  */
+  user?: Id
+
+  /**  */
+  mailingAddress: Address
+
+  /**  */
+  alternateAddress: Address
+
+  /**  */
+  alternateContact: AlternateContact
+
+  /**  */
+  accessibility: Accessibility
+
+  /**  */
+  demographics: Demographics
+
+  /**  */
+  householdMembers: HouseholdMember[]
+
+  /**  */
+  preferredUnit: UnitType[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  deletedAt?: Date
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  additionalPhone?: boolean
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  contactPreferences: string[]
+
+  /**  */
+  householdSize?: number
+
+  /**  */
+  housingStatus?: string
+
+  /**  */
+  sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
+  incomeVouchers?: boolean
+
+  /**  */
+  income?: string
+
+  /**  */
+  preferences: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  acceptedTerms?: boolean
+
+  /**  */
+  submissionDate?: Date
+
+  /**  */
+  markedAsDuplicate: boolean
+
+  /**  */
+  confirmationCode: string
+}
+
+export interface ApplicationFlaggedSet {
+  /**  */
+  resolvingUser: Id
+
+  /**  */
+  applications: Application[]
+
+  /**  */
+  listing: Id
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  rule: string
+
+  /**  */
+  resolvedTime?: Date
+
+  /**  */
+  status: EnumApplicationFlaggedSetStatus
+
+  /**  */
+  listingId: string
+}
+
+export interface ApplicationFlaggedSetPaginationMeta {
+  /**  */
+  totalFlagged: number
+
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+}
+
+export interface PaginatedApplicationFlaggedSet {
+  /**  */
+  items: ApplicationFlaggedSet[]
+
+  /**  */
+  meta: ApplicationFlaggedSetPaginationMeta
+}
+
+export interface ApplicationFlaggedSetResolve {
+  /**  */
+  afsId: string
+
+  /**  */
+  applications: Id[]
+}
+
+export interface Asset {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+export interface PaperApplication {
+  /**  */
+  language: Language
+
+  /**  */
+  file?: CombinedFileTypes
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType
+
+  /**  */
+  paperApplications?: PaperApplication[]
+
+  /**  */
+  listing: Id
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface AssetCreate {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+export interface PaperApplicationCreate {
+  /**  */
+  language: Language
+
+  /**  */
+  file?: CombinedFileTypes
+}
+
+export interface ApplicationMethodCreate {
+  /**  */
+  type: ApplicationMethodType
+
+  /**  */
+  paperApplications?: PaperApplicationCreate[]
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listing: Id
+}
+
+export interface AssetUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+export interface PaperApplicationUpdate {
+  /**  */
+  language: Language
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  file?: CombinedFileTypes
+}
+
+export interface ApplicationMethodUpdate {
+  /**  */
+  type: ApplicationMethodType
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  paperApplications?: PaperApplicationUpdate[]
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listing: Id
+}
+
+export interface BooleanInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: boolean
+}
+
+export interface TextInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+}
+
+export interface AddressCreate {
+  /**  */
+  placeName?: string
+
+  /**  */
+  city: string
+
+  /**  */
+  county?: string
+
+  /**  */
+  state: string
+
+  /**  */
+  street: string
+
+  /**  */
+  street2?: string
+
+  /**  */
+  zipCode: string
+
+  /**  */
+  latitude?: number
+
+  /**  */
+  longitude?: number
+}
+
+export interface AddressInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: AddressCreate
+}
+
+export interface ApplicationsApiExtraModel {
+  /**  */
+  orderBy?: EnumApplicationsApiExtraModelOrderBy
+
+  /**  */
+  order?: EnumApplicationsApiExtraModelOrder
+}
+
+export interface PaginationMeta {
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+}
+
+export interface PaginatedApplication {
+  /**  */
+  items: Application[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface ApplicantCreate {
+  /**  */
+  address: AddressCreate
+
+  /**  */
+  workAddress: AddressCreate
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  workInRegion?: string
+}
+
+export interface AlternateContactCreate {
+  /**  */
+  mailingAddress: AddressCreate
+
+  /**  */
+  type?: string
+
+  /**  */
+  otherType?: string
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  agency?: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  emailAddress?: string
+}
+
+export interface AccessibilityCreate {
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearing?: boolean
+}
+
+export interface DemographicsCreate {
+  /**  */
+  ethnicity?: string
+
+  /**  */
+  gender?: string
+
+  /**  */
+  sexualOrientation?: string
+
+  /**  */
+  howDidYouHear: string[]
+
+  /**  */
+  race?: string[]
+}
+
+export interface HouseholdMemberCreate {
+  /**  */
+  address: AddressCreate
+
+  /**  */
+  workAddress: AddressCreate
+
+  /**  */
+  orderId?: number
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  sameAddress?: string
+
+  /**  */
+  relationship?: string
+
+  /**  */
+  workInRegion?: string
+}
+
+export interface ApplicationCreate {
+  /**  */
+  incomePeriod?: IncomePeriod
+
+  /**  */
+  status: ApplicationStatus
+
+  /**  */
+  language?: Language
+
+  /**  */
+  submissionType: ApplicationSubmissionType
+
+  /**  */
+  listing: Id
+
+  /**  */
+  applicant: ApplicantCreate
+
+  /**  */
+  mailingAddress: AddressCreate
+
+  /**  */
+  alternateAddress: AddressCreate
+
+  /**  */
+  alternateContact: AlternateContactCreate
+
+  /**  */
+  accessibility: AccessibilityCreate
+
+  /**  */
+  demographics: DemographicsCreate
+
+  /**  */
+  householdMembers: HouseholdMemberCreate[]
+
+  /**  */
+  preferredUnit: Id[]
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  additionalPhone?: boolean
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  contactPreferences: string[]
+
+  /**  */
+  householdSize?: number
+
+  /**  */
+  housingStatus?: string
+
+  /**  */
+  sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
+  incomeVouchers?: boolean
+
+  /**  */
+  income?: string
+
+  /**  */
+  preferences: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  acceptedTerms?: boolean
+
+  /**  */
+  submissionDate?: Date
+}
+
+export interface AddressUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  placeName?: string
+
+  /**  */
+  city: string
+
+  /**  */
+  county?: string
+
+  /**  */
+  state: string
+
+  /**  */
+  street: string
+
+  /**  */
+  street2?: string
+
+  /**  */
+  zipCode: string
+
+  /**  */
+  latitude?: number
+
+  /**  */
+  longitude?: number
+}
+
+export interface ApplicantUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  address: AddressUpdate
+
+  /**  */
+  workAddress: AddressUpdate
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  workInRegion?: string
+}
+
+export interface AlternateContactUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  mailingAddress: AddressUpdate
+
+  /**  */
+  type?: string
+
+  /**  */
+  otherType?: string
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  agency?: string
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  emailAddress?: string
+}
+
+export interface AccessibilityUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  mobility?: boolean
+
+  /**  */
+  vision?: boolean
+
+  /**  */
+  hearing?: boolean
+}
+
+export interface DemographicsUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  ethnicity?: string
+
+  /**  */
+  gender?: string
+
+  /**  */
+  sexualOrientation?: string
+
+  /**  */
+  howDidYouHear: string[]
+
+  /**  */
+  race?: string[]
+}
+
+export interface HouseholdMemberUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  address: AddressUpdate
+
+  /**  */
+  workAddress: AddressUpdate
+
+  /**  */
+  orderId?: number
+
+  /**  */
+  firstName?: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName?: string
+
+  /**  */
+  birthMonth?: string
+
+  /**  */
+  birthDay?: string
+
+  /**  */
+  birthYear?: string
+
+  /**  */
+  emailAddress?: string
+
+  /**  */
+  noEmail?: boolean
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  phoneNumberType?: string
+
+  /**  */
+  noPhone?: boolean
+
+  /**  */
+  sameAddress?: string
+
+  /**  */
+  relationship?: string
+
+  /**  */
+  workInRegion?: string
+}
+
+export interface ApplicationUpdate {
+  /**  */
+  incomePeriod?: IncomePeriod
+
+  /**  */
+  status: ApplicationStatus
+
+  /**  */
+  language?: Language
+
+  /**  */
+  submissionType: ApplicationSubmissionType
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  deletedAt?: Date
+
+  /**  */
+  listing: Id
+
+  /**  */
+  applicant: ApplicantUpdate
+
+  /**  */
+  mailingAddress: AddressUpdate
+
+  /**  */
+  alternateAddress: AddressUpdate
+
+  /**  */
+  alternateContact: AlternateContactUpdate
+
+  /**  */
+  accessibility: AccessibilityUpdate
+
+  /**  */
+  demographics: DemographicsUpdate
+
+  /**  */
+  householdMembers: HouseholdMemberUpdate[]
+
+  /**  */
+  preferredUnit: Id[]
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  additionalPhone?: boolean
+
+  /**  */
+  additionalPhoneNumber?: string
+
+  /**  */
+  additionalPhoneNumberType?: string
+
+  /**  */
+  contactPreferences: string[]
+
+  /**  */
+  householdSize?: number
+
+  /**  */
+  housingStatus?: string
+
+  /**  */
+  sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
+  incomeVouchers?: boolean
+
+  /**  */
+  income?: string
+
+  /**  */
+  preferences: ApplicationMultiselectQuestion[]
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[]
+
+  /**  */
+  acceptedTerms?: boolean
+
+  /**  */
+  submissionDate?: Date
+}
+
+export interface CreatePresignedUploadMetadata {
+  /**  */
+  parametersToSign: object
+}
+
+export interface CreatePresignedUploadMetadataResponse {
+  /**  */
+  signature: string
+}
+
+export interface PaginatedAssets {
+  /**  */
+  items: Asset[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
 export interface UserErrorExtraModel {
   /**  */
   userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
@@ -2383,11 +3625,6 @@ export interface IdName {
   name: string
 }
 
-export interface Id {
-  /**  */
-  id: string
-}
-
 export interface UserRoles {
   /**  */
   user: Id
@@ -2404,10 +3641,7 @@ export interface UserRoles {
 
 export interface Jurisdiction {
   /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
+  multiselectQuestions: Id[]
 
   /**  */
   id: string
@@ -2764,23 +3998,6 @@ export interface UserFilterParams {
   isPortalUser?: boolean
 }
 
-export interface PaginationMeta {
-  /**  */
-  currentPage: number
-
-  /**  */
-  itemCount: number
-
-  /**  */
-  itemsPerPage: number
-
-  /**  */
-  totalItems: number
-
-  /**  */
-  totalPages: number
-}
-
 export interface PaginatedUserList {
   /**  */
   items: User[]
@@ -2888,1383 +4105,6 @@ export interface UserProfileUpdate {
   agreedToTermsOfService: boolean
 }
 
-export interface AmiChartItem {
-  /**  */
-  percentOfAmi: number
-
-  /**  */
-  householdSize: number
-
-  /**  */
-  income: number
-}
-
-export interface AmiChart {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdiction: Id
-}
-
-export interface AmiChartCreate {
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdiction: Id
-}
-
-export interface AmiChartUpdate {
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  name: string
-
-  /**  */
-  jurisdiction: Id
-
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-}
-
-export interface Address {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-}
-
-export interface Applicant {
-  /**  */
-  address: Address
-
-  /**  */
-  workAddress: Address
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  workInRegion?: string
-}
-
-export interface AlternateContact {
-  /**  */
-  mailingAddress: Address
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  type?: string
-
-  /**  */
-  otherType?: string
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  agency?: string
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  emailAddress?: string
-}
-
-export interface Accessibility {
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  vision?: boolean
-
-  /**  */
-  hearing?: boolean
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
-export interface Demographics {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  ethnicity?: string
-
-  /**  */
-  gender?: string
-
-  /**  */
-  sexualOrientation?: string
-
-  /**  */
-  howDidYouHear: string[]
-
-  /**  */
-  race?: string[]
-}
-
-export interface HouseholdMember {
-  /**  */
-  address: Address
-
-  /**  */
-  workAddress: Address
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  orderId?: number
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  sameAddress?: string
-
-  /**  */
-  relationship?: string
-
-  /**  */
-  workInRegion?: string
-}
-
-export interface UnitType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface ApplicationPreferenceOption {
-  /**  */
-  key: string
-
-  /**  */
-  checked: boolean
-
-  /**  */
-  extraData?: AllExtraDataTypes[]
-}
-
-export interface ApplicationPreference {
-  /**  */
-  key: string
-
-  /**  */
-  claimed: boolean
-
-  /**  */
-  options: ApplicationPreferenceOption[]
-}
-
-export interface ApplicationProgramOption {
-  /**  */
-  key: string
-
-  /**  */
-  checked: boolean
-
-  /**  */
-  extraData?: AllExtraDataTypes[]
-}
-
-export interface ApplicationProgram {
-  /**  */
-  key: string
-
-  /**  */
-  claimed: boolean
-
-  /**  */
-  options: ApplicationProgramOption[]
-}
-
-export interface Application {
-  /**  */
-  incomePeriod?: IncomePeriod
-
-  /**  */
-  status: ApplicationStatus
-
-  /**  */
-  language?: Language
-
-  /**  */
-  submissionType: ApplicationSubmissionType
-
-  /**  */
-  applicant: Applicant
-
-  /**  */
-  listing: Id
-
-  /**  */
-  user?: Id
-
-  /**  */
-  mailingAddress: Address
-
-  /**  */
-  alternateAddress: Address
-
-  /**  */
-  alternateContact: AlternateContact
-
-  /**  */
-  accessibility: Accessibility
-
-  /**  */
-  demographics: Demographics
-
-  /**  */
-  householdMembers: HouseholdMember[]
-
-  /**  */
-  preferredUnit: UnitType[]
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  deletedAt?: Date
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  additionalPhone?: boolean
-
-  /**  */
-  additionalPhoneNumber?: string
-
-  /**  */
-  additionalPhoneNumberType?: string
-
-  /**  */
-  contactPreferences: string[]
-
-  /**  */
-  householdSize?: number
-
-  /**  */
-  housingStatus?: string
-
-  /**  */
-  sendMailToMailingAddress?: boolean
-
-  /**  */
-  householdExpectingChanges?: boolean
-
-  /**  */
-  householdStudent?: boolean
-
-  /**  */
-  incomeVouchers?: boolean
-
-  /**  */
-  income?: string
-
-  /**  */
-  preferences: ApplicationPreference[]
-
-  /**  */
-  programs?: ApplicationProgram[]
-
-  /**  */
-  acceptedTerms?: boolean
-
-  /**  */
-  submissionDate?: Date
-
-  /**  */
-  markedAsDuplicate: boolean
-
-  /**  */
-  confirmationCode: string
-}
-
-export interface ApplicationFlaggedSet {
-  /**  */
-  resolvingUser: Id
-
-  /**  */
-  applications: Application[]
-
-  /**  */
-  listing: Id
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  rule: string
-
-  /**  */
-  resolvedTime?: Date
-
-  /**  */
-  status: EnumApplicationFlaggedSetStatus
-
-  /**  */
-  listingId: string
-}
-
-export interface ApplicationFlaggedSetPaginationMeta {
-  /**  */
-  totalFlagged: number
-
-  /**  */
-  currentPage: number
-
-  /**  */
-  itemCount: number
-
-  /**  */
-  itemsPerPage: number
-
-  /**  */
-  totalItems: number
-
-  /**  */
-  totalPages: number
-}
-
-export interface PaginatedApplicationFlaggedSet {
-  /**  */
-  items: ApplicationFlaggedSet[]
-
-  /**  */
-  meta: ApplicationFlaggedSetPaginationMeta
-}
-
-export interface ApplicationFlaggedSetResolve {
-  /**  */
-  afsId: string
-
-  /**  */
-  applications: Id[]
-}
-
-export interface Asset {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-}
-
-export interface PaperApplication {
-  /**  */
-  language: Language
-
-  /**  */
-  file?: CombinedFileTypes
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
-export interface ApplicationMethod {
-  /**  */
-  type: ApplicationMethodType
-
-  /**  */
-  paperApplications?: PaperApplication[]
-
-  /**  */
-  listing: Id
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  label?: string
-
-  /**  */
-  externalReference?: string
-
-  /**  */
-  acceptsPostmarkedApplications?: boolean
-
-  /**  */
-  phoneNumber?: string
-}
-
-export interface AssetCreate {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-}
-
-export interface PaperApplicationCreate {
-  /**  */
-  language: Language
-
-  /**  */
-  file?: CombinedFileTypes
-}
-
-export interface ApplicationMethodCreate {
-  /**  */
-  type: ApplicationMethodType
-
-  /**  */
-  paperApplications?: PaperApplicationCreate[]
-
-  /**  */
-  label?: string
-
-  /**  */
-  externalReference?: string
-
-  /**  */
-  acceptsPostmarkedApplications?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listing: Id
-}
-
-export interface AssetUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-}
-
-export interface PaperApplicationUpdate {
-  /**  */
-  language: Language
-
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  file?: CombinedFileTypes
-}
-
-export interface ApplicationMethodUpdate {
-  /**  */
-  type: ApplicationMethodType
-
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  paperApplications?: PaperApplicationUpdate[]
-
-  /**  */
-  label?: string
-
-  /**  */
-  externalReference?: string
-
-  /**  */
-  acceptsPostmarkedApplications?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listing: Id
-}
-
-export interface BooleanInput {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-
-  /**  */
-  value: boolean
-}
-
-export interface TextInput {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-
-  /**  */
-  value: string
-}
-
-export interface AddressCreate {
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-}
-
-export interface AddressInput {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-
-  /**  */
-  value: AddressCreate
-}
-
-export interface ApplicationsApiExtraModel {
-  /**  */
-  orderBy?: EnumApplicationsApiExtraModelOrderBy
-
-  /**  */
-  order?: EnumApplicationsApiExtraModelOrder
-}
-
-export interface PaginatedApplication {
-  /**  */
-  items: Application[]
-
-  /**  */
-  meta: PaginationMeta
-}
-
-export interface ApplicantCreate {
-  /**  */
-  address: AddressCreate
-
-  /**  */
-  workAddress: AddressCreate
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  workInRegion?: string
-}
-
-export interface AlternateContactCreate {
-  /**  */
-  mailingAddress: AddressCreate
-
-  /**  */
-  type?: string
-
-  /**  */
-  otherType?: string
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  agency?: string
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  emailAddress?: string
-}
-
-export interface AccessibilityCreate {
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  vision?: boolean
-
-  /**  */
-  hearing?: boolean
-}
-
-export interface DemographicsCreate {
-  /**  */
-  ethnicity?: string
-
-  /**  */
-  gender?: string
-
-  /**  */
-  sexualOrientation?: string
-
-  /**  */
-  howDidYouHear: string[]
-
-  /**  */
-  race?: string[]
-}
-
-export interface HouseholdMemberCreate {
-  /**  */
-  address: AddressCreate
-
-  /**  */
-  workAddress: AddressCreate
-
-  /**  */
-  orderId?: number
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  sameAddress?: string
-
-  /**  */
-  relationship?: string
-
-  /**  */
-  workInRegion?: string
-}
-
-export interface ApplicationCreate {
-  /**  */
-  incomePeriod?: IncomePeriod
-
-  /**  */
-  status: ApplicationStatus
-
-  /**  */
-  language?: Language
-
-  /**  */
-  submissionType: ApplicationSubmissionType
-
-  /**  */
-  listing: Id
-
-  /**  */
-  applicant: ApplicantCreate
-
-  /**  */
-  mailingAddress: AddressCreate
-
-  /**  */
-  alternateAddress: AddressCreate
-
-  /**  */
-  alternateContact: AlternateContactCreate
-
-  /**  */
-  accessibility: AccessibilityCreate
-
-  /**  */
-  demographics: DemographicsCreate
-
-  /**  */
-  householdMembers: HouseholdMemberCreate[]
-
-  /**  */
-  preferredUnit: Id[]
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  additionalPhone?: boolean
-
-  /**  */
-  additionalPhoneNumber?: string
-
-  /**  */
-  additionalPhoneNumberType?: string
-
-  /**  */
-  contactPreferences: string[]
-
-  /**  */
-  householdSize?: number
-
-  /**  */
-  housingStatus?: string
-
-  /**  */
-  sendMailToMailingAddress?: boolean
-
-  /**  */
-  householdExpectingChanges?: boolean
-
-  /**  */
-  householdStudent?: boolean
-
-  /**  */
-  incomeVouchers?: boolean
-
-  /**  */
-  income?: string
-
-  /**  */
-  preferences: ApplicationPreference[]
-
-  /**  */
-  programs?: ApplicationProgram[]
-
-  /**  */
-  acceptedTerms?: boolean
-
-  /**  */
-  submissionDate?: Date
-}
-
-export interface AddressUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  placeName?: string
-
-  /**  */
-  city: string
-
-  /**  */
-  county?: string
-
-  /**  */
-  state: string
-
-  /**  */
-  street: string
-
-  /**  */
-  street2?: string
-
-  /**  */
-  zipCode: string
-
-  /**  */
-  latitude?: number
-
-  /**  */
-  longitude?: number
-}
-
-export interface ApplicantUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  address: AddressUpdate
-
-  /**  */
-  workAddress: AddressUpdate
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  workInRegion?: string
-}
-
-export interface AlternateContactUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  mailingAddress: AddressUpdate
-
-  /**  */
-  type?: string
-
-  /**  */
-  otherType?: string
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  agency?: string
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  emailAddress?: string
-}
-
-export interface AccessibilityUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  mobility?: boolean
-
-  /**  */
-  vision?: boolean
-
-  /**  */
-  hearing?: boolean
-}
-
-export interface DemographicsUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  ethnicity?: string
-
-  /**  */
-  gender?: string
-
-  /**  */
-  sexualOrientation?: string
-
-  /**  */
-  howDidYouHear: string[]
-
-  /**  */
-  race?: string[]
-}
-
-export interface HouseholdMemberUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  address: AddressUpdate
-
-  /**  */
-  workAddress: AddressUpdate
-
-  /**  */
-  orderId?: number
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  sameAddress?: string
-
-  /**  */
-  relationship?: string
-
-  /**  */
-  workInRegion?: string
-}
-
-export interface ApplicationUpdate {
-  /**  */
-  incomePeriod?: IncomePeriod
-
-  /**  */
-  status: ApplicationStatus
-
-  /**  */
-  language?: Language
-
-  /**  */
-  submissionType: ApplicationSubmissionType
-
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  deletedAt?: Date
-
-  /**  */
-  listing: Id
-
-  /**  */
-  applicant: ApplicantUpdate
-
-  /**  */
-  mailingAddress: AddressUpdate
-
-  /**  */
-  alternateAddress: AddressUpdate
-
-  /**  */
-  alternateContact: AlternateContactUpdate
-
-  /**  */
-  accessibility: AccessibilityUpdate
-
-  /**  */
-  demographics: DemographicsUpdate
-
-  /**  */
-  householdMembers: HouseholdMemberUpdate[]
-
-  /**  */
-  preferredUnit: Id[]
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  additionalPhone?: boolean
-
-  /**  */
-  additionalPhoneNumber?: string
-
-  /**  */
-  additionalPhoneNumberType?: string
-
-  /**  */
-  contactPreferences: string[]
-
-  /**  */
-  householdSize?: number
-
-  /**  */
-  housingStatus?: string
-
-  /**  */
-  sendMailToMailingAddress?: boolean
-
-  /**  */
-  householdExpectingChanges?: boolean
-
-  /**  */
-  householdStudent?: boolean
-
-  /**  */
-  incomeVouchers?: boolean
-
-  /**  */
-  income?: string
-
-  /**  */
-  preferences: ApplicationPreference[]
-
-  /**  */
-  programs?: ApplicationProgram[]
-
-  /**  */
-  acceptedTerms?: boolean
-
-  /**  */
-  submissionDate?: Date
-}
-
-export interface CreatePresignedUploadMetadata {
-  /**  */
-  parametersToSign: object
-}
-
-export interface CreatePresignedUploadMetadataResponse {
-  /**  */
-  signature: string
-}
-
-export interface PaginatedAssets {
-  /**  */
-  items: Asset[]
-
-  /**  */
-  meta: PaginationMeta
-}
-
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -4297,10 +4137,7 @@ export interface JurisdictionCreate {
   enableUtilitiesIncluded: boolean
 
   /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
+  multiselectQuestions: Id[]
 }
 
 export interface JurisdictionUpdate {
@@ -4344,10 +4181,7 @@ export interface JurisdictionUpdate {
   enableUtilitiesIncluded: boolean
 
   /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
+  multiselectQuestions: Id[]
 }
 
 export interface ListingFilterParams {
@@ -4536,80 +4370,7 @@ export interface ListingImage {
   ordinal?: number
 }
 
-export interface FormMetadataExtraData {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-}
-
-export interface FormMetadataOptions {
-  /**  */
-  key: string
-
-  /**  */
-  extraData?: FormMetadataExtraData[]
-
-  /**  */
-  description: boolean
-
-  /**  */
-  exclusive: boolean
-}
-
-export interface FormMetadata {
-  /**  */
-  key: string
-
-  /**  */
-  options: FormMetadataOptions[]
-
-  /**  */
-  hideGenericDecline: boolean
-
-  /**  */
-  customSelectText: string
-
-  /**  */
-  hideFromListing: boolean
-
-  /**  */
-  type: FormMetaDataType
-}
-
-export interface Program {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-}
-
-export interface ListingProgram {
-  /**  */
-  program: Program
-
-  /**  */
-  ordinal?: number
-}
-
-export interface PreferenceLink {
+export interface MultiselectLink {
   /**  */
   title: string
 
@@ -4617,9 +4378,38 @@ export interface PreferenceLink {
   url: string
 }
 
-export interface Preference {
+export interface MultiselectOption {
   /**  */
-  links?: PreferenceLink[]
+  text: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  description?: string
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  exclusive?: boolean
+}
+
+export interface MultiselectQuestion {
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  options?: MultiselectOption[]
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: ApplicationSection
 
   /**  */
   jurisdictions?: IdName[]
@@ -4634,21 +4424,21 @@ export interface Preference {
   updatedAt: Date
 
   /**  */
-  title?: string
+  text: string
 
   /**  */
-  subtitle?: string
+  subText?: string
 
   /**  */
   description?: string
 
   /**  */
-  formMetadata?: FormMetadata
+  optOutText?: string
 }
 
-export interface ListingPreference {
+export interface ListingMultiselectQuestion {
   /**  */
-  preference: Preference
+  multiselectQuestion: MultiselectQuestion
 
   /**  */
   ordinal?: number
@@ -4980,10 +4770,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  listingPrograms?: ListingProgram[]
-
-  /**  */
-  listingPreferences: ListingPreference[]
+  listingMultiselectQuestions: ListingMultiselectQuestion[]
 
   /**  */
   jurisdiction: JurisdictionSlim
@@ -5355,17 +5142,9 @@ export interface UnitsSummaryCreate {
   unitType: Id
 }
 
-export interface ListingPreferenceUpdate {
+export interface ListingMultiselectQuestionUpdate {
   /**  */
-  preference: Id
-
-  /**  */
-  ordinal?: number
-}
-
-export interface ListingProgramUpdate {
-  /**  */
-  program: Id
+  multiselectQuestion: Id
 
   /**  */
   ordinal?: number
@@ -5436,10 +5215,7 @@ export interface ListingCreate {
   unitsSummary?: UnitsSummaryCreate[]
 
   /**  */
-  listingPreferences: ListingPreferenceUpdate[]
-
-  /**  */
-  listingPrograms?: ListingProgramUpdate[]
+  listingMultiselectQuestions: ListingMultiselectQuestionUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5863,10 +5639,7 @@ export interface ListingUpdate {
   unitsSummary?: UnitsSummaryUpdate[]
 
   /**  */
-  listingPreferences: ListingPreferenceUpdate[]
-
-  /**  */
-  listingPrograms?: ListingProgramUpdate[]
+  listingMultiselectQuestions: ListingMultiselectQuestionUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -6046,94 +5819,76 @@ export interface ListingUpdate {
   utilities?: ListingUtilities
 }
 
-export interface PreferencesFilterParams {
+export interface MultiselectQuestionsFilterParams {
   /**  */
-  $comparison: EnumPreferencesFilterParamsComparison
+  $comparison: EnumMultiselectQuestionsFilterParamsComparison
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  applicationSection?: string
 }
 
-export interface PreferenceCreate {
+export interface MultiselectQuestionCreate {
   /**  */
-  links?: PreferenceLink[]
+  links?: MultiselectLink[]
 
   /**  */
-  title?: string
+  options?: MultiselectOption[]
 
   /**  */
-  subtitle?: string
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: ApplicationSection
+
+  /**  */
+  text: string
+
+  /**  */
+  subText?: string
 
   /**  */
   description?: string
 
   /**  */
-  formMetadata?: FormMetadata
+  optOutText?: string
 
   /**  */
   jurisdictions?: IdName[]
 }
 
-export interface PreferenceUpdate {
+export interface MultiselectQuestionUpdate {
   /**  */
-  links?: PreferenceLink[]
+  links?: MultiselectLink[]
 
   /**  */
-  title?: string
+  options?: MultiselectOption[]
 
   /**  */
-  subtitle?: string
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: ApplicationSection
+
+  /**  */
+  id: string
+
+  /**  */
+  text: string
+
+  /**  */
+  subText?: string
 
   /**  */
   description?: string
 
   /**  */
-  formMetadata?: FormMetadata
+  optOutText?: string
 
   /**  */
   jurisdictions?: IdName[]
-
-  /**  */
-  id: string
-}
-
-export interface ProgramsFilterParams {
-  /**  */
-  $comparison: EnumProgramsFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-}
-
-export interface ProgramCreate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-}
-
-export interface ProgramUpdate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-
-  /**  */
-  id: string
 }
 
 export interface ReservedCommunityTypeCreate {
@@ -6256,46 +6011,7 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-export enum EnumUserErrorExtraModelUserErrorMessages {
-  "accountConfirmed" = "accountConfirmed",
-  "accountNotConfirmed" = "accountNotConfirmed",
-  "errorSaving" = "errorSaving",
-  "emailNotFound" = "emailNotFound",
-  "tokenExpired" = "tokenExpired",
-  "tokenMissing" = "tokenMissing",
-  "emailInUse" = "emailInUse",
-  "passwordOutdated" = "passwordOutdated",
-}
-export enum EnumLoginMfaType {
-  "sms" = "sms",
-  "email" = "email",
-}
-export enum EnumRequestMfaCodeMfaType {
-  "sms" = "sms",
-  "email" = "email",
-}
-export enum Language {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
-export enum EnumJurisdictionLanguages {
-  "en" = "en",
-  "es" = "es",
-  "vi" = "vi",
-  "zh" = "zh",
-  "tl" = "tl",
-}
-export type CombinedRolesTypes = UserRoles
-export enum EnumUserFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "NA" = "NA",
-}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -6305,6 +6021,14 @@ export enum ApplicationStatus {
   "draft" = "draft",
   "submitted" = "submitted",
   "removed" = "removed",
+}
+
+export enum Language {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
 }
 
 export enum ApplicationSubmissionType {
@@ -6342,6 +6066,39 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
+}
+export enum EnumLoginMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum EnumRequestMfaCodeMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+  "tl" = "tl",
+}
+export type CombinedRolesTypes = UserRoles
+export enum EnumUserFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
 export enum EnumJurisdictionCreateLanguages {
   "en" = "en",
   "es" = "es",
@@ -6372,6 +6129,7 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "mostRecentlyPublished" = "mostRecentlyPublished",
   "name" = "name",
   "waitlistOpen" = "waitlistOpen",
   "status" = "status",
@@ -6410,9 +6168,9 @@ export enum ListingEventType {
   "lotteryResults" = "lotteryResults",
 }
 
-export enum FormMetaDataType {
-  "radio" = "radio",
-  "checkbox" = "checkbox",
+export enum ApplicationSection {
+  "programs" = "programs",
+  "preferences" = "preferences",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
@@ -6422,14 +6180,7 @@ export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate
-export enum EnumPreferencesFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "NA" = "NA",
-}
-export enum EnumProgramsFilterParamsComparison {
+export enum EnumMultiselectQuestionsFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",
