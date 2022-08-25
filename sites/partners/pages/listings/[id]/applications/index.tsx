@@ -118,7 +118,6 @@ const ApplicationsList = () => {
           flagsQty: flaggedApps?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
-          flagsLabel: t("nav.flags"),
         }}
         breadcrumbs={
           <Breadcrumbs>
