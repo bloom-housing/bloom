@@ -3,6 +3,7 @@ import { LocalizedLink } from "../actions/LocalizedLink"
 import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
+import { TooltipProps } from "./Tooltip"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
@@ -23,7 +24,10 @@ export interface ImageTag {
   iconType?: UniversalIconType
   iconColor?: string
   styleType?: AppearanceStyleType
+  tooltip?: ImageTagTooltip
 }
+
+export type ImageTagTooltip = Pick<TooltipProps, "id" | "text">
 
 export interface ImageItem {
   url: string
@@ -167,7 +171,7 @@ const ImageCard = (props: ImageCardProps) => {
         <Modal
           open={showModal}
           title={props.modalAriaTitle || "Images"}
-          scrollable={true}
+          scrollable={false}
           onClose={() => setShowModal(!showModal)}
           className="image-card__overlay"
           modalClassNames="image-card__gallery-modal"

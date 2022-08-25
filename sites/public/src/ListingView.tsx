@@ -476,13 +476,13 @@ export const ListingView = (props: ListingProps) => {
       <div className="w-full md:w-2/3">
         <header className="image-card--leader">
           <ImageCard
-            // imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
-            images={[
-              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
-              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
-              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
-              { url: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)) },
-            ]}
+            images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
+              (imageUrl: string) => {
+                return {
+                  url: imageUrl,
+                }
+              }
+            )}
             tags={getImageCardTag(listing)}
             modalCloseLabel={t("t.backToListing")}
           />
