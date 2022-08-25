@@ -236,7 +236,7 @@ const SelectAndOrder = ({
           )}
 
           <Button
-            id="addPreferenceButton"
+            id={`add-${applicationSection}-button`}
             type="button"
             size={AppearanceSizeType.normal}
             onClick={() => setTableDrawer(true)}
