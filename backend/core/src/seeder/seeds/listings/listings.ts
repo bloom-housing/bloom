@@ -2,8 +2,7 @@ import { BaseEntity } from "typeorm"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { ApplicationMethodCreateDto } from "../../../application-methods/dto/application-method.dto"
 import { ListingPublishedCreateDto } from "../../../listings/dto/listing-published-create.dto"
-import { PreferenceCreateDto } from "../../../preferences/dto/preference-create.dto"
-import { ProgramCreateDto } from "../../../program/dto/program-create.dto"
+import { MultiselectQuestionCreateDto } from "../../../multiselect-question/dto/multiselect-question-create.dto"
 import { AssetCreateDto } from "../../../assets/dto/asset.dto"
 import { AmiChartCreateDto } from "../../../ami-charts/dto/ami-chart.dto"
 import { ListingEventCreateDto } from "../../../listings/dto/listing-event.dto"
@@ -20,7 +19,7 @@ export type ListingSeedType = Omit<
   | "applicationMethods"
   | "events"
   | "assets"
-  | "preferences"
+  | "multiselectQuestions"
   | "leasingAgents"
   | "showWaitlist"
   | "units"
@@ -32,8 +31,7 @@ export type ListingSeedType = Omit<
   jurisdictionName: string
 }
 
-export type PreferenceSeedType = PreferenceCreateDto
-export type ProgramSeedType = Omit<ProgramCreateDto, "listing">
+export type MultiselectQuestionSeedType = Omit<MultiselectQuestionCreateDto, "listing">
 
 export type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 
@@ -42,7 +40,7 @@ export interface ListingSeed {
   amiChart: AmiChartCreateDto
   units: Array<UnitSeedType>
   applicationMethods: Array<ApplicationMethodSeedType>
-  preferences: Array<PreferenceSeedType>
+  multiselectQuestions: Array<MultiselectQuestionSeedType>
   listingEvents: Array<ListingEventCreateDto>
   assets: Array<AssetDtoSeedType>
   listing: ListingSeedType

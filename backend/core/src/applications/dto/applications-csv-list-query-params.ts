@@ -23,7 +23,12 @@ export class ApplicationsCsvListQueryParams extends OmitType(PaginatedApplicatio
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  @Transform(
+    (value: string | boolean | undefined) => {
+      return value === "true" || value === true
+    },
+    { toClassOnly: true }
+  )
   includeDemographics?: boolean
 }
 

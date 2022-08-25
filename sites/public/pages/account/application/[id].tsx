@@ -84,14 +84,14 @@ export default () => {
               >
                 <div className="py-2">
                   {listing && (
-                    <Link
-                      href={`listing/id=${listing.id}`}
-                      as={`${origin}/listing/${listing.id}/${listing.urlSlug}`}
-                    >
-                      <a className="lined text-tiny">
+                    <span className="lined text-tiny">
+                      <Link
+                        href={`listing/id=${listing.id}`}
+                        as={`${origin}/listing/${listing.id}/${listing.urlSlug}`}
+                      >
                         {t("application.confirmation.viewOriginalListing")}
-                      </a>
-                    </Link>
+                      </Link>
+                    </span>
                   )}
                 </div>
               </FormCard>
@@ -120,9 +120,9 @@ export default () => {
 
                 <div className="form-card__pager hide-for-print">
                   <div className="form-card__pager-row py-6">
-                    <a href="#" className="lined text-tiny" onClick={() => window.print()}>
+                    <button className="lined text-tiny" onClick={() => window.print()}>
                       {t("application.confirmation.printCopy")}
-                    </a>
+                    </button>
                   </div>
                 </div>
               </FormCard>

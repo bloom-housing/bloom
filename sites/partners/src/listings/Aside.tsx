@@ -163,7 +163,10 @@ const Aside = ({
         )
       }
 
-      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
+      const lotteryResults = listing.events.find(
+        (event) => event.type === ListingEventType.lotteryResults
+      )
+      if (lotteryResults) {
         elements.push(
           <GridCell className="flex" key="btn-edit-lottery">
             <Button
@@ -174,10 +177,7 @@ const Aside = ({
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
               {t("listings.actions.resultsPosted")}{" "}
-              {dayjs(
-                listing.events.find((event) => event.type === ListingEventType.lotteryResults)
-                  ?.startTime
-              ).format("MMMM DD, YYYY")}
+              {dayjs(lotteryResults?.startTime).format("MMMM DD, YYYY")}
               <Icon size="medium" symbol="edit" className="ml-2" />
             </Button>
           </GridCell>

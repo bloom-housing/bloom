@@ -9,6 +9,7 @@ import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 import { classToClass } from "class-transformer"
+import dayjs from "dayjs"
 
 const tritonListing: ListingSeedType = {
   jurisdictionName: "Alameda",
@@ -79,8 +80,7 @@ const tritonListing: ListingSeedType = {
   leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
@@ -217,11 +217,12 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     > = {
       ...classToClass(tritonListing),
       name: "Test: Triton 2",
+      publishedAt: dayjs(new Date()).subtract(2.5, "hour"),
       assets: getDefaultAssets(),
-      listingPreferences: [
+      listingMultiselectQuestions: [
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
           }),
           ordinal: 2,
         },

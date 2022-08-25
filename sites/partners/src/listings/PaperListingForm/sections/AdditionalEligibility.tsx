@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
+import { t, GridSection, Textarea, GridCell } from "@bloom-housing/ui-components"
 import { fieldMessage } from "../../../../lib/helpers"
 import { useJurisdiction } from "../../../../lib/hooks"
 
@@ -32,12 +32,12 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
   return (
     <div>
       <GridSection
-        grid={false}
         separator
         title={t("listings.sections.additionalEligibilityTitle")}
         description={t("listings.sections.additionalEligibilitySubtext")}
+        columns={2}
       >
-        <GridSection columns={2}>
+        <GridCell>
           <Textarea
             label={t("listings.creditHistory")}
             name={"creditHistory"}
@@ -46,6 +46,8 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
             register={register}
             maxLength={2000}
           />
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("listings.rentalHistory")}
             name={"rentalHistory"}
@@ -54,8 +56,8 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
             register={register}
             maxLength={2000}
           />
-        </GridSection>
-        <GridSection columns={2}>
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("listings.criminalBackground")}
             name={"criminalBackground"}
@@ -64,6 +66,8 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
             register={register}
             maxLength={2000}
           />
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("listings.sections.rentalAssistanceTitle")}
             name={"rentalAssistance"}
@@ -80,7 +84,7 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
               onChange: () => clearErrors("rentalAssistance"),
             }}
           />
-        </GridSection>
+        </GridCell>
       </GridSection>
     </div>
   )
