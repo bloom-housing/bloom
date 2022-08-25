@@ -2,7 +2,6 @@ import React, { useMemo, useEffect } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import ReactDOM from "react-dom"
-import axe from "@axe-core/react"
 
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
@@ -35,6 +34,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const axe = require("@axe-core/react")
       void axe(React, ReactDOM, 1000)
     }
   }, [])
