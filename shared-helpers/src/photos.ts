@@ -28,9 +28,10 @@ export const imageUrlFromListing = (listing: Listing, size = 400) => {
     ?.filter((asset: Asset) => asset.label == CLOUDINARY_BUILDING_LABEL)
     ?.map((asset: Asset) => asset.fileId)
 
-  if (cloudinaryBuilding)
+  if (cloudinaryBuilding?.length > 0)
     return cloudinaryBuilding.map((imageId) => cloudinaryUrlFromId(imageId, size))
   else {
+    console.log("here")
     const assetStrs = imageAssets
       ?.filter((asset: Asset) => asset.label == "building")
       ?.map((asset) => asset.fileId)
