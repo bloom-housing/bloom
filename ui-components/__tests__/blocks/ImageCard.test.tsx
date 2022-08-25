@@ -1,8 +1,7 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
-import { ImageCard } from "blocks/ImageCard"
-import { t } from "helpers/translator"
-import { ApplicationStatusType } from "global/ApplicationStatusType"
+import { ImageCard } from "../../src/blocks/ImageCard"
+import { ApplicationStatusType, t } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 
