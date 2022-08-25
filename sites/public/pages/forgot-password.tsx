@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import { useRouter } from "next/router"
+import Head from "next/head"
 import { useForm } from "react-hook-form"
 import { t, setSiteAlertMessage, FormForgotPassword } from "@bloom-housing/ui-components"
 import {
@@ -10,6 +11,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
+import MetaTags from "../src/MetaTags"
 
 const ForgotPassword = () => {
   const router = useRouter()

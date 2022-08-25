@@ -3,7 +3,6 @@ import "@bloom-housing/ui-components/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import ReactDOM from "react-dom"
-import axe from "@axe-core/react"
 import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
   blankApplication,
@@ -67,6 +66,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const axe = require("@axe-core/react")
       void axe(React, ReactDOM, 1000)
     }
   }, [])
