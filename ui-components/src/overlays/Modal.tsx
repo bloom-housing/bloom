@@ -59,7 +59,6 @@ export const Modal = (props: ModalProps) => {
       onClose={props.onClose}
       className={props.className}
       backdrop={props.backdrop}
-      scrollable={props.scrollable}
       slim={props.slim}
       role={props.role ? props.role : "dialog"}
     >

@@ -171,7 +171,7 @@ const ImageCard = (props: ImageCardProps) => {
         <Modal
           open={showModal}
           title={props.modalAriaTitle || "Images"}
-          scrollable={false}
+          scrollable={true}
           onClose={() => setShowModal(!showModal)}
           className="image-card__overlay"
           modalClassNames="image-card__gallery-modal"
