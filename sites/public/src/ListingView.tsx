@@ -484,6 +484,8 @@ export const ListingView = (props: ListingProps) => {
               }
             )}
             tags={getImageCardTag(listing)}
+            moreImagesLabel={t("listings.moreImagesLabel")}
+            moreImagesDescription={t("listings.moreImagesAltDescription") + listing.name}
             modalCloseLabel={t("t.backToListing")}
           />
           <div className="py-3 mx-3">
