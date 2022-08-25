@@ -117,9 +117,9 @@ const ApplicationChooseLanguage = () => {
       </FormCard>
       <FormCard className="overflow-hidden">
         <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
+          <h1 className="form-card__title is-borderless">
             {t("application.chooseLanguage.letsGetStarted")}
-          </h2>
+          </h1>
         </div>
 
         {listing && (

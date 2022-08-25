@@ -53,10 +53,6 @@ function Dashboard(props: DashboardProps) {
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
-        <Head>
-          <title>{t("nav.myDashboard")}</title>
-        </Head>
-        <MetaTags title={t("nav.myDashboard")} description="" />
         {alertMessage && (
           <AlertBox className="" onClose={() => closeAlert()} type="success">
             {t(alertMessage)}
@@ -67,7 +63,7 @@ function Dashboard(props: DashboardProps) {
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
 
             <div className="flex flex-wrap relative">
-              <h1 aria-label={t("nav.myDashboard")} />
+              <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
               <DashBlocks>
                 <DashBlock
                   href="/account/applications"
