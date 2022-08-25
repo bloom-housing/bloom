@@ -1,41 +1,54 @@
 import React, { useMemo, useState } from "react"
 import Head from "next/head"
-import { AgGridReact } from "ag-grid-react"
 import dayjs from "dayjs"
 import {
   PageHeader,
-  AgPagination,
   Button,
   t,
   Drawer,
-  AG_PER_PAGE_OPTIONS,
   SiteAlert,
+  AgTable,
+  useAgTable,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import { useUserList, useListingsData } from "../../lib/hooks"
 import { FormUserManage } from "../../src/users/FormUserManage"
 
-const defaultColDef = {
-  resizable: true,
-  maxWidth: 300,
-}
-
 type UserDrawerValue = {
   type: "add" | "edit"
   user?: User
+}
+
+const getRolesDisplay = ({ value }) => {
+  const { isAdmin, isPartner } = value || {}
+
+  const roles = []
+
+  if (isAdmin) {
+    roles.push(t("users.administrator"))
+  }
+
+  if (isPartner) {
+    roles.push(t("users.partner"))
+  }
+
+  return roles.join(", ")
 }
 
 const Users = () => {
   /* Add user drawer */
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
 
-  /* Ag Grid column definitions */
+  const tableOptions = useAgTable()
+
   const columns = useMemo(() => {
     return [
       {
         headerName: t("t.name"),
         field: "",
+        sortable: true,
+        unSortIcon: true,
         valueGetter: ({ data }) => {
           const { firstName, lastName } = data
           return `${firstName} ${lastName}`
@@ -55,10 +68,23 @@ const Users = () => {
       {
         headerName: t("t.email"),
         field: "email",
+        sortable: true,
+        unSortIcon: true,
       },
       {
         headerName: t("t.listing"),
+        sortable: true,
+        unSortIcon: true,
         field: "leasingAgentInListings",
+        comparator: (valueA, valueB) => {
+          if (!valueA.length || !valueB.length) {
+            return !valueA.length ? 1 : -1
+          }
+          return valueA
+            .map((item) => item.name)
+            .join(", ")
+            .localeCompare(valueB.map((item) => item.name).join(", "))
+        },
         valueFormatter: ({ value }) => {
           return value.map((item) => item.name).join(", ")
         },
@@ -66,55 +92,53 @@ const Users = () => {
       {
         headerName: t("t.role"),
         field: "roles",
-        valueFormatter: ({ value }) => {
-          const { isAdmin, isPartner } = value || {}
-
-          const roles = []
-
-          if (isAdmin) {
-            roles.push(t("users.administrator"))
-          }
-
-          if (isPartner) {
-            roles.push(t("users.partner"))
-          }
-
-          return roles.join(", ")
+        sortable: true,
+        unSortIcon: true,
+        comparator: (valueA, valueB) => {
+          return getRolesDisplay({ value: valueA }).localeCompare(
+            getRolesDisplay({ value: valueB })
+          )
         },
+        valueFormatter: getRolesDisplay,
       },
       {
         headerName: t("listings.details.createdDate"),
         field: "createdAt",
+        sortable: true,
+        unSortIcon: true,
         valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YYYY"),
       },
       {
         headerName: t("listings.unit.status"),
         field: "confirmedAt",
+        sortable: true,
+        unSortIcon: true,
+        comparator: (valueA, valueB, _nodeA, _nodeB, isInverted) => {
+          let comparatorValue = 0
+          if (!valueA || !valueB) {
+            comparatorValue = valueA ? -1 : 1
+          } else {
+            comparatorValue = valueA < valueB ? -1 : 1
+          }
+          return isInverted ? Math.abs(comparatorValue) : comparatorValue
+        },
         valueFormatter: ({ value }) => (value ? t("users.confirmed") : t("users.unconfirmed")),
       },
     ]
   }, [])
 
-  /* Pagination */
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
-  const [currentPage, setCurrentPage] = useState<number>(1)
-
   /* Fetch user list */
-  const { data: userList } = useUserList({
-    page: currentPage,
-    limit: itemsPerPage,
+  const { data: userList, loading, error } = useUserList({
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
+    search: tableOptions.filter.filterValue,
   })
-
   /* Fetch listings */
   const { listingDtos } = useListingsData({
     limit: "all",
   })
 
-  const resetPagination = () => {
-    setCurrentPage(1)
-  }
-
-  if (!userList) return null
+  if (error) return "An error has occurred."
 
   return (
     <Layout>
@@ -131,9 +155,28 @@ const Users = () => {
 
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          <div className="ag-theme-alpine ag-theme-bloom">
-            <div className="flex justify-between">
-              <div className="w-56"></div>
+          <AgTable
+            id="users-table"
+            pagination={{
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
+            }}
+            config={{
+              columns,
+              totalItemsLabel: t("users.totalUsers"),
+            }}
+            data={{
+              items: userList?.items,
+              loading: loading,
+              totalItems: userList?.meta.totalItems,
+              totalPages: userList?.meta.totalPages,
+            }}
+            search={{
+              setSearch: tableOptions.filter.setFilterValue,
+            }}
+            headerContent={
               <div className="flex-row">
                 <Button
                   className="mx-1"
@@ -143,33 +186,8 @@ const Users = () => {
                   {t("users.addUser")}
                 </Button>
               </div>
-            </div>
-            <div className="applications-table mt-5">
-              <AgGridReact
-                columnDefs={columns}
-                defaultColDef={defaultColDef}
-                rowData={userList.items}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressPaginationPanel={true}
-                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
-
-              <AgPagination
-                totalItems={userList.meta.totalItems}
-                totalPages={userList.meta.totalPages}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                quantityLabel={t("users.totalUsers")}
-                setCurrentPage={setCurrentPage}
-                setItemsPerPage={setItemsPerPage}
-                onPerPageChange={resetPagination}
-                includeBorder={true}
-              />
-            </div>
-          </div>
+            }
+          />
         </article>
       </section>
 

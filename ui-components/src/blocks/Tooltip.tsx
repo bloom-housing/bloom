@@ -50,12 +50,12 @@ const Tooltip = ({ className, id, text, children }: React.PropsWithChildren<Tool
         style={position || {}}
         role="tooltip"
         id={id}
-        data-testid="tooltip-element"
+        data-test-id="tooltip-element"
       >
         {text}
       </div>
 
-      <div className="tooltip__children" data-testid="tooltip-children" ref={childrenWrapperRef}>
+      <div className="tooltip__children" data-test-id="tooltip-children" ref={childrenWrapperRef}>
         {children}
       </div>
     </div>

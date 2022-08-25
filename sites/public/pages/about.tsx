@@ -1,5 +1,5 @@
 import React from "react"
-import { MarkdownSection, t, PageHeader, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { t, PageHeader } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 
 export default function About() {

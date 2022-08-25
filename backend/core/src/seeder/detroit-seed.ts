@@ -119,7 +119,7 @@ async function seed() {
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
-  const listings = await seedListings(app, rolesRepo, jurisdictions)
+  await seedListings(app, rolesRepo, jurisdictions)
 
   let user1 = await userService.findByEmail("test@example.com")
   if (user1 === undefined) {

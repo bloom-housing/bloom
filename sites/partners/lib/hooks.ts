@@ -25,7 +25,9 @@ interface UseSingleApplicationDataProps extends PaginationProps {
   listingId: string
 }
 
-type UseUserListProps = PaginationProps
+type UseUserListProps = PaginationProps & {
+  search?: string
+}
 export interface ColumnOrder {
   orderBy: string
   orderDir: string
@@ -367,29 +369,32 @@ export function useReservedCommunityTypeList() {
   }
 }
 
-export function useUserList({ page, limit }: UseUserListProps) {
-  const queryParams = new URLSearchParams()
-  queryParams.append("page", page.toString())
-  queryParams.append("limit", limit.toString())
+export function useUserList({ page, limit, search = "" }: UseUserListProps) {
+  const params = {
+    page,
+    limit,
+    filter: [
+      {
+        isPortalUser: true,
+        $comparison: EnumUserFilterParamsComparison["="],
+      },
+    ],
+    search,
+  }
+
+  if (search?.length < 3) {
+    delete params.search
+  } else {
+    Object.assign(params, { search })
+  }
+
+  const paramsString = qs.stringify(params)
 
   const { userService } = useContext(AuthContext)
 
-  const fetcher = () =>
-    userService.list({
-      page,
-      limit,
-      filter: [
-        {
-          isPortalUser: true,
-          $comparison: EnumUserFilterParamsComparison["NA"],
-        },
-      ],
-    })
+  const fetcher = () => userService.list(params)
 
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/user/list?${queryParams.toString()}`,
-    fetcher
-  )
+  const { data, error } = useSWR(`${process.env.backendApiBase}/user/list?${paramsString}`, fetcher)
 
   return {
     data,

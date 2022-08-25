@@ -89,7 +89,7 @@ const FieldGroup = ({
           disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
-          data-testid={item.dataTestId ?? dataTestId}
+          data-test-id={item.dataTestId ?? dataTestId}
         />
         <label
           htmlFor={item.id}

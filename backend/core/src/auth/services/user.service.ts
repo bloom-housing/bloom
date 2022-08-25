@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, FindConditions, Repository } from "typeorm"
+import { Brackets, DeepPartial, FindConditions, Repository } from "typeorm"
 import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import dayjs from "dayjs"
@@ -108,11 +108,11 @@ export class UserService {
       PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
-    const distinctIDQB = this._getQb(false)
+    const distinctIDQB = this.userRepository.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
     distinctIDQB.orderBy("user.id")
-    const qb = this._getQb()
+    const qb = this.userRepository.getQb()
 
     if (params.filter) {
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
@@ -126,12 +126,30 @@ export class UserService {
         qb
       )
     }
+
+    if (params.search) {
+      distinctIDQB.andWhere(
+        new Brackets((subQb) => {
+          subQb.where("user.firstName ILIKE :search", { search: `%${params.search}%` })
+          subQb.orWhere("user.lastName ILIKE :search", { search: `%${params.search}%` })
+          subQb.orWhere("user.email ILIKE :search", { search: `%${params.search}%` })
+          subQb.orWhere("leasingAgentInListings.name ILIKE :search", {
+            search: `%${params.search}%`,
+          })
+          subQb.orWhere(
+            "CONCAT(user.firstName, ' ', user.lastName, ' ', user.email, ' ', leasingAgentInListings.name) ILIKE :search",
+            { search: `%${params.search}%` }
+          )
+        })
+      )
+    }
+
     const distinctIDResult = await paginate<User>(distinctIDQB, options)
 
     qb.andWhere("user.id IN (:...distinctIDs)", {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
-    const result = await qb.getMany()
+    const result = distinctIDResult.items.length ? await qb.getMany() : []
     /**
      * admin are the only ones that can access all users
      * so this will throw on the first user that isn't their own (non admin users can access themselves)
@@ -446,19 +464,6 @@ export class UserService {
     user.resetToken = null
     await this.userRepository.save(user)
     return this.authService.generateAccessToken(user)
-  }
-
-  private _getQb(withSelect = true) {
-    const qb = this.userRepository.createQueryBuilder("user")
-    if (withSelect) {
-      qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
-      qb.leftJoinAndSelect("user.roles", "user_roles")
-    } else {
-      qb.leftJoin("user.leasingAgentInListings", "listings")
-      qb.leftJoin("user.roles", "user_roles")
-    }
-
-    return qb
   }
 
   async invitePartnersPortalUser(dto: UserInviteDto, authContext: AuthContext) {

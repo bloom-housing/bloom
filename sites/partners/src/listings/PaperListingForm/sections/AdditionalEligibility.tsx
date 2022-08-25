@@ -1,13 +1,12 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
-import { fieldMessage } from "../../../../lib/helpers"
 
 const AdditionalEligibility = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors } = formMethods
+  const { register } = formMethods
 
   return (
     <div>

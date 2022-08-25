@@ -2,11 +2,11 @@ import React, { useContext } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
+import { getDetailFieldNumber, getDetailBoolean } from "./helpers"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)

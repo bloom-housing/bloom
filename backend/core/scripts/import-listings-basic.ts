@@ -107,7 +107,7 @@ function destructureYearBuilt(yearBuilt: string): number {
   }
 
   if (yearBuilt.includes("/")) {
-    const [year1, year2] = yearBuilt.split("/")
+    const [_year1, year2] = yearBuilt.split("/")
     return Number.parseInt(year2)
   }
 

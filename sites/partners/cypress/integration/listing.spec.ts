@@ -142,8 +142,8 @@ describe("Listing Management Tests", () => {
 
     // Add units
     cy.getByTestId("addUnitsButton").contains("Add unit group").click()
-    cy.get(`[data-testid="unitTypeCheckBox"]`).first().click()
-    cy.get(`[data-testid="openWaitListQuestion"]`).last().click()
+    cy.get(`[data-test-id="unitTypeCheckBox"]`).first().click()
+    cy.get(`[data-test-id="openWaitListQuestion"]`).last().click()
     cy.fillFormFields("listing", unitFormFieldsToType, unitFormFieldsToSelect)
 
     // Add AMI data

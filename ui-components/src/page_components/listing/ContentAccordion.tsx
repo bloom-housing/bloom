@@ -34,7 +34,7 @@ const ContentAccordion = (props: ContentAccordionProps) => {
         className={`w-full text-left ${props.disableAccordion && "cursor-default"}`}
         ref={buttonRef}
         aria-expanded={accordionOpen}
-        data-testid={"content-accordion-button"}
+        data-test-id={"content-accordion-button"}
       >
         <div
           className={`flex justify-between ${props.barClass} ${

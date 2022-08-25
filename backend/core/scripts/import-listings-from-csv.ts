@@ -111,7 +111,7 @@ async function main() {
     }
 
     // Add data about unitsSummaries
-    const unitsSummaries: UnitsSummaryImport[] = []
+    // const unitsSummaries: UnitsSummaryImport[] = []
     // TODO: Update with new unit groups model
     // if (listingFields["Number 0BR"]) {
     //   unitsSummaries.push({

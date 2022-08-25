@@ -51,7 +51,7 @@
     "@cypress/code-coverage": "^3.9.12",
     "@cypress/webpack-preprocessor": "^5.11.1",
     "@next/bundle-analyzer": "^10.1.0",
-    "@testing-library/dom": "^8.2.0",
+    "@testing-library/dom": "^7.28.1",
     "@testing-library/user-event": "^13.2.1",
     "@types/markdown-to-jsx": "^6.11.2",
     "@types/node": "^12.12.67",

@@ -115,13 +115,13 @@ async function main(): Promise<void> {
     }
   }
 
-  const listingsService = new client.ListingsService()
-  const listing = await listingsService.retrieve({ id: args.listingId })
+  // const listingsService = new client.ListingsService()
+  // const listing = await listingsService.retrieve({ id: args.listingId })
   // TODO: Update with new unit groups model
   // const listingUnitTypeNameSummaryMap = listing.unitsSummary.reduce((a, s) => {
   //   return { ...a, [s.unitType.name]: s }
   // }, {})
-  const listingUnitTypeNameSummaryMap = {}
+  // const listingUnitTypeNameSummaryMap = {}
 
   // Make sure that the listing has all specified mapped unit type names.
   /* const listingUnitTypeNames = new Set(Object.keys(listingUnitTypeNameSummaryMap))
