@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.12...@bloom-housing/ui-components@5.1.1-alpha.13) (2022-08-26)
+
+
+### Bug Fixes
+
+* add margin in contact section ([#2999](https://github.com/bloom-housing/bloom/issues/2999)) ([4acb49a](https://github.com/bloom-housing/bloom/commit/4acb49acf17ebabb7a0a34160d992cb5f63eeb02))
+
+
+
+
+
 ## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.11...@bloom-housing/ui-components@5.1.1-alpha.12) (2022-08-24)
 
 
