@@ -1,9 +1,19 @@
 import React from "react"
 import { AlertBox } from "./AlertBox"
+import AlertBoxDocumentation from "./AlertBox.docs.mdx"
+import { BADGES } from "../../.storybook/constants"
 
 export default {
-  title: "Notifications/Alert Box",
+  title: "Notifications/Alert Box  🚩",
+  id: "notifications/alert-box",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  component: AlertBox,
+  parameters: {
+    docs: {
+      page: AlertBoxDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 export const AlertBoxAlert = () => (
@@ -42,6 +52,12 @@ export const AlertBoxSuccessInvert = () => (
   </AlertBox>
 )
 
+export const AlertBoxWarn = () => (
+  <AlertBox onClose={() => {}} type="warn">
+    Some warning
+  </AlertBox>
+)
+
 export const AlertBoxBoundToLayoutWidth = () => (
   <AlertBox onClose={() => {}} type="success" boundToLayoutWidth>
     Some warning
@@ -53,3 +69,27 @@ export const AlertBoxNarrow = () => (
     Some warning
   </AlertBox>
 )
+
+export const styleOverrides = () => {
+  const cssVarsOverride = `
+    .alert-box-overrides .alert-box {
+      --background-color: var(--bloom-color-gray-400);
+      --horizontal-padding: var(--bloom-s3);
+      --font-weight: 400;
+      --close-icon-color: var(--bloom-color-gray-600);
+    }
+  `
+
+  return (
+    <>
+      <div className="alert-box-overrides">
+        <AlertBox onClose={() => {}}>Some warning</AlertBox>
+        <style>{cssVarsOverride}</style>
+      </div>
+
+      <p className="mt-12 font-semibold">Customized using the following variable overrides:</p>
+
+      <pre>{cssVarsOverride.replace(".page-header-overrides ", "")}</pre>
+    </>
+  )
+}
