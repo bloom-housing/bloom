@@ -345,8 +345,8 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 }}
                 onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+                data-test-id={`${menuLink.title}-${index}`}
                 role={"button"}
-                data-test-id={`${menuLink.title}`}
               >
                 {menuContent}
               </span>
