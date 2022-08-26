@@ -20,7 +20,7 @@ import {
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
-import { tableColumns, getLinkCellFormatter } from "../../../../../src/applications/helpers"
+import { getLinkCellFormatter } from "../../../../../src/applications/helpers"
 
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
@@ -41,7 +41,55 @@ const ApplicationsList = () => {
     listingId,
     page: 1,
     limit: 1,
+    view: "resolved",
   })
+
+  const columns = [
+    {
+      headerName: t("applications.duplicates.duplicateGroup"),
+      field: "id",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      cellRenderer: "formatLinkCell",
+      valueGetter: ({ data }) => {
+        if (!data?.applications?.length) return ""
+        const applicant = data.applications[0]?.applicant
+
+        return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
+      },
+    },
+    {
+      headerName: t("applications.duplicates.primaryApplicant"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      valueGetter: ({ data }) => {
+        if (!data?.applications?.length) return ""
+        const applicant = data.applications[0]?.applicant
+
+        return `${applicant.firstName} ${applicant.lastName}`
+      },
+    },
+    {
+      headerName: t("applications.pendingReview"),
+      field: "",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+      valueGetter: ({ data }) => {
+        return `${data?.applications?.length ?? 0}`
+      },
+    },
+    {
+      headerName: t("t.rule"),
+      field: "rule",
+      sortable: false,
+      filter: false,
+      pinned: "left",
+    },
+  ]
 
   return (
     <Layout>
@@ -97,14 +145,14 @@ const ApplicationsList = () => {
               }}
               config={{
                 gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
-                columns: tableColumns,
+                columns: columns,
                 totalItemsLabel: t("applications.totalApplications"),
               }}
               data={{
-                items: flaggedAppsData.items,
+                items: flaggedAppsData?.items ?? [],
                 loading: flaggedAppsLoading,
-                totalItems: flaggedAppsData.meta.totalItems,
-                totalPages: flaggedAppsData.meta.totalPages,
+                totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
               }}
               search={{
                 setSearch: tableOptions.filter.setFilterValue,

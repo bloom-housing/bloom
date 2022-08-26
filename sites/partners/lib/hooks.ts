@@ -27,6 +27,10 @@ interface UseSingleApplicationDataProps extends PaginationProps {
   listingId: string
 }
 
+interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataProps {
+  view?: string
+}
+
 type UseUserListProps = PaginationProps & {
   search?: string
 }
@@ -130,7 +134,8 @@ export function useFlaggedApplicationsList({
   listingId,
   page,
   limit,
-}: UseSingleApplicationDataProps) {
+  view,
+}: UseSingleFlaggedApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const params = {
@@ -147,34 +152,13 @@ export function useFlaggedApplicationsList({
     Object.assign(params, limit)
   }
 
+  if (view) {
+    queryParams.append("view", view)
+    Object.assign(params, { view })
+  }
   const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
-
-  const { data, error } = useSWR(endpoint, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
-export function useFlaggedApplicationsMeta(listingId: string) {
-  const { applicationFlaggedSetsService } = useContext(AuthContext)
-
-  const params = {
-    listingId,
-  }
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-
-  const endpoint = `${
-    process.env.backendApiBase
-  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
-
-  const fetcher = () => applicationFlaggedSetsService.meta(params)
 
   const { data, error } = useSWR(endpoint, fetcher)
 
@@ -224,6 +208,31 @@ export function useApplicationsData(
     appsMeta,
     appsLoading: !error && !data,
     appsError: error,
+  }
+}
+
+export function useFlaggedApplicationsMeta(listingId: string) {
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
+
+  const params = {
+    listingId,
+  }
+
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+
+  const endpoint = `${
+    process.env.backendApiBase
+  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
+
+  const fetcher = () => applicationFlaggedSetsService.meta(params)
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
   }
 }
 export function useSingleFlaggedApplication(afsId: string) {
@@ -461,7 +470,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, listingId])
+  }, [applicationsService, includeDemographics, listingId])
 
   return {
     onExport,
