@@ -21,12 +21,15 @@ const ProgressNavItem = (props: {
     }
   }
 
-  const srText =
-    props.section === props.currentPageSection ? (
-      <span className="sr-only">{t("progressNav.current")}</span>
-    ) : (
-      ""
-    )
+  const srTextBuilder = (): string | React.ReactFragment => {
+    if (props.section < props.currentPageSection) {
+      return <span className="sr-only">{t("progressNav.completed")}</span>
+    } else if (props.section > props.currentPageSection) {
+      return <span className="sr-only">{t("progressNav.notCompleted")}</span>
+    } else {
+      return ""
+    }
+  }
 
   return (
     <li className={`progress-nav__${props.style}-item ${bgColor}`}>
@@ -35,8 +38,7 @@ const ProgressNavItem = (props: {
         aria-current={bgColor === "is-active"}
         className={"progress-nav__item-container"}
       >
-        {props.label}
-        {srText}
+        {props.label} {srTextBuilder()}
       </span>
     </li>
   )
