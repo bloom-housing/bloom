@@ -6,11 +6,24 @@ import { useFlaggedApplicationsMeta } from "../../lib/hooks"
 type ApplicationsSideNavProps = {
   className?: string
   listingId: string
+  listingOpen?: boolean
 }
 
-const ApplicationsSideNav = ({ className, listingId }: ApplicationsSideNavProps) => {
+const ApplicationsSideNav = ({
+  className,
+  listingId,
+  listingOpen = false,
+}: ApplicationsSideNavProps) => {
   const router = useRouter()
   const { data } = useFlaggedApplicationsMeta(listingId)
+  const resolvedNav = listingOpen
+    ? []
+    : {
+        label: t("t.resolved"),
+        url: `/listings/${listingId}/applications/resolved`,
+        count: data?.totalResolvedCount || 0,
+      }
+
   const items = [
     {
       label: t("applications.allApplications"),
@@ -34,30 +47,27 @@ const ApplicationsSideNav = ({ className, listingId }: ApplicationsSideNavProps)
         }, */
       ],
     },
-    {
-      label: t("t.resolved"),
-      url: `/listings/${listingId}/applications/resolved`,
-      count: data?.totalResolvedCount || 0,
-    },
-  ].reduce((acc, curr) => {
-    // check which element is currently active
+  ]
+    .concat(resolvedNav)
+    .reduce((acc, curr) => {
+      // check which element is currently active
 
-    if (curr.url === router.asPath) {
-      Object.assign(curr, { current: true })
-    }
+      if (curr.url === router.asPath) {
+        Object.assign(curr, { current: true })
+      }
 
-    if (curr.childrenItems) {
-      curr.childrenItems.forEach((childItem) => {
-        if (childItem.url === router.asPath) {
-          Object.assign(childItem, { current: true })
-        }
-      })
-    }
+      if (curr.childrenItems) {
+        curr.childrenItems.forEach((childItem) => {
+          if (childItem.url === router.asPath) {
+            Object.assign(childItem, { current: true })
+          }
+        })
+      }
 
-    acc.push(curr)
+      acc.push(curr)
 
-    return acc
-  }, [])
+      return acc
+    }, [])
 
   return <SideNav className={className} navItems={items} />
 }

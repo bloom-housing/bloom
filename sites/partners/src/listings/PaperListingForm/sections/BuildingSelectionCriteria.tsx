@@ -116,7 +116,7 @@ const LotteryResults = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={listingPhotoUrl} />
+            <img src={listingPhotoUrl} alt={"Upload preview"} />
           </TableThumbnail>
         ),
       },

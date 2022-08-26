@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.8...@bloom-housing/ui-components@5.1.1-alpha.9) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
 ## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.7...@bloom-housing/ui-components@5.1.1-alpha.8) (2022-08-18)
 
 

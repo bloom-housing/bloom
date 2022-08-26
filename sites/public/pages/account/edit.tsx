@@ -282,9 +282,7 @@ const Edit = () => {
                     className={"mb-1"}
                   />
                   <div className="float-left text-tiny font-semibold">
-                    <Link href="/forgot-password">
-                      <a>{t("authentication.signIn.forgotPassword")}</a>
-                    </Link>
+                    <Link href="/forgot-password">{t("authentication.signIn.forgotPassword")}</Link>
                   </div>
                 </div>
 
