@@ -112,7 +112,7 @@ const ApplicationsList = () => {
       this.linkWithId.innerText = params.value
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
+        void router.push(`/application/${applicationId}/review`)
       })
     }
     getGui() {
