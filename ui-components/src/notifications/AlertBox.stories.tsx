@@ -40,6 +40,12 @@ export const AlertBoxNoticeInvert = () => (
   </AlertBox>
 )
 
+export const AlertBoxNoticeInvertLink = () => (
+  <AlertBox onClose={() => {}} type="notice" inverted>
+    Some warning <a href={""}>with link text</a>
+  </AlertBox>
+)
+
 export const AlertBoxSuccess = () => (
   <AlertBox onClose={() => {}} type="success">
     Some warning
