@@ -5,10 +5,10 @@ import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
-import { t } from "../helpers/translator"
 import { Icon, IconFillColors, UniversalIconType } from "../icons/Icon"
 import { Modal } from "../overlays/Modal"
 import { Button } from "../actions/Button"
+import { t } from "../helpers/translator"
 
 export interface StatusBarType {
   status?: ApplicationStatusType
@@ -53,6 +53,9 @@ export interface ImageCardProps {
   moreImagesLabel?: string
   /** The aria label of the clickable region of the images grid */
   moreImagesDescription?: string
+  strings?: {
+    defaultImageAltText?: string
+  }
 }
 
 /**
@@ -119,7 +122,11 @@ const ImageCard = (props: ImageCardProps) => {
           {props.imageUrl ? (
             <img
               src={props.imageUrl}
-              alt={props.description || t("listings.buildingImageAltText")}
+              alt={
+                props.description ??
+                props.strings?.defaultImageAltText ??
+                t("listings.buildingImageAltText")
+              }
             />
           ) : props.images && displayedImages ? (
             displayedImages.map((image, index) => (

@@ -38,6 +38,11 @@ export interface SiteHeaderProps {
   noticeMobile?: boolean
   siteHeaderWidth?: SiteHeaderWidth
   title?: string
+  strings?: {
+    close?: string
+    logoAriaLable?: string
+    menu?: string
+  }
 }
 
 const SiteHeader = (props: SiteHeaderProps) => {
@@ -240,7 +245,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   setMobileDrawer(false)
                 }
               }}
-              aria-label={t("t.close")}
+              aria-label={props.strings?.close ?? t("t.close")}
             >
               <Icon size="small" symbol="arrowForward" fill={"#ffffff"} className={"pl-2"} />
             </button>
@@ -377,7 +382,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
               }
             }}
           >
-            <div className={"pr-2 text-tiny text-primary uppercase"}>{t("t.menu")}</div>
+            <div className={"pr-2 text-tiny text-primary uppercase"}>
+              {props.strings?.menu ?? t("t.menu")}
+            </div>
             <Icon
               symbol={mobileMenu ? "closeSmall" : "hamburger"}
               size={"base"}
@@ -400,7 +407,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             className={"navbar-mobile-menu-button"}
             unstyled
           >
-            {mobileMenu ? t("t.close") : t("t.menu")}
+            {mobileMenu ? props.strings?.close ?? t("t.close") : props.strings?.menu ?? t("t.menu")}
           </Button>
         )}
       </>
@@ -415,7 +422,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             props.logoWidth && "navbar-custom-width"
           }`}
           href={props.homeURL}
-          aria-label={t("t.homePage")}
+          aria-label={props.strings?.logoAriaLable ?? t("t.homePage")}
         >
           <div className={`logo-content ${props.imageOnly && "navbar-image-only-container"}`}>
             <img
