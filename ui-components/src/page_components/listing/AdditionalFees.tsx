@@ -22,7 +22,7 @@ const AdditionalFees = ({
   footerContent,
   strings,
 }: AdditionalFeesProps) => {
-  if (!deposit && !applicationFee && !strings && footerContent?.length === 0) return <></>
+  if (!deposit && !applicationFee && (!footerContent || footerContent?.length === 0)) return <></>
   return (
     <div className="info-card bg-gray-100 border-0">
       <p className="info-card__title mb-2">{strings.sectionHeader}</p>
