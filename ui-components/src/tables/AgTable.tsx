@@ -37,6 +37,7 @@ export interface AgTableConfig {
   gridComponents?: { [p: string]: any }
   columns: (ColDef | ColGroupDef)[]
   totalItemsLabel: string
+  rowSelection?: boolean
 }
 
 export interface AgTableData {
@@ -88,7 +89,7 @@ const AgTable = ({
   sort: { setSort } = {},
   headerContent,
   data,
-  config: { gridComponents, columns, totalItemsLabel },
+  config: { gridComponents, columns, totalItemsLabel, rowSelection },
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
@@ -221,6 +222,8 @@ const AgTable = ({
               suppressPaginationPanel={true}
               paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
               suppressScrollOnNewData={true}
+              rowSelection={rowSelection ? "multiple" : undefined}
+              rowMultiSelectWithClick={rowSelection ? true : undefined}
             ></AgGridReact>
           </div>
         </LoadingOverlay>
