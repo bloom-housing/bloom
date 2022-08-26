@@ -59,7 +59,7 @@ const GetApplication = (props: ApplicationsProps) => {
       <h2 className="text-caps-underline">
         {props.strings?.howToApply ?? t("listings.apply.howToApply")}
       </h2>
-      {!props.applicationsOpen && props.strings?.applicationsOpenInFuture && (
+      {!props.applicationsOpen && (
         <p className="mb-5 text-gray-700">
           {props.strings?.applicationsOpenInFuture ??
             t("listings.apply.applicationWillBeAvailableOn", {
