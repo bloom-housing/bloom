@@ -196,17 +196,6 @@ const ApplicationsList = () => {
                   sort={{
                     setSort: tableOptions.sort.setSortOptions,
                   }}
-                  headerContent={
-                    <div className="flex-row">
-                      <Button
-                        className="mx-1"
-                        onClick={() => onExport()}
-                        loading={csvExportLoading}
-                      >
-                        {t("t.export")}
-                      </Button>
-                    </div>
-                  }
                 />
 
                 {/* <div className="flex flex-row justify-end">
