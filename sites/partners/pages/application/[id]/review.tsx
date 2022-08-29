@@ -163,62 +163,39 @@ const Flag = () => {
               {isSuccess ? "Updated" : t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
-          <div className="ag-theme-alpine ag-theme-bloom">
-            <p> original below</p>
-            <div className="applications-table mt-5">
-              <AgGridReact
-                columnDefs={columns}
-                rowData={data.applications}
-                gridOptions={gridOptions}
-                domLayout="autoHeight"
-                headerHeight={83}
-                rowHeight={58}
-                suppressScrollOnNewData={true}
-                rowSelection="multiple"
-                rowMultiSelectWithClick={true}
-                onGridReady={onGridReady}
-                onSelectionChanged={onSelectionChanged}
-              ></AgGridReact>
-              <StatusAside columns={1} actions={actions} />
-              <p> agTable below </p>
-              <AgTable
-                id="listings-table"
-                pagination={{
-                  perPage: tableOptions.pagination.itemsPerPage,
-                  setPerPage: tableOptions.pagination.setItemsPerPage,
-                  currentPage: tableOptions.pagination.currentPage,
-                  setCurrentPage: tableOptions.pagination.setCurrentPage,
-                  hidePagination: true,
-                }}
-                config={{
-                  columns,
-                  totalItemsLabel: t("listings.totalListings"),
-                  rowSelection: true,
-                }}
-                data={{
-                  items: data?.applications ?? [],
-                  loading: false,
-                  totalItems: data?.applications?.length ?? 0,
-                  totalPages: 1,
-                }}
-                search={{
-                  setSearch: tableOptions.filter.setFilterValue,
-                  showSearch: false,
-                }}
-                sort={{
-                  setSort: tableOptions.sort.setSortOptions,
-                }}
-                headerContent={
-                  <>
-                    <div className="flex-row">text here</div>
-                    <div className="flex-row">
-                      <StatusAside columns={1} actions={actions} />
-                    </div>
-                  </>
-                }
-              />
-            </div>
-          </div>
+          <AgTable
+            id="applications-table"
+            pagination={{
+              perPage: tableOptions.pagination.itemsPerPage,
+              setPerPage: tableOptions.pagination.setItemsPerPage,
+              currentPage: tableOptions.pagination.currentPage,
+              setCurrentPage: tableOptions.pagination.setCurrentPage,
+              hidePagination: true,
+            }}
+            config={{
+              columns,
+              totalItemsLabel: "",
+              rowSelection: true,
+            }}
+            data={{
+              items: data?.applications ?? [],
+              loading: false,
+              totalItems: data?.applications?.length ?? 0,
+              totalPages: 1,
+            }}
+            search={{
+              setSearch: tableOptions.filter.setFilterValue,
+              showSearch: false,
+            }}
+            headerContent={
+              <>
+                <div className="flex-row">text here</div>
+                <div className="flex-row">
+                  <StatusAside columns={1} actions={actions} />
+                </div>
+              </>
+            }
+          />
         </div>
       </section>
     </Layout>
