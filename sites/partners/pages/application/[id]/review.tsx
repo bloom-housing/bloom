@@ -1,8 +1,9 @@
 import React, { useMemo, useState, useCallback, useContext, useEffect } from "react"
 import Head from "next/head"
+import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
-import { GridApi, RowNode, GridOptions } from "ag-grid-community"
+import { GridApi, RowNode, GridOptions, Grid } from "ag-grid-community"
 
 import Layout from "../../../layouts"
 import {
@@ -17,6 +18,7 @@ import {
   GridCell,
   AgTable,
   useAgTable,
+  GridSection,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
@@ -38,7 +40,7 @@ const Flag = () => {
 
   const columns = useMemo(() => getCols(), [])
 
-  const { data, revalidate } = useSingleFlaggedApplication(flagsetId)
+  const { data, revalidate, loading } = useSingleFlaggedApplication(flagsetId)
 
   const { mutate, reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
 
@@ -108,21 +110,20 @@ const Flag = () => {
 
   const tableOptions = useAgTable()
 
-  const actions = [
-    <GridCell key="btn-submitNew">
-      <Button
-        type="button"
-        onClick={resolveFlag}
-        styleType={AppearanceStyleType.success}
-        disabled={selectedRows.length === 0}
-        loading={isLoading}
-      >
-        {t("flags.resolveFlag")}
-      </Button>
-    </GridCell>,
-  ]
-
   if (!data) return null
+
+  const getTitle = () => {
+    if (data.rule === "Email") {
+      return t(`flags.emailRule`, {
+        email: data?.applications[0].applicant.emailAddress,
+      })
+    } else if (data.rule === "Name and DOB") {
+      return t("flags.nameDobRule", {
+        name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
+      })
+    }
+    return ""
+  }
 
   return (
     <Layout>
@@ -132,27 +133,21 @@ const Flag = () => {
 
       <NavigationHeader
         className="relative"
-        title={
-          <>
-            <p className="font-sans font-semibold uppercase text-3xl">{data.rule}</p>
-          </>
-        }
+        title={<p className="font-sans font-semibold text-3xl">{getTitle()}</p>}
       />
 
-      <div className="border-t bg-white">
-        <StatusBar
-          backButton={
-            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
-              {t("t.back")}
-            </Button>
-          }
-          tagStyle={AppearanceStyleType.primary}
-          tagLabel={t("applications.pendingReview")}
-        />
-      </div>
+      <StatusBar
+        backButton={
+          <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
+            {t("t.back")}
+          </Button>
+        }
+        tagStyle={AppearanceStyleType.primary}
+        tagLabel={t("applications.pendingReview")}
+      />
 
-      <section>
-        <div className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4 w-full">
+      <section className="bg-primary-lighter py-5">
+        <div className="max-w-screen-xl px-5 mx-auto">
           {(isSuccess || isError) && (
             <AlertBox
               className="mb-5"
@@ -163,39 +158,48 @@ const Flag = () => {
               {isSuccess ? "Updated" : t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
-          <AgTable
-            id="applications-table"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-              hidePagination: true,
-            }}
-            config={{
-              columns,
-              totalItemsLabel: "",
-              rowSelection: true,
-            }}
-            data={{
-              items: data?.applications ?? [],
-              loading: false,
-              totalItems: data?.applications?.length ?? 0,
-              totalPages: 1,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-              showSearch: false,
-            }}
-            headerContent={
-              <>
-                <div className="flex-row">text here</div>
-                <div className="flex-row">
-                  <StatusAside columns={1} actions={actions} />
-                </div>
-              </>
-            }
-          />
+
+          <div className="flex md:flex-row flex-col flex-wrap">
+            <div className="md:w-9/12 md:pb-24 pb-8">
+              {t("flags.selectValidApplications")}
+              <AgTable
+                id="applications-table"
+                className="w-full m-h-0"
+                config={{
+                  columns,
+                  totalItemsLabel: t("applications.totalApplications"),
+                  rowSelection: true,
+                }}
+                data={{
+                  items: data?.applications ?? [],
+                  loading,
+                  totalItems: data?.applications?.length ?? 0,
+                  totalPages: 1,
+                }}
+                search={{
+                  setSearch: tableOptions.filter.setFilterValue,
+                  showSearch: false,
+                }}
+              />
+            </div>
+
+            <aside className="md:w-3/12 md:pl-6">
+              <GridSection columns={1} className={"w-full"}>
+                <Button
+                  styleType={AppearanceStyleType.primary}
+                  onClick={() => alert("save button")}
+                  dataTestId={"save-set-button"}
+                >
+                  {t("t.save")}
+                </Button>
+                {data.updatedAt && (
+                  <div className="border-t text-sm flex items-center justify-center md:mt-0 mt-4 pt-4">
+                    {t("t.lastUpdated")}: {dayjs(data.updatedAt).format("MMMM DD, YYYY")}
+                  </div>
+                )}
+              </GridSection>
+            </aside>
+          </div>
         </div>
       </section>
     </Layout>
