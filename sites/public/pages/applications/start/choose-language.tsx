@@ -1,8 +1,8 @@
 /*
-0.1 - Choose Language
-Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
-https://github.com/bloom-housing/bloom/issues/277
-*/
+ 0.1 - Choose Language
+ Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
+ https://github.com/bloom-housing/bloom/issues/277
+ */
 import axios from "axios"
 import { useRouter } from "next/router"
 import {
@@ -155,22 +155,20 @@ const ApplicationChooseLanguage = () => {
 
           {initialStateLoaded && !profile && (
             <>
-              <div className="form-card__pager-row primary px-4 border-t border-gray-450">
-                <h2 className="form-card__title w-full border-none pt-0 mt-0">
-                  {t("account.haveAnAccount")}
-                </h2>
-
-                <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
-
-                <div>
+              <ActionBlock
+                className="border-t border-gray-450"
+                header={t("account.haveAnAccount")}
+                subheader={t("application.chooseLanguage.signInSaveTime")}
+                background="primary-lighter"
+                actions={[
                   <LinkButton
                     href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
                     dataTestId={"app-choose-language-sign-in-button"}
                   >
                     {t("nav.signIn")}
-                  </LinkButton>
-                </div>
-              </div>
+                  </LinkButton>,
+                ]}
+              />
               <ActionBlock
                 className="border-t border-gray-450"
                 header={t("authentication.createAccount.noAccount")}
