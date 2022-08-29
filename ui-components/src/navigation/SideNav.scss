@@ -8,9 +8,11 @@
   --selection-parent-accent: var(--bloom-color-gray-450);
   --hover-link-color: var(--bloom-color-primary);
   --hover-background-color: var(--bloom-color-primary-lighter);
+  --background-color: var(--bloom-color-white);
 
   border: var(--border);
   border-radius: var(--border-radius);
+  background-color: var(--background-color);
 
   & > ul {
     & > li:first-child > a {

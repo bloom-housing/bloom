@@ -12,8 +12,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    minWidth: 250,
-    flex: 1,
     headerCheckboxSelection: true,
     checkboxSelection: true,
     cellRendererFramework: ({ data }) => {
@@ -28,7 +26,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
   },
   {
     headerName: t("application.name.lastName"),
@@ -37,7 +34,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
   },
   {
     headerName: t("applications.table.primaryDob"),
@@ -46,7 +42,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
     valueFormatter: ({ value }) => {
       if (!value) return ""
 
@@ -62,7 +57,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
   },
   {
     headerName: t("applications.table.applicationSubmissionDate"),
@@ -70,7 +64,6 @@ export const getCols = () => [
     sortable: false,
     filter: false,
     resizable: true,
-    flex: 1,
     valueGetter: ({ data }) => {
       if (!data?.submissionDate) return ""
 
@@ -90,7 +83,6 @@ export const getCols = () => [
     sortable: false,
     filter: false,
     resizable: true,
-    flex: 1,
     valueGetter: ({ data }) => {
       return data.reviewStatus === "flagged" ? t("applications.pendingReview") : data.status
     },

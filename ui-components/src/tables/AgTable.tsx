@@ -15,14 +15,15 @@ export interface ColumnOrder {
 }
 
 export interface AgTableProps {
-  id: string
+  className?: string
   config: AgTableConfig
   data: AgTableData
-  pagination: AgTablePagination
+  headerContent?: React.ReactNode
+  hidePagination?: boolean
+  id: string
+  pagination?: AgTablePagination
   search: AgTableSearch
   sort?: AgTableSort
-  headerContent?: React.ReactNode
-  className?: string
 }
 
 export interface AgTablePagination {
@@ -30,7 +31,6 @@ export interface AgTablePagination {
   setPerPage: React.Dispatch<React.SetStateAction<number>>
   currentPage: number
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
-  hidePagination?: boolean
 }
 
 export interface AgTableConfig {
@@ -92,6 +92,7 @@ const AgTable = ({
   headerContent,
   data,
   config: { gridComponents, columns, totalItemsLabel, rowSelection },
+  hidePagination,
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
@@ -147,7 +148,7 @@ const AgTable = ({
   const debounceFilter = useRef(
     debounce((value: string) => {
       setSearch(value)
-      pagination.setCurrentPage(1)
+      pagination?.setCurrentPage(1)
     }, 500)
   )
   useEffect(() => {
@@ -230,7 +231,7 @@ const AgTable = ({
           </div>
         </LoadingOverlay>
 
-        {pagination.hidePagination ? null : (
+        {!hidePagination && pagination && (
           <AgPagination
             totalItems={data.totalItems}
             totalPages={data.totalPages}

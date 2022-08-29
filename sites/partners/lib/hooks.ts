@@ -252,6 +252,7 @@ export function useSingleFlaggedApplication(afsId: string) {
     revalidate,
     data,
     error,
+    loading: !error && !data,
   }
 }
 

@@ -47,6 +47,7 @@
 .page-header__title {
   text-align: center;
   font-family: var(--text-font-family);
+  word-break: break-all;
 
   @media (min-width: $screen-md) {
     font-size: var(--title-font-size);
