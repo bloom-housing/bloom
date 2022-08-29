@@ -17,7 +17,6 @@ type NavigationHeaderTabs = {
   flagsQty?: number
   listingLabel: string
   applicationsLabel: string
-  flagsLabel: string
 }
 
 type NavigationHeaderTabsElement = {
@@ -59,15 +58,6 @@ const NavigationHeader = ({
         content: undefined,
       },
     ]
-
-    if (process.env.showDuplicates && typeof tabs?.flagsQty === "number") {
-      elements.push({
-        label: tabs.flagsLabel,
-        path: `/listings/${listingId}/flags`,
-        activePaths: [`/listings/${listingId}/flags`],
-        content: <>{tabs.flagsQty}</>,
-      })
-    }
 
     return elements
   }, [tabs, listingId])
