@@ -30,6 +30,7 @@ export interface AgTablePagination {
   setPerPage: React.Dispatch<React.SetStateAction<number>>
   currentPage: number
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+  hidePagination?: boolean
 }
 
 export interface AgTableConfig {
@@ -50,6 +51,7 @@ export interface AgTableData {
 
 export interface AgTableSearch {
   setSearch: React.Dispatch<React.SetStateAction<string>>
+  showSearch?: boolean
 }
 
 export interface AgTableSort {
@@ -85,7 +87,7 @@ const AgTable = ({
   id,
   className,
   pagination,
-  search: { setSearch },
+  search: { setSearch, showSearch = true },
   sort: { setSort } = {},
   headerContent,
   data,
@@ -186,7 +188,7 @@ const AgTable = ({
   return (
     <div className={`ag-theme-alpine ag-theme-bloom ${className || ""}`}>
       <div className="flex justify-between flex-col md:flex-row">
-        <div className="flex flex-wrap">
+        <div className={`flex flex-wrap ${showSearch ? "" : "hidden"}`}>
           <div className="md:mr-5 w-full md:w-56">
             <Field
               dataTestId="ag-search-input"
@@ -228,15 +230,17 @@ const AgTable = ({
           </div>
         </LoadingOverlay>
 
-        <AgPagination
-          totalItems={data.totalItems}
-          totalPages={data.totalPages}
-          currentPage={pagination.currentPage}
-          itemsPerPage={pagination.perPage}
-          quantityLabel={totalItemsLabel}
-          setCurrentPage={pagination.setCurrentPage}
-          setItemsPerPage={pagination.setPerPage}
-        />
+        {pagination.hidePagination ? null : (
+          <AgPagination
+            totalItems={data.totalItems}
+            totalPages={data.totalPages}
+            currentPage={pagination.currentPage}
+            itemsPerPage={pagination.perPage}
+            quantityLabel={totalItemsLabel}
+            setCurrentPage={pagination.setCurrentPage}
+            setItemsPerPage={pagination.setPerPage}
+          />
+        )}
       </div>
     </div>
   )

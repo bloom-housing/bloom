@@ -23,7 +23,7 @@ import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import { getCols } from "../../../src/flags/applicationsCols"
 
 import {
-  EnumApplicationFlaggedSetStatus,
+  // EnumApplicationFlaggedSetStatus,
   ApplicationFlaggedSet,
 } from "@bloom-housing/backend-core/types"
 
@@ -31,9 +31,7 @@ const Flag = () => {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const router = useRouter()
-  console.log("34:", router.query)
   const flagsetId = router.query.id as string
-  const listingId = ""
 
   const [gridApi, setGridApi] = useState<GridApi>(null)
   const [selectedRows, setSelectedRows] = useState<RowNode[]>([])
@@ -115,25 +113,17 @@ const Flag = () => {
       <Button
         type="button"
         onClick={resolveFlag}
-        styleType={
-          data?.status === EnumApplicationFlaggedSetStatus.resolved
-            ? AppearanceStyleType.secondary
-            : AppearanceStyleType.success
-        }
-        disabled={
-          selectedRows.length === 0 && data?.status !== EnumApplicationFlaggedSetStatus.resolved
-        }
+        styleType={AppearanceStyleType.success}
+        disabled={selectedRows.length === 0}
         loading={isLoading}
       >
-        {data?.status === EnumApplicationFlaggedSetStatus.resolved
-          ? t("account.settings.update")
-          : t("flags.resolveFlag")}
+        {t("flags.resolveFlag")}
       </Button>
     </GridCell>,
   ]
 
   if (!data) return null
-  console.log("108:", data)
+
   return (
     <Layout>
       <Head>
@@ -152,16 +142,12 @@ const Flag = () => {
       <div className="border-t bg-white">
         <StatusBar
           backButton={
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => router.push(`/listings/${listingId}/flags`)}
-            >
+            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
               {t("t.back")}
             </Button>
           }
           tagStyle={AppearanceStyleType.primary}
-          tagLabel={data.status === "flagged" ? t("applications.pendingReview") : data.status}
+          tagLabel={t("applications.pendingReview")}
         />
       </div>
 
@@ -178,7 +164,7 @@ const Flag = () => {
             </AlertBox>
           )}
           <div className="ag-theme-alpine ag-theme-bloom">
-            <StatusAside columns={1} actions={actions} />
+            <p> original below</p>
             <div className="applications-table mt-5">
               <AgGridReact
                 columnDefs={columns}
@@ -193,7 +179,7 @@ const Flag = () => {
                 onGridReady={onGridReady}
                 onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
-
+              <StatusAside columns={1} actions={actions} />
               <p> agTable below </p>
               <AgTable
                 id="listings-table"
@@ -202,6 +188,7 @@ const Flag = () => {
                   setPerPage: tableOptions.pagination.setItemsPerPage,
                   currentPage: tableOptions.pagination.currentPage,
                   setCurrentPage: tableOptions.pagination.setCurrentPage,
+                  hidePagination: true,
                 }}
                 config={{
                   columns,
@@ -216,16 +203,18 @@ const Flag = () => {
                 }}
                 search={{
                   setSearch: tableOptions.filter.setFilterValue,
+                  showSearch: false,
                 }}
                 sort={{
                   setSort: tableOptions.sort.setSortOptions,
                 }}
                 headerContent={
-                  <div className="flex-row">
-                    <Button className="mx-1" onClick={() => console.log("hello")}>
-                      {t("listings.addListing")}
-                    </Button>
-                  </div>
+                  <>
+                    <div className="flex-row">text here</div>
+                    <div className="flex-row">
+                      <StatusAside columns={1} actions={actions} />
+                    </div>
+                  </>
                 }
               />
             </div>

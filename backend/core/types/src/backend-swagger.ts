@@ -215,6 +215,8 @@ export class ApplicationFlaggedSetsService {
       limit?: number
       /**  */
       listingId: string
+      /**  */
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationFlaggedSetMeta> {
@@ -226,6 +228,7 @@ export class ApplicationFlaggedSetsService {
         page: params["page"],
         limit: params["limit"],
         listingId: params["listingId"],
+        view: params["view"],
       }
       let data = null
 
@@ -2701,6 +2704,9 @@ export interface Application {
   submissionType: ApplicationSubmissionType
 
   /**  */
+  reviewStatus?: FlaggedSetStatus
+
+  /**  */
   applicant: Applicant
 
   /**  */
@@ -2821,9 +2827,6 @@ export interface ApplicationFlaggedSet {
 
   /**  */
   resolvedTime?: Date
-
-  /**  */
-  status: EnumApplicationFlaggedSetStatus
 
   /**  */
   listingId: string
@@ -3296,6 +3299,9 @@ export interface ApplicationCreate {
   submissionType: ApplicationSubmissionType
 
   /**  */
+  reviewStatus?: FlaggedSetStatus
+
+  /**  */
   listing: Id
 
   /**  */
@@ -3617,6 +3623,9 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionType: ApplicationSubmissionType
+
+  /**  */
+  reviewStatus?: FlaggedSetStatus
 
   /**  */
   id?: string
@@ -6303,11 +6312,12 @@ export enum ApplicationSubmissionType {
   "paper" = "paper",
   "electronical" = "electronical",
 }
-export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
-export enum EnumApplicationFlaggedSetStatus {
+
+export enum FlaggedSetStatus {
   "flagged" = "flagged",
   "resolved" = "resolved",
 }
+export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum ApplicationMethodType {
   "Internal" = "Internal",
   "FileDownload" = "FileDownload",

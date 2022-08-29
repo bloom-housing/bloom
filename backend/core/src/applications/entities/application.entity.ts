@@ -43,6 +43,7 @@ import { ApplicationSubmissionType } from "../types/application-submission-type-
 import { IncomePeriod } from "../types/income-period-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { ApplicationProgram } from "./application-program.entity"
+import { FlaggedSetStatus } from "../../application-flagged-sets/types/flagged-set-status-enum"
 
 @Entity({ name: "applications" })
 @Unique(["listing", "confirmationCode"])
@@ -279,4 +280,10 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   confirmationCode: string
+
+  @Column({ enum: FlaggedSetStatus, default: FlaggedSetStatus.resolved })
+  @Expose()
+  @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: FlaggedSetStatus, enumName: "FlaggedSetStatus" })
+  reviewStatus?: FlaggedSetStatus | null
 }

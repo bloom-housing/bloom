@@ -39,6 +39,7 @@ export class ApplicationFlaggedSetsService {
     const innerQuery = this.afsRepository
       .createQueryBuilder("afs")
       .select("afs.id")
+      .leftJoin("afs.applications", "applications")
       .where("afs.listingId = :listingId", { listingId: queryParams.listingId })
       .orderBy("afs.id", "DESC")
       .offset((queryParams.page - 1) * queryParams.limit)
@@ -46,15 +47,23 @@ export class ApplicationFlaggedSetsService {
 
     if (queryParams.view) {
       if (queryParams.view === View.pending) {
-        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.flagged })
+        innerQuery.andWhere("applications.reviewStatus = :status", {
+          status: FlaggedSetStatus.flagged,
+        })
       } else if (queryParams.view === View.pendingNameAndDoB) {
-        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.flagged })
+        innerQuery.andWhere("applications.reviewStatus = :status", {
+          status: FlaggedSetStatus.flagged,
+        })
         innerQuery.andWhere("rule = :rule", { rule: Rule.nameAndDOB })
       } else if (queryParams.view === View.pendingEmail) {
-        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.flagged })
+        innerQuery.andWhere("applications.reviewStatus = :status", {
+          status: FlaggedSetStatus.flagged,
+        })
         innerQuery.andWhere("rule = :rule", { rule: Rule.email })
       } else if (queryParams.view === View.resolved) {
-        innerQuery.andWhere("status = :status", { status: FlaggedSetStatus.resolved })
+        innerQuery.andWhere("applications.reviewStatus = :status", {
+          status: FlaggedSetStatus.resolved,
+        })
       }
     }
 
@@ -63,7 +72,7 @@ export class ApplicationFlaggedSetsService {
       .select([
         "afs.id",
         "afs.rule",
-        "afs.status",
+        "applications.reviewStatus",
         "afs.listingId",
         "listing.id",
         "applications.id",
@@ -88,7 +97,7 @@ export class ApplicationFlaggedSetsService {
       totalPages: Math.ceil(count / queryParams.limit),
     }
 
-    innerQuery.andWhere("afs.status = :status", { status: FlaggedSetStatus.flagged })
+    innerQuery.andWhere("applications.reviewStatus = :status", { status: FlaggedSetStatus.flagged })
     const countTotalFlagged = await innerQuery.getCount()
 
     return {
@@ -128,7 +137,8 @@ export class ApplicationFlaggedSetsService {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       afs.resolvingUser = this.request.user as User
       afs.resolvedTime = new Date()
-      afs.status = FlaggedSetStatus.resolved
+      // TODO: update this so it resolves at the application level instead of the flagged set level
+      // afs.status = FlaggedSetStatus.resolved
       const appsToBeResolved = afs.applications.filter((afsApp) =>
         dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
       )
@@ -201,7 +211,8 @@ export class ApplicationFlaggedSetsService {
     const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
     const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
     for (const afs of afses) {
-      afs.status = FlaggedSetStatus.flagged
+      // // TODO: update this so it resolves at the application level instead of the flagged set level
+      // afs.status = FlaggedSetStatus.flagged
       afs.resolvedTime = null
       afs.resolvingUser = null
       const applicationIndex = afs.applications.findIndex(
@@ -266,7 +277,8 @@ export class ApplicationFlaggedSetsService {
           rule: rule,
           resolvedTime: null,
           resolvingUser: null,
-          status: FlaggedSetStatus.flagged,
+          // TODO: update this so it resolves at the application level instead of the flagged set level
+          // status: FlaggedSetStatus.flagged,
           applications: [newApplication, matchedApplication],
           listing: newApplication.listing,
         }
@@ -411,39 +423,53 @@ export class ApplicationFlaggedSetsService {
       status?: FlaggedSetStatus
       rule?: Rule
     }): SelectQueryBuilder<ApplicationFlaggedSet> => {
-      const query = this.afsRepository.createQueryBuilder("afs")
-      query
-        .select("SUM(1) as value")
-        .where("afs.listing_id = :listingId", { listingId: params.listingId })
+      const innerQuery = this.afsRepository
+        .createQueryBuilder("afs")
+        .select("afs.id")
+        .leftJoin("afs.applications", "applications")
+      innerQuery.where("afs.listing_id = :listingId", { listingId: params.listingId })
       if (params.status) {
-        query.andWhere("afs.status = :status", { status: params.status })
+        innerQuery.andWhere("applications.reviewStatus = :status", { status: params.status })
       }
       if (params.rule) {
-        query.andWhere("afs.rule = :rule", { rule: params.rule })
+        innerQuery.andWhere("afs.rule = :rule", { rule: params.rule })
       }
-      return query
+
+      const outerQuery = this.afsRepository
+        .createQueryBuilder("afs")
+        .select("SUM(1) as value")
+        .where(`afs.id IN (` + innerQuery.getQuery() + ")")
+        .setParameters(innerQuery.getParameters())
+
+      return outerQuery
     }
+
     const allQB = this.applicationsRepository.createQueryBuilder("afs")
     allQB.select("SUM(1) as value")
     allQB.where("afs.listing_id = :listingId", { listingId: queryParams.listingId })
+
     const resolvedQB = constructQuery({
       listingId: queryParams.listingId,
       status: FlaggedSetStatus.resolved,
     })
+
     const pendingQB = constructQuery({
       listingId: queryParams.listingId,
       status: FlaggedSetStatus.flagged,
     })
+
     const pendingNameQB = constructQuery({
       listingId: queryParams.listingId,
       status: FlaggedSetStatus.flagged,
       rule: Rule.nameAndDOB,
     })
+
     const pendingEmailQB = constructQuery({
       listingId: queryParams.listingId,
       status: FlaggedSetStatus.flagged,
       rule: Rule.email,
     })
+
     const [
       totalCount,
       totalResolvedCount,
@@ -455,6 +481,7 @@ export class ApplicationFlaggedSetsService {
         async (query) => await query.getRawOne()
       )
     )
+
     const res: ApplicationFlaggedSetMeta = {
       totalCount: totalCount.value,
       totalResolvedCount: totalResolvedCount.value,
@@ -462,6 +489,7 @@ export class ApplicationFlaggedSetsService {
       totalNamePendingCount: totalNamePendingCount.value,
       totalEmailPendingCount: totalEmailPendingCount.value,
     }
+
     return res
   }
 }

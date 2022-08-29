@@ -86,14 +86,13 @@ export const getCols = () => [
   },
   {
     headerName: t("applications.table.reviewStatus"),
-    field: "submissionDate",
+    field: "reviewStatus",
     sortable: false,
     filter: false,
     resizable: true,
     flex: 1,
-    valueGetter: ({ data, value }) => {
-      console.log("95:", { data })
-      return "TBD"
+    valueGetter: ({ data }) => {
+      return data.reviewStatus === "flagged" ? t("applications.pendingReview") : data.status
     },
   },
 ]

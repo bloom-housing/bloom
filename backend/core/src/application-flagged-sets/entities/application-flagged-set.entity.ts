@@ -32,11 +32,6 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Type(() => User)
   resolvingUser: User
 
-  @Column({ enum: FlaggedSetStatus, nullable: false, default: FlaggedSetStatus.flagged })
-  @Expose()
-  @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
-  status: FlaggedSetStatus
-
   @ManyToMany(() => Application)
   @JoinTable({ name: "application_flagged_set_applications_applications" })
   @Expose()

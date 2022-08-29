@@ -240,6 +240,9 @@ export const makeNewApplication = async (
   dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""}`
   dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""}`
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
+  if (pos === 0) {
+    dto.reviewStatus = FlaggedSetStatus.flagged
+  }
   const originalApp = await applicationRepo.save({
     ...dto,
     user,
@@ -253,6 +256,7 @@ export const makeNewApplication = async (
     dto.preferredUnit = unitTypes
     dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""} B`
     dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""} B`
+    dto.reviewStatus = FlaggedSetStatus.flagged
 
     const applicationFlaggedSetRepo = app.get<Repository<ApplicationFlaggedSet>>(
       getRepositoryToken(ApplicationFlaggedSet)
@@ -268,7 +272,6 @@ export const makeNewApplication = async (
       rule: Rule.email,
       resolvedTime: null,
       resolvingUser: null,
-      status: FlaggedSetStatus.flagged,
       applications: [newApp, originalApp],
       listing: listing,
     }
@@ -279,6 +282,7 @@ export const makeNewApplication = async (
     dto.listing = listing
     dto.preferredUnit = unitTypes
     dto.applicant.emailAddress = `${splitEmail[0]}${pos ?? ""}B@${splitEmail[1]}`
+    dto.reviewStatus = FlaggedSetStatus.flagged
 
     newApp = await applicationRepo.save({
       ...dto,
@@ -289,7 +293,6 @@ export const makeNewApplication = async (
       rule: Rule.nameAndDOB,
       resolvedTime: null,
       resolvingUser: null,
-      status: FlaggedSetStatus.flagged,
       applications: [newApp, originalApp],
       listing: listing,
     }
