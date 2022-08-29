@@ -1,0 +1,41 @@
+.card {
+  --border-radius: var(--bloom-rounded-lg);
+  --border-width: var(--bloom-border-1);
+  --border-color: var(--bloom-color-gray-450);
+  --background-color: var(--bloom-color-white);
+
+  --content-padding-block: var(--bloom-s7);
+  --content-padding-inline: var(--bloom-s16);
+
+  --header-padding-block: var(--bloom-s7) var(--bloom-s3);
+  --header-padding-inline: var(--content-padding-inline);
+
+  background-color: var(--background-color);
+  border: var(--border-width) solid var(--border-color);
+  overflow: hidden;
+  border-radius: var(--border-radius);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-block: var(--header-padding-block);
+  margin-inline: var(--header-padding-inline);
+}
+
+.card > *:not(:first-child), .card__footer > .card__section {
+  border-top: 1px solid var(--bloom-color-gray-450);
+}
+
+.card__section {
+  padding-block: var(--content-padding-block);
+  margin-inline: var(--content-padding-inline);
+}
+
+.card__footer, .card__footer > :not(.card__section) + .card__section {
+  border-top: none !important;
+}
