@@ -1,38 +1,25 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   AgTable,
   t,
-  Button,
-  SiteAlert,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  useSingleListingData,
-  useFlaggedApplicationsList,
-  useApplicationsExport,
-} from "../../../../../lib/hooks"
+import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
 
 const ApplicationsList = () => {
-  const { profile } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
   const type = router.query.type as string
-
-  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
-    listingId,
-    profile?.roles?.isAdmin ?? false
-  )
 
   const tableOptions = useAgTable()
 
@@ -146,7 +133,6 @@ const ApplicationsList = () => {
           flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
-          flagsLabel: t("nav.flags"),
         }}
         breadcrumbs={
           <Breadcrumbs>
@@ -160,13 +146,7 @@ const ApplicationsList = () => {
             </BreadcrumbLink>
           </Breadcrumbs>
         }
-      >
-        {csvExportError && (
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="alert" timeout={5000} dismissable />
-          </div>
-        )}
-      </NavigationHeader>
+      />
 
       <ListingStatusBar status={listingDto?.status} />
 
@@ -216,17 +196,6 @@ const ApplicationsList = () => {
                   sort={{
                     setSort: tableOptions.sort.setSortOptions,
                   }}
-                  headerContent={
-                    <div className="flex-row">
-                      <Button
-                        className="mx-1"
-                        onClick={() => onExport()}
-                        loading={csvExportLoading}
-                      >
-                        {t("t.export")}
-                      </Button>
-                    </div>
-                  }
                 />
 
                 {/* <div className="flex flex-row justify-end">
