@@ -7,29 +7,28 @@ export const tableColumns = [
     field: "",
     sortable: false,
     filter: false,
-    pinned: "left",
     cellRenderer: "formatLinkCell",
+    flex: 1,
+    minWidth: 200,
   },
   {
     headerName: t("applications.duplicates.primaryApplicant"),
     field: "",
     sortable: false,
     filter: false,
-    pinned: "left",
   },
   {
     headerName: t("t.rule"),
     field: "rule",
     sortable: false,
     filter: false,
-    pinned: "left",
   },
   {
     headerName: t("applications.pendingReview"),
     field: "",
     sortable: false,
     filter: false,
-    pinned: "right",
+    type: "rightAligned",
   },
 ]
 

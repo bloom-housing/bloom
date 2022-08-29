@@ -83,6 +83,8 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
+        minWidth: 200,
+        flex: 1,
       },
       {
         headerName: t("listings.listingStatusText"),
@@ -90,7 +92,6 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        flex: 1,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
         cellRenderer: "ApplicationsLink",
       },
