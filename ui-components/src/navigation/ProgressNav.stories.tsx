@@ -4,7 +4,7 @@ import { ProgressNav } from "./ProgressNav"
 import ProgressNavDocs from "./ProgressNav.docs.mdx"
 
 export default {
-  title: "Navigation/Progress Nav",
+  title: "Navigation/Progress Nav 🚩",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
   parameters: {
     docs: {
