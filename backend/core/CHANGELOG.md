@@ -3,6 +3,116 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.14...@bloom-housing/backend-core@5.1.1-alpha.15) (2022-08-24)
+
+
+### Bug Fixes
+
+* updates translation migration files ([#2995](https://github.com/bloom-housing/bloom/issues/2995)) ([09a63e1](https://github.com/bloom-housing/bloom/commit/09a63e1d281757467dadb2777662279cc97ba070))
+
+
+
+
+
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.13...@bloom-housing/backend-core@5.1.1-alpha.14) (2022-08-24)
+
+
+### Bug Fixes
+
+* styling precedence issues in preferences ([#2994](https://github.com/bloom-housing/bloom/issues/2994)) ([f043c38](https://github.com/bloom-housing/bloom/commit/f043c386009fab85039bb684618b4de1fc5493f7))
+
+
+
+
+
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.12...@bloom-housing/backend-core@5.1.1-alpha.13) (2022-08-24)
+
+
+### Features
+
+* adds the ability to manage preference for partner admins ([#2985](https://github.com/bloom-housing/bloom/issues/2985)) ([0f1f470](https://github.com/bloom-housing/bloom/commit/0f1f470f00f4ef95a2e35a921701339fb813f1f5))
+
+
+
+
+
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.11...@bloom-housing/backend-core@5.1.1-alpha.12) (2022-08-24)
+
+
+### Bug Fixes
+
+* update to fix some lingering migration issues ([#2991](https://github.com/bloom-housing/bloom/issues/2991)) ([3136c63](https://github.com/bloom-housing/bloom/commit/3136c637a63b1286dbccee67ec3e4a8f68e5d8e3))
+
+
+
+
+
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.10...@bloom-housing/backend-core@5.1.1-alpha.11) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.9...@bloom-housing/backend-core@5.1.1-alpha.10) (2022-08-23)
+
+
+### Bug Fixes
+
+* Migration hotfix 2 ([#2990](https://github.com/bloom-housing/bloom/issues/2990)) ([a213238](https://github.com/bloom-housing/bloom/commit/a213238944cd23c36f55264c2a4a489f79d99702))
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.8...@bloom-housing/backend-core@5.1.1-alpha.9) (2022-08-23)
+
+
+### Bug Fixes
+
+* update to get migration to run on dev ([#2987](https://github.com/bloom-housing/bloom/issues/2987)) ([f52ff59](https://github.com/bloom-housing/bloom/commit/f52ff59bbe345fab7b45656fd27dcdb11cc79d57))
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.7...@bloom-housing/backend-core@5.1.1-alpha.8) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.6...@bloom-housing/backend-core@5.1.1-alpha.7) (2022-08-22)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.5...@bloom-housing/backend-core@5.1.1-alpha.6) (2022-08-18)
+
+
+### Bug Fixes
+
+* update to resolve issue with migration ([#2963](https://github.com/bloom-housing/bloom/issues/2963)) ([3282be8](https://github.com/bloom-housing/bloom/commit/3282be89c41a7a5111912cbd27495e4489d3392d))
+
+
+
+
+
 ## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.4...@bloom-housing/backend-core@5.1.1-alpha.5) (2022-08-16)
 
 

@@ -3,6 +3,174 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.28...@bloom-housing/partners@5.1.1-alpha.29) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.27...@bloom-housing/partners@5.1.1-alpha.28) (2022-08-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.26...@bloom-housing/partners@5.1.1-alpha.27) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.25...@bloom-housing/partners@5.1.1-alpha.26) (2022-08-24)
+
+
+### Bug Fixes
+
+* styling precedence issues in preferences ([#2994](https://github.com/bloom-housing/bloom/issues/2994)) ([f043c38](https://github.com/bloom-housing/bloom/commit/f043c386009fab85039bb684618b4de1fc5493f7))
+
+
+
+
+
+## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.24...@bloom-housing/partners@5.1.1-alpha.25) (2022-08-24)
+
+
+### Features
+
+* adds the ability to manage preference for partner admins ([#2985](https://github.com/bloom-housing/bloom/issues/2985)) ([0f1f470](https://github.com/bloom-housing/bloom/commit/0f1f470f00f4ef95a2e35a921701339fb813f1f5))
+
+
+
+
+
+## [5.1.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.23...@bloom-housing/partners@5.1.1-alpha.24) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.22...@bloom-housing/partners@5.1.1-alpha.23) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.21...@bloom-housing/partners@5.1.1-alpha.22) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.20...@bloom-housing/partners@5.1.1-alpha.21) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.19...@bloom-housing/partners@5.1.1-alpha.20) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.18...@bloom-housing/partners@5.1.1-alpha.19) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.17...@bloom-housing/partners@5.1.1-alpha.18) (2022-08-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.16...@bloom-housing/partners@5.1.1-alpha.17) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
+## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.15...@bloom-housing/partners@5.1.1-alpha.16) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.14...@bloom-housing/partners@5.1.1-alpha.15) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.13...@bloom-housing/partners@5.1.1-alpha.14) (2022-08-18)
+
+
+### Features
+
+* **lottery:** add edit lottery results functionality ([#2954](https://github.com/bloom-housing/bloom/issues/2954)) ([e6cb314](https://github.com/bloom-housing/bloom/commit/e6cb314e28a0e80fecbe3e6085737ce4f93eb4ef))
+
+
+
+
+
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.12...@bloom-housing/partners@5.1.1-alpha.13) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.11...@bloom-housing/partners@5.1.1-alpha.12) (2022-08-18)
+
+
+### Bug Fixes
+
+* **paperlistform:** adjust padding on add listing form ([#2945](https://github.com/bloom-housing/bloom/issues/2945)) ([b8b8846](https://github.com/bloom-housing/bloom/commit/b8b8846b6bd8c2b3e830dbf471a3a186efd9e773))
+
+
+
+
+
 ## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.10...@bloom-housing/partners@5.1.1-alpha.11) (2022-08-16)
 
 **Note:** Version bump only for package @bloom-housing/partners

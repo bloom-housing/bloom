@@ -1,7 +1,5 @@
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
-  Preference,
-  Program,
   ListingStatus,
   ListingApplicationAddressType,
   Unit,
@@ -10,6 +8,7 @@ import {
   ListingEvent,
   PaperApplication,
   PaperApplicationCreate,
+  MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
@@ -129,8 +128,7 @@ export const formDefaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   programRules: "",
   rentalAssistance: null,
   rentalHistory: "",
@@ -195,8 +193,8 @@ export type TempEvent = ListingEvent & {
 export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
-  preferences: Preference[]
-  programs: Program[]
+  preferences: MultiselectQuestion[]
+  programs: MultiselectQuestion[]
   units: TempUnit[]
   openHouseEvents: TempEvent[]
   profile: User

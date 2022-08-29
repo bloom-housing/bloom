@@ -15,13 +15,23 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationSummary = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("summary")
-  const currentPageSection = 5
+  let currentPageSection = 4
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+    currentPageSection += 1
 
   /* Form Handler */
   const { handleSubmit } = useForm()
@@ -60,7 +70,10 @@ const ApplicationSummary = () => {
         <FormSummaryDetails
           application={application}
           listing={listing}
-          hidePreferences={listing?.listingPreferences.length === 0}
+          hidePreferences={
+            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+          }
+          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
           editMode
         />
 

@@ -4,7 +4,7 @@ import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
 import { Listing } from "./entities/listing.entity"
 import { Unit } from "../units/entities/unit.entity"
-import { Preference } from "../preferences/entities/preference.entity"
+import { MultiselectQuestion } from "../multiselect-question/entities/multiselect-question.entity"
 import { AuthModule } from "../auth/auth.module"
 import { User } from "../auth/entities/user.entity"
 import { TranslationsModule } from "../translations/translations.module"
@@ -18,7 +18,7 @@ import { ListingUtilities } from "./entities/listing-utilities.entity"
   imports: [
     TypeOrmModule.forFeature([
       Listing,
-      Preference,
+      MultiselectQuestion,
       Unit,
       User,
       AmiChart,
