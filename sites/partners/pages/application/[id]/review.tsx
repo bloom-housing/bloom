@@ -20,7 +20,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
-import { getCols } from "../../../src/flags/applicationsCols"
+import { getCols } from "./applicationsCols"
 
 import {
   // EnumApplicationFlaggedSetStatus,
