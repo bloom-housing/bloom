@@ -13,6 +13,7 @@ import {
   FormCard,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -130,13 +131,14 @@ const ApplicationChooseLanguage = () => {
         )}
 
         <div className="form-card__pager">
-          <div className="form-card__pager-row primary px-4">
+          <div className="form-card__pager-row px-4">
             {listing?.applicationConfig.languages.length > 1 && (
               <>
-                <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
-                  {t("application.chooseLanguage.chooseYourLanguage")}
-                </h3>
-
+                <div className="w-full">
+                  <Heading style="sidebarHeader">
+                    {t("application.chooseLanguage.chooseYourLanguage")}
+                  </Heading>
+                </div>
                 {listing.applicationConfig.languages.map((lang, index) => (
                   <Button
                     className="language-select mx-1 mb-2"
