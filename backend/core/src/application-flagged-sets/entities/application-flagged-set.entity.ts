@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
-import { IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDate, IsEnum, IsOptional, IsString, ValidateNested, IsBoolean } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Application } from "../../applications/entities/application.entity"
@@ -43,4 +43,9 @@ export class ApplicationFlaggedSet extends AbstractEntity {
 
   @Column()
   listingId: string
+
+  @Column({ type: "bool", nullable: false, default: false })
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  showConfirmationAlert: boolean
 }

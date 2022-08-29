@@ -2830,6 +2830,9 @@ export interface ApplicationFlaggedSet {
 
   /**  */
   listingId: string
+
+  /**  */
+  showConfirmationAlert: boolean
 }
 
 export interface ApplicationFlaggedSetPaginationMeta {

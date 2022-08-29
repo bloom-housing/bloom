@@ -4,8 +4,7 @@ import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
 import { GridApi, RowNode, GridOptions, Grid } from "ag-grid-community"
-
-import Layout from "../../../layouts"
+import { useForm, useWatch, useFormContext } from "react-hook-form"
 import {
   t,
   Button,
@@ -19,9 +18,13 @@ import {
   AgTable,
   useAgTable,
   GridSection,
+  Modal,
+  AppearanceBorderType,
+  Field,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
+import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
 
 import {
@@ -36,13 +39,17 @@ const Flag = () => {
   const flagsetId = router.query.id as string
 
   const [gridApi, setGridApi] = useState<GridApi>(null)
+  const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [selectedRows, setSelectedRows] = useState<RowNode[]>([])
 
   const columns = useMemo(() => getCols(), [])
 
-  const { data, revalidate, loading } = useSingleFlaggedApplication(flagsetId)
+  const { data, revalidate } = useSingleFlaggedApplication(flagsetId)
 
   const { mutate, reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, errors, trigger, getValues, setValue, control } = useForm()
 
   const gridOptions: GridOptions = {
     getRowNodeId: (data) => data.id,
@@ -125,6 +132,8 @@ const Flag = () => {
     return ""
   }
 
+  const numberConfirmedApps = data.applications.filter((app) => !app.markedAsDuplicate).length
+
   return (
     <Layout>
       <Head>
@@ -155,13 +164,27 @@ const Flag = () => {
               closeable
               onClose={() => reset()}
             >
-              {isSuccess ? "Updated" : t("account.settings.alerts.genericError")}
+              {isSuccess ? t("t.updated") : t("account.settings.alerts.genericError")}
+            </AlertBox>
+          )}
+          {data.showConfirmationAlert && (
+            <AlertBox
+              className="md:w-9/12 mb-5"
+              type={"success"}
+              closeable
+              onClose={() => {
+                // todo: call backend, update this flag, endpoint does not yet exist
+              }}
+            >
+              {numberConfirmedApps > 1
+                ? t("flags.confirmationAlertPlural", { amount: numberConfirmedApps })
+                : t("flags.confirmationAlertSingular", { amount: numberConfirmedApps })}
             </AlertBox>
           )}
 
           <div className="flex md:flex-row flex-col flex-wrap">
             <div className="md:w-9/12 md:pb-24 pb-8">
-              {t("flags.selectValidApplications")}
+              <p className={"font-semibold"}>{t("flags.selectValidApplications")}</p>
               <AgTable
                 id="applications-table"
                 className="w-full m-h-0"
@@ -172,7 +195,7 @@ const Flag = () => {
                 }}
                 data={{
                   items: data?.applications ?? [],
-                  loading,
+                  loading: isLoading,
                   totalItems: data?.applications?.length ?? 0,
                   totalPages: 1,
                 }}
@@ -187,7 +210,7 @@ const Flag = () => {
               <GridSection columns={1} className={"w-full"}>
                 <Button
                   styleType={AppearanceStyleType.primary}
-                  onClick={() => alert("save button")}
+                  onClick={() => setSaveModalOpen(true)}
                   dataTestId={"save-set-button"}
                 >
                   {t("t.save")}
@@ -202,6 +225,61 @@ const Flag = () => {
           </div>
         </div>
       </section>
+      <Modal
+        open={!!saveModalOpen}
+        title={t("flags.updateStatus")}
+        ariaDescription={t("listings.closeThisListing")}
+        onClose={() => setSaveModalOpen(false)}
+        actions={[
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.primary}
+            onClick={() => {
+              setSaveModalOpen(false)
+            }}
+          >
+            {t("t.save")}
+          </Button>,
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setSaveModalOpen(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        <Field
+          id="setStatus.pending"
+          name="setStatus"
+          className="m-0"
+          type="radio"
+          label={t("applications.pendingReview")}
+          register={register}
+          inputProps={{
+            value: "pending",
+            defaultChecked: true, // todo: what is the flag for seeing if it is resolved?
+          }}
+        />
+        <p className={"mb-6 ml-8 text-sm text-gray-800"}>{t("flags.pendingDescription")}</p>
+
+        <Field
+          id="setStatus.resolved"
+          name="setStatus"
+          className="m-0 border-t pt-6"
+          type="radio"
+          label={t("t.resolved")}
+          register={register}
+          inputProps={{
+            value: "resolved",
+            defaultChecked: false, // todo: what is the flag for seeing if it is resolved?
+          }}
+        />
+        <p className={"ml-8 text-sm text-gray-800"}>{t("flags.resolvedDescription")}</p>
+      </Modal>
     </Layout>
   )
 }
