@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.26...@bloom-housing/public@5.1.1-alpha.27) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.25...@bloom-housing/public@5.1.1-alpha.26) (2022-08-26)
 
 **Note:** Version bump only for package @bloom-housing/public
