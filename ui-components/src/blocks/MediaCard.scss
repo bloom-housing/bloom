@@ -28,6 +28,9 @@
     left: calc(50% - 1.5rem);
   }
 }
+.media-card__header-container {
+  width: 100%;
+}
 
 .media-card__body {
   padding: var(--card-padding);
