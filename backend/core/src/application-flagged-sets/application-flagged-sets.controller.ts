@@ -22,6 +22,7 @@ import { ApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
 import { PaginatedApplicationFlaggedSetDto } from "./dto/paginated-application-flagged-set.dto"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
+import { ApplicationFlaggedSetsCronjobConsumer } from "./application-flagged-sets-cronjob-consumer"
 import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 
 @Controller("/applicationFlaggedSets")
@@ -35,7 +36,10 @@ import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dt
   })
 )
 export class ApplicationFlaggedSetsController {
-  constructor(private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService) {}
+  constructor(
+    private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
+    private readonly afsProcessingService: ApplicationFlaggedSetsCronjobConsumer
+  ) {}
 
   @Get("meta")
   @ApiOperation({ summary: "Meta information for application flagged sets", operationId: "meta" })
@@ -72,5 +76,12 @@ export class ApplicationFlaggedSetsController {
     @Body() dto: ApplicationFlaggedSetResolveDto
   ): Promise<ApplicationFlaggedSetDto> {
     return mapTo(ApplicationFlaggedSetDto, await this.applicationFlaggedSetsService.resolve(dto))
+  }
+
+  @Post("process")
+  @ApiOperation({ summary: "Trigger the duplicate check process", operationId: "process" })
+  async process(): Promise<string> {
+    await this.afsProcessingService.process()
+    return "success"
   }
 }
