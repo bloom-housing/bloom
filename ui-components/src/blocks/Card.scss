@@ -4,11 +4,21 @@
   --border-color: var(--bloom-color-gray-450);
   --background-color: var(--bloom-color-white);
 
-  --content-padding-block: var(--bloom-s7);
-  --content-padding-inline: var(--bloom-s16);
+  --content-padding-block: var(--bloom-s8);
+  --content-padding-inline-desktop: var(--bloom-s16);
+  --content-padding-inline-mobile: var(--bloom-s4);
+  --content-padding-inline: var(--content-padding-inline-desktop);
 
-  --header-padding-block: var(--bloom-s7) var(--bloom-s3);
-  --header-padding-inline: var(--content-padding-inline);
+  --header-padding-block: var(--bloom-s8) var(--bloom-s3);
+  --header-padding-inline-desktop: var(--content-padding-inline-desktop);
+  --header-padding-inline-mobile: var(--content-padding-inline-mobile);
+  --header-padding-inline: var(--header-padding-inline-desktop);
+  --header-description-margin: var(--bloom-s3);
+
+  @media (max-width: $screen-sm) {
+    --content-padding-inline: var(--content-padding-inline-mobile);
+    --header-padding-inline: var(--header-padding-inline-mobile);
+  }
 
   background-color: var(--background-color);
   border: var(--border-width) solid var(--border-color);
@@ -20,14 +30,30 @@
 }
 
 .card__header {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
   padding-block: var(--header-padding-block);
   margin-inline: var(--header-padding-inline);
+
+  border-bottom: 1px solid var(--bloom-color-gray-450);
+
+  &.is-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--bloom-s7);
+  }
+
+  p {
+    margin-block: var(--header-description-margin);
+    font-size: var(--bloom-font-size-base);
+  }
 }
 
-.card > *:not(:first-child), .card__footer > .card__section {
+.card__header + .card__footer {
+  margin-block-start: var(--content-padding-block);
+}
+
+.card > *:nth-child(n + 3),
+.card__footer > .card__section {
   border-top: 1px solid var(--bloom-color-gray-450);
 }
 
@@ -36,6 +62,7 @@
   margin-inline: var(--content-padding-inline);
 }
 
-.card__footer, .card__footer > :not(.card__section) + .card__section {
+.card__footer,
+.card__footer > :not(.card__section) + .card__section {
   border-top: none !important;
 }
