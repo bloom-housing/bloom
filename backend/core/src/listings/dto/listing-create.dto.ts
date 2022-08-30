@@ -39,6 +39,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "listingMultiselectQuestions",
   "publishedAt",
   "closedAt",
+  "afsLastRunAt",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
