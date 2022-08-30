@@ -41,8 +41,8 @@
     flex-direction: row;
     align-items: unset;
   }
-  :last-child {
-    @apply pb-0;
+  a:last-child {
+    padding-bottom: 0;
   }
 }
 
