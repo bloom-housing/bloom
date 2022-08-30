@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.16...@bloom-housing/backend-core@5.1.1-alpha.17) (2022-08-30)
+
+
+### Bug Fixes
+
+* **login:** too many login attempts fix ([#2988](https://github.com/bloom-housing/bloom/issues/2988)) ([4323e1c](https://github.com/bloom-housing/bloom/commit/4323e1c4cee18d8ee805378b32ae35826013d5c4))
+
+
+
+
+
 ## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@5.1.1-alpha.15...@bloom-housing/backend-core@5.1.1-alpha.16) (2022-08-30)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
