@@ -427,6 +427,17 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
+  const additionalInformationCard = (cardTitle: string, cardData: string) => {
+    return (
+      <div className="info-card">
+        <h3 className="text-serif-lg">{cardTitle}</h3>
+        <p className="text-sm text-gray-700 break-words">
+          <Markdown children={cardData} options={{ disableParsingRawHTML: true }} />
+        </p>
+      </div>
+    )
+  }
+
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
 
   const getAccessibilityFeatures = () => {
@@ -879,39 +890,18 @@ export const ListingView = (props: ListingProps) => {
             subtitle={t("listings.sections.additionalInformationSubtitle")}
           >
             <div className="listing-detail-panel">
-              {listing.requiredDocuments && (
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.requiredDocuments}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
-                </div>
-              )}
-              {listing.programRules && (
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.programRules}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
-                </div>
-              )}
-              {listing.specialNotes && (
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.specialNotes")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.specialNotes}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
-                </div>
-              )}
+              {listing.requiredDocuments &&
+                additionalInformationCard(
+                  t("listings.requiredDocuments"),
+                  listing.requiredDocuments
+                )}
+              {listing.programRules &&
+                additionalInformationCard(
+                  t("listings.importantProgramRules"),
+                  listing.programRules
+                )}
+              {listing.specialNotes &&
+                additionalInformationCard(t("listings.specialNotes"), listing.specialNotes)}
             </div>
           </ListingDetailItem>
         )}

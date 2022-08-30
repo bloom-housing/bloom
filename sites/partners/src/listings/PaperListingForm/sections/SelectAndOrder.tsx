@@ -35,6 +35,7 @@ type SelectAndOrderProps = {
   }
   formKey: string
   applicationSection: ApplicationSection
+  subNote?: string
 }
 
 const SelectAndOrder = ({
@@ -49,6 +50,7 @@ const SelectAndOrder = ({
   drawerButtonText,
   dataFetcher,
   formKey,
+  subNote,
 }: SelectAndOrderProps) => {
   const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
   const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
@@ -244,6 +246,7 @@ const SelectAndOrder = ({
             {listingData.length ? editText : addText}
           </Button>
         </div>
+        {subNote && <p className="field-sub-note">{subNote}</p>}
       </GridSection>
 
       <Drawer
