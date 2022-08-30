@@ -49,13 +49,17 @@ export const useCatchNetworkError = () => {
     } else if (message === NetworkErrorMessage.MfaUnauthorized) {
       setNetworkError({
         title: t("authentication.signIn.enterValidEmailAndPasswordAndMFA"),
-        description: t("authentication.signIn.afterFailedAttempts"),
+        description: t("authentication.signIn.afterFailedAttempts", {
+          count: error?.response?.data?.failureCountRemaining || 5,
+        }),
         error,
       })
     } else {
       setNetworkError({
         title: t("authentication.signIn.enterValidEmailAndPassword"),
-        description: t("authentication.signIn.afterFailedAttempts"),
+        description: t("authentication.signIn.afterFailedAttempts", {
+          count: error?.response?.data?.failureCountRemaining || 5,
+        }),
         error,
       })
     }
