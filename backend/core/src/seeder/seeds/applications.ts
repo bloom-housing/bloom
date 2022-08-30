@@ -1,6 +1,6 @@
 import { INestApplicationContext } from "@nestjs/common"
-import { DeepPartial, Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
 import { IncomePeriod } from "../../applications/types/income-period-enum"
 import { Language } from "../../shared/types/language-enum"
 import { InputType } from "../../shared/types/input-type"
@@ -12,9 +12,6 @@ import { User } from "../../auth/entities/user.entity"
 import { Application } from "../../applications/entities/application.entity"
 import { ApplicationsService } from "../../applications/services/applications.service"
 import { ApplicationCreateDto } from "../../applications/dto/application-create.dto"
-import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
-import { FlaggedSetStatus } from "../../application-flagged-sets/types/flagged-set-status-enum"
-import { Rule } from "../../application-flagged-sets/types/rule-enum"
 
 const getApplicationCreateDtoTemplate = (
   jurisdictionString: string
@@ -239,7 +236,7 @@ export const makeNewApplication = async (
   dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""}`
   dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""}`
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
-  const originalApp = await applicationRepo.save({
+  await applicationRepo.save({
     ...dto,
     user,
     confirmationCode: ApplicationsService.generateConfirmationCode(),
@@ -253,25 +250,11 @@ export const makeNewApplication = async (
     dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""} B`
     dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""} B`
 
-    const applicationFlaggedSetRepo = app.get<Repository<ApplicationFlaggedSet>>(
-      getRepositoryToken(ApplicationFlaggedSet)
-    )
-
-    let newApp = await applicationRepo.save({
+    await applicationRepo.save({
       ...dto,
       user,
       confirmationCode: ApplicationsService.generateConfirmationCode(),
     })
-
-    let newAfs: DeepPartial<ApplicationFlaggedSet> = {
-      rule: Rule.email,
-      resolvedTime: null,
-      resolvingUser: null,
-      status: FlaggedSetStatus.flagged,
-      applications: [newApp, originalApp],
-      listing: listing,
-    }
-    await applicationFlaggedSetRepo.save(newAfs)
 
     // create a flagged duplicate by name and DOB
     dto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
@@ -279,19 +262,10 @@ export const makeNewApplication = async (
     dto.preferredUnit = unitTypes
     dto.applicant.emailAddress = `${splitEmail[0]}${pos ?? ""}B@${splitEmail[1]}`
 
-    newApp = await applicationRepo.save({
+    await applicationRepo.save({
       ...dto,
       user,
       confirmationCode: ApplicationsService.generateConfirmationCode(),
     })
-    newAfs = {
-      rule: Rule.nameAndDOB,
-      resolvedTime: null,
-      resolvingUser: null,
-      status: FlaggedSetStatus.flagged,
-      applications: [newApp, originalApp],
-      listing: listing,
-    }
-    await applicationFlaggedSetRepo.save(newAfs)
   }
 }
