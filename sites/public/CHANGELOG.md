@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.15...@bloom-housing/public@5.1.1-alpha.16) (2022-08-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.14...@bloom-housing/public@5.1.1-alpha.15) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
 ## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.13...@bloom-housing/public@5.1.1-alpha.14) (2022-08-18)
 
 **Note:** Version bump only for package @bloom-housing/public

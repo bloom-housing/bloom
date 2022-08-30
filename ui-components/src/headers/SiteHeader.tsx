@@ -104,7 +104,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
       return (
         <>
           {option.iconSrc && isDesktop && (
-            <img src={option.iconSrc} className={option.iconClassName} />
+            <img
+              src={option.iconSrc}
+              className={option.iconClassName}
+              alt={`${option.title} icon`}
+            />
           )}
           {option.title}
         </>
@@ -337,6 +341,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 data-test-id={`${menuLink.title}-${index}`}
+                role={"button"}
               >
                 {menuContent}
               </span>

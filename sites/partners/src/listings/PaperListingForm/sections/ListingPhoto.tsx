@@ -71,7 +71,7 @@ const ListingPhoto = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={cloudinaryData.url} />
+            <img src={cloudinaryData.url} alt={"Preview"} />
           </TableThumbnail>
         ),
       },
@@ -110,7 +110,7 @@ const ListingPhoto = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={listingPhotoUrl} />
+            <img src={listingPhotoUrl} alt={"Preview"} />
           </TableThumbnail>
         ),
       },

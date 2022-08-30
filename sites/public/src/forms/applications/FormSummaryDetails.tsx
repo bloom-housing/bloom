@@ -12,10 +12,8 @@ type FormSummaryDetailsProps = {
 }
 
 const EditLink = (props: { href: string }) => (
-  <div className="float-right flex">
-    <LocalizedLink href={props.href}>
-      <a className="edit-link">{t("t.edit")}</a>
-    </LocalizedLink>
+  <div className="float-right flex edit-link">
+    <LocalizedLink href={props.href}>{t("t.edit")}</LocalizedLink>
   </div>
 )
 

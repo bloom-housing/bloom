@@ -94,7 +94,6 @@ const AgTable = ({
   const columnStateLsKey = `column-state_${id}`
   const defaultColDef = {
     resizable: true,
-    maxWidth: 300,
   }
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)

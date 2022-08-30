@@ -44,6 +44,7 @@ const ApplicationsList = () => {
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
+  const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -69,9 +70,10 @@ const ApplicationsList = () => {
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
 
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
+      !isListingOpen &&
+        this.linkWithId.addEventListener("click", function () {
+          void router.push(`/application/${applicationId}`)
+        })
     }
 
     getGui() {
@@ -116,7 +118,6 @@ const ApplicationsList = () => {
           flagsQty: flaggedApps?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
-          flagsLabel: t("nav.flags"),
         }}
         breadcrumbs={
           <Breadcrumbs>
@@ -139,52 +140,60 @@ const ApplicationsList = () => {
 
       <section>
         <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-          <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
+          {listingDto && (
+            <>
+              <ApplicationsSideNav
+                className="w-full md:w-72"
+                listingId={listingId}
+                listingOpen={isListingOpen}
+              />
 
-          <AgTable
-            className="w-full"
-            id="applications-table"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-            }}
-            config={{
-              gridComponents,
-              columns: columnDefs,
-              totalItemsLabel: t("applications.totalApplications"),
-            }}
-            data={{
-              items: applications,
-              loading: appsLoading,
-              totalItems: appsMeta?.totalItems,
-              totalPages: appsMeta?.totalPages,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-            }}
-            sort={{
-              setSort: tableOptions.sort.setSortOptions,
-            }}
-            headerContent={
-              <div className="flex-row">
-                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
-                  <Button
-                    className="mx-1"
-                    onClick={() => false}
-                    dataTestId={"addApplicationButton"}
-                  >
-                    {t("applications.addApplication")}
-                  </Button>
-                </LocalizedLink>
+              <AgTable
+                className="w-full"
+                id="applications-table"
+                pagination={{
+                  perPage: tableOptions.pagination.itemsPerPage,
+                  setPerPage: tableOptions.pagination.setItemsPerPage,
+                  currentPage: tableOptions.pagination.currentPage,
+                  setCurrentPage: tableOptions.pagination.setCurrentPage,
+                }}
+                config={{
+                  gridComponents,
+                  columns: columnDefs,
+                  totalItemsLabel: t("applications.totalApplications"),
+                }}
+                data={{
+                  items: applications,
+                  loading: appsLoading,
+                  totalItems: appsMeta?.totalItems,
+                  totalPages: appsMeta?.totalPages,
+                }}
+                search={{
+                  setSearch: tableOptions.filter.setFilterValue,
+                }}
+                sort={{
+                  setSort: tableOptions.sort.setSortOptions,
+                }}
+                headerContent={
+                  <div className="flex-row">
+                    <LocalizedLink href={`/listings/${listingId}/applications/add`}>
+                      <Button
+                        className="mx-1"
+                        onClick={() => false}
+                        dataTestId={"addApplicationButton"}
+                      >
+                        {t("applications.addApplication")}
+                      </Button>
+                    </LocalizedLink>
 
-                <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
-                  {t("t.export")}
-                </Button>
-              </div>
-            }
-          />
+                    <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
+                      {t("t.export")}
+                    </Button>
+                  </div>
+                }
+              />
+            </>
+          )}
         </article>
       </section>
     </Layout>

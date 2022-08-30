@@ -71,7 +71,6 @@ export default function ListingDetail(props: ListingProps) {
                 flagsQty: flaggedApps?.meta?.totalFlagged,
                 listingLabel: t("t.listingSingle"),
                 applicationsLabel: t("nav.applications"),
-                flagsLabel: t("nav.flags"),
               }}
               breadcrumbs={
                 <Breadcrumbs>
