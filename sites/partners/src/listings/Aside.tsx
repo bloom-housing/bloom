@@ -51,7 +51,7 @@ const Aside = ({
         <LinkButton
           unstyled
           fullWidth
-          className="bg-opacity-0"
+          className="bg-opacity-0 text-blue-700"
           href={type === "add" ? "/" : `/listings/${listingId}`}
           type="button"
         >

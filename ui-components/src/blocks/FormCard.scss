@@ -32,6 +32,7 @@
   @apply border-t-4;
   @apply border-primary;
   @apply leading-tight;
+  @apply text-3xl;
 
   @screen md {
     @apply mx-auto;

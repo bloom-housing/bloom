@@ -48,6 +48,7 @@
     "tailwindcss": "2.2.10"
   },
   "devDependencies": {
+    "@axe-core/react": "4.4.3",
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "@cypress/code-coverage": "^3.9.12",

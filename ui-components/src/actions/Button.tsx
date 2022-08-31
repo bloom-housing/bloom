@@ -79,6 +79,7 @@ const Button = (props: ButtonProps) => {
       onClick={props.onClick}
       disabled={props.disabled || props.loading}
       aria-hidden={props.ariaHidden}
+      tabIndex={props.ariaHidden ? -1 : 0}
       aria-label={props.ariaLabel}
       data-test-id={props.dataTestId || props["data-test-id"]}
     >

@@ -154,6 +154,7 @@ export const ListingView = (props: ListingProps) => {
             listing.buildingSelectionCriteriaFile.fileId,
             process.env.cloudinaryCloudName
           )}
+          className={"text-blue-700"}
         >
           {t("listings.moreBuildingSelectionCriteria")}
         </a>
@@ -162,7 +163,7 @@ export const ListingView = (props: ListingProps) => {
   } else if (listing.buildingSelectionCriteria) {
     buildingSelectionCriteria = (
       <p>
-        <a href={listing.buildingSelectionCriteria}>
+        <a href={listing.buildingSelectionCriteria} className={"text-blue-700"}>
           {t("listings.moreBuildingSelectionCriteria")}
         </a>
       </p>
@@ -194,7 +195,7 @@ export const ListingView = (props: ListingProps) => {
       >
         <>
           <PreferencesList listingPreferences={getPreferenceData()} />
-          <p className="text-gray-700 text-tiny">
+          <p className="text-gray-750 text-tiny">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
         </>
@@ -510,6 +511,7 @@ export const ListingView = (props: ListingProps) => {
                 ]
               : undefined
           }
+          description={listing.name}
         />
         <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
           <Heading priority={1} style={"cardHeader"} className={"text-black"}>
