@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { t, AppearanceStyleType, AppearanceSizeType, Tag } from "@bloom-housing/ui-components"
-import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
+import { FlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
 export const getFlagSetCols = () => [
   {
@@ -87,7 +87,7 @@ export const getFlagSetCols = () => [
     flex: 1,
     cellRendererFramework: ({ data }) => {
       const styleType =
-        data.status === EnumApplicationFlaggedSetStatus.flagged
+        data.status === FlaggedSetStatus.flagged
           ? AppearanceStyleType.info
           : AppearanceStyleType.success
 

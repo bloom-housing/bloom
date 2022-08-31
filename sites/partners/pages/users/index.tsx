@@ -36,6 +36,8 @@ const Users = () => {
       {
         headerName: t("t.name"),
         field: "",
+        flex: 1,
+        minWidth: 150,
         valueGetter: ({ data }) => {
           const { firstName, lastName } = data
           return `${firstName} ${lastName}`
@@ -55,6 +57,8 @@ const Users = () => {
       {
         headerName: t("t.email"),
         field: "email",
+        flex: 1,
+        minWidth: 250,
       },
       {
         headerName: t("t.listing"),

@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -51,18 +51,6 @@ export class ApplicationMethodUpdateDto extends OmitType(ApplicationMethodDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
