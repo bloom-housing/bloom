@@ -77,14 +77,15 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
     await queryRunner.query(`
         CREATE TABLE "multiselect_programs_preferences_mapper" (
             "multiselect_id" uuid NOT NULL,
-            "program_or_program_id" uuid NOT NULL,
+            "program_or_preference_id" uuid NOT NULL,
             "application_section" "public"."multiselect_questions_application_section_enum" NOT NULL,
-            "juris_name" text not null
+            "juris_name" text not null,
+            "created_at" TIMESTAMP NOT NULL DEFAULT now()
         )`)
 
     // fill mapper table
     await queryRunner.query(`
-        INSERT INTO multiselect_programs_preferences_mapper (multiselect_id, program_or_program_id, application_section, juris_name)
+        INSERT INTO multiselect_programs_preferences_mapper (multiselect_id, program_or_preference_id, application_section, juris_name)
         SELECT
             mq.id,
             p.id,
@@ -102,7 +103,7 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
         WHERE mq.application_section = 'programs';
 
 
-        INSERT INTO multiselect_programs_preferences_mapper (multiselect_id, program_or_program_id, application_section, juris_name)
+        INSERT INTO multiselect_programs_preferences_mapper (multiselect_id, program_or_preference_id, application_section, juris_name)
         SELECT
             mq.id,
             p.id,
@@ -196,7 +197,7 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
   private isDataAllowed(listingData, listing_id, meta, type) {
     return listingData.some(
       (listingInfo) =>
-        listingInfo.listing_id === listing_id && listingInfo[type] === meta.program_or_program_id
+        listingInfo.listing_id === listing_id && listingInfo[type] === meta.program_or_preference_id
     )
   }
 
@@ -207,9 +208,9 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
             p.form_metadata,
             mq.text,
             mppm.juris_name as jurisName,
-            mppm.program_or_program_id
+            mppm.program_or_preference_id
         FROM multiselect_programs_preferences_mapper mppm
-            LEFT JOIN ${type}s p ON p.id = mppm.program_or_program_id
+            LEFT JOIN ${type}s p ON p.id = mppm.program_or_preference_id
             LEFT JOIN multiselect_questions mq ON mq.id = mppm.multiselect_id
         WHERE mppm.application_section = '${type}s'
     `)
