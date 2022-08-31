@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.18...@bloom-housing/ui-components@5.1.1-alpha.19) (2022-08-31)
+
+
+### Bug Fixes
+
+* table columns should take up full width ([#3005](https://github.com/bloom-housing/bloom/issues/3005)) ([5524049](https://github.com/bloom-housing/bloom/commit/5524049f248151b1d3510feb1ea73a7775f7f4d5))
+
+
+
+
+
 ## [5.1.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.17...@bloom-housing/ui-components@5.1.1-alpha.18) (2022-08-31)
 
 
