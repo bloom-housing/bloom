@@ -75,9 +75,9 @@ export default function ListingsList() {
         unSortIcon: true,
         sort: "asc",
         filter: false,
-        width: 350,
-        minWidth: 100,
         cellRenderer: "formatLinkCell",
+        minWidth: 200,
+        flex: 1,
       },
       {
         headerName: t("listings.buildingAddress"),

@@ -49,6 +49,8 @@ const Users = () => {
         field: "",
         sortable: true,
         unSortIcon: true,
+        flex: 1,
+        minWidth: 150,
         valueGetter: ({ data }) => {
           const { firstName, lastName } = data
           return `${firstName} ${lastName}`
@@ -70,6 +72,8 @@ const Users = () => {
         field: "email",
         sortable: true,
         unSortIcon: true,
+        flex: 1,
+        minWidth: 250,
       },
       {
         headerName: t("t.listing"),
