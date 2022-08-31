@@ -12,7 +12,7 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
       `ALTER TABLE "listings" ADD "last_application_update_at" TIMESTAMP WITH TIME ZONE DEFAULT '1970-01-01'`
     )
     await queryRunner.query(
-      `ALTER TABLE "application_flagged_set" ADD "rule_key" character varying NOT NULL`
+      `ALTER TABLE "application_flagged_set" ADD "rule_key" character varying`
     )
     await queryRunner.query(
       `ALTER TABLE "application_flagged_set" ADD CONSTRAINT "UQ_2983d3205a16bfae28323d021ea" UNIQUE ("rule_key")`
@@ -56,6 +56,10 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
         [ruleKey, afsa.application_flagged_set_id]
       )
     }
+
+    await queryRunner.query(
+      `ALTER TABLE "application_flagged_set" ALTER COLUMN "rule_key" SET NOT NULL`
+    )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
