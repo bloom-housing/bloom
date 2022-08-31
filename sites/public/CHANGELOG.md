@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.37...@bloom-housing/public@5.1.1-alpha.38) (2022-08-31)
+
+
+### Bug Fixes
+
+* **application:** remove programs from autofill ([#3021](https://github.com/bloom-housing/bloom/issues/3021)) ([ec019cf](https://github.com/bloom-housing/bloom/commit/ec019cf54c236c101ec30b026feea78a16992544))
+
+
+
+
+
 ## [5.1.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.36...@bloom-housing/public@5.1.1-alpha.37) (2022-08-31)
 
 **Note:** Version bump only for package @bloom-housing/public
