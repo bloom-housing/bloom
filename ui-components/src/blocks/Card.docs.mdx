@@ -1,0 +1,20 @@
+import { Canvas, Story, ArgsTable } from "@storybook/addon-docs"
+import { Card } from "./Card"
+
+# Card
+
+<Canvas>
+  <Story id="blocks-card--text-content" />
+</Canvas>
+
+The 2nd-generation Card component is indended to serve as a flexible content container with a header, zero or more content sections, and a footer. Over time our intention is to "port" some other cards and content blocks in the system to use this Card for their underlying structure.
+
+Styles within the DOM tree of Card are intended to set up sensible defaults without requiring the consumer to configure bespoke styling as they author a card. For example, rule lines will be drawn automatically between the various subcomponents within a card, and margin/padding will be set according to top-level variables.
+
+You can author a Card using subcomponents simply by referencing them via the single Card import. For example, `<Card.Header>`, `<Card.Footer>` etc. In the case where you want to create a new type of card, you can import the subcomponents directly as `<CardHeader>`, `<CardFooter>`, etc. and place them in any container. It's still recommended you include the `.card` class on your custom container so you inherit a base set of CSS properties. (See the **Wacky Card** example below.)
+
+Note that the `<Card.Footer>` subcomponent doesn't inherently add rules or padding (so that you can use other components with self-contained styling such as `<ButtonGroup>`. However, you can use `<Card.Section>` within `<Card.Footer>` to add rules and padding.
+
+<Canvas>
+  <Story id="blocks-card--custom-wacky-card" />
+</Canvas>

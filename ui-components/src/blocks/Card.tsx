@@ -48,4 +48,4 @@ Card.Header = CardHeader
 Card.Section = CardSection
 Card.Footer = CardFooter
 
-export { Card as default, Card }
+export { Card as default, Card, CardHeader, CardSection, CardFooter }

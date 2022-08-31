@@ -1,39 +1,21 @@
 import React from "react"
+import { BADGES } from "../../.storybook/constants"
 import { AppearanceStyleType, Button, ButtonGroup, ButtonGroupSpacing, LinkButton } from "../.."
 import Card from "./Card"
+import CardDocumentation from "./Card.docs.mdx"
 
 export default {
-  title: "Blocks/Card",
+  title: "Blocks/Card 🚩",
+  id: "blocks/card",
+  parameters: {
+    docs: {
+      page: CardDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
-export const Standard = () => (
-  <div style={{ maxWidth: "500px" }}>
-    <Card>
-      <Card.Header
-        suffix={
-          <div>
-            <Button>Click</Button>
-          </div>
-        }
-      >
-        <h3 className="card-header">I'm a heading!</h3>
-      </Card.Header>
-
-      <Card.Section>
-        <p>Hello World!</p>
-      </Card.Section>
-
-      <Card.Footer>
-        <ButtonGroup
-          spacing={ButtonGroupSpacing.even}
-          columns={[<Button styleType={AppearanceStyleType.primary}>Call to Action</Button>]}
-        />
-      </Card.Footer>
-    </Card>
-  </div>
-)
-
-export const OnlyTextContent = () => (
+export const TextContent = () => (
   <div style={{ maxWidth: "500px" }}>
     <Card>
       <Card.Header>
@@ -53,6 +35,37 @@ export const OnlyTextContent = () => (
         <Card.Section>
           <p>Footer content here.</p>
         </Card.Section>
+      </Card.Footer>
+    </Card>
+  </div>
+)
+
+export const MixedContent = () => (
+  <div style={{ maxWidth: "500px" }}>
+    <Card>
+      <figure>
+        <img src="/images/listing.jpg" />
+      </figure>
+
+      <Card.Header
+        suffix={
+          <div>
+            <Button>Click</Button>
+          </div>
+        }
+      >
+        <h3 className="card-header">I'm a heading!</h3>
+      </Card.Header>
+
+      <Card.Section>
+        <p>Hello World!</p>
+      </Card.Section>
+
+      <Card.Footer>
+        <ButtonGroup
+          spacing={ButtonGroupSpacing.even}
+          columns={[<Button styleType={AppearanceStyleType.primary}>Call to Action</Button>]}
+        />
       </Card.Footer>
     </Card>
   </div>
@@ -151,5 +164,55 @@ export const DetroitStyle = () => {
         <style>{cssVarsOverride}</style>
       </div>
     </>
+  )
+}
+
+export const CustomWackyCard = () => {
+  const wackyStyles = `
+    .wacky-card {
+      --background-color: lightyellow;
+      --border-color: maroon;
+      --border-radius: 20px;
+      --content-padding-inline-desktop: 1.3rem;
+      --border-width: 3px;
+      --rule-color: forestgreen;
+
+      color: var(--bloom-color-secondary);
+      box-shadow: var(--bloom-shadow-md);
+    }
+
+    .wacky-card > .card__header {
+      color: var(--bloom-color-alert-dark);
+      font-family: var(--bloom-font-alt-sans);
+    }
+  `
+
+  return (
+    <div style={{ maxWidth: "500px" }}>
+      <article className="wacky-card card">
+        <Card.Header>
+          <h3>This is totally custom!</h3>
+        </Card.Header>
+
+        <Card.Section className="markdown">
+          <p>Markdown styled content here.</p>
+
+          <ul>
+            <li>List Item 1</li>
+            <li>List Item 2</li>
+          </ul>
+        </Card.Section>
+
+        <Card.Footer>
+          <Card.Section>
+            <div className="field text-center font-bold">
+              <input type="checkbox" id="good" />
+              <label htmlFor="good">Looks good! 👍</label>
+            </div>
+          </Card.Section>
+        </Card.Footer>
+      </article>
+      <style>{wackyStyles}</style>
+    </div>
   )
 }

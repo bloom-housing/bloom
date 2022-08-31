@@ -15,6 +15,8 @@
   --header-padding-inline: var(--header-padding-inline-desktop);
   --header-description-margin: var(--bloom-s3);
 
+  --rule-color: var(--border-color);
+
   @media (max-width: $screen-sm) {
     --content-padding-inline: var(--content-padding-inline-mobile);
     --header-padding-inline: var(--header-padding-inline-mobile);
@@ -33,7 +35,7 @@
   padding-block: var(--header-padding-block);
   margin-inline: var(--header-padding-inline);
 
-  border-bottom: 1px solid var(--bloom-color-gray-450);
+  border-bottom: var(--border-width) solid var(--rule-color);
 
   &.is-flex {
     display: flex;
@@ -54,7 +56,7 @@
 
 .card > *:nth-child(n + 3),
 .card__footer > .card__section {
-  border-top: 1px solid var(--bloom-color-gray-450);
+  border-top: var(--border-width) solid var(--rule-color);
 }
 
 .card__section {
