@@ -28,8 +28,8 @@
   .alert-box_inner {
     margin: auto;
     max-width: var(--max-width);
-    padding-right: var(--bloom-s4);
-    padding-left: var(--bloom-s4);
+    padding-right: var(--horizontal-padding);
+    padding-left: var(--horizontal-padding);
     flex: 1;
     display: flex;
     align-items: center;
@@ -96,7 +96,7 @@
 
 .alert-box__close {
   font-size: var(--bloom-font-size-3xl);
-  right: var(--bloom-s4);
+  right: var(--horizontal-padding);
   margin-left: var(--blom-s3);
   padding: 0;
   line-height: var(--bloom-s4);
