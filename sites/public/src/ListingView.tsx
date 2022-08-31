@@ -749,7 +749,9 @@ export const ListingView = (props: ListingProps) => {
                     listing.referralApplication.externalReference ||
                     t("application.referralApplication.instructions")
                   }
-                  title={t("application.referralApplication.furtherInformation")}
+                  strings={{
+                    title: t("application.referralApplication.furtherInformation"),
+                  }}
                 />
               )}
             </div>
