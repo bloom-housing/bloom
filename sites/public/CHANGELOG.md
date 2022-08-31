@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.30...@bloom-housing/public@5.1.1-alpha.31) (2022-08-31)
+
+
+### Bug Fixes
+
+* null app fee showing null string ([#3016](https://github.com/bloom-housing/bloom/issues/3016)) ([05e28ad](https://github.com/bloom-housing/bloom/commit/05e28ad9f887dcfff5567af96e97be50c86b2109))
+
+
+
+
+
 ## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.29...@bloom-housing/public@5.1.1-alpha.30) (2022-08-30)
 
 **Note:** Version bump only for package @bloom-housing/public
