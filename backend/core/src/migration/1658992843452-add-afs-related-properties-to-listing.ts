@@ -37,13 +37,13 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
       )
 
       let ruleKey: String | null = null
-      console.log("afsas.rule = ", afsas.rule)
+
       // get application info needed for key
-      if (afsas.rule === Rule.email) {
-        ruleKey = `${afsas.lisitng_id}-email-${applicant.email_address}`
-      } else if (afsas.rule === Rule.nameAndDOB) {
+      if (afsa.rule === Rule.email) {
+        ruleKey = `${afsa.lisitng_id}-email-${applicant.email_address}`
+      } else if (afsa.rule === Rule.nameAndDOB) {
         ruleKey =
-          `${afsas.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
+          `${afsa.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
           `${applicant.birth_day}-${applicant.birth_year}`
       }
 
