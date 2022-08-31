@@ -37,7 +37,15 @@ const ncpListing: ListingSeedType = {
   managementWebsite: "https://www.kmgprestige.com/communities/",
   name: "New Center Pavilion",
   status: ListingStatus.active,
-  images: [],
+  images: [
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+      },
+    },
+  ],
   digitalApplication: undefined,
   paperApplication: undefined,
   section8Acceptance: false,
