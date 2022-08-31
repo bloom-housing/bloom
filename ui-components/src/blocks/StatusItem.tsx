@@ -42,7 +42,7 @@ const StatusItem = (props: StatusItemProps) => {
             {props.confirmationNumber && (
               <>
                 <span className="status-item__confirm-text">
-                  {props.strings?.yourNumber ?? t("application.yourLotteryNumber")}
+                  {props.strings?.yourNumber ?? t("application.yourLotteryNumber")}:
                 </span>
                 <br />
                 <span className="status-item__confirm-number">{props.confirmationNumber}</span>

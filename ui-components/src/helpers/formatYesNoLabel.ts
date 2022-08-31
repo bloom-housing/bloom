@@ -7,7 +7,5 @@ export const formatYesNoLabel = (
   if (value === null || typeof value == "undefined")
     return strings?.notApplicableString ?? t("t.n/a")
   if (value) return strings?.yesString ?? t("t.yes")
-  if (!value) return strings?.noString ?? t("t.no")
-
-  return t("t.n/a")
+  return strings?.noString ?? t("t.no")
 }
