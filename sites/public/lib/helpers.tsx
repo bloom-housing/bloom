@@ -374,7 +374,7 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
       availability: {
         content: <strong>{availability ?? t("listings.unitsSummary.notAvailable")}</strong>,
       },
-      ami: ami ?? { content: t("listings.unitsSummary.notAvailable") },
+      ami: { content: ami ?? t("listings.unitsSummary.notAvailable") },
     }
   })
 
@@ -409,17 +409,21 @@ export const getHmiSummary = (listing: Listing): UnitSummaryTable => {
 
       for (const key in row) {
         if (key === "householdSize") {
-          obj[key] = (
-            <>
-              <strong>{row[key]}</strong> {row[key] === "1" ? t("t.person") : t("t.people")}
-            </>
-          )
+          obj[key] = {
+            content: (
+              <>
+                <strong>{row[key]}</strong> {row[key] === "1" ? t("t.person") : t("t.people")}
+              </>
+            ),
+          }
         } else {
-          obj[key] = (
-            <>
-              <strong>${row[key].toLocaleString("en")}</strong> {t("t.perYear")}
-            </>
-          )
+          obj[key] = {
+            content: (
+              <>
+                <strong>${row[key].toLocaleString("en")}</strong> {t("t.perYear")}
+              </>
+            ),
+          }
         }
       }
 
