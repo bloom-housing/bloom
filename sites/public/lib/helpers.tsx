@@ -216,7 +216,7 @@ export const getListings = (listings) => {
     <ListingCard
       key={index}
       imageCardProps={{
-        imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302"))[0],
+        imageUrl: imageUrlFromListing(listing, process.env.listingPhotoSize)[0],
         href: `/listing/${listing.id}/${listing.urlSlug}`,
         tags: getImageCardTag(listing),
       }}

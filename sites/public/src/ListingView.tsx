@@ -476,7 +476,7 @@ export const ListingView = (props: ListingProps) => {
       <div className="w-full md:w-2/3">
         <header className="image-card--leader">
           <ImageCard
-            images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
+            images={imageUrlFromListing(listing, process.env.listingPhotoSize).map(
               (imageUrl: string) => {
                 return {
                   url: imageUrl,

@@ -17,7 +17,7 @@ export const getUrlForListingImage = (image: Asset, size = 400) => {
   }
 }
 
-export const imageUrlFromListing = (listing: Listing, size = 400) => {
+export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
   // Use the new `images` field
   const imageAssets =
     listing?.images?.length && listing.images[0].image

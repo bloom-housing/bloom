@@ -182,24 +182,21 @@ const ImageCard = (props: ImageCardProps) => {
             </Button>,
           ]}
         >
-          {props.images &&
-            props.images.map((image, index) => (
-              <p key={index} className="mb-7">
-                <picture>
-                  {image.mobileUrl && (
-                    <source media="(max-width: 767px)" srcSet={image.mobileUrl} />
-                  )}
-                  <img
-                    src={image.url}
-                    alt={
-                      image.description
-                        ? image.description
-                        : `${props.description || ""} - photo ${index + 1}`
-                    }
-                  />
-                </picture>
-              </p>
-            ))}
+          {props.images.map((image, index) => (
+            <p key={index} className="mb-7">
+              <picture>
+                {image.mobileUrl && <source media="(max-width: 767px)" srcSet={image.mobileUrl} />}
+                <img
+                  src={image.url}
+                  alt={
+                    image.description
+                      ? image.description
+                      : `${props.description || ""} - photo ${index + 1}`
+                  }
+                />
+              </picture>
+            </p>
+          ))}
         </Modal>
       )}
     </>
