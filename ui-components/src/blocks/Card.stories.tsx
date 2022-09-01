@@ -19,7 +19,7 @@ export const TextContent = () => (
   <div style={{ maxWidth: "500px" }}>
     <Card>
       <Card.Header>
-        <h3>I'm a heading!</h3>
+        <h3>I'm just a heading</h3>
       </Card.Header>
 
       <Card.Section className="markdown">
@@ -75,11 +75,11 @@ export const HeaderFooterOnly = () => (
   <div style={{ maxWidth: "600px" }}>
     <Card>
       <Card.Header>
-        <h2>Household Maximum Income</h2>
-        <p aria-roledescription="subtitle">
-          To determine your eligibility for this property, choose your household size (include
-          yourself in that calculation).
-        </p>
+        <Card.HeadingGroup
+          headingPriority={2}
+          heading="Household Maximum Income"
+          subheading="To determine your eligibility for this property, choose your household size (include yourself in that calculation)."
+        />
       </Card.Header>
 
       <Card.Footer>
@@ -140,11 +140,11 @@ export const DetroitStyle = () => {
       <div className="card-overrides" style={{ maxWidth: "600px" }}>
         <Card>
           <Card.Header>
-            <h2>Household Maximum Income</h2>
-            <p aria-roledescription="subtitle">
-              To determine your eligibility for this property, choose your household size (include
-              yourself in that calculation).
-            </p>
+            <Card.HeadingGroup
+              headingPriority={2}
+              heading="Household Maximum Income"
+              subheading="To determine your eligibility for this property, choose your household size (include yourself in that calculation)."
+            />
           </Card.Header>
 
           <Card.Footer>
