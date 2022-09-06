@@ -18,10 +18,11 @@ export const getUrlForListingImage = (image: Asset, size = 400) => {
 }
 
 export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
-  // Use the new `images` field
   const imageAssets =
     listing?.images?.length && listing.images[0].image
-      ? listing.images.map((imageObj) => imageObj.image)
+      ? listing.images
+          .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
+          .map((imageObj) => imageObj.image)
       : listing?.assets
 
   const cloudinaryBuilding = imageAssets
