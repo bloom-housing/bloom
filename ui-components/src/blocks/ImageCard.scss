@@ -52,12 +52,6 @@
         "Main Secondary-2";
     }
 
-    &.has-modal-overflow {
-      img:nth-child(3) {
-        opacity: 0.5;
-      }
-    }
-
     img {
       aspect-ratio: 16 / 9;
       display: block;
@@ -98,7 +92,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
+      color: var(--bloom-color-white);
+      background: rgba(0, 0, 0, 0.6);
       @media (max-width: $screen-sm) {
         font-size: var(--bloom-font-size-sm);
         line-height: var(--bloom-line-height-none);
