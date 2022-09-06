@@ -249,7 +249,7 @@ const Settings = () => {
             dataTestId={"clone-button-confirm"}
             disabled={isCreateLoading}
           >
-            {t("t.copy")}
+            {t("settings.copy")}
           </Button>,
           <Button
             type="button"
