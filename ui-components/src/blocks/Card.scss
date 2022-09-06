@@ -1,41 +1,43 @@
 .card {
+  /* Component Variables */
+  --background-color: var(--bloom-color-white);
   --border-radius: var(--bloom-rounded-lg);
   --border-width: var(--bloom-border-1);
   --border-color: var(--bloom-color-gray-450);
-  --background-color: var(--bloom-color-white);
-
-  --content-padding-block: var(--bloom-s8);
-  --content-padding-inline-desktop: var(--bloom-s16);
-  --content-padding-inline-mobile: var(--bloom-s4);
-  --content-padding-inline: var(--content-padding-inline-desktop);
-
-  --header-padding-block: var(--bloom-s8) var(--bloom-s3);
-  --header-padding-inline-desktop: var(--content-padding-inline-desktop);
-  --header-padding-inline-mobile: var(--content-padding-inline-mobile);
-  --header-padding-inline: var(--header-padding-inline-desktop);
-  --header-description-margin: var(--bloom-s3);
-
+  --rule-width: var(--border-width);
   --rule-color: var(--border-color);
 
+  --content-padding-block: var(--bloom-s8);
+  --content-margin-inline-desktop: var(--bloom-s16);
+  --content-margin-inline-mobile: var(--bloom-s4);
+  --content-margin-inline: var(--content-margin-inline-desktop);
+
+  --header-padding-block: var(--bloom-s8) var(--bloom-s3);
+  --header-margin-inline-desktop: var(--content-margin-inline-desktop);
+  --header-margin-inline-mobile: var(--content-margin-inline-mobile);
+  --header-margin-inline: var(--header-margin-inline-desktop);
+  --header-subheading-margin: var(--bloom-s3);
+  --header-heading-color: inherit;
+  --header-subheading-color: inherit;
+
   @media (max-width: $screen-sm) {
-    --content-padding-inline: var(--content-padding-inline-mobile);
-    --header-padding-inline: var(--header-padding-inline-mobile);
+    --content-margin-inline: var(--content-margin-inline-mobile);
+    --header-margin-inline: var(--header-margin-inline-mobile);
   }
 
+  /* Default Styles */
   background-color: var(--background-color);
   border: var(--border-width) solid var(--border-color);
   overflow: hidden;
   border-radius: var(--border-radius);
-
   display: flex;
   flex-direction: column;
 }
 
 .card__header {
   padding-block: var(--header-padding-block);
-  margin-inline: var(--header-padding-inline);
-
-  border-bottom: var(--border-width) solid var(--rule-color);
+  margin-inline: var(--header-margin-inline);
+  border-bottom: var(--rule-width) solid var(--rule-color);
 
   &.is-flex {
     display: flex;
@@ -44,9 +46,14 @@
     gap: var(--bloom-s7);
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--header-heading-color);
+  }
+
   p {
-    margin-block: var(--header-description-margin);
+    margin-block: var(--header-subheading-margin);
     font-size: var(--bloom-font-size-base);
+    color: var(--header-subheading-color);
   }
 }
 
@@ -56,15 +63,16 @@
 
 .card > *:nth-child(n + 3),
 .card__footer > .card__section {
-  border-top: var(--border-width) solid var(--rule-color);
+  border-top: var(--rule-width) solid var(--rule-color);
 }
 
 .card__section {
   padding-block: var(--content-padding-block);
-  margin-inline: var(--content-padding-inline);
+  margin-inline: var(--content-margin-inline);
 }
 
-.card__footer,
-.card__footer > :not(.card__section) + .card__section {
-  border-top: none !important;
+/* Using the double-class specificity hack, proceed with caution: */
+.card__footer.card__footer,
+.card__footer.card__footer > :not(.card__section) + .card__section {
+  border-top: none;
 }

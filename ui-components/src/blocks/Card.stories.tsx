@@ -147,6 +147,17 @@ export const DetroitStyle = () => {
             />
           </Card.Header>
 
+          <Card.Section className="markdown">
+            <div className="field">
+              <input type="radio" name="household-size" id="one-two" />
+              <label htmlFor="one-two">1-2 People</label>
+            </div>
+            <div className="field">
+              <input type="radio" name="household-size" id="three-six" />
+              <label htmlFor="three-six">3-6 People</label>
+            </div>
+          </Card.Section>
+
           <Card.Footer>
             <ButtonGroup
               columns={[
@@ -173,17 +184,24 @@ export const CustomWackyCard = () => {
       --background-color: lightyellow;
       --border-color: maroon;
       --border-radius: 20px;
-      --content-padding-inline-desktop: 1.3rem;
+      --content-margin-inline-desktop: 1.3rem;
       --border-width: 3px;
+      --rule-width: 6px;
       --rule-color: forestgreen;
+      --header-heading-color: var(--bloom-color-alert-dark);
 
       color: var(--bloom-color-secondary);
       box-shadow: var(--bloom-shadow-md);
     }
 
-    .wacky-card > .card__header {
-      color: var(--bloom-color-alert-dark);
-      font-family: var(--bloom-font-alt-sans);
+    .wacky-card > .card__header > * {
+      font-family: cursive;
+      font-size: 200%;
+      letter-spacing: var(--bloom-letter-spacing-wider);
+    }
+
+    .wacky-card .markdown {
+      font-family: var(--bloom-font-serif);
     }
   `
 
@@ -206,8 +224,8 @@ export const CustomWackyCard = () => {
         <Card.Footer>
           <Card.Section>
             <div className="field text-center font-bold">
-              <input type="checkbox" id="good" />
-              <label htmlFor="good">Looks good! 👍</label>
+              <input type="checkbox" id="good" checked />
+              <label htmlFor="good">Looks good! 😜👍</label>
             </div>
           </Card.Section>
         </Card.Footer>

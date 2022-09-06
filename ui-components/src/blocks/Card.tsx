@@ -22,10 +22,18 @@ const CardHeader = (props: CardHeaderProps) => {
 }
 
 interface CardHeadingGroupProps {
+  /** A string or element to display in an `h2` tag (overridable via `headingPriority`) */
   heading: React.ReactNode
+  /** A string or element to display in an `p` tag (using `aria-roledescription="subtitle"`) */
   subheading: React.ReactNode
+  /**
+   * The heading level (1 through 6)
+   * @default 2
+   */
   headingPriority?: number
+  /** Additional class name for the heading */
   headingClassName?: string
+  /** Additional class name for the subheading */
   subheadingClassName?: string
 }
 
@@ -43,6 +51,10 @@ const CardHeadingGroup = (props: CardHeadingGroupProps) => {
 }
 
 interface CardSectionProps {
+  /**
+   * Whether to center the text within the section
+   * @default false
+   */
   centered?: boolean
   className?: string
   children: React.ReactNode
