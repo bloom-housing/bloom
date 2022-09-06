@@ -236,7 +236,7 @@ const Settings = () => {
       />
       <Modal
         open={!!cloneDrawerOpen}
-        title={t("settings.createClone")}
+        title={t("t.copy")}
         ariaDescription={t("listings.listingIsAlreadyLive")}
         onClose={() => setCloneDrawerOpen(null)}
         actions={[
@@ -249,7 +249,7 @@ const Settings = () => {
             dataTestId={"clone-button-confirm"}
             disabled={isCreateLoading}
           >
-            {t("settings.clone")}
+            {t("t.copy")}
           </Button>,
           <Button
             type="button"
