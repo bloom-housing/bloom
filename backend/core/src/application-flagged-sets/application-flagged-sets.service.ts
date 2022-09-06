@@ -104,12 +104,25 @@ export class ApplicationFlaggedSetsService {
   }
 
   async findOneById(afsId: string) {
-    return await this.afsRepository.findOneOrFail({
-      relations: ["listing", "applications"],
-      where: {
-        id: afsId,
-      },
-    })
+    const qb = this.afsRepository
+      .createQueryBuilder("afs")
+      .select([
+        "afs.id",
+        "applications.id",
+        "applications.submissionType",
+        "applications.confirmationCode",
+        "applicant.firstName",
+        "applicant.lastName",
+        "applicant.birthDay",
+        "applicant.birthMonth",
+        "applicant.birthYear",
+      ])
+      .leftJoin("afs.applications", "applications")
+      .leftJoin("applications.applicant", "applicant")
+      .orderBy("applications.confirmationCode", "DESC")
+      .where("afs.id = :id", { id: afsId })
+
+    return await qb.getOneOrFail()
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {
