@@ -15,7 +15,7 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Expose()
   @IsEnum(Rule, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  rule: string
+  rule: Rule
 
   @Column({ nullable: false, unique: true })
   @Expose()

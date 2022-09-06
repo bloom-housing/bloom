@@ -84,7 +84,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     valueGetter: ({ data }) => {
-      console.log("87:", { data })
       return data.reviewStatus === "flagged" ? t("applications.pendingReview") : data.reviewStatus
     },
   },

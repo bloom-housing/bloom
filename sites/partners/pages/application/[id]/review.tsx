@@ -1,9 +1,8 @@
-import React, { useMemo, useState, useCallback, useContext, useEffect } from "react"
+import React, { useMemo, useState, useCallback, useEffect } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
-import { AgGridReact } from "ag-grid-react"
-import { GridApi, RowNode, GridOptions, Grid } from "ag-grid-community"
+import { GridApi, RowNode } from "ag-grid-community"
 
 import Layout from "../../../layouts"
 import {
@@ -14,13 +13,10 @@ import {
   AppearanceStyleType,
   useMutate,
   StatusBar,
-  StatusAside,
-  GridCell,
   AgTable,
   useAgTable,
   GridSection,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import { getCols } from "./applicationsCols"
 
@@ -30,23 +26,17 @@ import {
 } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
-  const { applicationFlaggedSetsService } = useContext(AuthContext)
-
   const router = useRouter()
   const flagsetId = router.query.id as string
 
-  const [gridApi, setGridApi] = useState<GridApi>(null)
+  const [gridApi] = useState<GridApi>(null)
   const [selectedRows, setSelectedRows] = useState<RowNode[]>([])
 
   const columns = useMemo(() => getCols(), [])
 
-  const { data, revalidate, loading } = useSingleFlaggedApplication(flagsetId)
+  const { data, loading } = useSingleFlaggedApplication(flagsetId)
 
-  const { mutate, reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
-
-  const gridOptions: GridOptions = {
-    getRowNodeId: (data) => data.id,
-  }
+  const { reset, isSuccess, isError } = useMutate<ApplicationFlaggedSet>()
 
   /* It selects all flagged rows on init and update (revalidate). */
   const selectFlaggedApps = useCallback(() => {
@@ -68,45 +58,6 @@ const Flag = () => {
 
     selectFlaggedApps()
   }, [data, gridApi, selectFlaggedApps])
-
-  const onGridReady = (params) => {
-    setGridApi(params.api)
-  }
-
-  const onSelectionChanged = () => {
-    const selected = gridApi.getSelectedNodes()
-    setSelectedRows(selected)
-  }
-
-  const deselectAll = useCallback(() => {
-    gridApi.deselectAll()
-  }, [gridApi])
-
-  const resolveFlag = useCallback(() => {
-    const applicationIds = selectedRows?.map((item) => ({ id: item.data.id })) || []
-
-    void reset()
-
-    void mutate(() =>
-      applicationFlaggedSetsService.resolve({
-        body: {
-          afsId: flagsetId,
-          applications: applicationIds,
-        },
-      })
-    ).then(() => {
-      deselectAll()
-      void revalidate()
-    })
-  }, [
-    mutate,
-    reset,
-    revalidate,
-    deselectAll,
-    selectedRows,
-    applicationFlaggedSetsService,
-    flagsetId,
-  ])
 
   const tableOptions = useAgTable()
 
@@ -169,6 +120,7 @@ const Flag = () => {
                   columns,
                   totalItemsLabel: t("applications.totalApplications"),
                   rowSelection: true,
+                  setSelectedRows: setSelectedRows,
                 }}
                 data={{
                   items: data?.applications ?? [],
@@ -186,9 +138,14 @@ const Flag = () => {
             <aside className="md:w-3/12 md:pl-6">
               <GridSection columns={1} className={"w-full"}>
                 <Button
-                  styleType={AppearanceStyleType.primary}
+                  styleType={
+                    selectedRows.length
+                      ? AppearanceStyleType.primary
+                      : AppearanceStyleType.secondary
+                  }
                   onClick={() => alert("save button")}
                   dataTestId={"save-set-button"}
+                  disabled={!selectedRows.length}
                 >
                   {t("t.save")}
                 </Button>

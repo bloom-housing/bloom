@@ -110,6 +110,7 @@ const ApplicationsList = () => {
       this.disabledLink = document.createElement("button")
       this.disabledLink.innerText = params.value
       this.disabledLink.classList.add("text-gray-750")
+      this.disabledLink.classList.add("cursor-default")
     }
     getGui() {
       return this.disabledLink

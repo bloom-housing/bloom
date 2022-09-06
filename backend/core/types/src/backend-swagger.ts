@@ -2832,7 +2832,7 @@ export interface ApplicationFlaggedSet {
   updatedAt: Date
 
   /**  */
-  rule: string
+  rule: EnumApplicationFlaggedSetRule
 
   /**  */
   ruleKey: string
@@ -6276,6 +6276,10 @@ export enum FlaggedSetStatus {
   "resolved" = "resolved",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum EnumApplicationFlaggedSetRule {
+  "Name and DOB" = "Name and DOB",
+  "Email" = "Email",
+}
 export enum ApplicationMethodType {
   "Internal" = "Internal",
   "FileDownload" = "FileDownload",
