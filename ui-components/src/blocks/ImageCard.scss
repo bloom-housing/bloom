@@ -159,6 +159,7 @@
   --modal-shadow: none;
   @media (min-width: $screen-md) {
     --scroll-max-height: calc(80vh - 200px);
+    max-width: var(--bloom-width-5xl);
   }
   svg {
     @apply sr-only;
