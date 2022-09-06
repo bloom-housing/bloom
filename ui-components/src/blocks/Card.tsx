@@ -2,8 +2,10 @@ import React from "react"
 import { Heading } from "../headers/Heading"
 import "./Card.scss"
 
-interface CardHeaderProps {
+export interface CardHeaderProps {
+  /** An additional element(s) you can add to the side of the main child element(s) */
   suffix?: React.ReactNode
+  /** Additional class name */
   className?: string
   children: React.ReactNode
 }
@@ -21,7 +23,7 @@ const CardHeader = (props: CardHeaderProps) => {
   )
 }
 
-interface CardHeadingGroupProps {
+export interface CardHeadingGroupProps {
   /** A string or element to display in an `h2` tag (overridable via `headingPriority`) */
   heading: React.ReactNode
   /** A string or element to display in an `p` tag (using `aria-roledescription="subtitle"`) */
@@ -50,12 +52,13 @@ const CardHeadingGroup = (props: CardHeadingGroupProps) => {
   )
 }
 
-interface CardSectionProps {
+export interface CardSectionProps {
   /**
    * Whether to center the text within the section
    * @default false
    */
   centered?: boolean
+  /** Additional class name */
   className?: string
   children: React.ReactNode
 }
@@ -68,7 +71,8 @@ const CardSection = (props: CardSectionProps) => {
   return <div className={classNames.join(" ")}>{props.children}</div>
 }
 
-interface CardFooterProps {
+export interface CardFooterProps {
+  /** Additional class name */
   className?: string
   children: React.ReactNode
 }
@@ -80,7 +84,8 @@ const CardFooter = (props: CardFooterProps) => {
   return <footer className={classNames.join(" ")}>{props.children}</footer>
 }
 
-interface CardProps {
+export interface CardProps {
+  /** Additional class name */
   className?: string
   children: React.ReactNode
 }
