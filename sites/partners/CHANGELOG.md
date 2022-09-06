@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.36...@bloom-housing/partners@5.1.1-alpha.37) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.35...@bloom-housing/partners@5.1.1-alpha.36) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.34...@bloom-housing/partners@5.1.1-alpha.35) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.33...@bloom-housing/partners@5.1.1-alpha.34) (2022-08-31)
+
+
+### Bug Fixes
+
+* table columns should take up full width ([#3005](https://github.com/bloom-housing/bloom/issues/3005)) ([5524049](https://github.com/bloom-housing/bloom/commit/5524049f248151b1d3510feb1ea73a7775f7f4d5))
+
+
+
+
+
+## [5.1.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.32...@bloom-housing/partners@5.1.1-alpha.33) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.31...@bloom-housing/partners@5.1.1-alpha.32) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.30...@bloom-housing/partners@5.1.1-alpha.31) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.29...@bloom-housing/partners@5.1.1-alpha.30) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [5.1.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.28...@bloom-housing/partners@5.1.1-alpha.29) (2022-08-29)
 
 **Note:** Version bump only for package @bloom-housing/partners

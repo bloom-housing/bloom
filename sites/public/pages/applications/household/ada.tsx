@@ -147,7 +147,6 @@ const ApplicationAda = () => {
 
         <div className="form-card__group">
           <fieldset>
-            <p className="field-note mb-4">{t("errors.selectAllThatApply")}</p>
             <legend className="sr-only">{t("application.details.adaPriorities")}</legend>
             <FieldGroup
               type="checkbox"

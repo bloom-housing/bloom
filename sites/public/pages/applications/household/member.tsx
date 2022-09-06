@@ -242,6 +242,8 @@ const ApplicationMember = () => {
                       errorMessage={t("errors.streetError")}
                       register={register}
                       dataTestId={"app-household-member-address-street"}
+                      label={t("application.contact.streetAddress")}
+                      readerOnly={true}
                     />
 
                     <Field

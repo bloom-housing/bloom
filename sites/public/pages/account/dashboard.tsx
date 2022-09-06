@@ -67,6 +67,7 @@ function Dashboard(props: DashboardProps) {
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
 
             <div className="flex flex-wrap relative">
+              <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
               <DashBlocks>
                 <DashBlock
                   href="/account/applications"

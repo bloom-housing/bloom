@@ -10,7 +10,9 @@ describe("<ReferralApplication>", () => {
       <ReferralApplication
         phoneNumber={"211"}
         description={"Referral description"}
-        title={"For further information"}
+        strings={{
+          title: "For further information",
+        }}
       />
     )
     expect(getByText("211", { exact: false })).toBeTruthy()

@@ -11,6 +11,11 @@ const ProgressNavItem = (props: {
   label: string
   mounted: boolean
   style: ProgressNavStyle
+  strings?: {
+    screenReaderCompleted?: string
+    screenReaderNotCompleted?: string
+    screenReaderTitle?: string
+  }
 }) => {
   let bgColor = "is-disabled"
   if (props.mounted) {
@@ -23,9 +28,17 @@ const ProgressNavItem = (props: {
 
   const srTextBuilder = (): string | React.ReactFragment => {
     if (props.section < props.currentPageSection) {
-      return <span className="sr-only">{t("progressNav.completed")}</span>
+      return (
+        <span className="sr-only">
+          {props.strings?.screenReaderCompleted ?? t("progressNav.completed")}
+        </span>
+      )
     } else if (props.section > props.currentPageSection) {
-      return <span className="sr-only">{t("progressNav.notCompleted")}</span>
+      return (
+        <span className="sr-only">
+          {props.strings?.screenReaderNotCompleted ?? t("progressNav.notCompleted")}
+        </span>
+      )
     } else {
       return ""
     }
@@ -50,12 +63,17 @@ const ProgressNav = (props: {
   labels: string[]
   mounted: boolean
   style?: ProgressNavStyle
+  strings?: {
+    screenReaderHeading?: string
+  }
 }) => {
   let navClasses = "progress-nav"
   if (props.style === "bar") navClasses += " progress-nav__bar"
   return (
     <div aria-label="progress">
-      <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
+      <h2 className="sr-only">
+        {props.strings?.screenReaderHeading ?? t("progressNav.srHeading")}
+      </h2>
       <ol className={!props.mounted ? "invisible" : navClasses}>
         {props.labels.map((label, i) => (
           <ProgressNavItem

@@ -1,5 +1,5 @@
 .markdown {
-  h3 {
+  h2 {
     @apply mt-8;
     @apply mb-5;
     @apply text-3xl;
@@ -9,7 +9,7 @@
     }
   }
 
-  h3:first-child {
+  h2:first-child {
     @apply mt-0;
   }
 
