@@ -39,7 +39,7 @@
   }
 
   .card__container.is-dense .card__section {
-    padding-block: calc(var(--content-padding-block) - var(--bloom-s3))
+    padding-block: calc(var(--content-padding-block) - var(--bloom-s3));
   }
 
   &.card-appendix {
