@@ -163,7 +163,7 @@ const Aside = ({
         )
       }
 
-      const lotteryResults = listing.events.find(
+      const lotteryResults = listing?.events?.find(
         (event) => event.type === ListingEventType.lotteryResults
       )
       if (lotteryResults) {

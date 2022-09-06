@@ -12,6 +12,7 @@ import {
   ListingAvailability,
   Jurisdiction,
   ApplicationSection,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -343,6 +344,25 @@ export const ListingView = (props: ListingProps) => {
   const getDateString = (date: Date, format: string) => {
     return date ? dayjs(date).format(format) : null
   }
+
+  const getWhatToExpectContent = () => {
+    if (listing.whatToExpect) return { content: listing.whatToExpect, expandableContent: null }
+    if (listing.listingAvailability === ListingAvailability.openWaitlist)
+      return {
+        content: t("whatToExpect.waitlist"),
+        expandableContent: t("whatToExpect.waitlistReadMore"),
+      }
+    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe)
+      return { content: t("whatToExpect.fcfs"), expandableContent: t("whatToExpect.fcfsReadMore") }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery)
+      return {
+        content: t("whatToExpect.lottery"),
+        expandableContent: t("whatToExpect.lotteryReadMore"),
+      }
+    return null
+  }
+
+  const whatToExpectContent = getWhatToExpectContent()
 
   const applySidebar = () => (
     <>
@@ -768,7 +788,8 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <ExpandableSection
-              content={listing.whatToExpect}
+              content={whatToExpectContent.content}
+              expandableContent={whatToExpectContent.expandableContent}
               strings={{
                 title: t("whatToExpect.label"),
                 readMore: t("t.readMore"),
