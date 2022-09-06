@@ -6,7 +6,6 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
-import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
 import { Rule } from "../types/rule-enum"
 
 @Entity()
@@ -16,7 +15,12 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Expose()
   @IsEnum(Rule, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  rule: string
+  rule: Rule
+
+  @Column({ nullable: false, unique: true })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  ruleKey: string
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()

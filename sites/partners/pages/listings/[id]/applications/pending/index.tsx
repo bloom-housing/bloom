@@ -1,48 +1,32 @@
-import React, { useEffect, useState, useContext } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   AgTable,
   t,
-  Button,
-  SiteAlert,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
-import {
-  useSingleListingData,
-  useFlaggedApplicationsList,
-  useApplicationsExport,
-} from "../../../../../lib/hooks"
+import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
 
 const ApplicationsList = () => {
-  const { profile } = useContext(AuthContext)
   const router = useRouter()
   const listingId = router.query.id as string
   const type = router.query.type as string
-
-  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
-    listingId,
-    profile?.roles?.isAdmin ?? false
-  )
 
   const tableOptions = useAgTable()
 
   /* Data Fetching */
   const { listingDto } = useSingleListingData(listingId)
   const listingName = listingDto?.name
-  const [isListingOpen, setIsListingOpen] = useState(null)
-  useEffect(() => {
-    listingDto?.status && setIsListingOpen(listingDto.status === "active")
-  }, [listingDto?.status])
+  const isListingOpen = listingDto?.status === "active"
   let view = "pending"
   if (type && type === "name_dob") {
     view = "pendingNameAndDoB"
@@ -107,6 +91,7 @@ const ApplicationsList = () => {
   class formatEnabledCell {
     linkWithId: HTMLSpanElement
     init(params) {
+      console.log("94:", { params })
       const applicationId = params.data.id
       this.linkWithId = document.createElement("button")
       this.linkWithId.innerText = params.value
@@ -125,6 +110,7 @@ const ApplicationsList = () => {
       this.disabledLink = document.createElement("button")
       this.disabledLink.innerText = params.value
       this.disabledLink.classList.add("text-gray-750")
+      this.disabledLink.classList.add("cursor-default")
     }
     getGui() {
       return this.disabledLink
@@ -149,7 +135,6 @@ const ApplicationsList = () => {
           flagsQty: flaggedAppsData?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
-          flagsLabel: t("nav.flags"),
         }}
         breadcrumbs={
           <Breadcrumbs>
@@ -163,78 +148,68 @@ const ApplicationsList = () => {
             </BreadcrumbLink>
           </Breadcrumbs>
         }
-      >
-        {csvExportError && (
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="alert" timeout={5000} dismissable />
-          </div>
-        )}
-      </NavigationHeader>
+      />
 
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
         <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-          <ApplicationsSideNav
-            className="w-full md:w-72"
-            listingId={listingId}
-            listingOpen={isListingOpen}
-          />
-
-          <div className="w-full">
-            {isListingOpen && (
-              <AlertBox type="notice" className="mb-3" closeable>
-                Preview applications that are pending review. Duplicates can be resolved when
-                applications close
-                {listingDto?.applicationDueDate &&
-                  ` on ${formatDateTime(listingDto.applicationDueDate, true)}`}
-                .
-              </AlertBox>
-            )}
-            {isListingOpen !== null && (
-              <AgTable
-                id="applications-table"
-                className="w-full"
-                pagination={{
-                  perPage: tableOptions.pagination.itemsPerPage,
-                  setPerPage: tableOptions.pagination.setItemsPerPage,
-                  currentPage: tableOptions.pagination.currentPage,
-                  setCurrentPage: tableOptions.pagination.setCurrentPage,
-                }}
-                config={{
-                  gridComponents,
-                  columns,
-                  totalItemsLabel: t("applications.totalApplications"),
-                }}
-                data={{
-                  items: flaggedAppsData?.items ?? [],
-                  loading: flaggedAppsLoading,
-                  totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
-                  totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
-                }}
-                search={{
-                  setSearch: tableOptions.filter.setFilterValue,
-                }}
-                sort={{
-                  setSort: tableOptions.sort.setSortOptions,
-                }}
-                headerContent={
-                  <div className="flex-row">
-                    <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
-                      {t("t.export")}
-                    </Button>
-                  </div>
-                }
+          {listingDto && (
+            <>
+              <ApplicationsSideNav
+                className="w-full md:w-72"
+                listingId={listingId}
+                listingOpen={isListingOpen}
               />
-            )}
 
-            {/* <div className="flex flex-row justify-end">
+              <div className="w-full">
+                {isListingOpen && (
+                  <AlertBox type="notice" className="mb-3" customIcon={"lock"} closeable>
+                    Preview applications that are pending review. Duplicates can be resolved when
+                    applications close
+                    {listingDto?.applicationDueDate &&
+                      ` on ${formatDateTime(listingDto.applicationDueDate, true)}`}
+                    .
+                  </AlertBox>
+                )}
+                <AgTable
+                  id="applications-table"
+                  className="w-full"
+                  pagination={{
+                    perPage: tableOptions.pagination.itemsPerPage,
+                    setPerPage: tableOptions.pagination.setItemsPerPage,
+                    currentPage: tableOptions.pagination.currentPage,
+                    setCurrentPage: tableOptions.pagination.setCurrentPage,
+                  }}
+                  config={{
+                    gridComponents,
+                    columns,
+                    totalItemsLabel: t("applications.totalApplications"),
+                  }}
+                  data={{
+                    items: flaggedAppsData?.items ?? [],
+                    loading: flaggedAppsLoading,
+                    totalItems: flaggedAppsData?.meta?.totalItems ?? 0,
+                    totalPages: flaggedAppsData?.meta?.totalPages ?? 0,
+                  }}
+                  search={{
+                    setSearch: tableOptions.filter.setFilterValue,
+                  }}
+                  sort={{
+                    setSort: tableOptions.sort.setSortOptions,
+                  }}
+                />
+
+                {/* <div className="flex flex-row justify-end">
+>>>>>>> upstream/feat/duplicates-v2
               <div className="mt-5">
                 <span>Last Updated 06/17/22 at 9:00am</span>
                 <Button className="mx-1 ml-5">{t("applications.scanForDuplicates")}</Button>
               </div>
             </div> */}
-          </div>
+              </div>
+            </>
+          )}
         </article>
       </section>
     </Layout>

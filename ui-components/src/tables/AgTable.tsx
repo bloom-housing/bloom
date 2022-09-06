@@ -1,7 +1,15 @@
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { GridOptions, ColumnState, ColumnApi, ColDef, ColGroupDef } from "ag-grid-community"
+import {
+  GridOptions,
+  ColumnState,
+  ColumnApi,
+  ColDef,
+  ColGroupDef,
+  RowNode,
+  GridApi,
+} from "ag-grid-community"
 import { AgPagination, AG_PER_PAGE_OPTIONS } from "./AgPagination"
 import { LoadingOverlay } from "../overlays/LoadingOverlay"
 import { Field } from "../forms/Field"
@@ -39,6 +47,7 @@ export interface AgTableConfig {
   columns: (ColDef | ColGroupDef)[]
   totalItemsLabel: string
   rowSelection?: boolean
+  setSelectedRows?: (selected: RowNode[]) => void
 }
 
 export interface AgTableData {
@@ -91,17 +100,17 @@ const AgTable = ({
   sort: { setSort } = {},
   headerContent,
   data,
-  config: { gridComponents, columns, totalItemsLabel, rowSelection },
+  config: { gridComponents, columns, totalItemsLabel, rowSelection, setSelectedRows },
   hidePagination,
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
   const defaultColDef = {
     resizable: true,
-    maxWidth: 300,
   }
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
+  const [gridApi, setGridApi] = useState<GridApi | null>(null)
 
   const [validSearch, setValidSearch] = useState<boolean>(true)
 
@@ -184,6 +193,7 @@ const AgTable = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onGridReady = (params: any) => {
     setGridColumnApi(params.columnApi)
+    setGridApi(params.api)
   }
 
   return (
@@ -209,7 +219,6 @@ const AgTable = ({
 
         {headerContent}
       </div>
-
       <div className="applications-table mt-5">
         <LoadingOverlay isLoading={data.loading}>
           <div>
@@ -227,6 +236,11 @@ const AgTable = ({
               suppressScrollOnNewData={true}
               rowSelection={rowSelection ? "multiple" : undefined}
               rowMultiSelectWithClick={rowSelection ? true : undefined}
+              onSelectionChanged={
+                setSelectedRows && rowSelection
+                  ? () => setSelectedRows(gridApi?.getSelectedNodes() || [])
+                  : undefined
+              }
             ></AgGridReact>
           </div>
         </LoadingOverlay>
