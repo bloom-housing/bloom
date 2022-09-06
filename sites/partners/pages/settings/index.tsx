@@ -247,7 +247,7 @@ const Settings = () => {
               saveQuestion({ ...cloneDrawerOpen, text: `Copy of ${cloneDrawerOpen.text}` }, "add")
             }}
             dataTestId={"clone-button-confirm"}
-            disabled={isCreateLoading}
+            loading={isCreateLoading}
           >
             {t("settings.copy")}
           </Button>,
@@ -265,7 +265,7 @@ const Settings = () => {
           </Button>,
         ]}
       >
-        {t("settings.createCloneDescription")}
+        {t("settings.createCopyDescription")}
       </Modal>
     </>
   )
