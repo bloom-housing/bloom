@@ -31,10 +31,6 @@
 
   .control {
     position: relative;
-    // padding: var(--bloom-s4);
-    // border-width: 1px;
-    // border-radius: var(--bloom-s1_5);
-    // border-color: var(--bloom-color-gray-450);
 
     .input {
       @apply border;
@@ -85,6 +81,7 @@
     opacity: 0;
     position: absolute;
     margin-left: -20px;
+
     &:focus {
       text-decoration: none;
       // Appears to be for the case of no label
