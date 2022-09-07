@@ -1,6 +1,7 @@
 import React from "react"
 import { BADGES } from "../../.storybook/constants"
 import { AppearanceStyleType, Button, ButtonGroup, ButtonGroupSpacing, LinkButton } from "../.."
+import { HeadingGroup } from "../headers/HeadingGroup"
 import Card from "./Card"
 import CardDocumentation from "./Card.docs.mdx"
 
@@ -43,19 +44,21 @@ export const TextContent = () => (
 export const MixedContent = () => (
   <div style={{ maxWidth: "500px" }}>
     <Card>
-      <figure>
-        <img src="/images/listing.jpg" />
-      </figure>
+      <div>
+        <figure>
+          <img src="/images/listing.jpg" />
+        </figure>
 
-      <Card.Header
-        suffix={
-          <div>
-            <Button>Click</Button>
-          </div>
-        }
-      >
-        <h3 className="card-header">I'm a heading!</h3>
-      </Card.Header>
+        <Card.Header
+          suffix={
+            <div>
+              <Button>Click</Button>
+            </div>
+          }
+        >
+          <h3 className="card-header">I'm a heading!</h3>
+        </Card.Header>
+      </div>
 
       <Card.Section>
         <p>Hello World!</p>
@@ -75,7 +78,7 @@ export const HeaderFooterOnly = () => (
   <div style={{ maxWidth: "600px" }}>
     <Card>
       <Card.Header>
-        <Card.HeadingGroup
+        <HeadingGroup
           headingPriority={2}
           heading="Household Maximum Income"
           subheading="To determine your eligibility for this property, choose your household size (include yourself in that calculation)."
@@ -140,7 +143,7 @@ export const DetroitStyle = () => {
       <div className="card-overrides" style={{ maxWidth: "600px" }}>
         <Card>
           <Card.Header>
-            <Card.HeadingGroup
+            <HeadingGroup
               headingPriority={2}
               heading="Household Maximum Income"
               subheading="To determine your eligibility for this property, choose your household size (include yourself in that calculation)."
@@ -188,7 +191,6 @@ export const CustomWackyCard = () => {
       --border-width: 3px;
       --rule-width: 6px;
       --rule-color: forestgreen;
-      --header-heading-color: var(--bloom-color-alert-dark);
 
       color: var(--bloom-color-secondary);
       box-shadow: var(--bloom-shadow-md);
@@ -198,6 +200,7 @@ export const CustomWackyCard = () => {
       font-family: cursive;
       font-size: 200%;
       letter-spacing: var(--bloom-letter-spacing-wider);
+      color: var(--bloom-color-alert-dark);
     }
 
     .wacky-card .markdown {

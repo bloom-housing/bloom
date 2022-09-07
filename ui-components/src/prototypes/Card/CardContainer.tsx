@@ -21,7 +21,6 @@ const CardContainer = (props: ContainerProps) => {
   const headerChildren = slotElements(props.children, "CardHeader")
   const sectionChildren = slotElements(props.children, "CardSection")
   const footerChildren = slotElements(props.children, "CardFooter")
-  console.info(sectionChildren.length)
 
   const dense = sectionChildren.length > 1
 

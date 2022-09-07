@@ -16,9 +16,6 @@
   --header-margin-inline-desktop: var(--content-margin-inline-desktop);
   --header-margin-inline-mobile: var(--content-margin-inline-mobile);
   --header-margin-inline: var(--header-margin-inline-desktop);
-  --header-subheading-margin: var(--bloom-s3);
-  --header-heading-color: inherit;
-  --header-subheading-color: inherit;
 
   @media (max-width: $screen-sm) {
     --content-margin-inline: var(--content-margin-inline-mobile);
@@ -44,21 +41,6 @@
     justify-content: space-between;
     align-items: center;
     gap: var(--bloom-s7);
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: var(--header-heading-color);
-  }
-
-  p {
-    margin-block: var(--header-subheading-margin);
-    font-size: var(--bloom-font-size-base);
-    color: var(--header-subheading-color);
   }
 }
 

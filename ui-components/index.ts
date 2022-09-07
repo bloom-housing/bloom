@@ -56,6 +56,7 @@ export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/StepHeader"
 export * from "./src/headers/Heading"
+export * from "./src/headers/HeadingGroup"
 
 /* Helpers */
 export * from "./src/helpers/capitalize"

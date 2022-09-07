@@ -8,7 +8,7 @@ import { Card } from "./Card"
   <Story id="blocks-card--text-content" />
 </Canvas>
 
-The 2nd-generation Card component is indended to serve as a flexible content container with a header, optional content sections, and a footer. Over time our intention is to "port" some other card types and content blocks in the system to use Card as their underlying structure.
+The 2nd-generation Card component is intended to serve as a flexible content container with a header, optional content sections, and a footer. Over time our intention is to "port" some other card types and content blocks in the system to use Card as their underlying structure.
 
 Styles within the Card node tree are intended to set up sensible defaults without requiring the consumer to configure bespoke styling as they author a card. For example, rule lines will be drawn automatically between the various subcomponents within a card, and margin/padding will be set according to top-level variables.
 
@@ -16,7 +16,7 @@ You can author a Card using subcomponents simply by referencing them via a singl
 
 Note that the `<Card.Footer>` subcomponent doesn't inherently add rules or padding so that you can use other components with self-contained styling such as `<ButtonGroup>`. However, you can add `<Card.Section>` within `<Card.Footer>` to add rules and padding.
 
-The `<Card.Header>` subcomponent will typically be paired with a child `<Card.HeadingGroup>` for a title + subtitle grouping, but that's not a requirement.
+The `<Card.Header>` subcomponent will typically be paired with a child `<HeadingGroup>` for a title + subtitle grouping, but that's not a requirement.
 
 You can browse through the various stories for different examples of how you'd pattern a card with various subcomponents. Many of the visual aspects of a Card can be customized using the CSS variables listed below. For example, this "wacky card" example:
 
@@ -31,10 +31,6 @@ You can browse through the various stories for different examples of how you'd p
 ## Card.Header Properties
 
 <ArgsTable of={Card.Header} />
-
-## Card.HeadingGroup Properties
-
-<ArgsTable of={Card.HeadingGroup} />
 
 ## Card.Section Properties
 
@@ -62,6 +58,3 @@ You can apply CSS variables to the `.card` selector to customize the appearance 
 | `--header-padding-block`          | Size                                         | The space above and below the header                                         | `--bloom-s8`             |
 | `--header-margin-inline-desktop`  | Size                                         | The space to the left and right of the header for desktop-size screens       | `--bloom-s16`            |
 | `--header-margin-inline-mobile`   | Size                                         | The space to the left and right of the header for mobile-size screens        | `--bloom-s4`             |
-| `--header-subheading-margin`      | Size                                         | The space between the heading and subheading within a card header            | `--bloom-s3`             |
-| `--header-heading-color`          | Color                                        | Override to set a specific heading text color                                | `inherit`                |
-| `--header-subheading-color`       | Color                                        | Override to set a specific subheading text color                             | `inherit`                |
