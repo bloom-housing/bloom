@@ -26,7 +26,7 @@ const ApplicationConfirmation = () => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const router = useRouter()
 
-  const imageUrl = imageUrlFromListing(listing, process.env.listingPhotoSize)[0]
+  const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
 
   const reviewOrder = useMemo(() => {
     if (listing) {

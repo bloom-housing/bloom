@@ -75,7 +75,7 @@ const ApplicationChooseLanguage = () => {
   const currentPageSection = 1
 
   const imageUrl = listing?.assets
-    ? imageUrlFromListing(listing, process.env.listingPhotoSize)[0]
+    ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
     : ""
 
   const onLanguageSelect = useCallback(
