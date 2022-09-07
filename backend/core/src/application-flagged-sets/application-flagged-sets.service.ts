@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { BadRequestException, Inject, Injectable, Scope } from "@nestjs/common"
 import { InjectQueue } from "@nestjs/bull"
 import { Queue } from "bull"
 import { AuthzService } from "../auth/services/authz.service"
@@ -17,6 +17,7 @@ import { ListingStatus } from "../listings/types/listing-status-enum"
 import { View } from "./types/view-enum"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
 import { Rule } from "./types/rule-enum"
+import { IdDto } from "../../src/shared/dto/id.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -103,7 +104,7 @@ export class ApplicationFlaggedSetsService {
     }
   }
 
-  async findOneById(afsId: string) {
+  async findOneById(afsId: string, applicationIdList?: IdDto[]) {
     const qb = this.afsRepository
       .createQueryBuilder("afs")
       .select([
@@ -116,26 +117,27 @@ export class ApplicationFlaggedSetsService {
         "applicant.birthDay",
         "applicant.birthMonth",
         "applicant.birthYear",
+        "listing.id",
+        "listing.status",
       ])
       .leftJoin("afs.applications", "applications")
       .leftJoin("applications.applicant", "applicant")
+      .leftJoin("afs.listing", "listing")
       .orderBy("applications.confirmationCode", "DESC")
       .where("afs.id = :id", { id: afsId })
+    if (applicationIdList) {
+      qb.andWhere("applications.id IN (:...applicationIdList)", {
+        applicationIdList: applicationIdList.map((elem) => elem.id),
+      })
+    }
 
     return await qb.getOneOrFail()
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {
     return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
-      const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
-      const afs = await transAfsRepository.findOne({
-        where: { id: dto.afsId },
-        relations: ["applications", "listing"],
-      })
-      if (!afs) {
-        throw new NotFoundException()
-      }
+      const afs = await this.findOneById(dto.afsId, dto.applications)
 
       if (afs.listing.status !== ListingStatus.closed) {
         throw new BadRequestException("Listing must be closed before resolving any duplicates.")
@@ -144,29 +146,15 @@ export class ApplicationFlaggedSetsService {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       afs.resolvingUser = this.request.user as User
       afs.resolvedTime = new Date()
-      // TODO: update this so it resolves at the application level instead of the flagged set level
-      // afs.status = FlaggedSetStatus.resolved
-      const appsToBeResolved = afs.applications.filter((afsApp) =>
-        dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
+
+      await Promise.all(
+        afs.applications.map(async (appToBeResolved) => {
+          await transApplicationsRepository.update(appToBeResolved.id, {
+            markedAsDuplicate: dto.reviewStatus === FlaggedSetStatus.resolved,
+            reviewStatus: dto.reviewStatus,
+          })
+        })
       )
-
-      const appsNotToBeResolved = afs.applications.filter(
-        (afsApp) => !dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
-      )
-
-      for (const appToBeResolved of appsToBeResolved) {
-        appToBeResolved.markedAsDuplicate = true
-      }
-
-      for (const appNotToBeResolved of appsNotToBeResolved) {
-        appNotToBeResolved.markedAsDuplicate = false
-      }
-
-      await transApplicationsRepository.save([...appsToBeResolved, ...appsNotToBeResolved])
-
-      appsToBeResolved.forEach((app) => (app.markedAsDuplicate = true))
-      await transAfsRepository.save(afs)
-
       return afs
     })
   }
