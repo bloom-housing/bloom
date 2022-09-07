@@ -63,3 +63,19 @@ export const CurrencyFieldError = () => {
     />
   )
 }
+
+export const checkedTesting = () => {
+  const { register, getValues, setValue } = useForm({ mode: "onChange" })
+  return (
+    <Field
+      register={register}
+      name={"Test Input"}
+      className={"custom-class"}
+      // controlClassName={"custom-control-class"}
+      describedBy={"Test Input"}
+      label={"Test Input Custom"}
+      type={"checkbox"}
+      bordered
+    />
+  )
+}

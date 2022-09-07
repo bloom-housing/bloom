@@ -31,6 +31,7 @@ export interface FieldProps {
   setValue?: UseFormMethods["setValue"]
   dataTestId?: string
   hidden?: boolean
+  bordered?: boolean
 }
 
 const Field = (props: FieldProps) => {
@@ -52,6 +53,8 @@ const Field = (props: FieldProps) => {
   if (props.controlClassName) {
     controlClasses.push(props.controlClassName)
   }
+  if (props.bordered && (props.type === "radio" || props.type === "checkbox"))
+    controlClasses.push("field-border")
 
   const formatValue = () => {
     if (props.getValues && props.setValue) {
