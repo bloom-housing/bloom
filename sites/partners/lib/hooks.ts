@@ -354,6 +354,26 @@ export function useJurisdictionalMultiselectQuestionList(
   }
 }
 
+export function useListingsMultiselectQuestionList(multiselectQuestionId: string) {
+  const { multiselectQuestionsService } = useContext(AuthContext)
+
+  const fetcher = () =>
+    multiselectQuestionsService.retrieveListings({
+      multiselectQuestionId,
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/muliselectQuestions/listings/${multiselectQuestionId}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()

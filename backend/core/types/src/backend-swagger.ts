@@ -1538,6 +1538,29 @@ export class MultiselectQuestionsService {
       axios(configs, resolve, reject)
     })
   }
+
+  /**
+   * Get Listings by multiselect question id
+   */
+  retrieveListings(
+    params: {
+      /**  */
+      multiselectQuestionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/listings/{multiselectQuestionId}"
+      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ReservedCommunityTypesService {
