@@ -61,6 +61,7 @@ export const Modal = (props: ModalProps) => {
       backdrop={props.backdrop}
       slim={props.slim}
       role={props.role ? props.role : "dialog"}
+      scrollable={true}
     >
       <div className={modalClassNames.join(" ")}>
         <ModalHeader
