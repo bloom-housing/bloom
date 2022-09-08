@@ -25,16 +25,14 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
           .map((imageObj) => imageObj.image)
       : listing?.assets
 
-  const cloudinaryBuilding = imageAssets
-    ?.filter((asset: Asset) => asset.label == CLOUDINARY_BUILDING_LABEL)
-    ?.map((asset: Asset) => asset.fileId)
-
-  if (cloudinaryBuilding?.length > 0)
-    return cloudinaryBuilding.map((imageId) => cloudinaryUrlFromId(imageId, size))
-  else {
-    const assetStrs = imageAssets
-      ?.filter((asset: Asset) => asset.label == "building")
-      ?.map((asset) => asset.fileId)
-    return assetStrs?.length > 0 ? assetStrs : ["/images/detroitDefault.png"]
-  }
+  const imageUrls = imageAssets
+    ?.filter(
+      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
+    )
+    ?.map((asset: Asset) => {
+      return asset.label === CLOUDINARY_BUILDING_LABEL
+        ? cloudinaryUrlFromId(asset.fileId, size)
+        : asset.fileId
+    })
+  return imageUrls?.length > 0 ? imageUrls : ["/images/detroitDefault.png"]
 }
