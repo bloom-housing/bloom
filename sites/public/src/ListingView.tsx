@@ -347,6 +347,11 @@ export const ListingView = (props: ListingProps) => {
 
   const getWhatToExpectContent = () => {
     if (listing.whatToExpect) return { content: listing.whatToExpect, expandableContent: null }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery)
+      return {
+        content: t("whatToExpect.lottery"),
+        expandableContent: t("whatToExpect.lotteryReadMore"),
+      }
     if (listing.listingAvailability === ListingAvailability.openWaitlist)
       return {
         content: t("whatToExpect.waitlist"),
@@ -354,11 +359,7 @@ export const ListingView = (props: ListingProps) => {
       }
     if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe)
       return { content: t("whatToExpect.fcfs"), expandableContent: t("whatToExpect.fcfsReadMore") }
-    if (listing.reviewOrderType === ListingReviewOrder.lottery)
-      return {
-        content: t("whatToExpect.lottery"),
-        expandableContent: t("whatToExpect.lotteryReadMore"),
-      }
+
     return null
   }
 
@@ -788,8 +789,8 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <ExpandableSection
-              content={whatToExpectContent.content}
-              expandableContent={whatToExpectContent.expandableContent}
+              content={whatToExpectContent?.content}
+              expandableContent={whatToExpectContent?.expandableContent}
               strings={{
                 title: t("whatToExpect.label"),
                 readMore: t("t.readMore"),
