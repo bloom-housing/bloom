@@ -100,7 +100,14 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
             ) as jurisName
         FROM multiselect_questions mq
             JOIN programs p ON p.title = mq.text
-        WHERE mq.application_section = 'programs';
+        WHERE mq.application_section = 'programs'
+          AND exists (
+            SELECT
+                1
+            FROM jurisdictions_programs_programs jpp
+            WHERE jpp.programs_id = p.id
+          )
+        ;
 
 
         INSERT INTO multiselect_programs_preferences_mapper (multiselect_id, program_or_preference_id, application_section, juris_name)
@@ -118,7 +125,13 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
             ) as jurisName
         FROM multiselect_questions mq
             JOIN preferences p ON p.title = mq.text
-        WHERE mq.application_section = 'preferences';
+        WHERE mq.application_section = 'preferences'
+          AND exists (
+            SELECT
+                1
+            FROM jurisdictions_preferences_preferences jpp
+            WHERE jpp.preferences_id = p.id
+          )
     `)
 
     await this.alterData(queryRunner, "program")
@@ -259,7 +272,7 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
                 toReturn.key = this.getTranslated(
                   `${type}s`,
                   selection.key,
-                  "preferNotToSay" ? "preferNotToSay" : `${opt.key}.label`,
+                  opt.key === "preferNotToSay" ? "preferNotToSay" : `${opt.key}.label`,
                   metaKey.jurisName
                 )
                 return toReturn
