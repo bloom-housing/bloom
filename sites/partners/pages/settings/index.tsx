@@ -67,22 +67,19 @@ const Settings = () => {
         return aChar.localeCompare(bChar)
       })
       .map((preference) => {
-        const rowClass = updatedIds.indexOf(preference.id) >= 0 ? "bg-gray-400" : ""
+        // const rowClass = updatedIds.indexOf(preference.id) >= 0 ? "bg-gray-400" : ""
         return {
           name: {
             content: preference?.text,
-            rowClass,
           },
           jurisdiction: {
             content: preference?.jurisdictions?.reduce((acc, item, index) => {
               return `${acc}${index > 0 ? ", " : ""}${item.name}`
             }, ""),
-            rowClass,
           },
 
           updated: {
             content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
-            rowClass,
           },
           icons: {
             content: (
@@ -96,7 +93,6 @@ const Settings = () => {
                 editTestId={`preference-edit-icon: ${preference.text}`}
               />
             ),
-            rowClass,
           },
         }
       })
