@@ -220,7 +220,7 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
         SELECT
             p.form_metadata,
             mq.text,
-            mppm.juris_name as jurisName,
+            mppm.juris_name as jurisname,
             mppm.program_or_preference_id
         FROM multiselect_programs_preferences_mapper mppm
             LEFT JOIN ${type}s p ON p.id = mppm.program_or_preference_id
@@ -273,7 +273,7 @@ export class programAndPreferenceUpdates1661805250707 implements MigrationInterf
                   `${type}s`,
                   selection.key,
                   opt.key === "preferNotToSay" ? "preferNotToSay" : `${opt.key}.label`,
-                  metaKey.jurisName
+                  metaKey.jurisname
                 )
                 return toReturn
               }),
