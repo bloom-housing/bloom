@@ -25,8 +25,6 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
           .map((imageObj) => imageObj.image)
       : listing?.assets
 
-  console.log(imageAssets)
-
   const imageUrls = imageAssets
     ?.filter(
       (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
@@ -36,6 +34,6 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
         ? cloudinaryUrlFromId(asset.fileId, size)
         : asset.fileId
     })
-  console.log(imageUrls)
+
   return imageUrls?.length > 0 ? imageUrls : ["/images/detroitDefault.png"]
 }
