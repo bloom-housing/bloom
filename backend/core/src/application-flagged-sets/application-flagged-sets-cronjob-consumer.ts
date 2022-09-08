@@ -7,7 +7,6 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { ListingRepository } from "../listings/db/listing.repository"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
-import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 
 @Processor(AFSProcessingQueueNames.afsProcessing)
 export class ApplicationFlaggedSetsCronjobConsumer {
@@ -97,8 +96,6 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
 
     for (const afs of afses) {
-      // TODO: update this so it resolves at the application level instead of the flagged set level
-      // afs.status = FlaggedSetStatus.flagged
       afs.resolvedTime = null
       afs.resolvingUser = null
 
@@ -143,7 +140,6 @@ export class ApplicationFlaggedSetsCronjobConsumer {
         ruleKey: this.getRuleKeyForRule(newApplication, rule),
         resolvedTime: null,
         resolvingUser: null,
-        status: FlaggedSetStatus.flagged,
         applications: [newApplication, ...applicationsMatchingRule],
         listing: { id: newApplication.listingId },
       })

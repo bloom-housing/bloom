@@ -199,14 +199,6 @@ const ApplicationsList = () => {
                     setSort: tableOptions.sort.setSortOptions,
                   }}
                 />
-
-                {/* <div className="flex flex-row justify-end">
->>>>>>> upstream/feat/duplicates-v2
-              <div className="mt-5">
-                <span>Last Updated 06/17/22 at 9:00am</span>
-                <Button className="mx-1 ml-5">{t("applications.scanForDuplicates")}</Button>
-              </div>
-            </div> */}
               </div>
             </>
           )}
