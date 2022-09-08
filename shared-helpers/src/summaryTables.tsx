@@ -5,8 +5,14 @@ import {
   t,
   numberOrdinal,
   ContentAccordion,
+  getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
 import { MinMax, UnitSummary, Unit, ListingAvailability } from "@bloom-housing/backend-core/types"
+
+const getTranslationFromCurrencyString = (value: string) => {
+  if (value.startsWith("t.")) return getTranslationWithArguments(value)
+  return value
+}
 
 export const unitSummariesTable = (
   summaries: UnitSummary[],
@@ -16,12 +22,12 @@ export const unitSummariesTable = (
     const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
-        <strong>{unitSummary.minIncomeRange.min}</strong>
+        <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
       ) : (
         <>
-          <strong>{unitSummary.minIncomeRange.min}</strong>
+          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
           {` ${t("t.to")} `}
-          <strong>{unitSummary.minIncomeRange.max}</strong>
+          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}</strong>
         </>
       )
 
@@ -29,14 +35,14 @@ export const unitSummariesTable = (
       const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
       return rentMin == rentMax ? (
         <>
-          <strong>{rentMin}</strong>
+          <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
           {unit}
         </>
       ) : (
         <>
-          <strong>{rentMin}</strong>
+          <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
           {` ${t("t.to")} `}
-          <strong>{rentMax}</strong>
+          <strong>{getTranslationFromCurrencyString(rentMax)}</strong>
           {unit}
         </>
       )

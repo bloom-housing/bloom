@@ -245,7 +245,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
 
 const getCurrencyString = (initialValue: string) => {
   const roundedValue = getRoundedNumber(initialValue)
-  if (Number.isNaN(roundedValue)) return "N/A"
+  if (Number.isNaN(roundedValue)) return "t.n/a"
   return usd.format(roundedValue)
 }
 
