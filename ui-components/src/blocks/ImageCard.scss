@@ -156,6 +156,11 @@
     --scroll-max-height: calc(80vh - 200px);
     max-width: var(--bloom-width-5xl);
   }
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   svg {
     @apply sr-only;
   }
