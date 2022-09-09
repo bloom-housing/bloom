@@ -28,6 +28,19 @@
   .field-label--caps.label + .field-note {
     @apply mt-0;
   }
+  .field-border {
+    --bg: var(--bloom-color-white);
+    background-color: var(--bg);
+    padding-top: var(--bloom-s4);
+    padding-bottom: var(--bloom-s4);
+    padding-left: 46px;
+    border-width: 1px;
+    border-radius: var(--bloom-s1_5);
+    border-color: var(--bloom-color-gray-450);
+  }
+  input:checked + label.field-border {
+    --bg: var(--bloom-color-gray-450);
+  }
 
   .control {
     position: relative;
@@ -341,20 +354,6 @@ input[type="number"] {
   @apply tracking-wide;
   @apply font-sans;
   font-weight: normal;
-}
-
-.field-border {
-  --bg: var(--bloom-color-white);
-  background-color: var(--bg);
-  padding-top: var(--bloom-s4);
-  padding-bottom: var(--bloom-s4) !important;
-  padding-left: calc(var(--bloom-s4) + 4rem);
-  border-width: 1px;
-  border-radius: var(--bloom-s1_5);
-  border-color: var(--bloom-color-gray-450);
-}
-input:checked + label.field-border {
-  background-color: red;
 }
 
 .form-section__title {
