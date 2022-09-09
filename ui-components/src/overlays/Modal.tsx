@@ -14,7 +14,8 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   modalClassNames?: string
   headerClassNames?: string
   role?: string
-  scrollable?: boolean
+  scrollableModal?: boolean
+  scrollableOverlay?: boolean
   slim?: boolean
   title: string
 }
@@ -46,7 +47,7 @@ export const Modal = (props: ModalProps) => {
   const modalClassNames = ["modal"]
   const innerClassNames = ["modal__inner"]
   const closeClassNames = ["modal__close"]
-  if (props.scrollable) innerClassNames.push("is-scrollable")
+  if (props.scrollableModal) innerClassNames.push("is-scrollable")
   if (props.modalClassNames) modalClassNames.push(...props.modalClassNames.split(" "))
   if (props.innerClassNames) innerClassNames.push(...props.innerClassNames.split(" "))
   if (props.closeClassNames) closeClassNames.push(...props.closeClassNames.split(" "))
@@ -59,9 +60,9 @@ export const Modal = (props: ModalProps) => {
       onClose={props.onClose}
       className={props.className}
       backdrop={props.backdrop}
-      scrollable={props.scrollable}
       slim={props.slim}
       role={props.role ? props.role : "dialog"}
+      scrollable={props.scrollableOverlay}
     >
       <div className={modalClassNames.join(" ")}>
         <ModalHeader

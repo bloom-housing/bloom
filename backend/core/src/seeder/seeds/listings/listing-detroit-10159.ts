@@ -38,7 +38,22 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "https://www.elitep-m.com",
   name: "New Center Square",
   status: ListingStatus.active,
-  images: [],
+  images: [
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+      },
+    },
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+      },
+    },
+  ],
   digitalApplication: undefined,
   paperApplication: undefined,
   section8Acceptance: null,

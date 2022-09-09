@@ -476,8 +476,19 @@ export const ListingView = (props: ListingProps) => {
       <div className="w-full md:w-2/3">
         <header className="image-card--leader">
           <ImageCard
-            imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+            images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
+              (imageUrl: string) => {
+                return {
+                  url: imageUrl,
+                }
+              }
+            )}
             tags={getImageCardTag(listing)}
+            moreImagesLabel={t("listings.moreImagesLabel")}
+            moreImagesDescription={t("listings.moreImagesAltDescription", {
+              listingName: listing.name,
+            })}
+            modalCloseLabel={t("t.backToListing")}
           />
           <div className="py-3 mx-3">
             <Heading priority={1} style={"cardHeader"}>

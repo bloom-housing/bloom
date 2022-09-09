@@ -17,19 +17,23 @@ export const getUrlForListingImage = (image: Asset, size = 400) => {
   }
 }
 
-export const imageUrlFromListing = (listing: Listing, size = 400) => {
-  // Use the new `image` field
+export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
   const imageAssets =
-    listing?.images?.length && listing.images[0].image ? [listing.images[0].image] : listing?.assets
+    listing?.images?.length && listing.images[0].image
+      ? listing.images
+          .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
+          .map((imageObj) => imageObj.image)
+      : listing?.assets
 
-  // Fallback to `assets`
-  const cloudinaryBuilding = imageAssets?.find(
-    (asset: Asset) => asset.label == CLOUDINARY_BUILDING_LABEL
-  )?.fileId
-  if (cloudinaryBuilding) return cloudinaryUrlFromId(cloudinaryBuilding, size)
+  const imageUrls = imageAssets
+    ?.filter(
+      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
+    )
+    ?.map((asset: Asset) => {
+      return asset.label === CLOUDINARY_BUILDING_LABEL
+        ? cloudinaryUrlFromId(asset.fileId, size)
+        : asset.fileId
+    })
 
-  return (
-    imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId ||
-    "/images/detroitDefault.png"
-  )
+  return imageUrls?.length > 0 ? imageUrls : ["/images/detroitDefault.png"]
 }
