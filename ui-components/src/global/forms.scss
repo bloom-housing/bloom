@@ -28,9 +28,9 @@
   .field-label--caps.label + .field-note {
     @apply mt-0;
   }
+
   .field-border {
-    --bg: var(--bloom-color-white);
-    background-color: var(--bg);
+    background-color: var(--bloom-color-white);
     padding-top: var(--bloom-s4);
     padding-bottom: var(--bloom-s4);
     padding-left: 46px;
@@ -39,7 +39,10 @@
     border-color: var(--bloom-color-gray-450);
   }
   input:checked + label.field-border {
-    --bg: var(--bloom-color-gray-450);
+    background-color: var(--bloom-color-gray-100);
+  }
+  input:focus + label.field-border {
+    box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px $tailwind-primary;
   }
 
   .control {
