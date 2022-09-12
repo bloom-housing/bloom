@@ -2,7 +2,7 @@
 import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/ui-components/src/locales/general.json"
 import { configure } from "@testing-library/dom"
-import '@testing-library/jest-dom/extend-expect'
+import "@testing-library/jest-dom/extend-expect"
 import general from "../page_content/locale_overrides/general.json"
 addTranslation({ ...generalTranslations, ...general })
 
