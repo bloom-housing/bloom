@@ -6,15 +6,16 @@ import { colorClasses } from "./alertTypes"
 import "./AlertBox.scss"
 
 export interface AlertBoxProps {
-  type?: AlertTypes
-  customIcon?: IconTypes
-  closeable?: boolean
-  onClose?: () => void
-  children: ReactNode
-  inverted?: boolean
-  className?: string
   boundToLayoutWidth?: boolean
+  children: ReactNode
+  className?: string
+  closeable?: boolean
+  customIcon?: IconTypes
+  inverted?: boolean
   narrow?: boolean
+  onClose?: () => void
+  sticky?: boolean
+  type?: AlertTypes
 }
 
 const icons: { [k in AlertTypes]: IconTypes } = {
@@ -35,6 +36,7 @@ const AlertBox = (props: AlertBoxProps) => {
     ...(props.className ? [props.className] : []),
     ...(props.boundToLayoutWidth ? [] : ["fullWidth"]),
     ...(props.narrow ? ["narrow"] : []),
+    ...(props.sticky ? ["alert-box__sticky"] : []),
   ].join(" ")
 
   if (onClose) closeable = true

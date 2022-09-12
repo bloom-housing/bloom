@@ -11,10 +11,16 @@ import {
   MenuLink,
   t,
   setSiteAlertMessage,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
-const Layout = (props) => {
+interface LayoutProps {
+  stickyAlert?: React.ReactNode
+  children?: React.ReactNode
+}
+
+const Layout = (props: LayoutProps) => {
   const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
 
@@ -75,6 +81,7 @@ const Layout = (props) => {
         <Head>
           <title>{t("nav.siteTitle")}</title>
         </Head>
+        {props.stickyAlert}
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"
@@ -95,9 +102,7 @@ const Layout = (props) => {
           menuLinks={menuLinks}
           logoWidth={"base"}
         />
-        <main id="main-content" className="md:overflow-x-hidden">
-          {props.children}
-        </main>
+        <main id="main-content">{props.children}</main>
       </div>
 
       <SiteFooter>
