@@ -41,7 +41,7 @@ const Settings = () => {
   const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
 
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
-  const [cloneDrawerOpen, setCloneDrawerOpen] = useState<MultiselectQuestion>(null)
+  const [copyModalOpen, setCopyModalOpen] = useState<MultiselectQuestion>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
   const [updatedIds, setUpdatedIds] = useState<string[]>([])
 
@@ -84,7 +84,7 @@ const Settings = () => {
           icons: {
             content: (
               <ManageIconSection
-                onCopy={() => setCloneDrawerOpen(preference)}
+                onCopy={() => setCopyModalOpen(preference)}
                 copyTestId={`preference-copy-icon: ${preference.text}`}
                 onEdit={() => {
                   setQuestionData(preference)
@@ -100,7 +100,7 @@ const Settings = () => {
 
   useEffect(() => {
     if (!isCreateLoading) {
-      setCloneDrawerOpen(null)
+      setCopyModalOpen(null)
     }
   }, [isCreateLoading])
 
@@ -231,18 +231,18 @@ const Settings = () => {
         isLoading={isCreateLoading || isUpdateLoading}
       />
       <Modal
-        open={!!cloneDrawerOpen}
+        open={!!copyModalOpen}
         title={t("t.copy")}
         ariaDescription={t("listings.listingIsAlreadyLive")}
-        onClose={() => setCloneDrawerOpen(null)}
+        onClose={() => setCopyModalOpen(null)}
         actions={[
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
             onClick={() => {
-              saveQuestion({ ...cloneDrawerOpen, text: `Copy of ${cloneDrawerOpen.text}` }, "add")
+              saveQuestion({ ...copyModalOpen, text: `Copy of ${copyModalOpen.text}` }, "add")
             }}
-            dataTestId={"clone-button-confirm"}
+            dataTestId={"copy-button-confirm"}
             loading={isCreateLoading}
           >
             {t("settings.copy")}
@@ -252,10 +252,10 @@ const Settings = () => {
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
-              setCloneDrawerOpen(null)
+              setCopyModalOpen(null)
             }}
             disabled={isCreateLoading}
-            dataTestId={"clone-button-cancel"}
+            dataTestId={"copy-button-cancel"}
           >
             {t("t.cancel")}
           </Button>,
