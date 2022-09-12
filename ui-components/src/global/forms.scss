@@ -151,19 +151,6 @@
     box-shadow: 0 0 0 1px $tailwind-primary;
   }
 
-  input[type="checkbox"]:focus + label.field-border::before,
-  input[type="radio"]:focus + label.field-border::before {
-    background-color: none;
-  }
-  input[type="checkbox"]:focus + label.field-border,
-  input[type="radio"]:focus + label.field-border {
-    background-color: var(--bloom-color-gray-100);
-  }
-  input[type="checkbox"]:focus + label.field-border,
-  input[type="radio"]:checked + label.field-border {
-    box-shadow: 0 0 0 2px #ffffff, 0 0 3px 4px $tailwind-primary;
-  }
-
   input[type="radio"]:checked + label::before {
     box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-primary;
   }
