@@ -46,8 +46,8 @@
     }
     input[type="checkbox"]:focus + label,
     input[type="radio"]:focus + label {
-      box-shadow: 0 0 0 1px white, 0 0 0 2px $tailwind-accent-cool,
-        0 0 3px 4px $tailwind-accent-cool;
+      box-shadow: 0 0 0 1px white, 0 0 0 2px var(--bloom-color-accent-cool),
+        0 0 3px 4px var(--bloom-color-accent-cool);
     }
     input[type="checkbox"]:checked + label,
     input[type="radio"]:checked + label {
