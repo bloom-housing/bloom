@@ -45,10 +45,12 @@
       border-radius: var(--bordered-border-radius);
       border-color: var(--bloom-color-gray-450);
     }
+    input[type="checkbox"] + label::before,
+    input[type="radio"] + label::before,
     input[type="checkbox"]:focus + label::before,
     input[type="radio"]:focus + label::before {
       background-color: none;
-      box-shadow: 0 0 0 1px white, 0 0 0 2px var(--bloom-color-gray-550);
+      box-shadow: 0 0 0 1px white, 0 0 0 2px var(--bloom-color-gray-450);
     }
     input[type="checkbox"]:focus + label,
     input[type="radio"]:focus + label {
