@@ -1,4 +1,10 @@
 .field {
+  --bordered-border-width: 1px;
+  --bordered-border-radius: var(--bloom-s1_5);
+  --bordered-vertical-padding: var(--bloom-s4);
+  --bordered-leftward-padding: 2.875rem;
+  --bordered-checked-bg-color: var(--bloom-color-gray-100);
+
   margin-bottom: 1.25rem;
 
   * > &:last-child {
@@ -32,11 +38,11 @@
   .field-border {
     label {
       background-color: var(--bloom-color-white);
-      padding-top: var(--bloom-s4);
-      padding-bottom: var(--bloom-s4);
-      padding-left: 2.875rem;
-      border-width: 1px;
-      border-radius: var(--bloom-s1_5);
+      padding-top: var(--bordered-vertical-padding);
+      padding-bottom: var(--bordered-vertical-padding);
+      padding-left: var(--bordered-leftward-padding);
+      border-width: var(--bordered-border-width);
+      border-radius: var(--bordered-border-radius);
       border-color: var(--bloom-color-gray-450);
     }
     input[type="checkbox"]:focus + label::before,
@@ -51,7 +57,7 @@
     }
     input[type="checkbox"]:checked + label,
     input[type="radio"]:checked + label {
-      background-color: var(--bloom-color-gray-100);
+      background-color: var(--checked-bg-color);
     }
   }
 
