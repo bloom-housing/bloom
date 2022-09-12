@@ -22,12 +22,16 @@ export const unitSummariesTable = (
     const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
-        <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
+        <>
+          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
+          {unitSummary.minIncomeRange.min !== "t.n/a" && ` ${t("t.perMonth")}`}
+        </>
       ) : (
         <>
           <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
           {` ${t("t.to")} `}
           <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}</strong>
+          {` ${t("t.perMonth")}`}
         </>
       )
 
@@ -36,7 +40,7 @@ export const unitSummariesTable = (
       return rentMin == rentMax ? (
         <>
           <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
-          {unit}
+          {rentMin !== "t.n/a" && unit}
         </>
       ) : (
         <>
@@ -85,12 +89,7 @@ export const unitSummariesTable = (
         content: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
       },
       minimumIncome: {
-        content: (
-          <span>
-            {minIncome}
-            {` ${t("t.perMonth")}`}
-          </span>
-        ),
+        content: <span>{minIncome}</span>,
       },
       rent: { content: <span>{rent}</span> },
       availability: {
