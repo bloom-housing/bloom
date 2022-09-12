@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.22...@bloom-housing/ui-components@5.1.1-alpha.23) (2022-09-12)
+
+
+### Bug Fixes
+
+* add unit tests to partners ([#3023](https://github.com/bloom-housing/bloom/issues/3023)) ([92889f5](https://github.com/bloom-housing/bloom/commit/92889f56f1fc6dc54be207ca0cf3dd9ce58176d1))
+
+
+
+
+
 ## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.21...@bloom-housing/ui-components@5.1.1-alpha.22) (2022-08-31)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
