@@ -131,7 +131,9 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-
+      {csvExportError && (
+        <SiteAlert type="alert" timeout={5000} dismissable stickyToHeader={true} />
+      )}
       <NavigationHeader
         title={listingName}
         listingId={listingId}
@@ -151,13 +153,7 @@ const ApplicationsList = () => {
             </BreadcrumbLink>
           </Breadcrumbs>
         }
-      >
-        {csvExportError && (
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="alert" timeout={5000} dismissable />
-          </div>
-        )}
-      </NavigationHeader>
+      />
 
       <ListingStatusBar status={listingDto?.status} />
 

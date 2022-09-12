@@ -47,13 +47,7 @@ export default function Home(props: IndexProps) {
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
   return (
-    <Layout
-      stickyAlert={
-        <AlertBox className="" closeable={true} sticky={true}>
-          Example alert box message
-        </AlertBox>
-      }
-    >
+    <Layout>
       <Head>
         <title>{t("nav.siteTitle")}</title>
       </Head>

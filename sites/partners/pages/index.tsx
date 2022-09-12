@@ -7,7 +7,6 @@ import {
   LocalizedLink,
   AgTable,
   useAgTable,
-  AlertBox,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -134,22 +133,12 @@ export default function ListingsList() {
   })
 
   return (
-    <Layout
-    // stickyAlert={
-    //   <AlertBox className="" closeable={true} sticky={true}>
-    //     Example alert box message
-    //   </AlertBox>
-    // }
-    >
+    <Layout>
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
-      <AlertBox className="" closeable={true} sticky={true}>
-        Example alert box message
-      </AlertBox>
       <NavigationHeader title={t("nav.listings")} />
-
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <AgTable

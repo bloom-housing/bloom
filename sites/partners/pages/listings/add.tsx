@@ -27,7 +27,7 @@ const NewListing = () => {
           image={metaImage}
           description={metaDescription}
         />
-
+        <SiteAlert type="success" timeout={5000} dismissable stickyToHeader={true} />
         <NavigationHeader
           className="relative"
           title={t("listings.newListing")}
@@ -39,12 +39,7 @@ const NewListing = () => {
               </BreadcrumbLink>
             </Breadcrumbs>
           }
-        >
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="success" timeout={5000} dismissable />
-          </div>
-        </NavigationHeader>
-
+        />
         <PaperListingForm />
       </Layout>
     </ListingGuard>

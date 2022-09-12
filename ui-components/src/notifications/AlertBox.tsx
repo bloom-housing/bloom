@@ -14,7 +14,7 @@ export interface AlertBoxProps {
   inverted?: boolean
   narrow?: boolean
   onClose?: () => void
-  sticky?: boolean
+  stickyToHeader?: boolean
   type?: AlertTypes
 }
 
@@ -36,7 +36,7 @@ const AlertBox = (props: AlertBoxProps) => {
     ...(props.className ? [props.className] : []),
     ...(props.boundToLayoutWidth ? [] : ["fullWidth"]),
     ...(props.narrow ? ["narrow"] : []),
-    ...(props.sticky ? ["alert-box__sticky"] : []),
+    ...(props.stickyToHeader ? ["alert-box__sticky"] : []),
   ].join(" ")
 
   if (onClose) closeable = true

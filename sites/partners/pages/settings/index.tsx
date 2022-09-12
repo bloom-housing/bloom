@@ -155,13 +155,8 @@ const Settings = () => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-
-        <NavigationHeader className="relative" title={t("t.settings")}>
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} />
-          </div>
-        </NavigationHeader>
-
+        <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} stickyToHeader={true} />
+        <NavigationHeader title={t("t.settings")} />
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
             <LoadingOverlay isLoading={loading}>

@@ -109,7 +109,13 @@
 
 .alert-box__sticky {
   position: sticky;
-  top: var(--bloom-s2);
-  margin-top: var(--bloom-s2);
+  top: var(--bloom-s3);
+  margin-top: var(--bloom-s3);
+  margin-right: var(--bloom-s3);
   z-index: 10;
+  margin-left: auto;
+}
+
+.alert-box__sticky + header {
+  margin-top: -3.5rem;
 }
