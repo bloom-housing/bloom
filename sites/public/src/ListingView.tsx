@@ -513,10 +513,10 @@ export const ListingView = (props: ListingProps) => {
           description={listing.name}
         />
         <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
-          <Heading priority={1} style={"cardHeader"} className={"text-black"}>
+          <Heading priority={1} style={"largeHeader"} className={"text-black"}>
             {listing.name}
           </Heading>
-          <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
+          <Heading priority={2} style={"mediumHeader"} className={"mb-1"}>
             {oneLineAddress}
           </Heading>
           <p className="text-gray-750 text-base mb-1">{listing.developer}</p>

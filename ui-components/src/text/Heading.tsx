@@ -10,13 +10,14 @@ export interface HeadingProps {
 export type HeaderType = keyof typeof HeaderStyleMap
 
 const HeaderStyleMap = {
-  cardHeader: "card-header",
-  cardSubheader: "card-subheader",
-  tableHeader: "table-header",
-  tableSubheader: "table-subheader",
-  sidebarHeader: "text-caps-underline",
-  categoryHeader: "category-header",
-  sidebarSubHeader: "text-caps-tiny",
+  largeHeader: "text__large-header",
+  mediumHeader: "text__medium-header",
+  smallWeighted: "text__small-weighted",
+  smallNormal: "text__small-normal",
+  underlineHeader: "text__underline-header",
+  lightWeighted: "text__light-weighted",
+  capsWeighted: "text__caps-weighted",
+  fieldLabel: "text__field-label",
 }
 
 const Heading = (props: HeadingProps) => {

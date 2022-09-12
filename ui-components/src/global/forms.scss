@@ -23,7 +23,7 @@
   }
 
   label.sr-only + .control,
-  label.field-label--caps + .control {
+  label.text__field-label + .control {
     @apply mt-0;
   }
 
@@ -31,7 +31,7 @@
     @apply mt-2;
   }
 
-  .field-label--caps.label + .field-note {
+  .text__field-label.label + .field-note {
     @apply mt-0;
   }
 
@@ -256,10 +256,9 @@
   }
 }
 
-/* Restore previous Tailwind v1 color */
 input::placeholder,
 textarea::placeholder {
-  color: #a0aec0;
+  color: var(--bloom-color-gray-650);
 }
 
 input[type],
@@ -296,17 +295,6 @@ input[type="number"] {
   @apply pb-2;
   @apply text-tiny;
   @apply text-gray-800;
-}
-
-.field-label--caps {
-  @apply font-sans;
-  @apply uppercase;
-  @apply text-gray-750;
-  @apply tracking-widest;
-  @apply font-semibold;
-  @apply text-tiny;
-  @apply mb-3;
-  @apply inline-block;
 }
 
 .field--inline {

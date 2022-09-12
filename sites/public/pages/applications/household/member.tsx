@@ -148,7 +148,7 @@ const ApplicationMember = () => {
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="field-label--caps">
+                  <legend className="text__field-label">
                     {t("application.household.member.name")}
                   </legend>
 
@@ -211,7 +211,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="field-label--caps">
+                  <legend className="text__field-label">
                     {t("application.household.member.haveSameAddress")}
                   </legend>
                   <FieldGroup
@@ -230,7 +230,7 @@ const ApplicationMember = () => {
 
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
                   <fieldset className="mt-8">
-                    <legend className="field-label--caps">
+                    <legend className="text__field-label">
                       {t("application.contact.address")}
                     </legend>
 
@@ -306,7 +306,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="field-label--caps">
+                  <legend className="text__field-label">
                     {t("application.household.member.workInRegion", {
                       county: listing?.countyCode,
                     })}
@@ -328,7 +328,7 @@ const ApplicationMember = () => {
 
                 {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
                   <fieldset className="mt-8">
-                    <legend className="field-label--caps">
+                    <legend className="text__field-label">
                       {t("application.contact.address")}
                     </legend>
 
@@ -402,7 +402,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__group">
                 <div className={"field " + (errors.relationship ? "error" : "")}>
-                  <label className="field-label--caps" htmlFor="relationship">
+                  <label className="text__field-label" htmlFor="relationship">
                     {t("application.household.member.whatIsTheirRelationship")}
                   </label>
                   <div className="control">

@@ -47,7 +47,7 @@ const FormApplicationData = () => {
             readerOnly
             errorMessage={t("errors.dateError")}
             required={!!isDateRequired}
-            labelClass={"field-label--caps"}
+            labelClass={"text__field-label"}
           />
         </ViewItem>
 
@@ -62,7 +62,7 @@ const FormApplicationData = () => {
             readerOnly
             disabled={!isDateFilled}
             required={!!isDateFilled}
-            labelClass={"field-label--caps"}
+            labelClass={"text__field-label"}
           />
         </ViewItem>
 

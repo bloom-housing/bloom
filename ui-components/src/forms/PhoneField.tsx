@@ -22,7 +22,7 @@ export const PhoneField = (props: {
   dataTestId?: string
 }) => {
   const labelClasses = ["label"]
-  if (props.caps) labelClasses.push("field-label--caps")
+  if (props.caps) labelClasses.push("text__field-label")
   if (props.readerOnly) labelClasses.push("sr-only")
   /**
    * we need to handle two different use cases,

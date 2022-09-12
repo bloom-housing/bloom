@@ -1,6 +1,6 @@
 import * as React from "react"
 import { StackedTable, StackedTableProps } from "./StackedTable"
-import { Heading } from "../headers/Heading"
+import { Heading } from "../text/Heading"
 
 export interface CategoryTableSection {
   /** The header text for a category */
@@ -18,7 +18,7 @@ const CategoryTable = (props: CategoryTableProps) => {
   const tables = props.categoryData.map((category, index) => {
     return (
       <div key={index}>
-        <Heading priority={3} style={"categoryHeader"}>
+        <Heading priority={3} style={"lightWeighted"}>
           {category.header}
         </Heading>
         <hr className={"my-2"} />

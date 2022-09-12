@@ -1,6 +1,7 @@
 import * as React from "react"
 import Markdown from "markdown-to-jsx"
 import { ExpandableContent } from "../../../actions/ExpandableContent"
+import { Heading } from "../../../text/Heading"
 
 export interface ExpandableSectionProps {
   content: string | React.ReactNode
@@ -28,7 +29,9 @@ const ExpandableSection = ({ content, expandableContent, strings }: ExpandableSe
   }
   return (
     <section className="aside-block">
-      <h4 className="text-caps-underline">{strings.title}</h4>
+      <Heading priority={4} style={"underlineHeader"}>
+        {strings.title}
+      </Heading>
       <div className="text-tiny text-gray-750">
         {getTextContent(content)}
         {expandableContent && (

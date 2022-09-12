@@ -165,7 +165,7 @@ const FieldGroup = ({
   }
   return (
     <div>
-      {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
+      {groupLabel && <label className="text__field-label">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
       <div className={`field ${error && "error"} ${fieldGroupClassName || ""} mb-0`}>

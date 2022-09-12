@@ -3,7 +3,7 @@ import Markdown from "markdown-to-jsx"
 import { Address } from "../../../helpers/MultiLineAddress"
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
-import { Heading } from "../../../headers/Heading"
+import { Heading } from "../../../text/Heading"
 
 export interface ApplicationAddressesProps {
   /** The dropoff address for paper applications */
@@ -38,7 +38,7 @@ const SubmitApplication = ({
         <div className="text-serif-lg">{strings.sectionHeader}</div>
         {applicationMailingAddress && (
           <>
-            <Heading priority={3} style={"sidebarSubHeader"}>
+            <Heading priority={3} style={"capsWeighted"}>
               {strings.mailHeader}
             </Heading>
             <>
@@ -51,13 +51,13 @@ const SubmitApplication = ({
         {applicationDropOffAddress && (
           <>
             {applicationMailingAddress && <OrDivider bgColor="gray-100" />}
-            <Heading priority={3} style={"sidebarSubHeader"}>
+            <Heading priority={3} style={"capsWeighted"}>
               {strings.dropOffHeader}
             </Heading>
             <ContactAddress address={applicationDropOffAddress} mapString={strings.mapString} />
             {applicationDropOffAddressOfficeHours && (
               <>
-                <Heading priority={3} style={"sidebarSubHeader"}>
+                <Heading priority={3} style={"capsWeighted"}>
                   {strings.officeHoursHeader}
                 </Heading>
                 <p className="mt-4 text-tiny text-gray-750">
