@@ -27,7 +27,7 @@ const NewListing = () => {
           image={metaImage}
           description={metaDescription}
         />
-        <SiteAlert type="success" timeout={5000} dismissable stickyToHeader={true} />
+        <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
         <NavigationHeader
           className="relative"
           title={t("listings.newListing")}

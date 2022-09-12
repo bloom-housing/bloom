@@ -79,10 +79,11 @@ export const AlertBoxNarrow = () => (
 
 export const AlertBoxSticky = () => (
   <div style={{ height: "200rem", border: "3px solid gray" }}>
-    <div style={{ borderBottom: "1px solid gray" }}> {withMenuLinks()}</div>
-    <AlertBox onClose={() => {}} type="success" narrow stickyToHeader={true}>
+    <div>{withMenuLinks()}</div>
+    <AlertBox onClose={() => {}} type="success" sticky={true}>
       Some warning
     </AlertBox>
+    <div style={{ borderTop: "1px solid gray", padding: "5rem" }}>Page Content</div>
   </div>
 )
 

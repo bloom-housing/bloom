@@ -117,6 +117,7 @@
   width: fit-content;
 }
 
-.alert-box__sticky + header {
-  margin-top: -3.5rem;
+.alert-box__sticky + * {
+  --alert-box-height: -3.6rem;
+  margin-top: var(--alert-box-height);
 }

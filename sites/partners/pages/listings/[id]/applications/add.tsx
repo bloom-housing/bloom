@@ -23,7 +23,7 @@ const NewApplication = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert type="success" timeout={5000} dismissable stickyToHeader={true} />
+      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <NavigationHeader
         className="relative"
         title={t("applications.newApplication")}

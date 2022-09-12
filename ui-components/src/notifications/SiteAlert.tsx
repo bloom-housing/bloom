@@ -11,7 +11,7 @@ type SiteAlertProps = {
     type: AlertTypes
     message: string
   }
-  stickyToHeader?: boolean
+  sticky?: boolean
 }
 
 export const setSiteAlertMessage = (message: string, type: AlertTypes) => {
@@ -31,7 +31,7 @@ export const SiteAlert = ({
   type = "alert",
   className,
   alertMessage,
-  stickyToHeader,
+  sticky,
 }: SiteAlertProps) => {
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState("")
@@ -77,7 +77,7 @@ export const SiteAlert = ({
       onClose={dismissable ? () => setOpen(false) : undefined}
       className={className}
       type={alertMessage?.type ?? type}
-      stickyToHeader={stickyToHeader}
+      sticky={sticky}
     >
       {message}
     </AlertBox>

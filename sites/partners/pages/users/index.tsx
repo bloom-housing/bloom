@@ -120,7 +120,7 @@ const Users = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert dismissable alertMessage={alertMessage} stickyToHeader={true} timeout={5000} />
+      <SiteAlert dismissable alertMessage={alertMessage} sticky={true} timeout={5000} />
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

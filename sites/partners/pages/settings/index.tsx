@@ -155,7 +155,7 @@ const Settings = () => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} stickyToHeader={true} />
+        <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} sticky={true} />
         <NavigationHeader className="relative" title={t("t.settings")} />
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
