@@ -18,6 +18,11 @@
   background-color: var(--default-background-color);
   border-radius: var(--border-radius);
 
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 3px 4px var(--bloom-color-accent-cool);
+  }
+
   img {
     border-radius: var(--border-radius);
     width: 100%;
@@ -137,7 +142,7 @@
 .image-card--leader {
   width: 100%;
 
-  @media (min-width: $screen-sm) {
+  @media (min-width: $screen-md) {
     width: var(--bloom-width-2-3rd);
     padding-block-start: var(--bloom-s8);
     padding-inline-end: var(--bloom-s8);
@@ -161,7 +166,13 @@
     flex-direction: column;
     align-items: center;
   }
+  button {
+    outline: none;
+  }
   svg {
     @apply sr-only;
+  }
+  footer button:focus {
+    box-shadow: 0 0 3px 4px var(--bloom-color-accent-cool);
   }
 }
