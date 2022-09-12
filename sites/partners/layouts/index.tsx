@@ -13,11 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
-interface LayoutProps {
-  children?: React.ReactNode
-}
-
-const Layout = (props: LayoutProps) => {
+const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
@@ -68,6 +64,7 @@ const Layout = (props: LayoutProps) => {
           siteHeaderWidth={"wide"}
           homeURL={"/"}
         />
+
         <main>{props.children}</main>
 
         <SiteFooter>
