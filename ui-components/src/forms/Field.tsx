@@ -54,6 +54,9 @@ const Field = (props: FieldProps) => {
     controlClasses.push(props.controlClassName)
   }
 
+  if (props.bordered && (props.type === "radio" || props.type === "checkbox"))
+    controlClasses.push("field-border")
+
   const formatValue = () => {
     if (props.getValues && props.setValue) {
       const currencyValue = props.getValues(props.name)
@@ -78,24 +81,13 @@ const Field = (props: FieldProps) => {
     if (props.type === "radio") {
       labelClasses.push("font-semibold")
     }
-    if (props.bordered && (props.type === "radio" || props.type === "checkbox"))
-      labelClasses.push("field-border")
 
     return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
         {props.label}
       </label>
     )
-  }, [
-    props.caps,
-    props.primary,
-    props.readerOnly,
-    props.type,
-    props.bordered,
-    props.id,
-    props.name,
-    props.label,
-  ])
+  }, [props.caps, props.primary, props.readerOnly, props.type, props.id, props.name, props.label])
 
   const idOrName = props.id || props.name
 
