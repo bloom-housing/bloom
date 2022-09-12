@@ -14,7 +14,6 @@ import {
 import { AuthContext } from "@bloom-housing/shared-helpers"
 
 interface LayoutProps {
-  stickyAlert?: React.ReactNode
   children?: React.ReactNode
 }
 
@@ -69,7 +68,6 @@ const Layout = (props: LayoutProps) => {
           siteHeaderWidth={"wide"}
           homeURL={"/"}
         />
-        {props.stickyAlert}
         <main>{props.children}</main>
 
         <SiteFooter>
