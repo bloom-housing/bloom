@@ -37,6 +37,11 @@ interface FieldGroupProps {
   register: UseFormMethods["register"]
   type?: string
   validation?: RegisterOptions
+  strings?: {
+    description?: string
+    readLess?: string
+    readMore?: string
+  }
 }
 
 const FieldGroup = ({
@@ -54,6 +59,7 @@ const FieldGroup = ({
   fieldLabelClassName,
   groupSubNote,
   dataTestId,
+  strings,
 }: FieldGroupProps) => {
   // Always align two-option radio groups side by side
   if (fields?.length === 2) {
@@ -103,7 +109,12 @@ const FieldGroup = ({
 
         {item.description && (
           <div className="ml-8 -mt-1 mb-5">
-            <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
+            <ExpandableContent
+              strings={{
+                readMore: strings?.readMore ?? t("t.readMore"),
+                readLess: strings?.readLess ?? t("t.readLess"),
+              }}
+            >
               <p className="field-note mb-2 -mt-2">{item.description}</p>
             </ExpandableContent>
           </div>
@@ -143,7 +154,7 @@ const FieldGroup = ({
             name={`${name}-${item.value}`}
             register={register}
             defaultValue={item.defaultText}
-            placeholder={t("t.description")}
+            placeholder={strings?.description ?? t("t.description")}
             className={"mb-4"}
             disabled={item.disabled}
             dataTestId={item.dataTestId}

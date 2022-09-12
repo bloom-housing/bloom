@@ -371,7 +371,7 @@
   "authentication.forgotPassword.sendEmail": "Enviar correo electrónico",
   "authentication.forgotPassword.success": "Le hemos enviado un correo electrónico con un enlace para restablecer tu contraseña.",
   "authentication.signIn.accountHasBeenLocked": "Por razones de seguridad_ esta cuenta ha sido bloqueada.",
-  "authentication.signIn.afterFailedAttempts": "Por razones de seguridad_ después de 5 intentos fallidos_ deberá esperar 30 minutos antes de volver a intentarlo.",
+  "authentication.signIn.afterFailedAttempts": "Por razones de seguridad_ después de %{count} intentos fallidos_ deberá esperar 30 minutos antes de volver a intentarlo.",
   "authentication.signIn.changeYourPassword": "Puede cambiar su contraseña",
   "authentication.signIn.enterLoginEmail": "Por favor_ escriba su correo electrónico de inicio de sesión",
   "authentication.signIn.enterLoginPassword": "Por favor_ escriba su contraseña de inicio de sesión",

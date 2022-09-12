@@ -10,7 +10,11 @@ const FooterNav = (props: FooterNavProps) => (
   <section className="footer-sock">
     <div className="footer-sock__inner">
       <p className="footer-copyright">{props.copyright}</p>
-      {props.children && <nav className="footer-nav">{props.children}</nav>}
+      {props.children && (
+        <nav className="footer-nav" aria-label={"Footer"}>
+          {props.children}
+        </nav>
+      )}
     </div>
   </section>
 )

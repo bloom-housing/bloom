@@ -324,7 +324,7 @@
   "authentication.forgotPassword.sendEmail": "Magpadala ng email",
   "authentication.forgotPassword.success": "Nagpadala kami sa iyo ng email. Makakatanggap ka ng email na may link para i-reset ang iyong password.",
   "authentication.signIn.accountHasBeenLocked": "Para sa mga kadahilanang pangseguridad_ ang account na ito isinara na.",
-  "authentication.signIn.afterFailedAttempts": "Para sa mga kadahilanang pangseguridad_ pagkatapos ng 5 nabigong pagtatangka_ kailangan mong maghintay ng 30 minuto bago subukang muli.",
+  "authentication.signIn.afterFailedAttempts": "Para sa mga kadahilanang pangseguridad_ pagkatapos ng %{count} nabigong pagtatangka_ kailangan mong maghintay ng 30 minuto bago subukang muli.",
   "authentication.signIn.changeYourPassword": "Maaari mong palitan ang iyong password",
   "authentication.signIn.enterLoginEmail": "Pakilagay ang iyong email sa pag-login",
   "authentication.signIn.enterLoginPassword": "Pakilagay ang iyong password sa pag-log in",

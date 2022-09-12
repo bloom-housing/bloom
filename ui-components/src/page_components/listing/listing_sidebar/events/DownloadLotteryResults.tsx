@@ -5,13 +5,18 @@ type DownloadLotteryResultsProps = {
   resultsDate?: string
   buttonText?: string
   pdfURL?: string
+  strings?: {
+    sectionHeader?: string
+  }
 }
 
 const DownloadLotteryResults = (props: DownloadLotteryResultsProps) => {
   if (!props.pdfURL) return null
   return (
     <section className="aside-block text-center">
-      <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
+      <h2 className="text-caps pb-4">
+        {props.strings?.sectionHeader ?? t("listings.lotteryResults.header")}
+      </h2>
       {props.resultsDate && (
         <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">{props.resultsDate}</p>
       )}

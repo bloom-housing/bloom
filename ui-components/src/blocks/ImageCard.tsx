@@ -5,10 +5,10 @@ import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
-import { t } from "../helpers/translator"
 import { Icon, IconFillColors, UniversalIconType } from "../icons/Icon"
 import { Modal } from "../overlays/Modal"
 import { Button } from "../actions/Button"
+import { t } from "../helpers/translator"
 
 export interface StatusBarType {
   status?: ApplicationStatusType
@@ -53,6 +53,9 @@ export interface ImageCardProps {
   moreImagesLabel?: string
   /** The aria label of the clickable region of the images grid */
   moreImagesDescription?: string
+  strings?: {
+    defaultImageAltText?: string
+  }
 }
 
 /**
@@ -64,20 +67,24 @@ const ImageCard = (props: ImageCardProps) => {
   const [showModal, setShowModal] = useState(false)
 
   const getStatuses = () => {
-    return props.statuses?.map((status, index) => {
+    const statuses = props.statuses?.map((status, index) => {
       return (
-        <aside className="image-card__status" aria-label={status.content} key={index}>
-          <ApplicationStatus
-            status={status.status}
-            content={status.content}
-            subContent={status.subContent}
-            withIcon={!status.hideIcon}
-            iconType={status.iconType}
-            vivid
-          />
-        </aside>
+        <ApplicationStatus
+          status={status.status}
+          content={status.content}
+          subContent={status.subContent}
+          withIcon={!status.hideIcon}
+          iconType={status.iconType}
+          vivid
+          key={index}
+        />
       )
     })
+    return (
+      <aside className="image-card__status" aria-label={`${props.description} Statuses`}>
+        {statuses}
+      </aside>
+    )
   }
 
   const innerClasses = ["image-card__inner"]
@@ -119,7 +126,11 @@ const ImageCard = (props: ImageCardProps) => {
           {props.imageUrl ? (
             <img
               src={props.imageUrl}
-              alt={props.description || t("listings.buildingImageAltText")}
+              alt={
+                props.description ??
+                props.strings?.defaultImageAltText ??
+                t("listings.buildingImageAltText")
+              }
             />
           ) : props.images && displayedImages ? (
             displayedImages.map((image, index) => (

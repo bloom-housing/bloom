@@ -95,12 +95,12 @@ const Contact = ({
 
       {additionalInformation?.map((info) => {
         return (
-          <React.Fragment key={info.title}>
+          <div key={info.title} className={"my-3"}>
             <Heading priority={3} style={"sidebarSubHeader"}>
               {info.title}
             </Heading>
             <div className="text-gray-800 text-tiny markdown">{info.content}</div>
-          </React.Fragment>
+          </div>
         )
       })}
     </section>
