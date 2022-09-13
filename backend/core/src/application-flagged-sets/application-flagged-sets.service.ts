@@ -116,6 +116,7 @@ export class ApplicationFlaggedSetsService {
         "applications.id",
         "applications.submissionType",
         "applications.confirmationCode",
+        "applications.reviewStatus",
         "applicant.firstName",
         "applicant.lastName",
         "applicant.birthDay",
@@ -150,22 +151,48 @@ export class ApplicationFlaggedSetsService {
 
       const selectedApps = afs.applications.map((app) => app.id)
 
-      if (dto.reviewStatus === ApplicationReviewStatus.pendingAndValid) {
+      if (dto.status === FlaggedSetStatus.pending) {
         // mark selected as pendingAndValid
         await transApplicationsRepository
           .createQueryBuilder()
           .update(Application)
-          .set({ reviewStatus: dto.reviewStatus })
+          .set({ reviewStatus: ApplicationReviewStatus.pendingAndValid })
           .where("id IN (:...selectedApps)", {
             selectedApps,
           })
           .execute()
-      } else if (dto.reviewStatus === ApplicationReviewStatus.valid) {
+
+        // mark those that were not selected as duplicate
+        await transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.pending })
+          .where("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+          .andWhere(
+            "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
+            { afsId: dto.afsId }
+          )
+          .execute()
+
+        // mark the flagged set as pending
+        await transAfsRepository
+          .createQueryBuilder()
+          .update(ApplicationFlaggedSet)
+          .set({
+            resolvedTime: new Date(),
+            status: FlaggedSetStatus.pending,
+            resolvingUser: this.request.user as User,
+          })
+          .where("id = :afsId", { afsId: dto.afsId })
+          .execute()
+      } else if (dto.status === FlaggedSetStatus.resolved) {
         // mark selected a valid
         await transApplicationsRepository
           .createQueryBuilder()
           .update(Application)
-          .set({ reviewStatus: dto.reviewStatus })
+          .set({ reviewStatus: ApplicationReviewStatus.valid })
           .where("id IN (:...selectedApps)", {
             selectedApps,
           })

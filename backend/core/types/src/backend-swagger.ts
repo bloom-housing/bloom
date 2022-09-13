@@ -2886,7 +2886,7 @@ export interface ApplicationFlaggedSetResolve {
   applications: Id[]
 
   /**  */
-  reviewStatus: EnumApplicationFlaggedSetResolveReviewStatus
+  status: EnumApplicationFlaggedSetResolveStatus
 }
 
 export interface Asset {
@@ -6296,11 +6296,10 @@ export enum EnumApplicationFlaggedSetStatus {
   "pending" = "pending",
   "resolved" = "resolved",
 }
-export enum EnumApplicationFlaggedSetResolveReviewStatus {
+export enum EnumApplicationFlaggedSetResolveStatus {
+  "flagged" = "flagged",
   "pending" = "pending",
-  "pendingAndValid" = "pendingAndValid",
-  "valid" = "valid",
-  "duplicate" = "duplicate",
+  "resolved" = "resolved",
 }
 export enum ApplicationMethodType {
   "Internal" = "Internal",
