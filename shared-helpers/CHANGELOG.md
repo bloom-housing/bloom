@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.38...@bloom-housing/shared-helpers@5.1.1-alpha.39) (2022-09-13)
+
+
+### Bug Fixes
+
+* return N/A string if rent and income is NaN ([#3040](https://github.com/bloom-housing/bloom/issues/3040)) ([be5c1a1](https://github.com/bloom-housing/bloom/commit/be5c1a1c7d68395264ea9bf7ddacf8c2ca9bfbef))
+
+
+
+
+
 ## [5.1.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.37...@bloom-housing/shared-helpers@5.1.1-alpha.38) (2022-09-12)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
