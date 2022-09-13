@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react"
+import React, { useMemo, useState, useCallback, useEffect, useContext } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
@@ -20,27 +20,30 @@ import {
   AppearanceBorderType,
   Field,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
-
 import {
-  // EnumApplicationFlaggedSetStatus,
   ApplicationFlaggedSet,
+  ApplicationReviewStatus,
+  EnumApplicationFlaggedSetResolveReviewStatus,
+  EnumApplicationFlaggedSetStatus,
 } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
   const router = useRouter()
   const flagsetId = router.query.id as string
 
-  const [gridApi] = useState<GridApi>(null)
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [selectedRows, setSelectedRows] = useState<RowNode[]>([])
+  const [gridApi, setGridApi] = useState<GridApi | null>(null)
 
   const columns = useMemo(() => getCols(), [])
 
   const { data, loading, revalidate } = useSingleFlaggedApplication(flagsetId)
   const { mutate, reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, trigger, getValues, setValue, control } = useForm()
@@ -53,13 +56,12 @@ const Flag = () => {
   const selectFlaggedApps = useCallback(() => {
     if (!data) return
 
-    const duplicateIds = data.applications
-      .filter((item) => item.markedAsDuplicate)
-      .map((item) => item.id)
-
     gridApi.forEachNode((row) => {
-      if (duplicateIds.includes(row.id)) {
-        gridApi.selectNode(row, true)
+      if (
+        row.data.reviewStatus === EnumApplicationFlaggedSetResolveReviewStatus.pendingAndValid ||
+        row.data.reviewStatus === EnumApplicationFlaggedSetResolveReviewStatus.valid
+      ) {
+        row.setSelected(true)
       }
     })
   }, [data, gridApi])
@@ -106,8 +108,16 @@ const Flag = () => {
             {t("t.back")}
           </Button>
         }
-        tagStyle={AppearanceStyleType.primary}
-        tagLabel={t("applications.pendingReview")}
+        tagStyle={
+          data.status === EnumApplicationFlaggedSetStatus.resolved
+            ? AppearanceStyleType.success
+            : AppearanceStyleType.primary
+        }
+        tagLabel={
+          data.status === EnumApplicationFlaggedSetStatus.resolved
+            ? t("t.resolved")
+            : t("applications.pendingReview")
+        }
       />
 
       <section className="bg-primary-lighter py-5">
@@ -159,6 +169,8 @@ const Flag = () => {
                   setSearch: tableOptions.filter.setFilterValue,
                   showSearch: false,
                 }}
+                gridApi={gridApi}
+                setGridApi={setGridApi}
               />
             </div>
 
@@ -195,7 +207,23 @@ const Flag = () => {
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
-            onClick={() => {
+            onClick={async () => {
+              const selectedData = gridApi.getSelectedRows()
+              try {
+                await applicationFlaggedSetsService.resolve({
+                  body: {
+                    afsId: data.id,
+                    applications: selectedData.map((row) => {
+                      return { id: row.id }
+                    }),
+                    reviewStatus: EnumApplicationFlaggedSetResolveReviewStatus.pendingAndValid,
+                  },
+                })
+                // TODO: set success alert
+              } catch (err) {
+                // TODO: set failure alert
+                console.warn(err)
+              }
               setSaveModalOpen(false)
             }}
           >

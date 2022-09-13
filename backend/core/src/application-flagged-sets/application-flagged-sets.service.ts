@@ -116,6 +116,7 @@ export class ApplicationFlaggedSetsService {
         "applications.id",
         "applications.submissionType",
         "applications.confirmationCode",
+        "applications.reviewStatus",
         "applicant.firstName",
         "applicant.lastName",
         "applicant.birthDay",
@@ -142,6 +143,7 @@ export class ApplicationFlaggedSetsService {
     return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
       const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
+      // TODO: For each application, set it to the status on that application, then set the set status
       const afs = await this.findOneById(dto.afsId, dto.applications)
 
       if (afs.listing.status !== ListingStatus.closed) {
