@@ -35,7 +35,7 @@ const ApplicationVouchers = () => {
     : 3
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, getValues } = useForm({
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },
     shouldFocusError: false,
   })
@@ -125,14 +125,20 @@ const ApplicationVouchers = () => {
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
               <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
                 type="radio"
                 name="incomeVouchers"
                 error={errors.incomeVouchers}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}
-                validation={{ required: true }}
                 fields={incomeVouchersValues}
                 dataTestId={"app-income-vouchers"}
+                validation={{
+                  validate: () => {
+                    return !!Object.values(getValues()).filter((value) => value).length
+                  },
+                }}
               />
             </fieldset>
           </div>

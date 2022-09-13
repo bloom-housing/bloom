@@ -130,10 +130,14 @@ export const getRadioFields = (
         fieldClassName="ml-0"
         type={"radio"}
         name={fieldName(question?.text, applicationSection)}
-        error={errors && errors[question?.text]}
+        error={
+          errors &&
+          Object.keys(errors).length > 0 &&
+          errors["application"]["programs"][question?.text]
+        }
         errorMessage={errors && t("errors.selectAnOption")}
         register={register}
-        validation={{ required: !!errors }}
+        validation={{ required: true }}
         fields={options?.map((option) => {
           return {
             id: `${question?.text}-${option?.text}`,

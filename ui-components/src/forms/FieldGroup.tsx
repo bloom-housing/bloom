@@ -61,7 +61,7 @@ const FieldGroup = ({
   dataTestId,
   strings,
 }: FieldGroupProps) => {
-  // Always align two-option radio groups side by side
+  // Always default align two-option radio groups side by side
   if (fields?.length === 2) {
     fieldGroupClassName = `${fieldGroupClassName} flex`
     fieldClassName = `${fieldClassName} flex-initial mr-4`
