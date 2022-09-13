@@ -59,7 +59,7 @@ const ApplicationAddMembers = () => {
     return (
       <HouseholdMemberForm
         editMember={editMember}
-        key={member}
+        key={index}
         memberFirstName={member.firstName}
         memberId={index}
         memberLastName={member.lastName}

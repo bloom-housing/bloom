@@ -172,10 +172,10 @@ const ApplicationName = () => {
           </div>
 
           <div className="form-card__group">
-            <h3 className="field-label--caps">
+            <legend className="field-label--caps">
               {t("application.name.yourEmailAddress")}
               <LockIcon />
-            </h3>
+            </legend>
 
             <p className="field-note mb-4">{t("application.name.emailPrivacy")}</p>
 

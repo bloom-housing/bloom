@@ -51,7 +51,7 @@ const Aside = ({
         <LinkButton
           unstyled
           fullWidth
-          className="bg-opacity-0"
+          className="bg-opacity-0 text-blue-700"
           href={type === "add" ? "/" : `/listings/${listingId}`}
           type="button"
         >
@@ -203,7 +203,7 @@ const Aside = ({
         <GridCell key="btn-preview">
           <a
             target="_blank"
-            href={`${listing.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+            href={`${listing?.jurisdiction.publicUrl}/preview/listings/${listingId}`}
           >
             <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}

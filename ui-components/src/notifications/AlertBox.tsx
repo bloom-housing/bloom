@@ -7,6 +7,7 @@ import "./AlertBox.scss"
 
 export interface AlertBoxProps {
   type?: AlertTypes
+  customIcon?: IconTypes
   closeable?: boolean
   onClose?: () => void
   children: ReactNode
@@ -20,6 +21,7 @@ const icons: { [k in AlertTypes]: IconTypes } = {
   alert: "warning",
   notice: "info",
   success: "check",
+  warn: "warning",
 }
 
 const AlertBox = (props: AlertBoxProps) => {
@@ -28,7 +30,7 @@ const AlertBox = (props: AlertBoxProps) => {
 
   const classNames = [
     "alert-box",
-    colorClasses[props.type || "alert"],
+    colorClasses[props.type || ""],
     ...(props.inverted ? ["invert"] : []),
     ...(props.className ? [props.className] : []),
     ...(props.boundToLayoutWidth ? [] : ["fullWidth"]),
@@ -47,14 +49,16 @@ const AlertBox = (props: AlertBoxProps) => {
     <>
       <div className="alert-box__head">
         <div className="alert-box__title">
-          <span className="alert-box__icon">
-            <Icon
-              size="medium"
-              symbol={icons[props.type || "alert"]}
-              fill={props.inverted ? IconFillColors.white : undefined}
-              ariaHidden={true}
-            />
-          </span>
+          {(props.type || props.customIcon) && (
+            <span className="alert-box__icon">
+              <Icon
+                size="medium"
+                symbol={props.type ? icons[props.type] : props.customIcon ?? "warning"}
+                fill={props.inverted ? IconFillColors.white : undefined}
+                ariaHidden={true}
+              />
+            </span>
+          )}
           <span className="alert-box__body">
             {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
           </span>

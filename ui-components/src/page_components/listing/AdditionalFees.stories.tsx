@@ -16,7 +16,7 @@ export const allFieldsAndFourFooterItems = () => {
   return (
     <AdditionalFees
       deposit={"$1140  - $1500"}
-      applicationFee={"30"}
+      applicationFee={"$30"}
       footerContent={[
         <ul>
           <li key={0} className={"list-disc list-inside"}>
@@ -41,7 +41,7 @@ export const allFieldsAndThreeFooterItems = () => {
   return (
     <AdditionalFees
       deposit={"$1140 - $1500"}
-      applicationFee={"30"}
+      applicationFee={"$30"}
       footerContent={[
         <ul>
           <li key={0} className={"list-disc list-inside"}>
@@ -90,7 +90,7 @@ export const allFieldsAndTwoFooterItems = () => {
 }
 
 export const allFieldsAndFooterNotIncluded = () => {
-  return <AdditionalFees applicationFee={"30"} deposit={"$1140 - $1500"} strings={strings} />
+  return <AdditionalFees applicationFee={"$30"} deposit={"$1140 - $1500"} strings={strings} />
 }
 
 export const justDepositRange = () => {

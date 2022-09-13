@@ -11,7 +11,7 @@ const ListSection = (props: ListSectionProps) => (
   <li className="list-section custom-counter__item">
     <header className="list-section__header custom-counter__header">
       <hgroup>
-        <h4 className="custom-counter__title">{props.title}</h4>
+        <h3 className="custom-counter__title">{props.title}</h3>
         <span className="custom-counter__subtitle">{props.subtitle}</span>
       </hgroup>
     </header>

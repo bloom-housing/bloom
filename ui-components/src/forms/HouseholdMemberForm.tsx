@@ -10,6 +10,9 @@ export interface HouseholdMemberFormProps {
   memberId?: number
   memberLastName: string
   subtitle: string
+  strings?: {
+    edit?: string
+  }
 }
 
 const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
@@ -26,7 +29,7 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
           type={"button"}
           data-test-id={"app-household-member-edit-button"}
         >
-          {t("t.edit")}
+          {props.strings?.edit ?? t("t.edit")}
         </button>
       ) : (
         <Icon

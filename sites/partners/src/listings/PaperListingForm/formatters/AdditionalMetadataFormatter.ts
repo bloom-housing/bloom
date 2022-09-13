@@ -44,7 +44,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
 
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
-    if (!this.data.reservedCommunityType.id) this.data.reservedCommunityType = null
+    if (!this.data.reservedCommunityType?.id) this.data.reservedCommunityType = null
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery

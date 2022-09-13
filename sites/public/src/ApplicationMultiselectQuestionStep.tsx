@@ -38,7 +38,6 @@ export interface ApplicationMultiselectQuestionStepProps {
   strings?: {
     title?: string
     subTitle?: string
-    selectText?: string
   }
 }
 
@@ -183,14 +182,6 @@ const ApplicationMultiselectQuestionStep = ({
             {t("errors.errorsToResolve")}
           </AlertBox>
         )}
-
-        <div className="form-card__group pb-0">
-          <p className="field-note">
-            {strings?.selectText ?? questionSetInputType === "radio"
-              ? t("t.pleaseSelectOne")
-              : t("errors.selectAllThatApply")}
-          </p>
-        </div>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div key={question?.id}>
