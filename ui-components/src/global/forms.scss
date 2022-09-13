@@ -59,7 +59,7 @@
     }
     input[type="checkbox"]:checked + label,
     input[type="radio"]:checked + label {
-      background-color: var(--checked-bg-color);
+      background-color: var(--bordered-checked-bg-color);
     }
   }
 
