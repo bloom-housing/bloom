@@ -321,7 +321,6 @@ input[type="number"] {
 .field-note {
   @apply text-tiny;
   @apply text-gray-700;
-  @apply font-semibold;
   white-space: pre-line;
 }
 
@@ -331,7 +330,7 @@ input[type="number"] {
   @apply text-red-700;
   @apply tracking-wide;
   @apply leading-5;
-  @apply mt-2;
+  @apply mt-1;
 }
 
 .field-sub-note {

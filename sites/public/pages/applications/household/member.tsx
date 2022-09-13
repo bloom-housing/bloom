@@ -215,6 +215,8 @@ const ApplicationMember = () => {
                     {t("application.household.member.haveSameAddress")}
                   </legend>
                   <FieldGroup
+                    fieldGroupClassName="grid grid-cols-1"
+                    fieldClassName="ml-0"
                     name="sameAddress"
                     type="radio"
                     register={register}
@@ -311,6 +313,8 @@ const ApplicationMember = () => {
                   </legend>
                   <FieldGroup
                     name="workInRegion"
+                    fieldGroupClassName="grid grid-cols-1"
+                    fieldClassName="ml-0"
                     groupNote={t("application.household.member.workInRegionNote")}
                     type="radio"
                     register={register}

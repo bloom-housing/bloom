@@ -100,7 +100,9 @@ const ApplicationName = () => {
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group border-b" data-test-id={"application-initial-page"}>
             <fieldset>
-              <legend className="field-label--caps">
+              <legend
+                className={`field-label--caps ${errors.applicant?.firstName ? "text-red-700" : ""}`}
+              >
                 {t("application.name.yourName")}
                 <LockIcon />
               </legend>
@@ -172,7 +174,11 @@ const ApplicationName = () => {
           </div>
 
           <div className="form-card__group">
-            <legend className="field-label--caps">
+            <legend
+              className={`field-label--caps ${
+                errors.applicant?.emailAddress ? "text-red-700" : ""
+              }`}
+            >
               {t("application.name.yourEmailAddress")}
               <LockIcon />
             </legend>

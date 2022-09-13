@@ -287,7 +287,11 @@ const ApplicationAddress = () => {
 
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">{t("application.contact.address")}</legend>
+                <legend
+                  className={`field-label--caps ${errors.applicant?.address ? "text-red-700" : ""}`}
+                >
+                  {t("application.contact.address")}
+                </legend>
 
                 <p className="field-note mb-4">
                   {t("application.contact.addressWhereYouCurrentlyLive")}
@@ -451,7 +455,11 @@ const ApplicationAddress = () => {
             )}
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">
+                <legend
+                  className={`field-label--caps ${
+                    errors?.contactPreferences ? "text-red-700" : ""
+                  }`}
+                >
                   {t("application.contact.contactPreference")}
                 </legend>
                 <FieldGroup
@@ -469,7 +477,11 @@ const ApplicationAddress = () => {
 
             <div className="form-card__group">
               <fieldset>
-                <legend className="field-label--caps">
+                <legend
+                  className={`field-label--caps ${
+                    errors?.applicant?.workInRegion ? "text-red-700" : ""
+                  }`}
+                >
                   {t("application.contact.doYouWorkIn", { county: listing?.countyCode })}
                 </legend>
 

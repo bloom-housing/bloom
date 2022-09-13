@@ -207,6 +207,8 @@ const ApplicationIncome = () => {
                 validation={{ required: true }}
                 fields={incomePeriodValues}
                 dataTestId={"app-income-period"}
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
               />
             </fieldset>
           </div>

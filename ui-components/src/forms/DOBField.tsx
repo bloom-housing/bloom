@@ -44,6 +44,8 @@ const DOBField = (props: DOBFieldProps) => {
     return [name, baseName].filter((item) => item).join(".")
   }
 
+  const hasError = error?.birthMonth || error?.birthDay || error?.birthYear
+
   const birthDay = watch(getFieldName("birthDay")) ?? defaultDOB?.birthDay
   const birthMonth = watch(getFieldName("birthMonth")) ?? defaultDOB?.birthMonth
 
@@ -56,6 +58,7 @@ const DOBField = (props: DOBFieldProps) => {
 
   const labelClasses = ["field-label--caps"]
   if (props.readerOnly) labelClasses.push("sr-only")
+  if (hasError) labelClasses.push("text-red-700")
 
   return (
     <fieldset id={id}>
@@ -132,7 +135,7 @@ const DOBField = (props: DOBFieldProps) => {
         />
       </div>
 
-      {(error?.birthMonth || error?.birthDay || error?.birthYear) && (
+      {hasError && (
         <div className="field error">
           <span id={`${id}-error`} className="error-message">
             {errorMessage ? errorMessage : props.strings?.dateError ?? t("errors.dateOfBirthError")}
