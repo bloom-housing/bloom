@@ -2713,7 +2713,7 @@ export interface Application {
   submissionType: ApplicationSubmissionType
 
   /**  */
-  reviewStatus?: FlaggedSetStatus
+  reviewStatus?: ApplicationReviewStatus
 
   /**  */
   applicant: Applicant
@@ -2845,6 +2845,9 @@ export interface ApplicationFlaggedSet {
 
   /**  */
   showConfirmationAlert: boolean
+
+  /**  */
+  status: EnumApplicationFlaggedSetStatus
 }
 
 export interface ApplicationFlaggedSetPaginationMeta {
@@ -2881,6 +2884,9 @@ export interface ApplicationFlaggedSetResolve {
 
   /**  */
   applications: Id[]
+
+  /**  */
+  reviewStatus: EnumApplicationFlaggedSetResolveReviewStatus
 }
 
 export interface Asset {
@@ -3296,7 +3302,7 @@ export interface ApplicationCreate {
   submissionType: ApplicationSubmissionType
 
   /**  */
-  reviewStatus?: FlaggedSetStatus
+  reviewStatus?: ApplicationReviewStatus
 
   /**  */
   listing: Id
@@ -3622,7 +3628,7 @@ export interface ApplicationUpdate {
   submissionType: ApplicationSubmissionType
 
   /**  */
-  reviewStatus?: FlaggedSetStatus
+  reviewStatus?: ApplicationReviewStatus
 
   /**  */
   id?: string
@@ -6274,14 +6280,27 @@ export enum ApplicationSubmissionType {
   "electronical" = "electronical",
 }
 
-export enum FlaggedSetStatus {
-  "flagged" = "flagged",
-  "resolved" = "resolved",
+export enum ApplicationReviewStatus {
+  "pending" = "pending",
+  "pendingAndValid" = "pendingAndValid",
+  "valid" = "valid",
+  "duplicate" = "duplicate",
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum EnumApplicationFlaggedSetRule {
   "Name and DOB" = "Name and DOB",
   "Email" = "Email",
+}
+export enum EnumApplicationFlaggedSetStatus {
+  "flagged" = "flagged",
+  "pending" = "pending",
+  "resolved" = "resolved",
+}
+export enum EnumApplicationFlaggedSetResolveReviewStatus {
+  "pending" = "pending",
+  "pendingAndValid" = "pendingAndValid",
+  "valid" = "valid",
+  "duplicate" = "duplicate",
 }
 export enum ApplicationMethodType {
   "Internal" = "Internal",

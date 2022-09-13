@@ -2,7 +2,7 @@ import { Expose, Type } from "class-transformer"
 import { ArrayMaxSize, IsArray, IsDefined, IsEnum, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
-import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
+import { ApplicationReviewStatus } from "../../applications/types/application-review-status-enum"
 
 export class ApplicationFlaggedSetResolveDto {
   @Expose()
@@ -18,6 +18,6 @@ export class ApplicationFlaggedSetResolveDto {
   applications: IdDto[]
 
   @Expose()
-  @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
-  reviewStatus: FlaggedSetStatus | null
+  @IsEnum(ApplicationReviewStatus, { groups: [ValidationsGroupsEnum.default] })
+  reviewStatus: ApplicationReviewStatus
 }

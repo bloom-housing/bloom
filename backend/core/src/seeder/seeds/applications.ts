@@ -12,7 +12,7 @@ import { User } from "../../auth/entities/user.entity"
 import { Application } from "../../applications/entities/application.entity"
 import { ApplicationsService } from "../../applications/services/applications.service"
 import { ApplicationCreateDto } from "../../applications/dto/application-create.dto"
-import { FlaggedSetStatus } from "../../application-flagged-sets/types/flagged-set-status-enum"
+import { ApplicationReviewStatus } from "../../applications/types/application-review-status-enum"
 
 const applicationCreateDtoTemplate: Omit<
   ApplicationCreateDto,
@@ -231,16 +231,27 @@ export const makeNewApplication = async (
   pos = 0
 ) => {
   let dto: ApplicationCreateDto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
+  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
   dto.listing = listing
   dto.preferredUnit = unitTypes
+  // modifications to applicant
   const splitEmail = dto.applicant.emailAddress.split("@")
   dto.applicant.emailAddress = `${splitEmail[0]}${pos ?? ""}@${splitEmail[1]}`
   dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""}`
   dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""}`
-  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
+
+  // modifications to householdmembers
+  if (dto.householdMembers?.length) {
+    dto.householdMembers.forEach((mem) => {
+      const splitEmail = mem.emailAddress.split("@")
+      mem.emailAddress = `${splitEmail[0]}${pos ?? ""}@${splitEmail[1]}`
+      mem.firstName = `${dto.applicant.firstName}_${mem.firstName}${pos ?? ""}`
+      mem.lastName = `${dto.applicant.lastName}_${mem.lastName}${pos ?? ""}`
+    })
+  }
 
   if (pos === 0) {
-    dto.reviewStatus = FlaggedSetStatus.flagged
+    dto.reviewStatus = ApplicationReviewStatus.pending
   }
   await applicationRepo.save({
     ...dto,
@@ -255,7 +266,7 @@ export const makeNewApplication = async (
     dto.preferredUnit = unitTypes
     dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""} B`
     dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""} B`
-    dto.reviewStatus = FlaggedSetStatus.flagged
+    dto.reviewStatus = ApplicationReviewStatus.pending
 
     await applicationRepo.save({
       ...dto,
@@ -268,7 +279,7 @@ export const makeNewApplication = async (
     dto.listing = listing
     dto.preferredUnit = unitTypes
     dto.applicant.emailAddress = `${splitEmail[0]}${pos ?? ""}B@${splitEmail[1]}`
-    dto.reviewStatus = FlaggedSetStatus.flagged
+    ApplicationReviewStatus.pending
 
     await applicationRepo.save({
       ...dto,
