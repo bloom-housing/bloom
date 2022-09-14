@@ -144,16 +144,21 @@ export class EmailService {
     }
 
     let eligibleText
-    let contactText = ""
-    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe)
+    let preferenceText
+    let contactText = null
+    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
       eligibleText = this.polyglot.t("confirmation.eligible.fcfs")
-
-    if (listing.listingAvailability === ListingAvailability.openWaitlist) {
-      contactText = this.polyglot.t("confirmation.eligible.waitlist.contact")
-      eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
+      preferenceText = this.polyglot.t("confirmation.eligible.fcfsPreference")
     }
-    if (listing.reviewOrderType === ListingReviewOrder.lottery)
+    if (listing.listingAvailability === ListingAvailability.openWaitlist) {
+      eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
+      contactText = this.polyglot.t("confirmation.eligible.waitlistContact")
+      preferenceText = this.polyglot.t("confirmation.eligible.waitlistPreference")
+    }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
       eligibleText = this.polyglot.t("confirmation.eligible.lottery")
+      preferenceText = this.polyglot.t("confirmation.eligible.lotteryPreference")
+    }
 
     const user = {
       firstName: application.applicant.firstName,
@@ -176,7 +181,7 @@ export class EmailService {
         listing,
         listingUrl,
         application,
-        preferenceText: this.polyglot.t("confirmation.preferences"),
+        preferenceText,
         interviewText: this.polyglot.t("confirmation.interview"),
         eligibleText,
         contactText,
