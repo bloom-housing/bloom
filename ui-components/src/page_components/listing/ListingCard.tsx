@@ -5,7 +5,7 @@ import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
 import { Heading, HeaderType } from "../../headers/Heading"
 import { Tag } from "../../text/Tag"
-import { AppearanceStyleType } from "../../global/AppearanceTypes"
+import { AppearanceShadeType, AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
 import { NavigationContext } from "../../config/NavigationContext"
@@ -16,6 +16,7 @@ export interface CardHeader {
   content: string | React.ReactNode
   href?: string
   customClass?: string
+  style?: AppearanceStyleType
 }
 
 export interface FooterButton {
@@ -75,9 +76,23 @@ const ListingCard = (props: ListingCardProps) => {
     header: CardHeader | undefined,
     priority: number,
     style?: HeaderType,
-    customClass?: string
+    customClass?: string,
+    pillStyle?: boolean
   ) => {
     if (header && header.content) {
+      if (pillStyle) {
+        return (
+          <Tag
+            className="listings-pill_header"
+            pillStyle
+            capitalized
+            styleType={header.style}
+            shade={AppearanceShadeType.light}
+          >
+            {header.content}
+          </Tag>
+        )
+      }
       return (
         <Heading priority={priority} style={style} className={customClass}>
           {header.href ? (
@@ -130,7 +145,7 @@ const ListingCard = (props: ListingCardProps) => {
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>
-            {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
+            {getHeader(contentProps?.tableHeader, 4, "tableHeader", "", true)}
             {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
           </div>
           {children && children}
