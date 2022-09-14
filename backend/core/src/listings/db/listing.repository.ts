@@ -1,4 +1,4 @@
-import Listing from "../entities/listing.entity"
+import { Listing } from "../entities/listing.entity"
 import { EntityRepository, Repository } from "typeorm"
 import { ListingsQueryBuilder } from "./listing-query-builder"
 

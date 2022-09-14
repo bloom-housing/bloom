@@ -24,15 +24,20 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("demographics")
-  const currentPageSection = 5
+  let currentPageSection = 4
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+    currentPageSection += 1
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method

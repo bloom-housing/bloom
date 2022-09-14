@@ -1,6 +1,13 @@
 import React, { useMemo, useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, ViewItem, FieldGroup } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  Textarea,
+  ViewItem,
+  FieldGroup,
+  GridCell,
+} from "@bloom-housing/ui-components"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingFeatures } from "@bloom-housing/backend-core/types"
 
@@ -31,12 +38,12 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
   return (
     <div>
       <GridSection
-        grid={false}
+        columns={2}
         separator
         title={t("listings.sections.buildingFeaturesTitle")}
         description={t("listings.sections.buildingFeaturesSubtitle")}
       >
-        <GridSection columns={2}>
+        <GridCell>
           <Textarea
             label={t("t.propertyAmenities")}
             name={"amenities"}
@@ -45,6 +52,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             register={register}
             maxLength={600}
           />
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("t.additionalAccessibility")}
             name={"accessibility"}
@@ -53,8 +62,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             register={register}
             maxLength={600}
           />
-        </GridSection>
-        <GridSection columns={2}>
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("t.unitAmenities")}
             name={"unitAmenities"}
@@ -63,6 +72,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             register={register}
             maxLength={600}
           />
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("t.smokingPolicy")}
             name={"smokingPolicy"}
@@ -71,8 +82,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             register={register}
             maxLength={600}
           />
-        </GridSection>
-        <GridSection columns={2}>
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("t.petsPolicy")}
             name={"petPolicy"}
@@ -81,6 +92,8 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             register={register}
             maxLength={600}
           />
+        </GridCell>
+        <GridCell>
           <Textarea
             label={t("t.servicesOffered")}
             name={"servicesOffered"}
@@ -89,9 +102,9 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             register={register}
             maxLength={600}
           />
-        </GridSection>
+        </GridCell>
         {!enableAccessibilityFeatures ? null : (
-          <GridSection columns={1}>
+          <GridCell span={2}>
             <ViewItem label={t("listings.sections.accessibilityFeatures")}>
               <FieldGroup
                 type="checkbox"
@@ -101,7 +114,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 fieldGroupClassName="grid grid-cols-3 mt-4"
               />
             </ViewItem>
-          </GridSection>
+          </GridCell>
         )}
       </GridSection>
     </div>

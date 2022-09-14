@@ -91,3 +91,6 @@ test-coverage/
 
 # redis dumps
 dump.rdb
+
+# pg dumps
+*.dump

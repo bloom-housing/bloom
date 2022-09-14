@@ -29,7 +29,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 
 const ApplicationsList = () => {
-  const { applicationsService } = useContext(AuthContext)
+  const { applicationsService, profile } = useContext(AuthContext)
   const router = useRouter()
 
   const tableOptions = useAgTable()
@@ -84,6 +84,7 @@ const ApplicationsList = () => {
     try {
       const content = await applicationsService.listAsCsv({
         listingId,
+        includeDemographics: profile?.roles?.isAdmin ?? false,
       })
 
       const now = new Date()
@@ -130,7 +131,7 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-
+      {csvExportError && <SiteAlert type="alert" timeout={5000} dismissable sticky={true} />}
       <NavigationHeader
         title={listingName}
         listingId={listingId}
@@ -150,13 +151,7 @@ const ApplicationsList = () => {
             </BreadcrumbLink>
           </Breadcrumbs>
         }
-      >
-        {csvExportError && (
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="alert" timeout={5000} dismissable />
-          </div>
-        )}
-      </NavigationHeader>
+      />
 
       <ListingStatusBar status={listingDto?.status} />
 

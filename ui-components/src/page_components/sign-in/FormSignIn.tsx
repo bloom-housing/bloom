@@ -66,7 +66,7 @@ const FormSignIn = ({
     <FormCard>
       <div className="form-card__lead text-center">
         <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t(`nav.signIn`)}</h2>
+        <h1 className="form-card__title">{t(`nav.signIn`)}</h1>
       </div>
       <FormSignInErrorBox
         errors={errors}
@@ -88,7 +88,7 @@ const FormSignIn = ({
 
           <aside className="float-right text-tiny font-semibold">
             <LinkComponent href="/forgot-password">
-              <a>{t("authentication.signIn.forgotPassword")}</a>
+              {t("authentication.signIn.forgotPassword")}
             </LinkComponent>
           </aside>
 

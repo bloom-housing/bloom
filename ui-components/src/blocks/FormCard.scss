@@ -32,6 +32,7 @@
   @apply border-t-4;
   @apply border-primary;
   @apply leading-tight;
+  @apply text-3xl;
 
   @screen md {
     @apply mx-auto;
@@ -69,7 +70,6 @@
 
   @screen print {
     @apply py-2;
-    @apply px-0;
   }
 }
 
@@ -87,13 +87,7 @@
 }
 
 .form-card__group {
-  @screen md {
-    @apply px-8;
-  }
-
-  @screen print {
-    @apply px-0;
-  }
+  @apply px-8;
 }
 
 .form-card__header {

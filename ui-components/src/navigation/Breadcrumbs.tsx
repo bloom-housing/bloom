@@ -9,7 +9,7 @@ export interface BreadcrumbsProps {
 const BreadcrumbLink = (props: { href: string; children: React.ReactNode; current?: boolean }) => (
   <li>
     <LocalizedLink
-      className={props.current ? "is-active" : undefined}
+      className={props.current ? "is-active text-gray-850" : "text-blue-700"}
       aria-current={props.current ? "page" : undefined}
       href={props.href}
     >

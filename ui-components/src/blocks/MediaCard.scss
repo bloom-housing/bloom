@@ -1,4 +1,5 @@
 .media-card {
+  --header-height: var(--bloom-s24);
   --title-color: var(--bloom-color-primary-dark);
   --title-font-size: var(--bloom-font-size-base);
   --title-font-family: var(--bloom-font-sans);
@@ -8,27 +9,28 @@
   --card-border: var(--bloom-border-1) solid var(--bloom-color-gray-450);
   --card-border-rounded: var(--bloom-rounded);
   --card-padding: var(--bloom-s6);
-  --max-width: var(--bloom-width-lg);
-  --background-color: var(--bloom-color-white);
-  max-width: var(--max-width);
   border: var(--card-border);
   border-radius: var(--card-border-rounded);
   background-color: var(--content-bg-color);
-  max-width: var(--max-width);
 }
 
 .media-card__header {
-  padding-top: var(--card-padding);
-  padding-bottom: var(--card-padding);
+  height: var(--header-height);
   border-top-right-radius: calc(var(--card-border-rounded) - var(--bloom-border-1));
   border-top-left-radius: calc(var(--card-border-rounded) - var(--bloom-border-1));
   background-color: var(--title-color);
   cursor: pointer;
+  position: relative;
+  svg {
+    position: absolute;
+    // Explicit values since reflective of icon size
+    top: calc(50% - 1.5rem);
+    left: calc(50% - 1.5rem);
+  }
 }
 
-.media-card__icon-container {
-  display: flex;
-  justify-content: center;
+.media-card__header-container {
+  width: 100%;
 }
 
 .media-card__body {
@@ -40,6 +42,7 @@
   font-size: var(--title-font-size);
   font-family: var(--title-font-family);
   letter-spacing: var(--title-font-spacing);
+  text-align: left;
   font-weight: 700;
 }
 

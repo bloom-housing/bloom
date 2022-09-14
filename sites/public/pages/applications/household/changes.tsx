@@ -102,11 +102,10 @@ const ApplicationHouseholdChanges = () => {
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div
             className={`form-card__group field text-lg ${
-              errors.expectingHouseholdChanges ? "error" : ""
+              errors.householdExpectingChanges ? "error" : ""
             }`}
           >
             <fieldset>
-              <p className="field-note mb-4">{t("t.pleaseSelectYesNo")}</p>
               <FieldGroup
                 type="radio"
                 name="householdExpectingChanges"
