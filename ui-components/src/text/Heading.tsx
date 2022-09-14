@@ -17,7 +17,6 @@ const HeaderStyleMap = {
   underlineHeader: "text__underline-header",
   lightWeighted: "text__light-weighted",
   capsWeighted: "text__caps-weighted",
-  fieldLabel: "text__field-label",
 }
 
 const Heading = (props: HeadingProps) => {
