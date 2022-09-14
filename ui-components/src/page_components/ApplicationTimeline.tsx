@@ -16,7 +16,7 @@ const ApplicationTimeline = (props: ApplicationTimelineProps) => (
     className="progress-nav application-timeline"
     aria-label="Steps of processing your application"
   >
-    <li className="progress-nav__item is-active" aria-current="step">
+    <li className="progress-nav__dot-item is-active" aria-current="step">
       <span className="text-white absolute">
         <Icon symbol="check" size="base" />
       </span>
@@ -25,13 +25,13 @@ const ApplicationTimeline = (props: ApplicationTimelineProps) => (
           t("application.review.confirmation.applicationReceived")}
       </Markdown>
     </li>
-    <li className="progress-nav__item is-disabled">
+    <li className="progress-nav__dot-item is-disabled">
       <Markdown options={{ disableParsingRawHTML: true }}>
         {props.strings?.applicationsClosed ??
           t("application.review.confirmation.applicationsClosed")}
       </Markdown>
     </li>
-    <li className="progress-nav__item is-disabled">
+    <li className="progress-nav__dot-item is-disabled">
       <Markdown options={{ disableParsingRawHTML: true }}>
         {props.strings?.applicationsRanked ??
           t("application.review.confirmation.applicationsRanked")}
