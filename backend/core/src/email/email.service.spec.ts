@@ -86,7 +86,6 @@ const translationServiceMock = {
               },
               interview:
                 "If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.",
-              preferences: "Housing preferences, if applicable, will affect waitlist order.",
               contactedForAnInterview:
                 "If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.",
               prepareForNextSteps: "Prepare for next steps",
