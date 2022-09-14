@@ -16,7 +16,7 @@ export class newConfirmationEmailTranslations1663104141106 implements MigrationI
         fcfs:
           "Eligibile applicants will be contacted on a first come first serve basis until vacancies are filled.",
         fcfsPreference:
-          "Housing preferences, if applicable, will affect first come, first serve order.",
+          "Housing preferences, if applicable, will affect first come first serve order.",
         lottery:
           "Once the application period closes, eligible applicants will be placed in order based on lottery rank order.",
         lotteryPreference: "Housing preferences, if applicable, will affect lottery rank order.",
