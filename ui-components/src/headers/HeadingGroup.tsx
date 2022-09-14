@@ -14,10 +14,6 @@ export interface HeadingGroupProps {
   headingPriority?: number
   /** Additional class name for the whole group */
   className?: string
-  /** Additional class name for the heading */
-  headingClassName?: string
-  /** Additional class name for the subheading */
-  subheadingClassName?: string
 }
 
 const HeadingGroup = (props: HeadingGroupProps) => {
@@ -26,12 +22,8 @@ const HeadingGroup = (props: HeadingGroupProps) => {
 
   return (
     <hgroup className={classNames.join(" ")} role="group">
-      <Heading className={props.headingClassName} priority={props.headingPriority ?? 2}>
-        {props.heading}
-      </Heading>
-      <p className={props.subheadingClassName} aria-roledescription="subtitle">
-        {props.subheading}
-      </p>
+      <Heading priority={props.headingPriority ?? 2}>{props.heading}</Heading>
+      <p aria-roledescription="subtitle">{props.subheading}</p>
     </hgroup>
   )
 }

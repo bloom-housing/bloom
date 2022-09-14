@@ -23,3 +23,27 @@ export const withContent = () => (
     />
   </div>
 )
+
+export const customStyled = () => {
+  const customStyles = `
+    .custom-heading-group {
+      --heading-margin: 2rem;
+      --heading-color: maroon;
+      --subheading-color: forestgreen;
+      --subheading-margin: var(--heading-margin);
+    }
+  `
+  return (
+    <div>
+      <HeadingGroup
+        className="custom-heading-group"
+        headingPriority={2}
+        heading="Household Maximum Income"
+        subheading="To determine your eligibility for this property, choose your household size (include yourself in that calculation)."
+      />
+      <hr className="mb-8" />
+      <p>More content here.</p>
+      <style>{customStyles}</style>
+    </div>
+  )
+}

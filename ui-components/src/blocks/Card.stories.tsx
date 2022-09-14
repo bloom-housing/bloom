@@ -119,7 +119,7 @@ export const DetroitStyle = () => {
       font-family: var(--bloom-font-sans);
     }
 
-    .card-overrides h2 {
+    .card-overrides .heading-group > *:first-child {
       font-family: var(--bloom-font-sans);
     }
 
@@ -178,62 +178,5 @@ export const DetroitStyle = () => {
         <style>{cssVarsOverride}</style>
       </div>
     </>
-  )
-}
-
-export const CustomWackyCard = () => {
-  const wackyStyles = `
-    .wacky-card {
-      --background-color: lightyellow;
-      --border-color: maroon;
-      --border-radius: 20px;
-      --content-margin-inline-desktop: 1.3rem;
-      --border-width: 3px;
-      --rule-width: 6px;
-      --rule-color: forestgreen;
-
-      color: var(--bloom-color-secondary);
-      box-shadow: var(--bloom-shadow-md);
-    }
-
-    .wacky-card > .card__header > * {
-      font-family: cursive;
-      font-size: 200%;
-      letter-spacing: var(--bloom-letter-spacing-wider);
-      color: var(--bloom-color-alert-dark);
-    }
-
-    .wacky-card .markdown {
-      font-family: var(--bloom-font-serif);
-    }
-  `
-
-  return (
-    <div style={{ maxWidth: "500px" }}>
-      <article className="wacky-card card">
-        <Card.Header>
-          <h3>This is totally custom!</h3>
-        </Card.Header>
-
-        <Card.Section className="markdown">
-          <p>Markdown styled content here.</p>
-
-          <ul>
-            <li>List Item 1</li>
-            <li>List Item 2</li>
-          </ul>
-        </Card.Section>
-
-        <Card.Footer>
-          <Card.Section>
-            <div className="field text-center font-bold">
-              <input type="checkbox" id="good" checked />
-              <label htmlFor="good">Looks good! 😜👍</label>
-            </div>
-          </Card.Section>
-        </Card.Footer>
-      </article>
-      <style>{wackyStyles}</style>
-    </div>
   )
 }
