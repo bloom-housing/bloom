@@ -57,6 +57,11 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
+    valueGetter: ({ data }) => {
+      return data.submissionType === ApplicationSubmissionType.electronical
+        ? t("application.details.submissionType.digital")
+        : t("application.details.submissionType.paper")
+    },
   },
   {
     headerName: t("applications.table.applicationSubmissionDate"),
@@ -84,7 +89,10 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     valueGetter: ({ data }) => {
-      return data.reviewStatus === "flagged" ? t("applications.pendingReview") : data.reviewStatus
+      if (data.reviewStatus === "valid") return t("applications.valid")
+      if (data.reviewStatus === "pendingAndValid") return t("applications.validPending")
+      if (data.reviewStatus === "duplicate") return t("applications.duplicate")
+      return t("applications.pending")
     },
   },
 ]

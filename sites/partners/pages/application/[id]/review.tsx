@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback, useEffect, useContext } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
+import { useSWRConfig } from "swr"
 import { useRouter } from "next/router"
 import { GridApi, RowNode } from "ag-grid-community"
 import { useForm } from "react-hook-form"
@@ -28,6 +29,7 @@ import {
   ApplicationReviewStatus,
   EnumApplicationFlaggedSetStatus,
   EnumApplicationFlaggedSetResolveStatus,
+  ApplicationFlaggedSetResolve,
 } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
@@ -40,31 +42,58 @@ const Flag = () => {
 
   const columns = useMemo(() => getCols(), [])
 
-  const { data } = useSingleFlaggedApplication(flagsetId)
+  const { data, cacheKey } = useSingleFlaggedApplication(flagsetId)
   const { reset, isSuccess, isLoading, isError } = useMutate<ApplicationFlaggedSet>()
   const { applicationFlaggedSetsService } = useContext(AuthContext)
+
+  const { mutate } = useSWRConfig()
+
+  const { mutate: saveSetMutate, isLoading: isSaveLoading } = useMutate()
+
+  const saveSet = (formattedData: ApplicationFlaggedSetResolve) => {
+    void saveSetMutate(() =>
+      applicationFlaggedSetsService
+        .resolve({
+          body: formattedData,
+        })
+        .then(() => {
+          // setAlertMessage({ message: t(`settings.preferenceAlertUpdated`), type: "success" })
+        })
+        .catch((e) => {
+          // setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          console.log(e)
+        })
+        .finally(() => {
+          console.log("before mutate")
+          void mutate(cacheKey)
+          console.log("after mutate")
+        })
+    )
+  }
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues } = useForm()
 
-  /* It selects all flagged rows on init and update (revalidate). */
-  const selectFlaggedApps = useCallback(() => {
+  const selectFlaggedApps = () => {
     if (!data) return
+    console.log("SELECTING APPS")
     gridApi.forEachNode((row) => {
+      console.log(row.data)
       if (
         row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
         row.data.reviewStatus === ApplicationReviewStatus.valid
       ) {
         row.setSelected(true)
+        console.log("im setting to tru!")
       }
     })
-  }, [data, gridApi])
+  }
 
   useEffect(() => {
     if (!gridApi) return
 
     selectFlaggedApps()
-  }, [data, gridApi, selectFlaggedApps])
+  }, [data, isSaveLoading])
 
   const tableOptions = useAgTable()
 
@@ -199,24 +228,16 @@ const Flag = () => {
             onClick={async () => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
-              try {
-                await applicationFlaggedSetsService.resolve({
-                  body: {
-                    afsId: data.id,
-                    applications: selectedData.map((row) => {
-                      return { id: row.id }
-                    }),
-                    status:
-                      status === "pending"
-                        ? EnumApplicationFlaggedSetResolveStatus.pending
-                        : EnumApplicationFlaggedSetResolveStatus.resolved,
-                  },
-                })
-                // TODO: set success alert
-              } catch (err) {
-                // TODO: set failure alert
-                console.warn(err)
-              }
+              saveSet({
+                afsId: data.id,
+                applications: selectedData.map((row) => {
+                  return { id: row.id }
+                }),
+                status:
+                  status === "pending"
+                    ? EnumApplicationFlaggedSetResolveStatus.pending
+                    : EnumApplicationFlaggedSetResolveStatus.resolved,
+              })
               setSaveModalOpen(false)
             }}
           >

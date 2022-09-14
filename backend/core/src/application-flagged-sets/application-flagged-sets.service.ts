@@ -117,6 +117,7 @@ export class ApplicationFlaggedSetsService {
         "applications.submissionType",
         "applications.confirmationCode",
         "applications.reviewStatus",
+        "applications.submissionDate",
         "applicant.firstName",
         "applicant.lastName",
         "applicant.birthDay",
