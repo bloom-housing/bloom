@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
+import { faGripLines } from "@fortawesome/free-solid-svg-icons"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
 import { Icon, IconFillColors } from "../icons/Icon"
 import { t } from "../helpers/translator"
-import { faGripLines } from "@fortawesome/free-solid-svg-icons"
 
 export interface TableHeadersOptions {
   name: string
@@ -74,6 +74,10 @@ export interface StandardTableProps {
   translateData?: boolean
   /** An id applied to the table */
   id?: string
+  strings?: {
+    orderString?: string
+    sortString?: string
+  }
 }
 
 const headerName = (header: string | TableHeadersOptions) => {
@@ -110,12 +114,16 @@ export const StandardTable = (props: StandardTableProps) => {
   }, [props.data])
 
   if (props.draggable) {
-    headerLabels.splice(0, 0, <th key={"header-draggable"}>{t("t.order")}</th>)
+    headerLabels.splice(
+      0,
+      0,
+      <th key={"header-draggable"}>{props.strings?.orderString ?? t("t.order")}</th>
+    )
     headerLabels.splice(
       0,
       0,
       <th key={"header-draggable"} className={"table__draggable-cell pl-5"}>
-        {t("t.sort")}
+        {props.strings?.sortString ?? t("t.sort")}
       </th>
     )
   }
@@ -156,7 +164,7 @@ export const StandardTable = (props: StandardTableProps) => {
         0,
         <Cell
           key={`${dataIndex}-order-draggable`}
-          headerLabel={t("t.sort")}
+          headerLabel={props.strings?.sortString ?? t("t.sort")}
           className={`pl-5 ${cellClassName ?? undefined}`}
         >
           {dataIndex + 1}
@@ -167,7 +175,7 @@ export const StandardTable = (props: StandardTableProps) => {
         0,
         <Cell
           key={`${dataIndex}-sort-draggable`}
-          headerLabel={t("t.sort")}
+          headerLabel={props.strings?.sortString ?? t("t.sort")}
           className={`table__draggable-cell pl-7`}
         >
           <Icon symbol={faGripLines} size={"medium"} fill={IconFillColors.primary} />

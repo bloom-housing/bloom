@@ -70,3 +70,22 @@ export const AdditionalInformation = () => {
     />
   )
 }
+
+export const AdditionalInformationMissingFields = () => {
+  return (
+    <Contact
+      sectionTitle={"Contact Leasing Agent"}
+      contactTitle={"Contact Title"}
+      contactName={"Contact Name"}
+      contactPhoneNumber={"Call (123) 456 - 7890"}
+      contactPhoneNumberNote={"Phone number note"}
+      strings={{ email: "Email", website: "Website", getDirections: "Get Directions" }}
+      additionalInformation={[
+        {
+          title: "Office Hours",
+          content: "Monday - Friday 11:00am - 12:00pm",
+        },
+      ]}
+    />
+  )
+}

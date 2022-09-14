@@ -371,7 +371,7 @@
   "authentication.forgotPassword.sendEmail": "傳送電子郵件",
   "authentication.forgotPassword.success": "我們已向您傳送電子郵件。您會收到具有重設密碼連結的電子郵件。",
   "authentication.signIn.accountHasBeenLocked": "基於安全原因，此帳戶已遭到鎖定。",
-  "authentication.signIn.afterFailedAttempts": "基於安全原因，只要失敗嘗試達 5 次，您就必須等待 30 分鐘才能再試一次。",
+  "authentication.signIn.afterFailedAttempts": "基於安全原因，只要失敗嘗試達 %{count} 次，您就必須等待 30 分鐘才能再試一次。",
   "authentication.signIn.changeYourPassword": "您可以變更密碼",
   "authentication.signIn.enterLoginEmail": "請輸入您的登入電子郵件",
   "authentication.signIn.enterLoginPassword": "請輸入您的登入密碼",

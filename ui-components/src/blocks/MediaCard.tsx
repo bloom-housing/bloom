@@ -22,13 +22,13 @@ const MediaCard = (props: MediaCardProps) => {
         aria-label={"Launch video"}
       >
         <div className="media-card__header">
-          <div className="media-card__icon-container">
-            <Icon symbol={props.icon ?? faCirclePlay} size="2xl" fill="white" />
-          </div>
+          <Icon symbol={props.icon ?? faCirclePlay} size="2xl" fill="white" />
         </div>
       </button>
       <div className="media-card__body">
-        <h3 className="media-card__title">{props.title}</h3>
+        <button onClick={props.handleClick}>
+          <h3 className="media-card__title">{props.title}</h3>
+        </button>
         <div className={"media-card__subtitle"}>{props.subtitle}</div>
       </div>
     </div>

@@ -77,7 +77,7 @@ export default () => {
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
-          <h2 className="form-card__title">{t("account.createAccount")}</h2>
+          <h1 className="form-card__title">{t("account.createAccount")}</h1>
           {requestError && (
             <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
               {requestError}
@@ -106,6 +106,8 @@ export default () => {
               name="middleName"
               placeholder={t("application.name.middleNameOptional")}
               register={register}
+              label={t("application.name.middleNameOptional")}
+              readerOnly
             />
 
             <Field
@@ -115,6 +117,8 @@ export default () => {
               error={errors.lastName}
               errorMessage={t("errors.lastNameError")}
               register={register}
+              label={t("application.name.lastName")}
+              readerOnly
             />
           </div>
 
@@ -144,7 +148,7 @@ export default () => {
               errorMessage={t("authentication.signIn.loginError")}
               register={register}
             />
-            <p className="text text-gray-750 text-tiny">
+            <p className="text text-gray-750 text-tiny pb-2">
               {t("authentication.createAccount.reEnterEmail")}
             </p>
             <Field
@@ -168,6 +172,8 @@ export default () => {
               error={errors.emailConfirmation}
               errorMessage={t("authentication.createAccount.errors.emailMismatch")}
               register={register}
+              label={t("authentication.createAccount.reEnterEmail")}
+              readerOnly
             />
           </div>
 
@@ -188,7 +194,7 @@ export default () => {
               errorMessage={t("authentication.signIn.passwordError")}
               register={register}
             />
-            <p className="text text-gray-750 text-tiny">
+            <p className="text text-gray-750 text-tiny pb-2">
               {t("authentication.createAccount.reEnterPassword")}
             </p>
             <Field
@@ -213,10 +219,14 @@ export default () => {
               error={errors.passwordConfirmation}
               errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
               register={register}
+              label={t("authentication.createAccount.reEnterPassword")}
+              readerOnly
             />
 
             <div className="text-center mt-10">
-              <Button styleType={AppearanceStyleType.primary}>{t("account.createAccount")}</Button>
+              <Button type="submit" styleType={AppearanceStyleType.primary}>
+                {t("account.createAccount")}
+              </Button>
             </div>
           </div>
         </Form>

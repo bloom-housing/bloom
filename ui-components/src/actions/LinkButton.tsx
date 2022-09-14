@@ -39,6 +39,7 @@ const LinkButton = (props: LinkButtonProps) => {
       <LinkComponent
         href={props.href}
         aria-hidden={props.ariaHidden}
+        tabIndex={props.ariaHidden ? -1 : 0}
         className={buttonClasses.join(" ")}
         data-test-id={props.dataTestId}
       >

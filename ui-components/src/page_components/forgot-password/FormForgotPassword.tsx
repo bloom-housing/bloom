@@ -53,7 +53,7 @@ const FormForgotPassword = ({
     <FormCard>
       <div className="form-card__lead text-center border-b mx-0">
         <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("authentication.forgotPassword.sendEmail")}</h2>
+        <h1 className="form-card__title">{t("authentication.forgotPassword.sendEmail")}</h1>
       </div>
 
       {Object.entries(errors).length > 0 && !networkError.error && (

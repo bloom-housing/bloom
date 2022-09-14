@@ -1,86 +1,108 @@
 .alert-box {
-  @apply relative;
-  @apply py-3;
-  @apply px-4;
-  @apply leading-snug;
-  @apply flex;
-  @apply items-center;
+  --vertical-padding: var(--bloom-s3);
+  --horizontal-padding: var(--bloom-s4);
+  --background-color: var(--bloom-color-primary-light);
+  --alert-background-color: var(--bloom-color-alert-light);
+  --alert-invert-background-color: var(--bloom-color-alert);
+  --notice-background-color: var(--bloom-color-primary-light);
+  --notice-invert-background-color: var(--bloom-color-primary);
+  --success-background-color: var(--bloom-color-success-light);
+  --success-invert-background-color: var(--bloom-color-success);
+  --warn-background-color: var(--bloom-color-warn-light);
+  --warn-invert-background-color: var(--bloom-color-warn);
+  --text-color: var(--bloom-color-gray-900);
+  --close-icon-color: var(--bloom-color-gray-900);
+  --font-weight: 600;
+  --max-width: var(--bloom-width-5xl);
+  --line-height: 1.375;
+
+  padding: var(--vertical-padding) var(--horizontal-padding);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-weight: var(--font-weight);
+  position: relative;
+  display: flex;
+  align-items: center;
+  line-height: var(--line-height);
 
   .alert-box_inner {
-    @apply m-auto;
-    @apply max-w-5xl;
-    @apply px-4;
-    @apply flex-1;
-    @apply flex;
-    @apply items-center;
+    margin: auto;
+    max-width: var(--max-width);
+    padding-right: var(--horizontal-padding);
+    padding-left: var(--horizontal-padding);
+    flex: 1;
+    display: flex;
+    align-items: center;
   }
 
   &.narrow {
-    padding-top: 0.35rem;
-    padding-bottom: 0.35rem;
+    padding-top: var(--bloom-s1_5);
+    padding-bottom: var(--bloom-s1_5);
   }
 
-  // Inverts color scheme of alert
   &.invert {
-    @apply text-white;
-
-    .close {
-      @apply text-white;
+    color: var(--bloom-color-white);
+    a {
+      color: var(--bloom-color-white);
+      text-decoration: underline;
     }
   }
 
   &.alert {
-    @apply bg-alert-light;
+    background-color: var(--alert-background-color);
 
     &.invert {
-      @apply bg-alert;
+      background-color: var(--alert-invert-background-color);
     }
   }
 
   &.primary {
-    @apply bg-primary-light;
+    background-color: var(--notice-background-color);
 
     &.invert {
-      @apply bg-primary;
+      background-color: var(--notice-invert-background-color);
     }
   }
 
   &.success {
-    @apply bg-success-light;
+    background-color: var(--success-background-color);
 
     &.invert {
-      @apply bg-success;
+      background-color: var(--success-invert-background-color);
     }
   }
 
   &.warn {
-    @apply bg-warn-light;
-
-    &.invert {
-      @apply bg-warn;
-    }
+    background-color: var(--warn-background-color);
   }
 }
 
 .alert-box__head {
-  @apply flex justify-between;
-  @apply w-full;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .alert-box__title {
-  @apply flex justify-between;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .alert-box__body {
-  @apply ml-2;
-  @apply font-semibold;
-  @apply text-tiny;
+  font-weight: var(--font-weight);
+  font-size: var(--bloom-font-size-tiny);
 }
 
 .alert-box__close {
-  @apply text-3xl;
-  right: 1rem;
-  @apply ml-3;
-  @apply p-0;
-  line-height: 1rem;
+  font-size: var(--bloom-font-size-3xl);
+  right: var(--horizontal-padding);
+  margin-left: var(--blom-s3);
+  padding: 0;
+  line-height: var(--bloom-s4);
+  color: var(--close-icon-color);
+}
+
+.alert-box__icon {
+  margin-right: var(--bloom-s3);
 }

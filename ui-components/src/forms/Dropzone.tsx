@@ -11,6 +11,12 @@ interface DropzoneProps {
   accept?: string | string[]
   progress?: number
   className?: string
+  strings?: {
+    chooseFromFolder?: string
+    dragHere?: string
+    dropHere?: string
+    orString?: string
+  }
 }
 
 const Dropzone = (props: DropzoneProps) => {
@@ -51,11 +57,14 @@ const Dropzone = (props: DropzoneProps) => {
         <div className={dropzoneClasses.join(" ")} {...getRootProps()}>
           <input id={props.id} {...getInputProps()} data-test-id={"dropzone-input"} />
           {isDragActive ? (
-            <p>{t("t.dropFilesHere")}</p>
+            <p>{props.strings?.dropHere ?? t("t.dropFilesHere")}</p>
           ) : (
             <p>
-              {t("t.dragFilesHere")} {t("t.or")}{" "}
-              <u className="text-primary">{t("t.chooseFromFolder").toLowerCase()}</u>
+              {props.strings?.dragHere ?? t("t.dragFilesHere")}{" "}
+              {props.strings?.orString ?? t("t.or")}{" "}
+              <u className="text-primary">
+                {props.strings?.chooseFromFolder ?? t("t.chooseFromFolder").toLowerCase()}
+              </u>
             </p>
           )}
         </div>

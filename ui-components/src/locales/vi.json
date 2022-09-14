@@ -371,7 +371,7 @@
   "authentication.forgotPassword.sendEmail": "Gửi email",
   "authentication.forgotPassword.success": "Chúng tôi đã gửi email cho quý vị. Quý vị sẽ nhận được email có liên kết để đặt lại mật khẩu.",
   "authentication.signIn.accountHasBeenLocked": "Vì lý do bảo mật_ tài khoản này đã bị khóa.",
-  "authentication.signIn.afterFailedAttempts": "Vì lý do bảo mật_ quý vị sẽ phải chờ 30 phút trước khi thử lại sau 5 lần thử không thành công.",
+  "authentication.signIn.afterFailedAttempts": "Vì lý do bảo mật_ quý vị sẽ phải chờ 30 phút trước khi thử lại sau %{count} lần thử không thành công.",
   "authentication.signIn.changeYourPassword": "Quý vị có thể đổi mật khẩu",
   "authentication.signIn.enterLoginEmail": "Vui lòng nhập email đăng nhập của quý vị",
   "authentication.signIn.enterLoginPassword": "Vui lòng nhập mật khẩu đăng nhập của quý vị",
