@@ -14,10 +14,16 @@ export default {
     badges: [BADGES.GEN2],
   },
 }
-export const baseHeader = () => <Heading>Base Header</Heading>
-export const styled = () => <Heading style={"underlineHeader"}>Underline Header</Heading>
-export const styledCustomPriority = () => (
-  <Heading style={"largeHeader"} priority={6}>
-    Custom Priority - 6
-  </Heading>
-)
+export const base1 = () => <Heading>Test Header</Heading>
+export const base2 = () => <Heading priority={2}>Test Header</Heading>
+export const base3 = () => <Heading priority={3}>Test Header</Heading>
+export const base4 = () => <Heading priority={4}>Test Header</Heading>
+export const base5 = () => <Heading priority={5}>Test Header</Heading>
+export const base6 = () => <Heading priority={6}>Test Header</Heading>
+export const largeHeader = () => <Heading style={"largeHeader"}>Large Header</Heading>
+export const mediumHeader = () => <Heading style={"mediumHeader"}>Medium Header</Heading>
+export const smallWeighted = () => <Heading style={"smallWeighted"}>Small Weighted</Heading>
+export const smallNormal = () => <Heading style={"smallNormal"}>Small Normal</Heading>
+export const underlineHeader = () => <Heading style={"underlineHeader"}>Underline Header</Heading>
+export const lightWeighted = () => <Heading style={"lightWeighted"}>Light Weighted</Heading>
+export const capsWeighted = () => <Heading style={"capsWeighted"}>Caps Weighted</Heading>
