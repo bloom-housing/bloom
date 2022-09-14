@@ -67,18 +67,6 @@ export const Overlay = (props: OverlayProps) => {
     }
   }, [elForPortal, overlayRoot])
 
-  // // disable body scrolling when the overlay is open
-  // useEffect(() => {
-  //   if (props.scrollable) return
-  //   if (!(overlayRoot && elForPortal)) return
-
-  //   props.open ? disableBodyScroll(elForPortal) : enableBodyScroll(elForPortal)
-
-  //   return () => {
-  //     enableBodyScroll(elForPortal)
-  //   }
-  // }, [elForPortal, overlayRoot, props.open])
-
   return (
     elForPortal &&
     createPortal(

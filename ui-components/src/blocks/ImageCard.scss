@@ -25,7 +25,7 @@
 
   img {
     border-radius: var(--border-radius);
-    width: 100%;
+    aspect-ratio: 16 / 9;
     height: var(--image-height);
     object-fit: cover;
   }
@@ -58,7 +58,7 @@
     }
 
     img {
-      aspect-ratio: 16 / 9;
+      width: 100%;
       display: block;
 
       &:nth-child(1) {
