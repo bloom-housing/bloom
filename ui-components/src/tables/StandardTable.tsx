@@ -117,12 +117,12 @@ export const StandardTable = (props: StandardTableProps) => {
     headerLabels.splice(
       0,
       0,
-      <th key={"header-draggable"}>{props.strings?.orderString ?? t("t.order")}</th>
+      <th key={"header-draggable-order"}>{props.strings?.orderString ?? t("t.order")}</th>
     )
     headerLabels.splice(
       0,
       0,
-      <th key={"header-draggable"} className={"table__draggable-cell pl-5"}>
+      <th key={"header-draggable-sort"} className={"table__draggable-cell pl-5"}>
         {props.strings?.sortString ?? t("t.sort")}
       </th>
     )
