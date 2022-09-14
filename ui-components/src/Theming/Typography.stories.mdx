@@ -1,0 +1,19 @@
+import { Canvas, Story, Meta, DocsContainer, Source } from "@storybook/addon-docs"
+import { LargeHeader, LargeHeaderSource, Typography } from "./Typography"
+
+<Meta
+  title="Theming/Typography"
+  parameters={{
+    docs: {
+      container: ({ children, context }) => (
+        <DocsContainer context={context}>
+          <div>{children}</div>
+        </DocsContainer>
+      ),
+    },
+  }}
+/>
+
+# Typography
+
+<Typography />
