@@ -19,5 +19,5 @@ export class ApplicationFlaggedSetResolveDto {
 
   @Expose()
   @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
-  reviewStatus: FlaggedSetStatus | null
+  status: FlaggedSetStatus
 }

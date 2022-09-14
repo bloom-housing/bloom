@@ -7,6 +7,7 @@ import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Rule } from "../types/rule-enum"
+import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
 
 @Entity()
 @Index(["listing"])
@@ -52,4 +53,9 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   showConfirmationAlert: boolean
+
+  @Column({ enum: FlaggedSetStatus, nullable: false, default: FlaggedSetStatus.pending })
+  @Expose()
+  @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
+  status: FlaggedSetStatus
 }
