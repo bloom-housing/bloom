@@ -45,7 +45,7 @@ const Flag = () => {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = useForm()
+  const { register, getValues } = useForm()
 
   /* It selects all flagged rows on init and update (revalidate). */
   const selectFlaggedApps = useCallback(() => {
@@ -171,14 +171,9 @@ const Flag = () => {
             <aside className="md:w-3/12 md:pl-6">
               <GridSection columns={1} className={"w-full"}>
                 <Button
-                  styleType={
-                    selectedRows.length
-                      ? AppearanceStyleType.primary
-                      : AppearanceStyleType.secondary
-                  }
+                  styleType={AppearanceStyleType.primary}
                   onClick={() => setSaveModalOpen(true)}
                   dataTestId={"save-set-button"}
-                  disabled={!selectedRows.length}
                 >
                   {t("t.save")}
                 </Button>
@@ -203,6 +198,7 @@ const Flag = () => {
             styleType={AppearanceStyleType.primary}
             onClick={async () => {
               const selectedData = gridApi.getSelectedRows()
+              const status = getValues()["setStatus"]
               try {
                 await applicationFlaggedSetsService.resolve({
                   body: {
@@ -210,7 +206,10 @@ const Flag = () => {
                     applications: selectedData.map((row) => {
                       return { id: row.id }
                     }),
-                    status: EnumApplicationFlaggedSetResolveStatus.resolved,
+                    status:
+                      status === "pending"
+                        ? EnumApplicationFlaggedSetResolveStatus.pending
+                        : EnumApplicationFlaggedSetResolveStatus.resolved,
                   },
                 })
                 // TODO: set success alert
@@ -244,7 +243,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "pending",
-            defaultChecked: true, // todo: what is the flag for seeing if it is resolved?
+            defaultChecked: data.status === EnumApplicationFlaggedSetStatus.pending, // todo: what is the flag for seeing if it is resolved?
           }}
         />
         <p className={"mb-6 ml-8 text-sm text-gray-800"}>{t("flags.pendingDescription")}</p>
@@ -258,7 +257,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "resolved",
-            defaultChecked: false, // todo: what is the flag for seeing if it is resolved?
+            defaultChecked: data.status === EnumApplicationFlaggedSetStatus.resolved, // todo: what is the flag for seeing if it is resolved?
           }}
         />
         <p className={"ml-8 text-sm text-gray-800"}>{t("flags.resolvedDescription")}</p>
