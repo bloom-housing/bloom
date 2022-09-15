@@ -76,8 +76,8 @@ const ListingCard = (props: ListingCardProps) => {
     header: CardHeader | undefined,
     priority: number,
     style?: HeaderType,
-    customClass?: string,
-    pillStyle?: boolean
+    pillStyle?: boolean,
+    customClass?: string
   ) => {
     if (header && header.content) {
       if (pillStyle) {
@@ -112,8 +112,8 @@ const ListingCard = (props: ListingCardProps) => {
   const getContentHeader = () => {
     return (
       <div className="listings-row_headers">
-        {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
-        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
+        {getHeader(contentProps?.contentHeader, 2, "cardHeader", false, "order-1")}
+        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", false, "order-2")}
         {cardTags && cardTags?.length > 0 && (
           <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
@@ -145,7 +145,7 @@ const ListingCard = (props: ListingCardProps) => {
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>
-            {getHeader(contentProps?.tableHeader, 4, "tableHeader", "", true)}
+            {getHeader(contentProps?.tableHeader, 4, "tableHeader", true)}
             {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
           </div>
           {children && children}
