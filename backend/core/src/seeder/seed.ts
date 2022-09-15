@@ -384,10 +384,7 @@ async function seed() {
       ])
     }
   }
-  // process duplicate check
-  console.log("processing duplicates check")
   await afsProcessingService.process()
-  console.log("duplicates processed")
 
   await app.close()
 }

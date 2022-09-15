@@ -37,7 +37,6 @@ const Flag = () => {
   const flagsetId = router.query.id as string
 
   const [saveModalOpen, setSaveModalOpen] = useState(false)
-  const [selectedRows, setSelectedRows] = useState<RowNode[]>([])
   const [gridApi, setGridApi] = useState<GridApi | null>(null)
 
   const columns = useMemo(() => getCols(), [])
@@ -64,9 +63,7 @@ const Flag = () => {
           console.log(e)
         })
         .finally(() => {
-          console.log("before mutate")
           void mutate(cacheKey)
-          console.log("after mutate")
         })
     )
   }
@@ -76,15 +73,14 @@ const Flag = () => {
 
   const selectFlaggedApps = () => {
     if (!data) return
-    console.log("SELECTING APPS")
     gridApi.forEachNode((row) => {
+      // it is setting them successfully but then the nodes change on mutate
       console.log(row.data)
       if (
         row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
         row.data.reviewStatus === ApplicationReviewStatus.valid
       ) {
         row.setSelected(true)
-        console.log("im setting to tru!")
       }
     })
   }
@@ -93,7 +89,7 @@ const Flag = () => {
     if (!gridApi) return
 
     selectFlaggedApps()
-  }, [data, isSaveLoading])
+  }, [data, gridApi])
 
   const tableOptions = useAgTable()
 
@@ -180,7 +176,6 @@ const Flag = () => {
                   columns,
                   totalItemsLabel: t("applications.totalApplications"),
                   rowSelection: true,
-                  setSelectedRows: setSelectedRows,
                 }}
                 data={{
                   items: data?.applications ?? [],

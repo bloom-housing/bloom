@@ -50,7 +50,6 @@ export interface AgTableConfig {
   columns: (ColDef | ColGroupDef)[]
   totalItemsLabel: string
   rowSelection?: boolean
-  setSelectedRows?: (selected: RowNode[]) => void
 }
 
 export interface AgTableData {
@@ -97,7 +96,7 @@ export const useAgTable = () => {
 
 const AgTable = ({
   className,
-  config: { gridComponents, columns, totalItemsLabel, rowSelection, setSelectedRows },
+  config: { gridComponents, columns, totalItemsLabel, rowSelection },
   data,
   gridApi,
   headerContent,
@@ -242,11 +241,6 @@ const AgTable = ({
               suppressScrollOnNewData={true}
               rowSelection={rowSelection ? "multiple" : undefined}
               rowMultiSelectWithClick={rowSelection ? true : undefined}
-              onSelectionChanged={
-                setSelectedRows && rowSelection
-                  ? () => setSelectedRows(gridApi?.getSelectedNodes() || [])
-                  : undefined
-              }
             ></AgGridReact>
           </div>
         </LoadingOverlay>
