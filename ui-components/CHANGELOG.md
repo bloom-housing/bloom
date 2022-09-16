@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.25...@bloom-housing/ui-components@5.1.1-alpha.26) (2022-09-16)
+
+
+### Bug Fixes
+
+* updated css class naming ([#483](https://github.com/bloom-housing/bloom/issues/483)) ([#3073](https://github.com/bloom-housing/bloom/issues/3073)) ([bfd68de](https://github.com/bloom-housing/bloom/commit/bfd68de406b1785676e6453afd1536159096d080))
+
+
+
+
+
 ## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.24...@bloom-housing/ui-components@5.1.1-alpha.25) (2022-09-14)
 
 
