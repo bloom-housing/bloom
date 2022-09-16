@@ -18,6 +18,7 @@ import { View } from "./types/view-enum"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
 import { Rule } from "./types/rule-enum"
 import { IdDto } from "../../src/shared/dto/id.dto"
+import { ApplicationReviewStatus } from "../applications/types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -34,7 +35,6 @@ export class ApplicationFlaggedSetsService {
     const innerQuery = this.afsRepository
       .createQueryBuilder("afs")
       .select("afs.id")
-      .leftJoin("afs.applications", "applications")
       .where("afs.listingId = :listingId", { listingId: queryParams.listingId })
       .orderBy("afs.id", "DESC")
       .offset((queryParams.page - 1) * queryParams.limit)
@@ -42,31 +42,32 @@ export class ApplicationFlaggedSetsService {
 
     if (queryParams.view) {
       if (queryParams.view === View.pending) {
-        innerQuery.andWhere("applications.reviewStatus = :status", {
-          status: FlaggedSetStatus.flagged,
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.pending,
         })
       } else if (queryParams.view === View.pendingNameAndDoB) {
-        innerQuery.andWhere("applications.reviewStatus = :status", {
-          status: FlaggedSetStatus.flagged,
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.pending,
         })
         innerQuery.andWhere("rule = :rule", { rule: Rule.nameAndDOB })
       } else if (queryParams.view === View.pendingEmail) {
-        innerQuery.andWhere("applications.reviewStatus = :status", {
-          status: FlaggedSetStatus.flagged,
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.pending,
         })
         innerQuery.andWhere("rule = :rule", { rule: Rule.email })
       } else if (queryParams.view === View.resolved) {
-        innerQuery.andWhere("applications.reviewStatus = :status", {
+        innerQuery.andWhere("afs.status = :status", {
           status: FlaggedSetStatus.resolved,
         })
       }
     }
-
+    // status
     const outerQuery = this.afsRepository
       .createQueryBuilder("afs")
       .select([
         "afs.id",
         "afs.rule",
+        "afs.status",
         "applications.reviewStatus",
         "afs.listingId",
         "listing.id",
@@ -92,7 +93,9 @@ export class ApplicationFlaggedSetsService {
       totalPages: Math.ceil(count / queryParams.limit),
     }
 
-    innerQuery.andWhere("applications.reviewStatus = :status", { status: FlaggedSetStatus.flagged })
+    innerQuery.andWhere("afs.status = :status", {
+      status: FlaggedSetStatus.pending,
+    })
     const countTotalFlagged = await innerQuery.getCount()
 
     return {
@@ -109,9 +112,12 @@ export class ApplicationFlaggedSetsService {
       .createQueryBuilder("afs")
       .select([
         "afs.id",
+        "afs.status",
         "applications.id",
         "applications.submissionType",
         "applications.confirmationCode",
+        "applications.reviewStatus",
+        "applications.submissionDate",
         "applicant.firstName",
         "applicant.lastName",
         "applicant.birthDay",
@@ -136,6 +142,7 @@ export class ApplicationFlaggedSetsService {
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {
     return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+      const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
       const afs = await this.findOneById(dto.afsId, dto.applications)
 
@@ -143,18 +150,81 @@ export class ApplicationFlaggedSetsService {
         throw new BadRequestException("Listing must be closed before resolving any duplicates.")
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      afs.resolvingUser = this.request.user as User
-      afs.resolvedTime = new Date()
+      const selectedApps = afs.applications.map((app) => app.id)
 
-      await Promise.all(
-        afs.applications.map(async (appToBeResolved) => {
-          await transApplicationsRepository.update(appToBeResolved.id, {
-            markedAsDuplicate: dto.reviewStatus === FlaggedSetStatus.resolved,
-            reviewStatus: dto.reviewStatus,
+      if (dto.status === FlaggedSetStatus.pending) {
+        // mark selected as pendingAndValid
+        await transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.pendingAndValid })
+          .where("id IN (:...selectedApps)", {
+            selectedApps,
           })
-        })
-      )
+          .execute()
+
+        // mark those that were not selected as duplicate
+        await transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.pending })
+          .where("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+          .andWhere(
+            "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
+            { afsId: dto.afsId }
+          )
+          .execute()
+
+        // mark the flagged set as pending
+        await transAfsRepository
+          .createQueryBuilder()
+          .update(ApplicationFlaggedSet)
+          .set({
+            resolvedTime: new Date(),
+            status: FlaggedSetStatus.pending,
+            resolvingUser: this.request.user as User,
+          })
+          .where("id = :afsId", { afsId: dto.afsId })
+          .execute()
+      } else if (dto.status === FlaggedSetStatus.resolved) {
+        // mark selected a valid
+        await transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.valid })
+          .where("id IN (:...selectedApps)", {
+            selectedApps,
+          })
+          .execute()
+
+        // mark those that were not selected as duplicate
+        await transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.duplicate })
+          .where("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+          .andWhere(
+            "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
+            { afsId: dto.afsId }
+          )
+          .execute()
+
+        // mark the flagged set as resolved
+        await transAfsRepository
+          .createQueryBuilder()
+          .update(ApplicationFlaggedSet)
+          .set({
+            resolvedTime: new Date(),
+            status: FlaggedSetStatus.resolved,
+            resolvingUser: this.request.user as User,
+          })
+          .where("id = :afsId", { afsId: dto.afsId })
+          .execute()
+      }
       return afs
     })
   }
@@ -169,13 +239,10 @@ export class ApplicationFlaggedSetsService {
       status?: FlaggedSetStatus
       rule?: Rule
     }): SelectQueryBuilder<ApplicationFlaggedSet> => {
-      const innerQuery = this.afsRepository
-        .createQueryBuilder("afs")
-        .select("afs.id")
-        .leftJoin("afs.applications", "applications")
+      const innerQuery = this.afsRepository.createQueryBuilder("afs").select("afs.id")
       innerQuery.where("afs.listing_id = :listingId", { listingId: params.listingId })
       if (params.status) {
-        innerQuery.andWhere("applications.reviewStatus = :status", { status: params.status })
+        innerQuery.andWhere("afs.status = :status", { status: params.status })
       }
       if (params.rule) {
         innerQuery.andWhere("afs.rule = :rule", { rule: params.rule })
@@ -201,18 +268,18 @@ export class ApplicationFlaggedSetsService {
 
     const pendingQB = constructQuery({
       listingId: queryParams.listingId,
-      status: FlaggedSetStatus.flagged,
+      status: FlaggedSetStatus.pending,
     })
 
     const pendingNameQB = constructQuery({
       listingId: queryParams.listingId,
-      status: FlaggedSetStatus.flagged,
+      status: FlaggedSetStatus.pending,
       rule: Rule.nameAndDOB,
     })
 
     const pendingEmailQB = constructQuery({
       listingId: queryParams.listingId,
-      status: FlaggedSetStatus.flagged,
+      status: FlaggedSetStatus.pending,
       rule: Rule.email,
     })
 

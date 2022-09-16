@@ -96,6 +96,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
 
     for (const afs of afses) {
+      afs.status = FlaggedSetStatus.pending
       afs.resolvedTime = null
       afs.resolvingUser = null
 
@@ -140,6 +141,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
         ruleKey: this.getRuleKeyForRule(newApplication, rule),
         resolvedTime: null,
         resolvingUser: null,
+        status: FlaggedSetStatus.pending,
         applications: [newApplication, ...applicationsMatchingRule],
         listing: { id: newApplication.listingId },
       })

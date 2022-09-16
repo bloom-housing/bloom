@@ -32,6 +32,9 @@ export interface AgTableProps {
   pagination?: AgTablePagination
   search: AgTableSearch
   sort?: AgTableSort
+  // If using row selection, these two props are required
+  gridApi?: GridApi | null
+  setGridApi?: React.Dispatch<React.SetStateAction<GridApi | null>>
 }
 
 export interface AgTablePagination {
@@ -47,7 +50,6 @@ export interface AgTableConfig {
   columns: (ColDef | ColGroupDef)[]
   totalItemsLabel: string
   rowSelection?: boolean
-  setSelectedRows?: (selected: RowNode[]) => void
 }
 
 export interface AgTableData {
@@ -93,15 +95,17 @@ export const useAgTable = () => {
 }
 
 const AgTable = ({
-  id,
   className,
+  config: { gridComponents, columns, totalItemsLabel, rowSelection },
+  data,
+  gridApi,
+  headerContent,
+  hidePagination,
+  id,
   pagination,
   search: { setSearch, showSearch = true },
+  setGridApi,
   sort: { setSort } = {},
-  headerContent,
-  data,
-  config: { gridComponents, columns, totalItemsLabel, rowSelection, setSelectedRows },
-  hidePagination,
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
@@ -110,7 +114,6 @@ const AgTable = ({
   }
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
-  const [gridApi, setGridApi] = useState<GridApi | null>(null)
 
   const [validSearch, setValidSearch] = useState<boolean>(true)
 
@@ -193,7 +196,9 @@ const AgTable = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onGridReady = (params: any) => {
     setGridColumnApi(params.columnApi)
-    setGridApi(params.api)
+    if (setGridApi) {
+      setGridApi(params.api)
+    }
   }
 
   return (
@@ -236,11 +241,6 @@ const AgTable = ({
               suppressScrollOnNewData={true}
               rowSelection={rowSelection ? "multiple" : undefined}
               rowMultiSelectWithClick={rowSelection ? true : undefined}
-              onSelectionChanged={
-                setSelectedRows && rowSelection
-                  ? () => setSelectedRows(gridApi?.getSelectedNodes() || [])
-                  : undefined
-              }
             ></AgGridReact>
           </div>
         </LoadingOverlay>
