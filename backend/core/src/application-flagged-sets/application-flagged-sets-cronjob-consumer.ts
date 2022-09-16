@@ -7,6 +7,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { ListingRepository } from "../listings/db/listing.repository"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
+import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 
 @Processor(AFSProcessingQueueNames.afsProcessing)
 export class ApplicationFlaggedSetsCronjobConsumer {

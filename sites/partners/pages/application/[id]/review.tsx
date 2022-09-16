@@ -220,7 +220,7 @@ const Flag = () => {
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
-            onClick={async () => {
+            onClick={() => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
               saveSet({
