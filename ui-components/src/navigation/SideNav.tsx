@@ -20,7 +20,7 @@ const ItemLabel = ({ item }: { item: SideNavItemProps }) => {
     return (
       <>
         <span>{item.label}</span>
-        <span>{item.count}</span>
+        <span className={"side-nav__count"}>{item.count}</span>
       </>
     )
   } else {

@@ -55,28 +55,8 @@ const ApplicationsSideNav = ({
       <div className={"hidden md:block"}>
         <SideNav className={className} navItems={items} />
       </div>
-      <div className={"block md:hidden mb-4"}>
-        <Tabs
-          className={"tabs__horizontal"}
-          selectedIndex={items.findIndex((item) => item.url === router.asPath)}
-          onSelect={() => {}}
-        >
-          <TabList>
-            {items.map((navItem) => {
-              return (
-                <Tab>
-                  <LinkComponent
-                    href={navItem.url}
-                    aria-current={navItem.url === router.asPath ? "page" : undefined}
-                    className={"text-gray-850"}
-                  >
-                    {navItem.label}
-                  </LinkComponent>
-                </Tab>
-              )
-            })}
-          </TabList>
-        </Tabs>
+      <div className={"block md:hidden mb-4 w-full sm:w-auto"}>
+        <SideNav className={`${className} side-nav__horizontal`} navItems={items} />
       </div>
     </>
   )

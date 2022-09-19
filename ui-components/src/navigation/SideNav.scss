@@ -72,3 +72,61 @@
     padding-inline-start: calc(var(--current-padding-inline) + var(--current-padding-block));
   }
 }
+
+.side-nav__horizontal {
+  display: flex;
+
+  ul {
+    width: 100%;
+  }
+
+  @media (min-width: $screen-sm) {
+    a {
+      &[aria-current]:not(:focus) {
+        box-shadow: inset 0px -3px 0px 0px var(--hover-link-color);
+      }
+
+      &.has-current-child:not(:focus) {
+        box-shadow: inset 0px 0px -3px 0px var(--selection-parent-accent);
+      }
+    }
+
+    ul {
+      width: auto;
+      display: flex;
+      flex-direction: row;
+      @media (min-width: $screen-md) {
+        flex-direction: row;
+      }
+      @media (max-width: $screen-sm) {
+        flex-direction: column;
+        width: 100%;
+      }
+    }
+
+    li:not(:last-child) {
+      border-right: var(--border);
+      border-bottom: 0px;
+    }
+
+    li:last-child {
+      border-left: var(--border);
+    }
+
+    & > ul {
+      & > li:first-child > a {
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: 0px;
+      }
+
+      & > li:last-child > a {
+        border-bottom-right-radius: var(--border-radius);
+        border-bottom-left-radius: 0px;
+      }
+    }
+  }
+}
+
+.side-nav__count {
+  margin-left: var(--bloom-s4);
+}
