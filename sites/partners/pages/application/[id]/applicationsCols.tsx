@@ -18,7 +18,7 @@ export const getCols = () => [
       if (!data?.id && !data?.confirmationCode) return ""
       return <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
     },
-    width: 175,
+    width: 180,
   },
 
   {

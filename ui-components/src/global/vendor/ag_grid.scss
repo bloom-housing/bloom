@@ -125,6 +125,12 @@
       min-height: 15px;
     }
   }
+
+  .ag-ltr {
+    .ag-selection-checkbox {
+      margin-right: var(--bloom-s6);
+    }
+  }
 }
 
 .data-pager {
