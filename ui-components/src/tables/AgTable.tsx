@@ -7,7 +7,6 @@ import {
   ColumnApi,
   ColDef,
   ColGroupDef,
-  RowNode,
   GridApi,
 } from "ag-grid-community"
 import { AgPagination, AG_PER_PAGE_OPTIONS } from "./AgPagination"
@@ -31,10 +30,8 @@ export interface AgTableProps {
   id: string
   pagination?: AgTablePagination
   search: AgTableSearch
+  selectConfig?: AgTableSelectConfig
   sort?: AgTableSort
-  // If using row selection, these two props are required
-  gridApi?: GridApi | null
-  setGridApi?: React.Dispatch<React.SetStateAction<GridApi | null>>
 }
 
 export interface AgTablePagination {
@@ -42,6 +39,11 @@ export interface AgTablePagination {
   setPerPage: React.Dispatch<React.SetStateAction<number>>
   currentPage: number
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+export interface AgTableSelectConfig {
+  setGridApi: React.Dispatch<React.SetStateAction<GridApi | null>>
+  updateSelectedValues: () => void
 }
 
 export interface AgTableConfig {
@@ -98,13 +100,12 @@ const AgTable = ({
   className,
   config: { gridComponents, columns, totalItemsLabel, rowSelection },
   data,
-  gridApi,
   headerContent,
   hidePagination,
   id,
+  selectConfig,
   pagination,
   search: { setSearch, showSearch = true },
-  setGridApi,
   sort: { setSort } = {},
 }: AgTableProps) => {
   // local storage key with column state
@@ -196,8 +197,8 @@ const AgTable = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onGridReady = (params: any) => {
     setGridColumnApi(params.columnApi)
-    if (setGridApi) {
-      setGridApi(params.api)
+    if (selectConfig?.setGridApi) {
+      selectConfig.setGridApi(params.api)
     }
   }
 
@@ -240,7 +241,9 @@ const AgTable = ({
               paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
               suppressScrollOnNewData={true}
               rowSelection={rowSelection ? "multiple" : undefined}
-              rowMultiSelectWithClick={rowSelection ? true : undefined}
+              rowMultiSelectWithClick={rowSelection}
+              onRowDataChanged={selectConfig?.updateSelectedValues ?? undefined}
+              onFirstDataRendered={selectConfig?.updateSelectedValues ?? undefined}
             ></AgGridReact>
           </div>
         </LoadingOverlay>

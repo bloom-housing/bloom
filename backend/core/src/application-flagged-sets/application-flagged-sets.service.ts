@@ -112,6 +112,7 @@ export class ApplicationFlaggedSetsService {
       .createQueryBuilder("afs")
       .select([
         "afs.id",
+        "afs.rule",
         "afs.status",
         "applications.id",
         "applications.submissionType",
@@ -123,6 +124,7 @@ export class ApplicationFlaggedSetsService {
         "applicant.birthDay",
         "applicant.birthMonth",
         "applicant.birthYear",
+        "applicant.emailAddress",
         "listing.id",
         "listing.status",
       ])

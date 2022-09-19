@@ -20,6 +20,19 @@ export const getCols = () => [
     },
   },
   {
+    headerName: t("applications.table.reviewStatus"),
+    field: "reviewStatus",
+    sortable: false,
+    filter: false,
+    resizable: true,
+    valueGetter: ({ data }) => {
+      if (data.reviewStatus === "valid") return t("applications.valid")
+      if (data.reviewStatus === "pendingAndValid") return t("applications.validPending")
+      if (data.reviewStatus === "duplicate") return t("applications.duplicate")
+      return t("applications.pending")
+    },
+  },
+  {
     headerName: t("application.name.firstName"),
     field: "applicant.firstName",
     sortable: false,
@@ -80,19 +93,6 @@ export const getCols = () => [
       )
 
       return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
-    },
-  },
-  {
-    headerName: t("applications.table.reviewStatus"),
-    field: "reviewStatus",
-    sortable: false,
-    filter: false,
-    resizable: true,
-    valueGetter: ({ data }) => {
-      if (data.reviewStatus === "valid") return t("applications.valid")
-      if (data.reviewStatus === "pendingAndValid") return t("applications.validPending")
-      if (data.reviewStatus === "duplicate") return t("applications.duplicate")
-      return t("applications.pending")
     },
   },
 ]

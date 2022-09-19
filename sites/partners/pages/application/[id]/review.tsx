@@ -1,9 +1,9 @@
-import React, { useMemo, useState, useCallback, useEffect, useContext } from "react"
+import React, { useMemo, useState, useContext } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import { useRouter } from "next/router"
-import { GridApi, RowNode } from "ag-grid-community"
+import { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
 import {
   t,
@@ -30,7 +30,6 @@ import {
   EnumApplicationFlaggedSetStatus,
   EnumApplicationFlaggedSetResolveStatus,
   ApplicationFlaggedSetResolve,
-  Application,
 } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
@@ -39,8 +38,6 @@ const Flag = () => {
 
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [gridApi, setGridApi] = useState<GridApi | null>(null)
-  const [tableData, setTableData] = useState<ApplicationFlaggedSet>()
-  const [applicationData, setApplicationData] = useState<Application[]>()
 
   const columns = useMemo(() => getCols(), [])
 
@@ -67,9 +64,6 @@ const Flag = () => {
         })
         .finally(() => {
           void mutate(cacheKey)
-          // setTimeout(() => {
-          //   selectFlaggedApps()
-          // }, 1000)
         })
     )
   }
@@ -77,8 +71,8 @@ const Flag = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues } = useForm()
 
-  const selectFlaggedApps = () => {
-    if (!applicationData || !gridApi) return
+  const selectFlaggedApps = (data: ApplicationFlaggedSet, gridApi: GridApi) => {
+    if (!data || !gridApi) return
     gridApi.forEachNode((row) => {
       row.setSelected(
         row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
@@ -87,46 +81,24 @@ const Flag = () => {
     })
   }
 
-  useEffect(() => {
-    if (!gridApi) return
-    selectFlaggedApps()
-  }, [applicationData, gridApi])
-
-  useEffect(() => {
-    setTableData(data)
-    if (applicationData) {
-      setApplicationData(
-        applicationData.map((app) => {
-          return {
-            ...app,
-            reviewStatus: data.applications.find((existingApp) => existingApp.id === app.id)
-              .reviewStatus,
-          }
-        })
-      )
-    } else {
-      setApplicationData(data?.applications)
-    }
-  }, [data])
-
   const tableOptions = useAgTable()
 
-  if (!tableData) return null
+  if (!data) return null
 
   const getTitle = () => {
-    if (tableData.rule === "Email") {
+    if (data.rule === "Email") {
       return t(`flags.emailRule`, {
-        email: applicationData[0].applicant.emailAddress,
+        email: data?.applications[0].applicant.emailAddress,
       })
-    } else if (tableData.rule === "Name and DOB") {
+    } else if (data?.rule === "Name and DOB") {
       return t("flags.nameDobRule", {
-        name: `${tableData?.applications[0].applicant.firstName} ${tableData?.applications[0].applicant.lastName}`,
+        name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
       })
     }
     return ""
   }
 
-  const numberConfirmedApps = applicationData?.filter((app) => !app.markedAsDuplicate).length
+  const numberConfirmedApps = data?.applications?.filter((app) => !app.markedAsDuplicate).length
 
   return (
     <Layout>
@@ -146,12 +118,12 @@ const Flag = () => {
           </Button>
         }
         tagStyle={
-          tableData.status === EnumApplicationFlaggedSetStatus.resolved
+          data?.status === EnumApplicationFlaggedSetStatus.resolved
             ? AppearanceStyleType.success
             : AppearanceStyleType.primary
         }
         tagLabel={
-          tableData.status === EnumApplicationFlaggedSetStatus.resolved
+          data?.status === EnumApplicationFlaggedSetStatus.resolved
             ? t("t.resolved")
             : t("applications.pendingReview")
         }
@@ -169,7 +141,7 @@ const Flag = () => {
               {isSuccess ? t("t.updated") : t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
-          {tableData.showConfirmationAlert && (
+          {data?.showConfirmationAlert && (
             <AlertBox
               className="md:w-9/12 mb-5"
               type={"success"}
@@ -196,17 +168,19 @@ const Flag = () => {
                   rowSelection: true,
                 }}
                 data={{
-                  items: applicationData ?? [],
+                  items: data.applications ?? [],
                   loading: isLoading,
-                  totalItems: applicationData?.length ?? 0,
+                  totalItems: data.applications?.length ?? 0,
                   totalPages: 1,
                 }}
                 search={{
                   setSearch: tableOptions.filter.setFilterValue,
                   showSearch: false,
                 }}
-                gridApi={gridApi}
-                setGridApi={setGridApi}
+                selectConfig={{
+                  setGridApi: setGridApi,
+                  updateSelectedValues: () => selectFlaggedApps(data, gridApi),
+                }}
               />
             </div>
 
@@ -219,9 +193,9 @@ const Flag = () => {
                 >
                   {t("t.save")}
                 </Button>
-                {tableData.updatedAt && (
+                {data?.updatedAt && (
                   <div className="border-t text-sm flex items-center justify-center md:mt-0 mt-4 pt-4">
-                    {t("t.lastUpdated")}: {dayjs(tableData.updatedAt).format("MMMM DD, YYYY")}
+                    {t("t.lastUpdated")}: {dayjs(data?.updatedAt).format("MMMM DD, YYYY")}
                   </div>
                 )}
               </GridSection>
@@ -238,11 +212,12 @@ const Flag = () => {
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
+            loading={isSaveLoading}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
               saveSet({
-                afsId: tableData.id,
+                afsId: data?.id,
                 applications: selectedData.map((row) => {
                   return { id: row.id }
                 }),
@@ -277,7 +252,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "pending",
-            defaultChecked: tableData.status === EnumApplicationFlaggedSetStatus.pending,
+            defaultChecked: data?.status === EnumApplicationFlaggedSetStatus.pending,
           }}
         />
         <p className={"mb-6 ml-8 text-sm text-gray-800"}>{t("flags.pendingDescription")}</p>
@@ -291,7 +266,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "resolved",
-            defaultChecked: tableData.status === EnumApplicationFlaggedSetStatus.resolved,
+            defaultChecked: data?.status === EnumApplicationFlaggedSetStatus.resolved,
           }}
         />
         <p className={"ml-8 text-sm text-gray-800"}>{t("flags.resolvedDescription")}</p>
