@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.45...@bloom-housing/partners@5.1.1-alpha.46) (2022-09-19)
+
+
+### Features
+
+* add confirm modal when copying a preference ([#3041](https://github.com/bloom-housing/bloom/issues/3041)) ([b3d69e9](https://github.com/bloom-housing/bloom/commit/b3d69e9b557998489c828c86ff742c91feca799f))
+
+
+
+
+
 ## [5.1.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.44...@bloom-housing/partners@5.1.1-alpha.45) (2022-09-16)
 
 **Note:** Version bump only for package @bloom-housing/partners

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.27...@bloom-housing/ui-components@5.1.1-alpha.28) (2022-09-19)
+
+
+### Features
+
+* add confirm modal when copying a preference ([#3041](https://github.com/bloom-housing/bloom/issues/3041)) ([b3d69e9](https://github.com/bloom-housing/bloom/commit/b3d69e9b557998489c828c86ff742c91feca799f))
+
+
+
+
+
 ## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.26...@bloom-housing/ui-components@5.1.1-alpha.27) (2022-09-16)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
