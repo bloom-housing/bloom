@@ -15,7 +15,7 @@
   border-top: var(--bloom-border-1) solid var(--border-color);
   color: var(--text-color);
 
-  @media (min-width: $screen-sm) {
+  @media (min-width: $screen-md) {
     padding: var(--bloom-s10) 0;
   }
 

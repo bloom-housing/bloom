@@ -22,10 +22,14 @@
       @apply rounded-tl-lg;
       @apply rounded-tr-lg;
       @apply rounded-tr-none;
+      @apply rounded-bl-lg;
     }
     &:last-of-type {
       @apply rounded-tr-lg;
+      @apply rounded-br-lg;
     }
+
+    border-bottom-color: var(--bloom-color-gray-450);
   }
 }
 

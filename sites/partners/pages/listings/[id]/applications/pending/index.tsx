@@ -143,7 +143,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
           {listingDto && (
             <>
               <ApplicationsSideNav

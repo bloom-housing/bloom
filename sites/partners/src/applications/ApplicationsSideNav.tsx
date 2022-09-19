@@ -2,6 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import { t, SideNav, Tabs, TabList, Tab } from "@bloom-housing/ui-components"
 import { useFlaggedApplicationsMeta } from "../../lib/hooks"
+import LinkComponent from "../LinkComponent"
 
 type ApplicationsSideNavProps = {
   className?: string
@@ -55,10 +56,24 @@ const ApplicationsSideNav = ({
         <SideNav className={className} navItems={items} />
       </div>
       <div className={"block md:hidden mb-4"}>
-        <Tabs className={"tabs__horizontal"}>
+        <Tabs
+          className={"tabs__horizontal"}
+          selectedIndex={items.findIndex((item) => item.url === router.asPath)}
+          onSelect={() => {}}
+        >
           <TabList>
             {items.map((navItem) => {
-              return <Tab>{navItem.label}</Tab>
+              return (
+                <Tab>
+                  <LinkComponent
+                    href={navItem.url}
+                    aria-current={navItem.url === router.asPath ? "page" : undefined}
+                    className={"text-gray-850"}
+                  >
+                    {navItem.label}
+                  </LinkComponent>
+                </Tab>
+              )
             })}
           </TabList>
         </Tabs>
