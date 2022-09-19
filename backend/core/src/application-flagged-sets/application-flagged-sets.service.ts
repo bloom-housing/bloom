@@ -131,7 +131,7 @@ export class ApplicationFlaggedSetsService {
       .leftJoin("afs.listing", "listing")
       .orderBy("applications.confirmationCode", "DESC")
       .where("afs.id = :id", { id: afsId })
-    if (applicationIdList) {
+    if (applicationIdList?.length) {
       qb.andWhere("applications.id IN (:...applicationIdList)", {
         applicationIdList: applicationIdList.map((elem) => elem.id),
       })
@@ -150,32 +150,37 @@ export class ApplicationFlaggedSetsService {
         throw new BadRequestException("Listing must be closed before resolving any duplicates.")
       }
 
-      const selectedApps = afs.applications.map((app) => app.id)
+      const selectedApps = dto.applications.length ? afs.applications.map((app) => app.id) : []
 
       if (dto.status === FlaggedSetStatus.pending) {
         // mark selected as pendingAndValid
-        await transApplicationsRepository
-          .createQueryBuilder()
-          .update(Application)
-          .set({ reviewStatus: ApplicationReviewStatus.pendingAndValid })
-          .where("id IN (:...selectedApps)", {
-            selectedApps,
-          })
-          .execute()
+        if (selectedApps.length) {
+          await transApplicationsRepository
+            .createQueryBuilder()
+            .update(Application)
+            .set({ reviewStatus: ApplicationReviewStatus.pendingAndValid })
+            .where("id IN (:...selectedApps)", {
+              selectedApps,
+            })
+            .execute()
+        }
 
         // mark those that were not selected as duplicate
-        await transApplicationsRepository
+        const qb = transApplicationsRepository
           .createQueryBuilder()
           .update(Application)
           .set({ reviewStatus: ApplicationReviewStatus.pending })
-          .where("id NOT IN (:...selectedApps)", {
-            selectedApps,
-          })
-          .andWhere(
+          .where(
             "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
             { afsId: dto.afsId }
           )
-          .execute()
+
+        if (selectedApps.length) {
+          qb.andWhere("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+        }
+        await qb.execute()
 
         // mark the flagged set as pending
         await transAfsRepository
@@ -190,28 +195,32 @@ export class ApplicationFlaggedSetsService {
           .execute()
       } else if (dto.status === FlaggedSetStatus.resolved) {
         // mark selected a valid
-        await transApplicationsRepository
-          .createQueryBuilder()
-          .update(Application)
-          .set({ reviewStatus: ApplicationReviewStatus.valid })
-          .where("id IN (:...selectedApps)", {
-            selectedApps,
-          })
-          .execute()
+        if (selectedApps.length) {
+          await transApplicationsRepository
+            .createQueryBuilder()
+            .update(Application)
+            .set({ reviewStatus: ApplicationReviewStatus.valid })
+            .where("id IN (:...selectedApps)", {
+              selectedApps,
+            })
+            .execute()
+        }
 
         // mark those that were not selected as duplicate
-        await transApplicationsRepository
+        const qb = transApplicationsRepository
           .createQueryBuilder()
           .update(Application)
           .set({ reviewStatus: ApplicationReviewStatus.duplicate })
-          .where("id NOT IN (:...selectedApps)", {
-            selectedApps,
-          })
-          .andWhere(
+          .where(
             "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
             { afsId: dto.afsId }
           )
-          .execute()
+        if (selectedApps.length) {
+          qb.andWhere("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+        }
+        await qb.execute()
 
         // mark the flagged set as resolved
         await transAfsRepository
