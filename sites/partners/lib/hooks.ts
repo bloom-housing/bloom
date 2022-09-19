@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from "react"
-import useSWR, { mutate } from "swr"
+import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
