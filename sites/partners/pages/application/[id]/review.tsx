@@ -30,6 +30,7 @@ import {
   EnumApplicationFlaggedSetStatus,
   EnumApplicationFlaggedSetResolveStatus,
   ApplicationFlaggedSetResolve,
+  Application,
 } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
@@ -38,6 +39,8 @@ const Flag = () => {
 
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [gridApi, setGridApi] = useState<GridApi | null>(null)
+  const [tableData, setTableData] = useState<ApplicationFlaggedSet>()
+  const [applicationData, setApplicationData] = useState<Application[]>()
 
   const columns = useMemo(() => getCols(), [])
 
@@ -64,6 +67,9 @@ const Flag = () => {
         })
         .finally(() => {
           void mutate(cacheKey)
+          // setTimeout(() => {
+          //   selectFlaggedApps()
+          // }, 1000)
         })
     )
   }
@@ -72,43 +78,55 @@ const Flag = () => {
   const { register, getValues } = useForm()
 
   const selectFlaggedApps = () => {
-    if (!data) return
+    if (!applicationData || !gridApi) return
     gridApi.forEachNode((row) => {
-      // it is setting them successfully but then the nodes change on mutate
-      console.log(row.data)
-      if (
+      row.setSelected(
         row.data.reviewStatus === ApplicationReviewStatus.pendingAndValid ||
-        row.data.reviewStatus === ApplicationReviewStatus.valid
-      ) {
-        row.setSelected(true)
-      }
+          row.data.reviewStatus === ApplicationReviewStatus.valid
+      )
     })
   }
 
   useEffect(() => {
     if (!gridApi) return
-
     selectFlaggedApps()
-  }, [data, gridApi])
+  }, [applicationData, gridApi])
+
+  useEffect(() => {
+    setTableData(data)
+    if (applicationData) {
+      setApplicationData(
+        applicationData.map((app) => {
+          return {
+            ...app,
+            reviewStatus: data.applications.find((existingApp) => existingApp.id === app.id)
+              .reviewStatus,
+          }
+        })
+      )
+    } else {
+      setApplicationData(data?.applications)
+    }
+  }, [data])
 
   const tableOptions = useAgTable()
 
-  if (!data) return null
+  if (!tableData) return null
 
   const getTitle = () => {
-    if (data.rule === "Email") {
+    if (tableData.rule === "Email") {
       return t(`flags.emailRule`, {
-        email: data?.applications[0].applicant.emailAddress,
+        email: applicationData[0].applicant.emailAddress,
       })
-    } else if (data.rule === "Name and DOB") {
+    } else if (tableData.rule === "Name and DOB") {
       return t("flags.nameDobRule", {
-        name: `${data?.applications[0].applicant.firstName} ${data?.applications[0].applicant.lastName}`,
+        name: `${tableData?.applications[0].applicant.firstName} ${tableData?.applications[0].applicant.lastName}`,
       })
     }
     return ""
   }
 
-  const numberConfirmedApps = data.applications.filter((app) => !app.markedAsDuplicate).length
+  const numberConfirmedApps = applicationData?.filter((app) => !app.markedAsDuplicate).length
 
   return (
     <Layout>
@@ -128,12 +146,12 @@ const Flag = () => {
           </Button>
         }
         tagStyle={
-          data.status === EnumApplicationFlaggedSetStatus.resolved
+          tableData.status === EnumApplicationFlaggedSetStatus.resolved
             ? AppearanceStyleType.success
             : AppearanceStyleType.primary
         }
         tagLabel={
-          data.status === EnumApplicationFlaggedSetStatus.resolved
+          tableData.status === EnumApplicationFlaggedSetStatus.resolved
             ? t("t.resolved")
             : t("applications.pendingReview")
         }
@@ -151,7 +169,7 @@ const Flag = () => {
               {isSuccess ? t("t.updated") : t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
-          {data.showConfirmationAlert && (
+          {tableData.showConfirmationAlert && (
             <AlertBox
               className="md:w-9/12 mb-5"
               type={"success"}
@@ -178,9 +196,9 @@ const Flag = () => {
                   rowSelection: true,
                 }}
                 data={{
-                  items: data?.applications ?? [],
+                  items: applicationData ?? [],
                   loading: isLoading,
-                  totalItems: data?.applications?.length ?? 0,
+                  totalItems: applicationData?.length ?? 0,
                   totalPages: 1,
                 }}
                 search={{
@@ -201,9 +219,9 @@ const Flag = () => {
                 >
                   {t("t.save")}
                 </Button>
-                {data.updatedAt && (
+                {tableData.updatedAt && (
                   <div className="border-t text-sm flex items-center justify-center md:mt-0 mt-4 pt-4">
-                    {t("t.lastUpdated")}: {dayjs(data.updatedAt).format("MMMM DD, YYYY")}
+                    {t("t.lastUpdated")}: {dayjs(tableData.updatedAt).format("MMMM DD, YYYY")}
                   </div>
                 )}
               </GridSection>
@@ -224,7 +242,7 @@ const Flag = () => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
               saveSet({
-                afsId: data.id,
+                afsId: tableData.id,
                 applications: selectedData.map((row) => {
                   return { id: row.id }
                 }),
@@ -259,7 +277,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "pending",
-            defaultChecked: data.status === EnumApplicationFlaggedSetStatus.pending, // todo: what is the flag for seeing if it is resolved?
+            defaultChecked: tableData.status === EnumApplicationFlaggedSetStatus.pending,
           }}
         />
         <p className={"mb-6 ml-8 text-sm text-gray-800"}>{t("flags.pendingDescription")}</p>
@@ -273,7 +291,7 @@ const Flag = () => {
           register={register}
           inputProps={{
             value: "resolved",
-            defaultChecked: data.status === EnumApplicationFlaggedSetStatus.resolved, // todo: what is the flag for seeing if it is resolved?
+            defaultChecked: tableData.status === EnumApplicationFlaggedSetStatus.resolved,
           }}
         />
         <p className={"ml-8 text-sm text-gray-800"}>{t("flags.resolvedDescription")}</p>
