@@ -91,7 +91,6 @@ const ApplicationsList = () => {
   class formatEnabledCell {
     linkWithId: HTMLSpanElement
     init(params) {
-      console.log("94:", { params })
       const applicationId = params.data.id
       this.linkWithId = document.createElement("button")
       this.linkWithId.innerText = params.value

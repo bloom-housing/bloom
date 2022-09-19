@@ -56,10 +56,10 @@ const Flag = () => {
           body: formattedData,
         })
         .then(() => {
-          // setAlertMessage({ message: t(`settings.preferenceAlertUpdated`), type: "success" })
+          // next issue: set success alert
         })
         .catch((e) => {
-          // setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+          // next issue: set failure alert
           console.log(e)
         })
         .finally(() => {
@@ -147,12 +147,12 @@ const Flag = () => {
               type={"success"}
               closeable
               onClose={() => {
-                // todo: call backend, update this flag, endpoint does not yet exist
+                // next issue: call backend, update this flag, endpoint does not yet exist
               }}
             >
-              {numberConfirmedApps > 1
+              {numberConfirmedApps !== 1
                 ? t("flags.confirmationAlertPlural", { amount: numberConfirmedApps })
-                : t("flags.confirmationAlertSingular", { amount: numberConfirmedApps })}
+                : t("flags.confirmationAlertSingular")}
             </AlertBox>
           )}
 

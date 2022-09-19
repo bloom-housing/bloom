@@ -248,7 +248,7 @@ const AgTable = ({
           </div>
         </LoadingOverlay>
 
-        {!hidePagination && pagination && (
+        {pagination && (
           <AgPagination
             totalItems={data.totalItems}
             totalPages={data.totalPages}

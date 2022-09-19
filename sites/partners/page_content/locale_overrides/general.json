@@ -108,7 +108,7 @@
   "errors.partialAddress": "Cannot enter a partial address",
   "errors.unauthorized.title": "Unauthorized",
   "errors.urlError": "Please enter a valid url",
-  "flags.confirmationAlertSingular": "You confirmed %{amount} valid application. You can make changes and save your updates.",
+  "flags.confirmationAlertSingular": "You confirmed 1 valid application. You can make changes and save your updates.",
   "flags.confirmationAlertPlural": "You confirmed %{amount} valid applications. You can make changes and save your updates.",
   "flags.emailRule": "%{email}: Email",
   "flags.flaggedSet": "Flagged Set",
