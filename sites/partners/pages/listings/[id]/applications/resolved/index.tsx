@@ -14,6 +14,7 @@ import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { getLinkCellFormatter } from "../../../../../src/applications/helpers"
+import { Application, ApplicationReviewStatus } from "@bloom-housing/backend-core"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -35,9 +36,6 @@ const ApplicationsList = () => {
     {
       headerName: t("applications.duplicates.duplicateGroup"),
       field: "id",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
@@ -45,13 +43,12 @@ const ApplicationsList = () => {
 
         return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
       },
+      flex: 1,
+      minWidth: 250,
     },
     {
       headerName: t("applications.duplicates.primaryApplicant"),
       field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
         const applicant = data.applications[0]?.applicant
@@ -60,21 +57,24 @@ const ApplicationsList = () => {
       },
     },
     {
-      headerName: t("applications.pendingReview"),
+      headerName: t("applications.duplicates.duplicateApplications"),
       field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       valueGetter: ({ data }) => {
-        return `${data?.applications?.length ?? 0}`
+        return data?.applications?.filter(
+          (app: Application) => app.reviewStatus === ApplicationReviewStatus.duplicate
+        ).length
       },
+      type: "rightAligned",
     },
     {
-      headerName: t("t.rule"),
-      field: "rule",
-      sortable: false,
-      filter: false,
-      pinned: "left",
+      headerName: t("applications.duplicates.validApplications"),
+      field: "",
+      valueGetter: ({ data }) => {
+        return data?.applications?.filter(
+          (app: Application) => app.reviewStatus === ApplicationReviewStatus.valid
+        ).length
+      },
+      type: "rightAligned",
     },
   ]
 
@@ -110,7 +110,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
           <ApplicationsSideNav className="w-full md:w-72" listingId={listingId} />
 
           <div className="w-full">

@@ -1,6 +1,6 @@
 import React from "react"
 import { useRouter } from "next/router"
-import { t, SideNav } from "@bloom-housing/ui-components"
+import { t, SideNav, Tabs, TabList, Tab } from "@bloom-housing/ui-components"
 import { useFlaggedApplicationsMeta } from "../../lib/hooks"
 
 type ApplicationsSideNavProps = {
@@ -34,18 +34,6 @@ const ApplicationsSideNav = ({
       label: t("applications.pendingReview"),
       url: `/listings/${listingId}/applications/pending`,
       count: data?.totalPendingCount || 0,
-      childrenItems: [
-        /* {
-          label: t("applications.namedob"),
-          url: `/listings/${listingId}/applications/pending?type=name_dob`,
-          count: data?.totalNamePendingCount || 0,
-        },
-        {
-          label: t("t.email"),
-          url: `/listings/${listingId}/applications/pending?type=email`,
-          count: data?.totalEmailPendingCount || 0,
-        }, */
-      ],
     },
   ]
     .concat(resolvedNav)
@@ -56,20 +44,27 @@ const ApplicationsSideNav = ({
         Object.assign(curr, { current: true })
       }
 
-      if (curr.childrenItems) {
-        curr.childrenItems.forEach((childItem) => {
-          if (childItem.url === router.asPath) {
-            Object.assign(childItem, { current: true })
-          }
-        })
-      }
-
       acc.push(curr)
 
       return acc
     }, [])
 
-  return <SideNav className={className} navItems={items} />
+  return (
+    <>
+      <div className={"hidden md:block"}>
+        <SideNav className={className} navItems={items} />
+      </div>
+      <div className={"block md:hidden mb-4"}>
+        <Tabs className={"tabs__horizontal"}>
+          <TabList>
+            {items.map((navItem) => {
+              return <Tab>{navItem.label}</Tab>
+            })}
+          </TabList>
+        </Tabs>
+      </div>
+    </>
+  )
 }
 
 export { ApplicationsSideNav as default, ApplicationsSideNav }

@@ -111,23 +111,25 @@ const Flag = () => {
         title={<p className="font-sans font-semibold text-3xl">{getTitle()}</p>}
       />
 
-      <StatusBar
-        backButton={
-          <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
-            {t("t.back")}
-          </Button>
-        }
-        tagStyle={
-          data?.status === EnumApplicationFlaggedSetStatus.resolved
-            ? AppearanceStyleType.success
-            : AppearanceStyleType.primary
-        }
-        tagLabel={
-          data?.status === EnumApplicationFlaggedSetStatus.resolved
-            ? t("t.resolved")
-            : t("applications.pendingReview")
-        }
-      />
+      <div>
+        <StatusBar
+          backButton={
+            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
+              {t("t.back")}
+            </Button>
+          }
+          tagStyle={
+            data?.status === EnumApplicationFlaggedSetStatus.resolved
+              ? AppearanceStyleType.success
+              : AppearanceStyleType.primary
+          }
+          tagLabel={
+            data?.status === EnumApplicationFlaggedSetStatus.resolved
+              ? t("t.resolved")
+              : t("applications.pendingReview")
+          }
+        />
+      </div>
 
       <section className="bg-primary-lighter py-5">
         <div className="max-w-screen-xl px-5 mx-auto">
@@ -155,7 +157,6 @@ const Flag = () => {
                 : t("flags.confirmationAlertSingular")}
             </AlertBox>
           )}
-
           <div className="flex md:flex-row flex-col flex-wrap">
             <div className="md:w-9/12 md:pb-24 pb-8">
               <p className={"font-semibold"}>{t("flags.selectValidApplications")}</p>

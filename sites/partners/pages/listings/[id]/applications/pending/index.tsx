@@ -45,9 +45,6 @@ const ApplicationsList = () => {
     {
       headerName: t("applications.duplicates.duplicateGroup"),
       field: "id",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
@@ -55,13 +52,12 @@ const ApplicationsList = () => {
 
         return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
       },
+      flex: 1,
+      minWidth: 250,
     },
     {
       headerName: t("applications.duplicates.primaryApplicant"),
       field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
         const applicant = data.applications[0]?.applicant
@@ -70,21 +66,16 @@ const ApplicationsList = () => {
       },
     },
     {
+      headerName: t("t.rule"),
+      field: "rule",
+    },
+    {
       headerName: t("applications.pendingReview"),
       field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       valueGetter: ({ data }) => {
         return `${data?.applications?.length ?? 0}`
       },
-    },
-    {
-      headerName: t("t.rule"),
-      field: "rule",
-      sortable: false,
-      filter: false,
-      pinned: "left",
+      type: "rightAligned",
     },
   ]
 
@@ -173,7 +164,6 @@ const ApplicationsList = () => {
                 )}
                 <AgTable
                   id="applications-table"
-                  className="w-full"
                   pagination={{
                     perPage: tableOptions.pagination.itemsPerPage,
                     setPerPage: tableOptions.pagination.setItemsPerPage,

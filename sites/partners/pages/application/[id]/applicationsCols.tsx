@@ -11,27 +11,16 @@ export const getCols = () => [
     sortable: false,
     filter: false,
     resizable: true,
-    unSortIcon: true,
+    pinned: "left",
     headerCheckboxSelection: true,
     checkboxSelection: true,
     cellRendererFramework: ({ data }) => {
       if (!data?.id && !data?.confirmationCode) return ""
       return <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
     },
+    width: 175,
   },
-  {
-    headerName: t("applications.table.reviewStatus"),
-    field: "reviewStatus",
-    sortable: false,
-    filter: false,
-    resizable: true,
-    valueGetter: ({ data }) => {
-      if (data.reviewStatus === "valid") return t("applications.valid")
-      if (data.reviewStatus === "pendingAndValid") return t("applications.validPending")
-      if (data.reviewStatus === "duplicate") return t("applications.duplicate")
-      return t("applications.pending")
-    },
-  },
+
   {
     headerName: t("application.name.firstName"),
     field: "applicant.firstName",
@@ -94,6 +83,21 @@ export const getCols = () => [
 
       return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
     },
+  },
+  {
+    headerName: t("applications.table.reviewStatus"),
+    field: "reviewStatus",
+    pinned: "right",
+    sortable: false,
+    filter: false,
+    resizable: true,
+    valueGetter: ({ data }) => {
+      if (data.reviewStatus === "valid") return t("applications.valid")
+      if (data.reviewStatus === "pendingAndValid") return t("applications.validPending")
+      if (data.reviewStatus === "duplicate") return t("applications.duplicate")
+      return t("applications.pending")
+    },
+    width: 140,
   },
 ]
 
