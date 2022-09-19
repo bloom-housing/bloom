@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
 import { useSWRConfig } from "swr"
 
@@ -19,6 +19,9 @@ import {
   t,
   AlertTypes,
   useMutate,
+  Modal,
+  AppearanceStyleType,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -38,7 +41,10 @@ const Settings = () => {
   const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
 
   const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
+  const [copyModalOpen, setCopyModalOpen] = useState<MultiselectQuestion>(null)
   const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
+  const [updatedIds, setUpdatedIds] = useState<string[]>([])
+
   const [alertMessage, setAlertMessage] = useState({
     type: "alert" as AlertTypes,
     message: undefined,
@@ -51,6 +57,53 @@ const Settings = () => {
     ApplicationSection.preferences
   )
 
+  const tableData = useMemo(() => {
+    return data
+      ?.sort((a, b) => {
+        const aChar = a.text.toUpperCase()
+        const bChar = b.text.toUpperCase()
+        if (aChar === bChar)
+          return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
+        return aChar.localeCompare(bChar)
+      })
+      .map((preference) => {
+        // const rowClass = updatedIds.indexOf(preference.id) >= 0 ? "bg-gray-400" : ""
+        return {
+          name: {
+            content: preference?.text,
+          },
+          jurisdiction: {
+            content: preference?.jurisdictions?.reduce((acc, item, index) => {
+              return `${acc}${index > 0 ? ", " : ""}${item.name}`
+            }, ""),
+          },
+
+          updated: {
+            content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
+          },
+          icons: {
+            content: (
+              <ManageIconSection
+                onCopy={() => setCopyModalOpen(preference)}
+                copyTestId={`preference-copy-icon: ${preference.text}`}
+                onEdit={() => {
+                  setQuestionData(preference)
+                  setPreferenceDrawerOpen("edit")
+                }}
+                editTestId={`preference-edit-icon: ${preference.text}`}
+              />
+            ),
+          },
+        }
+      })
+  }, [updatedIds, data])
+
+  useEffect(() => {
+    if (!isCreateLoading) {
+      setCopyModalOpen(null)
+    }
+  }, [isCreateLoading])
+
   const saveQuestion = (
     formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
     requestType: DrawerType
@@ -61,7 +114,12 @@ const Settings = () => {
           .update({
             body: { ...formattedData, id: questionData.id },
           })
-          .then(() => {
+          .then((result) => {
+            setUpdatedIds(
+              updatedIds.find((existingId) => existingId === result.id)
+                ? updatedIds
+                : [...updatedIds, result.id]
+            )
             setAlertMessage({ message: t(`settings.preferenceAlertUpdated`), type: "success" })
           })
           .catch((e) => {
@@ -79,7 +137,12 @@ const Settings = () => {
           .create({
             body: formattedData,
           })
-          .then(() => {
+          .then((result) => {
+            setUpdatedIds(
+              updatedIds.find((existingId) => existingId === result.id)
+                ? updatedIds
+                : [...updatedIds, result.id]
+            )
             setAlertMessage({ message: t(`settings.preferenceAlertCreated`), type: "success" })
           })
           .catch((e) => {
@@ -107,40 +170,7 @@ const Settings = () => {
               icons: "",
             }}
             cellClassName={"px-5 py-3"}
-            data={data
-              ?.sort((a, b) => {
-                const aChar = a.text.toUpperCase()
-                const bChar = b.text.toUpperCase()
-                if (aChar === bChar)
-                  return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
-                return aChar.localeCompare(bChar)
-              })
-              .map((preference) => {
-                return {
-                  name: { content: preference?.text },
-                  jurisdiction: {
-                    content: preference?.jurisdictions?.reduce((acc, item, index) => {
-                      return `${acc}${index > 0 ? ", " : ""}${item.name}`
-                    }, ""),
-                  },
-                  updated: {
-                    content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
-                  },
-                  icons: {
-                    content: (
-                      <ManageIconSection
-                        onCopy={() => saveQuestion(preference, "add")}
-                        copyTestId={`preference-copy-icon: ${preference.text}`}
-                        onEdit={() => {
-                          setQuestionData(preference)
-                          setPreferenceDrawerOpen("edit")
-                        }}
-                        editTestId={`preference-edit-icon: ${preference.text}`}
-                      />
-                    ),
-                  },
-                }
-              })}
+            data={tableData}
           />
         ) : (
           <div className={"ml-5 mb-5"}>{t("t.none")}</div>
@@ -195,6 +225,39 @@ const Settings = () => {
         saveQuestion={saveQuestion}
         isLoading={isCreateLoading || isUpdateLoading}
       />
+      <Modal
+        open={!!copyModalOpen}
+        title={t("t.copy")}
+        ariaDescription={t("listings.listingIsAlreadyLive")}
+        onClose={() => setCopyModalOpen(null)}
+        actions={[
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.primary}
+            onClick={() => {
+              saveQuestion({ ...copyModalOpen, text: `Copy of ${copyModalOpen.text}` }, "add")
+            }}
+            dataTestId={"copy-button-confirm"}
+            loading={isCreateLoading}
+          >
+            {t("settings.copy")}
+          </Button>,
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setCopyModalOpen(null)
+            }}
+            disabled={isCreateLoading}
+            dataTestId={"copy-button-cancel"}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("settings.createCopyDescription")}
+      </Modal>
     </>
   )
 }

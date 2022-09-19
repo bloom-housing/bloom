@@ -51,6 +51,8 @@ export type StandardTableCell = {
   content: React.ReactNode
   /** Text content that will replace this cell's header on mobile views */
   mobileReplacement?: string
+  /** Classname to apply to this row */
+  rowClass?: string
 }
 
 export type StandardTableData = Record<string, StandardTableCell>[]
@@ -135,9 +137,11 @@ export const StandardTable = (props: StandardTableProps) => {
       ? `standardrow-${dataIndex}`
       : nanoid()
 
+    let rowClass: string | undefined = ""
     const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]?.content
+      rowClass = row[colKey]?.rowClass ? row[colKey].rowClass : ""
 
       const cellClass = [headerClassName(headers[colKey]), cellClassName].join(" ")
 
@@ -201,7 +205,7 @@ export const StandardTable = (props: StandardTableProps) => {
             )}
           </Draggable>
         ) : (
-          <tr id={rowKey} key={rowKey}>
+          <tr id={rowKey} key={rowKey} className={rowClass ? rowClass : ""}>
             {cols}
           </tr>
         )}
