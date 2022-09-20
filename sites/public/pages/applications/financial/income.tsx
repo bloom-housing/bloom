@@ -87,7 +87,7 @@ const ApplicationIncome = () => {
     if (!validationError) {
       const toSave = { income, incomePeriod }
 
-      conductor.completeSection(3)
+      conductor.completeSection(4)
       conductor.currentStep.save(toSave)
       conductor.routeToNextOrReturnUrl()
     }

@@ -35,6 +35,7 @@ const ApplicationHouseholdStudent = () => {
     conductor.currentStep.save({
       householdStudent: householdStudent === "true",
     })
+    conductor.completeSection(2)
     conductor.routeToNextOrReturnUrl()
   }
 
