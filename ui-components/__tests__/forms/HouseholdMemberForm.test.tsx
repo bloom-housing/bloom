@@ -6,11 +6,7 @@ import { t } from "../../src/helpers/translator"
 afterEach(cleanup)
 
 describe("<HouseholdMemberForm>", () => {
-  const useContext = jest.spyOn(require("react"), "useContext")
-
   it("renders as a primary applicant", () => {
-    const router = { push: jest.fn().mockImplementation(() => Promise.resolve()) }
-    useContext.mockReturnValue({ router })
     global.scrollTo = jest.fn()
     const editMemberSpy = jest.fn()
 
@@ -29,8 +25,6 @@ describe("<HouseholdMemberForm>", () => {
     expect(editMemberSpy).toHaveBeenCalledTimes(1)
   })
   it("renders as a household member", () => {
-    const router = { push: jest.fn().mockImplementation(() => Promise.resolve()) }
-    useContext.mockReturnValue({ router })
     global.scrollTo = jest.fn()
     const editMemberSpy = jest.fn()
 

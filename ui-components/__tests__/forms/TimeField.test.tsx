@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 afterEach(cleanup)
 
 const DefaultTimeField = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors } = useForm({ mode: "onChange" })
   return (
     <TimeField

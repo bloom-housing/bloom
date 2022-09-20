@@ -10,7 +10,7 @@ import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 const mockRouter: GenericRouter = {
   pathname: "",
   asPath: "",
-  back: () => {},
+  back: jest.fn(),
   push(url: string) {
     this.pathname = url
     this.asPath = url
@@ -80,7 +80,7 @@ const itShouldNotRenderChildren = () =>
 
 const itShouldRedirect = () =>
   test("it should redirect", () => {
-    const { container, getByText } = render(
+    render(
       <NavigationContext.Provider
         value={{
           router: mockRouter,
@@ -99,7 +99,7 @@ const itShouldRedirect = () =>
 
 const itShouldNotRedirect = () =>
   test("it should not redirect", () => {
-    const { container, getByText } = render(
+    render(
       <NavigationContext.Provider
         value={{
           router: mockRouter,
