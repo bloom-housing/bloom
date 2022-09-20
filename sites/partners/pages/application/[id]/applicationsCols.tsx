@@ -51,6 +51,7 @@ export const getCols = () => [
 
       return isValidDOB ? `${value.birthMonth}/${value.birthDay}/${value.birthYear}` : ""
     },
+    width: 120,
   },
   {
     headerName: t("application.details.type"),
@@ -64,6 +65,7 @@ export const getCols = () => [
         ? t("application.details.submissionType.digital")
         : t("application.details.submissionType.paper")
     },
+    width: 130,
   },
   {
     headerName: t("applications.table.applicationSubmissionDate"),

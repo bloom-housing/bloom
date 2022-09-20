@@ -65,6 +65,7 @@ const ApplicationsList = () => {
         ).length
       },
       type: "rightAligned",
+      width: 130,
     },
     {
       headerName: t("applications.duplicates.validApplications"),
@@ -75,6 +76,7 @@ const ApplicationsList = () => {
         ).length
       },
       type: "rightAligned",
+      width: 130,
     },
   ]
 
