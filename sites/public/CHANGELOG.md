@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.47...@bloom-housing/public@5.1.1-alpha.48) (2022-09-21)
+
+
+### Bug Fixes
+
+* complete app section while navigating ([a288b8c](https://github.com/bloom-housing/bloom/commit/a288b8c3d8866149ba3737ec58176cb8abfa65b6))
+
+
+
+
+
 ## [5.1.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.46...@bloom-housing/public@5.1.1-alpha.47) (2022-09-19)
 
 **Note:** Version bump only for package @bloom-housing/public
