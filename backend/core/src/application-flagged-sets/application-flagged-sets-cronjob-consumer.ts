@@ -8,6 +8,7 @@ import { ListingRepository } from "../listings/db/listing.repository"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
+import { getView } from "../applications/views/view"
 
 @Processor(AFSProcessingQueueNames.afsProcessing)
 export class ApplicationFlaggedSetsCronjobConsumer {
@@ -20,7 +21,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
 
   @Process({ concurrency: 1 })
   async process() {
-    const rules = [Rule.nameAndDOB, Rule.email]
+    const rules = [Rule.email, Rule.nameAndDOB]
     const outOfDateListings = await this.listingRepository
       .createQueryBuilder("listings")
       .select(["listings.id", "listings.afsLastRunAt"])
@@ -36,8 +37,22 @@ export class ApplicationFlaggedSetsCronjobConsumer {
 
     for (const outOfDateListing of outOfDateListings) {
       try {
+        const qbView = getView(this.applicationRepository.createQueryBuilder("application"))
+        const qb = qbView.getViewQb(true)
+        qb.where("application.listing_id = :id", { id: outOfDateListing.id })
+        qb.andWhere("application.createdAt >= :afsLastRunAt", {
+          afsLastRunAt: outOfDateListing.afsLastRunAt,
+        })
+        const newApplications = await qb.getMany()
+        let matched = false
         for (const rule of rules) {
-          await this.generateAFSesForListingRule(outOfDateListing, rule)
+          if (!matched) {
+            matched = await this.generateAFSesForListingRule(
+              outOfDateListing,
+              rule,
+              newApplications
+            )
+          }
         }
       } catch (e) {
         console.error(e)
@@ -50,19 +65,15 @@ export class ApplicationFlaggedSetsCronjobConsumer {
 
   private async generateAFSesForListingRule(
     listing: Pick<Listing, "id" | "afsLastRunAt">,
-    rule: Rule
-  ) {
-    const newApplications = await this.applicationRepository.find({
-      where: {
-        listing: {
-          id: listing.id,
-        },
-        createdAt: MoreThanOrEqual(listing.afsLastRunAt),
-      },
-    })
-
+    rule: Rule,
+    newApplications: Application[]
+  ): Promise<boolean> {
+    let matched = false
     for (const newApplication of newApplications) {
-      await this.addApplication(newApplication, rule)
+      const match = await this.addApplication(newApplication, rule)
+      if (match === true) {
+        matched = match
+      }
     }
 
     const existingApplications = await this.applicationRepository.find({
@@ -78,6 +89,8 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     for (const existingApplication of existingApplications) {
       await this.updateApplication(existingApplication, rule)
     }
+
+    return matched
   }
 
   async updateApplication(application: Application, rule: Rule) {
@@ -115,18 +128,27 @@ export class ApplicationFlaggedSetsCronjobConsumer {
         afsesToBeRemoved.push(afs)
       }
     }
-
-    await this.afsRepository.save(afsesToBeSaved)
-    await this.afsRepository.remove(afsesToBeRemoved)
+    if (afsesToBeSaved.length) {
+      await this.afsRepository.save(afsesToBeSaved)
+    }
+    if (afsesToBeRemoved.length) {
+      await this.afsRepository.remove(afsesToBeRemoved)
+    }
 
     await this.addApplication(application, rule)
   }
 
-  async addApplication(newApplication: Application, rule: Rule) {
+  /**
+   *
+   * This method checks if the new application matches others based on the rule.
+   * If there are applications that match, this application is added to the AFS set (creating a new one or updating an existing set)
+   * return true if matching applications
+   */
+  async addApplication(newApplication: Application, rule: Rule): Promise<boolean> {
     const applicationsMatchingRule = await this.fetchDuplicatesMatchingRule(newApplication, rule)
 
-    if (applicationsMatchingRule.length == 0) {
-      return
+    if (applicationsMatchingRule.length === 0) {
+      return false
     }
 
     const afses = await this.afsRepository
@@ -159,6 +181,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
           "probably a logic error when creating AFSes"
       )
     }
+    return true
   }
 
   private async fetchDuplicatesMatchingRule(application: Application, rule: Rule) {
