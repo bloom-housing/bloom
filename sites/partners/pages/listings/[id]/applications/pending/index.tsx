@@ -68,6 +68,7 @@ const ApplicationsList = () => {
     {
       headerName: t("t.rule"),
       field: "rule",
+      width: 150,
     },
     {
       headerName: t("applications.pendingReview"),
@@ -76,6 +77,7 @@ const ApplicationsList = () => {
         return `${data?.applications?.length ?? 0}`
       },
       type: "rightAligned",
+      width: 100,
     },
   ]
 
