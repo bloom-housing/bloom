@@ -165,12 +165,11 @@ export class ApplicationsService {
   }
 
   async findOne(applicationId: string) {
-    const application = await this.repository.findOne({
-      where: {
-        id: applicationId,
-      },
-      relations: ["user"],
-    })
+    const qb = getView(this.repository.createQueryBuilder("application"), "base").getViewQb(true)
+
+    qb.leftJoinAndSelect("application.user", "user")
+
+    const application = await qb.where("application.id = :id", { id: applicationId }).getOne()
 
     if (!application) {
       throw new NotFoundException()
