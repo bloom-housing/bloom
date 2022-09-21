@@ -136,6 +136,7 @@ const ApplicationsList = () => {
               }}
               search={{
                 setSearch: tableOptions.filter.setFilterValue,
+                showSearch: false,
               }}
               sort={{
                 setSort: tableOptions.sort.setSortOptions,

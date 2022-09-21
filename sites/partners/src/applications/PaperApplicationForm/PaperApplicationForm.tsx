@@ -11,7 +11,12 @@ import {
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
-import { HouseholdMember, Application, ApplicationStatus } from "@bloom-housing/backend-core/types"
+import {
+  HouseholdMember,
+  Application,
+  ApplicationStatus,
+  ApplicationReviewStatus,
+} from "@bloom-housing/backend-core/types"
 import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
 import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
@@ -109,9 +114,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       const result = editMode
         ? await applicationsService.update({
             id: application.id,
-            body: { id: application.id, ...body },
+            body: { id: application.id, ...body, reviewStatus: application.reviewStatus },
           })
-        : await applicationsService.create({ body })
+        : await applicationsService.create({
+            body: { ...body, reviewStatus: ApplicationReviewStatus.valid },
+          })
 
       setLoading(false)
 
