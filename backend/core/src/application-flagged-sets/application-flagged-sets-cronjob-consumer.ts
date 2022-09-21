@@ -120,9 +120,8 @@ export class ApplicationFlaggedSetsCronjobConsumer {
 
   /**
    *
-   * This method checks if the new application matches others based on the rule.
+   * This method checks if the new application matches others based on the rules.
    * If there are applications that match, this application is added to the AFS set (creating a new one or updating an existing set)
-   * return true if matching applications
    */
   async addApplication(newApplication: Application): Promise<void> {
     const rules = [Rule.email, Rule.nameAndDOB]
