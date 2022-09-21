@@ -40,10 +40,11 @@ export class ApplicationFlaggedSetsCronjobConsumer {
         const qbView = getView(this.applicationRepository.createQueryBuilder("application"))
         const qb = qbView.getViewQb(true)
         qb.where("application.listing_id = :id", { id: outOfDateListing.id })
-        qb.andWhere("application.createdAt >= :afsLastRunAt", {
+        qb.andWhere("application.updatedAt >= :afsLastRunAt", {
           afsLastRunAt: outOfDateListing.afsLastRunAt,
         })
         const newApplications = await qb.getMany()
+
         let matched = false
         for (const rule of rules) {
           if (!matched) {
