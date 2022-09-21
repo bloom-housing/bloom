@@ -109,10 +109,6 @@
       border-bottom: 0px;
     }
 
-    li:last-child {
-      border-left: var(--border);
-    }
-
     & > ul {
       & > li:first-child > a {
         border-bottom-left-radius: var(--border-radius);

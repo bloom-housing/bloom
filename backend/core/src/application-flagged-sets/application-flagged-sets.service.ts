@@ -8,7 +8,6 @@ import { getManager, Repository, SelectQueryBuilder } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
-import { User } from "../auth/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
@@ -191,7 +190,7 @@ export class ApplicationFlaggedSetsService {
           .set({
             resolvedTime: new Date(),
             status: FlaggedSetStatus.pending,
-            resolvingUser: this.request.user as User,
+            resolvingUser: this.request.user,
           })
           .where("id = :afsId", { afsId: dto.afsId })
           .execute()
@@ -231,7 +230,7 @@ export class ApplicationFlaggedSetsService {
           .set({
             resolvedTime: new Date(),
             status: FlaggedSetStatus.resolved,
-            resolvingUser: this.request.user as User,
+            resolvingUser: this.request.user,
           })
           .where("id = :afsId", { afsId: dto.afsId })
           .execute()

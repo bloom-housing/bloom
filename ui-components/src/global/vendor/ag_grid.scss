@@ -94,20 +94,12 @@
 
   .ag-body-viewport {
     ::-webkit-scrollbar {
-      // -webkit-appearance: none;
       height: 8px;
-      @apply bg-gray-600;
     }
 
     ::-webkit-scrollbar-thumb {
       border-radius: 8px;
-      @apply bg-gray-600;
-    }
-
-    ::-webkit-scrollbar-track {
-      @apply bg-gray-100;
-      -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.7);
-      box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.7);
+      @apply bg-gray-550;
     }
   }
 
@@ -121,8 +113,8 @@
   .ag-layout-auto-height {
     .ag-center-cols-container,
     .ag-center-cols-clipper {
-      height: auto;
-      min-height: 15px;
+      // height: auto;
+      min-height: 130px;
     }
   }
 
@@ -130,6 +122,14 @@
     .ag-selection-checkbox {
       margin-right: var(--bloom-s6);
     }
+  }
+
+  .ag-horizontal-right-spacer:not(.ag-scroller-corner) {
+    border: none;
+  }
+
+  .ag-horizontal-left-spacer:not(.ag-scroller-corner) {
+    border: none;
   }
 }
 

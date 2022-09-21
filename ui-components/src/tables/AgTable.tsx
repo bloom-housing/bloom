@@ -26,7 +26,6 @@ export interface AgTableProps {
   config: AgTableConfig
   data: AgTableData
   headerContent?: React.ReactNode
-  hidePagination?: boolean
   id: string
   pagination?: AgTablePagination
   search: AgTableSearch
@@ -101,7 +100,6 @@ const AgTable = ({
   config: { gridComponents, columns, totalItemsLabel, rowSelection },
   data,
   headerContent,
-  hidePagination,
   id,
   selectConfig,
   pagination,
@@ -216,7 +214,7 @@ const AgTable = ({
               placeholder={t("t.filter")}
             />
           </div>
-          <div className="w-full md:w-auto mt-2 mb-2 md:mb-0">
+          <div className="w-full md:w-auto mt-2 md:mt-0 mb-2 md:mb-0">
             {!validSearch && (
               <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
             )}
@@ -237,6 +235,7 @@ const AgTable = ({
               domLayout={"autoHeight"}
               headerHeight={83}
               rowHeight={58}
+              pagination={!!pagination}
               suppressPaginationPanel={true}
               paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
               suppressScrollOnNewData={true}
