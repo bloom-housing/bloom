@@ -20,6 +20,7 @@ import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
+import dayjs from "dayjs"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -120,6 +121,20 @@ export class ListingsService {
       }
     })
     listingDto.unitsAvailable = availableUnits
+
+    if (
+      listing.status === ListingStatus.active &&
+      listingDto.applicationDueDate &&
+      dayjs(listingDto.applicationDueDate).isBefore(new Date())
+    ) {
+      listingDto.status = ListingStatus.closed
+    } else if (
+      listing.status === ListingStatus.closed &&
+      listingDto.applicationDueDate &&
+      dayjs(listingDto.applicationDueDate).isAfter(new Date())
+    ) {
+      listingDto.status = ListingStatus.active
+    }
 
     if (listing.status == ListingStatus.active && listingDto.status === ListingStatus.closed) {
       await this.afsService.scheduleAfsProcessing()
