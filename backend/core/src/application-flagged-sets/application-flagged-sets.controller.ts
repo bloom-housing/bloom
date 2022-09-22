@@ -26,6 +26,7 @@ import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-r
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ApplicationFlaggedSetsCronjobConsumer } from "./application-flagged-sets-cronjob-consumer"
 import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/applicationFlaggedSets")
 @ApiTags("applicationFlaggedSets")
@@ -80,13 +81,13 @@ export class ApplicationFlaggedSetsController {
     return mapTo(ApplicationFlaggedSetDto, await this.applicationFlaggedSetsService.resolve(dto))
   }
 
-  @Put("resetConfirmationAlert")
+  @Put(":id")
   @ApiOperation({
     summary: "Reset flagged set confirmation alert",
     operationId: "resetConfirmationAlert",
   })
-  async resetConfirmationAlert(@Param("id") id: string): Promise<StatusDto> {
-    await this.applicationFlaggedSetsService.resetConfirmationAlert(id)
+  async resetConfirmationAlert(@Param("id") id: string, @Body() dto: IdDto): Promise<StatusDto> {
+    await this.applicationFlaggedSetsService.resetConfirmationAlert(dto.id)
     return mapTo(StatusDto, { status: "ok" })
   }
 

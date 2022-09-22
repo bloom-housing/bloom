@@ -152,6 +152,7 @@ const Flag = () => {
               closeable
               onClose={async () => {
                 await applicationFlaggedSetsService?.resetConfirmationAlert({
+                  body: { id: data.id },
                   id: data.id,
                 })
               }}

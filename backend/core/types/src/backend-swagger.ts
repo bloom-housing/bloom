@@ -318,16 +318,18 @@ export class ApplicationFlaggedSetsService {
     params: {
       /**  */
       id: string
+      /** requestBody */
+      body?: Id
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Status> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationFlaggedSets/resetConfirmationAlert"
+      let url = basePath + "/applicationFlaggedSets/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = null
+      let data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
