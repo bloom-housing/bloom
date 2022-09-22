@@ -235,7 +235,6 @@ const AgTable = ({
               domLayout={"autoHeight"}
               headerHeight={83}
               rowHeight={58}
-              pagination={!!pagination}
               suppressPaginationPanel={true}
               paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
               suppressScrollOnNewData={true}
