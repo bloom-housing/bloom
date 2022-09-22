@@ -27,7 +27,6 @@ import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 import { ListingRepository } from "../../listings/db/listing.repository"
 import { Listing } from "../../listings/entities/listing.entity"
-import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -123,7 +122,6 @@ export class ApplicationsService {
 
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
-    applicationCreateDto.reviewStatus = ApplicationReviewStatus.pending
 
     const listing = await this.listingsRepository
       .createQueryBuilder("listings")
