@@ -98,7 +98,9 @@ const Flag = () => {
     return ""
   }
 
-  const numberConfirmedApps = data?.applications?.filter((app) => !app.markedAsDuplicate).length
+  const numberConfirmedApps = data?.applications?.filter(
+    (app) => app.reviewStatus === ApplicationReviewStatus.valid
+  ).length
 
   return (
     <Layout>
@@ -148,8 +150,10 @@ const Flag = () => {
               className="md:w-9/12 mb-5"
               type={"success"}
               closeable
-              onClose={() => {
-                // next issue: call backend, update this flag, endpoint does not yet exist
+              onClose={async () => {
+                await applicationFlaggedSetsService?.resetConfirmationAlert({
+                  id: data.id,
+                })
               }}
             >
               {numberConfirmedApps !== 1
