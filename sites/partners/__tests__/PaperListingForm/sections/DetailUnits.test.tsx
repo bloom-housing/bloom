@@ -8,7 +8,9 @@ import { ListingReviewOrder } from "@bloom-housing/backend-core"
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
     const results = render(
-      <ListingContext.Provider value={{ ...listing, units: [] }}>
+      <ListingContext.Provider
+        value={{ ...listing, reviewOrderType: ListingReviewOrder.waitlist, units: [] }}
+      >
         <DetailUnits setUnitDrawer={jest.fn()} />
       </ListingContext.Provider>
     )

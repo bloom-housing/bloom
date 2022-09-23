@@ -148,14 +148,14 @@ export class EmailService {
       eligibleText = this.polyglot.t("confirmation.eligible.fcfs")
       preferenceText = this.polyglot.t("confirmation.eligible.fcfsPreference")
     }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
+      eligibleText = this.polyglot.t("confirmation.eligible.lottery")
+      preferenceText = this.polyglot.t("confirmation.eligible.lotteryPreference")
+    }
     if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
       eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
       contactText = this.polyglot.t("confirmation.eligible.waitlistContact")
       preferenceText = this.polyglot.t("confirmation.eligible.waitlistPreference")
-    }
-    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-      eligibleText = this.polyglot.t("confirmation.eligible.lottery")
-      preferenceText = this.polyglot.t("confirmation.eligible.lotteryPreference")
     }
 
     const user = {
