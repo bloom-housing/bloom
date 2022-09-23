@@ -49,15 +49,12 @@ const NavigationHeader = ({
         path: `/listings/${listingId}/applications`,
         content: undefined,
       },
-    ]
-
-    if (process.env.showDuplicates && typeof tabs?.flagsQty === "number") {
-      elements.push({
-        label: tabs.flagsLabel,
+      {
+        label: tabs?.flagsLabel || "",
         path: `/listings/${listingId}/flags`,
-        content: <>{tabs.flagsQty}</>,
-      })
-    }
+        content: tabs?.flagsQty ? <>{tabs?.flagsQty}</> : undefined,
+      },
+    ]
 
     return elements
   }, [tabs, listingId])

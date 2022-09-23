@@ -151,7 +151,8 @@ export function useFlaggedApplicationsList({
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
 
-  const { data, error } = useSWR(endpoint, fetcher)
+  // only make the call if duplicates should be shown
+  const { data, error } = useSWR(process.env.showDuplicates ? endpoint : null, fetcher)
 
   return {
     data,

@@ -12,6 +12,7 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
 
@@ -45,8 +46,6 @@ const FlagsPage = () => {
 
   const columns = useMemo(() => getFlagSetCols(), [])
 
-  if (!data) return null
-
   return (
     <Layout>
       <Head>
@@ -77,28 +76,32 @@ const FlagsPage = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto mt-2 pb-8 px-4 w-full">
-        <div className="ag-theme-alpine ag-theme-bloom">
-          <div className="applications-table">
-            <AgGridReact
-              columnDefs={columns}
-              rowData={data?.items}
-              domLayout="autoHeight"
-              headerHeight={83}
-              rowHeight={58}
-              defaultColDef={defaultColDef}
-            ></AgGridReact>
+        {process.env.showDuplicates ? (
+          <div className="ag-theme-alpine ag-theme-bloom">
+            <div className="applications-table">
+              <AgGridReact
+                columnDefs={columns}
+                rowData={data?.items}
+                domLayout="autoHeight"
+                headerHeight={83}
+                rowHeight={58}
+                defaultColDef={defaultColDef}
+              ></AgGridReact>
 
-            <AgPagination
-              totalItems={data?.meta.totalItems}
-              totalPages={data?.meta.totalPages}
-              currentPage={currentPage}
-              itemsPerPage={itemsPerPage}
-              quantityLabel={t("applications.totalSets")}
-              setCurrentPage={setCurrentPage}
-              setItemsPerPage={setItemsPerPage}
-            />
+              <AgPagination
+                totalItems={data?.meta.totalItems}
+                totalPages={data?.meta.totalPages}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                quantityLabel={t("applications.totalSets")}
+                setCurrentPage={setCurrentPage}
+                setItemsPerPage={setItemsPerPage}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <AlertBox type="warn">{t("flags.underConstruction")}</AlertBox>
+        )}
       </article>
     </Layout>
   )

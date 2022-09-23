@@ -100,6 +100,7 @@
   "flags.markedAsDuplicate": "%{quantity} applications marked as duplicate",
   "flags.resolveFlag": "Resolve Flag",
   "flags.ruleName": "Rule Name",
+  "flags.underConstruction": "Under Construction: New updates to the feature coming soon.",
   "leasingAgent.name": "Leasing Agent Name",
   "leasingAgent.namePlaceholder": "Full Name",
   "leasingAgent.officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday",
