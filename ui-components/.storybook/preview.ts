@@ -12,7 +12,7 @@ export const parameters = {
   options: {
     storySort: {
       order: [
-        "Theming",
+        "Documentation",
         "Actions",
         "Blocks",
         "Footers",

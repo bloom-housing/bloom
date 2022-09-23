@@ -28,7 +28,7 @@ const EventSection = (props: EventSectionProps) => {
   return (
     <section className="aside-block">
       {props.headerText && (
-        <Heading priority={4} style={props.sectionHeader ? "underlineHeader" : "capsWeighted"}>
+        <Heading priority={4} style={props.sectionHeader ? "underlineWeighted" : "capsWeighted"}>
           {props.headerText}
         </Heading>
       )}

@@ -1,5 +1,5 @@
 import * as React from "react"
-import "./Theming.scss"
+import "./Utilities.scss"
 
 interface CustomMdxTableProps {
   data: (string | React.ReactNode)[][]
@@ -35,10 +35,13 @@ export const Typography = () => {
     <CustomMdxTable
       headers={["Class", "Example"]}
       data={[
-        ["text__large-header", <div className={"text__large-header"}>Large Header Text Style</div>],
         [
-          "text__medium-header",
-          <div className={"text__medium-header"}>Medium Header Text Style</div>,
+          "text__large-primary",
+          <div className={"text__large-primary"}>Large Primary Text Style</div>,
+        ],
+        [
+          "text__medium-normal",
+          <div className={"text__medium-normal"}>Medium Normal Text Style</div>,
         ],
         [
           "text__small-weighted",
@@ -46,8 +49,8 @@ export const Typography = () => {
         ],
         ["text__small-normal", <div className={"text__small-normal"}>Small Normal Text Style</div>],
         [
-          "text__underline-header",
-          <div className={"text__underline-header"}>Underline Header Text Style</div>,
+          "text__underline-weighted",
+          <div className={"text__underline-weighted"}>Underline Weighted Text Style</div>,
         ],
         [
           "text__light-weighted",
@@ -57,7 +60,7 @@ export const Typography = () => {
           "text__caps-weighted",
           <div className={"text__caps-weighted"}>Caps Weighted Text Style</div>,
         ],
-        ["text__field-label", <div className={"text__field-label"}>Field Label Text Style</div>],
+        ["text_caps-spaced", <div className={"text_caps-spaced"}>Caps Spaced Text Style</div>],
       ]}
     />
   )

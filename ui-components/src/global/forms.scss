@@ -23,7 +23,7 @@
   }
 
   label.sr-only + .control,
-  label.text__field-label + .control {
+  label.text_caps-spaced + .control {
     @apply mt-0;
   }
 
@@ -31,7 +31,7 @@
     @apply mt-2;
   }
 
-  .text__field-label.label + .field-note {
+  .text_caps-spaced.label + .field-note {
     @apply mt-0;
   }
 

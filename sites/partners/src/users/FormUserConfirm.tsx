@@ -131,7 +131,7 @@ const FormUserConfirm = () => {
         <Form id="update-password" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group is-borderless">
             <fieldset>
-              <legend className="text__field-label">
+              <legend className="text_caps-spaced">
                 {t("authentication.createAccount.password")}
               </legend>
               <p className="field-note mb-4">{t("users.makeNote")}</p>

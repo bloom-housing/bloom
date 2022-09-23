@@ -10,11 +10,11 @@ export interface HeadingProps {
 export type HeaderType = keyof typeof HeaderStyleMap
 
 const HeaderStyleMap = {
-  largeHeader: "text__large-header",
+  largePrimary: "text__large-primary",
   mediumHeader: "text__medium-header",
   smallWeighted: "text__small-weighted",
   smallNormal: "text__small-normal",
-  underlineHeader: "text__underline-header",
+  underlineWeighted: "text__underline-weighted",
   lightWeighted: "text__light-weighted",
   capsWeighted: "text__caps-weighted",
 }

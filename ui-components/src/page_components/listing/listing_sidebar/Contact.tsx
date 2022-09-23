@@ -49,7 +49,7 @@ const Contact = ({
 
   return (
     <section className="aside-block">
-      <Heading priority={4} style={"underlineHeader"}>
+      <Heading priority={4} style={"underlineWeighted"}>
         {sectionTitle}
       </Heading>
 

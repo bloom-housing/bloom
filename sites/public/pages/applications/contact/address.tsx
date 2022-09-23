@@ -288,7 +288,7 @@ const ApplicationAddress = () => {
             <div className="form-card__group border-b">
               <fieldset>
                 <legend
-                  className={`text__field-label ${errors.applicant?.address ? "text-alert" : ""}`}
+                  className={`text_caps-spaced ${errors.appslicant?.address ? "text-alert" : ""}`}
                 >
                   {t("application.contact.address")}
                 </legend>
@@ -378,7 +378,7 @@ const ApplicationAddress = () => {
             {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="text__field-label">
+                  <legend className="text_caps-spaced">
                     {t("application.contact.mailingAddress")}
                   </legend>
 
@@ -456,7 +456,7 @@ const ApplicationAddress = () => {
             <div className="form-card__group border-b">
               <fieldset>
                 <legend
-                  className={`text__field-label ${errors?.contactPreferences ? "text-alert" : ""}`}
+                  className={`text_caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
                 >
                   {t("application.contact.contactPreference")}
                 </legend>
@@ -476,7 +476,7 @@ const ApplicationAddress = () => {
             <div className="form-card__group">
               <fieldset>
                 <legend
-                  className={`text__field-label ${
+                  className={`text_caps-spaced ${
                     errors?.applicant?.workInRegion ? "text-alert" : ""
                   }`}
                 >
@@ -529,7 +529,7 @@ const ApplicationAddress = () => {
                 (!workInRegion && application.applicant.workInRegion == "yes")) && (
                 <div className="form-card__group mx-0 px-0 mt-2">
                   <fieldset>
-                    <legend className="text__field-label">
+                    <legend className="text_caps-spaced">
                       {t("application.contact.workAddress")}
                     </legend>
 

@@ -101,7 +101,7 @@ const ApplicationName = () => {
           <div className="form-card__group border-b" data-test-id={"application-initial-page"}>
             <fieldset>
               <legend
-                className={`text__field-label ${errors.applicant?.firstName ? "text-alert" : ""}`}
+                className={`text_caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
               >
                 {t("application.name.yourName")}
                 <LockIcon />
@@ -175,7 +175,7 @@ const ApplicationName = () => {
 
           <div className="form-card__group">
             <legend
-              className={`text__field-label ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
+              className={`text_caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
             >
               {t("application.name.yourEmailAddress")}
               <LockIcon />

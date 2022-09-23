@@ -11,7 +11,7 @@ const SidebarBlock = ({ children, className, title, priority, style }: SidebarBl
   return (
     <section className={`aside-block ${className ? className : ""}`}>
       {title && (
-        <Heading priority={priority ?? 4} style={style ?? "underlineHeader"}>
+        <Heading priority={priority ?? 4} style={style ?? "underlineWeighted"}>
           {title}
         </Heading>
       )}

@@ -188,7 +188,7 @@ const ApplicationMultiselectQuestionStep = ({
             <div className={`form-card__group`}>
               {questionSetInputType === "checkbox" ? (
                 <fieldset>
-                  <legend className="text__field-label mb-4">{question?.text}</legend>
+                  <legend className="text_caps-spaced mb-4">{question?.text}</legend>
                   <p className="field-note mb-8">{question?.description}</p>
 
                   {allOptions.map((option) => {

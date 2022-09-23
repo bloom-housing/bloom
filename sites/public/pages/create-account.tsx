@@ -88,7 +88,7 @@ export default () => {
 
         <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <label className="text__field-label" htmlFor="firstName">
+            <label className="text_caps-spaced" htmlFor="firstName">
               {t("application.name.yourName")}
             </label>
 

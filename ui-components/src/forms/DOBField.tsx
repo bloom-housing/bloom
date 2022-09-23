@@ -56,7 +56,7 @@ const DOBField = (props: DOBFieldProps) => {
     )
   }
 
-  const labelClasses = ["text__field-label"]
+  const labelClasses = ["text_caps-spaced"]
   if (props.readerOnly) labelClasses.push("sr-only")
   if (hasError) labelClasses.push("text-alert")
 

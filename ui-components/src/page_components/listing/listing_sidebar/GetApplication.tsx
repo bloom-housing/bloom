@@ -56,7 +56,7 @@ const GetApplication = (props: ApplicationsProps) => {
 
   return (
     <section className="aside-block" data-test-id="get-application-section">
-      <Heading priority={2} style={"underlineHeader"}>
+      <Heading priority={2} style={"underlineWeighted"}>
         {props.strings?.howToApply ?? t("listings.apply.howToApply")}
       </Heading>
 
