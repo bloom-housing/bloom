@@ -86,7 +86,7 @@ export class ApplicationFlaggedSetsController {
     summary: "Reset flagged set confirmation alert",
     operationId: "resetConfirmationAlert",
   })
-  async resetConfirmationAlert(@Param("id") id: string, @Body() dto: IdDto): Promise<StatusDto> {
+  async resetConfirmationAlert(@Body() dto: IdDto): Promise<StatusDto> {
     await this.applicationFlaggedSetsService.resetConfirmationAlert(dto.id)
     return mapTo(StatusDto, { status: "ok" })
   }

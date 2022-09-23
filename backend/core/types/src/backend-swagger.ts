@@ -316,8 +316,6 @@ export class ApplicationFlaggedSetsService {
    */
   resetConfirmationAlert(
     params: {
-      /**  */
-      id: string
       /** requestBody */
       body?: Id
     } = {} as any,
@@ -325,7 +323,6 @@ export class ApplicationFlaggedSetsService {
   ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applicationFlaggedSets/{id}"
-      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 

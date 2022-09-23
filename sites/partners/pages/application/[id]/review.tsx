@@ -153,7 +153,6 @@ const Flag = () => {
               onClose={async () => {
                 await applicationFlaggedSetsService?.resetConfirmationAlert({
                   body: { id: data.id },
-                  id: data.id,
                 })
                 void mutate(cacheKey)
               }}
