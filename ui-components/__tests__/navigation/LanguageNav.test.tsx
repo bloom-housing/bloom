@@ -10,12 +10,12 @@ describe("<LanguageNav>", () => {
       {
         label: "English",
         active: true,
-        onClick: () => {},
+        onClick: jest.fn(),
       },
       {
         label: "Spanish",
         active: false,
-        onClick: () => {},
+        onClick: jest.fn(),
       },
     ]
 
