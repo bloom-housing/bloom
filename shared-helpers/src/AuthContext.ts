@@ -141,6 +141,23 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     })
   }, [router, apiUrl, router.locale])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (document.cookie.split("; ").some((cookie) => cookie.startsWith("access-token="))) {
+        authService
+          .requestNewToken()
+          .then(() => {
+            // this auto sets the new cookies so we don't really have to do anything
+            // this set up is to avoid some linting errors
+          })
+          .catch((e) => {
+            console.error(e)
+          })
+      }
+    }, 1000 * 60 * 59) // runs once every 59 minutes
+    return () => clearInterval(interval)
+  })
+
   const loadProfile = useCallback(
     async (redirect?: string) => {
       try {

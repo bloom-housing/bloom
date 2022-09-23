@@ -12,7 +12,7 @@ import {
 import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
 import { DefaultAuthGuard } from "../guards/default.guard"
-import { ApiBody, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiBody, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { LoginDto } from "../dto/login.dto"
 import { mapTo } from "../../shared/mapTo"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
@@ -24,9 +24,9 @@ import { UserService } from "../services/user.service"
 import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { UserErrorExtraModel } from "../user-errors"
-import { TokenDto } from "../dto/token.dto"
-import { TOKEN_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from "../constants"
+import { TOKEN_COOKIE_NAME, REFRESH_COOKIE_NAME } from "../constants"
 import { Response as ExpressResponse } from "express"
+import { OptionalAuthGuard } from "../guards/optional-auth.guard"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -42,22 +42,11 @@ export class AuthController {
   @Post("login")
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: "Login", operationId: "login" })
-  login(@Request() req, @Response({ passthrough: true }) res: ExpressResponse): LoginResponseDto {
-    const accessToken = this.authService.generateAccessToken(req.user)
-
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
-    return mapTo(LoginResponseDto, { status: "ok" })
-  }
-
-  @UseGuards(DefaultAuthGuard)
-  @Post("token")
-  @ApiBody({ type: TokenDto })
-  @ApiOperation({ summary: "Token", operationId: "token" })
-  token(@Request() req, @Response({ passthrough: true }) res: ExpressResponse): LoginResponseDto {
-    const accessToken = this.authService.generateAccessToken(req.user)
-
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
-    return mapTo(LoginResponseDto, { status: "ok" })
+  async login(
+    @Request() req,
+    @Response({ passthrough: true }) res: ExpressResponse
+  ): Promise<LoginResponseDto> {
+    return mapTo(LoginResponseDto, await this.authService.tokenGen(res, req.user))
   }
 
   @UseGuards(DefaultAuthGuard)
@@ -83,5 +72,25 @@ export class AuthController {
   async getMfaInfo(@Body() getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
     const getMfaInfoResponseDto = await this.userService.getMfaInfo(getMfaInfoDto)
     return mapTo(GetMfaInfoResponseDto, getMfaInfoResponseDto)
+  }
+
+  @Get("requestNewToken")
+  @ApiOperation({
+    summary: "Requests a new token given a refresh token",
+    operationId: "requestNewToken",
+  })
+  @ApiBearerAuth()
+  @UseGuards(OptionalAuthGuard)
+  async requestNewToken(
+    @Request() req,
+    @Response({ passthrough: true }) res: ExpressResponse
+  ): Promise<LoginResponseDto> {
+    if (!req?.cookies[REFRESH_COOKIE_NAME]) {
+      throw new Error("no refresh token sent")
+    }
+    return mapTo(
+      LoginResponseDto,
+      await this.authService.tokenGen(res, req.user, req.cookies[REFRESH_COOKIE_NAME])
+    )
   }
 }

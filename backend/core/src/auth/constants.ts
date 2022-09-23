@@ -3,8 +3,15 @@ import { CookieOptions } from "express"
 export const SCRYPT_KEYLEN = 64
 export const SALT_SIZE = SCRYPT_KEYLEN
 export const TOKEN_COOKIE_NAME = "access-token"
-export const TOKEN_COOKIE_MAXAGE = 86400000
+export const REFRESH_COOKIE_NAME = "refresh-token"
+export const TOKEN_COOKIE_MAXAGE = 86400000 // 24 hours
 export const AUTH_COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: true,
+  maxAge: TOKEN_COOKIE_MAXAGE / 24, // access token should last 1 hr
+}
+export const REFRESH_COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
   secure: true,
   sameSite: true,

@@ -1,4 +1,4 @@
-import { ExtractJwt, Strategy } from "passport-jwt"
+import { Strategy } from "passport-jwt"
 import { Request } from "express"
 import { PassportStrategy } from "@nestjs/passport"
 import { HttpException, Injectable, UnauthorizedException } from "@nestjs/common"
@@ -46,6 +46,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         USER_ERRORS.PASSWORD_OUTDATED.message,
         USER_ERRORS.PASSWORD_OUTDATED.status
       )
+    }
+
+    const tokenMatch = await this.userRepository
+      .createQueryBuilder("user")
+      .select("user.id")
+      .where("user.id = :id", { id: userId })
+      .andWhere("user.activeAccessToken = :accessToken", { accessToken: rawToken })
+      .getCount()
+
+    if (!tokenMatch) {
+      throw new UnauthorizedException()
     }
 
     return user

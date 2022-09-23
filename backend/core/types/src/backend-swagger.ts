@@ -697,27 +697,6 @@ export class AuthService {
     })
   }
   /**
-   * Token
-   */
-  token(
-    params: {
-      /** requestBody */
-      body?: Token
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/token"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
    * Logout
    */
   logout(options: IRequestOptions = {}): Promise<LogoutResponse> {
@@ -769,6 +748,21 @@ export class AuthService {
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Requests a new token given a refresh token
+   */
+  requestNewToken(options: IRequestOptions = {}): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/requestNewToken"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -908,7 +902,7 @@ export class UserService {
       body?: Confirm
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/confirm"
 
@@ -3714,8 +3708,6 @@ export interface LoginResponse {
   success: boolean
 }
 
-export interface Token {}
-
 export interface LogoutResponse {
   /**  */
   success: boolean
@@ -3903,6 +3895,12 @@ export interface User {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserCreate {
@@ -3950,6 +3948,12 @@ export interface UserCreate {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserBasic {
@@ -4018,6 +4022,12 @@ export interface UserBasic {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface Email {
@@ -4139,6 +4149,12 @@ export interface UserUpdate {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserFilterParams {
@@ -4210,6 +4226,12 @@ export interface UserInvite {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserProfileUpdate {
