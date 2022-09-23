@@ -1,6 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { Card } from "../../src/blocks/Card"
+import { HeadingGroup } from "../../src/headers/HeadingGroup"
 import { Button } from "../../src/actions/Button"
 import { ButtonGroup } from "../../src/actions/ButtonGroup"
 import { LinkButton } from "../../src/actions/LinkButton"
@@ -37,7 +38,7 @@ describe("<Card>", () => {
     const { getByText } = render(
       <Card>
         <Card.Header>
-          <Card.HeadingGroup
+          <HeadingGroup
             headingPriority={2}
             heading="Household Maximum Income"
             subheading="To determine your eligibility for this property, choose your household size (include yourself in that calculation)."
