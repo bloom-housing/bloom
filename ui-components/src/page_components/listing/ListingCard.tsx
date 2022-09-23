@@ -16,7 +16,7 @@ export interface CardHeader {
   content: string | React.ReactNode
   href?: string
   customClass?: string
-  style?: AppearanceStyleType
+  styleType?: AppearanceStyleType
 }
 
 export interface FooterButton {
@@ -75,7 +75,7 @@ const ListingCard = (props: ListingCardProps) => {
   const getHeader = (
     header: CardHeader | undefined,
     priority: number,
-    style?: HeaderType,
+    styleType?: HeaderType,
     pillStyle?: boolean,
     customClass?: string
   ) => {
@@ -86,7 +86,7 @@ const ListingCard = (props: ListingCardProps) => {
             className="listings-pill_header"
             pillStyle
             capitalized
-            styleType={header.style}
+            styleType={header.styleType}
             shade={AppearanceShadeType.light}
           >
             {header.content}
@@ -94,7 +94,7 @@ const ListingCard = (props: ListingCardProps) => {
         )
       }
       return (
-        <Heading priority={priority} style={style} className={customClass}>
+        <Heading priority={priority} style={styleType} className={customClass}>
           {header.href ? (
             <LinkComponent className="is-card-link" href={header.href}>
               {header.content}
