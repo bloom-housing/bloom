@@ -52,7 +52,6 @@ const views: Views = {
       "listingImagesImage.id",
       "listingImagesImage.fileId",
       "listingImagesImage.label",
-      "listings.listingAvailability",
       "utilities.id",
       "utilities.water",
       "utilities.gas",

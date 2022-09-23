@@ -84,6 +84,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }) ?? []
   )
 
+  console.log(listing)
+
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,

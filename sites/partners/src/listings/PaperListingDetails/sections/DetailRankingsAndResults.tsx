@@ -26,13 +26,15 @@ const DetailRankingsAndResults = () => {
       grid={false}
       inset
     >
-      <GridSection columns={2}>
-        <ViewItem id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
-          {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
-            ? t("listings.firstComeFirstServe")
-            : t("listings.lotteryTitle")}
-        </ViewItem>
-      </GridSection>
+      {listing.reviewOrderType !== ListingReviewOrder.waitlist && (
+        <GridSection columns={2}>
+          <ViewItem id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
+            {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
+              ? t("listings.firstComeFirstServe")
+              : t("listings.lotteryTitle")}
+          </ViewItem>
+        </GridSection>
+      )}
       {lotteryEvent && (
         <>
           <GridSection columns={3}>

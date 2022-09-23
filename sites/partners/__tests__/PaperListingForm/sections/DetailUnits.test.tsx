@@ -3,7 +3,7 @@ import { fireEvent, render, within } from "@testing-library/react"
 import { DetailUnits } from "../../../src/listings/PaperListingDetails/sections/DetailUnits"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import { listing, unit } from "../../testHelpers"
-import { ListingAvailability } from "@bloom-housing/backend-core"
+import { ListingReviewOrder } from "@bloom-housing/backend-core"
 
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
@@ -32,7 +32,7 @@ describe("DetailUnits", () => {
       <ListingContext.Provider
         value={{
           ...listing,
-          listingAvailability: ListingAvailability.availableUnits,
+          reviewOrderType: ListingReviewOrder.firstComeFirstServe,
           disableUnitsAccordion: true,
         }}
       >

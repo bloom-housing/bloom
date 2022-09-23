@@ -13,7 +13,6 @@ import { UserCreateDto } from "../../../auth/dto/user-create.dto"
 import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
-import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 import { ApplicationSection } from "../../../multiselect-question/types/multiselect-application-section-enum"
 export const getDate = (days: number) => {
   const someDate = new Date()
@@ -220,7 +219,6 @@ export const defaultListing: ListingSeedType = {
   isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: "Custom what to expect text",
-  listingAvailability: ListingAvailability.availableUnits,
 }
 
 // Preferences
