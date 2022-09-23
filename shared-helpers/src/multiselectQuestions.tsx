@@ -130,11 +130,7 @@ export const getRadioFields = (
         fieldClassName="ml-0"
         type={"radio"}
         name={fieldName(question?.text, applicationSection)}
-        error={
-          errors &&
-          Object.keys(errors).length > 0 &&
-          errors["application"]["programs"][question?.text]
-        }
+        error={errors && errors?.application?.programs?.[question?.text]}
         errorMessage={errors && t("errors.selectAnOption")}
         register={register}
         validation={{ required: true }}
