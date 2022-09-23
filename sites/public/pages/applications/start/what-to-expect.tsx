@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import Markdown from "markdown-to-jsx"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -58,9 +59,45 @@ const ApplicationWhatToExpect = () => {
           </h2>
         </div>
         <div className="form-card__pager-row px-16">
-          <p className="field-note py-2">{t("application.start.whatToExpect.info1")}</p>
-          <p className="field-note py-2">{t("application.start.whatToExpect.info2")}</p>
-          <p className="field-note py-2">{t("application.start.whatToExpect.info3")}</p>
+          <div className="markdown mt-4">
+            <Markdown
+              options={{
+                disableParsingRawHTML: false,
+                overrides: {
+                  ol: {
+                    component: ({ children, ...props }) => (
+                      <ol {...props} className="large-numbers">
+                        {children}
+                      </ol>
+                    ),
+                  },
+                },
+              }}
+            >
+              {t("application.start.whatToExpect.steps")}
+            </Markdown>
+
+            <Markdown
+              options={{
+                disableParsingRawHTML: false,
+                overrides: {
+                  li: {
+                    component: ({ children, ...props }) => (
+                      <li {...props} className="mb-5">
+                        {children}
+                      </li>
+                    ),
+                  },
+                },
+              }}
+            >
+              {`
+${t("application.start.whatToExpect.finePrintOpenWaitlist1")}
+${t("application.start.whatToExpect.finePrint")}
+${t("application.start.whatToExpect.finePrintOpenWaitlist2")}
+              `}
+            </Markdown>
+          </div>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
