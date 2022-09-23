@@ -11,7 +11,7 @@ export type HeaderType = keyof typeof HeaderStyleMap
 
 const HeaderStyleMap = {
   largePrimary: "text__large-primary",
-  mediumHeader: "text__medium-header",
+  mediumNormal: "text__medium-normal",
   smallWeighted: "text__small-weighted",
   smallNormal: "text__small-normal",
   underlineWeighted: "text__underline-weighted",
