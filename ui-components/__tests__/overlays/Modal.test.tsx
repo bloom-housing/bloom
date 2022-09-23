@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, getByTestId } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { Modal } from "../../src/overlays/Modal"
 
 afterEach(cleanup)
@@ -9,11 +9,11 @@ describe("<Modal>", () => {
     const portalRoot = document.createElement("div")
     portalRoot.setAttribute("id", "__next")
     document.body.appendChild(portalRoot)
-    const { getByText, debug, getByRole } = render(
+    const { getByText, getByRole } = render(
       <Modal
         open={true}
         title={"Modal Title"}
-        onClose={() => {}}
+        onClose={jest.fn()}
         ariaDescription={"My Modal"}
         actions={[<div key={0}>Action 1</div>, <div key={1}>Action 2</div>]}
       >
@@ -34,7 +34,7 @@ describe("<Modal>", () => {
       <Modal
         open={true}
         title={"Modal Title"}
-        onClose={() => {}}
+        onClose={jest.fn()}
         ariaDescription={"My Modal"}
         actions={[<div key={0}>Action 1</div>, <div key={1}>Action 2</div>]}
       >
@@ -52,7 +52,7 @@ describe("<Modal>", () => {
     portalRoot.setAttribute("id", "__next")
     document.body.appendChild(portalRoot)
     const { queryByTestId } = render(
-      <Modal open={true} title={"Modal Title"} onClose={() => {}} ariaDescription={"My Modal"}>
+      <Modal open={true} title={"Modal Title"} onClose={jest.fn()} ariaDescription={"My Modal"}>
         <strong>Modal Children</strong>
       </Modal>
     )

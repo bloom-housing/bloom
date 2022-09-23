@@ -13,7 +13,7 @@ describe("<Drawer>", () => {
       <Drawer
         open={true}
         title={"Drawer Title"}
-        onClose={() => {}}
+        onClose={jest.fn()}
         ariaDescription={"My Drawer"}
         actions={[<div key={0}>Action 1</div>, <div key={1}>Action 2</div>]}
       >
@@ -33,7 +33,7 @@ describe("<Drawer>", () => {
       <Drawer
         open={true}
         title={"Drawer Title"}
-        onClose={() => {}}
+        onClose={jest.fn()}
         ariaDescription={"My Drawer"}
         className={"custom-class"}
         direction={DrawerSide.left}

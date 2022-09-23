@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, fireEvent } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { Tabs, TabList, Tab, TabPanel } from "../../src/navigation/Tabs"
 
 afterEach(cleanup)

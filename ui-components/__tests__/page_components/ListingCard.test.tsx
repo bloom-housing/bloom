@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, getAllByText } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { ListingCard } from "../../src/page_components/listing/ListingCard"
 
 afterEach(cleanup)
