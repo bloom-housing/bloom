@@ -235,7 +235,7 @@ const Settings = () => {
             type="button"
             styleType={AppearanceStyleType.primary}
             onClick={() => {
-              saveQuestion({ ...copyModalOpen, text: `Copy of ${copyModalOpen.text}` }, "add")
+              saveQuestion({ ...copyModalOpen, text: `${copyModalOpen.text} (Copy)` }, "add")
             }}
             dataTestId={"copy-button-confirm"}
             loading={isCreateLoading}
