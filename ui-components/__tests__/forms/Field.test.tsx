@@ -1,11 +1,12 @@
 import React from "react"
-import { render, cleanup, fireEvent, getByPlaceholderText } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { Field } from "../../src/forms/Field"
 import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
 
 const FieldDefault = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <Field register={register} name={"Test Input"} label={"Test Input Default"} type={"text"} />
@@ -13,6 +14,7 @@ const FieldDefault = () => {
 }
 
 const FieldError = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <Field
@@ -27,6 +29,7 @@ const FieldError = () => {
 }
 
 const FieldCustomProps = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <Field
@@ -46,6 +49,7 @@ const FieldCustomProps = () => {
 }
 
 const FieldCurrency = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues, setValue } = useForm({ mode: "onChange" })
   return (
     <Field
@@ -74,11 +78,11 @@ describe("<Field>", () => {
     expect(getByText("Uh oh!")).toBeTruthy()
     expect(getByLabelText("Test Input Error")).toBeTruthy()
   })
-  it("can render custom state", async () => {
+  it("can render custom state", () => {
     const { getByLabelText } = render(<FieldCustomProps />)
     expect(getByLabelText("Test Input Custom")).toBeTruthy()
   })
-  it("can render currency field", async () => {
+  it("can render currency field", () => {
     const { getByText, getByLabelText, getByPlaceholderText } = render(<FieldCurrency />)
     expect(getByLabelText("Test Input Custom")).toBeTruthy()
     expect(getByText("$")).toBeTruthy()

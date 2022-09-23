@@ -6,7 +6,7 @@ afterEach(cleanup)
 
 describe("<Form>", () => {
   it("renders without error", () => {
-    const { getByText } = render(<Form onSubmit={() => {}}>Children go here</Form>)
+    const { getByText } = render(<Form onSubmit={jest.fn()}>Children go here</Form>)
     expect(getByText("Children go here")).not.toBeNull()
   })
 })

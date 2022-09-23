@@ -14,6 +14,13 @@ export interface HouseholdSizeFieldProps {
   householdSizeMin: number
   register: UseFormMethods["register"]
   validate: boolean
+  strings?: {
+    dontQualifyDescription?: string
+    dontQualifyHeader?: string
+    getAssistance?: string
+    householdTooBigError?: string
+    householdTooSmallError?: string
+  }
 }
 
 const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
@@ -26,6 +33,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
     clearErrors,
     error,
     assistanceUrl,
+    strings,
   } = props
   if (!householdSizeMax || !validate) {
     return <></>
@@ -44,25 +52,31 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               ? register({
                   min: {
                     value: householdSizeMin || 0,
-                    message: t("errors.householdTooSmall"),
+                    message: strings?.householdTooSmallError ?? t("errors.householdTooSmall"),
                   },
                   max: {
                     value: householdSizeMax,
-                    message: t("errors.householdTooBig"),
+                    message: strings?.householdTooBigError ?? t("errors.householdTooBig"),
                   },
                 })
               : register
           }
         />
       </span>
-      <ErrorMessage id={"householdsize-error"} error={!!error}>
+      <ErrorMessage
+        id={"householdsize-error"}
+        error={!!error}
+        className="block mt-0 line-normal text-red-700"
+      >
         <AlertBox type="alert" inverted onClose={() => clearErrors()}>
-          {t("application.household.dontQualifyHeader")}
+          {strings?.dontQualifyHeader ?? t("application.household.dontQualifyHeader")}
         </AlertBox>
         <AlertNotice title={error?.message} type="alert" inverted>
-          <p className="mb-2">{t("application.household.dontQualifyInfo")}</p>
+          <p className="mb-2">
+            {strings?.dontQualifyDescription ?? t("application.household.dontQualifyInfo")}
+          </p>
           <p>
-            <a href={assistanceUrl}>{t("pageTitle.getAssistance")}</a>
+            <a href={assistanceUrl}>{strings?.getAssistance ?? t("pageTitle.getAssistance")}</a>
           </p>
         </AlertNotice>
       </ErrorMessage>

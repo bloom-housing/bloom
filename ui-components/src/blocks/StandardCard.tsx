@@ -21,7 +21,7 @@ const StandardCard = ({
     <div className={`standard-card ${className}`}>
       <div className="standard-card__inner">
         {title && (
-          <Heading className="standard-card__title" priority={3}>
+          <Heading className="standard-card__title" priority={2}>
             {title}
           </Heading>
         )}

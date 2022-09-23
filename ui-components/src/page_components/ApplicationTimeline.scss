@@ -4,13 +4,13 @@
 }
 
 .application-timeline {
-  .progress-nav__item {
+  .progress-nav__dot-item {
     @apply pt-0;
 
     text-transform: unset;
 
     .absolute {
-      margin-top: 0.45rem;
+      margin-top: 0.25rem;
       z-index: 2;
       margin-left: -0.4rem;
     }
@@ -20,17 +20,17 @@
     }
   }
 
-  .progress-nav__item.is-active::before,
-  .progress-nav__item.is-disabled::before {
+  .progress-nav__dot-item.is-active::before,
+  .progress-nav__dot-item.is-disabled::before {
     height: 2rem;
     width: 2rem;
   }
 
-  .progress-nav__item.is-active::before {
+  .progress-nav__dot-item.is-active::before {
     @apply bg-green-700;
   }
 
-  .progress-nav__item::after {
+  .progress-nav__dot-item::after {
     top: 1rem;
   }
 }

@@ -62,7 +62,7 @@ export default function ListingDetail(props: ListingProps) {
             <Head>
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
-
+            <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
             <NavigationHeader
               title={listing.name}
               listingId={listing.id}
@@ -81,11 +81,7 @@ export default function ListingDetail(props: ListingProps) {
                   </BreadcrumbLink>
                 </Breadcrumbs>
               }
-            >
-              <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-                <SiteAlert type="success" timeout={5000} dismissable />
-              </div>
-            </NavigationHeader>
+            />
 
             <ListingStatusBar status={listing.status} />
 

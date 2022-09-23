@@ -6,9 +6,8 @@ import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions
 export const activeJurisdictions: JurisdictionCreateDto[] = [
   {
     name: "Alameda",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
@@ -19,22 +18,20 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
   },
   {
     name: "San Jose",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "SJ: HousingBayArea.org <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
       "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-    enablePartnerSettings: null,
+    enablePartnerSettings: false,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
   },
   {
     name: "San Mateo",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "SMC: HousingBayArea.org <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
@@ -45,9 +42,8 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
   },
   {
     name: "Detroit",
-    preferences: [],
+    multiselectQuestions: [],
     languages: [Language.en],
-    programs: [],
     publicUrl: "",
     emailFromAddress: "Detroit Housing <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:

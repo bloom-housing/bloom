@@ -3,7 +3,7 @@ import { Language } from "../shared/types/language-enum"
 export class updateInviteEmailText1655122535654 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const [{ language, translations }] = await queryRunner.query(
-      `SELECT language, translations from translations WHERE language = 'en' LIMIT 1`
+      `SELECT language, translations from translations WHERE language = 'en' and jurisdiction_id is NULL LIMIT 1`
     )
 
     translations["invite"] = {

@@ -35,7 +35,6 @@ const translationRepositoryMock = {}
 
 const translationServiceMock = {
   getTranslationByLanguageAndJurisdictionOrDefaultEn: (language) => {
-    // console.log("foooo = ", language, jurisdiction)
     return language === "es"
       ? {
           jurisdictionId: "",
@@ -56,12 +55,9 @@ const translationServiceMock = {
             confirmation: {
               gotYourConfirmationNumber: "We got your application for",
               yourConfirmationNumber: "Your Confirmation Number", // UPDATED
-              applicationReceived:
-                'Application <br />received<span class="sr-only"> completed</span>',
-              applicationsClosed:
-                'Application <br />closed<span class="sr-only"> not completed</span>',
-              applicationsRanked:
-                'Application <br />ranked<span class="sr-only"> not completed</span>',
+              applicationReceived: "Application <br />received",
+              applicationsClosed: "Application <br />closed",
+              applicationsRanked: "Application <br />ranked",
               whatHappensNext: "What happens next?",
               applicationPeriodCloses:
                 "JURISDICTION: Once the application period closes, the property manager will begin processing applications.",
@@ -72,6 +68,24 @@ const translationServiceMock = {
                 lottery:
                   "Eligible applicants will be placed in order <strong>based on preference and lottery rank</strong>.",
               },
+              eligible: {
+                fcfs:
+                  "Eligibile applicants will be contacted on a first come first serve basis until vacancies are filled.",
+                fcfsPreference:
+                  "Housing preferences, if applicable, will affect first come first serve order.",
+                lottery:
+                  "Once the application period closes, eligible applicants will be placed in order based on lottery rank order.",
+                lotteryPreference:
+                  "Housing preferences, if applicable, will affect lottery rank order.",
+                waitlist:
+                  "Eligibile applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.",
+                waitlistPreference:
+                  "Housing preferences, if applicable, will affect waitlist order.",
+                waitlistContact:
+                  "You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.",
+              },
+              interview:
+                "If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.",
               contactedForAnInterview:
                 "If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.",
               prepareForNextSteps: "Prepare for next steps",
@@ -80,7 +94,6 @@ const translationServiceMock = {
               readHowYouCanPrepare: "Read about how you can prepare for next steps",
               needToMakeUpdates: "Need to make updates?",
               ifYouNeedToUpdateInformation: "",
-
               shouldBeChosen:
                 "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
               subject: "Your Application Confirmation",

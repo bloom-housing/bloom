@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
 const Optional = ({ disabled = false }) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors } = useForm({ mode: "onChange" })
   return (
     <DateField

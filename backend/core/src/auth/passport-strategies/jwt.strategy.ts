@@ -41,7 +41,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       relations: ["leasingAgentInListings"],
     })
 
-    if (UserService.isPasswordOutdated(user)) {
+    if (user && UserService.isPasswordOutdated(user)) {
       throw new HttpException(
         USER_ERRORS.PASSWORD_OUTDATED.message,
         USER_ERRORS.PASSWORD_OUTDATED.status

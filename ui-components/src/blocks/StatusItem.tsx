@@ -10,6 +10,15 @@ interface StatusItemProps {
   confirmationNumber?: string
   listingName: string
   listingURL: string
+  strings?: {
+    applicationDeadline?: string
+    edited?: string
+    seeListing?: string
+    status?: string
+    submittedStatus?: string
+    viewApplication?: string
+    yourNumber?: string
+  }
 }
 
 const StatusItem = (props: StatusItemProps) => {
@@ -22,7 +31,8 @@ const StatusItem = (props: StatusItemProps) => {
           <h3 className="status-item__title">{props.listingName}</h3>
           {props.applicationDueDate && (
             <p className="status-item__due">
-              {t("listings.applicationDeadline")}: {props.applicationDueDate}
+              {props.strings?.applicationDeadline ?? t("listings.applicationDeadline")}:{" "}
+              {props.applicationDueDate}
             </p>
           )}
         </header>
@@ -32,7 +42,7 @@ const StatusItem = (props: StatusItemProps) => {
             {props.confirmationNumber && (
               <>
                 <span className="status-item__confirm-text">
-                  {t("application.yourLotteryNumber")}:
+                  {props.strings?.yourNumber ?? t("application.yourLotteryNumber")}:
                 </span>
                 <br />
                 <span className="status-item__confirm-number">{props.confirmationNumber}</span>
@@ -43,11 +53,12 @@ const StatusItem = (props: StatusItemProps) => {
           <div className="status-item__action">
             <p className="status-item__status">
               <span className={"status-item__label"}>
-                {t("application.status")}: {t("application.statuses.submitted")}
+                {props.strings?.status ?? t("application.status")}:{" "}
+                {props.strings?.submittedStatus ?? t("application.statuses.submitted")}
               </span>
             </p>
             <a href={props.applicationURL} className="button is-small">
-              {t("application.viewApplication")}
+              {props.strings?.viewApplication ?? t("application.viewApplication")}
             </a>
           </div>
         </section>
@@ -55,13 +66,13 @@ const StatusItem = (props: StatusItemProps) => {
         <footer className="status-item__footer">
           <div className="status-item_links">
             <LinkComponent className="status-item__link lined" href={props.listingURL}>
-              {t("t.seeListing")}
+              {props.strings?.seeListing ?? t("t.seeListing")}
             </LinkComponent>
           </div>
 
           <div className="status-item__meta">
             <p className="status-item__date">
-              {t("application.edited")}: {props.applicationUpdatedAt}
+              {props.strings?.edited ?? t("application.edited")}: {props.applicationUpdatedAt}
             </p>
           </div>
         </footer>

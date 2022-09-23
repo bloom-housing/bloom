@@ -5,6 +5,9 @@ import { SelectOption } from "../forms/Select"
 export interface FormOptionsProps {
   options: (string | SelectOption)[]
   keyPrefix?: string
+  strings?: {
+    selectOne?: string
+  }
 }
 
 export const numberOptions = (end: number, start = 1): SelectOption[] => {
@@ -21,7 +24,7 @@ export const FormOptions = (props: FormOptionsProps) => {
     if (option == "" || option["value"] == "") {
       return (
         <option value="" key="select-one">
-          {t("t.selectOne")}
+          {props.strings?.selectOne ?? t("t.selectOne")}
         </option>
       )
     } else {

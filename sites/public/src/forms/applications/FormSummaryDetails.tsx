@@ -1,7 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes, getProgramOptionName } from "@bloom-housing/shared-helpers"
-import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
+import { getUniqueUnitTypes } from "@bloom-housing/shared-helpers"
+import {
+  Address,
+  AllExtraDataTypes,
+  ApplicationMultiselectQuestion,
+  ApplicationMultiselectQuestionOption,
+  ApplicationSection,
+  InputType,
+  Listing,
+} from "@bloom-housing/backend-core/types"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -9,12 +17,13 @@ type FormSummaryDetailsProps = {
   listing: Listing
   editMode?: boolean
   hidePreferences?: boolean
+  hidePrograms?: boolean
 }
 
 const EditLink = (props: { href: string }) => (
-  <div className="float-right flex">
-    <LocalizedLink href={props.href}>
-      <a className="edit-link">{t("t.edit")}</a>
+  <div className="float-right flex edit-link">
+    <LocalizedLink href={props.href} className={"text-blue-700"}>
+      {t("t.edit")}
     </LocalizedLink>
   </div>
 )
@@ -52,6 +61,7 @@ const FormSummaryDetails = ({
   listing,
   editMode = false,
   hidePreferences = false,
+  hidePrograms = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -75,23 +85,13 @@ const FormSummaryDetails = ({
     }
   }
 
-  const preferenceHelperText = (extraData?: AllExtraDataTypes[]) => {
+  const multiselectQuestionAddress = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
-    return extraData.reduce((acc, item, i) => {
-      if (
-        item.type === InputType.text ||
-        (item.type === InputType.hhMemberSelect && typeof item.value === "string")
-      ) {
-        acc += `${item.value.toString()}`
-        if (i + 1 < extraData.length) {
-          acc += ", "
-        }
-      }
-
+    return extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
         acc += `
-          ${item.value.street},
-          ${item.value.street2 ?? ""},
+          ${item.value.street}${!item.value.street2 && ","}
+          ${item.value.street2 ? `${item.value.street2},` : ""}
           ${item.value.city},
           ${item.value.state}
           ${item.value.zipCode}
@@ -100,6 +100,50 @@ const FormSummaryDetails = ({
 
       return acc
     }, "")
+  }
+
+  const multiselectQuestionSection = (
+    applicationSection: ApplicationSection,
+    appLink: string,
+    header: string,
+    emptyText?: string,
+    className?: string
+  ) => {
+    return (
+      <>
+        <h3 className="form--card__sub-header">
+          {header}
+          {editMode && <EditLink href={appLink} />}
+        </h3>
+        <div
+          id={applicationSection}
+          className={`form-card__group mx-0 ${className ? className : ""}`}
+        >
+          {emptyText ? (
+            <p className="field-note text-black">{emptyText}</p>
+          ) : (
+            <>
+              {application[applicationSection]
+                .filter((item) => item.claimed === true)
+                .map((question: ApplicationMultiselectQuestion) =>
+                  question.options
+                    .filter((item) => item.checked === true)
+                    .map((option: ApplicationMultiselectQuestionOption, index) => (
+                      <ViewItem
+                        label={question.key}
+                        helper={multiselectQuestionAddress(option?.extraData)}
+                        key={index}
+                        data-test-id={"app-summary-preference"}
+                      >
+                        {option.key}
+                      </ViewItem>
+                    ))
+                )}
+            </>
+          )}
+        </div>
+      </>
+    )
   }
 
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
@@ -329,19 +373,6 @@ const FormSummaryDetails = ({
               </Fragment>
             ))}
           </ViewItem>
-          {application.programs
-            .filter((item) => item.claimed === true)
-            .map((program) =>
-              program.options
-                .filter((item) => item.checked === true)
-                .map((option, index) => (
-                  <ViewItem label={t(`application.programs.${program.key}.summary`)} key={index}>
-                    {t(getProgramOptionName(option.key, program.key), {
-                      county: listing?.countyCode,
-                    })}
-                  </ViewItem>
-                ))
-            )}
           <ViewItem id="householdChanges" label={t("application.household.expectingChanges.title")}>
             {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
           </ViewItem>
@@ -350,12 +381,24 @@ const FormSummaryDetails = ({
           </ViewItem>
         </div>
 
+        {!hidePrograms &&
+          multiselectQuestionSection(
+            ApplicationSection.programs,
+            "/applications/programs/programs",
+            t("t.programs"),
+            application.programs.filter((item) => item.claimed == true).length == 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.countyCode,
+                })} ${t("application.preferences.general.preamble")}`
+              : null
+          )}
+
         <h3 className="form--card__sub-header">
           {t("t.income")}
           {editMode && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
-        <div className="form-card__group border-b mx-0">
+        <div className="form-card__group mx-0">
           <ViewItem
             data-test-id={"app-summary-income-vouchers"}
             id="incomeVouchers"
@@ -371,45 +414,18 @@ const FormSummaryDetails = ({
           )}
         </div>
 
-        {!hidePreferences && (
-          <>
-            <h3 className="form--card__sub-header">
-              {t("t.preferences")}
-              {editMode && <EditLink href="/applications/preferences/all" />}
-            </h3>
-            <div id="preferences" className="form-card__group border-b mx-0">
-              {application.preferences.filter((item) => item.claimed == true).length == 0 ? (
-                <p className="field-note text-black">
-                  {t("application.preferences.general.title", {
-                    county: listing?.countyCode,
-                  })}{" "}
-                  {t("application.preferences.general.preamble")}
-                </p>
-              ) : (
-                <>
-                  {application.preferences
-                    .filter((item) => item.claimed === true)
-                    .map((preference) =>
-                      preference.options
-                        .filter((item) => item.checked === true)
-                        .map((option, index) => (
-                          <ViewItem
-                            label={t("application.preferences.youHaveClaimed")}
-                            helper={preferenceHelperText(option?.extraData)}
-                            key={index}
-                            data-test-id={"app-summary-preference"}
-                          >
-                            {t(`application.preferences.${preference.key}.${option.key}.label`, {
-                              county: listing?.countyCode,
-                            })}
-                          </ViewItem>
-                        ))
-                    )}
-                </>
-              )}
-            </div>
-          </>
-        )}
+        {!hidePreferences &&
+          multiselectQuestionSection(
+            ApplicationSection.preferences,
+            "/applications/preferences/all",
+            t("t.preferences"),
+            application.preferences.filter((item) => item.claimed == true).length == 0
+              ? `${t("application.preferences.general.title", {
+                  county: listing?.countyCode,
+                })} ${t("application.preferences.general.preamble")}`
+              : null,
+            "border-b"
+          )}
       </div>
     </>
   )

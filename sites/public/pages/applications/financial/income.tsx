@@ -3,7 +3,8 @@
 Total pre-tax household income from all sources
 */
 import React, { useContext, useEffect, useState } from "react"
-import { Listing } from "@bloom-housing/backend-core/types"
+import Link from "next/link"
+import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -20,7 +21,13 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
 type IncomeError = "low" | "high" | null
@@ -55,7 +62,9 @@ const ApplicationIncome = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageSection = 3
+  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+    ? 4
+    : 3
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -78,7 +87,7 @@ const ApplicationIncome = () => {
     if (!validationError) {
       const toSave = { income, incomePeriod }
 
-      conductor.completeSection(3)
+      conductor.completeSection(currentPageSection)
       conductor.currentStep.save(toSave)
       conductor.routeToNextOrReturnUrl()
     }
@@ -162,7 +171,7 @@ const ApplicationIncome = () => {
                 {t(`application.financial.income.validationError.instruction2`)}
               </p>
               <p>
-                <a href="#">{t("pageTitle.getAssistance")}</a>
+                <Link href={`/get-assistance`}>{t("pageTitle.getAssistance")}</Link>
               </p>
             </AlertNotice>
           </>

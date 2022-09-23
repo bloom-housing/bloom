@@ -3,6 +3,447 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.49...@bloom-housing/public@5.1.1-alpha.50) (2022-09-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.48...@bloom-housing/public@5.1.1-alpha.49) (2022-09-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.47...@bloom-housing/public@5.1.1-alpha.48) (2022-09-21)
+
+
+### Bug Fixes
+
+* complete app section while navigating ([a288b8c](https://github.com/bloom-housing/bloom/commit/a288b8c3d8866149ba3737ec58176cb8abfa65b6))
+
+
+
+
+
+## [5.1.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.46...@bloom-housing/public@5.1.1-alpha.47) (2022-09-19)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.45...@bloom-housing/public@5.1.1-alpha.46) (2022-09-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.44...@bloom-housing/public@5.1.1-alpha.45) (2022-09-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.43...@bloom-housing/public@5.1.1-alpha.44) (2022-09-14)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.42...@bloom-housing/public@5.1.1-alpha.43) (2022-09-13)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.41...@bloom-housing/public@5.1.1-alpha.42) (2022-09-13)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.40...@bloom-housing/public@5.1.1-alpha.41) (2022-09-12)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.39...@bloom-housing/public@5.1.1-alpha.40) (2022-09-09)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.38...@bloom-housing/public@5.1.1-alpha.39) (2022-09-08)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.37...@bloom-housing/public@5.1.1-alpha.38) (2022-08-31)
+
+
+### Bug Fixes
+
+* **application:** remove programs from autofill ([#3021](https://github.com/bloom-housing/bloom/issues/3021)) ([ec019cf](https://github.com/bloom-housing/bloom/commit/ec019cf54c236c101ec30b026feea78a16992544))
+
+
+
+
+
+## [5.1.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.36...@bloom-housing/public@5.1.1-alpha.37) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.35...@bloom-housing/public@5.1.1-alpha.36) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.34...@bloom-housing/public@5.1.1-alpha.35) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.33...@bloom-housing/public@5.1.1-alpha.34) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.32...@bloom-housing/public@5.1.1-alpha.33) (2022-08-31)
+
+
+### Bug Fixes
+
+* remove select text from multiselect application questions ([#3017](https://github.com/bloom-housing/bloom/issues/3017)) ([07e28ed](https://github.com/bloom-housing/bloom/commit/07e28ed9f4699b8f5553328f2b7edb69cc25eb42))
+
+
+
+
+
+## [5.1.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.31...@bloom-housing/public@5.1.1-alpha.32) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.30...@bloom-housing/public@5.1.1-alpha.31) (2022-08-31)
+
+
+### Bug Fixes
+
+* null app fee showing null string ([#3016](https://github.com/bloom-housing/bloom/issues/3016)) ([05e28ad](https://github.com/bloom-housing/bloom/commit/05e28ad9f887dcfff5567af96e97be50c86b2109))
+
+
+
+
+
+## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.29...@bloom-housing/public@5.1.1-alpha.30) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.28...@bloom-housing/public@5.1.1-alpha.29) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.27...@bloom-housing/public@5.1.1-alpha.28) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.26...@bloom-housing/public@5.1.1-alpha.27) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.25...@bloom-housing/public@5.1.1-alpha.26) (2022-08-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.24...@bloom-housing/public@5.1.1-alpha.25) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.23...@bloom-housing/public@5.1.1-alpha.24) (2022-08-24)
+
+
+### Bug Fixes
+
+* styling precedence issues in preferences ([#2994](https://github.com/bloom-housing/bloom/issues/2994)) ([f043c38](https://github.com/bloom-housing/bloom/commit/f043c386009fab85039bb684618b4de1fc5493f7))
+
+
+
+
+
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.22...@bloom-housing/public@5.1.1-alpha.23) (2022-08-24)
+
+
+### Features
+
+* adds the ability to manage preference for partner admins ([#2985](https://github.com/bloom-housing/bloom/issues/2985)) ([0f1f470](https://github.com/bloom-housing/bloom/commit/0f1f470f00f4ef95a2e35a921701339fb813f1f5))
+
+
+
+
+
+## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.21...@bloom-housing/public@5.1.1-alpha.22) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.20...@bloom-housing/public@5.1.1-alpha.21) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.19...@bloom-housing/public@5.1.1-alpha.20) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.18...@bloom-housing/public@5.1.1-alpha.19) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.17...@bloom-housing/public@5.1.1-alpha.18) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.16...@bloom-housing/public@5.1.1-alpha.17) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.15...@bloom-housing/public@5.1.1-alpha.16) (2022-08-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.14...@bloom-housing/public@5.1.1-alpha.15) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.13...@bloom-housing/public@5.1.1-alpha.14) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.12...@bloom-housing/public@5.1.1-alpha.13) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.11...@bloom-housing/public@5.1.1-alpha.12) (2022-08-18)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.10...@bloom-housing/public@5.1.1-alpha.11) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.9...@bloom-housing/public@5.1.1-alpha.10) (2022-08-16)
+
+
+### Features
+
+* **listings:** update default sort of listings ([#2947](https://github.com/bloom-housing/bloom/issues/2947)) ([a555192](https://github.com/bloom-housing/bloom/commit/a5551926209c13b9dcc228ebe36f4527c7bae41b))
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.8...@bloom-housing/public@5.1.1-alpha.9) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.7...@bloom-housing/public@5.1.1-alpha.8) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.6...@bloom-housing/public@5.1.1-alpha.7) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.5...@bloom-housing/public@5.1.1-alpha.6) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.4...@bloom-housing/public@5.1.1-alpha.5) (2022-08-12)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.3...@bloom-housing/public@5.1.1-alpha.4) (2022-08-12)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.2...@bloom-housing/public@5.1.1-alpha.3) (2022-08-03)
+
+
+### Features
+
+* **expandabletext:** fix a broken ci check; fix a prop name ([e839c81](https://github.com/bloom-housing/bloom/commit/e839c811b237164b1cd26bbc888db512f66bc6b0))
+* **expandabletext:** remove translations;pass markdown props through component ([e21e88a](https://github.com/bloom-housing/bloom/commit/e21e88a5be527ec860b3515c1dc545a186713e06)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+
+
+### BREAKING CHANGES
+
+* **expandabletext:** In uses of ExpandableText component, the translations are now being passed down
+instead of done within the component. Any options for the Markdown component used within
+ExpandableText also needs to be passed
+
+
+
+
+
+## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.1...@bloom-housing/public@5.1.1-alpha.2) (2022-08-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.0...@bloom-housing/public@5.1.1-alpha.1) (2022-08-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [5.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.0.1-alpha.38...@bloom-housing/public@5.1.1-alpha.0) (2022-07-27)
 
 

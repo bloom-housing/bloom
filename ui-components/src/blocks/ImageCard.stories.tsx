@@ -20,6 +20,62 @@ export default {
 
 export const image = () => <ImageCard imageUrl="/images/listing.jpg" />
 
+export const twoImages = () => (
+  <ImageCard
+    images={[
+      { url: "/images/listing.jpg" },
+      {
+        url:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/oakhouse_cgdqmx.jpg",
+      },
+    ]}
+  />
+)
+
+export const threeImages = () => (
+  <ImageCard
+    images={[
+      { url: "/images/listing.jpg" },
+      {
+        url:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/oakhouse_cgdqmx.jpg",
+      },
+      {
+        url:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+      },
+    ]}
+  />
+)
+
+export const fourImages = () => (
+  <ImageCard
+    images={[
+      { url: "/images/listing.jpg" },
+      {
+        url:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/oakhouse_cgdqmx.jpg",
+        mobileUrl:
+          "https://res.cloudinary.com/exygy/image/upload/w_767,c_limit,q_55/dev/oakhouse_cgdqmx.jpg",
+        thumbnailUrl:
+          "https://res.cloudinary.com/exygy/image/upload/w_480,c_limit,q_55/dev/oakhouse_cgdqmx.jpg",
+        description: "The second photo in the list",
+      },
+      {
+        url:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+      },
+      {
+        url:
+          "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+      },
+    ]}
+    modalCloseLabel="Back to listing"
+    moreImagesLabel="images"
+    moreImagesDescription="more images for 'Property Name'"
+  />
+)
+
 export const withLink = () => <ImageCard href="/listings" imageUrl="/images/listing.jpg" />
 
 export const withNoImage = () => <ImageCard />

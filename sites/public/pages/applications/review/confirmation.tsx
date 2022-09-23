@@ -67,18 +67,18 @@ const ApplicationConfirmation = () => {
     <FormsLayout>
       <FormCard>
         <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
+          <h1 className="form-card__title is-borderless">
             {t("application.review.confirmation.title")}
             {listing?.name}
-          </h2>
+          </h1>
         </div>
 
         {imageUrl && <img src={imageUrl} alt={listing?.name} />}
 
         <div className="form-card__group border-b text-center">
-          <h3 className="form-card__paragraph-title">
+          <h2 className="form-card__paragraph-title">
             {t("application.review.confirmation.lotteryNumber")}
-          </h3>
+          </h2>
 
           <p
             id="confirmationCode"
@@ -133,17 +133,15 @@ const ApplicationConfirmation = () => {
           )}
 
           <div className="form-card__pager-row py-6">
-            <Link href="/listings">
-              <a data-test-id={"app-confirmation-browse"} className="lined text-tiny">
-                {t("application.review.confirmation.browseMore")}
-              </a>
-            </Link>
+            <span className="lined text-tiny" data-test-id={"app-confirmation-browse"}>
+              <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
+            </span>
           </div>
 
           <div className="form-card__pager-row py-6 border-t">
-            <Link href="/applications/view" data-test-id={"app-confirmation-print"}>
-              <a className="lined text-tiny">{t("application.review.confirmation.print")}</a>
-            </Link>
+            <span className="lined text-tiny" data-test-id={"app-confirmation-print"}>
+              <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
+            </span>
           </div>
         </div>
       </FormCard>

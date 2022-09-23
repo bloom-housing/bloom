@@ -533,6 +533,8 @@ const ApplicationAddress = () => {
                       errorMessage={t("errors.streetError")}
                       register={register}
                       dataTestId={"app-primary-work-address-street"}
+                      label={t("application.contact.streetAddress")}
+                      readerOnly={true}
                     />
 
                     <Field

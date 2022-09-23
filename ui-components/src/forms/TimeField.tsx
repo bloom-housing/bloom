@@ -29,6 +29,14 @@ export type TimeFieldProps = {
   watch: UseFormMethods["watch"]
   seconds?: boolean
   dataTestId?: string
+  strings?: {
+    hour?: string
+    minutes?: string
+    minutesPlaceholder?: string
+    seconds?: string
+    time?: string
+    timeError?: string
+  }
 }
 
 export const formatDateToTimeField = (date: Date) => {
@@ -56,6 +64,7 @@ const TimeField = ({
   defaultValues,
   disabled,
   dataTestId,
+  strings,
 }: TimeFieldProps) => {
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
@@ -82,7 +91,7 @@ const TimeField = ({
       <div className="field-group--date">
         <Field
           name={fieldName("hours")}
-          label={t("t.hour")}
+          label={strings?.hour ?? t("t.hour")}
           defaultValue={defaultValues?.hours ?? ""}
           readerOnly={true}
           placeholder="HH"
@@ -106,10 +115,10 @@ const TimeField = ({
 
         <Field
           name={fieldName("minutes")}
-          label={t("t.minutes")}
+          label={strings?.minutes ?? t("t.minutes")}
           defaultValue={defaultValues?.minutes ?? ""}
           readerOnly={true}
-          placeholder={t("account.settings.placeholders.month")}
+          placeholder={strings?.minutesPlaceholder ?? t("account.settings.placeholders.month")}
           error={error}
           validation={{
             required: required || innerRequiredRule,
@@ -130,7 +139,7 @@ const TimeField = ({
 
         {seconds && (
           <Field
-            label={t("t.seconds")}
+            label={strings?.seconds ?? t("t.seconds")}
             defaultValue={defaultValues?.seconds ?? ""}
             name={fieldName("seconds")}
             readerOnly={true}
@@ -158,7 +167,7 @@ const TimeField = ({
           name={fieldName("period")}
           id={fieldName("period")}
           labelClassName="sr-only"
-          label={t("t.time")}
+          label={strings?.time ?? t("t.time")}
           register={register}
           options={["am", "pm"]}
           keyPrefix="t"
@@ -172,7 +181,7 @@ const TimeField = ({
 
       <div id={`${id}-error`} className="field error">
         <ErrorMessage id={"time-field-error"} error={error}>
-          {t("errors.timeError")}
+          {strings?.timeError ?? t("errors.timeError")}
         </ErrorMessage>
       </div>
     </fieldset>

@@ -7,11 +7,12 @@ import { t } from "../../src/helpers/translator"
 afterEach(cleanup)
 
 const DefaultHouseholdSize = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <HouseholdSizeField
       assistanceUrl={""}
-      clearErrors={() => {}}
+      clearErrors={jest.fn()}
       error={null}
       householdSize={3}
       householdSizeMax={3}
@@ -23,10 +24,12 @@ const DefaultHouseholdSize = () => {
 }
 
 type ErrorHouseholdSizeProps = {
-  clearErrorsSpy: jest.Mock<any, any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  clearErrorsSpy: jest.Mock<unknown, any[]>
 }
 
 const ErrorHouseholdSize = (props: ErrorHouseholdSizeProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <HouseholdSizeField

@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import ReferralApplication from "../../src/page_components/listing/listing_sidebar/ReferralApplication"
+import { ReferralApplication } from "../../src/page_components/listing/listing_sidebar/ReferralApplication"
 
 afterEach(cleanup)
 
@@ -10,7 +10,9 @@ describe("<ReferralApplication>", () => {
       <ReferralApplication
         phoneNumber={"211"}
         description={"Referral description"}
-        title={"For further information"}
+        strings={{
+          title: "For further information",
+        }}
       />
     )
     expect(getByText("211", { exact: false })).toBeTruthy()

@@ -14,9 +14,8 @@ import {
   ReservedCommunityTypesService,
   UnitAccessibilityPriorityTypesService,
   UnitTypesService,
-  PreferencesService,
+  MultiselectQuestionsService,
   JurisdictionsService,
-  ProgramsService,
   RequestMfaCodeResponse,
   EnumRequestMfaCodeMfaType,
   EnumLoginMfaType,
@@ -46,8 +45,7 @@ type ContextProps = {
   userService: UserService
   userProfileService: UserProfileService
   authService: AuthService
-  preferencesService: PreferencesService
-  programsService: ProgramsService
+  multiselectQuestionsService: MultiselectQuestionsService
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
@@ -194,8 +192,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     userService: new UserService(),
     userProfileService: new UserProfileService(),
     authService: new AuthService(),
-    preferencesService: new PreferencesService(),
-    programsService: new ProgramsService(),
+    multiselectQuestionsService: new MultiselectQuestionsService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),

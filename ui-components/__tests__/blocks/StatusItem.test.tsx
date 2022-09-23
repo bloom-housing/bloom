@@ -7,7 +7,7 @@ afterEach(cleanup)
 
 describe("<StatusItem>", () => {
   it("renders without error", () => {
-    const { getByText, queryByText } = render(
+    const { getByText } = render(
       <StatusItem
         applicationDueDate={"March 10th, 2022"}
         applicationURL={"application/1234abcd"}

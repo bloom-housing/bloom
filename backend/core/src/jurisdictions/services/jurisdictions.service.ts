@@ -14,8 +14,7 @@ export class JurisdictionsService {
   joinOptions = {
     alias: "jurisdiction",
     leftJoinAndSelect: {
-      programs: "jurisdiction.programs",
-      preferences: "jurisdiction.preferences",
+      multiselectquestions: "jurisdiction.multiselectQuestions",
     },
   }
 

@@ -7,10 +7,10 @@ export class ListingDefaultOnePreferenceSeed extends ListingDefaultSeed {
     return await this.listingRepository.save({
       ...listing,
       name: "Test: Default, One Preference",
-      listingPreferences: [
+      listingMultiselectQuestions: [
         {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference(listing.jurisdiction.name).title,
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(listing.jurisdiction.name).text,
           }),
           ordinal: 1,
           page: 1,

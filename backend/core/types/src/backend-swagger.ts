@@ -1440,19 +1440,19 @@ export class PaperApplicationsService {
   }
 }
 
-export class PreferencesService {
+export class MultiselectQuestionsService {
   /**
-   * List preferences
+   * List multiselect questions
    */
   list(
     params: {
       /**  */
-      filter?: PreferencesFilterParams[]
+      filter?: MultiselectQuestionsFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference[]> {
+  ): Promise<MultiselectQuestion[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { filter: params["filter"] }
@@ -1463,17 +1463,17 @@ export class PreferencesService {
     })
   }
   /**
-   * Create preference
+   * Create multiselect question
    */
   create(
     params: {
       /** requestBody */
-      body?: PreferenceCreate
+      body?: MultiselectQuestionCreate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -1484,7 +1484,7 @@ export class PreferencesService {
     })
   }
   /**
-   * Delete preference by id
+   * Delete multiselect question by id
    */
   delete(
     params: {
@@ -1494,7 +1494,7 @@ export class PreferencesService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences"
+      let url = basePath + "/multiselectQuestions"
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -1505,17 +1505,17 @@ export class PreferencesService {
     })
   }
   /**
-   * Update preference
+   * Update multiselect question
    */
   update(
     params: {
       /** requestBody */
-      body?: PreferenceUpdate
+      body?: MultiselectQuestionUpdate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences/{preferenceId}"
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -1526,127 +1526,18 @@ export class PreferencesService {
     })
   }
   /**
-   * Get preference by id
+   * Get multiselect question by id
    */
   retrieve(
     params: {
       /**  */
-      preferenceId: string
+      multiselectQuestionId: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Preference> {
+  ): Promise<MultiselectQuestion> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/preferences/{preferenceId}"
-      url = url.replace("{preferenceId}", params["preferenceId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-}
-
-export class ProgramsService {
-  /**
-   * List programs
-   */
-  list(
-    params: {
-      /**  */
-      filter?: ProgramsFilterParams[]
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program[]> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { filter: params["filter"] }
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Create program
-   */
-  create(
-    params: {
-      /** requestBody */
-      body?: ProgramCreate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete program by id
-   */
-  delete(
-    params: {
-      /** requestBody */
-      body?: Id
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs"
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Update program
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: ProgramUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get program by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      programId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Program> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/programs/{programId}"
-      url = url.replace("{programId}", params["programId"] + "")
+      let url = basePath + "/multiselectQuestions/{multiselectQuestionId}"
+      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -2603,7 +2494,7 @@ export interface UnitType {
   numBedrooms: number
 }
 
-export interface ApplicationPreferenceOption {
+export interface ApplicationMultiselectQuestionOption {
   /**  */
   key: string
 
@@ -2614,7 +2505,7 @@ export interface ApplicationPreferenceOption {
   extraData?: AllExtraDataTypes[]
 }
 
-export interface ApplicationPreference {
+export interface ApplicationMultiselectQuestion {
   /**  */
   key: string
 
@@ -2622,29 +2513,7 @@ export interface ApplicationPreference {
   claimed: boolean
 
   /**  */
-  options: ApplicationPreferenceOption[]
-}
-
-export interface ApplicationProgramOption {
-  /**  */
-  key: string
-
-  /**  */
-  checked: boolean
-
-  /**  */
-  extraData?: AllExtraDataTypes[]
-}
-
-export interface ApplicationProgram {
-  /**  */
-  key: string
-
-  /**  */
-  claimed: boolean
-
-  /**  */
-  options: ApplicationProgramOption[]
+  options: ApplicationMultiselectQuestionOption[]
 }
 
 export interface Application {
@@ -2739,10 +2608,10 @@ export interface Application {
   income?: string
 
   /**  */
-  preferences: ApplicationPreference[]
+  preferences: ApplicationMultiselectQuestion[]
 
   /**  */
-  programs?: ApplicationProgram[]
+  programs?: ApplicationMultiselectQuestion[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3319,10 +3188,10 @@ export interface ApplicationCreate {
   income?: string
 
   /**  */
-  preferences: ApplicationPreference[]
+  preferences: ApplicationMultiselectQuestion[]
 
   /**  */
-  programs?: ApplicationProgram[]
+  programs?: ApplicationMultiselectQuestion[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3654,10 +3523,10 @@ export interface ApplicationUpdate {
   income?: string
 
   /**  */
-  preferences: ApplicationPreference[]
+  preferences: ApplicationMultiselectQuestion[]
 
   /**  */
-  programs?: ApplicationProgram[]
+  programs?: ApplicationMultiselectQuestion[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3784,10 +3653,7 @@ export interface UserRoles {
 
 export interface Jurisdiction {
   /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
+  multiselectQuestions: Id[]
 
   /**  */
   id: string
@@ -4313,10 +4179,7 @@ export interface JurisdictionCreate {
   enableUtilitiesIncluded: boolean
 
   /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
+  multiselectQuestions: Id[]
 }
 
 export interface JurisdictionUpdate {
@@ -4360,10 +4223,7 @@ export interface JurisdictionUpdate {
   enableUtilitiesIncluded: boolean
 
   /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
+  multiselectQuestions: Id[]
 }
 
 export interface ListingFilterParams {
@@ -4552,80 +4412,7 @@ export interface ListingImage {
   ordinal?: number
 }
 
-export interface FormMetadataExtraData {
-  /**  */
-  type: InputType
-
-  /**  */
-  key: string
-}
-
-export interface FormMetadataOptions {
-  /**  */
-  key: string
-
-  /**  */
-  extraData?: FormMetadataExtraData[]
-
-  /**  */
-  description: boolean
-
-  /**  */
-  exclusive: boolean
-}
-
-export interface FormMetadata {
-  /**  */
-  key: string
-
-  /**  */
-  options: FormMetadataOptions[]
-
-  /**  */
-  hideGenericDecline: boolean
-
-  /**  */
-  customSelectText: string
-
-  /**  */
-  hideFromListing: boolean
-
-  /**  */
-  type: FormMetaDataType
-}
-
-export interface Program {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-}
-
-export interface ListingProgram {
-  /**  */
-  program: Program
-
-  /**  */
-  ordinal?: number
-}
-
-export interface PreferenceLink {
+export interface MultiselectLink {
   /**  */
   title: string
 
@@ -4633,9 +4420,38 @@ export interface PreferenceLink {
   url: string
 }
 
-export interface Preference {
+export interface MultiselectOption {
   /**  */
-  links?: PreferenceLink[]
+  text: string
+
+  /**  */
+  ordinal: number
+
+  /**  */
+  description?: string
+
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  collectAddress?: boolean
+
+  /**  */
+  exclusive?: boolean
+}
+
+export interface MultiselectQuestion {
+  /**  */
+  links?: MultiselectLink[]
+
+  /**  */
+  options?: MultiselectOption[]
+
+  /**  */
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: ApplicationSection
 
   /**  */
   jurisdictions?: IdName[]
@@ -4650,21 +4466,21 @@ export interface Preference {
   updatedAt: Date
 
   /**  */
-  title?: string
+  text: string
 
   /**  */
-  subtitle?: string
+  subText?: string
 
   /**  */
   description?: string
 
   /**  */
-  formMetadata?: FormMetadata
+  optOutText?: string
 }
 
-export interface ListingPreference {
+export interface ListingMultiselectQuestion {
   /**  */
-  preference: Preference
+  multiselectQuestion: MultiselectQuestion
 
   /**  */
   ordinal?: number
@@ -4996,10 +4812,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  listingPrograms?: ListingProgram[]
-
-  /**  */
-  listingPreferences: ListingPreference[]
+  listingMultiselectQuestions: ListingMultiselectQuestion[]
 
   /**  */
   jurisdiction: JurisdictionSlim
@@ -5371,17 +5184,9 @@ export interface UnitsSummaryCreate {
   unitType: Id
 }
 
-export interface ListingPreferenceUpdate {
+export interface ListingMultiselectQuestionUpdate {
   /**  */
-  preference: Id
-
-  /**  */
-  ordinal?: number
-}
-
-export interface ListingProgramUpdate {
-  /**  */
-  program: Id
+  multiselectQuestion: Id
 
   /**  */
   ordinal?: number
@@ -5452,10 +5257,7 @@ export interface ListingCreate {
   unitsSummary?: UnitsSummaryCreate[]
 
   /**  */
-  listingPreferences: ListingPreferenceUpdate[]
-
-  /**  */
-  listingPrograms?: ListingProgramUpdate[]
+  listingMultiselectQuestions: ListingMultiselectQuestionUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5879,10 +5681,7 @@ export interface ListingUpdate {
   unitsSummary?: UnitsSummaryUpdate[]
 
   /**  */
-  listingPreferences: ListingPreferenceUpdate[]
-
-  /**  */
-  listingPrograms?: ListingProgramUpdate[]
+  listingMultiselectQuestions: ListingMultiselectQuestionUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -6062,94 +5861,76 @@ export interface ListingUpdate {
   utilities?: ListingUtilities
 }
 
-export interface PreferencesFilterParams {
+export interface MultiselectQuestionsFilterParams {
   /**  */
-  $comparison: EnumPreferencesFilterParamsComparison
+  $comparison: EnumMultiselectQuestionsFilterParamsComparison
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  applicationSection?: string
 }
 
-export interface PreferenceCreate {
+export interface MultiselectQuestionCreate {
   /**  */
-  links?: PreferenceLink[]
+  links?: MultiselectLink[]
 
   /**  */
-  title?: string
+  options?: MultiselectOption[]
 
   /**  */
-  subtitle?: string
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: ApplicationSection
+
+  /**  */
+  text: string
+
+  /**  */
+  subText?: string
 
   /**  */
   description?: string
 
   /**  */
-  formMetadata?: FormMetadata
+  optOutText?: string
 
   /**  */
   jurisdictions?: IdName[]
 }
 
-export interface PreferenceUpdate {
+export interface MultiselectQuestionUpdate {
   /**  */
-  links?: PreferenceLink[]
+  links?: MultiselectLink[]
 
   /**  */
-  title?: string
+  options?: MultiselectOption[]
 
   /**  */
-  subtitle?: string
+  hideFromListing?: boolean
+
+  /**  */
+  applicationSection: ApplicationSection
+
+  /**  */
+  id: string
+
+  /**  */
+  text: string
+
+  /**  */
+  subText?: string
 
   /**  */
   description?: string
 
   /**  */
-  formMetadata?: FormMetadata
+  optOutText?: string
 
   /**  */
   jurisdictions?: IdName[]
-
-  /**  */
-  id: string
-}
-
-export interface ProgramsFilterParams {
-  /**  */
-  $comparison: EnumProgramsFilterParamsComparison
-
-  /**  */
-  jurisdiction?: string
-}
-
-export interface ProgramCreate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-}
-
-export interface ProgramUpdate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-
-  /**  */
-  id: string
 }
 
 export interface ReservedCommunityTypeCreate {
@@ -6390,6 +6171,7 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
   "mostRecentlyClosed" = "mostRecentlyClosed",
+  "mostRecentlyPublished" = "mostRecentlyPublished",
   "name" = "name",
   "waitlistOpen" = "waitlistOpen",
   "status" = "status",
@@ -6428,9 +6210,9 @@ export enum ListingEventType {
   "lotteryResults" = "lotteryResults",
 }
 
-export enum FormMetaDataType {
-  "radio" = "radio",
-  "checkbox" = "checkbox",
+export enum ApplicationSection {
+  "programs" = "programs",
+  "preferences" = "preferences",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
@@ -6440,14 +6222,7 @@ export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate
-export enum EnumPreferencesFilterParamsComparison {
-  "=" = "=",
-  "<>" = "<>",
-  "IN" = "IN",
-  ">=" = ">=",
-  "NA" = "NA",
-}
-export enum EnumProgramsFilterParamsComparison {
+export enum EnumMultiselectQuestionsFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",
