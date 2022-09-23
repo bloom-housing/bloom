@@ -155,6 +155,7 @@ const Flag = () => {
                   body: { id: data.id },
                   id: data.id,
                 })
+                void mutate(cacheKey)
               }}
             >
               {numberConfirmedApps !== 1

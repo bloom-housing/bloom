@@ -206,6 +206,7 @@ export class ApplicationFlaggedSetsService {
             resolvedTime: new Date(),
             status: FlaggedSetStatus.pending,
             resolvingUser: this.request.user,
+            showConfirmationAlert: false,
           })
           .where("id = :afsId", { afsId: dto.afsId })
           .execute()
