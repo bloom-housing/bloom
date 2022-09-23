@@ -203,7 +203,7 @@ const AgTable = ({
   return (
     <div className={`ag-theme-alpine ag-theme-bloom ${className || ""}`}>
       <div className="flex justify-between flex-col md:flex-row">
-        <div className={`flex flex-wrap ${showSearch ? "" : "hidden"}`}>
+        <div className={`flex flex-wrap ${showSearch ? "mb-5" : "hidden"}`}>
           <div className="md:mr-5 w-full md:w-56">
             <Field
               dataTestId="ag-search-input"
@@ -223,7 +223,7 @@ const AgTable = ({
 
         {headerContent}
       </div>
-      <div className="applications-table mt-5">
+      <div className="applications-table">
         <LoadingOverlay isLoading={data.loading}>
           <div>
             <AgGridReact

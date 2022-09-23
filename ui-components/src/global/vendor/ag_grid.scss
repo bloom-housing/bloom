@@ -103,18 +103,23 @@
     }
   }
 
+  .ag-body-horizontal-scroll {
+    border-bottom: 1px solid var(--bloom-color-gray-500);
+    border-radius: var(--bloom-rounded-md);
+  }
+
   .ag-root-wrapper {
     @apply border-b-0;
     @apply rounded-t-md;
-    @apply rounded-b-none;
+    @apply rounded-b-md;
     overflow: visible;
   }
 
   .ag-layout-auto-height {
     .ag-center-cols-container,
     .ag-center-cols-clipper {
-      // height: auto;
-      min-height: 130px;
+      --table-min-height: 124px;
+      min-height: var(--table-min-height);
     }
   }
 

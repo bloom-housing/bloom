@@ -159,7 +159,7 @@ const Flag = () => {
           )}
           <div className="flex md:flex-row flex-col flex-wrap">
             <div className="md:w-9/12 md:pb-24 pb-8">
-              <p className={"font-semibold"}>{t("flags.selectValidApplications")}</p>
+              <p className={"font-semibold mb-5"}>{t("flags.selectValidApplications")}</p>
               <AgTable
                 id="applications-table"
                 className="w-full m-h-0"
