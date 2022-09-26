@@ -3,7 +3,6 @@ import { Expose, Type } from "class-transformer"
 import {
   ArrayMinSize,
   IsArray,
-  IsDate,
   IsDefined,
   IsEmail,
   IsNotEmpty,

@@ -363,15 +363,12 @@ async function seed() {
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
       await Promise.all([
-        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user1, i),
-        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user2, i),
+        await makeNewApplication(app, listing, unitTypes, user1, i),
+        await makeNewApplication(app, listing, unitTypes, user2, i + 10),
       ])
     }
   }
-  // process duplicate check
-  console.log("processing duplicates check")
   await afsProcessingService.process()
-  console.log("duplicates processed")
 
   await app.close()
 }

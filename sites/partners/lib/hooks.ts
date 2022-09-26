@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from "react"
-import useSWR, { mutate } from "swr"
+import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -238,20 +238,20 @@ export function useFlaggedApplicationsMeta(listingId: string) {
 export function useSingleFlaggedApplication(afsId: string) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
   const fetcher = () =>
     applicationFlaggedSetsService.retrieve({
       afsId,
     })
 
-  const { data, error } = useSWR(endpoint, fetcher)
+  const cacheKey = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
 
-  const revalidate = () => mutate(endpoint)
+  const { data, error } = useSWR(cacheKey, fetcher)
 
   return {
-    revalidate,
+    cacheKey,
     data,
     error,
+    loading: !error && !data,
   }
 }
 

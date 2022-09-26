@@ -1,8 +1,8 @@
 import Link from "next/link"
 
 import { t } from "@bloom-housing/ui-components"
-import { convertDataToPst } from "../../lib/helpers"
-import { ApplicationStatus, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import { convertDataToPst } from "../../../lib/helpers"
+import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 export const getCols = () => [
   {
@@ -11,16 +11,16 @@ export const getCols = () => [
     sortable: false,
     filter: false,
     resizable: true,
-    unSortIcon: true,
-    minWidth: 250,
-    flex: 1,
+    pinned: "left",
     headerCheckboxSelection: true,
     checkboxSelection: true,
     cellRendererFramework: ({ data }) => {
       if (!data?.id && !data?.confirmationCode) return ""
       return <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
     },
+    width: 180,
   },
+
   {
     headerName: t("application.name.firstName"),
     field: "applicant.firstName",
@@ -28,7 +28,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
   },
   {
     headerName: t("application.name.lastName"),
@@ -37,7 +36,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
   },
   {
     headerName: t("applications.table.primaryDob"),
@@ -46,7 +44,6 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
     valueFormatter: ({ value }) => {
       if (!value) return ""
 
@@ -54,6 +51,7 @@ export const getCols = () => [
 
       return isValidDOB ? `${value.birthMonth}/${value.birthDay}/${value.birthYear}` : ""
     },
+    width: 120,
   },
   {
     headerName: t("application.details.type"),
@@ -62,7 +60,12 @@ export const getCols = () => [
     filter: false,
     resizable: true,
     unSortIcon: true,
-    flex: 1,
+    valueGetter: ({ data }) => {
+      return data.submissionType === ApplicationSubmissionType.electronical
+        ? t("application.details.submissionType.digital")
+        : t("application.details.submissionType.paper")
+    },
+    width: 130,
   },
   {
     headerName: t("applications.table.applicationSubmissionDate"),
@@ -70,7 +73,6 @@ export const getCols = () => [
     sortable: false,
     filter: false,
     resizable: true,
-    flex: 1,
     valueGetter: ({ data }) => {
       if (!data?.submissionDate) return ""
 
@@ -87,12 +89,18 @@ export const getCols = () => [
   {
     headerName: t("applications.table.reviewStatus"),
     field: "reviewStatus",
+    pinned: "right",
     sortable: false,
     filter: false,
     resizable: true,
-    flex: 1,
     valueGetter: ({ data }) => {
-      return data.reviewStatus === "flagged" ? t("applications.pendingReview") : data.status
+      if (data.reviewStatus === "valid") return t("applications.valid")
+      if (data.reviewStatus === "pendingAndValid") return t("applications.validPending")
+      if (data.reviewStatus === "duplicate") return t("applications.duplicate")
+      return t("applications.pending")
     },
+    width: 140,
   },
 ]
+
+export default getCols

@@ -1,4 +1,5 @@
 import {
+  ApplicationReviewStatus,
   ApplicationStatus,
   ApplicationSubmissionType,
   ApplicationUpdate,
@@ -13,6 +14,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
       id: listingId,
     },
     language: Language.en,
+    reviewStatus: ApplicationReviewStatus.pending,
     status: ApplicationStatus.submitted,
     submissionType: ApplicationSubmissionType.electronical,
     acceptedTerms: false,
