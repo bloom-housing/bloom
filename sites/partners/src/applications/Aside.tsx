@@ -114,7 +114,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
                 type="button"
                 unstyled
                 fullWidth
-                className="bg-opacity-0 text-red-700"
+                className="bg-opacity-0 text-alert"
                 onClick={() => setDeleteModal(true)}
               >
                 {t("t.delete")}

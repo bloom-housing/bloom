@@ -70,7 +70,7 @@ const ApplicationDates = ({
               </Button>
               <Button
                 type="button"
-                className="font-semibold uppercase text-red-700 my-0"
+                className="font-semibold uppercase text-alert my-0"
                 onClick={() => setModalDeleteOpenHouse(event)}
                 unstyled
               >
