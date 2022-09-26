@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.30...@bloom-housing/ui-components@5.1.1-alpha.31) (2022-09-26)
+
+
+### Bug Fixes
+
+* make pill style on listing card optional ([#3088](https://github.com/bloom-housing/bloom/issues/3088)) ([e574010](https://github.com/bloom-housing/bloom/commit/e57401067639e3e05a426f61dd0c3dc18dcda35d))
+
+
+
+
+
 ## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.29...@bloom-housing/ui-components@5.1.1-alpha.30) (2022-09-26)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
