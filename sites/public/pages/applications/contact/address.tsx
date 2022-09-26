@@ -456,9 +456,7 @@ const ApplicationAddress = () => {
             <div className="form-card__group border-b">
               <fieldset>
                 <legend
-                  className={`field-label--caps ${
-                    errors?.contactPreferences ? "text-red-700" : ""
-                  }`}
+                  className={`field-label--caps ${errors?.contactPreferences ? "text-alert" : ""}`}
                 >
                   {t("application.contact.contactPreference")}
                 </legend>
@@ -479,7 +477,7 @@ const ApplicationAddress = () => {
               <fieldset>
                 <legend
                   className={`field-label--caps ${
-                    errors?.applicant?.workInRegion ? "text-red-700" : ""
+                    errors?.applicant?.workInRegion ? "text-alert" : ""
                   }`}
                 >
                   {t("application.contact.doYouWorkIn", { county: listing?.countyCode })}

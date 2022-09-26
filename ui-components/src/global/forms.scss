@@ -196,7 +196,7 @@
 
   &.error {
     label {
-      @apply text-red-700;
+      @apply text-alert;
     }
 
     .control {
@@ -208,7 +208,7 @@
       }
 
       .prepend {
-        @apply text-red-700;
+        @apply text-alert;
       }
     }
 
@@ -327,7 +327,7 @@ input[type="number"] {
 .error-message {
   display: inline-block;
   @apply text-sm;
-  @apply text-red-700;
+  @apply text-alert;
   @apply tracking-wide;
   @apply leading-5;
   @apply mt-1;

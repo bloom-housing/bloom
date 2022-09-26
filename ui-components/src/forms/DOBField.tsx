@@ -58,7 +58,7 @@ const DOBField = (props: DOBFieldProps) => {
 
   const labelClasses = ["field-label--caps"]
   if (props.readerOnly) labelClasses.push("sr-only")
-  if (hasError) labelClasses.push("text-red-700")
+  if (hasError) labelClasses.push("text-alert")
 
   return (
     <fieldset id={id}>

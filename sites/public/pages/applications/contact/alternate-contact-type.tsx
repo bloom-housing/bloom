@@ -96,7 +96,7 @@ const ApplicationAlternateContactType = () => {
         <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <fieldset>
-              <legend className={`field-label--caps ${errors?.type ? "text-red-700" : ""}`}>
+              <legend className={`field-label--caps ${errors?.type ? "text-alert" : ""}`}>
                 {t("application.alternateContact.type.label")}
               </legend>
               <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>

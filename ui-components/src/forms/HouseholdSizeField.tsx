@@ -66,7 +66,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
       <ErrorMessage
         id={"householdsize-error"}
         error={!!error}
-        className="block mt-0 line-normal text-red-700"
+        className="block mt-0 line-normal text-alert"
       >
         <AlertBox type="alert" inverted onClose={() => clearErrors()}>
           {strings?.dontQualifyHeader ?? t("application.household.dontQualifyHeader")}
