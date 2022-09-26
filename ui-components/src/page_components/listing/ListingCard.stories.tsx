@@ -110,6 +110,22 @@ export const WithHeaders = () => {
   )
 }
 
+export const WithPillHeader = () => {
+  return (
+    <ListingCard
+      imageCardProps={{ ...standardImageCardProps, href: undefined }}
+      tableProps={{ ...standardTableProps }}
+      footerButtons={[{ text: "See Details", href: "see-details-link", ariaHidden: true }]}
+      contentProps={{
+        contentHeader: { content: "Optional content header", href: "listing-link" },
+        contentSubheader: { content: "Optional content subheader" },
+        tableHeader: { content: "Optional table header", isPillType: true },
+        tableSubheader: { content: "Optional table subheader" },
+      }}
+    />
+  )
+}
+
 export const WithTags = () => {
   return (
     <ListingCard
@@ -361,8 +377,8 @@ export const detroitStyle = () => {
           tableProps={{ ...standardTableProps }}
           footerButtons={[{ text: "See Details", href: "see-details-link" }]}
           contentProps={{
-            contentHeader: { text: "Optional content header" },
-            contentSubheader: { text: "Optional content subheader" },
+            contentHeader: { content: "Optional content header" },
+            contentSubheader: { content: "Optional content subheader" },
           }}
           cardTags={[
             { text: "Tag 1 text" },
