@@ -17,7 +17,7 @@ export interface CardHeader {
   href?: string
   customClass?: string
   styleType?: AppearanceStyleType
-  pillType?: boolean
+  isPillType?: boolean
 }
 
 export interface FooterButton {
@@ -80,7 +80,7 @@ const ListingCard = (props: ListingCardProps) => {
     customClass?: string
   ) => {
     if (header && header.content) {
-      if (header.pillType) {
+      if (header.isPillType) {
         return (
           <Tag
             className="listings-pill_header"

@@ -117,13 +117,13 @@ export const getListings = (listings) => {
       return {
         content: t("listings.availableUnits"),
         styleType: AppearanceStyleType.success,
-        pillType: true,
+        isPillType: true,
       }
     } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
       return {
         content: t("listings.waitlist.open"),
         styleType: AppearanceStyleType.primary,
-        pillType: true,
+        isPillType: true,
       }
     }
     return null

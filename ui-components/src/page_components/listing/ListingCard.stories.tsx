@@ -119,7 +119,7 @@ export const WithPillHeader = () => {
       contentProps={{
         contentHeader: { content: "Optional content header", href: "listing-link" },
         contentSubheader: { content: "Optional content subheader" },
-        tableHeader: { content: "Optional table header", pillType: true },
+        tableHeader: { content: "Optional table header", isPillType: true },
         tableSubheader: { content: "Optional table subheader" },
       }}
     />
