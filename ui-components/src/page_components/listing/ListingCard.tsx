@@ -5,7 +5,7 @@ import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
 import { Heading, HeaderType } from "../../headers/Heading"
 import { Tag } from "../../text/Tag"
-import { AppearanceStyleType } from "../../global/AppearanceTypes"
+import { AppearanceShadeType, AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
 import { NavigationContext } from "../../config/NavigationContext"
@@ -16,6 +16,7 @@ export interface CardHeader {
   content: string | React.ReactNode
   href?: string
   customClass?: string
+  styleType?: AppearanceStyleType
 }
 
 export interface FooterButton {
@@ -74,12 +75,26 @@ const ListingCard = (props: ListingCardProps) => {
   const getHeader = (
     header: CardHeader | undefined,
     priority: number,
-    style?: HeaderType,
+    styleType?: HeaderType,
+    pillStyle?: boolean,
     customClass?: string
   ) => {
     if (header && header.content) {
+      if (pillStyle) {
+        return (
+          <Tag
+            className="listings-pill_header"
+            pillStyle
+            capitalized
+            styleType={header.styleType}
+            shade={AppearanceShadeType.light}
+          >
+            {header.content}
+          </Tag>
+        )
+      }
       return (
-        <Heading priority={priority} style={style} className={customClass}>
+        <Heading priority={priority} style={styleType} className={customClass}>
           {header.href ? (
             <LinkComponent className="is-card-link" href={header.href}>
               {header.content}
@@ -97,8 +112,8 @@ const ListingCard = (props: ListingCardProps) => {
   const getContentHeader = () => {
     return (
       <div className="listings-row_headers">
-        {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
-        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
+        {getHeader(contentProps?.contentHeader, 2, "cardHeader", false, "order-1")}
+        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", false, "order-2")}
         {cardTags && cardTags?.length > 0 && (
           <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
@@ -130,7 +145,7 @@ const ListingCard = (props: ListingCardProps) => {
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>
-            {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
+            {getHeader(contentProps?.tableHeader, 4, "tableHeader", true)}
             {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
           </div>
           {children && children}
