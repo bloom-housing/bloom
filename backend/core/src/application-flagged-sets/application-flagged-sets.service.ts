@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Scope } from "@nestjs/common"
+import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { InjectQueue } from "@nestjs/bull"
 import { Queue } from "bull"
 import { AuthzService } from "../auth/services/authz.service"
@@ -17,6 +17,7 @@ import { View } from "./types/view-enum"
 import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
 import { Rule } from "./types/rule-enum"
 import { IdDto } from "../../src/shared/dto/id.dto"
+import { assignDefined } from "../../src/shared/utils/assign-defined"
 import { ApplicationReviewStatus } from "../applications/types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
@@ -113,6 +114,7 @@ export class ApplicationFlaggedSetsService {
         "afs.id",
         "afs.rule",
         "afs.status",
+        "afs.showConfirmationAlert",
         "applications.id",
         "applications.submissionType",
         "applications.confirmationCode",
@@ -139,6 +141,19 @@ export class ApplicationFlaggedSetsService {
     }
 
     return await qb.getOneOrFail()
+  }
+
+  async resetConfirmationAlert(id: string) {
+    const obj = await this.afsRepository.findOne({
+      where: {
+        id,
+      },
+    })
+    if (!obj) {
+      throw new NotFoundException()
+    }
+    assignDefined(obj, { ...obj, showConfirmationAlert: false })
+    await this.afsRepository.save(obj)
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {
@@ -191,6 +206,7 @@ export class ApplicationFlaggedSetsService {
             resolvedTime: new Date(),
             status: FlaggedSetStatus.pending,
             resolvingUser: this.request.user,
+            showConfirmationAlert: false,
           })
           .where("id = :afsId", { afsId: dto.afsId })
           .execute()
@@ -231,6 +247,7 @@ export class ApplicationFlaggedSetsService {
             resolvedTime: new Date(),
             status: FlaggedSetStatus.resolved,
             resolvingUser: this.request.user,
+            showConfirmationAlert: true,
           })
           .where("id = :afsId", { afsId: dto.afsId })
           .execute()

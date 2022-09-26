@@ -312,6 +312,27 @@ export class ApplicationFlaggedSetsService {
     })
   }
   /**
+   * Reset flagged set confirmation alert
+   */
+  resetConfirmationAlert(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Trigger the duplicate check process
    */
   process(options: IRequestOptions = {}): Promise<string> {
@@ -2889,6 +2910,11 @@ export interface ApplicationFlaggedSetResolve {
   status: EnumApplicationFlaggedSetResolveStatus
 }
 
+export interface Status {
+  /**  */
+  status: string
+}
+
 export interface Asset {
   /**  */
   id: string
@@ -4061,11 +4087,6 @@ export interface Email {
 
   /**  */
   appUrl?: string
-}
-
-export interface Status {
-  /**  */
-  status: string
 }
 
 export interface Confirm {
