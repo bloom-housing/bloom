@@ -26,7 +26,7 @@ const ApplicationHouseholdStudent = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, getValues } = useForm<Record<string, any>>({
     defaultValues: { householdStudent: application.householdStudent?.toString() },
     shouldFocusError: false,
   })
@@ -105,14 +105,20 @@ const ApplicationHouseholdStudent = () => {
           >
             <fieldset>
               <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
                 type="radio"
                 name="householdStudent"
                 error={errors.householdStudent}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}
-                validation={{ required: true }}
                 fields={householdStudentValues}
                 dataTestId={"app-student"}
+                validation={{
+                  validate: () => {
+                    return !!Object.values(getValues()).filter((value) => value).length
+                  },
+                }}
               />
             </fieldset>
           </div>

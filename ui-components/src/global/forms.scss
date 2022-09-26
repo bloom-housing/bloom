@@ -230,7 +230,7 @@
 
   &.error {
     label {
-      @apply text-red-700;
+      @apply text-alert;
     }
 
     .control {
@@ -242,7 +242,7 @@
       }
 
       .prepend {
-        @apply text-red-700;
+        @apply text-alert;
       }
     }
 
@@ -355,17 +355,16 @@ input[type="number"] {
 .field-note {
   @apply text-tiny;
   @apply text-gray-700;
-  @apply font-semibold;
   white-space: pre-line;
 }
 
 .error-message {
   display: inline-block;
   @apply text-sm;
-  @apply text-red-700;
+  @apply text-alert;
   @apply tracking-wide;
   @apply leading-5;
-  @apply mt-2;
+  @apply mt-1;
 }
 
 .field-sub-note {

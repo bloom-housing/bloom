@@ -81,6 +81,7 @@ const Field = (props: FieldProps) => {
     if (props.type === "radio") {
       labelClasses.push("font-semibold")
     }
+    if (props.error) labelClasses.push("text-alert")
 
     return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
