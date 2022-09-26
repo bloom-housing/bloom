@@ -145,25 +145,26 @@ const Flag = () => {
               {isSuccess ? t("t.updated") : t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
-          {data?.showConfirmationAlert && (
-            <AlertBox
-              className="md:w-9/12 mb-5"
-              type={"success"}
-              closeable
-              onClose={async () => {
-                await applicationFlaggedSetsService?.resetConfirmationAlert({
-                  body: { id: data.id },
-                })
-                void mutate(cacheKey)
-              }}
-            >
-              {numberConfirmedApps !== 1
-                ? t("flags.confirmationAlertPlural", { amount: numberConfirmedApps })
-                : t("flags.confirmationAlertSingular")}
-            </AlertBox>
-          )}
+
           <div className="flex md:flex-row flex-col flex-wrap">
             <div className="md:w-9/12 md:pb-24 pb-8">
+              {data?.showConfirmationAlert && (
+                <AlertBox
+                  className="mb-5 mt-1"
+                  type={"success"}
+                  closeable
+                  onClose={async () => {
+                    await applicationFlaggedSetsService?.resetConfirmationAlert({
+                      body: { id: data.id },
+                    })
+                    void mutate(cacheKey)
+                  }}
+                >
+                  {numberConfirmedApps !== 1
+                    ? t("flags.confirmationAlertPlural", { amount: numberConfirmedApps })
+                    : t("flags.confirmationAlertSingular")}
+                </AlertBox>
+              )}
               <p className={"font-semibold mb-5"}>{t("flags.selectValidApplications")}</p>
               <AgTable
                 id="applications-table"
