@@ -44,7 +44,7 @@ export const getLinkCellFormatter = (router: NextRouter) =>
       this.linkWithId.innerText = params.value
 
       this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
+        void router.push(`/application/${applicationId}/review`)
       })
     }
 

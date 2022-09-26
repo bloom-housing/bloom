@@ -35,7 +35,6 @@ import DetailApplicationDates from "../../../src/listings/PaperListingDetails/se
 import DetailPreferences from "../../../src/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../src/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
-import { useFlaggedApplicationsList } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -45,12 +44,6 @@ export default function ListingDetail(props: ListingProps) {
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
-
-  const { data: flaggedApps } = useFlaggedApplicationsList({
-    listingId: listing.id,
-    page: 1,
-    limit: 1,
-  })
 
   if (!listing) return null
 
@@ -68,7 +61,6 @@ export default function ListingDetail(props: ListingProps) {
               listingId={listing.id}
               tabs={{
                 show: listing.status !== ListingStatus.pending,
-                flagsQty: flaggedApps?.meta?.totalFlagged,
                 listingLabel: t("t.listingSingle"),
                 applicationsLabel: t("nav.applications"),
               }}

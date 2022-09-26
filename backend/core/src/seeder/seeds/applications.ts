@@ -12,6 +12,7 @@ import { User } from "../../auth/entities/user.entity"
 import { Application } from "../../applications/entities/application.entity"
 import { ApplicationsService } from "../../applications/services/applications.service"
 import { ApplicationCreateDto } from "../../applications/dto/application-create.dto"
+import { ApplicationReviewStatus } from "../../applications/types/application-review-status-enum"
 
 const getApplicationCreateDtoTemplate = (
   jurisdictionString: string
@@ -226,29 +227,62 @@ export const makeNewApplication = async (
   user?: User,
   pos = 0
 ) => {
-  const dto: ApplicationCreateDto = JSON.parse(
+  let dto: ApplicationCreateDto = JSON.parse(
     JSON.stringify(getApplicationCreateDtoTemplate(jurisdictionString))
   )
+  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
+
   dto.listing = listing
   dto.preferredUnit = unitTypes
+  if (pos === 0 || pos === 10) {
+    dto.reviewStatus = ApplicationReviewStatus.pending
+  }
+  // modifications set up
   const splitEmail = dto.applicant.emailAddress.split("@")
-  dto.applicant.emailAddress = `${splitEmail[0]}${pos ?? ""}@${splitEmail[1]}`
-  dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""}`
-  dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""}`
-  const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
+  const modifiedEmail = `${splitEmail[0]}${pos}@${splitEmail[1]}`
+  const modifiedFirstName = `${dto.applicant.firstName}${pos}`
+  const modifiedLastName = `${dto.applicant.lastName}${pos}`
+
+  // modifications to applicant
+  dto.applicant.firstName = modifiedFirstName
+  dto.applicant.lastName = modifiedLastName
+  dto.applicant.emailAddress = modifiedEmail
+
+  // modifications to householdmembers
+  if (dto.householdMembers?.length) {
+    dto.householdMembers.forEach((mem) => {
+      const splitEmail = mem.emailAddress.split("@")
+      mem.emailAddress = `${splitEmail[0]}${pos}+${modifiedFirstName}@${splitEmail[1]}`
+      mem.firstName = `${modifiedFirstName}_${mem.firstName}${pos}`
+      mem.lastName = `${modifiedLastName}_${mem.lastName}${pos}`
+    })
+  }
+
   await applicationRepo.save({
     ...dto,
     user,
     confirmationCode: ApplicationsService.generateConfirmationCode(),
   })
 
-  if (pos === 0) {
+  if (pos === 0 || pos === 10) {
     // create a flagged duplicate by email
-    dto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
+    dto = JSON.parse(JSON.stringify(getApplicationCreateDtoTemplate(jurisdictionString)))
     dto.listing = listing
     dto.preferredUnit = unitTypes
-    dto.applicant.firstName = `${dto.applicant.firstName}${pos ?? ""} B`
-    dto.applicant.lastName = `${dto.applicant.lastName}${pos ?? ""} B`
+    dto.reviewStatus = ApplicationReviewStatus.pending
+    // modifications to applicant
+    dto.applicant.firstName = `${modifiedFirstName} B`
+    dto.applicant.lastName = `${modifiedLastName} B`
+    dto.applicant.emailAddress = modifiedEmail
+    // modifications to householdmembers
+    if (dto.householdMembers?.length) {
+      dto.householdMembers.forEach((mem) => {
+        const splitEmail = mem.emailAddress.split("@")
+        mem.emailAddress = `${splitEmail[0]}${pos}+${modifiedFirstName}HHEmail@${splitEmail[1]}`
+        mem.firstName = `${modifiedFirstName}_${mem.firstName}${pos} HHEmail`
+        mem.lastName = `${modifiedLastName}_${mem.lastName}${pos} HHEmail`
+      })
+    }
 
     await applicationRepo.save({
       ...dto,
@@ -257,10 +291,23 @@ export const makeNewApplication = async (
     })
 
     // create a flagged duplicate by name and DOB
-    dto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
+    dto = JSON.parse(JSON.stringify(getApplicationCreateDtoTemplate(jurisdictionString)))
     dto.listing = listing
     dto.preferredUnit = unitTypes
-    dto.applicant.emailAddress = `${splitEmail[0]}${pos ?? ""}B@${splitEmail[1]}`
+    dto.reviewStatus = ApplicationReviewStatus.pending
+    // modifications to applicant
+    dto.applicant.firstName = modifiedFirstName
+    dto.applicant.lastName = modifiedLastName
+    dto.applicant.emailAddress = `${modifiedEmail}B`
+    // modifications to householdmembers
+    if (dto.householdMembers?.length) {
+      dto.householdMembers.forEach((mem) => {
+        const splitEmail = mem.emailAddress.split("@")
+        mem.emailAddress = `${splitEmail[0]}${pos}+${modifiedFirstName}HHName@${splitEmail[1]}`
+        mem.firstName = `${modifiedFirstName}_${mem.firstName}${pos} HHName`
+        mem.lastName = `${modifiedLastName}_${mem.lastName}${pos} HHName`
+      })
+    }
 
     await applicationRepo.save({
       ...dto,

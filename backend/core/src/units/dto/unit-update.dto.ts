@@ -1,6 +1,6 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
 import { UnitRentTypeUpdateDto } from "../../unit-rent-types/dto/unit-rent-type.dto"

@@ -42,6 +42,8 @@ import { ApplicationStatus } from "../types/application-status-enum"
 import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
 import { IncomePeriod } from "../types/income-period-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { ApplicationProgram } from "./application-program.entity"
+import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Entity({ name: "applications" })
 @Unique(["listing", "confirmationCode"])
@@ -278,4 +280,10 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   confirmationCode: string
+
+  @Column({ enum: ApplicationReviewStatus, default: ApplicationReviewStatus.valid })
+  @Expose()
+  @IsEnum(ApplicationReviewStatus, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ApplicationReviewStatus, enumName: "ApplicationReviewStatus" })
+  reviewStatus?: ApplicationReviewStatus | null
 }

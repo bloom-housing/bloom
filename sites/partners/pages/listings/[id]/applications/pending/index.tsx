@@ -45,9 +45,6 @@ const ApplicationsList = () => {
     {
       headerName: t("applications.duplicates.duplicateGroup"),
       field: "id",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       cellRenderer: "formatLinkCell",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
@@ -55,13 +52,12 @@ const ApplicationsList = () => {
 
         return `${applicant.firstName} ${applicant.lastName}: ${data.rule}`
       },
+      flex: 1,
+      minWidth: 250,
     },
     {
       headerName: t("applications.duplicates.primaryApplicant"),
       field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       valueGetter: ({ data }) => {
         if (!data?.applications?.length) return ""
         const applicant = data.applications[0]?.applicant
@@ -70,21 +66,18 @@ const ApplicationsList = () => {
       },
     },
     {
+      headerName: t("t.rule"),
+      field: "rule",
+      width: 150,
+    },
+    {
       headerName: t("applications.pendingReview"),
       field: "",
-      sortable: false,
-      filter: false,
-      pinned: "left",
       valueGetter: ({ data }) => {
         return `${data?.applications?.length ?? 0}`
       },
-    },
-    {
-      headerName: t("t.rule"),
-      field: "rule",
-      sortable: false,
-      filter: false,
-      pinned: "left",
+      type: "rightAligned",
+      width: 100,
     },
   ]
 
@@ -96,7 +89,7 @@ const ApplicationsList = () => {
       this.linkWithId.innerText = params.value
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
+        void router.push(`/application/${applicationId}/review`)
       })
     }
     getGui() {
@@ -109,6 +102,7 @@ const ApplicationsList = () => {
       this.disabledLink = document.createElement("button")
       this.disabledLink.innerText = params.value
       this.disabledLink.classList.add("text-gray-750")
+      this.disabledLink.classList.add("cursor-default")
     }
     getGui() {
       return this.disabledLink
@@ -150,8 +144,8 @@ const ApplicationsList = () => {
 
       <ListingStatusBar status={listingDto?.status} />
 
-      <section>
-        <article className="flex items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
+      <section className={"bg-gray-200 pt-4"}>
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
           {listingDto && (
             <>
               <ApplicationsSideNav
@@ -172,7 +166,6 @@ const ApplicationsList = () => {
                 )}
                 <AgTable
                   id="applications-table"
-                  className="w-full"
                   pagination={{
                     perPage: tableOptions.pagination.itemsPerPage,
                     setPerPage: tableOptions.pagination.setItemsPerPage,
@@ -192,18 +185,12 @@ const ApplicationsList = () => {
                   }}
                   search={{
                     setSearch: tableOptions.filter.setFilterValue,
+                    showSearch: false,
                   }}
                   sort={{
                     setSort: tableOptions.sort.setSortOptions,
                   }}
                 />
-
-                {/* <div className="flex flex-row justify-end">
-              <div className="mt-5">
-                <span>Last Updated 06/17/22 at 9:00am</span>
-                <Button className="mx-1 ml-5">{t("applications.scanForDuplicates")}</Button>
-              </div>
-            </div> */}
               </div>
             </>
           )}
