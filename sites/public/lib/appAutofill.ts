@@ -35,6 +35,7 @@ class AutofillCleaner {
     this.application.acceptedTerms = false
     this.application.status = ApplicationStatus.submitted
     this.application.preferences = []
+    this.application.programs = []
 
     return this
   }

@@ -22,15 +22,19 @@ export interface ColumnOrder {
 }
 
 export interface AgTableProps {
-  className?: string
   config: AgTableConfig
   data: AgTableData
-  headerContent?: React.ReactNode
   id: string
   pagination?: AgTablePagination
   search: AgTableSearch
   selectConfig?: AgTableSelectConfig
   sort?: AgTableSort
+  headerContent?: React.ReactNode
+  className?: string
+  strings?: {
+    filter?: string
+    searchError?: string
+  }
 }
 
 export interface AgTablePagination {
@@ -105,6 +109,7 @@ const AgTable = ({
   pagination,
   search: { setSearch, showSearch = true },
   sort: { setSort } = {},
+  strings,
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
@@ -208,15 +213,17 @@ const AgTable = ({
             <Field
               dataTestId="ag-search-input"
               name="filter-input"
-              label={t("t.filter")}
+              label={strings?.filter ?? t("t.filter")}
               readerOnly={true}
               register={register}
-              placeholder={t("t.filter")}
+              placeholder={strings?.filter ?? t("t.filter")}
             />
           </div>
           <div className="w-full md:w-auto mt-2 md:mt-0 mb-2 md:mb-0">
             {!validSearch && (
-              <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
+              <AlertBox type="notice">
+                {strings?.searchError ?? t("applications.table.searchError")}
+              </AlertBox>
             )}
           </div>
         </div>

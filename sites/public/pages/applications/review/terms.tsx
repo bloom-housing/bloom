@@ -14,9 +14,16 @@ import {
   AlertBox,
   ProgressNav,
 } from "@bloom-housing/ui-components"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
@@ -29,7 +36,10 @@ const ApplicationTerms = () => {
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const currentPageSection = 5
+  let currentPageSection = 4
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+    currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
@@ -40,7 +50,7 @@ const ApplicationTerms = () => {
     const acceptedTerms = data.agree === "agree"
     conductor.currentStep.save({ acceptedTerms })
     application.acceptedTerms = acceptedTerms
-    application.completedSections = 5
+    application.completedSections = 6
     applicationsService
       .submit({
         body: {

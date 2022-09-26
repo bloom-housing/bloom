@@ -35,7 +35,6 @@ const translationRepositoryMock = {}
 
 const translationServiceMock = {
   getTranslationByLanguageAndJurisdictionOrDefaultEn: (language) => {
-    // console.log("foooo = ", language, jurisdiction)
     return language === "es"
       ? {
           jurisdictionId: "",
@@ -69,6 +68,24 @@ const translationServiceMock = {
                 lottery:
                   "Eligible applicants will be placed in order <strong>based on preference and lottery rank</strong>.",
               },
+              eligible: {
+                fcfs:
+                  "Eligibile applicants will be contacted on a first come first serve basis until vacancies are filled.",
+                fcfsPreference:
+                  "Housing preferences, if applicable, will affect first come first serve order.",
+                lottery:
+                  "Once the application period closes, eligible applicants will be placed in order based on lottery rank order.",
+                lotteryPreference:
+                  "Housing preferences, if applicable, will affect lottery rank order.",
+                waitlist:
+                  "Eligibile applicants will be placed on the waitlist on a first come first serve basis until waitlist spots are filled.",
+                waitlistPreference:
+                  "Housing preferences, if applicable, will affect waitlist order.",
+                waitlistContact:
+                  "You may be contacted while on the waitlist to confirm that you wish to remain on the waitlist.",
+              },
+              interview:
+                "If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.",
               contactedForAnInterview:
                 "If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents.",
               prepareForNextSteps: "Prepare for next steps",
@@ -77,7 +94,6 @@ const translationServiceMock = {
               readHowYouCanPrepare: "Read about how you can prepare for next steps",
               needToMakeUpdates: "Need to make updates?",
               ifYouNeedToUpdateInformation: "",
-
               shouldBeChosen:
                 "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
               subject: "Your Application Confirmation",
@@ -224,7 +240,13 @@ describe("EmailService", () => {
       // TODO Remove BaseEntity from inheritance from all entities
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      await service.confirmation(listing, application, "http://localhost:3000")
+      await service.confirmation(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { ...listing, reviewOrderType: ListingReviewOrder.firstComeFirstServe },
+        application,
+        "http://localhost:3000"
+      )
 
       expect(sendMock).toHaveBeenCalled()
       const emailMock = sendMock.mock.calls[0][0]
@@ -236,7 +258,7 @@ describe("EmailService", () => {
       expect(emailMock.html).toMatch("Your Confirmation Number")
       expect(emailMock.html).toMatch("Marisela Baca")
       expect(emailMock.html).toMatch(
-        /Eligible applicants will be placed in order based on <strong>first come first serve<\/strong> basis./
+        /Eligibile applicants will be contacted on a first come first serve basis until vacancies are filled./
       )
       expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
       // contains application id
@@ -256,7 +278,7 @@ describe("EmailService", () => {
 
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.html).toMatch(
-        /The lottery will be held on December 31, 2019. Eligible applicants will be placed in order <strong>based on preference and lottery rank<\/strong>./
+        /Once the application period closes, eligible applicants will be placed in order based on lottery rank order./
       )
     })
 

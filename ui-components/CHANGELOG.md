@@ -3,6 +3,218 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.30...@bloom-housing/ui-components@5.1.1-alpha.31) (2022-09-26)
+
+
+### Bug Fixes
+
+* make pill style on listing card optional ([#3088](https://github.com/bloom-housing/bloom/issues/3088)) ([e574010](https://github.com/bloom-housing/bloom/commit/e57401067639e3e05a426f61dd0c3dc18dcda35d))
+
+
+
+
+
+## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.29...@bloom-housing/ui-components@5.1.1-alpha.30) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.28...@bloom-housing/ui-components@5.1.1-alpha.29) (2022-09-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.27...@bloom-housing/ui-components@5.1.1-alpha.28) (2022-09-19)
+
+
+### Features
+
+* add confirm modal when copying a preference ([#3041](https://github.com/bloom-housing/bloom/issues/3041)) ([b3d69e9](https://github.com/bloom-housing/bloom/commit/b3d69e9b557998489c828c86ff742c91feca799f))
+
+
+
+
+
+## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.26...@bloom-housing/ui-components@5.1.1-alpha.27) (2022-09-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.25...@bloom-housing/ui-components@5.1.1-alpha.26) (2022-09-16)
+
+
+### Bug Fixes
+
+* updated css class naming ([#483](https://github.com/bloom-housing/bloom/issues/483)) ([#3073](https://github.com/bloom-housing/bloom/issues/3073)) ([bfd68de](https://github.com/bloom-housing/bloom/commit/bfd68de406b1785676e6453afd1536159096d080))
+
+
+
+
+
+## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.24...@bloom-housing/ui-components@5.1.1-alpha.25) (2022-09-14)
+
+
+### Features
+
+* allow alerts to be sticky under page header ([#3050](https://github.com/bloom-housing/bloom/issues/3050)) ([d776e84](https://github.com/bloom-housing/bloom/commit/d776e84f76a8bde3f24d1c6706ed35dd777dc66b))
+
+
+
+
+
+## [5.1.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.23...@bloom-housing/ui-components@5.1.1-alpha.24) (2022-09-13)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.22...@bloom-housing/ui-components@5.1.1-alpha.23) (2022-09-12)
+
+
+### Bug Fixes
+
+* add unit tests to partners ([#3023](https://github.com/bloom-housing/bloom/issues/3023)) ([92889f5](https://github.com/bloom-housing/bloom/commit/92889f56f1fc6dc54be207ca0cf3dd9ce58176d1))
+
+
+
+
+
+## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.21...@bloom-housing/ui-components@5.1.1-alpha.22) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.20...@bloom-housing/ui-components@5.1.1-alpha.21) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.19...@bloom-housing/ui-components@5.1.1-alpha.20) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.18...@bloom-housing/ui-components@5.1.1-alpha.19) (2022-08-31)
+
+
+### Bug Fixes
+
+* table columns should take up full width ([#3005](https://github.com/bloom-housing/bloom/issues/3005)) ([5524049](https://github.com/bloom-housing/bloom/commit/5524049f248151b1d3510feb1ea73a7775f7f4d5))
+
+
+
+
+
+## [5.1.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.17...@bloom-housing/ui-components@5.1.1-alpha.18) (2022-08-31)
+
+
+### Bug Fixes
+
+* null app fee showing null string ([#3016](https://github.com/bloom-housing/bloom/issues/3016)) ([05e28ad](https://github.com/bloom-housing/bloom/commit/05e28ad9f887dcfff5567af96e97be50c86b2109))
+
+
+
+
+
+## [5.1.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.16...@bloom-housing/ui-components@5.1.1-alpha.17) (2022-08-30)
+
+
+### Bug Fixes
+
+* **login:** too many login attempts fix ([#2988](https://github.com/bloom-housing/bloom/issues/2988)) ([4323e1c](https://github.com/bloom-housing/bloom/commit/4323e1c4cee18d8ee805378b32ae35826013d5c4))
+
+
+
+
+
+## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.15...@bloom-housing/ui-components@5.1.1-alpha.16) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.14...@bloom-housing/ui-components@5.1.1-alpha.15) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.13...@bloom-housing/ui-components@5.1.1-alpha.14) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.12...@bloom-housing/ui-components@5.1.1-alpha.13) (2022-08-26)
+
+
+### Bug Fixes
+
+* add margin in contact section ([#2999](https://github.com/bloom-housing/bloom/issues/2999)) ([4acb49a](https://github.com/bloom-housing/bloom/commit/4acb49acf17ebabb7a0a34160d992cb5f63eeb02))
+
+
+
+
+
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.11...@bloom-housing/ui-components@5.1.1-alpha.12) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.10...@bloom-housing/ui-components@5.1.1-alpha.11) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.9...@bloom-housing/ui-components@5.1.1-alpha.10) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.8...@bloom-housing/ui-components@5.1.1-alpha.9) (2022-08-22)
 
 

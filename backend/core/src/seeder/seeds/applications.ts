@@ -14,36 +14,20 @@ import { ApplicationsService } from "../../applications/services/applications.se
 import { ApplicationCreateDto } from "../../applications/dto/application-create.dto"
 import { ApplicationReviewStatus } from "../../applications/types/application-review-status-enum"
 
-const applicationCreateDtoTemplate: Omit<
-  ApplicationCreateDto,
-  "user" | "listing" | "listingId" | "preferredUnit"
-> = {
-  acceptedTerms: true,
-  accessibility: {
-    hearing: false,
-    mobility: false,
-    vision: false,
-  },
-  additionalPhone: false,
-  additionalPhoneNumber: undefined,
-  additionalPhoneNumberType: undefined,
-  alternateAddress: {
-    city: "city",
-    county: "county",
-    latitude: 52.0,
-    longitude: 50,
-    placeName: "Place Name",
-    state: "state",
-    street: "street",
-    street2: "street2",
-    zipCode: "zip code",
-  },
-  alternateContact: {
-    agency: "agency",
-    emailAddress: "test@example.com",
-    firstName: "First",
-    lastName: "Last",
-    mailingAddress: {
+const getApplicationCreateDtoTemplate = (
+  jurisdictionString: string
+): Omit<ApplicationCreateDto, "user" | "listing" | "listingId" | "preferredUnit"> => {
+  return {
+    acceptedTerms: true,
+    accessibility: {
+      hearing: false,
+      mobility: false,
+      vision: false,
+    },
+    additionalPhone: false,
+    additionalPhoneNumber: undefined,
+    additionalPhoneNumberType: undefined,
+    alternateAddress: {
       city: "city",
       county: "county",
       latitude: 52.0,
@@ -54,57 +38,28 @@ const applicationCreateDtoTemplate: Omit<
       street2: "street2",
       zipCode: "zip code",
     },
-    otherType: "other",
-    phoneNumber: "(123) 123-1231",
-    type: "friend",
-  },
-  appUrl: "",
-  applicant: {
-    address: {
-      city: "city",
-      county: "county",
-      latitude: 52.0,
-      longitude: 50,
-      placeName: "Place Name",
-      state: "state",
-      street: "street",
-      street2: "street2",
-      zipCode: "zip code",
+    alternateContact: {
+      agency: "agency",
+      emailAddress: "test@example.com",
+      firstName: "First",
+      lastName: "Last",
+      mailingAddress: {
+        city: "city",
+        county: "county",
+        latitude: 52.0,
+        longitude: 50,
+        placeName: "Place Name",
+        state: "state",
+        street: "street",
+        street2: "street2",
+        zipCode: "zip code",
+      },
+      otherType: "other",
+      phoneNumber: "(123) 123-1231",
+      type: "friend",
     },
-    birthDay: "03",
-    birthMonth: "04",
-    birthYear: "1990",
-    emailAddress: "test@example.com",
-    firstName: "First",
-    lastName: "Last",
-    middleName: "Middle",
-    noEmail: false,
-    noPhone: false,
-    phoneNumber: "(123) 123-1231",
-    phoneNumberType: "cell",
-    workAddress: {
-      city: "city",
-      county: "county",
-      latitude: 52.0,
-      longitude: 50,
-      placeName: "Place Name",
-      state: "state",
-      street: "street",
-      street2: "street2",
-      zipCode: "zip code",
-    },
-    workInRegion: "no",
-  },
-  contactPreferences: [],
-  demographics: {
-    ethnicity: null,
-    gender: null,
-    howDidYouHear: ["email", "facebook"],
-    race: ["asian", "filipino"],
-    sexualOrientation: null,
-  },
-  householdMembers: [
-    {
+    appUrl: "",
+    applicant: {
       address: {
         city: "city",
         county: "county",
@@ -116,20 +71,17 @@ const applicationCreateDtoTemplate: Omit<
         street2: "street2",
         zipCode: "zip code",
       },
-      birthDay: "30",
-      birthMonth: "01",
-      birthYear: "1960",
-      emailAddress: "household@example.com",
+      birthDay: "03",
+      birthMonth: "04",
+      birthYear: "1990",
+      emailAddress: "test@example.com",
       firstName: "First",
       lastName: "Last",
       middleName: "Middle",
       noEmail: false,
       noPhone: false,
-      orderId: 1,
       phoneNumber: "(123) 123-1231",
       phoneNumberType: "cell",
-      relationship: "parent",
-      sameAddress: "no",
       workAddress: {
         city: "city",
         county: "county",
@@ -143,94 +95,141 @@ const applicationCreateDtoTemplate: Omit<
       },
       workInRegion: "no",
     },
-  ],
-  householdSize: 2,
-  housingStatus: "status",
-  income: "5000.00",
-  incomePeriod: IncomePeriod.perMonth,
-  incomeVouchers: false,
-  householdExpectingChanges: false,
-  householdStudent: false,
-  language: Language.en,
-  mailingAddress: {
-    city: "city",
-    county: "county",
-    latitude: 52.0,
-    longitude: 50,
-    placeName: "Place Name",
-    state: "state",
-    street: "street",
-    street2: "street2",
-    zipCode: "zip code",
-  },
-  preferences: [
-    {
-      key: "liveWork",
-      claimed: true,
-      options: [
-        {
-          key: "live",
-          checked: true,
-          extraData: [],
-        },
-        {
-          key: "work",
-          checked: false,
-          extraData: [],
-        },
-      ],
+    contactPreferences: [],
+    demographics: {
+      ethnicity: null,
+      gender: null,
+      howDidYouHear: ["email", "facebook"],
+      race: ["asian", "filipino"],
+      sexualOrientation: null,
     },
-    {
-      key: "displacedTenant",
-      claimed: true,
-      options: [
-        {
-          key: "general",
-          checked: true,
-          extraData: [
-            {
-              key: "name",
-              type: InputType.text,
-              value: "Roger Thornhill",
-            },
-            {
-              key: "address",
-              type: InputType.address,
-              value: {
-                street: "Street",
-                street2: "Street2",
-                city: "City",
-                state: "state",
-                zipCode: "100200",
-                county: "Alameda",
-                latitude: null,
-                longitude: null,
+    householdMembers: [
+      {
+        address: {
+          city: "city",
+          county: "county",
+          latitude: 52.0,
+          longitude: 50,
+          placeName: "Place Name",
+          state: "state",
+          street: "street",
+          street2: "street2",
+          zipCode: "zip code",
+        },
+        birthDay: "30",
+        birthMonth: "01",
+        birthYear: "1960",
+        emailAddress: "household@example.com",
+        firstName: "First",
+        lastName: "Last",
+        middleName: "Middle",
+        noEmail: false,
+        noPhone: false,
+        orderId: 1,
+        phoneNumber: "(123) 123-1231",
+        phoneNumberType: "cell",
+        relationship: "parent",
+        sameAddress: "no",
+        workAddress: {
+          city: "city",
+          county: "county",
+          latitude: 52.0,
+          longitude: 50,
+          placeName: "Place Name",
+          state: "state",
+          street: "street",
+          street2: "street2",
+          zipCode: "zip code",
+        },
+        workInRegion: "no",
+      },
+    ],
+    householdSize: 2,
+    housingStatus: "status",
+    income: "5000.00",
+    incomePeriod: IncomePeriod.perMonth,
+    incomeVouchers: false,
+    householdExpectingChanges: false,
+    householdStudent: false,
+    language: Language.en,
+    mailingAddress: {
+      city: "city",
+      county: "county",
+      latitude: 52.0,
+      longitude: 50,
+      placeName: "Place Name",
+      state: "state",
+      street: "street",
+      street2: "street2",
+      zipCode: "zip code",
+    },
+    preferences: [
+      {
+        key: `Live/Work in County - ${jurisdictionString}`,
+        claimed: true,
+        options: [
+          {
+            key: "Live in County",
+            checked: true,
+            extraData: [],
+          },
+          {
+            key: "Work in County",
+            checked: false,
+            extraData: [],
+          },
+        ],
+      },
+      {
+        key: `Displacee Tenant Housing - ${jurisdictionString}`,
+        claimed: true,
+        options: [
+          {
+            key: "General",
+            checked: true,
+            extraData: [
+              {
+                key: "address",
+                type: InputType.address,
+                value: {
+                  street: "Street",
+                  street2: "Street2",
+                  city: "City",
+                  state: "state",
+                  zipCode: "100200",
+                  county: "Alameda",
+                  latitude: null,
+                  longitude: null,
+                },
               },
-            },
-          ],
-        },
-        {
-          key: "missionCorridor",
-          checked: false,
-          extraData: [],
-        },
-      ],
-    },
-  ],
-  sendMailToMailingAddress: true,
-  status: ApplicationStatus.submitted,
-  submissionDate: new Date(),
-  submissionType: ApplicationSubmissionType.electronical,
+            ],
+          },
+          {
+            key: "Mission Corridor",
+            checked: false,
+            extraData: [],
+          },
+        ],
+      },
+    ],
+    sendMailToMailingAddress: true,
+    status: ApplicationStatus.submitted,
+    submissionDate: new Date(),
+    submissionType: ApplicationSubmissionType.electronical,
+  }
 }
 
 export const makeNewApplication = async (
   app: INestApplicationContext,
   listing: Listing,
   unitTypes: UnitType[],
+  jurisdictionString: string,
   user?: User,
   pos = 0
 ) => {
-  let dto: ApplicationCreateDto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
+  let dto: ApplicationCreateDto = JSON.parse(
+    JSON.stringify(getApplicationCreateDtoTemplate(jurisdictionString))
+  )
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
 
   dto.listing = listing
@@ -267,7 +266,7 @@ export const makeNewApplication = async (
 
   if (pos === 0 || pos === 10) {
     // create a flagged duplicate by email
-    dto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
+    dto = JSON.parse(JSON.stringify(getApplicationCreateDtoTemplate(jurisdictionString)))
     dto.listing = listing
     dto.preferredUnit = unitTypes
     dto.reviewStatus = ApplicationReviewStatus.pending
@@ -292,7 +291,7 @@ export const makeNewApplication = async (
     })
 
     // create a flagged duplicate by name and DOB
-    dto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
+    dto = JSON.parse(JSON.stringify(getApplicationCreateDtoTemplate(jurisdictionString)))
     dto.listing = listing
     dto.preferredUnit = unitTypes
     dto.reviewStatus = ApplicationReviewStatus.pending

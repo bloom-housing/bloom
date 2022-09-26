@@ -55,3 +55,24 @@ export const FieldGroupDescriptions = () => {
     />
   )
 }
+
+export const FieldGroupError = () => {
+  const { register } = useForm({ mode: "onChange" })
+  return (
+    <FieldGroup
+      error={true}
+      register={register}
+      name={"testInput"}
+      type={"checkbox"}
+      fields={[
+        { id: "1234", label: "Input 1" },
+        { id: "5678", label: "Input 2" },
+      ]}
+      fieldGroupClassName={"field-group-classname"}
+      fieldClassName={"field-classname"}
+      fieldLabelClassName={"text-primary"}
+      groupNote={"Group Note"}
+      groupLabel={"Group Label"}
+    />
+  )
+}

@@ -1,5 +1,5 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultUnits } from "./shared"
+import { getDefaultUnits, getTayProgram } from "./shared"
 import { BaseEntity } from "typeorm"
 import { defaultAmiChart } from "../ami-charts/default-ami-chart"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
@@ -29,7 +29,14 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
     const newListing = await this.listingRepository.save({
       ...listing,
       name: "Test: Default, BMR Chart",
-      preferences: [],
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getTayProgram(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 1,
+        },
+      ],
     })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = bmrUnits.map((unit) => {

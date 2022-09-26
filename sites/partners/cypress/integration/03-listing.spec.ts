@@ -47,7 +47,7 @@ describe("Listing Management Tests", () => {
       cy.getByID("monthlyRent").type(listing["monthlyRent"])
       cy.getByID("priorityType.id").select(listing["priorityType.id"])
       cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
-      cy.get("#addPreferenceButton").contains("Add Preference").click()
+      cy.get("#add-preferences-button").contains("Add Preference").click()
       cy.get(".border > .button").contains("Select Preferences").click()
       cy.get(":nth-child(1) > .grid-section__inner > .field > div > .label")
         .contains("Live/Work in County")

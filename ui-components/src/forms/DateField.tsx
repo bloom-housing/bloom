@@ -25,6 +25,15 @@ export interface DateFieldProps {
   required?: boolean
   watch: UseFormMethods["watch"]
   dataTestId?: string
+  strings?: {
+    dateError?: string
+    day?: string
+    dayPlaceholder?: string
+    month?: string
+    monthPlaceholder?: string
+    year?: string
+    yearPlaceholder?: string
+  }
 }
 
 const DateField = (props: DateFieldProps) => {
@@ -44,10 +53,10 @@ const DateField = (props: DateFieldProps) => {
       <div className="field-group--date">
         <Field
           name={getFieldName("month")}
-          label={t("t.month")}
+          label={props.strings?.month ?? t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder={t("account.settings.placeholders.month")}
+          placeholder={props.strings?.monthPlaceholder ?? t("account.settings.placeholders.month")}
           defaultValue={defaultDate?.month ?? ""}
           error={error?.month !== undefined}
           validation={{
@@ -65,10 +74,10 @@ const DateField = (props: DateFieldProps) => {
         />
         <Field
           name={getFieldName("day")}
-          label={t("t.day")}
+          label={props.strings?.day ?? t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder={t("account.settings.placeholders.day")}
+          placeholder={props.strings?.dayPlaceholder ?? t("account.settings.placeholders.day")}
           defaultValue={defaultDate?.day ?? ""}
           error={error?.day !== undefined}
           validation={{
@@ -86,10 +95,10 @@ const DateField = (props: DateFieldProps) => {
         />
         <Field
           name={getFieldName("year")}
-          label={t("t.year")}
+          label={props.strings?.year ?? t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
-          placeholder={t("account.settings.placeholders.year")}
+          placeholder={props.strings?.yearPlaceholder ?? t("account.settings.placeholders.year")}
           defaultValue={defaultDate?.year ?? ""}
           error={error?.year !== undefined}
           validation={{
@@ -113,7 +122,7 @@ const DateField = (props: DateFieldProps) => {
       {(error?.month || error?.day || error?.year) && (
         <div className="field error">
           <span id={`${id}-error`} className="error-message">
-            {errorMessage ? errorMessage : t("errors.dateError")}
+            {errorMessage ? errorMessage : props.strings?.dateError ?? t("errors.dateError")}
           </span>
         </div>
       )}

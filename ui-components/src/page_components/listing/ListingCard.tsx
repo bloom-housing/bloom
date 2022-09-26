@@ -5,7 +5,7 @@ import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
 import { Heading, HeaderType } from "../../headers/Heading"
 import { Tag } from "../../text/Tag"
-import { AppearanceStyleType } from "../../global/AppearanceTypes"
+import { AppearanceShadeType, AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
 import { NavigationContext } from "../../config/NavigationContext"
@@ -16,6 +16,8 @@ export interface CardHeader {
   content: string | React.ReactNode
   href?: string
   customClass?: string
+  styleType?: AppearanceStyleType
+  isPillType?: boolean
 }
 
 export interface FooterButton {
@@ -74,12 +76,25 @@ const ListingCard = (props: ListingCardProps) => {
   const getHeader = (
     header: CardHeader | undefined,
     priority: number,
-    style?: HeaderType,
+    styleType?: HeaderType,
     customClass?: string
   ) => {
     if (header && header.content) {
+      if (header.isPillType) {
+        return (
+          <Tag
+            className="listings-pill_header"
+            pillStyle
+            capitalized
+            styleType={header.styleType}
+            shade={AppearanceShadeType.light}
+          >
+            {header.content}
+          </Tag>
+        )
+      }
       return (
-        <Heading priority={priority} style={style} className={customClass}>
+        <Heading priority={priority} style={styleType} className={customClass}>
           {header.href ? (
             <LinkComponent className="is-card-link" href={header.href}>
               {header.content}

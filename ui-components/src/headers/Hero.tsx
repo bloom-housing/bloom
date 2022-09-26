@@ -14,6 +14,9 @@ export interface HeroProps {
   secondaryButtonLink?: string
   secondaryButtonTitle?: string
   title: React.ReactNode
+  strings?: {
+    allApplicationsClosed?: string
+  }
 }
 
 const HeroButton = (props: { title: string; href: string; className?: string }) => (
@@ -26,7 +29,11 @@ const Hero = (props: HeroProps) => {
   let subHeader, styles
   let classNames = ""
   if (props.allApplicationsClosed) {
-    subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+    subHeader = (
+      <h2 className="hero__subtitle">
+        {props.strings?.allApplicationsClosed ?? t("welcome.allApplicationClosed")}
+      </h2>
+    )
   } else if (props.children) {
     subHeader = <h2 className="hero__subtitle">{props.children}</h2>
   }

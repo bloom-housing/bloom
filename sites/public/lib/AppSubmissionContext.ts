@@ -1,12 +1,12 @@
 import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
-import { blankApplication } from "@bloom-housing/shared-helpers"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { blankApplication, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 
 export const retrieveApplicationConfig = (listing: Listing) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
   const config = {
-    sections: ["you", "household", "income"],
+    sections: ["you", "household"],
     languages: ["en", "es", "zh", "vi", "tl"],
     steps: [
       {
@@ -54,20 +54,30 @@ export const retrieveApplicationConfig = (listing: Listing) => {
       {
         name: "householdStudent",
       },
-      {
-        name: "programs",
-      },
-      {
-        name: "vouchersSubsidies",
-      },
-      {
-        name: "income",
-      },
     ],
   }
 
+  // conditionally add programs
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) {
+    config.sections.push("programs")
+    config.steps.push({
+      name: "programs",
+    })
+  }
+
+  config.sections.push("income")
+
+  config.steps.push(
+    {
+      name: "vouchersSubsidies",
+    },
+    {
+      name: "income",
+    }
+  )
+
   // conditionally add preferences
-  if (listing.listingPreferences.length) {
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length) {
     config.sections.push("preferences")
     config.steps.push(
       {

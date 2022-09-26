@@ -67,18 +67,18 @@ const ApplicationConfirmation = () => {
     <FormsLayout>
       <FormCard>
         <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
+          <h1 className="form-card__title is-borderless">
             {t("application.review.confirmation.title")}
             {listing?.name}
-          </h2>
+          </h1>
         </div>
 
         {imageUrl && <img src={imageUrl} alt={listing?.name} />}
 
         <div className="form-card__group border-b text-center">
-          <h3 className="form-card__paragraph-title">
+          <h2 className="form-card__paragraph-title">
             {t("application.review.confirmation.lotteryNumber")}
-          </h3>
+          </h2>
 
           <p
             id="confirmationCode"

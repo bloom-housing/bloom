@@ -68,10 +68,10 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
       tinted
       inset
     >
-      {application.householdSize >= 1 ? (
+      {application?.householdMembers?.length ? (
         <MinimalTable headers={householdMembersHeaders} data={householdMembersData} />
       ) : (
-        <span className="text-base font-semibold">{t("t.none")}</span>
+        <span className="font-semibold">{t("t.none")}</span>
       )}
     </GridSection>
   )

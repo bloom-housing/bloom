@@ -1,65 +1,160 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useMemo, useEffect } from "react"
 import Head from "next/head"
+import { useSWRConfig } from "swr"
+
+import {
+  ApplicationSection,
+  MultiselectQuestion,
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
+} from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
-  AppearanceStyleType,
-  AppearanceBorderType,
   Button,
-  Icon,
-  IconFillColors,
   LoadingOverlay,
   MinimalTable,
   NavigationHeader,
-  Modal,
   SiteAlert,
   StandardCard,
   t,
+  AlertTypes,
+  useMutate,
+  Modal,
+  AppearanceStyleType,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import Layout from "../../layouts"
-import { useJurisdictionalPreferenceList } from "../../lib/hooks"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
+import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
+import ManageIconSection from "../../src/settings/ManageIconSection"
+
+export type DrawerType = "add" | "edit"
 
 const Settings = () => {
-  const { profile } = useContext(AuthContext)
+  const { mutate } = useSWRConfig()
 
-  const [deleteModal, setDeleteModal] = useState(false)
-  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState(false)
+  const { profile, multiselectQuestionsService } = useContext(AuthContext)
 
-  const { data, loading } = useJurisdictionalPreferenceList(
+  const { mutate: updateQuestion, isLoading: isUpdateLoading } = useMutate()
+  const { mutate: createQuestion, isLoading: isCreateLoading } = useMutate()
+
+  const [preferenceDrawerOpen, setPreferenceDrawerOpen] = useState<DrawerType | null>(null)
+  const [copyModalOpen, setCopyModalOpen] = useState<MultiselectQuestion>(null)
+  const [questionData, setQuestionData] = useState<MultiselectQuestion>(null)
+  const [updatedIds, setUpdatedIds] = useState<string[]>([])
+
+  const [alertMessage, setAlertMessage] = useState({
+    type: "alert" as AlertTypes,
+    message: undefined,
+  })
+
+  const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.reduce((acc, curr) => {
       return `${acc}${","}${curr.id}`
-    }, "")
+    }, ""),
+    ApplicationSection.preferences
   )
 
-  const iconContent = () => {
-    return (
-      <div className={"flex justify-end"}>
-        <div className={"w-max"}>
-          <button onClick={() => setPreferenceDrawerOpen(true)}>
-            <Icon
-              symbol={faPenToSquare}
-              size={"medium"}
-              fill={IconFillColors.primary}
-              className={"mr-5"}
-            />
-          </button>
-          <button onClick={() => alert("copy")}>
-            <Icon
-              symbol={faClone}
-              size={"medium"}
-              fill={IconFillColors.primary}
-              className={"mr-5"}
-            />
-          </button>
-          <button onClick={() => setDeleteModal(true)}>
-            <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
-          </button>
-        </div>
-      </div>
-    )
+  const tableData = useMemo(() => {
+    return data
+      ?.sort((a, b) => {
+        const aChar = a.text.toUpperCase()
+        const bChar = b.text.toUpperCase()
+        if (aChar === bChar)
+          return a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0
+        return aChar.localeCompare(bChar)
+      })
+      .map((preference) => {
+        // const rowClass = updatedIds.indexOf(preference.id) >= 0 ? "bg-gray-400" : ""
+        return {
+          name: {
+            content: preference?.text,
+          },
+          jurisdiction: {
+            content: preference?.jurisdictions?.reduce((acc, item, index) => {
+              return `${acc}${index > 0 ? ", " : ""}${item.name}`
+            }, ""),
+          },
+
+          updated: {
+            content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
+          },
+          icons: {
+            content: (
+              <ManageIconSection
+                onCopy={() => setCopyModalOpen(preference)}
+                copyTestId={`preference-copy-icon: ${preference.text}`}
+                onEdit={() => {
+                  setQuestionData(preference)
+                  setPreferenceDrawerOpen("edit")
+                }}
+                editTestId={`preference-edit-icon: ${preference.text}`}
+              />
+            ),
+          },
+        }
+      })
+  }, [updatedIds, data])
+
+  useEffect(() => {
+    if (!isCreateLoading) {
+      setCopyModalOpen(null)
+    }
+  }, [isCreateLoading])
+
+  const saveQuestion = (
+    formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
+    requestType: DrawerType
+  ) => {
+    if (requestType === "edit") {
+      void updateQuestion(() =>
+        multiselectQuestionsService
+          .update({
+            body: { ...formattedData, id: questionData.id },
+          })
+          .then((result) => {
+            setUpdatedIds(
+              updatedIds.find((existingId) => existingId === result.id)
+                ? updatedIds
+                : [...updatedIds, result.id]
+            )
+            setAlertMessage({ message: t(`settings.preferenceAlertUpdated`), type: "success" })
+          })
+          .catch((e) => {
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setPreferenceDrawerOpen(null)
+            void mutate(cacheKey)
+          })
+      )
+    } else {
+      void createQuestion(() =>
+        multiselectQuestionsService
+          .create({
+            body: formattedData,
+          })
+          .then((result) => {
+            setUpdatedIds(
+              updatedIds.find((existingId) => existingId === result.id)
+                ? updatedIds
+                : [...updatedIds, result.id]
+            )
+            setAlertMessage({ message: t(`settings.preferenceAlertCreated`), type: "success" })
+          })
+          .catch((e) => {
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
+            console.log(e)
+          })
+          .finally(() => {
+            setPreferenceDrawerOpen(null)
+            void mutate(cacheKey)
+          })
+      )
+    }
   }
 
   const getCardContent = () => {
@@ -75,20 +170,7 @@ const Settings = () => {
               icons: "",
             }}
             cellClassName={"px-5 py-3"}
-            data={data?.map((preference) => {
-              return {
-                name: { content: preference?.title },
-                jurisdiction: {
-                  content: preference?.jurisdictions?.reduce((acc, item, index) => {
-                    return `${acc}${index > 0 ? ", " : ""}${item.name}`
-                  }, ""),
-                },
-                updated: {
-                  content: dayjs(preference?.updatedAt).format("MM/DD/YYYY"),
-                },
-                icons: { content: iconContent() },
-              }
-            })}
+            data={tableData}
           />
         ) : (
           <div className={"ml-5 mb-5"}>{t("t.none")}</div>
@@ -103,21 +185,27 @@ const Settings = () => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-
-        <NavigationHeader className="relative" title={t("t.settings")}>
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="success" timeout={5000} dismissable />
-            <SiteAlert type="alert" timeout={5000} dismissable />
-          </div>
-        </NavigationHeader>
-
+        <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} sticky={true} />
+        <NavigationHeader className="relative" title={t("t.settings")} />
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
             <LoadingOverlay isLoading={loading}>
               <StandardCard
                 title={t("t.preferences")}
                 emptyStateMessage={t("t.none")}
-                footer={<Button size={AppearanceSizeType.small}>{t("t.addItem")}</Button>}
+                footer={
+                  <Button
+                    size={AppearanceSizeType.small}
+                    onClick={() => {
+                      setQuestionData(null)
+                      setPreferenceDrawerOpen("add")
+                    }}
+                    dataTestId={"preference-add-item"}
+                    disabled={loading}
+                  >
+                    {t("t.addItem")}
+                  </Button>
+                }
               >
                 {getCardContent()}
               </StandardCard>
@@ -125,40 +213,51 @@ const Settings = () => {
           </article>
         </section>
       </Layout>
+      <PreferenceDrawer
+        drawerOpen={!!preferenceDrawerOpen}
+        questionData={questionData}
+        setQuestionData={setQuestionData}
+        drawerType={preferenceDrawerOpen}
+        onDrawerClose={() => {
+          setPreferenceDrawerOpen(null)
+          void mutate(cacheKey)
+        }}
+        saveQuestion={saveQuestion}
+        isLoading={isCreateLoading || isUpdateLoading}
+      />
       <Modal
-        open={!!deleteModal}
-        title={t("t.areYouSure")}
-        ariaDescription={t("listings.closeThisListing")}
-        onClose={() => setDeleteModal(false)}
+        open={!!copyModalOpen}
+        title={t("t.copy")}
+        ariaDescription={t("listings.listingIsAlreadyLive")}
+        onClose={() => setCopyModalOpen(null)}
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.alert}
+            styleType={AppearanceStyleType.primary}
             onClick={() => {
-              setDeleteModal(false)
+              saveQuestion({ ...copyModalOpen, text: `${copyModalOpen.text} (Copy)` }, "add")
             }}
+            dataTestId={"copy-button-confirm"}
+            loading={isCreateLoading}
           >
-            {t("t.delete")}
+            {t("settings.copy")}
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
+            styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
-              setDeleteModal(false)
+              setCopyModalOpen(null)
             }}
+            disabled={isCreateLoading}
+            dataTestId={"copy-button-cancel"}
           >
             {t("t.cancel")}
           </Button>,
         ]}
       >
-        {t("settings.preferenceDelete")}
+        {t("settings.createCopyDescription")}
       </Modal>
-      <PreferenceDrawer
-        drawerOpen={preferenceDrawerOpen}
-        setDrawerOpen={setPreferenceDrawerOpen}
-        defaultValues={undefined}
-      />
     </>
   )
 }

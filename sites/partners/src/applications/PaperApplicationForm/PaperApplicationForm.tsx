@@ -9,12 +9,13 @@ import {
   StatusBar,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   HouseholdMember,
   Application,
   ApplicationStatus,
+  ApplicationSection,
   ApplicationReviewStatus,
 } from "@bloom-housing/backend-core/types"
 import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
@@ -24,11 +25,10 @@ import { FormPrimaryApplicant } from "./sections/FormPrimaryApplicant"
 import { FormAlternateContact } from "./sections/FormAlternateContact"
 import { FormHouseholdMembers } from "./sections/FormHouseholdMembers"
 import { FormHouseholdDetails } from "./sections/FormHouseholdDetails"
-import { FormPreferences } from "./sections/FormPreferences"
 import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
-import { FormPrograms } from "./sections/FormPrograms"
+import { FormMultiselectQuestions } from "./sections/FormMultiselectQuestions"
 
 import { Aside } from "../Aside"
 import { FormTypes } from "./FormTypes"
@@ -45,12 +45,13 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
 
-  const preferences = listingDto?.listingPreferences
-  const programs = listingDto?.listingPrograms
-  const countyCode = listingDto?.countyCode
+  const preferences = listingSectionQuestions(listingDto, ApplicationSection.preferences)
+
+  const programs = listingSectionQuestions(listingDto, ApplicationSection.programs)
+
   const units = listingDto?.units
 
-  const defaultValues = editMode ? mapApiToForm(application) : {}
+  const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -107,7 +108,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       data: formData,
       listingId,
       editMode,
-      programs: programs.map((item) => item.program),
+      programs: programs.map((item) => item?.multiselectQuestion),
+      preferences: preferences.map((item) => item?.multiselectQuestion),
     })
 
     try {
@@ -205,11 +207,19 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       applicationAccessibilityFeatures={application?.accessibility}
                     />
 
-                    <FormPreferences preferences={preferences} county={countyCode} />
-
-                    <FormPrograms programs={programs} county={countyCode} />
+                    <FormMultiselectQuestions
+                      questions={programs}
+                      applicationSection={ApplicationSection.programs}
+                      sectionTitle={t("application.details.programs")}
+                    />
 
                     <FormHouseholdIncome />
+
+                    <FormMultiselectQuestions
+                      questions={preferences}
+                      applicationSection={ApplicationSection.preferences}
+                      sectionTitle={t("application.details.preferences")}
+                    />
 
                     <FormDemographics formValues={application?.demographics} />
 

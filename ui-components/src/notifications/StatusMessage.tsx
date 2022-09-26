@@ -8,6 +8,10 @@ import "./StatusMessage.scss"
 export interface StatusMessagesProps {
   lastTimestamp?: string
   children?: React.ReactNode
+  strings?: {
+    lastUpdated?: string
+    statusHistory?: string
+  }
 }
 
 export const StatusMessages = (props: StatusMessagesProps) => {
@@ -17,7 +21,7 @@ export const StatusMessages = (props: StatusMessagesProps) => {
         {props.lastTimestamp && (
           <li className="status-message">
             <div className="status-message__note text-center">
-              {t("t.lastUpdated")}: {props.lastTimestamp}
+              {props.strings?.lastUpdated ?? t("t.lastUpdated")}: {props.lastTimestamp}
             </div>
           </li>
         )}
@@ -26,7 +30,9 @@ export const StatusMessages = (props: StatusMessagesProps) => {
   } else {
     return (
       <>
-        <h3 className="status-messages__title">{t("t.statusHistory")}</h3>
+        <h3 className="status-messages__title">
+          {props.strings?.statusHistory ?? t("t.statusHistory")}
+        </h3>
         <ul className="status-messages">{props.children}</ul>
       </>
     )

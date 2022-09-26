@@ -18,6 +18,7 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
+import { ListingAvailability } from "../listings/types/listing-availability-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -133,7 +134,6 @@ export class EmailService {
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
     const jurisdiction = await this.getListingJurisdiction(listing)
     void (await this.loadTranslations(jurisdiction, application.language || Language.en))
-    let eligibleApplicantsText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
@@ -143,29 +143,31 @@ export class EmailService {
       )
     }
 
-    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-      const lotteryText = []
-      if (listing.applicationDueDate) {
-        lotteryText.push(
-          this.polyglot.t("confirmation.eligibleApplicants.lotteryDate", {
-            lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
-          })
-        )
-      }
-      lotteryText.push(this.polyglot.t("confirmation.eligibleApplicants.lottery"))
-      eligibleApplicantsText = new Handlebars.SafeString(lotteryText.join(" "))
-    } else {
-      // for when listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe
-      eligibleApplicantsText = new Handlebars.SafeString(
-        this.polyglot.t("confirmation.eligibleApplicants.FCFS")
-      )
+    let eligibleText
+    let preferenceText
+    let contactText = null
+    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
+      eligibleText = this.polyglot.t("confirmation.eligible.fcfs")
+      preferenceText = this.polyglot.t("confirmation.eligible.fcfsPreference")
     }
+    if (listing.listingAvailability === ListingAvailability.openWaitlist) {
+      eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
+      contactText = this.polyglot.t("confirmation.eligible.waitlistContact")
+      preferenceText = this.polyglot.t("confirmation.eligible.waitlistPreference")
+    }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
+      eligibleText = this.polyglot.t("confirmation.eligible.lottery")
+      preferenceText = this.polyglot.t("confirmation.eligible.lotteryPreference")
+    }
+
     const user = {
       firstName: application.applicant.firstName,
       middleName: application.applicant.middleName,
       lastName: application.applicant.lastName,
     }
+
     const nextStepsUrl = this.polyglot.t("confirmation.nextStepsUrl")
+
     await this.send(
       application.applicant.emailAddress,
       jurisdiction.emailFromAddress,
@@ -179,7 +181,10 @@ export class EmailService {
         listing,
         listingUrl,
         application,
-        eligibleApplicantsText,
+        preferenceText,
+        interviewText: this.polyglot.t("confirmation.interview"),
+        eligibleText,
+        contactText,
         nextStepsUrl: nextStepsUrl != "confirmation.nextStepsUrl" ? nextStepsUrl : null,
         user,
       })

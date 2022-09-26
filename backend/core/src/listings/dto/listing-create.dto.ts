@@ -10,9 +10,8 @@ import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
-import { ListingPreferenceUpdateDto } from "../../preferences/dto/listing-preference-update.dto"
-import { ListingProgramUpdateDto } from "../../program/dto/listing-program-update.dto"
 import { ListingImageUpdateDto } from "./listing-image-update.dto"
+import { ListingMultiselectQuestionUpdateDto } from "../../multiselect-question/dto/listing-multiselect-question-update.dto"
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -37,8 +36,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "result",
   "unitsSummary",
   "referralApplication",
-  "listingPreferences",
-  "listingPrograms",
+  "listingMultiselectQuestions",
   "publishedAt",
   "closedAt",
   "afsLastRunAt",
@@ -140,12 +138,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreferenceUpdateDto)
-  listingPreferences: ListingPreferenceUpdateDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingProgramUpdateDto)
-  listingPrograms?: ListingProgramUpdateDto[]
+  @Type(() => ListingMultiselectQuestionUpdateDto)
+  listingMultiselectQuestions: ListingMultiselectQuestionUpdateDto[]
 }

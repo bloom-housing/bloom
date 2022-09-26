@@ -3,6 +3,277 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.47...@bloom-housing/shared-helpers@5.1.1-alpha.48) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.46...@bloom-housing/shared-helpers@5.1.1-alpha.47) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.45...@bloom-housing/shared-helpers@5.1.1-alpha.46) (2022-09-23)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.44...@bloom-housing/shared-helpers@5.1.1-alpha.45) (2022-09-22)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.43...@bloom-housing/shared-helpers@5.1.1-alpha.44) (2022-09-19)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.42...@bloom-housing/shared-helpers@5.1.1-alpha.43) (2022-09-16)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.41...@bloom-housing/shared-helpers@5.1.1-alpha.42) (2022-09-16)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.40...@bloom-housing/shared-helpers@5.1.1-alpha.41) (2022-09-14)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.39...@bloom-housing/shared-helpers@5.1.1-alpha.40) (2022-09-13)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.38...@bloom-housing/shared-helpers@5.1.1-alpha.39) (2022-09-13)
+
+
+### Bug Fixes
+
+* return N/A string if rent and income is NaN ([#3040](https://github.com/bloom-housing/bloom/issues/3040)) ([be5c1a1](https://github.com/bloom-housing/bloom/commit/be5c1a1c7d68395264ea9bf7ddacf8c2ca9bfbef))
+
+
+
+
+
+## [5.1.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.37...@bloom-housing/shared-helpers@5.1.1-alpha.38) (2022-09-12)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.36...@bloom-housing/shared-helpers@5.1.1-alpha.37) (2022-09-09)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.35...@bloom-housing/shared-helpers@5.1.1-alpha.36) (2022-09-08)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.34...@bloom-housing/shared-helpers@5.1.1-alpha.35) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.33...@bloom-housing/shared-helpers@5.1.1-alpha.34) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.32...@bloom-housing/shared-helpers@5.1.1-alpha.33) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.31...@bloom-housing/shared-helpers@5.1.1-alpha.32) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.30...@bloom-housing/shared-helpers@5.1.1-alpha.31) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.29...@bloom-housing/shared-helpers@5.1.1-alpha.30) (2022-08-30)
+
+
+### Bug Fixes
+
+* **login:** too many login attempts fix ([#2988](https://github.com/bloom-housing/bloom/issues/2988)) ([4323e1c](https://github.com/bloom-housing/bloom/commit/4323e1c4cee18d8ee805378b32ae35826013d5c4))
+
+
+
+
+
+## [5.1.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.28...@bloom-housing/shared-helpers@5.1.1-alpha.29) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.27...@bloom-housing/shared-helpers@5.1.1-alpha.28) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.26...@bloom-housing/shared-helpers@5.1.1-alpha.27) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.25...@bloom-housing/shared-helpers@5.1.1-alpha.26) (2022-08-26)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.24...@bloom-housing/shared-helpers@5.1.1-alpha.25) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.23...@bloom-housing/shared-helpers@5.1.1-alpha.24) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.22...@bloom-housing/shared-helpers@5.1.1-alpha.23) (2022-08-24)
+
+
+### Features
+
+* adds the ability to manage preference for partner admins ([#2985](https://github.com/bloom-housing/bloom/issues/2985)) ([0f1f470](https://github.com/bloom-housing/bloom/commit/0f1f470f00f4ef95a2e35a921701339fb813f1f5))
+
+
+
+
+
+## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.21...@bloom-housing/shared-helpers@5.1.1-alpha.22) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.20...@bloom-housing/shared-helpers@5.1.1-alpha.21) (2022-08-24)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.19...@bloom-housing/shared-helpers@5.1.1-alpha.20) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.18...@bloom-housing/shared-helpers@5.1.1-alpha.19) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [5.1.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.17...@bloom-housing/shared-helpers@5.1.1-alpha.18) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.16...@bloom-housing/shared-helpers@5.1.1-alpha.17) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
 ## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@5.1.1-alpha.15...@bloom-housing/shared-helpers@5.1.1-alpha.16) (2022-08-22)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
