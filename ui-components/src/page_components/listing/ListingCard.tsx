@@ -112,8 +112,8 @@ const ListingCard = (props: ListingCardProps) => {
   const getContentHeader = () => {
     return (
       <div className="listings-row_headers">
-        {getHeader(contentProps?.contentHeader, 2, "largePrimary", false, "order-1")}
-        {getHeader(contentProps?.contentSubheader, 3, "mediumNormal", false, "order-2")}
+        {getHeader(contentProps?.contentHeader, 2, "largePrimary", "order-1")}
+        {getHeader(contentProps?.contentSubheader, 3, "mediumNormal", "order-2")}
         {cardTags && cardTags?.length > 0 && (
           <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
