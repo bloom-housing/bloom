@@ -22,10 +22,8 @@ export interface ColumnOrder {
 }
 
 export interface AgTableProps {
-  className?: string
   config: AgTableConfig
   data: AgTableData
-  headerContent?: React.ReactNode
   id: string
   pagination?: AgTablePagination
   search: AgTableSearch
