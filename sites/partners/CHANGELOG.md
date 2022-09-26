@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.49...@bloom-housing/partners@5.1.1-alpha.50) (2022-09-26)
+
+
+### Bug Fixes
+
+* append copy text to copied preferences ([#3084](https://github.com/bloom-housing/bloom/issues/3084)) ([4881c9f](https://github.com/bloom-housing/bloom/commit/4881c9f09842af14662585ca09852c86c1c3881d))
+
+
+
+
+
 ## [5.1.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@5.1.1-alpha.48...@bloom-housing/partners@5.1.1-alpha.49) (2022-09-26)
 
 **Note:** Version bump only for package @bloom-housing/partners
