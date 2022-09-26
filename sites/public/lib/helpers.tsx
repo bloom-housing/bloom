@@ -114,9 +114,17 @@ export const getListings = (listings) => {
 
   const generateTableSubHeader = (listing) => {
     if (listing.listingAvailability === ListingAvailability.availableUnits) {
-      return { content: t("listings.availableUnits"), styleType: AppearanceStyleType.success }
+      return {
+        content: t("listings.availableUnits"),
+        styleType: AppearanceStyleType.success,
+        pillType: true,
+      }
     } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
-      return { content: t("listings.waitlist.open"), styleType: AppearanceStyleType.primary }
+      return {
+        content: t("listings.waitlist.open"),
+        styleType: AppearanceStyleType.primary,
+        pillType: true,
+      }
     }
     return null
   }
