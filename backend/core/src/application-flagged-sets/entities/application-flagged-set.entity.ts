@@ -1,13 +1,13 @@
 import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
-import { IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDate, IsEnum, IsOptional, IsString, ValidateNested, IsBoolean } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
-import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
 import { Rule } from "../types/rule-enum"
+import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
 
 @Entity()
 @Index(["listing"])
@@ -16,7 +16,7 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Expose()
   @IsEnum(Rule, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  rule: string
+  rule: Rule
 
   @Column({ nullable: false, unique: true })
   @Expose()
@@ -37,11 +37,6 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Type(() => User)
   resolvingUser: User
 
-  @Column({ enum: FlaggedSetStatus, nullable: false, default: FlaggedSetStatus.flagged })
-  @Expose()
-  @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
-  status: FlaggedSetStatus
-
   @ManyToMany(() => Application)
   @JoinTable({ name: "application_flagged_set_applications_applications" })
   @Expose()
@@ -53,4 +48,14 @@ export class ApplicationFlaggedSet extends AbstractEntity {
 
   @Column()
   listingId: string
+
+  @Column({ type: "bool", nullable: false, default: false })
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  showConfirmationAlert: boolean
+
+  @Column({ enum: FlaggedSetStatus, nullable: false, default: FlaggedSetStatus.pending })
+  @Expose()
+  @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
+  status: FlaggedSetStatus
 }

@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { PaperApplication } from "../entities/paper-application.entity"

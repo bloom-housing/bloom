@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Request,
   UseGuards,
@@ -17,6 +18,7 @@ import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { mapTo } from "../shared/mapTo"
+import { StatusDto } from "../shared/dto/status.dto"
 import { ApplicationFlaggedSetsService } from "./application-flagged-sets.service"
 import { ApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
 import { PaginatedApplicationFlaggedSetDto } from "./dto/paginated-application-flagged-set.dto"
@@ -24,6 +26,7 @@ import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-r
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ApplicationFlaggedSetsCronjobConsumer } from "./application-flagged-sets-cronjob-consumer"
 import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("/applicationFlaggedSets")
 @ApiTags("applicationFlaggedSets")
@@ -76,6 +79,16 @@ export class ApplicationFlaggedSetsController {
     @Body() dto: ApplicationFlaggedSetResolveDto
   ): Promise<ApplicationFlaggedSetDto> {
     return mapTo(ApplicationFlaggedSetDto, await this.applicationFlaggedSetsService.resolve(dto))
+  }
+
+  @Put(":id")
+  @ApiOperation({
+    summary: "Reset flagged set confirmation alert",
+    operationId: "resetConfirmationAlert",
+  })
+  async resetConfirmationAlert(@Body() dto: IdDto): Promise<StatusDto> {
+    await this.applicationFlaggedSetsService.resetConfirmationAlert(dto.id)
+    return mapTo(StatusDto, { status: "ok" })
   }
 
   @Post("process")

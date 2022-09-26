@@ -25,8 +25,11 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
       INNER JOIN application_flagged_set afs ON afs.id = afsas.application_flagged_set_id
       WHERE afs.rule_key IS NULL
     `)
+
+    const ruleKeyMap: { [key: string]: number } = {}
+
     for (const afsa of afsas) {
-      const applicant = await queryRunner.query(
+      const [applicant] = await queryRunner.query(
         `
         SELECT applicant.email_address, applicant.first_name, applicant.last_name, applicant.birth_month, applicant.birth_day, applicant.birth_year 
         FROM applicant
@@ -36,25 +39,55 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
         [afsa.applications_id]
       )
 
-      let ruleKey: String | null = null
+      let ruleKey: string | null = null
 
       // get application info needed for key
       if (afsa.rule === Rule.email) {
-        ruleKey = `${afsa.lisitng_id}-email-${applicant.email_address}`
+        ruleKey = `${afsa.listing_id}-email-${applicant.email_address}`
       } else if (afsa.rule === Rule.nameAndDOB) {
         ruleKey =
           `${afsa.listing_id}-nameAndDOB-${applicant.first_name}-${applicant.last_name}-${applicant.birth_month}-` +
           `${applicant.birth_day}-${applicant.birth_year}`
       }
 
-      // set rule_key
-      await queryRunner.query(
+      // check if rule_key already exists, because their are existing duplicates
+      const existingSets = await queryRunner.query(
         `
-        UPDATE application_flagged_set
-        SET rule_key = $1
-        WHERE id = $2`,
-        [ruleKey, afsa.application_flagged_set_id]
+        SELECT id, rule_key
+        FROM application_flagged_set
+        WHERE rule_key = $1
+        `,
+        [ruleKey]
       )
+      
+      // update and delete the current set if the application_flagged_set ids are different
+      if (existingSets.length && existingSets[0].id !== afsa.application_flagged_set_id) {
+        const update = await queryRunner.query(
+          `
+          UPDATE application_flagged_set_applications_applications
+          SET application_flagged_set_id = $1
+          WHERE application_flagged_set_id = $2
+          AND applications_id = $3
+          `,
+          [existingSets[0].id, afsas.application_flagged_set_id, afsa.applications_id]
+        )
+
+        await queryRunner.query(
+          `
+          DELETE FROM application_flagged_set WHERE id = $1
+          `,
+          [afsa.application_flagged_set_id]
+        )
+      } else {
+        // set rule_key
+        await queryRunner.query(
+          `
+          UPDATE application_flagged_set
+          SET rule_key = $1
+          WHERE id = $2`,
+          [ruleKey, afsa.application_flagged_set_id]
+        )
+      }
     }
 
     await queryRunner.query(

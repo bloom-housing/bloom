@@ -1,7 +1,14 @@
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
-import { GridOptions, ColumnState, ColumnApi, ColDef, ColGroupDef } from "ag-grid-community"
+import {
+  GridOptions,
+  ColumnState,
+  ColumnApi,
+  ColDef,
+  ColGroupDef,
+  GridApi,
+} from "ag-grid-community"
 import { AgPagination, AG_PER_PAGE_OPTIONS } from "./AgPagination"
 import { LoadingOverlay } from "../overlays/LoadingOverlay"
 import { Field } from "../forms/Field"
@@ -15,14 +22,15 @@ export interface ColumnOrder {
 }
 
 export interface AgTableProps {
-  id: string
+  className?: string
   config: AgTableConfig
   data: AgTableData
-  pagination: AgTablePagination
-  search: AgTableSearch
-  sort?: AgTableSort
   headerContent?: React.ReactNode
-  className?: string
+  id: string
+  pagination?: AgTablePagination
+  search: AgTableSearch
+  selectConfig?: AgTableSelectConfig
+  sort?: AgTableSort
 }
 
 export interface AgTablePagination {
@@ -32,11 +40,17 @@ export interface AgTablePagination {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>
 }
 
+export interface AgTableSelectConfig {
+  setGridApi: React.Dispatch<React.SetStateAction<GridApi | null>>
+  updateSelectedValues: () => void
+}
+
 export interface AgTableConfig {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   gridComponents?: { [p: string]: any }
   columns: (ColDef | ColGroupDef)[]
   totalItemsLabel: string
+  rowSelection?: boolean
 }
 
 export interface AgTableData {
@@ -49,6 +63,7 @@ export interface AgTableData {
 
 export interface AgTableSearch {
   setSearch: React.Dispatch<React.SetStateAction<string>>
+  showSearch?: boolean
 }
 
 export interface AgTableSort {
@@ -81,14 +96,15 @@ export const useAgTable = () => {
 }
 
 const AgTable = ({
-  id,
   className,
-  pagination,
-  search: { setSearch },
-  sort: { setSort } = {},
-  headerContent,
+  config: { gridComponents, columns, totalItemsLabel, rowSelection },
   data,
-  config: { gridComponents, columns, totalItemsLabel },
+  headerContent,
+  id,
+  selectConfig,
+  pagination,
+  search: { setSearch, showSearch = true },
+  sort: { setSort } = {},
 }: AgTableProps) => {
   // local storage key with column state
   const columnStateLsKey = `column-state_${id}`
@@ -143,7 +159,7 @@ const AgTable = ({
   const debounceFilter = useRef(
     debounce((value: string) => {
       setSearch(value)
-      pagination.setCurrentPage(1)
+      pagination?.setCurrentPage(1)
     }, 500)
   )
   useEffect(() => {
@@ -179,12 +195,15 @@ const AgTable = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onGridReady = (params: any) => {
     setGridColumnApi(params.columnApi)
+    if (selectConfig?.setGridApi) {
+      selectConfig.setGridApi(params.api)
+    }
   }
 
   return (
     <div className={`ag-theme-alpine ag-theme-bloom ${className || ""}`}>
       <div className="flex justify-between flex-col md:flex-row">
-        <div className="flex flex-wrap">
+        <div className={`flex flex-wrap ${showSearch ? "mb-5" : "hidden"}`}>
           <div className="md:mr-5 w-full md:w-56">
             <Field
               dataTestId="ag-search-input"
@@ -195,7 +214,7 @@ const AgTable = ({
               placeholder={t("t.filter")}
             />
           </div>
-          <div className="w-full md:w-auto mt-2 mb-2 md:mb-0">
+          <div className="w-full md:w-auto mt-2 md:mt-0 mb-2 md:mb-0">
             {!validSearch && (
               <AlertBox type="notice">{t("applications.table.searchError")}</AlertBox>
             )}
@@ -204,8 +223,7 @@ const AgTable = ({
 
         {headerContent}
       </div>
-
-      <div className="applications-table mt-5">
+      <div className="applications-table">
         <LoadingOverlay isLoading={data.loading}>
           <div>
             <AgGridReact
@@ -220,19 +238,25 @@ const AgTable = ({
               suppressPaginationPanel={true}
               paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
               suppressScrollOnNewData={true}
+              rowSelection={rowSelection ? "multiple" : undefined}
+              rowMultiSelectWithClick={rowSelection}
+              onRowDataChanged={selectConfig?.updateSelectedValues ?? undefined}
+              onFirstDataRendered={selectConfig?.updateSelectedValues ?? undefined}
             ></AgGridReact>
           </div>
         </LoadingOverlay>
 
-        <AgPagination
-          totalItems={data.totalItems}
-          totalPages={data.totalPages}
-          currentPage={pagination.currentPage}
-          itemsPerPage={pagination.perPage}
-          quantityLabel={totalItemsLabel}
-          setCurrentPage={pagination.setCurrentPage}
-          setItemsPerPage={pagination.setPerPage}
-        />
+        {pagination && (
+          <AgPagination
+            totalItems={data.totalItems}
+            totalPages={data.totalPages}
+            currentPage={pagination.currentPage}
+            itemsPerPage={pagination.perPage}
+            quantityLabel={totalItemsLabel}
+            setCurrentPage={pagination.setCurrentPage}
+            setItemsPerPage={pagination.setPerPage}
+          />
+        )}
       </div>
     </div>
   )

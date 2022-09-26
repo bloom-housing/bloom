@@ -215,6 +215,8 @@ export class ApplicationFlaggedSetsService {
       limit?: number
       /**  */
       listingId: string
+      /**  */
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationFlaggedSetMeta> {
@@ -226,6 +228,7 @@ export class ApplicationFlaggedSetsService {
         page: params["page"],
         limit: params["limit"],
         listingId: params["listingId"],
+        view: params["view"],
       }
       let data = null
 
@@ -301,6 +304,27 @@ export class ApplicationFlaggedSetsService {
       let url = basePath + "/applicationFlaggedSets/resolve"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Reset flagged set confirmation alert
+   */
+  resetConfirmationAlert(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
       let data = params.body
 
@@ -2710,6 +2734,9 @@ export interface Application {
   submissionType: ApplicationSubmissionType
 
   /**  */
+  reviewStatus?: ApplicationReviewStatus
+
+  /**  */
   applicant: Applicant
 
   /**  */
@@ -2826,7 +2853,7 @@ export interface ApplicationFlaggedSet {
   updatedAt: Date
 
   /**  */
-  rule: string
+  rule: EnumApplicationFlaggedSetRule
 
   /**  */
   ruleKey: string
@@ -2835,10 +2862,13 @@ export interface ApplicationFlaggedSet {
   resolvedTime?: Date
 
   /**  */
-  status: EnumApplicationFlaggedSetStatus
+  listingId: string
 
   /**  */
-  listingId: string
+  showConfirmationAlert: boolean
+
+  /**  */
+  status: EnumApplicationFlaggedSetStatus
 }
 
 export interface ApplicationFlaggedSetPaginationMeta {
@@ -2875,6 +2905,14 @@ export interface ApplicationFlaggedSetResolve {
 
   /**  */
   applications: Id[]
+
+  /**  */
+  status: EnumApplicationFlaggedSetResolveStatus
+}
+
+export interface Status {
+  /**  */
+  status: string
 }
 
 export interface Asset {
@@ -3290,6 +3328,9 @@ export interface ApplicationCreate {
   submissionType: ApplicationSubmissionType
 
   /**  */
+  reviewStatus?: ApplicationReviewStatus
+
+  /**  */
   listing: Id
 
   /**  */
@@ -3611,6 +3652,9 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionType: ApplicationSubmissionType
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatus
 
   /**  */
   id?: string
@@ -4043,11 +4087,6 @@ export interface Email {
 
   /**  */
   appUrl?: string
-}
-
-export interface Status {
-  /**  */
-  status: string
 }
 
 export interface Confirm {
@@ -6261,9 +6300,26 @@ export enum ApplicationSubmissionType {
   "paper" = "paper",
   "electronical" = "electronical",
 }
+
+export enum ApplicationReviewStatus {
+  "pending" = "pending",
+  "pendingAndValid" = "pendingAndValid",
+  "valid" = "valid",
+  "duplicate" = "duplicate",
+}
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum EnumApplicationFlaggedSetRule {
+  "Name and DOB" = "Name and DOB",
+  "Email" = "Email",
+}
 export enum EnumApplicationFlaggedSetStatus {
   "flagged" = "flagged",
+  "pending" = "pending",
+  "resolved" = "resolved",
+}
+export enum EnumApplicationFlaggedSetResolveStatus {
+  "flagged" = "flagged",
+  "pending" = "pending",
   "resolved" = "resolved",
 }
 export enum ApplicationMethodType {
