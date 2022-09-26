@@ -235,7 +235,7 @@ describe("EmailService", () => {
       expect(emailMock.html).toMatch("Your Confirmation Number")
       expect(emailMock.html).toMatch("Marisela Baca")
       expect(emailMock.html).toMatch(
-        /Eligible applicants will be placed in order based on <strong>first come first serve<\/strong> basis./
+        /If you are contacted for an interview, you will be asked to fill out a more detailed application and provide supporting documents.</
       )
       expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
       // contains application id
@@ -255,7 +255,7 @@ describe("EmailService", () => {
 
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.html).toMatch(
-        /The lottery will be held on December 31, 2019. Eligible applicants will be placed in order <strong>based on preference and lottery rank<\/strong>./
+        /Once the application period closes, eligible applicants will be placed in order based on lottery rank order./
       )
     })
 
