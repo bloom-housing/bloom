@@ -112,6 +112,7 @@ export default function ListingsList() {
       {
         headerName: t("listings.verified"),
         field: "isVerified",
+        colId: "verified",
         sortable: true,
         unSortIcon: true,
         filter: false,
