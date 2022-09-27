@@ -157,11 +157,11 @@ const ApplicationsList = () => {
               <div className="w-full">
                 {isListingOpen && (
                   <AlertBox type="notice" className="mb-3" customIcon={"lock"} closeable>
-                    Preview applications that are pending review. Duplicates can be resolved when
-                    applications close
-                    {listingDto?.applicationDueDate &&
-                      ` on ${formatDateTime(listingDto.applicationDueDate, true)}`}
-                    .
+                    {listingDto?.applicationDueDate
+                      ? t("applications.duplicatesAlertDate", {
+                          date: formatDateTime(listingDto.applicationDueDate, true),
+                        })
+                      : t("applications.duplicatesAlert")}
                   </AlertBox>
                 )}
                 <AgTable

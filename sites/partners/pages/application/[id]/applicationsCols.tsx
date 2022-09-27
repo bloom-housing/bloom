@@ -16,7 +16,11 @@ export const getCols = () => [
     checkboxSelection: true,
     cellRendererFramework: ({ data }) => {
       if (!data?.id && !data?.confirmationCode) return ""
-      return <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
+      return (
+        <span className={"text-blue-900"}>
+          <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
+        </span>
+      )
     },
     width: 180,
   },
