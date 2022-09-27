@@ -29,6 +29,7 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 
 interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataProps {
   view?: string
+  limit: number
 }
 
 type UseUserListProps = PaginationProps & {
@@ -141,22 +142,16 @@ export function useFlaggedApplicationsList({
   const params = {
     listingId,
     page,
-  }
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", page.toString())
-
-  if (typeof limit === "number") {
-    queryParams.append("limit", limit.toString())
-    Object.assign(params, limit)
+    limit,
   }
 
   if (view) {
-    queryParams.append("view", view)
     Object.assign(params, { view })
   }
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
+
+  const paramString = qs.stringify(params)
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${paramString}`
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
 

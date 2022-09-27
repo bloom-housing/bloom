@@ -27,8 +27,8 @@ const ApplicationsList = () => {
   const listingName = listingDto?.name
   const { data: flaggedAppsData, loading: flaggedAppsLoading } = useFlaggedApplicationsList({
     listingId,
-    page: 1,
-    limit: 1,
+    page: tableOptions.pagination.currentPage,
+    limit: tableOptions.pagination.itemsPerPage,
     view: "resolved",
   })
 
