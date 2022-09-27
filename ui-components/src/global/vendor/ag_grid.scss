@@ -11,6 +11,12 @@
     )
   );
 
+  --ag-selected-row-background-color: var(--bloom-color-primary-light);
+
+  a {
+    color: var(--bloom-color-primary-dark);
+  }
+
   .ag-row {
     height: ag-param(row-height);
   }
