@@ -15,7 +15,7 @@ import {
 import { setSiteAlertMessage } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
-  limit: number | "all"
+  limit: number
 }
 
 export interface ColumnOrder {
@@ -141,22 +141,16 @@ export function useFlaggedApplicationsList({
   const params = {
     listingId,
     page,
-  }
-
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", page.toString())
-
-  if (typeof limit === "number") {
-    queryParams.append("limit", limit.toString())
-    Object.assign(params, limit)
+    limit,
   }
 
   if (view) {
-    queryParams.append("view", view)
     Object.assign(params, { view })
   }
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
+
+  const paramString = qs.stringify(params)
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${paramString}`
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
 
