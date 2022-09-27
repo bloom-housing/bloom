@@ -15,7 +15,7 @@ import {
 import { setSiteAlertMessage } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
-  limit: number
+  limit: number | "all"
 }
 
 export interface ColumnOrder {
@@ -29,6 +29,7 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 
 interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataProps {
   view?: string
+  limit: number
 }
 
 type UseUserListProps = PaginationProps & {
