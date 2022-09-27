@@ -50,7 +50,6 @@ export default class AdditionalMetadataFormatter extends Formatter {
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe
 
-    console.log(this.data)
     if (this.data.listingAvailabilityQuestion === "openWaitlist") {
       this.data.reviewOrderType = ListingReviewOrder.waitlist
     }
