@@ -59,7 +59,7 @@ export class addAfsRelatedPropertiesToListing1658992843452 implements MigrationI
         `,
         [ruleKey]
       )
-      
+
       // update and delete the current set if the application_flagged_set ids are different
       if (existingSets.length && existingSets[0].id !== afsa.application_flagged_set_id) {
         const update = await queryRunner.query(
