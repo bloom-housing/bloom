@@ -56,7 +56,7 @@ const GetApplication = (props: ApplicationsProps) => {
 
   return (
     <section className="aside-block" data-test-id="get-application-section">
-      <Heading priority={2} style={"underlineWeighted"}>
+      <Heading priority={2} styleType={"underlineWeighted"}>
         {props.strings?.howToApply ?? t("listings.apply.howToApply")}
       </Heading>
 
@@ -122,7 +122,7 @@ const GetApplication = (props: ApplicationsProps) => {
           {props.applicationsOpen && (props.onlineApplicationURL || props.paperMethod) && (
             <OrDivider bgColor="white" />
           )}
-          <Heading priority={3} style={"capsWeighted"}>
+          <Heading priority={3} styleType={"capsWeighted"}>
             {props.strings?.pickUpApplication ?? t("listings.apply.pickUpAnApplication")}
           </Heading>
           <ContactAddress
@@ -131,7 +131,7 @@ const GetApplication = (props: ApplicationsProps) => {
           />
           {props.applicationPickUpAddressOfficeHours && (
             <>
-              <Heading priority={3} style={"capsWeighted"}>
+              <Heading priority={3} styleType={"capsWeighted"}>
                 {props.strings?.officeHoursHeading ?? t("leasingAgent.officeHours")}
               </Heading>
               <p className="text-gray-800 text-tiny markdown">

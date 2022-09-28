@@ -49,7 +49,7 @@ const Contact = ({
 
   return (
     <section className="aside-block">
-      <Heading priority={4} style={"underlineWeighted"}>
+      <Heading priority={4} styleType={"underlineWeighted"}>
         {sectionTitle}
       </Heading>
 
@@ -96,7 +96,7 @@ const Contact = ({
       {additionalInformation?.map((info) => {
         return (
           <div key={info.title} className={"my-3"}>
-            <Heading priority={3} style={"capsWeighted"}>
+            <Heading priority={3} styleType={"capsWeighted"}>
               {info.title}
             </Heading>
             <div className="text-gray-800 text-tiny markdown">{info.content}</div>

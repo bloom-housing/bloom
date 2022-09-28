@@ -288,7 +288,7 @@ const ApplicationAddress = () => {
             <div className="form-card__group border-b">
               <fieldset>
                 <legend
-                  className={`text_caps-spaced ${errors.appslicant?.address ? "text-alert" : ""}`}
+                  className={`text_caps-spaced ${errors.applicant?.address ? "text-alert" : ""}`}
                 >
                   {t("application.contact.address")}
                 </legend>

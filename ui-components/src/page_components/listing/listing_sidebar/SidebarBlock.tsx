@@ -7,11 +7,11 @@ export interface SidebarBlockProps extends Omit<HeadingProps, "children" | "clas
   title?: string
 }
 
-const SidebarBlock = ({ children, className, title, priority, style }: SidebarBlockProps) => {
+const SidebarBlock = ({ children, className, title, priority, styleType }: SidebarBlockProps) => {
   return (
     <section className={`aside-block ${className ? className : ""}`}>
       {title && (
-        <Heading priority={priority ?? 4} style={style ?? "underlineWeighted"}>
+        <Heading priority={priority ?? 4} styleType={styleType ?? "underlineWeighted"}>
           {title}
         </Heading>
       )}

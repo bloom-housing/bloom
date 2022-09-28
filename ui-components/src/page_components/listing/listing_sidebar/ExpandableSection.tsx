@@ -29,7 +29,7 @@ const ExpandableSection = ({ content, expandableContent, strings }: ExpandableSe
   }
   return (
     <section className="aside-block">
-      <Heading priority={4} style={"underlineWeighted"}>
+      <Heading priority={4} styleType={"underlineWeighted"}>
         {strings.title}
       </Heading>
       <div className="text-tiny text-gray-750">

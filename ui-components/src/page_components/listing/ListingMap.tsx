@@ -109,7 +109,7 @@ const ListingMap = (props: ListingMapProps) => {
     <div className="listing-map" ref={setIntersectingElement}>
       <div className="addressPopup">
         {props.listingName && (
-          <Heading priority={3} style={"capsWeighted"}>
+          <Heading priority={3} styleType={"capsWeighted"}>
             {props.listingName}
           </Heading>
         )}

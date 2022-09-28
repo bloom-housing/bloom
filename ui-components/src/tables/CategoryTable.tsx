@@ -18,7 +18,7 @@ const CategoryTable = (props: CategoryTableProps) => {
   const tables = props.categoryData.map((category, index) => {
     return (
       <div key={index}>
-        <Heading priority={3} style={"lightWeighted"}>
+        <Heading priority={3} styleType={"lightWeighted"}>
           {category.header}
         </Heading>
         <hr className={"my-2"} />

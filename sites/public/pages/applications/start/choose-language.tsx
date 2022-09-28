@@ -139,7 +139,7 @@ const ApplicationChooseLanguage = () => {
             {listing?.applicationConfig.languages.length > 1 && (
               <>
                 <div className="w-full">
-                  <Heading style="underlineWeighted">
+                  <Heading styleType="underlineWeighted">
                     {t("application.chooseLanguage.chooseYourLanguage")}
                   </Heading>
                 </div>

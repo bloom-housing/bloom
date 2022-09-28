@@ -17,7 +17,7 @@ const ReferralApplication = (props: ReferralApplicationProps) => {
 
   return (
     <section className="aside-block">
-      <Heading priority={2} style={"underlineWeighted"}>
+      <Heading priority={2} styleType={"underlineWeighted"}>
         {props.strings.title}
       </Heading>
       <p>

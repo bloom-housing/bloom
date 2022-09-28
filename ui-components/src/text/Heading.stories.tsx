@@ -20,10 +20,12 @@ export const base3 = () => <Heading priority={3}>Test Header</Heading>
 export const base4 = () => <Heading priority={4}>Test Header</Heading>
 export const base5 = () => <Heading priority={5}>Test Header</Heading>
 export const base6 = () => <Heading priority={6}>Test Header</Heading>
-export const largeHeader = () => <Heading style={"largePrimary"}>Large Header</Heading>
-export const mediumHeader = () => <Heading style={"mediumNormal"}>Medium Header</Heading>
-export const smallWeighted = () => <Heading style={"smallWeighted"}>Small Weighted</Heading>
-export const smallNormal = () => <Heading style={"smallNormal"}>Small Normal</Heading>
-export const underlineHeader = () => <Heading style={"underlineWeighted"}>Underline Header</Heading>
-export const lightWeighted = () => <Heading style={"lightWeighted"}>Light Weighted</Heading>
-export const capsWeighted = () => <Heading style={"capsWeighted"}>Caps Weighted</Heading>
+export const largeHeader = () => <Heading styleType={"largePrimary"}>Large Header</Heading>
+export const mediumHeader = () => <Heading styleType={"mediumNormal"}>Medium Header</Heading>
+export const smallWeighted = () => <Heading styleType={"smallWeighted"}>Small Weighted</Heading>
+export const smallNormal = () => <Heading styleType={"smallNormal"}>Small Normal</Heading>
+export const underlineHeader = () => (
+  <Heading styleType={"underlineWeighted"}>Underline Header</Heading>
+)
+export const lightWeighted = () => <Heading styleType={"lightWeighted"}>Light Weighted</Heading>
+export const capsWeighted = () => <Heading styleType={"capsWeighted"}>Caps Weighted</Heading>
