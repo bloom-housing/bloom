@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.33...@bloom-housing/ui-components@5.1.1-alpha.34) (2022-09-28)
+
+
+### Features
+
+* **preferences:** add delete preference button ([#3075](https://github.com/bloom-housing/bloom/issues/3075)) ([29a079e](https://github.com/bloom-housing/bloom/commit/29a079e23ecc5cd31589993fef0c9de661c6e8c8))
+
+
+
+
+
 ## [5.1.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.32...@bloom-housing/ui-components@5.1.1-alpha.33) (2022-09-26)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
