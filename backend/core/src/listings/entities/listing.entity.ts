@@ -91,7 +91,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingMultiselectQuestion)
-  listingMultiselectQuestions: ListingMultiselectQuestion[]
+  listingMultiselectQuestions?: ListingMultiselectQuestion[]
 
   @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()
@@ -102,7 +102,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiPropertyOptional()
   get referralApplication(): ApplicationMethodDto | undefined {
-    return this.applicationMethods.find((method) => method.type === ApplicationMethodType.Referral)
+    return this.applicationMethods?.find((method) => method.type === ApplicationMethodType.Referral)
   }
 
   // booleans to make dealing with different application methods easier to parse
