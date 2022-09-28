@@ -29,6 +29,7 @@ import Layout from "../../layouts"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../src/settings/ManageIconSection"
+import { PreferenceDeleteModal } from "../../src/settings/PreferenceDeleteModal"
 
 export type DrawerType = "add" | "edit"
 
@@ -49,6 +50,9 @@ const Settings = () => {
     type: "alert" as AlertTypes,
     message: undefined,
   })
+  const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] = useState<MultiselectQuestion | null>(
+    null
+  )
 
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
     profile?.jurisdictions?.reduce((acc, curr) => {
@@ -91,6 +95,8 @@ const Settings = () => {
                   setPreferenceDrawerOpen("edit")
                 }}
                 editTestId={`preference-edit-icon: ${preference.text}`}
+                onDelete={() => setDeleteConfirmModalOpen(preference)}
+                deleteTestId={`preference-delete-icon: ${preference.text}`}
               />
             ),
           },
@@ -258,6 +264,16 @@ const Settings = () => {
       >
         {t("settings.createCopyDescription")}
       </Modal>
+      {deleteConfirmModalOpen && (
+        <PreferenceDeleteModal
+          multiselectQuestion={deleteConfirmModalOpen}
+          setAlertMessage={setAlertMessage}
+          onClose={() => {
+            setDeleteConfirmModalOpen(null)
+            void mutate(cacheKey)
+          }}
+        />
+      )}
     </>
   )
 }

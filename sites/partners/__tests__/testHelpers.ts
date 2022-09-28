@@ -1,10 +1,44 @@
 import {
+  ApplicationSection,
   Listing,
   ListingAvailability,
   ListingReviewOrder,
   ListingStatus,
+  MultiselectQuestion,
   Unit,
 } from "@bloom-housing/backend-core"
+
+export const multiselectQuestionPreference: MultiselectQuestion = {
+  id: "id1",
+  text: "Live/Work in County",
+  subText: "Live/Work in County subtitle",
+  jurisdictions: [{ id: "1", name: "Alameda" }],
+  createdAt: new Date("2022-09-14T22:53:09.982Z"),
+  updatedAt: new Date("2022-09-15T22:53:09.982Z"),
+  description: "At least one household member lives or works in County",
+  links: [
+    {
+      title: "Live/Work in County Link Title",
+      url: "https://www.example.com",
+    },
+  ],
+  optOutText: "I don't want this preference",
+  options: [
+    {
+      text: "Live in County",
+      ordinal: 1,
+      description: "A description of the option.",
+      links: [
+        {
+          title: "Live in County Link Title",
+          url: "https://www.example.com",
+        },
+      ],
+    },
+    { text: "Work in County", ordinal: 1 },
+  ],
+  applicationSection: ApplicationSection.preferences,
+}
 
 export const user = {
   agreedToTermsOfService: false,

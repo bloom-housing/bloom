@@ -3,11 +3,10 @@ import { fireEvent, render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
-import axios from "axios"
 import LotteryResults from "../../src/listings/PaperListingForm/sections/LotteryResults"
 import { FormProvider, useForm } from "react-hook-form"
 import { formDefaults, FormListing } from "../../src/listings/PaperListingForm/formTypes"
-import { ListingEvent, ListingEventType, serviceOptions } from "@bloom-housing/backend-core"
+import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core"
 
 const FormComponent = ({ children, values }: { values?: FormListing; children }) => {
   const formMethods = useForm<FormListing>({
@@ -21,9 +20,6 @@ const server = setupServer()
 
 // Enable API mocking before tests.
 beforeAll(() => {
-  serviceOptions.axios = axios.create({
-    baseURL: "http://localhost:3100",
-  })
   server.listen()
 })
 
