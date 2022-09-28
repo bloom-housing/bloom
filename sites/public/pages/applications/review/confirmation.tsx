@@ -11,6 +11,7 @@ import {
   AppearanceStyleType,
   ApplicationTimeline,
   Button,
+  ContentAccordion,
   FormCard,
   t,
 } from "@bloom-housing/ui-components"
@@ -33,9 +34,13 @@ const ApplicationConfirmation = () => {
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
 
-  const reviewOrder = useMemo(() => {
+  const content = useMemo(() => {
     if (listing) {
-      if (listing.reviewOrderType == ListingReviewOrder.lottery) {
+      if (listing.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
+        return {
+          text: t("application.review.confirmation.whatHappensNext.fcfs"),
+        }
+      } else if (listing.reviewOrderType == ListingReviewOrder.lottery) {
         const lotteryEvent = getLotteryEvent(listing)
         const lotteryText = []
         if (lotteryEvent?.startTime) {
@@ -45,13 +50,18 @@ const ApplicationConfirmation = () => {
             })
           )
         }
-        lotteryText.push(t("application.review.confirmation.eligibleApplicants.lottery"))
-        return lotteryText.join(" ")
+        lotteryText.push(t("application.review.confirmation.whatHappensNext.lottery"))
+        return {
+          text: lotteryText.join(" "),
+        }
       } else {
-        return t("application.review.confirmation.eligibleApplicants.FCFS")
+        // TODO: change to use new enum!
+        return {
+          text: t("application.review.confirmation.whatHappensNext.waitlist"),
+        }
       }
     } else {
-      return ""
+      return { text: "" }
     }
   }, [listing, router.locale])
 
@@ -93,9 +103,7 @@ const ApplicationConfirmation = () => {
         <div className="form-card__group border-b markdown markdown-informational">
           <ApplicationTimeline />
 
-          <Markdown options={{ disableParsingRawHTML: true }}>
-            {t("application.review.confirmation.whatHappensNext", { reviewOrder })}
-          </Markdown>
+          <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
         </div>
 
         <div className="form-card__group border-b markdown markdown-informational">
