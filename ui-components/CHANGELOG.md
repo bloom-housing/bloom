@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.34...@bloom-housing/ui-components@5.1.1-alpha.35) (2022-09-28)
+
+
+### Bug Fixes
+
+* email tests ([#3095](https://github.com/bloom-housing/bloom/issues/3095)) ([a663dfd](https://github.com/bloom-housing/bloom/commit/a663dfd3df457f88130e59c37ea30d70ae2b6d0b))
+* heading size issues on resources page ([#3090](https://github.com/bloom-housing/bloom/issues/3090)) ([d7492a2](https://github.com/bloom-housing/bloom/commit/d7492a2b0fc6ec877fa99d7234a373cca7fd86ac))
+
+
+
+
+
 ## [5.1.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.33...@bloom-housing/ui-components@5.1.1-alpha.34) (2022-09-28)
 
 
