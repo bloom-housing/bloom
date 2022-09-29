@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "6.0.0",
+  "version": "6.0.1-alpha.1",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -26,9 +26,9 @@
     "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start"
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^6.0.0",
-    "@bloom-housing/shared-helpers": "^6.0.0",
-    "@bloom-housing/ui-components": "^6.0.0",
+    "@bloom-housing/backend-core": "^6.0.1-alpha.1",
+    "@bloom-housing/shared-helpers": "^6.0.1-alpha.1",
+    "@bloom-housing/ui-components": "^6.0.1-alpha.1",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
@@ -54,6 +54,9 @@
     "@cypress/code-coverage": "^3.9.12",
     "@cypress/webpack-preprocessor": "^5.11.1",
     "@next/bundle-analyzer": "^10.1.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^14.4.3",
     "@types/mapbox__mapbox-sdk": "^0.13.2",
     "@types/node": "^12.12.67",
     "@types/react": "^16.9.52",
@@ -63,12 +66,13 @@
     "cypress-file-upload": "^5.0.8",
     "jest": "^26.5.3",
     "js-levenshtein": "^1.1.6",
+    "msw": "^0.46.0",
     "next-transpile-modules": "^8.0.0",
     "nyc": "^15.1.0",
     "postcss": "^8.3.6",
     "sass": "1.52.1",
     "sass-loader": "^10.0.3",
-    "typescript": "^4.5.5",
+    "typescript": "4.6.4",
     "webpack": "^5.69.1"
   }
 }

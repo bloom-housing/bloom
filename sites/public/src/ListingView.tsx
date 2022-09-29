@@ -403,8 +403,7 @@ export const ListingView = (props: ListingProps) => {
     ]
     const unitRow = [
       {
-        text:
-          listing.unitsAvailable === 1 ? t("listings.availableUnit") : t("listings.availableUnits"),
+        text: listing.unitsAvailable === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits"),
         amount: listing.unitsAvailable,
         emphasized: true,
       },
@@ -418,7 +417,7 @@ export const ListingView = (props: ListingProps) => {
           sectionTitle:
             listing.listingAvailability === ListingAvailability.openWaitlist
               ? t("listings.waitlist.isOpen")
-              : t("listings.availableUnits"),
+              : t("listings.vacantUnitsAvailable"),
           description:
             listing.listingAvailability === ListingAvailability.openWaitlist
               ? t("listings.waitlist.submitForWaitlist")

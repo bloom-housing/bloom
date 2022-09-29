@@ -2,6 +2,7 @@
   ol {
     @apply flex;
     @apply items-center;
+    flex-wrap: wrap;
     line-height: 1.5rem;
   }
 

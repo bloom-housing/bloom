@@ -1,7 +1,7 @@
-import { useContext } from "react"
-import useSWR, { mutate } from "swr"
+import { useCallback, useContext, useState } from "react"
+import useSWR from "swr"
 import qs from "qs"
-
+import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   ApplicationSection,
@@ -12,7 +12,7 @@ import {
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
-
+import { setSiteAlertMessage } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -25,6 +25,11 @@ export interface ColumnOrder {
 
 interface UseSingleApplicationDataProps extends PaginationProps {
   listingId: string
+}
+
+interface UseSingleFlaggedApplicationDataProps extends UseSingleApplicationDataProps {
+  view?: string
+  limit: number
 }
 
 type UseUserListProps = PaginationProps & {
@@ -130,24 +135,23 @@ export function useFlaggedApplicationsList({
   listingId,
   page,
   limit,
-}: UseSingleApplicationDataProps) {
+  view,
+}: UseSingleFlaggedApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const params = {
     listingId,
     page,
+    limit,
   }
 
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", page.toString())
-
-  if (typeof limit === "number") {
-    queryParams.append("limit", limit.toString())
-    Object.assign(params, limit)
+  if (view) {
+    Object.assign(params, { view })
   }
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
+  const paramString = qs.stringify(params)
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${paramString}`
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
 
@@ -155,9 +159,11 @@ export function useFlaggedApplicationsList({
 
   return {
     data,
+    loading: !error && !data,
     error,
   }
 }
+
 export function useApplicationsData(
   currentPage: number,
   delayedFilterValue: string,
@@ -199,23 +205,48 @@ export function useApplicationsData(
     appsError: error,
   }
 }
+
+export function useFlaggedApplicationsMeta(listingId: string) {
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
+
+  const params = {
+    listingId,
+  }
+
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+
+  const endpoint = `${
+    process.env.backendApiBase
+  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
+
+  const fetcher = () => applicationFlaggedSetsService.meta(params)
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
 export function useSingleFlaggedApplication(afsId: string) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
   const fetcher = () =>
     applicationFlaggedSetsService.retrieve({
       afsId,
     })
 
-  const { data, error } = useSWR(endpoint, fetcher)
+  const cacheKey = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
 
-  const revalidate = () => mutate(endpoint)
+  const { data, error } = useSWR(cacheKey, fetcher)
 
   return {
-    revalidate,
+    cacheKey,
     data,
     error,
+    loading: !error && !data,
   }
 }
 
@@ -354,6 +385,26 @@ export function useJurisdictionalMultiselectQuestionList(
   }
 }
 
+export function useListingsMultiselectQuestionList(multiselectQuestionId: string) {
+  const { multiselectQuestionsService } = useContext(AuthContext)
+
+  const fetcher = () =>
+    multiselectQuestionsService.retrieveListings({
+      multiselectQuestionId,
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/muliselectQuestions/listings/${multiselectQuestionId}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()
@@ -401,5 +452,44 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
     data,
     loading: !error && !data,
     error,
+  }
+}
+
+export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
+  const { applicationsService } = useContext(AuthContext)
+
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
+
+  const onExport = useCallback(async () => {
+    setCsvExportError(false)
+    setCsvExportLoading(true)
+
+    try {
+      const content = await applicationsService.listAsCsv({
+        listingId,
+        includeDemographics,
+      })
+
+      const now = new Date()
+      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
+
+      const blob = new Blob([content], { type: "text/csv" })
+      const fileLink = document.createElement("a")
+      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
+      fileLink.href = URL.createObjectURL(blob)
+      fileLink.click()
+    } catch (err) {
+      setCsvExportError(true)
+      setSiteAlertMessage(err.response.data.error, "alert")
+    }
+
+    setCsvExportLoading(false)
+  }, [applicationsService, includeDemographics, listingId])
+
+  return {
+    onExport,
+    csvExportLoading,
+    csvExportError,
   }
 }

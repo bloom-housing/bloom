@@ -113,20 +113,15 @@ const Users = () => {
     limit: "all",
   })
 
-  if (error) return "An error has occurred."
+  if (error) return <div>An error has occurred.</div>
 
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-
-      <NavigationHeader className="relative" title={t("nav.users")}>
-        <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} />
-        </div>
-      </NavigationHeader>
-
+      <SiteAlert dismissable alertMessage={alertMessage} sticky={true} timeout={5000} />
+      <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <AgTable

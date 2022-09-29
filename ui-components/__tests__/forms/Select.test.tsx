@@ -8,6 +8,7 @@ afterEach(cleanup)
 const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
 const DefaultSelect = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <Select
@@ -25,6 +26,7 @@ const DefaultSelect = () => {
 }
 
 const ErrorSelect = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <Select

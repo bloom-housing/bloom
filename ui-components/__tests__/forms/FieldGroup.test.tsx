@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 afterEach(cleanup)
 
 const FieldGroupCustom = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <FieldGroup
@@ -26,6 +27,7 @@ const FieldGroupCustom = () => {
 }
 
 const FieldGroupError = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <FieldGroup
@@ -43,6 +45,7 @@ const FieldGroupError = () => {
 }
 
 const FieldGroupDefaultValues = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <FieldGroup
@@ -63,6 +66,7 @@ const FieldGroupDefaultValues = () => {
 }
 
 const FieldGroupSubfieldsUnchecked = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <FieldGroup
@@ -98,6 +102,7 @@ const FieldGroupSubfieldsUnchecked = () => {
 }
 
 const FieldGroupSubfieldsChecked = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm({ mode: "onChange" })
   return (
     <FieldGroup

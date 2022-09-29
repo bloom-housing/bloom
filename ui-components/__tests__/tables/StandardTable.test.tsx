@@ -28,14 +28,14 @@ const dataWithImage: StandardTableData = [...data]
 dataWithImage[0].image = {
   content: (
     <TableThumbnail>
-      <img src="/images/listing.jpg" />
+      <img src="/images/listing.jpg" alt="sample" />
     </TableThumbnail>
   ),
 }
 dataWithImage[1].image = {
   content: (
     <TableThumbnail>
-      <img src="/images/logo_glyph.svg" />
+      <img src="/images/logo_glyph.svg" alt="sample" />
     </TableThumbnail>
   ),
 }

@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import ReferralApplication from "../../src/page_components/listing/listing_sidebar/ReferralApplication"
+import { ReferralApplication } from "../../src/page_components/listing/listing_sidebar/ReferralApplication"
 
 afterEach(cleanup)
 

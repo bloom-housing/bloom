@@ -1,13 +1,6 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import {
-  ArrayMaxSize,
-  IsDate,
-  IsDefined,
-  IsOptional,
-  IsUUID,
-  ValidateNested,
-} from "class-validator"
+import { ArrayMaxSize, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressUpdateDto } from "../../shared/dto/address.dto"
@@ -46,23 +39,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "listingMultiselectQuestions",
   "publishedAt",
   "closedAt",
+  "afsLastRunAt",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
