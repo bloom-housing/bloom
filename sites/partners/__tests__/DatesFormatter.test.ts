@@ -1,5 +1,5 @@
 import { TimeFieldPeriod } from "@bloom-housing/ui-components"
-import { createDate, createTime } from "../lib/helpers"
+import { createTime } from "../lib/helpers"
 import { YesNoAnswer } from "../src/applications/PaperApplicationForm/FormTypes"
 import DatesFormatter from "../src/listings/PaperListingForm/formatters/DatesFormatter"
 import { FormMetadata } from "../src/listings/PaperListingForm/formTypes"

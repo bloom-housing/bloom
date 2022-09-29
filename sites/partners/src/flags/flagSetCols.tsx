@@ -87,7 +87,7 @@ export const getFlagSetCols = () => [
     flex: 1,
     cellRendererFramework: ({ data }) => {
       const styleType =
-        data.status === EnumApplicationFlaggedSetStatus.flagged
+        data.status === EnumApplicationFlaggedSetStatus.pending
           ? AppearanceStyleType.info
           : AppearanceStyleType.success
 

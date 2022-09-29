@@ -141,7 +141,7 @@ describe("<AgTable>", () => {
     })
   })
 
-  it("renders loading overlay", async () => {
+  it("renders loading overlay", () => {
     const { getByTestId } = render(<AgTableComponent loading={true} />)
 
     const loadingOverlay = getByTestId("loading-overlay")

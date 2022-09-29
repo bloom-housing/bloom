@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useContext } from "react"
+import React, { useContext, useMemo } from "react"
 import { useRouter } from "next/router"
-import dayjs from "dayjs"
 import Head from "next/head"
 import {
   AgTable,
@@ -8,7 +7,6 @@ import {
   Button,
   LocalizedLink,
   SiteAlert,
-  setSiteAlertMessage,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
@@ -19,6 +17,7 @@ import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
+  useApplicationsExport,
 } from "../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
@@ -27,21 +26,25 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
 } from "@bloom-housing/backend-core/types"
+import { ApplicationsSideNav } from "../../../../src/applications/ApplicationsSideNav"
 
 const ApplicationsList = () => {
-  const { applicationsService, profile } = useContext(AuthContext)
+  const { profile } = useContext(AuthContext)
   const router = useRouter()
+  const listingId = router.query.id as string
 
   const tableOptions = useAgTable()
 
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
+  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
+    listingId,
+    profile?.roles?.isAdmin ?? false
+  )
 
   /* Data Fetching */
-  const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
+  const isListingOpen = listingDto?.status === "active"
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
@@ -67,40 +70,15 @@ const ApplicationsList = () => {
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
 
-      this.linkWithId.addEventListener("click", function () {
-        void router.push(`/application/${applicationId}`)
-      })
+      !isListingOpen &&
+        this.linkWithId.addEventListener("click", function () {
+          void router.push(`/application/${applicationId}`)
+        })
     }
 
     getGui() {
       return this.linkWithId
     }
-  }
-
-  const onExport = async () => {
-    setCsvExportError(false)
-    setCsvExportLoading(true)
-
-    try {
-      const content = await applicationsService.listAsCsv({
-        listingId,
-        includeDemographics: profile?.roles?.isAdmin ?? false,
-      })
-
-      const now = new Date()
-      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
-
-      const blob = new Blob([content], { type: "text/csv" })
-      const fileLink = document.createElement("a")
-      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
-      fileLink.href = URL.createObjectURL(blob)
-      fileLink.click()
-    } catch (err) {
-      setCsvExportError(true)
-      setSiteAlertMessage(err.response.data.error, "alert")
-    }
-
-    setCsvExportLoading(false)
   }
 
   // get the highest value from householdSize and limit to 6
@@ -131,7 +109,7 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-
+      {csvExportError && <SiteAlert type="alert" timeout={5000} dismissable sticky={true} />}
       <NavigationHeader
         title={listingName}
         listingId={listingId}
@@ -140,7 +118,6 @@ const ApplicationsList = () => {
           flagsQty: flaggedApps?.meta?.totalFlagged,
           listingLabel: t("t.listingSingle"),
           applicationsLabel: t("nav.applications"),
-          flagsLabel: t("nav.flags"),
         }}
         breadcrumbs={
           <Breadcrumbs>
@@ -151,61 +128,66 @@ const ApplicationsList = () => {
             </BreadcrumbLink>
           </Breadcrumbs>
         }
-      >
-        {csvExportError && (
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="alert" timeout={5000} dismissable />
-          </div>
-        )}
-      </NavigationHeader>
+      />
 
       <ListingStatusBar status={listingDto?.status} />
 
-      <section>
-        <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto pb-8 px-4 mt-2">
-          <AgTable
-            id="applications-table"
-            pagination={{
-              perPage: tableOptions.pagination.itemsPerPage,
-              setPerPage: tableOptions.pagination.setItemsPerPage,
-              currentPage: tableOptions.pagination.currentPage,
-              setCurrentPage: tableOptions.pagination.setCurrentPage,
-            }}
-            config={{
-              gridComponents,
-              columns: columnDefs,
-              totalItemsLabel: t("applications.totalApplications"),
-            }}
-            data={{
-              items: applications,
-              loading: appsLoading,
-              totalItems: appsMeta?.totalItems,
-              totalPages: appsMeta?.totalPages,
-            }}
-            search={{
-              setSearch: tableOptions.filter.setFilterValue,
-            }}
-            sort={{
-              setSort: tableOptions.sort.setSortOptions,
-            }}
-            headerContent={
-              <div className="flex-row">
-                <LocalizedLink href={`/listings/${listingId}/applications/add`}>
-                  <Button
-                    className="mx-1"
-                    onClick={() => false}
-                    dataTestId={"addApplicationButton"}
-                  >
-                    {t("applications.addApplication")}
-                  </Button>
-                </LocalizedLink>
+      <section className={"bg-gray-200 pt-4"}>
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2 flex-col">
+          {listingDto && (
+            <>
+              <ApplicationsSideNav
+                className="w-full md:w-72"
+                listingId={listingId}
+                listingOpen={isListingOpen}
+              />
 
-                <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
-                  {t("t.export")}
-                </Button>
-              </div>
-            }
-          />
+              <AgTable
+                className="w-full"
+                id="applications-table"
+                pagination={{
+                  perPage: tableOptions.pagination.itemsPerPage,
+                  setPerPage: tableOptions.pagination.setItemsPerPage,
+                  currentPage: tableOptions.pagination.currentPage,
+                  setCurrentPage: tableOptions.pagination.setCurrentPage,
+                }}
+                config={{
+                  gridComponents,
+                  columns: columnDefs,
+                  totalItemsLabel: t("applications.totalApplications"),
+                }}
+                data={{
+                  items: applications,
+                  loading: appsLoading,
+                  totalItems: appsMeta?.totalItems,
+                  totalPages: appsMeta?.totalPages,
+                }}
+                search={{
+                  setSearch: tableOptions.filter.setFilterValue,
+                }}
+                sort={{
+                  setSort: tableOptions.sort.setSortOptions,
+                }}
+                headerContent={
+                  <div className="flex-row">
+                    <LocalizedLink href={`/listings/${listingId}/applications/add`}>
+                      <Button
+                        className="mx-1"
+                        onClick={() => false}
+                        dataTestId={"addApplicationButton"}
+                      >
+                        {t("applications.addApplication")}
+                      </Button>
+                    </LocalizedLink>
+
+                    <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
+                      {t("t.export")}
+                    </Button>
+                  </div>
+                }
+              />
+            </>
+          )}
         </article>
       </section>
     </Layout>

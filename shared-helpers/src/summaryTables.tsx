@@ -19,7 +19,8 @@ export const unitSummariesTable = (
   listingAvailability: ListingAvailability
 ): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
-    const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
+    const unitPluralization =
+      unitSummary.totalAvailable == 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
         <>

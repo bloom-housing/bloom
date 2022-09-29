@@ -11,6 +11,7 @@ interface DropzoneProps {
   accept?: string | string[]
   progress?: number
   className?: string
+  maxFiles?: number
   strings?: {
     chooseFromFolder?: string
     dragHere?: string
@@ -24,6 +25,8 @@ const Dropzone = (props: DropzoneProps) => {
   const classNames = ["field"]
   if (props.className) classNames.push(props.className)
 
+  const maxFiles = props.maxFiles || 1
+
   const onDrop = useCallback(
     (acceptedFiles) => {
       acceptedFiles.forEach((file: File) => uploader(file))
@@ -33,7 +36,8 @@ const Dropzone = (props: DropzoneProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: props.accept,
-    maxFiles: 1,
+    maxFiles: maxFiles > 1 ? maxFiles : undefined,
+    multiple: maxFiles > 1,
   })
 
   const dropzoneClasses = ["dropzone", "control"]
@@ -48,7 +52,7 @@ const Dropzone = (props: DropzoneProps) => {
       <label htmlFor={props.id} className="label">
         {props.label}
       </label>
-      {props.helptext && <p className="view-item__label mt-2 mb-4">{props.helptext}</p>}
+      {props.helptext && <p className="dropzone__helptext">{props.helptext}</p>}
       {props.progress && props.progress === 100 ? (
         <></>
       ) : props.progress && props.progress > 0 ? (

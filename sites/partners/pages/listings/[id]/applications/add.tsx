@@ -23,7 +23,7 @@ const NewApplication = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-
+      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <NavigationHeader
         className="relative"
         title={t("applications.newApplication")}
@@ -39,11 +39,7 @@ const NewApplication = () => {
             </BreadcrumbLink>
           </Breadcrumbs>
         }
-      >
-        <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert type="success" timeout={5000} dismissable />
-        </div>
-      </NavigationHeader>
+      />
 
       <PaperApplicationForm listingId={listingId} />
     </Layout>

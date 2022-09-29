@@ -16,6 +16,7 @@ import {
   Application,
   ApplicationStatus,
   ApplicationSection,
+  ApplicationReviewStatus,
 } from "@bloom-housing/backend-core/types"
 import { mapFormToApi, mapApiToForm } from "../../../lib/formatApplicationData"
 import { useSingleListingData } from "../../../lib/hooks"
@@ -115,9 +116,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       const result = editMode
         ? await applicationsService.update({
             id: application.id,
-            body: { id: application.id, ...body },
+            body: { id: application.id, ...body, reviewStatus: application.reviewStatus },
           })
-        : await applicationsService.create({ body })
+        : await applicationsService.create({
+            body: { ...body, reviewStatus: ApplicationReviewStatus.valid },
+          })
 
       setLoading(false)
 

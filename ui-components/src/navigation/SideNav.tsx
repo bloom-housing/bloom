@@ -11,8 +11,8 @@ export interface SideNavItemProps {
 }
 
 export interface SideNavProps {
-  navItems?: SideNavItemProps[]
   className?: string
+  navItems?: SideNavItemProps[]
 }
 
 const ItemLabel = ({ item }: { item: SideNavItemProps }) => {
@@ -20,7 +20,7 @@ const ItemLabel = ({ item }: { item: SideNavItemProps }) => {
     return (
       <>
         <span>{item.label}</span>
-        <span>{item.count}</span>
+        <span className={"side-nav__count"}>{item.count}</span>
       </>
     )
   } else {

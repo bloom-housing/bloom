@@ -6,7 +6,7 @@ import { AuthContext } from "../src/AuthContext"
 afterEach(cleanup)
 
 describe("<Timeout>", () => {
-  it("creates element if user is logged in", async () => {
+  it("creates element if user is logged in", () => {
     const onTimeoutSpy = jest.fn()
     const anchorMocked = document.createElement("div")
     const createElementSpy = jest.spyOn(document, "createElement").mockReturnValueOnce(anchorMocked)
@@ -27,7 +27,7 @@ describe("<Timeout>", () => {
             passwordValidForDays: 180,
             agreedToTermsOfService: true,
           },
-          signOut: () => {},
+          signOut: jest.fn(),
         }}
       >
         <LoggedInUserIdleTimeout onTimeout={onTimeoutSpy} />
@@ -37,14 +37,14 @@ describe("<Timeout>", () => {
     createElementSpy.mockRestore()
   })
 
-  it("does not create element if user is not logged in", async () => {
+  it("does not create element if user is not logged in", () => {
     const onTimeoutSpy = jest.fn()
     const anchorMocked = document.createElement("div")
     const createElementSpy = jest.spyOn(document, "createElement").mockReturnValueOnce(anchorMocked)
     render(
       <AuthContext.Provider
         value={{
-          signOut: () => {},
+          signOut: jest.fn(),
         }}
       >
         <LoggedInUserIdleTimeout onTimeout={onTimeoutSpy} />

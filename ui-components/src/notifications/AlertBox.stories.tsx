@@ -2,6 +2,7 @@ import React from "react"
 import { AlertBox } from "./AlertBox"
 import AlertBoxDocumentation from "./AlertBox.docs.mdx"
 import { BADGES } from "../../.storybook/constants"
+import { withMenuLinks } from "../headers/SiteHeader.stories"
 
 export default {
   title: "Notifications/Alert Box  🚩",
@@ -74,6 +75,16 @@ export const AlertBoxNarrow = () => (
   <AlertBox onClose={() => {}} type="success" narrow>
     Some warning
   </AlertBox>
+)
+
+export const AlertBoxSticky = () => (
+  <div style={{ height: "200rem", border: "3px solid gray" }}>
+    <div>{withMenuLinks()}</div>
+    <AlertBox onClose={() => {}} type="success" sticky={true}>
+      Some warning
+    </AlertBox>
+    <div style={{ borderTop: "1px solid gray", padding: "5rem" }}>Page Content</div>
+  </div>
 )
 
 export const styleOverrides = () => {

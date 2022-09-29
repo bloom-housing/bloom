@@ -347,13 +347,17 @@ const PreferenceDrawer = ({
                   register={register}
                   controlClassName={"control"}
                   keyPrefix={"jurisdictions"}
-                  options={[
-                    { label: "", value: "" },
-                    ...profile.jurisdictions.map((jurisdiction) => ({
-                      label: jurisdiction.name,
-                      value: jurisdiction.id,
-                    })),
-                  ]}
+                  options={
+                    profile
+                      ? [
+                          { label: "", value: "" },
+                          ...profile?.jurisdictions.map((jurisdiction) => ({
+                            label: jurisdiction.name,
+                            value: jurisdiction.id,
+                          })),
+                        ]
+                      : [{ label: "", value: "" }]
+                  }
                   dataTestId={"preference-jurisdiction"}
                   defaultValue={
                     questionData?.jurisdictions?.length > 0

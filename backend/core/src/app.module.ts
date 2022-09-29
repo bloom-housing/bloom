@@ -1,4 +1,6 @@
 // dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+import { BullModule } from "@nestjs/bull"
+
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require("dotenv").config()
@@ -38,6 +40,7 @@ import { PaperApplicationsModule } from "./paper-applications/paper-applications
 import { ActivityLogModule } from "./activity-log/activity-log.module"
 import { logger } from "./shared/middlewares/logger.middleware"
 import { CatchAllFilter } from "./shared/filters/catch-all-filter"
+import { AFSProcessingQueueNames } from "./application-flagged-sets/constants/applications-flagged-sets-constants"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)

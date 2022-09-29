@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
@@ -25,6 +26,8 @@ import { MultiselectQuestionUpdateDto } from "../multiselect-question/dto/multis
 import { MultiselectQuestionsListQueryParams } from "../multiselect-question/dto/multiselect-question-list-query-params"
 import { MultiselectQuestionsFilterParams } from "../multiselect-question/dto/multiselect-question-filter-params"
 import { IdDto } from "../shared/dto/id.dto"
+import { ListingDto } from "../listings/dto/listing.dto"
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 
 @Controller("/multiselectQuestions")
 @ApiTags("multiselectQuestions")
@@ -79,9 +82,21 @@ export class MultiselectQuestionsController {
     )
   }
 
+  @Get(`listings/:multiselectQuestionId`)
+  @ApiOperation({ summary: "Get multiselect question by id", operationId: "retrieve" })
+  async retrieveListings(
+    @Param("multiselectQuestionId") multiselectQuestionId: string
+  ): Promise<ListingDto[]> {
+    const results = await this.multiselectQuestionsService.findListingsWithMultiSelectQuestion(
+      multiselectQuestionId
+    )
+    return mapTo(ListingDto, results)
+  }
+
   @Delete()
   @ApiOperation({ summary: "Delete multiselect question by id", operationId: "delete" })
   @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @UseInterceptors(ActivityLogInterceptor)
   async delete(@Body() dto: IdDto): Promise<void> {
     await this.multiselectQuestionsService.delete(dto.id)
   }

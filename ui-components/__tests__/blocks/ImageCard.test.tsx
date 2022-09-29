@@ -8,7 +8,7 @@ afterEach(cleanup)
 
 describe("<ImageCard>", () => {
   it("renders title, subtitle, image and alt text", () => {
-    const { getByText, getByAltText } = render(
+    const { getByAltText } = render(
       <ImageCard imageUrl={"/images/listing.jpg"} description={"A description of the image"} />
     )
 
@@ -79,7 +79,7 @@ describe("<ImageCard>", () => {
     portalRoot.setAttribute("id", "__next")
     document.body.appendChild(portalRoot)
 
-    const { getByAltText, getByTestId, container } = render(
+    const { getByAltText, getByTestId } = render(
       <ImageCard
         images={[
           { url: "/images/listing.jpg", description: "A description of the image" },

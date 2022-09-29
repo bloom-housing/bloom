@@ -2,13 +2,13 @@ import Link from "next/link"
 
 import { t } from "@bloom-housing/ui-components"
 import { convertDataToPst } from "../../lib/helpers"
-import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import { ApplicationStatus, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 export const getCols = () => [
   {
     headerName: t("application.details.number"),
     field: "id",
-    sortable: true,
+    sortable: false,
     filter: false,
     resizable: true,
     unSortIcon: true,
@@ -24,7 +24,7 @@ export const getCols = () => [
   {
     headerName: t("application.name.firstName"),
     field: "applicant.firstName",
-    sortable: true,
+    sortable: false,
     filter: false,
     resizable: true,
     unSortIcon: true,
@@ -33,7 +33,7 @@ export const getCols = () => [
   {
     headerName: t("application.name.lastName"),
     field: "applicant.lastName",
-    sortable: true,
+    sortable: false,
     filter: false,
     resizable: true,
     unSortIcon: true,
@@ -56,19 +56,12 @@ export const getCols = () => [
     },
   },
   {
-    headerName: t("t.email"),
-    field: "applicant.emailAddress",
+    headerName: t("application.details.type"),
+    field: "submissionType",
     sortable: false,
     filter: false,
     resizable: true,
-    flex: 1,
-  },
-  {
-    headerName: t("t.phone"),
-    field: "applicant.phoneNumber",
-    sortable: false,
-    filter: false,
-    resizable: true,
+    unSortIcon: true,
     flex: 1,
   },
   {
@@ -89,6 +82,17 @@ export const getCols = () => [
       )
 
       return `${dateTime.date} ${t("t.at")} ${dateTime.time}`
+    },
+  },
+  {
+    headerName: t("applications.table.reviewStatus"),
+    field: "reviewStatus",
+    sortable: false,
+    filter: false,
+    resizable: true,
+    flex: 1,
+    valueGetter: ({ data }) => {
+      return data.reviewStatus === "flagged" ? t("applications.pendingReview") : data.status
     },
   },
 ]

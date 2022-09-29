@@ -92,7 +92,7 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700 my-0"
+                className="front-semibold uppercase text-alert my-0"
                 onClick={() => {
                   deleteItem(item, false)
                 }}
@@ -117,7 +117,7 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700 my-0"
+                className="front-semibold uppercase text-alert my-0"
                 onClick={() => {
                   deleteItem(item, true)
                 }}
