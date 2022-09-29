@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { ChangeEvent, useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 
@@ -64,12 +64,20 @@ const Field = (props: FieldProps) => {
 
       if (focused && currencyValue) {
         props.setValue(props.name, parseFloat(currencyValue.replaceAll(",", "")))
-      } else if (!isNaN(numericIncome)) {
+      } else if (isNaN(numericIncome)) {
+        props.setValue(props.name, "")
+      } else {
         props.setValue(
           props.name,
           numericIncome.toLocaleString("en-US", { minimumFractionDigits: 2 })
         )
       }
+    }
+  }
+
+  const filterNumbers = (e: ChangeEvent<HTMLInputElement>) => {
+    if (props.setValue) {
+      props.setValue(props.name, e.target.value.replace(/[a-z]|[A-Z]/g, "").match(/^\d*\.?\d?\d?/g))
     }
   }
 
@@ -80,6 +88,7 @@ const Field = (props: FieldProps) => {
       step: 0.01,
       onBlur: () => formatValue(),
       onFocus: () => formatValue(true),
+      onChange: filterNumbers,
     }
   }
 
