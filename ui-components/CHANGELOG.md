@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@6.0.1-alpha.1...@bloom-housing/ui-components@6.0.1-alpha.2) (2022-09-29)
+
+
+* 2938/card component (#3043) ([7a4a148](https://github.com/bloom-housing/bloom/commit/7a4a14891b4c8057f27a9f95e87a00d1d7a58be8)), closes [#3043](https://github.com/bloom-housing/bloom/issues/3043)
+
+
+### BREAKING CHANGES
+
+* Renamed exported interfaces in ListingCard so as to not conflict with Card and other components
+
+* Fix code style issues with Prettier
+
+* feat: split HeadingGroup out to its own separate component
+
+* fix: simplify stories and styling for Card and HeadingGroup
+
+* remove: prototype "slotted" card component
+
+* test: fix the incorrect component name in Card
+
+Co-authored-by: Lint Action <lint-action@samuelmeuli.com>
+
+
+
+
+
 ## [6.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@6.0.1-alpha.0...@bloom-housing/ui-components@6.0.1-alpha.1) (2022-09-28)
 
 
