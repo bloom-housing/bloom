@@ -78,15 +78,15 @@ const ApplicationIncome = () => {
 
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
+    const incomeValue = Number.parseFloat(income.replaceAll(",", ""))
     // Skip validation of total income if the applicant has income vouchers.
-    console.log(Number.parseFloat(income.replace(",", "")))
     const validationError = application.incomeVouchers
       ? null
-      : verifyIncome(listing, income, incomePeriod)
+      : verifyIncome(listing, incomeValue, incomePeriod)
     setIncomeError(validationError)
 
     if (!validationError) {
-      const toSave = { income, incomePeriod }
+      const toSave = { income: incomeValue, incomePeriod }
 
       conductor.completeSection(currentPageSection)
       conductor.currentStep.save(toSave)
