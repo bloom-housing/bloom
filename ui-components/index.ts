@@ -10,6 +10,7 @@ export * from "./src/actions/Video"
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
 export * from "./src/blocks/StatusItem"
+export * from "./src/blocks/Card"
 export * from "./src/blocks/DashBlock"
 export * from "./src/blocks/DashBlocks"
 export * from "./src/blocks/FormCard"
@@ -55,6 +56,7 @@ export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/StepHeader"
 export * from "./src/headers/Heading"
+export * from "./src/headers/HeadingGroup"
 
 /* Helpers */
 export * from "./src/helpers/capitalize"
