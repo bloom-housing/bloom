@@ -12,7 +12,7 @@ import { NavigationContext } from "../../config/NavigationContext"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
-export interface CardHeader {
+export interface ListingCardHeader {
   content: string | React.ReactNode
   href?: string
   customClass?: string
@@ -20,17 +20,17 @@ export interface CardHeader {
   isPillType?: boolean
 }
 
-export interface FooterButton {
+export interface ListingFooterButton {
   href: string
   text: string
   ariaHidden?: boolean
 }
 
 export interface ListingCardContentProps {
-  contentHeader?: CardHeader
-  contentSubheader?: CardHeader
-  tableHeader?: CardHeader
-  tableSubheader?: CardHeader
+  contentHeader?: ListingCardHeader
+  contentSubheader?: ListingCardHeader
+  tableHeader?: ListingCardHeader
+  tableSubheader?: ListingCardHeader
 }
 export interface ListingCardProps {
   /** A list of tags to be rendered below the content header, a Tag component is rendered for each */
@@ -40,7 +40,7 @@ export interface ListingCardProps {
   /** An object containing fields that render optional headers above the content section's table */
   contentProps?: ListingCardContentProps
   /** A list of buttons to render in the footer of the content section */
-  footerButtons?: FooterButton[]
+  footerButtons?: ListingFooterButton[]
   /** A class name applied to the footer container of the content section */
   footerContainerClass?: string
   /** Custom content rendered below the content table */
@@ -74,7 +74,7 @@ const ListingCard = (props: ListingCardProps) => {
   const { LinkComponent } = useContext(NavigationContext)
 
   const getHeader = (
-    header: CardHeader | undefined,
+    header: ListingCardHeader | undefined,
     priority: number,
     styleType?: HeaderType,
     customClass?: string
