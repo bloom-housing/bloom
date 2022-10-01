@@ -35,34 +35,31 @@ const ApplicationConfirmation = () => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
 
   const content = useMemo(() => {
-    if (listing) {
-      if (listing.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
-        return {
-          text: t("application.review.confirmation.whatHappensNext.fcfs"),
-        }
-      } else if (listing.reviewOrderType == ListingReviewOrder.lottery) {
-        const lotteryEvent = getLotteryEvent(listing)
-        const lotteryText = []
-        if (lotteryEvent?.startTime) {
-          lotteryText.push(
-            t("application.review.confirmation.eligibleApplicants.lotteryDate", {
-              lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
-            })
-          )
-        }
-        lotteryText.push(t("application.review.confirmation.whatHappensNext.lottery"))
-        return {
-          text: lotteryText.join(" "),
-        }
-      } else {
-        // TODO: change to use new enum!
-        return {
-          text: t("application.review.confirmation.whatHappensNext.waitlist"),
-        }
+    if (listing?.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
+      return {
+        text: t("application.review.confirmation.whatHappensNext.fcfs"),
       }
-    } else {
-      return { text: "" }
+    } else if (listing?.reviewOrderType == ListingReviewOrder.lottery) {
+      const lotteryEvent = getLotteryEvent(listing)
+      const lotteryText = []
+      if (lotteryEvent?.startTime) {
+        lotteryText.push(
+          t("application.review.confirmation.eligibleApplicants.lotteryDate", {
+            lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
+          })
+        )
+      }
+      lotteryText.push(t("application.review.confirmation.whatHappensNext.lottery"))
+      return {
+        text: lotteryText.join(" "),
+      }
+    } else if (listing?.reviewOrderType == ListingReviewOrder.waitlist) {
+      return {
+        text: t("application.review.confirmation.whatHappensNext.waitlist"),
+      }
     }
+
+    return { text: "" }
   }, [listing, router.locale])
 
   useEffect(() => {

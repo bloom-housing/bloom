@@ -33,27 +33,24 @@ const ApplicationWhatToExpect = () => {
   }
 
   const content = useMemo(() => {
-    if (listing) {
-      if (listing.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
-        return {
-          steps: t("application.start.whatToExpect.fcfs.steps"),
-          finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
-        }
-      } else if (listing.reviewOrderType == ListingReviewOrder.lottery) {
-        return {
-          steps: t("application.start.whatToExpect.lottery.steps"),
-          finePrint: t("application.start.whatToExpect.lottery.finePrint"),
-        }
-      } else {
-        // TODO: change to use new enum!
-        return {
-          steps: t("application.start.whatToExpect.waitlist.steps"),
-          finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
-        }
+    if (listing?.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
+      return {
+        steps: t("application.start.whatToExpect.fcfs.steps"),
+        finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
       }
-    } else {
-      return { steps: "", finePrint: "" }
+    } else if (listing?.reviewOrderType == ListingReviewOrder.lottery) {
+      return {
+        steps: t("application.start.whatToExpect.lottery.steps"),
+        finePrint: t("application.start.whatToExpect.lottery.finePrint"),
+      }
+    } else if (listing?.reviewOrderType == ListingReviewOrder.waitlist) {
+      return {
+        steps: t("application.start.whatToExpect.waitlist.steps"),
+        finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
+      }
     }
+
+    return { steps: "", finePrint: "" }
   }, [listing, router.locale])
 
   useEffect(() => {

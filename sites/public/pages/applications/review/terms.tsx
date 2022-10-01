@@ -86,24 +86,21 @@ const ApplicationTerms = () => {
   ]
 
   const content = useMemo(() => {
-    if (listing) {
-      if (listing.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
-        return {
-          text: t("application.review.terms.fcfs.text"),
-        }
-      } else if (listing.reviewOrderType == ListingReviewOrder.lottery) {
-        return {
-          text: t("application.review.terms.lottery.text"),
-        }
-      } else {
-        // TODO: change to use new enum!
-        return {
-          text: t("application.review.terms.waitlist.text"),
-        }
+    if (listing?.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
+      return {
+        text: t("application.review.terms.fcfs.text"),
       }
-    } else {
-      return { text: "" }
+    } else if (listing?.reviewOrderType == ListingReviewOrder.lottery) {
+      return {
+        text: t("application.review.terms.lottery.text"),
+      }
+    } else if (listing?.reviewOrderType == ListingReviewOrder.waitlist) {
+      return {
+        text: t("application.review.terms.waitlist.text"),
+      }
     }
+
+    return { text: "" }
   }, [listing, router.locale])
 
   useEffect(() => {
