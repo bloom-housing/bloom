@@ -13,6 +13,7 @@ import { ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed } from ".
 import { ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed } from "./seeds/listings/listing-default-summary-with-30-listing-with-10-ami-percentage-seed"
 import { ListingDefaultSummaryWith30And60AmiPercentageSeed } from "./seeds/listings/listing-default-summary-with-30-and-60-ami-percentage-seed"
 import { ListingDefaultSummaryWith10ListingWith30AmiPercentageSeed } from "./seeds/listings/listing-default-summary-with-10-listing-with-30-ami-percentage-seed"
+import { ListingDefaultNeighborhoodAmenitiesSeed } from "./seeds/listings/listing-default-neighbor-amenities"
 import { Listing10158Seed } from "./seeds/listings/listing-detroit-10158"
 import { Listing10157Seed } from "./seeds/listings/listing-detroit-10157"
 import { Listing10147Seed } from "./seeds/listings/listing-detroit-10147"
@@ -82,6 +83,7 @@ const listingSeeds: any[] = [
   ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed,
   ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed,
   ListingDefaultSummaryWith10ListingWith30AmiPercentageSeed,
+  ListingDefaultNeighborhoodAmenitiesSeed,
   Listing10145Seed,
   Listing10147Seed,
   Listing10157Seed,

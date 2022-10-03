@@ -222,6 +222,7 @@ views.full = {
     ["unitGroups.priorityType", "summaryPriorityType"],
     ["unitGroups.amiLevels", "unitGroupsAmiLevels"],
     ["listings.features", "listing_features"],
+    ["listings.neighborhoodAmenities", "listing_neighborhood_amenities"],
     ["listings.utilities", "listing_utilities"],
     ["listings.listingPrograms", "listingPrograms"],
     ["listingPrograms.program", "listingProgramsProgram"],

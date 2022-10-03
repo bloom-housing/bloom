@@ -610,7 +610,11 @@ export const ListingView = (props: ListingProps) => {
                     {listing.listingPrograms
                       .sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
                       .map((program) => (
-                        <InfoCard className="" title={program.program.title}>
+                        <InfoCard
+                          className=""
+                          title={program.program.title}
+                          key={program.program?.id}
+                        >
                           {program.program.description}
                         </InfoCard>
                       ))}

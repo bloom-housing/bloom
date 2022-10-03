@@ -62,7 +62,7 @@ describe("Listings", () => {
     // but the last listing.
     const page = "1"
     // This is the number of listings in ../../src/seed.ts minus 1
-    const limit = 12
+    const limit = 13
     const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
@@ -71,15 +71,22 @@ describe("Listings", () => {
   })
 
   it("should return the last page of paginated listings", async () => {
-    // Make the limit 1 less than the full number of listings, so that the second page contains
-    // only one listing.
-    const queryParams = {
-      limit: 12,
-      page: 3,
+    let queryParams = {
+      limit: 1,
+      page: 1,
       view: "base",
     }
-    const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    let query = qs.stringify(queryParams)
+    let res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    const totalItems = res.body.meta.totalItems
+
+    queryParams = {
+      limit: totalItems - 1,
+      page: 2,
+      view: "base",
+    }
+    query = qs.stringify(queryParams)
+    res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toEqual(1)
   })
 
@@ -97,6 +104,10 @@ describe("Listings", () => {
     const oldOccupancy = Number(listing.units[0].maxOccupancy)
     listing.units[0].maxOccupancy = oldOccupancy + 1
 
+    listing.neighborhoodAmenities = {
+      grocery: "grocery location",
+    }
+
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
@@ -105,6 +116,13 @@ describe("Listings", () => {
     const modifiedListing: ListingDto = putResponse.body
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
+    expect(modifiedListing.neighborhoodAmenities).toEqual({
+      grocery: "grocery location",
+      pharmacy: null,
+      medicalClinic: null,
+      park: null,
+      seniorCenter: null,
+    })
   })
 
   it("should add/overwrite image in existing listing", async () => {

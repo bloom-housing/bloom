@@ -70,6 +70,7 @@ import { AmiDefaultTritonDetroit } from "../seeder/seeds/ami-charts/triton-ami-c
 import { AmiDefaultSanJose } from "../seeder/seeds/ami-charts/default-ami-chart-san-jose"
 import { AmiDefaultSanMateo } from "../seeder/seeds/ami-charts/default-ami-chart-san-mateo"
 import { Asset } from "../assets/entities/asset.entity"
+import { ListingDefaultNeighborhoodAmenitiesSeed } from "./seeds/listings/listing-default-neighbor-amenities"
 
 @Module({})
 export class SeederModule {
@@ -149,6 +150,7 @@ export class SeederModule {
         ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed,
         ListingDefaultSummaryWith10ListingWith30AmiPercentageSeed,
         ListingTritonSeedDetroit,
+        ListingDefaultNeighborhoodAmenitiesSeed,
         AmiChartDefaultSeed,
         AmiDefaultMissingAMI,
         AmiDefaultTriton,

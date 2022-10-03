@@ -21,6 +21,7 @@ import { Region } from "../../property/types/region-enum"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 import { ListingImageDto } from "./listing-image.dto"
+import { ListingNeighborhoodAmenitiesDto } from "./listing-neighborhood-amenities.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -36,6 +37,7 @@ export class ListingDto extends OmitType(Listing, [
   "leasingAgentAddress",
   "listingPreferences",
   "listingPrograms",
+  "neighborhoodAmenities",
   "property",
   "reservedCommunityType",
   "result",
@@ -110,6 +112,13 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingPreferenceDto)
   listingPreferences: ListingPreferenceDto[]
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ListingNeighborhoodAmenitiesDto)
+  neighborhoodAmenities?: ListingNeighborhoodAmenitiesDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

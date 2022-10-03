@@ -5324,6 +5324,23 @@ export interface ListingUtilities {
   internet?: boolean
 }
 
+export interface ListingNeighborhoodAmenities {
+  /**  */
+  grocery?: string
+
+  /**  */
+  pharmacy?: string
+
+  /**  */
+  medicalClinic?: string
+
+  /**  */
+  park?: string
+
+  /**  */
+  seniorCenter?: string
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -5426,6 +5443,9 @@ export interface Listing {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  neighborhoodAmenities?: ListingNeighborhoodAmenities
 
   /**  */
   petPolicy?: string
