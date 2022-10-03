@@ -175,7 +175,10 @@ const ApplicationsList = () => {
                   config={{
                     gridComponents,
                     columns,
-                    totalItemsLabel: t("applications.totalApplications"),
+                    totalItemsLabel:
+                      flaggedAppsData?.meta?.totalItems === 1
+                        ? t("applications.duplicates.set")
+                        : t("applications.duplicates.sets"),
                   }}
                   data={{
                     items: flaggedAppsData?.items ?? [],
