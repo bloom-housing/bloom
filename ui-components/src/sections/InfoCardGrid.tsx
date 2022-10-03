@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Heading } from "../headers/Heading"
+import { Heading } from "../text/Heading"
 import "./InfoCardGrid.scss"
 
 export interface InfoCardGridProps {
@@ -11,7 +11,7 @@ export interface InfoCardGridProps {
 const InfoCardGrid = (props: InfoCardGridProps) => (
   <section className="info-cards">
     <header className="info-cards__header">
-      <Heading style={"sidebarHeader"} priority={2} className={"text-tiny"}>
+      <Heading styleType={"underlineWeighted"} priority={2} className={"text-tiny"}>
         {props.title}
       </Heading>
       {props.subtitle && <p className="info-cards__subtitle">{props.subtitle}</p>}
