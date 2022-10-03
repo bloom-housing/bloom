@@ -109,7 +109,7 @@ const ApplicationDemographics = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <fieldset>
-              <legend className="field-label--caps">
+              <legend className="text_caps-spaced">
                 {t("application.review.demographics.raceLabel")}
               </legend>
               <FieldGroup
@@ -140,7 +140,7 @@ const ApplicationDemographics = () => {
                 label={t("application.review.demographics.ethnicityLabel")}
                 placeholder={t("t.selectOne")}
                 register={register}
-                labelClassName="field-label--caps mb-3"
+                labelClassName="text_caps-spaced mb-3"
                 controlClassName="control"
                 options={ethnicityKeys}
                 keyPrefix="application.review.demographics.ethnicityOptions"
@@ -151,7 +151,7 @@ const ApplicationDemographics = () => {
 
           <div className="form-card__group is-borderless">
             <fieldset>
-              <legend className="field-label--caps">
+              <legend className="text_caps-spaced">
                 {t("application.review.demographics.howDidYouHearLabel")}
               </legend>
               <FieldGroup

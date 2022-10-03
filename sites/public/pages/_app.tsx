@@ -68,7 +68,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     if (process.env.NODE_ENV !== "production") {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const axe = require("@axe-core/react")
-      void axe(React, ReactDOM, 1000)
+      void axe(React, ReactDOM, 5000)
     }
   }, [])
 

@@ -122,7 +122,7 @@
   }
 
   &.is-info {
-    color: var(--info-appearance-label-color, var(--bloom-color-gray-800));
+    color: var(--info-appearance-label-color, var(--bloom-text-color-dark));
     background-color: var(--info-appearance-background-color, var(--bloom-color-warn-light));
   }
 

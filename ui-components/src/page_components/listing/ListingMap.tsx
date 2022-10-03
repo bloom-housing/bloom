@@ -5,7 +5,7 @@ import MapGL, { Marker } from "react-map-gl"
 import "./ListingMap.scss"
 import { MultiLineAddress, Address } from "../../helpers/MultiLineAddress"
 import { useIntersect } from "../../.."
-import { Heading } from "../../headers/Heading"
+import { Heading } from "../../text/Heading"
 
 export interface ListingMapProps {
   address?: Address
@@ -109,7 +109,7 @@ const ListingMap = (props: ListingMapProps) => {
     <div className="listing-map" ref={setIntersectingElement}>
       <div className="addressPopup">
         {props.listingName && (
-          <Heading priority={3} style={"sidebarSubHeader"}>
+          <Heading priority={3} styleType={"capsWeighted"}>
             {props.listingName}
           </Heading>
         )}

@@ -116,7 +116,7 @@
   &.is-warning {
     background-color: var(--warning-appearance-background-color, var(--bloom-color-warn));
     border-color: var(--warning-appearance-border-color, var(--bloom-color-warn));
-    color: var(--warning-appearance-label-color, var(--bloom-color-gray-800));
+    color: var(--warning-appearance-label-color, var(--bloom-text-color-dark));
 
     &:hover {
       background-color: var(
@@ -176,7 +176,7 @@
     }
 
     &.is-warning {
-      color: var(--bloom-color-gray-800);
+      color: var(--bloom-text-color-dark);
 
       &:hover {
         color: var(--bloom-color-white);
