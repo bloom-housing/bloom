@@ -148,7 +148,7 @@ const ApplicationMember = () => {
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="text_caps-spaced">
+                  <legend className="text__caps-spaced">
                     {t("application.household.member.name")}
                   </legend>
 
@@ -211,7 +211,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="text_caps-spaced">
+                  <legend className="text__caps-spaced">
                     {t("application.household.member.haveSameAddress")}
                   </legend>
                   <FieldGroup
@@ -230,7 +230,9 @@ const ApplicationMember = () => {
 
                 {(sameAddress == "no" || (!sameAddress && member.sameAddress == "no")) && (
                   <fieldset className="mt-8">
-                    <legend className="text_caps-spaced">{t("application.contact.address")}</legend>
+                    <legend className="text__caps-spaced">
+                      {t("application.contact.address")}
+                    </legend>
 
                     <Field
                       id="addressStreet"
@@ -304,7 +306,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="text_caps-spaced">
+                  <legend className="text__caps-spaced">
                     {t("application.household.member.workInRegion", {
                       county: listing?.countyCode,
                     })}
@@ -326,7 +328,9 @@ const ApplicationMember = () => {
 
                 {(workInRegion == "yes" || (!workInRegion && member.workInRegion == "yes")) && (
                   <fieldset className="mt-8">
-                    <legend className="text_caps-spaced">{t("application.contact.address")}</legend>
+                    <legend className="text__caps-spaced">
+                      {t("application.contact.address")}
+                    </legend>
 
                     <Field
                       id="workAddress.street"
@@ -398,7 +402,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__group">
                 <div className={"field " + (errors.relationship ? "error" : "")}>
-                  <label className="text_caps-spaced" htmlFor="relationship">
+                  <label className="text__caps-spaced" htmlFor="relationship">
                     {t("application.household.member.whatIsTheirRelationship")}
                   </label>
                   <div className="control">
