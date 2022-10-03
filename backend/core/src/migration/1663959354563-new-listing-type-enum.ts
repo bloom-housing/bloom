@@ -15,7 +15,7 @@ export class newListingTypeEnum1663959354563 implements MigrationInterface {
     )
     await queryRunner.query(`DROP TYPE "public"."listings_review_order_type_enum_old"`)
 
-    const listings = await queryRunner.query(`SELECT * FROM listings`)
+    const listings = await queryRunner.query(`SELECT id, listing_availability FROM listings`)
 
     for (const l of listings) {
       if (l.listing_availability === "openWaitlist") {
@@ -36,7 +36,7 @@ export class newListingTypeEnum1663959354563 implements MigrationInterface {
     await queryRunner.query(
       `CREATE TYPE "public"."listings_listing_availability_enum" AS ENUM('availableUnits', 'openWaitlist')`
     )
-    const listings = await queryRunner.query(`SELECT * FROM listings`)
+    const listings = await queryRunner.query(`SELECT id, review_order_type FROM listings`)
 
     for (const l of listings) {
       if (l.review_order_type === "waitlist") {
