@@ -7,7 +7,6 @@ import { ListingReviewOrder } from "../../../listings/types/listing-review-order
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
 import { classToClass } from "class-transformer"
 import dayjs from "dayjs"
 
@@ -96,7 +95,6 @@ const tritonListing: ListingSeedType = {
   waitlistOpenSpots: 200,
   isWaitlistOpen: true,
   whatToExpect: null,
-  listingAvailability: ListingAvailability.availableUnits,
   utilities: {
     water: true,
     gas: true,

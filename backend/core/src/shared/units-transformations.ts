@@ -10,7 +10,7 @@ import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { AmiChartItem } from "../ami-charts/entities/ami-chart-item.entity"
 import { UnitAmiChartOverride } from "../units/entities/unit-ami-chart-override.entity"
 import { Listing } from "../listings/entities/listing.entity"
-import { ListingAvailability } from "../listings/types/listing-availability-enum"
+import { ListingReviewOrder } from "../listings/types/listing-review-order-enum"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -335,7 +335,7 @@ export const summarizeUnitsByTypeAndRent = (units: Units, listing: Listing): Uni
     const finalSummary = unitMap[key].reduce((summary, unit, index) => {
       return getUnitsSummary(unit, index === 0 ? null : summary)
     }, {} as UnitSummary)
-    if (listing.listingAvailability === ListingAvailability.availableUnits) {
+    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
       finalSummary.totalAvailable = unitMap[key].length
     }
     summaries.push(finalSummary)
