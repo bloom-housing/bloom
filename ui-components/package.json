@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "6.0.1-alpha.2",
+  "version": "6.0.1-alpha.3",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Shared user interface components for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/ui-components",
@@ -60,8 +60,8 @@
     "preact": "^10.5.14",
     "pretty": "2.0.0",
     "puppeteer": "^10.1.0",
-    "react-is": "^17.0.2",
     "react-dom-server": "0.0.5",
+    "react-is": "^17.0.2",
     "react-test-renderer": "^17.0.2",
     "regenerator-runtime": "^0.13.7",
     "sass": "1.52.1",

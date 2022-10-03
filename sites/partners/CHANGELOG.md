@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@6.0.1-alpha.2...@bloom-housing/partners@6.0.1-alpha.3) (2022-10-03)
+
+
+### Code Refactoring
+
+* organize design system text styles ([#3055](https://github.com/bloom-housing/bloom/issues/3055)) ([f5bcb62](https://github.com/bloom-housing/bloom/commit/f5bcb629885fd9ce6c17e3e817bd0ee500373990))
+
+
+### Features
+
+* new listing type field ([#3085](https://github.com/bloom-housing/bloom/issues/3085)) ([0af7f2a](https://github.com/bloom-housing/bloom/commit/0af7f2a8fb83de1d30745d7d1548b9eff326ccf3))
+
+
+### BREAKING CHANGES
+
+* the different style types you can pass to the heading component have individually been renamed to fit the design system, as well as the prop to pass them in
+
+
+
+
+
 ## [6.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@6.0.1-alpha.1...@bloom-housing/partners@6.0.1-alpha.2) (2022-09-29)
 
 **Note:** Version bump only for package @bloom-housing/partners
