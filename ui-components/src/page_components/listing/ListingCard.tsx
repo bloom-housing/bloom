@@ -3,7 +3,7 @@ import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
 import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
-import { Heading, HeaderType } from "../../headers/Heading"
+import { Heading, HeaderType } from "../../text/Heading"
 import { Tag } from "../../text/Tag"
 import { AppearanceShadeType, AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
@@ -94,7 +94,7 @@ const ListingCard = (props: ListingCardProps) => {
         )
       }
       return (
-        <Heading priority={priority} style={styleType} className={customClass}>
+        <Heading priority={priority} styleType={styleType} className={customClass}>
           {header.href ? (
             <LinkComponent className="is-card-link" href={header.href}>
               {header.content}
@@ -112,8 +112,8 @@ const ListingCard = (props: ListingCardProps) => {
   const getContentHeader = () => {
     return (
       <div className="listings-row_headers">
-        {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
-        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
+        {getHeader(contentProps?.contentHeader, 2, "largePrimary", "order-1")}
+        {getHeader(contentProps?.contentSubheader, 3, "mediumNormal", "order-2")}
         {cardTags && cardTags?.length > 0 && (
           <div className="listings-row_tags">
             {cardTags?.map((cardTag, index) => {
@@ -145,8 +145,8 @@ const ListingCard = (props: ListingCardProps) => {
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>
-            {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
-            {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
+            {getHeader(contentProps?.tableHeader, 4, "smallWeighted")}
+            {getHeader(contentProps?.tableSubheader, 5, "smallNormal")}
           </div>
           {children && children}
           {tableProps && (tableProps.data || tableProps.stackedData) && (

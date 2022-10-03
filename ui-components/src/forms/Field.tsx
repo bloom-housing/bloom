@@ -75,7 +75,7 @@ const Field = (props: FieldProps) => {
 
   const label = useMemo(() => {
     const labelClasses = ["label"]
-    if (props.caps) labelClasses.push("field-label--caps")
+    if (props.caps) labelClasses.push("text_caps-spaced")
     if (props.primary) labelClasses.push("text-primary")
     if (props.readerOnly) labelClasses.push("sr-only")
     if (props.type === "radio") {

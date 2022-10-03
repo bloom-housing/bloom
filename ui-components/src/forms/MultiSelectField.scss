@@ -82,7 +82,7 @@
   width: 100%;
   padding: var(--bloom-s1) var(--bloom-s2);
   font-size: var(--bloom-font-size-sm);
-  color: var(--bloom-color-gray-750);
+  color: var(--bloom-text-color);
   text-align: right;
 }
 
@@ -126,7 +126,7 @@
 
 .multi-select-field__option--no-results,
 .multi-select-field__option[aria-disabled="true"] {
-  color: var(--bloom-color-gray-750) !important;
+  color: var(--bloom-text-color) !important;
   cursor: not-allowed !important;
   text-decoration: none !important;
 }

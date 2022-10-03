@@ -1,5 +1,5 @@
 import React from "react"
-import { Heading } from "./Heading"
+import { Heading } from "../text/Heading"
 import "./HeadingGroup.scss"
 
 export interface HeadingGroupProps {
