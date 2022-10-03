@@ -59,7 +59,7 @@ const AdditionalResources = () => {
                   overrides: {
                     h4: {
                       component: ({ children, ...props }) => (
-                        <h4 {...props} className="text-caps-underline">
+                        <h4 {...props} className={"text__caps_underline"}>
                           {children}
                         </h4>
                       ),

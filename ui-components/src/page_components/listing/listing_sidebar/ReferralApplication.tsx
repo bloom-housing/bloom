@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Heading } from "../../../text/Heading"
 import { t } from "../../../helpers/translator"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 
@@ -16,7 +17,9 @@ const ReferralApplication = (props: ReferralApplicationProps) => {
 
   return (
     <section className="aside-block">
-      <h2 className="text-caps-underline">{props.strings.title}</h2>
+      <Heading priority={2} styleType={"underlineWeighted"}>
+        {props.strings.title}
+      </Heading>
       <p>
         <a href={linkedPhoneNumber}>
           <Icon symbol="phone" size="medium" fill={IconFillColors.primary} />{" "}

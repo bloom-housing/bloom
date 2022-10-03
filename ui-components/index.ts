@@ -55,7 +55,6 @@ export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/StepHeader"
-export * from "./src/headers/Heading"
 export * from "./src/headers/HeadingGroup"
 
 /* Helpers */
@@ -164,5 +163,6 @@ export * from "./src/tables/AgPagination"
 
 /* Text */
 export * from "./src/text/Description"
+export * from "./src/text/Heading"
 export * from "./src/text/Message"
 export * from "./src/text/Tag"
