@@ -78,7 +78,7 @@ const ApplicationIncome = () => {
 
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
-    const incomeValue = Number.parseFloat(income.replaceAll(",", ""))
+    const incomeValue = income.replaceAll(",", "")
     // Skip validation of total income if the applicant has income vouchers.
     const validationError = application.incomeVouchers
       ? null
