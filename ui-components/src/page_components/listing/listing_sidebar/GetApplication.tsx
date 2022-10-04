@@ -4,7 +4,7 @@ import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 import { Address } from "../../../helpers/MultiLineAddress"
-import { Heading } from "../../../headers/Heading"
+import { Heading } from "../../../text/Heading"
 import { t } from "../../../helpers/translator"
 import { OrDivider } from "./OrDivider"
 import { ContactAddress } from "./ContactAddress"
@@ -56,9 +56,10 @@ const GetApplication = (props: ApplicationsProps) => {
 
   return (
     <section className="aside-block" data-test-id="get-application-section">
-      <h2 className="text-caps-underline">
+      <Heading priority={2} styleType={"underlineWeighted"}>
         {props.strings?.howToApply ?? t("listings.apply.howToApply")}
-      </h2>
+      </Heading>
+
       {!props.applicationsOpen && (
         <p className="mb-5 text-gray-700">
           {props.strings?.applicationsOpenInFuture ??
@@ -121,7 +122,7 @@ const GetApplication = (props: ApplicationsProps) => {
           {props.applicationsOpen && (props.onlineApplicationURL || props.paperMethod) && (
             <OrDivider bgColor="white" />
           )}
-          <Heading priority={3} style={"sidebarSubHeader"}>
+          <Heading priority={3} styleType={"capsWeighted"}>
             {props.strings?.pickUpApplication ?? t("listings.apply.pickUpAnApplication")}
           </Heading>
           <ContactAddress
@@ -130,7 +131,7 @@ const GetApplication = (props: ApplicationsProps) => {
           />
           {props.applicationPickUpAddressOfficeHours && (
             <>
-              <Heading priority={3} style={"sidebarSubHeader"}>
+              <Heading priority={3} styleType={"capsWeighted"}>
                 {props.strings?.officeHoursHeading ?? t("leasingAgent.officeHours")}
               </Heading>
               <p className="text-gray-800 text-tiny markdown">

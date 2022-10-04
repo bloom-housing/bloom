@@ -10,6 +10,7 @@ export * from "./src/actions/Video"
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
 export * from "./src/blocks/StatusItem"
+export * from "./src/blocks/Card"
 export * from "./src/blocks/DashBlock"
 export * from "./src/blocks/DashBlocks"
 export * from "./src/blocks/FormCard"
@@ -54,7 +55,7 @@ export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/StepHeader"
-export * from "./src/headers/Heading"
+export * from "./src/headers/HeadingGroup"
 
 /* Helpers */
 export * from "./src/helpers/capitalize"
@@ -89,6 +90,7 @@ export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/TabNav"
 export * from "./src/navigation/Tabs"
 export * from "./src/navigation/Breadcrumbs"
+export * from "./src/navigation/SideNav"
 
 /* Notifications */
 export * from "./src/notifications/AlertBox"
@@ -161,5 +163,6 @@ export * from "./src/tables/AgPagination"
 
 /* Text */
 export * from "./src/text/Description"
+export * from "./src/text/Heading"
 export * from "./src/text/Message"
 export * from "./src/text/Tag"

@@ -14,6 +14,7 @@ for (let i = 0; i < 10; i++) {
 }
 
 const DefaultMultiSelectField = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues, setValue } = useForm({ mode: "onChange" })
 
   return (

@@ -6,7 +6,7 @@ import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
-import { Language, ListingAvailability } from "../../types"
+import { Language, ListingReviewOrder } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -19,6 +19,7 @@ import { AuthzService } from "../auth/services/authz.service"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
+import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -27,7 +28,8 @@ export class ListingsService {
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
-    @Inject(REQUEST) private req: ExpressRequest
+    @Inject(REQUEST) private req: ExpressRequest,
+    private readonly afsService: ApplicationFlaggedSetsService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -109,15 +111,17 @@ export class ListingsService {
     await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.update)
 
     const availableUnits =
-      listingDto.listingAvailability === ListingAvailability.availableUnits
-        ? listingDto.units.length
-        : 0
+      listingDto.reviewOrderType !== ListingReviewOrder.waitlist ? listingDto.units.length : 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
         delete unit.id
       }
     })
     listingDto.unitsAvailable = availableUnits
+
+    if (listing.status == ListingStatus.active && listingDto.status === ListingStatus.closed) {
+      await this.afsService.scheduleAfsProcessing()
+    }
 
     Object.assign(listing, {
       ...listingDto,

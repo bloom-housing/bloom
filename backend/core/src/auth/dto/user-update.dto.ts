@@ -3,7 +3,6 @@ import { Expose, Type } from "class-transformer"
 import {
   ArrayMinSize,
   IsArray,
-  IsDate,
   IsDefined,
   IsEmail,
   IsNotEmpty,
@@ -46,18 +45,6 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   email?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, getByLabelText } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { SiteHeader } from "../../src/headers/SiteHeader"
 
 afterEach(cleanup)
@@ -44,7 +44,7 @@ describe("<SiteHeader>", () => {
               },
               {
                 title: "Sign Out",
-                onClick: () => {},
+                onClick: jest.fn(),
               },
             ],
           },

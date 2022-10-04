@@ -6,7 +6,6 @@ import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
-import dayjs from "dayjs"
 import { ConfigService } from "@nestjs/config"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
@@ -18,7 +17,6 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
-import { ListingAvailability } from "../listings/types/listing-availability-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -150,14 +148,14 @@ export class EmailService {
       eligibleText = this.polyglot.t("confirmation.eligible.fcfs")
       preferenceText = this.polyglot.t("confirmation.eligible.fcfsPreference")
     }
-    if (listing.listingAvailability === ListingAvailability.openWaitlist) {
-      eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
-      contactText = this.polyglot.t("confirmation.eligible.waitlistContact")
-      preferenceText = this.polyglot.t("confirmation.eligible.waitlistPreference")
-    }
     if (listing.reviewOrderType === ListingReviewOrder.lottery) {
       eligibleText = this.polyglot.t("confirmation.eligible.lottery")
       preferenceText = this.polyglot.t("confirmation.eligible.lotteryPreference")
+    }
+    if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
+      eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
+      contactText = this.polyglot.t("confirmation.eligible.waitlistContact")
+      preferenceText = this.polyglot.t("confirmation.eligible.waitlistPreference")
     }
 
     const user = {

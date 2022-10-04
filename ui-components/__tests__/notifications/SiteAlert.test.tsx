@@ -9,6 +9,7 @@ describe("<SiteAlert>", () => {
     jest.spyOn(window.sessionStorage.__proto__, "setItem")
     window.sessionStorage.__proto__.setItem = jest.fn()
     setSiteAlertMessage("Alert Message Goes Here", "success")
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(sessionStorage.setItem).toHaveBeenCalledWith(
       "alert_message_success",
       "Alert Message Goes Here"

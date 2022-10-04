@@ -26,7 +26,7 @@ describe("<InfoCard>", () => {
   })
 
   it("if children are JSX, render as inputted", () => {
-    const { container, debug } = render(
+    const { container } = render(
       <InfoCard title={"Info Card Title"} className={"custom-class"}>
         <div>Children go here</div>
       </InfoCard>

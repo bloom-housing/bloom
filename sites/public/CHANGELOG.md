@@ -3,6 +3,126 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@6.0.1-alpha.2...@bloom-housing/public@6.0.1-alpha.3) (2022-10-03)
+
+
+### Code Refactoring
+
+* organize design system text styles ([#3055](https://github.com/bloom-housing/bloom/issues/3055)) ([f5bcb62](https://github.com/bloom-housing/bloom/commit/f5bcb629885fd9ce6c17e3e817bd0ee500373990))
+
+
+### Features
+
+* new listing type field ([#3085](https://github.com/bloom-housing/bloom/issues/3085)) ([0af7f2a](https://github.com/bloom-housing/bloom/commit/0af7f2a8fb83de1d30745d7d1548b9eff326ccf3))
+
+
+### BREAKING CHANGES
+
+* the different style types you can pass to the heading component have individually been renamed to fit the design system, as well as the prop to pass them in
+
+
+
+
+
+## [6.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@6.0.1-alpha.1...@bloom-housing/public@6.0.1-alpha.2) (2022-09-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [6.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@6.0.1-alpha.0...@bloom-housing/public@6.0.1-alpha.1) (2022-09-28)
+
+
+### Features
+
+* add duplicates v2 feature ([11cd2b3](https://github.com/bloom-housing/bloom/commit/11cd2b3b4d39c69e10ca1c9a8c2c7199b4a08b6b)), closes [#3006](https://github.com/bloom-housing/bloom/issues/3006) [#2961](https://github.com/bloom-housing/bloom/issues/2961) [#3020](https://github.com/bloom-housing/bloom/issues/3020) [#3093](https://github.com/bloom-housing/bloom/issues/3093) [#2974](https://github.com/bloom-housing/bloom/issues/2974) [#2909](https://github.com/bloom-housing/bloom/issues/2909) [#2958](https://github.com/bloom-housing/bloom/issues/2958) [#2904](https://github.com/bloom-housing/bloom/issues/2904) [#2987](https://github.com/bloom-housing/bloom/issues/2987) [#2990](https://github.com/bloom-housing/bloom/issues/2990) [#2989](https://github.com/bloom-housing/bloom/issues/2989) [#2991](https://github.com/bloom-housing/bloom/issues/2991) [#2985](https://github.com/bloom-housing/bloom/issues/2985) [#2994](https://github.com/bloom-housing/bloom/issues/2994) [#2995](https://github.com/bloom-housing/bloom/issues/2995) [#2999](https://github.com/bloom-housing/bloom/issues/2999) [#2950](https://github.com/bloom-housing/bloom/issues/2950) [#2968](https://github.com/bloom-housing/bloom/issues/2968) [#2784](https://github.com/bloom-housing/bloom/issues/2784) [#2988](https://github.com/bloom-housing/bloom/issues/2988) [#3016](https://github.com/bloom-housing/bloom/issues/3016) [#3018](https://github.com/bloom-housing/bloom/issues/3018) [#3017](https://github.com/bloom-housing/bloom/issues/3017) [#3005](https://github.com/bloom-housing/bloom/issues/3005) [#3012](https://github.com/bloom-housing/bloom/issues/3012) [#3014](https://github.com/bloom-housing/bloom/issues/3014) [#3000](https://github.com/bloom-housing/bloom/issues/3000) [#3021](https://github.com/bloom-housing/bloom/issues/3021) [#3027](https://github.com/bloom-housing/bloom/issues/3027) [#3036](https://github.com/bloom-housing/bloom/issues/3036) [#3023](https://github.com/bloom-housing/bloom/issues/3023) [#3040](https://github.com/bloom-housing/bloom/issues/3040) [#3054](https://github.com/bloom-housing/bloom/issues/3054) [#3050](https://github.com/bloom-housing/bloom/issues/3050) [#483](https://github.com/bloom-housing/bloom/issues/483) [#3073](https://github.com/bloom-housing/bloom/issues/3073) [#3070](https://github.com/bloom-housing/bloom/issues/3070) [#3041](https://github.com/bloom-housing/bloom/issues/3041) [#3061](https://github.com/bloom-housing/bloom/issues/3061) [#3077](https://github.com/bloom-housing/bloom/issues/3077) [#3063](https://github.com/bloom-housing/bloom/issues/3063) [#3084](https://github.com/bloom-housing/bloom/issues/3084) [#3088](https://github.com/bloom-housing/bloom/issues/3088) [#2892](https://github.com/bloom-housing/bloom/issues/2892) [#3006](https://github.com/bloom-housing/bloom/issues/3006) [#2961](https://github.com/bloom-housing/bloom/issues/2961) [#3020](https://github.com/bloom-housing/bloom/issues/3020) [#3086](https://github.com/bloom-housing/bloom/issues/3086) [#3102](https://github.com/bloom-housing/bloom/issues/3102) [#3101](https://github.com/bloom-housing/bloom/issues/3101) [#3104](https://github.com/bloom-housing/bloom/issues/3104) [#3105](https://github.com/bloom-housing/bloom/issues/3105)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@5.1.1-alpha.8
+ - @bloom-housing/shared-helpers@5.1.1-alpha.18
+ - @bloom-housing/partners@5.1.1-alpha.20
+ - @bloom-housing/public@5.1.1-alpha.18
+ - @bloom-housing/ui-components@5.1.1-alpha.11
+
+
+
+
+
+## [6.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.56...@bloom-housing/public@6.0.1-alpha.0) (2022-09-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.55...@bloom-housing/public@5.1.1-alpha.56) (2022-09-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.54...@bloom-housing/public@5.1.1-alpha.55) (2022-09-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.53...@bloom-housing/public@5.1.1-alpha.54) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.52...@bloom-housing/public@5.1.1-alpha.53) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.51...@bloom-housing/public@5.1.1-alpha.52) (2022-09-26)
+
+
+### Bug Fixes
+
+* make pill style on listing card optional ([#3088](https://github.com/bloom-housing/bloom/issues/3088)) ([e574010](https://github.com/bloom-housing/bloom/commit/e57401067639e3e05a426f61dd0c3dc18dcda35d))
+
+
+
+
+
+## [5.1.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.50...@bloom-housing/public@5.1.1-alpha.51) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [5.1.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.49...@bloom-housing/public@5.1.1-alpha.50) (2022-09-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [5.1.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.48...@bloom-housing/public@5.1.1-alpha.49) (2022-09-22)
 
 **Note:** Version bump only for package @bloom-housing/public

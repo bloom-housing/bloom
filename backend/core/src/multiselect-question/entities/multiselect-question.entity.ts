@@ -76,7 +76,9 @@ class MultiselectQuestion {
   @Type(() => MultiselectQuestion)
   listingMultiselectQuestions: MultiselectQuestion[]
 
-  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.multiselectQuestions)
+  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.multiselectQuestions, {
+    onDelete: "CASCADE",
+  })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)

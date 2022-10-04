@@ -27,6 +27,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationReviewStatus } from "@bloom-housing/backend-core"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -54,6 +55,7 @@ const ApplicationTerms = () => {
       .submit({
         body: {
           ...application,
+          reviewStatus: ApplicationReviewStatus.pending,
           listing: {
             id: listing.id,
           },

@@ -18,7 +18,7 @@ import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { ListingAvailability } from "@bloom-housing/backend-core/types"
+import { ListingReviewOrder } from "@bloom-housing/backend-core"
 
 type UnitProps = {
   units: TempUnit[]
@@ -122,7 +122,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700 my-0"
+                className="front-semibold uppercase text-alert my-0"
                 onClick={() => setUnitDeleteModal(unit.tempId)}
                 unstyled
               >
@@ -194,15 +194,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
                   value: "availableUnits",
                   id: "availableUnits",
                   dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked:
-                    listing?.listingAvailability === ListingAvailability.availableUnits,
+                  defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
                 },
                 {
                   label: t("listings.waitlist.open"),
                   value: "openWaitlist",
                   id: "openWaitlist",
                   dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.listingAvailability === ListingAvailability.openWaitlist,
+                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
                 },
               ]}
             />

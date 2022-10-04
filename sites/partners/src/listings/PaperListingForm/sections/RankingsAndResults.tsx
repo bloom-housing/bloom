@@ -72,31 +72,33 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         title={t("listings.sections.rankingsResultsTitle")}
         description={t("listings.sections.rankingsResultsSubtitle")}
       >
-        <GridSection columns={2} className={"flex items-center"}>
-          <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
-            <FieldGroup
-              name="reviewOrderQuestion"
-              type="radio"
-              register={register}
-              fields={[
-                {
-                  label: t("listings.firstComeFirstServe"),
-                  value: "reviewOrderFCFS",
-                  id: "reviewOrderFCFS",
-                  defaultChecked:
-                    listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
-                },
-                {
-                  label: t("listings.lotteryTitle"),
-                  value: "reviewOrderLottery",
-                  id: "reviewOrderLottery",
-                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
-                },
-              ]}
-            />
-          </GridCell>
-        </GridSection>
+        {availabilityQuestion !== "openWaitlist" && (
+          <GridSection columns={2} className={"flex items-center"}>
+            <GridCell>
+              <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
+              <FieldGroup
+                name="reviewOrderQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    label: t("listings.firstComeFirstServe"),
+                    value: "reviewOrderFCFS",
+                    id: "reviewOrderFCFS",
+                    defaultChecked:
+                      listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+                  },
+                  {
+                    label: t("listings.lotteryTitle"),
+                    value: "reviewOrderLottery",
+                    id: "reviewOrderLottery",
+                    defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
+                  },
+                ]}
+              />
+            </GridCell>
+          </GridSection>
+        )}
         {reviewOrder === "reviewOrderFCFS" && (
           <GridSection columns={2} className={"flex items-center"}>
             <GridCell>
