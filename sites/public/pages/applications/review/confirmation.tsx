@@ -11,7 +11,6 @@ import {
   AppearanceStyleType,
   ApplicationTimeline,
   Button,
-  ContentAccordion,
   FormCard,
   t,
 } from "@bloom-housing/ui-components"
