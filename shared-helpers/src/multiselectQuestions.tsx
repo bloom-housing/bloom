@@ -122,7 +122,7 @@ export const getRadioFields = (
   return (
     <fieldset>
       {applicationSection === ApplicationSection.preferences && (
-        <legend className="text_caps-spaced mb-4">{question?.text}</legend>
+        <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
       <p className="field-note mb-8">{question?.description}</p>
       <FieldGroup

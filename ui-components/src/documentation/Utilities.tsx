@@ -60,7 +60,7 @@ export const Typography = () => {
           "text__caps-weighted",
           <div className={"text__caps-weighted"}>Caps Weighted Text Style</div>,
         ],
-        ["text_caps-spaced", <div className={"text_caps-spaced"}>Caps Spaced Text Style</div>],
+        ["text__caps-spaced", <div className={"text__caps-spaced"}>Caps Spaced Text Style</div>],
       ]}
     />
   )
