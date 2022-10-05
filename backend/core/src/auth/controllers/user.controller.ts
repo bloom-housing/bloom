@@ -44,6 +44,7 @@ import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
 import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
+import { IdDto } from "../../shared/dto/id.dto"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -168,11 +169,12 @@ export class UserController {
     return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
   }
 
-  @Delete(`:id`)
+  // codegen generate unusable code for this, if we don't have a body
+  @Delete()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Delete user by id", operationId: "delete" })
   @UseInterceptors(ActivityLogInterceptor)
-  async delete(@Param("id") userId: string): Promise<void> {
-    return await this.userService.delete(userId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.userService.delete(dto.id)
   }
 }

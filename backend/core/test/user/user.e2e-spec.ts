@@ -619,7 +619,8 @@ describe("Users", () => {
     expect(res.body.email).toBe(user.email)
 
     await supertest(app.getHttpServer())
-      .delete(`/user/${user.id}`)
+      .delete(`/user`)
+      .send({ id: user.id })
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
 
@@ -655,7 +656,8 @@ describe("Users", () => {
     })
 
     await supertest(app.getHttpServer())
-      .delete(`/user/${user.id}`)
+      .delete(`/user`)
+      .send({ id: user.id })
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
 
