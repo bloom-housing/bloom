@@ -163,7 +163,7 @@ h1.title {
   font-size: var(--text-light-weighted-font-size, var(--bloom-font-size-sm));
 }
 
-.text_caps-spaced {
+.text__caps-spaced {
   font-family: var(--text-caps-spaced-font-family, var(--bloom-font-sans));
   text-transform: uppercase;
   color: var(--text-caps-spaced-color, var(--bloom-text-color));

@@ -102,7 +102,7 @@ export default () => {
           onSubmit={handleSubmit(onSubmit, onError)}
         >
           <div className="form-card__group border-b">
-            <label className="text_caps-spaced" htmlFor="phoneNumber">
+            <label className="text__caps-spaced" htmlFor="phoneNumber">
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
             <PhoneField
@@ -120,7 +120,7 @@ export default () => {
             />
           </div>
           <div className="form-card__group border-b">
-            <h3 className="text_caps-spaced">
+            <h3 className="text__caps-spaced">
               {t("application.alternateContact.contact.emailAddressFormLabel")}
             </h3>
             <Field
@@ -140,7 +140,7 @@ export default () => {
           </div>
           <div className="form-card__group">
             <fieldset>
-              <legend className="text_caps-spaced">
+              <legend className="text__caps-spaced">
                 {t("application.alternateContact.contact.contactMailingAddressLabel")}
               </legend>
               <p className="field-note mb-4">
