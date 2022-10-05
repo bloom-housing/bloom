@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@6.0.1-alpha.3...@bloom-housing/partners@6.0.1-alpha.4) (2022-10-05)
+
+
+### Bug Fixes
+
+* individual application link in applications table ([#3125](https://github.com/bloom-housing/bloom/issues/3125)) ([8693136](https://github.com/bloom-housing/bloom/commit/8693136012c51a9151d538f46bdb7278bd1d5056))
+* update copy on total number of duplicate sets ([#3119](https://github.com/bloom-housing/bloom/issues/3119)) ([3fcf1fc](https://github.com/bloom-housing/bloom/commit/3fcf1fc427d135b8169ca560e28d956a94e2159b))
+
+
+
+
+
 ## [6.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@6.0.1-alpha.2...@bloom-housing/partners@6.0.1-alpha.3) (2022-10-03)
 
 
