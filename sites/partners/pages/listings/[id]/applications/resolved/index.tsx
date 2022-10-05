@@ -128,7 +128,10 @@ const ApplicationsList = () => {
               config={{
                 gridComponents: { formatLinkCell: getLinkCellFormatter(router) },
                 columns: columns,
-                totalItemsLabel: t("applications.totalApplications"),
+                totalItemsLabel:
+                  flaggedAppsData?.meta?.totalItems === 1
+                    ? t("applications.duplicates.set")
+                    : t("applications.duplicates.sets"),
               }}
               data={{
                 items: flaggedAppsData?.items ?? [],
