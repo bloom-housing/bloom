@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@6.0.1-alpha.3...@bloom-housing/shared-helpers@6.0.1-alpha.4) (2022-10-05)
+
+
+### Bug Fixes
+
+* rename text style class for consistency ([#3122](https://github.com/bloom-housing/bloom/issues/3122)) ([4209072](https://github.com/bloom-housing/bloom/commit/420907230615af11fe4b096d8ba9b8ffc629c505))
+
+
+
+
+
 ## [6.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@6.0.1-alpha.2...@bloom-housing/shared-helpers@6.0.1-alpha.3) (2022-10-03)
 
 
