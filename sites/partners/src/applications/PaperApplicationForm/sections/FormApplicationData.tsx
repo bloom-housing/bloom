@@ -47,7 +47,7 @@ const FormApplicationData = () => {
             readerOnly
             errorMessage={t("errors.dateError")}
             required={!!isDateRequired}
-            labelClass={"text_caps-spaced"}
+            labelClass={"text__caps-spaced"}
           />
         </ViewItem>
 
@@ -62,7 +62,7 @@ const FormApplicationData = () => {
             readerOnly
             disabled={!isDateFilled}
             required={!!isDateFilled}
-            labelClass={"text_caps-spaced"}
+            labelClass={"text__caps-spaced"}
           />
         </ViewItem>
 
