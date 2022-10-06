@@ -58,6 +58,8 @@
   "applications.duplicates.validApplications": "Valid Applications",
   "applications.duplicates.duplicateGroup": "Duplicate group",
   "applications.duplicates.primaryApplicant": "Primary applicant",
+  "applications.duplicates.set": "Set",
+  "applications.duplicates.sets": "Sets",
   "applications.namedob": "Name + DOB",
   "applications.newApplication": "New Application",
   "applications.pending": "Pending",

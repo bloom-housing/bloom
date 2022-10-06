@@ -2,7 +2,7 @@ import * as React from "react"
 import { Message } from "./Message"
 
 export default {
-  title: "Prototypes/Message",
+  title: "Text/Message",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 

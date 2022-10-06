@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Heading } from "../../../text/Heading"
 
 export interface QuantityRow {
   amount: number | null
@@ -33,7 +34,9 @@ const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) 
 
   return (
     <section className="aside-block is-tinted">
-      <h4 className="text-caps-tiny">{strings.sectionTitle}</h4>
+      <Heading priority={4} styleType={"capsWeighted"}>
+        {strings.sectionTitle}
+      </Heading>
       <div>
         {strings.description && (
           <p className="text-tiny text-gray-800 pb-3">{strings.description}</p>

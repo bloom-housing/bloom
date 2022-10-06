@@ -89,6 +89,7 @@ module.exports = {
         800: "var(--bloom-color-gray-800)",
         750: "var(--bloom-color-gray-750)",
         700: "var(--bloom-color-gray-700)",
+        650: "var(--bloom-color-gray-650)",
         600: "var(--bloom-color-gray-600)",
         550: "var(--bloom-color-gray-550)",
         500: "var(--bloom-color-gray-500)",

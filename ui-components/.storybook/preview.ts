@@ -12,6 +12,7 @@ export const parameters = {
   options: {
     storySort: {
       order: [
+        "Documentation",
         "Actions",
         "Blocks",
         "Footers",
@@ -24,6 +25,10 @@ export const parameters = {
         "Overlays",
         "Sections",
         "Tables",
+        "Text",
+        "Listing Sidebar",
+        "Listing",
+        "Prototypes",
       ],
     },
   },

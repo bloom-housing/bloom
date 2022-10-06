@@ -70,10 +70,9 @@ const ApplicationsList = () => {
       this.linkWithId.classList.add("text-blue-700")
       this.linkWithId.innerText = params.value
 
-      !isListingOpen &&
-        this.linkWithId.addEventListener("click", function () {
-          void router.push(`/application/${applicationId}`)
-        })
+      this.linkWithId.addEventListener("click", function () {
+        void router.push(`/application/${applicationId}`)
+      })
     }
 
     getGui() {

@@ -1,5 +1,5 @@
 import React from "react"
-import { Heading } from "../headers/Heading"
+import { Heading } from "../text/Heading"
 import "./StandardCard.scss"
 
 export interface StandardCardProps {
