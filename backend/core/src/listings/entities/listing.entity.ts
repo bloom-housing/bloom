@@ -43,7 +43,6 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
-import { ListingAvailability } from "../types/listing-availability-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingFeatures } from "./listing-features.entity"
@@ -91,7 +90,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingMultiselectQuestion)
-  listingMultiselectQuestions: ListingMultiselectQuestion[]
+  listingMultiselectQuestions?: ListingMultiselectQuestion[]
 
   @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()
@@ -102,7 +101,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiPropertyOptional()
   get referralApplication(): ApplicationMethodDto | undefined {
-    return this.applicationMethods.find((method) => method.type === ApplicationMethodType.Referral)
+    return this.applicationMethods?.find((method) => method.type === ApplicationMethodType.Referral)
   }
 
   // booleans to make dealing with different application methods easier to parse
@@ -520,16 +519,6 @@ class Listing extends BaseEntity {
   })
   reviewOrderType?: ListingReviewOrder | null
 
-  @Column({ type: "enum", enum: ListingAvailability, nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ListingAvailability, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({
-    enum: ListingAvailability,
-    enumName: "ListingAvailability",
-  })
-  listingAvailability?: ListingAvailability | null
-
   @Expose()
   applicationConfig?: Record<string, unknown>
 
@@ -661,6 +650,20 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingUtilities)
   utilities?: ListingUtilities
+
+  @Column({ type: "timestamptz", nullable: true, default: "1970-01-01" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  afsLastRunAt?: Date | null
+
+  @Column({ type: "timestamptz", nullable: true, default: "1970-01-01" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  lastApplicationUpdateAt?: Date | null
 }
 
 export { Listing as default, Listing }

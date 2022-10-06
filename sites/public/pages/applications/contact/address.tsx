@@ -287,7 +287,11 @@ const ApplicationAddress = () => {
 
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">{t("application.contact.address")}</legend>
+                <legend
+                  className={`text__caps-spaced ${errors.applicant?.address ? "text-alert" : ""}`}
+                >
+                  {t("application.contact.address")}
+                </legend>
 
                 <p className="field-note mb-4">
                   {t("application.contact.addressWhereYouCurrentlyLive")}
@@ -374,7 +378,7 @@ const ApplicationAddress = () => {
             {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
               <div className="form-card__group border-b">
                 <fieldset>
-                  <legend className="field-label--caps">
+                  <legend className="text__caps-spaced">
                     {t("application.contact.mailingAddress")}
                   </legend>
 
@@ -451,7 +455,9 @@ const ApplicationAddress = () => {
             )}
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">
+                <legend
+                  className={`text__caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
+                >
                   {t("application.contact.contactPreference")}
                 </legend>
                 <FieldGroup
@@ -469,7 +475,11 @@ const ApplicationAddress = () => {
 
             <div className="form-card__group">
               <fieldset>
-                <legend className="field-label--caps">
+                <legend
+                  className={`text__caps-spaced ${
+                    errors?.applicant?.workInRegion ? "text-alert" : ""
+                  }`}
+                >
                   {t("application.contact.doYouWorkIn", { county: listing?.countyCode })}
                 </legend>
 
@@ -519,7 +529,7 @@ const ApplicationAddress = () => {
                 (!workInRegion && application.applicant.workInRegion == "yes")) && (
                 <div className="form-card__group mx-0 px-0 mt-2">
                   <fieldset>
-                    <legend className="field-label--caps">
+                    <legend className="text__caps-spaced">
                       {t("application.contact.workAddress")}
                     </legend>
 

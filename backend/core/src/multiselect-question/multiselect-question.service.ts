@@ -9,11 +9,14 @@ import { MultiselectQuestionsListQueryParams } from "../multiselect-question/dto
 import { MultiselectQuestionsFilterParams } from "../multiselect-question/dto/multiselect-question-filter-params"
 import { jurisdictionFilterTypeToFieldMap } from "./dto/jurisdictionFilterTypeToFieldMap"
 import { assignDefined } from "../shared/utils/assign-defined"
+import { Listing } from "../listings/entities/listing.entity"
 
 export class MultiselectQuestionsService {
   constructor(
     @InjectRepository(MultiselectQuestion)
-    private readonly repository: Repository<MultiselectQuestion>
+    private readonly repository: Repository<MultiselectQuestion>,
+    @InjectRepository(Listing)
+    private readonly listingRepository: Repository<Listing>
   ) {}
 
   list(params?: MultiselectQuestionsListQueryParams): Promise<MultiselectQuestion[]> {
@@ -65,5 +68,18 @@ export class MultiselectQuestionsService {
     assignDefined(obj, dto)
     await this.repository.save(obj)
     return obj
+  }
+
+  async findListingsWithMultiSelectQuestion(multiSelectQuestionId: string): Promise<Listing[]> {
+    const qb = this.listingRepository
+      .createQueryBuilder("listings")
+      .select(["listings.id", "listings.name"])
+      .leftJoin("listings.listingMultiselectQuestions", "listingMultiselectQuestions")
+      .leftJoin("listingMultiselectQuestions.multiselectQuestion", "multiselectQuestion")
+      .where("multiselectQuestion.id = :multiSelectQuestionId", {
+        multiSelectQuestionId: multiSelectQuestionId,
+      })
+
+    return qb.getMany()
   }
 }

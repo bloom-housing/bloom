@@ -8,13 +8,11 @@ export default {
       <div style={{ padding: "1rem" }}>
         <style>
           {`
-      .funky {
-        color: orange !important;
-        background: darkblue;
-        font-family: cursive;
+      .styled {
+        color: blue !important;
         font-weight: bold;
       }
-      .tabs__panel.funky {
+      .tabs__panel.styled {
         display: block;
       }
     `}
@@ -54,7 +52,7 @@ export const Default = () => {
       <TabPanel>
         <p>This is disabled</p>
       </TabPanel>
-      <TabPanel selectedClassName="funky">
+      <TabPanel selectedClassName="styled">
         <p>Feeling funky!</p>
       </TabPanel>
     </Tabs>

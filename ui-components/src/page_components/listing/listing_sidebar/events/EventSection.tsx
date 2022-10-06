@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Heading } from "../../../../headers/Heading"
+import { Heading } from "../../../../text/Heading"
 
 export type EventType = {
   timeString?: string
@@ -28,7 +28,10 @@ const EventSection = (props: EventSectionProps) => {
   return (
     <section className="aside-block">
       {props.headerText && (
-        <Heading priority={4} style={props.sectionHeader ? "sidebarHeader" : "sidebarSubHeader"}>
+        <Heading
+          priority={4}
+          styleType={props.sectionHeader ? "underlineWeighted" : "capsWeighted"}
+        >
           {props.headerText}
         </Heading>
       )}

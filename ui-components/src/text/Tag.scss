@@ -11,6 +11,8 @@
   --pill-font-weight: 600;
   --pill-text-transform: uppercase;
   --pill-letter-spacing: var(--bloom-letter-spacing-ultrawide);
+  --pill-capitalized-text-transform: capitalized;
+  --pill-capitalized-letter-spacing: var(--bloom-letter-spacing-wide);
 
   --small-pill-padding: var(--bloom-s1) var(--bloom-s3);
   --small-pill-font-size: var(--bloom-font-size-2xs);
@@ -120,7 +122,7 @@
   }
 
   &.is-info {
-    color: var(--info-appearance-label-color, var(--bloom-color-gray-800));
+    color: var(--info-appearance-label-color, var(--bloom-text-color-dark));
     background-color: var(--info-appearance-background-color, var(--bloom-color-warn-light));
   }
 
@@ -128,5 +130,10 @@
     font-size: var(--bloom-font-size-sm);
     padding-block: var(--bloom-s2);
     padding-inline: var(--bloom-s4);
+  }
+
+  &.is-capitalized {
+    text-transform: var(--pill-capitalized-text-transform);
+    letter-spacing: var(--pill-capitalized-letter-spacing);
   }
 }

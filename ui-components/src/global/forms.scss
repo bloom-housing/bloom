@@ -23,7 +23,7 @@
   }
 
   label.sr-only + .control,
-  label.field-label--caps + .control {
+  label.text__caps-spaced + .control {
     @apply mt-0;
   }
 
@@ -31,7 +31,7 @@
     @apply mt-2;
   }
 
-  .field-label--caps.label + .field-note {
+  .text__caps-spaced.label + .field-note {
     @apply mt-0;
   }
 
@@ -230,7 +230,7 @@
 
   &.error {
     label {
-      @apply text-red-700;
+      @apply text-alert;
     }
 
     .control {
@@ -242,7 +242,7 @@
       }
 
       .prepend {
-        @apply text-red-700;
+        @apply text-alert;
       }
     }
 
@@ -256,10 +256,9 @@
   }
 }
 
-/* Restore previous Tailwind v1 color */
 input::placeholder,
 textarea::placeholder {
-  color: #a0aec0;
+  color: var(--bloom-color-gray-650);
 }
 
 input[type],
@@ -296,17 +295,6 @@ input[type="number"] {
   @apply pb-2;
   @apply text-tiny;
   @apply text-gray-800;
-}
-
-.field-label--caps {
-  @apply font-sans;
-  @apply uppercase;
-  @apply text-gray-750;
-  @apply tracking-widest;
-  @apply font-semibold;
-  @apply text-tiny;
-  @apply mb-3;
-  @apply inline-block;
 }
 
 .field--inline {
@@ -355,17 +343,16 @@ input[type="number"] {
 .field-note {
   @apply text-tiny;
   @apply text-gray-700;
-  @apply font-semibold;
   white-space: pre-line;
 }
 
 .error-message {
   display: inline-block;
   @apply text-sm;
-  @apply text-red-700;
+  @apply text-alert;
   @apply tracking-wide;
   @apply leading-5;
-  @apply mt-2;
+  @apply mt-1;
 }
 
 .field-sub-note {

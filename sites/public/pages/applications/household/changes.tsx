@@ -26,7 +26,7 @@ const ApplicationHouseholdChanges = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm<Record<string, any>>({
+  const { register, handleSubmit, errors, getValues } = useForm<Record<string, any>>({
     defaultValues: { householdExpectingChanges: application.householdExpectingChanges?.toString() },
     shouldFocusError: false,
   })
@@ -107,14 +107,20 @@ const ApplicationHouseholdChanges = () => {
           >
             <fieldset>
               <FieldGroup
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
                 type="radio"
                 name="householdExpectingChanges"
                 error={errors.householdExpectingChanges}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}
-                validation={{ required: true }}
                 fields={householdChangesValues}
                 dataTestId={"app-expecting-changes"}
+                validation={{
+                  validate: () => {
+                    return !!Object.values(getValues()).filter((value) => value).length
+                  },
+                }}
               />
             </fieldset>
           </div>

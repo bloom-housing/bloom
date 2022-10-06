@@ -455,7 +455,7 @@ const FormUserManage = ({
           {mode === "edit" && (
             <Button
               type="button"
-              className="bg-opacity-0 text-red-700"
+              className="bg-opacity-0 text-alert"
               onClick={() => setDeleteModalActive(true)}
               unstyled
             >

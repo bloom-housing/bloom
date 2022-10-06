@@ -9,9 +9,9 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingStatus,
-  ListingAvailability,
   Jurisdiction,
   ApplicationSection,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -131,7 +131,7 @@ export const ListingView = (props: ListingProps) => {
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(
       listing.unitsSummarized.byUnitTypeAndRent,
-      listing.listingAvailability
+      listing.reviewOrderType
     )
   } // else condition is handled inline below
 
@@ -403,8 +403,7 @@ export const ListingView = (props: ListingProps) => {
     ]
     const unitRow = [
       {
-        text:
-          listing.unitsAvailable === 1 ? t("listings.availableUnit") : t("listings.availableUnits"),
+        text: listing.unitsAvailable === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits"),
         amount: listing.unitsAvailable,
         emphasized: true,
       },
@@ -412,15 +411,15 @@ export const ListingView = (props: ListingProps) => {
     return (
       <QuantityRowSection
         quantityRows={
-          listing.listingAvailability === ListingAvailability.openWaitlist ? waitlistRow : unitRow
+          listing.reviewOrderType === ListingReviewOrder.waitlist ? waitlistRow : unitRow
         }
         strings={{
           sectionTitle:
-            listing.listingAvailability === ListingAvailability.openWaitlist
+            listing.reviewOrderType === ListingReviewOrder.waitlist
               ? t("listings.waitlist.isOpen")
-              : t("listings.availableUnits"),
+              : t("listings.vacantUnitsAvailable"),
           description:
-            listing.listingAvailability === ListingAvailability.openWaitlist
+            listing.reviewOrderType === ListingReviewOrder.waitlist
               ? t("listings.waitlist.submitForWaitlist")
               : t("listings.availableUnitsDescription"),
         }}
@@ -514,10 +513,10 @@ export const ListingView = (props: ListingProps) => {
           description={listing.name}
         />
         <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
-          <Heading priority={1} style={"cardHeader"} className={"text-black"}>
+          <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
             {listing.name}
           </Heading>
-          <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
+          <Heading priority={2} styleType={"mediumNormal"} className={"mb-1"}>
             {oneLineAddress}
           </Heading>
           <p className="text-gray-750 text-base mb-1">{listing.developer}</p>
@@ -547,7 +546,7 @@ export const ListingView = (props: ListingProps) => {
               })
 
               groupedUnits = byAMI
-                ? getSummariesTable(byAMI.byUnitType, listing.listingAvailability)
+                ? getSummariesTable(byAMI.byUnitType, listing.reviewOrderType)
                 : []
 
               return (

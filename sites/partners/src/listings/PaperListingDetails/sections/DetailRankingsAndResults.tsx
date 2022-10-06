@@ -26,13 +26,15 @@ const DetailRankingsAndResults = () => {
       grid={false}
       inset
     >
-      <GridSection columns={2}>
-        <ViewItem id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
-          {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
-            ? t("listings.firstComeFirstServe")
-            : t("listings.lotteryTitle")}
-        </ViewItem>
-      </GridSection>
+      {listing.reviewOrderType !== ListingReviewOrder.waitlist && (
+        <GridSection columns={2}>
+          <ViewItem id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
+            {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
+              ? t("listings.firstComeFirstServe")
+              : t("listings.lotteryTitle")}
+          </ViewItem>
+        </GridSection>
+      )}
       {lotteryEvent && (
         <>
           <GridSection columns={3}>
@@ -60,18 +62,21 @@ const DetailRankingsAndResults = () => {
           </ViewItem>
         </GridSection>
       )}
-      <GridSection columns={2}>
-        <ViewItem id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>
-          {getDetailBoolean(listing.isWaitlistOpen)}
-        </ViewItem>
-      </GridSection>
-      {listing.isWaitlistOpen && (
-        <GridSection columns={3}>
-          <ViewItem id="waitlistOpenSpots" label={t("listings.waitlist.openSize")}>
-            {getDetailFieldNumber(listing.waitlistOpenSpots)}
-          </ViewItem>
-        </GridSection>
+      {listing.reviewOrderType === ListingReviewOrder.waitlist && (
+        <>
+          <GridSection columns={2}>
+            <ViewItem id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>
+              {getDetailBoolean(listing.isWaitlistOpen)}
+            </ViewItem>
+          </GridSection>
+          <GridSection columns={3}>
+            <ViewItem id="waitlistOpenSpots" label={t("listings.waitlist.openSize")}>
+              {getDetailFieldNumber(listing.waitlistOpenSpots)}
+            </ViewItem>
+          </GridSection>
+        </>
       )}
+
       <GridSection columns={1}>
         <GridCell>
           <ViewItem id="whatToExpect" label={t("listings.whatToExpectLabel")}>

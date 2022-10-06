@@ -122,7 +122,7 @@ export const getRadioFields = (
   return (
     <fieldset>
       {applicationSection === ApplicationSection.preferences && (
-        <legend className="field-label--caps mb-4">{question?.text}</legend>
+        <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
       <p className="field-note mb-8">{question?.description}</p>
       <FieldGroup
@@ -130,10 +130,10 @@ export const getRadioFields = (
         fieldClassName="ml-0"
         type={"radio"}
         name={fieldName(question?.text, applicationSection)}
-        error={errors && errors[question?.text]}
+        error={errors && errors?.application?.programs?.[question?.text]}
         errorMessage={errors && t("errors.selectAnOption")}
         register={register}
-        validation={{ required: !!errors }}
+        validation={{ required: true }}
         fields={options?.map((option) => {
           return {
             id: `${question?.text}-${option?.text}`,

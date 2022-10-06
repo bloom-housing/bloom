@@ -7,7 +7,7 @@ import {
   ContentAccordion,
   getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
-import { MinMax, UnitSummary, Unit, ListingAvailability } from "@bloom-housing/backend-core/types"
+import { MinMax, UnitSummary, Unit, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 const getTranslationFromCurrencyString = (value: string) => {
   if (value.startsWith("t.")) return getTranslationWithArguments(value)
@@ -16,10 +16,11 @@ const getTranslationFromCurrencyString = (value: string) => {
 
 export const unitSummariesTable = (
   summaries: UnitSummary[],
-  listingAvailability: ListingAvailability
+  listingReviewOrder: ListingReviewOrder
 ): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
-    const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
+    const unitPluralization =
+      unitSummary.totalAvailable == 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
         <>
@@ -62,7 +63,7 @@ export const unitSummariesTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = null
-    if (listingAvailability === ListingAvailability.availableUnits) {
+    if (listingReviewOrder !== ListingReviewOrder.waitlist) {
       availability = (
         <span>
           {unitSummary.totalAvailable > 0 ? (
@@ -76,7 +77,7 @@ export const unitSummariesTable = (
           )}
         </span>
       )
-    } else if (listingAvailability === ListingAvailability.openWaitlist) {
+    } else if (listingReviewOrder === ListingReviewOrder.waitlist) {
       availability = (
         <span>
           <strong>{t("listings.waitlist.open")}</strong>
@@ -103,12 +104,12 @@ export const unitSummariesTable = (
 
 export const getSummariesTable = (
   summaries: UnitSummary[],
-  listingAvailability: ListingAvailability
+  listingReviewOrder: ListingReviewOrder
 ): StandardTableData => {
   let unitSummaries: StandardTableData = []
 
   if (summaries?.length > 0) {
-    unitSummaries = unitSummariesTable(summaries, listingAvailability)
+    unitSummaries = unitSummariesTable(summaries, listingReviewOrder)
   }
   return unitSummaries
 }

@@ -162,7 +162,7 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="firstName">
+              <label className="text__caps-spaced" htmlFor="firstName">
                 {t("application.name.yourName")}
               </label>
 
@@ -269,7 +269,7 @@ const Edit = () => {
             )}
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">
+                <legend className="text__caps-spaced">
                   {t("authentication.createAccount.password")}
                 </legend>
                 <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>

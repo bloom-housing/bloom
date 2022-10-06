@@ -205,6 +205,38 @@ export class AmiChartsService {
 
 export class ApplicationFlaggedSetsService {
   /**
+   * Meta information for application flagged sets
+   */
+  meta(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number
+      /**  */
+      listingId: string
+      /**  */
+      view?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSetMeta> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/meta"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        view: params["view"],
+      }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List application flagged sets
    */
   list(
@@ -215,6 +247,8 @@ export class ApplicationFlaggedSetsService {
       limit?: number
       /**  */
       listingId: string
+      /**  */
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplicationFlaggedSet> {
@@ -226,6 +260,7 @@ export class ApplicationFlaggedSetsService {
         page: params["page"],
         limit: params["limit"],
         listingId: params["listingId"],
+        view: params["view"],
       }
       let data = null
 
@@ -271,6 +306,42 @@ export class ApplicationFlaggedSetsService {
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Reset flagged set confirmation alert
+   */
+  resetConfirmationAlert(
+    params: {
+      /** requestBody */
+      body?: Id
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the duplicate check process
+   */
+  process(options: IRequestOptions = {}): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1547,6 +1618,29 @@ export class MultiselectQuestionsService {
       axios(configs, resolve, reject)
     })
   }
+
+  /**
+   * Get Listings by multiselect question id
+   */
+  retrieveListings(
+    params: {
+      /**  */
+      multiselectQuestionId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/multiselectQuestions/listings/{multiselectQuestionId}"
+      url = url.replace("{multiselectQuestionId}", params["multiselectQuestionId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ReservedCommunityTypesService {
@@ -2235,12 +2329,23 @@ export interface AmiChartUpdate {
 
   /**  */
   id?: string
+}
+
+export interface ApplicationFlaggedSetMeta {
+  /**  */
+  totalCount?: number
 
   /**  */
-  createdAt?: Date
+  totalResolvedCount?: number
 
   /**  */
-  updatedAt?: Date
+  totalPendingCount?: number
+
+  /**  */
+  totalNamePendingCount?: number
+
+  /**  */
+  totalEmailPendingCount?: number
 }
 
 export interface Address {
@@ -2530,6 +2635,9 @@ export interface Application {
   submissionType: ApplicationSubmissionType
 
   /**  */
+  reviewStatus?: ApplicationReviewStatus
+
+  /**  */
   applicant: Applicant
 
   /**  */
@@ -2646,16 +2754,22 @@ export interface ApplicationFlaggedSet {
   updatedAt: Date
 
   /**  */
-  rule: string
+  rule: EnumApplicationFlaggedSetRule
+
+  /**  */
+  ruleKey: string
 
   /**  */
   resolvedTime?: Date
 
   /**  */
-  status: EnumApplicationFlaggedSetStatus
+  listingId: string
 
   /**  */
-  listingId: string
+  showConfirmationAlert: boolean
+
+  /**  */
+  status: EnumApplicationFlaggedSetStatus
 }
 
 export interface ApplicationFlaggedSetPaginationMeta {
@@ -2692,6 +2806,14 @@ export interface ApplicationFlaggedSetResolve {
 
   /**  */
   applications: Id[]
+
+  /**  */
+  status: EnumApplicationFlaggedSetResolveStatus
+}
+
+export interface Status {
+  /**  */
+  status: string
 }
 
 export interface Asset {
@@ -2804,12 +2926,6 @@ export interface AssetUpdate {
   id?: string
 
   /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
   fileId: string
 
   /**  */
@@ -2824,12 +2940,6 @@ export interface PaperApplicationUpdate {
   id?: string
 
   /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
   file?: CombinedFileTypes
 }
 
@@ -2839,12 +2949,6 @@ export interface ApplicationMethodUpdate {
 
   /**  */
   id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   paperApplications?: PaperApplicationUpdate[]
@@ -3123,6 +3227,9 @@ export interface ApplicationCreate {
 
   /**  */
   submissionType: ApplicationSubmissionType
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatus
 
   /**  */
   listing: Id
@@ -3448,13 +3555,10 @@ export interface ApplicationUpdate {
   submissionType: ApplicationSubmissionType
 
   /**  */
+  reviewStatus?: ApplicationReviewStatus
+
+  /**  */
   id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   deletedAt?: Date
@@ -3904,11 +4008,6 @@ export interface Email {
   appUrl?: string
 }
 
-export interface Status {
-  /**  */
-  status: string
-}
-
 export interface Confirm {
   /**  */
   token: string
@@ -3961,12 +4060,6 @@ export interface UserUpdate {
 
   /**  */
   email?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   password?: string
@@ -4185,12 +4278,6 @@ export interface JurisdictionCreate {
 export interface JurisdictionUpdate {
   /**  */
   id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   name: string
@@ -4776,9 +4863,6 @@ export interface Listing {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
-  listingAvailability?: ListingAvailability
-
-  /**  */
   showWaitlist: boolean
 
   /**  */
@@ -5026,6 +5110,12 @@ export interface Listing {
 
   /**  */
   closedAt?: Date
+
+  /**  */
+  afsLastRunAt?: Date
+
+  /**  */
+  lastApplicationUpdateAt?: Date
 }
 
 export interface PaginatedListing {
@@ -5207,9 +5297,6 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  listingAvailability?: ListingAvailability
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5428,6 +5515,9 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
+  lastApplicationUpdateAt?: Date
+
+  /**  */
   countyCode?: string
 
   /**  */
@@ -5443,12 +5533,6 @@ export interface ListingEventUpdate {
 
   /**  */
   id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   file?: AssetUpdate
@@ -5474,24 +5558,12 @@ export interface UnitAmiChartOverrideUpdate {
   id?: string
 
   /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
   items: AmiChartItem[]
 }
 
 export interface UnitUpdate {
   /**  */
   id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   amiChart?: Id
@@ -5624,16 +5696,7 @@ export interface ListingUpdate {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
-  listingAvailability?: ListingAvailability
-
-  /**  */
   id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
 
   /**  */
   applicationMethods: ApplicationMethodUpdate[]
@@ -5852,6 +5915,9 @@ export interface ListingUpdate {
   customMapPin?: boolean
 
   /**  */
+  lastApplicationUpdateAt?: Date
+
+  /**  */
   countyCode?: string
 
   /**  */
@@ -5867,9 +5933,6 @@ export interface MultiselectQuestionsFilterParams {
 
   /**  */
   jurisdiction?: string
-
-  /**  */
-  applicationSection?: string
 }
 
 export interface MultiselectQuestionCreate {
@@ -5997,12 +6060,6 @@ export interface TranslationUpdate {
   id?: string
 
   /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
   translations: object
 
   /**  */
@@ -6077,9 +6134,26 @@ export enum ApplicationSubmissionType {
   "paper" = "paper",
   "electronical" = "electronical",
 }
+
+export enum ApplicationReviewStatus {
+  "pending" = "pending",
+  "pendingAndValid" = "pendingAndValid",
+  "valid" = "valid",
+  "duplicate" = "duplicate",
+}
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
+export enum EnumApplicationFlaggedSetRule {
+  "Name and DOB" = "Name and DOB",
+  "Email" = "Email",
+}
 export enum EnumApplicationFlaggedSetStatus {
   "flagged" = "flagged",
+  "pending" = "pending",
+  "resolved" = "resolved",
+}
+export enum EnumApplicationFlaggedSetResolveStatus {
+  "flagged" = "flagged",
+  "pending" = "pending",
   "resolved" = "resolved",
 }
 export enum ApplicationMethodType {
@@ -6197,11 +6271,7 @@ export enum ListingStatus {
 export enum ListingReviewOrder {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
-}
-
-export enum ListingAvailability {
-  "availableUnits" = "availableUnits",
-  "openWaitlist" = "openWaitlist",
+  "waitlist" = "waitlist",
 }
 
 export enum ListingEventType {

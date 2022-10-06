@@ -110,6 +110,8 @@ const ApplicationPreferredUnits = () => {
               <legend className="sr-only">{t("application.household.preferredUnit.legend")}</legend>
               <FieldGroup
                 type="checkbox"
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
                 name="preferredUnit"
                 groupNote={t("application.household.preferredUnit.optionsLabel")}
                 fields={preferredUnitOptions}

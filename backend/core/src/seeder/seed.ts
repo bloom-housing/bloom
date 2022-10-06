@@ -52,6 +52,7 @@ import { ApplicationMethodType } from "../application-methods/types/application-
 import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
 import { CountyCode } from "../shared/types/county-code"
+import { ApplicationFlaggedSetsCronjobConsumer } from "../application-flagged-sets/application-flagged-sets-cronjob-consumer"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -211,7 +212,9 @@ async function seed() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)
-
+  const afsProcessingService = await app.resolve<ApplicationFlaggedSetsCronjobConsumer>(
+    ApplicationFlaggedSetsCronjobConsumer
+  )
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
@@ -360,11 +363,12 @@ async function seed() {
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
       await Promise.all([
-        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user1),
-        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user2),
+        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user1, i),
+        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user2, i + 10),
       ])
     }
   }
+  await afsProcessingService.process()
 
   await app.close()
 }
