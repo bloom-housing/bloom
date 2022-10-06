@@ -44,7 +44,7 @@ import { AFSProcessingQueueNames } from "./application-flagged-sets/constants/ap
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
-  const allowList = process.env.CORS_ORIGINS
+  const allowList = process.env.CORS_ORIGINS || []
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
