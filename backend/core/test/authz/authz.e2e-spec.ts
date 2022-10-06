@@ -23,6 +23,7 @@ import { makeTestListing } from "../utils/make-test-listing"
 import { UserInviteDto } from "../../src/auth/dto/user-invite.dto"
 import { EmailService } from "../../src/email/email.service"
 import { getTestAppBody } from "../lib/get-test-app-body"
+import cookieParser from "cookie-parser"
 
 jest.setTimeout(30000)
 
@@ -60,6 +61,7 @@ describe("Authz", () => {
 
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
 
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")

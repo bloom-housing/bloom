@@ -132,11 +132,10 @@ export class UserController {
   @ApiOperation({ summary: "Update Password", operationId: "update-password" })
   async updatePassword(
     @Body() dto: UpdatePasswordDto,
-    @Response() res: ExpressResponse
+    @Response({ passthrough: true }) res: ExpressResponse
   ): Promise<LoginResponseDto> {
-    const accessToken = await this.userService.updatePassword(dto)
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
-    return mapTo(LoginResponseDto, { success: true })
+    await this.userService.updatePassword(dto, res)
+    return mapTo(LoginResponseDto, { success: "ok" })
   }
 
   @Put(":id")
