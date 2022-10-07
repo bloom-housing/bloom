@@ -85,7 +85,6 @@ const Field = (props: FieldProps) => {
   if (props.type === "currency") {
     inputProps = {
       ...inputProps,
-      step: 0.01,
       onBlur: () => formatValue(),
       onFocus: () => formatValue(true),
       onChange: filterNumbers,
