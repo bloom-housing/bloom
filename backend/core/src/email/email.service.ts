@@ -6,7 +6,6 @@ import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
-import dayjs from "dayjs"
 import { ConfigService } from "@nestjs/config"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
@@ -144,16 +143,9 @@ export class EmailService {
     }
 
     if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-      const lotteryText = []
-      if (listing.applicationDueDate) {
-        lotteryText.push(
-          this.polyglot.t("confirmation.eligibleApplicants.lotteryDate", {
-            lotteryDate: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
-          })
-        )
-      }
-      lotteryText.push(this.polyglot.t("confirmation.eligibleApplicants.lottery"))
-      eligibleApplicantsText = new Handlebars.SafeString(lotteryText.join(" "))
+      eligibleApplicantsText = new Handlebars.SafeString(
+        this.polyglot.t("confirmation.eligibleApplicants.lottery")
+      )
     } else {
       // for when listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe
       eligibleApplicantsText = new Handlebars.SafeString(

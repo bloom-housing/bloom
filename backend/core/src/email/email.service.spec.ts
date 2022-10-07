@@ -279,7 +279,7 @@ describe("EmailService", () => {
 
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.html).toMatch(
-        /The lottery will be held on December 31, 2019. Eligible applicants will be placed in order <strong>based on preference and lottery rank<\/strong>./
+        /Eligible applicants will be placed in order <strong>based on preference and lottery rank<\/strong>./
       )
     })
 
