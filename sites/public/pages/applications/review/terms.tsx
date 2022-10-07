@@ -88,21 +88,22 @@ const ApplicationTerms = () => {
   ]
 
   const content = useMemo(() => {
-    if (listing?.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
-      return {
-        text: t("application.review.terms.fcfs.text"),
-      }
-    } else if (listing?.reviewOrderType == ListingReviewOrder.lottery) {
-      return {
-        text: t("application.review.terms.lottery.text"),
-      }
-    } else if (listing?.reviewOrderType == ListingReviewOrder.waitlist) {
-      return {
-        text: t("application.review.terms.waitlist.text"),
-      }
+    switch (listing?.reviewOrderType) {
+      case ListingReviewOrder.firstComeFirstServe:
+        return {
+          text: t("application.review.terms.fcfs.text"),
+        }
+      case ListingReviewOrder.lottery:
+        return {
+          text: t("application.review.terms.lottery.text"),
+        }
+      case ListingReviewOrder.waitlist:
+        return {
+          text: t("application.review.terms.waitlist.text"),
+        }
+      default:
+        return { text: "" }
     }
-
-    return { text: "" }
   }, [listing, router.locale])
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import {
   FormCard,
   t,
 } from "@bloom-housing/ui-components"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { ListingEvent, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
   imageUrlFromListing,
   PageView,
@@ -34,31 +34,34 @@ const ApplicationConfirmation = () => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
 
   const content = useMemo(() => {
-    if (listing?.reviewOrderType == ListingReviewOrder.firstComeFirstServe) {
-      return {
-        text: t("application.review.confirmation.whatHappensNext.fcfs"),
-      }
-    } else if (listing?.reviewOrderType == ListingReviewOrder.lottery) {
-      const lotteryEvent = getLotteryEvent(listing)
-      const lotteryText = []
-      if (lotteryEvent?.startTime) {
-        lotteryText.push(
-          t("application.review.confirmation.eligibleApplicants.lotteryDate", {
-            lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
-          })
-        )
-      }
-      lotteryText.push(t("application.review.confirmation.whatHappensNext.lottery"))
-      return {
-        text: lotteryText.join(" "),
-      }
-    } else if (listing?.reviewOrderType == ListingReviewOrder.waitlist) {
-      return {
-        text: t("application.review.confirmation.whatHappensNext.waitlist"),
-      }
-    }
+    let lotteryEvent: ListingEvent
+    const lotteryText = []
 
-    return { text: "" }
+    switch (listing?.reviewOrderType) {
+      case ListingReviewOrder.firstComeFirstServe:
+        return {
+          text: t("application.review.confirmation.whatHappensNext.fcfs"),
+        }
+      case ListingReviewOrder.lottery:
+        lotteryEvent = getLotteryEvent(listing)
+        if (lotteryEvent?.startTime) {
+          lotteryText.push(
+            t("application.review.confirmation.eligibleApplicants.lotteryDate", {
+              lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
+            })
+          )
+        }
+        lotteryText.push(t("application.review.confirmation.whatHappensNext.lottery"))
+        return {
+          text: lotteryText.join(" "),
+        }
+      case ListingReviewOrder.waitlist:
+        return {
+          text: t("application.review.confirmation.whatHappensNext.waitlist"),
+        }
+      default:
+        return { text: "" }
+    }
   }, [listing, router.locale])
 
   useEffect(() => {
