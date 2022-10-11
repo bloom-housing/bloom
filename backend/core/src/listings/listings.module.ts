@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { Logger, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
@@ -14,6 +14,7 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { ListingRepository } from "./db/listing.repository"
 import { ListingUtilities } from "./entities/listing-utilities.entity"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
+import { ListingsCronService } from "./listings-cron.service"
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/applic
     ActivityLogModule,
     ApplicationFlaggedSetsModule,
   ],
-  providers: [ListingsService],
+  providers: [ListingsService, ListingsCronService, Logger],
   exports: [ListingsService],
   controllers: [ListingsController],
 })
