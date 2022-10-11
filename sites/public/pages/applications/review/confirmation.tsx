@@ -34,26 +34,14 @@ const ApplicationConfirmation = () => {
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
 
   const content = useMemo(() => {
-    let lotteryEvent: ListingEvent
-    const lotteryText = []
-
     switch (listing?.reviewOrderType) {
       case ListingReviewOrder.firstComeFirstServe:
         return {
           text: t("application.review.confirmation.whatHappensNext.fcfs"),
         }
       case ListingReviewOrder.lottery:
-        lotteryEvent = getLotteryEvent(listing)
-        if (lotteryEvent?.startTime) {
-          lotteryText.push(
-            t("application.review.confirmation.eligibleApplicants.lotteryDate", {
-              lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
-            })
-          )
-        }
-        lotteryText.push(t("application.review.confirmation.whatHappensNext.lottery"))
         return {
-          text: lotteryText.join(" "),
+          text: t("application.review.confirmation.whatHappensNext.lottery"),
         }
       case ListingReviewOrder.waitlist:
         return {
