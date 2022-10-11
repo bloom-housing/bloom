@@ -9,6 +9,7 @@ import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { getView } from "../applications/views/view"
+import { Inject, Logger } from "@nestjs/common"
 
 @Processor(AFSProcessingQueueNames.afsProcessing)
 export class ApplicationFlaggedSetsCronjobConsumer {
@@ -16,11 +17,13 @@ export class ApplicationFlaggedSetsCronjobConsumer {
     @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
-    @InjectRepository(Application) private readonly applicationRepository: Repository<Application>
+    @InjectRepository(Application) private readonly applicationRepository: Repository<Application>,
+    @Inject(Logger) private readonly logger = new Logger(ApplicationFlaggedSetsCronjobConsumer.name)
   ) {}
 
   @Process({ concurrency: 1 })
   async process() {
+    this.logger.log("running the Application flagged sets cron job")
     const outOfDateListings = await this.listingRepository
       .createQueryBuilder("listings")
       .select(["listings.id", "listings.afsLastRunAt"])
@@ -34,6 +37,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
       )
       .getMany()
 
+    this.logger.log(`updating the flagged sets for ${outOfDateListings.length} listings`)
     for (const outOfDateListing of outOfDateListings) {
       try {
         await this.generateAFSesForListingRules(outOfDateListing)
