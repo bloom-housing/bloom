@@ -1,9 +1,9 @@
 describe("Paper Application Tests", () => {
-  before(() => {
+  beforeEach(() => {
     cy.login()
   })
 
-  after(() => {
+  afterEach(() => {
     cy.signOut()
   })
 
