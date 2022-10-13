@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.0...@bloom-housing/backend-core@7.0.1-alpha.1) (2022-10-13)
+
+
+### Bug Fixes
+
+* add back in eligibility translations ([#3134](https://github.com/bloom-housing/bloom/issues/3134)) ([a9ba463](https://github.com/bloom-housing/bloom/commit/a9ba463bfb414ff13820616f7045f43cc997dca2))
+
+
+
+
+
 ## [7.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@6.0.1-alpha.2...@bloom-housing/backend-core@7.0.1-alpha.0) (2022-10-05)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
