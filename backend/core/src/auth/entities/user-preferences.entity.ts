@@ -8,6 +8,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 export class UserPreferences {
   @OneToOne(() => User, (user) => user.preferences, {
     primary: true,
+    onDelete: "CASCADE",
   })
   @JoinColumn()
   user: User

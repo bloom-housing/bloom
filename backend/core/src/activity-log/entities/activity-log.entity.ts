@@ -17,7 +17,7 @@ export class ActivityLog extends AbstractEntity {
   @Expose()
   action: string
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: "SET NULL" })
   @JoinColumn()
   @Expose()
   @Type(() => User)
