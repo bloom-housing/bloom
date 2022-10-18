@@ -94,7 +94,6 @@ const translationServiceMock = {
               readHowYouCanPrepare: "Read about how you can prepare for next steps",
               needToMakeUpdates: "Need to make updates?",
               ifYouNeedToUpdateInformation: "",
-
               shouldBeChosen:
                 "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
               subject: "Your Application Confirmation",
@@ -259,7 +258,7 @@ describe("EmailService", () => {
       expect(emailMock.html).toMatch("Your Confirmation Number")
       expect(emailMock.html).toMatch("Marisela Baca")
       expect(emailMock.html).toMatch(
-        /If you are contacted for an interview, you will need to fill out a more detailed application and provide supporting documents./
+        /Eligible applicants will be contacted on a first come first serve basis until vacancies are filled./
       )
       expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
       // contains application id
@@ -279,7 +278,7 @@ describe("EmailService", () => {
 
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.html).toMatch(
-        /Eligible applicants will be placed in order <strong>based on preference and lottery rank<\/strong>./
+        /Once the application period closes, eligible applicants will be placed in order based on lottery rank order./
       )
     })
 

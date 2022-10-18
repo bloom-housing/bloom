@@ -88,6 +88,7 @@ export class TranslationsService extends AbstractServiceFactory<
       "servicesOffered",
       "smokingPolicy",
       "unitAmenities",
+      "whatToExpect",
     ]
 
     for (let i = 0; i < listing.events.length; i++) {

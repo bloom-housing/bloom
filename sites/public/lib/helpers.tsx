@@ -5,7 +5,6 @@ import {
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
-  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -52,10 +51,10 @@ const getListingCardSubtitle = (address: Address) => {
 
 const getListingTableData = (
   unitsSummarized: UnitsSummarized,
-  listingAvailability: ListingAvailability
+  listingReviewOrder: ListingReviewOrder
 ) => {
   return unitsSummarized !== undefined
-    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingAvailability)
+    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingReviewOrder)
     : []
 }
 
@@ -113,13 +112,13 @@ export const getListings = (listings) => {
   }
 
   const generateTableSubHeader = (listing) => {
-    if (listing.listingAvailability === ListingAvailability.availableUnits) {
+    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
       return {
         content: t("listings.availableUnits"),
         styleType: AppearanceStyleType.success,
         isPillType: true,
       }
-    } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
+    } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
       return {
         content: t("listings.waitlist.open"),
         styleType: AppearanceStyleType.primary,
@@ -147,7 +146,7 @@ export const getListings = (listings) => {
         }}
         tableProps={{
           headers: unitSummariesHeaders,
-          data: getListingTableData(listing.unitsSummarized, listing.listingAvailability),
+          data: getListingTableData(listing.unitsSummarized, listing.reviewOrderType),
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}

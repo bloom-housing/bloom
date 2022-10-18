@@ -29,9 +29,12 @@
 
             <h2 class="mt3">{{t "confirmation.whatHappensNext"}}</h2>
             <ul>
-            <li>{{t "confirmation.applicationPeriodCloses"}}</li>
-            <li>{{eligibleApplicantsText}}</li>
-            <li>{{t "confirmation.contactedForAnInterview"}}</li>
+            <li>{{eligibleText}}</li>
+            <li>{{preferenceText}}</li>
+            <li>{{interviewText}}</li>
+            {{#if contactText}}
+              <li>{{contactText}}</li>
+            {{/if}}
             </ul>
 
             {{#if nextStepsUrl}}

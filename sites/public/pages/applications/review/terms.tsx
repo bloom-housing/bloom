@@ -2,7 +2,7 @@
 5.3 Terms
 View of application terms with checkbox
 */
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
@@ -14,7 +14,7 @@ import {
   AlertBox,
   ProgressNav,
 } from "@bloom-housing/ui-components"
-import { ApplicationSection } from "@bloom-housing/backend-core"
+import { ApplicationSection, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import {
@@ -87,6 +87,25 @@ const ApplicationTerms = () => {
     },
   ]
 
+  const content = useMemo(() => {
+    switch (listing?.reviewOrderType) {
+      case ListingReviewOrder.firstComeFirstServe:
+        return {
+          text: t("application.review.terms.fcfs.text"),
+        }
+      case ListingReviewOrder.lottery:
+        return {
+          text: t("application.review.terms.lottery.text"),
+        }
+      case ListingReviewOrder.waitlist:
+        return {
+          text: t("application.review.terms.waitlist.text"),
+        }
+      default:
+        return { text: "" }
+    }
+  }, [listing, router.locale])
+
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -122,20 +141,37 @@ const ApplicationTerms = () => {
         )}
 
         <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager-row">
+          <div className="form-card__pager-row markdown">
             {listing?.applicationDueDate && (
-              <Markdown options={{ disableParsingRawHTML: false }}>
-                {t("application.review.terms.textSubmissionDate", {
-                  applicationDueDate: applicationDueDate,
-                })}
-              </Markdown>
+              <>
+                <Markdown options={{ disableParsingRawHTML: true }}>
+                  {t("application.review.terms.textSubmissionDate", {
+                    applicationDueDate: applicationDueDate,
+                  })}
+                </Markdown>
+                <br />
+                <br />
+              </>
             )}
 
-            <Markdown options={{ disableParsingRawHTML: false }}>
-              {t("application.review.terms.text")}
+            <Markdown
+              options={{
+                disableParsingRawHTML: true,
+                overrides: {
+                  li: {
+                    component: ({ children, ...props }) => (
+                      <li {...props} className="mb-5">
+                        {children}
+                      </li>
+                    ),
+                  },
+                },
+              }}
+            >
+              {content.text}
             </Markdown>
 
-            <div className="mt-4">
+            <div className="mt-6">
               <FieldGroup
                 name="agree"
                 type="checkbox"

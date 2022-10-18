@@ -14,7 +14,7 @@ import {
   FormCard,
   t,
 } from "@bloom-housing/ui-components"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { ListingEvent, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
   imageUrlFromListing,
   PageView,
@@ -33,25 +33,22 @@ const ApplicationConfirmation = () => {
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
 
-  const reviewOrder = useMemo(() => {
-    if (listing) {
-      if (listing.reviewOrderType == ListingReviewOrder.lottery) {
-        const lotteryEvent = getLotteryEvent(listing)
-        const lotteryText = []
-        if (lotteryEvent?.startTime) {
-          lotteryText.push(
-            t("application.review.confirmation.eligibleApplicants.lotteryDate", {
-              lotteryDate: dayjs(lotteryEvent?.startTime).format("MMMM D, YYYY"),
-            })
-          )
+  const content = useMemo(() => {
+    switch (listing?.reviewOrderType) {
+      case ListingReviewOrder.firstComeFirstServe:
+        return {
+          text: t("application.review.confirmation.whatHappensNext.fcfs"),
         }
-        lotteryText.push(t("application.review.confirmation.eligibleApplicants.lottery"))
-        return lotteryText.join(" ")
-      } else {
-        return t("application.review.confirmation.eligibleApplicants.FCFS")
-      }
-    } else {
-      return ""
+      case ListingReviewOrder.lottery:
+        return {
+          text: t("application.review.confirmation.whatHappensNext.lottery"),
+        }
+      case ListingReviewOrder.waitlist:
+        return {
+          text: t("application.review.confirmation.whatHappensNext.waitlist"),
+        }
+      default:
+        return { text: "" }
     }
   }, [listing])
 
@@ -93,9 +90,7 @@ const ApplicationConfirmation = () => {
         <div className="form-card__group border-b markdown markdown-informational">
           <ApplicationTimeline />
 
-          <Markdown options={{ disableParsingRawHTML: true }}>
-            {t("application.review.confirmation.whatHappensNext", { reviewOrder })}
-          </Markdown>
+          <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
         </div>
 
         <div className="form-card__group border-b markdown markdown-informational">

@@ -6,7 +6,7 @@ import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
-import { Language, ListingAvailability } from "../../types"
+import { Language, ListingReviewOrder } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -111,9 +111,7 @@ export class ListingsService {
     await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.update)
 
     const availableUnits =
-      listingDto.listingAvailability === ListingAvailability.availableUnits
-        ? listingDto.units.length
-        : 0
+      listingDto.reviewOrderType !== ListingReviewOrder.waitlist ? listingDto.units.length : 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
         delete unit.id
