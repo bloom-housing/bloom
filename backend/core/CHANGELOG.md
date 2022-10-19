@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.1...@bloom-housing/backend-core@7.0.1-alpha.2) (2022-10-19)
+
+
+### Bug Fixes
+
+* correct the cron jobs ([407c0fb](https://github.com/bloom-housing/bloom/commit/407c0fbe10e3150047dadbb43c5248b768e8dc63))
+
+
+
+
+
 ## [7.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.0...@bloom-housing/backend-core@7.0.1-alpha.1) (2022-10-13)
 
 
