@@ -2,11 +2,11 @@ import React, { useContext } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
+import { getDetailFieldNumber, getDetailBoolean } from "./helpers"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
@@ -76,13 +76,6 @@ const DetailRankingsAndResults = () => {
           </GridSection>
         </>
       )}
-      <GridSection columns={1}>
-        <GridCell>
-          <ViewItem id="whatToExpect" label={t("listings.whatToExpectLabel")}>
-            {getDetailFieldString(listing.whatToExpect)}
-          </ViewItem>
-        </GridCell>
-      </GridSection>
     </GridSection>
   )
 }
