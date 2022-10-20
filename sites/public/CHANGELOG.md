@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.4...@bloom-housing/public@7.0.1-alpha.5) (2022-10-20)
+
+
+### Bug Fixes
+
+* switch listing to server side props ([#3145](https://github.com/bloom-housing/bloom/issues/3145)) ([937faa9](https://github.com/bloom-housing/bloom/commit/937faa99dab0249b43bc90fd7cc8bd3dcacf6f38))
+
+
+
+
+
 ## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.3...@bloom-housing/public@7.0.1-alpha.4) (2022-10-20)
 
 
