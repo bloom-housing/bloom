@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.3...@bloom-housing/public@7.0.1-alpha.4) (2022-10-20)
+
+
+### Features
+
+* **expandablecontent:** remove classname from ExpandableContent ([a1068d9](https://github.com/bloom-housing/bloom/commit/a1068d92a88ec32a3f1108c5592a0c6bf55f31cf)), closes [#3140](https://github.com/bloom-housing/bloom/issues/3140)
+
+
+
+
+
 ## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.2...@bloom-housing/public@7.0.1-alpha.3) (2022-10-19)
 
 **Note:** Version bump only for package @bloom-housing/public

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.1...@bloom-housing/ui-components@7.0.1-alpha.2) (2022-10-20)
+
+
+### Features
+
+* **expandablecontent:** remove classname from ExpandableContent ([a1068d9](https://github.com/bloom-housing/bloom/commit/a1068d92a88ec32a3f1108c5592a0c6bf55f31cf)), closes [#3140](https://github.com/bloom-housing/bloom/issues/3140)
+* **expandabletext:** add classname to stories ([194a738](https://github.com/bloom-housing/bloom/commit/194a738142ca5c911c5914b4ed0d415388972ee2)), closes [#3140](https://github.com/bloom-housing/bloom/issues/3140)
+
+
+
+
+
 ## [7.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.0...@bloom-housing/ui-components@7.0.1-alpha.1) (2022-10-12)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
