@@ -11,6 +11,7 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -168,9 +169,10 @@ const ApplicationsList = () => {
                   setSort: tableOptions.sort.setSortOptions,
                 }}
                 headerContent={
-                  <div className="flex-row">
+                  <div className="flex-row ">
                     <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                       <Button
+                        size={AppearanceSizeType.small}
                         className="mx-1"
                         onClick={() => false}
                         dataTestId={"addApplicationButton"}
@@ -179,7 +181,12 @@ const ApplicationsList = () => {
                       </Button>
                     </LocalizedLink>
 
-                    <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
+                    <Button
+                      size={AppearanceSizeType.small}
+                      className="mx-1"
+                      onClick={() => onExport()}
+                      loading={csvExportLoading}
+                    >
                       {t("t.export")}
                     </Button>
                   </div>
