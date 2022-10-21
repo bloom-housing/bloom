@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.2...@bloom-housing/backend-core@7.0.1-alpha.3) (2022-10-21)
+
+
+### Bug Fixes
+
+* update activity-log relationship to users for deletion ([#3139](https://github.com/bloom-housing/bloom/issues/3139)) ([f95532e](https://github.com/bloom-housing/bloom/commit/f95532e4ebe693c128d742399030054d0f735164))
+
+
+
+
+
 ## [7.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.1...@bloom-housing/backend-core@7.0.1-alpha.2) (2022-10-19)
 
 
