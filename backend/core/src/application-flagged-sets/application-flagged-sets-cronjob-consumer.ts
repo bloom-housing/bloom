@@ -23,7 +23,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
 
   @Process({ concurrency: 1 })
   async process() {
-    this.logger.log("running the Application flagged sets cron job")
+    this.logger.warn("running the Application flagged sets cron job")
     const outOfDateListings = await this.listingRepository
       .createQueryBuilder("listings")
       .select(["listings.id", "listings.afsLastRunAt"])
@@ -37,7 +37,7 @@ export class ApplicationFlaggedSetsCronjobConsumer {
       )
       .getMany()
 
-    this.logger.log(`updating the flagged sets for ${outOfDateListings.length} listings`)
+    this.logger.warn(`updating the flagged sets for ${outOfDateListings.length} listings`)
     for (const outOfDateListing of outOfDateListings) {
       try {
         await this.generateAFSesForListingRules(outOfDateListing)

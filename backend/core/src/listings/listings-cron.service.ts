@@ -11,9 +11,9 @@ export class ListingsCronService {
     @Inject(Logger) private readonly logger = new Logger(ListingsCronService.name)
   ) {}
 
-  @Interval(1000 * 60 * 60)
+  @Interval(1000 * 60 * 1)
   public async changeOverdueListingsStatusCron() {
-    this.logger.log("changeOverdueListingsStatusCron job running")
+    this.logger.warn("changeOverdueListingsStatusCron job running")
     const listings = await this.listingRepository
       .createQueryBuilder("listings")
       .select(["listings.id", "listings.applicationDueDate", "listings.status"])
@@ -28,6 +28,6 @@ export class ListingsCronService {
     }
 
     await this.listingRepository.save(listings)
-    this.logger.log(`Changed the status of ${listings?.length} listings`)
+    this.logger.warn(`Changed the status of ${listings?.length} listings`)
   }
 }
