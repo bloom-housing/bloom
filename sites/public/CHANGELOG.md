@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.7...@bloom-housing/public@7.0.1-alpha.8) (2022-10-25)
+
+
+### Features
+
+* accept only numeric values in currency field ([4638808](https://github.com/bloom-housing/bloom/commit/4638808e79d758d28f1f7befd2c77e892673374e))
+* display income currency value with commas ([343e36f](https://github.com/bloom-housing/bloom/commit/343e36f4eced424aa915c91192274c5dda65c25f))
+* submit income as a string ([0e43540](https://github.com/bloom-housing/bloom/commit/0e43540d008dc51a0195eac4c2b0f367b4978957))
+
+
+
+
+
 ## [7.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.6...@bloom-housing/public@7.0.1-alpha.7) (2022-10-24)
 
 **Note:** Version bump only for package @bloom-housing/public

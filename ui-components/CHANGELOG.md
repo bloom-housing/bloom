@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.3...@bloom-housing/ui-components@7.0.1-alpha.4) (2022-10-25)
+
+
+### Features
+
+* accept only numeric values in currency field ([4638808](https://github.com/bloom-housing/bloom/commit/4638808e79d758d28f1f7befd2c77e892673374e))
+* display income currency value with commas ([343e36f](https://github.com/bloom-housing/bloom/commit/343e36f4eced424aa915c91192274c5dda65c25f))
+* remove redundant step prop from currency field ([f02556b](https://github.com/bloom-housing/bloom/commit/f02556b73416b382a822e84781e2817c0fcb2631))
+
+
+
+
+
 ## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.2...@bloom-housing/ui-components@7.0.1-alpha.3) (2022-10-24)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
