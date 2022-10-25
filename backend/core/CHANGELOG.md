@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.3...@bloom-housing/backend-core@7.0.1-alpha.4) (2022-10-25)
+
+
+### Features
+
+* add thank you translations to email footer ([5f3c7b1](https://github.com/bloom-housing/bloom/commit/5f3c7b1e81357e1aff5f3f3532dbb7691ac243ce))
+
+
+
+
+
 ## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.2...@bloom-housing/backend-core@7.0.1-alpha.3) (2022-10-21)
 
 
