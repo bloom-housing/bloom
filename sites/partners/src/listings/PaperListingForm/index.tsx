@@ -18,6 +18,7 @@ import {
   Tab,
   TabPanel,
   LatitudeLongitude,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
@@ -454,6 +455,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               setCloseModal(false)
               triggerSubmitWithStatus(false, ListingStatus.closed)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("listings.actions.close")}
           </Button>,
@@ -464,6 +466,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             onClick={() => {
               setCloseModal(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,
@@ -486,6 +489,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               setPublishModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("listings.actions.publish")}
           </Button>,
@@ -496,6 +500,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             onClick={() => {
               setPublishModal(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,
@@ -518,6 +523,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               setListingIsAlreadyLiveModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}
+            size={AppearanceSizeType.small}
             dataTestId={"listingIsAlreadyLiveButton"}
           >
             {t("t.save")}
@@ -529,6 +535,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             onClick={() => {
               setListingIsAlreadyLiveModal(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

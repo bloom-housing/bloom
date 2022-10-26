@@ -15,6 +15,7 @@ import {
   SiteAlert,
   Modal,
   passwordRegex,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
@@ -254,6 +255,7 @@ export default () => {
               void router.push("/")
               window.scrollTo(0, 0)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.ok")}
           </Button>,
@@ -264,6 +266,7 @@ export default () => {
               setConfirmationResent(true)
               void resendConfirmation(email.current.toString())
             }}
+            size={AppearanceSizeType.small}
           >
             {t("authentication.createAccount.resendTheEmail")}
           </Button>,

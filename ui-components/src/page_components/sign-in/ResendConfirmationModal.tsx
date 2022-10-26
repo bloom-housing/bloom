@@ -6,6 +6,7 @@ import {
   Form,
   Field,
   emailRegex,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import React, { useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
@@ -67,6 +68,7 @@ const ResendConfirmationModal = ({
           styleType={AppearanceStyleType.primary}
           onClick={() => onFormSubmit()}
           loading={loading}
+          size={AppearanceSizeType.small}
         >
           {t("authentication.createAccount.resendTheEmail")}
         </Button>,
@@ -77,6 +79,7 @@ const ResendConfirmationModal = ({
             onClose()
             window.scrollTo(0, 0)
           }}
+          size={AppearanceSizeType.small}
         >
           {t("t.cancel")}
         </Button>,

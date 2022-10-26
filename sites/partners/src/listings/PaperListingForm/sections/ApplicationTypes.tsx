@@ -17,6 +17,7 @@ import {
   PhoneField,
   PhoneMask,
   StandardTableData,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
@@ -544,6 +545,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
           >
             Save
           </Button>,
@@ -554,6 +556,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             }}
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
           >
             Cancel
           </Button>,

@@ -245,6 +245,7 @@ const Settings = () => {
             }}
             dataTestId={"copy-button-confirm"}
             loading={isCreateLoading}
+            size={AppearanceSizeType.small}
           >
             {t("settings.copy")}
           </Button>,
@@ -257,6 +258,7 @@ const Settings = () => {
             }}
             disabled={isCreateLoading}
             dataTestId={"copy-button-cancel"}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

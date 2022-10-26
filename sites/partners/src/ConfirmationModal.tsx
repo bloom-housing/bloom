@@ -6,6 +6,7 @@ import {
   Form,
   Field,
   useMutate,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
@@ -85,6 +86,7 @@ const ConfirmationModal = ({
           styleType={AppearanceStyleType.primary}
           onClick={() => onSubmit()}
           loading={isLoading}
+          size={AppearanceSizeType.small}
         >
           {t("authentication.createAccount.resendTheEmail")}
         </Button>,
@@ -96,6 +98,7 @@ const ConfirmationModal = ({
             onClose()
             window.scrollTo(0, 0)
           }}
+          size={AppearanceSizeType.small}
         >
           {t("t.cancel")}
         </Button>,

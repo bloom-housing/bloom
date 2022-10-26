@@ -217,6 +217,7 @@ const ApplicationDates = ({
           <Button
             styleType={AppearanceStyleType.alert}
             onClick={() => onOpenHouseEventDelete(modalDeleteOpenHouse)}
+            size={AppearanceSizeType.small}
           >
             {t("t.delete")}
           </Button>,
@@ -226,6 +227,7 @@ const ApplicationDates = ({
             onClick={() => {
               setModalDeleteOpenHouse(null)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

@@ -11,6 +11,7 @@ import {
   Modal,
   AppearanceBorderType,
   LinkButton,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "./ApplicationContext"
 
@@ -146,6 +147,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
               onDelete()
               setDeleteModal(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.delete")}
           </Button>,
@@ -155,6 +157,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             onClick={() => {
               setDeleteModal(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

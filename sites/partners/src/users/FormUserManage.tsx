@@ -478,6 +478,7 @@ const FormUserManage = ({
             onClick={() => {
               onDelete()
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.delete")}
           </Button>,
@@ -488,6 +489,7 @@ const FormUserManage = ({
             onClick={() => {
               setDeleteModalActive(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

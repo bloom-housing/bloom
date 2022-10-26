@@ -10,6 +10,7 @@ import {
   MinimalTable,
   TableThumbnail,
   StandardTableData,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import {
   ListingEvent,
@@ -147,6 +148,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
             resetDrawerState()
           }}
           styleType={AppearanceStyleType.primary}
+          size={AppearanceSizeType.small}
         >
           {progressValue === 100 ? t("t.post") : t("t.save")}
         </Button>,
@@ -157,6 +159,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
           }}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
+          size={AppearanceSizeType.small}
         >
           {t("t.cancel")}
         </Button>,

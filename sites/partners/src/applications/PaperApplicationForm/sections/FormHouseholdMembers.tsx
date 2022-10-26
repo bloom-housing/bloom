@@ -177,6 +177,7 @@ const FormHouseholdMembers = ({
           <Button
             styleType={AppearanceStyleType.alert}
             onClick={() => deleteMember(membersDeleteModal)}
+            size={AppearanceSizeType.small}
           >
             {t("t.delete")}
           </Button>,
@@ -186,6 +187,7 @@ const FormHouseholdMembers = ({
             onClick={() => {
               setMembersDeleteModal(null)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

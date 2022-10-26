@@ -9,6 +9,7 @@ import {
   AlertTypes,
   t,
   AppearanceStyleType,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 
 const PROMPT_TIMEOUT = 60000
@@ -89,6 +90,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
         clearTimeout(promptTimeout)
         setPromptTimeout(undefined)
       }}
+      size={AppearanceSizeType.small}
     >
       {promptAction}
     </Button>,

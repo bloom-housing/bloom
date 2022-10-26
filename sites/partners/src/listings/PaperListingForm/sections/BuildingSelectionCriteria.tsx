@@ -14,6 +14,7 @@ import {
   TableThumbnail,
   FieldGroup,
   StandardTableData,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
@@ -247,6 +248,7 @@ const LotteryResults = () => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
           >
             Save
           </Button>,
@@ -257,6 +259,7 @@ const LotteryResults = () => {
             }}
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

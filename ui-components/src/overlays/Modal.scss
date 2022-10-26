@@ -4,15 +4,17 @@
   --title-font-size: var(--bloom-font-size-base-alt);
   --title-font-family: var(--bloom-font-sans);
   --content-font-color: var(--bloom-color-gray-700);
-  --content-padding-block: var(--bloom-s5) var(--bloom-s8);
+  --content-padding-block: var(--bloom-s6);
   --max-width: var(--bloom-width-5xl);
   --desktop-min-width: var(--bloom-width-lg);
   --footer-background-color: var(--bloom-color-primary-lighter);
   --border-radius: var(--bloom-rounded);
+  --mobile-border-radius: 0;
   --background-color: var(--bloom-color-white);
   --modal-shadow: var(--bloom-shadow-md);
   --modal-border: var(--bloom-border-1) solid var(--bloom-color-gray-400);
   --footer-justify: normal;
+  overflow: auto;
 
   position: relative;
   max-width: var(--max-width);
@@ -20,11 +22,15 @@
   margin: auto;
   border: var(--modal-border);
   background-color: var(--background-color);
-  border-radius: var(--border-radius);
   box-shadow: var(--modal-shadow);
-
   @media (min-width: $screen-md) {
     min-width: var(--desktop-min-width);
+  }
+  width: 100vw;
+  border-radius: var(--mobile-border-radius);
+  @media (min-width: $screen-sm) {
+    border-radius: var(--border-radius);
+    width: auto;
   }
 }
 
@@ -35,6 +41,7 @@
 .modal__title {
   padding-block: var(--bloom-s6) var(--bloom-s3);
   padding-inline: var(--bloom-s6) var(--bloom-s12);
+  padding-bottom: 0;
   color: var(--title-color);
   font-size: var(--title-font-size);
   font-family: var(--title-font-family);
@@ -50,7 +57,12 @@
   }
 
   &.is-scrollable {
-    max-height: calc(100vh - 200px);
+    --footer-height: 150px;
+    max-height: calc(100vh - var(--footer-height));
+    @media (min-width: $screen-md) {
+      max-height: calc(100vh - (var(--footer-height) + var(--bloom-s6)));
+      margin-bottom: auto;
+    }
     overflow-y: auto;
   }
 
@@ -60,8 +72,7 @@
 }
 
 .modal__footer {
-  padding-block: var(--bloom-s4);
-  padding-inline: var(--bloom-s6);
+  padding: var(--bloom-s6);
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
   background-color: var(--footer-background-color);

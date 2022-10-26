@@ -19,6 +19,7 @@ import {
   Modal,
   AppearanceBorderType,
   Field,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
@@ -219,6 +220,7 @@ const Flag = () => {
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
             loading={isSaveLoading}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
@@ -241,6 +243,7 @@ const Flag = () => {
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
             border={AppearanceBorderType.borderless}
             onClick={() => {
               setSaveModalOpen(false)
