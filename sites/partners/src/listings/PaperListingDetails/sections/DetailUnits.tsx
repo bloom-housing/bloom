@@ -9,7 +9,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
-import { ListingAvailability } from "@bloom-housing/backend-core"
+import { ListingReviewOrder } from "@bloom-housing/backend-core"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -54,9 +54,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   )
 
   const listingAvailabilityText = useMemo(() => {
-    if (listing.listingAvailability === ListingAvailability.availableUnits) {
+    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
       return t("listings.availableUnits")
-    } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
+    } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
       return t("listings.waitlist.open")
     }
     return t("t.none")

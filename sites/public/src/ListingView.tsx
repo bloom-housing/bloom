@@ -9,9 +9,9 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingStatus,
-  ListingAvailability,
   Jurisdiction,
   ApplicationSection,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -131,7 +131,7 @@ export const ListingView = (props: ListingProps) => {
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(
       listing.unitsSummarized.byUnitTypeAndRent,
-      listing.listingAvailability
+      listing.reviewOrderType
     )
   } // else condition is handled inline below
 
@@ -411,15 +411,15 @@ export const ListingView = (props: ListingProps) => {
     return (
       <QuantityRowSection
         quantityRows={
-          listing.listingAvailability === ListingAvailability.openWaitlist ? waitlistRow : unitRow
+          listing.reviewOrderType === ListingReviewOrder.waitlist ? waitlistRow : unitRow
         }
         strings={{
           sectionTitle:
-            listing.listingAvailability === ListingAvailability.openWaitlist
+            listing.reviewOrderType === ListingReviewOrder.waitlist
               ? t("listings.waitlist.isOpen")
               : t("listings.vacantUnitsAvailable"),
           description:
-            listing.listingAvailability === ListingAvailability.openWaitlist
+            listing.reviewOrderType === ListingReviewOrder.waitlist
               ? t("listings.waitlist.submitForWaitlist")
               : t("listings.availableUnitsDescription"),
         }}
@@ -546,7 +546,7 @@ export const ListingView = (props: ListingProps) => {
               })
 
               groupedUnits = byAMI
-                ? getSummariesTable(byAMI.byUnitType, listing.listingAvailability)
+                ? getSummariesTable(byAMI.byUnitType, listing.reviewOrderType)
                 : []
 
               return (
