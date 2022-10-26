@@ -204,11 +204,16 @@ const AgTable = ({
       selectConfig.setGridApi(params.api)
     }
   }
+  console.log(headerContent)
 
   return (
     <div className={`ag-theme-alpine ag-theme-bloom ${className || ""}`}>
-      <div className="flex justify-between flex-col md:flex-row">
-        <div className={`flex flex-wrap ${showSearch ? "mb-5" : "hidden"}`}>
+      <div
+        className={`flex justify-between flex-col md:flex-row ${
+          (showSearch || headerContent) && "my-4"
+        }`}
+      >
+        <div className={`flex flex-wrap ${!showSearch && "hidden"}`}>
           <div className="md:mr-5 w-full md:w-56">
             <Field
               dataTestId="ag-search-input"
@@ -227,8 +232,7 @@ const AgTable = ({
             )}
           </div>
         </div>
-
-        {headerContent}
+        <div>{headerContent}</div>
       </div>
       <div className="applications-table">
         <LoadingOverlay isLoading={data.loading}>
