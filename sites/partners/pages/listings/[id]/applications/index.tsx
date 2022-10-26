@@ -169,7 +169,7 @@ const ApplicationsList = () => {
                   setSort: tableOptions.sort.setSortOptions,
                 }}
                 headerContent={
-                  <div className="flex-row ">
+                  <div className="flex-row">
                     <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                       <Button
                         size={AppearanceSizeType.small}

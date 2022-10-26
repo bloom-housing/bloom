@@ -204,7 +204,6 @@ const AgTable = ({
       selectConfig.setGridApi(params.api)
     }
   }
-  console.log(headerContent)
 
   return (
     <div className={`ag-theme-alpine ag-theme-bloom ${className || ""}`}>
@@ -232,7 +231,7 @@ const AgTable = ({
             )}
           </div>
         </div>
-        <div>{headerContent}</div>
+        {headerContent}
       </div>
       <div className="applications-table">
         <LoadingOverlay isLoading={data.loading}>
