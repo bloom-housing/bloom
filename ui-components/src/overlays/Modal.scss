@@ -14,6 +14,7 @@
   --modal-shadow: var(--bloom-shadow-md);
   --modal-border: var(--bloom-border-1) solid var(--bloom-color-gray-400);
   --footer-justify: normal;
+  --footer-height: 150px;
   overflow: auto;
 
   position: relative;
@@ -23,14 +24,20 @@
   border: var(--modal-border);
   background-color: var(--background-color);
   box-shadow: var(--modal-shadow);
-  @media (min-width: $screen-md) {
-    min-width: var(--desktop-min-width);
-  }
   width: 100vw;
   border-radius: var(--mobile-border-radius);
+
   @media (min-width: $screen-sm) {
     border-radius: var(--border-radius);
+    min-width: var(--desktop-min-width);
     width: auto;
+  }
+
+  max-height: 100vh;
+  max-width: 100vw;
+  @media (min-width: $screen-md) {
+    max-height: calc(100vh - var(--bloom-s6));
+    max-width: calc(100vw - var(--bloom-s6));
   }
 }
 
@@ -57,10 +64,11 @@
   }
 
   &.is-scrollable {
-    --footer-height: 150px;
     max-height: calc(100vh - var(--footer-height));
+    max-width: 100vw;
     @media (min-width: $screen-md) {
       max-height: calc(100vh - (var(--footer-height) + var(--bloom-s6)));
+      max-width: calc(100vw - var(--bloom-s6));
       margin-bottom: auto;
     }
     overflow-y: auto;
