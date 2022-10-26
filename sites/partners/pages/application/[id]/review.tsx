@@ -256,7 +256,6 @@ const Flag = () => {
           id="setStatus.pending"
           name="setStatus"
           className="m-0"
-          controlClassName={"pb-0"}
           type="radio"
           label={t("applications.pendingReview")}
           register={register}
