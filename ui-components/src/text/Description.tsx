@@ -1,23 +1,31 @@
 import * as React from "react"
 import "./Description.scss"
-import Markdown from "markdown-to-jsx"
+import Markdown, { MarkdownOptions } from "markdown-to-jsx"
 
 export interface DescriptionProps {
   term: string
   description: any
+  dtClassName?: string
   markdown?: boolean
+  markdownProps?: MarkdownOptions
 }
 
 export const Description = (props: DescriptionProps) => {
+  const dtClasses = ["description__body"]
+  if (props.dtClassName) dtClasses.push(props.dtClassName)
+
   return (
     <>
       <dd className="description__title">{props.term}</dd>
       {props.markdown ? (
-        <dt className="description__body">
-          <Markdown options={{ disableParsingRawHTML: true }} children={props.description} />
+        <dt className={dtClasses.join(" ")}>
+          <Markdown
+            options={{ disableParsingRawHTML: true, ...props.markdownProps }}
+            children={props.description}
+          />
         </dt>
       ) : (
-        <dt className="description__body">{props.description}</dt>
+        <dt className={dtClasses.join(" ")}>{props.description}</dt>
       )}
     </>
   )
