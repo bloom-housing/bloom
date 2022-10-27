@@ -20,7 +20,6 @@ import { AssetUpdateDto } from "../../assets/dto/asset.dto"
 import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingImageUpdateDto } from "./listing-image-update.dto"
-import { ListingAvailability } from "../types/listing-availability-enum"
 
 export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "assets",
@@ -39,7 +38,6 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "rentalAssistance",
   "reviewOrderType",
   "units",
-  "listingAvailability",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -76,10 +74,6 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageUpdateDto)
   images: ListingImageUpdateDto[]
-
-  @Expose()
-  @IsEnum(ListingAvailability, { groups: [ValidationsGroupsEnum.default] })
-  listingAvailability: ListingAvailability | null
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })

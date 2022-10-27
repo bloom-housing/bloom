@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { Logger, Module } from "@nestjs/common"
 import { ApplicationFlaggedSetsController } from "./application-flagged-sets.controller"
 import { ApplicationFlaggedSetsService } from "./application-flagged-sets.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -40,6 +40,7 @@ import { ListingRepository } from "../listings/db/listing.repository"
     ApplicationFlaggedSetsService,
     ApplicationFlaggedSetsCronjobBoostrapService,
     ApplicationFlaggedSetsCronjobConsumer,
+    Logger,
   ],
   exports: [
     ApplicationFlaggedSetsService,

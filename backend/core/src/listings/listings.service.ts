@@ -6,7 +6,7 @@ import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
-import { Language, ListingAvailability } from "../../types"
+import { Language, ListingReviewOrder } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -111,9 +111,7 @@ export class ListingsService {
     await this.authorizeUserActionForListingId(this.req.user, listing.id, authzActions.update)
 
     const availableUnits =
-      listingDto.listingAvailability === ListingAvailability.availableUnits
-        ? listingDto.units.length
-        : 0
+      listingDto.reviewOrderType !== ListingReviewOrder.waitlist ? listingDto.units.length : 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
         delete unit.id
@@ -164,24 +162,6 @@ export class ListingsService {
 
     await this.addUnitsSummarized(result)
     return result
-  }
-
-  @Interval(1000 * 60 * 60)
-  public async changeOverdueListingsStatusCron() {
-    const listings = await this.listingRepository
-      .createQueryBuilder("listings")
-      .select(["listings.id", "listings.applicationDueDate", "listings.status"])
-      .where(`listings.status = '${ListingStatus.active}'`)
-      .andWhere(`listings.applicationDueDate IS NOT NULL`)
-      .andWhere(`listings.applicationDueDate < NOW()`)
-      .getMany()
-
-    for (const listing of listings) {
-      listing.status = ListingStatus.closed
-      listing.closedAt = new Date()
-    }
-
-    await this.listingRepository.save(listings)
   }
 
   private async addUnitsSummarized(listing: Listing) {

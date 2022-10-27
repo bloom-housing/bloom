@@ -2,7 +2,7 @@
 0.2 - What To Expect
 A notice regarding application process and rules
 */
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useMemo } from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -12,14 +12,18 @@ import {
   Form,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import Markdown from "markdown-to-jsx"
+import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("whatToExpect")
+  const router = useRouter()
   const currentPageSection = 1
 
   /* Form Handler */
@@ -27,6 +31,28 @@ const ApplicationWhatToExpect = () => {
   const onSubmit = () => {
     conductor.routeToNextOrReturnUrl()
   }
+
+  const content = useMemo(() => {
+    switch (listing?.reviewOrderType) {
+      case ListingReviewOrder.firstComeFirstServe:
+        return {
+          steps: t("application.start.whatToExpect.fcfs.steps"),
+          finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
+        }
+      case ListingReviewOrder.lottery:
+        return {
+          steps: t("application.start.whatToExpect.lottery.steps"),
+          finePrint: t("application.start.whatToExpect.lottery.finePrint"),
+        }
+      case ListingReviewOrder.waitlist:
+        return {
+          steps: t("application.start.whatToExpect.waitlist.steps"),
+          finePrint: t("application.start.whatToExpect.waitlist.finePrint"),
+        }
+      default:
+        return { steps: "", finePrint: "" }
+    }
+  }, [listing, router.locale])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -58,9 +84,41 @@ const ApplicationWhatToExpect = () => {
           </h2>
         </div>
         <div className="form-card__pager-row px-16">
-          <p className="field-note py-2">{t("application.start.whatToExpect.info1")}</p>
-          <p className="field-note py-2">{t("application.start.whatToExpect.info2")}</p>
-          <p className="field-note py-2">{t("application.start.whatToExpect.info3")}</p>
+          <div className="markdown mt-4">
+            <Markdown
+              options={{
+                disableParsingRawHTML: true,
+                overrides: {
+                  ol: {
+                    component: ({ children, ...props }) => (
+                      <ol {...props} className="large-numbers">
+                        {children}
+                      </ol>
+                    ),
+                  },
+                },
+              }}
+            >
+              {content.steps}
+            </Markdown>
+
+            <Markdown
+              options={{
+                disableParsingRawHTML: true,
+                overrides: {
+                  li: {
+                    component: ({ children, ...props }) => (
+                      <li {...props} className="mb-5">
+                        {children}
+                      </li>
+                    ),
+                  },
+                },
+              }}
+            >
+              {content.finePrint}
+            </Markdown>
+          </div>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">

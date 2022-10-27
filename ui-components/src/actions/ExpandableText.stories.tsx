@@ -16,18 +16,27 @@ const longText =
   Lorem Ipsum."
 
 export const standard = () => (
-  <ExpandableText strings={{ readMore: "More", readLess: "Less" }}>{longText}</ExpandableText>
+  <ExpandableText buttonClassName="ml-4" strings={{ readMore: "More", readLess: "Less" }}>
+    {longText}
+  </ExpandableText>
 )
 export const expanded = () => (
-  <ExpandableText strings={{ readMore: "More", readLess: "Less" }} expand={true}>
+  <ExpandableText
+    buttonClassName="ml-4"
+    strings={{ readMore: "More", readLess: "Less" }}
+    expand={true}
+  >
     {longText}
   </ExpandableText>
 )
 export const noExpansion = () => (
-  <ExpandableText strings={{ readMore: "More", readLess: "Less" }}>Short text</ExpandableText>
+  <ExpandableText buttonClassName="ml-4" strings={{ readMore: "More", readLess: "Less" }}>
+    Short text
+  </ExpandableText>
 )
 export const html = () => (
   <ExpandableText
+    buttonClassName="ml-4"
     strings={{ readMore: "More", readLess: "Less" }}
   >{`Go to <a href="http://www.google.com" target="_blank">Google</a>. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been \
   the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley \
@@ -35,6 +44,7 @@ export const html = () => (
 )
 export const disableRawHtml = () => (
   <ExpandableText
+    buttonClassName="ml-4"
     strings={{ readMore: "More", readLess: "Less" }}
     markdownProps={{ disableParsingRawHTML: true }}
   >{`Go to <a href="http://www.google.com" target="_blank">Google</a>. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been \
@@ -46,7 +56,7 @@ export const buttonClassName = () => (
   <ExpandableText
     strings={{ readMore: "More", readLess: "Less" }}
     markdownProps={{ disableParsingRawHTML: true }}
-    buttonClassName="ml-4 font-bold"
+    buttonClassName="ml-1 font-bold"
   >
     {
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been \

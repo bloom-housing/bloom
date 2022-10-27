@@ -3,6 +3,113 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.10...@bloom-housing/public@7.0.1) (2022-10-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.9...@bloom-housing/public@7.0.1-alpha.10) (2022-10-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.8...@bloom-housing/public@7.0.1-alpha.9) (2022-10-25)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.7...@bloom-housing/public@7.0.1-alpha.8) (2022-10-25)
+
+
+### Features
+
+* accept only numeric values in currency field ([4638808](https://github.com/bloom-housing/bloom/commit/4638808e79d758d28f1f7befd2c77e892673374e))
+* display income currency value with commas ([343e36f](https://github.com/bloom-housing/bloom/commit/343e36f4eced424aa915c91192274c5dda65c25f))
+* submit income as a string ([0e43540](https://github.com/bloom-housing/bloom/commit/0e43540d008dc51a0195eac4c2b0f367b4978957))
+
+
+
+
+
+## [7.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.6...@bloom-housing/public@7.0.1-alpha.7) (2022-10-24)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.5...@bloom-housing/public@7.0.1-alpha.6) (2022-10-21)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.4...@bloom-housing/public@7.0.1-alpha.5) (2022-10-20)
+
+
+### Bug Fixes
+
+* switch listing to server side props ([#3145](https://github.com/bloom-housing/bloom/issues/3145)) ([937faa9](https://github.com/bloom-housing/bloom/commit/937faa99dab0249b43bc90fd7cc8bd3dcacf6f38))
+
+
+
+
+
+## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.3...@bloom-housing/public@7.0.1-alpha.4) (2022-10-20)
+
+
+### Features
+
+* **expandablecontent:** remove classname from ExpandableContent ([a1068d9](https://github.com/bloom-housing/bloom/commit/a1068d92a88ec32a3f1108c5592a0c6bf55f31cf)), closes [#3140](https://github.com/bloom-housing/bloom/issues/3140)
+
+
+
+
+
+## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.2...@bloom-housing/public@7.0.1-alpha.3) (2022-10-19)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.1...@bloom-housing/public@7.0.1-alpha.2) (2022-10-13)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.1-alpha.0...@bloom-housing/public@7.0.1-alpha.1) (2022-10-12)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@6.0.1-alpha.4...@bloom-housing/public@7.0.1-alpha.0) (2022-10-05)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 # [7.0.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@5.1.1-alpha.40...@bloom-housing/public@7.0.0) (2022-09-29)
 
 
