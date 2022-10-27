@@ -10,13 +10,13 @@
   --title-font-size: var(--bloom-font-size-5xl);
 
   /* Base Styles */
-  padding: var(--bloom-s8);
+  padding: var(--bloom-s8) 0;
   background-color: var(--background-color);
   border-top: var(--bloom-border-1) solid var(--border-color);
   color: var(--text-color);
 
   @media (min-width: $screen-md) {
-    padding: var(--bloom-s10);
+    padding: var(--bloom-s10) 0;
   }
 
   /* Variants */
@@ -41,8 +41,8 @@
 }
 
 .page-header__breadcrumbs {
+  margin-bottom: 10px;
   margin-top: calc(-1 * var(--bloom-s4));
-  margin-bottom: var(--bloom-s5);
 }
 
 .page-header__title {
