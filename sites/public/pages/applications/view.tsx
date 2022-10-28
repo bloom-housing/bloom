@@ -10,7 +10,13 @@ import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT, UserStatus } from "../../lib/constants"
-import { pushGtmEvent, PageView, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  pushGtmEvent,
+  PageView,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -38,9 +44,11 @@ const ApplicationView = () => {
       >
         <div className="py-2">
           {listing && (
-            <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
-              <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
-            </Link>
+            <span className={"lined text-tiny"}>
+              <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
+                {t("application.confirmation.viewOriginalListing")}
+              </Link>
+            </span>
           )}
         </div>
       </FormCard>
@@ -68,15 +76,18 @@ const ApplicationView = () => {
         <FormSummaryDetails
           listing={listing}
           application={application}
-          hidePreferences={listing?.listingPreferences.length === 0}
+          hidePreferences={
+            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+          }
+          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
           editMode={false}
         />
 
         <div className="form-card__pager hide-for-print">
           <div className="form-card__pager-row py-6">
-            <a href="#" className="lined text-tiny" onClick={() => window.print()}>
+            <button className="lined text-tiny" onClick={() => window.print()}>
               {t("application.confirmation.printCopy")}
-            </a>
+            </button>
           </div>
         </div>
       </FormCard>

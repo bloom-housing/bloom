@@ -1,4 +1,10 @@
 .field {
+  --bordered-border-width: 1px;
+  --bordered-border-radius: var(--bloom-s1_5);
+  --bordered-vertical-padding: var(--bloom-s4);
+  --bordered-leftward-padding: 2.875rem;
+  --bordered-checked-bg-color: var(--bloom-color-gray-100);
+
   margin-bottom: 1.25rem;
 
   * > &:last-child {
@@ -17,7 +23,7 @@
   }
 
   label.sr-only + .control,
-  label.field-label--caps + .control {
+  label.text__caps-spaced + .control {
     @apply mt-0;
   }
 
@@ -25,8 +31,36 @@
     @apply mt-2;
   }
 
-  .field-label--caps.label + .field-note {
+  .text__caps-spaced.label + .field-note {
     @apply mt-0;
+  }
+
+  .field-border {
+    label {
+      background-color: var(--bloom-color-white);
+      padding-top: var(--bordered-vertical-padding);
+      padding-bottom: var(--bordered-vertical-padding);
+      padding-left: var(--bordered-leftward-padding);
+      border-width: var(--bordered-border-width);
+      border-radius: var(--bordered-border-radius);
+      border-color: var(--bloom-color-gray-450);
+    }
+    input[type="checkbox"] + label::before,
+    input[type="radio"] + label::before,
+    input[type="checkbox"]:focus + label::before,
+    input[type="radio"]:focus + label::before {
+      background-color: none;
+      box-shadow: 0 0 0 1px white, 0 0 0 2px var(--bloom-color-gray-450);
+    }
+    input[type="checkbox"]:focus + label,
+    input[type="radio"]:focus + label {
+      box-shadow: 0 0 0 1px white, 0 0 0 2px var(--bloom-color-accent-cool),
+        0 0 3px 4px var(--bloom-color-accent-cool);
+    }
+    input[type="checkbox"]:checked + label,
+    input[type="radio"]:checked + label {
+      background-color: var(--bordered-checked-bg-color);
+    }
   }
 
   .control {
@@ -196,7 +230,7 @@
 
   &.error {
     label {
-      @apply text-red-700;
+      @apply text-alert;
     }
 
     .control {
@@ -208,7 +242,7 @@
       }
 
       .prepend {
-        @apply text-red-700;
+        @apply text-alert;
       }
     }
 
@@ -222,10 +256,9 @@
   }
 }
 
-/* Restore previous Tailwind v1 color */
 input::placeholder,
 textarea::placeholder {
-  color: #a0aec0;
+  color: var(--bloom-color-gray-650);
 }
 
 input[type],
@@ -262,17 +295,6 @@ input[type="number"] {
   @apply pb-2;
   @apply text-tiny;
   @apply text-gray-800;
-}
-
-.field-label--caps {
-  @apply font-sans;
-  @apply uppercase;
-  @apply text-gray-750;
-  @apply tracking-widest;
-  @apply font-semibold;
-  @apply text-tiny;
-  @apply mb-3;
-  @apply inline-block;
 }
 
 .field--inline {
@@ -321,14 +343,16 @@ input[type="number"] {
 .field-note {
   @apply text-tiny;
   @apply text-gray-700;
-  @apply font-semibold;
   white-space: pre-line;
 }
 
 .error-message {
+  display: inline-block;
   @apply text-sm;
-  @apply text-red-700;
+  @apply text-alert;
   @apply tracking-wide;
+  @apply leading-5;
+  @apply mt-1;
 }
 
 .field-sub-note {

@@ -1,24 +1,22 @@
 import React from "react"
-import { render, cleanup, fireEvent } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { SideNav } from "../../src/navigation/SideNav"
 
 afterEach(cleanup)
 
+const navItems = [
+  {
+    url: "/One",
+    label: "NavItem 1",
+    current: false,
+  },
+  { url: "/Two", label: "NavItem 2", current: false },
+  { url: "/Three", label: "NavItem 3", current: false },
+]
+
 describe("<SideNav>", () => {
   it("renders default state", () => {
-    const { getByText } = render(
-      <SideNav
-        navItems={[
-          {
-            url: "/One",
-            label: "NavItem 1",
-            current: false,
-          },
-          { url: "/Two", label: "NavItem 2", current: false },
-          { url: "/Three", label: "NavItem 3", current: false },
-        ]}
-      />
-    )
+    const { getByText } = render(<SideNav navItems={navItems} />)
 
     expect(getByText("NavItem 1")).toBeTruthy()
     expect(getByText("NavItem 2")).toBeTruthy()
@@ -28,20 +26,12 @@ describe("<SideNav>", () => {
     expect(getByText("NavItem 3").closest("a")?.getAttribute("href")).toBe("/Three")
   })
 
-  it("does not render anchor tag with only current = true nav item", () => {
-    const { queryByText } = render(
-      <SideNav
-        navItems={[
-          {
-            url: "/One",
-            label: "NavItem 1",
-            current: true,
-          },
-        ]}
-      />
+  it("renders with current state", () => {
+    const { getByText, container } = render(
+      <SideNav navItems={[...navItems, { url: "/Four", label: "NavItem 4", current: true }]} />
     )
 
-    const anchorTag = queryByText("NavItem 1")?.closest("a")
-    expect(anchorTag).not.toBeInTheDocument()
+    expect(container.querySelectorAll("a[aria-current]").length).toEqual(1)
+    expect(getByText("NavItem 4").closest("a")?.getAttribute("aria-current")).toEqual("page")
   })
 })

@@ -8,10 +8,17 @@ import { Unit } from "./entities/unit.entity"
 import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../unit-rent-types/entities/unit-rent-type.entity"
 import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { UserRepository } from "../auth/repositories/user-repository"
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Unit, UnitType, UnitRentType, UnitAccessibilityPriorityType]),
+    TypeOrmModule.forFeature([
+      Unit,
+      UnitType,
+      UnitRentType,
+      UnitAccessibilityPriorityType,
+      UserRepository,
+    ]),
     AuthModule,
   ],
   providers: [UnitsService, AuthzService],

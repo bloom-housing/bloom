@@ -32,13 +32,13 @@ describe("Unit Transformations", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "name",
-        programs: [],
+        multiselectQuestions: [],
         languages: [Language.en],
-        preferences: [],
         publicUrl: "",
         emailFromAddress: "email from address",
         rentalAssistanceDefault: "",
         enableAccessibilityFeatures: false,
+        enableUtilitiesIncluded: false,
       },
     }
 

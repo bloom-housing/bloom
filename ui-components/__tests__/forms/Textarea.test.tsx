@@ -6,11 +6,13 @@ import { useForm } from "react-hook-form"
 afterEach(cleanup)
 
 const TextareaDefault = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm()
   return <Textarea name={"textarea-test"} label={"Textarea Label"} register={register} />
 }
 
 const TextareaCustom = () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = useForm()
   return (
     <Textarea

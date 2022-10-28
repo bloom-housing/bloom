@@ -1,7 +1,5 @@
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
-  Preference,
-  Program,
   ListingStatus,
   ListingApplicationAddressType,
   Unit,
@@ -10,6 +8,7 @@ import {
   ListingEvent,
   PaperApplication,
   PaperApplicationCreate,
+  MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
@@ -44,6 +43,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
   listingFeatures?: string[]
+  listingUtilities?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
@@ -116,7 +116,9 @@ export const formDefaults: FormListing = {
   events: [],
   images: [],
   listingFeatures: [],
+  listingUtilities: [],
   features: {},
+  utilities: {},
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
@@ -126,8 +128,7 @@ export const formDefaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   programRules: "",
   rentalAssistance: null,
   rentalHistory: "",
@@ -157,7 +158,6 @@ export const formDefaults: FormListing = {
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: null,
-  listingAvailability: null,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
@@ -192,8 +192,8 @@ export type TempEvent = ListingEvent & {
 export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
-  preferences: Preference[]
-  programs: Program[]
+  preferences: MultiselectQuestion[]
+  programs: MultiselectQuestion[]
   units: TempUnit[]
   openHouseEvents: TempEvent[]
   profile: User

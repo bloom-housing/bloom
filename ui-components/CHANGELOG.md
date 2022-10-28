@@ -3,6 +3,1668 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.4...@bloom-housing/ui-components@7.0.1) (2022-10-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.3...@bloom-housing/ui-components@7.0.1-alpha.4) (2022-10-25)
+
+
+### Features
+
+* accept only numeric values in currency field ([4638808](https://github.com/bloom-housing/bloom/commit/4638808e79d758d28f1f7befd2c77e892673374e))
+* display income currency value with commas ([343e36f](https://github.com/bloom-housing/bloom/commit/343e36f4eced424aa915c91192274c5dda65c25f))
+* remove redundant step prop from currency field ([f02556b](https://github.com/bloom-housing/bloom/commit/f02556b73416b382a822e84781e2817c0fcb2631))
+
+
+
+
+
+## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.2...@bloom-housing/ui-components@7.0.1-alpha.3) (2022-10-24)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [7.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.1...@bloom-housing/ui-components@7.0.1-alpha.2) (2022-10-20)
+
+
+### Features
+
+* **expandablecontent:** remove classname from ExpandableContent ([a1068d9](https://github.com/bloom-housing/bloom/commit/a1068d92a88ec32a3f1108c5592a0c6bf55f31cf)), closes [#3140](https://github.com/bloom-housing/bloom/issues/3140)
+* **expandabletext:** add classname to stories ([194a738](https://github.com/bloom-housing/bloom/commit/194a738142ca5c911c5914b4ed0d415388972ee2)), closes [#3140](https://github.com/bloom-housing/bloom/issues/3140)
+
+
+
+
+
+## [7.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1-alpha.0...@bloom-housing/ui-components@7.0.1-alpha.1) (2022-10-12)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [7.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@6.0.1-alpha.4...@bloom-housing/ui-components@7.0.1-alpha.0) (2022-10-05)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+# [7.0.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.22...@bloom-housing/ui-components@7.0.0) (2022-09-29)
+
+
+* Release/2022 09 29 (#3114) ([dd9cbd6](https://github.com/bloom-housing/bloom/commit/dd9cbd6e549c69a3410a0753011e8f157ef61f31)), closes [#3114](https://github.com/bloom-housing/bloom/issues/3114) [#3023](https://github.com/bloom-housing/bloom/issues/3023) [#3040](https://github.com/bloom-housing/bloom/issues/3040) [#3054](https://github.com/bloom-housing/bloom/issues/3054) [#3050](https://github.com/bloom-housing/bloom/issues/3050) [#483](https://github.com/bloom-housing/bloom/issues/483) [#3073](https://github.com/bloom-housing/bloom/issues/3073) [#3070](https://github.com/bloom-housing/bloom/issues/3070) [#3041](https://github.com/bloom-housing/bloom/issues/3041) [#3077](https://github.com/bloom-housing/bloom/issues/3077) [#3063](https://github.com/bloom-housing/bloom/issues/3063) [#3084](https://github.com/bloom-housing/bloom/issues/3084) [#3086](https://github.com/bloom-housing/bloom/issues/3086) [#3056](https://github.com/bloom-housing/bloom/issues/3056) [#3075](https://github.com/bloom-housing/bloom/issues/3075) [#3095](https://github.com/bloom-housing/bloom/issues/3095) [#3090](https://github.com/bloom-housing/bloom/issues/3090) [#3006](https://github.com/bloom-housing/bloom/issues/3006) [#2961](https://github.com/bloom-housing/bloom/issues/2961) [#3020](https://github.com/bloom-housing/bloom/issues/3020) [#3093](https://github.com/bloom-housing/bloom/issues/3093) [#2974](https://github.com/bloom-housing/bloom/issues/2974) [#2909](https://github.com/bloom-housing/bloom/issues/2909) [#2958](https://github.com/bloom-housing/bloom/issues/2958) [#2904](https://github.com/bloom-housing/bloom/issues/2904) [#2987](https://github.com/bloom-housing/bloom/issues/2987) [#2990](https://github.com/bloom-housing/bloom/issues/2990) [#2989](https://github.com/bloom-housing/bloom/issues/2989) [#2991](https://github.com/bloom-housing/bloom/issues/2991) [#2985](https://github.com/bloom-housing/bloom/issues/2985) [#2994](https://github.com/bloom-housing/bloom/issues/2994) [#2995](https://github.com/bloom-housing/bloom/issues/2995) [#2999](https://github.com/bloom-housing/bloom/issues/2999) [#2950](https://github.com/bloom-housing/bloom/issues/2950) [#2968](https://github.com/bloom-housing/bloom/issues/2968) [#2784](https://github.com/bloom-housing/bloom/issues/2784) [#2988](https://github.com/bloom-housing/bloom/issues/2988) [#3016](https://github.com/bloom-housing/bloom/issues/3016) [#3018](https://github.com/bloom-housing/bloom/issues/3018) [#3017](https://github.com/bloom-housing/bloom/issues/3017) [#3005](https://github.com/bloom-housing/bloom/issues/3005) [#3012](https://github.com/bloom-housing/bloom/issues/3012) [#3014](https://github.com/bloom-housing/bloom/issues/3014) [#3000](https://github.com/bloom-housing/bloom/issues/3000) [#3021](https://github.com/bloom-housing/bloom/issues/3021) [#3027](https://github.com/bloom-housing/bloom/issues/3027) [#3036](https://github.com/bloom-housing/bloom/issues/3036) [#3023](https://github.com/bloom-housing/bloom/issues/3023) [#3040](https://github.com/bloom-housing/bloom/issues/3040) [#3054](https://github.com/bloom-housing/bloom/issues/3054) [#3050](https://github.com/bloom-housing/bloom/issues/3050) [#483](https://github.com/bloom-housing/bloom/issues/483) [#3073](https://github.com/bloom-housing/bloom/issues/3073) [#3070](https://github.com/bloom-housing/bloom/issues/3070) [#3041](https://github.com/bloom-housing/bloom/issues/3041) [#3061](https://github.com/bloom-housing/bloom/issues/3061) [#3077](https://github.com/bloom-housing/bloom/issues/3077) [#3063](https://github.com/bloom-housing/bloom/issues/3063) [#3084](https://github.com/bloom-housing/bloom/issues/3084) [#3088](https://github.com/bloom-housing/bloom/issues/3088) [#2892](https://github.com/bloom-housing/bloom/issues/2892) [#3006](https://github.com/bloom-housing/bloom/issues/3006) [#2961](https://github.com/bloom-housing/bloom/issues/2961) [#3020](https://github.com/bloom-housing/bloom/issues/3020) [#3086](https://github.com/bloom-housing/bloom/issues/3086) [#3102](https://github.com/bloom-housing/bloom/issues/3102) [#3101](https://github.com/bloom-housing/bloom/issues/3101) [#3104](https://github.com/bloom-housing/bloom/issues/3104) [#3105](https://github.com/bloom-housing/bloom/issues/3105)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@5.1.1-alpha.8
+ - @bloom-housing/shared-helpers@5.1.1-alpha.18
+ - @bloom-housing/partners@5.1.1-alpha.20
+ - @bloom-housing/public@5.1.1-alpha.18
+ - @bloom-housing/ui-components@5.1.1-alpha.11
+
+
+
+
+
+## [6.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@6.0.1-alpha.0...@bloom-housing/ui-components@6.0.1-alpha.1) (2022-09-28)
+
+
+### Features
+
+* add duplicates v2 feature ([11cd2b3](https://github.com/bloom-housing/bloom/commit/11cd2b3b4d39c69e10ca1c9a8c2c7199b4a08b6b)), closes [#3006](https://github.com/bloom-housing/bloom/issues/3006) [#2961](https://github.com/bloom-housing/bloom/issues/2961) [#3020](https://github.com/bloom-housing/bloom/issues/3020) [#3093](https://github.com/bloom-housing/bloom/issues/3093) [#2974](https://github.com/bloom-housing/bloom/issues/2974) [#2909](https://github.com/bloom-housing/bloom/issues/2909) [#2958](https://github.com/bloom-housing/bloom/issues/2958) [#2904](https://github.com/bloom-housing/bloom/issues/2904) [#2987](https://github.com/bloom-housing/bloom/issues/2987) [#2990](https://github.com/bloom-housing/bloom/issues/2990) [#2989](https://github.com/bloom-housing/bloom/issues/2989) [#2991](https://github.com/bloom-housing/bloom/issues/2991) [#2985](https://github.com/bloom-housing/bloom/issues/2985) [#2994](https://github.com/bloom-housing/bloom/issues/2994) [#2995](https://github.com/bloom-housing/bloom/issues/2995) [#2999](https://github.com/bloom-housing/bloom/issues/2999) [#2950](https://github.com/bloom-housing/bloom/issues/2950) [#2968](https://github.com/bloom-housing/bloom/issues/2968) [#2784](https://github.com/bloom-housing/bloom/issues/2784) [#2988](https://github.com/bloom-housing/bloom/issues/2988) [#3016](https://github.com/bloom-housing/bloom/issues/3016) [#3018](https://github.com/bloom-housing/bloom/issues/3018) [#3017](https://github.com/bloom-housing/bloom/issues/3017) [#3005](https://github.com/bloom-housing/bloom/issues/3005) [#3012](https://github.com/bloom-housing/bloom/issues/3012) [#3014](https://github.com/bloom-housing/bloom/issues/3014) [#3000](https://github.com/bloom-housing/bloom/issues/3000) [#3021](https://github.com/bloom-housing/bloom/issues/3021) [#3027](https://github.com/bloom-housing/bloom/issues/3027) [#3036](https://github.com/bloom-housing/bloom/issues/3036) [#3023](https://github.com/bloom-housing/bloom/issues/3023) [#3040](https://github.com/bloom-housing/bloom/issues/3040) [#3054](https://github.com/bloom-housing/bloom/issues/3054) [#3050](https://github.com/bloom-housing/bloom/issues/3050) [#483](https://github.com/bloom-housing/bloom/issues/483) [#3073](https://github.com/bloom-housing/bloom/issues/3073) [#3070](https://github.com/bloom-housing/bloom/issues/3070) [#3041](https://github.com/bloom-housing/bloom/issues/3041) [#3061](https://github.com/bloom-housing/bloom/issues/3061) [#3077](https://github.com/bloom-housing/bloom/issues/3077) [#3063](https://github.com/bloom-housing/bloom/issues/3063) [#3084](https://github.com/bloom-housing/bloom/issues/3084) [#3088](https://github.com/bloom-housing/bloom/issues/3088) [#2892](https://github.com/bloom-housing/bloom/issues/2892) [#3006](https://github.com/bloom-housing/bloom/issues/3006) [#2961](https://github.com/bloom-housing/bloom/issues/2961) [#3020](https://github.com/bloom-housing/bloom/issues/3020) [#3086](https://github.com/bloom-housing/bloom/issues/3086) [#3102](https://github.com/bloom-housing/bloom/issues/3102) [#3101](https://github.com/bloom-housing/bloom/issues/3101) [#3104](https://github.com/bloom-housing/bloom/issues/3104) [#3105](https://github.com/bloom-housing/bloom/issues/3105)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@5.1.1-alpha.8
+ - @bloom-housing/shared-helpers@5.1.1-alpha.18
+ - @bloom-housing/partners@5.1.1-alpha.20
+ - @bloom-housing/public@5.1.1-alpha.18
+ - @bloom-housing/ui-components@5.1.1-alpha.11
+
+
+
+
+
+## [6.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.35...@bloom-housing/ui-components@6.0.1-alpha.0) (2022-09-28)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.34...@bloom-housing/ui-components@5.1.1-alpha.35) (2022-09-28)
+
+
+### Bug Fixes
+
+* email tests ([#3095](https://github.com/bloom-housing/bloom/issues/3095)) ([a663dfd](https://github.com/bloom-housing/bloom/commit/a663dfd3df457f88130e59c37ea30d70ae2b6d0b))
+* heading size issues on resources page ([#3090](https://github.com/bloom-housing/bloom/issues/3090)) ([d7492a2](https://github.com/bloom-housing/bloom/commit/d7492a2b0fc6ec877fa99d7234a373cca7fd86ac))
+
+
+
+
+
+## [5.1.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.33...@bloom-housing/ui-components@5.1.1-alpha.34) (2022-09-28)
+
+
+### Features
+
+* **preferences:** add delete preference button ([#3075](https://github.com/bloom-housing/bloom/issues/3075)) ([29a079e](https://github.com/bloom-housing/bloom/commit/29a079e23ecc5cd31589993fef0c9de661c6e8c8))
+
+
+
+
+
+## [5.1.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.32...@bloom-housing/ui-components@5.1.1-alpha.33) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.31...@bloom-housing/ui-components@5.1.1-alpha.32) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.30...@bloom-housing/ui-components@5.1.1-alpha.31) (2022-09-26)
+
+
+### Bug Fixes
+
+* make pill style on listing card optional ([#3088](https://github.com/bloom-housing/bloom/issues/3088)) ([e574010](https://github.com/bloom-housing/bloom/commit/e57401067639e3e05a426f61dd0c3dc18dcda35d))
+
+
+
+
+
+## [5.1.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.29...@bloom-housing/ui-components@5.1.1-alpha.30) (2022-09-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.28...@bloom-housing/ui-components@5.1.1-alpha.29) (2022-09-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.27...@bloom-housing/ui-components@5.1.1-alpha.28) (2022-09-19)
+
+
+### Features
+
+* add confirm modal when copying a preference ([#3041](https://github.com/bloom-housing/bloom/issues/3041)) ([b3d69e9](https://github.com/bloom-housing/bloom/commit/b3d69e9b557998489c828c86ff742c91feca799f))
+
+
+
+
+
+## [5.1.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.26...@bloom-housing/ui-components@5.1.1-alpha.27) (2022-09-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.25...@bloom-housing/ui-components@5.1.1-alpha.26) (2022-09-16)
+
+
+### Bug Fixes
+
+* updated css class naming ([#483](https://github.com/bloom-housing/bloom/issues/483)) ([#3073](https://github.com/bloom-housing/bloom/issues/3073)) ([bfd68de](https://github.com/bloom-housing/bloom/commit/bfd68de406b1785676e6453afd1536159096d080))
+
+
+
+
+
+## [5.1.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.24...@bloom-housing/ui-components@5.1.1-alpha.25) (2022-09-14)
+
+
+### Features
+
+* allow alerts to be sticky under page header ([#3050](https://github.com/bloom-housing/bloom/issues/3050)) ([d776e84](https://github.com/bloom-housing/bloom/commit/d776e84f76a8bde3f24d1c6706ed35dd777dc66b))
+
+
+
+
+
+## [5.1.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.23...@bloom-housing/ui-components@5.1.1-alpha.24) (2022-09-13)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.22...@bloom-housing/ui-components@5.1.1-alpha.23) (2022-09-12)
+
+
+### Bug Fixes
+
+* add unit tests to partners ([#3023](https://github.com/bloom-housing/bloom/issues/3023)) ([92889f5](https://github.com/bloom-housing/bloom/commit/92889f56f1fc6dc54be207ca0cf3dd9ce58176d1))
+
+
+
+
+
+## [5.1.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.21...@bloom-housing/ui-components@5.1.1-alpha.22) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.20...@bloom-housing/ui-components@5.1.1-alpha.21) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.19...@bloom-housing/ui-components@5.1.1-alpha.20) (2022-08-31)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.18...@bloom-housing/ui-components@5.1.1-alpha.19) (2022-08-31)
+
+
+### Bug Fixes
+
+* table columns should take up full width ([#3005](https://github.com/bloom-housing/bloom/issues/3005)) ([5524049](https://github.com/bloom-housing/bloom/commit/5524049f248151b1d3510feb1ea73a7775f7f4d5))
+
+
+
+
+
+## [5.1.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.17...@bloom-housing/ui-components@5.1.1-alpha.18) (2022-08-31)
+
+
+### Bug Fixes
+
+* null app fee showing null string ([#3016](https://github.com/bloom-housing/bloom/issues/3016)) ([05e28ad](https://github.com/bloom-housing/bloom/commit/05e28ad9f887dcfff5567af96e97be50c86b2109))
+
+
+
+
+
+## [5.1.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.16...@bloom-housing/ui-components@5.1.1-alpha.17) (2022-08-30)
+
+
+### Bug Fixes
+
+* **login:** too many login attempts fix ([#2988](https://github.com/bloom-housing/bloom/issues/2988)) ([4323e1c](https://github.com/bloom-housing/bloom/commit/4323e1c4cee18d8ee805378b32ae35826013d5c4))
+
+
+
+
+
+## [5.1.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.15...@bloom-housing/ui-components@5.1.1-alpha.16) (2022-08-30)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.14...@bloom-housing/ui-components@5.1.1-alpha.15) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.13...@bloom-housing/ui-components@5.1.1-alpha.14) (2022-08-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.12...@bloom-housing/ui-components@5.1.1-alpha.13) (2022-08-26)
+
+
+### Bug Fixes
+
+* add margin in contact section ([#2999](https://github.com/bloom-housing/bloom/issues/2999)) ([4acb49a](https://github.com/bloom-housing/bloom/commit/4acb49acf17ebabb7a0a34160d992cb5f63eeb02))
+
+
+
+
+
+## [5.1.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.11...@bloom-housing/ui-components@5.1.1-alpha.12) (2022-08-24)
+
+
+### Features
+
+* show preference details on listing form ([#2989](https://github.com/bloom-housing/bloom/issues/2989)) ([b4b2b9e](https://github.com/bloom-housing/bloom/commit/b4b2b9ee75c4895ea5b0694dddbf0c8979c0e251))
+
+
+
+
+
+## [5.1.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.10...@bloom-housing/ui-components@5.1.1-alpha.11) (2022-08-23)
+
+
+* refactor!: preferences & programs data model merged (#2904) ([8e027ff](https://github.com/bloom-housing/bloom/commit/8e027ff905118f36c61bc0f974231d9bb8911131)), closes [#2904](https://github.com/bloom-housing/bloom/issues/2904)
+
+
+### BREAKING CHANGES
+
+* The preference and program entities have been merged into a single entity called MultiselectQuestion
+
+
+
+
+
+## [5.1.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.9...@bloom-housing/ui-components@5.1.1-alpha.10) (2022-08-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.8...@bloom-housing/ui-components@5.1.1-alpha.9) (2022-08-22)
+
+
+### Bug Fixes
+
+* add a11y linting tools and fix errors ([#2974](https://github.com/bloom-housing/bloom/issues/2974)) ([e583d12](https://github.com/bloom-housing/bloom/commit/e583d1283511c83dd48f48f934be9a7794a67e74))
+
+
+
+
+
+## [5.1.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.7...@bloom-housing/ui-components@5.1.1-alpha.8) (2022-08-18)
+
+
+### Features
+
+* **expandabletext:** add classname to expandable text button ([#2965](https://github.com/bloom-housing/bloom/issues/2965)) ([6d4b8a7](https://github.com/bloom-housing/bloom/commit/6d4b8a7132825c1aa3abcc0368529557cb3d2647))
+
+
+
+
+
+## [5.1.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.6...@bloom-housing/ui-components@5.1.1-alpha.7) (2022-08-18)
+
+
+### Bug Fixes
+
+* image width fix for tablet screen sizes ([#2970](https://github.com/bloom-housing/bloom/issues/2970)) ([feac019](https://github.com/bloom-housing/bloom/commit/feac019b25a476221a7ad77518d1fa185a75b27f))
+
+
+
+
+
+## [5.1.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.5...@bloom-housing/ui-components@5.1.1-alpha.6) (2022-08-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.4...@bloom-housing/ui-components@5.1.1-alpha.5) (2022-08-16)
+
+
+### Bug Fixes
+
+* ensure listing card link region covers image tags ([#2943](https://github.com/bloom-housing/bloom/issues/2943)) ([ebc8d48](https://github.com/bloom-housing/bloom/commit/ebc8d48556b587a4ad8fc9bc294be54b69e88462))
+
+
+
+
+
+## [5.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.3...@bloom-housing/ui-components@5.1.1-alpha.4) (2022-08-12)
+
+
+### Bug Fixes
+
+* clean up str variable assignment ([7db94e8](https://github.com/bloom-housing/bloom/commit/7db94e81d65eb7ff7314a435f7d34a93af22049e))
+* fix changing const ([c5b37a9](https://github.com/bloom-housing/bloom/commit/c5b37a9106aab902f11e2a8034ea835c46c53d53))
+* fix html string errors ([1548c60](https://github.com/bloom-housing/bloom/commit/1548c6085b882e8b894bc17d96a096553bf7eccf))
+* remove types from removed dep ([4cd5e14](https://github.com/bloom-housing/bloom/commit/4cd5e148a29b6081f7337f26ed8e9e477e2737a4))
+* replace usage of sanitize-html ([aad2f94](https://github.com/bloom-housing/bloom/commit/aad2f949ae6386d1e460b959808501be1b8c0f06))
+
+
+
+
+
+## [5.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.2...@bloom-housing/ui-components@5.1.1-alpha.3) (2022-08-03)
+
+
+### Bug Fixes
+
+* **expandabletext:** add required strings to expandable text ([03bbc46](https://github.com/bloom-housing/bloom/commit/03bbc46b4f8f910efef0a1f984717da0a65794ed))
+* **expandabletext:** fix stories with passing req prop ([057d8fe](https://github.com/bloom-housing/bloom/commit/057d8feb038e07bb3d6784d1d6d4d068ba72460c)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+* **expandabletext:** fix tests; remove test prop ([28af8fc](https://github.com/bloom-housing/bloom/commit/28af8fc319190c50b2751d29c251e472e48e6971))
+* option typing with import ([dc195f8](https://github.com/bloom-housing/bloom/commit/dc195f8acb8850bab11eafc80a2cea3f8b6e0de5))
+
+
+### Features
+
+* **expandabletext:** fix a broken ci check; fix a prop name ([e839c81](https://github.com/bloom-housing/bloom/commit/e839c811b237164b1cd26bbc888db512f66bc6b0))
+* **expandabletext:** fix type usage ([1a406fe](https://github.com/bloom-housing/bloom/commit/1a406fe7c19639e28bb1fdc19fd9e58a25c8bfd1)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+* **expandabletext:** remove translations;pass markdown props through component ([e21e88a](https://github.com/bloom-housing/bloom/commit/e21e88a5be527ec860b3515c1dc545a186713e06)), closes [#2925](https://github.com/bloom-housing/bloom/issues/2925)
+
+
+### BREAKING CHANGES
+
+* **expandabletext:** In uses of ExpandableText component, the translations are now being passed down
+instead of done within the component. Any options for the Markdown component used within
+ExpandableText also needs to be passed
+
+
+
+
+
+## [5.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.1...@bloom-housing/ui-components@5.1.1-alpha.2) (2022-08-01)
+
+
+### Features
+
+* **errormessage:** add classname to errormessage; apply styles to Field ([b63be81](https://github.com/bloom-housing/bloom/commit/b63be81f2fa5fc523b5804842d0eb4781ed32054)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **errormessage:** add text color ([74adf72](https://github.com/bloom-housing/bloom/commit/74adf72fcd625ad14c51815dce54d3e7beae5e11)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **forms.scss:** apply styling change to error-message class ([2c30044](https://github.com/bloom-housing/bloom/commit/2c300441c580464be1b69f861b5080e74242166e)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **formsigninerrorbox:** add classnames to undo changes ([fa7e9f7](https://github.com/bloom-housing/bloom/commit/fa7e9f7e235e4a6b750d67d7338bebaace202519)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+* **textarea:** apply lineheight and margin to textarea ([afbe5e4](https://github.com/bloom-housing/bloom/commit/afbe5e49c081bc85da1d4718e2ea1e6b8cc295b0)), closes [#2911](https://github.com/bloom-housing/bloom/issues/2911)
+
+
+
+
+
+## [5.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.1.1-alpha.0...@bloom-housing/ui-components@5.1.1-alpha.1) (2022-08-01)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.29...@bloom-housing/ui-components@5.1.1-alpha.0) (2022-07-27)
+
+
+* 2022-07-26 sync master (#2917) ([6f0dd1d](https://github.com/bloom-housing/bloom/commit/6f0dd1df4d2df12e0e94cb339c9232531a37f2a2)), closes [#2917](https://github.com/bloom-housing/bloom/issues/2917) [#2753](https://github.com/bloom-housing/bloom/issues/2753) [#2441](https://github.com/bloom-housing/bloom/issues/2441) [#2460](https://github.com/bloom-housing/bloom/issues/2460) [#2459](https://github.com/bloom-housing/bloom/issues/2459) [#2464](https://github.com/bloom-housing/bloom/issues/2464) [#2465](https://github.com/bloom-housing/bloom/issues/2465) [#2466](https://github.com/bloom-housing/bloom/issues/2466) [#2436](https://github.com/bloom-housing/bloom/issues/2436) [#2451](https://github.com/bloom-housing/bloom/issues/2451) [#2415](https://github.com/bloom-housing/bloom/issues/2415) [#2354](https://github.com/bloom-housing/bloom/issues/2354) [#2455](https://github.com/bloom-housing/bloom/issues/2455) [#2484](https://github.com/bloom-housing/bloom/issues/2484) [#2482](https://github.com/bloom-housing/bloom/issues/2482) [#2483](https://github.com/bloom-housing/bloom/issues/2483) [#2476](https://github.com/bloom-housing/bloom/issues/2476) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2470](https://github.com/bloom-housing/bloom/issues/2470) [#2488](https://github.com/bloom-housing/bloom/issues/2488) [#2487](https://github.com/bloom-housing/bloom/issues/2487) [#2496](https://github.com/bloom-housing/bloom/issues/2496) [#2498](https://github.com/bloom-housing/bloom/issues/2498) [#2499](https://github.com/bloom-housing/bloom/issues/2499) [#2291](https://github.com/bloom-housing/bloom/issues/2291) [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485) [#2494](https://github.com/bloom-housing/bloom/issues/2494) [#2503](https://github.com/bloom-housing/bloom/issues/2503) [#2495](https://github.com/bloom-housing/bloom/issues/2495) [#2477](https://github.com/bloom-housing/bloom/issues/2477) [#2505](https://github.com/bloom-housing/bloom/issues/2505) [#2372](https://github.com/bloom-housing/bloom/issues/2372) [#2489](https://github.com/bloom-housing/bloom/issues/2489) [#2497](https://github.com/bloom-housing/bloom/issues/2497) [#2506](https://github.com/bloom-housing/bloom/issues/2506) [#2486](https://github.com/bloom-housing/bloom/issues/2486)
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+
+
+
+
+
+# [5.1.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@5.0.0...@bloom-housing/ui-components@5.1.0) (2022-07-27)
+
+
+### Bug Fixes
+
+* a11y issues on homepage components ([#2624](https://github.com/seanmalbert/bloom/issues/2624)) ([bf443d5](https://github.com/seanmalbert/bloom/commit/bf443d55d12d624b057666933bdd06feaf7d79be))
+* account translations ([#2278](https://github.com/seanmalbert/bloom/issues/2278)) ([1420282](https://github.com/seanmalbert/bloom/commit/1420282ec0de17b8629f2a7dd6c1149f7a1f8894))
+* add icons to unit accordions if enabled ([#2372](https://github.com/seanmalbert/bloom/issues/2372)) ([#2489](https://github.com/seanmalbert/bloom/issues/2489)) ([55e4dc9](https://github.com/seanmalbert/bloom/commit/55e4dc9a95b9fe9125153b43556fd64d06506f24))
+* add mailThin icon to stories ([ba8400b](https://github.com/seanmalbert/bloom/commit/ba8400bed4e9d653f85ec38ef4bca3b74df371dd))
+* add missing dependency preventing build ([#2808](https://github.com/seanmalbert/bloom/issues/2808)) ([ca95792](https://github.com/seanmalbert/bloom/commit/ca95792249186c62ba546b13ff6564186c4a12af))
+* add optional prop for Language Nav aria label ([#2672](https://github.com/seanmalbert/bloom/issues/2672)) ([5f1b3f6](https://github.com/seanmalbert/bloom/commit/5f1b3f66f5269cfd9285b958f608cdb41e779c70))
+* allow headers in responsive mobile tables to wrap text ([#2496](https://github.com/seanmalbert/bloom/issues/2496)) ([7d5a73e](https://github.com/seanmalbert/bloom/commit/7d5a73e5ee2213fb126fced86d94a55668941ed9))
+* apply action block style to button class not component ([#2348](https://github.com/seanmalbert/bloom/issues/2348)) ([cd79ee5](https://github.com/seanmalbert/bloom/commit/cd79ee558554815f4b8421740e4850484a97ad21))
+* bump version ([#2349](https://github.com/seanmalbert/bloom/issues/2349)) ([b9e3ba1](https://github.com/seanmalbert/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/seanmalbert/bloom/issues/2350)) ([05863f5](https://github.com/seanmalbert/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+* changed aria-selected to aria-current issue [#698](https://github.com/seanmalbert/bloom/issues/698) ([bed1b23](https://github.com/seanmalbert/bloom/commit/bed1b23d63af134542f6760aa70d1ccac87940fa))
+* dates showing as invalid in send by mail section ([#2362](https://github.com/seanmalbert/bloom/issues/2362)) ([3567388](https://github.com/seanmalbert/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
+* ensure dayjs parsing strings will work as expected ([eb44939](https://github.com/seanmalbert/bloom/commit/eb449395ebea3a3b4b58eb217df1e1313c722a0d))
+* fix hero button width with secondary button ([#2306](https://github.com/seanmalbert/bloom/issues/2306)) ([929ac8e](https://github.com/seanmalbert/bloom/commit/929ac8e7fd30718a77a10277323abf1604a45a19))
+* Fix infinite page width ([#2434](https://github.com/seanmalbert/bloom/issues/2434)) ([12ac594](https://github.com/seanmalbert/bloom/commit/12ac594a7aa5a04370b20b19d6fff3189c0cfeee)), closes [#2374](https://github.com/seanmalbert/bloom/issues/2374)
+* Fix modal styles on mobile ([#2280](https://github.com/seanmalbert/bloom/issues/2280)) ([95f45e5](https://github.com/seanmalbert/bloom/commit/95f45e5a6d2c38c512f59d8cb35847cab59dc8bb)), closes [#2253](https://github.com/seanmalbert/bloom/issues/2253)
+* footer alignment issue with overflowing links ([#2713](https://github.com/seanmalbert/bloom/issues/2713)) ([b87be1d](https://github.com/seanmalbert/bloom/commit/b87be1da10d59df2616f5df51629a8201baa6f86))
+* footer nav widths ([42aef6f](https://github.com/seanmalbert/bloom/commit/42aef6f74a8a7e27c6bdb870cb6c69c7569f41c0))
+* forgot password empty warning and two minor style changes ([#2680](https://github.com/seanmalbert/bloom/issues/2680)) ([01f1519](https://github.com/seanmalbert/bloom/commit/01f15194e2de8595a772c8c87f455d882e47f164))
+* guard against 0 output ([0ea9012](https://github.com/seanmalbert/bloom/commit/0ea9012fdac02fb1cb4357abec2ec69633902654))
+* image gradient obscures image on mobile, is harsh in safari ([#2487](https://github.com/seanmalbert/bloom/issues/2487)) ([78785ff](https://github.com/seanmalbert/bloom/commit/78785ff0646e94fa751584ee090eacaec1994e36))
+* listings group expandable section css updates ([#2377](https://github.com/seanmalbert/bloom/issues/2377)) ([fba77ef](https://github.com/seanmalbert/bloom/commit/fba77efc25ccb213a0e18a8b58ddf8ada07fbb8c))
+* make mailThin background transparent ([87b372b](https://github.com/seanmalbert/bloom/commit/87b372b28e1b44c5a450544a2d15f09a84de2ebb))
+* make numbered list breakpoint match config ([326df54](https://github.com/seanmalbert/bloom/commit/326df5404d2a967f1a36f8ba7635d4cb92d37742))
+* make primary buttons primary background ([1b44435](https://github.com/seanmalbert/bloom/commit/1b44435aef22d814a0b511d7d63129d73a7b78ac))
+* mobile notice text wrap issue ([#2308](https://github.com/seanmalbert/bloom/issues/2308)) ([47fdd7e](https://github.com/seanmalbert/bloom/commit/47fdd7ea0e15ec50888cb00f1caa11df269c9e84))
+* more style tweaks for AlertBox ([#2526](https://github.com/seanmalbert/bloom/issues/2526)) ([bce3920](https://github.com/seanmalbert/bloom/commit/bce3920b7638be3def05d852d0192ab0cbb2e749))
+* move type declarations out of shared-helpers ([#2356](https://github.com/seanmalbert/bloom/issues/2356)) ([2fd4a87](https://github.com/seanmalbert/bloom/commit/2fd4a8743414df113ec0f653c143fd16e8c57c55))
+* patches translations for preferences ([#2410](https://github.com/seanmalbert/bloom/issues/2410)) ([7906e6b](https://github.com/seanmalbert/bloom/commit/7906e6bc035fab4deea79ea51833a0ef29926d45))
+* propagate custom icon type to ImageCard prop ([afb045d](https://github.com/seanmalbert/bloom/commit/afb045dfea0937c89bdc90886d161f0e4e27d880))
+* remove backend dependency from ui-components ([#2804](https://github.com/seanmalbert/bloom/issues/2804)) ([aa41b56](https://github.com/seanmalbert/bloom/commit/aa41b5629bcc2c24ecc67de5efc0101970522bc0))
+* remove bold style from current waitlist size ([2e2f414](https://github.com/seanmalbert/bloom/commit/2e2f4141e62c8544c0828b29de0b99bb97abb201))
+* remove next dependency from ui-components ([#2352](https://github.com/seanmalbert/bloom/issues/2352)) ([136e8a1](https://github.com/seanmalbert/bloom/commit/136e8a1af2b4f285644caa9a18d60121f4d82566))
+* remove shared-helpers dependency from FormForgotPassword ([#2498](https://github.com/seanmalbert/bloom/issues/2498)) ([779707d](https://github.com/seanmalbert/bloom/commit/779707d9087b3330a1b4cd65d5bde31521fa7d6a))
+* remove shared-helpers dependency from FormSignIn ([#2499](https://github.com/seanmalbert/bloom/issues/2499)) ([de4e696](https://github.com/seanmalbert/bloom/commit/de4e696957935de7f7834ef5bbe5c6edd3262a8b))
+* remove shared-helpers dependency from ui-components ([#2620](https://github.com/seanmalbert/bloom/issues/2620)) ([cd6ea54](https://github.com/seanmalbert/bloom/commit/cd6ea5450402a9b5d2a8681c403cbfcff6b6b1c9))
+* remove space between minutes and AM/PM for ApplicationStatus ([#2566](https://github.com/seanmalbert/bloom/issues/2566)) ([5440b38](https://github.com/seanmalbert/bloom/commit/5440b38f3048d17e6e76b41f0aa81f5176368af2))
+* removed unused partner footer links ([#2590](https://github.com/seanmalbert/bloom/issues/2590)) ([318d42e](https://github.com/seanmalbert/bloom/commit/318d42e01f5374c7cd2d3e7b35a4bb44e3659c94))
+* removes more closed listing application paths ([#2319](https://github.com/seanmalbert/bloom/issues/2319)) ([ff50205](https://github.com/seanmalbert/bloom/commit/ff50205f371ebd63d07168b290733d0f1e2d493c))
+* show waitlist values even if they're zero ([6a35e67](https://github.com/seanmalbert/bloom/commit/6a35e679f142105e40719e89bda3d957e3200e1d))
+* simpler conditionals ([f3e588d](https://github.com/seanmalbert/bloom/commit/f3e588d5e6dd0a39d1aed99ef6eba0054540ed14))
+* site footer overflowing ([#2719](https://github.com/seanmalbert/bloom/issues/2719)) ([b36b9f3](https://github.com/seanmalbert/bloom/commit/b36b9f3b1acad7a3f030662ac396a2375f0b7db3))
+* support text wrapping in ApplicationStatus ([#2504](https://github.com/seanmalbert/bloom/issues/2504)) ([d730fa9](https://github.com/seanmalbert/bloom/commit/d730fa9fc6df7d9e99bb5b7fad65b1ab743776b4))
+* unit accordion radio button not showing default value ([#2451](https://github.com/seanmalbert/bloom/issues/2451)) ([4ed8103](https://github.com/seanmalbert/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+* Update hardcoded translations ([c58bf25](https://github.com/seanmalbert/bloom/commit/c58bf25bb7243ea357e208aef88e74af4a968e97)), closes [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+* Update translation ([f8d2604](https://github.com/seanmalbert/bloom/commit/f8d2604b5244ca9c5bc92665d056f5e58d32f978))
+* use appropriate copy for FCFS vs Lottery in Application Confirmation screen ([#2702](https://github.com/seanmalbert/bloom/issues/2702)) ([5289504](https://github.com/seanmalbert/bloom/commit/52895044cba64eeb7789c68f0a5eb957785055b5))
+* use drag n drop ([a354904](https://github.com/seanmalbert/bloom/commit/a3549045d4f0da64692318f84f0336f1287ad48a))
+* use the correct AlertBox component for preview listing notice ([#2497](https://github.com/seanmalbert/bloom/issues/2497)) ([f985c44](https://github.com/seanmalbert/bloom/commit/f985c444aaed31504a1e1ce7173c6e15194e2af6))
+* ux updates for new listing card design ([#2687](https://github.com/seanmalbert/bloom/issues/2687)) ([c8814ae](https://github.com/seanmalbert/bloom/commit/c8814ae57b62fa6f932017bb70d47663b09fca1a))
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([0b1d143](https://github.com/seanmalbert/bloom/commit/0b1d143ab8b17add9d52533560f28d7a1f6dfd3d))
+* visual design bugs ([#2737](https://github.com/seanmalbert/bloom/issues/2737)) ([dbac685](https://github.com/seanmalbert/bloom/commit/dbac685cd1e4d276b57a1d961eb5707decbc248b))
+* waitlist: handle both null and undefined ([90fd369](https://github.com/seanmalbert/bloom/commit/90fd369b471c7f9baa0a1d58f452159449fe6fcf))
+
+
+### Code Refactoring
+
+* remove backend dependencies from events components, consolidate ([#2495](https://github.com/seanmalbert/bloom/issues/2495)) ([d884689](https://github.com/seanmalbert/bloom/commit/d88468965bc67c74b8b3eaced20c77472e90331f))
+* remove backend dependencies from sidebar application components ([#2675](https://github.com/seanmalbert/bloom/issues/2675)) ([d2ebf87](https://github.com/seanmalbert/bloom/commit/d2ebf87c34af3f5b6168fa4e08663fea0a4a872c))
+* remove business logic, strings from waitlist component ([#2689](https://github.com/seanmalbert/bloom/issues/2689)) ([a5721db](https://github.com/seanmalbert/bloom/commit/a5721db518453ddbd777e50ca92fdeac19997aa9))
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/seanmalbert/bloom/issues/2108)) ([1d0c1f3](https://github.com/seanmalbert/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+* 2022-07-26 release (#2916) ([af8d3df](https://github.com/seanmalbert/bloom/commit/af8d3dfc1974878cc21500272405ef5046dcfb50)), closes [#2916](https://github.com/seanmalbert/bloom/issues/2916) [#2821](https://github.com/seanmalbert/bloom/issues/2821) [#2764](https://github.com/seanmalbert/bloom/issues/2764) [#2767](https://github.com/seanmalbert/bloom/issues/2767) [#2787](https://github.com/seanmalbert/bloom/issues/2787) [#2769](https://github.com/seanmalbert/bloom/issues/2769) [#2781](https://github.com/seanmalbert/bloom/issues/2781) [#2827](https://github.com/seanmalbert/bloom/issues/2827) [Issue#2827](https://github.com/Issue/issues/2827) [#2788](https://github.com/seanmalbert/bloom/issues/2788) [#2842](https://github.com/seanmalbert/bloom/issues/2842) [#2822](https://github.com/seanmalbert/bloom/issues/2822) [#2847](https://github.com/seanmalbert/bloom/issues/2847) [#2830](https://github.com/seanmalbert/bloom/issues/2830) [#2788](https://github.com/seanmalbert/bloom/issues/2788) [#2842](https://github.com/seanmalbert/bloom/issues/2842) [#2827](https://github.com/seanmalbert/bloom/issues/2827) [Issue#2827](https://github.com/Issue/issues/2827) [#2822](https://github.com/seanmalbert/bloom/issues/2822) [#2846](https://github.com/seanmalbert/bloom/issues/2846) [#2851](https://github.com/seanmalbert/bloom/issues/2851) [#2594](https://github.com/seanmalbert/bloom/issues/2594) [#2812](https://github.com/seanmalbert/bloom/issues/2812) [#2799](https://github.com/seanmalbert/bloom/issues/2799) [#2828](https://github.com/seanmalbert/bloom/issues/2828) [#2843](https://github.com/seanmalbert/bloom/issues/2843) [#2827](https://github.com/seanmalbert/bloom/issues/2827) [#2875](https://github.com/seanmalbert/bloom/issues/2875) [#2859](https://github.com/seanmalbert/bloom/issues/2859) [#2848](https://github.com/seanmalbert/bloom/issues/2848) [#2785](https://github.com/seanmalbert/bloom/issues/2785)
+* 2022-06 -16 sync master (#2825) ([17dabfe](https://github.com/seanmalbert/bloom/commit/17dabfeaf77afb55d629f97fe8e90001df94dc04)), closes [#2825](https://github.com/seanmalbert/bloom/issues/2825) [#2753](https://github.com/seanmalbert/bloom/issues/2753) [#2441](https://github.com/seanmalbert/bloom/issues/2441) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2459](https://github.com/seanmalbert/bloom/issues/2459) [#2464](https://github.com/seanmalbert/bloom/issues/2464) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2466](https://github.com/seanmalbert/bloom/issues/2466) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2451](https://github.com/seanmalbert/bloom/issues/2451) [#2415](https://github.com/seanmalbert/bloom/issues/2415) [#2354](https://github.com/seanmalbert/bloom/issues/2354) [#2455](https://github.com/seanmalbert/bloom/issues/2455) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2476](https://github.com/seanmalbert/bloom/issues/2476) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2470](https://github.com/seanmalbert/bloom/issues/2470) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2487](https://github.com/seanmalbert/bloom/issues/2487) [#2496](https://github.com/seanmalbert/bloom/issues/2496) [#2498](https://github.com/seanmalbert/bloom/issues/2498) [#2499](https://github.com/seanmalbert/bloom/issues/2499) [#2291](https://github.com/seanmalbert/bloom/issues/2291) [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2494](https://github.com/seanmalbert/bloom/issues/2494) [#2503](https://github.com/seanmalbert/bloom/issues/2503) [#2495](https://github.com/seanmalbert/bloom/issues/2495) [#2477](https://github.com/seanmalbert/bloom/issues/2477) [#2505](https://github.com/seanmalbert/bloom/issues/2505) [#2372](https://github.com/seanmalbert/bloom/issues/2372) [#2489](https://github.com/seanmalbert/bloom/issues/2489) [#2497](https://github.com/seanmalbert/bloom/issues/2497) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2486](https://github.com/seanmalbert/bloom/issues/2486)
+* 2022 05 24 sync master (#2754) ([f52781f](https://github.com/seanmalbert/bloom/commit/f52781fe18fbdad071d6e9a8a2b29877596c5492)), closes [#2754](https://github.com/seanmalbert/bloom/issues/2754) [#2753](https://github.com/seanmalbert/bloom/issues/2753) [#2441](https://github.com/seanmalbert/bloom/issues/2441) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2459](https://github.com/seanmalbert/bloom/issues/2459) [#2464](https://github.com/seanmalbert/bloom/issues/2464) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2466](https://github.com/seanmalbert/bloom/issues/2466) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2451](https://github.com/seanmalbert/bloom/issues/2451) [#2415](https://github.com/seanmalbert/bloom/issues/2415) [#2354](https://github.com/seanmalbert/bloom/issues/2354) [#2455](https://github.com/seanmalbert/bloom/issues/2455) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2476](https://github.com/seanmalbert/bloom/issues/2476) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2470](https://github.com/seanmalbert/bloom/issues/2470) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2487](https://github.com/seanmalbert/bloom/issues/2487) [#2496](https://github.com/seanmalbert/bloom/issues/2496) [#2498](https://github.com/seanmalbert/bloom/issues/2498) [#2499](https://github.com/seanmalbert/bloom/issues/2499) [#2291](https://github.com/seanmalbert/bloom/issues/2291) [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2494](https://github.com/seanmalbert/bloom/issues/2494) [#2503](https://github.com/seanmalbert/bloom/issues/2503) [#2495](https://github.com/seanmalbert/bloom/issues/2495) [#2477](https://github.com/seanmalbert/bloom/issues/2477) [#2505](https://github.com/seanmalbert/bloom/issues/2505) [#2372](https://github.com/seanmalbert/bloom/issues/2372) [#2489](https://github.com/seanmalbert/bloom/issues/2489) [#2497](https://github.com/seanmalbert/bloom/issues/2497) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2486](https://github.com/seanmalbert/bloom/issues/2486)
+* 2022-04-11 sync master (#2649) ([9d30acf](https://github.com/seanmalbert/bloom/commit/9d30acf7b53fca50a87fc8bd2658c11d3ed37427)), closes [#2649](https://github.com/seanmalbert/bloom/issues/2649) [#2037](https://github.com/seanmalbert/bloom/issues/2037) [#2095](https://github.com/seanmalbert/bloom/issues/2095) [#2162](https://github.com/seanmalbert/bloom/issues/2162) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2439](https://github.com/seanmalbert/bloom/issues/2439) [#2196](https://github.com/seanmalbert/bloom/issues/2196) [#2238](https://github.com/seanmalbert/bloom/issues/2238) [#2226](https://github.com/seanmalbert/bloom/issues/2226) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2243](https://github.com/seanmalbert/bloom/issues/2243) [#2195](https://github.com/seanmalbert/bloom/issues/2195) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2266](https://github.com/seanmalbert/bloom/issues/2266) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2270](https://github.com/seanmalbert/bloom/issues/2270) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2213](https://github.com/seanmalbert/bloom/issues/2213) [#2234](https://github.com/seanmalbert/bloom/issues/2234) [#1901](https://github.com/seanmalbert/bloom/issues/1901) [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2280](https://github.com/seanmalbert/bloom/issues/2280) [#2253](https://github.com/seanmalbert/bloom/issues/2253) [#2276](https://github.com/seanmalbert/bloom/issues/2276) [#2282](https://github.com/seanmalbert/bloom/issues/2282) [#2262](https://github.com/seanmalbert/bloom/issues/2262) [#2278](https://github.com/seanmalbert/bloom/issues/2278) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2290](https://github.com/seanmalbert/bloom/issues/2290) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2305](https://github.com/seanmalbert/bloom/issues/2305) [#2306](https://github.com/seanmalbert/bloom/issues/2306) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2190](https://github.com/seanmalbert/bloom/issues/2190) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2301](https://github.com/seanmalbert/bloom/issues/2301) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2313](https://github.com/seanmalbert/bloom/issues/2313) [#2289](https://github.com/seanmalbert/bloom/issues/2289) [#2279](https://github.com/seanmalbert/bloom/issues/2279) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2458](https://github.com/seanmalbert/bloom/issues/2458) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2519](https://github.com/seanmalbert/bloom/issues/2519) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2534](https://github.com/seanmalbert/bloom/issues/2534) [#2544](https://github.com/seanmalbert/bloom/issues/2544) [#2550](https://github.com/seanmalbert/bloom/issues/2550) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2438](https://github.com/seanmalbert/bloom/issues/2438) [#2429](https://github.com/seanmalbert/bloom/issues/2429) [#2452](https://github.com/seanmalbert/bloom/issues/2452) [#2458](https://github.com/seanmalbert/bloom/issues/2458) [#2423](https://github.com/seanmalbert/bloom/issues/2423) [#2432](https://github.com/seanmalbert/bloom/issues/2432) [#2437](https://github.com/seanmalbert/bloom/issues/2437) [#2440](https://github.com/seanmalbert/bloom/issues/2440) [#2441](https://github.com/seanmalbert/bloom/issues/2441) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2459](https://github.com/seanmalbert/bloom/issues/2459) [#2464](https://github.com/seanmalbert/bloom/issues/2464) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2466](https://github.com/seanmalbert/bloom/issues/2466) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2451](https://github.com/seanmalbert/bloom/issues/2451) [#2415](https://github.com/seanmalbert/bloom/issues/2415) [#2354](https://github.com/seanmalbert/bloom/issues/2354) [#2455](https://github.com/seanmalbert/bloom/issues/2455) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2476](https://github.com/seanmalbert/bloom/issues/2476) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2470](https://github.com/seanmalbert/bloom/issues/2470) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2487](https://github.com/seanmalbert/bloom/issues/2487) [#2496](https://github.com/seanmalbert/bloom/issues/2496) [#2498](https://github.com/seanmalbert/bloom/issues/2498) [#2499](https://github.com/seanmalbert/bloom/issues/2499) [#2291](https://github.com/seanmalbert/bloom/issues/2291) [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2494](https://github.com/seanmalbert/bloom/issues/2494) [#2503](https://github.com/seanmalbert/bloom/issues/2503) [#2495](https://github.com/seanmalbert/bloom/issues/2495) [#2477](https://github.com/seanmalbert/bloom/issues/2477) [#2505](https://github.com/seanmalbert/bloom/issues/2505) [#2372](https://github.com/seanmalbert/bloom/issues/2372) [#2489](https://github.com/seanmalbert/bloom/issues/2489) [#2497](https://github.com/seanmalbert/bloom/issues/2497) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2486](https://github.com/seanmalbert/bloom/issues/2486)
+* 2022-04-06 sync master (#2628) ([bc31833](https://github.com/seanmalbert/bloom/commit/bc31833f7ea5720a242d93a01bb1b539181fbad4)), closes [#2628](https://github.com/seanmalbert/bloom/issues/2628) [#2037](https://github.com/seanmalbert/bloom/issues/2037) [#2095](https://github.com/seanmalbert/bloom/issues/2095) [#2162](https://github.com/seanmalbert/bloom/issues/2162) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2439](https://github.com/seanmalbert/bloom/issues/2439) [#2196](https://github.com/seanmalbert/bloom/issues/2196) [#2238](https://github.com/seanmalbert/bloom/issues/2238) [#2226](https://github.com/seanmalbert/bloom/issues/2226) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2243](https://github.com/seanmalbert/bloom/issues/2243) [#2195](https://github.com/seanmalbert/bloom/issues/2195) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2266](https://github.com/seanmalbert/bloom/issues/2266) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2270](https://github.com/seanmalbert/bloom/issues/2270) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2213](https://github.com/seanmalbert/bloom/issues/2213) [#2234](https://github.com/seanmalbert/bloom/issues/2234) [#1901](https://github.com/seanmalbert/bloom/issues/1901) [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2280](https://github.com/seanmalbert/bloom/issues/2280) [#2253](https://github.com/seanmalbert/bloom/issues/2253) [#2276](https://github.com/seanmalbert/bloom/issues/2276) [#2282](https://github.com/seanmalbert/bloom/issues/2282) [#2262](https://github.com/seanmalbert/bloom/issues/2262) [#2278](https://github.com/seanmalbert/bloom/issues/2278) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2290](https://github.com/seanmalbert/bloom/issues/2290) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2305](https://github.com/seanmalbert/bloom/issues/2305) [#2306](https://github.com/seanmalbert/bloom/issues/2306) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2190](https://github.com/seanmalbert/bloom/issues/2190) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2301](https://github.com/seanmalbert/bloom/issues/2301) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2313](https://github.com/seanmalbert/bloom/issues/2313) [#2289](https://github.com/seanmalbert/bloom/issues/2289) [#2279](https://github.com/seanmalbert/bloom/issues/2279) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2458](https://github.com/seanmalbert/bloom/issues/2458) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2519](https://github.com/seanmalbert/bloom/issues/2519) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2534](https://github.com/seanmalbert/bloom/issues/2534) [#2544](https://github.com/seanmalbert/bloom/issues/2544) [#2550](https://github.com/seanmalbert/bloom/issues/2550) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2438](https://github.com/seanmalbert/bloom/issues/2438) [#2429](https://github.com/seanmalbert/bloom/issues/2429) [#2452](https://github.com/seanmalbert/bloom/issues/2452) [#2458](https://github.com/seanmalbert/bloom/issues/2458) [#2423](https://github.com/seanmalbert/bloom/issues/2423) [#2432](https://github.com/seanmalbert/bloom/issues/2432) [#2437](https://github.com/seanmalbert/bloom/issues/2437) [#2440](https://github.com/seanmalbert/bloom/issues/2440) [#2441](https://github.com/seanmalbert/bloom/issues/2441) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2459](https://github.com/seanmalbert/bloom/issues/2459) [#2464](https://github.com/seanmalbert/bloom/issues/2464) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2466](https://github.com/seanmalbert/bloom/issues/2466) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2451](https://github.com/seanmalbert/bloom/issues/2451) [#2415](https://github.com/seanmalbert/bloom/issues/2415) [#2354](https://github.com/seanmalbert/bloom/issues/2354) [#2455](https://github.com/seanmalbert/bloom/issues/2455) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2476](https://github.com/seanmalbert/bloom/issues/2476) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2470](https://github.com/seanmalbert/bloom/issues/2470) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2487](https://github.com/seanmalbert/bloom/issues/2487) [#2496](https://github.com/seanmalbert/bloom/issues/2496) [#2498](https://github.com/seanmalbert/bloom/issues/2498) [#2499](https://github.com/seanmalbert/bloom/issues/2499) [#2291](https://github.com/seanmalbert/bloom/issues/2291) [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2494](https://github.com/seanmalbert/bloom/issues/2494) [#2503](https://github.com/seanmalbert/bloom/issues/2503) [#2495](https://github.com/seanmalbert/bloom/issues/2495) [#2477](https://github.com/seanmalbert/bloom/issues/2477) [#2505](https://github.com/seanmalbert/bloom/issues/2505) [#2372](https://github.com/seanmalbert/bloom/issues/2372) [#2489](https://github.com/seanmalbert/bloom/issues/2489) [#2497](https://github.com/seanmalbert/bloom/issues/2497) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2486](https://github.com/seanmalbert/bloom/issues/2486)
+* 2022 03 28 sync master (#2593) ([580283d](https://github.com/seanmalbert/bloom/commit/580283da22246b7d39978e7dfa08016b2c0c3757)), closes [#2593](https://github.com/seanmalbert/bloom/issues/2593) [#2037](https://github.com/seanmalbert/bloom/issues/2037) [#2095](https://github.com/seanmalbert/bloom/issues/2095) [#2162](https://github.com/seanmalbert/bloom/issues/2162) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2439](https://github.com/seanmalbert/bloom/issues/2439) [#2196](https://github.com/seanmalbert/bloom/issues/2196) [#2238](https://github.com/seanmalbert/bloom/issues/2238) [#2226](https://github.com/seanmalbert/bloom/issues/2226) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2243](https://github.com/seanmalbert/bloom/issues/2243) [#2195](https://github.com/seanmalbert/bloom/issues/2195) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2266](https://github.com/seanmalbert/bloom/issues/2266) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2270](https://github.com/seanmalbert/bloom/issues/2270) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2213](https://github.com/seanmalbert/bloom/issues/2213) [#2234](https://github.com/seanmalbert/bloom/issues/2234) [#1901](https://github.com/seanmalbert/bloom/issues/1901) [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2280](https://github.com/seanmalbert/bloom/issues/2280) [#2253](https://github.com/seanmalbert/bloom/issues/2253) [#2276](https://github.com/seanmalbert/bloom/issues/2276) [#2282](https://github.com/seanmalbert/bloom/issues/2282) [#2262](https://github.com/seanmalbert/bloom/issues/2262) [#2278](https://github.com/seanmalbert/bloom/issues/2278) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2290](https://github.com/seanmalbert/bloom/issues/2290) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2305](https://github.com/seanmalbert/bloom/issues/2305) [#2306](https://github.com/seanmalbert/bloom/issues/2306) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2190](https://github.com/seanmalbert/bloom/issues/2190) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2301](https://github.com/seanmalbert/bloom/issues/2301) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2313](https://github.com/seanmalbert/bloom/issues/2313) [#2289](https://github.com/seanmalbert/bloom/issues/2289) [#2279](https://github.com/seanmalbert/bloom/issues/2279) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2458](https://github.com/seanmalbert/bloom/issues/2458) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2519](https://github.com/seanmalbert/bloom/issues/2519) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2534](https://github.com/seanmalbert/bloom/issues/2534) [#2544](https://github.com/seanmalbert/bloom/issues/2544) [#2550](https://github.com/seanmalbert/bloom/issues/2550) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2438](https://github.com/seanmalbert/bloom/issues/2438) [#2429](https://github.com/seanmalbert/bloom/issues/2429) [#2452](https://github.com/seanmalbert/bloom/issues/2452) [#2458](https://github.com/seanmalbert/bloom/issues/2458) [#2423](https://github.com/seanmalbert/bloom/issues/2423) [#2432](https://github.com/seanmalbert/bloom/issues/2432) [#2437](https://github.com/seanmalbert/bloom/issues/2437) [#2440](https://github.com/seanmalbert/bloom/issues/2440) [#2441](https://github.com/seanmalbert/bloom/issues/2441) [#2460](https://github.com/seanmalbert/bloom/issues/2460) [#2459](https://github.com/seanmalbert/bloom/issues/2459) [#2464](https://github.com/seanmalbert/bloom/issues/2464) [#2465](https://github.com/seanmalbert/bloom/issues/2465) [#2466](https://github.com/seanmalbert/bloom/issues/2466) [#2436](https://github.com/seanmalbert/bloom/issues/2436) [#2451](https://github.com/seanmalbert/bloom/issues/2451) [#2415](https://github.com/seanmalbert/bloom/issues/2415) [#2354](https://github.com/seanmalbert/bloom/issues/2354) [#2455](https://github.com/seanmalbert/bloom/issues/2455) [#2484](https://github.com/seanmalbert/bloom/issues/2484) [#2482](https://github.com/seanmalbert/bloom/issues/2482) [#2483](https://github.com/seanmalbert/bloom/issues/2483) [#2476](https://github.com/seanmalbert/bloom/issues/2476) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2470](https://github.com/seanmalbert/bloom/issues/2470) [#2488](https://github.com/seanmalbert/bloom/issues/2488) [#2487](https://github.com/seanmalbert/bloom/issues/2487) [#2496](https://github.com/seanmalbert/bloom/issues/2496) [#2498](https://github.com/seanmalbert/bloom/issues/2498) [#2499](https://github.com/seanmalbert/bloom/issues/2499) [#2291](https://github.com/seanmalbert/bloom/issues/2291) [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485) [#2494](https://github.com/seanmalbert/bloom/issues/2494) [#2503](https://github.com/seanmalbert/bloom/issues/2503) [#2495](https://github.com/seanmalbert/bloom/issues/2495) [#2477](https://github.com/seanmalbert/bloom/issues/2477) [#2505](https://github.com/seanmalbert/bloom/issues/2505) [#2372](https://github.com/seanmalbert/bloom/issues/2372) [#2489](https://github.com/seanmalbert/bloom/issues/2489) [#2497](https://github.com/seanmalbert/bloom/issues/2497) [#2506](https://github.com/seanmalbert/bloom/issues/2506) [#2486](https://github.com/seanmalbert/bloom/issues/2486)
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/seanmalbert/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+
+
+### Features
+
+* accordion component cleanup ([#2528](https://github.com/seanmalbert/bloom/issues/2528)) ([704a15a](https://github.com/seanmalbert/bloom/commit/704a15af400de8958b20498feedd35942ee0b78e))
+* actionable row component ([#2810](https://github.com/seanmalbert/bloom/issues/2810)) ([da10703](https://github.com/seanmalbert/bloom/commit/da107038d05b7efd601af70673666a125293ffef))
+* add accessibility building features to listing ([#2755](https://github.com/seanmalbert/bloom/issues/2755)) ([0c8dfb8](https://github.com/seanmalbert/bloom/commit/0c8dfb833d0ef6d4f4927636c9f01bae6f48e4f1))
+* add matched style to ApplicationStatus ([a54fb97](https://github.com/seanmalbert/bloom/commit/a54fb9769b68c9362e5f312a1021f5d0ba3d17a7))
+* adds gtm tracking to rest of pages ([#2545](https://github.com/seanmalbert/bloom/issues/2545)) ([1c96f71](https://github.com/seanmalbert/bloom/commit/1c96f7101017aefd8bca70731265f6efb1ab5cf0))
+* adds partners re-request confirmation ([#2574](https://github.com/seanmalbert/bloom/issues/2574)) ([235af78](https://github.com/seanmalbert/bloom/commit/235af781914e5c36104bb3862dd55152a16e6750)), closes [#2577](https://github.com/seanmalbert/bloom/issues/2577)
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([4f6945f](https://github.com/seanmalbert/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+* adds veteran to reserved community types translations ([#2544](https://github.com/seanmalbert/bloom/issues/2544)) ([f973f1a](https://github.com/seanmalbert/bloom/commit/f973f1af71487b0e032b1a11fda35b21890060a0))
+* alert-box line-height ([3e8aafb](https://github.com/seanmalbert/bloom/commit/3e8aafb8272c05670c81aeef5809d88f1d1ba18e))
+* allow application status bar to have custom icon color ([#2572](https://github.com/seanmalbert/bloom/issues/2572)) ([2d7c0c5](https://github.com/seanmalbert/bloom/commit/2d7c0c508b938bc58bb0efe1f5e407e7124738f4))
+* application timeout screen reader accessible ([#2625](https://github.com/seanmalbert/bloom/issues/2625)) ([0771ef3](https://github.com/seanmalbert/bloom/commit/0771ef3f7e4001efb4dae8cca06743801daace05))
+* **backend:** add partners portal users multi factor authentication ([#2291](https://github.com/seanmalbert/bloom/issues/2291)) ([5b10098](https://github.com/seanmalbert/bloom/commit/5b10098d8668f9f42c60e90236db16d6cc517793)), closes [#2461](https://github.com/seanmalbert/bloom/issues/2461) [#2485](https://github.com/seanmalbert/bloom/issues/2485)
+* **backend:** add user password expiration ([107c2f0](https://github.com/seanmalbert/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* **backend:** improve ami chart dto definitions ([#2677](https://github.com/seanmalbert/bloom/issues/2677)) ([ca3890e](https://github.com/seanmalbert/bloom/commit/ca3890e2759f230824e31e6bd985300f40b0a0ed))
+* create table card component ([#2781](https://github.com/seanmalbert/bloom/issues/2781)) ([7cb3147](https://github.com/seanmalbert/bloom/commit/7cb31477268733b8b3d51dd77b2e33afb713ffbc))
+* **expandablecontent.tsx:** add classname prop ([0fc164d](https://github.com/seanmalbert/bloom/commit/0fc164dcf9a9b6df2511dd1eb09ca62c4e79fbb4)), closes [#2798](https://github.com/seanmalbert/bloom/issues/2798)
+* listing card takes optional children ([#2407](https://github.com/seanmalbert/bloom/issues/2407)) ([3c73a11](https://github.com/seanmalbert/bloom/commit/3c73a1144748fca6d50e5e0b220230eb8bf48dc6))
+* listing card title redesign, multiple tags possible ([#2531](https://github.com/seanmalbert/bloom/issues/2531)) ([2b795cb](https://github.com/seanmalbert/bloom/commit/2b795cb6c47c084937e996332d1583e9e5bcbc54))
+* load overly to partner listings grid ([#2621](https://github.com/seanmalbert/bloom/issues/2621)) ([4785f34](https://github.com/seanmalbert/bloom/commit/4785f344831f97dac2164224e32247619e5ac808))
+* make page header title optional ([6ce7707](https://github.com/seanmalbert/bloom/commit/6ce770790120fe3d472bca2a937a9b9d3faaa943))
+* missing translations, script to merge new translations ([#2728](https://github.com/seanmalbert/bloom/issues/2728)) ([1abc50d](https://github.com/seanmalbert/bloom/commit/1abc50de6b3311e92d47292b6f5ec69bf4c5094a))
+* **modal:** add option for fixed-height scrollable modal ([#2769](https://github.com/seanmalbert/bloom/issues/2769)) ([756582d](https://github.com/seanmalbert/bloom/commit/756582d4e36c2772a420c8bcbf9625bb6be66ad6))
+* new category table component ([#2648](https://github.com/seanmalbert/bloom/issues/2648)) ([3b3fe46](https://github.com/seanmalbert/bloom/commit/3b3fe46dda3d0e553664c10cea46849551ce064c))
+* new Envelope icon ([#2642](https://github.com/seanmalbert/bloom/issues/2642)) ([e2dbe06](https://github.com/seanmalbert/bloom/commit/e2dbe0688e389c8196665495cdde7edcada0cf9b))
+* only show MapBox map when it's in the viewport ([#2470](https://github.com/seanmalbert/bloom/issues/2470)) ([86f9d6c](https://github.com/seanmalbert/bloom/commit/86f9d6cccd7de7e635ae4eab5b1e1358faf834e4))
+* open preference links in new tab/window ([#2618](https://github.com/seanmalbert/bloom/issues/2618)) ([ba07a7f](https://github.com/seanmalbert/bloom/commit/ba07a7ff2d01fadf1439671557ae44ce583426de))
+* outdated password messaging updates ([b14e19d](https://github.com/seanmalbert/bloom/commit/b14e19d43099af2ba721d8aaaeeb2be886d05111))
+* overrides fallback to english, tagalog support ([#2262](https://github.com/seanmalbert/bloom/issues/2262)) ([679ab9b](https://github.com/seanmalbert/bloom/commit/679ab9b1816d5934f48f02ca5f5696952ef88ae7))
+* partners terms page ([#2440](https://github.com/seanmalbert/bloom/issues/2440)) ([63105bc](https://github.com/seanmalbert/bloom/commit/63105bcedfe371a4a9995e25b1e5aba67d06ad0c))
+* password reset message ([0cba6e6](https://github.com/seanmalbert/bloom/commit/0cba6e62b45622a430612672daef5c97c1e6b140))
+* refactor ada form fields ([#2612](https://github.com/seanmalbert/bloom/issues/2612)) ([f516f21](https://github.com/seanmalbert/bloom/commit/f516f2164249cea5b622b6bb5cd6efb5455003ca))
+* **sidenav component:** update Prototype SideNav Component for Production Usage ([4ae5e5c](https://github.com/seanmalbert/bloom/commit/4ae5e5c159c7150a808df85b2aa47e443256eb5f)), closes [#698](https://github.com/seanmalbert/bloom/issues/698)
+* simplify Waitlist component and use more flexible schema ([96df149](https://github.com/seanmalbert/bloom/commit/96df1496f377ddfa6f0e6c016c84954b6a43ff4a))
+* swap anchor tags with LinkComponent for language routes ([#2686](https://github.com/seanmalbert/bloom/issues/2686)) ([a397930](https://github.com/seanmalbert/bloom/commit/a3979306fe39acd7b424a9e7364d791ad77fa2d0))
+* swap h5 with h1 for screen reader compatibility ([#2653](https://github.com/seanmalbert/bloom/issues/2653)) ([09d1976](https://github.com/seanmalbert/bloom/commit/09d19762cac4ee4c700e01bc0962be737d8b1155))
+* updates to mfa styling ([#2532](https://github.com/seanmalbert/bloom/issues/2532)) ([7654efc](https://github.com/seanmalbert/bloom/commit/7654efc8a7c5cba0f7436fda62b886f646fe8a03))
+* veteran preference option translation strings ([6b25906](https://github.com/seanmalbert/bloom/commit/6b25906a9cc71532c67da3c546ba06f896bb3232))
+
+
+### BREAKING CHANGES
+
+* prop name change for header from "text" to "content"
+
+* chore(release): version
+
+ - @bloom-housing/shared-helpers@5.0.1-alpha.2
+ - @bloom-housing/partners@5.0.1-alpha.2
+ - @bloom-housing/public@5.0.1-alpha.2
+ - @bloom-housing/ui-components@5.0.1-alpha.1
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* the LeasingAgent component has been renamed to Contact with a new generalized prop set, the SidebarAddress component has been renamed to ContactAddress with a new generalized prop set
+* the Waitlist component was renamed to QuantityRowSection which also has a new prop set to account for a flexible number of rows and strings
+* There is a new prop interface for the StandardTable component and all components that use it, which includes passing cell content within a new object, allowing us to support new cell options - all tables will need to pass data with the new format.
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+* fix: adds jurisdictionId to useSWR path
+
+* fix: recalculate units available on listing update
+
+picked form dev f1a3dbce6478b16542ed61ab20de5dfb9b797262
+
+* feat: feat(backend): make use of new application confirmation codes
+
+picked from dev 3c45c2904818200eed4568931d4cc352fd2f449e
+
+* revert: revert "chore(deps): bump axios from 0.21.1 to 0.21.2
+
+picked from dev 2b83bc0393afc42eed542e326d5ef75502ce119c
+
+* fix: app submission w/ no due date
+
+picked from dev 4af1f5a8448f16d347b4a65ecb85fda4d6ed71fc
+
+* feat: adds new preferences, reserved community type
+
+* feat: adds bottom border to preferences
+
+* feat: updates preference string
+
+* fix: preference cleanup for avance
+
+* refactor: remove applicationAddress
+
+picked from dev bf10632a62bf2f14922948c046ea3352ed010f4f
+
+* feat: refactor and add public site application flow cypress tests
+
+picked from dev 9ec0e8d05f9570773110754e7fdaf49254d1eab8
+
+* feat: better seed data for ami-charts
+
+picked from dev d8b1d4d185731a589c563a32bd592d01537785f3
+
+* feat: adds listing management cypress tests to partner portal
+
+* fix: listings management keep empty strings, remove empty objects
+
+picked from dev c4b1e833ec128f457015ac7ffa421ee6047083d9
+
+* feat: one month rent
+
+picked from dev 883b0d53030e1c4d54f2f75bd5e188bb1d255f64
+
+* test: view.spec.ts test
+
+picked from dev 324446c90138d8fac50aba445f515009b5a58bfb
+
+* refactor: removes jsonpath
+
+picked from dev deb39acc005607ce3076942b1f49590d08afc10c
+
+* feat: adds jurisdictions to pref seeds
+
+picked from dev 9e47cec3b1acfe769207ccbb33c07019cd742e33
+
+* feat: new demographics sub-race questions
+
+picked from dev 9ab892694c1ad2fa8890b411b3b32af68ade1fc3
+
+* feat: updates email confirmation for lottery
+
+picked from dev 1a5e824c96d8e23674c32ea92688b9f7255528d3
+
+* fix: add ariaHidden to Icon component
+
+picked from dev c7bb86aec6fd5ad386c7ca50087d0113b14503be
+
+* fix: add ariaLabel prop to Button component
+
+picked from dev 509ddc898ba44c05e26f8ed8c777f1ba456eeee5
+
+* fix: change the yes/no radio text to be more descriptive
+
+picked from dev 0c46054574535523d6f217bb0677bbe732b8945f
+
+* fix: remove alameda reference in demographics
+
+picked from dev 7d5991cbf6dbe0b61f2b14d265e87ce3687f743d
+
+* chore: release version
+
+picked from dev fe82f25dc349877d974ae62d228fea0354978fb7
+
+* feat: ami chart jurisdictionalized
+
+picked from dev 0a5cbc88a9d9e3c2ff716fe0f44ca6c48f5dcc50
+
+* refactor: make backend a peer dependency in ui-components
+
+picked from dev 952aaa14a77e0960312ff0eeee51399d1d6af9f3
+
+* feat: add a phone number column to the user_accounts table
+
+picked from dev 2647df9ab9888a525cc8a164d091dda6482c502a
+
+* chore: removes application program partners
+
+* chore: removes application program display
+
+* Revert "chore: removes application program display"
+
+This reverts commit 14825b4a6c9cd1a7235e32074e32af18a71b5c26.
+
+* Revert "chore: removes application program partners"
+
+This reverts commit d7aa38c777972a2e21d9f816441caa27f98d3f86.
+
+* chore: yarn.lock and backend-swagger
+
+* fix: removes Duplicate identifier fieldGroupObjectToArray
+
+* feat: skip preferences if not on listing
+
+* chore(release): version
+
+* fix: cannot save custom mailing, dropoff, or pickup address
+
+* chore(release): version
+
+* chore: converge on one axios version, remove peer dependency
+
+* chore(release): version
+
+* feat: simplify Waitlist component and use more flexible schema
+
+* chore(release): version
+
+* fix: lottery results uploads now save
+
+* chore(release): version
+
+* feat: add SRO unit type
+
+* chore(release): version
+
+* fix: paper application submission
+
+* chore(release): version
+
+* fix: choose-language context
+
+* chore(release): version
+
+* fix: applications/view hide prefs
+
+* chore(release): version
+
+* feat: overrides fallback to english, tagalog support
+
+* chore(release): version
+
+* fix: account translations
+
+* chore(release): version
+
+* fix: units with invalid ami chart
+
+* chore(release): version
+
+* fix: remove description for the partners programs
+
+* fix: fix modal styles on mobile
+
+* fix: visual improvement to programs form display
+
+* fix: submission tests not running
+* sign-in pages have been updated
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+* fix: adds jurisdictionId to useSWR path
+
+* fix: recalculate units available on listing update
+
+picked form dev f1a3dbce6478b16542ed61ab20de5dfb9b797262
+
+* feat: feat(backend): make use of new application confirmation codes
+
+picked from dev 3c45c2904818200eed4568931d4cc352fd2f449e
+
+* revert: revert "chore(deps): bump axios from 0.21.1 to 0.21.2
+
+picked from dev 2b83bc0393afc42eed542e326d5ef75502ce119c
+
+* fix: app submission w/ no due date
+
+picked from dev 4af1f5a8448f16d347b4a65ecb85fda4d6ed71fc
+
+* feat: adds new preferences, reserved community type
+
+* feat: adds bottom border to preferences
+
+* feat: updates preference string
+
+* fix: preference cleanup for avance
+
+* refactor: remove applicationAddress
+
+picked from dev bf10632a62bf2f14922948c046ea3352ed010f4f
+
+* feat: refactor and add public site application flow cypress tests
+
+picked from dev 9ec0e8d05f9570773110754e7fdaf49254d1eab8
+
+* feat: better seed data for ami-charts
+
+picked from dev d8b1d4d185731a589c563a32bd592d01537785f3
+
+* feat: adds listing management cypress tests to partner portal
+
+* fix: listings management keep empty strings, remove empty objects
+
+picked from dev c4b1e833ec128f457015ac7ffa421ee6047083d9
+
+* feat: one month rent
+
+picked from dev 883b0d53030e1c4d54f2f75bd5e188bb1d255f64
+
+* test: view.spec.ts test
+
+picked from dev 324446c90138d8fac50aba445f515009b5a58bfb
+
+* refactor: removes jsonpath
+
+picked from dev deb39acc005607ce3076942b1f49590d08afc10c
+
+* feat: adds jurisdictions to pref seeds
+
+picked from dev 9e47cec3b1acfe769207ccbb33c07019cd742e33
+
+* feat: new demographics sub-race questions
+
+picked from dev 9ab892694c1ad2fa8890b411b3b32af68ade1fc3
+
+* feat: updates email confirmation for lottery
+
+picked from dev 1a5e824c96d8e23674c32ea92688b9f7255528d3
+
+* fix: add ariaHidden to Icon component
+
+picked from dev c7bb86aec6fd5ad386c7ca50087d0113b14503be
+
+* fix: add ariaLabel prop to Button component
+
+picked from dev 509ddc898ba44c05e26f8ed8c777f1ba456eeee5
+
+* fix: change the yes/no radio text to be more descriptive
+
+picked from dev 0c46054574535523d6f217bb0677bbe732b8945f
+
+* fix: remove alameda reference in demographics
+
+picked from dev 7d5991cbf6dbe0b61f2b14d265e87ce3687f743d
+
+* chore: release version
+
+picked from dev fe82f25dc349877d974ae62d228fea0354978fb7
+
+* feat: ami chart jurisdictionalized
+
+picked from dev 0a5cbc88a9d9e3c2ff716fe0f44ca6c48f5dcc50
+
+* refactor: make backend a peer dependency in ui-components
+
+picked from dev 952aaa14a77e0960312ff0eeee51399d1d6af9f3
+
+* feat: add a phone number column to the user_accounts table
+
+picked from dev 2647df9ab9888a525cc8a164d091dda6482c502a
+
+* chore: removes application program partners
+
+* chore: removes application program display
+
+* Revert "chore: removes application program display"
+
+This reverts commit 14825b4a6c9cd1a7235e32074e32af18a71b5c26.
+
+* Revert "chore: removes application program partners"
+
+This reverts commit d7aa38c777972a2e21d9f816441caa27f98d3f86.
+
+* chore: yarn.lock and backend-swagger
+
+* fix: removes Duplicate identifier fieldGroupObjectToArray
+
+* feat: skip preferences if not on listing
+
+* chore(release): version
+
+* fix: cannot save custom mailing, dropoff, or pickup address
+
+* chore(release): version
+
+* chore: converge on one axios version, remove peer dependency
+
+* chore(release): version
+
+* feat: simplify Waitlist component and use more flexible schema
+
+* chore(release): version
+
+* fix: lottery results uploads now save
+
+* chore(release): version
+
+* feat: add SRO unit type
+
+* chore(release): version
+
+* fix: paper application submission
+
+* chore(release): version
+
+* fix: choose-language context
+
+* chore(release): version
+
+* fix: applications/view hide prefs
+
+* chore(release): version
+
+* feat: overrides fallback to english, tagalog support
+
+* chore(release): version
+
+* fix: account translations
+
+* chore(release): version
+
+* fix: units with invalid ami chart
+
+* chore(release): version
+
+* fix: remove description for the partners programs
+
+* fix: fix modal styles on mobile
+
+* fix: visual improvement to programs form display
+
+* fix: submission tests not running
+* sign-in pages have been updated
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+* fix: adds jurisdictionId to useSWR path
+
+* fix: recalculate units available on listing update
+
+picked form dev f1a3dbce6478b16542ed61ab20de5dfb9b797262
+
+* feat: feat(backend): make use of new application confirmation codes
+
+picked from dev 3c45c2904818200eed4568931d4cc352fd2f449e
+
+* revert: revert "chore(deps): bump axios from 0.21.1 to 0.21.2
+
+picked from dev 2b83bc0393afc42eed542e326d5ef75502ce119c
+
+* fix: app submission w/ no due date
+
+picked from dev 4af1f5a8448f16d347b4a65ecb85fda4d6ed71fc
+
+* feat: adds new preferences, reserved community type
+
+* feat: adds bottom border to preferences
+
+* feat: updates preference string
+
+* fix: preference cleanup for avance
+
+* refactor: remove applicationAddress
+
+picked from dev bf10632a62bf2f14922948c046ea3352ed010f4f
+
+* feat: refactor and add public site application flow cypress tests
+
+picked from dev 9ec0e8d05f9570773110754e7fdaf49254d1eab8
+
+* feat: better seed data for ami-charts
+
+picked from dev d8b1d4d185731a589c563a32bd592d01537785f3
+
+* feat: adds listing management cypress tests to partner portal
+
+* fix: listings management keep empty strings, remove empty objects
+
+picked from dev c4b1e833ec128f457015ac7ffa421ee6047083d9
+
+* feat: one month rent
+
+picked from dev 883b0d53030e1c4d54f2f75bd5e188bb1d255f64
+
+* test: view.spec.ts test
+
+picked from dev 324446c90138d8fac50aba445f515009b5a58bfb
+
+* refactor: removes jsonpath
+
+picked from dev deb39acc005607ce3076942b1f49590d08afc10c
+
+* feat: adds jurisdictions to pref seeds
+
+picked from dev 9e47cec3b1acfe769207ccbb33c07019cd742e33
+
+* feat: new demographics sub-race questions
+
+picked from dev 9ab892694c1ad2fa8890b411b3b32af68ade1fc3
+
+* feat: updates email confirmation for lottery
+
+picked from dev 1a5e824c96d8e23674c32ea92688b9f7255528d3
+
+* fix: add ariaHidden to Icon component
+
+picked from dev c7bb86aec6fd5ad386c7ca50087d0113b14503be
+
+* fix: add ariaLabel prop to Button component
+
+picked from dev 509ddc898ba44c05e26f8ed8c777f1ba456eeee5
+
+* fix: change the yes/no radio text to be more descriptive
+
+picked from dev 0c46054574535523d6f217bb0677bbe732b8945f
+
+* fix: remove alameda reference in demographics
+
+picked from dev 7d5991cbf6dbe0b61f2b14d265e87ce3687f743d
+
+* chore: release version
+
+picked from dev fe82f25dc349877d974ae62d228fea0354978fb7
+
+* feat: ami chart jurisdictionalized
+
+picked from dev 0a5cbc88a9d9e3c2ff716fe0f44ca6c48f5dcc50
+
+* refactor: make backend a peer dependency in ui-components
+
+picked from dev 952aaa14a77e0960312ff0eeee51399d1d6af9f3
+
+* feat: add a phone number column to the user_accounts table
+
+picked from dev 2647df9ab9888a525cc8a164d091dda6482c502a
+
+* chore: removes application program partners
+
+* chore: removes application program display
+
+* Revert "chore: removes application program display"
+
+This reverts commit 14825b4a6c9cd1a7235e32074e32af18a71b5c26.
+
+* Revert "chore: removes application program partners"
+
+This reverts commit d7aa38c777972a2e21d9f816441caa27f98d3f86.
+
+* chore: yarn.lock and backend-swagger
+
+* fix: removes Duplicate identifier fieldGroupObjectToArray
+
+* feat: skip preferences if not on listing
+
+* chore(release): version
+
+* fix: cannot save custom mailing, dropoff, or pickup address
+
+* chore(release): version
+
+* chore: converge on one axios version, remove peer dependency
+
+* chore(release): version
+
+* feat: simplify Waitlist component and use more flexible schema
+
+* chore(release): version
+
+* fix: lottery results uploads now save
+
+* chore(release): version
+
+* feat: add SRO unit type
+
+* chore(release): version
+
+* fix: paper application submission
+
+* chore(release): version
+
+* fix: choose-language context
+
+* chore(release): version
+
+* fix: applications/view hide prefs
+
+* chore(release): version
+
+* feat: overrides fallback to english, tagalog support
+
+* chore(release): version
+
+* fix: account translations
+
+* chore(release): version
+
+* fix: units with invalid ami chart
+
+* chore(release): version
+
+* fix: remove description for the partners programs
+
+* fix: fix modal styles on mobile
+
+* fix: visual improvement to programs form display
+
+* fix: submission tests not running
+* sign-in pages have been updated
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.38
+ - @bloom-housing/shared-helpers@4.0.1-alpha.63
+ - @bloom-housing/partners@4.0.1-alpha.67
+ - @bloom-housing/public@4.0.1-alpha.66
+ - @bloom-housing/ui-components@4.0.1-alpha.62
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+* remove applicationDueTime field and consolidated into applicationDueDate
+* moved some helpers from ui-components to shared-helpers
+* sign-in pages have been updated
+
+
+
+
+
+## [5.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.28...@bloom-housing/ui-components@5.0.1-alpha.29) (2022-07-27)
+
+
+### Bug Fixes
+
+* preview and juri admin perms for user access ([#2914](https://github.com/bloom-housing/bloom/issues/2914)) ([2db1fdb](https://github.com/bloom-housing/bloom/commit/2db1fdba2fcb366acfc436c3f58b1651550d2367))
+
+
+
+
+
+## [5.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.27...@bloom-housing/ui-components@5.0.1-alpha.28) (2022-07-27)
+
+
+### Bug Fixes
+
+* fix password confirmation validation in the reset password form ([23064fe](https://github.com/bloom-housing/bloom/commit/23064fe8135ee9f531bac41b1b1f7e0ce771905a))
+
+
+
+
+
+## [5.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.26...@bloom-housing/ui-components@5.0.1-alpha.27) (2022-07-26)
+
+
+### Features
+
+* **listsection:** modify props to allow react children for list section subtitle ([ed07255](https://github.com/bloom-housing/bloom/commit/ed0725505961277aa0f293ec1e2b49330080df49))
+
+
+
+
+
+## [5.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.25...@bloom-housing/ui-components@5.0.1-alpha.26) (2022-07-26)
+
+
+### Features
+
+* **eventsection:** allow EventSection to lowercase date ([246a13e](https://github.com/bloom-housing/bloom/commit/246a13e50d3b5bd464cdedde708f6c89b4f1db47)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+* **eventsection:** fix prop name; update story instance name ([ec1337b](https://github.com/bloom-housing/bloom/commit/ec1337ba2344d539767e70ec9e7766cf70f92033)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+* **eventsection:** make dateClassname optional ([5daa884](https://github.com/bloom-housing/bloom/commit/5daa884979457a5dc4ee9801fac22d5131b4d5d8)), closes [#2907](https://github.com/bloom-housing/bloom/issues/2907)
+
+
+
+
+
+## [5.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.24...@bloom-housing/ui-components@5.0.1-alpha.25) (2022-07-26)
+
+
+### Bug Fixes
+
+* **component:** allow modals to scroll for iphone ([#2905](https://github.com/bloom-housing/bloom/issues/2905)) ([e1d89d1](https://github.com/bloom-housing/bloom/commit/e1d89d1c7a4b4924f72a00014ae920be4edf99b6))
+
+
+
+
+
+## [5.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.23...@bloom-housing/ui-components@5.0.1-alpha.24) (2022-07-22)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.22...@bloom-housing/ui-components@5.0.1-alpha.23) (2022-07-20)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.21...@bloom-housing/ui-components@5.0.1-alpha.22) (2022-07-20)
+
+
+### Features
+
+* creating users as juris admin ([#2863](https://github.com/bloom-housing/bloom/issues/2863)) ([bc0aede](https://github.com/bloom-housing/bloom/commit/bc0aede7c622d3ffe4c2aa0f0ce7826bc97af9bf))
+
+
+
+
+
+## [5.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.20...@bloom-housing/ui-components@5.0.1-alpha.21) (2022-07-20)
+
+
+### Bug Fixes
+
+* allow jsx in expandable section ([#2902](https://github.com/bloom-housing/bloom/issues/2902)) ([93ae489](https://github.com/bloom-housing/bloom/commit/93ae489196ad96a9f68247ff2b5cc3fbe0f347d2))
+
+
+
+
+
+## [5.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.19...@bloom-housing/ui-components@5.0.1-alpha.20) (2022-07-20)
+
+
+### Bug Fixes
+
+* render html address properly ([#2897](https://github.com/bloom-housing/bloom/issues/2897)) ([87a759a](https://github.com/bloom-housing/bloom/commit/87a759a68c35d1c47ec4fbbec6c947a63993d27c))
+
+
+
+
+
+## [5.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.18...@bloom-housing/ui-components@5.0.1-alpha.19) (2022-07-19)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.17...@bloom-housing/ui-components@5.0.1-alpha.18) (2022-07-19)
+
+
+### Features
+
+* visuals for add preference, preference option drawers ([#2877](https://github.com/bloom-housing/bloom/issues/2877)) ([8611034](https://github.com/bloom-housing/bloom/commit/8611034845b45ce4d4e4eb44e790ac2adec0ba94))
+
+
+
+
+
+## [5.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.16...@bloom-housing/ui-components@5.0.1-alpha.17) (2022-07-15)
+
+
+### Features
+
+* creating users as admin ([#2856](https://github.com/bloom-housing/bloom/issues/2856)) ([dd946d1](https://github.com/bloom-housing/bloom/commit/dd946d1777b4678e89832da527768180f474d129))
+
+
+
+
+
+## [5.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.15...@bloom-housing/ui-components@5.0.1-alpha.16) (2022-07-13)
+
+
+### Bug Fixes
+
+* add classname prop for custom styling onto application status component ([#2888](https://github.com/bloom-housing/bloom/issues/2888)) ([fedcaa4](https://github.com/bloom-housing/bloom/commit/fedcaa4e4bf537d0207f7d0ecfaf5078879e1fad))
+
+
+
+
+
+## [5.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.14...@bloom-housing/ui-components@5.0.1-alpha.15) (2022-07-12)
+
+
+### Features
+
+* modal styling updates ([#2857](https://github.com/bloom-housing/bloom/issues/2857)) ([4faf6de](https://github.com/bloom-housing/bloom/commit/4faf6de448a7fff8d4fa1a7a1144674ace311732))
+
+
+
+
+
+## [5.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.13...@bloom-housing/ui-components@5.0.1-alpha.14) (2022-07-12)
+
+
+### Features
+
+* **preferencelist:** vertically align content at $md bp ([8dc7867](https://github.com/bloom-housing/bloom/commit/8dc786768fe3e2c82e8e345e418148751971a1c2)), closes [#2827](https://github.com/bloom-housing/bloom/issues/2827)
+
+
+
+
+
+## [5.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.12...@bloom-housing/ui-components@5.0.1-alpha.13) (2022-07-12)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.11...@bloom-housing/ui-components@5.0.1-alpha.12) (2022-07-11)
+
+
+### Bug Fixes
+
+* resolve key warning in contact component ([fe1070a](https://github.com/bloom-housing/bloom/commit/fe1070acdbb7b927d9466f583d2f301127de114f))
+
+
+
+
+
+## [5.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.10...@bloom-housing/ui-components@5.0.1-alpha.11) (2022-07-11)
+
+
+### Bug Fixes
+
+* ux updates and bug fixes for sidebar components ([#2859](https://github.com/bloom-housing/bloom/issues/2859)) ([1bd3b36](https://github.com/bloom-housing/bloom/commit/1bd3b36415ff55be88ea5ada6184de2c232f2da5))
+
+
+
+
+
+## [5.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.9...@bloom-housing/ui-components@5.0.1-alpha.10) (2022-07-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.8...@bloom-housing/ui-components@5.0.1-alpha.9) (2022-07-07)
+
+
+### Features
+
+* populate jurisdictional preferences on settings page ([#2828](https://github.com/bloom-housing/bloom/issues/2828)) ([2ea5646](https://github.com/bloom-housing/bloom/commit/2ea5646a49dc6782fe0e83e942e1917929fde153))
+
+
+
+
+
+## [5.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.7...@bloom-housing/ui-components@5.0.1-alpha.8) (2022-07-06)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [5.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.6...@bloom-housing/ui-components@5.0.1-alpha.7) (2022-07-02)
+
+
+### Bug Fixes
+
+* switch back to padding for image card leader ([#2851](https://github.com/bloom-housing/bloom/issues/2851)) ([c3fde4a](https://github.com/bloom-housing/bloom/commit/c3fde4adbff2bd116c4acaf39f609d3c0ed0638f))
+
+
+
+
+
+## [5.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.5...@bloom-housing/ui-components@5.0.1-alpha.6) (2022-06-29)
+
+
+### Bug Fixes
+
+* hide apply section if there is no data ([#2846](https://github.com/bloom-housing/bloom/issues/2846)) ([5fcaf58](https://github.com/bloom-housing/bloom/commit/5fcaf58acc8cc083c738f53a23beba4e567b2994))
+
+
+
+
+
+## [5.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.4...@bloom-housing/ui-components@5.0.1-alpha.5) (2022-06-27)
+
+
+### Bug Fixes
+
+* application due date sentence ([#2822](https://github.com/bloom-housing/bloom/issues/2822)) ([62a870e](https://github.com/bloom-housing/bloom/commit/62a870e3696849dc751e410282279e23071db544))
+
+
+
+
+
+## [5.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.3...@bloom-housing/ui-components@5.0.1-alpha.4) (2022-06-23)
+
+
+### Features
+
+* **preferenceslist:** add storybook example without subtitle ([4a32106](https://github.com/bloom-housing/bloom/commit/4a32106d0f171822961e4dcee5ee9013ee23b329))
+* **preferenceslist:** move ordinal at mobile bp; update text color for contrast ([b063f5d](https://github.com/bloom-housing/bloom/commit/b063f5dd0813778f1d77efa510ee3a2d788be717)), closes [#2827](https://github.com/bloom-housing/bloom/issues/2827)
+* **preferenceslist:** move ordinal left; make other elements align horizontally ([7034cc7](https://github.com/bloom-housing/bloom/commit/7034cc76a04e8c395ae3a51b2f2c4e5cef944086)), closes [Issue#2827](https://github.com/Issue/issues/2827)
+
+
+
+
+
+## [5.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.2...@bloom-housing/ui-components@5.0.1-alpha.3) (2022-06-23)
+
+
+### Bug Fixes
+
+* mfa verificication fields ([#2842](https://github.com/bloom-housing/bloom/issues/2842)) ([32a3df6](https://github.com/bloom-housing/bloom/commit/32a3df66a883dcffca8b304ba769f8a2d8c5c240))
+
+
+
+
+
+## [5.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.1...@bloom-housing/ui-components@5.0.1-alpha.2) (2022-06-23)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [5.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@5.0.1-alpha.0...@bloom-housing/ui-components@5.0.1-alpha.1) (2022-06-21)
 
 

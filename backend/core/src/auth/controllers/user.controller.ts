@@ -19,6 +19,7 @@ import { defaultValidationPipeOptions } from "../../shared/default-validation-pi
 import { UserService } from "../services/user.service"
 import { OptionalAuthGuard } from "../guards/optional-auth.guard"
 import { AuthzGuard } from "../guards/authz.guard"
+import { AdminOrJurisdictionalAdminGuard } from "../guards/admin-or-jurisidictional-admin.guard"
 import { UserDto } from "../dto/user.dto"
 import { mapTo } from "../../shared/mapTo"
 import { StatusDto } from "../../shared/dto/status.dto"
@@ -39,6 +40,7 @@ import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
 import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
+import { IdDto } from "../../shared/dto/id.dto"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -134,7 +136,7 @@ export class UserController {
   }
 
   @Get("/list")
-  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
   @ApiExtraModels(UserFilterParams)
   @ApiOperation({ summary: "List users", operationId: "list" })
   async list(@Query() queryParams: UserListQueryParams): Promise<PaginatedUserListDto> {
@@ -156,11 +158,12 @@ export class UserController {
     return mapTo(UserDto, await this.userService.findById(userId))
   }
 
-  @Delete(`:id`)
+  // codegen generate unusable code for this, if we don't have a body
+  @Delete()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Delete user by id", operationId: "delete" })
   @UseInterceptors(ActivityLogInterceptor)
-  async delete(@Param("id") userId: string): Promise<void> {
-    return await this.userService.delete(userId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.userService.delete(dto.id)
   }
 }

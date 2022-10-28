@@ -17,6 +17,7 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
 
   return (
     <div className={classNames.join(" ")}>
+      {isExpanded && <div>{children}</div>}
       <button
         type="button"
         className="button is-unstyled expandable-content-button no-underline has-toggle"
@@ -27,7 +28,6 @@ const ExpandableContent = ({ children, strings, className }: ExpandableContentPr
       >
         {isExpanded ? strings.readLess : strings.readMore}
       </button>
-      {isExpanded && <div className="expandable-content-container">{children}</div>}
     </div>
   )
 }

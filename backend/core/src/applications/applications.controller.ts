@@ -20,7 +20,7 @@ import { mapTo } from "../shared/mapTo"
 import { ApplicationDto } from "./dto/application.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { applicationPreferenceApiExtraModels } from "./types/application-preference-api-extra-models"
+import { applicationMultiselectQuestionApiExtraModels } from "./types/application-multiselect-question-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
@@ -31,6 +31,7 @@ import { ApplicationsApiExtraModel } from "./types/applications-api-extra-model"
 import { PaginatedApplicationDto } from "./dto/paginated-application.dto"
 import { ApplicationCreateDto } from "./dto/application-create.dto"
 import { ApplicationUpdateDto } from "./dto/application-update.dto"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -44,7 +45,7 @@ import { ApplicationUpdateDto } from "./dto/application-update.dto"
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceApiExtraModels, ApplicationsApiExtraModel)
+@ApiExtraModels(...applicationMultiselectQuestionApiExtraModels, ApplicationsApiExtraModel)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
@@ -97,9 +98,10 @@ export class ApplicationsController {
     return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto))
   }
 
-  @Delete(`:id`)
+  // codegen generate unusable code for this, if we don't have a body
+  @Delete()
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Param("id") applicationId: string) {
-    await this.applicationsService.delete(applicationId)
+  async delete(@Body() dto: IdDto) {
+    await this.applicationsService.delete(dto.id)
   }
 }

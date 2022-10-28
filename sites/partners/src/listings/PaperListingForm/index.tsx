@@ -19,13 +19,13 @@ import {
   TabPanel,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
   ListingEventType,
-  Preference,
-  Program,
+  ApplicationSection,
+  MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import { AlertErrorType, FormListing, TempEvent, TempUnit, formDefaults } from "./formTypes"
 import ListingDataPipeline from "./ListingDataPipeline"
@@ -49,7 +49,7 @@ import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
+import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -73,14 +73,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(
-    listing?.listingPreferences.map((listingPref) => {
-      return { ...listingPref.preference }
+  const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
+    listingSectionQuestions(listing, ApplicationSection.preferences)?.map((listingPref) => {
+      return { ...listingPref?.multiselectQuestion }
     }) ?? []
   )
-  const [programs, setPrograms] = useState<Program[]>(
-    listing?.listingPrograms.map((program) => {
-      return program.program
+  const [programs, setPrograms] = useState<MultiselectQuestion[]>(
+    listingSectionQuestions(listing, ApplicationSection.programs)?.map((listingProg) => {
+      return { ...listingProg?.multiselectQuestion }
     }) ?? []
   )
 
@@ -287,15 +287,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       <LoadingOverlay isLoading={loading}>
         <>
           <StatusBar
-            backButton={
-              <Button
-                inlineIcon="left"
-                icon="arrowBack"
-                onClick={() => (editMode ? router.push(`/listings/${listing?.id}`) : router.back())}
-              >
-                {t("t.back")}
-              </Button>
-            }
             tagStyle={(() => {
               switch (listing?.status) {
                 case ListingStatus.active:
@@ -359,8 +350,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             subtitle={t("listings.sections.housingPreferencesSubtext")}
                             title={t("listings.sections.housingPreferencesTitle")}
                             drawerButtonText={t("listings.selectPreferences")}
-                            dataFetcher={useJurisdictionalPreferenceList}
+                            dataFetcher={useJurisdictionalMultiselectQuestionList}
                             formKey={"preference"}
+                            applicationSection={ApplicationSection.preferences}
                           />
                           <SelectAndOrder
                             addText={"Add program"}
@@ -373,15 +365,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             }
                             title={"Housing Programs"}
                             drawerButtonText={"Select programs"}
-                            dataFetcher={useJurisdictionalProgramList}
+                            dataFetcher={useJurisdictionalMultiselectQuestionList}
                             formKey={"program"}
+                            applicationSection={ApplicationSection.programs}
                           />
-                          <AdditionalFees />
+                          <AdditionalFees existingUtilities={listing?.utilities} />
                           <BuildingFeatures existingFeatures={listing?.features} />
                           <AdditionalEligibility defaultText={listing?.rentalAssistance} />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
-
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
                               type="button"

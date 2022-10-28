@@ -2,7 +2,7 @@
 5.3 Terms
 View of application terms with checkbox
 */
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
@@ -14,12 +14,20 @@ import {
   AlertBox,
   ProgressNav,
 } from "@bloom-housing/ui-components"
+import { ApplicationSection, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  listingSectionQuestions,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationReviewStatus } from "@bloom-housing/backend-core"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -28,7 +36,10 @@ const ApplicationTerms = () => {
   const [apiError, setApiError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const currentPageSection = 5
+  let currentPageSection = 4
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+    currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
   /* Form Handler */
@@ -39,11 +50,12 @@ const ApplicationTerms = () => {
     const acceptedTerms = data.agree === "agree"
     conductor.currentStep.save({ acceptedTerms })
     application.acceptedTerms = acceptedTerms
-    application.completedSections = 5
+    application.completedSections = 6
     applicationsService
       .submit({
         body: {
           ...application,
+          reviewStatus: ApplicationReviewStatus.pending,
           listing: {
             id: listing.id,
           },
@@ -74,6 +86,25 @@ const ApplicationTerms = () => {
       label: t("application.review.terms.confirmCheckboxText"),
     },
   ]
+
+  const content = useMemo(() => {
+    switch (listing?.reviewOrderType) {
+      case ListingReviewOrder.firstComeFirstServe:
+        return {
+          text: t("application.review.terms.fcfs.text"),
+        }
+      case ListingReviewOrder.lottery:
+        return {
+          text: t("application.review.terms.lottery.text"),
+        }
+      case ListingReviewOrder.waitlist:
+        return {
+          text: t("application.review.terms.waitlist.text"),
+        }
+      default:
+        return { text: "" }
+    }
+  }, [listing, router.locale])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -110,12 +141,37 @@ const ApplicationTerms = () => {
         )}
 
         <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager-row">
-            <Markdown options={{ disableParsingRawHTML: false }}>
-              {t("application.review.terms.text", { applicationDueDate: applicationDueDate })}
+          <div className="form-card__pager-row markdown">
+            {listing?.applicationDueDate && (
+              <>
+                <Markdown options={{ disableParsingRawHTML: true }}>
+                  {t("application.review.terms.textSubmissionDate", {
+                    applicationDueDate: applicationDueDate,
+                  })}
+                </Markdown>
+                <br />
+                <br />
+              </>
+            )}
+
+            <Markdown
+              options={{
+                disableParsingRawHTML: true,
+                overrides: {
+                  li: {
+                    component: ({ children, ...props }) => (
+                      <li {...props} className="mb-5">
+                        {children}
+                      </li>
+                    ),
+                  },
+                },
+              }}
+            >
+              {content.text}
             </Markdown>
 
-            <div className="mt-4">
+            <div className="mt-6">
               <FieldGroup
                 name="agree"
                 type="checkbox"

@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import axios from "axios"
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import { NavigationHeader, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 import Layout from "../../../layouts"
 import PaperListingForm from "../../../src/listings/PaperListingForm"
@@ -39,7 +39,7 @@ const EditListing = (props: { listing: Listing }) => {
             description={metaDescription}
           />
 
-          <PageHeader
+          <NavigationHeader
             title={
               <>
                 <p className="font-sans font-semibold uppercase text-3xl">
@@ -48,6 +48,15 @@ const EditListing = (props: { listing: Listing }) => {
 
                 <p className="font-sans text-base mt-1">{listing.id}</p>
               </>
+            }
+            breadcrumbs={
+              <Breadcrumbs>
+                <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+                <BreadcrumbLink href={`/listings/${listing.id}`}>{listing.name}</BreadcrumbLink>
+                <BreadcrumbLink href={`/listings/${listing.id}/edit`} current>
+                  {t("t.edit")}
+                </BreadcrumbLink>
+              </Breadcrumbs>
             }
           />
 

@@ -1,4 +1,6 @@
 // dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+import { BullModule } from "@nestjs/bull"
+
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require("dotenv").config()
@@ -15,10 +17,8 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { AuthModule } from "./auth/auth.module"
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
-import { PreferencesModule } from "./preferences/preferences.module"
+import { MultiselectQuestionsModule } from "./multiselect-question/multiselect-question.module"
 import { UnitsModule } from "./units/units.module"
-import { PropertyGroupsModule } from "./property-groups/property-groups.module"
-import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import { ApplicationFlaggedSetsModule } from "./application-flagged-sets/application-flagged-sets.module"
 import * as bodyParser from "body-parser"
@@ -37,10 +37,10 @@ import { UnitRentTypesModule } from "./unit-rent-types/unit-rent-types.module"
 import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priority-types/unit-accessibility-priority-types.module"
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
-import { ProgramsModule } from "./program/programs.module"
 import { ActivityLogModule } from "./activity-log/activity-log.module"
 import { logger } from "./shared/middlewares/logger.middleware"
 import { CatchAllFilter } from "./shared/filters/catch-all-filter"
+import { AFSProcessingQueueNames } from "./application-flagged-sets/constants/applications-flagged-sets-constants"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
@@ -92,11 +92,7 @@ export class AppModule {
         JurisdictionsModule,
         ListingsModule,
         PaperApplicationsModule,
-        PreferencesModule,
-        ProgramsModule,
-        PropertiesModule,
-        PropertyGroupsModule,
-        ProgramsModule,
+        MultiselectQuestionsModule,
         ReservedCommunityTypesModule,
         SharedModule,
         TranslationsModule,

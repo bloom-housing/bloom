@@ -5,9 +5,14 @@ import {
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
-  ListingAvailability,
 } from "@bloom-housing/backend-core/types"
-import { t, ListingCard, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
+import {
+  t,
+  ListingCard,
+  ApplicationStatusType,
+  StatusBarType,
+  AppearanceStyleType,
+} from "@bloom-housing/ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -46,10 +51,10 @@ const getListingCardSubtitle = (address: Address) => {
 
 const getListingTableData = (
   unitsSummarized: UnitsSummarized,
-  listingAvailability: ListingAvailability
+  listingReviewOrder: ListingReviewOrder
 ) => {
   return unitsSummarized !== undefined
-    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingAvailability)
+    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingReviewOrder)
     : []
 }
 
@@ -107,10 +112,18 @@ export const getListings = (listings) => {
   }
 
   const generateTableSubHeader = (listing) => {
-    if (listing.listingAvailability === ListingAvailability.availableUnits) {
-      return { content: t("listings.availableUnits") }
-    } else if (listing.listingAvailability === ListingAvailability.openWaitlist) {
-      return { content: t("listings.waitlist.open") }
+    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
+      return {
+        content: t("listings.availableUnits"),
+        styleType: AppearanceStyleType.success,
+        isPillType: true,
+      }
+    } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
+      return {
+        content: t("listings.waitlist.open"),
+        styleType: AppearanceStyleType.primary,
+        isPillType: true,
+      }
     }
     return null
   }
@@ -121,7 +134,6 @@ export const getListings = (listings) => {
         imageCardProps={{
           imageUrl:
             imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          href: `/listing/${listing.id}/${listing.urlSlug}`,
           tags: listing.reservedCommunityType
             ? [
                 {
@@ -134,15 +146,22 @@ export const getListings = (listings) => {
         }}
         tableProps={{
           headers: unitSummariesHeaders,
-          data: getListingTableData(listing.unitsSummarized, listing.listingAvailability),
+          data: getListingTableData(listing.unitsSummarized, listing.reviewOrderType),
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
         footerButtons={[
-          { text: t("t.seeDetails"), href: `/listing/${listing.id}/${listing.urlSlug}` },
+          {
+            text: t("t.seeDetails"),
+            href: `/listing/${listing.id}/${listing.urlSlug}`,
+            ariaHidden: true,
+          },
         ]}
         contentProps={{
-          contentHeader: { content: listing.name },
+          contentHeader: {
+            content: listing.name,
+            href: `/listing/${listing.id}/${listing.urlSlug}`,
+          },
           contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
           tableHeader: generateTableSubHeader(listing),
         }}

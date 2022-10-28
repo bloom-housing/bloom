@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import {
-  PageHeader,
+  NavigationHeader,
   t,
   Button,
   LocalizedLink,
@@ -63,7 +63,7 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
 
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile.roles?.isAdmin || false
+  const isAdmin = profile.roles?.isAdmin || profile.roles?.isJurisdictionalAdmin || false
 
   const tableOptions = useAgTable()
 
@@ -83,6 +83,8 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
+        minWidth: 200,
+        flex: 1,
       },
       {
         headerName: t("listings.listingStatusText"),
@@ -90,7 +92,6 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        flex: 1,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
         cellRenderer: "ApplicationsLink",
       },
@@ -125,8 +126,10 @@ export default function ListingsList() {
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,
-    userId: !isAdmin ? profile?.id : undefined,
+    userId: profile?.id,
     sort: tableOptions.sort.sortOptions,
+    roles: profile?.roles,
+    userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
   return (
@@ -135,7 +138,7 @@ export default function ListingsList() {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
-      <PageHeader title={t("nav.listings")} />
+      <NavigationHeader title={t("nav.listings")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <AgTable

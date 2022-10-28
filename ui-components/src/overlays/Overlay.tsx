@@ -16,6 +16,7 @@ export type OverlayProps = {
   children: React.ReactNode
   slim?: boolean
   role?: string
+  scrollable?: boolean
 }
 
 const OverlayInner = (props: OverlayProps) => {
@@ -37,6 +38,9 @@ const OverlayInner = (props: OverlayProps) => {
       aria-describedby={props.ariaDescription}
       onClick={(e) => {
         if (e.target === e.currentTarget) closeHandler()
+      }}
+      onKeyPress={(e) => {
+        if (e.key === "Escape") closeHandler()
       }}
     >
       <div className={`fixed-overlay__inner ${props.slim ? "fixed-overlay__inner-slim" : ""}`}>
@@ -68,6 +72,7 @@ export const Overlay = (props: OverlayProps) => {
 
   // disable body scrolling when the overlay is open
   useEffect(() => {
+    if (props.scrollable) return
     if (!(overlayRoot && elForPortal)) return
 
     props.open ? disableBodyScroll(elForPortal) : enableBodyScroll(elForPortal)

@@ -45,7 +45,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         <LinkButton
           unstyled
           fullWidth
-          className="bg-opacity-0"
+          className="bg-opacity-0 text-blue-800"
           href={`/listings/${listingId}/applications`}
         >
           {t("t.cancel")}
@@ -66,7 +66,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
           <Button
             unstyled
             fullWidth
-            className="bg-opacity-0 text-red-700"
+            className="bg-opacity-0 text-red-750"
             onClick={() => setDeleteModal(true)}
           >
             {t("t.delete")}
@@ -114,7 +114,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
                 type="button"
                 unstyled
                 fullWidth
-                className="bg-opacity-0 text-red-700"
+                className="bg-opacity-0 text-alert"
                 onClick={() => setDeleteModal(true)}
               >
                 {t("t.delete")}

@@ -152,7 +152,7 @@ const Edit = () => {
         <FormCard>
           <div className="form-card__lead text-center border-b mx-0">
             <Icon size="2xl" symbol="settings" />
-            <h2 className="form-card__title">{t("account.accountSettings")}</h2>
+            <h1 className="form-card__title">{t("account.accountSettings")}</h1>
           </div>
           <SiteAlert type="notice" dismissable />
           <Form id="update-name" onSubmit={handleSubmit(onNameSubmit)}>
@@ -162,7 +162,7 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
-              <label className="field-label--caps" htmlFor="firstName">
+              <label className="text__caps-spaced" htmlFor="firstName">
                 {t("application.name.yourName")}
               </label>
 
@@ -178,18 +178,22 @@ const Edit = () => {
 
               <Field
                 name="middleName"
-                placeholder={`${t("application.name.middleNameOptional")}`}
+                placeholder={t("application.name.middleNameOptional")}
                 register={register}
                 defaultValue={profile ? profile?.middleName : null}
+                label={t("application.name.middleNameOptional")}
+                readerOnly
               />
 
               <Field
                 name="lastName"
-                placeholder={`${t("application.name.lastName")}`}
+                placeholder={t("application.name.lastName")}
                 error={errors.lastName}
                 errorMessage={t("errors.lastNameError")}
                 register={register}
                 defaultValue={profile ? profile.lastName : null}
+                label={t("application.name.lastName")}
+                readerOnly
               />
               <div className="text-center">
                 <Button className="items-center">{t("account.settings.update")}</Button>
@@ -265,7 +269,7 @@ const Edit = () => {
             )}
             <div className="form-card__group border-b">
               <fieldset>
-                <legend className="field-label--caps">
+                <legend className="text__caps-spaced">
                   {t("authentication.createAccount.password")}
                 </legend>
                 <p className="field-note mb-4">{t("account.settings.passwordRemember")}</p>
@@ -282,9 +286,7 @@ const Edit = () => {
                     className={"mb-1"}
                   />
                   <div className="float-left text-tiny font-semibold">
-                    <Link href="/forgot-password">
-                      <a>{t("authentication.signIn.forgotPassword")}</a>
-                    </Link>
+                    <Link href="/forgot-password">{t("authentication.signIn.forgotPassword")}</Link>
                   </div>
                 </div>
 

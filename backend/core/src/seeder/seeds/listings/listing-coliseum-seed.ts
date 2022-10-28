@@ -1,9 +1,10 @@
-import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { ListingSeedType, UnitSeedType } from "./listings"
 import {
   getDate,
   getDefaultAssets,
   getHopwaPreference,
   getLiveWorkPreference,
+  getDisplaceePreference,
   getPbvPreference,
   getServedInMilitaryProgram,
   getTayProgram,
@@ -16,31 +17,6 @@ import { ListingReviewOrder } from "../../../listings/types/listing-review-order
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
-
-const coliseumProperty: PropertySeedType = {
-  accessibility:
-    "Fifteen (15) units are designed for residents with mobility impairments per HUD/U.F.A.S. guidelines with one (1) of these units further designed for residents with auditory or visual impairments.  There are two (2) additional units with features for those with auditory or visual impairments.  All the other units are adaptable. Accessible features in the property include: * 36” wide entries and doorways * Kitchens built to the accessibility standards of the California Building Code, including appliance controls and switch outlets within reach, and work surfaces and storage at accessible heights * Bathrooms built to the accessibility standards of the California Building Code, including grab bars, flexible shower spray hose, switch outlets within reach, and in-tub seats. * Closet rods and shelves at mobility height. * Window blinds/shades able to be used without grasping or twisting * Units for the Hearing & Visually Impaired will have a horn & strobe for fire alarm and a flashing light doorbell. The 44 non-ADA units are built to Adaptable standards.",
-  amenities: "Community room, bike parking, courtyard off the community room, 2nd floor courtyard.",
-  buildingAddress: {
-    county: "Alameda",
-    city: "Oakland",
-    street: "3300 Hawley Street",
-    zipCode: "94621",
-    state: "CA",
-    latitude: 37.7549632,
-    longitude: -122.1968792,
-  },
-  buildingTotalUnits: 58,
-  developer: "Resources for Community Development",
-  neighborhood: "Coliseum",
-  petPolicy: "Permitted",
-  servicesOffered:
-    "Residential supportive services are provided to all residents on a volunteer basis.",
-  smokingPolicy: "No Smoking",
-  unitAmenities: null,
-  yearBuilt: 2021,
-}
 
 const coliseumListing: ListingSeedType = {
   jurisdictionName: "Alameda",
@@ -65,6 +41,27 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  accessibility:
+    "Fifteen (15) units are designed for residents with mobility impairments per HUD/U.F.A.S. guidelines with one (1) of these units further designed for residents with auditory or visual impairments.  There are two (2) additional units with features for those with auditory or visual impairments.  All the other units are adaptable. Accessible features in the property include: * 36” wide entries and doorways * Kitchens built to the accessibility standards of the California Building Code, including appliance controls and switch outlets within reach, and work surfaces and storage at accessible heights * Bathrooms built to the accessibility standards of the California Building Code, including grab bars, flexible shower spray hose, switch outlets within reach, and in-tub seats. * Closet rods and shelves at mobility height. * Window blinds/shades able to be used without grasping or twisting * Units for the Hearing & Visually Impaired will have a horn & strobe for fire alarm and a flashing light doorbell. The 44 non-ADA units are built to Adaptable standards.",
+  amenities: "Community room, bike parking, courtyard off the community room, 2nd floor courtyard.",
+  buildingAddress: {
+    county: "Alameda",
+    city: "Oakland",
+    street: "3300 Hawley Street",
+    zipCode: "94621",
+    state: "CA",
+    latitude: 37.7549632,
+    longitude: -122.1968792,
+  },
+  buildingTotalUnits: 58,
+  developer: "Resources for Community Development",
+  neighborhood: "Coliseum",
+  petPolicy: "Permitted",
+  servicesOffered:
+    "Residential supportive services are provided to all residents on a volunteer basis.",
+  smokingPolicy: "No Smoking",
+  unitAmenities: null,
+  yearBuilt: 2021,
   images: [],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
@@ -92,8 +89,7 @@ const coliseumListing: ListingSeedType = {
     "Tuesdays & Thursdays, 9:00am to 5:00pm | Persons with disabilities who are unable to access the on-line application may request a Reasonable Accommodation by calling (510) 649-5739 for assistance. A TDD line is available at (415) 345-4470.",
   leasingAgentPhone: "(510) 625-1632",
   leasingAgentTitle: "Property Manager",
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
@@ -110,7 +106,16 @@ const coliseumListing: ListingSeedType = {
   waitlistOpenSpots: 3000,
   isWaitlistOpen: true,
   whatToExpect: null,
-  listingAvailability: ListingAvailability.availableUnits,
+  utilities: {
+    water: false,
+    gas: false,
+    trash: null,
+    sewer: true,
+    electricity: false,
+    cable: null,
+    phone: false,
+    internet: null,
+  },
 }
 
 export class ListingColiseumSeed extends ListingDefaultSeed {
@@ -930,19 +935,61 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       },
     ]
 
-    const property = await this.propertyRepository.save({
-      ...coliseumProperty,
-      unitsAvailable: coliseumUnits.length,
-    })
+    const listingCreateDto: Omit<
+      DeepPartial<Listing>,
+      keyof BaseEntity | "urlSlug" | "showWaitlist"
+    > = {
+      ...coliseumListing,
+      assets: getDefaultAssets(),
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 1,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getPbvPreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 2,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getHopwaPreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 3,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 4,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 1,
+        },
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getTayProgram(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 2,
+        },
+      ],
+      events: [],
+    }
+
+    const listing = await this.listingRepository.save(listingCreateDto)
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = coliseumUnits.map(
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
-          },
           amiChart,
+          listing: { id: listing.id },
         }
       }
     )
@@ -974,50 +1021,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
 
     await this.unitsRepository.save(unitsToBeCreated)
 
-    const listingCreateDto: Omit<
-      DeepPartial<Listing>,
-      keyof BaseEntity | "urlSlug" | "showWaitlist"
-    > = {
-      ...coliseumListing,
-      property: property,
-      assets: getDefaultAssets(),
-      listingPreferences: [
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
-          }),
-          ordinal: 1,
-        },
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getPbvPreference(alamedaJurisdiction.name).title,
-          }),
-          ordinal: 2,
-        },
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getHopwaPreference(alamedaJurisdiction.name).title,
-          }),
-          ordinal: 3,
-        },
-      ],
-      events: [],
-      listingPrograms: [
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getServedInMilitaryProgram().title,
-          }),
-          ordinal: 1,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getTayProgram().title,
-          }),
-          ordinal: 2,
-        },
-      ],
-    }
-
-    return await this.listingRepository.save(listingCreateDto)
+    return listing
   }
 }

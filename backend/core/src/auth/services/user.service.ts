@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   HttpException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -49,7 +50,7 @@ import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
-import { ListingRepository } from "../../listings/repositories/listing.repository"
+import { ListingRepository } from "../../listings/db/listing.repository"
 
 dayjs.extend(advancedFormat)
 
@@ -92,19 +93,24 @@ export class UserService {
     const distinctIDQB = this.userRepository.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
-    distinctIDQB.orderBy("user.id")
+    distinctIDQB.orderBy("user.firstName")
+    distinctIDQB.addOrderBy("user.lastName")
     const qb = this.userRepository.getQb()
 
     if (params.filter) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      const user = this.req.user as User
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        distinctIDQB
+        distinctIDQB,
+        user
       )
       addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
         params.filter,
         userFilterTypeToFieldMap,
-        qb
+        qb,
+        user
       )
     }
 
@@ -130,6 +136,9 @@ export class UserService {
     qb.andWhere("user.id IN (:...distinctIDs)", {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
+
+    qb.orderBy("user.firstName")
+    qb.addOrderBy("user.lastName")
 
     const result = distinctIDResult.items.length ? await qb.getMany() : []
     /**
@@ -319,12 +328,12 @@ export class UserService {
     await this.applicationsRepository.save(applications)
   }
 
-  public async _createUser(dto: DeepPartial<User>) {
+  public async _createUser(dto: DeepPartial<User>, storedUser?: User) {
     if (dto.confirmedAt) {
       await this.authorizeUserAction(this.req.user, dto, authzActions.confirm)
     }
 
-    const existingUser = await this.userRepository.findByEmail(dto.email)
+    const existingUser = storedUser ?? (await this.userRepository.findByEmail(dto.email))
 
     if (existingUser) {
       if (!existingUser.roles && dto.roles) {
@@ -337,6 +346,21 @@ export class UserService {
             existingUser.confirmationToken ||
             UserService.createConfirmationToken(existingUser.id, existingUser.email),
           confirmedAt: null,
+        })
+      } else if (
+        existingUser?.roles?.isPartner &&
+        dto?.roles?.isPartner &&
+        this.jurisdictionsMismatch(dto, existingUser)
+      ) {
+        // recreating a partner with jurisdiction mismatch -> giving partner a new jurisdiction
+        return await this.userRepository.save({
+          ...existingUser,
+          jurisdictions: [...existingUser.jurisdictions, ...dto.jurisdictions],
+          leasingAgentInListings: [
+            ...existingUser.leasingAgentInListings,
+            ...dto.leasingAgentInListings,
+          ],
+          roles: dto.roles,
         })
       } else {
         // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
@@ -402,20 +426,38 @@ export class UserService {
 
     await this.validateInviteActionPermissionsOrThrow(dto)
 
-    const user = await this._createUser({
-      ...dto,
-      passwordHash: await this.passwordService.passwordToHash(password),
-      jurisdictions: dto.jurisdictions
-        ? dto.jurisdictions
-        : [await this.jurisdictionResolverService.getJurisdiction()],
-      mfaEnabled: true,
-    })
+    const existingUser = await this.userRepository.findByEmail(dto.email)
 
-    await this.emailService.invite(
-      user,
-      this.configService.get("PARTNERS_PORTAL_URL"),
-      UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+    const user = await this._createUser(
+      {
+        ...dto,
+        passwordHash: await this.passwordService.passwordToHash(password),
+        jurisdictions: dto.jurisdictions
+          ? dto.jurisdictions
+          : [await this.jurisdictionResolverService.getJurisdiction()],
+        mfaEnabled: true,
+      },
+      existingUser
     )
+
+    if (
+      existingUser &&
+      existingUser?.roles?.isPartner &&
+      dto?.roles?.isPartner &&
+      this.jurisdictionsMismatch(dto, existingUser)
+    ) {
+      await this.emailService.portalAccountUpdate(
+        user,
+        this.configService.get("PARTNERS_PORTAL_URL"),
+        existingUser
+      )
+    } else {
+      await this.emailService.invite(
+        user,
+        this.configService.get("PARTNERS_PORTAL_URL"),
+        UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+      )
+    }
     return user
   }
 
@@ -562,10 +604,29 @@ export class UserService {
   }
 
   private async authorizeUserAction(requestingUser, targetUser, action) {
+    if (requestingUser?.roles?.isJurisdictionalAdmin) {
+      return this.authorizeJurisdictionalAdmin(requestingUser, targetUser)
+    }
     return await this.authzService.canOrThrow(requestingUser, "user", action, {
       id: targetUser.id,
-      jurisdictionId: targetUser.id,
     })
+  }
+
+  private authorizeJurisdictionalAdmin(requestingUser, targetUser) {
+    // jurisdictional admins can't view super admins
+    if (targetUser?.roles?.isAdmin) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+
+    const requesterJurisdictions = requestingUser.jurisdictions?.map((juris) => juris.id)
+    const targetJurisdictions = targetUser.jurisdictions?.map((juris) => juris.id)
+    // jurisdictional admins should only see a user if they share a jurisdiction
+    const res = requesterJurisdictions.some((juris) => targetJurisdictions.includes(juris))
+
+    if (!res) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+    return res
   }
 
   private async authorizeUserProfileAction(requestingUser, targetUser, action) {
@@ -627,5 +688,13 @@ export class UserService {
         })
       )
     }
+  }
+
+  private jurisdictionsMismatch(incomingUser: DeepPartial<User>, existingUser: User | undefined) {
+    // verify that there is a jurisdictional difference between the incoming user and the existing user
+    return incomingUser?.jurisdictions?.some(
+      (incomingJuris) =>
+        !existingUser?.jurisdictions?.some((existingJuris) => existingJuris.id === incomingJuris.id)
+    )
   }
 }

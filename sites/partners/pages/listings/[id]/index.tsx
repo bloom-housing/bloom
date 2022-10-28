@@ -1,18 +1,16 @@
-import React, { useMemo, useState } from "react"
-import { useRouter } from "next/router"
+import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
 import {
-  AppearanceStyleType,
-  PageHeader,
   t,
-  Tag,
-  Button,
   AlertBox,
   SiteAlert,
+  Breadcrumbs,
+  BreadcrumbLink,
+  NavigationHeader,
 } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
-
+import { ListingStatusBar } from "../../../src/listings/ListingStatusBar"
 import ListingGuard from "../../../src/ListingGuard"
 import Layout from "../../../layouts"
 import Aside from "../../../src/listings/Aside"
@@ -43,35 +41,9 @@ interface ListingProps {
 }
 
 export default function ListingDetail(props: ListingProps) {
-  const router = useRouter()
-  /* const listingId = router.query.id as string
-  const { listingDto, listingLoading } = useSingleListingData(listingId) */
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
-
-  const listingStatus = useMemo(() => {
-    switch (listing?.status) {
-      case ListingStatus.active:
-        return (
-          <Tag styleType={AppearanceStyleType.success} pillStyle>
-            {t(`listings.listingStatus.active`)}
-          </Tag>
-        )
-      case ListingStatus.closed:
-        return (
-          <Tag pillStyle styleType={AppearanceStyleType.closed}>
-            {t(`listings.listingStatus.closed`)}
-          </Tag>
-        )
-      default:
-        return (
-          <Tag styleType={AppearanceStyleType.primary} pillStyle>
-            {t(`listings.listingStatus.pending`)}
-          </Tag>
-        )
-    }
-  }, [listing?.status])
 
   if (!listing) return null
 
@@ -83,35 +55,26 @@ export default function ListingDetail(props: ListingProps) {
             <Head>
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
-
-            <PageHeader
-              className="relative"
-              title={
-                <>
-                  <p
-                    data-test-id="page-header-text"
-                    className="font-sans font-semibold uppercase text-3xl"
-                  >
+            <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+            <NavigationHeader
+              title={listing.name}
+              listingId={listing.id}
+              tabs={{
+                show: listing.status !== ListingStatus.pending,
+                listingLabel: t("t.listingSingle"),
+                applicationsLabel: t("nav.applications"),
+              }}
+              breadcrumbs={
+                <Breadcrumbs>
+                  <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/listings/${listing.id}`} current>
                     {listing.name}
-                  </p>
-
-                  <p className="font-sans text-base mt-1">{listing.id}</p>
-                </>
+                  </BreadcrumbLink>
+                </Breadcrumbs>
               }
-            >
-              <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-                <SiteAlert type="success" timeout={5000} dismissable />
-              </div>
-            </PageHeader>
-            <section className="border-t bg-white">
-              <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-                <Button inlineIcon="left" icon="arrowBack" onClick={() => router.push("/")}>
-                  {t("t.back")}
-                </Button>
+            />
 
-                <div className="status-bar__status md:pl-4 md:w-3/12">{listingStatus}</div>
-              </div>
-            </section>
+            <ListingStatusBar status={listing.status} />
 
             <section className="bg-primary-lighter">
               <div className="mx-auto px-5 mt-5 max-w-screen-xl">
@@ -127,7 +90,7 @@ export default function ListingDetail(props: ListingProps) {
                 )}
 
                 <div className="flex flex-row flex-wrap ">
-                  <div className="info-card md:w-9/12">
+                  <div className="info-card md:w-9/12 overflow-hidden">
                     <DetailListingData />
                     <DetailListingIntro />
                     <DetailListingPhoto />
@@ -147,7 +110,7 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailApplicationDates />
                   </div>
 
-                  <div className="md:w-3/12 pl-6">
+                  <div className="w-full md:w-3/12 md:pl-6">
                     <Aside type="details" />
                   </div>
                 </div>
@@ -168,7 +131,6 @@ export async function getServerSideProps(context: { params: Record<string, strin
   try {
     response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
   } catch (e) {
-    console.log("e = ", e)
     return { notFound: true }
   }
 

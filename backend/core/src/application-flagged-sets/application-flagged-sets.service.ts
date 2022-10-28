@@ -1,28 +1,24 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { InjectQueue } from "@nestjs/bull"
+import { Queue } from "bull"
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import {
-  Brackets,
-  DeepPartial,
-  EntityManager,
-  getManager,
-  getMetadataArgsStorage,
-  In,
-  QueryRunner,
-  Repository,
-  SelectQueryBuilder,
-} from "typeorm"
-import { paginate } from "nestjs-typeorm-paginate"
+import { getManager, Repository, SelectQueryBuilder } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
-import { User } from "../auth/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
-import { Rule } from "./types/rule-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
+import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
+import { View } from "./types/view-enum"
+import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
+import { Rule } from "./types/rule-enum"
+import { IdDto } from "../../src/shared/dto/id.dto"
+import { assignDefined } from "../../src/shared/utils/assign-defined"
+import { ApplicationReviewStatus } from "../applications/types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -32,336 +28,308 @@ export class ApplicationFlaggedSetsService {
     @InjectRepository(Application)
     private readonly applicationsRepository: Repository<Application>,
     @InjectRepository(ApplicationFlaggedSet)
-    private readonly afsRepository: Repository<ApplicationFlaggedSet>
+    private readonly afsRepository: Repository<ApplicationFlaggedSet>,
+    @InjectQueue(AFSProcessingQueueNames.afsProcessing) private afsProcessingQueue: Queue
   ) {}
   async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
-    const results = await paginate<ApplicationFlaggedSet>(
-      this.afsRepository,
-      { limit: queryParams.limit, page: queryParams.page },
-      {
-        relations: ["listing", "applications"],
-        where: {
-          ...(queryParams.listingId && { listingId: queryParams.listingId }),
-        },
+    const innerQuery = this.afsRepository
+      .createQueryBuilder("afs")
+      .select("afs.id")
+      .where("afs.listingId = :listingId", { listingId: queryParams.listingId })
+      .orderBy("afs.id", "DESC")
+      .offset((queryParams.page - 1) * queryParams.limit)
+      .limit(queryParams.limit)
+
+    if (queryParams.view) {
+      if (queryParams.view === View.pending) {
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.pending,
+        })
+      } else if (queryParams.view === View.pendingNameAndDoB) {
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.pending,
+        })
+        innerQuery.andWhere("rule = :rule", { rule: Rule.nameAndDOB })
+      } else if (queryParams.view === View.pendingEmail) {
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.pending,
+        })
+        innerQuery.andWhere("rule = :rule", { rule: Rule.email })
+      } else if (queryParams.view === View.resolved) {
+        innerQuery.andWhere("afs.status = :status", {
+          status: FlaggedSetStatus.resolved,
+        })
       }
-    )
-    const countTotalFlagged = await this.afsRepository.count({
-      where: {
-        status: FlaggedSetStatus.flagged,
-        ...(queryParams.listingId && { listingId: queryParams.listingId }),
-      },
+    }
+    // status
+    const outerQuery = this.afsRepository
+      .createQueryBuilder("afs")
+      .select([
+        "afs.id",
+        "afs.rule",
+        "afs.status",
+        "applications.reviewStatus",
+        "afs.listingId",
+        "listing.id",
+        "applications.id",
+        "applicant.firstName",
+        "applicant.lastName",
+      ])
+      .leftJoin("afs.listing", "listing")
+      .leftJoin("afs.applications", "applications")
+      .leftJoin("applications.applicant", "applicant")
+      .orderBy("afs.id", "DESC")
+      .where(`afs.id IN (` + innerQuery.getQuery() + ")")
+      .setParameters(innerQuery.getParameters())
+
+    const items = await outerQuery.getMany()
+    const count = await innerQuery.getCount()
+
+    const paginationInfo = {
+      currentPage: queryParams.page,
+      itemCount: items.length,
+      itemsPerPage: queryParams.limit,
+      totalItems: count,
+      totalPages: Math.ceil(count / queryParams.limit),
+    }
+
+    innerQuery.andWhere("afs.status = :status", {
+      status: FlaggedSetStatus.pending,
     })
+    const countTotalFlagged = await innerQuery.getCount()
+
     return {
-      ...results,
+      items,
       meta: {
-        ...results.meta,
+        ...paginationInfo,
         totalFlagged: countTotalFlagged,
       },
     }
   }
 
-  async findOneById(afsId: string) {
-    return await this.afsRepository.findOneOrFail({
-      relations: ["listing", "applications"],
+  async findOneById(afsId: string, applicationIdList?: IdDto[]) {
+    const qb = this.afsRepository
+      .createQueryBuilder("afs")
+      .select([
+        "afs.id",
+        "afs.rule",
+        "afs.status",
+        "afs.showConfirmationAlert",
+        "applications.id",
+        "applications.submissionType",
+        "applications.confirmationCode",
+        "applications.reviewStatus",
+        "applications.submissionDate",
+        "applicant.firstName",
+        "applicant.lastName",
+        "applicant.birthDay",
+        "applicant.birthMonth",
+        "applicant.birthYear",
+        "applicant.emailAddress",
+        "listing.id",
+        "listing.status",
+      ])
+      .leftJoin("afs.applications", "applications")
+      .leftJoin("applications.applicant", "applicant")
+      .leftJoin("afs.listing", "listing")
+      .orderBy("applications.confirmationCode", "DESC")
+      .where("afs.id = :id", { id: afsId })
+    if (applicationIdList?.length) {
+      qb.andWhere("applications.id IN (:...applicationIdList)", {
+        applicationIdList: applicationIdList.map((elem) => elem.id),
+      })
+    }
+
+    return await qb.getOneOrFail()
+  }
+
+  async resetConfirmationAlert(id: string) {
+    const obj = await this.afsRepository.findOne({
       where: {
-        id: afsId,
+        id,
       },
     })
+    if (!obj) {
+      throw new NotFoundException()
+    }
+    assignDefined(obj, { ...obj, showConfirmationAlert: false })
+    await this.afsRepository.save(obj)
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {
     return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
       const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
-      const afs = await transAfsRepository.findOne({
-        where: { id: dto.afsId },
-        relations: ["applications", "listing"],
-      })
-      if (!afs) {
-        throw new NotFoundException()
-      }
+      const afs = await this.findOneById(dto.afsId, dto.applications)
 
       if (afs.listing.status !== ListingStatus.closed) {
         throw new BadRequestException("Listing must be closed before resolving any duplicates.")
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      afs.resolvingUser = this.request.user as User
-      afs.resolvedTime = new Date()
-      afs.status = FlaggedSetStatus.resolved
-      const appsToBeResolved = afs.applications.filter((afsApp) =>
-        dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
-      )
+      const selectedApps = dto.applications.length ? afs.applications.map((app) => app.id) : []
 
-      const appsNotToBeResolved = afs.applications.filter(
-        (afsApp) => !dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
-      )
+      if (dto.status === FlaggedSetStatus.pending) {
+        // mark selected as pendingAndValid
+        if (selectedApps.length) {
+          await transApplicationsRepository
+            .createQueryBuilder()
+            .update(Application)
+            .set({ reviewStatus: ApplicationReviewStatus.pendingAndValid })
+            .where("id IN (:...selectedApps)", {
+              selectedApps,
+            })
+            .execute()
+        }
 
-      for (const appToBeResolved of appsToBeResolved) {
-        appToBeResolved.markedAsDuplicate = true
+        // mark those that were not selected as duplicate
+        const qb = transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.pending })
+          .where(
+            "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
+            { afsId: dto.afsId }
+          )
+
+        if (selectedApps.length) {
+          qb.andWhere("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+        }
+        await qb.execute()
+
+        // mark the flagged set as pending
+        await transAfsRepository
+          .createQueryBuilder()
+          .update(ApplicationFlaggedSet)
+          .set({
+            resolvedTime: new Date(),
+            status: FlaggedSetStatus.pending,
+            resolvingUser: this.request.user,
+            showConfirmationAlert: false,
+          })
+          .where("id = :afsId", { afsId: dto.afsId })
+          .execute()
+      } else if (dto.status === FlaggedSetStatus.resolved) {
+        // mark selected a valid
+        if (selectedApps.length) {
+          await transApplicationsRepository
+            .createQueryBuilder()
+            .update(Application)
+            .set({ reviewStatus: ApplicationReviewStatus.valid })
+            .where("id IN (:...selectedApps)", {
+              selectedApps,
+            })
+            .execute()
+        }
+
+        // mark those that were not selected as duplicate
+        const qb = transApplicationsRepository
+          .createQueryBuilder()
+          .update(Application)
+          .set({ reviewStatus: ApplicationReviewStatus.duplicate })
+          .where(
+            "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
+            { afsId: dto.afsId }
+          )
+        if (selectedApps.length) {
+          qb.andWhere("id NOT IN (:...selectedApps)", {
+            selectedApps,
+          })
+        }
+        await qb.execute()
+
+        // mark the flagged set as resolved
+        await transAfsRepository
+          .createQueryBuilder()
+          .update(ApplicationFlaggedSet)
+          .set({
+            resolvedTime: new Date(),
+            status: FlaggedSetStatus.resolved,
+            resolvingUser: this.request.user,
+            showConfirmationAlert: true,
+          })
+          .where("id = :afsId", { afsId: dto.afsId })
+          .execute()
       }
-
-      for (const appNotToBeResolved of appsNotToBeResolved) {
-        appNotToBeResolved.markedAsDuplicate = false
-      }
-
-      await transApplicationsRepository.save([...appsToBeResolved, ...appsNotToBeResolved])
-
-      appsToBeResolved.forEach((app) => (app.markedAsDuplicate = true))
-      await transAfsRepository.save(afs)
-
       return afs
     })
   }
 
-  async onApplicationSave(newApplication: Application, transactionalEntityManager: EntityManager) {
-    for (const rule of [Rule.email, Rule.nameAndDOB]) {
-      await this.updateApplicationFlaggedSetsForRule(
-        transactionalEntityManager,
-        newApplication,
-        rule
-      )
-    }
+  public async scheduleAfsProcessing() {
+    return this.afsProcessingQueue.add(null, {})
   }
 
-  private async _getAfsesContainingApplicationId(
-    queryRunnery: QueryRunner,
-    applicationId: string
-  ): Promise<Array<{ application_flagged_set_id: string }>> {
-    const metadataArgsStorage = getMetadataArgsStorage().findJoinTable(
-      ApplicationFlaggedSet,
-      "applications"
-    )
-    const applicationsJunctionTableName = metadataArgsStorage.name
-    const query = `
-      SELECT DISTINCT application_flagged_set_id FROM ${applicationsJunctionTableName}
-      WHERE applications_id = $1
-  `
-    return await queryRunnery.query(query, [applicationId])
-  }
-
-  async onApplicationUpdate(
-    newApplication: Application,
-    transactionalEntityManager: EntityManager
-  ) {
-    const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
-    newApplication.markedAsDuplicate = false
-    await transApplicationsRepository.save(newApplication)
-
-    const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
-
-    const afsIds = await this._getAfsesContainingApplicationId(
-      transAfsRepository.queryRunner,
-      newApplication.id
-    )
-    const afses = await transAfsRepository.find({
-      where: { id: In(afsIds.map((afs) => afs.application_flagged_set_id)) },
-      relations: ["applications"],
-    })
-    const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
-    const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
-    for (const afs of afses) {
-      afs.status = FlaggedSetStatus.flagged
-      afs.resolvedTime = null
-      afs.resolvingUser = null
-      const applicationIndex = afs.applications.findIndex(
-        (application) => application.id === newApplication.id
-      )
-      afs.applications.splice(applicationIndex, 1)
-      if (afs.applications.length > 1) {
-        afsesToBeSaved.push(afs)
-      } else {
-        afsesToBeRemoved.push(afs)
+  async meta(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    const constructQuery = (params: {
+      listingId: string
+      status?: FlaggedSetStatus
+      rule?: Rule
+    }): SelectQueryBuilder<ApplicationFlaggedSet> => {
+      const innerQuery = this.afsRepository.createQueryBuilder("afs").select("afs.id")
+      innerQuery.where("afs.listing_id = :listingId", { listingId: params.listingId })
+      if (params.status) {
+        innerQuery.andWhere("afs.status = :status", { status: params.status })
       }
-    }
-    await transAfsRepository.save(afsesToBeSaved)
-    await transAfsRepository.remove(afsesToBeRemoved)
-
-    await this.onApplicationSave(newApplication, transactionalEntityManager)
-  }
-
-  async fetchDuplicatesMatchingRule(
-    transactionalEntityManager: EntityManager,
-    application: Application,
-    rule: Rule
-  ) {
-    switch (rule) {
-      case Rule.nameAndDOB:
-        return await this.fetchDuplicatesMatchingNameAndDOBRule(
-          transactionalEntityManager,
-          application
-        )
-      case Rule.email:
-        return await this.fetchDuplicatesMatchingEmailRule(transactionalEntityManager, application)
-    }
-  }
-
-  async updateApplicationFlaggedSetsForRule(
-    transactionalEntityManager: EntityManager,
-    newApplication: Application,
-    rule: Rule
-  ) {
-    const applicationsMatchingRule = await this.fetchDuplicatesMatchingRule(
-      transactionalEntityManager,
-      newApplication,
-      rule
-    )
-    const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
-    const visitedAfses = []
-    const afses = await transAfsRepository
-      .createQueryBuilder("afs")
-      .leftJoin("afs.applications", "applications")
-      .select(["afs", "applications.id"])
-      .where(`afs.listing_id = :listingId`, { listingId: newApplication.listing.id })
-      .andWhere(`rule = :rule`, { rule })
-      .getMany()
-
-    for (const matchedApplication of applicationsMatchingRule) {
-      const afsesMatchingRule = afses.filter((afs) =>
-        afs.applications.map((app) => app.id).includes(matchedApplication.id)
-      )
-
-      if (afsesMatchingRule.length === 0) {
-        const newAfs: DeepPartial<ApplicationFlaggedSet> = {
-          rule: rule,
-          resolvedTime: null,
-          resolvingUser: null,
-          status: FlaggedSetStatus.flagged,
-          applications: [newApplication, matchedApplication],
-          listing: newApplication.listing,
-        }
-        await transAfsRepository.save(newAfs)
-      } else if (afsesMatchingRule.length === 1) {
-        for (const afs of afsesMatchingRule) {
-          if (visitedAfses.includes(afs.id)) {
-            return
-          }
-          visitedAfses.push(afs.id)
-          afs.applications.push(newApplication)
-          await transAfsRepository.save(afs)
-        }
-      } else {
-        console.error(
-          "There should be up to one AFS matching a rule for given application, " +
-            "probably a logic error when creating AFSes"
-        )
+      if (params.rule) {
+        innerQuery.andWhere("afs.rule = :rule", { rule: params.rule })
       }
+
+      const outerQuery = this.afsRepository
+        .createQueryBuilder("afs")
+        .select("SUM(1) as value")
+        .where(`afs.id IN (` + innerQuery.getQuery() + ")")
+        .setParameters(innerQuery.getParameters())
+
+      return outerQuery
     }
-  }
 
-  private async fetchDuplicatesMatchingEmailRule(
-    transactionalEntityManager: EntityManager,
-    newApplication: Application
-  ) {
-    const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
-    return await transApplicationsRepository.find({
-      select: ["id"],
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id,
-          })
-          .andWhere("Application__applicant.emailAddress = :emailAddress", {
-            emailAddress: newApplication.applicant.emailAddress,
-          })
-          .andWhere("Application.status = :status", { status: "submitted" })
-      },
+    const allQB = this.applicationsRepository.createQueryBuilder("afs")
+    allQB.select("SUM(1) as value")
+    allQB.where("afs.listing_id = :listingId", { listingId: queryParams.listingId })
+
+    const resolvedQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.resolved,
     })
-  }
 
-  private async fetchDuplicatesMatchingNameAndDOBRule(
-    transactionalEntityManager: EntityManager,
-    newApplication: Application
-  ) {
-    const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
-    const firstNames = [
-      newApplication.applicant.firstName,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.firstName),
-    ]
-
-    const lastNames = [
-      newApplication.applicant.lastName,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.lastName),
-    ]
-
-    const birthMonths = [
-      newApplication.applicant.birthMonth,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.birthMonth),
-    ]
-
-    const birthDays = [
-      newApplication.applicant.birthDay,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.birthDay),
-    ]
-
-    const birthYears = [
-      newApplication.applicant.birthYear,
-      ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear),
-    ]
-
-    return await transApplicationsRepository.find({
-      select: ["id"],
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listing.id,
-          })
-          .andWhere("Application.status = :status", { status: "submitted" })
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.firstName IN (:...firstNames)", {
-                firstNames: firstNames,
-              })
-              subQb.orWhere("Application__applicant.firstName IN (:...firstNames)", {
-                firstNames: firstNames,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.lastName IN (:...lastNames)", {
-                lastNames: lastNames,
-              })
-              subQb.orWhere("Application__applicant.lastName IN (:...lastNames)", {
-                lastNames: lastNames,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths,
-              })
-              subQb.orWhere("Application__applicant.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthDay IN (:...birthDays)", {
-                birthDays: birthDays,
-              })
-              subQb.orWhere("Application__applicant.birthDay IN (:...birthDays)", {
-                birthDays: birthDays,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthYear IN (:...birthYears)", {
-                birthYears: birthYears,
-              })
-              subQb.orWhere("Application__applicant.birthYear IN (:...birthYears)", {
-                birthYears: birthYears,
-              })
-            })
-          )
-      },
+    const pendingQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.pending,
     })
+
+    const pendingNameQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.pending,
+      rule: Rule.nameAndDOB,
+    })
+
+    const pendingEmailQB = constructQuery({
+      listingId: queryParams.listingId,
+      status: FlaggedSetStatus.pending,
+      rule: Rule.email,
+    })
+
+    const [
+      totalCount,
+      totalResolvedCount,
+      totalPendingCount,
+      totalNamePendingCount,
+      totalEmailPendingCount,
+    ] = await Promise.all(
+      [allQB, resolvedQB, pendingQB, pendingNameQB, pendingEmailQB].map(
+        async (query) => await query.getRawOne()
+      )
+    )
+
+    const res: ApplicationFlaggedSetMeta = {
+      totalCount: totalCount.value,
+      totalResolvedCount: totalResolvedCount.value,
+      totalPendingCount: totalPendingCount.value,
+      totalNamePendingCount: totalNamePendingCount.value,
+      totalEmailPendingCount: totalEmailPendingCount.value,
+    }
+
+    return res
   }
 }

@@ -8,6 +8,5 @@ describe("Log in using MFA Tests", () => {
       },
     })
     cy.loginWithMfa()
-    cy.signOut()
   })
 })

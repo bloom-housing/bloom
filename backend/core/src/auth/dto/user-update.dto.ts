@@ -3,7 +3,6 @@ import { Expose, Type } from "class-transformer"
 import {
   ArrayMinSize,
   IsArray,
-  IsDate,
   IsDefined,
   IsEmail,
   IsNotEmpty,
@@ -20,6 +19,7 @@ import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { UserDto } from "./user.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { UserRolesOnly } from "../entities/user-roles.entity"
 
 export class UserUpdateDto extends OmitType(UserDto, [
   "id",
@@ -45,18 +45,6 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   email?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -97,4 +85,8 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdictions: IdDto[]
+
+  @Expose()
+  @Type(() => UserRolesOnly)
+  roles?: UserRolesOnly
 }

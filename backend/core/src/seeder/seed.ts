@@ -45,14 +45,14 @@ import { UserRoles } from "../auth/entities/user-roles.entity"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { UserService } from "../auth/services/user.service"
 import { User } from "../auth/entities/user.entity"
-import { Preference } from "../preferences/entities/preference.entity"
-import { Program } from "../program/entities/program.entity"
+import { MultiselectQuestion } from "../multiselect-question/entities/multiselect-question.entity"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationMethodsService } from "../application-methods/application-methods.service"
 import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
 import { CountyCode } from "../shared/types/county-code"
+import { ApplicationFlaggedSetsCronjobConsumer } from "../application-flagged-sets/application-flagged-sets-cronjob-consumer"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -120,27 +120,34 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
-export async function createPreferences(
+export async function createMultiselectQuestions(
   app: INestApplicationContext,
   jurisdictions: Jurisdiction[]
 ) {
-  const preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
-  const preferencesToSave = []
+  const multiselectQuestionsRepository = app.get<Repository<MultiselectQuestion>>(
+    getRepositoryToken(MultiselectQuestion)
+  )
+  const multiselectQuestionsToSave = []
 
   jurisdictions.forEach((jurisdiction) => {
-    preferencesToSave.push(
+    multiselectQuestionsToSave.push(
       getLiveWorkPreference(jurisdiction.name),
       getPbvPreference(jurisdiction.name),
       getHopwaPreference(jurisdiction.name),
-      getDisplaceePreference(jurisdiction.name)
+      getDisplaceePreference(jurisdiction.name),
+      getServedInMilitaryProgram(jurisdiction.name),
+      getTayProgram(jurisdiction.name),
+      getDisabilityOrMentalIllnessProgram(jurisdiction.name),
+      getHousingSituationProgram(jurisdiction.name),
+      getFlatRentAndRentBasedOnIncomeProgram(jurisdiction.name)
     )
   })
 
-  const preferences = await preferencesRepository.save(preferencesToSave)
+  const multiselectQuestions = await multiselectQuestionsRepository.save(multiselectQuestionsToSave)
 
   for (const jurisdiction of jurisdictions) {
-    jurisdiction.preferences = preferences.filter((preference) => {
-      const jurisdictionName = preference.title.split("-").pop()
+    jurisdiction.multiselectQuestions = multiselectQuestions.filter((question) => {
+      const jurisdictionName = question.text.split("-").pop()
       return jurisdictionName === ` ${jurisdiction.name}`
     })
   }
@@ -148,28 +155,7 @@ export async function createPreferences(
     getRepositoryToken(Jurisdiction)
   )
   await jurisdictionsRepository.save(jurisdictions)
-  return preferences
-}
-
-export async function createPrograms(app: INestApplicationContext, jurisdictions: Jurisdiction[]) {
-  const programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
-  const programs = await programsRepository.save([
-    getServedInMilitaryProgram(),
-    getTayProgram(),
-    getDisabilityOrMentalIllnessProgram(),
-    getHousingSituationProgram(),
-    getFlatRentAndRentBasedOnIncomeProgram(),
-  ])
-
-  for (const jurisdiction of jurisdictions) {
-    jurisdiction.programs = programs
-  }
-  const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
-    getRepositoryToken(Jurisdiction)
-  )
-  await jurisdictionsRepository.save(jurisdictions)
-
-  return programs
+  return multiselectQuestions
 }
 
 const seedAmiCharts = async (app: INestApplicationContext) => {
@@ -189,7 +175,7 @@ const seedListings = async (
 ) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
-  await createPreferences(app, jurisdictions)
+  await createMultiselectQuestions(app, jurisdictions)
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
   const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
@@ -226,11 +212,12 @@ async function seed() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)
-
+  const afsProcessingService = await app.resolve<ApplicationFlaggedSetsCronjobConsumer>(
+    ApplicationFlaggedSetsCronjobConsumer
+  )
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
-  await createPrograms(app, jurisdictions)
   await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
@@ -316,7 +303,7 @@ async function seed() {
       jurisdictions,
     })
   )
-  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  const roles: UserRoles = { user: admin, isPartner: false, isAdmin: true }
   await rolesRepo.save(roles)
   await userService.confirm({ token: admin.confirmationToken })
 
@@ -340,7 +327,7 @@ async function seed() {
     mfaCode: "123456",
     mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
   })
-  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: false, isAdmin: true }
   await rolesRepo.save(mfaRoles)
   await userService.confirm({ token: mfaUser.confirmationToken })
 
@@ -376,11 +363,12 @@ async function seed() {
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
       await Promise.all([
-        await makeNewApplication(app, listing, unitTypes, user1),
-        await makeNewApplication(app, listing, unitTypes, user2),
+        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user1, i),
+        await makeNewApplication(app, listing, unitTypes, listing.jurisdictionName, user2, i + 10),
       ])
     }
   }
+  await afsProcessingService.process()
 
   await app.close()
 }

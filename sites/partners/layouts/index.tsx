@@ -24,13 +24,16 @@ const Layout = (props) => {
       href: "/",
     })
   }
-  if (profile?.roles?.isAdmin) {
+  if (profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) {
     menuLinks.push({
       title: t("nav.users"),
       href: "/users",
     })
   }
-  if (profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings)) {
+  if (
+    profile?.jurisdictions?.some((jurisdiction) => !!jurisdiction.enablePartnerSettings) &&
+    (profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin)
+  ) {
     menuLinks.push({
       title: t("t.settings"),
       href: "/settings",

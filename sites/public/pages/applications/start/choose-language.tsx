@@ -1,17 +1,19 @@
 /*
-0.1 - Choose Language
-Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
-https://github.com/bloom-housing/bloom/issues/277
-*/
+ 0.1 - Choose Language
+ Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
+ https://github.com/bloom-housing/bloom/issues/277
+ */
 import axios from "axios"
 import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
   LinkButton,
+  ActionBlock,
   FormCard,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -117,25 +119,30 @@ const ApplicationChooseLanguage = () => {
       </FormCard>
       <FormCard className="overflow-hidden">
         <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
+          <h1 className="form-card__title is-borderless">
             {t("application.chooseLanguage.letsGetStarted")}
-          </h2>
+          </h1>
         </div>
 
         {listing && (
           <div className="form-card__group p-0 m-0">
-            <ImageCard imageUrl={imageUrl} statuses={[{ content: appStatusContent }]} />
+            <ImageCard
+              imageUrl={imageUrl}
+              statuses={[{ content: appStatusContent }]}
+              description={listing.name}
+            />
           </div>
         )}
 
         <div className="form-card__pager">
-          <div className="form-card__pager-row primary px-4">
+          <div className="form-card__pager-row px-4">
             {listing?.applicationConfig.languages.length > 1 && (
               <>
-                <h3 className="mb-4 font-alt-sans field-label--caps block text-base text-black">
-                  {t("application.chooseLanguage.chooseYourLanguage")}
-                </h3>
-
+                <div className="w-full">
+                  <Heading styleType="underlineWeighted">
+                    {t("application.chooseLanguage.chooseYourLanguage")}
+                  </Heading>
+                </div>
                 {listing.applicationConfig.languages.map((lang, index) => (
                   <Button
                     className="language-select mx-1 mb-2"
@@ -153,22 +160,35 @@ const ApplicationChooseLanguage = () => {
           </div>
 
           {initialStateLoaded && !profile && (
-            <div className="form-card__pager-row primary px-4 border-t border-gray-450">
-              <h2 className="form-card__title w-full border-none pt-0 mt-0">
-                {t("account.haveAnAccount")}
-              </h2>
-
-              <p className="my-6">{t("application.chooseLanguage.signInSaveTime")}</p>
-
-              <div>
-                <LinkButton
-                  href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                  dataTestId={"app-choose-language-sign-in-button"}
-                >
-                  {t("nav.signIn")}
-                </LinkButton>
-              </div>
-            </div>
+            <>
+              <ActionBlock
+                className="border-t border-gray-450"
+                header={t("account.haveAnAccount")}
+                subheader={t("application.chooseLanguage.signInSaveTime")}
+                background="primary-lighter"
+                actions={[
+                  <LinkButton
+                    href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                    dataTestId={"app-choose-language-sign-in-button"}
+                  >
+                    {t("nav.signIn")}
+                  </LinkButton>,
+                ]}
+              />
+              <ActionBlock
+                className="border-t border-gray-450"
+                header={t("authentication.createAccount.noAccount")}
+                background="primary-lighter"
+                actions={[
+                  <LinkButton
+                    href={"/create-account"}
+                    dataTestId={"app-choose-language-create-account-button"}
+                  >
+                    {t("account.createAccount")}
+                  </LinkButton>,
+                ]}
+              />
+            </>
           )}
         </div>
       </FormCard>

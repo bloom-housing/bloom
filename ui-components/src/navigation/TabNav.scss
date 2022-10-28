@@ -11,13 +11,16 @@
 .tab-nav__tab {
   a {
     @apply block;
-    @apply px-6;
-    @apply py-3;
+    @apply px-6 pb-3;
     @apply border-b-2;
-    @apply text-gray-700;
+    @apply text-gray-750;
     @apply items-center;
     border-color: transparent;
     line-height: 1.5rem;
+
+    @screen md {
+      @apply pb-3;
+    }
 
     &:hover {
       @apply text-gray-900;

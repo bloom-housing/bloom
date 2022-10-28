@@ -1,14 +1,23 @@
+import * as React from "react"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
   AppearanceShadeType,
 } from "../global/AppearanceTypes"
-import * as React from "react"
+import { BADGES } from "../../.storybook/constants"
 import { Tag } from "./Tag"
+import TagDocumentation from "./Tag.docs.mdx"
 
 export default {
-  title: "Text/Tag",
+  title: "Text/Tag 🚩",
+  id: "text/tag",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  parameters: {
+    docs: {
+      page: TagDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 export const standard = () => <Tag>Tag</Tag>

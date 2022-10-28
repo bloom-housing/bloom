@@ -1,5 +1,5 @@
 import React, { useMemo, useContext, useState, useCallback } from "react"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import {
   Button,
   t,
@@ -8,26 +8,30 @@ import {
   GridCell,
   ViewItem,
   Field,
-  FieldGroup,
   Select,
   useMutate,
   AppearanceStyleType,
   AppearanceBorderType,
   emailRegex,
-  setSiteAlertMessage,
   Tag,
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
-import router from "next/router"
+import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 
 type FormUserManageProps = {
   mode: "add" | "edit"
   user?: User
   listings: Listing[]
   onDrawerClose: () => void
+  setAlertMessage: React.Dispatch<
+    React.SetStateAction<{
+      type: string
+      message: string
+    }>
+  >
 }
 
 type FormUserManageValues = {
@@ -36,67 +40,114 @@ type FormUserManageValues = {
   email?: string
   role?: string
   user_listings?: string[]
-  listings_all?: boolean
+  jurisdiction_all?: boolean
+  jurisdictions?: string[]
 }
 
 const determineUserRole = (roles: UserRolesCreate) => {
   if (roles?.isAdmin) {
     return RoleOption.Administrator
+  } else if (roles?.isJurisdictionalAdmin) {
+    return RoleOption.JurisdictionalAdmin
   }
-
   return RoleOption.Partner
 }
 
-const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
-  const { userService } = useContext(AuthContext)
+const FormUserManage = ({
+  mode,
+  user,
+  listings,
+  onDrawerClose,
+  setAlertMessage,
+}: FormUserManageProps) => {
+  const { userService, profile } = useContext(AuthContext)
+  const jurisdictionList = profile.jurisdictions
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
 
-  const defaultValues: FormUserManageValues =
-    mode === "edit"
-      ? {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: determineUserRole(user.roles),
-          user_listings: user.leasingAgentInListings?.map((item) => item.id) ?? [],
-          listings_all: listings.length === user.leasingAgentInListings.length,
-        }
-      : {}
+  let defaultValues: FormUserManageValues = {}
+  if (mode === "edit") {
+    defaultValues = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: determineUserRole(user.roles),
+      user_listings: user.leasingAgentInListings?.map((item) => item.id) ?? [],
+      jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
+      jurisdictions: user.jurisdictions.map((elem) => elem.id),
+    }
+  } else if (profile?.roles?.isJurisdictionalAdmin) {
+    defaultValues = {
+      jurisdictions: [jurisdictionList[0].id],
+    }
+  }
 
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, getValues, trigger, setValue } = useForm<FormUserManageValues>({
+  const methods = useForm<FormUserManageValues>({
     defaultValues,
   })
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, errors, getValues, trigger, setValue } = methods
 
-  const listingsOptions = useMemo(() => {
-    return listings.map((listing) => ({
-      id: listing.id,
-      label: listing.name,
-      value: listing.id,
+  const jurisdictionOptions = useMemo(() => {
+    return jurisdictionList.map((juris) => ({
+      id: juris.id,
+      label: juris.name,
+      value: juris.id,
       inputProps: {
         onChange: () => {
-          if (getValues("user_listings").length === listings.length) {
-            setValue("listings_all", true)
+          if (getValues("jurisdictions").length === jurisdictionList.length) {
+            setValue("jurisdiction_all", true)
           } else {
-            setValue("listings_all", false)
+            setValue("jurisdiction_all", false)
           }
         },
       },
     }))
-  }, [getValues, listings, setValue])
+  }, [jurisdictionList, getValues, setValue])
 
-  /**
-   * Control listing checkboxes on select/deselect all listings option
-   */
-  const updateAllCheckboxes = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.checked) {
-      setValue("user_listings", [])
-    } else {
-      const allListingIds = listingsOptions.map((option) => option.id)
-      setValue("user_listings", allListingIds)
-    }
-  }
+  const listingsOptions = useMemo(() => {
+    const jurisdictionalizedListings = {}
+    jurisdictionList.forEach((juris) => {
+      jurisdictionalizedListings[juris.id] = []
+    })
+    listings.forEach((listing) => {
+      if (jurisdictionalizedListings[listing.jurisdiction.id]) {
+        // if the user has access to the jurisdiction
+        jurisdictionalizedListings[listing.jurisdiction.id].push({
+          id: listing.id,
+          label: listing.name,
+          value: listing.id,
+        })
+      }
+    })
+
+    Object.keys(jurisdictionalizedListings).forEach((key) => {
+      const listingsInJurisdiction = jurisdictionalizedListings[key]
+      listingsInJurisdiction.forEach((listing) => {
+        listing.inputProps = {
+          onChange: () => {
+            let currValues = getValues("user_listings")
+            if (currValues && !Array.isArray(currValues)) {
+              currValues = [currValues]
+            } else if (!currValues) {
+              currValues = []
+            }
+
+            const temp = listingsInJurisdiction.every((elem) =>
+              currValues.some((search) => elem.id === search)
+            )
+
+            if (temp) {
+              setValue(`listings_all_${key}`, true)
+            } else {
+              setValue(`listings_all_${key}`, false)
+            }
+          },
+        }
+      })
+    })
+    return jurisdictionalizedListings
+  }, [getValues, listings, setValue, jurisdictionList])
 
   const { mutate: sendInvite, isLoading: isSendInviteLoading } = useMutate()
   const { mutate: resendConfirmation, isLoading: isResendConfirmationLoading } = useMutate()
@@ -104,7 +155,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   const { mutate: deleteUser, isLoading: isDeleteUserLoading } = useMutate()
 
   const createUserBody = useCallback(async () => {
-    const { firstName, lastName, email, role } = getValues()
+    const { firstName, lastName, email, role, jurisdictions } = getValues()
 
     /**
      * react-hook form returns:
@@ -132,21 +183,21 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
     const roles = (() => ({
       isAdmin: role.includes(RoleOption.Administrator),
       isPartner: role.includes(RoleOption.Partner),
+      isJurisdictionalAdmin: role.includes(RoleOption.JurisdictionalAdmin),
     }))()
 
     const leasingAgentInListings = user_listings?.map((id) => ({ id })) || []
 
-    const jurisdictions = user_listings
-      .reduce((acc, curr) => {
-        const listing = listings.find((listing) => listing.id === curr)
-
-        if (!acc.includes(listing.jurisdiction.id)) {
-          acc.push(listing.jurisdiction.id)
-        }
-
-        return acc
-      }, [])
-      .map((id) => ({ id }))
+    let selectedJurisdictions = []
+    if (Array.isArray(jurisdictions)) {
+      selectedJurisdictions = jurisdictions.map((elem) => ({
+        id: elem,
+      }))
+    } else if (jurisdictions) {
+      selectedJurisdictions = [{ id: jurisdictions }]
+    } else {
+      selectedJurisdictions = jurisdictionOptions.map((elem) => ({ id: elem.id }))
+    }
 
     const body = {
       firstName,
@@ -154,12 +205,12 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       email,
       roles,
       leasingAgentInListings: leasingAgentInListings,
-      jurisdictions: jurisdictions,
+      jurisdictions: selectedJurisdictions,
       agreedToTermsOfService: user?.agreedToTermsOfService ?? false,
     }
 
     return body
-  }, [getValues, listings, trigger, user?.agreedToTermsOfService])
+  }, [getValues, trigger, user?.agreedToTermsOfService, jurisdictionOptions])
 
   const onInvite = async () => {
     const body = await createUserBody()
@@ -171,18 +222,17 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           body,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.inviteSent`), "success")
+          setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
         })
         .catch((e) => {
           if (e?.response?.status === 409) {
-            setSiteAlertMessage(t(`errors.alert.emailConflict`), "alert")
+            setAlertMessage({ message: t(`errors.alert.emailConflict`), type: "alert" })
           } else {
-            setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+            setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
           }
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }
@@ -196,14 +246,13 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       userService
         .resendPartnerConfirmation({ body })
         .then(() => {
-          setSiteAlertMessage(t(`users.confirmationSent`), "success")
+          setAlertMessage({ message: t(`users.confirmationSent`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
   }
@@ -223,40 +272,40 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           body,
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.userUpdated`), "success")
+          setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
-          void router.reload()
         })
     )
-  }, [createUserBody, onDrawerClose, updateUser, userService, user])
+  }, [createUserBody, onDrawerClose, updateUser, userService, user, setAlertMessage])
 
   const onDelete = () => {
     void deleteUser(() =>
       userService
         .delete({
-          id: user.id,
+          body: {
+            id: user.id,
+          },
         })
         .then(() => {
-          setSiteAlertMessage(t(`users.userDeleted`), "success")
+          setAlertMessage({ message: t(`users.userDeleted`), type: "success" })
         })
         .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          setAlertMessage({ message: t(`errors.alert.badRequest`), type: "alert" })
         })
         .finally(() => {
           onDrawerClose()
           setDeleteModalActive(false)
-          void router.reload()
         })
     )
   }
 
   return (
-    <>
+    <FormProvider {...methods}>
       <Form onSubmit={() => false}>
         <div className="border rounded-md p-8 bg-white">
           <GridSection
@@ -344,7 +393,14 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
                   register={register}
                   controlClassName="control"
                   keyPrefix="users"
-                  options={roleKeys}
+                  options={roleKeys
+                    .filter((elem) => {
+                      if (profile?.roles?.isJurisdictionalAdmin) {
+                        return elem !== RoleOption.Administrator
+                      }
+                      return true
+                    })
+                    .sort((a, b) => (a < b ? -1 : 1))}
                   error={!!errors?.role}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
@@ -352,33 +408,10 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
               </ViewItem>
             </GridCell>
           </GridSection>
-
-          <GridSection title={t("nav.listings")} columns={2}>
-            <GridCell>
-              <ViewItem>
-                <Field
-                  id="listings_all"
-                  name="listings_all"
-                  label={t("users.allListings")}
-                  register={register}
-                  type="checkbox"
-                  inputProps={{
-                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => updateAllCheckboxes(e),
-                  }}
-                />
-
-                <FieldGroup
-                  name="user_listings"
-                  fields={listingsOptions}
-                  type="checkbox"
-                  register={register}
-                  error={!!errors?.user_listings}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                />
-              </ViewItem>
-            </GridCell>
-          </GridSection>
+          <JurisdictionAndListingSelection
+            jurisdictionOptions={jurisdictionOptions}
+            listingsOptions={listingsOptions}
+          />
         </div>
 
         <div className="mt-6">
@@ -401,6 +434,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
               onClick={() => onInvite()}
               styleType={AppearanceStyleType.primary}
               loading={isSendInviteLoading}
+              dataTestId={"invite-user"}
             >
               {t("t.invite")}
             </Button>
@@ -418,21 +452,10 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
             </Button>
           )}
 
-          {mode === "add" && (
-            <Button
-              type="button"
-              onClick={() => onDrawerClose()}
-              styleType={AppearanceStyleType.secondary}
-              border={AppearanceBorderType.borderless}
-            >
-              {t("t.cancel")}
-            </Button>
-          )}
-
           {mode === "edit" && (
             <Button
               type="button"
-              className="bg-opacity-0 text-red-700"
+              className="bg-opacity-0 text-alert"
               onClick={() => setDeleteModalActive(true)}
               unstyled
             >
@@ -472,7 +495,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       >
         {t("users.doYouWantDeleteUser")}
       </Modal>
-    </>
+    </FormProvider>
   )
 }
 

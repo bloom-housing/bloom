@@ -3,36 +3,20 @@ import { ExpandableContent } from "./ExpandableContent"
 
 # Expandable Content
 
-The Expandable Content component displays a button and when clicked, toggles an arbitrary child element underneath.
+The Expandable Content component displays a button and when clicked, toggles an arbitrary child element above.
 
 <Canvas>
-  <Story id="headers-page-header--with-content" />
+  <Story id="actions-expandable-content" />
 </Canvas>
 
 <br />
-<br />
-
-## Variants
-
-### Inverse
-
-<Canvas>
-  <Story id="headers-page-header--inversed" />
-</Canvas>
 
 ## Component Properties
 
 <ArgsTable of={ExpandableContent} />
 
-## Theming Variables
-
-<Canvas>
-  <Story id="headers-page-header--style-overrides" />
-</Canvas>
-
 You can apply CSS variables to the `.expandable-content` selector to customize the appearance of the component.
 
 | Name                         | Type  | Description                                               | Default                         |
 | ---------------------------- | ----- | --------------------------------------------------------- | ------------------------------- |
-| `--expandable-content-container-margin-top`         | Spacing | The space between the button and the content                             | `--bloom-s6` |
 | `--expandable-content-button-margin`             | Spacing | The margin around the button                               | `0`        |

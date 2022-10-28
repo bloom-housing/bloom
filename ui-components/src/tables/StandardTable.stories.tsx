@@ -65,7 +65,7 @@ export const preferenceHeaders = {
 const getDeleteButton = () => {
   return (
     <div className={"text-right"}>
-      <Button type="button" className="front-semibold uppercase text-red-700 m-0" unstyled>
+      <Button type="button" className="front-semibold uppercase text-alert m-0" unstyled>
         Delete
       </Button>
     </div>

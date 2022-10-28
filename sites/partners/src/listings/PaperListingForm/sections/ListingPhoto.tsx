@@ -71,7 +71,7 @@ const ListingPhoto = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={cloudinaryData.url} />
+            <img src={cloudinaryData.url} alt={"Preview"} />
           </TableThumbnail>
         ),
       },
@@ -80,7 +80,7 @@ const ListingPhoto = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-red-700 my-0"
+            className="font-semibold uppercase text-alert my-0"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -110,7 +110,7 @@ const ListingPhoto = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={listingPhotoUrl} />
+            <img src={listingPhotoUrl} alt={"Preview"} />
           </TableThumbnail>
         ),
       },
@@ -130,7 +130,7 @@ const ListingPhoto = () => {
             </Button>
             <Button
               type="button"
-              className="font-semibold uppercase text-red-700 my-0"
+              className="font-semibold uppercase text-alert my-0"
               onClick={() => {
                 setCloudinaryData({ ...cloudinaryData, id: "" })
                 deletePhoto()

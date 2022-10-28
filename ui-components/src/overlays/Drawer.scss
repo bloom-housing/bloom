@@ -104,3 +104,10 @@
   @apply pb-4;
   @apply overflow-y-visible;
 }
+
+.drawer__small {
+  width: 100%;
+  @screen md {
+    width: 45rem;
+  }
+}

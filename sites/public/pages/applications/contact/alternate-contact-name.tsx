@@ -85,7 +85,7 @@ export default () => {
         <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="form-card__group">
             <fieldset>
-              <legend className="field-label--caps">
+              <legend className="text__caps-spaced">
                 {t("application.alternateContact.name.alternateContactFormLabel")}
               </legend>
               <Field

@@ -29,6 +29,7 @@ import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 import { EmailService } from "../../src/email/email.service"
 import { MfaType } from "../../src/auth/types/mfa-type"
 import { UserRepository } from "../../src/auth/repositories/user-repository"
+import dayjs from "dayjs"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -99,6 +100,9 @@ describe("Applications", () => {
   })
 
   it("should not allow user to create an account with weak password", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Mute the error console logging
+    })
     const userCreateDto: UserCreateDto = {
       password: "abcdef",
       passwordConfirmation: "abcdef",
@@ -113,6 +117,9 @@ describe("Applications", () => {
   })
 
   it("should not allow user to create an account which is already confirmed nor confirm it using PUT", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Mute the error console logging
+    })
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "Abcdef1!",
@@ -196,6 +203,9 @@ describe("Applications", () => {
   })
 
   it("should not allow user to sign in before confirming the account", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Mute the error console logging
+    })
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "Abcdef1!",
@@ -227,6 +237,9 @@ describe("Applications", () => {
   })
 
   it("should not allow user to create an account without matching confirmation", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Mute the error console logging
+    })
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "abcdef2",
@@ -274,6 +287,9 @@ describe("Applications", () => {
   })
 
   it("should not allow user/anonymous to modify other existing user's data", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Mute the error console logging
+    })
     const user2UpdateDto: UserUpdateDto = {
       id: user2Profile.id,
       dob: new Date(),
@@ -611,8 +627,9 @@ describe("Applications", () => {
     expect(res.body.email).toBe(user.email)
 
     await supertest(app.getHttpServer())
-      .delete(`/user/${user.id}`)
+      .delete(`/user`)
       .set(...setAuthorization(adminAccessToken))
+      .send({ id: user.id })
       .expect(200)
 
     await supertest(app.getHttpServer())
@@ -644,8 +661,9 @@ describe("Applications", () => {
     })
 
     await supertest(app.getHttpServer())
-      .delete(`/user/${user.id}`)
+      .delete(`/user`)
       .set(...setAuthorization(adminAccessToken))
+      .send({ id: user.id })
       .expect(200)
 
     const application = await applicationsRepository.findOneOrFail({
@@ -943,6 +961,78 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .post("/auth/login")
       .send({ email: userCreateDto.email, password: newPassword })
+      .expect(201)
+  })
+
+  it("should fail login if too many attempts and pass after lockout period", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Mute the error console logging
+    })
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "password@b.com",
+      emailConfirmation: "password@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    const userCreateResponse = await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+    await supertest(app.getHttpServer())
+      .put(`/user/${userCreateResponse.body.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .send({
+        ...userCreateResponse.body,
+        confirmedAt: new Date(),
+      })
+      .expect(200)
+
+    // first five should fail with not authorized
+    let failedResponse = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: "wrong password" })
+      .expect(401)
+    expect(failedResponse.body.failureCountRemaining).toBe(5)
+    failedResponse = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: "wrong password2" })
+      .expect(401)
+    expect(failedResponse.body.failureCountRemaining).toBe(4)
+    failedResponse = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: "wrong password3" })
+      .expect(401)
+    expect(failedResponse.body.failureCountRemaining).toBe(3)
+    failedResponse = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: "wrong password4" })
+      .expect(401)
+    expect(failedResponse.body.failureCountRemaining).toBe(2)
+    failedResponse = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: "wrong password5" })
+      .expect(401)
+    expect(failedResponse.body.failureCountRemaining).toBe(1)
+    // 6th fails with too many requests
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(429)
+
+    const userRepository = await app.resolve<UserRepository>(UserRepository)
+    const user = await userRepository.findByEmail(userCreateDto.email)
+    user.lastLoginAt = dayjs(new Date()).subtract(31, "minutes").toDate()
+    await usersRepository.save(user)
+
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(201)
   })
 

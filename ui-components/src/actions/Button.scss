@@ -1,17 +1,37 @@
 @import "../global/mixins.scss";
 
 .button {
+  /* Component Variables */
+  --normal-rounded: var(--bloom-rounded);
+  --normal-padding: var(--bloom-s4) var(--bloom-s6);
+  --label-transform: uppercase;
+  --label-font: var(--bloom-font-alt-sans);
+  --label-letter-spacing: var(--bloom-letter-spacing-widest);
+  --normal-font-size: var(--bloom-font-size-sm);
+  --label-weight: bold;
+  --small-rounded: var(--bloom-rounded);
+  --small-padding: var(--bloom-s3) var(--bloom-s6);
+  --small-font-size: var(--bloom-font-size-xs);
+  --big-rounded: var(--bloom-rounded);
+  --big-padding: var(--bloom-s6);
+  --big-font-size: var(--bloom-font-size-sm);
+
+  /* Base Styles */
   position: relative;
-  border-radius: var(--normal-rounded, var(--bloom-rounded));
-  padding: var(--normal-padding, var(--bloom-s4) var(--bloom-s6));
+  border-radius: var(--normal-rounded);
+  padding: var(--normal-padding);
   text-align: center;
-  text-transform: var(--label-transform, uppercase);
-  font-family: var(--label-font, var(--bloom-font-alt-sans));
+  text-transform: var(--label-transform);
+  font-family: var(--label-font);
   display: inline-block;
-  letter-spacing: var(--label-letter-spacing, var(--bloom-letter-spacing-widest));
-  font-size: var(--normal-font-size, var(--bloom-font-size-sm));
-  font-weight: var(--label-weight, bold);
+  letter-spacing: var(--label-letter-spacing);
+  font-size: var(--normal-font-size);
+  font-weight: var(--label-weight);
   line-height: var(--bloom-line-height-snug);
+
+  &.transition {
+    transition: all 200ms ease-out;
+  }
 
   &:focus {
     outline: none;
@@ -20,6 +40,9 @@
 
   &:hover {
     border-color: var(--bloom-color-primary-dark);
+    &.transition {
+      transition: all 200ms ease-in;
+    }
   }
 
   &:disabled {
@@ -31,24 +54,25 @@
 
   &.is-secondary {
     border-color: var(--bloom-color-gray-700);
-    color: var(--bloom-color-gray-700);
+    color: var(--bloom-text-color-light);
 
     &:hover {
       background-color: var(--bloom-color-gray-700);
       color: var(--bloom-color-white);
+      border-color: var(--bloom-color-gray-700);
     }
   }
 
   &.is-small {
-    border-radius: var(--small-rounded, var(--bloom-rounded));
-    padding: var(--small-padding, var(--bloom-s3) var(--bloom-s6));
-    font-size: var(--small-font-size, var(--bloom-font-size-xs));
+    border-radius: var(--small-rounded);
+    padding: var(--small-padding);
+    font-size: var(--small-font-size);
   }
 
   &.is-big {
-    border-radius: var(--big-rounded, var(--bloom-rounded));
-    padding: var(--big-padding, var(--bloom-s6));
-    font-size: var(--big-font-size, var(--bloom-font-size-sm));
+    border-radius: var(--big-rounded);
+    padding: var(--big-padding);
+    font-size: var(--big-font-size);
   }
 
   &.is-normal-case {

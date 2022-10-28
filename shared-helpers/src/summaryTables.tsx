@@ -5,23 +5,34 @@ import {
   t,
   numberOrdinal,
   ContentAccordion,
+  getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
-import { MinMax, UnitSummary, Unit, ListingAvailability } from "@bloom-housing/backend-core/types"
+import { MinMax, UnitSummary, Unit, ListingReviewOrder } from "@bloom-housing/backend-core/types"
+
+const getTranslationFromCurrencyString = (value: string) => {
+  if (value.startsWith("t.")) return getTranslationWithArguments(value)
+  return value
+}
 
 export const unitSummariesTable = (
   summaries: UnitSummary[],
-  listingAvailability: ListingAvailability
+  listingReviewOrder: ListingReviewOrder
 ): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
-    const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
+    const unitPluralization =
+      unitSummary.totalAvailable == 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
-        <strong>{unitSummary.minIncomeRange.min}</strong>
+        <>
+          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
+          {unitSummary.minIncomeRange.min !== "t.n/a" && ` ${t("t.perMonth")}`}
+        </>
       ) : (
         <>
-          <strong>{unitSummary.minIncomeRange.min}</strong>
+          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
           {` ${t("t.to")} `}
-          <strong>{unitSummary.minIncomeRange.max}</strong>
+          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}</strong>
+          {` ${t("t.perMonth")}`}
         </>
       )
 
@@ -29,14 +40,14 @@ export const unitSummariesTable = (
       const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
       return rentMin == rentMax ? (
         <>
-          <strong>{rentMin}</strong>
-          {unit}
+          <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
+          {rentMin !== "t.n/a" && unit}
         </>
       ) : (
         <>
-          <strong>{rentMin}</strong>
+          <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
           {` ${t("t.to")} `}
-          <strong>{rentMax}</strong>
+          <strong>{getTranslationFromCurrencyString(rentMax)}</strong>
           {unit}
         </>
       )
@@ -52,7 +63,7 @@ export const unitSummariesTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = null
-    if (listingAvailability === ListingAvailability.availableUnits) {
+    if (listingReviewOrder !== ListingReviewOrder.waitlist) {
       availability = (
         <span>
           {unitSummary.totalAvailable > 0 ? (
@@ -66,7 +77,7 @@ export const unitSummariesTable = (
           )}
         </span>
       )
-    } else if (listingAvailability === ListingAvailability.openWaitlist) {
+    } else if (listingReviewOrder === ListingReviewOrder.waitlist) {
       availability = (
         <span>
           <strong>{t("listings.waitlist.open")}</strong>
@@ -79,12 +90,7 @@ export const unitSummariesTable = (
         content: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
       },
       minimumIncome: {
-        content: (
-          <span>
-            {minIncome}
-            {` ${t("t.perMonth")}`}
-          </span>
-        ),
+        content: <span>{minIncome}</span>,
       },
       rent: { content: <span>{rent}</span> },
       availability: {
@@ -98,12 +104,12 @@ export const unitSummariesTable = (
 
 export const getSummariesTable = (
   summaries: UnitSummary[],
-  listingAvailability: ListingAvailability
+  listingReviewOrder: ListingReviewOrder
 ): StandardTableData => {
   let unitSummaries: StandardTableData = []
 
   if (summaries?.length > 0) {
-    unitSummaries = unitSummariesTable(summaries, listingAvailability)
+    unitSummaries = unitSummariesTable(summaries, listingReviewOrder)
   }
   return unitSummaries
 }

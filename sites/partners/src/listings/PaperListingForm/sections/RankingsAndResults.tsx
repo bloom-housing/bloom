@@ -16,8 +16,8 @@ import {
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../formTypes"
-import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { getLotteryEvent } from "@bloom-housing/shared-helpers"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
@@ -27,7 +27,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, errors } = formMethods
+  const { register, watch, control } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing)
 
@@ -72,31 +72,33 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         title={t("listings.sections.rankingsResultsTitle")}
         description={t("listings.sections.rankingsResultsSubtitle")}
       >
-        <GridSection columns={2} className={"flex items-center"}>
-          <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
-            <FieldGroup
-              name="reviewOrderQuestion"
-              type="radio"
-              register={register}
-              fields={[
-                {
-                  label: t("listings.firstComeFirstServe"),
-                  value: "reviewOrderFCFS",
-                  id: "reviewOrderFCFS",
-                  defaultChecked:
-                    listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
-                },
-                {
-                  label: t("listings.lotteryTitle"),
-                  value: "reviewOrderLottery",
-                  id: "reviewOrderLottery",
-                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
-                },
-              ]}
-            />
-          </GridCell>
-        </GridSection>
+        {availabilityQuestion !== "openWaitlist" && (
+          <GridSection columns={2} className={"flex items-center"}>
+            <GridCell>
+              <p className="field-label m-4 ml-0">{t("listings.reviewOrderQuestion")}</p>
+              <FieldGroup
+                name="reviewOrderQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    label: t("listings.firstComeFirstServe"),
+                    value: "reviewOrderFCFS",
+                    id: "reviewOrderFCFS",
+                    defaultChecked:
+                      listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+                  },
+                  {
+                    label: t("listings.lotteryTitle"),
+                    value: "reviewOrderLottery",
+                    id: "reviewOrderLottery",
+                    defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
+                  },
+                ]}
+              />
+            </GridCell>
+          </GridSection>
+        )}
         {reviewOrder === "reviewOrderFCFS" && (
           <GridSection columns={2} className={"flex items-center"}>
             <GridCell>

@@ -9,8 +9,9 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingStatus,
-  ListingAvailability,
   Jurisdiction,
+  ApplicationSection,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -130,7 +131,7 @@ export const ListingView = (props: ListingProps) => {
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(
       listing.unitsSummarized.byUnitTypeAndRent,
-      listing.listingAvailability
+      listing.reviewOrderType
     )
   } // else condition is handled inline below
 
@@ -153,6 +154,7 @@ export const ListingView = (props: ListingProps) => {
             listing.buildingSelectionCriteriaFile.fileId,
             process.env.cloudinaryCloudName
           )}
+          className={"text-blue-700"}
         >
           {t("listings.moreBuildingSelectionCriteria")}
         </a>
@@ -161,33 +163,31 @@ export const ListingView = (props: ListingProps) => {
   } else if (listing.buildingSelectionCriteria) {
     buildingSelectionCriteria = (
       <p>
-        <a href={listing.buildingSelectionCriteria}>
+        <a href={listing.buildingSelectionCriteria} className={"text-blue-700"}>
           {t("listings.moreBuildingSelectionCriteria")}
         </a>
       </p>
     )
   }
 
+  const listingPreferences = listing?.listingMultiselectQuestions.filter(
+    (listingPref) =>
+      listingPref.multiselectQuestion.applicationSection === ApplicationSection.preferences &&
+      !listingPref.multiselectQuestion.hideFromListing
+  )
+
   const getPreferenceData = () => {
-    return listing.listingPreferences
-      .filter((listingPref) => {
-        return (
-          !listingPref.preference.formMetadata ||
-          !listingPref.preference.formMetadata.hideFromListing
-        )
-      })
-      .map((listingPref, index) => {
-        return {
-          ordinal: index + 1,
-          links: listingPref.preference.links,
-          title: listingPref.preference.title,
-          subtitle: listingPref.preference.subtitle,
-          description: listingPref.preference.description,
-        }
-      })
+    return listingPreferences.map((listingPref, index) => {
+      return {
+        ordinal: index + 1,
+        links: listingPref?.multiselectQuestion?.links,
+        title: listingPref?.multiselectQuestion?.text,
+        description: listingPref?.multiselectQuestion?.description,
+      }
+    })
   }
 
-  if (listing.listingPreferences && listing.listingPreferences.length > 0) {
+  if (listingPreferences && listingPreferences?.length > 0) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}
@@ -195,7 +195,7 @@ export const ListingView = (props: ListingProps) => {
       >
         <>
           <PreferencesList listingPreferences={getPreferenceData()} />
-          <p className="text-gray-700 text-tiny">
+          <p className="text-gray-750 text-tiny">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
         </>
@@ -403,8 +403,7 @@ export const ListingView = (props: ListingProps) => {
     ]
     const unitRow = [
       {
-        text:
-          listing.unitsAvailable === 1 ? t("listings.availableUnit") : t("listings.availableUnits"),
+        text: listing.unitsAvailable === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits"),
         amount: listing.unitsAvailable,
         emphasized: true,
       },
@@ -412,19 +411,30 @@ export const ListingView = (props: ListingProps) => {
     return (
       <QuantityRowSection
         quantityRows={
-          listing.listingAvailability === ListingAvailability.openWaitlist ? waitlistRow : unitRow
+          listing.reviewOrderType === ListingReviewOrder.waitlist ? waitlistRow : unitRow
         }
         strings={{
           sectionTitle:
-            listing.listingAvailability === ListingAvailability.openWaitlist
+            listing.reviewOrderType === ListingReviewOrder.waitlist
               ? t("listings.waitlist.isOpen")
-              : t("listings.availableUnits"),
+              : t("listings.vacantUnitsAvailable"),
           description:
-            listing.listingAvailability === ListingAvailability.openWaitlist
+            listing.reviewOrderType === ListingReviewOrder.waitlist
               ? t("listings.waitlist.submitForWaitlist")
               : t("listings.availableUnitsDescription"),
         }}
       />
+    )
+  }
+
+  const additionalInformationCard = (cardTitle: string, cardData: string) => {
+    return (
+      <div className="info-card">
+        <h3 className="text-serif-lg">{cardTitle}</h3>
+        <p className="text-sm text-gray-700 break-words">
+          <Markdown children={cardData} options={{ disableParsingRawHTML: true }} />
+        </p>
+      </div>
     )
   }
 
@@ -443,6 +453,47 @@ export const ListingView = (props: ListingProps) => {
 
   const accessibilityFeatures = getAccessibilityFeatures()
 
+  const getUtilitiesIncluded = () => {
+    let utilitiesExist = false
+    const utilitiesIncluded = Object.keys(listing?.utilities ?? {}).reduce(
+      (acc, current, index) => {
+        if (listing?.utilities[current]) {
+          utilitiesExist = true
+          acc.push(
+            <li key={index} className={"list-disc list-inside"}>
+              {t(`listings.utilities.${current}`)}
+            </li>
+          )
+        }
+        return acc
+      },
+      []
+    )
+    return !utilitiesExist ? null : (
+      <div>
+        <div className="text-base">{t("listings.sections.utilities")}</div>
+        {utilitiesIncluded.length <= 4 ? (
+          <ul>{utilitiesIncluded}</ul>
+        ) : (
+          <div className="flex">
+            <ul className="float-left w-1/2">{utilitiesIncluded.slice(0, 4)}</ul>
+            <ul className="float-right w-1/2">{utilitiesIncluded.slice(4)}</ul>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const getFooterContent = () => {
+    const footerContent: (string | React.ReactNode)[] = []
+    if (props.jurisdiction.enableUtilitiesIncluded) {
+      const utilitiesDisplay = getUtilitiesIncluded()
+      if (utilitiesDisplay) footerContent.push(utilitiesDisplay)
+    }
+    if (listing?.costsNotIncluded) footerContent.push(listing.costsNotIncluded)
+    return footerContent
+  }
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -459,12 +510,13 @@ export const ListingView = (props: ListingProps) => {
                 ]
               : undefined
           }
+          description={listing.name}
         />
         <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
-          <Heading priority={1} style={"cardHeader"} className={"text-black"}>
+          <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
             {listing.name}
           </Heading>
-          <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
+          <Heading priority={2} styleType={"mediumNormal"} className={"mb-1"}>
             {oneLineAddress}
           </Heading>
           <p className="text-gray-750 text-base mb-1">{listing.developer}</p>
@@ -494,7 +546,7 @@ export const ListingView = (props: ListingProps) => {
               })
 
               groupedUnits = byAMI
-                ? getSummariesTable(byAMI.byUnitType, listing.listingAvailability)
+                ? getSummariesTable(byAMI.byUnitType, listing.reviewOrderType)
                 : []
 
               return (
@@ -556,7 +608,15 @@ export const ListingView = (props: ListingProps) => {
                   title={t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)}
                   subtitle={t("listings.allUnits")}
                 >
-                  <ExpandableText className="text-sm text-gray-700">
+                  <ExpandableText
+                    className="text-sm text-gray-700"
+                    buttonClassName="ml-4"
+                    markdownProps={{ disableParsingRawHTML: true }}
+                    strings={{
+                      readMore: t("t.more"),
+                      readLess: t("t.less"),
+                    }}
+                  >
                     {listing.reservedCommunityDescription}
                   </ExpandableText>
                 </InfoCard>
@@ -603,21 +663,45 @@ export const ListingView = (props: ListingProps) => {
                 <>
                   {listing.creditHistory && (
                     <InfoCard title={t("listings.creditHistory")}>
-                      <ExpandableText className="text-sm text-gray-700">
+                      <ExpandableText
+                        className="text-sm text-gray-700"
+                        buttonClassName="ml-4"
+                        markdownProps={{ disableParsingRawHTML: true }}
+                        strings={{
+                          readMore: t("t.more"),
+                          readLess: t("t.less"),
+                        }}
+                      >
                         {listing.creditHistory}
                       </ExpandableText>
                     </InfoCard>
                   )}
                   {listing.rentalHistory && (
                     <InfoCard title={t("listings.rentalHistory")}>
-                      <ExpandableText className="text-sm text-gray-700">
+                      <ExpandableText
+                        className="text-sm text-gray-700"
+                        buttonClassName="ml-4"
+                        markdownProps={{ disableParsingRawHTML: true }}
+                        strings={{
+                          readMore: t("t.more"),
+                          readLess: t("t.less"),
+                        }}
+                      >
                         {listing.rentalHistory}
                       </ExpandableText>
                     </InfoCard>
                   )}
                   {listing.criminalBackground && (
                     <InfoCard title={t("listings.criminalBackground")}>
-                      <ExpandableText className="text-sm text-gray-700">
+                      <ExpandableText
+                        className="text-sm text-gray-700"
+                        buttonClassName="ml-4"
+                        markdownProps={{ disableParsingRawHTML: true }}
+                        strings={{
+                          readMore: t("t.more"),
+                          readLess: t("t.less"),
+                        }}
+                      >
                         {listing.criminalBackground}
                       </ExpandableText>
                     </InfoCard>
@@ -670,7 +754,9 @@ export const ListingView = (props: ListingProps) => {
                     listing.referralApplication.externalReference ||
                     t("application.referralApplication.instructions")
                   }
-                  title={t("application.referralApplication.furtherInformation")}
+                  strings={{
+                    title: t("application.referralApplication.furtherInformation"),
+                  }}
                 />
               )}
             </div>
@@ -772,8 +858,8 @@ export const ListingView = (props: ListingProps) => {
             </dl>
             <AdditionalFees
               deposit={getCurrencyRange(parseInt(listing.depositMin), parseInt(listing.depositMax))}
-              applicationFee={`$${listing.applicationFee}`}
-              costsNotIncluded={listing.costsNotIncluded}
+              applicationFee={listing.applicationFee ? `$${listing.applicationFee}` : undefined}
+              footerContent={getFooterContent()}
               strings={{
                 sectionHeader: t("listings.sections.additionalFees"),
                 applicationFee: t("listings.applicationFee"),
@@ -811,39 +897,18 @@ export const ListingView = (props: ListingProps) => {
             subtitle={t("listings.sections.additionalInformationSubtitle")}
           >
             <div className="listing-detail-panel">
-              {listing.requiredDocuments && (
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.requiredDocuments")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.requiredDocuments}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
-                </div>
-              )}
-              {listing.programRules && (
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.importantProgramRules")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.programRules}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
-                </div>
-              )}
-              {listing.specialNotes && (
-                <div className="info-card">
-                  <h3 className="text-serif-lg">{t("listings.specialNotes")}</h3>
-                  <p className="text-sm text-gray-700">
-                    <Markdown
-                      children={listing.specialNotes}
-                      options={{ disableParsingRawHTML: true }}
-                    />
-                  </p>
-                </div>
-              )}
+              {listing.requiredDocuments &&
+                additionalInformationCard(
+                  t("listings.requiredDocuments"),
+                  listing.requiredDocuments
+                )}
+              {listing.programRules &&
+                additionalInformationCard(
+                  t("listings.importantProgramRules"),
+                  listing.programRules
+                )}
+              {listing.specialNotes &&
+                additionalInformationCard(t("listings.specialNotes"), listing.specialNotes)}
             </div>
           </ListingDetailItem>
         )}

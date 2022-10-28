@@ -4,27 +4,37 @@ import { Icon } from "../icons/Icon"
 import { t } from "../helpers/translator"
 import "./ApplicationTimeline.scss"
 
-const ApplicationTimeline = () => (
+export interface ApplicationTimelineProps {
+  strings?: {
+    applicationReceived?: string
+    applicationsClosed?: string
+    applicationsRanked?: string
+  }
+}
+const ApplicationTimeline = (props: ApplicationTimelineProps) => (
   <ul
     className="progress-nav application-timeline"
     aria-label="Steps of processing your application"
   >
-    <li className="progress-nav__item is-active" aria-current="step">
+    <li className="progress-nav__dot-item is-active" aria-current="step">
       <span className="text-white absolute">
         <Icon symbol="check" size="base" />
       </span>
       <Markdown className="font-bold" options={{ disableParsingRawHTML: true }}>
-        {t("application.review.confirmation.applicationReceived")}
+        {props.strings?.applicationReceived ??
+          t("application.review.confirmation.applicationReceived")}
       </Markdown>
     </li>
-    <li className="progress-nav__item is-disabled">
+    <li className="progress-nav__dot-item is-disabled">
       <Markdown options={{ disableParsingRawHTML: true }}>
-        {t("application.review.confirmation.applicationsClosed")}
+        {props.strings?.applicationsClosed ??
+          t("application.review.confirmation.applicationsClosed")}
       </Markdown>
     </li>
-    <li className="progress-nav__item is-disabled">
+    <li className="progress-nav__dot-item is-disabled">
       <Markdown options={{ disableParsingRawHTML: true }}>
-        {t("application.review.confirmation.applicationsRanked")}
+        {props.strings?.applicationsRanked ??
+          t("application.review.confirmation.applicationsRanked")}
       </Markdown>
     </li>
   </ul>

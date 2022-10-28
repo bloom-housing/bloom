@@ -24,3 +24,17 @@ export class UserRoles {
   @Expose()
   isPartner?: boolean
 }
+
+export class UserRolesOnly {
+  @Column("boolean", { default: false })
+  @Expose()
+  isAdmin?: boolean
+
+  @Column("boolean", { default: false })
+  @Expose()
+  isJurisdictionalAdmin?: boolean
+
+  @Column("boolean", { default: false })
+  @Expose()
+  isPartner?: boolean
+}

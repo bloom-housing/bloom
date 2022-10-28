@@ -16,6 +16,7 @@ import { ListingReviewOrder } from "../listings/types/listing-review-order-enum"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
+import { Translation } from "../translations/entities/translation.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -62,11 +63,23 @@ export class EmailService {
     )
   }
 
-  private async getUserJurisdiction(user?: User) {
+  private async getUserJurisdiction(user?: User, existingUser?: User) {
     let jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     if (!jurisdiction && user?.jurisdictions) {
+      let whereClause = { id: user.jurisdictions[0].id }
+      if (existingUser?.jurisdictions) {
+        // if we are updating an existing user, narrow jurisdictions down to new jurisdictions only
+        const newJuris = user.jurisdictions.filter(
+          (juris) =>
+            !existingUser.jurisdictions.some((preExistingJuris) => preExistingJuris.id === juris.id)
+        )
+        if (newJuris.length) {
+          whereClause = { id: newJuris[0].id }
+        }
+      }
+
       jurisdiction = await this.jurisdictionService.findOne({
-        where: { id: user.jurisdictions[0].id },
+        where: whereClause,
       })
     }
     return jurisdiction
@@ -119,7 +132,6 @@ export class EmailService {
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
     const jurisdiction = await this.getListingJurisdiction(listing)
     void (await this.loadTranslations(jurisdiction, application.language || Language.en))
-    let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
 
@@ -129,34 +141,50 @@ export class EmailService {
       )
     }
 
-    if (listing.applicationDueDate) {
-      if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
-          lotteryDate: listing.applicationDueDate,
-        })
-      } else {
-        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.noLottery", {
-          lotteryDate: listing.applicationDueDate,
-        })
-      }
-    } else {
-      whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
+    let eligibleText
+    let preferenceText
+    let contactText = null
+    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
+      eligibleText = this.polyglot.t("confirmation.eligible.fcfs")
+      preferenceText = this.polyglot.t("confirmation.eligible.fcfsPreference")
     }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
+      eligibleText = this.polyglot.t("confirmation.eligible.lottery")
+      preferenceText = this.polyglot.t("confirmation.eligible.lotteryPreference")
+    }
+    if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
+      eligibleText = this.polyglot.t("confirmation.eligible.waitlist")
+      contactText = this.polyglot.t("confirmation.eligible.waitlistContact")
+      preferenceText = this.polyglot.t("confirmation.eligible.waitlistPreference")
+    }
+
     const user = {
       firstName: application.applicant.firstName,
       middleName: application.applicant.middleName,
       lastName: application.applicant.lastName,
     }
+
+    const nextStepsUrl = this.polyglot.t("confirmation.nextStepsUrl")
+
     await this.send(
       application.applicant.emailAddress,
       jurisdiction.emailFromAddress,
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
-        listing: listing,
-        listingUrl: listingUrl,
-        application: application,
-        whatToExpectText: whatToExpectText,
-        user: user,
+        subject: this.polyglot.t("confirmation.subject"),
+        header: {
+          logoTitle: this.polyglot.t("header.logoTitle"),
+          logoUrl: this.polyglot.t("header.logoUrl"),
+        },
+        listing,
+        listingUrl,
+        application,
+        preferenceText,
+        interviewText: this.polyglot.t("confirmation.interview"),
+        eligibleText,
+        contactText,
+        nextStepsUrl: nextStepsUrl != "confirmation.nextStepsUrl" ? nextStepsUrl : null,
+        user,
       })
     )
   }
@@ -186,19 +214,41 @@ export class EmailService {
   }
 
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
-    const jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-      language,
-      jurisdiction ? jurisdiction.id : null
-    )
-    const genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-      language,
+    let jurisdictionalTranslations: Translation | null,
+      genericTranslations: Translation | null,
+      jurisdictionalDefaultTranslations: Translation | null
+
+    if (language != Language.en) {
+      if (jurisdiction) {
+        jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          language,
+          jurisdiction.id
+        )
+      }
+      genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        language,
+        null
+      )
+    }
+
+    if (jurisdiction) {
+      jurisdictionalDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        Language.en,
+        jurisdiction.id
+      )
+    }
+
+    const genericDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+      Language.en,
       null
     )
 
     // Deep merge
     const translations = merge(
-      genericTranslations.translations,
-      jurisdictionalTranslations.translations
+      genericDefaultTranslations.translations,
+      genericTranslations?.translations,
+      jurisdictionalDefaultTranslations?.translations,
+      jurisdictionalTranslations?.translations
     )
 
     this.polyglot.replace(translations)
@@ -226,6 +276,12 @@ export class EmailService {
 
     fs.readdirSync(dirName).forEach((filename) => {
       partials[filename.slice(0, -4)] = this.partial("partials/" + filename)
+    })
+
+    const layoutsDirName = path.resolve(__dirname, "..", "shared", "views/layouts")
+
+    fs.readdirSync(layoutsDirName).forEach((filename) => {
+      partials[`layout_${filename.slice(0, -4)}`] = this.partial("layouts/" + filename)
     })
 
     return partials
@@ -267,6 +323,20 @@ export class EmailService {
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl },
+      })
+    )
+  }
+
+  async portalAccountUpdate(user: User, appUrl: string, existingUser: User) {
+    const jurisdiction = await this.getUserJurisdiction(user, existingUser)
+    void (await this.loadTranslations(jurisdiction, user.language || Language.en))
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t("invite.portalAccountUpdate"),
+      this.template("portal-account-update")({
+        user,
+        appUrl,
       })
     )
   }

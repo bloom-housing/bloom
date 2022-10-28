@@ -22,6 +22,7 @@ import {
   PaperApplicationUpdateDto,
 } from "./dto/paper-application.dto"
 import { PaperApplicationsService } from "./paper-applications.service"
+import { IdDto } from "../shared/dto/id.dto"
 
 @Controller("paperApplications")
 @ApiTags("paperApplications")
@@ -61,9 +62,9 @@ export class PaperApplicationsController {
     )
   }
 
-  @Delete(`:paperApplicationId`)
+  @Delete()
   @ApiOperation({ summary: "Delete paperApplication by id", operationId: "delete" })
-  async delete(@Param("paperApplicationId") paperApplicationId: string): Promise<void> {
-    return await this.paperApplicationsService.delete(paperApplicationId)
+  async delete(@Body() dto: IdDto): Promise<void> {
+    return await this.paperApplicationsService.delete(dto.id)
   }
 }

@@ -2,7 +2,7 @@ import * as React from "react"
 import { ContactAddress } from "./ContactAddress"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Address } from "../../../helpers/MultiLineAddress"
-import { Heading } from "../../../headers/Heading"
+import { Heading } from "../../../text/Heading"
 
 export interface ContactProps {
   /** Any number of text sections rendered after the contact information */
@@ -49,7 +49,7 @@ const Contact = ({
 
   return (
     <section className="aside-block">
-      <Heading priority={4} style={"sidebarHeader"}>
+      <Heading priority={4} styleType={"underlineWeighted"}>
         {sectionTitle}
       </Heading>
 
@@ -95,12 +95,12 @@ const Contact = ({
 
       {additionalInformation?.map((info) => {
         return (
-          <>
-            <Heading priority={3} style={"sidebarSubHeader"}>
+          <div key={info.title} className={"my-3"}>
+            <Heading priority={3} styleType={"capsWeighted"}>
               {info.title}
             </Heading>
             <div className="text-gray-800 text-tiny markdown">{info.content}</div>
-          </>
+          </div>
         )
       })}
     </section>

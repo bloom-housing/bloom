@@ -12,6 +12,7 @@ export const parameters = {
   options: {
     storySort: {
       order: [
+        "Documentation",
         "Actions",
         "Blocks",
         "Footers",
@@ -24,6 +25,10 @@ export const parameters = {
         "Overlays",
         "Sections",
         "Tables",
+        "Text",
+        "Listing Sidebar",
+        "Listing",
+        "Prototypes",
       ],
     },
   },
@@ -41,8 +46,8 @@ export const parameters = {
   badgesConfig: {
     [BADGES.GEN2]: {
       styles: {
-        backgroundColor: "#e41d3d",
-        borderColor: "#b21d38",
+        backgroundColor: "#0077da",
+        borderColor: "#0077da",
         color: "#fff",
       },
       title: "2nd Generation",

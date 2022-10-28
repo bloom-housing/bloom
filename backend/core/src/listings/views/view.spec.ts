@@ -20,23 +20,19 @@ const mockUnitTypes = [
 const mockListings = [
   {
     id: "listing-1",
-    property: {
-      units: [
-        { unitType: mockUnitTypes[0], minimumIncome: "0", rent: "100" },
-        { unitType: mockUnitTypes[0], minimumIncome: "1", rent: "101" },
-        { unitType: mockUnitTypes[1], minimumIncome: "0", rent: "100" },
-      ],
-    },
+    units: [
+      { unitType: mockUnitTypes[0], minimumIncome: "0", rent: "100" },
+      { unitType: mockUnitTypes[0], minimumIncome: "1", rent: "101" },
+      { unitType: mockUnitTypes[1], minimumIncome: "0", rent: "100" },
+    ],
   },
   {
     id: "listing-2",
-    property: {
-      units: [
-        { unitType: mockUnitTypes[0], minimumIncome: "0", rent: "100" },
-        { unitType: mockUnitTypes[1], minimumIncome: "1", rent: "101" },
-        { unitType: mockUnitTypes[2], minimumIncome: "2", rent: "102" },
-      ],
-    },
+    units: [
+      { unitType: mockUnitTypes[0], minimumIncome: "0", rent: "100" },
+      { unitType: mockUnitTypes[1], minimumIncome: "1", rent: "101" },
+      { unitType: mockUnitTypes[2], minimumIncome: "2", rent: "102" },
+    ],
   },
 ]
 
@@ -59,7 +55,7 @@ describe("listing views", () => {
       view.getViewQb()
 
       expect(mockQueryBuilder.select).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(14)
+      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(12)
     })
 
     it("should map unitSummary to listings", () => {
@@ -80,7 +76,7 @@ describe("listing views", () => {
 
       view.getViewQb()
 
-      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(29)
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(27)
     })
   })
 

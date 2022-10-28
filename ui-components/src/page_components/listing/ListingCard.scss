@@ -1,64 +1,92 @@
 .listings-row {
-  @apply flex;
-  @apply flex-row;
-  @apply flex-wrap;
-  @apply max-w-5xl;
-  @apply m-auto;
-  @apply mb-12;
-  max-width: 48rem;
+  --tags-flex-order: 0;
+  --inter-row-gap: var(--bloom-s12);
+  --max-width: var(--bloom-width-3xl);
+  --max-width-large-screen: var(--bloom-width-5xl);
+  --cell-padding: var(--bloom-s3);
 
-  &:first-of-type {
-    @apply mt-12;
-  }
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: var(--max-width);
+  margin: var(--inter-row-gap) auto;
+  position: relative;
 
-  @screen lg {
-    @apply max-w-5xl;
+  @media (min-width: $screen-lg) {
+    --max-width: var(--max-width-large-screen);
   }
 }
 
-.listings-row_figure {
-  @apply w-full;
-  @apply p-3;
-  @apply pb-0;
+.listings-row_figure,
+.listings-row_content {
+  width: 100%;
+  padding: var(--cell-padding);
+  padding-bottom: 0px;
 
-  @screen lg {
-    @apply w-6/12;
+  @media (min-width: $screen-lg) {
+    width: 50%;
   }
 }
 
 .listings-row_content {
-  @apply w-full;
-  @apply p-3;
+  .listings-row_headers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
-  @screen lg {
-    @apply w-6/12;
+    @media (min-width: $screen-md) {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .listings-row_tags {
+      order: var(--tags-flex-order);
+      display: inline-flex;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+
+      .tag {
+        margin-bottom: var(--bloom-s2);
+        margin-inline-end: var(--bloom-s2);
+
+        &:last-of-type {
+          margin-inline-end: 0;
+        }
+
+        .ui-icon {
+          margin-inline-end: var(--bloom-s2);
+        }
+      }
+    }
   }
 
-  .listings-row_headers {
-    @apply flex;
-    @apply flex-col;
-    @apply items-center;
-    @apply text-center;
-    @screen md {
-      @apply items-start;
-      @apply text-left;
-    }
+  .is-card-link::after {
+    content: "";
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
   }
 }
 
 .listings-row_table {
-  @apply mb-4;
+  margin-block-end: var(--bloom-s4);
 }
 
 .listings-row_footer {
-  @apply flex;
-  @apply justify-end;
-  @apply w-full;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
   a:not(:first-child) {
-    @apply ml-1;
+    margin-inline-start: var(--bloom-s1);
   }
 }
-
-.listings-row_table {
-  @apply mb-4;
+.listings-pill_header {
+  margin-bottom: var(--bloom-s3);
+  margin-top: var(--bloom-s1);
 }

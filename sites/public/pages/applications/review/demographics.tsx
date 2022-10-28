@@ -24,15 +24,20 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
+  listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("demographics")
-  const currentPageSection = 5
+  let currentPageSection = 4
+  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) currentPageSection += 1
+  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
+    currentPageSection += 1
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -104,7 +109,7 @@ const ApplicationDemographics = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <fieldset>
-              <legend className="field-label--caps">
+              <legend className="text__caps-spaced">
                 {t("application.review.demographics.raceLabel")}
               </legend>
               <FieldGroup
@@ -135,7 +140,7 @@ const ApplicationDemographics = () => {
                 label={t("application.review.demographics.ethnicityLabel")}
                 placeholder={t("t.selectOne")}
                 register={register}
-                labelClassName="field-label--caps mb-3"
+                labelClassName="text__caps-spaced mb-3"
                 controlClassName="control"
                 options={ethnicityKeys}
                 keyPrefix="application.review.demographics.ethnicityOptions"
@@ -146,7 +151,7 @@ const ApplicationDemographics = () => {
 
           <div className="form-card__group is-borderless">
             <fieldset>
-              <legend className="field-label--caps">
+              <legend className="text__caps-spaced">
                 {t("application.review.demographics.howDidYouHearLabel")}
               </legend>
               <FieldGroup

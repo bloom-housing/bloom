@@ -47,7 +47,7 @@ describe("Listing Management Tests", () => {
       cy.getByID("monthlyRent").type(listing["monthlyRent"])
       cy.getByID("priorityType.id").select(listing["priorityType.id"])
       cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
-      cy.get("#addPreferenceButton").contains("Add Preference").click()
+      cy.get("#add-preferences-button").contains("Add Preference").click()
       cy.get(".border > .button").contains("Select Preferences").click()
       cy.get(":nth-child(1) > .grid-section__inner > .field > div > .label")
         .contains("Live/Work in County")
@@ -140,7 +140,8 @@ describe("Listing Management Tests", () => {
       cy.get("#publishButton").contains("Publish").click()
 
       cy.get("#publishButtonConfirm").contains("Publish").click()
-      cy.get(".page-header__title > .font-semibold").contains(listing["name"])
+      cy.get("[data-test-id=page-header]").should("be.visible")
+      cy.getByTestId("page-header").should("have.text", listing["name"])
     })
   })
 
@@ -197,7 +198,6 @@ describe("Listing Management Tests", () => {
       cy.get("#specialNotes").contains(listing["specialNotes"])
       cy.get("#reviewOrderQuestion").contains("First come first serve")
       cy.get("#dueDateQuestion").contains("No")
-      cy.getByID("waitlist.openQuestion").contains("No")
       cy.get("#whatToExpect").contains(
         "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
       )
@@ -252,7 +252,7 @@ describe("Listing Management Tests", () => {
       cy.getByTestId("nameField").type(" (Edited)")
       cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
       cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
-      cy.getByTestId("page-header-text").should("have.text", `${listing["name"]} (Edited)`)
+      cy.getByTestId("page-header").should("have.text", `${listing["name"]} (Edited)`)
     })
   })
 })

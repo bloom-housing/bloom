@@ -36,13 +36,13 @@ import { Demographics } from "./demographics.entity"
 import { HouseholdMember } from "./household-member.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { ApplicationPreference } from "./application-preferences.entity"
+import { ApplicationMultiselectQuestion } from "./application-multiselect-question.entity"
 import { Language } from "../../shared/types/language-enum"
 import { ApplicationStatus } from "../types/application-status-enum"
 import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
 import { IncomePeriod } from "../types/income-period-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
-import { ApplicationProgram } from "./application-program.entity"
+import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Entity({ name: "applications" })
 @Unique(["listing", "confirmationCode"])
@@ -221,16 +221,16 @@ export class Application extends AbstractEntity {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationPreference)
-  preferences: ApplicationPreference[]
+  @Type(() => ApplicationMultiselectQuestion)
+  preferences: ApplicationMultiselectQuestion[]
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationProgram)
-  programs?: ApplicationProgram[]
+  @Type(() => ApplicationMultiselectQuestion)
+  programs?: ApplicationMultiselectQuestion[]
 
   @Column({ enum: ApplicationStatus })
   @Expose()
@@ -279,4 +279,10 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   confirmationCode: string
+
+  @Column({ enum: ApplicationReviewStatus, default: ApplicationReviewStatus.valid })
+  @Expose()
+  @IsEnum(ApplicationReviewStatus, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ApplicationReviewStatus, enumName: "ApplicationReviewStatus" })
+  reviewStatus?: ApplicationReviewStatus | null
 }

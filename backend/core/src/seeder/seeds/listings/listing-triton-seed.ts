@@ -1,4 +1,4 @@
-import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { ListingSeedType, UnitSeedType } from "./listings"
 import { getDate, getDefaultAssets, getLiveWorkPreference } from "./shared"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
@@ -7,9 +7,16 @@ import { ListingReviewOrder } from "../../../listings/types/listing-review-order
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { ListingAvailability } from "../../../listings/types/listing-availability-enum"
+import { classToClass } from "class-transformer"
+import dayjs from "dayjs"
 
-const tritonProperty: PropertySeedType = {
+const tritonListing: ListingSeedType = {
+  jurisdictionName: "Alameda",
+  digitalApplication: false,
+  commonDigitalApplication: false,
+  paperApplication: false,
+  referralOpportunity: false,
+  countyCode: CountyCode.alameda,
   accessibility:
     "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   amenities: "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
@@ -31,15 +38,6 @@ const tritonProperty: PropertySeedType = {
   smokingPolicy: "Non-Smoking",
   unitAmenities: "Washer and dryer, AC and Heater, Gas Stove",
   yearBuilt: 2021,
-}
-
-const tritonListing: ListingSeedType = {
-  jurisdictionName: "Alameda",
-  digitalApplication: false,
-  commonDigitalApplication: false,
-  paperApplication: false,
-  referralOpportunity: false,
-  countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
@@ -81,8 +79,7 @@ const tritonListing: ListingSeedType = {
   leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
-  listingPreferences: [],
-  listingPrograms: [],
+  listingMultiselectQuestions: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
@@ -98,7 +95,16 @@ const tritonListing: ListingSeedType = {
   waitlistOpenSpots: 200,
   isWaitlistOpen: true,
   whatToExpect: null,
-  listingAvailability: ListingAvailability.availableUnits,
+  utilities: {
+    water: true,
+    gas: true,
+    trash: null,
+    sewer: true,
+    electricity: false,
+    cable: null,
+    phone: true,
+    internet: null,
+  },
 }
 
 export class ListingTritonSeed extends ListingDefaultSeed {
@@ -203,17 +209,33 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       },
     ]
 
-    const property = await this.propertyRepository.save({
-      ...tritonProperty,
-      unitsAvailable: tritonUnits.length,
-    })
+    const listingCreateDto: Omit<
+      DeepPartial<Listing>,
+      keyof BaseEntity | "urlSlug" | "showWaitlist"
+    > = {
+      ...classToClass(tritonListing),
+      name: "Test: Triton 2",
+      publishedAt: dayjs(new Date()).subtract(2.5, "hour"),
+      assets: getDefaultAssets(),
+      listingMultiselectQuestions: [
+        {
+          multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
+            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+          }),
+          ordinal: 2,
+        },
+      ],
+      events: [],
+    }
+
+    const listing = await this.listingRepository.save(listingCreateDto)
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = tritonUnits.map(
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
+          listing: {
+            id: listing.id,
           },
           amiChart,
         }
@@ -228,26 +250,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
 
     await this.unitsRepository.save(unitsToBeCreated)
 
-    const listingCreateDto: Omit<
-      DeepPartial<Listing>,
-      keyof BaseEntity | "urlSlug" | "showWaitlist"
-    > = {
-      ...tritonListing,
-      name: "Test: Triton 2",
-      property: property,
-      assets: getDefaultAssets(),
-      listingPreferences: [
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
-          }),
-          ordinal: 2,
-        },
-      ],
-      events: [],
-    }
-
-    return await this.listingRepository.save(listingCreateDto)
+    return listing
   }
 }
 
@@ -262,12 +265,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "Detroit TCAC 2019",
       jurisdiction: detroitJurisdiction,
-    })
-
-    const property = await this.propertyRepository.findOneOrFail({
-      developer: "Thompson Dorfman, LLC",
-      neighborhood: "Foster City",
-      smokingPolicy: "Non-Smoking",
     })
 
     const tritonUnits: Array<UnitSeedType> = [
@@ -358,12 +355,25 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       },
     ]
 
+    const listingCreateDto: Omit<
+      DeepPartial<Listing>,
+      keyof BaseEntity | "urlSlug" | "showWaitlist"
+    > = {
+      ...classToClass(tritonListing),
+      name: "Test: Triton 1",
+      applicationOpenDate: getDate(-5),
+      assets: getDefaultAssets(),
+      events: [],
+    }
+
+    const listing = await this.listingRepository.save(listingCreateDto)
+
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = tritonUnits.map(
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
+          listing: {
+            id: listing.id,
           },
           amiChart,
         }
@@ -378,18 +388,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
 
     await this.unitsRepository.save(unitsToBeCreated)
 
-    const listingCreateDto: Omit<
-      DeepPartial<Listing>,
-      keyof BaseEntity | "urlSlug" | "showWaitlist"
-    > = {
-      ...tritonListing,
-      name: "Test: Triton 1",
-      property: property,
-      applicationOpenDate: getDate(-5),
-      assets: getDefaultAssets(),
-      events: [],
-    }
-
-    return await this.listingRepository.save(listingCreateDto)
+    return listing
   }
 }

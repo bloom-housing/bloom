@@ -74,9 +74,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
         {
           const req = context.switchToHttp().getRequest()
           let resourceId
-          if (req.method === "DELETE") {
-            resourceId = req.params.id
-          } else if (req.method === "POST") {
+          if (req.method === "POST") {
             resourceId = value?.id
           } else {
             resourceId = req.body.id

@@ -3,18 +3,18 @@ import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   AppearanceStyleType,
-  PageHeader,
+  NavigationHeader,
   t,
   Tag,
-  Button,
   AlertBox,
   SiteAlert,
+  Breadcrumbs,
+  BreadcrumbLink,
 } from "@bloom-housing/ui-components"
+import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useSingleApplicationData } from "../../../lib/hooks"
-
 import Layout from "../../../layouts"
-import { ApplicationStatus } from "@bloom-housing/backend-core/types"
+import { ApplicationSection, ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
@@ -26,8 +26,7 @@ import { DetailsPrimaryApplicant } from "../../../src/applications/PaperApplicat
 import { DetailsAlternateContact } from "../../../src/applications/PaperApplicationDetails/sections/DetailsAlternateContact"
 import { DetailsHouseholdMembers } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
 import { DetailsHouseholdDetails } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
-import { DetailsPreferences } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
-import { DetailsPrograms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrograms"
+import { DetailsMultiselectQuestions } from "../../../src/applications/PaperApplicationDetails/sections/DetailsMultiselectQuestions"
 import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../src/applications/Aside"
@@ -37,6 +36,11 @@ export default function ApplicationsList() {
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
 
+  {
+    /* TODO: add listing name in a listing response */
+  }
+  const { listingDto } = useSingleListingData(application?.listing.id)
+
   const { applicationsService } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState(false)
 
@@ -44,7 +48,7 @@ export default function ApplicationsList() {
 
   async function deleteApplication() {
     try {
-      await applicationsService.delete({ id: applicationId })
+      await applicationsService.delete({ body: { id: applicationId } })
       void router.push(`/listings/${application?.listing?.id}/applications`)
     } catch (err) {
       setErrorAlert(true)
@@ -82,8 +86,8 @@ export default function ApplicationsList() {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-
-        <PageHeader
+        <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+        <NavigationHeader
           className="relative"
           title={
             <>
@@ -96,21 +100,23 @@ export default function ApplicationsList() {
               </p>
             </>
           }
-        >
-          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-            <SiteAlert type="success" timeout={5000} dismissable />
-          </div>
-        </PageHeader>
+          breadcrumbs={
+            <Breadcrumbs>
+              <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${application?.listing?.id}`}>
+                {listingDto?.name}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications`}>
+                {t("nav.applications")}
+              </BreadcrumbLink>
+              <BreadcrumbLink href={`/application/${application.id}`} current>
+                {application.confirmationCode}
+              </BreadcrumbLink>
+            </Breadcrumbs>
+          }
+        />
         <section className="border-t bg-white">
-          <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => router.push(`/listings/${application.listing.id}/applications`)}
-            >
-              {t("t.back")}
-            </Button>
-
+          <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
             <div className="status-bar__status md:pl-4 md:w-3/12">{applicationStatus}</div>
           </div>
         </section>
@@ -140,11 +146,19 @@ export default function ApplicationsList() {
 
                 <DetailsHouseholdDetails />
 
-                <DetailsPreferences listingId={application?.listing?.id} />
-
-                <DetailsPrograms listingId={application?.listing?.id} />
+                <DetailsMultiselectQuestions
+                  listingId={application?.listing?.id}
+                  applicationSection={ApplicationSection.programs}
+                  title={t("application.details.programs")}
+                />
 
                 <DetailsHouseholdIncome />
+
+                <DetailsMultiselectQuestions
+                  listingId={application?.listing?.id}
+                  applicationSection={ApplicationSection.preferences}
+                  title={t("application.details.preferences")}
+                />
 
                 <DetailsTerms />
               </div>

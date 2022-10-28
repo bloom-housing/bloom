@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import Markdown from "markdown-to-jsx"
-import { t } from "../helpers/translator"
+import Markdown, { MarkdownOptions } from "markdown-to-jsx"
 import "./ExpandableText.scss"
 
 export interface ExpandableTextProps {
@@ -8,6 +7,12 @@ export interface ExpandableTextProps {
   expand?: boolean
   maxLength?: number
   className?: string
+  strings: {
+    readMore: string
+    readLess: string
+  }
+  markdownProps?: MarkdownOptions
+  buttonClassName?: string
 }
 
 const getText = (text: string, expanded: boolean, maxLength: number) => {
@@ -22,11 +27,21 @@ const getText = (text: string, expanded: boolean, maxLength: number) => {
   return position > 0 ? text.substring(0, position) + "..." : text.substring(0, maxLength) + "..."
 }
 
-const moreLessButton = (expanded: boolean, setExpanded: (newValue: boolean) => void) => {
+const moreLessButton = (
+  expanded: boolean,
+  setExpanded: (newValue: boolean) => void,
+  strings: ExpandableTextProps["strings"],
+  buttonClassName: ExpandableTextProps["buttonClassName"]
+) => {
+  const classes = ["button-toggle"]
+  if (buttonClassName) {
+    classes.push(buttonClassName)
+  }
+
   return (
-    <span className="button-toggle" onClick={() => setExpanded(!expanded)}>
-      {expanded ? t("t.less") : t("t.more")}
-    </span>
+    <button className={classes.join(" ")} onClick={() => setExpanded(!expanded)}>
+      {expanded ? strings?.readLess : strings?.readMore}
+    </button>
   )
 }
 
@@ -38,13 +53,14 @@ const ExpandableText = (props: ExpandableTextProps) => {
   if (!props.children) return null
 
   if (props.children.length > maxLength) {
-    button = moreLessButton(expanded, setExpanded)
+    button = moreLessButton(expanded, setExpanded, props.strings, props.buttonClassName)
   }
   return (
-    <div className={`expandable-text ${props.className}`}>
+    <div className={`expandable-text ${props?.className}`}>
+      {" "}
       <Markdown
         children={getText(props.children, expanded, maxLength)}
-        options={{ disableParsingRawHTML: true }}
+        options={props.markdownProps}
       />
       {button}
     </div>
