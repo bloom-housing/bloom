@@ -60,6 +60,7 @@
     "preact": "^10.5.14",
     "pretty": "2.0.0",
     "puppeteer": "^10.1.0",
+    "react-dom-server": "0.0.5",
     "react-is": "^17.0.2",
     "react-dom-server": "0.0.5",
     "react-test-renderer": "^17.0.2",
