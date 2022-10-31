@@ -209,7 +209,7 @@ const AgTable = ({
     <div className={`ag-theme-alpine ag-theme-bloom ${className || ""}`}>
       <div
         className={`flex justify-between flex-col md:flex-row ${
-          showSearch || headerContent ? "my-4" : ""
+          showSearch || headerContent ? "mb-4" : ""
         }`}
       >
         <div className={`flex flex-wrap ${!showSearch && "hidden"}`}>
