@@ -220,6 +220,8 @@
   "listings.sections.buildingDetailsTitle": "Building Details",
   "listings.sections.buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
   "listings.sections.buildingFeaturesTitle": "Building Features",
+  "listings.sections.neighborhoodAmenitiesTitle": "Neighborhood Amenities",
+  "listings.sections.neighborhoodAmenitiesSubtitle": "Provide details about any local amenities including grocery stores, health services and parks within 2 miles of your listing.",
   "listings.sections.communityType": "Community Type",
   "listings.sections.communityTypeSubtitle": "Are there any requirements that applicants need to meet?",
   "listings.sections.communityType.tellUs": "Tell us about any additional community types related to this listing.",

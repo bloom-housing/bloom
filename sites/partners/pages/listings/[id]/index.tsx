@@ -36,6 +36,7 @@ import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/
 import DetailApplicationDates from "../../../src/listings/PaperListingDetails/sections/DetailApplicationDates"
 import DetailVerification from "../../../src/listings/PaperListingDetails/sections/DetailVerification"
 import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
+import DetailNeighborhoodAmenities from "../../../src/listings/PaperListingDetails/sections/DetailNeighborhoodAmenities"
 
 interface ListingProps {
   listing: Listing
@@ -134,6 +135,7 @@ export default function ListingDetail(props: ListingProps) {
                     <DetailPrograms />
                     <DetailAdditionalFees />
                     <DetailBuildingFeatures />
+                    <DetailNeighborhoodAmenities />
                     <DetailAdditionalEligibility />
                     <DetailAdditionalDetails />
                     <DetailVerification />

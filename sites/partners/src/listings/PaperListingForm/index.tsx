@@ -52,6 +52,7 @@ import Verification from "./sections/Verification"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalProgramList } from "../../../lib/hooks"
+import NeighborhoodAmenities from "./sections/NeighborhoodAmenities"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -424,6 +425,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           />
                           <AdditionalFees existingUtilities={listing?.utilities} />
                           <BuildingFeatures existingFeatures={listing?.features} />
+                          <NeighborhoodAmenities />
                           <AdditionalEligibility />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
