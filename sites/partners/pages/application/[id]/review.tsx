@@ -133,7 +133,7 @@ const Flag = () => {
         />
       </div>
 
-      <section className="bg-primary-lighter py-5">
+      <section className="bg-gray-300 py-5">
         <div className="max-w-screen-xl px-5 mx-auto">
           {(isSuccess || isError) && (
             <AlertBox
@@ -165,7 +165,9 @@ const Flag = () => {
                     : t("flags.confirmationAlertSingular")}
                 </AlertBox>
               )}
-              <p className={"font-semibold mb-5"}>{t("flags.selectValidApplications")}</p>
+              <p className={"text-base-alt font-semibold mb-5"}>
+                {t("flags.selectValidApplications")}
+              </p>
               <AgTable
                 id="applications-table"
                 className="w-full m-h-0"

@@ -111,14 +111,11 @@
 
   .ag-body-horizontal-scroll {
     border-bottom: 1px solid var(--bloom-color-gray-500);
-    border-radius: var(--bloom-rounded-md);
   }
 
   .ag-root-wrapper {
     @apply border-b-0;
     @apply rounded-t-md;
-    @apply rounded-b-md;
-    overflow: visible;
   }
 
   .ag-layout-auto-height {

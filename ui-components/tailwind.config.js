@@ -18,6 +18,7 @@ module.exports = {
       sm: "var(--bloom-font-size-sm)",
       tiny: "var(--bloom-font-size-tiny)",
       base: "var(--bloom-font-size-base)",
+      "base-alt": "var(--bloom-font-size-base-alt)",
       lg: "var(--bloom-font-size-lg)",
       xl: "var(--bloom-font-size-xl)",
       "2xl": "var(--bloom-font-size-2xl)",
