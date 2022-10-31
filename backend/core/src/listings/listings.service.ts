@@ -164,24 +164,6 @@ export class ListingsService {
     return result
   }
 
-  @Interval(1000 * 60 * 60)
-  public async changeOverdueListingsStatusCron() {
-    const listings = await this.listingRepository
-      .createQueryBuilder("listings")
-      .select(["listings.id", "listings.applicationDueDate", "listings.status"])
-      .where(`listings.status = '${ListingStatus.active}'`)
-      .andWhere(`listings.applicationDueDate IS NOT NULL`)
-      .andWhere(`listings.applicationDueDate < NOW()`)
-      .getMany()
-
-    for (const listing of listings) {
-      listing.status = ListingStatus.closed
-      listing.closedAt = new Date()
-    }
-
-    await this.listingRepository.save(listings)
-  }
-
   private async addUnitsSummarized(listing: Listing) {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
       const amiCharts = await this.amiChartsRepository.find({

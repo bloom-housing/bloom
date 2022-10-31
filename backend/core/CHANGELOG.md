@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.5...@bloom-housing/backend-core@7.0.1) (2022-10-26)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [7.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.4...@bloom-housing/backend-core@7.0.1-alpha.5) (2022-10-26)
+
+
+### Bug Fixes
+
+* change the cron job logging level ([#3150](https://github.com/bloom-housing/bloom/issues/3150)) ([fe43154](https://github.com/bloom-housing/bloom/commit/fe4315423ffd17ee22d16018cc938271592dfcf5))
+
+
+
+
+
+## [7.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.3...@bloom-housing/backend-core@7.0.1-alpha.4) (2022-10-25)
+
+
+### Features
+
+* add thank you translations to email footer ([5f3c7b1](https://github.com/bloom-housing/bloom/commit/5f3c7b1e81357e1aff5f3f3532dbb7691ac243ce))
+
+
+
+
+
+## [7.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.2...@bloom-housing/backend-core@7.0.1-alpha.3) (2022-10-21)
+
+
+### Bug Fixes
+
+* update activity-log relationship to users for deletion ([#3139](https://github.com/bloom-housing/bloom/issues/3139)) ([f95532e](https://github.com/bloom-housing/bloom/commit/f95532e4ebe693c128d742399030054d0f735164))
+
+
+
+
+
+## [7.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.1...@bloom-housing/backend-core@7.0.1-alpha.2) (2022-10-19)
+
+
+### Bug Fixes
+
+* correct the cron jobs ([407c0fb](https://github.com/bloom-housing/bloom/commit/407c0fbe10e3150047dadbb43c5248b768e8dc63))
+
+
+
+
+
+## [7.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.0...@bloom-housing/backend-core@7.0.1-alpha.1) (2022-10-13)
+
+
+### Bug Fixes
+
+* add back in eligibility translations ([#3134](https://github.com/bloom-housing/bloom/issues/3134)) ([a9ba463](https://github.com/bloom-housing/bloom/commit/a9ba463bfb414ff13820616f7045f43cc997dca2))
+
+
+
+
+
 ## [7.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@6.0.1-alpha.2...@bloom-housing/backend-core@7.0.1-alpha.0) (2022-10-05)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
