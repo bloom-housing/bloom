@@ -14,7 +14,7 @@
   --modal-shadow: var(--bloom-shadow-md);
   --modal-border: var(--bloom-border-1) solid var(--bloom-color-gray-400);
   --footer-justify: normal;
-  --footer-height: 150px;
+  --footer-height: 170px;
   overflow: auto;
 
   position: relative;
@@ -48,7 +48,7 @@
 .modal__title {
   padding-block: var(--bloom-s6) var(--bloom-s3);
   padding-inline: var(--bloom-s6) var(--bloom-s12);
-  padding-bottom: 0;
+  padding-bottom: var(--bloom-s6);
   color: var(--title-color);
   font-size: var(--title-font-size);
   font-family: var(--title-font-family);
@@ -57,6 +57,7 @@
 .modal__inner {
   padding-block: var(--content-padding-block);
   padding-inline: var(--bloom-s6);
+  padding-top: 0;
 
   &:last-of-type {
     border-bottom-right-radius: var(--border-radius);
