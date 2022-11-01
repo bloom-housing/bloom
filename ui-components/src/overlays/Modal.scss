@@ -16,6 +16,7 @@
   --footer-justify: normal;
   --footer-height: 170px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   position: relative;
   max-width: var(--max-width);
