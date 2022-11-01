@@ -113,9 +113,9 @@ const ListingsPage = ({ initialListings }) => {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const initialListings = await fetchBaseListingData()
-  return { props: { initialListings }, revalidate: process.env.cacheRevalidate }
+  return { props: { initialListings } }
 }
 
 export default ListingsPage
