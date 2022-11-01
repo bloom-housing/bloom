@@ -143,7 +143,6 @@ const Aside = ({
           <div className="grid gap-2" key="btn-close-unpublish">
             <Button
               type="button"
-              styleType={AppearanceStyleType.secondary}
               fullWidth
               onClick={() => showCloseListingModal && showCloseListingModal()}
             >

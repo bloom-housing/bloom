@@ -56,12 +56,7 @@ export const BasicModal = () => {
           >
             {text("Action 2 Label", "Submit")}
           </Button>,
-          <Button
-            onClick={() => setOpenModal(!openModal)}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
-            size={AppearanceSizeType.small}
-          >
+          <Button onClick={() => setOpenModal(!openModal)} size={AppearanceSizeType.small}>
             {text("Action 1 Label", "Cancel")}
           </Button>,
         ]}
@@ -101,12 +96,7 @@ export const BasicModalOverflowContent = () => {
           >
             {text("Action 2 Label", "Submit")}
           </Button>,
-          <Button
-            onClick={() => setOpenModal(!openModal)}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
-            size={AppearanceSizeType.small}
-          >
+          <Button onClick={() => setOpenModal(!openModal)} size={AppearanceSizeType.small}>
             {text("Action 1 Label", "Cancel")}
           </Button>,
         ]}
@@ -140,12 +130,7 @@ export const ScrollableModal = () => {
         >
           {text("Action 2 Label", "Submit")}
         </Button>,
-        <Button
-          size={AppearanceSizeType.small}
-          onClick={() => setOpenModal(!openModal)}
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
-        >
+        <Button size={AppearanceSizeType.small} onClick={() => setOpenModal(!openModal)}>
           {text("Action 1 Label", "Cancel")}
         </Button>,
       ]}
@@ -179,12 +164,7 @@ export const ScrollableModalMinimalContent = () => {
         >
           {text("Action 2 Label", "Submit")}
         </Button>,
-        <Button
-          size={AppearanceSizeType.small}
-          onClick={() => setOpenModal(!openModal)}
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
-        >
+        <Button size={AppearanceSizeType.small} onClick={() => setOpenModal(!openModal)}>
           {text("Action 1 Label", "Cancel")}
         </Button>,
       ]}
@@ -215,12 +195,7 @@ export const TransparentOverlayModal = () => (
       >
         {text("Action 2 Label", "Submit")}
       </Button>,
-      <Button
-        size={AppearanceSizeType.small}
-        onClick={noop}
-        styleType={AppearanceStyleType.secondary}
-        border={AppearanceBorderType.borderless}
-      >
+      <Button size={AppearanceSizeType.small} onClick={noop}>
         {text("Action 1 Label", "Cancel")}
       </Button>,
     ]}
@@ -229,3 +204,63 @@ export const TransparentOverlayModal = () => (
     {text("Content", "Modal Content")}
   </Modal>
 )
+
+export const ManyButtons = () => {
+  const [openModal, setOpenModal] = useState(false)
+
+  return (
+    <>
+      <Button
+        onClick={() => {
+          setOpenModal(!openModal)
+        }}
+      >
+        {text("Button Label", "Open Modal")}
+      </Button>
+      <div style={{ height: "1000px" }}></div>
+      <Modal
+        open={openModal}
+        title={text("Title", "Modal Title")}
+        ariaDescription="Modal description"
+        onClose={() => setOpenModal(!openModal)}
+        backdrop={boolean("Backdrop", true)}
+        slim={boolean("Slim", false)}
+        hideCloseIcon={boolean("Hide Close Icon", false)}
+        actions={[
+          <Button
+            onClick={() => setOpenModal(!openModal)}
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
+          >
+            {text("Action 4 Label", "New")}
+          </Button>,
+          <Button
+            onClick={() => setOpenModal(!openModal)}
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
+          >
+            {text("Action 3 Label", "Copy")}
+          </Button>,
+          <Button
+            onClick={() => setOpenModal(!openModal)}
+            styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
+          >
+            {text("Action 2 Label", "Submit")}
+          </Button>,
+          <Button
+            onClick={() => setOpenModal(!openModal)}
+            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
+          >
+            {text("Action 1 Label", "Cancel")}
+          </Button>,
+        ]}
+      >
+        {text("Content", "Modal Content")}
+      </Modal>
+    </>
+  )
+}

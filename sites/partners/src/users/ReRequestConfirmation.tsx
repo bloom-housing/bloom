@@ -85,8 +85,6 @@ const ReRequestConfirmation = ({
               {t("users.requestResend")}
             </Button>
             <Button
-              styleType={AppearanceStyleType.secondary}
-              border={AppearanceBorderType.borderless}
               onClick={() => {
                 clearErrors(), onClose(false)
               }}

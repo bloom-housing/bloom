@@ -251,8 +251,6 @@ const Settings = () => {
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setCopyModalOpen(null)
             }}

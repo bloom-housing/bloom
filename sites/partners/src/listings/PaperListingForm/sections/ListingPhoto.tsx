@@ -216,8 +216,6 @@ const ListingPhoto = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             size={AppearanceSizeType.small}
           >
             Cancel

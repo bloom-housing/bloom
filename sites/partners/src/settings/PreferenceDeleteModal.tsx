@@ -107,8 +107,6 @@ export const PreferenceDeleteModal = ({
         </Button>,
         <Button
           type="button"
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
           onClick={onClose}
           ariaLabel={t("t.cancel")}
           size={AppearanceSizeType.small}

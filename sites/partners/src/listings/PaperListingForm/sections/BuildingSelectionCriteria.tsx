@@ -257,8 +257,6 @@ const LotteryResults = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             size={AppearanceSizeType.small}
           >
             {t("t.cancel")}

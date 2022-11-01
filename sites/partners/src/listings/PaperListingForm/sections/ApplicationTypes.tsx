@@ -554,8 +554,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             onClick={() => {
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             size={AppearanceSizeType.small}
           >
             Cancel

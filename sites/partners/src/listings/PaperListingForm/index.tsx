@@ -461,8 +461,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setCloseModal(false)
             }}
@@ -495,8 +493,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setPublishModal(false)
             }}
@@ -530,8 +526,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setListingIsAlreadyLiveModal(false)
             }}

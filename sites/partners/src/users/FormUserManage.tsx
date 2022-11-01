@@ -445,7 +445,6 @@ const FormUserManage = ({
               type="button"
               className="mx-1"
               onClick={() => onInviteResend()}
-              styleType={AppearanceStyleType.secondary}
               loading={isResendConfirmationLoading}
             >
               {t("users.resendInvite")}
@@ -484,7 +483,6 @@ const FormUserManage = ({
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
               setDeleteModalActive(false)

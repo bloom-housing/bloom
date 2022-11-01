@@ -261,7 +261,6 @@ export default () => {
           </Button>,
           <Button
             disabled={confirmationResent}
-            styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setConfirmationResent(true)
               void resendConfirmation(email.current.toString())
