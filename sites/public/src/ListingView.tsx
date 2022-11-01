@@ -749,7 +749,67 @@ export const ListingView = (props: ListingProps) => {
                 address={getGenericAddress(listing.buildingAddress)}
                 listingName={listing.name}
               />
+              <p className="text-sm underline block mt-4 mb-8">
+                <a
+                  href={googleMapsHref}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="Opens in new window"
+                >
+                  {t("t.getDirections")}
+                </a>
+              </p>
             </div>
+            {listing.neighborhoodAmenities && (
+              <>
+                <header className="detail-header pt-0 ps-0 md:ps-4 pb-6 border-none flex justify-start">
+                  <div className="flex justify-between w-full">
+                    <hgroup className="detail-header__hgroup ps-0 md:ps-4">
+                      <h2 className="detail-header__title">
+                        {t("listings.sections.neighborhoodAmenitiesPublicTitle")}
+                      </h2>
+                      <span className="detail-header__subtitle">
+                        {t("listings.sections.neighborhoodAmenitiesPublicSubtitle")}
+                      </span>
+                    </hgroup>
+                  </div>
+                </header>
+                <div className="listing-detail-panel">
+                  <dl className="column-definition-list">
+                    {listing.neighborhoodAmenities?.grocery && (
+                      <Description
+                        term={t("t.grocery")}
+                        description={listing.neighborhoodAmenities.grocery}
+                      />
+                    )}
+                    {listing.neighborhoodAmenities?.pharmacy && (
+                      <Description
+                        term={t("t.pharmacy")}
+                        description={listing.neighborhoodAmenities.pharmacy}
+                      />
+                    )}
+                    {listing.neighborhoodAmenities?.medicalClinic && (
+                      <Description
+                        term={t("t.medicalClinic")}
+                        description={listing.neighborhoodAmenities.medicalClinic}
+                      />
+                    )}
+                    {listing.neighborhoodAmenities?.park && (
+                      <Description
+                        term={t("t.park")}
+                        description={listing.neighborhoodAmenities.park}
+                      />
+                    )}
+                    {listing.neighborhoodAmenities?.seniorCenter && (
+                      <Description
+                        term={t("t.seniorCenter")}
+                        description={listing.neighborhoodAmenities.seniorCenter}
+                      />
+                    )}
+                  </dl>
+                </div>
+              </>
+            )}
           </ListingDetailItem>
           {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
             <ListingDetailItem
