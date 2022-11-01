@@ -9,7 +9,6 @@ import {
   Field,
   Select,
   AppearanceStyleType,
-  AppearanceBorderType,
   FieldGroup,
   Button,
   Form,

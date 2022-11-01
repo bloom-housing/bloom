@@ -9,7 +9,6 @@ import {
   StatusMessages,
   LocalizedLink,
   Modal,
-  AppearanceBorderType,
   LinkButton,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
@@ -152,8 +151,6 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
             {t("t.delete")}
           </Button>,
           <Button
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setDeleteModal(false)
             }}

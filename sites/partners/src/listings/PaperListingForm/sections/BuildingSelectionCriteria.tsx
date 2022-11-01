@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceBorderType,
   AppearanceStyleType,
   Button,
   Drawer,

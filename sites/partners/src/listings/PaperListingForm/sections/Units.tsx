@@ -8,7 +8,6 @@ import {
   Drawer,
   Modal,
   AppearanceStyleType,
-  AppearanceBorderType,
   ViewItem,
   GridCell,
   FieldGroup,
@@ -288,8 +287,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             {t("t.delete")}
           </Button>,
           <Button
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setUnitDeleteModal(null)
             }}

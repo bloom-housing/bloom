@@ -11,7 +11,6 @@ import {
   Select,
   useMutate,
   AppearanceStyleType,
-  AppearanceBorderType,
   emailRegex,
   Tag,
   AppearanceSizeType,
@@ -483,7 +482,6 @@ const FormUserManage = ({
           </Button>,
           <Button
             type="button"
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setDeleteModalActive(false)
             }}

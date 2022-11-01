@@ -12,7 +12,6 @@ import {
   AppearanceStyleType,
   Button,
   Modal,
-  AppearanceBorderType,
   Tabs,
   TabList,
   Tab,

@@ -16,7 +16,6 @@ import {
   MinimalTable,
   Modal,
   AppearanceStyleType,
-  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { FormListing, TempEvent } from "../formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
@@ -222,8 +221,6 @@ const ApplicationDates = ({
             {t("t.delete")}
           </Button>,
           <Button
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setModalDeleteOpenHouse(null)
             }}

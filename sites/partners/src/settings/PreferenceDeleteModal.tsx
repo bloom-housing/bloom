@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from "react"
 import {
   AlertTypes,
-  AppearanceBorderType,
   AppearanceSizeType,
   AppearanceStyleType,
   Button,

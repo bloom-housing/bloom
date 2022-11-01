@@ -17,7 +17,6 @@ import {
   useAgTable,
   GridSection,
   Modal,
-  AppearanceBorderType,
   Field,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
@@ -242,9 +241,7 @@ const Flag = () => {
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
             size={AppearanceSizeType.small}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setSaveModalOpen(false)
             }}

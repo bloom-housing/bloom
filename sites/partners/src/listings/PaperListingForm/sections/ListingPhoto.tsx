@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form"
 import {
   t,
   AppearanceStyleType,
-  AppearanceBorderType,
   Button,
   Dropzone,
   Drawer,
