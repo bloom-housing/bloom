@@ -54,6 +54,7 @@ export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/Heading"
+export * from "./src/headers/StepHeader"
 
 /* Helpers */
 // export * from "./src/helpers/tableSummaries"

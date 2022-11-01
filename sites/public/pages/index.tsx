@@ -41,11 +41,18 @@ export default function Home({ latestListings, comingSoonListings }) {
   const heroTitle = <>{t("welcome.title")}</>
 
   const heroInset: React.ReactNode = (
-    <>
+    <div className="flex flex-wrap justify-center gap-2">
       <Link href="/listings">
-        <a className="hero__button hero__home-button">{t("welcome.seeRentalListings")}</a>
+        <a className="hero__button hero__rentals-button">{t("welcome.seeRentalListings")}</a>
       </Link>
-    </>
+      {process.env.showFinder && (
+        <Link href="/finder">
+          <a className="hero__button hero__finder-button">
+            {t("listingFilters.buttonTitleExtended")}
+          </a>
+        </Link>
+      )}
+    </div>
   )
 
   /**

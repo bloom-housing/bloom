@@ -229,14 +229,19 @@ const FilterForm = (props: FilterFormProps) => {
               prepend={"$"}
               defaultValue={localFilterState?.minRent}
               error={errors?.minRent !== undefined}
-              errorMessage={t("errors.minGreaterThanMaxRentError")}
-              validation={{ max: maxRent || minRent }}
+              errorMessage={
+                errors?.minRent?.type === "min"
+                  ? t("errors.negativeMinRent")
+                  : t("errors.minGreaterThanMaxRentError")
+              }
+              validation={{ max: maxRent || minRent, min: 0 }}
               readerOnly
               inputProps={{
                 onBlur: () => {
                   void trigger("minRent")
                   void trigger("maxRent")
                 },
+                min: 0,
               }}
             />
           </GridCell>
@@ -259,6 +264,7 @@ const FilterForm = (props: FilterFormProps) => {
                   void trigger("minRent")
                   void trigger("maxRent")
                 },
+                min: 0,
               }}
             />
           </GridCell>

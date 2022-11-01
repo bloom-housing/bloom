@@ -1,7 +1,9 @@
 .progress-nav {
-  padding: 20px 0;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
   @screen md {
-    padding: 31px 0;
+    padding-bottom: 3rem;
+    padding-top: 2rem;
   }
 }
 
@@ -44,4 +46,37 @@ li.progress-nav__item {
 // Body text should have normal font weight
 .field-note {
   @apply font-normal;
+}
+
+.finder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .field {
+    --leftward-margin: 0rem;
+  }
+}
+.finder-grid__multiselect {
+  row-gap: 0.5rem;
+  column-gap: 0.5rem;
+
+  .finder-grid__field {
+    width: 100%;
+    @screen md {
+      width: calc(50% - 0.25rem);
+    }
+  }
+}
+.finder-grid__rental_costs {
+  row-gap: 1rem;
+  column-gap: 1rem;
+  .finder-grid__field {
+    width: 100%;
+    @screen md {
+      width: calc(50% - 0.5rem);
+    }
+  }
+  .finder-grid__row {
+    width: 100%;
+  }
 }

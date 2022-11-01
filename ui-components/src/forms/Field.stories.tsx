@@ -63,3 +63,57 @@ export const CurrencyFieldError = () => {
     />
   )
 }
+
+export const checkboxDefault = () => {
+  const { register, getValues, setValue } = useForm({ mode: "onChange" })
+  return (
+    <Field
+      register={register}
+      name={"Test Input"}
+      describedBy={"Test Input"}
+      label={"Test Input"}
+      type={"checkbox"}
+    />
+  )
+}
+
+export const checkboxBordered = () => {
+  const { register, getValues, setValue } = useForm({ mode: "onChange" })
+  return (
+    <Field
+      register={register}
+      name={"Test Input"}
+      describedBy={"Test Input"}
+      label={"Test Input"}
+      type={"checkbox"}
+      bordered
+    />
+  )
+}
+
+export const radioDefault = () => {
+  const { register, getValues, setValue } = useForm({ mode: "onChange" })
+  return (
+    <Field
+      register={register}
+      name={"Test Input"}
+      describedBy={"Test Input"}
+      label={"Test Input"}
+      type={"radio"}
+    />
+  )
+}
+
+export const radioBordered = () => {
+  const { register, getValues, setValue } = useForm({ mode: "onChange" })
+  return (
+    <Field
+      register={register}
+      name={"Test Input"}
+      describedBy={"Test Input"}
+      label={"Test Input"}
+      type={"radio"}
+      bordered
+    />
+  )
+}
