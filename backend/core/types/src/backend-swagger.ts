@@ -755,7 +755,7 @@ export class AuthService {
       body?: Login
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/login"
 
@@ -827,7 +827,7 @@ export class AuthService {
   /**
    * Requests a new token given a refresh token
    */
-  requestNewToken(options: IRequestOptions = {}): Promise<LoginResponse> {
+  requestNewToken(options: IRequestOptions = {}): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/requestNewToken"
 
@@ -1015,7 +1015,7 @@ export class UserService {
       body?: UpdatePassword
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/update-password"
 
@@ -1618,11 +1618,10 @@ export class MultiselectQuestionsService {
       axios(configs, resolve, reject)
     })
   }
-
   /**
-   * Get Listings by multiselect question id
+   * Get multiselect question by id
    */
-  retrieveListings(
+  retrieve1(
     params: {
       /**  */
       multiselectQuestionId: string
@@ -3674,11 +3673,6 @@ export interface Login {
 
   /**  */
   mfaType?: EnumLoginMfaType
-}
-
-export interface LoginResponse {
-  /**  */
-  success: boolean
 }
 
 export interface LogoutResponse {
@@ -5933,6 +5927,9 @@ export interface MultiselectQuestionsFilterParams {
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  applicationSection?: string
 }
 
 export interface MultiselectQuestionCreate {

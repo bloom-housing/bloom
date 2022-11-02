@@ -35,7 +35,6 @@ import { UserListQueryParams } from "../dto/user-list-query-params"
 import { PaginatedUserListDto } from "../dto/paginated-user-list.dto"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ForgotPasswordResponseDto } from "../dto/forgot-password-response.dto"
-import { LoginResponseDto } from "../dto/login-response.dto"
 import { UserCreateQueryParams } from "../dto/user-create-query-params"
 import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
@@ -133,9 +132,9 @@ export class UserController {
   async updatePassword(
     @Body() dto: UpdatePasswordDto,
     @Response({ passthrough: true }) res: ExpressResponse
-  ): Promise<LoginResponseDto> {
+  ): Promise<StatusDto> {
     await this.userService.updatePassword(dto, res)
-    return mapTo(LoginResponseDto, { success: "ok" })
+    return mapTo(StatusDto, { status: "ok" })
   }
 
   @Put(":id")

@@ -80,6 +80,6 @@ export class AuthService {
 
     res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
     res.cookie(REFRESH_COOKIE_NAME, newRefreshToken, REFRESH_COOKIE_OPTIONS)
-    return { success: "ok" }
+    return { status: "ok" }
   }
 }

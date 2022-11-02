@@ -16,7 +16,7 @@ import { ApiBearerAuth, ApiBody, ApiExtraModels, ApiOperation, ApiTags } from "@
 import { LoginDto } from "../dto/login.dto"
 import { mapTo } from "../../shared/mapTo"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
-import { LoginResponseDto } from "../dto/login-response.dto"
+import { StatusDto } from "../../shared/dto/status.dto"
 import { LogoutResponseDto } from "../dto/logout-response.dto"
 import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
 import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
@@ -45,8 +45,8 @@ export class AuthController {
   async login(
     @Request() req,
     @Response({ passthrough: true }) res: ExpressResponse
-  ): Promise<LoginResponseDto> {
-    return mapTo(LoginResponseDto, await this.authService.tokenGen(res, req.user))
+  ): Promise<StatusDto> {
+    return mapTo(StatusDto, await this.authService.tokenGen(res, req.user))
   }
 
   @UseGuards(DefaultAuthGuard)
@@ -84,12 +84,12 @@ export class AuthController {
   async requestNewToken(
     @Request() req,
     @Response({ passthrough: true }) res: ExpressResponse
-  ): Promise<LoginResponseDto> {
+  ): Promise<StatusDto> {
     if (!req?.cookies[REFRESH_COOKIE_NAME]) {
       throw new Error("no refresh token sent")
     }
     return mapTo(
-      LoginResponseDto,
+      StatusDto,
       await this.authService.tokenGen(res, req.user, req.cookies[REFRESH_COOKIE_NAME])
     )
   }
