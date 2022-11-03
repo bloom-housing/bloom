@@ -14,6 +14,7 @@ import {
   ProgressNav,
   t,
   Heading,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -170,6 +171,7 @@ const ApplicationChooseLanguage = () => {
                   <LinkButton
                     href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
                     dataTestId={"app-choose-language-sign-in-button"}
+                    size={AppearanceSizeType.small}
                   >
                     {t("nav.signIn")}
                   </LinkButton>,
@@ -183,6 +185,7 @@ const ApplicationChooseLanguage = () => {
                   <LinkButton
                     href={"/create-account"}
                     dataTestId={"app-choose-language-create-account-button"}
+                    size={AppearanceSizeType.small}
                   >
                     {t("account.createAccount")}
                   </LinkButton>,

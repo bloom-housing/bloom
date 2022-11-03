@@ -64,18 +64,6 @@ export const Modal = (props: ModalProps) => {
       role={props.role ? props.role : "dialog"}
     >
       <div className={modalClassNames.join(" ")}>
-        <ModalHeader
-          title={props.title}
-          uniqueId={uniqueIdRef.current}
-          className={props.headerClassNames}
-        />
-
-        <section className={innerClassNames.join(" ")}>
-          {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
-        </section>
-
-        {props.actions && <ModalFooter actions={props.actions} />}
-
         {!props.hideCloseIcon && (
           <button
             className={closeClassNames.join(" ")}
@@ -90,6 +78,17 @@ export const Modal = (props: ModalProps) => {
             />
           </button>
         )}
+        <ModalHeader
+          title={props.title}
+          uniqueId={uniqueIdRef.current}
+          className={props.headerClassNames}
+        />
+
+        <section className={innerClassNames.join(" ")}>
+          {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
+        </section>
+
+        {props.actions && <ModalFooter actions={props.actions} />}
       </div>
     </Overlay>
   )

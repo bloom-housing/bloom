@@ -17,8 +17,8 @@ import {
   useAgTable,
   GridSection,
   Modal,
-  AppearanceBorderType,
   Field,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
@@ -221,6 +221,7 @@ const Flag = () => {
           <Button
             type="button"
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
             loading={isSaveLoading}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
@@ -242,8 +243,7 @@ const Flag = () => {
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
             onClick={() => {
               setSaveModalOpen(false)
             }}

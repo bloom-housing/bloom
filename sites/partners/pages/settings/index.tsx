@@ -21,7 +21,6 @@ import {
   useMutate,
   Modal,
   AppearanceStyleType,
-  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -245,18 +244,18 @@ const Settings = () => {
             }}
             dataTestId={"copy-button-confirm"}
             loading={isCreateLoading}
+            size={AppearanceSizeType.small}
           >
             {t("settings.copy")}
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setCopyModalOpen(null)
             }}
             disabled={isCreateLoading}
             dataTestId={"copy-button-cancel"}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,
