@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.2-alpha.0...@bloom-housing/ui-components@7.0.2-alpha.1) (2022-11-03)
+
+
+### Bug Fixes
+
+* allow for more space for modals on mobile ([#3153](https://github.com/bloom-housing/bloom/issues/3153)) ([7e41703](https://github.com/bloom-housing/bloom/commit/7e41703ad8571eb160f4eaf53f40f9055f7639a3))
+
+
+
+
+
 ## [7.0.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.1...@bloom-housing/ui-components@7.0.2-alpha.0) (2022-10-31)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
