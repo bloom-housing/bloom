@@ -10,7 +10,7 @@
       align-items: center;
       height: auto;
       max-height: none;
-      padding: 24px 0 18px;
+      padding: var(--bloom-s6) 0;
 
       @media (min-width: $header-desktop-min-size) {
         padding: 0 12px;
@@ -303,7 +303,6 @@
 .hero__finder-button {
   color: var(--bloom-color-white);
   background-color: var(--bloom-color-primary-dark);
-
   &:hover {
     color: var(--bloom-color-white);
     box-shadow: 0 0 0 var(--bloom-s0_5) var(--bloom-color-primary-dark) inset;

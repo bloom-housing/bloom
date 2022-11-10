@@ -48,6 +48,31 @@ li.progress-nav__item {
   @apply font-normal;
 }
 
+.finder-card {
+  --content-margin-inline-desktop: var(--bloom-s20);
+  --content-margin-inline-mobile: var(--bloom-s4);
+  --header-padding-block: var(--bloom-s12) var(--bloom-s8);
+  .heading-group {
+    --subheading-margin: var(--bloom-s4) 0rem;
+  }
+  .button-group {
+    --padding-inline-desktop: 0rem;
+    --padding-inline-mobile: 0rem;
+    .button-group__column {
+      .button {
+        --normal-rounded: 3.75rem;
+        --normal-padding: var(--bloom-s2) var(--bloom-s4);
+        --normal-font-size: var(--bloom-font-size-base);
+      }
+    }
+  }
+  @media (max-width: $screen-sm) {
+    h2 {
+      font-size: var(--bloom-s5);
+    }
+  }
+}
+
 .finder-grid {
   display: flex;
   flex-wrap: wrap;

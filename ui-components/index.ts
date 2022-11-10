@@ -1,5 +1,6 @@
 /* Actions */
 export * from "./src/actions/Button"
+export * from "./src/actions/ButtonGroup"
 export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
@@ -10,6 +11,7 @@ export * from "./src/actions/Video"
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
 export * from "./src/blocks/StatusItem"
+export * from "./src/blocks/Card"
 export * from "./src/blocks/DashBlock"
 export * from "./src/blocks/DashBlocks"
 export * from "./src/blocks/FormCard"
@@ -54,6 +56,7 @@ export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/Heading"
+export * from "./src/headers/HeadingGroup"
 export * from "./src/headers/StepHeader"
 
 /* Helpers */

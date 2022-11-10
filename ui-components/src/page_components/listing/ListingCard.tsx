@@ -11,27 +11,27 @@ import "./ListingCard.scss"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
-export interface CardHeader {
+export interface ListingCardHeader {
   customClass?: string
   text: string
 }
 
-export interface FooterButton {
+export interface ListingFooterButton {
   href: string
   text: string
 }
 
 export interface ListingCardContentProps {
-  contentHeader?: CardHeader
-  contentSubheader?: CardHeader
-  tableHeader?: CardHeader
-  tableSubheader?: CardHeader
+  contentHeader?: ListingCardHeader
+  contentSubheader?: ListingCardHeader
+  tableHeader?: ListingCardHeader
+  tableSubheader?: ListingCardHeader
 }
 export interface ListingCardProps {
   cardTags?: ImageTag[]
   children?: React.ReactElement
   contentProps?: ListingCardContentProps
-  footerButtons?: FooterButton[]
+  footerButtons?: ListingFooterButton[]
   footerContainerClass?: string
   footerContent?: React.ReactNode
   imageCardProps: ImageCardProps
@@ -70,7 +70,7 @@ const ListingCard = (props: ListingCardProps) => {
   } = props
 
   const getHeader = (
-    header: CardHeader | undefined,
+    header: ListingCardHeader | undefined,
     priority: number,
     style?: HeaderType,
     customClass?: string
