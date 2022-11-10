@@ -15,6 +15,8 @@ import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
+import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import { convertDataToPst } from "../../../../../lib/helpers"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -113,6 +115,11 @@ const ApplicationsList = () => {
     formatLinkCell: isListingOpen ? formatDisabledCell : formatEnabledCell,
   }
 
+  const afsLastRun = convertDataToPst(
+    listingDto?.afsLastRunAt,
+    ApplicationSubmissionType.electronical
+  )
+
   return (
     <Layout>
       <Head>
@@ -145,7 +152,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">
           {listingDto && (
             <>
               <ApplicationsSideNav
@@ -198,6 +205,13 @@ const ApplicationsList = () => {
             </>
           )}
         </article>
+        {afsLastRun && (
+          <article className="flex max-w-screen-xl mx-auto pb-4 px-4 justify-end">
+            <p className="text-gray-750 text-sm">
+              {`${t("t.lastUpdated")} ${afsLastRun.date} ${t("t.at")} ${afsLastRun.time}`}
+            </p>
+          </article>
+        )}
       </section>
     </Layout>
   )
