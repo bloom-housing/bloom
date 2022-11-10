@@ -2,6 +2,6 @@ import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-
 
 export const getLotteryEvent = (listing: Listing): ListingEvent | undefined => {
   return listing?.events.find(
-    (event) => event.type === ListingEventType.publicLottery && event.startTime
+    (event) => event.type === ListingEventType.publicLottery && event.startDate
   )
 }

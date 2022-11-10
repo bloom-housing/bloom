@@ -26,6 +26,11 @@ export default class EventsFormatter extends Formatter {
       events.push({
         type: ListingEventType.publicLottery,
         startTime: createTime(createDate(this.data.lotteryDate), this.data.lotteryStartTime),
+        startDate: createTime(createDate(this.data.lotteryDate), {
+          hours: "12",
+          minutes: "00",
+          period: "pm",
+        }),
         endTime: createTime(createDate(this.data.lotteryDate), this.data.lotteryEndTime),
         note: this.data.lotteryDateNotes,
       })

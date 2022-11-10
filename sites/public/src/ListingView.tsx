@@ -69,7 +69,6 @@ interface ListingProps {
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
-
   const {
     content: appStatusContent,
     subContent: appStatusSubContent,
@@ -206,7 +205,7 @@ export const ListingView = (props: ListingProps) => {
   const getEvent = (event: ListingEvent, note?: string | React.ReactNode): EventType => {
     return {
       timeString: getTimeRangeString(event.startTime, event.endTime),
-      dateString: dayjs(event.startTime).format("MMMM D, YYYY"),
+      dateString: dayjs(event.startDate).format("MMMM D, YYYY"),
       linkURL: event.url,
       linkText: event.label || t("listings.openHouseEvent.seeVideo"),
       note: note || event.note,
@@ -237,7 +236,7 @@ export const ListingView = (props: ListingProps) => {
 
   let lotterySection
   if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
-    lotterySection = (
+    lotterySection = publicLottery.startDate && (
       <EventSection
         headerText={t("listings.publicLottery.header")}
         sectionHeader={true}

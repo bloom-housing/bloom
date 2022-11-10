@@ -134,14 +134,14 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   register={register}
                   watch={watch}
                   defaultDate={{
-                    month: lotteryEvent?.startTime
-                      ? dayjs(new Date(lotteryEvent?.startTime)).utc().format("MM")
+                    month: lotteryEvent?.startDate
+                      ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("MM")
                       : null,
-                    day: lotteryEvent?.startTime
-                      ? dayjs(new Date(lotteryEvent?.startTime)).utc().format("DD")
+                    day: lotteryEvent?.startDate
+                      ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("DD")
                       : null,
-                    year: lotteryEvent?.startTime
-                      ? dayjs(new Date(lotteryEvent?.startTime)).utc().format("YYYY")
+                    year: lotteryEvent?.startDate
+                      ? dayjs(new Date(lotteryEvent?.startDate)).utc().format("YYYY")
                       : null,
                   }}
                 />
