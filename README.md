@@ -93,7 +93,7 @@ Once staging has been QAed, we manually update `production`.
 
 ### Pull Requests
 
-Pull requests are opened to the dev branch, not to master. When opening a pull request please fill out the entire pull request template which includes tagging the issue your PR is related to, a description of your PR, indicating the type of change, including details for the reviewer about how to test your PR, and a testing checklist. Additionally, officially link the issue to the PR using GitHub's linking UI.
+Pull requests are opened to the main branch. When opening a pull request please fill out the entire pull request template which includes tagging the issue your PR is related to, a description of your PR, indicating the type of change, including details for the reviewer about how to test your PR, and a testing checklist. Additionally, officially link the issue to the PR using GitHub's linking UI.
 
 When your PR is ready for review, add the `needs review(s)` label to help surface it to our internal team. You can assign people as reviewers to surface the work further. If you put up a PR that is not yet ready for eyes, add the `wip` label.
 
