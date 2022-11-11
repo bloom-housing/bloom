@@ -2,7 +2,6 @@ import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
-import { Interval } from "@nestjs/schedule"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
@@ -120,7 +119,8 @@ export class ListingsService {
     listingDto.unitsAvailable = availableUnits
 
     if (listing.status == ListingStatus.active && listingDto.status === ListingStatus.closed) {
-      await this.afsService.scheduleAfsProcessing()
+      // Commenting out for now as this is causing issues in closing listings
+      // await this.afsService.scheduleAfsProcessing()
     }
 
     Object.assign(listing, {
