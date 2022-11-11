@@ -1,13 +1,22 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { MarkdownSection, PageHeader, t } from "@bloom-housing/ui-components"
 import Markdown from "markdown-to-jsx"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import RenderIf from "../../public/src/RenderIf"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
-import pageContent from "../page_content/privacy_policy.md"
+
+const getPrivacySection = async (jurisdiction: string) => {
+  return import(
+    `../page_content/jurisdiction_overrides/${jurisdiction
+      .toLowerCase()
+      .replace(" ", "_")}/privacy_policy.md`
+  )
+}
 
 const Privacy = () => {
   const { profile } = useContext(AuthContext)
+  const [privacySection, setPrivacySection] = useState("")
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -17,13 +26,31 @@ const Privacy = () => {
     })
   }, [profile])
 
+  useEffect(() => {
+    const loadPageContent = async () => {
+      const privacy = await getPrivacySection(process.env.jurisdictionName || "")
+      setPrivacySection(privacy.default)
+    }
+    loadPageContent().catch(() => {
+      console.log("privacy section doesn't exist")
+    })
+  }, [])
+
   const pageTitle = <>{t("pageTitle.privacy")}</>
 
   return (
     <Layout>
       <PageHeader title={pageTitle} inverse />
       <MarkdownSection>
-        <Markdown>{pageContent}</Markdown>
+        <Markdown
+          options={{
+            overrides: {
+              RenderIf,
+            },
+          }}
+        >
+          {privacySection}
+        </Markdown>
       </MarkdownSection>
     </Layout>
   )

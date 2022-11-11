@@ -3,7 +3,6 @@ import spanishTranslations from "@bloom-housing/ui-components/src/locales/es.jso
 import chineseTranslations from "@bloom-housing/ui-components/src/locales/zh.json"
 import vietnameseTranslations from "@bloom-housing/ui-components/src/locales/vi.json"
 import tagalogTranslations from "@bloom-housing/ui-components/src/locales/tl.json"
-
 import additionalGeneralTranslations from "../page_content/locale_overrides/general.json"
 
 export const translations = {
@@ -15,3 +14,22 @@ export const translations = {
 } as Record<string, any>
 
 export const overrideTranslations = { en: additionalGeneralTranslations } as Record<string, any>
+
+export const jurisdictionTranslations = async () => {
+  const [english, spanish, chinese, vietnamese] = await Promise.allSettled(
+    ["general", "es", "zh", "vi", "tl"].map(async (locale) => {
+      return import(
+        `../page_content/jurisdiction_overrides/${process.env.jurisdictionName
+          .toLowerCase()
+          .replace(" ", "_")}/locale_overrides/${locale}.json`
+      )
+    })
+  )
+
+  return {
+    en: english.status === "fulfilled" ? english.value : null,
+    es: spanish.status === "fulfilled" ? spanish.value : null,
+    zh: chinese.status === "fulfilled" ? chinese.value : null,
+    vi: vietnamese.status === "fulfilled" ? vietnamese.value : null,
+  }
+}

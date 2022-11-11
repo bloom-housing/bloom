@@ -1,18 +1,14 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import Link from "next/link"
 import Head from "next/head"
-import {
-  SiteHeader,
-  SiteFooter,
-  FooterNav,
-  FooterSection,
-  ExygyFooter,
-  MenuLink,
-  t,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
+import { SiteHeader, MenuLink, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import { JurisdictionFooterSection as SanMateoFooter } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-footer-section"
+import { JurisdictionFooterSection as SanJoseFooter } from "../page_content/jurisdiction_overrides/san_jose/jurisdiction-footer-section"
+import { JurisdictionFooterSection as AlamedaFooter } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-footer-section"
+import { JursidictionSiteNotice as SanJoseNotice } from "../page_content/jurisdiction_overrides/san_jose/jurisdiction-site-notice"
+import { JursidictionSiteNotice as AlamedaNotice } from "../page_content/jurisdiction_overrides/alameda/jurisdiction-site-notice"
+import { JursidictionSiteNotice as SanMateoNotice } from "../page_content/jurisdiction_overrides/san_mateo/jurisdiction-site-notice"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -69,6 +65,17 @@ const Layout = (props) => {
     })
   }
 
+  let siteNotice = <div></div>
+  if (process.env.jurisdictionName === "Alameda") {
+    siteNotice = <AlamedaNotice />
+  }
+  if (process.env.jurisdictionName === "San Jose") {
+    siteNotice = <SanJoseNotice />
+  }
+  if (process.env.jurisdictionName === "San Mateo") {
+    siteNotice = <SanMateoNotice />
+  }
+
   return (
     <div className="site-wrapper">
       <div className="site-content">
@@ -78,11 +85,7 @@ const Layout = (props) => {
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL="/"
-          notice={
-            <a href="/" target="_blank" className={"cursor-pointer"}>
-              {t("nav.getFeedback")}
-            </a>
-          }
+          notice={siteNotice}
           title={t("nav.siteTitle")}
           languages={languages.map((lang) => {
             return {
@@ -100,15 +103,9 @@ const Layout = (props) => {
         </main>
       </div>
 
-      <SiteFooter>
-        <FooterNav copyright={t("footer.copyright")}>
-          <Link href="/privacy">{t("pageTitle.privacy")}</Link>
-          <Link href="/disclaimer">{t("pageTitle.disclaimer")}</Link>
-        </FooterNav>
-        <FooterSection className="bg-black" small>
-          <ExygyFooter />
-        </FooterSection>
-      </SiteFooter>
+      {process.env.jurisdictionName === "Alameda" && <AlamedaFooter />}
+      {process.env.jurisdictionName === "San Mateo" && <SanMateoFooter />}
+      {process.env.jurisdictionName === "San Jose" && <SanJoseFooter />}
     </div>
   )
 }

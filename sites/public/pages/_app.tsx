@@ -16,12 +16,15 @@ import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
 } from "../lib/ApplicationConductor"
-import { translations, overrideTranslations } from "../src/translations"
+import { translations, overrideTranslations, jurisdictionTranslations } from "../src/translations"
 import LinkComponent from "../src/LinkComponent"
+
+// Note: import overrides.scss last so that it overrides styles defined in imports above
+import "../styles/overrides.scss"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
-  //  const initialized = useState(true)
+  const [initialized, setInitialized] = useState(false)
   const [application, setApplication] = useState(() => {
     return loadApplicationFromAutosave() || { ...blankApplication }
   })
@@ -34,6 +37,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   }, [application, savedListing])
 
   useMemo(() => {
+    setInitialized(false)
     addTranslation(translations.general, true)
     if (locale && locale !== "en" && translations[locale]) {
       addTranslation(translations[locale])
@@ -42,6 +46,17 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     if (overrideTranslations[locale]) {
       addTranslation(overrideTranslations[locale])
     }
+    const loadJurisdictionTranslations = async () => {
+      const jurisdictionOverride = await jurisdictionTranslations()
+      if (jurisdictionOverride) {
+        addTranslation(jurisdictionOverride["en"])
+        addTranslation(jurisdictionOverride[locale])
+      }
+      setInitialized(true)
+    }
+    loadJurisdictionTranslations().catch(() => {
+      console.log("jurisdiction translations loading failed")
+    })
   }, [locale])
 
   useEffect(() => {
@@ -71,6 +86,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       void axe(React, ReactDOM, 5000)
     }
   }, [])
+
+  if (!initialized) {
+    return null
+  }
 
   return (
     <NavigationContext.Provider

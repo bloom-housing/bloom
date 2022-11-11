@@ -1,4 +1,5 @@
 **/*.hbs
+**/*.md
 .github
 ui-components/CHANGELOG.md
 sites/public/CHANGELOG.md

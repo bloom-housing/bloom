@@ -1,22 +1,35 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
-import Markdown from "markdown-to-jsx"
 import Layout from "../layouts/application"
-import {
-  t,
-  InfoCardGrid,
-  InfoCard,
-  PageHeader,
-  MarkdownSection,
-} from "@bloom-housing/ui-components"
+import { t, PageHeader } from "@bloom-housing/ui-components"
 import { UserStatus } from "../lib/constants"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+
+const getAdditionalResourcesSection = async (jurisdiction: string) => {
+  return import(
+    `../page_content/jurisdiction_overrides/${jurisdiction
+      .toLowerCase()
+      .replace(" ", "_")}/additional-resources-section`
+  )
+}
 
 const AdditionalResources = () => {
   const pageTitle = t("pageTitle.additionalResources")
   const subTitle = t("pageDescription.additionalResources")
-
   const { profile } = useContext(AuthContext)
+  const [additionalResources, setAdditionalResources] = useState()
+
+  useEffect(() => {
+    const loadPageContent = async () => {
+      const additionalResources = await getAdditionalResourcesSection(
+        process.env.jurisdictionName || ""
+      )
+      setAdditionalResources(additionalResources.AdditionalResourcesSection)
+    }
+    loadPageContent().catch(() => {
+      console.log("additional-resources-section doesn't exist")
+    })
+  }, [])
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -33,46 +46,9 @@ const AdditionalResources = () => {
           {pageTitle} - {t("nav.siteTitle")}
         </title>
       </Head>
-
       <PageHeader title={<>{pageTitle}</>} subtitle={subTitle} inverse={true}></PageHeader>
 
-      <section className="md:px-5">
-        <article className="markdown max-w-5xl m-auto md:flex">
-          <div className="pt-4 md:w-8/12 md:py-0 serif-paragraphs">
-            <MarkdownSection>
-              <Markdown
-                options={{
-                  overrides: {
-                    InfoCard,
-                    InfoCardGrid,
-                  },
-                }}
-              >
-                Page content here
-              </Markdown>
-            </MarkdownSection>
-          </div>
-          <aside className="pt-4 pb-10 md:w-4/12 md:pl-4 md:py-0 md:shadow-left">
-            <MarkdownSection>
-              <Markdown
-                options={{
-                  overrides: {
-                    h4: {
-                      component: ({ children, ...props }) => (
-                        <h4 {...props} className={"text__caps_underline"}>
-                          {children}
-                        </h4>
-                      ),
-                    },
-                  },
-                }}
-              >
-                Sidebar content here
-              </Markdown>
-            </MarkdownSection>
-          </aside>
-        </article>
-      </section>
+      {additionalResources}
     </Layout>
   )
 }
