@@ -11,6 +11,12 @@ export class MultiselectOption {
   text: string
 
   @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  untranslatedText?: string
+
+  @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   ordinal: number

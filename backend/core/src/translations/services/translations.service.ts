@@ -97,6 +97,10 @@ export class TranslationsService extends AbstractServiceFactory<
     }
 
     for (let i = 0; i < listing.listingMultiselectQuestions?.length; i++) {
+      listing.listingMultiselectQuestions[i].multiselectQuestion.untranslatedText =
+        listing.listingMultiselectQuestions[i].multiselectQuestion.text
+      listing.listingMultiselectQuestions[i].multiselectQuestion.untranslatedOptOutText =
+        listing.listingMultiselectQuestions[i].multiselectQuestion.optOutText
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.text`)
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.description`)
       pathsToFilter.push(`listingMultiselectQuestions[${i}].multiselectQuestion.subText`)
@@ -115,6 +119,8 @@ export class TranslationsService extends AbstractServiceFactory<
         k < listing.listingMultiselectQuestions[i].multiselectQuestion.options?.length;
         k++
       ) {
+        listing.listingMultiselectQuestions[i].multiselectQuestion.options[k].untranslatedText =
+          listing.listingMultiselectQuestions[i].multiselectQuestion.options[k].text
         pathsToFilter.push(
           `listingMultiselectQuestions[${i}].multiselectQuestion.options[${k}].text`
         )
