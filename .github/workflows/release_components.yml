@@ -1,9 +1,9 @@
 name: Pre-release ui-components
 
 on:
-  # Triggers the workflow on push only for the dev branch
+  # Triggers the workflow on push only for the main branch
   push:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Version ui-components
-        run: yarn version:prerelease:ui-components
+        run: yarn version:ui-components
         env:
           GITHUB_TOKEN: ${{ secrets.ADMIN_TOKEN }}
         
