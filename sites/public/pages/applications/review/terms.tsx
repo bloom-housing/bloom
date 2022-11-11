@@ -14,7 +14,11 @@ import {
   AlertBox,
   ProgressNav,
 } from "@bloom-housing/ui-components"
-import { ApplicationSection, ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import {
+  ApplicationSection,
+  ApplicationReviewStatus,
+  ListingReviewOrder,
+} from "@bloom-housing/backend-core"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
 import {
@@ -27,8 +31,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationReviewStatus } from "@bloom-housing/backend-core"
-
+import { untranslateMultiselectQuestion } from "../../../lib/helpers"
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
@@ -51,6 +54,14 @@ const ApplicationTerms = () => {
     conductor.currentStep.save({ acceptedTerms })
     application.acceptedTerms = acceptedTerms
     application.completedSections = 6
+
+    if (application?.programs?.length) {
+      untranslateMultiselectQuestion(application.programs, listing)
+    }
+    if (application?.preferences?.length) {
+      untranslateMultiselectQuestion(application.preferences, listing)
+    }
+
     applicationsService
       .submit({
         body: {
