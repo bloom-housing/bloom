@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.2-alpha.1...@bloom-housing/ui-components@7.0.2) (2022-11-14)
+
+
+### Bug Fixes
+
+* allow for scrollable modal to have flexible height ([#3163](https://github.com/bloom-housing/bloom/issues/3163)) ([16ef100](https://github.com/bloom-housing/bloom/commit/16ef10033a16bb019b68e03025a84569bed05d7e))
+
+
+
+
+
 ## [7.0.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.2-alpha.0...@bloom-housing/ui-components@7.0.2-alpha.1) (2022-11-03)
 
 
