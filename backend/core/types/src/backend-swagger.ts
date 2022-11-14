@@ -1609,9 +1609,8 @@ export class MultiselectQuestionsService {
       axios(configs, resolve, reject)
     })
   }
-
   /**
-   * Get Listings by multiselect question id
+   * Get multiselect question by id
    */
   retrieveListings(
     params: {
@@ -5891,6 +5890,9 @@ export interface MultiselectQuestionsFilterParams {
 
   /**  */
   jurisdiction?: string
+
+  /**  */
+  applicationSection?: string
 }
 
 export interface MultiselectQuestionCreate {
