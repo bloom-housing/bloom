@@ -41,7 +41,8 @@
   "finder.rentalCosts.section8": "تضمين أماكن الإيجار التي تقبل قسائم اختيار السكن بموجب المادة 8",
   "finder.rentalCosts.minRent": "الحد الأدنى للإيجار",
   "finder.rentalCosts.maxRent": "الحد الأقصى للإيجار",
-  "finder.rentalCosts.maxPlaceholder": "لا يوجد حد أقصى للإيجار بالدولار الأمريكي",
+  "finder.rentalCosts.minPlaceholder": "لا يوجد حد أدنى للإيجار",
+  "finder.rentalCosts.maxPlaceholder": "لا يوجد حد أقصى للإيجار",
   "finder.accessibility.question": "هل تحتاج أنت أو أي من أفراد أسرتك إلى أي من ميزات التيسير التالية؟",
   "finder.accessibility.subtitle": "تشمل ميزات التيسير العديد من الميزات المصممة خصوصًا للمقيمين من ذوي الإعاقة، بالإضافة إلى عدد من وسائل الراحة الأخرى بالمباني والوحدات.",
   "finder.programs.question": "هل تبحث عن أحد أنواع أماكن الإيجار التالية؟",
@@ -61,5 +62,7 @@
   "finder.disclaimer.info4": "بعض المباني مخصصة لكبار السن فقط.",
   "finder.disclaimer.info5": "وفي هذه الأنواع من أماكن الإيجار، سيساعدك موظفو إدارة العقار على تحديد أهليتك.",
   "finder.multiselectHelper": "يرجى تحديد واحد أو أكثر:",
-  "finder.skip": "تخطي هذا وإظهار أماكن للإيجار لي"
+  "finder.skip": "تخطي هذا وإظهار أماكن للإيجار لي",
+  "errors.minGreaterThanMaxRentError": "يجب أن يكون الحد الأدنى للإيجار أقل من أو يساوي الحد الأقصى للإيجار",
+  "errors.maxLessThanMinRentError": "يجب أن يكون الحد الأقصى للإيجار أكبر من أو يساوي الحد الأدنى للإيجار"
 }

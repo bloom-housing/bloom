@@ -62,5 +62,7 @@
   "finder.disclaimer.info4": "Algunos edificios solo están reservados para personas mayores.",
   "finder.disclaimer.info5": "En este tipo de alquileres, el personal de administración de la propiedad lo ayudará a determinar su elegibilidad.",
   "finder.multiselectHelper": "Seleccione una o más opciones:",
-  "finder.skip": "Saltar esto y mostrarme alquileres"
+  "finder.skip": "Saltar esto y mostrarme alquileres",
+  "errors.minGreaterThanMaxRentError": "El alquiler mínimo debe ser inferior o igual al alquiler máximo",
+  "errors.maxLessThanMinRentError": "El alquiler máximo debe ser mayor o igual que el alquiler mínimo"
 }
