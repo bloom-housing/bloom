@@ -53,9 +53,19 @@ const EventSection = (props: EventSectionProps) => {
             </p>
           )}
           {event.note && (
-            <p className={`text-tiny text-gray-700 ${index !== props.events.length - 1 && "pb-3"}`}>
-              {event.note}
-            </p>
+            <>
+              {typeof event.note === "string" ? (
+                <p
+                  className={`text-tiny text-gray-700 ${
+                    index !== props.events.length - 1 && "pb-3"
+                  }`}
+                >
+                  {event.note}
+                </p>
+              ) : (
+                event.note
+              )}
+            </>
           )}
         </div>
       ))}

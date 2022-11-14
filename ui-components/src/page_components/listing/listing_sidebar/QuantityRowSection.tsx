@@ -39,7 +39,13 @@ const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) 
       </Heading>
       <div>
         {strings.description && (
-          <p className="text-tiny text-gray-800 pb-3">{strings.description}</p>
+          <>
+            {typeof strings.description === "string" ? (
+              <p>{strings.description}</p>
+            ) : (
+              strings.description
+            )}
+          </>
         )}
         {quantityRows.length && <ul>{quantityRows.map((row) => getRow(row))}</ul>}
       </div>
