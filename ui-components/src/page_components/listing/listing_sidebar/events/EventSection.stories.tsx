@@ -114,9 +114,9 @@ export const MultipleSections = () => {
 export const FragmentNote = () => {
   const note = () => {
     return (
-      <>
+      <p>
         I'm a <a href={"https://www.exygy.com"}>fragment note</a>.
-      </>
+      </p>
     )
   }
   const events: EventType[] = [
