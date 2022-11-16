@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.2...@bloom-housing/ui-components@7.0.3) (2022-11-16)
+
+
+### Bug Fixes
+
+* support jsx in EventSection, QuantityRowSection ([#3170](https://github.com/bloom-housing/bloom/issues/3170)) ([6370616](https://github.com/bloom-housing/bloom/commit/637061643473f1167d1dccc5e76b7c57c1272bc0))
+
+
+
+
+
 ## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.2-alpha.1...@bloom-housing/ui-components@7.0.2) (2022-11-14)
 
 
