@@ -64,5 +64,8 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.whatToExpect = `This property is still under development by the property owners. If you sign up for notifications through Detroit Home Connect, we will send you updates when this property has opened up applications for residents. You can also check back later to this page for updates.`
       this.data.whatToExpectAdditionalText = null
     }
+    if (!Object.values(this.data.neighborhoodAmenities).some((item) => item.trim() !== "")) {
+      this.data.neighborhoodAmenities = null
+    }
   }
 }
