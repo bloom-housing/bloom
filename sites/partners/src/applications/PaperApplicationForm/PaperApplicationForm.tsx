@@ -145,7 +145,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   async function deleteApplication() {
     try {
-      await applicationsService.delete({ id: application?.id })
+      await applicationsService.delete({ body: { id: application?.id } })
+
       void router.push(`/listings/${listingId}/applications`)
     } catch (err) {
       setAlert("api")
