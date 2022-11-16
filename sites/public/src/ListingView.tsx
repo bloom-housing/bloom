@@ -776,34 +776,40 @@ export const ListingView = (props: ListingProps) => {
                 </header>
                 <div className="listing-detail-panel">
                   <dl className="column-definition-list">
-                    {listing.neighborhoodAmenities?.grocery && (
+                    {listing.neighborhoodAmenities?.groceryStores && (
                       <Description
-                        term={t("t.grocery")}
-                        description={listing.neighborhoodAmenities.grocery}
+                        term={t("listings.amenities.groceryStores")}
+                        description={listing.neighborhoodAmenities.groceryStores}
                       />
                     )}
-                    {listing.neighborhoodAmenities?.pharmacy && (
+                    {listing.neighborhoodAmenities?.publicTransportation && (
                       <Description
-                        term={t("t.pharmacy")}
-                        description={listing.neighborhoodAmenities.pharmacy}
+                        term={t("listings.amenities.publicTransportation")}
+                        description={listing.neighborhoodAmenities.publicTransportation}
                       />
                     )}
-                    {listing.neighborhoodAmenities?.medicalClinic && (
+                    {listing.neighborhoodAmenities?.schools && (
                       <Description
-                        term={t("t.medicalClinic")}
-                        description={listing.neighborhoodAmenities.medicalClinic}
+                        term={t("listings.amenities.schools")}
+                        description={listing.neighborhoodAmenities.schools}
                       />
                     )}
-                    {listing.neighborhoodAmenities?.park && (
+                    {listing.neighborhoodAmenities?.parksAndCommunityCenters && (
                       <Description
-                        term={t("t.park")}
-                        description={listing.neighborhoodAmenities.park}
+                        term={t("listings.amenities.parksAndCommunityCenters")}
+                        description={listing.neighborhoodAmenities.parksAndCommunityCenters}
                       />
                     )}
-                    {listing.neighborhoodAmenities?.seniorCenter && (
+                    {listing.neighborhoodAmenities?.pharmacies && (
                       <Description
-                        term={t("t.seniorCenter")}
-                        description={listing.neighborhoodAmenities.seniorCenter}
+                        term={t("listings.amenities.pharmacies")}
+                        description={listing.neighborhoodAmenities.pharmacies}
+                      />
+                    )}
+                    {listing.neighborhoodAmenities?.healthCareResources && (
+                      <Description
+                        term={t("listings.amenities.healthCareResources")}
+                        description={listing.neighborhoodAmenities.healthCareResources}
                       />
                     )}
                   </dl>

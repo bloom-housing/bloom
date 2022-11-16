@@ -105,7 +105,7 @@ describe("Listings", () => {
     listing.units[0].maxOccupancy = oldOccupancy + 1
 
     listing.neighborhoodAmenities = {
-      grocery: "grocery location",
+      groceryStores: "grocery location",
     }
 
     const putResponse = await supertest(app.getHttpServer())
@@ -117,11 +117,12 @@ describe("Listings", () => {
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
     expect(modifiedListing.neighborhoodAmenities).toEqual({
-      grocery: "grocery location",
-      pharmacy: null,
-      medicalClinic: null,
-      park: null,
-      seniorCenter: null,
+      groceryStores: "grocery location",
+      publicTransportation: null,
+      schools: null,
+      parksAndCommunityCenters: null,
+      pharmacies: null,
+      healthCareResources: null,
     })
   })
 

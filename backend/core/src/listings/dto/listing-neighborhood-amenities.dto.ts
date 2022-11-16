@@ -13,25 +13,30 @@ export class ListingNeighborhoodAmenitiesDto extends OmitType(ListingNeighborhoo
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  grocery?: string | null
+  groceryStores?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  pharmacy?: string | null
+  publicTransportation?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  medicalClinic?: string | null
+  schools?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  park?: string | null
+  parksAndCommunityCenters?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  seniorCenter?: string | null
+  pharmacies?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  healthCareResources?: string | null
 }

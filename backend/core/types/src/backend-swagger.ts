@@ -4998,19 +4998,22 @@ export interface ListingPreference {
 
 export interface ListingNeighborhoodAmenities {
   /**  */
-  grocery?: string
+  groceryStores?: string
 
   /**  */
-  pharmacy?: string
+  publicTransportation?: string
 
   /**  */
-  medicalClinic?: string
+  schools?: string
 
   /**  */
-  park?: string
+  parksAndCommunityCenters?: string
 
   /**  */
-  seniorCenter?: string
+  pharmacies?: string
+
+  /**  */
+  healthCareResources?: string
 }
 
 export interface JurisdictionSlim {

@@ -14,36 +14,58 @@ const DetailBuildingFeatures = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="neighborhoodAmenities.grocery" label={t("t.grocery")}>
-            {getDetailFieldString(listing.neighborhoodAmenities?.grocery)}
+          <ViewItem
+            id="neighborhoodAmenities.groceryStores"
+            label={t("listings.amenities.groceryStores")}
+          >
+            {getDetailFieldString(listing.neighborhoodAmenities?.groceryStores)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="neighborhoodAmenities.pharmacy" label={t("t.pharmacy")}>
-            {getDetailFieldString(listing.neighborhoodAmenities?.pharmacy)}
+          <ViewItem
+            id="neighborhoodAmenities.publicTransportation"
+            label={t("listings.amenities.publicTransportation")}
+          >
+            {getDetailFieldString(listing.neighborhoodAmenities?.publicTransportation)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="neighborhoodAmenities.medicalClinic" label={t("t.medicalClinic")}>
-            {getDetailFieldString(listing.neighborhoodAmenities?.medicalClinic)}
+          <ViewItem id="neighborhoodAmenities.schools" label={t("listings.amenities.schools")}>
+            {getDetailFieldString(listing.neighborhoodAmenities?.schools)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="neighborhoodAmenities.park" label={t("t.park")}>
-            {getDetailFieldString(listing.neighborhoodAmenities?.park)}
+          <ViewItem
+            id="neighborhoodAmenities.parksAndCommunityCenters"
+            label={t("listings.amenities.parksAndCommunityCenters")}
+          >
+            {getDetailFieldString(listing.neighborhoodAmenities?.parksAndCommunityCenters)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="neighborhoodAmenities.seniorCenter" label={t("t.seniorCenter")}>
-            {getDetailFieldString(listing.neighborhoodAmenities?.seniorCenter)}
+          <ViewItem
+            id="neighborhoodAmenities.pharmacies"
+            label={t("listings.amenities.pharmacies")}
+          >
+            {getDetailFieldString(listing.neighborhoodAmenities?.pharmacies)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem
+            id="neighborhoodAmenities.healthCareResources"
+            label={t("listings.amenities.healthCareResources")}
+          >
+            {getDetailFieldString(listing.neighborhoodAmenities?.healthCareResources)}
           </ViewItem>
         </GridCell>
       </GridSection>

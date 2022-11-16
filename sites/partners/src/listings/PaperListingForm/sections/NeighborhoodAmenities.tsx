@@ -18,41 +18,48 @@ const NeighborhoodAmenities = () => {
       >
         <GridSection columns={2}>
           <Textarea
-            label={t("t.grocery")}
-            name={"neighborhoodAmenities.grocery"}
-            id={"neighborhoodAmenities.grocery"}
+            label={t("listings.amenities.groceryStores")}
+            name={"neighborhoodAmenities.groceryStores"}
+            id={"neighborhoodAmenities.groceryStores"}
             fullWidth={true}
             register={register}
           />
           <Textarea
-            label={t("t.pharmacy")}
-            name={"neighborhoodAmenities.pharmacy"}
-            id={"neighborhoodAmenities.pharmacy"}
-            fullWidth={true}
-            register={register}
-          />
-        </GridSection>
-        <GridSection columns={2}>
-          <Textarea
-            label={t("t.medicalClinic")}
-            name={"neighborhoodAmenities.medicalClinic"}
-            id={"neighborhoodAmenities.medicalClinic"}
-            fullWidth={true}
-            register={register}
-          />
-          <Textarea
-            label={t("t.park")}
-            name={"neighborhoodAmenities.park"}
-            id={"neighborhoodAmenities.park"}
+            label={t("listings.amenities.publicTransportation")}
+            name={"neighborhoodAmenities.publicTransportation"}
+            id={"neighborhoodAmenities.publicTransportation"}
             fullWidth={true}
             register={register}
           />
         </GridSection>
         <GridSection columns={2}>
           <Textarea
-            label={t("t.seniorCenter")}
-            name={"neighborhoodAmenities.seniorCenter"}
-            id={"neighborhoodAmenities.seniorCenter"}
+            label={t("listings.amenities.schools")}
+            name={"neighborhoodAmenities.schools"}
+            id={"neighborhoodAmenities.schools"}
+            fullWidth={true}
+            register={register}
+          />
+          <Textarea
+            label={t("listings.amenities.parksAndCommunityCenters")}
+            name={"neighborhoodAmenities.parksAndCommunityCenters"}
+            id={"neighborhoodAmenities.parksAndCommunityCenters"}
+            fullWidth={true}
+            register={register}
+          />
+        </GridSection>
+        <GridSection columns={2}>
+          <Textarea
+            label={t("listings.amenities.pharmacies")}
+            name={"neighborhoodAmenities.pharmacies"}
+            id={"neighborhoodAmenities.pharmacies"}
+            fullWidth={true}
+            register={register}
+          />
+          <Textarea
+            label={t("listings.amenities.healthCareResources")}
+            name={"neighborhoodAmenities.healthCareResources"}
+            id={"neighborhoodAmenities.healthCareResources"}
             fullWidth={true}
             register={register}
           />
