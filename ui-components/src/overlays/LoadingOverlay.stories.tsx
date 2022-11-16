@@ -20,3 +20,13 @@ export const Default = () => (
     </div>
   </LoadingOverlay>
 )
+
+export const DefaultNoStyling = () => (
+  <LoadingOverlay isLoading={true}>
+    <div
+      style={{
+        padding: "5em 1em 5em",
+      }}
+    ></div>
+  </LoadingOverlay>
+)

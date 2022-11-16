@@ -34,6 +34,8 @@ const credits = (
 )
 const logo = <img src="/images/alameda-logo-white.svg" alt="Alameda Logo" />
 
+export const defaultContent = () => <SiteFooter>Content</SiteFooter>
+
 export const footer = () => (
   <SiteFooter>
     <FooterNav copyright="Alameda County © 2020 • All Rights Reserved">

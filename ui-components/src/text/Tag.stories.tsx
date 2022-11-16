@@ -3,6 +3,7 @@ import {
   AppearanceSizeType,
   AppearanceStyleType,
   AppearanceShadeType,
+  AppearanceBorderType,
 } from "../global/AppearanceTypes"
 import { BADGES } from "../../.storybook/constants"
 import { Tag } from "./Tag"
@@ -28,12 +29,40 @@ export const warning = () => <Tag styleType={AppearanceStyleType.warning}>Warnin
 
 export const small = () => <Tag size={AppearanceSizeType.small}>Warning</Tag>
 
+export const capitalized = () => (
+  <Tag size={AppearanceSizeType.small} capitalized>
+    Warning
+  </Tag>
+)
+
+export const border = () => (
+  <Tag size={AppearanceSizeType.small} border={AppearanceBorderType.outlined}>
+    Warning
+  </Tag>
+)
+
+export const shade = () => (
+  <Tag
+    size={AppearanceSizeType.small}
+    styleType={AppearanceStyleType.secondary}
+    shade={AppearanceShadeType.light}
+  >
+    Warning
+  </Tag>
+)
+
 // TODO: export const big = () => <Tag size={AppearanceSizeType.big}>Warning</Tag>
 
 export const pill = () => <Tag pillStyle={true}>Pill Style</Tag>
 
 export const pillSmall = () => (
   <Tag pillStyle={true} size={AppearanceSizeType.small}>
+    Pill Small
+  </Tag>
+)
+
+export const normalCase = () => (
+  <Tag pillStyle={true} size={AppearanceSizeType.small} normalCase>
     Pill Small
   </Tag>
 )
