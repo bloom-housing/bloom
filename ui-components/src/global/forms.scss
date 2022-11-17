@@ -3,6 +3,7 @@
   --bordered-border-radius: var(--bloom-s1_5);
   --bordered-vertical-padding: var(--bloom-s4);
   --bordered-leftward-padding: 2.875rem;
+  --bordered-rightward-padding: 2.875rem;
   --bordered-checked-bg-color: var(--bloom-color-gray-100);
   --leftward-margin: 2rem;
 
@@ -42,6 +43,7 @@
       padding-top: var(--bordered-vertical-padding);
       padding-bottom: var(--bordered-vertical-padding);
       padding-left: var(--bordered-leftward-padding);
+      padding-right: var(--bordered-rightward-padding);
       border-width: var(--bordered-border-width);
       border-radius: var(--bordered-border-radius);
       border-color: var(--bloom-color-gray-450);
