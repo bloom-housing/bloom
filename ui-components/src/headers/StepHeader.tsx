@@ -7,6 +7,7 @@ export interface StepHeaderProps {
   stepPreposition: string
   stepLabeling: string[]
   className?: string
+  priority?: number
 }
 
 const StepHeader = ({
@@ -15,15 +16,18 @@ const StepHeader = ({
   stepPreposition,
   stepLabeling,
   className,
+  priority,
 }: StepHeaderProps) => {
+  const Tag = `h${priority}` as keyof JSX.IntrinsicElements
+
   return (
-    <div className={`step-header ${className}`}>
-      <div className="step-header__circle-number">{currentStep}</div>
-      <div>{`${stepPreposition} ${totalSteps}`}</div>
-      <div className="step-header__title">
+    <Tag className={`step-header ${className}`}>
+      <span className="step-header__circle-number">{currentStep}</span>
+      <span>{`${stepPreposition} ${totalSteps}`}</span>
+      <span className="step-header__title">
         {stepLabeling[Math.min(currentStep - 1, stepLabeling.length - 1)]}
-      </div>
-    </div>
+      </span>
+    </Tag>
   )
 }
 

@@ -18,7 +18,7 @@ import {
 import axios from "axios"
 import router from "next/router"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import Layout from "../layouts/application"
 import FinderDisclaimer from "../src/forms/finder/FinderDisclaimer"
@@ -36,6 +36,7 @@ export interface FinderQuestion {
   formSection: string
   fieldGroupName: string
   fields: FinderField[]
+  legendText: string
   question: string
   subtitle: string
 }
@@ -46,6 +47,7 @@ const Finder = () => {
   const [questionIndex, setQuestionIndex] = useState<number>(0)
   const [formData, setFormData] = useState<FinderQuestion[]>([])
   const [isDisclaimer, setIsDisclaimer] = useState<boolean>(false)
+  const finderBody = useRef(null)
   const minRent = watch("minRent")
   const maxRent = watch("maxRent")
 
@@ -102,6 +104,7 @@ const Finder = () => {
             formSection: t("finder.progress.housingLabel"),
             fieldGroupName: "bedRoomSize",
             fields: bedroomFields,
+            legendText: t("finder.bedRoomSize.legend"),
             question: t("finder.bedRoomSize.question"),
             subtitle: t("finder.default.subtitle"),
           })
@@ -115,6 +118,7 @@ const Finder = () => {
           formSection: t("finder.progress.housingLabel"),
           fieldGroupName: "region",
           fields: neighborhoodFields,
+          legendText: t("finder.region.legend"),
           question: t("finder.region.question"),
           subtitle: t("finder.default.subtitle"),
         })
@@ -143,6 +147,7 @@ const Finder = () => {
           formSection: t("finder.progress.housingLabel"),
           fieldGroupName: "rentalCosts",
           fields: costFields,
+          legendText: t("finder.rentalCosts.legend"),
           question: t("finder.rentalCosts.question"),
           subtitle: t("finder.default.subtitle"),
         })
@@ -157,6 +162,7 @@ const Finder = () => {
           formSection: t("t.accessibility"),
           fieldGroupName: "accessibility",
           fields: a11yFields,
+          legendText: t("finder.accessibility.legend"),
           question: t("finder.accessibility.question"),
           subtitle: t("finder.accessibility.subtitle"),
         })
@@ -173,6 +179,7 @@ const Finder = () => {
             formSection: t("finder.progress.buildingLabel"),
             fieldGroupName: "communityPrograms",
             fields: programFields,
+            legendText: t("finder.programs.legend"),
             question: t("finder.programs.question"),
             subtitle: t("finder.programs.subtitle"),
           })
@@ -191,15 +198,16 @@ const Finder = () => {
     return (
       <div className="flex flex-col w-full pb-8 px-2 lg:px-0 sm:pb-0">
         <div className="flex flex-row flex-wrap justify-between gap-y-4 gap-x-0.5">
-          <div className="md:text-xl capitalize font-bold">
+          <h1 className="text-base md:text-lg capitalize font-bold">
             {t("listingFilters.buttonTitleExtended")}
-          </div>
+          </h1>
           {!isDisclaimer && (
             <StepHeader
               currentStep={sectionNumber}
               totalSteps={3}
               stepPreposition={t("finder.progress.stepPreposition")}
               stepLabeling={stepLabels}
+              priority={2}
             />
           )}
         </div>
@@ -210,6 +218,7 @@ const Finder = () => {
             labels={stepLabels}
             mounted={true}
             style="bar"
+            removeSrHeader
           />
         </div>
       </div>
@@ -233,11 +242,13 @@ const Finder = () => {
       setFormData(formCopy)
       if (questionIndex >= formData.length - 1) setIsDisclaimer(true)
       setQuestionIndex(questionIndex + 1)
+      finderBody.current.focus()
     }
   }
   const previousQuestion = () => {
     setIsDisclaimer(false)
     setQuestionIndex(questionIndex - 1)
+    finderBody.current.focus()
   }
 
   const skipToListings = () => {
@@ -248,14 +259,14 @@ const Finder = () => {
   return (
     <Layout>
       <Form onSubmit={handleSubmit(onSubmit)} className="bg-gray-300 border-t border-gray-450">
-        <div className="md:mb-8 mt-8 mx-auto max-w-5xl">
+        <div tabIndex={-1} ref={finderBody} className="md:mb-8 mt-8 mx-auto max-w-5xl">
           <ProgressHeader />
           <Card className="finder-card">
             {formData?.length > 0 && (
-              <>
+              <div>
                 <Card.Header>
                   <HeadingGroup
-                    headingPriority={2}
+                    headingPriority={3}
                     heading={
                       !isDisclaimer ? activeQuestion.question : t("finder.disclaimer.header")
                     }
@@ -326,7 +337,7 @@ const Finder = () => {
                     </Card.Section>
                   )}
                 </Card.Footer>
-              </>
+              </div>
             )}
           </Card>
         </div>

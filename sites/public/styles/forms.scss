@@ -66,8 +66,14 @@ li.progress-nav__item {
       }
     }
   }
+  h1 {
+    font-size: var(--bloom-s5);
+  }
+  h3 {
+    font-size: 1.625rem;
+  }
   @media (max-width: $screen-sm) {
-    h2 {
+    h3 {
       font-size: var(--bloom-s5);
     }
   }

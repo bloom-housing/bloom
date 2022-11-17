@@ -60,6 +60,7 @@ const ProgressNavItem = (props: {
 const ProgressNav = (props: {
   currentPageSection: number
   completedSections: number
+  removeSrHeader?: boolean
   labels: string[]
   mounted: boolean
   style?: ProgressNavStyle
@@ -68,12 +69,15 @@ const ProgressNav = (props: {
   }
 }) => {
   let navClasses = "progress-nav"
+
   if (props.style === "bar") navClasses += " progress-nav__bar"
   return (
-    <div aria-label="progress">
-      <h2 className="sr-only">
-        {props.strings?.screenReaderHeading ?? t("progressNav.srHeading")}
-      </h2>
+    <div aria-label={"progress"}>
+      {!props.removeSrHeader && (
+        <h2 className="sr-only">
+          {props.strings?.screenReaderHeading ?? t("progressNav.srHeading")}
+        </h2>
+      )}
       <ol className={!props.mounted ? "invisible" : navClasses}>
         {props.labels.map((label, i) => (
           <ProgressNavItem
