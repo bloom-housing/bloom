@@ -4,7 +4,7 @@ import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
-import { AppearanceStyleType } from "../global/AppearanceTypes"
+import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
 import { Icon, IconFillColors, UniversalIconType } from "../icons/Icon"
 import { Modal } from "../overlays/Modal"
 import { Button } from "../actions/Button"
@@ -185,7 +185,7 @@ const ImageCard = (props: ImageCardProps) => {
           headerClassNames="sr-only"
           closeIconColor={IconFillColors.white}
           actions={[
-            <Button onClick={() => setShowModal(!showModal)}>
+            <Button onClick={() => setShowModal(!showModal)} size={AppearanceSizeType.small}>
               {props.modalCloseLabel || "Close"}
             </Button>,
           ]}

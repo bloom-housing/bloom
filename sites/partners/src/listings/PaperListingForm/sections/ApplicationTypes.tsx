@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceBorderType,
   AppearanceStyleType,
   Button,
   Drawer,
@@ -17,6 +16,7 @@ import {
   PhoneField,
   PhoneMask,
   StandardTableData,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
@@ -544,6 +544,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
           >
             Save
           </Button>,
@@ -552,8 +553,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             onClick={() => {
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
           >
             Cancel
           </Button>,

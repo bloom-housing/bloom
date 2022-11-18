@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import {
   AlertTypes,
-  AppearanceBorderType,
+  AppearanceSizeType,
   AppearanceStyleType,
   Button,
   LinkButton,
@@ -68,7 +68,12 @@ export const PreferenceDeleteModal = ({
         onClose={onClose}
         scrollable
         actions={[
-          <Button type="button" styleType={AppearanceStyleType.primary} onClick={onClose}>
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.primary}
+            onClick={onClose}
+            size={AppearanceSizeType.small}
+          >
             {t("t.done")}
           </Button>,
         ]}
@@ -91,15 +96,19 @@ export const PreferenceDeleteModal = ({
       open={!!multiselectQuestion}
       onClose={onClose}
       actions={[
-        <Button type="button" styleType={AppearanceStyleType.alert} onClick={deletePreference}>
+        <Button
+          type="button"
+          styleType={AppearanceStyleType.alert}
+          onClick={deletePreference}
+          size={AppearanceSizeType.small}
+        >
           {t("t.delete")}
         </Button>,
         <Button
           type="button"
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
           onClick={onClose}
           ariaLabel={t("t.cancel")}
+          size={AppearanceSizeType.small}
         >
           {t("t.cancel")}
         </Button>,

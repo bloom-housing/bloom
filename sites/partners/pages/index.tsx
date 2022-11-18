@@ -7,6 +7,7 @@ import {
   LocalizedLink,
   AgTable,
   useAgTable,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -170,7 +171,7 @@ export default function ListingsList() {
               <div className="flex-row">
                 {isAdmin && (
                   <LocalizedLink href={`/listings/add`}>
-                    <Button className="mx-1" onClick={() => false}>
+                    <Button size={AppearanceSizeType.small} className="mx-1" onClick={() => false}>
                       {t("listings.addListing")}
                     </Button>
                   </LocalizedLink>

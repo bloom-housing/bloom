@@ -6,6 +6,7 @@ import {
   Form,
   Field,
   AlertBox,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
@@ -87,6 +88,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
               .getElementById("resend-confirmation")
               .dispatchEvent(new Event("submit", { cancelable: true }))
           }}
+          size={AppearanceSizeType.small}
         >
           {t("authentication.createAccount.resendTheEmail")}
         </Button>,
@@ -97,6 +99,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
             setOpenModal(false)
             window.scrollTo(0, 0)
           }}
+          size={AppearanceSizeType.small}
         >
           {t("t.cancel")}
         </Button>,

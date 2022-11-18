@@ -9,6 +9,7 @@ import {
   SiteAlert,
   ActionBlock,
   Icon,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -74,7 +75,11 @@ export default function Home(props: IndexProps) {
               header={t("welcome.signUp")}
               icon={<Icon size="3xl" symbol="mailThin" />}
               actions={[
-                <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
+                <LinkButton
+                  key={"sign-up"}
+                  href={props.jurisdiction.notificationsSignUpURL}
+                  size={AppearanceSizeType.small}
+                >
                   {t("welcome.signUpToday")}
                 </LinkButton>,
               ]}
@@ -85,7 +90,11 @@ export default function Home(props: IndexProps) {
             header={t("welcome.seeMoreOpportunitiesTruncated")}
             icon={<Icon size="3xl" symbol="building" />}
             actions={[
-              <LinkButton href="/additional-resources" key={"additional-resources"}>
+              <LinkButton
+                href="/additional-resources"
+                key={"additional-resources"}
+                size={AppearanceSizeType.small}
+              >
                 {t("welcome.viewAdditionalHousingTruncated")}
               </LinkButton>,
             ]}

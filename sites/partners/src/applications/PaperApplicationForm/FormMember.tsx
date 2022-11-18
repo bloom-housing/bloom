@@ -9,7 +9,6 @@ import {
   Field,
   Select,
   AppearanceStyleType,
-  AppearanceBorderType,
   FieldGroup,
   Button,
   Form,
@@ -236,12 +235,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           {t("t.submit")}
         </Button>
 
-        <Button
-          type="button"
-          onClick={onClose}
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
-        >
+        <Button type="button" onClick={onClose}>
           {t("t.cancel")}
         </Button>
       </div>

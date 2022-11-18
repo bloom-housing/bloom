@@ -284,7 +284,7 @@ const SelectAndOrder = ({
           type="button"
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
+          size={AppearanceSizeType.small}
           onClick={() => {
             setListingData(draftListingData)
             setTableDrawer(null)

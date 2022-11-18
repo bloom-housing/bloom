@@ -12,6 +12,7 @@ import {
   Button,
   Form,
   numberOptions,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
@@ -616,6 +617,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             onClick={() => copyAndNew()}
             styleType={AppearanceStyleType.secondary}
             className="mr-4"
+            size={AppearanceSizeType.small}
           >
             {t("t.copy")}
           </Button>
@@ -625,6 +627,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             onClick={() => onFormSubmit("save")}
             styleType={AppearanceStyleType.secondary}
             className="mr-4 mb-4 sm:mb-0"
+            size={AppearanceSizeType.small}
           >
             {t("t.save")}
           </Button>
@@ -634,6 +637,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           onClick={() => onFormSubmit("saveNew")}
           styleType={AppearanceStyleType.secondary}
           className="mr-4 mb-4 sm:mb-0"
+          size={AppearanceSizeType.small}
         >
           {t("t.saveNew")}
         </Button>
@@ -642,6 +646,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           type="button"
           onClick={() => onFormSubmit("saveExit")}
           styleType={AppearanceStyleType.primary}
+          size={AppearanceSizeType.small}
         >
           {t("t.saveExit")}
         </Button>
@@ -651,6 +656,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           onClick={() => onClose(false, false, null)}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
+          size={AppearanceSizeType.small}
         >
           {t("t.cancel")}
         </Button>

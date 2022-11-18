@@ -11,6 +11,7 @@ import {
   Breadcrumbs,
   BreadcrumbLink,
   NavigationHeader,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
@@ -132,7 +133,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 mt-2 flex-col">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">
           {listingDto && (
             <>
               <ApplicationsSideNav
@@ -171,6 +172,7 @@ const ApplicationsList = () => {
                   <div className="flex-row">
                     <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                       <Button
+                        size={AppearanceSizeType.small}
                         className="mx-1"
                         onClick={() => false}
                         dataTestId={"addApplicationButton"}
@@ -179,7 +181,12 @@ const ApplicationsList = () => {
                       </Button>
                     </LocalizedLink>
 
-                    <Button className="mx-1" onClick={() => onExport()} loading={csvExportLoading}>
+                    <Button
+                      size={AppearanceSizeType.small}
+                      className="mx-1"
+                      onClick={() => onExport()}
+                      loading={csvExportLoading}
+                    >
                       {t("t.export")}
                     </Button>
                   </div>

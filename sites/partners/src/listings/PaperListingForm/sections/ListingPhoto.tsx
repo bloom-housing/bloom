@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form"
 import {
   t,
   AppearanceStyleType,
-  AppearanceBorderType,
   Button,
   Dropzone,
   Drawer,
@@ -12,6 +11,7 @@ import {
   MinimalTable,
   TableThumbnail,
   StandardTableData,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
@@ -206,6 +206,7 @@ const ListingPhoto = () => {
             }}
             styleType={AppearanceStyleType.primary}
             data-test-id={!cloudinaryData.url ? "listing-photo-empty" : "listing-photo-uploaded"}
+            size={AppearanceSizeType.small}
           >
             Save
           </Button>,
@@ -214,8 +215,7 @@ const ListingPhoto = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
           >
             Cancel
           </Button>,

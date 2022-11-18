@@ -8,7 +8,6 @@ import {
   Drawer,
   Modal,
   AppearanceStyleType,
-  AppearanceBorderType,
   ViewItem,
   GridCell,
   FieldGroup,
@@ -280,15 +279,18 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         ariaDescription={t("listings.unit.deleteConf")}
         onClose={() => setUnitDeleteModal(null)}
         actions={[
-          <Button styleType={AppearanceStyleType.alert} onClick={() => deleteUnit(unitDeleteModal)}>
+          <Button
+            styleType={AppearanceStyleType.alert}
+            onClick={() => deleteUnit(unitDeleteModal)}
+            size={AppearanceSizeType.small}
+          >
             {t("t.delete")}
           </Button>,
           <Button
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setUnitDeleteModal(null)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,
