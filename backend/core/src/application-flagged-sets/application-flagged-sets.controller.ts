@@ -24,7 +24,7 @@ import { ApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
 import { PaginatedApplicationFlaggedSetDto } from "./dto/paginated-application-flagged-set.dto"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
-import { ApplicationFlaggedSetsCronjobConsumer } from "./application-flagged-sets-cronjob-consumer"
+import { ApplicationFlaggedSetsCronjobService } from "./application-flagged-sets-cronjob.service"
 import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dto"
 import { IdDto } from "../shared/dto/id.dto"
 
@@ -41,7 +41,7 @@ import { IdDto } from "../shared/dto/id.dto"
 export class ApplicationFlaggedSetsController {
   constructor(
     private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
-    private readonly afsProcessingService: ApplicationFlaggedSetsCronjobConsumer
+    private readonly afsProcessingService: ApplicationFlaggedSetsCronjobService
   ) {}
 
   @Get("meta")
