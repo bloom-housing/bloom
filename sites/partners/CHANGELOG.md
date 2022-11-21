@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.1.0...@bloom-housing/partners@7.2.0) (2022-11-21)
+
+
+### Features
+
+* adding last run to pending page ([#3168](https://github.com/bloom-housing/bloom/issues/3168)) ([45fcda2](https://github.com/bloom-housing/bloom/commit/45fcda23364b79e6c88718d70c7bb8c0d5cbb4cd))
+
+
+
+
+
 # [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.3...@bloom-housing/partners@7.1.0) (2022-11-21)
 
 
