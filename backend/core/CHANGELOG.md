@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.2...@bloom-housing/backend-core@7.1.0) (2022-11-21)
+
+
+### Features
+
+* adding UUID validation ([#3172](https://github.com/bloom-housing/bloom/issues/3172)) ([320c0f0](https://github.com/bloom-housing/bloom/commit/320c0f0e2e2ec8b40bcdddc39875456d53e7cca4))
+
+
+
+
+
 ## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.2-alpha.0...@bloom-housing/backend-core@7.0.2) (2022-11-14)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
