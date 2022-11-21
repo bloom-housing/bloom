@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -154,7 +155,9 @@ export class UserController {
   @Get(`:id`)
   @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
   @UseGuards(DefaultAuthGuard, AuthzGuard)
-  async retrieve(@Param("id") userId: string): Promise<UserDto> {
+  async retrieve(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) userId: string
+  ): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.findById(userId))
   }
 
