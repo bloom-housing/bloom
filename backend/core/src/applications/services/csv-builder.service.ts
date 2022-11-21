@@ -70,7 +70,9 @@ export class CsvBuilder {
                 const column = headerIndex[`${headerGroup} ${groupKey}`]
                 const sub_val = val[sub_id][groupKey]
                 rows[row][column] =
-                  sub_val !== undefined && sub_val !== null ? JSON.stringify(sub_val) : ""
+                  sub_val !== undefined && sub_val !== null
+                    ? this.escapeDoubleQuotes(JSON.stringify(sub_val))
+                    : ""
               })
             })
           } else if (groupKeys.nested === false) {
@@ -78,7 +80,9 @@ export class CsvBuilder {
               const column = headerIndex[`${key} ${sub_key}`]
               const sub_val = val[sub_key]
               rows[row][column] =
-                sub_val !== undefined && sub_val !== null ? JSON.stringify(sub_val) : ""
+                sub_val !== undefined && sub_val !== null
+                  ? this.escapeDoubleQuotes(JSON.stringify(sub_val))
+                  : ""
             })
           }
         } else {
@@ -94,12 +98,20 @@ export class CsvBuilder {
           } else {
             value = val
           }
-          rows[row][column] = value !== undefined && value !== null ? JSON.stringify(value) : ""
+          rows[row][column] =
+            value !== undefined && value !== null
+              ? this.escapeDoubleQuotes(JSON.stringify(value))
+              : ""
         }
       })
     })
 
-    let csvString = headers.join(",")
+    // this covers the case where a header has a comma or a double quote in its text
+    // we use the csv spec and escape the comma by wrapping the whole thing in double quotes
+    // we use the csv spec and escape the double quotes by use a second set of double quotes
+    let csvString = headers.reduce((accumulator, curr) => {
+      return `${accumulator}${accumulator.length ? "," : ""}"${curr.replace(/"/g, `""`)}"`
+    }, "")
     csvString += "\n"
 
     // turn rows into csv format
@@ -111,5 +123,9 @@ export class CsvBuilder {
     })
 
     return csvString
+  }
+
+  private escapeDoubleQuotes(data: string) {
+    return data.replace(/\\"/g, `""`)
   }
 }
