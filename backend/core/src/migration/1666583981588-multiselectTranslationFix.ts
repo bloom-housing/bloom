@@ -284,7 +284,11 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         opt_out_text: null,
       },
       {
-        options: ["Live in Alameda County Preference", "Work in Alameda County Preference"],
+        options: [
+          "Live in Alameda County Preference",
+          "Work in Alameda County Preference",
+          "Work in Alameda County Preference",
+        ],
         text: "Live/Work in Alameda County",
         opt_out_text: null,
       },
@@ -297,6 +301,11 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         options: ["I'm interested"],
         text: "Housing Opportunities for Persons with AIDS (HOPWA)",
         opt_out_text: "I'm not interested",
+      },
+      {
+        options: ["Live or Work", "Family", "Veteran"],
+        text: "Oakland Housing Authority Preferences",
+        opt_out_text: null,
       },
     ],
     es: [
@@ -1136,7 +1145,7 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         opt_out_text: null,
       },
       {
-        options: ["住在阿拉米达县偏好", "在阿拉米达县工作优先"],
+        options: ["住在阿拉米达县偏好", "在阿拉米达县工作优先", "在阿拉米达县工作偏好"],
         text: "在阿拉米达县生活/工作",
         opt_out_text: null,
       },
@@ -1149,6 +1158,11 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         options: ["我很感兴趣"],
         text: "艾滋病患者的住房机会 (HOPWA)",
         opt_out_text: "我对此不感兴趣",
+      },
+      {
+        options: ["生活或工作", "家庭", "老将"],
+        text: "奥克兰房屋委员会偏好",
+        opt_out_text: null,
       },
     ],
     tl: [
