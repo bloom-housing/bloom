@@ -19,6 +19,7 @@ import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
+import { ListingsQueryBuilder } from "./db/listing-query-builder"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -66,8 +67,17 @@ export class ListingsService {
       .getViewQb()
       .addInnerFilteredQuery(innerFilteredQuery)
       .addOrderConditions(params.orderBy, params.orderDir)
-      .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getManyPaginated()
+
+    if (!params.view || params.view === "full") {
+      const promiseArray = listingsPaginated.items.map((listing) =>
+        this.getUnitsForListing(listing.id)
+      )
+      const units = await Promise.all(promiseArray)
+      listingsPaginated.items.forEach((listing, index) => {
+        listing.units = units[index].units
+      })
+    }
 
     return {
       ...listingsPaginated,
@@ -100,8 +110,7 @@ export class ListingsService {
 
   async update(listingDto: ListingUpdateDto) {
     const qb = this.getFullyJoinedQueryBuilder()
-    qb.where("listings.id = :id", { id: listingDto.id })
-    const listing = await qb.getOne()
+    const listing = await this.getListingAndUnits(qb, listingDto.id)
 
     if (!listing) {
       throw new NotFoundException()
@@ -149,7 +158,7 @@ export class ListingsService {
 
   async findOne(listingId: string, lang: Language = Language.en, view = "full") {
     const qb = getView(this.listingRepository.createQueryBuilder("listings"), view).getViewQb()
-    const result = await qb.where("listings.id = :id", { id: listingId }).getOne()
+    const result = await this.getListingAndUnits(qb, listingId)
 
     if (!result) {
       throw new NotFoundException()
@@ -183,5 +192,30 @@ export class ListingsService {
       id: listingId,
       jurisdictionId,
     })
+  }
+
+  private getUnitsForListing(listingId: string) {
+    return this.listingRepository
+      .createQueryBuilder("listings")
+      .select("listings.id")
+      .leftJoinAndSelect("listings.units", "units")
+      .leftJoinAndSelect("units.amiChartOverride", "amiChartOverride")
+      .leftJoinAndSelect("units.unitType", "unitTypeRef")
+      .leftJoinAndSelect("units.unitRentType", "unitRentType")
+      .leftJoinAndSelect("units.priorityType", "priorityType")
+      .leftJoinAndSelect("units.amiChart", "amiChart")
+      .where("listings.id = :id", { id: listingId })
+      .getOne()
+  }
+
+  private async getListingAndUnits(listingQuery: ListingsQueryBuilder, listingId: string) {
+    const fullListingDataQuery = listingQuery.where("listings.id = :id", { id: listingId }).getOne()
+
+    const fullUnitDataQuery = this.getUnitsForListing(listingId)
+
+    const [result, unitData] = await Promise.all([fullListingDataQuery, fullUnitDataQuery])
+    result.units = unitData.units
+
+    return result
   }
 }
