@@ -13,6 +13,7 @@ import {
   ValidationPipe,
   ClassSerializerInterceptor,
   Headers,
+  ParseUUIDPipe,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -70,7 +71,7 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async retrieve(
     @Headers("language") language: Language,
-    @Param("id") listingId: string,
+    @Param("id", new ParseUUIDPipe({ version: "4" })) listingId: string,
     @Query() queryParams: ListingsRetrieveQueryParams
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {

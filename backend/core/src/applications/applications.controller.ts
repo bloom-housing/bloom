@@ -5,6 +5,7 @@ import {
   Get,
   Header,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -97,7 +98,9 @@ export class ApplicationsController {
 
   @Get(`:id`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  async retrieve(@Param("id") applicationId: string): Promise<ApplicationDto> {
+  async retrieve(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) applicationId: string
+  ): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     return mapTo(ApplicationDto, app)
   }

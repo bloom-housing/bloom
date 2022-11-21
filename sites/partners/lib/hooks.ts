@@ -46,7 +46,7 @@ type UseListingsDataProps = PaginationProps & {
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.retrieve({ id: listingId })
+  const fetcher = () => listingId && listingsService.retrieve({ id: listingId })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
 
