@@ -30,7 +30,7 @@ describe("CSVBuilder", () => {
 
   it("create correctly escaped CSV for correct data", () => {
     const response = service.buildFromIdIndex({ 1: { foo: "bar", bar: "foo" }, 2: { bar: "baz" } })
-    expect(response).toBe('foo,bar\n"bar","foo"\n,"baz"\n')
+    expect(response).toBe('"foo","bar"\n"bar","foo"\n,"baz"\n')
   })
 
   it("create correct CSV for correct data with undefined value", () => {
@@ -38,7 +38,7 @@ describe("CSVBuilder", () => {
       1: { foo: "bar", bar: undefined },
       2: { bar: "baz" },
     })
-    expect(response).toBe('foo,bar\n"bar",\n,"baz"\n')
+    expect(response).toBe('"foo","bar"\n"bar",\n,"baz"\n')
   })
 
   it("create correct CSV for correct data with null value", () => {
@@ -46,29 +46,43 @@ describe("CSVBuilder", () => {
       1: { foo: "bar", bar: null },
       2: { bar: "baz" },
     })
-    expect(response).toBe('foo,bar\n"bar",\n,"baz"\n')
+    expect(response).toBe('"foo","bar"\n"bar",\n,"baz"\n')
   })
 
   it("create CSV with escaped double quotes", () => {
     const response = service.buildFromIdIndex({ 1: { foo: '"', bar: "foo" } })
-    expect(response).toBe('foo,bar\n"\\"","foo"\n')
+    expect(response).toBe('"foo","bar"\n"""","foo"\n')
   })
 
   it("create CSV with comma in value", () => {
     const response = service.buildFromIdIndex({ 1: { foo: "with, comma", bar: "should work," } })
-    expect(response).toBe('foo,bar\n"with, comma","should work,"\n')
+    expect(response).toBe('"foo","bar"\n"with, comma","should work,"\n')
+  })
+
+  it("create CSV with comma in header", () => {
+    const response = service.buildFromIdIndex({
+      1: { "foo,withcomma": "with, comma", bar: "should work," },
+    })
+    expect(response).toBe('"foo,withcomma","bar"\n"with, comma","should work,"\n')
+  })
+
+  it("create CSV with double quote in header", () => {
+    const response = service.buildFromIdIndex({
+      1: { 'foo,"withcomma"': "with, comma", bar: "should work," },
+    })
+    expect(response).toBe('"foo,""withcomma""","bar"\n"with, comma","should work,"\n')
   })
 
   it("create a CSV with an array of strings", () => {
     const response = service.buildFromIdIndex({ 1: { foo: ["foo", "bar"] } })
-    expect(response).toBe('foo\n"foo, bar"\n')
+    expect(response).toBe('"foo"\n"foo, bar"\n')
   })
 
   it("create a CSV with a nested object of key: string pairs that converts it to an array", () => {
     const response = service.buildFromIdIndex({
       1: { foo: "bar", bar: { 1: "bar-sub-1", 2: "bar-sub-2" } },
     })
-    expect(response).toBe('foo,bar\n"bar","bar-sub-1, bar-sub-2"\n')
+    expect(response).toBe('"foo","bar"\n"bar","bar-sub-1, bar-sub-2"\n')
   })
 
   it("create CSV with extraHeaders and nested groupKeys", () => {
@@ -88,7 +102,9 @@ describe("CSVBuilder", () => {
         return groups[group]
       }
     )
-    expect(response).toBe('foo,bar,baz (1) sub,baz (2) sub\n"bar","foo","sub-foo","sub-bar"\n')
+    expect(response).toBe(
+      '"foo","bar","baz (1) sub","baz (2) sub"\n"bar","foo","sub-foo","sub-bar"\n'
+    )
   })
 
   it("create CSV with extraHeaders and non nested groupKeys", () => {
@@ -108,7 +124,7 @@ describe("CSVBuilder", () => {
         return groups[group]
       }
     )
-    expect(response).toBe('foo,bar,baz sub,baz bus\n"bar","foo","baz-sub","baz-bus"\n')
+    expect(response).toBe('"foo","bar","baz sub","baz bus"\n"bar","foo","baz-sub","baz-bus"\n')
   })
 })
 

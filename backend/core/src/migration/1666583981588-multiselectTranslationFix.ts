@@ -293,6 +293,11 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         text: "Live/Work in Alameda County",
         opt_out_text: null,
       },
+      {
+        options: ["I'm interested"],
+        text: "Housing Opportunities for Persons with AIDS (HOPWA)",
+        opt_out_text: "I'm not interested",
+      },
     ],
     es: [
       {
@@ -1120,7 +1125,6 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         text: "艾滋病人的住房机会 (HOPWA)",
         opt_out_text: "我对此不感兴趣",
       },
-
       {
         options: ["是的，我是圣马特奥市注册租户", "不，我不是圣马特奥市注册租户"],
         text: "圣马特奥市注册租户",
@@ -1140,6 +1144,11 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
         options: ["住在阿拉米达县偏好", "在阿拉米达县工作优先"],
         text: "在阿拉米达县生活/工作",
         opt_out_text: null,
+      },
+      {
+        options: ["我很感兴趣"],
+        text: "艾滋病患者的住房机会 (HOPWA)",
+        opt_out_text: "我对此不感兴趣",
       },
     ],
     tl: [
@@ -1517,7 +1526,7 @@ export class multiselectTranslationFix1666583981588 implements MigrationInterfac
       } else {
         // if we are searching for an option key
         const translation = translationSet[keyIndex]
-        if (translation.options?.length) {
+        if (translation?.options?.length) {
           let useOptOut = false
           const optionIndex = translation.options.findIndex((option) => option === key)
           if (optionIndex === -1 && translation.opt_out_text === key) {
