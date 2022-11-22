@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.0...@bloom-housing/partners@7.2.1) (2022-11-22)
+
+
+### Bug Fixes
+
+* cypress tests working again ([#3180](https://github.com/bloom-housing/bloom/issues/3180)) ([f480de5](https://github.com/bloom-housing/bloom/commit/f480de5861f949e45129a0298078f69d4371f1cc))
+
+
+
+
+
 # [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.1.0...@bloom-housing/partners@7.2.0) (2022-11-21)
 
 
