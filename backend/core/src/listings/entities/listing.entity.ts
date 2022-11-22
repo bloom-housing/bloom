@@ -655,6 +655,13 @@ class Listing extends BaseEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   isVerified?: boolean
 
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  verifiedAt?: Date | null
+
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

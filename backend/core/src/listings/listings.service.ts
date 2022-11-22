@@ -193,6 +193,10 @@ export class ListingsService {
       }
     })
     listingDto.unitsAvailable = availableUnits
+    let newVerifyDate = listingDto.isVerified === false ? null : listing.verifiedAt
+    if (listingDto.isVerified === true && !listing.verifiedAt) {
+      newVerifyDate = new Date()
+    }
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: false }),
       publishedAt:
@@ -203,6 +207,7 @@ export class ListingsService {
         listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
           ? new Date()
           : listing.closedAt,
+      verifiedAt: newVerifyDate,
       property: plainToClass(
         PropertyUpdateDto,
         {
