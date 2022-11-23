@@ -1,7 +1,5 @@
-.expandable-content {
-  --expandable-content-button-margin: 0;
-}
-
-.expandable-content-button {
-  margin: var(--expandable-content-button-margin) !important;
+.expandable-content{
+  .button{
+    --label-weight:400;
+  }
 }

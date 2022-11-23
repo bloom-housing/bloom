@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import { Button } from "./Button"
+import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons"
 import "./ExpandableContent.scss"
 
 type ExpandableContentProps = {
@@ -11,23 +13,25 @@ type ExpandableContentProps = {
 }
 
 const ExpandableContent = ({ children, strings, className }: ExpandableContentProps) => {
+  const [isExpanded, setExpanded] = useState(false)
   const classNames = ["expandable-content"]
   if (className) classNames.push(...className.split(" "))
-  const [isExpanded, setExpanded] = useState(false)
 
   return (
     <div className={classNames.join(" ")}>
       {isExpanded && <div>{children}</div>}
-      <button
-        type="button"
-        className="button is-unstyled expandable-content-button no-underline has-toggle"
-        aria-expanded={isExpanded}
+      <Button
+        className="expandable-content__button"
+        unstyled={true}
+        inlineIcon="right"
+        icon={isExpanded ? faAngleUp : faAngleDown}
+        iconSize="small"
         onClick={() => {
           setExpanded(!isExpanded)
         }}
       >
         {isExpanded ? strings.readLess : strings.readMore}
-      </button>
+      </Button>
     </div>
   )
 }

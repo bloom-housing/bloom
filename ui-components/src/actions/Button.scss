@@ -23,7 +23,7 @@
   text-align: center;
   text-transform: var(--label-transform);
   font-family: var(--label-font);
-  display: inline-block;
+  dislay: inline-block;
   letter-spacing: var(--label-letter-spacing);
   font-size: var(--normal-font-size);
   font-weight: var(--label-weight);
@@ -103,19 +103,19 @@
 
   &.is-inline {
     color: var(--bloom-color-primary);
-    font-weight: 600;
+    font-weight: var(--label-weight);
     font-size: var(--bloom-font-size-tiny);
     margin: 0;
     text-decoration: none;
 
     &.has-icon-left {
       .button__icon {
-        margin-right: var(--bloom-s1);
+        margin-right: var(--bloom-s3);
       }
     }
     &.has-icon-right {
       .button__icon {
-        margin-left: var(--bloom-s1);
+        margin-left: var(--bloom-s3);
       }
     }
   }
