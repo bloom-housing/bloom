@@ -5367,6 +5367,9 @@ export interface Listing {
   marketingSeason?: ListingSeasonEnum
 
   /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
   region?: Region
 
   /**  */
@@ -5864,6 +5867,9 @@ export interface ListingCreate {
   marketingSeason?: ListingSeasonEnum
 
   /**  */
+  homeType?: HomeTypeEnum
+
+  /**  */
   applicationMethods: ApplicationMethodCreate[]
 
   /**  */
@@ -6342,6 +6348,9 @@ export interface ListingUpdate {
 
   /**  */
   marketingSeason?: ListingSeasonEnum
+
+  /**  */
+  homeType?: HomeTypeEnum
 
   /**  */
   id?: string
@@ -7211,6 +7220,13 @@ export enum ListingSeasonEnum {
   "summer" = "summer",
   "fall" = "fall",
   "winter" = "winter",
+}
+
+export enum HomeTypeEnum {
+  "apartment" = "apartment",
+  "duplex" = "duplex",
+  "house" = "house",
+  "townhome" = "townhome",
 }
 
 export enum Region {

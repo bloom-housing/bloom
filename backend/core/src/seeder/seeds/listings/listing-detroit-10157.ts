@@ -7,6 +7,7 @@ import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
+import { HomeTypeEnum } from "../../../listings/types/home-type-enum"
 
 const nccProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -46,6 +47,7 @@ const nccListing: ListingSeedType = {
   digitalApplication: undefined,
   paperApplication: undefined,
   section8Acceptance: false,
+  homeType: HomeTypeEnum.apartment,
   referralOpportunity: undefined,
   depositMin: undefined,
   depositMax: undefined,

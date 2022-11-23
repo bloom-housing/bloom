@@ -55,6 +55,7 @@ import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
 import { ListingSeasonEnum } from "../types/listing-season-enum"
 import { ListingUtilities } from "./listing-utilities.entity"
 import { ListingNeighborhoodAmenities } from "./listing-neighborhood-amenities.entity"
+import { HomeTypeEnum } from "../types/home-type-enum"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -689,6 +690,7 @@ class Listing extends BaseEntity {
   marketingDate?: Date | null
 
   @Column({
+    type: "enum",
     enum: ListingSeasonEnum,
     nullable: true,
   })
@@ -700,6 +702,17 @@ class Listing extends BaseEntity {
     enumName: "ListingSeasonEnum",
   })
   marketingSeason?: ListingSeasonEnum | null
+
+  @Column({
+    type: "enum",
+    enum: HomeTypeEnum,
+    nullable: true,
+  })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(HomeTypeEnum, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: HomeTypeEnum, enumName: "HomeTypeEnum" })
+  homeType?: HomeTypeEnum | null
 }
 
 export { Listing as default, Listing }

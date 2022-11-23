@@ -6,6 +6,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
+import { HomeTypeEnum } from "../../../listings/types/home-type-enum"
 
 const mshProperty: PropertySeedType = {
   buildingAddress: {
@@ -37,6 +38,7 @@ const mshListing: ListingSeedType = {
   digitalApplication: undefined,
   paperApplication: undefined,
   section8Acceptance: true,
+  homeType: HomeTypeEnum.apartment,
   referralOpportunity: undefined,
   depositMin: undefined,
   depositMax: undefined,

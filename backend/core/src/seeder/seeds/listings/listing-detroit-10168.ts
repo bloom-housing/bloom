@@ -8,6 +8,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
+import { HomeTypeEnum } from "../../../listings/types/home-type-enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -66,6 +67,7 @@ const listingSeed: ListingSeedType = {
   digitalApplication: undefined,
   paperApplication: undefined,
   section8Acceptance: null,
+  homeType: HomeTypeEnum.duplex,
   referralOpportunity: undefined,
   depositMin: undefined,
   depositMax: undefined,
