@@ -1,9 +1,18 @@
 import * as React from "react"
-
+import { BADGES } from "../../.storybook/constants"
 import { PreferencesList } from "./PreferencesList"
+import PreferencesListDocumentation from "./PreferencesList.docs.mdx"
 
 export default {
-  title: "Lists/Preferences List",
+  title: "Lists/Preferences List 🚩",
+  id: "lists/preferences-list",
+  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  parameters: {
+    docs: {
+      page: PreferencesListDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 const listingPreferences = [
