@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.1...@bloom-housing/partners@7.2.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* table a11y dynamic linting until performance issues are resolved ([#3178](https://github.com/bloom-housing/bloom/issues/3178)) ([7fe8886](https://github.com/bloom-housing/bloom/commit/7fe8886454621210c439d436d3e36068bed9a6ea))
+
+
+
+
+
 ## [7.2.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.0...@bloom-housing/partners@7.2.1) (2022-11-22)
 
 

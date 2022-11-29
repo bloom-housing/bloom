@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.3...@bloom-housing/ui-components@7.0.4) (2022-11-29)
+
+
+### Bug Fixes
+
+* fix text alignment on action block component ([#3177](https://github.com/bloom-housing/bloom/issues/3177)) ([6c45984](https://github.com/bloom-housing/bloom/commit/6c4598499651389b2e49f27c0994fdb7c986cb62))
+
+
+
+
+
 ## [7.0.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.2...@bloom-housing/ui-components@7.0.3) (2022-11-16)
 
 
