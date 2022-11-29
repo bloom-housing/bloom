@@ -318,5 +318,15 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.section8Acceptance]?: boolean
+  [ListingFilterKeys.section8Acceptance]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "apartment,townhome",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.homeType]?: string
 }

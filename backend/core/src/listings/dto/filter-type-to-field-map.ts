@@ -79,4 +79,5 @@ export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   wideDoorways: "listing_features.wideDoorways",
   loweredCabinets: "listing_features.loweredCabinets",
   section8Acceptance: "listings.section8Acceptance",
+  homeType: "listings.homeType",
 }

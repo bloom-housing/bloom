@@ -4,6 +4,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { Region } from "./regions"
+import { HomeTypeEnum } from "../../backend/core/src/listings/types/home-type-enum"
 
 // TODO(#629): Refactor filter state storage strategy
 // Currently, the knowledge of "what a filter is" is spread across multiple
@@ -63,6 +64,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.bedRoomSize:
     case ListingFilterKeys.communityPrograms:
     case ListingFilterKeys.region:
+    case ListingFilterKeys.homeType:
     case ListingFilterKeys.accessibility:
     case ListingFilterKeys.availability:
     case ListingFilterKeys.zipcode:
@@ -78,6 +80,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
 // the filter state object, ListingFilterState.
 // We exclude bedrooms, since that is constructed from studio, oneBdrm, and so on
 const { bedrooms, ...IncludedBackendKeys } = ListingFilterKeys
+
 enum BedroomFields {
   studio = "studio",
   oneBdrm = "oneBdrm",
@@ -89,6 +92,7 @@ export const FrontendListingFilterStateKeys = {
   ...IncludedBackendKeys,
   ...BedroomFields,
   ...Region,
+  ...HomeTypeEnum,
   favorited: "favorited" as const,
   bedRoomSize: "bedRoomSize" as const,
   communityPrograms: "communityPrograms" as const,
@@ -155,6 +159,13 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.wideDoorways]?: string | boolean
   [FrontendListingFilterStateKeys.loweredCabinets]?: string | boolean
   [FrontendListingFilterStateKeys.section8Acceptance]?: string | boolean
+
+  // home type
+  [FrontendListingFilterStateKeys.homeType]?: string
+  [FrontendListingFilterStateKeys.apartment]?: string | boolean
+  [FrontendListingFilterStateKeys.duplex]?: string | boolean
+  [FrontendListingFilterStateKeys.house]?: string | boolean
+  [FrontendListingFilterStateKeys.townhome]?: string | boolean
 
   // favorites
   [FrontendListingFilterStateKeys.favorited]?: string | boolean

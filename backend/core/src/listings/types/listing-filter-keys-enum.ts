@@ -49,6 +49,7 @@ export enum ListingFilterKeys {
   wideDoorways = "wideDoorways",
   loweredCabinets = "loweredCabinets",
   section8Acceptance = "section8Acceptance",
+  homeType = "homeType",
 }
 
 export enum AvailabilityFilterEnum {
