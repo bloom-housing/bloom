@@ -1,5 +1,6 @@
 .action-block {
   display: flex;
+  text-align: center;
   @apply p-4;
 
   &.primary-lighter {
@@ -19,7 +20,7 @@
     }
   }
   .action-block__actions .button {
-    @apply m-2;
+    @apply m-1;
   }
   .action-block__subheader {
     @apply pt-2;
