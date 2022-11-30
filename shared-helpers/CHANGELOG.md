@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.5...@bloom-housing/shared-helpers@7.1.0) (2022-11-30)
+
+
+### Features
+
+* add startDate field to listing events ([#3167](https://github.com/bloom-housing/bloom/issues/3167)) ([3d0aa11](https://github.com/bloom-housing/bloom/commit/3d0aa11abf36db016fa3ce3117a72b5fdad88614))
+
+
+
+
+
 ## [7.0.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.4...@bloom-housing/shared-helpers@7.0.5) (2022-11-29)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
