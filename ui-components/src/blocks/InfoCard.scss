@@ -2,7 +2,8 @@
   --padding:var(--bloom-s6);
   --margin-bottom:var(--bloom-s4);
   --border-color:var(--bloom-color-gray-450);
-  --background-color:var(--bloom-color-primary-lighter);
+  --background-color:var(--bloom-color-white);
+  --background-color-lighter:var(--bloom-color-primary-lighter);
   --title-color:var(--bloom-color-gray-800);
   --title-font-size:var(--bloom-font-size-base);
   --title-font-family:var(--bloom-font-sans);
@@ -14,11 +15,12 @@
   margin-bottom:var(--margin-bottom);
   border-radius: 0.25rem;
   border-width:1px;
+  background-color:var(--background-color);
 }
 
 .info-card.is-normal-primary-lighter,
 .markdown .info-card {
-  background-color:var(--background-color);
+  background-color:var(--background-color-lighter);
 
   .info-card__title {
     font-size:var(--title-font-size);

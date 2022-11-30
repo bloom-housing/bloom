@@ -6,7 +6,7 @@ import PreferencesListDocumentation from "./PreferencesList.docs.mdx"
 export default {
   title: "Lists/Preferences List 🚩",
   id: "lists/preferences-list",
-  decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>],
   parameters: {
     docs: {
       page: PreferencesListDocumentation,

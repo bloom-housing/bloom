@@ -1,6 +1,7 @@
 .preferences-list{
-  --title-color:var(--bloom-color-gray-800);
-  --title-text-transform:uppercase;
+  --background-color:var(--bloom-color-white);
+  --info-card-title-color:var(--bloom-color-gray-800);
+  --info-card-title-text-transform:uppercase;
   --ordinal-bg-color:var(--bloom-color-white);
   --ordinal-border-width:var(--bloom-border-2);
   --ordinal-border-color:var(--bloom-color-primary);
@@ -14,12 +15,12 @@
 
 .preferences-list__item {
   .info-card__title {
-    --info-card-title-text-transform:var(--title-text-transform);
-    --info-card-title-font-size:var(--bloom-font-size-sm);
-    --info-card-title-letter-spacing:var(--bloom-letter-spacing-wide);
+    --title-text-transform:var(--info-card-title-text-transform);
+    --title-font-size:var(--bloom-font-size-sm);
+    --title-letter-spacing:var(--bloom-letter-spacing-wide);
 
     margin-bottom:0px;
-    color:var(--title-color);
+    color:var(--info-card-title-color);
 
     @media (max-width: $screen-md) {
       margin-left: 0px;
@@ -30,9 +31,11 @@
 
 .preferences-list__item--title-only {
    .info-card__title {
-    --info-card-title-text-transform:var(--title-text-transform);
-    --info-card-title-font-size:var(--bloom-font-size-sm);
-    --info-card-title-letter-spacing:var(--bloom-letter-spacing-wide);
+    --title-text-transform:var(--info-card-title-text-transform);
+    --title-font-size:var(--bloom-font-size-sm);
+    --title-letter-spacing:var(--bloom-letter-spacing-wide);
+
+    color:var(--info-card-title-color);
   }
 
   .preferences-list__number {
