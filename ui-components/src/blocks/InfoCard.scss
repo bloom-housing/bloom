@@ -7,8 +7,10 @@
   --title-color:var(--bloom-color-gray-800);
   --title-font-size:var(--bloom-font-size-base);
   --title-font-family:var(--bloom-font-sans);
-  --title-text-transform:none;
-  --title-letter-spacing:0;
+  --title-text-transform:uppercase;
+  --title-text-transform-lighter:none;
+  --title-letter-spacing:0.025em;
+  --title-letter-spacing-lighter:0;
 
   padding:var(--padding);
   border-color:var(--border-color);
@@ -24,6 +26,8 @@
 
   .info-card__title {
     font-size:var(--title-font-size);
+    text-transform:var(--title-text-transform-lighter);
+    letter-spacing:var(--title-letter-spacing-lighter);
     }
 }
 
