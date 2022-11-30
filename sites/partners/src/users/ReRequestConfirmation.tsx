@@ -1,13 +1,5 @@
 import React, { useContext } from "react"
-import {
-  AppearanceBorderType,
-  AppearanceStyleType,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  t,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Button, Field, Form, FormCard, t } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 
@@ -85,8 +77,6 @@ const ReRequestConfirmation = ({
               {t("users.requestResend")}
             </Button>
             <Button
-              styleType={AppearanceStyleType.secondary}
-              border={AppearanceBorderType.borderless}
               onClick={() => {
                 clearErrors(), onClose(false)
               }}

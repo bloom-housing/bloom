@@ -4467,6 +4467,9 @@ export interface ListingEvent {
   updatedAt: Date
 
   /**  */
+  startDate?: Date
+
+  /**  */
   startTime?: Date
 
   /**  */
@@ -5126,6 +5129,9 @@ export interface ListingEventCreate {
 
   /**  */
   file?: AssetCreate
+
+  /**  */
+  startDate?: Date
 
   /**  */
   startTime?: Date

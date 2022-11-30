@@ -8,7 +8,6 @@ import {
   Drawer,
   Modal,
   AppearanceStyleType,
-  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../FormTypes"
@@ -177,15 +176,15 @@ const FormHouseholdMembers = ({
           <Button
             styleType={AppearanceStyleType.alert}
             onClick={() => deleteMember(membersDeleteModal)}
+            size={AppearanceSizeType.small}
           >
             {t("t.delete")}
           </Button>,
           <Button
-            styleType={AppearanceStyleType.primary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setMembersDeleteModal(null)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

@@ -13,6 +13,7 @@ export class ListingDefaultLotteryPending extends ListingDefaultSeed {
       events: [
         {
           startTime: getDate(10),
+          startDate: getDate(10),
           endTime: getDate(10),
           note:
             "Custom public lottery event note. This is a long note and should take up more space.",
@@ -22,11 +23,13 @@ export class ListingDefaultLotteryPending extends ListingDefaultSeed {
         },
         {
           startTime: getDate(15),
+          startDate: getDate(15),
           endTime: getDate(15),
           type: ListingEventType.openHouse,
         },
         {
           startTime: getDate(20),
+          startDate: getDate(20),
           endTime: getDate(20),
           note: "Custom open house event note",
           type: ListingEventType.openHouse,
@@ -35,6 +38,7 @@ export class ListingDefaultLotteryPending extends ListingDefaultSeed {
         },
         {
           startTime: getDate(-10),
+          startDate: getDate(-10),
           endTime: getDate(-10),
           type: ListingEventType.publicLottery,
           url: "https://www.example2.com",
@@ -42,6 +46,7 @@ export class ListingDefaultLotteryPending extends ListingDefaultSeed {
         },
         {
           startTime: getDate(15),
+          startDate: getDate(15),
           endTime: getDate(15),
           type: ListingEventType.lotteryResults,
           label: "Custom Event URL Label",

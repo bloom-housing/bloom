@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.5...@bloom-housing/shared-helpers@7.1.0) (2022-11-30)
+
+
+### Features
+
+* add startDate field to listing events ([#3167](https://github.com/bloom-housing/bloom/issues/3167)) ([3d0aa11](https://github.com/bloom-housing/bloom/commit/3d0aa11abf36db016fa3ce3117a72b5fdad88614))
+
+
+
+
+
+## [7.0.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.4...@bloom-housing/shared-helpers@7.0.5) (2022-11-29)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [7.0.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.3...@bloom-housing/shared-helpers@7.0.4) (2022-11-21)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [7.0.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.2...@bloom-housing/shared-helpers@7.0.3) (2022-11-16)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.2-alpha.2...@bloom-housing/shared-helpers@7.0.2) (2022-11-14)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [7.0.2-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.2-alpha.1...@bloom-housing/shared-helpers@7.0.2-alpha.2) (2022-11-03)
+
+
+### Bug Fixes
+
+* allow for more space for modals on mobile ([#3153](https://github.com/bloom-housing/bloom/issues/3153)) ([7e41703](https://github.com/bloom-housing/bloom/commit/7e41703ad8571eb160f4eaf53f40f9055f7639a3))
+
+
+
+
+
+## [7.0.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.2-alpha.0...@bloom-housing/shared-helpers@7.0.2-alpha.1) (2022-11-02)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+## [7.0.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.1...@bloom-housing/shared-helpers@7.0.2-alpha.0) (2022-10-31)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
 ## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.0.1-alpha.9...@bloom-housing/shared-helpers@7.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers

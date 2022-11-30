@@ -6,7 +6,11 @@ import { GridSection } from "../sections/GridSection"
 import { ViewItem } from "../blocks/ViewItem"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
-import { AppearanceBorderType, AppearanceStyleType } from "../global/AppearanceTypes"
+import {
+  AppearanceBorderType,
+  AppearanceSizeType,
+  AppearanceStyleType,
+} from "../global/AppearanceTypes"
 
 export default {
   title: "Overlays/Drawer",
@@ -27,14 +31,15 @@ export const Standard = () => {
             key={0}
             onClick={() => setDrawerState(!drawerState)}
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
           >
             Submit
           </Button>,
           <Button
             key={1}
             onClick={() => setDrawerState(!drawerState)}
-            styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
           >
             Cancel
           </Button>,
@@ -75,12 +80,7 @@ export const StandardOnLeft = () => {
           >
             Submit
           </Button>,
-          <Button
-            key={1}
-            onClick={() => setDrawerState(!drawerState)}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
-          >
+          <Button key={1} onClick={() => setDrawerState(!drawerState)}>
             Cancel
           </Button>,
         ]}

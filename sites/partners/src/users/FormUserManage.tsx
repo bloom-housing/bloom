@@ -11,7 +11,6 @@ import {
   Select,
   useMutate,
   AppearanceStyleType,
-  AppearanceBorderType,
   emailRegex,
   Tag,
   AppearanceSizeType,
@@ -445,7 +444,6 @@ const FormUserManage = ({
               type="button"
               className="mx-1"
               onClick={() => onInviteResend()}
-              styleType={AppearanceStyleType.secondary}
               loading={isResendConfirmationLoading}
             >
               {t("users.resendInvite")}
@@ -478,16 +476,16 @@ const FormUserManage = ({
             onClick={() => {
               onDelete()
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.delete")}
           </Button>,
           <Button
             type="button"
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
             onClick={() => {
               setDeleteModalActive(false)
             }}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,

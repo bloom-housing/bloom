@@ -73,8 +73,8 @@ export const CustomDescription = () => {
   const customDescription = () => {
     return (
       <div>
-        <div className={"italic pb-2"}>Custom styled content.</div>
-        <div className={"underline"}>More custom styled content.</div>
+        <p className={"italic pb-2"}>Custom styled content.</p>
+        <p className={"underline"}>More custom styled content.</p>
       </div>
     )
   }

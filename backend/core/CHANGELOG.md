@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.1.0...@bloom-housing/backend-core@7.2.0) (2022-11-30)
+
+
+### Features
+
+* add startDate field to listing events ([#3167](https://github.com/bloom-housing/bloom/issues/3167)) ([3d0aa11](https://github.com/bloom-housing/bloom/commit/3d0aa11abf36db016fa3ce3117a72b5fdad88614))
+
+
+
+
+
+# [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.2...@bloom-housing/backend-core@7.1.0) (2022-11-21)
+
+
+### Features
+
+* adding UUID validation ([#3172](https://github.com/bloom-housing/bloom/issues/3172)) ([320c0f0](https://github.com/bloom-housing/bloom/commit/320c0f0e2e2ec8b40bcdddc39875456d53e7cca4))
+
+
+
+
+
+## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.2-alpha.0...@bloom-housing/backend-core@7.0.2) (2022-11-14)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [7.0.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1...@bloom-housing/backend-core@7.0.2-alpha.0) (2022-11-02)
+
+
+### Bug Fixes
+
+* upgrade ioredis version ([#3161](https://github.com/bloom-housing/bloom/issues/3161)) ([8e8644b](https://github.com/bloom-housing/bloom/commit/8e8644b590e51f07cdcdb715bd09a1d8d09b1386))
+
+
+
+
+
 ## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.5...@bloom-housing/backend-core@7.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

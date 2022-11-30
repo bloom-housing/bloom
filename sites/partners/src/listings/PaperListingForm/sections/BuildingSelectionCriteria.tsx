@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceBorderType,
   AppearanceStyleType,
   Button,
   Drawer,
@@ -14,6 +13,7 @@ import {
   TableThumbnail,
   FieldGroup,
   StandardTableData,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
@@ -247,6 +247,7 @@ const LotteryResults = () => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
+            size={AppearanceSizeType.small}
           >
             Save
           </Button>,
@@ -255,8 +256,7 @@ const LotteryResults = () => {
             onClick={() => {
               resetDrawerState()
             }}
-            styleType={AppearanceStyleType.secondary}
-            border={AppearanceBorderType.borderless}
+            size={AppearanceSizeType.small}
           >
             {t("t.cancel")}
           </Button>,
