@@ -505,9 +505,11 @@ export const ListingView = (props: ListingProps) => {
             </p>
           </div>
           <div className={"flex flex-wrap mx-2"}>
-            {getListingTags(listing.listingPrograms, listing.features)?.map((cardTag) =>
-              getListingTag(cardTag)
-            )}
+            {getListingTags(
+              listing.listingPrograms,
+              listing.features,
+              listing.homeType
+            )?.map((cardTag) => getListingTag(cardTag))}
           </div>
           <div className="text-right px-2">
             <FavoriteButton name={listing.name} id={listing.id} />

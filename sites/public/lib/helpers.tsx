@@ -12,6 +12,7 @@ import {
   ListingProgram,
   ListingStatus,
   ListingReviewOrder,
+  HomeTypeEnum,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -28,6 +29,8 @@ import {
   StandardTableData,
   StatusBarType,
   ApplicationStatusType,
+  AppearanceShadeType,
+  CardTag,
 } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
@@ -133,9 +136,10 @@ export const getImageTagLabelFromListing = (listing: Listing) => {
 export const getListingTags = (
   listingPrograms: ListingProgram[],
   listingFeatures: ListingFeatures,
+  homeType?: HomeTypeEnum,
   translate?: boolean
 ) => {
-  const tags: ImageTag[] =
+  const tags: CardTag[] =
     listingPrograms
       ?.sort((a, b) => (a.ordinal < b.ordinal ? -1 : 1))
       .map((program) => {
@@ -152,13 +156,21 @@ export const getListingTags = (
       iconColor: AppearanceStyleType.primary,
     })
   }
+  if (homeType) {
+    tags.unshift({
+      text: t(`homeType.${homeType}`),
+      styleType: AppearanceStyleType.success,
+      shadeType: AppearanceShadeType.light,
+    })
+  }
   return tags
 }
 
-export const getListingTag = (tag: ImageTag) => {
+export const getListingTag = (tag: CardTag) => {
   return (
     <Tag
-      styleType={AppearanceStyleType.accentLight}
+      styleType={tag.styleType ?? AppearanceStyleType.accentLight}
+      shade={tag?.shadeType}
       className={"me-2 mb-2 font-bold px-3 py-2"}
       key={tag.text}
     >
@@ -231,7 +243,7 @@ export const getListings = (listings) => {
         contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
         tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
       }}
-      cardTags={getListingTags(listing.listingPrograms, listing.features, true)}
+      cardTags={getListingTags(listing.listingPrograms, listing.features, listing.homeType, true)}
       footerContent={
         <div className={"flex justify-between items-center"}>
           <FavoriteButton name={listing.name} id={listing.id} />

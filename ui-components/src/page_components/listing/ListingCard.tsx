@@ -3,9 +3,9 @@ import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
 import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
-import { Heading, HeaderType } from "../../headers/Heading"
+import { HeaderType, Heading } from "../../headers/Heading"
 import { Tag } from "../../text/Tag"
-import { AppearanceStyleType } from "../../global/AppearanceTypes"
+import { AppearanceShadeType, AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
 
@@ -27,8 +27,13 @@ export interface ListingCardContentProps {
   tableHeader?: ListingCardHeader
   tableSubheader?: ListingCardHeader
 }
+
+export interface CardTag extends ImageTag {
+  shadeType?: AppearanceShadeType
+}
+
 export interface ListingCardProps {
-  cardTags?: ImageTag[]
+  cardTags?: CardTag[]
   children?: React.ReactElement
   contentProps?: ListingCardContentProps
   footerButtons?: ListingFooterButton[]
@@ -85,7 +90,6 @@ const ListingCard = (props: ListingCardProps) => {
       return <></>
     }
   }
-
   const getContentHeader = () => {
     return (
       <>
@@ -94,7 +98,6 @@ const ListingCard = (props: ListingCardProps) => {
       </>
     )
   }
-
   const getContent = () => {
     return (
       <>
@@ -111,7 +114,8 @@ const ListingCard = (props: ListingCardProps) => {
                 {cardTags?.map((cardTag, index) => {
                   return (
                     <Tag
-                      styleType={AppearanceStyleType.accentLight}
+                      styleType={cardTag.styleType ?? AppearanceStyleType.accentLight}
+                      shade={cardTag?.shadeType}
                       className={"me-2 mb-2 font-bold px-3 py-2"}
                       key={index}
                     >
