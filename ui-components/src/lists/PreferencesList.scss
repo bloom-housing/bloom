@@ -15,9 +15,7 @@
 
 .preferences-list__item {
   .info-card__title {
-    --title-text-transform:var(--info-card-title-text-transform);
     --title-font-size:var(--bloom-font-size-sm);
-    --title-letter-spacing:var(--bloom-letter-spacing-wide);
 
     margin-bottom:0px;
     color:var(--info-card-title-color);
@@ -31,9 +29,7 @@
 
 .preferences-list__item--title-only {
    .info-card__title {
-    --title-text-transform:var(--info-card-title-text-transform);
     --title-font-size:var(--bloom-font-size-sm);
-    --title-letter-spacing:var(--bloom-letter-spacing-wide);
 
     color:var(--info-card-title-color);
   }
