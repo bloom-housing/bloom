@@ -5,7 +5,8 @@
   --background-color: var(--bloom-color-white);
   --background-color-lighter: var(--bloom-color-primary-lighter);
   --title-color: var(--bloom-color-gray-800);
-  --title-font-size: var(--bloom-font-size-base);
+  --title-font-size: var(--bloom-font-size-sm);
+  --title-font-lighter: var(--bloom-font-size-base);
   --title-font-family: var(--bloom-font-sans);
   --title-text-transform: uppercase;
   --title-text-transform-lighter: none;
@@ -25,7 +26,7 @@
   background-color: var(--background-color-lighter);
 
   .info-card__title {
-    font-size: var(--title-font-size);
+    font-size: var(--title-font-size-lighter);
     text-transform: var(--title-text-transform-lighter);
     letter-spacing: var(--title-letter-spacing-lighter);
   }
