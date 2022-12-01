@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.0...@bloom-housing/partners@7.3.1) (2022-12-01)
+
+
+### Reverts
+
+* Revert "fix: cypress tests working again (#3180)" (#3194) ([4894a20](https://github.com/bloom-housing/bloom/commit/4894a2017906aae134860eef39c7f70a58c7d182)), closes [#3180](https://github.com/bloom-housing/bloom/issues/3180) [#3194](https://github.com/bloom-housing/bloom/issues/3194)
+
+
+
+
+
 # [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.2...@bloom-housing/partners@7.3.0) (2022-11-30)
 
 
