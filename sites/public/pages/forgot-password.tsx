@@ -39,7 +39,7 @@ const ForgotPassword = () => {
       const { status } = error.response || {}
       determineNetworkError(status, error)
     }
-    setSiteAlertMessage(t(`authentication.forgotPassword.message`), "success")
+    setSiteAlertMessage(t(`authentication.forgotPassword.message`), "notice")
     await router.push("/sign-in")
   }
 
