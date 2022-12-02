@@ -5,7 +5,6 @@ Bloom is designed to use a set of independently run services that provide the da
 ## Resources
 
 - [Heroku Postgres](https://www.heroku.com/postgres)
-- [Heroku Redis](https://www.heroku.com/redis)
 
 ## Heroku Buildpacks
 
@@ -38,9 +37,3 @@ DATABASE_URL=
 EMAIL_API_KEY='SENDGRID-API-KEY'
 
 PARTNERS_BASE_URL='PARTNER-PORTAL-URL'
-
-REDIS_TLS_URL=
-
-REDIS_URL=
-
-REDIS_USE_TLS=1
