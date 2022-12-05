@@ -2,7 +2,7 @@ import * as React from "react"
 import DownloadLotteryResults from "./DownloadLotteryResults"
 
 export default {
-  title: "Listing Sidebar/Events/Lottery Results",
+  title: "Listing Sidebar/Events/Download Lottery Results",
 }
 
 export const NoDate = () => {
