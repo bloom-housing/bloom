@@ -35,12 +35,12 @@ const ForgotPassword = () => {
 
     try {
       await forgotPassword(email)
-      setSiteAlertMessage(t(`authentication.forgotPassword.success`), "success")
-      await router.push("/")
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)
     }
+    setSiteAlertMessage(t(`authentication.forgotPassword.message`), "notice")
+    await router.push("/sign-in")
   }
 
   return (
