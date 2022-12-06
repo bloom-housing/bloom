@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.3...@bloom-housing/partners@7.3.4) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [7.3.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.2...@bloom-housing/partners@7.3.3) (2022-12-06)
 
 **Note:** Version bump only for package @bloom-housing/partners
