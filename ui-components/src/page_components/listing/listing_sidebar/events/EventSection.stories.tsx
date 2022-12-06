@@ -49,6 +49,20 @@ export const Note = () => {
   return <EventSection events={events} headerText={"Lottery"} sectionHeader={true} />
 }
 
+export const NoteAndURL = () => {
+  const events: EventType[] = [
+    {
+      dateString: "November 22, 2022",
+      timeString: "10:00am - 11:00am",
+      note:
+        "Virtual lottery (not in person). We will post a link to the virtual lottery on February 23rd. Check back then.",
+      linkURL: "https://www.exygy.com",
+      linkText: "See Video",
+    },
+  ]
+  return <EventSection events={events} headerText={"Lottery"} sectionHeader={true} />
+}
+
 export const LongStrings = () => {
   const events: EventType[] = [
     {
