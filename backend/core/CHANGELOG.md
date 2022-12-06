@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.2.0...@bloom-housing/backend-core@7.3.0) (2022-12-06)
+
+
+### Features
+
+* migrate afs job off of redis ([#3199](https://github.com/bloom-housing/bloom/issues/3199)) ([2d8afa2](https://github.com/bloom-housing/bloom/commit/2d8afa2836011b206f24c6de40cfebc015def388))
+
+
+
+
+
 # [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.1.0...@bloom-housing/backend-core@7.2.0) (2022-11-30)
 
 
