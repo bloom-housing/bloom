@@ -433,7 +433,6 @@
   "flags.markedAsDuplicate": "تم وضع علامة على٪ {quantity} من التطبيقات على أنها مكررة",
   "authentication.forgotPassword.changePassword": "تغيير كلمة السر",
   "authentication.forgotPassword.sendEmail": "ارسل بريد الكتروني",
-  "authentication.forgotPassword.success": "لقد أرسلنا لك بريدًا إلكترونيًا. ستتلقى بريدًا إلكترونيًا يحتوي على رابط لإعادة تعيين كلمة المرور الخاصة بك.",
   "authentication.forgotPassword.errors.tokenExpired": "انتهت صلاحية رمز إعادة تعيين كلمة المرور. الرجاء طلب واحدة جديدة.",
   "authentication.forgotPassword.errors.tokenMissing": "لم يتم العثور على الرمز. الرجاء طلب واحدة جديدة.",
   "authentication.forgotPassword.errors.generic": "كان هناك خطأ. يرجى المحاولة مرة أخرى ، أو الاتصال بالدعم للمساعدة.",

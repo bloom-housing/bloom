@@ -433,7 +433,6 @@
   "flags.markedAsDuplicate": "%{amount} অ্যাপ্লিকেশনগুলি সদৃশ হিসাবে চিহ্নিত",
   "authentication.forgotPassword.changePassword": "পাসওয়ার্ড পরিবর্তন করুন",
   "authentication.forgotPassword.sendEmail": "ইমেইল পাঠান",
-  "authentication.forgotPassword.success": "আমরা আপনাকে একটি ইমেল পাঠিয়েছি। আপনি আপনার পাসওয়ার্ড রিসেট করার জন্য একটি লিঙ্ক সহ একটি ইমেল পাবেন৷",
   "authentication.forgotPassword.errors.tokenExpired": "পাসওয়ার্ড টোকেনের মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে নতুনের জন্য অনুরোধ করুন।",
   "authentication.forgotPassword.errors.tokenMissing": "টোকেন পাওয়া যায়নি। অনুগ্রহ করে নতুনের জন্য অনুরোধ করুন।",
   "authentication.forgotPassword.errors.generic": "সেখানে একটা ভুল ছিল. অনুগ্রহ করে আবার চেষ্টা করুন, অথবা সাহায্যের জন্য সহায়তার সাথে যোগাযোগ করুন।",

@@ -435,17 +435,15 @@ export class UserService {
   }
 
   public async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await this.findByEmail(dto.email)
-    if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    const user = await this.userRepository.findByEmail(dto.email)
+    if (user) {
+      // Token expires in 1 hour
+      const payload = { id: user.id, exp: Number.parseInt(dayjs().add(1, "hour").format("X")) }
+      user.resetToken = encode(payload, process.env.APP_SECRET)
+      await this.userRepository.save(user)
+      await this.emailService.forgotPassword(user, dto.appUrl)
+      return user
     }
-
-    // Token expires in 1 hour
-    const payload = { id: user.id, exp: Number.parseInt(dayjs().add(1, "hour").format("X")) }
-    user.resetToken = encode(payload, process.env.APP_SECRET)
-    await this.userRepository.save(user)
-    await this.emailService.forgotPassword(user, dto.appUrl)
-    return user
   }
 
   public async updatePassword(dto: UpdatePasswordDto) {

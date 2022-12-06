@@ -307,7 +307,6 @@
   "authentication.createAccount.reEnterEmail": "Vuelva a introducir la dirección de correo electrónico",
   "authentication.createAccount.reEnterPassword": "Reingresa tu contraseña",
   "authentication.createAccount.resendTheEmail": "Volver a enviar el email",
-  "authentication.forgotPassword.success": "Te hemos enviado un correo electrónico. Recibirás un correo electrónico con un enlace para restablecer tu contraseña.",
   "authentication.forgotPassword.sendEmail": "Inscribirse",
   "authentication.signIn.error": "Hubo un error cuando usted inició sesión",
   "authentication.signIn.errorGenericMessage": "Por favor inténtelo de nuevo, o comuníquese con servicio al cliente para recibir asistencia.",
