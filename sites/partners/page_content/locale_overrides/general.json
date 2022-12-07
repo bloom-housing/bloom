@@ -93,7 +93,7 @@
   "applications.table.residenceState": "Residence State",
   "applications.table.residenceStreet": "Residence Street Address",
   "applications.table.residenceZip": "Residence Zip",
-  "applications.table.reviewStatus": "Application Status",
+  "applications.table.reviewStatus": "Review Status",
   "applications.table.searchError": "Enter at least 3 characters to search",
   "applications.table.subsidyOrVoucher": "Subsidy or Voucher",
   "applications.table.workCity": "Work City",
