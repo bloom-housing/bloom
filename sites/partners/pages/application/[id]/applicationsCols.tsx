@@ -58,6 +58,14 @@ export const getCols = () => [
     width: 120,
   },
   {
+    headerName: t("t.email"),
+    field: "applicant.emailAddress",
+    sortable: false,
+    filter: false,
+    resizable: true,
+    unSortIcon: true,
+  },
+  {
     headerName: t("application.details.type"),
     field: "submissionType",
     sortable: false,
