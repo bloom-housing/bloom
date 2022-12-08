@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.5...@bloom-housing/partners@7.4.0) (2022-12-08)
+
+
+### Features
+
+* add email column to duplicates table ([ce2a1a8](https://github.com/bloom-housing/bloom/commit/ce2a1a88e34ab5734e0de3cad9556df3b939efae))
+
+
+
+
+
 ## [7.3.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.4...@bloom-housing/partners@7.3.5) (2022-12-08)
 
 **Note:** Version bump only for package @bloom-housing/partners
