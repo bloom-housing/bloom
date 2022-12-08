@@ -76,7 +76,7 @@ describe("listing views", () => {
 
       view.getViewQb()
 
-      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(27)
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(21)
     })
   })
 
