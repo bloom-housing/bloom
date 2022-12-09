@@ -52,7 +52,7 @@ import { ApplicationMethodType } from "../application-methods/types/application-
 import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
 import { CountyCode } from "../shared/types/county-code"
-import { ApplicationFlaggedSetsCronjobConsumer } from "../application-flagged-sets/application-flagged-sets-cronjob-consumer"
+import { ApplicationFlaggedSetsCronjobService } from "../application-flagged-sets/application-flagged-sets-cronjob.service"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -80,6 +80,7 @@ const listingSeeds: any[] = [
   ListingTritonSeedDetroit,
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const amiSeeds: any[] = [
   AmiChartDefaultSeed,
   AmiDefaultMissingAMI,
@@ -212,8 +213,8 @@ async function seed() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)
-  const afsProcessingService = await app.resolve<ApplicationFlaggedSetsCronjobConsumer>(
-    ApplicationFlaggedSetsCronjobConsumer
+  const afsProcessingService = await app.resolve<ApplicationFlaggedSetsCronjobService>(
+    ApplicationFlaggedSetsCronjobService
   )
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))

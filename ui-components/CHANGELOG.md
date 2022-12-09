@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.6...@bloom-housing/ui-components@7.0.7) (2022-12-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [7.0.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.5...@bloom-housing/ui-components@7.0.6) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [7.0.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.4...@bloom-housing/ui-components@7.0.5) (2022-12-05)
+
+
+### Bug Fixes
+
+* **infocard preferenceslist:** fix spacing in scss files; fix typo in doc ([f067c61](https://github.com/bloom-housing/bloom/commit/f067c611926acfce8c3702ce705cbc2840cc379e))
+* **infocard:** add default text size ([00af02e](https://github.com/bloom-housing/bloom/commit/00af02e4abde2bb310f1dfb900bd920d4f0594e7))
+* **infocard:** add lighter vars ([2089a69](https://github.com/bloom-housing/bloom/commit/2089a691f0ef67dacbeac9eb731ba93bea1c2261))
+* **infocard:** fix typo ([9a73783](https://github.com/bloom-housing/bloom/commit/9a7378331046e1cb5a165e72ab05addd80e1f75c))
+* **infocard:** fix var usage ([6e0f58a](https://github.com/bloom-housing/bloom/commit/6e0f58affa2de7dd54236a5bd23a7780d21d0cee))
+* **preferenceslist:** fix mixnamed css vars; add bg ([a934b09](https://github.com/bloom-housing/bloom/commit/a934b09529f01def49e5b6396fcd5fa309c7df06))
+* **preferenceslist:** remove uneeded vars ([f21e29f](https://github.com/bloom-housing/bloom/commit/f21e29f7efc5d94576aef8d255b89068c9957bf5))
+* **preferenceslist:** remove unused css var ([fec242c](https://github.com/bloom-housing/bloom/commit/fec242c4fcb5c1485b5dfb12255ac2d30160be62))
+* **preferenceslist:** remove unused css var ([9e8f365](https://github.com/bloom-housing/bloom/commit/9e8f365403c0a6ea441be294eaee9a2b620c55f7))
+
+
+
+
+
 ## [7.0.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@7.0.3...@bloom-housing/ui-components@7.0.4) (2022-11-29)
 
 

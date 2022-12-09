@@ -369,7 +369,6 @@
   "authentication.forgotPassword.errors.tokenExpired": "El token de restablecimiento de contraseña caducó. Por favor_ solicite uno nuevo.",
   "authentication.forgotPassword.errors.tokenMissing": "El token no fue encontrado. Por favor_ solicite uno nuevo.",
   "authentication.forgotPassword.sendEmail": "Enviar correo electrónico",
-  "authentication.forgotPassword.success": "Le hemos enviado un correo electrónico con un enlace para restablecer tu contraseña.",
   "authentication.signIn.accountHasBeenLocked": "Por razones de seguridad_ esta cuenta ha sido bloqueada.",
   "authentication.signIn.afterFailedAttempts": "Por razones de seguridad_ después de %{count} intentos fallidos_ deberá esperar 30 minutos antes de volver a intentarlo.",
   "authentication.signIn.changeYourPassword": "Puede cambiar su contraseña",

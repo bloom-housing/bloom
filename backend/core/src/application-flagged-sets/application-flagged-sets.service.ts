@@ -1,6 +1,4 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
-import { InjectQueue } from "@nestjs/bull"
-import { Queue } from "bull"
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -14,11 +12,11 @@ import { ApplicationFlaggedSetMeta } from "./dto/application-flagged-set-meta.dt
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 import { View } from "./types/view-enum"
-import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
 import { Rule } from "./types/rule-enum"
 import { IdDto } from "../../src/shared/dto/id.dto"
 import { assignDefined } from "../../src/shared/utils/assign-defined"
 import { ApplicationReviewStatus } from "../applications/types/application-review-status-enum"
+import { ApplicationFlaggedSetsCronjobService } from "./application-flagged-sets-cronjob.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -29,7 +27,7 @@ export class ApplicationFlaggedSetsService {
     private readonly applicationsRepository: Repository<Application>,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
-    @InjectQueue(AFSProcessingQueueNames.afsProcessing) private afsProcessingQueue: Queue
+    private readonly applicationFlaggedSetsCronjobService: ApplicationFlaggedSetsCronjobService
   ) {}
   async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
     const innerQuery = this.afsRepository
@@ -257,7 +255,7 @@ export class ApplicationFlaggedSetsService {
   }
 
   public async scheduleAfsProcessing() {
-    return this.afsProcessingQueue.add(null, {})
+    return this.applicationFlaggedSetsCronjobService.process()
   }
 
   async meta(queryParams: PaginatedApplicationFlaggedSetQueryParams) {

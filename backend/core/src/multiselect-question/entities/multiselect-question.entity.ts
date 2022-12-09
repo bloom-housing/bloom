@@ -50,6 +50,16 @@ class MultiselectQuestion {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   text: string
 
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  untranslatedText?: string
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  untranslatedOptOutText?: string
+
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

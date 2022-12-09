@@ -5,6 +5,7 @@ import {
   ListingReviewOrder,
   UnitsSummarized,
   ListingStatus,
+  ApplicationMultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -167,5 +168,40 @@ export const getListings = (listings) => {
         }}
       />
     )
+  })
+}
+
+export const untranslateMultiselectQuestion = (
+  data: ApplicationMultiselectQuestion[],
+  listing: Listing
+) => {
+  const multiselectQuestions = listing?.listingMultiselectQuestions ?? []
+
+  data.forEach((datum) => {
+    const question = multiselectQuestions.find(
+      (elem) => elem.multiselectQuestion.text === datum.key
+    )?.multiselectQuestion
+
+    if (question) {
+      datum.key = question.untranslatedText ?? question.text
+
+      if (datum.options) {
+        datum.options.forEach((option) => {
+          const selectedOption = question.options.find((elem) => elem.text === option.key)
+
+          if (selectedOption) {
+            option.key = selectedOption.untranslatedText ?? selectedOption.text
+          } else if (question.optOutText === option.key) {
+            option.key = question.untranslatedOptOutText ?? question.optOutText
+          }
+
+          if (option.extraData) {
+            option.extraData.forEach((extra) => {
+              extra.key = selectedOption.untranslatedText ?? selectedOption.text
+            })
+          }
+        })
+      }
+    }
   })
 }

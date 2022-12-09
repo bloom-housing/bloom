@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.0...@bloom-housing/partners@7.4.1) (2022-12-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.5...@bloom-housing/partners@7.4.0) (2022-12-08)
+
+
+### Features
+
+* add email column to duplicates table ([ce2a1a8](https://github.com/bloom-housing/bloom/commit/ce2a1a88e34ab5734e0de3cad9556df3b939efae))
+
+
+
+
+
+## [7.3.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.4...@bloom-housing/partners@7.3.5) (2022-12-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.3...@bloom-housing/partners@7.3.4) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.2...@bloom-housing/partners@7.3.3) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.1...@bloom-housing/partners@7.3.2) (2022-12-05)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.0...@bloom-housing/partners@7.3.1) (2022-12-01)
+
+
+### Reverts
+
+* Revert "fix: cypress tests working again (#3180)" (#3194) ([4894a20](https://github.com/bloom-housing/bloom/commit/4894a2017906aae134860eef39c7f70a58c7d182)), closes [#3180](https://github.com/bloom-housing/bloom/issues/3180) [#3194](https://github.com/bloom-housing/bloom/issues/3194)
+
+
+
+
+
 # [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.2...@bloom-housing/partners@7.3.0) (2022-11-30)
 
 

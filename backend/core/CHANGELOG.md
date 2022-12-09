@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.3.1...@bloom-housing/backend-core@7.4.0) (2022-12-08)
+
+
+### Features
+
+* Updates from hba 12-07-2022 ([#3210](https://github.com/bloom-housing/bloom/issues/3210)) ([7d55de4](https://github.com/bloom-housing/bloom/commit/7d55de436194de31d91276c68038143c3fd56e92)), closes [#523](https://github.com/bloom-housing/bloom/issues/523) [#537](https://github.com/bloom-housing/bloom/issues/537) [#541](https://github.com/bloom-housing/bloom/issues/541) [#545](https://github.com/bloom-housing/bloom/issues/545) [#551](https://github.com/bloom-housing/bloom/issues/551) [#553](https://github.com/bloom-housing/bloom/issues/553) [#550](https://github.com/bloom-housing/bloom/issues/550)
+
+
+
+
+
+## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.3.0...@bloom-housing/backend-core@7.3.1) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+# [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.2.0...@bloom-housing/backend-core@7.3.0) (2022-12-06)
+
+
+### Features
+
+* migrate afs job off of redis ([#3199](https://github.com/bloom-housing/bloom/issues/3199)) ([2d8afa2](https://github.com/bloom-housing/bloom/commit/2d8afa2836011b206f24c6de40cfebc015def388))
+
+
+
+
+
 # [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.1.0...@bloom-housing/backend-core@7.2.0) (2022-11-30)
 
 

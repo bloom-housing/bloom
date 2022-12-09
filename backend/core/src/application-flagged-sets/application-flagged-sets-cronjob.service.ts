@@ -1,5 +1,3 @@
-import { Process, Processor } from "@nestjs/bull"
-import { AFSProcessingQueueNames } from "./constants/applications-flagged-sets-constants"
 import { Brackets, LessThan, MoreThanOrEqual, Repository, SelectQueryBuilder } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
@@ -9,21 +7,57 @@ import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { getView } from "../applications/views/view"
-import { Inject, Logger } from "@nestjs/common"
+import { Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common"
+import { SchedulerRegistry } from "@nestjs/schedule"
+import { CronJob } from "cron"
+import { ConfigService } from "@nestjs/config"
+import { CronJobService } from "../shared/services/cron-job.service"
+import dayjs from "dayjs"
 
-@Processor(AFSProcessingQueueNames.afsProcessing)
-export class ApplicationFlaggedSetsCronjobConsumer {
+const CRON_JOB_NAME = "AFS_CRON_JOB"
+const CRON_CONFIG_VALUE = "AFS_PROCESSING_CRON_STRING"
+@Injectable()
+export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   constructor(
     @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
     @InjectRepository(Application) private readonly applicationRepository: Repository<Application>,
-    @Inject(Logger) private readonly logger = new Logger(ApplicationFlaggedSetsCronjobConsumer.name)
+    @Inject(Logger) private readonly logger = new Logger(ApplicationFlaggedSetsCronjobService.name),
+    private schedulerRegistry: SchedulerRegistry,
+    private readonly config: ConfigService,
+    private readonly cronJobService: CronJobService
   ) {}
 
-  @Process({ concurrency: 1 })
-  async process() {
+  onModuleInit() {
+    // Take the cron job frequency from .env and add a random seconds to it.
+    // That way when there are multiple instances running they won't run at the exact same time.
+    const repeatCron = this.config.get<string>(CRON_CONFIG_VALUE)
+    const randomSecond = Math.floor(Math.random() * 60)
+    const newCron = `${randomSecond} ${repeatCron}`
+    const job = new CronJob(newCron, () => {
+      void (async () => {
+        const currentCronJob = await this.cronJobService.getCronJobByName(CRON_JOB_NAME)
+        // To prevent multiple overlapped jobs only run if one hasn't started in the last 5 minutes
+        if (
+          !currentCronJob ||
+          currentCronJob.lastRunDate < dayjs(new Date()).subtract(5, "minutes").toDate()
+        ) {
+          try {
+            await this.process()
+          } catch (e) {
+            this.logger.error(`${CRON_JOB_NAME} failed to run`)
+          }
+        }
+      })()
+    })
+    this.schedulerRegistry.addCronJob(CRON_JOB_NAME, job)
+    job.start()
+  }
+
+  public async process() {
     this.logger.warn("running the Application flagged sets cron job")
+    await this.cronJobService.saveCronJobByName(CRON_JOB_NAME)
     const outOfDateListings = await this.listingRepository
       .createQueryBuilder("listings")
       .select(["listings.id", "listings.afsLastRunAt"])

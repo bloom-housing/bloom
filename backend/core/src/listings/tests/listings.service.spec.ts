@@ -83,6 +83,7 @@ const mockInnerQueryBuilder = {
   groupBy: jest.fn().mockReturnThis(),
   addGroupBy: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
   offset: jest.fn().mockReturnThis(),
   limit: jest.fn().mockReturnThis(),
   getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
@@ -98,6 +99,7 @@ const mockQueryBuilder = {
   leftJoin: jest.fn().mockReturnThis(),
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
@@ -110,6 +112,7 @@ const mockQueryBuilder = {
   paginate: ListingsQueryBuilder.prototype.paginate,
   addInnerFilteredQuery: ListingsQueryBuilder.prototype.addInnerFilteredQuery,
   getManyPaginated: ListingsQueryBuilder.prototype.getManyPaginated,
+  getOne: jest.fn().mockReturnValue({ id: "asdf1", units: [] }),
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
@@ -372,7 +375,7 @@ describe("ListingsService", () => {
         undefined
       )
 
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
       expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
         "listings.updated_at",
         "DESC",
@@ -381,11 +384,11 @@ describe("ListingsService", () => {
 
       // Verify that the full query is still also ordered by the number of bedrooms
       // (or max_occupancy) at the unit level.
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
       expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
-        "units.max_occupancy",
-        "ASC",
-        "NULLS LAST"
+        "listings.updated_at",
+        "DESC",
+        undefined
       )
     })
   })

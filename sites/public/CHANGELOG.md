@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.1.4...@bloom-housing/public@7.2.0) (2022-12-08)
+
+
+### Features
+
+* Updates from hba 12-07-2022 ([#3210](https://github.com/bloom-housing/bloom/issues/3210)) ([7d55de4](https://github.com/bloom-housing/bloom/commit/7d55de436194de31d91276c68038143c3fd56e92)), closes [#523](https://github.com/bloom-housing/bloom/issues/523) [#537](https://github.com/bloom-housing/bloom/issues/537) [#541](https://github.com/bloom-housing/bloom/issues/541) [#545](https://github.com/bloom-housing/bloom/issues/545) [#551](https://github.com/bloom-housing/bloom/issues/551) [#553](https://github.com/bloom-housing/bloom/issues/553) [#550](https://github.com/bloom-housing/bloom/issues/550)
+
+
+
+
+
+## [7.1.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.1.3...@bloom-housing/public@7.1.4) (2022-12-08)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.1.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.1.2...@bloom-housing/public@7.1.3) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.1.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.1.1...@bloom-housing/public@7.1.2) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.1.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.1.0...@bloom-housing/public@7.1.1) (2022-12-05)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 # [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.0.5...@bloom-housing/public@7.1.0) (2022-11-30)
 
 

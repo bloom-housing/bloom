@@ -1621,7 +1621,7 @@ export class MultiselectQuestionsService {
   /**
    * Get multiselect question by id
    */
-  retrieve1(
+  retrieveListings(
     params: {
       /**  */
       multiselectQuestionId: string
@@ -4509,6 +4509,9 @@ export interface MultiselectOption {
   text: string
 
   /**  */
+  untranslatedText?: string
+
+  /**  */
   ordinal: number
 
   /**  */
@@ -4551,6 +4554,12 @@ export interface MultiselectQuestion {
 
   /**  */
   text: string
+
+  /**  */
+  untranslatedText?: string
+
+  /**  */
+  untranslatedOptOutText?: string
 
   /**  */
   subText?: string
@@ -5538,6 +5547,9 @@ export interface ListingEventUpdate {
   file?: AssetUpdate
 
   /**  */
+  startDate?: Date
+
+  /**  */
   startTime?: Date
 
   /**  */
@@ -5955,6 +5967,12 @@ export interface MultiselectQuestionCreate {
   text: string
 
   /**  */
+  untranslatedText?: string
+
+  /**  */
+  untranslatedOptOutText?: string
+
+  /**  */
   subText?: string
 
   /**  */
@@ -5985,6 +6003,12 @@ export interface MultiselectQuestionUpdate {
 
   /**  */
   text: string
+
+  /**  */
+  untranslatedText?: string
+
+  /**  */
+  untranslatedOptOutText?: string
 
   /**  */
   subText?: string

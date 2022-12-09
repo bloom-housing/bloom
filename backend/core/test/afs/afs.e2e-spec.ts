@@ -21,9 +21,9 @@ import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions from "../../ormconfig.test"
 import { EmailService } from "../../src/email/email.service"
-import cookieParser from "cookie-parser"
-import { ApplicationFlaggedSetsCronjobConsumer } from "../../src/application-flagged-sets/application-flagged-sets-cronjob-consumer"
+import { ApplicationFlaggedSetsCronjobService } from "../../src/application-flagged-sets/application-flagged-sets-cronjob.service"
 import { ListingRepository } from "../../src/listings/db/listing.repository"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -38,7 +38,7 @@ describe("ApplicationFlaggedSets", () => {
   let afsRepository: Repository<ApplicationFlaggedSet>
   let householdMembersRepository: Repository<HouseholdMember>
   let listingsRepository: Repository<Listing>
-  let afsProcessingService: ApplicationFlaggedSetsCronjobConsumer
+  let afsProcessingService: ApplicationFlaggedSetsCronjobService
   let listing1Id: string
   let updateApplication
   let getAfsesForListingId
@@ -122,8 +122,8 @@ describe("ApplicationFlaggedSets", () => {
       ).body
     }
 
-    afsProcessingService = app.get<ApplicationFlaggedSetsCronjobConsumer>(
-      ApplicationFlaggedSetsCronjobConsumer
+    afsProcessingService = app.get<ApplicationFlaggedSetsCronjobService>(
+      ApplicationFlaggedSetsCronjobService
     )
   })
 
