@@ -581,5 +581,30 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     )
   }
 
-  return [...defs, ...householdCols]
+  const duplicateCols = [
+    {
+      headerName: t("applications.duplicates.flaggedAsDuplicate"),
+      field: "reviewStatus",
+      sortable: false,
+      filter: false,
+      width: 125,
+      minWidth: 100,
+      valueFormatter: ({ value }) => {
+        return formatYesNoLabel(value && value === "duplicate")
+      },
+    },
+    {
+      headerName: t("applications.duplicates.markedAsDuplicate"),
+      field: "markedAsDuplicate",
+      sortable: false,
+      filter: false,
+      width: 125,
+      minWidth: 100,
+      valueFormatter: ({ value }) => {
+        return formatYesNoLabel(value)
+      },
+    },
+  ]
+
+  return [...defs, ...householdCols, ...duplicateCols]
 }

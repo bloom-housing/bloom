@@ -55,6 +55,8 @@
   "applications.duplicatesAlert": "Preview applications that are pending review. Duplicates can be resolved when applications close.",
   "applications.duplicatesAlertDate": "Preview applications that are pending review. Duplicates can be resolved when applications close on %{date}.",
   "applications.duplicates.duplicateApplications": "Duplicate Applications",
+  "applications.duplicates.flaggedAsDuplicate": "Flagged as Duplicate",
+  "applications.duplicates.markedAsDuplicate": "Marked as Duplicate",
   "applications.duplicates.validApplications": "Valid Applications",
   "applications.duplicates.duplicateGroup": "Duplicate group",
   "applications.duplicates.primaryApplicant": "Primary applicant",
