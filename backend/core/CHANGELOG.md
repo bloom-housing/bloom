@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.4.0...@bloom-housing/backend-core@7.5.0) (2022-12-13)
+
+
+### Features
+
+* remove redis and correct the throttler ([#3201](https://github.com/bloom-housing/bloom/issues/3201)) ([28c2f33](https://github.com/bloom-housing/bloom/commit/28c2f330816e6b0c0fa8fba8abc48d6d240cc2bf))
+
+
+
+
+
 # [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.3.1...@bloom-housing/backend-core@7.4.0) (2022-12-08)
 
 
