@@ -21,7 +21,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 

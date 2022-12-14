@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react"
 import { PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import Markdown from "markdown-to-jsx"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext } from "../shared"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import pageContent from "../page_content/disclaimer.md"

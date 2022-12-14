@@ -1,6 +1,6 @@
 import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
-import { blankApplication, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { blankApplication, listingSectionQuestions } from "../shared"
 import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 
 export const retrieveApplicationConfig = (listing: Listing) => {

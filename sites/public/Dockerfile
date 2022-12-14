@@ -1,0 +1,66 @@
+FROM node:14.17-alpine AS development
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /usr/src/app/
+
+# Copy all the source code from the root of the repo into the container
+COPY . ./
+
+WORKDIR /usr/src/app/sites/public
+
+COPY package.json ./
+COPY yarn*.lock ./
+COPY tsconfig*.json ./
+COPY *config.js ./
+
+RUN yarn install
+
+COPY . .
+
+# # If not defined, use our production backend site for build-time rendering.
+# # In order to override it for local development when building the image on
+# # its own, use --build-arg BACKEND_API_BASE=<override>.
+# ARG BACKEND_API_BASE=https://backend-core-tj3gg4i5eq-uc.a.run.app
+# ARG LANGUAGES=en,es,ar,bn
+
+RUN yarn build
+
+# FROM node:14.17-alpine AS production
+
+# # Use the NEXTJS_PORT variable as the PORT if defined, otherwise use PORT.
+# ENV NEXTJS_PORT=3000
+# ENV PORT=${NEXTJS_PORT}
+# ARG NODE_ENV=production
+# ENV NODE_ENV=${NODE_ENV}
+
+# WORKDIR /usr/src/app/
+
+# # We need to copy the source code for backend/core and ui-components as well in order
+# # to ensure that breaking changes in local dependencies from those packages are included
+# # instead of being pulled from npm.
+# COPY backend/core ./backend/core
+# COPY ui-components ./ui-components
+
+# COPY --from=development /usr/src/app/package.json ./package.json
+# COPY --from=development /usr/src/app/yarn*.lock ./
+# COPY --from=development /usr/src/app/tsconfig*.json ./
+# COPY --from=development /usr/src/app/node_modules ./node_modules
+
+# WORKDIR /usr/src/app/sites/public
+
+# COPY sites/public .
+
+# COPY --from=development /usr/src/app/sites/public/next.config.js ./next.config.js
+# COPY --from=development /usr/src/app/sites/public/public ./public
+# COPY --from=development /usr/src/app/sites/public/.next ./.next
+# COPY --from=development /usr/src/app/sites/public/node_modules ./node_modules
+
+EXPOSE ${PORT}
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+CMD yarn next start -p ${PORT}

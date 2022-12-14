@@ -1,5 +1,5 @@
 import { Button, LinkButton, t } from "@bloom-housing/ui-components"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide } from "../shared"
 
 const FormBackLink = (props: { url: string; onClick: () => void; custom?: boolean }) => {
   return (

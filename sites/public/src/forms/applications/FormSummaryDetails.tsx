@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes } from "@bloom-housing/shared-helpers"
+import { getUniqueUnitTypes } from "../shared"
 import {
   Address,
   AllExtraDataTypes,

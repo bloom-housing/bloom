@@ -10,7 +10,7 @@ import {
   MarkdownSection,
 } from "@bloom-housing/ui-components"
 import { UserStatus } from "../lib/constants"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext } from "../shared"
 
 const AdditionalResources = () => {
   const pageTitle = t("pageTitle.additionalResources")

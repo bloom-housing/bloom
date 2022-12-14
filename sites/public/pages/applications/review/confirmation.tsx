@@ -21,7 +21,7 @@ import {
   pushGtmEvent,
   AuthContext,
   getLotteryEvent,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"

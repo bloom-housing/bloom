@@ -28,7 +28,7 @@ import {
   getRadioFields,
   mapRadiosToApi,
   listingSectionQuestions,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import { UserStatus } from "../lib/constants"
 
 export interface ApplicationMultiselectQuestionStepProps {

@@ -30,7 +30,7 @@ import {
   relationshipKeys,
   stateKeys,
   AuthContext,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationMember = () => {

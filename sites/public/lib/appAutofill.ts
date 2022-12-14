@@ -4,7 +4,7 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
 } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/shared-helpers"
+import { blankApplication } from "../shared"
 
 class AutofillCleaner {
   application: Application = null

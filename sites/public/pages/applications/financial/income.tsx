@@ -27,7 +27,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import { UserStatus } from "../../../lib/constants"
 
 type IncomeError = "low" | "high" | null

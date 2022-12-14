@@ -21,7 +21,7 @@ import {
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "../shared"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
 

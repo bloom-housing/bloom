@@ -27,7 +27,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"

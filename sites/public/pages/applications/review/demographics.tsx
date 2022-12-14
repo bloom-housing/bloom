@@ -25,7 +25,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"

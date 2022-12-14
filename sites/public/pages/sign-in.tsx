@@ -16,7 +16,7 @@ import {
   NetworkStatusType,
   NetworkStatusContent,
   AuthContext,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
 

@@ -3,7 +3,7 @@ import Head from "next/head"
 import axios from "axios"
 import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
 import { AlertBox, t } from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import { imageUrlFromListing } from "../shared"
 
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"

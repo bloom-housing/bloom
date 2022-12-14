@@ -16,13 +16,7 @@ import {
   Heading,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import {
-  imageUrlFromListing,
-  OnClientSide,
-  PageView,
-  pushGtmEvent,
-  AuthContext,
-} from "@bloom-housing/shared-helpers"
+import { imageUrlFromListing, OnClientSide, PageView, pushGtmEvent, AuthContext } from "../shared"
 
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"

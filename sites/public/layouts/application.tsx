@@ -12,7 +12,7 @@ import {
   t,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../shared"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)

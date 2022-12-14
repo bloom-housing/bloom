@@ -21,7 +21,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { useContext, useEffect } from "react"

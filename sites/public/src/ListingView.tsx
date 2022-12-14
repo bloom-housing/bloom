@@ -54,7 +54,7 @@ import {
   getPostmarkString,
   UnitTables,
   getSummariesTable,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"

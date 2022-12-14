@@ -55,7 +55,7 @@ import { Asset } from "../assets/entities/asset.entity"
 @Module({})
 export class SeederModule {
   static forRoot(options: { test: boolean }): DynamicModule {
-    const dbConfig = options.test ? testDbOptions : dbOptions
+    const dbConfig = testDbOptions
     return {
       module: SeederModule,
       imports: [
@@ -63,6 +63,7 @@ export class SeederModule {
         SharedModule,
         TypeOrmModule.forRoot({
           ...dbConfig,
+          autoLoadEntities: true,
         }),
         TypeOrmModule.forFeature([
           Asset,
