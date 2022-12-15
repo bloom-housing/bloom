@@ -2,7 +2,7 @@ import * as React from "react"
 import { t } from "../../../helpers/translator"
 import dayjs from "dayjs"
 
-interface ListingUpdatedProps {
+export interface ListingUpdatedProps {
   listingUpdated: Date
   strings?: {
     listingUpdated?: string
