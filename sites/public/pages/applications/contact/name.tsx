@@ -18,7 +18,7 @@ import {
   ProgressNav,
   emailRegex,
 } from "@bloom-housing/ui-components"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "../shared"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "../../../shared"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"

@@ -5,18 +5,20 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app/
 
 # Copy all the source code from the root of the repo into the container
-COPY . ./
+# COPY . ./
 
-WORKDIR /usr/src/app/sites/public
+# WORKDIR /usr/src/app/sites/public
 
-COPY package.json ./
-COPY yarn*.lock ./
+COPY package*.json ./
 COPY tsconfig*.json ./
 COPY *config.js ./
 
 RUN yarn install
 
+# RUN yarn add --dev @types/react
+
 COPY . .
+
 
 # # If not defined, use our production backend site for build-time rendering.
 # # In order to override it for local development when building the image on

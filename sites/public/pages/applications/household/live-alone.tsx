@@ -16,7 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "../shared"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "../../../shared"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationLiveAlone = () => {

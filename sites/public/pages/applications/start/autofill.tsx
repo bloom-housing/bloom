@@ -8,7 +8,13 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
-import { blankApplication, OnClientSide, PageView, pushGtmEvent, AuthContext } from "../shared"
+import {
+  blankApplication,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+} from "../../../shared"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"

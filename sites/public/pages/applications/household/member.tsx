@@ -30,7 +30,7 @@ import {
   relationshipKeys,
   stateKeys,
   AuthContext,
-} from "../shared"
+} from "../../../shared"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationMember = () => {

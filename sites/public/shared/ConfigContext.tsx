@@ -1,4 +1,4 @@
-import { createContext, createElement, FunctionComponent } from "react"
+import React, { createContext, createElement, FunctionComponent } from "react"
 
 type ConfigContextProps = {
   storageType: "local" | "session"
@@ -19,6 +19,7 @@ export const ConfigProvider: FunctionComponent<{
   apiUrl: string
   storageType?: ConfigContextProps["storageType"]
   idleTimeout?: number
+  children?: React.ReactNode
 }> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) => {
   return createElement(
     ConfigContext.Provider,

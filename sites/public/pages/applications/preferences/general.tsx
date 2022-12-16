@@ -19,7 +19,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "../shared"
+} from "../../../shared"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"

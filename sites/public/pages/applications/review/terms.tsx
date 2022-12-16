@@ -27,7 +27,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "../shared"
+} from "../../../shared"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"

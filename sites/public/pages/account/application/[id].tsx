@@ -5,7 +5,7 @@ import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetai
 import FormsLayout from "../../../layouts/forms"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { useRouter } from "next/router"
-import { AuthContext, RequireLogin } from "../shared"
+import { AuthContext, RequireLogin } from "../../../shared"
 
 export default () => {
   const router = useRouter()

@@ -20,7 +20,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
-} from "../shared"
+} from "../../../shared"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"

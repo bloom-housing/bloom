@@ -27,7 +27,7 @@ import {
   pushGtmEvent,
   AuthContext,
   listingSectionQuestions,
-} from "../shared"
+} from "../../../shared"
 import { UserStatus } from "../../../lib/constants"
 
 type IncomeError = "low" | "high" | null

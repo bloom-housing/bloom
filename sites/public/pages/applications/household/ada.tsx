@@ -19,7 +19,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, adaFeatureKeys, AuthContext } from "../shared"
+import { OnClientSide, PageView, pushGtmEvent, adaFeatureKeys, AuthContext } from "../../../shared"
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 

@@ -10,7 +10,7 @@ import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT, UserStatus } from "../../lib/constants"
-import { pushGtmEvent, PageView, AuthContext, listingSectionQuestions } from "../shared"
+import { pushGtmEvent, PageView, AuthContext, listingSectionQuestions } from "../../shared"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationView = () => {

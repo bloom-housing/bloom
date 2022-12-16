@@ -10,7 +10,7 @@ import {
   SiteAlert,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "../shared"
+import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "../../shared"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../src/MetaTags"
 import { UserStatus } from "../../lib/constants"

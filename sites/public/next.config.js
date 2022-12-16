@@ -36,7 +36,6 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 // https://www.npmjs.com/package/next-transpile-modules
 module.exports = withBundleAnalyzer(
   withTM({
-    target: "serverless",
     env: {
       backendApiBase: BACKEND_API_BASE,
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,

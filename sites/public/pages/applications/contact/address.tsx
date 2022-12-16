@@ -31,7 +31,7 @@ import {
   PageView,
   pushGtmEvent,
   AuthContext,
-} from "../shared"
+} from "../../../shared"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import {
