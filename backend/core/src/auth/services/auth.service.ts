@@ -82,4 +82,24 @@ export class AuthService {
     res.cookie(REFRESH_COOKIE_NAME, newRefreshToken, REFRESH_COOKIE_OPTIONS)
     return { status: "ok" }
   }
+
+  async tokenClear(res: Response, user: User) {
+    if (!user?.id) {
+      throw new Error("no user found")
+    }
+    // clear access and refresh token into db
+    await this.userRepo
+      .createQueryBuilder("user")
+      .update(User)
+      .set({
+        activeAccessToken: null,
+        activeRefreshToken: null,
+      })
+      .where("id = :id", { id: user.id })
+      .execute()
+
+    res.cookie(TOKEN_COOKIE_NAME, "", AUTH_COOKIE_OPTIONS)
+    res.cookie(REFRESH_COOKIE_NAME, "", REFRESH_COOKIE_OPTIONS)
+    return { status: "ok" }
+  }
 }

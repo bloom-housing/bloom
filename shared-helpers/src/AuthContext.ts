@@ -159,7 +159,14 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   const loadProfile = useCallback(
     async (redirect?: string) => {
       try {
-        const profile = await userService?.userControllerProfile()
+        let profile = undefined
+        if (document.cookie.split("; ").some((cookie) => cookie.startsWith("access-token="))) {
+          // if we have an access token
+          profile = await userService?.userControllerProfile()
+        } else {
+          dispatch(saveProfile(null))
+        }
+
         if (profile) {
           dispatch(saveProfile(profile))
         }
@@ -222,11 +229,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       }
     },
     signOut: async () => {
-      const response = await new AuthService().logout()
-
-      if (response.success) {
-        dispatch(signOut())
-      }
+      await new AuthService().logout()
+      dispatch(saveProfile(null))
+      dispatch(signOut())
     },
     resetPassword: async (token, password, passwordConfirmation) => {
       dispatch(startLoading())

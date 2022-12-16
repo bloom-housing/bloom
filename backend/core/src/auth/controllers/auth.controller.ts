@@ -24,7 +24,7 @@ import { UserService } from "../services/user.service"
 import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { UserErrorExtraModel } from "../user-errors"
-import { TOKEN_COOKIE_NAME, REFRESH_COOKIE_NAME } from "../constants"
+import { REFRESH_COOKIE_NAME } from "../constants"
 import { Response as ExpressResponse } from "express"
 import { OptionalAuthGuard } from "../guards/optional-auth.guard"
 
@@ -52,10 +52,8 @@ export class AuthController {
   @UseGuards(DefaultAuthGuard)
   @Get("logout")
   @ApiOperation({ summary: "Logout", operationId: "logout" })
-  logout(@Response({ passthrough: true }) res): LogoutResponseDto {
-    res.cookie(TOKEN_COOKIE_NAME, "", { expires: new Date() })
-
-    return mapTo(LogoutResponseDto, { status: "ok" })
+  async logout(@Request() req, @Response({ passthrough: true }) res): Promise<LogoutResponseDto> {
+    return mapTo(LogoutResponseDto, await this.authService.tokenClear(res, req.user))
   }
 
   @Post("request-mfa-code")
