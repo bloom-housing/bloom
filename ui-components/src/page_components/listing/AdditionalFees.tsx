@@ -37,7 +37,7 @@ const AdditionalFees = ({
           </div>
         )}
         {deposit && (
-          <div className={`info-card__column-2 ${applicationFee && "ml-2"}`}>
+          <div className={`info-card__column-2 ${applicationFee && "sm:ml-2"}`}>
             <div className="text-base">{strings.deposit}</div>
             <div className="text-xl font-bold">{deposit}</div>
             {strings.depositSubtext?.map((depositSubtext, index) => (
