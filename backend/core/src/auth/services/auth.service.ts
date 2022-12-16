@@ -9,6 +9,8 @@ import {
   REFRESH_COOKIE_NAME,
   REFRESH_COOKIE_OPTIONS,
   TOKEN_COOKIE_NAME,
+  ACCESS_TOKEN_AVAILABLE_NAME,
+  ACCESS_TOKEN_AVAILABLE_OPTIONS,
 } from "../constants"
 
 import { Response } from "express"
@@ -80,6 +82,7 @@ export class AuthService {
 
     res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
     res.cookie(REFRESH_COOKIE_NAME, newRefreshToken, REFRESH_COOKIE_OPTIONS)
+    res.cookie(ACCESS_TOKEN_AVAILABLE_NAME, "True", ACCESS_TOKEN_AVAILABLE_OPTIONS)
     return { status: "ok" }
   }
 
@@ -98,8 +101,9 @@ export class AuthService {
       .where("id = :id", { id: user.id })
       .execute()
 
-    res.cookie(TOKEN_COOKIE_NAME, "", AUTH_COOKIE_OPTIONS)
-    res.cookie(REFRESH_COOKIE_NAME, "", REFRESH_COOKIE_OPTIONS)
+    res.clearCookie(TOKEN_COOKIE_NAME, AUTH_COOKIE_OPTIONS)
+    res.clearCookie(REFRESH_COOKIE_NAME, REFRESH_COOKIE_OPTIONS)
+    res.clearCookie(ACCESS_TOKEN_AVAILABLE_NAME, ACCESS_TOKEN_AVAILABLE_OPTIONS)
     return { status: "ok" }
   }
 }

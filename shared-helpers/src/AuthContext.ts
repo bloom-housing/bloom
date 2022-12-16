@@ -141,7 +141,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (document.cookie.split("; ").some((cookie) => cookie.startsWith("access-token="))) {
+      if (
+        document.cookie
+          .split("; ")
+          .some((cookie) => cookie.startsWith("access-token-available=True"))
+      ) {
         authService
           .requestNewToken()
           .then(() => {
@@ -160,7 +164,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     async (redirect?: string) => {
       try {
         let profile = undefined
-        if (document.cookie.split("; ").some((cookie) => cookie.startsWith("access-token="))) {
+        if (
+          document.cookie
+            .split("; ")
+            .some((cookie) => cookie.startsWith("access-token-available=True"))
+        ) {
           // if we have an access token
           profile = await userService?.userControllerProfile()
         } else {
