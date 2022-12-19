@@ -38,6 +38,7 @@ export function getDefaultListingEvents() {
 export const defaultListingEvents: Array<ListingEventCreateDto> = [
   {
     startTime: getDate(10),
+    startDate: getDate(10),
     endTime: getDate(10),
     note: "Custom open house event note",
     type: ListingEventType.openHouse,
@@ -46,6 +47,7 @@ export const defaultListingEvents: Array<ListingEventCreateDto> = [
   },
   {
     startTime: getDate(10),
+    startDate: getDate(10),
     endTime: getDate(10),
     note: "Custom public lottery event note",
     type: ListingEventType.publicLottery,

@@ -15,6 +15,7 @@ import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
+import dayjs from "dayjs"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -113,6 +114,12 @@ const ApplicationsList = () => {
     formatLinkCell: isListingOpen ? formatDisabledCell : formatEnabledCell,
   }
 
+  const dayjsDate = dayjs(listingDto?.afsLastRunAt)
+  const afsLastRun = {
+    date: dayjsDate.utc().format("MM/DD/YY"),
+    time: dayjsDate.utc().format("hh:mma"),
+  }
+
   return (
     <Layout>
       <Head>
@@ -145,7 +152,7 @@ const ApplicationsList = () => {
       <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
-        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4">
+        <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">
           {listingDto && (
             <>
               <ApplicationsSideNav
@@ -194,6 +201,11 @@ const ApplicationsList = () => {
                     setSort: tableOptions.sort.setSortOptions,
                   }}
                 />
+                {afsLastRun && (
+                  <span className="text-gray-750 text-sm flex max-w-screen-xl mx-auto pt-6 pb-4 px-4 justify-end">
+                    {`${t("t.lastUpdated")} ${afsLastRun.date} ${t("t.at")} ${afsLastRun.time}`}
+                  </span>
+                )}
               </div>
             </>
           )}

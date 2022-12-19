@@ -12,8 +12,6 @@ import Joi from "joi"
           .default("development"),
         EMAIL_API_KEY: Joi.string().required(),
         DATABASE_URL: Joi.string().required(),
-        REDIS_TLS_URL: Joi.string().required(),
-        REDIS_USE_TLS: Joi.number().required(),
         THROTTLE_TTL: Joi.number().default(1),
         THROTTLE_LIMIT: Joi.number().default(100),
         APP_SECRET: Joi.string().required().min(16),

@@ -2,7 +2,6 @@ import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
-import ReactDOM from "react-dom"
 import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
   blankApplication,
@@ -79,13 +78,14 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     }
   })
 
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const axe = require("@axe-core/react")
-      void axe(React, ReactDOM, 5000)
-    }
-  }, [])
+  // Investigating performance issues in #3051
+  // useEffect(() => {
+  //   if (process.env.NODE_ENV !== "production") {
+  //     // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //     const axe = require("@axe-core/react")
+  //     void axe(React, ReactDOM, 5000)
+  //   }
+  // }, [])
 
   if (!initialized) {
     return null

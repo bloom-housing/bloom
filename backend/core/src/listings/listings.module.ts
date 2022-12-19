@@ -37,5 +37,4 @@ import { ListingsCronService } from "./listings-cron.service"
   exports: [ListingsService],
   controllers: [ListingsController],
 })
-// We have to manually disconnect from redis on app close
 export class ListingsModule {}

@@ -369,7 +369,6 @@
   "authentication.forgotPassword.errors.tokenExpired": "重設密碼權杖已到期。請要求新的權杖。",
   "authentication.forgotPassword.errors.tokenMissing": "找不到權杖。請要求新的權杖。",
   "authentication.forgotPassword.sendEmail": "傳送電子郵件",
-  "authentication.forgotPassword.success": "我們已向您傳送電子郵件。您會收到具有重設密碼連結的電子郵件。",
   "authentication.signIn.accountHasBeenLocked": "基於安全原因，此帳戶已遭到鎖定。",
   "authentication.signIn.afterFailedAttempts": "基於安全原因，只要失敗嘗試達 %{count} 次，您就必須等待 30 分鐘才能再試一次。",
   "authentication.signIn.changeYourPassword": "您可以變更密碼",
