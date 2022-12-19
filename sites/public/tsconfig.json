@@ -1,6 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "es5",
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "lib": [
       "dom",
       "dom.iterable",

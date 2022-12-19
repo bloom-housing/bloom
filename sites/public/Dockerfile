@@ -23,7 +23,7 @@ COPY . .
 # # If not defined, use our production backend site for build-time rendering.
 # # In order to override it for local development when building the image on
 # # its own, use --build-arg BACKEND_API_BASE=<override>.
-# ARG BACKEND_API_BASE=https://backend-core-tj3gg4i5eq-uc.a.run.app
+# ARG BACKEND_API_BASE=https://backend-core-tj3gg4i5eq-uc.a.lsrun.app
 # ARG LANGUAGES=en,es,ar,bn
 
 RUN yarn build
