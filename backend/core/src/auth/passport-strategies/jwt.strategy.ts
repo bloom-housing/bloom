@@ -56,6 +56,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       .getCount()
 
     if (!tokenMatch) {
+      // if the incoming token is not the active token for the user, clear the user's tokens
+      await this.userRepository
+        .createQueryBuilder("user")
+        .update(User)
+        .set({
+          activeAccessToken: null,
+          activeRefreshToken: null,
+        })
+        .where("id = :id", { id: userId })
+        .execute()
       throw new UnauthorizedException()
     }
 

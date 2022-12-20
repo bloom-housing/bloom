@@ -212,7 +212,7 @@ export class UserService {
     return await this.userRepository.save(user)
   }
 
-  public async confirm(dto: ConfirmDto) {
+  public async confirm(dto: ConfirmDto, res?: Response) {
     let token: Record<string, string> = {}
     try {
       token = decode(dto.token, process.env.APP_SECRET)
@@ -244,7 +244,11 @@ export class UserService {
         ...user,
         ...(token.email && { email: token.email }),
       })
-      return this.authService.generateAccessToken(user)
+      if (res) {
+        return await this.authService.tokenGen(res, user)
+      } else {
+        return { status: "ok" }
+      }
     } catch (err) {
       throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }

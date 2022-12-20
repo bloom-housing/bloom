@@ -43,14 +43,14 @@ export class AuthService {
     }
     if (incomingRefreshToken) {
       // if token is provided, verify that its the correct refresh token
-      const res = await this.userRepo
+      const userCount = await this.userRepo
         .createQueryBuilder("user")
         .select("user.id")
         .where("user.id = :id", { id: user.id })
         .andWhere("user.activeRefreshToken = :refreshToken", { refreshToken: incomingRefreshToken })
         .getCount()
 
-      if (!res) {
+      if (!userCount) {
         // if the incoming refresh token is not the active refresh token for the user, clear the user's tokens
         await this.userRepo
           .createQueryBuilder("user")
@@ -61,6 +61,10 @@ export class AuthService {
           })
           .where("id = :id", { id: user.id })
           .execute()
+
+        res.clearCookie(TOKEN_COOKIE_NAME, AUTH_COOKIE_OPTIONS)
+        res.clearCookie(REFRESH_COOKIE_NAME, REFRESH_COOKIE_OPTIONS)
+        res.clearCookie(ACCESS_TOKEN_AVAILABLE_NAME, ACCESS_TOKEN_AVAILABLE_OPTIONS)
 
         throw new Error("someone is attempting to use an outdated refresh token")
       }

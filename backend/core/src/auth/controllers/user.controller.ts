@@ -42,7 +42,6 @@ import { DefaultAuthGuard } from "../guards/default.guard"
 import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
 import { IdDto } from "../../shared/dto/id.dto"
-import { TOKEN_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from "../constants"
 import { Response as ExpressResponse } from "express"
 @Controller("user")
 @ApiBearerAuth()
@@ -114,10 +113,7 @@ export class UserController {
     @Body() dto: ConfirmDto,
     @Response({ passthrough: true }) res: ExpressResponse
   ): Promise<StatusDto> {
-    const accessToken = await this.userService.confirm(dto)
-
-    res.cookie(TOKEN_COOKIE_NAME, accessToken, AUTH_COOKIE_OPTIONS)
-
+    await this.userService.confirm(dto, res)
     return mapTo(StatusDto, { status: "ok" })
   }
 
