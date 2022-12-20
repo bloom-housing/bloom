@@ -24,7 +24,6 @@ export class ApplicationDto extends OmitType(Application, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "flagged",
   "preferredUnit",
 ] as const) {
   @Expose()

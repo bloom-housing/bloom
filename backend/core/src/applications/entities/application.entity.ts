@@ -264,12 +264,16 @@ export class Application extends AbstractEntity {
   @Type(() => Date)
   submissionDate?: Date | null
 
+  // if this field is true then the application is a confirmed duplicate
+  // meaning that the record in the applicaiton flagged set table has a status of duplicate
   @Column({ type: "bool", default: false })
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   markedAsDuplicate: boolean
 
   // This is a 'virtual field' needed for CSV export
+  // if this field is true then the application is a possible duplicate
+  // meaning there exists a record in the application_flagged_set table for this application
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
