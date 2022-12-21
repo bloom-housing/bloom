@@ -1,24 +1,23 @@
-FROM node:14.17-alpine AS development
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+# FROM node:14.17-alpine AS development
+# # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+# RUN apk add --no-cache libc6-compat
 
-WORKDIR /usr/src/app/
+# WORKDIR /usr/src/app/
 
 # Copy all the source code from the root of the repo into the container
 # COPY . ./
 
 # WORKDIR /usr/src/app/sites/public
 
-COPY package*.json ./
-COPY tsconfig*.json ./
-COPY *config.js ./
+# COPY package*.json ./
+# COPY tsconfig*.json ./
+# COPY *config.js ./
 
-RUN yarn install
+# RUN yarn install
 
 # RUN yarn add --dev @types/react
 
-COPY . .
-
+# COPY . .
 
 # # If not defined, use our production backend site for build-time rendering.
 # # In order to override it for local development when building the image on
@@ -26,7 +25,7 @@ COPY . .
 # ARG BACKEND_API_BASE=https://backend-core-tj3gg4i5eq-uc.a.lsrun.app
 # ARG LANGUAGES=en,es,ar,bn
 
-RUN yarn build
+# RUN yarn build
 
 # FROM node:14.17-alpine AS production
 
@@ -58,11 +57,44 @@ RUN yarn build
 # COPY --from=development /usr/src/app/sites/public/.next ./.next
 # COPY --from=development /usr/src/app/sites/public/node_modules ./node_modules
 
-EXPOSE ${PORT}
+# EXPOSE 3000
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-CMD yarn next start -p ${PORT}
+# CMD yarn next start -p 3000
+
+FROM node:14-alpine
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
+
+# build image
+FROM node:14-alpine
+WORKDIR /app
+COPY --from=0 /app/node_modules ./node_modules
+COPY . .
+RUN NODE_OPTIONS="--max_old_space_size=4096" yarn build
+RUN rm -rf node_modules
+RUN yarn install --production --ignore-scripts --prefer-offline
+
+# build output image
+FROM node:14-alpine
+
+ENV NODE_ENV production
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+WORKDIR /app
+COPY --from=1 --chown=nextjs:nodejs /app/package.json /app/yarn.lock ./
+COPY --from=1 --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=1 --chown=nextjs:nodejs /app/public ./public
+COPY --from=1 --chown=nextjs:nodejs /app/.next ./.next
+
+USER nextjs
+
+EXPOSE 3000
+
+CMD [ "yarn", "start" ]

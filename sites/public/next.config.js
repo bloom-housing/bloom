@@ -62,5 +62,12 @@ module.exports = withBundleAnalyzer(
       })
       return config
     },
+    typescript: {
+      ignoreBuildErrors: true,
+    },
+    experimental: {
+      esmExternals: false,
+      forceSwcTransforms: true,
+    }
   })
 )

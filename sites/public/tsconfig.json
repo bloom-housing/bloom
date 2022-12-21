@@ -18,7 +18,8 @@
     ],
     "jsx": "preserve",
     "allowJs": true,
-    "incremental": true
+    "incremental": true,
+    "types": []
   },
   "exclude": [
     "node_modules",
