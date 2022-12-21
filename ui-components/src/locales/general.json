@@ -735,6 +735,7 @@
   "listings.singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
   "listings.specialNotes": "Special Notes",
   "listings.unitTypes.SRO": "SRO",
+  "listings.unitTypes.fiveBdrm": "5 BR",
   "listings.unitTypes.fourBdrm": "4 BR",
   "listings.unitTypes.oneBdrm": "1 BR",
   "listings.unitTypes.studio": "Studio",
