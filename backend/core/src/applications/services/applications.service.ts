@@ -109,7 +109,11 @@ export class ApplicationsService {
     )
     const flags = await Promise.all(promiseArray)
     result.forEach((application, index) => {
-      application.markedAsDuplicate = flags[index].status === ApplicationReviewStatus.duplicate
+      if (flags[index].status) {
+        application.markedAsDuplicate = flags[index].status === ApplicationReviewStatus.duplicate
+      } else {
+        application.markedAsDuplicate = false
+      }
       application.flagged = !!flags[index].id
     })
 
@@ -423,17 +427,12 @@ export class ApplicationsService {
     return this.repository
       .createQueryBuilder("applications")
       .select("applications.id", "appId")
-      .addSelect("application_flagged_set.id", "id")
-      .addSelect("application_flagged_set.status", "status")
+      .addSelect("application_flagged_set_applications_applications.applications_id", "id")
+      .addSelect("applications.review_status", "status")
       .leftJoin(
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications.applications_id = applications.id"
-      )
-      .leftJoin(
-        "application_flagged_set",
-        "application_flagged_set",
-        "application_flagged_set.id = application_flagged_set_applications_applications.application_flagged_set_id"
       )
       .where("applications.id = :id", { id: applicationId })
       .getRawOne()
