@@ -62,5 +62,6 @@ module.exports = withBundleAnalyzer(
       })
       return config
     },
+    experimental: { esmExternals: "loose" },
   })
 )

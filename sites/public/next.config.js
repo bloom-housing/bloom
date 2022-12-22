@@ -62,7 +62,9 @@ module.exports = withBundleAnalyzer(
         test: /\.md$/,
         type: "asset/source",
       })
+
       return config
     },
+    experimental: { esmExternals: "loose" },
   })
 )
