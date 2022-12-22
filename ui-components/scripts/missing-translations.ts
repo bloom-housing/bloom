@@ -1,48 +1,91 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // Prints out keys/strings that exist in the english file but not in a foreign language translation file
-// example: `ts-node missing-translations > missing-foreign-keys.json`
-const englishTranslations = require("../src/locales/general.json")
-const spanishTranslations = require("../src/locales/es.json")
-const chineseTranslations = require("../src/locales/zh.json")
-const vietnameseTranslations = require("../src/locales/vi.json")
-const tagalogTranslations = require("../src/locales/tl.json")
+// Temporarily update the ui-components tsconfig to include `"module": "commonjs"`
+// example: `ts-node scripts/missing-translations > missing-foreign-keys.csv`
 
 function main() {
   type TranslationsType = {
     [key: string]: string
   }
 
+  type MissingTranslations = {
+    [key: string]: TranslationInfo
+  }
+
+  type TranslationInfo = {
+    value: string
+    location: string
+  }
+
+  const enBaseTranslations = require("../src/locales/general.json")
+  const esBaseTranslations = require("../src/locales/es.json")
+  const arBaseTranslations = require("../src/locales/ar.json")
+  const bnBaseTranslations = require("../src/locales/bn.json")
+
+  const enOverrideTranslations = require("../../sites/public/page_content/locale_overrides/general.json")
+  const esOverrideTranslations = require("../../sites/public/page_content/locale_overrides/es.json")
+  const arOverrideTranslations = require("../../sites/public/page_content/locale_overrides/ar.json")
+  const bnOverrideTranslations = require("../../sites/public/page_content/locale_overrides/bn.json")
+
   const allTranslations = [
-    { translationKeys: spanishTranslations, language: "Spanish" },
-    { translationKeys: chineseTranslations, language: "Chinese" },
-    { translationKeys: vietnameseTranslations, language: "Vietnamese" },
-    { translationKeys: tagalogTranslations, language: "Tagalog" },
+    {
+      baseTranslations: esBaseTranslations,
+      overrideTranslations: esOverrideTranslations,
+      language: "Spanish",
+    },
+    {
+      baseTranslations: arBaseTranslations,
+      overrideTranslations: arOverrideTranslations,
+      language: "Arabic",
+    },
+    {
+      baseTranslations: bnBaseTranslations,
+      overrideTranslations: bnOverrideTranslations,
+      language: "Bengali",
+    },
   ]
 
   const findMissingStrings = (
-    baseTranslations: TranslationsType,
-    checkedTranslations: TranslationsType
+    enBaseTranslations: TranslationsType,
+    enOverrideTranslations: TranslationsType,
+    checkBaseTranslations: TranslationsType,
+    checkOverrideTranslations: TranslationsType
   ) => {
-    const baseKeys = Object.keys(baseTranslations)
-    const checkedKeys = Object.keys(checkedTranslations)
-    const missingKeys: string[] = []
-    baseKeys.forEach((key) => {
-      if (checkedKeys.indexOf(key) < 0) {
-        missingKeys.push(key)
+    const missingTranslations: MissingTranslations[] = []
+    //Comparison of override files
+    const enOverrideKeys = Object.keys(enOverrideTranslations)
+    const checkOverrideKeys = Object.keys(checkOverrideTranslations)
+    enOverrideKeys.forEach((key) => {
+      if (!checkOverrideKeys.includes(key)) {
+        missingTranslations[key] = { value: enOverrideTranslations[key], location: "override" }
       }
     })
-    return missingKeys
+    //Comparison of base files
+    const enBaseKeys = Object.keys(enBaseTranslations)
+    const checkBaseKeys = Object.keys(checkBaseTranslations)
+    enBaseKeys.forEach((key) => {
+      if (!enOverrideKeys.includes(key)) {
+        if (!checkBaseKeys.includes(key)) {
+          missingTranslations[key] = { value: enBaseTranslations[key], location: "ui-components" }
+        }
+      }
+    })
+
+    return missingTranslations
   }
 
-  allTranslations.forEach((foreignKeys) => {
+  allTranslations.forEach((translationSet) => {
     console.log("--------------------")
-    console.log(`Missing Public Site ${foreignKeys.language} Translations:`)
-    const missingPublicSiteTranslations = findMissingStrings(
-      englishTranslations,
-      foreignKeys.translationKeys
+    console.log(`Missing Public Site ${translationSet.language} Translations:`)
+    const missingPublicSiteTranslations: MissingTranslations[] = findMissingStrings(
+      enBaseTranslations,
+      enOverrideTranslations,
+      translationSet.baseTranslations,
+      translationSet.overrideTranslations
     )
-    missingPublicSiteTranslations.forEach((missingKey) =>
-      console.log(`${missingKey}, ${JSON.stringify(englishTranslations[missingKey])}`)
+    Object.entries(missingPublicSiteTranslations).forEach((entry) =>
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      console.log(`${entry[0]},${entry[1].location},"${entry[1].value}"`)
     )
   })
 }
