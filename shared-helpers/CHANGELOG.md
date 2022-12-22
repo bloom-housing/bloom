@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.1.6...@bloom-housing/shared-helpers@7.1.7) (2022-12-22)
+
+
+### Bug Fixes
+
+* public site user confirmation issue ([#561](https://github.com/bloom-housing/bloom/issues/561)) ([#3222](https://github.com/bloom-housing/bloom/issues/3222)) ([a6ee947](https://github.com/bloom-housing/bloom/commit/a6ee947d6a73689f9084a4f2599d1d6e22dd95e9))
+
+
+
+
+
 ## [7.1.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.1.5...@bloom-housing/shared-helpers@7.1.6) (2022-12-13)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
