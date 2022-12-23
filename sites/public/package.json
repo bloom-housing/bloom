@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "7.2.2",
+  "version": "7.2.3",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -24,9 +24,9 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^7.5.0",
-    "@bloom-housing/shared-helpers": "^7.1.7",
-    "@bloom-housing/ui-components": "^7.0.7",
+    "@bloom-housing/backend-core": "^7.6.0",
+    "@bloom-housing/shared-helpers": "^7.2.0",
+    "@bloom-housing/ui-components": "^7.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",

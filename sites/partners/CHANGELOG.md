@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.4...@bloom-housing/partners@7.5.0) (2022-12-23)
+
+
+### Features
+
+* add 5 bedroom option ([#3230](https://github.com/bloom-housing/bloom/issues/3230)) ([8ada8dc](https://github.com/bloom-housing/bloom/commit/8ada8dcea9d2c3bf3fdd6f574bbe8afd08eb1a9d))
+
+
+
+
+
 ## [7.4.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.3...@bloom-housing/partners@7.4.4) (2022-12-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
