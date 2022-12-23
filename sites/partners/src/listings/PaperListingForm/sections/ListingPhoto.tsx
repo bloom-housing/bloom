@@ -13,7 +13,7 @@ import {
   StandardTableData,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+import { cloudinaryUrlFromId } from "../../../../shared"
 
 import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
 

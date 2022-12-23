@@ -17,7 +17,7 @@ import {
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
-import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+import { cloudinaryUrlFromId } from "../../../../shared"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void

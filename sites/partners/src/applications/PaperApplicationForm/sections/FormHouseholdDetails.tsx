@@ -1,7 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, ViewItem, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
+import { getUniqueUnitTypes, adaFeatureKeys } from "../../../../shared"
 import { Accessibility, Unit, UnitType } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 

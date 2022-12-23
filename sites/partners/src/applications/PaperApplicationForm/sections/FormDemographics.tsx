@@ -8,7 +8,7 @@ import {
   Select,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
+import { ethnicityKeys, raceKeys, howDidYouHear } from "../../../../shared"
 import { Demographics } from "@bloom-housing/backend-core/types"
 
 type FormDemographicsProps = {

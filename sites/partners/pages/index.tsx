@@ -9,7 +9,7 @@ import {
   useAgTable,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../shared"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"

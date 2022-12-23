@@ -13,7 +13,7 @@ import {
   FieldGroup,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "../../../../shared"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 const FormPrimaryApplicant = () => {

@@ -1,5 +1,5 @@
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import { listingFeatures, listingUtilities } from "@bloom-housing/shared-helpers"
+import { listingFeatures, listingUtilities } from "../../../../shared"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {

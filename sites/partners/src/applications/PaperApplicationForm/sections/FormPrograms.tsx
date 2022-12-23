@@ -1,7 +1,7 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, FieldGroup } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { getInputType } from "@bloom-housing/shared-helpers"
+import { getInputType } from "../../../../shared"
 import { ListingMultiselectQuestion } from "@bloom-housing/backend-core"
 
 type FormProgramsProps = {

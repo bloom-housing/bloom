@@ -1,4 +1,4 @@
-import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
+import { AuthProvider, ConfigProvider } from "../shared"
 import { render, RenderOptions } from "@testing-library/react"
 import React, { FC, ReactElement } from "react"
 import { SWRConfig } from "swr"

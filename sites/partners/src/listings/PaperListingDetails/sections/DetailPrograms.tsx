@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from "react"
 import { t, GridSection, MinimalTable, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ApplicationSection } from "@bloom-housing/backend-core"
-import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { listingSectionQuestions } from "../../../../shared"
 
 const DetailPrograms = () => {
   const listing = useContext(ListingContext)

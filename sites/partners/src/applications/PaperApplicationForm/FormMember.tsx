@@ -14,7 +14,7 @@ import {
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import { relationshipKeys, stateKeys } from "../../../shared"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "./FormTypes"
 

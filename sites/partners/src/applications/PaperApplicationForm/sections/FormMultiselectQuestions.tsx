@@ -10,7 +10,7 @@ import {
 } from "@bloom-housing/ui-components"
 
 import { useFormContext } from "react-hook-form"
-import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
+import { stateKeys, getInputType, fieldName } from "../../../../shared"
 import {
   ApplicationSection,
   ListingMultiselectQuestion,

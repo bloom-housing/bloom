@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../../../../shared"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)

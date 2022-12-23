@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { t, setSiteAlertMessage, FormForgotPassword } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useCatchNetworkError, AuthContext } from "@bloom-housing/shared-helpers"
+import { useCatchNetworkError, AuthContext } from "../shared"
 
 const ForgotPassword = () => {
   const router = useRouter()

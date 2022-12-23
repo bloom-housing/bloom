@@ -10,7 +10,7 @@ import {
   ViewItem,
   Select,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys } from "../../../../shared"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const LeasingAgent = () => {

@@ -2,7 +2,7 @@ import { useCallback, useContext, useState } from "react"
 import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../shared"
 import {
   ApplicationSection,
   EnumApplicationsApiExtraModelOrder,

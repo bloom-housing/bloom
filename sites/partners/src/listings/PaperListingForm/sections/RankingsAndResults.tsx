@@ -17,7 +17,7 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../formTypes"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import { getLotteryEvent } from "@bloom-housing/shared-helpers"
+import { getLotteryEvent } from "../../../../shared"
 
 type RankingsAndResultsProps = {
   listing?: FormListing

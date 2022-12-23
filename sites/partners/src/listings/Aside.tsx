@@ -12,7 +12,7 @@ import {
   LinkButton,
   Icon,
 } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { pdfUrlFromListingEvents } from "../../shared"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 

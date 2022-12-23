@@ -16,7 +16,7 @@ import {
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
-import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
+import { RoleOption, roleKeys, AuthContext } from "../../shared"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 

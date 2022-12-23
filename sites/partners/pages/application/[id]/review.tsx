@@ -23,7 +23,7 @@ import {
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../../../shared"
 import {
   ApplicationFlaggedSet,
   ApplicationReviewStatus,

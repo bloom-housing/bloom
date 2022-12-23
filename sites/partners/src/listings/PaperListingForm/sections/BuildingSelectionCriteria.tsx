@@ -15,7 +15,7 @@ import {
   StandardTableData,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+import { cloudinaryUrlFromId } from "../../../../shared"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
 const LotteryResults = () => {

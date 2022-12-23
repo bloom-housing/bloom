@@ -10,7 +10,7 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { useListingsMultiselectQuestionList } from "../../lib/hooks"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../../shared"
 import { MultiselectQuestion } from "@bloom-housing/backend-core"
 
 type PreferenceDeleteModalProps = {

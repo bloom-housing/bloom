@@ -12,7 +12,7 @@ import {
   FieldGroup,
   TimeField,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys } from "../../../../shared"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../formTypes"
 import dayjs from "dayjs"

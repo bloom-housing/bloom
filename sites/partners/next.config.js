@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const withTM = require("next-transpile-modules")([
-  "@bloom-housing/shared-helpers",
   "@bloom-housing/ui-components",
   "@bloom-housing/backend-core",
 ])
@@ -36,7 +35,6 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 // https://www.npmjs.com/package/next-transpile-modules
 module.exports = withBundleAnalyzer(
   withTM({
-    target: "serverless",
     env: {
       backendApiBase: BACKEND_API_BASE,
       backendProxyBase: BACKEND_PROXY_BASE,
@@ -62,5 +60,12 @@ module.exports = withBundleAnalyzer(
       })
       return config
     },
+    typescript: {
+      ignoreBuildErrors: true,
+    },
+    experimental: {
+      esmExternals: false,
+      forceSwcTransforms: true,
+    }
   })
 )

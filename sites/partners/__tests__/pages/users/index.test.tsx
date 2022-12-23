@@ -1,4 +1,4 @@
-import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
+import { AuthProvider, ConfigProvider } from "../../../shared"
 import { render } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"

@@ -13,7 +13,7 @@ import {
   NavigationHeader,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../../../../shared"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,

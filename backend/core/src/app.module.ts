@@ -37,6 +37,7 @@ import { PaperApplicationsModule } from "./paper-applications/paper-applications
 import { ActivityLogModule } from "./activity-log/activity-log.module"
 import { logger } from "./shared/middlewares/logger.middleware"
 import { CatchAllFilter } from "./shared/filters/catch-all-filter"
+import { HealthController } from "./health/jurisdictions.controller"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
@@ -89,6 +90,7 @@ export class AppModule {
         UnitRentTypesModule,
         UnitAccessibilityPriorityTypesModule,
       ],
+      controllers: [HealthController],
     }
   }
 }

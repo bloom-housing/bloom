@@ -21,7 +21,7 @@ import {
   mapCheckboxesToApi,
   mapRadiosToApi,
   getInputType,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import {
   FormTypes,
   YesNoAnswer,

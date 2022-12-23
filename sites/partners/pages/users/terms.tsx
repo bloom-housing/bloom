@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useMemo } from "react"
 import FormsLayout from "../../layouts/forms"
 import { FormTerms } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../../shared"
 
 const TermsPage = () => {
   const { profile, userProfileService, loadProfile } = useContext(AuthContext)

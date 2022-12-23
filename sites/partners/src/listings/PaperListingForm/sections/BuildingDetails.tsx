@@ -11,7 +11,7 @@ import {
   ListingMap,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { stateKeys } from "../../../../shared"
 import { FormListing } from "../formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,

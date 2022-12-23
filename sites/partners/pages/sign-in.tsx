@@ -6,7 +6,7 @@ import {
   NetworkStatusType,
   NetworkStatusContent,
   AuthContext,
-} from "@bloom-housing/shared-helpers"
+} from "../shared"
 import {
   FormSignIn,
   FormSignInMFAType,

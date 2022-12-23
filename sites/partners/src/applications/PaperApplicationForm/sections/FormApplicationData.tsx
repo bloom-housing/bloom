@@ -8,7 +8,7 @@ import {
   DateField,
   DateFieldValues,
 } from "@bloom-housing/ui-components"
-import { applicationLanguageKeys } from "@bloom-housing/shared-helpers"
+import { applicationLanguageKeys } from "../../../../shared"
 import { useFormContext } from "react-hook-form"
 
 const FormApplicationData = () => {

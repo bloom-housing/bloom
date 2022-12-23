@@ -14,7 +14,7 @@ import { useSingleListingData, useFlaggedApplicationsList } from "../../../../..
 import { ListingStatusBar } from "../../../../../src/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../src/applications/ApplicationsSideNav"
-import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
+import { formatDateTime } from "../../../../../shared"
 import dayjs from "dayjs"
 
 const ApplicationsList = () => {

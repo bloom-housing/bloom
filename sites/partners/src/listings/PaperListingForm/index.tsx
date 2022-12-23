@@ -19,7 +19,7 @@ import {
   LatitudeLongitude,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingSectionQuestions } from "../../../shared"
 import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,

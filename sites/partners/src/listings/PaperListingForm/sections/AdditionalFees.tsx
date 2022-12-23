@@ -10,7 +10,7 @@ import {
   GridCell,
 } from "@bloom-housing/ui-components"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
-import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
+import { AuthContext, listingUtilities } from "../../../../shared"
 import { ListingUtilities } from "@bloom-housing/backend-core/types"
 
 type AdditionalFeesProps = {

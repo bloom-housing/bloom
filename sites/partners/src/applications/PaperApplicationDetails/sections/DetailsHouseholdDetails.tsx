@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
-import { sortUnitTypes } from "@bloom-housing/shared-helpers"
+import { sortUnitTypes } from "../../../../shared"
 import { ApplicationContext } from "../../ApplicationContext"
 
 const DetailsHouseholdDetails = () => {

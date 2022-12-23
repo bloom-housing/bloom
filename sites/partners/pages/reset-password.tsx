@@ -13,7 +13,7 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../shared"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {

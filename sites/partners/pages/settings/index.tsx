@@ -23,7 +23,7 @@ import {
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../../shared"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../src/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"

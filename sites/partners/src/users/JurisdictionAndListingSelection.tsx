@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, GridCell, Field, FieldGroup, Select } from "@bloom-housing/ui-components"
-import { RoleOption, AuthContext } from "@bloom-housing/shared-helpers"
+import { RoleOption, AuthContext } from "../../shared"
 
 const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method

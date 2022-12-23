@@ -1,3 +1,22 @@
+# FROM node:14.17-alpine AS development
+# # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+# RUN apk add --no-cache libc6-compat
+
+# WORKDIR /usr/src/app/
+
+# COPY package*.json ./
+# COPY tsconfig*.json ./
+# COPY *config.js ./
+
+# RUN yarn install
+
+# COPY . .
+
+# RUN yarn build
+
+# EXPOSE 3000
+
+# CMD yarn next start -p 3000
 
 FROM node:14-alpine
 WORKDIR /app
@@ -9,7 +28,8 @@ FROM node:14-alpine
 WORKDIR /app
 COPY --from=0 /app/node_modules ./node_modules
 COPY . .
-RUN NODE_OPTIONS="--max_old_space_size=4096" yarn build
+# RUN NODE_OPTIONS="--max_old_space_size=4096" yarn build
+RUN ls -a -l
 RUN rm -rf node_modules
 RUN yarn install --production --ignore-scripts --prefer-offline
 
@@ -26,8 +46,21 @@ COPY --from=1 --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=1 --chown=nextjs:nodejs /app/public ./public
 COPY --from=1 --chown=nextjs:nodejs /app/.next ./.next
 
+RUN ls -a -l
+
 USER nextjs
 
 EXPOSE 3001
 
 CMD [ "yarn", "start" ]
+
+
+# WORKDIR /app
+# COPY package.json yarn.lock ./
+# COPY /.next ./.next
+
+# RUN yarn install
+
+# EXPOSE 3001
+
+# CMD [ "yarn", "start" ]

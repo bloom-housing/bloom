@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext } from "../shared"
 
 type AuthGuardProps = {
   children: React.ReactElement

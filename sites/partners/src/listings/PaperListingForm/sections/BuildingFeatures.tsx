@@ -8,7 +8,7 @@ import {
   FieldGroup,
   GridCell,
 } from "@bloom-housing/ui-components"
-import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
+import { listingFeatures, AuthContext } from "../../../../shared"
 import { ListingFeatures } from "@bloom-housing/backend-core/types"
 
 type BuildingFeaturesProps = {

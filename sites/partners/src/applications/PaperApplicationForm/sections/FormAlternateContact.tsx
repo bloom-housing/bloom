@@ -11,7 +11,7 @@ import {
   PhoneField,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { altContactRelationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import { altContactRelationshipKeys, stateKeys } from "../../../../shared"
 
 const FormAlternateContact = () => {
   const formMethods = useFormContext()
