@@ -266,6 +266,18 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     confirmAccount: async (token) => {
       dispatch(startLoading())
       try {
+        serviceOptions.axios = axiosStatic.create({
+          baseURL: apiUrl,
+          headers: {
+            language: router.locale,
+            jurisdictionName: process.env.jurisdictionName,
+            appUrl: window.location.origin,
+          },
+          paramsSerializer: (params) => {
+            return qs.stringify(params)
+          },
+        })
+
         const response = await userService?.confirm({ body: { token } })
         if (response) {
           const profile = await userService?.userControllerProfile()
