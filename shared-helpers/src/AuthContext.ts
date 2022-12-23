@@ -268,6 +268,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       try {
         serviceOptions.axios = axiosStatic.create({
           baseURL: apiUrl,
+          withCredentials: true,
           headers: {
             language: router.locale,
             jurisdictionName: process.env.jurisdictionName,
