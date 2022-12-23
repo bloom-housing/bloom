@@ -68,22 +68,22 @@ This runs 3 processes for both apps and the backend services on 3 different port
 - 3001 for the partners app
 - 3100 for backend/core
 
-### UI-Component Development
-- Although its own open-source repository, developers may wish to see ui-component changes in the bloom context. This is achieved with the following steps:
+### Bloom's UI-Component Development
+- Although its own open-source repository, developers may wish to see ui-component changes in the Bloom context. This is achieved with the following steps:
 ### Directory Setup
-1. Clone both bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level. 
+1. Clone both Bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level. 
 ### Symlinking UI-C
-1. In the bloom directory, run `yarn link:uic`.
+1. In the Bloom directory, run `yarn link:uic`.
 2. Open the next.config.js file in the public and partner's directory.
 3. Uncomment the experimental property at the bottom of each file.
-4. Follow the directions above to run bloom locally.
-These steps allow for two development patterns. You can edit ui-components within the node_modules of bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_module in bloom. Both patterns will display up-to-date changes on the local server.
+4. Follow the directions above to run Bloom locally.
+These steps allow for two development patterns. You can edit ui-components within the node_modules of Bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_module in Bloom. Both patterns will display up-to-date changes on the local server.
 
 ### Unlinking UI-C
-1. In the bloom directory, run `yarn unlink:uic`.
+1. In the Bloom directory, run `yarn unlink:uic`.
 2. Open the next.config.js file in the public and partner's directory.
 3. Comment out the experimental property at the bottom of each file.
-4. Follow the directions above to run bloom locally.
+4. Follow the directions above to run Bloom locally.
 Bloom will now be consuming the published version of @bloom-housing/ui-components specified in package.json and no local ui-component changes will be reflected.
 
 
