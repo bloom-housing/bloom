@@ -60,7 +60,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, trigger, getValues, setValue, control, reset } = useForm()
 
-  const numberOccupancyOptions = 10
+  const numberOccupancyOptions = 11
 
   const rentType: string = useWatch({
     control,
