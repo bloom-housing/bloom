@@ -12,7 +12,7 @@ The backend can be simultaenously deployed to PaaS-style hosts such as Heroku. I
 
 ### Structure
 
-Bloom uses a monorepo-style repository containing multiple user-facing applications and backend services. The three main high-level packages are `backend/core`, `sites`, `ui-components`, and `shared-helpers`.
+Bloom uses a monorepo-style repository containing multiple user-facing applications and backend services. The three main high-level packages are `backend/core`, `sites`, and `shared-helpers`. Additionally, Bloom's UI leverages the in-house npm package `@bloom-housing/ui-components`.
 
 The `sites` package contains reference implementations for the two user-facing applications in the system:
 
@@ -38,8 +38,7 @@ In some cases the sites diverge slightly to accomodate jurisdictional customizat
 
 ---
 
-- `ui-components` contains our internal component library based on our internal design system. It is comprised of React components that we consume internally and also build to be configurable for outside consumers. We use [Storybook](https://storybook.js.org/), an environment that renders each of our components to provide documentation and display iterations.
-- Visit [ui-components/README](https://github.com/bloom-housing/bloom/blob/dev/ui-components/README.md) for more details and view our [published Storybook](https://storybook.bloom.exygy.dev/).
+- `@bloom-housing/ui-components` is our component library based on our internal design system. It is comprised of React components that we consume as an npm package and also build to be configurable for outside consumers. We use [Storybook](https://storybook.js.org/), an environment to provide documentation and display iterations. Our published storybook can be found[here](https://storybook.bloom.exygy.dev/) and for further details visit the [ui-components repository](https://github.com/bloom-housing/ui-components).
 
 ## Getting Started for Developers
 
@@ -68,6 +67,25 @@ This runs 3 processes for both apps and the backend services on 3 different port
 - 3000 for the public app
 - 3001 for the partners app
 - 3100 for backend/core
+
+### UI-Component Development
+- Although its own open-source repository, developers may wish to see ui-component changes in the bloom context. This is achieved with the following steps:
+### Directory Setup
+1. Clone both bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level. 
+### Symlinking UI-C
+1. In the bloom directory, run `yarn link:uic`.
+2. Open the next.config.js file in the public and partner's directory.
+3. Uncomment the experimental property at the bottom of each file.
+4. Follow the directions above to run bloom locally.
+These steps allow for two development patterns. You can edit ui-components within the node_modules of bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_module in bloom. Both patterns will display up-to-date changes on the local server.
+
+### Unlinking UI-C
+1. In the bloom directory, run `yarn unlink:uic`.
+2. Open the next.config.js file in the public and partner's directory.
+3. Comment out the experimental property at the bottom of each file.
+4. Follow the directions above to run bloom locally.
+Bloom will now be consuming the published version of @bloom-housing/ui-components specified in package.json and no local ui-component changes will be reflected.
+
 
 ## Contributing
 
