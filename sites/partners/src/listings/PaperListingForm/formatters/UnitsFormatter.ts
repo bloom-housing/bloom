@@ -10,6 +10,9 @@ export default class UnitsFormatter extends Formatter {
       const unit = { ...unitValue } // make a copy of the unit before transformation
 
       switch (unit.unitType?.name) {
+        case "fiveBdrm":
+          unit.numBedrooms = 5
+          break
         case "fourBdrm":
           unit.numBedrooms = 4
           break
