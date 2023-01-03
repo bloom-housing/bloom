@@ -20,7 +20,6 @@
     "@bloom-housing/ui-components": "^7.1.0"
   },
   "devDependencies": {
-    "@bloom-housing/ui-components": "^3.0.1-alpha.15",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/jest": "^26.0.14",
