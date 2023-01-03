@@ -27,22 +27,16 @@ export class MyController {
 ```
 
 Using the `DefaultAuthGuard` in this way requires the client to provide a valid JWT token as an
-`Authentication` header using the standard `Bearer <TOKEN>` format. Tokens are checked for a valid signature and
-valid expiry time (currently 10 minutes). Tokens may also be revoked by adding an entry to `revoked_tokens` table, or
+`Access-Token Cookie` using the `access-token=<TOKEN>` format. Tokens are checked for a valid signature and
+valid expiry time (currently 1 hour). Tokens may also be revoked by adding an entry to `revoked_tokens` table, or
 using the auth route `revoke_token`.
 
 ## Obtain a token
 
-To obtain a token, a user must first login. Currently, an email/password strategy is the only way to do this. A
-client can `POST /auth/login` with body `{ username, password }`. This request will either return 401 or 200 with an
-object containing `accessToken`.
+To obtain an access token cookie, a user must first login. Currently, a Multifactor authenticating and email/password strategy is the only way to do this. A
+client can `POST /auth/login` with body `{ username, password }`. This request will either return 401 or 200 with an access cookies attached in the response header.
 
-To renew a token, `POST /auth/token` with an existing valid token.
-
-## Registration
-
-A user may register using `POST /auth/register`. The app validates the user object, and if creation is successful, the
-resulting user will be returned along with a valid `accessToken`.
+To renew an access token, `POST /auth/requestNewToken` with an existing valid refresh cookie. That refresh cookie is also provided by the login process.
 
 ## Configuration
 

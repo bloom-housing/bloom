@@ -16,6 +16,7 @@ import { MultiselectQuestion } from "../../src/multiselect-question/entities/mul
 import { EmailService } from "../../src/email/email.service"
 import { ApplicationSection } from "../../src/multiselect-question/types/multiselect-application-section-enum"
 import { MultiselectQuestionDto } from "../../src/multiselect-question/dto/multiselect-question.dto"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -47,6 +48,7 @@ describe("Jurisdictions", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     multiselectQuestionsRepository = app.get<Repository<MultiselectQuestion>>(

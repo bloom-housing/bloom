@@ -1,9 +1,9 @@
 describe("Admin User Mangement Tests", () => {
-  before(() => {
+  beforeEach(() => {
     cy.loginAndAcceptTerms("jurisdictionalAdmin")
   })
 
-  after(() => {
+  afterEach(() => {
     cy.signOut()
   })
 
