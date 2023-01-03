@@ -6,7 +6,6 @@ import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
 import { text, withKnobs } from "@storybook/addon-knobs"
-import formatDateTime from "@bloom-housing/shared-helpers/src/DateFormat"
 
 dayjs.extend(advancedFormat)
 
@@ -23,7 +22,7 @@ listing.applicationDueDate = dayjs().add(days, "days").format()
 
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
-    content={t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate)}
+    content={t("listings.applicationDeadline") + ": January 13, 2023"}
     status={ApplicationStatusType.Open}
     vivid
   />
@@ -40,9 +39,7 @@ export const withSubContent = () => (
 
 export const dueSoonWithTime = () => (
   <ApplicationStatus
-    content={
-      t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate, true)
-    }
+    content={t("listings.applicationDeadline") + ": January 13, 2023 at 6:32PM"}
     status={ApplicationStatusType.Open}
   />
 )
@@ -53,9 +50,7 @@ days = 10
 
 export const pastDue = () => (
   <ApplicationStatus
-    content={
-      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
-    }
+    content={t("listings.applicationsClosed") + ": January 13, 2023"}
     status={ApplicationStatusType.Closed}
   />
 )
@@ -64,9 +59,7 @@ listingPast.applicationDueDate = dayjs().subtract(days, "days").format()
 
 export const pastDueAndVivid = () => (
   <ApplicationStatus
-    content={
-      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
-    }
+    content={t("listings.applicationsClosed") + ": January 13, 2023"}
     status={ApplicationStatusType.Closed}
     vivid={true}
   />
@@ -75,18 +68,14 @@ export const pastDueAndVivid = () => (
 export const pastDueWithStyles = () => (
   <ApplicationStatus
     className={text("className", "place-content-center")}
-    content={
-      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
-    }
+    content={t("listings.applicationsClosed") + ": January 13, 2023"}
     status={ApplicationStatusType.Closed}
   />
 )
 
 export const pastDueWithIconColor = () => (
   <ApplicationStatus
-    content={
-      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
-    }
+    content={t("listings.applicationsClosed") + ": January 13, 2023"}
     iconColor={text("Icon Color", "#ff0000")}
     status={ApplicationStatusType.Closed}
   />
@@ -98,9 +87,7 @@ listing2.applicationDueDate = dayjs().add(days, "days").format()
 
 export const openSoon = () => (
   <ApplicationStatus
-    content={
-      t("listings.applicationOpenPeriod") + ": " + formatDateTime(listing2.applicationDueDate)
-    }
+    content={t("listings.applicationOpenPeriod") + ": January 13, 2023"}
     status={ApplicationStatusType.Open}
   />
 )
@@ -111,7 +98,7 @@ listing3.applicationDueDate = dayjs().add(days, "days").format()
 
 export const openedAlready = () => (
   <ApplicationStatus
-    content={t("listings.applicationDeadline") + ": " + formatDateTime(listing3.applicationDueDate)}
+    content={t("listings.applicationDeadline") + ": January 13, 2023"}
     status={ApplicationStatusType.Open}
   />
 )
