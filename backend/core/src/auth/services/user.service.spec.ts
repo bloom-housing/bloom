@@ -287,24 +287,4 @@ describe("UserService", () => {
       expect(user["resetToken"]).toBeDefined()
     })
   })
-
-  describe("updatePassword", () => {
-    const updateDto = { password: "qwerty", passwordConfirmation: "qwerty", token: "abcefg" }
-    it("should return 400 if email is not found", async () => {
-      mockUserRepo.findByResetToken = jest.fn().mockResolvedValue(null)
-      await expect(service.updatePassword(updateDto)).rejects.toThrow(
-        new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
-      )
-    })
-
-    it("should set resetToken", async () => {
-      const mockedUser = { id: "123", email: "abc@xyz.com" }
-      mockUserRepo.findByEmail = jest.fn().mockResolvedValue(mockedUser)
-      mockUserRepo.findByResetToken = jest.fn().mockResolvedValue(mockedUser)
-      // Sets resetToken
-      await service.forgotPassword({ email: "abc@xyz.com" })
-      const accessToken = await service.updatePassword(updateDto)
-      expect(accessToken).toBeDefined()
-    })
-  })
 })

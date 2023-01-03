@@ -1,3 +1,3 @@
-export const setAuthorization = (accessToken: string): [string, string] => {
-  return ["Authorization", `Bearer ${accessToken}`]
+export const setAuthorization = (accessToken: string): ["Cookie", string] => {
+  return ["Cookie", accessToken]
 }
