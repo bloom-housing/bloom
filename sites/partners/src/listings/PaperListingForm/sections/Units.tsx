@@ -206,7 +206,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             />
           </GridCell>
         </GridSection>
-        <span className={"text-tiny text-gray-800 block mb-2"}>{t("listings.units")}</span>
+        <span className={"text-sm text-gray-800 block mb-2"}>{t("listings.units")}</span>
         <div className="bg-gray-300 px-4 py-5">
           {!!units.length && (
             <div className="mb-5">
@@ -230,7 +230,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.units) && (
-        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
+        <span className={"text-xs text-alert"}>{t("errors.requiredFieldError")}</span>
       )}
 
       <Drawer
