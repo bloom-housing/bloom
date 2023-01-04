@@ -519,7 +519,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         </GridSection>
         <GridSection columns={2} className="pt-6">
           <GridCell>
-            <table className={"w-full text-sm td-plain th-plain"}>
+            <table className={"w-full text-xs td-plain th-plain"}>
               <thead>
                 <tr>
                   <th>{t("listings.householdSize")}</th>

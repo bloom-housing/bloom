@@ -101,7 +101,7 @@ const ApplicationHouseholdChanges = () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div
-            className={`form-card__group field text-lg ${
+            className={`form-card__group field text-xl ${
               errors.householdExpectingChanges ? "error" : ""
             }`}
           >

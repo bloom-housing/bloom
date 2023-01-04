@@ -65,11 +65,11 @@ const Applications = () => {
   const noApplicationsSection = () => {
     return error ? (
       <div className="p-8">
-        <h1 className="pb-4 text-3xl">{`${t("account.errorFetchingApplications")}`}</h1>
+        <h1 className="pb-4 text-2xl">{`${t("account.errorFetchingApplications")}`}</h1>
       </div>
     ) : (
       <div className="p-8">
-        <h1 className="pb-4 text-3xl">{t("account.noApplications")}</h1>
+        <h1 className="pb-4 text-2xl">{t("account.noApplications")}</h1>
         <LinkButton href="/listings">{t("listings.browseListings")}</LinkButton>
       </div>
     )

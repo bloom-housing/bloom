@@ -43,7 +43,7 @@ const EditListing = (props: { listing: Listing }) => {
           <NavigationHeader
             title={
               <>
-                <p className="font-sans font-semibold uppercase text-3xl">
+                <p className="font-sans font-semibold uppercase text-2xl">
                   {t("t.edit")}: {listing.name}
                 </p>
 
