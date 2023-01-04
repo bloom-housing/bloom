@@ -121,7 +121,7 @@ const ApplicationVouchers = () => {
         )}
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
+          <div className={`form-card__group field text-xl ${errors.incomeVouchers ? "error" : ""}`}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
               <FieldGroup

@@ -21,9 +21,9 @@ For example, some colors in `tokens/colors.scss`:
 and some font sizes in `tokens/fonts.scss`:
 
 ```css
---bloom-font-size-lg: 1.25rem;
---bloom-font-size-xl: 1.375rem;
---bloom-font-size-2xl: 1.5rem;
+--bloom-font-size-xl: 1.25rem;
+--bloom-font-size-2xl: 1.625rem;
+--bloom-font-size-3xl: 2rem;
 ```
 
 Unlike Sass variables, Tailwind theme configs, or other methods of defining design tokens, CSS variables are resolved _at runtime_. In other words, they are evaluated and applied to the styling of the webpage by the browser itself. To use a CSS variable, use the `var` function within a property value:
@@ -107,7 +107,7 @@ Let's compare the `PageHeader` stylesheet before/after:
   @apply text-center;
 
   @screen md {
-    @apply text-5xl;
+    @apply text-4xl;
     @apply text-left;
   }
 }
@@ -129,7 +129,7 @@ Let's compare the `PageHeader` stylesheet before/after:
   --inverse-background-color: var(--bloom-color-primary-dark);
   --inverse-border-color: var(--bloom-color-primary);
   --inverse-text-color: var(--bloom-color-white);
-  --title-font-size: var(--bloom-font-size-5xl);
+  --title-font-size: var(--bloom-font-size-4xl);
 
   /* Base Styles */
   padding: var(--bloom-s8) 0;

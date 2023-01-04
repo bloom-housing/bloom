@@ -200,7 +200,7 @@ const SelectAndOrder = ({
       )
     }
     return (
-      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-tiny">
+      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-sm">
         <div>
           <button
             onClick={() => {

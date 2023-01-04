@@ -31,7 +31,7 @@ export default function ListingPage(props: ListingProps) {
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
       <AlertBox
-        className="pt-6 pb-4 bg-red-700 font-bold text-sm"
+        className="pt-6 pb-4 bg-red-700 font-bold text-xs"
         type="alert"
         boundToLayoutWidth
         inverted
