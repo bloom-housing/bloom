@@ -79,7 +79,7 @@ const ApplicationConfirmation = () => {
 
           <p
             id="confirmationCode"
-            className="font-serif text-3xl my-1"
+            className="font-serif text-2xl my-1"
             data-test-id={"app-confirmation-id"}
           >
             {application.confirmationCode || application.id}
@@ -128,13 +128,13 @@ const ApplicationConfirmation = () => {
           )}
 
           <div className="form-card__pager-row py-6">
-            <span className="lined text-tiny" data-test-id={"app-confirmation-browse"}>
+            <span className="lined text-sm" data-test-id={"app-confirmation-browse"}>
               <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
             </span>
           </div>
 
           <div className="form-card__pager-row py-6 border-t">
-            <span className="lined text-tiny" data-test-id={"app-confirmation-print"}>
+            <span className="lined text-sm" data-test-id={"app-confirmation-print"}>
               <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
             </span>
           </div>

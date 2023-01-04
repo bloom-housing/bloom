@@ -30,7 +30,7 @@ const NewApplication = () => {
         <NavigationHeader
           title={
             <>
-              <p className="font-sans font-semibold uppercase text-3xl">
+              <p className="font-sans font-semibold uppercase text-2xl">
                 {t("t.edit")}: {application.applicant.firstName} {application.applicant.lastName}
               </p>
 

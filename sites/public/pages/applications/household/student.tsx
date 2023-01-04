@@ -101,7 +101,7 @@ const ApplicationHouseholdStudent = () => {
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div
-            className={`form-card__group field text-lg ${errors.householdStudent ? "error" : ""}`}
+            className={`form-card__group field text-xl ${errors.householdStudent ? "error" : ""}`}
           >
             <fieldset>
               <FieldGroup

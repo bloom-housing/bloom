@@ -163,7 +163,7 @@ const ListingPhoto = () => {
         description={t("listings.sections.photoSubtitle")}
       >
         {
-          <span className={"text-tiny text-gray-800 block mb-2"}>
+          <span className={"text-sm text-gray-800 block mb-2"}>
             {t("listings.sections.photoTitle")}
           </span>
         }
@@ -189,7 +189,7 @@ const ListingPhoto = () => {
       </GridSection>
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.images) && (
-        <span className={"text-sm text-alert"}>{errors?.images?.nested?.message}</span>
+        <span className={"text-xs text-alert"}>{errors?.images?.nested?.message}</span>
       )}
 
       <Drawer
