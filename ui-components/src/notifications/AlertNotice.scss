@@ -1,6 +1,6 @@
 // secondary alert messaging
 .alert-notice {
-  @apply text-sm;
+  @apply text-xs;
   @apply py-4;
   @apply px-8;
   @apply bg-gray-200;
@@ -33,12 +33,12 @@
   }
 
   p {
-    @apply text-sm;
+    @apply text-xs;
   }
 }
 
 .alert-notice__title {
-  @apply text-sm;
+  @apply text-xs;
   @apply mb-3;
   @apply font-semibold;
 
@@ -54,5 +54,5 @@
 }
 
 .alert-notice__body {
-  @apply text-sm;
+  @apply text-xs;
 }

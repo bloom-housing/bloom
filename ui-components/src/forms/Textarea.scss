@@ -24,7 +24,7 @@
 }
 
 .textarea-error-message {
-  @apply text-xs;
+  @apply text-2xs;
   @apply text-alert;
   @apply block;
   @apply leading-5;
@@ -34,7 +34,7 @@
 .textarea-label {
   @apply block;
   @apply pb-2;
-  @apply text-tiny;
+  @apply text-sm;
   @apply text-gray-800;
 }
 

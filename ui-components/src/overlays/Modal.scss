@@ -1,12 +1,12 @@
 .modal {
   /* Component Variables */
   --title-color: var(--bloom-color-gray-900);
-  --title-font-size: var(--bloom-font-size-base-alt);
+  --title-font-size: var(--bloom-font-size-lg);
   --title-font-family: var(--bloom-font-sans);
   --content-font-color: var(--bloom-color-gray-700);
   --content-padding: var(--bloom-s6);
   --max-width: var(--bloom-width-5xl);
-  --desktop-min-width: var(--bloom-width-lg);
+  --desktop-min-width: var(--bloom-width-xl);
   --footer-background-color: var(--bloom-color-primary-lighter);
   --border-radius: var(--bloom-rounded);
   --mobile-border-radius: 0;

@@ -26,7 +26,7 @@ export const SummaryCardHeading = () => (
       <h2 className="summary-card__title">
         <a href="#">My Property</a>
       </h2>
-      <p className="text-sm mt-3">
+      <p className="text-xs mt-3">
         <span>1 Polk St, San Francisco, CA 94102</span>
         <span className="ml-4 pl-4 border-l border-gray-600">Waitlist: 353</span>
       </p>

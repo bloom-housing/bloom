@@ -28,14 +28,14 @@
   @apply m-auto;
 }
 .hero__title {
-  @apply text-4xl;
+  @apply text-3xl;
   @apply mb-5;
   @apply mx-auto;
   letter-spacing: -0.04em;
   max-width: 41rem;
 
   @screen md {
-    @apply text-6xl;
+    @apply text-5xl;
     @apply mb-8;
   }
 
@@ -58,6 +58,6 @@ h2.hero__subtitle {
   text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
 
   @screen md {
-    @apply text-lg;
+    @apply text-xl;
   }
 }

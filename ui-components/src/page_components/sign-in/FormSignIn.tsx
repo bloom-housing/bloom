@@ -86,7 +86,7 @@ const FormSignIn = ({
             dataTestId="sign-in-email-field"
           />
 
-          <aside className="float-right text-tiny font-semibold">
+          <aside className="float-right text-sm font-semibold">
             <LinkComponent href="/forgot-password">
               {t("authentication.signIn.forgotPassword")}
             </LinkComponent>

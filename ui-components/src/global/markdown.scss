@@ -3,7 +3,7 @@
 
   h2 {
     margin-block: var(--bloom-s8) var(--bloom-s5);
-    font-size: var(--bloom-font-size-3xl);
+    font-size: var(--bloom-font-size-2xl);
 
     @media (min-width: $screen-md) {
       font-size: var(--bloom-font-size-xl);
@@ -32,7 +32,7 @@
   /* Certain text blocks in the application form flow use this extra styling: */
 
   &.markdown-informational {
-    font-size: var(--bloom-font-size-tiny);
+    font-size: var(--bloom-font-size-sm);
     color: var(--bloom-color-gray-750);
 
     h3 {

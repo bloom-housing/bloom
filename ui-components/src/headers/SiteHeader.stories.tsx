@@ -280,7 +280,7 @@ export const withDropdownIcons = () => (
     notice="We're just getting started. We'd love to get your feedback."
     logoSrc="/images/logo_glyph.svg"
     title="Alameda County Housing Portal"
-    dropdownItemClassName={"text-xs"}
+    dropdownItemClassName={"text-2xs"}
     menuLinks={[
       {
         title: "My Account",
@@ -346,7 +346,7 @@ export const DAHLIAToggleSet = () => (
     mobileText={true}
     logoWidth={"medium"}
     logoSrc="https://bit.ly/3me4iUC"
-    dropdownItemClassName={"text-xs"}
+    dropdownItemClassName={"text-2xs"}
     menuLinks={[
       {
         title: "Some longer links",

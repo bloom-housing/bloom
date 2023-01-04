@@ -2,12 +2,12 @@
   /* Component Variables */
   --normal-padding: var(--bloom-s3) var(--bloom-s5);
   --normal-rounded: var(--bloom-rounded-md);
-  --normal-font-size: var(--bloom-font-size-tiny);
+  --normal-font-size: var(--bloom-font-size-sm);
   --normal-font-weight: normal;
 
   --pill-padding: var(--bloom-s2) var(--bloom-s4);
   --pill-rounded: var(--bloom-rounded-full);
-  --pill-font-size: var(--bloom-font-size-tiny);
+  --pill-font-size: var(--bloom-font-size-sm);
   --pill-font-weight: 600;
   --pill-text-transform: uppercase;
   --pill-letter-spacing: var(--bloom-letter-spacing-ultrawide);
@@ -15,7 +15,7 @@
   --pill-capitalized-letter-spacing: var(--bloom-letter-spacing-wide);
 
   --small-pill-padding: var(--bloom-s1) var(--bloom-s3);
-  --small-pill-font-size: var(--bloom-font-size-2xs);
+  --small-pill-font-size: var(--bloom-font-size-3xs);
 
   /* Default Styles */
   padding: var(--normal-padding);
@@ -127,7 +127,7 @@
   }
 
   &.is-small {
-    font-size: var(--bloom-font-size-sm);
+    font-size: var(--bloom-font-size-xs);
     padding-block: var(--bloom-s2);
     padding-inline: var(--bloom-s4);
   }

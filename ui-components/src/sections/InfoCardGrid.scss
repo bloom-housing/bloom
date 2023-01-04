@@ -9,7 +9,7 @@
 .info-cards__title {
   @apply font-alt-sans;
   @apply uppercase;
-  @apply text-tiny;
+  @apply text-sm;
   @apply mb-5;
   @apply pb-2;
   @apply border-0;
@@ -34,7 +34,7 @@
 
   .info-card {
     & > :not(.info-card__title) {
-      @apply text-tiny;
+      @apply text-sm;
     }
 
     @screen md {

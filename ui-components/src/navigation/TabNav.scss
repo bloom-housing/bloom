@@ -3,7 +3,7 @@
   @apply items-center;
   @apply font-alt-sans;
   @apply uppercase;
-  @apply text-sm;
+  @apply text-xs;
   @apply font-semibold;
   @apply tracking-wider;
 }
@@ -34,7 +34,7 @@
 
     .tag {
       @apply ml-2;
-      @apply text-xs;
+      @apply text-2xs;
       line-height: 1rem;
     }
   }

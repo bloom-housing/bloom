@@ -173,7 +173,7 @@ table {
       }
 
       .stacked-table-subtext {
-        @apply text-sm;
+        @apply text-xs;
         @apply text-gray-700;
         @apply pl-1;
         @apply font-normal;
@@ -227,7 +227,7 @@ table {
       @apply normal-case;
       @apply px-0;
       @apply pb-0;
-      @apply text-sm;
+      @apply text-xs;
       @screen md {
         @apply py-3;
       }
@@ -241,7 +241,7 @@ table {
       @apply normal-case;
       @apply px-0;
       @apply pb-0;
-      @apply text-sm;
+      @apply text-xs;
       @apply pl-2;
       @apply font-normal;
     }
@@ -287,7 +287,7 @@ table {
         @screen md {
           @apply text-base;
         }
-        @apply text-sm;
+        @apply text-xs;
         @apply text-black;
         @apply font-normal;
       }
@@ -334,7 +334,7 @@ td.reserved {
   @apply font-sans;
   @apply font-bold;
   @apply uppercase;
-  @apply text-2xs;
+  @apply text-3xs;
   @apply leading-tight;
   @apply py-2;
   @apply text-gray-750;
@@ -349,7 +349,7 @@ td.reserved {
 
   .reserved-icon {
     @apply text-accent-warm;
-    @apply text-sm;
+    @apply text-xs;
   }
 }
 

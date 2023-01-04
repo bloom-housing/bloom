@@ -66,7 +66,7 @@ const Contact = ({
             </a>
           </p>
           {contactPhoneNumberNote && (
-            <p className="text-sm text-gray-700">{contactPhoneNumberNote}</p>
+            <p className="text-xs text-gray-700">{contactPhoneNumberNote}</p>
           )}
         </>
       )}
@@ -99,7 +99,7 @@ const Contact = ({
             <Heading priority={3} styleType={"capsWeighted"}>
               {info.title}
             </Heading>
-            <div className="text-gray-800 text-tiny markdown">{info.content}</div>
+            <div className="text-gray-800 text-sm markdown">{info.content}</div>
           </div>
         )
       })}

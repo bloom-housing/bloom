@@ -4,7 +4,7 @@
   --ordinal-border-width: var(--bloom-border-2);
   --ordinal-border-color: var(--bloom-color-primary);
   --ordinal-color: var(--bloom-color-primary);
-  --ordinal-font-size: var(--bloom-font-size-sm);
+  --ordinal-font-size: var(--bloom-font-size-xs);
   --ordinal-padding: var(--bloom-s2);
   --ordinal-margin-right: var(--bloom-s2);
   --subtitle-color: var(--bloom-color-gray-750);
@@ -13,7 +13,7 @@
 
 .preferences-list__item {
   .info-card__title {
-    --title-font-size: var(--bloom-font-size-sm);
+    --title-font-size: var(--bloom-font-size-xs);
 
     margin-bottom: 0px;
     color: var(--info-card-title-color);
@@ -71,7 +71,7 @@
 
 .preferences-list__subtitle {
   color: var(--subtitle-color);
-  font-size: var(--bloom-font-size-tiny);
+  font-size: var(--bloom-font-size-sm);
 
   @media (max-width: $screen-md) {
     margin-left: 0px;
@@ -80,12 +80,12 @@
 
 .preferences-list__description {
   color: var(--description-color);
-  font-size: var(--bloom-font-size-sm);
+  font-size: var(--bloom-font-size-xs);
   margin-top: var(--bloom-s3);
 }
 
 .preferences-list__links {
-  font-size: var(--bloom-font-size-tiny);
+  font-size: var(--bloom-font-size-sm);
   margin-top: var(--bloom-s3);
   span {
     margin-right: var(--bloom-s4);

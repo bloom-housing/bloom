@@ -117,7 +117,7 @@
 }
 
 .status-item__date {
-  @apply text-sm;
+  @apply text-xs;
 }
 
 .status-item__address {
@@ -125,12 +125,12 @@
 }
 
 .status-item__confirm-text {
-  @apply text-tiny;
+  @apply text-sm;
   @apply mb-4;
 }
 
 .status-item__confirm-number {
-  @apply text-lg;
+  @apply text-xl;
 }
 
 .status-item__address {

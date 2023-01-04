@@ -100,7 +100,7 @@
       justify-content: center;
 
       @media (max-width: $screen-sm) {
-        font-size: var(--bloom-font-size-sm);
+        font-size: var(--bloom-font-size-xs);
         line-height: var(--bloom-line-height-none);
       }
     }

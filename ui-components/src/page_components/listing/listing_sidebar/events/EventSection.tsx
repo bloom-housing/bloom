@@ -19,7 +19,7 @@ type EventSectionProps = {
 const EventSection = (props: EventSectionProps) => {
   if (!props.events.length) return null
 
-  const dateClasses = ["inline-block text-tiny uppercase"]
+  const dateClasses = ["inline-block text-sm uppercase"]
 
   if (props.dateClassName) {
     dateClasses.push(props.dateClassName)
@@ -41,21 +41,19 @@ const EventSection = (props: EventSectionProps) => {
             <p className="text text-gray-800 pb-2 flex justify-between items-center">
               <span className={dateClasses.join(" ")}>{event.dateString}</span>
               {event.timeString && (
-                <span className="inline-block text-sm font-bold ml-5 font-alt-sans">
+                <span className="inline-block text-xs font-bold ml-5 font-alt-sans">
                   {event.timeString}
                 </span>
               )}
             </p>
           )}
           {event.linkURL && event.linkText && (
-            <p className="pb-2 text-tiny">
+            <p className="pb-2 text-sm">
               <a href={event.linkURL}>{event.linkText}</a>
             </p>
           )}
           {event.note && (
-            <div
-              className={`text-tiny text-gray-700 ${index !== props.events.length - 1 && "pb-3"}`}
-            >
+            <div className={`text-sm text-gray-700 ${index !== props.events.length - 1 && "pb-3"}`}>
               {typeof event.note === "string" ? <p>{event.note}</p> : event.note}
             </div>
           )}

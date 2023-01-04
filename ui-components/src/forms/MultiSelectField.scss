@@ -73,7 +73,7 @@
   background: var(--list-background-color);
   border: 1px solid var(--bloom-color-gray-700);
   border-radius: var(--bloom-rounded-sm);
-  font-size: var(--bloom-font-size-tiny);
+  font-size: var(--bloom-font-size-sm);
 }
 
 .multi-select-field__list--has-results[aria-label]:before {
@@ -81,7 +81,7 @@
   display: block;
   width: 100%;
   padding: var(--bloom-s1) var(--bloom-s2);
-  font-size: var(--bloom-font-size-sm);
+  font-size: var(--bloom-font-size-xs);
   color: var(--bloom-text-color);
   text-align: right;
 }
@@ -144,7 +144,7 @@
   padding-block: var(--bloom-s3);
   padding-inline: var(--bloom-s5) var(--bloom-s10);
   margin: 2px 4px 2px 0;
-  font-size: var(--bloom-font-size-tiny);
+  font-size: var(--bloom-font-size-sm);
   border-radius: var(--bloom-rounded-full);
   word-break: break-word;
   cursor: pointer;

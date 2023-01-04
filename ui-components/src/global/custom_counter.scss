@@ -37,7 +37,7 @@
 }
 
 .custom-counter__title {
-  @apply text-lg;
+  @apply text-xl;
 
   @screen md {
     @apply text-xl;
@@ -46,5 +46,5 @@
 
 .custom-counter__subtitle {
   @apply text-gray-750;
-  @apply text-tiny;
+  @apply text-sm;
 }

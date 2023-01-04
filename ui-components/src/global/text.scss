@@ -8,10 +8,10 @@ h6 {
 }
 
 h1 {
-  @apply text-3xl;
+  @apply text-2xl;
 
   @screen md {
-    @apply text-4xl;
+    @apply text-3xl;
   }
 }
 
@@ -19,7 +19,7 @@ h2 {
   @apply text-2xl;
 
   @screen md {
-    @apply text-3xl;
+    @apply text-2xl;
   }
 }
 
@@ -36,7 +36,7 @@ h4 {
 }
 
 h5 {
-  @apply text-lg;
+  @apply text-xl;
 }
 
 h6 {
@@ -69,12 +69,12 @@ a {
 }
 
 h1.title {
-  @apply text-4xl;
+  @apply text-3xl;
 }
 
-.text-serif-lg {
+.text-serif-xl {
   @apply font-serif;
-  @apply text-lg;
+  @apply text-xl;
   @apply mb-4;
 }
 
@@ -92,7 +92,7 @@ h1.title {
 .edit-link {
   @apply underline;
   @apply font-alt-sans;
-  @apply text-tiny;
+  @apply text-sm;
   @apply uppercase;
   @apply block;
   @apply text-primary;
@@ -105,7 +105,7 @@ h1.title {
   @apply rounded-full;
   @apply px-2;
   @apply py-1;
-  @apply text-sm;
+  @apply text-xs;
   @apply font-semibold;
   @apply text-gray-700;
   @apply mr-2;
@@ -127,7 +127,7 @@ h1.title {
   font-family: var(--text-large-primary-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-large-primary-font-weight, 600);
   color: var(--text-large-primary--color, var(--bloom-color-primary-dark));
-  font-size: var(--text-large-primary-font-size, var(--bloom-font-size-3xl));
+  font-size: var(--text-large-primary-font-size, var(--bloom-font-size-2xl));
   margin-block: var(--text-large-primary-margin-block, 0 var(--bloom-s3));
   line-height: var(--text-large-primary-line-height, var(--bloom-line-height-tight));
 }
@@ -144,7 +144,7 @@ h1.title {
   font-family: var(--text-small-weighted-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-small-weighted-font-weight, 600);
   color: var(--text-small-weighted-color, var(--bloom-text-color-dark));
-  font-size: var(--text-small-weighted-font-size, var(--bloom-font-size-sm));
+  font-size: var(--text-small-weighted-font-size, var(--bloom-font-size-xs));
   margin-block: var(--text-small-weighted-margin-block, 0 var(--bloom-s1));
 }
 
@@ -152,7 +152,7 @@ h1.title {
   font-family: var(--text-small-normal-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-small-normal-font-weight, normal);
   color: var(--text-small-normal-color, var(--bloom-text-color));
-  font-size: var(--text-small-normal-font-size, var(--bloom-font-size-sm));
+  font-size: var(--text-small-normal-font-size, var(--bloom-font-size-xs));
   margin-block: var(--text-small-normal-margin-block, 0 var(--bloom-s3));
 }
 
@@ -160,7 +160,7 @@ h1.title {
   font-family: var(--text-light-weighted-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-light-weighted-font-weight, 600);
   color: var(--text-light-weighted-color, var(--bloom-text-color-light));
-  font-size: var(--text-light-weighted-font-size, var(--bloom-font-size-sm));
+  font-size: var(--text-light-weighted-font-size, var(--bloom-font-size-xs));
 }
 
 .text__caps-spaced {
@@ -169,7 +169,7 @@ h1.title {
   color: var(--text-caps-spaced-color, var(--bloom-text-color));
   letter-spacing: var(--text-caps-spaced-letter-spacing, var(--bloom-letter-spacing-widest));
   font-weight: var(--text-caps-spaced-font-weight, 600);
-  font-size: var(--text-caps-spaced-font-size, var(--bloom-font-size-tiny));
+  font-size: var(--text-caps-spaced-font-size, var(--bloom-font-size-sm));
   margin-bottom: var(--text-caps-spaced-margin-bottom, var(--bloom-s3));
   display: inline-block;
 }
@@ -177,7 +177,7 @@ h1.title {
 .text__underline-weighted {
   font-family: var(--text-underline-weighted-font-family, var(--bloom-font-alt-sans));
   text-transform: var(--text-underline-weighted-transform, uppercase);
-  font-size: var(--text-underline-weighted-font-size, var(--bloom-font-size-tiny));
+  font-size: var(--text-underline-weighted-font-size, var(--bloom-font-size-sm));
   margin-bottom: var(--text-underline-weighted-bottom-margin, var(--bloom-s5));
   padding-bottom: var(--text-underline-weighted-bottom-padding, var(--bloom-s2));
   border: var(--text-underline-weighted-border, 0);
@@ -194,6 +194,6 @@ h1.title {
   text-transform: var(--text-caps-weighted-text-transform, uppercase);
   font-family: var(--text-caps-weighted-font-family, var(--bloom-font-sans));
   font-weight: var(--text-caps-weighted-font-weight, 700);
-  font-size: var(--text-caps-weighted-font-size, var(--bloom-font-size-tiny));
+  font-size: var(--text-caps-weighted-font-size, var(--bloom-font-size-sm));
   letter-spacing: var(--text-caps-weighted-letter-spacing, var(--bloom-letter-spacing-wide));
 }

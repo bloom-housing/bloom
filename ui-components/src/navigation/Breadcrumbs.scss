@@ -7,14 +7,14 @@
   }
 
   li {
-    @apply text-sm;
+    @apply text-xs;
     @apply flex;
     @apply tracking-wider;
     @apply self-center;
 
     &:not(:last-child)::after {
       content: "\203A";
-      @apply text-lg;
+      @apply text-xl;
       @apply px-2;
       line-height: 1.4rem;
     }

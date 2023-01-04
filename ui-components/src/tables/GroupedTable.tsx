@@ -68,7 +68,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
     })
   })
 
-  const tableClasses = ["w-full", "text-sm"]
+  const tableClasses = ["w-full", "text-xs"]
   if (props.responsiveCollapse) {
     tableClasses.push("responsive-collapse")
   }

@@ -91,11 +91,11 @@
 
 .alert-box__body {
   font-weight: var(--font-weight);
-  font-size: var(--bloom-font-size-tiny);
+  font-size: var(--bloom-font-size-sm);
 }
 
 .alert-box__close {
-  font-size: var(--bloom-font-size-3xl);
+  font-size: var(--bloom-font-size-2xl);
   right: var(--horizontal-padding);
   margin-left: var(--bloom-s3);
   padding: 0;

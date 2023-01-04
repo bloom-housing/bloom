@@ -382,7 +382,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
               }
             }}
           >
-            <div className={"pr-2 text-tiny text-primary uppercase"}>
+            <div className={"pr-2 text-sm text-primary uppercase"}>
               {props.strings?.menu ?? t("t.menu")}
             </div>
             <Icon

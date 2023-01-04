@@ -15,7 +15,7 @@ const SidebarBlock = ({ children, className, title, priority, styleType }: Sideb
           {title}
         </Heading>
       )}
-      <div className="text-tiny text-gray-750">{children}</div>
+      <div className="text-sm text-gray-750">{children}</div>
     </section>
   )
 }

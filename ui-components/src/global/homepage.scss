@@ -15,7 +15,7 @@
     @apply items-center;
 
     @screen md {
-      @apply text-lg;
+      @apply text-xl;
       @apply flex-row;
       @apply justify-around;
       > :nth-child(2) {

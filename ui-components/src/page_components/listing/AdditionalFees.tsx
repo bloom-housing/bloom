@@ -26,7 +26,7 @@ const AdditionalFees = ({
   return (
     <div className="info-card bg-gray-100 border-0">
       <p className="info-card__title mb-2">{strings.sectionHeader}</p>
-      <div className="info-card__columns text-sm">
+      <div className="info-card__columns text-xs">
         {applicationFee && (
           <div className={`info-card__column-2 ${deposit && "mr-2"}`}>
             <div className="text-base">{strings.applicationFee}</div>
@@ -47,7 +47,7 @@ const AdditionalFees = ({
         )}
       </div>
       {footerContent && footerContent?.length > 0 && (
-        <div className="info-card__columns text-sm">
+        <div className="info-card__columns text-xs">
           {footerContent?.map((elem, idx) => (
             <div key={`footer_info_${idx}`} className="info-card__column-2">
               {elem}

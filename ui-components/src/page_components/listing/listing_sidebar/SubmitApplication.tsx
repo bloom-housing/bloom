@@ -35,7 +35,7 @@ const SubmitApplication = ({
   return (
     <>
       <section className="aside-block is-tinted bg-gray-100">
-        <div className="text-serif-lg">{strings.sectionHeader}</div>
+        <div className="text-serif-xl">{strings.sectionHeader}</div>
         {applicationMailingAddress && (
           <>
             <Heading priority={3} styleType={"capsWeighted"}>
@@ -45,7 +45,7 @@ const SubmitApplication = ({
               <p className="text-gray-700">{applicationOrganization}</p>
               <ContactAddress address={applicationMailingAddress} mapString={strings.mapString} />
             </>
-            {strings.postmark && <p className="mt-4 text-tiny text-gray-750">{strings.postmark}</p>}
+            {strings.postmark && <p className="mt-4 text-sm text-gray-750">{strings.postmark}</p>}
           </>
         )}
         {applicationDropOffAddress && (
@@ -60,7 +60,7 @@ const SubmitApplication = ({
                 <Heading priority={3} styleType={"capsWeighted"}>
                   {strings.officeHoursHeader}
                 </Heading>
-                <p className="mt-4 text-tiny text-gray-750">
+                <p className="mt-4 text-sm text-gray-750">
                   <Markdown
                     children={applicationDropOffAddressOfficeHours}
                     options={{ disableParsingRawHTML: true }}

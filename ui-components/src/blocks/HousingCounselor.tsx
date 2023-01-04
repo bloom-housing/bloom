@@ -27,8 +27,8 @@ const LanguageLabel = (language: string) => {
 const HousingCounselor = (props: HousingCounselorProps) => {
   return (
     <div className="resource-item text-base">
-      <h3 className="font-sans text-lg">{props.name}</h3>
-      <p className="text-sm text-gray-800 pb-2">
+      <h3 className="font-sans text-xl">{props.name}</h3>
+      <p className="text-xs text-gray-800 pb-2">
         {props.strings?.languageServices ?? t("housingCounselors.languageServices")}
         {props.languages.map((language) => LanguageLabel(language))}
       </p>

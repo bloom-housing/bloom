@@ -29,7 +29,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
 
   // determine styling
   let textColor = vivid ? "text-white" : "text-gray-800"
-  const textSize = vivid ? "text-xs" : "text-sm"
+  const textSize = vivid ? "text-2xs" : "text-xs"
 
   const icon = withIcon && (
     <Icon

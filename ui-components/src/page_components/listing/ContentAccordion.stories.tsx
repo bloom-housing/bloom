@@ -76,7 +76,7 @@ export const grayThemeFilled = () => {
     return (
       <span className={"flex w-full justify-between items-center"}>
         <span className={"flex items-center"}>
-          <span className={"font-serif text-3xl font-medium leading-4 pr-2"}>1</span> person in
+          <span className={"font-serif text-2xl font-medium leading-4 pr-2"}>1</span> person in
           household
         </span>
         <span className={"flex pr-4 items-center"}>

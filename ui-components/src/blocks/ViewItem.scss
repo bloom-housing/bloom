@@ -28,7 +28,7 @@
 .view-item__label {
   @apply text-gray-800;
   @apply font-sans;
-  @apply text-tiny;
+  @apply text-sm;
   @apply block;
 }
 
@@ -54,6 +54,6 @@
 .view-item__helper {
   @apply text-gray-750;
   @apply font-sans;
-  @apply text-tiny;
+  @apply text-sm;
   @apply block;
 }

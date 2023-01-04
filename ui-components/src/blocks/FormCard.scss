@@ -32,7 +32,7 @@
   @apply border-t-4;
   @apply border-primary;
   @apply leading-tight;
-  @apply text-3xl;
+  @apply text-2xl;
 
   @screen md {
     @apply mx-auto;
@@ -115,7 +115,7 @@
 }
 
 .form-card__header_title {
-  @apply text-lg;
+  @apply text-xl;
   @apply font-alt-sans;
   @apply font-bold;
   @apply uppercase;
@@ -193,7 +193,7 @@
   @apply tracking-widest;
   @apply font-semibold;
   @apply font-sans;
-  @apply text-tiny;
+  @apply text-sm;
   @apply mb-2;
   @apply inline-block;
 }

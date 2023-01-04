@@ -32,7 +32,7 @@ const ExpandableSection = ({ content, expandableContent, strings }: ExpandableSe
       <Heading priority={4} styleType={"underlineWeighted"}>
         {strings.title}
       </Heading>
-      <div className="text-tiny text-gray-750">
+      <div className="text-sm text-gray-750">
         {getTextContent(content)}
         {expandableContent && (
           <div className={"mt-2"}>

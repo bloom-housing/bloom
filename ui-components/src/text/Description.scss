@@ -19,7 +19,7 @@
   @include clearfix;
 
   .description__title {
-    @apply text-lg;
+    @apply text-xl;
     @apply text-gray-800;
     @apply mb-3;
     clear: left;
@@ -36,7 +36,7 @@
   }
 
   .description__body {
-    @apply text-tiny;
+    @apply text-sm;
     @apply mb-5;
 
     @screen md {

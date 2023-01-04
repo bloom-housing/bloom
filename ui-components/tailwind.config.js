@@ -13,12 +13,11 @@ module.exports = {
       print: { raw: "print" },
     },
     fontSize: {
+      "3xs": "var(--bloom-font-size-3xs)",
       "2xs": "var(--bloom-font-size-2xs)",
       xs: "var(--bloom-font-size-xs)",
       sm: "var(--bloom-font-size-sm)",
-      tiny: "var(--bloom-font-size-tiny)",
       base: "var(--bloom-font-size-base)",
-      "base-alt": "var(--bloom-font-size-base-alt)",
       lg: "var(--bloom-font-size-lg)",
       xl: "var(--bloom-font-size-xl)",
       "2xl": "var(--bloom-font-size-2xl)",
@@ -26,7 +25,6 @@ module.exports = {
       "4xl": "var(--bloom-font-size-4xl)",
       "5xl": "var(--bloom-font-size-5xl)",
       "6xl": "var(--bloom-font-size-6xl)",
-      "6.5xl": "var(--bloom-font-size-6_5xl)",
       "7xl": "var(--bloom-font-size-7xl)",
     },
     fontFamily: {

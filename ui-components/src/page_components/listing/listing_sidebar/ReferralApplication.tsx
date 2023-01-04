@@ -26,7 +26,7 @@ const ReferralApplication = (props: ReferralApplicationProps) => {
           {props.strings.call ?? t("t.call")} {props.phoneNumber}
         </a>
       </p>
-      <p className="text-tiny mt-4 text-gray-800">{props.description}</p>
+      <p className="text-sm mt-4 text-gray-800">{props.description}</p>
     </section>
   )
 }

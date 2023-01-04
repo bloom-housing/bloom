@@ -27,7 +27,7 @@ const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) 
         } font-alt-sans leading-7`}
       >
         <span className="text-right w-12 inline-block pr-2.5 text-base">{row.amount}</span>
-        <span className={"text-sm"}>{row.text}</span>
+        <span className={"text-xs"}>{row.text}</span>
       </li>
     )
   }
@@ -39,7 +39,7 @@ const QuantityRowSection = ({ quantityRows, strings }: QuantityRowSectionProps) 
       </Heading>
       <div>
         {strings.description && (
-          <div className="text-tiny text-gray-800 pb-3">
+          <div className="text-sm text-gray-800 pb-3">
             {typeof strings.description === "string" ? (
               <p>{strings.description}</p>
             ) : (

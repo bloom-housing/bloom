@@ -14,7 +14,7 @@
   label,
   .label {
     @apply pb-2;
-    @apply text-tiny;
+    @apply text-sm;
     @apply text-gray-800;
   }
 
@@ -93,7 +93,7 @@
       @apply px-3;
       @apply py-2;
       @apply items-center;
-      @apply text-lg;
+      @apply text-xl;
       background: transparent;
     }
 
@@ -293,7 +293,7 @@ input[type="number"] {
 
 .field-label {
   @apply pb-2;
-  @apply text-tiny;
+  @apply text-sm;
   @apply text-gray-800;
 }
 
@@ -341,14 +341,14 @@ input[type="number"] {
 }
 
 .field-note {
-  @apply text-tiny;
+  @apply text-sm;
   @apply text-gray-700;
   white-space: pre-line;
 }
 
 .error-message {
   display: inline-block;
-  @apply text-sm;
+  @apply text-xs;
   @apply text-alert;
   @apply tracking-wide;
   @apply leading-5;
@@ -358,7 +358,7 @@ input[type="number"] {
 .field-sub-note {
   @apply mt-2;
   @apply text-gray-750;
-  @apply text-sm;
+  @apply text-xs;
   @apply tracking-wide;
   @apply font-sans;
   font-weight: normal;

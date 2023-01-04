@@ -7,14 +7,14 @@
   --label-transform: uppercase;
   --label-font: var(--bloom-font-alt-sans);
   --label-letter-spacing: var(--bloom-letter-spacing-widest);
-  --normal-font-size: var(--bloom-font-size-sm);
+  --normal-font-size: var(--bloom-font-size-xs);
   --label-weight: bold;
   --small-rounded: var(--bloom-rounded);
   --small-padding: var(--bloom-s3) var(--bloom-s6);
-  --small-font-size: var(--bloom-font-size-xs);
+  --small-font-size: var(--bloom-font-size-2xs);
   --big-rounded: var(--bloom-rounded);
   --big-padding: var(--bloom-s6);
-  --big-font-size: var(--bloom-font-size-sm);
+  --big-font-size: var(--bloom-font-size-xs);
 
   /* Base Styles */
   position: relative;
@@ -93,7 +93,7 @@
     font-weight: 400;
     text-decoration: underline;
     margin: var(--bloom-s4);
-    font-size: var(--bloom-font-size-tiny);
+    font-size: var(--bloom-font-size-sm);
 
     &:hover {
       color: var(--bloom-color-primary);
@@ -104,7 +104,7 @@
   &.is-inline {
     color: var(--bloom-color-primary);
     font-weight: 600;
-    font-size: var(--bloom-font-size-tiny);
+    font-size: var(--bloom-font-size-sm);
     margin: 0;
     text-decoration: none;
 
@@ -140,7 +140,7 @@
     text-decoration: underline;
     margin: var(--bloom-s4);
     text-transform: uppercase;
-    font-size: var(--bloom-font-size-tiny);
+    font-size: var(--bloom-font-size-sm);
     display: block;
 
     &:hover {

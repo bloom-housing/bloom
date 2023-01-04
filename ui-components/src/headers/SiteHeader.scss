@@ -191,10 +191,10 @@
             @apply text-gray-900;
             @apply font-alt-sans;
             @apply tracking-wider;
-            @apply text-sm;
+            @apply text-xs;
 
             @screen md {
-              @apply text-tiny;
+              @apply text-sm;
             }
           }
         }
@@ -222,13 +222,13 @@
           @apply relative;
           @apply rounded;
           @apply px-2;
-          @apply text-lg;
+          @apply text-xl;
           @apply text-center;
           @apply uppercase;
           @apply font-alt-sans;
           @apply inline-block;
           @apply tracking-widest;
-          @apply text-sm;
+          @apply text-xs;
           @apply font-bold;
           @apply leading-snug;
           @apply border-primary;
@@ -243,7 +243,7 @@
 
         .navbar-link {
           text-transform: uppercase;
-          @apply text-sm;
+          @apply text-xs;
           @apply pr-3;
           @apply pl-3;
           @apply text-gray-750;
@@ -340,7 +340,7 @@
 
   .navbar-notice__text {
     @apply max-w-5xl;
-    @apply text-sm;
+    @apply text-xs;
     @apply py-2;
     @apply px-3;
     margin: auto;
