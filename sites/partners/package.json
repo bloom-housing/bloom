@@ -64,6 +64,7 @@
     "concurrently": "^5.3.0",
     "cypress": "^9.5.1",
     "cypress-file-upload": "^5.0.8",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "js-levenshtein": "^1.1.6",
     "msw": "^0.46.0",
