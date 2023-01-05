@@ -22,8 +22,6 @@ import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import { ApplicationFlaggedSetsModule } from "./application-flagged-sets/application-flagged-sets.module"
 import * as bodyParser from "body-parser"
 import { ThrottlerModule } from "@nestjs/throttler"
-import { ThrottlerStorageRedisService } from "nestjs-throttler-storage-redis"
-import Redis from "ioredis"
 import { SharedModule } from "./shared/shared.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
@@ -42,7 +40,18 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
-  app.enableCors()
+  const allowList = process.env.CORS_ORIGINS || []
+  app.enableCors((req, cb) => {
+    const options = {
+      credentials: true,
+      origin: false,
+    }
+
+    if (allowList.indexOf(req.header("Origin")) !== -1) {
+      options.origin = true
+    }
+    cb(null, options)
+  })
   app.use(logger)
   app.useGlobalFilters(new CatchAllFilter(httpAdapter))
   app.use(bodyParser.json({ limit: "50mb" }))
@@ -58,26 +67,6 @@ export function applicationSetup(app: INestApplication) {
 })
 export class AppModule {
   static register(dbOptions): DynamicModule {
-    /**
-     * DEV NOTE:
-     * This configuration is required due to issues with
-     * self signed certificates in Redis 6.
-     *
-     * { rejectUnauthorized: false } option is intentional and required
-     *
-     * Read more:
-     * https://help.heroku.com/HC0F8CUS/redis-connection-issues
-     * https://devcenter.heroku.com/articles/heroku-redis#ioredis-module
-     */
-    const redis =
-      "0" === process.env.REDIS_USE_TLS
-        ? new Redis(process.env.REDIS_URL)
-        : new Redis(process.env.REDIS_TLS_URL, {
-            tls: {
-              rejectUnauthorized: false,
-            },
-          })
-
     return {
       module: AppModule,
       imports: [
@@ -104,7 +93,6 @@ export class AppModule {
           useFactory: (config: ConfigService) => ({
             ttl: config.get("THROTTLE_TTL"),
             limit: config.get("THROTTLE_LIMIT"),
-            storage: new ThrottlerStorageRedisService(redis),
           }),
         }),
         UnitsModule,

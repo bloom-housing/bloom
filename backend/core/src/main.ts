@@ -4,6 +4,7 @@ import { Logger } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { getConnection } from "typeorm"
 import { ConfigService } from "@nestjs/config"
+import cookieParser from "cookie-parser"
 import dbOptions from "../ormconfig"
 
 let app
@@ -11,6 +12,9 @@ async function bootstrap() {
   app = await NestFactory.create(AppModule.register(dbOptions), {
     logger: process.env.NODE_ENV === "development" ? ["error", "warn", "log"] : ["error", "warn"],
   })
+
+  app.use(cookieParser())
+
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   app = applicationSetup(app)

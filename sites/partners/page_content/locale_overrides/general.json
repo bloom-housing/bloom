@@ -281,6 +281,7 @@
   "listings.unit.title": "Unit",
   "listings.unit.type": "Unit Type",
   "listings.unit.typeOptions.SRO": "SRO",
+  "listings.unit.typeOptions.fiveBdrm": "Five Bedroom",
   "listings.unit.typeOptions.fourBdrm": "Four Bedroom",
   "listings.unit.typeOptions.oneBdrm": "One Bedroom",
   "listings.unit.typeOptions.studio": "Studio",

@@ -310,8 +310,10 @@ export function useUnitTypeList() {
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/unitTypes`, fetcher)
 
+  const sortedData = data?.sort((a, b) => a.numBedrooms - b.numBedrooms)
+
   return {
-    data,
+    data: sortedData,
     loading: !error && !data,
     error,
   }

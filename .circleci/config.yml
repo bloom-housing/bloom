@@ -6,7 +6,6 @@ executors:
   standard-node:
     docker:
       - image: "cimg/node:14.17.6"
-      - image: "cimg/redis:6.2.6"
       - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
@@ -16,7 +15,6 @@ executors:
   cypress-node:
     docker:
       - image: "cypress/base:14.17.0"
-      - image: "cimg/redis:6.2.6"
       - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
@@ -31,9 +29,6 @@ executors:
       DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
       # DB URL for the jest tests per ormconfig.test.ts
       TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-      REDIS_TLS_URL: "rediss://localhost:6379/0"
-      REDIS_URL: "redis://localhost:6379/0"
-      REDIS_USE_TLS: "0"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
@@ -98,9 +93,6 @@ jobs:
             DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
             # DB URL for the jest tests per ormconfig.test.ts
             TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-            REDIS_TLS_URL: "rediss://localhost:6379/0"
-            REDIS_URL: "redis://localhost:6379/0"
-            REDIS_USE_TLS: "0"
             CLOUDINARY_SIGNED_PRESET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
             CLOUDINARY_CLOUD_NAME: "exygy"

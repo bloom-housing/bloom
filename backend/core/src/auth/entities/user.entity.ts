@@ -183,4 +183,18 @@ export class User {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   hitConfirmationURL?: Date | null
+
+  // storing the active access token for a user
+  @Column({ type: "varchar", nullable: true, default: null })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  activeAccessToken?: string | null
+
+  // storing the active refresh token for a user
+  @Column({ type: "varchar", nullable: true, default: null })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  activeRefreshToken?: string | null
 }

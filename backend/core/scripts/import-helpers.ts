@@ -139,7 +139,7 @@ export async function importListing(
   })
 
   // Log in to retrieve an access token.
-  const { accessToken } = await authService.login({
+  await authService.login({
     body: {
       email: email,
       password: password,
@@ -149,10 +149,8 @@ export async function importListing(
   // Update the axios config so future requests include the access token in the header.
   serviceOptions.axios = axios.create({
     baseURL: apiUrl,
+    withCredentials: true,
     timeout: 10000,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   })
   const unitTypes = await unitTypesService.list()
   const priorityTypes = await unitAccessibilityPriorityTypesService.list()

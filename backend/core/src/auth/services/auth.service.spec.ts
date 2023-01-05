@@ -23,6 +23,10 @@ describe("AuthService", () => {
           provide: getRepositoryToken(RevokedToken),
           useValue: {},
         },
+        {
+          provide: getRepositoryToken(User),
+          useValue: {},
+        },
       ],
     }).compile()
 
