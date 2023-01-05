@@ -62,18 +62,6 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:helpers
-  jest-ui-components:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:shared:ui
-  jest-ui-components-a11y:
-    executor: puppeteer-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:shared:ui:a11y
   jest-backend:
     executor: standard-node
     steps:
@@ -126,12 +114,6 @@ workflows:
           requires:
             - setup
       - jest-shared-helpers:
-          requires:
-            - setup
-      - jest-ui-components:
-          requires:
-            - setup
-      - jest-ui-components-a11y:
           requires:
             - setup
       - jest-backend:

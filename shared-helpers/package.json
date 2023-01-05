@@ -20,11 +20,12 @@
     "@bloom-housing/ui-components": "^7.1.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/jest-dom": "5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/jest": "^26.0.14",
     "@types/node-polyglot": "^2.4.1",
     "@types/react-dom": "^16.9.5",
+    "@types/react-tabs": "^2.3.2",
     "@types/react-test-renderer": "^16.9.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
