@@ -115,14 +115,6 @@ h1.title {
   @apply block;
 }
 
-:root {
-  --bloom-text-color-light: var(--bloom-color-gray-700);
-  --bloom-text-color: var(--bloom-color-gray-750);
-  --bloom-text-color-dark: var(--bloom-color-gray-800);
-  --bloom-text-color-darker: var(--bloom-color-gray-850);
-  --bloom-text-color-darkest: var(--bloom-color-black);
-}
-
 .text__large-primary {
   font-family: var(--text-large-primary-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-large-primary-font-weight, 600);
@@ -135,7 +127,7 @@ h1.title {
 .text__medium-normal {
   font-family: var(--text-medium-normal-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-medium-normal-font-weight, normal);
-  color: var(--text-medium-normal-color, var(--bloom-text-color-darkest));
+  color: var(--text-medium-normal-color, var(--bloom-color-black));
   font-size: var(--text-medium-normal-font-size, var(--bloom-font-size-base));
   margin-block: var(--text-medium-normal-margin-block, 0 var(--bloom-s3));
 }

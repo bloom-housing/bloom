@@ -62,7 +62,7 @@
 
   &.is-secondary {
     color: var(--secondary-appearance-label-color, var(--bloom-color-white));
-    background-color: var(--secondary-appearance-background-color, var(--bloom-color-secondary));
+    background-color: var(--secondary-appearance-background-color, var(--bloom-color-primary-dark));
   }
 
   &.is-success {
