@@ -176,12 +176,12 @@ const itShouldIgnoreLoggedInState = () =>
 
 // Tests
 
-describe.skip("Without any paths specified", () => {
+describe("Without any paths specified", () => {
   itShouldWaitForAuthState()
   itShouldVerifyLoginState()
 })
 
-describe.skip("With a list of paths to require login for", () => {
+describe("With a list of paths to require login for", () => {
   beforeEach(() => {
     props = { requireForRoutes: ["/login-required"] }
   })
@@ -203,7 +203,7 @@ describe.skip("With a list of paths to require login for", () => {
   })
 })
 
-describe.skip("With a list of paths to bypass login", () => {
+describe("With a list of paths to bypass login", () => {
   beforeEach(() => {
     props = { skipForRoutes: ["/not-required"] }
   })

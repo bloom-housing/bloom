@@ -33,8 +33,7 @@ describe("settings", () => {
     expect(getByText("None")).toBeInTheDocument()
   })
 
-  // Skipping for now until the getByRole issue is solved
-  it.skip("should render the preference table", async () => {
+  it("should render the preference table", async () => {
     server.use(
       rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json([multiselectQuestionPreference]))

@@ -29,7 +29,7 @@ describe("DetailUnits", () => {
   })
 
   // skipping for now until we can solve the getByRole issue
-  it.skip("should render the detail units", () => {
+  it("should render the detail units", () => {
     const callUnitDrawer = jest.fn()
     const results = render(
       <ListingContext.Provider
