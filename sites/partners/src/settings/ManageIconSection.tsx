@@ -32,7 +32,12 @@ const ManageIconSection = (props: IconContentProps) => {
           />
         </button>
         {props.onDelete && (
-          <button onClick={props.onDelete} aria-label={"Delete"} data-test-id={props.deleteTestId}>
+          <button
+            onClick={props.onDelete}
+            aria-label={"Delete"}
+            data-test-id={props.deleteTestId}
+            data-testid={props.deleteTestId}
+          >
             <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
           </button>
         )}
