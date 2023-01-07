@@ -72,7 +72,7 @@
     }
 
     &.is-light-mode {
-      color: var(--success-light-appearance-label-color, var(--bloom-color-gray-900));
+      color: var(--success-light-appearance-label-color, var(--bloom-color-gray-950));
       background-color: var(
         --success-light-appearance-background-color,
         var(--bloom-color-success-light)
@@ -90,7 +90,7 @@
     }
 
     &.is-light-mode {
-      color: var(--accent-cool-light-appearance-label-color, var(--bloom-color-gray-900));
+      color: var(--accent-cool-light-appearance-label-color, var(--bloom-color-gray-950));
       background-color: var(
         --accent-cool-light-appearance-background-color,
         var(--bloom-color-accent-cool)
@@ -108,7 +108,7 @@
     }
 
     &.is-light-mode {
-      color: var(--accent-warm-light-appearance-label-color, var(--bloom-color-gray-900));
+      color: var(--accent-warm-light-appearance-label-color, var(--bloom-color-gray-950));
       background-color: var(
         --accent-warm-light-appearance-background-color,
         var(--bloom-color-accent-warm)

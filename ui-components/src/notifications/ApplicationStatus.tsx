@@ -51,7 +51,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
       textColor = "text-white"
       break
     case ApplicationStatusType.Matched:
-      bgColor = "bg-green-700"
+      bgColor = "bg-green-500"
       textColor = "text-white"
       break
     default:

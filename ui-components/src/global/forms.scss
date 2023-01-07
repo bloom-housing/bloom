@@ -73,7 +73,7 @@
       @apply rounded;
       @apply w-full;
       @apply py-3;
-      @apply text-gray-900;
+      @apply text-gray-950;
       font-family: inherit;
       font-size: 1rem;
       line-height: normal;
@@ -187,12 +187,12 @@
   }
 
   select {
-    @apply text-gray-900;
+    @apply text-gray-950;
     @apply rounded;
     @apply border;
     @apply border-gray-500;
     @apply bg-gray-200;
-    @apply text-gray-900;
+    @apply text-gray-950;
     @apply leading-tight;
     @apply py-2;
     @apply px-3;
@@ -237,7 +237,7 @@
       .input,
       .prepend,
       select {
-        @apply border-red-700;
+        @apply border-red-500;
         @apply border-2;
       }
 
@@ -367,7 +367,7 @@ input[type="number"] {
 .form-section__title {
   @apply font-alt-sans;
   @apply text-xl;
-  @apply text-gray-900;
+  @apply text-gray-950;
   @apply font-medium;
   @apply block;
   @apply mb-1;

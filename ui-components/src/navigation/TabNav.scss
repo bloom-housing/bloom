@@ -23,13 +23,13 @@
     }
 
     &:hover {
-      @apply text-gray-900;
+      @apply text-gray-950;
       @apply border-gray-450;
     }
 
     &.is-active {
       @apply border-primary;
-      @apply text-gray-900;
+      @apply text-gray-950;
     }
 
     .tag {

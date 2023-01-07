@@ -213,7 +213,7 @@ const exampleCustomContent = () => {
   }
   return (
     <div className={"text-gray-750"}>
-      <div className={"font-alt-sans font-semibold text-base mb-2 text-gray-900"}>
+      <div className={"font-alt-sans font-semibold text-base mb-2 text-gray-950"}>
         Available units
       </div>
       {getHeader("Units")}

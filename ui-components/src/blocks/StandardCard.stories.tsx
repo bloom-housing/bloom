@@ -47,9 +47,9 @@ export const styleOverrides = () => {
       --font-family: var(--bloom-font-sans);
       --border-radius: var(--bloom-rounded-md);
       --border-width: var(--bloom-border-4);
-      --border-color: var(--bloom-color-blue-600);
-      --title-color: var(--bloom-color-blue-600);
-      --background-color: var(--bloom-color-blue-200);
+      --border-color: var(--bloom-color-blue-500);
+      --title-color: var(--bloom-color-blue-500);
+      --background-color: var(--bloom-color-blue-100);
       --blank-color: var(--bloom-color-black);
       --blank-background: var(--bloom-color-gray-400);
     }

@@ -22,7 +22,7 @@ export const Default = () => {
 
 export const Styled = () => {
   return (
-    <SidebarBlock title={"Title"} style={"capsWeighted"} className={"bg-blue-200"}>
+    <SidebarBlock title={"Title"} styleType={"capsWeighted"} className={"bg-blue-100"}>
       Content
     </SidebarBlock>
   )

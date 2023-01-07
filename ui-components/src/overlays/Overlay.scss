@@ -1,7 +1,7 @@
 @import "../global/mixins.scss";
 
 .fixed-overlay {
-  --overlay-background-color: var(--bloom-color-gray-900);
+  --overlay-background-color: var(--bloom-color-gray-950);
   --overlay-opacity: 0.5;
 
   position: fixed;
