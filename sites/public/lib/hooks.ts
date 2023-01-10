@@ -14,7 +14,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
-import { getListingApplicationStatus } from "../lib/helpers"
+import { getListingApplicationStatus } from "./helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
