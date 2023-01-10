@@ -22,7 +22,6 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import { makeTestListing } from "../utils/make-test-listing"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 import { getUserAccessToken } from "../utils/get-user-access-token"
-import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -48,7 +47,7 @@ describe("Activiy", () => {
         ApplicationsModule,
         ThrottlerModule.forRoot({
           ttl: 60,
-          limit: 5,
+          limit: 2,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
         ListingsModule,
@@ -56,10 +55,12 @@ describe("Activiy", () => {
     }).compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
-    app.use(cookieParser())
     await app.init()
-
-    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    const res = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: "admin@example.com", password: "abcdef" })
+      .expect(201)
+    adminAccessToken = res.body.accessToken
     const userRepository = app.get<Repository<User>>(getRepositoryToken(User))
     adminId = (await userRepository.findOne({ email: "admin@example.com" })).id
     activityLogsRepository = app.get<Repository<ActivityLog>>(getRepositoryToken(ActivityLog))
