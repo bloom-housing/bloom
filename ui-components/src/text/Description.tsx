@@ -1,13 +1,13 @@
 import * as React from "react"
 import "./Description.scss"
-import Markdown, { MarkdownToJSX } from "markdown-to-jsx"
+import Markdown, { MarkdownOptions } from "markdown-to-jsx"
 
 export interface DescriptionProps {
   term: string
   description: any
   dtClassName?: string
   markdown?: boolean
-  markdownProps?: MarkdownToJSX.Options
+  markdownProps?: MarkdownOptions
 }
 
 export const Description = (props: DescriptionProps) => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import Markdown, { MarkdownToJSX } from "markdown-to-jsx"
+import Markdown, { MarkdownOptions } from "markdown-to-jsx"
 import "./ExpandableText.scss"
 
 export interface ExpandableTextProps {
@@ -11,7 +11,7 @@ export interface ExpandableTextProps {
     readMore: string
     readLess: string
   }
-  markdownProps?: MarkdownToJSX.Options
+  markdownProps?: MarkdownOptions
   buttonClassName?: string
 }
 
