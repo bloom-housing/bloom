@@ -45,7 +45,6 @@ export function applicationSetup(app: INestApplication) {
     const options = {
       credentials: true,
       origin: false,
-      exposedHeaders: "Set-Cookie",
     }
 
     if (allowList.indexOf(req.header("Origin")) !== -1) {
