@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { getUserAccessToken, getTokenFromCookie } from "../utils/get-user-access-token"
+import { getUserAccessToken } from "../utils/get-user-access-token"
 import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
@@ -30,7 +30,6 @@ import { EmailService } from "../../src/email/email.service"
 import { MfaType } from "../../src/auth/types/mfa-type"
 import { UserRepository } from "../../src/auth/repositories/user-repository"
 import dayjs from "dayjs"
-import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -38,8 +37,9 @@ import cookieParser from "cookie-parser"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("UsersService", () => {
+describe("Applications", () => {
   let app: INestApplication
+  let user1AccessToken: string
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
@@ -78,9 +78,9 @@ describe("UsersService", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
-    app.use(cookieParser())
     await app.init()
 
+    user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
     user2Profile = (
@@ -174,7 +174,7 @@ describe("UsersService", () => {
         ...userCreateResponse.body,
         confirmedAt: new Date(),
       })
-      .set(...setAuthorization(getTokenFromCookie(userLoginResponse)))
+      .set(...setAuthorization(userLoginResponse.body.accessToken))
       .expect(403)
   })
 
@@ -301,8 +301,8 @@ describe("UsersService", () => {
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
-      .set(...setAuthorization(userAccessToken))
       .send(user2UpdateDto)
+      .set(...setAuthorization(user1AccessToken))
       .expect(403)
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)

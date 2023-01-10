@@ -16,7 +16,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
-import { Status } from "@bloom-housing/backend-core/types"
+import { LoginResponse } from "@bloom-housing/backend-core/types"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 
 type FormUserConfirmFields = {
@@ -31,13 +31,18 @@ const FormUserConfirm = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, watch } = useForm<FormUserConfirmFields>()
   const router = useRouter()
-  const { mutate, isLoading: isConfirmLoading, isError, reset: resetMutation } = useMutate<Status>()
-  const { userService, loadProfile, loading } = useContext(AuthContext)
+  const { mutate, isLoading: isConfirmLoading, isError, reset: resetMutation } = useMutate<
+    LoginResponse
+  >()
+  const { userService } = useContext(AuthContext)
+  const { loginWithToken } = useContext(AuthContext)
+
   const token = router.query?.token as string
 
   const password = useRef({})
   password.current = watch("password", "")
 
+  const [isLoginLoading, setLoginLoading] = useState(false)
   const [isSubmitting, setSubmitting] = useState(false)
   const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
   const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
@@ -73,13 +78,21 @@ const FormUserConfirm = () => {
         })
       )
 
-      if (response) {
-        loadProfile("/")
+      const { accessToken } = response || {}
+
+      if (accessToken) {
+        setLoginLoading(true)
+        await loginWithToken(accessToken)
+        setLoginLoading(false)
+
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
+        void router.push("/")
+      } else {
+        setSubmitting(false)
+        setRerequestModalOpen(true)
       }
     } catch (err) {
       setSubmitting(false)
-      setRerequestModalOpen(true)
       console.error(err)
     }
   }
@@ -175,7 +188,7 @@ const FormUserConfirm = () => {
                 type="submit"
                 styleType={AppearanceStyleType.primary}
                 className={"items-center"}
-                loading={isConfirmLoading || loading}
+                loading={isConfirmLoading || isLoginLoading}
               >
                 {t("users.confirmAccount")}
               </Button>
