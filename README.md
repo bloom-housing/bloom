@@ -69,7 +69,7 @@ This runs 3 processes for both apps and the backend services on 3 different port
 - 3100 for backend/core
 
 ### Bloom's UI-Component Development
-- Although its own open-source repository, developers may wish to see ui-component changes in the Bloom context. This is achieved with the following steps:
+- Because Bloom's ui-components package is a separate open source repository, developing within both repos locally requires linking the folders with the following steps:
 ### Directory Setup
 1. Clone both Bloom and the [ui-components repository](https://github.com/bloom-housing/ui-components) on the same directory level. 
 ### Symlinking UI-C
@@ -77,7 +77,7 @@ This runs 3 processes for both apps and the backend services on 3 different port
 2. Open the next.config.js file in the public and partner's directory.
 3. Uncomment the experimental property at the bottom of each file.
 4. Follow the directions above to run Bloom locally.
-These steps allow for two development patterns. You can edit ui-components within the node_modules of Bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_module in Bloom. Both patterns will display up-to-date changes on the local server.
+These steps allow for two development patterns. You can edit ui-components within the node_modules of Bloom and the changes will be reflected in your local version of ui-components. Alternatively, you can edit the local version of ui-components and the changes will be reflected in the node_modules in Bloom. Both patterns will display up-to-date changes on the local server.
 
 ### Unlinking UI-C
 1. In the Bloom directory, run `yarn unlink:uic`.
