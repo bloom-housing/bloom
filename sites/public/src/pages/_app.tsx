@@ -10,11 +10,11 @@ import {
   AuthProvider,
 } from "@bloom-housing/shared-helpers"
 import { headScript, bodyTopTag, pageChangeHandler } from "../lib/customScripts"
-import { AppSubmissionContext } from "../lib/AppSubmissionContext"
+import { AppSubmissionContext } from "../lib/applications/AppSubmissionContext"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
-} from "../lib/ApplicationConductor"
+} from "../lib/applications/ApplicationConductor"
 import { translations, overrideTranslations } from "../lib/translations"
 import LinkComponent from "../components/LinkComponent"
 

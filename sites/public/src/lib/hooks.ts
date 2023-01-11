@@ -13,7 +13,7 @@ import {
   OrderParam,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
-import { AppSubmissionContext } from "./AppSubmissionContext"
+import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
