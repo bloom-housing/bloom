@@ -28,7 +28,6 @@ describe("DetailUnits", () => {
     expect(results.getByText("None")).toBeInTheDocument()
   })
 
-  // skipping for now until we can solve the getByRole issue
   it("should render the detail units", () => {
     const callUnitDrawer = jest.fn()
     const results = render(
