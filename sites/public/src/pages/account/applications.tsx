@@ -11,7 +11,7 @@ import {
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
-import { MetaTags } from "../../components/MetaTags"
+import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {

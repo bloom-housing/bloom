@@ -25,7 +25,10 @@ import {
 } from "@bloom-housing/shared-helpers"
 
 import FormsLayout from "../../../layouts/forms"
-import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
+import {
+  AppSubmissionContext,
+  retrieveApplicationConfig,
+} from "../../../lib/applications/AppSubmissionContext"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"

@@ -12,7 +12,7 @@ import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { emailRegex } from "../lib/helpers"
+import { emailRegex } from "../../lib/helpers"
 
 export interface ConfirmationModalProps {
   setSiteAlertMessage: (message: string, alertType: string) => void

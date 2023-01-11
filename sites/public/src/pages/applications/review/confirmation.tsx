@@ -21,7 +21,7 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
+import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationConfirmation = () => {

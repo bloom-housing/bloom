@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormSummaryDetails from "../../../components/forms/applications/FormSummaryDetails"
+import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   OnClientSide,

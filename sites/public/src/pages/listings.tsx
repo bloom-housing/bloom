@@ -5,7 +5,7 @@ import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
-import { MetaTags } from "../components/MetaTags"
+import { MetaTags } from "../components/shared/MetaTags"
 import { getListings } from "../lib/helpers"
 import { fetchClosedListings, fetchOpenListings } from "../lib/hooks"
 

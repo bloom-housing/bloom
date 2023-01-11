@@ -21,7 +21,7 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import FormBackLink from "../../../components/forms/applications/FormBackLink"
+import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
 import { UserStatus } from "../../../lib/constants"

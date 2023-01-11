@@ -6,10 +6,10 @@ import Link from "next/link"
 import dayjs from "dayjs"
 import { FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
-import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
+import { AppSubmissionContext } from "../../lib/applications/AppSubmissionContext"
 import { useContext, useEffect, useMemo } from "react"
-import FormSummaryDetails from "../../components/forms/applications/FormSummaryDetails"
-import { DATE_FORMAT, UserStatus } from "../../../lib/constants"
+import FormSummaryDetails from "../../components/shared/FormSummaryDetails"
+import { DATE_FORMAT, UserStatus } from "../../lib/constants"
 import {
   pushGtmEvent,
   PageView,

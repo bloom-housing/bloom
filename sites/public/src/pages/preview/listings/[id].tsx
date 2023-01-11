@@ -6,8 +6,8 @@ import { AlertBox, t } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 import Layout from "../../../layouts/application"
-import { ListingView } from "../../../components/ListingView"
-import { MetaTags } from "../../../components/MetaTags"
+import { ListingView } from "../../../components/listing/ListingView"
+import { MetaTags } from "../../../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
 
 interface ListingProps {

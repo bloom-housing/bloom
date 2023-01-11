@@ -18,7 +18,7 @@ import {
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
-import FormSummaryDetails from "../../../components/forms/applications/FormSummaryDetails"
+import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { useRouter } from "next/router"
 import { UserStatus } from "../../../lib/constants"

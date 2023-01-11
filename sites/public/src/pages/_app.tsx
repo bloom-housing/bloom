@@ -16,7 +16,7 @@ import ApplicationConductor, {
   loadSavedListing,
 } from "../lib/applications/ApplicationConductor"
 import { translations, overrideTranslations } from "../lib/translations"
-import LinkComponent from "../components/LinkComponent"
+import LinkComponent from "../components/core/LinkComponent"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router

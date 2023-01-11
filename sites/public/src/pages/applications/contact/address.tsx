@@ -32,13 +32,13 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/forms/applications/FormBackLink"
+import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
   findValidatedAddress,
   AddressValidationSelection,
-} from "../../../components/forms/applications/ValidateAddress"
+} from "../../../components/applications/ValidateAddress"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAddress = () => {

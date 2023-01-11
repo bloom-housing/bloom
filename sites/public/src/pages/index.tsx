@@ -14,8 +14,8 @@ import {
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
-import { ConfirmationModal } from "../components/ConfirmationModal"
-import { MetaTags } from "../components/MetaTags"
+import { ConfirmationModal } from "../components/account/ConfirmationModal"
+import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
 
 interface IndexProps {

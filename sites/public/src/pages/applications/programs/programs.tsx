@@ -1,6 +1,6 @@
 import React from "react"
 import { ApplicationSection } from "@bloom-housing/backend-core/types"
-import ApplicationMultiselectQuestionStep from "../../../components/ApplicationMultiselectQuestionStep"
+import ApplicationMultiselectQuestionStep from "../../../components/applications/ApplicationMultiselectQuestionStep"
 
 const ApplicationPrograms = () => {
   return (

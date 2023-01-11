@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react"
 import { t, FormCard, dateToString } from "@bloom-housing/ui-components"
 import Link from "next/link"
-import FormSummaryDetails from "../../../components/forms/applications/FormSummaryDetails"
+import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import FormsLayout from "../../../layouts/forms"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { useRouter } from "next/router"
