@@ -13,7 +13,7 @@ import {
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/MetaTags"
-import { UserStatus } from "../../../lib/constants"
+import { UserStatus } from "../../lib/constants"
 
 interface DashboardProps {
   router: NextRouter

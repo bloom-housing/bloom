@@ -3,7 +3,7 @@ import { ApplicationSection } from "@bloom-housing/backend-core/types"
 import { t } from "@bloom-housing/ui-components"
 import ApplicationMultiselectQuestionStep from "../../../components/ApplicationMultiselectQuestionStep"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 
 const ApplicationPreferencesAll = () => {
   const { listing } = useFormConductor("preferences")

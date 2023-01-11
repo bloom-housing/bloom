@@ -27,8 +27,8 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../components/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../../lib/hooks"
-import { UserStatus } from "../../../../lib/constants"
+import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationDemographics = () => {

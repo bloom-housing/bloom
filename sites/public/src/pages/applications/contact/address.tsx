@@ -21,7 +21,7 @@ import { useContext, useEffect, useState, useMemo, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { disableContactFormOption } from "../../../../lib/helpers"
+import { disableContactFormOption } from "../../../lib/helpers"
 import {
   contactPreferencesKeys,
   phoneNumberKeys,
@@ -33,13 +33,13 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../components/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
   findValidatedAddress,
   AddressValidationSelection,
 } from "../../../components/forms/applications/ValidateAddress"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)

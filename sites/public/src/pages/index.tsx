@@ -12,11 +12,11 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../lib/constants"
+import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/ConfirmationModal"
 import { MetaTags } from "../components/MetaTags"
-import { fetchJurisdictionByName } from "../../lib/hooks"
+import { fetchJurisdictionByName } from "../lib/hooks"
 
 interface IndexProps {
   jurisdiction: Jurisdiction

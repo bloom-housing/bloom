@@ -22,9 +22,9 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../components/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesGeneral = () => {
   const { profile } = useContext(AuthContext)

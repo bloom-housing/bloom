@@ -3,7 +3,7 @@ import Layout from "../layouts/application"
 import Head from "next/head"
 import { Hero, LinkButton, MarkdownSection, t } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../lib/constants"
+import { UserStatus } from "../lib/constants"
 
 const ErrorPage = () => {
   const pageTitle = t("errors.notFound.title")

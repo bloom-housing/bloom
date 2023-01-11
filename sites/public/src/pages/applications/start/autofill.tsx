@@ -17,11 +17,11 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/forms/applications/FormSummaryDetails"
-import AutofillCleaner from "../../../../lib/appAutofill"
+import AutofillCleaner from "../../../lib/appAutofill"
 import { useRouter } from "next/router"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 
 export default () => {
   const router = useRouter()

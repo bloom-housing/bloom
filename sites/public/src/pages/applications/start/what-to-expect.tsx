@@ -14,9 +14,9 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 import Markdown from "markdown-to-jsx"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 

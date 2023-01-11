@@ -4,7 +4,7 @@ import chineseTranslations from "@bloom-housing/ui-components/src/locales/zh.jso
 import vietnameseTranslations from "@bloom-housing/ui-components/src/locales/vi.json"
 import tagalogTranslations from "@bloom-housing/ui-components/src/locales/tl.json"
 
-import additionalGeneralTranslations from "../page_content/locale_overrides/general.json"
+import additionalGeneralTranslations from "../../page_content/locale_overrides/general.json"
 
 export const translations = {
   general: generalTranslations,

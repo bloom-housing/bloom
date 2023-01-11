@@ -8,7 +8,7 @@ import {
   useMutate,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { useRedirectToPrevPage } from "../../lib/hooks"
+import { useRedirectToPrevPage } from "../lib/hooks"
 import {
   PageView,
   pushGtmEvent,
@@ -17,7 +17,7 @@ import {
   NetworkStatusContent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../lib/constants"
+import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
 
 const SignIn = () => {

@@ -25,14 +25,11 @@ import {
 } from "@bloom-housing/shared-helpers"
 
 import FormsLayout from "../../../layouts/forms"
-import {
-  AppSubmissionContext,
-  retrieveApplicationConfig,
-} from "../../../../lib/AppSubmissionContext"
+import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
-import { useGetApplicationStatusProps } from "../../../../lib/hooks"
-import { UserStatus } from "../../../../lib/constants"
+import { useGetApplicationStatusProps } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 
 const loadListing = async (listingId, stateFunction, conductor, context, language) => {
   const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {

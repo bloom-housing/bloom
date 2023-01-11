@@ -9,13 +9,13 @@ import {
   ConfigProvider,
   AuthProvider,
 } from "@bloom-housing/shared-helpers"
-import { headScript, bodyTopTag, pageChangeHandler } from "../../src/customScripts"
-import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
+import { headScript, bodyTopTag, pageChangeHandler } from "../lib/customScripts"
+import { AppSubmissionContext } from "../lib/AppSubmissionContext"
 import ApplicationConductor, {
   loadApplicationFromAutosave,
   loadSavedListing,
-} from "../../lib/ApplicationConductor"
-import { translations, overrideTranslations } from "../../src/translations"
+} from "../lib/ApplicationConductor"
+import { translations, overrideTranslations } from "../lib/translations"
 import LinkComponent from "../components/LinkComponent"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {

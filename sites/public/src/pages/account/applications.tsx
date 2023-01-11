@@ -12,7 +12,7 @@ import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housin
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../components/MetaTags"
-import { UserStatus } from "../../../lib/constants"
+import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)

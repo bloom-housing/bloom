@@ -29,9 +29,9 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { useFormConductor } from "../../../../lib/hooks"
-import { UserStatus } from "../../../../lib/constants"
-import { untranslateMultiselectQuestion } from "../../../../lib/helpers"
+import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
+import { untranslateMultiselectQuestion } from "../../../lib/helpers"
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")

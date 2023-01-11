@@ -14,7 +14,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../components/forms/applications/FormSummaryDetails"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 import {
   OnClientSide,
   PageView,
@@ -22,7 +22,7 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationSummary = () => {

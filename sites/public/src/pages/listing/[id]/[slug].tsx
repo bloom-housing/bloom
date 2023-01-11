@@ -9,13 +9,13 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/ListingView"
 import { MetaTags } from "../../../components/MetaTags"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
-import { fetchJurisdictionByName } from "../../../../lib/hooks"
+import { fetchJurisdictionByName } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing

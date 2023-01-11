@@ -8,7 +8,7 @@ import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/ListingView"
 import { MetaTags } from "../../../components/MetaTags"
-import { fetchJurisdictionByName } from "../../../../lib/hooks"
+import { fetchJurisdictionByName } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing

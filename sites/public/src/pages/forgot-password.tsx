@@ -8,7 +8,7 @@ import {
   useCatchNetworkError,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../lib/constants"
+import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
 const ForgotPassword = () => {

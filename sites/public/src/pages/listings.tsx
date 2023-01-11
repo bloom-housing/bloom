@@ -3,11 +3,11 @@ import Head from "next/head"
 import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../lib/constants"
+import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { MetaTags } from "../components/MetaTags"
-import { getListings } from "../../lib/helpers"
-import { fetchClosedListings, fetchOpenListings } from "../../lib/hooks"
+import { getListings } from "../lib/helpers"
+import { fetchClosedListings, fetchOpenListings } from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: Listing[]

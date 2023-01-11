@@ -24,8 +24,8 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../components/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../../lib/hooks"
-import { UserStatus } from "../../../../lib/constants"
+import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)

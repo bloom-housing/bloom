@@ -15,7 +15,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../components/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 import {
   OnClientSide,
   PageView,
@@ -24,7 +24,7 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { useContext, useEffect } from "react"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 
 const ApplicationVouchers = () => {

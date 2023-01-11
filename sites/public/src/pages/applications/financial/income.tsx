@@ -20,7 +20,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../components/forms/applications/FormBackLink"
-import { useFormConductor } from "../../../../lib/hooks"
+import { useFormConductor } from "../../../lib/hooks"
 import {
   OnClientSide,
   PageView,
@@ -28,7 +28,7 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"

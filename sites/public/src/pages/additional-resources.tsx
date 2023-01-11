@@ -9,7 +9,7 @@ import {
   PageHeader,
   MarkdownSection,
 } from "@bloom-housing/ui-components"
-import { UserStatus } from "../../lib/constants"
+import { UserStatus } from "../lib/constants"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 
 const AdditionalResources = () => {
