@@ -45,7 +45,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
         <LinkButton
           unstyled
           fullWidth
-          className="bg-opacity-0 text-blue-800"
+          className="bg-opacity-0 text-blue-900"
           href={`/listings/${listingId}/applications`}
         >
           {t("t.cancel")}
