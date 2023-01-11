@@ -210,12 +210,12 @@ const SelectAndOrder = ({
               setOpenPreviews(newPreviews)
             }}
           >
-            <span className={"text-blue-600 underline"}>
+            <span className={"text-blue-500 underline"}>
               {previewShown ? t("t.hide") : t("t.previewLowercase")}
             </span>
           </button>
           {previewShown && (
-            <div className={"bg-blue-200 mt-2 p-4"}>
+            <div className={"bg-blue-100 mt-2 p-4"}>
               {getInfoSection(item, -1)}
               {item.options.map((option, index) => {
                 return getInfoSection(option, index)

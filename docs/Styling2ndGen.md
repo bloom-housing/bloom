@@ -13,8 +13,8 @@ Bloom design tokens include colors, typography settings, sizes, borders, and so 
 For example, some colors in `tokens/colors.scss`:
 
 ```css
---bloom-color-green-800: #216e1f;
---bloom-color-green-700: #2e8540;
+--bloom-color-green-700: #216e1f;
+--bloom-color-green-500: #2e8540;
 --bloom-color-green-300: #b4e5be;
 ```
 
