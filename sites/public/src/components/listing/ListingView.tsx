@@ -17,9 +17,7 @@ import {
   AdditionalFees,
   ApplicationStatus,
   Description,
-  DownloadLotteryResults,
   ExpandableText,
-  GetApplication,
   GroupedTable,
   Heading,
   ImageCard,
@@ -35,7 +33,6 @@ import {
   PreferencesList,
   ReferralApplication,
   StandardTable,
-  SubmitApplication,
   TableHeaders,
   QuantityRowSection,
   t,
@@ -59,6 +56,9 @@ import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"
 import { getGenericAddress, openInFuture } from "../../lib/helpers"
+import { GetApplication } from "./GetApplication"
+import { DownloadLotteryResults } from "./DownloadLotteryResults"
+import { SubmitApplication } from "./SubmitApplication"
 
 interface ListingProps {
   listing: Listing

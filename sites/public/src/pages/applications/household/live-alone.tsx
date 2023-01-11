@@ -3,20 +3,20 @@
 Asks whether the applicant will be adding any additional household members
 */
 import React, { useContext, useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import {
   AppearanceSizeType,
   Button,
   Form,
   FormCard,
-  HouseholdSizeField,
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import FormBackLink from "../../../components/applications/FormBackLink"
+import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationLiveAlone = () => {

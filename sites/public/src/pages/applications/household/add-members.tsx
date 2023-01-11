@@ -2,23 +2,23 @@
 2.2 - Add Members
 Add household members
 */
+import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
   Button,
   FormCard,
-  HouseholdMemberForm,
   t,
-  HouseholdSizeField,
   Form,
   ProgressNav,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
+import FormsLayout from "../../../layouts/forms"
+import FormBackLink from "../../../components/applications/FormBackLink"
+import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
+import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAddMembers = () => {

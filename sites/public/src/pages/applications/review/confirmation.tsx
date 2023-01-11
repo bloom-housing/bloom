@@ -6,13 +6,7 @@ import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
-import {
-  AppearanceStyleType,
-  ApplicationTimeline,
-  Button,
-  FormCard,
-  t,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Button, FormCard, t } from "@bloom-housing/ui-components"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
   imageUrlFromListing,
@@ -22,6 +16,7 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
+import { ApplicationTimeline } from "../../../components/applications/ApplicationTimeline"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationConfirmation = () => {
