@@ -1,7 +1,8 @@
 import React from "react"
 import Markdown from "markdown-to-jsx"
-import { t, Icon } from "@bloom-housing/ui-components"
-import styles from "./ApplicationTimeline.module.scss"
+import { Icon } from "../icons/Icon"
+import { t } from "../helpers/translator"
+import "./ApplicationTimeline.scss"
 
 export interface ApplicationTimelineProps {
   strings?: {
@@ -12,11 +13,11 @@ export interface ApplicationTimelineProps {
 }
 const ApplicationTimeline = (props: ApplicationTimelineProps) => (
   <ul
-    className={`progress-nav ${styles["application-timeline"]}`}
+    className="progress-nav application-timeline"
     aria-label="Steps of processing your application"
   >
-    <li className={`${styles["progress-nav__dot-item"]} is-active`} aria-current="step">
-      <span className={`text-white ${styles["absolute"]}`}>
+    <li className="progress-nav__dot-item is-active" aria-current="step">
+      <span className="text-white absolute">
         <Icon symbol="check" size="base" />
       </span>
       <Markdown className="font-bold" options={{ disableParsingRawHTML: true }}>
@@ -24,13 +25,13 @@ const ApplicationTimeline = (props: ApplicationTimelineProps) => (
           t("application.review.confirmation.applicationReceived")}
       </Markdown>
     </li>
-    <li className={`${styles["progress-nav__dot-item"]} is-disabled`}>
+    <li className="progress-nav__dot-item is-disabled">
       <Markdown options={{ disableParsingRawHTML: true }}>
         {props.strings?.applicationsClosed ??
           t("application.review.confirmation.applicationsClosed")}
       </Markdown>
     </li>
-    <li className={`${styles["progress-nav__dot-item"]} is-disabled`}>
+    <li className="progress-nav__dot-item is-disabled">
       <Markdown options={{ disableParsingRawHTML: true }}>
         {props.strings?.applicationsRanked ??
           t("application.review.confirmation.applicationsRanked")}
