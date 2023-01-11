@@ -4,7 +4,7 @@ import Markdown from "markdown-to-jsx"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
-import pageContent from "../../page_content/disclaimer.md"
+import pageContent from "../md_content/disclaimer.md"
 
 const Disclaimer = () => {
   const { profile } = useContext(AuthContext)
