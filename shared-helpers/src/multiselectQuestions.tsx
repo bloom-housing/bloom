@@ -244,7 +244,7 @@ export const getCheckboxOption = (
               {option?.links?.map((link) => (
                 <a
                   key={link.url}
-                  className="block pt-2 text-blue-600 underline"
+                  className="block pt-2 text-blue-500 underline"
                   href={link.url}
                   target={"_blank"}
                   rel="noreferrer noopener"
