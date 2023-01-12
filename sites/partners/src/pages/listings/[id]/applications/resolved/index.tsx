@@ -1,20 +1,14 @@
 import React from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import {
-  AgTable,
-  t,
-  useAgTable,
-  Breadcrumbs,
-  BreadcrumbLink,
-  NavigationHeader,
-} from "@bloom-housing/ui-components"
+import { AgTable, t, useAgTable, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { getLinkCellFormatter } from "../../../../../components/applications/helpers"
 import { Application, ApplicationReviewStatus } from "@bloom-housing/backend-core"
+import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
 const ApplicationsList = () => {
   const router = useRouter()

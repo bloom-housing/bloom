@@ -1,15 +1,10 @@
 import React from "react"
 import Head from "next/head"
-import {
-  NavigationHeader,
-  SiteAlert,
-  t,
-  Breadcrumbs,
-  BreadcrumbLink,
-} from "@bloom-housing/ui-components"
+import { SiteAlert, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../components/listings/PaperListingForm"
 import { MetaTags } from "../../components/shared/MetaTags"
+import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import ListingGuard from "../../components/shared/ListingGuard"
 
 const NewListing = () => {

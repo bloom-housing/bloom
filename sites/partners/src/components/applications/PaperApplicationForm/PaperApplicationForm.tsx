@@ -6,7 +6,6 @@ import {
   AlertBox,
   setSiteAlertMessage,
   LoadingOverlay,
-  StatusBar,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
@@ -32,6 +31,7 @@ import { FormMultiselectQuestions } from "./sections/FormMultiselectQuestions"
 
 import { Aside } from "../Aside"
 import { FormTypes } from "../../../lib/applications/FormTypes"
+import { StatusBar } from "../../../components/shared/StatusBar"
 
 type ApplicationFormProps = {
   listingId: string

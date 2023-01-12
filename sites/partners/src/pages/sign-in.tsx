@@ -7,16 +7,7 @@ import {
   NetworkStatusContent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import {
-  FormSignIn,
-  FormSignInMFAType,
-  FormSignInMFACode,
-  FormSignInAddPhone,
-  useMutate,
-  t,
-  ResendConfirmationModal,
-  RequestType,
-} from "@bloom-housing/ui-components"
+import { FormSignIn, useMutate, t, ResendConfirmationModal } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
   EnumRequestMfaCodeMfaType,
@@ -29,6 +20,9 @@ import {
   onSubmitMfaCodeWithPhone,
   onSubmitMfaCode,
 } from "../lib/users/signInHelpers"
+import { FormSignInMFAType } from "../components/users/FormSignInMFAType"
+import { FormSignInMFACode, RequestType } from "../components/users/FormSignInMFACode"
+import { FormSignInAddPhone } from "../components/users/FormSignInAddPhone"
 
 const SignIn = () => {
   const { login, requestMfaCode, userService } = useContext(AuthContext)

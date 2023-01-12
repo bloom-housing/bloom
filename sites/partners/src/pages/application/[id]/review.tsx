@@ -8,11 +8,9 @@ import { useForm } from "react-hook-form"
 import {
   t,
   Button,
-  NavigationHeader,
   AlertBox,
   AppearanceStyleType,
   useMutate,
-  StatusBar,
   AgTable,
   useAgTable,
   GridSection,
@@ -31,6 +29,8 @@ import {
   EnumApplicationFlaggedSetResolveStatus,
   ApplicationFlaggedSetResolve,
 } from "@bloom-housing/backend-core/types"
+import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import { StatusBar } from "../../../components/shared/StatusBar"
 
 const Flag = () => {
   const router = useRouter()

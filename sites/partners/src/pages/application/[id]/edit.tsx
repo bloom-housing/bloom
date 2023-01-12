@@ -1,11 +1,12 @@
 import React from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { NavigationHeader, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts"
 import PaperApplicationForm from "../../../components/applications/PaperApplicationForm/PaperApplicationForm"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { ApplicationContext } from "../../../components/applications/ApplicationContext"
+import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 
 const NewApplication = () => {
   const router = useRouter()

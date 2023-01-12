@@ -13,7 +13,6 @@ import {
   Button,
   LoadingOverlay,
   MinimalTable,
-  NavigationHeader,
   SiteAlert,
   StandardCard,
   t,
@@ -29,6 +28,7 @@ import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
+import { NavigationHeader } from "../../components/shared/NavigationHeader"
 
 export type DrawerType = "add" | "edit"
 

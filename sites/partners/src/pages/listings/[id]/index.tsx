@@ -1,17 +1,11 @@
 import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
-import {
-  t,
-  AlertBox,
-  SiteAlert,
-  Breadcrumbs,
-  BreadcrumbLink,
-  NavigationHeader,
-} from "@bloom-housing/ui-components"
+import { t, AlertBox, SiteAlert, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
+import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts/index"
 import Aside from "../../../components/listings/Aside"
 import { ListingContext } from "../../../components/listings/ListingContext"

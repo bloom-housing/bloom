@@ -1,7 +1,6 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import {
-  NavigationHeader,
   t,
   Button,
   LocalizedLink,
@@ -15,6 +14,8 @@ import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
+import { NavigationHeader } from "../components/shared/NavigationHeader"
+
 class formatLinkCell {
   link: HTMLAnchorElement
 

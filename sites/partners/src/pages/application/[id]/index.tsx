@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import Head from "next/head"
 import {
   AppearanceStyleType,
-  NavigationHeader,
   t,
   Tag,
   AlertBox,
@@ -19,7 +18,7 @@ import {
   DetailsMemberDrawer,
   MembersDrawer,
 } from "../../../components/applications/PaperApplicationDetails/DetailsMemberDrawer"
-
+import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import { ApplicationContext } from "../../../components/applications/ApplicationContext"
 import { DetailsApplicationData } from "../../../components/applications/PaperApplicationDetails/sections/DetailsApplicationData"
 import { DetailsPrimaryApplicant } from "../../../components/applications/PaperApplicationDetails/sections/DetailsPrimaryApplicant"

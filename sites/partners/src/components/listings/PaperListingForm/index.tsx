@@ -8,7 +8,6 @@ import {
   AlertBox,
   setSiteAlertMessage,
   LoadingOverlay,
-  StatusBar,
   AppearanceStyleType,
   Button,
   Modal,
@@ -56,6 +55,7 @@ import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
+import { StatusBar } from "../../../components/shared/StatusBar"
 
 type ListingFormProps = {
   listing?: FormListing

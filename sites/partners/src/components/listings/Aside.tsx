@@ -2,7 +2,6 @@ import React, { useContext, useMemo } from "react"
 import dayjs from "dayjs"
 import {
   t,
-  StatusAside,
   Button,
   GridCell,
   AppearanceStyleType,
@@ -15,6 +14,7 @@ import {
 import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
+import { StatusAside } from "../shared/StatusAside"
 
 type AsideProps = {
   type: AsideType

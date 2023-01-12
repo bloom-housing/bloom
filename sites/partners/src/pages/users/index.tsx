@@ -3,7 +3,6 @@ import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
 import {
-  NavigationHeader,
   AgTable,
   useAgTable,
   Button,
@@ -16,6 +15,7 @@ import { User } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import { useUserList, useListingsData } from "../../lib/hooks"
 import { FormUserManage } from "../../components/users/FormUserManage"
+import { NavigationHeader } from "../../components/shared/NavigationHeader"
 
 type UserDrawerValue = {
   type: "add" | "edit"

@@ -7,7 +7,6 @@ import {
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
-  NavigationHeader,
   AlertBox,
 } from "@bloom-housing/ui-components"
 import { useSingleListingData, useFlaggedApplicationsList } from "../../../../../lib/hooks"
@@ -16,6 +15,7 @@ import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
 import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
 import dayjs from "dayjs"
+import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
 const ApplicationsList = () => {
   const router = useRouter()

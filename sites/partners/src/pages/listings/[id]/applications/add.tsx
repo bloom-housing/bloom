@@ -1,14 +1,9 @@
 import React from "react"
 import Head from "next/head"
-import {
-  NavigationHeader,
-  SiteAlert,
-  t,
-  Breadcrumbs,
-  BreadcrumbLink,
-} from "@bloom-housing/ui-components"
+import { SiteAlert, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import Layout from "../../../../layouts"
 import PaperApplicationForm from "../../../../components/applications/PaperApplicationForm/PaperApplicationForm"
+import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 import { useRouter } from "next/router"
 import { useSingleListingData } from "../../../../lib/hooks"
 

@@ -2,7 +2,6 @@ import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
 import {
   t,
-  StatusAside,
   Button,
   GridCell,
   AppearanceStyleType,
@@ -13,6 +12,7 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "./ApplicationContext"
+import { StatusAside } from "../shared/StatusAside"
 
 type AsideProps = {
   type: AsideType

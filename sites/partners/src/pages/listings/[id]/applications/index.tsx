@@ -10,7 +10,6 @@ import {
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
-  NavigationHeader,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -28,6 +27,7 @@ import {
   EnumApplicationsApiExtraModelOrderBy,
 } from "@bloom-housing/backend-core/types"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
+import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
