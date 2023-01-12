@@ -27,6 +27,7 @@ module.exports = {
   transform: {
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
+  transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components)"],
   setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/sites/partners/.jest/setup-tests.js"],
   moduleNameMapper: {
