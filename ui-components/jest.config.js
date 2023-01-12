@@ -5,7 +5,11 @@ process.env.TZ = "UTC"
 
 module.exports = {
   testRegex: ["/*.test.tsx$", "/*.test.ts$"],
-  collectCoverageFrom: ["**/*.ts", "!**/*.tsx"],
+  collectCoverageFrom: [
+    "**/*.tsx",
+    "!**/*.stories.tsx",
+    "<rootDir>/ui-components/src/helpers/*.ts",
+  ],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
   coverageThreshold: {
@@ -19,18 +23,18 @@ module.exports = {
   preset: "ts-jest",
   globals: {
     "ts-jest": {
-      tsconfig: "tsconfig.test.json",
+      tsconfig: "tsconfig.json",
     },
   },
-  rootDir: "../..",
-  roots: ["<rootDir>/sites/partners"],
+  rootDir: "..",
+  roots: ["<rootDir>/ui-components"],
   transform: {
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
-  transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components)"],
   setupFiles: ["dotenv/config"],
-  setupFilesAfterEnv: ["<rootDir>/sites/partners/.jest/setup-tests.js"],
+  setupFilesAfterEnv: ["<rootDir>/ui-components/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
   },
+  testPathIgnorePatterns: ["storyshots.d.ts"],
 }

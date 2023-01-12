@@ -23,13 +23,12 @@ module.exports = {
     },
   },
   rootDir: "../..",
-  roots: ["<rootDir>/sites/partners"],
+  roots: ["<rootDir>/sites/public"],
   transform: {
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
-  transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components)"],
   setupFiles: ["dotenv/config"],
-  setupFilesAfterEnv: ["<rootDir>/sites/partners/.jest/setup-tests.js"],
+  setupFilesAfterEnv: ["<rootDir>/sites/public/.jest/setup-tests.js"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
   },
