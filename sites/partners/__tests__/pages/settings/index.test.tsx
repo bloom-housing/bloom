@@ -1,7 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, within } from "@testing-library/react"
-import Settings from "../../../pages/settings"
+import Settings from "../../../src/pages/settings"
 import { rest } from "msw"
 import { listing, multiselectQuestionPreference } from "../../testHelpers"
 import { render } from "../../testUtils"
