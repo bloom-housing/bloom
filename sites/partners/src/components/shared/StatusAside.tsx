@@ -10,7 +10,7 @@ export interface StatusAsideProps {
 }
 
 export const StatusAside = (props: StatusAsideProps) => (
-  <div className={styles["status-aside"]}>
+  <div>
     <div className={styles["status-aside__buttons"]}>
       <GridSection columns={props.columns || 2} tightSpacing={true}>
         {props.actions}
