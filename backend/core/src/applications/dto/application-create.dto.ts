@@ -26,6 +26,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "markedAsDuplicate",
+  "flagged",
   "preferredUnit",
   "confirmationCode",
 ] as const) {
