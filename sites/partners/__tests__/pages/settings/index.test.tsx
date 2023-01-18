@@ -1,7 +1,7 @@
 import React from "react"
 import { setupServer } from "msw/lib/node"
 import { fireEvent, within } from "@testing-library/react"
-import Settings from "../../../pages/settings"
+import Settings from "../../../src/pages/settings"
 import { rest } from "msw"
 import { listing, multiselectQuestionPreference } from "../../testHelpers"
 import { render } from "../../testUtils"
@@ -85,11 +85,11 @@ describe("settings", () => {
     const modal = await findByRole("dialog", { name: "Are you sure?" })
     expect(within(modal).getByText("Are you sure?")).toBeInTheDocument()
     expect(within(modal).getByText("Deleting a preference cannot be undone."))
-    expect(within(modal).getByRole("button", { name: "Delete" })).toBeInTheDocument()
-    expect(within(modal).getByRole("button", { name: "Cancel" })).toBeInTheDocument()
+    expect(within(modal).getByText("Delete")).toBeInTheDocument()
+    expect(within(modal).getByText("Cancel")).toBeInTheDocument()
 
     // Press the delete button
-    fireEvent.click(within(modal).getByRole("button", { name: "Delete" }))
+    fireEvent.click(within(modal).getByText("Delete"))
 
     // Modal should be closed and the alert popped up
     const removedToaster = await findByText("Preference Removed")
@@ -107,9 +107,7 @@ describe("settings", () => {
       })
     )
 
-    const { findByText, getByTestId, findByRole, queryAllByText, getByRole, getByText } = render(
-      <Settings />
-    )
+    const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(<Settings />)
 
     await findByText(multiselectQuestionPreference.text)
 
@@ -127,7 +125,7 @@ describe("settings", () => {
     expect(queryAllByText("Delete")).toHaveLength(0)
 
     // close modal
-    fireEvent.click(getByRole("button", { name: "Done" }))
+    fireEvent.click(getByText("Done"))
     expect(queryAllByText("Changes required before deleting")).toHaveLength(0)
   })
 })

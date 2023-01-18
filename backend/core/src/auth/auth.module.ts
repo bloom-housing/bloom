@@ -33,7 +33,7 @@ import { ListingRepository } from "../listings/db/listing.repository"
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("APP_SECRET"),
         signOptions: {
-          expiresIn: "1d",
+          expiresIn: "10m",
         },
       }),
     }),

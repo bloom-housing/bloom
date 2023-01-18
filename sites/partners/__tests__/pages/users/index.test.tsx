@@ -3,7 +3,7 @@ import { render } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
 import React from "react"
-import Users from "../../../pages/users"
+import Users from "../../../src/pages/users"
 import { user } from "../../testHelpers"
 
 const server = setupServer()

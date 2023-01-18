@@ -9,7 +9,6 @@ import {
   Put,
   Query,
   Request,
-  Response,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -36,13 +35,14 @@ import { UserListQueryParams } from "../dto/user-list-query-params"
 import { PaginatedUserListDto } from "../dto/paginated-user-list.dto"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ForgotPasswordResponseDto } from "../dto/forgot-password-response.dto"
+import { LoginResponseDto } from "../dto/login-response.dto"
 import { UserCreateQueryParams } from "../dto/user-create-query-params"
 import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
 import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
 import { IdDto } from "../../shared/dto/id.dto"
-import { Response as ExpressResponse } from "express"
+
 @Controller("user")
 @ApiBearerAuth()
 @ApiTags("user")
@@ -109,12 +109,9 @@ export class UserController {
 
   @Put("confirm")
   @ApiOperation({ summary: "Confirm email", operationId: "confirm" })
-  async confirm(
-    @Body() dto: ConfirmDto,
-    @Response({ passthrough: true }) res: ExpressResponse
-  ): Promise<StatusDto> {
-    await this.userService.confirm(dto, res)
-    return mapTo(StatusDto, { status: "ok" })
+  async confirm(@Body() dto: ConfirmDto): Promise<LoginResponseDto> {
+    const accessToken = await this.userService.confirm(dto)
+    return mapTo(LoginResponseDto, { accessToken })
   }
 
   @Put("forgot-password")
@@ -126,12 +123,9 @@ export class UserController {
 
   @Put("update-password")
   @ApiOperation({ summary: "Update Password", operationId: "update-password" })
-  async updatePassword(
-    @Body() dto: UpdatePasswordDto,
-    @Response({ passthrough: true }) res: ExpressResponse
-  ): Promise<StatusDto> {
-    await this.userService.updatePassword(dto, res)
-    return mapTo(StatusDto, { status: "ok" })
+  async updatePassword(@Body() dto: UpdatePasswordDto): Promise<LoginResponseDto> {
+    const accessToken = await this.userService.updatePassword(dto)
+    return mapTo(LoginResponseDto, { accessToken })
   }
 
   @Put(":id")

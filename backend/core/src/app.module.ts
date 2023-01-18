@@ -40,18 +40,7 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
-  const allowList = process.env.CORS_ORIGINS || []
-  app.enableCors((req, cb) => {
-    const options = {
-      credentials: true,
-      origin: false,
-    }
-
-    if (allowList.indexOf(req.header("Origin")) !== -1) {
-      options.origin = true
-    }
-    cb(null, options)
-  })
+  app.enableCors()
   app.use(logger)
   app.useGlobalFilters(new CatchAllFilter(httpAdapter))
   app.use(bodyParser.json({ limit: "50mb" }))

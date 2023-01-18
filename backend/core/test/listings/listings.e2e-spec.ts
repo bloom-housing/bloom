@@ -28,8 +28,6 @@ import { makeTestListing } from "../utils/make-test-listing"
 import dbOptions from "../../ormconfig.test"
 import { MultiselectQuestionDto } from "../../src/multiselect-question/dto/multiselect-question.dto"
 
-import cookieParser from "cookie-parser"
-
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
@@ -57,7 +55,6 @@ describe("Listings", () => {
 
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
-    app.use(cookieParser())
     await app.init()
     questionRepository = app.get<Repository<MultiselectQuestion>>(
       getRepositoryToken(MultiselectQuestion)

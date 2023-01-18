@@ -1,9 +1,9 @@
 describe("Preference Management Tests", () => {
-  beforeEach(() => {
+  before(() => {
     cy.login()
   })
 
-  afterEach(() => {
+  after(() => {
     cy.signOut()
   })
 
