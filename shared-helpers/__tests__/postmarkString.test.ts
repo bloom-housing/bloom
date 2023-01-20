@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react"
-import { getPostmarkString } from "../src/postmarkString"
+import { getPostmarkString } from "../src/utilities/postmarkString"
 import { t } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)

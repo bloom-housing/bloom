@@ -18,7 +18,7 @@ import {
   ExpandableContent,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "./formKeys"
+import { stateKeys } from "../utilities/formKeys"
 
 export const listingSectionQuestions = (
   listing: Listing,
@@ -211,6 +211,7 @@ export const getCheckboxOption = (
   getValues: UseFormMethods["getValues"],
   allOptions: string[],
   watchFields: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [x: string]: any
   },
   errors?: UseFormMethods["errors"],
@@ -275,10 +276,12 @@ export const getCheckboxOption = (
 }
 
 export const mapRadiosToApi = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: { [name: string]: any },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
   const [key, value] = Object.entries(data)[0]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options: any = []
 
   if (value) {
@@ -307,6 +310,7 @@ export const mapRadiosToApi = (
 }
 
 export const mapCheckboxesToApi = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
   question: MultiselectQuestion,
   applicationSection: ApplicationSection

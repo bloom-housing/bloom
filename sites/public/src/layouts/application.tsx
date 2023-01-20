@@ -7,12 +7,11 @@ import {
   SiteFooter,
   FooterNav,
   FooterSection,
-  ExygyFooter,
   MenuLink,
   t,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)

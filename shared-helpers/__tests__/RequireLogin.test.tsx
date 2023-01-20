@@ -1,7 +1,7 @@
 import React from "react"
 import { render } from "@testing-library/react"
-import { RequireLogin } from "../src/RequireLogin"
-import { AuthContext } from "../src/AuthContext"
+import { RequireLogin } from "../src/auth/RequireLogin"
+import { AuthContext } from "../src/auth/AuthContext"
 import { User } from "@bloom-housing/backend-core/types"
 import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 

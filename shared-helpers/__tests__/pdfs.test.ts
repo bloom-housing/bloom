@@ -1,6 +1,6 @@
 import { ListingEventType, ListingEvent } from "@bloom-housing/backend-core/types"
 import { cleanup } from "@testing-library/react"
-import { cloudinaryPdfFromId, pdfUrlFromListingEvents } from "../src/pdfs"
+import { cloudinaryPdfFromId, pdfUrlFromListingEvents } from "../src/utilities/pdfs"
 
 afterEach(cleanup)
 

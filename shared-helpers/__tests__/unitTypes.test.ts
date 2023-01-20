@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react"
-import { getUniqueUnitTypes, sortUnitTypes } from "../src/unitTypes"
+import { getUniqueUnitTypes, sortUnitTypes } from "../src/utilities/unitTypes"
 
 afterEach(cleanup)
 

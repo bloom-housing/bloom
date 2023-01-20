@@ -35,7 +35,7 @@ import qs from "qs"
 import axiosStatic from "axios"
 import { ConfigContext } from "./ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
-import { clearToken, getToken, getTokenTtl, setToken } from "./token"
+import { clearToken, getToken, getTokenTtl, setToken } from "../utilities/token"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
