@@ -22,7 +22,7 @@ const ResourceLinkCard = (props: ResourceLinkCardProps) => {
           symbol={iconSymbol}
           className="ml-2 px-2 info-cards__title"
         />
-        <h3 className="font-semibold mt-0">{title}</h3>
+        <h2 className="font-semibold mt-0">{title}</h2>
         <div className="mb-4">{subtitle}</div>
         <LinkButton unstyled className="bg-opacity-0 ms-0" href={linkUrl}>
           {linkLabel}

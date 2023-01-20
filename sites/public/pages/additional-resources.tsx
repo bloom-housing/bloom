@@ -93,11 +93,11 @@ const AdditionalResources = () => {
               <Markdown
                 options={{
                   overrides: {
-                    h4: {
+                    h3: {
                       component: ({ children, ...props }) => (
-                        <h4 {...props} className="text-caps-underline">
+                        <h3 {...props} className="text-tiny text-caps-underline">
                           {children}
-                        </h4>
+                        </h3>
                       ),
                     },
                     RenderIf,

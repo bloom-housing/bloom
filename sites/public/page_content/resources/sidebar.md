@@ -1,6 +1,6 @@
 <RenderIf language="default">
 
-#### Contact
+### Contact
 
 **City of Detroit Housing and Revitalization Department**
 
@@ -12,7 +12,7 @@ For general program inquiries, you may call the Housing and Revitalization Depar
 
 <RenderIf language="es">
 
-#### Contacto
+### Contacto
 
 **Departamento de Vivienda y Revitalización de la ciudad de Detroit**
 
@@ -24,7 +24,7 @@ Para consultas generales sobre el programa, comuníquese con el Departamento de 
 
 <RenderIf language="ar">
 
-#### الاتصال
+### الاتصال
 
 **إدارة الإسكان والتعمير بمدينة ديترويت**
 
@@ -36,7 +36,7 @@ Para consultas generales sobre el programa, comuníquese con el Departamento de 
 
 <RenderIf language="bn">
 
-#### যোগাযোগ
+### যোগাযোগ
 
 **ডেট্রয়েট সিটির হাউজিং এবং রিভাইটালাইজেশন ডিপার্টমেন্ট**
 
