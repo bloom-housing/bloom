@@ -1,4 +1,0 @@
-[build.environment]
-
-NODE_VERSION = "14.17.6"
-YARN_VERSION = "1.22.4"

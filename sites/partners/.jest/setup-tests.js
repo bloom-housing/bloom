@@ -5,7 +5,7 @@ import { configure } from "@testing-library/dom"
 import { serviceOptions } from "@bloom-housing/backend-core"
 import axios from "axios"
 import "@testing-library/jest-dom/extend-expect"
-import general from "../page_content/locale_overrides/general.json"
+import general from "../src/page_content/locale_overrides/general.json"
 addTranslation({ ...generalTranslations, ...general })
 
 process.env.cloudinaryCloudName = "exygy"

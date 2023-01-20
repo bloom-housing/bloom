@@ -8,8 +8,7 @@
       "sites/public",
       "sites/partners",
       "backend/core",
-      "shared-helpers",
-      "ui-components"
+      "shared-helpers"
     ],
     "nohoist": [
       "**/@anchan828/nest-sendgrid"
@@ -26,9 +25,12 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
+    "link:uic": "cd node_modules/react && yarn link && cd ../../../ui-components && yarn link 'react' && yarn link && cd ../bloom && yarn link '@bloom-housing/ui-components'",
+    "unlink:uic": "yarn unlink @bloom-housing/ui-components && cd ../ui-components && yarn unlink react && yarn unlink && yarn install --force && cd ../bloom/node_modules/react && yarn unlink && cd ../.. && yarn install --force",
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
     "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test",
     "test:app:public:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test:headless",
+    "test:app:public:unit": "cd sites/public && yarn test:unit",
     "build:app:public": "cd sites/public && yarn build",
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn dev",
     "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test",
@@ -41,25 +43,19 @@
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
-    "test:shared:ui": "cd ui-components && yarn && yarn test",
-    "test:shared:ui:a11y": "cd ui-components && yarn && yarn test:a11y",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
-    "publish:ui-components": "cd ui-components && lerna publish from-package --yes --include-merged-tags --no-verify-access",
-    "version:ui-components": "cd ui-components && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
     "publish:public": "cd sites/public && lerna publish from-package --yes --include-merged-tags --no-verify-access",
     "version:public": "cd sites/public && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
     "publish:partners": "cd sites/partners && lerna publish from-package --yes --include-merged-tags --no-verify-access",
     "version:partners": "cd sites/partners && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
     "publish:backend": "cd backend/core && lerna publish from-package --yes --include-merged-tags --no-verify-access",
     "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
-    "publish:all": "yarn publish:ui-components && yarn publish:backend --include-merged-tags --no-verify-access",
-    "version:prerelease:ui-components": "cd ui-components && lerna version prerelease --yes --no-commit-hooks --ignore-scripts --include-merged-tags --force-git-tag",
-    "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend --include-merged-tags --force-git-tag"
+    "version:all": "yarn version:public && yarn version:partners && yarn version:backend --include-merged-tags --force-git-tag"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -73,10 +69,10 @@
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^4.1.2",
-    "eslint-plugin-jsx-a11y": "6.5.1",
     "husky": "^4.3.0",
     "jest": "^26.5.3",
     "lerna": "^4.0.0",
@@ -107,5 +103,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "dependencies": {}
 }

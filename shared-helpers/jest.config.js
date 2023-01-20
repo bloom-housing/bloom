@@ -19,7 +19,7 @@ module.exports = {
   preset: "ts-jest",
   globals: {
     "ts-jest": {
-      tsConfig: "tsconfig.json",
+      tsconfig: "tsconfig.json",
     },
   },
   moduleNameMapper: {
@@ -30,6 +30,7 @@ module.exports = {
   transform: {
     "^.+\\.[t|j]sx?$": "ts-jest",
   },
+  transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components/*)"],
   setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/shared-helpers/.jest/setup-tests.js"],
 }
