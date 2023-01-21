@@ -1,4 +1,4 @@
-name: Pre-release packages
+name: Version packages
 
 on:
   # Triggers the workflow on push only for the main branch
@@ -32,9 +32,3 @@ jobs:
         run: yarn version:all
         env:
           GITHUB_TOKEN: ${{ secrets.ADMIN_TOKEN }}
-        
-      - name: Publish packages
-        run: yarn publish:all
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

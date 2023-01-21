@@ -48,8 +48,7 @@
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
-    "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
-    "publish:all": "lerna publish from-package --yes --include-merged-tags --no-verify-access"
+    "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
