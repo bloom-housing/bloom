@@ -70,8 +70,10 @@ const ListingsPage = ({ initialListings }) => {
       </Drawer>
 
       <div className={"bg-gray-300"}>
-        <h3 className="max-w-5xl flex sm:flex-row flex-col justify-between container mx-auto text-3xl text-primary-darker font-bold px-4 py-8  gap-y-2">
-          {t("listingFilters.allRentals")}
+        <div className="max-w-5xl flex sm:flex-row flex-col justify-between container mx-auto px-4 py-8  gap-y-2">
+          <h2 className="text-3xl text-primary-darker font-bold">
+            {t("listingFilters.allRentals")}
+          </h2>
           <Button
             className="bg-lush border-lush text-black"
             size={AppearanceSizeType.normal}
@@ -83,7 +85,7 @@ const ListingsPage = ({ initialListings }) => {
           >
             {t("listingFilters.buttonTitleExtended")}
           </Button>
-        </h3>
+        </div>
       </div>
       {initialListings?.meta?.totalItems === 0 && (
         <div className="container max-w-5xl my-4 px-4 content-start mx-auto">
