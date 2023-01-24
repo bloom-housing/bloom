@@ -133,7 +133,7 @@ const SignIn = () => {
           onSubmit={onSubmit}
           control={{ register, errors, handleSubmit, watch }}
           networkStatus={{
-            content: { ...networkStatusContent, error: !!networkStatusContent?.error },
+            content: networkStatusContent,
             type: networkStatusType,
             reset: () => {
               reset()
