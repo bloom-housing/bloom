@@ -2075,51 +2075,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@^7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-7.3.1.tgz#587f9ac09bfb02806f830993ad5c712160550afa"
-  integrity sha512-8L2Jlk+Jo857IrYs4wE+lMI5TmhDTnGYilfN5Yhdojww+hgR6Fz/SKCCfdwFj0+Ir/adZneWGmsIBGqv7nVVLg==
-  dependencies:
-    "@fortawesome/fontawesome-svg-core" "^6.1.1"
-    "@fortawesome/free-regular-svg-icons" "^6.1.1"
-    "@fortawesome/free-solid-svg-icons" "^6.1.1"
-    "@fortawesome/react-fontawesome" "^0.1.18"
-    "@mapbox/mapbox-sdk" "^0.13.0"
-    "@types/jwt-decode" "^2.2.1"
-    "@types/markdown-to-jsx" "^6.11.2"
-    "@types/mdx" "^2.0.1"
-    "@types/node" "^12.12.67"
-    "@types/node-polyglot" "^2.4.1"
-    "@types/react-beautiful-dnd" "^13.1.1"
-    "@types/react-dom" "^16.9.5"
-    "@types/react-text-mask" "^5.4.6"
-    "@types/react-transition-group" "^4.4.0"
-    ag-grid-community "^26.0.0"
-    ag-grid-react "^26.0.0"
-    aria-autocomplete "^1.4.0"
-    axios "0.21.2"
-    dayjs "^1.10.7"
-    jwt-decode "^2.2.0"
-    markdown-to-jsx "^6.11.4"
-    nanoid "^3.1.12"
-    node-polyglot "^2.4.0"
-    react "^17.0.2"
-    react-accessible-accordion "^3.3.5"
-    react-beautiful-dnd "^13.1.0"
-    react-dom "^17.0.2"
-    react-dropzone "^11.3.2"
-    react-focus-lock "^2.5.2"
-    react-hook-form "^6.15.5"
-    react-map-gl "^6.1.16"
-    react-media "^1.10.0"
-    react-remove-scroll "2.5.4"
-    react-tabs "^3.2.2"
-    react-text-mask "^5.4.3"
-    react-transition-group "^4.4.1"
-    tailwindcss "2.2.10"
-    ts-jest "^26.4.1"
-    typesafe-actions "^5.1.0"
-
 "@bloom-housing/ui-components@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-8.0.0.tgz#a0920bd3879a15c4d429ec3e98e35d46642d1091"
@@ -12700,14 +12655,6 @@ markdown-to-jsx@7.1.8:
   resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.1.8.tgz#49c3bb3c122aa714324034142c8829b93c889338"
   integrity sha512-rRSa1aFmFnpDRFAhv5vIkWM4nPaoB9vnzIjuIKa1wGupfn2hdCNeaQHKpu4/muoc8n8J7yowjTP2oncA4/Rbgg==
 
-markdown-to-jsx@^6.11.4:
-  version "6.11.4"
-  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-6.11.4.tgz#b4528b1ab668aef7fe61c1535c27e837819392c5"
-  integrity sha512-3lRCD5Sh+tfA52iGgfs/XZiw33f7fFX9Bn55aNnVNUd2GzLDkOWyKYYD8Yju2B1Vn+feiEdgJs8T6Tg0xNokPw==
-  dependencies:
-    prop-types "^15.6.2"
-    unquote "^1.1.0"
-
 matcher@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/matcher/-/matcher-3.0.0.tgz#bd9060f4c5b70aa8041ccc6f80368760994f30ca"
@@ -17986,11 +17933,6 @@ unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
-
-unquote@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/unquote/-/unquote-1.1.1.tgz#8fded7324ec6e88a0ff8b905e7c098cdc086d544"
-  integrity sha1-j97XMk7G6IoP+LkF58CYzcCG1UQ=
 
 unset-value@^1.0.0:
   version "1.0.0"
