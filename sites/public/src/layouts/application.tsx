@@ -83,6 +83,7 @@ const Layout = (props) => {
               {t("nav.getFeedback")}
             </a>
           }
+          mainContentId="main-content"
           title={t("nav.siteTitle")}
           languages={languages.map((lang) => {
             return {
