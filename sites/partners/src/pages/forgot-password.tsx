@@ -38,7 +38,7 @@ const ForgotPassword = () => {
         onSubmit={onSubmit}
         control={{ register, errors, handleSubmit }}
         networkError={{
-          error: { ...networkError, error: !!networkError?.error },
+          error: networkError,
           reset: resetNetworkError,
         }}
       />
