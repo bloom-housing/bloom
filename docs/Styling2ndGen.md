@@ -1,6 +1,6 @@
 # Styling 2nd Generation Components
 
-This covers preliminary documentation for the "2nd generation" UI components in the Bloom design system. (General styling information can be found in the README for ui-components.)
+This covers preliminary documentation for the "2nd generation" UI components in the Bloom design system. (General styling information can be found in the [README for ui-components](https://github.com/bloom-housing/ui-components).)
 
 First, we'll go over the what & why of the new component architecture, then we'll explain the process for converting a "1st gen" component to 2nd gen.
 
@@ -8,7 +8,7 @@ First, we'll go over the what & why of the new component architecture, then we'l
 
 In this updated system, the Bloom design tokens are defined as [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) (aka CSS Variables). They're values you can insert into (almost) every place you would put an actual property value in CSS.
 
-Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `ui-components/src/global/tokens` folder.
+Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the [src/global/tokens](https://github.com/bloom-housing/ui-components/tree/main/src/global/tokens) folder.
 
 For example, some colors in `tokens/colors.scss`:
 
