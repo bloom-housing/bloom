@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.5.0...@bloom-housing/partners@7.6.0) (2023-01-26)
+
+
+### Features
+
+* add description for FCFS in listing aside ([#3255](https://github.com/bloom-housing/bloom/issues/3255)) ([4905c31](https://github.com/bloom-housing/bloom/commit/4905c3173e96835f072c692934e326b0a0d7f626))
+* add marked and flagged as duplicate to all applications table ([#3214](https://github.com/bloom-housing/bloom/issues/3214)) ([f79f415](https://github.com/bloom-housing/bloom/commit/f79f415a917873e11b12b8795c2915f13737574f))
+* delete ui-c folder ([#3229](https://github.com/bloom-housing/bloom/issues/3229)) ([7472558](https://github.com/bloom-housing/bloom/commit/74725586e0c10c504087ffa4f8f621863a471ebd))
+
+
+
+
+
 # [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.4...@bloom-housing/partners@7.5.0) (2022-12-23)
 
 
