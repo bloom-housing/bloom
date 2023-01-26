@@ -194,7 +194,7 @@ export const ListingView = (props: ListingProps) => {
       >
         <>
           <PreferencesList listingPreferences={getPreferenceData()} />
-          <p className="text-gray-750 text-tiny">
+          <p className="text-gray-750 text-sm">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
         </>
@@ -437,8 +437,8 @@ export const ListingView = (props: ListingProps) => {
   const additionalInformationCard = (cardTitle: string, cardData: string) => {
     return (
       <div className="info-card">
-        <h3 className="text-serif-lg">{cardTitle}</h3>
-        <p className="text-sm text-gray-700 break-words">
+        <h3 className="text-serif-xl">{cardTitle}</h3>
+        <p className="text-xs text-gray-700 break-words">
           <Markdown children={cardData} options={{ disableParsingRawHTML: true }} />
         </p>
       </div>
@@ -616,7 +616,7 @@ export const ListingView = (props: ListingProps) => {
                   subtitle={t("listings.allUnits")}
                 >
                   <ExpandableText
-                    className="text-sm text-gray-700"
+                    className="text-xs text-gray-700"
                     buttonClassName="ml-4"
                     markdownProps={{ disableParsingRawHTML: true }}
                     strings={{
@@ -671,7 +671,7 @@ export const ListingView = (props: ListingProps) => {
                   {listing.creditHistory && (
                     <InfoCard title={t("listings.creditHistory")}>
                       <ExpandableText
-                        className="text-sm text-gray-700"
+                        className="text-xs text-gray-700"
                         buttonClassName="ml-4"
                         markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
@@ -686,7 +686,7 @@ export const ListingView = (props: ListingProps) => {
                   {listing.rentalHistory && (
                     <InfoCard title={t("listings.rentalHistory")}>
                       <ExpandableText
-                        className="text-sm text-gray-700"
+                        className="text-xs text-gray-700"
                         buttonClassName="ml-4"
                         markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
@@ -701,7 +701,7 @@ export const ListingView = (props: ListingProps) => {
                   {listing.criminalBackground && (
                     <InfoCard title={t("listings.criminalBackground")}>
                       <ExpandableText
-                        className="text-sm text-gray-700"
+                        className="text-xs text-gray-700"
                         buttonClassName="ml-4"
                         markdownProps={{ disableParsingRawHTML: true }}
                         strings={{

@@ -44,7 +44,7 @@ const ApplicationView = () => {
       >
         <div className="py-2">
           {listing && (
-            <span className={"lined text-tiny"}>
+            <span className={"lined text-sm"}>
               <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
                 {t("application.confirmation.viewOriginalListing")}
               </Link>
@@ -68,7 +68,7 @@ const ApplicationView = () => {
             {t("application.confirmation.lotteryNumber")}
           </h3>
 
-          <p className="font-serif text-3xl my-0">
+          <p className="font-serif text-2xl my-0">
             {application.confirmationCode || application.id}
           </p>
         </div>
@@ -85,7 +85,7 @@ const ApplicationView = () => {
 
         <div className="form-card__pager hide-for-print">
           <div className="form-card__pager-row py-6">
-            <button className="lined text-tiny" onClick={() => window.print()}>
+            <button className="lined text-sm" onClick={() => window.print()}>
               {t("application.confirmation.printCopy")}
             </button>
           </div>

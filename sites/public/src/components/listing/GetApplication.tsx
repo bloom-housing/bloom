@@ -109,7 +109,7 @@ const GetApplication = (props: ApplicationsProps) => {
       )}
       {showDownload &&
         props.paperApplications?.map((paperApplication: PaperApplication, index: number) => (
-          <p key={index} className="text-center mt-2 mb-4 text-sm">
+          <p key={index} className="text-center mt-2 mb-4 text-xs">
             <a
               href={paperApplication.fileURL}
               title={props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
@@ -136,7 +136,7 @@ const GetApplication = (props: ApplicationsProps) => {
               <Heading priority={3} styleType={"capsWeighted"}>
                 {props.strings?.officeHoursHeading ?? t("leasingAgent.officeHours")}
               </Heading>
-              <p className="text-gray-800 text-tiny markdown">
+              <p className="text-gray-800 text-sm markdown">
                 <Markdown
                   children={props.applicationPickUpAddressOfficeHours}
                   options={{ disableParsingRawHTML: true }}
