@@ -35,8 +35,10 @@
   "basicsVideo.residentTutorial": "Tutorial para residentes de Detroit Home Connect",
   "finder.progress.housingLabel": "Necesidades de vivienda",
   "finder.progress.buildingLabel": "Tipos de Edificios",
+  "finder.progress.stepPreposition": "de",
   "finder.bedRoomSize.question": "¿Cuántas habitaciones necesita?",
   "finder.region.question": "¿En qué áreas de Detroit le gustaría vivir?",
+  "finder.region.legend": "Opciones de área principal",
   "finder.rentalCosts.question": "¿Cuánto puede pagar de alquiler?",
   "finder.rentalCosts.section8": "Incluir alquileres que acepten vales de elección de vivienda de la sección 8",
   "finder.rentalCosts.minRent": "Alquiler mínimo",
@@ -64,5 +66,6 @@
   "finder.multiselectHelper": "Seleccione una o más opciones:",
   "finder.skip": "Saltar esto y mostrarme alquileres",
   "errors.minGreaterThanMaxRentError": "El alquiler mínimo debe ser inferior o igual al alquiler máximo",
-  "errors.maxLessThanMinRentError": "El alquiler máximo debe ser mayor o igual que el alquiler mínimo"
+  "errors.maxLessThanMinRentError": "El alquiler máximo debe ser mayor o igual que el alquiler mínimo",
+  "errors.negativeMinRent": "El alquiler mínimo debe ser un valor positivo"
 }

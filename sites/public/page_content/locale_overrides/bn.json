@@ -35,8 +35,10 @@
   "basicsCard.sectionTitle": "সাশ্রয়ী আবাসনের সাধারণ তথ্যাবলী সম্পর্কে আরও জেনে নিন",
   "finder.progress.housingLabel": "প্রয়োজনীয় বাসস্থান",
   "finder.progress.buildingLabel": "বিল্ডিং-এর ধরন",
+  "finder.progress.stepPreposition": "এর",
   "finder.bedRoomSize.question": "আপনার কতগুলি বেডরুম প্রয়োজন?",
   "finder.region.question": "আপনি ডেট্রয়েটের কোন এলাকায় থাকতে চান?",
+  "finder.region.legend": "প্রাথমিক এলাকা বিকল্প",
   "finder.rentalCosts.question": "আপনি কত ভাড়া দিতে পারবেন?",
   "finder.rentalCosts.section8": "সেকশন 8 হাউজিং চয়েস ভাউচার গ্রহণ করে এমন ভাড়া বাড়ি অন্তর্ভুক্ত করুন",
   "finder.rentalCosts.minRent": "ন্যূনতম ভাড়া",
@@ -64,5 +66,6 @@
   "finder.multiselectHelper": "অনুগ্রহ করে এক বা একাধিক নির্বাচন করুন:",
   "finder.skip": "এই ধাপটি এড়িয়ে যান এবং ভাড়ার বাড়িগুলো দেখান",
   "errors.minGreaterThanMaxRentError": "সর্বনিম্ন ভাড়া সর্বোচ্চ ভাড়ার চেয়ে কম বা সমান হতে হবে",
-  "errors.maxLessThanMinRentError": "সর্বোচ্চ ভাড়া ন্যূনতম ভাড়ার চেয়ে বেশি বা সমান হতে হবে"
+  "errors.maxLessThanMinRentError": "সর্বোচ্চ ভাড়া ন্যূনতম ভাড়ার চেয়ে বেশি বা সমান হতে হবে",
+  "errors.negativeMinRent": "ন্যূনতম ভাড়া একটি ইতিবাচক মান হতে হবে"
 }

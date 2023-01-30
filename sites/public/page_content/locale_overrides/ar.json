@@ -37,6 +37,7 @@
   "finder.progress.buildingLabel": "أنواع المباني",
   "finder.bedRoomSize.question": "كم عدد غرف النوم التي تلزمك؟",
   "finder.region.question": "في أي مناطق ديترويت تريد أن تقيم؟",
+  "finder.region.legend": "خيارات المنطقة الأساسية",
   "finder.rentalCosts.question": "كم يبلغ الإيجار الذي يمكنك دفعه؟",
   "finder.rentalCosts.section8": "تضمين أماكن الإيجار التي تقبل قسائم اختيار السكن بموجب المادة 8",
   "finder.rentalCosts.minRent": "الحد الأدنى للإيجار",
@@ -64,5 +65,6 @@
   "finder.multiselectHelper": "يرجى تحديد واحد أو أكثر:",
   "finder.skip": "تخطي هذا وإظهار أماكن للإيجار لي",
   "errors.minGreaterThanMaxRentError": "يجب أن يكون الحد الأدنى للإيجار أقل من أو يساوي الحد الأقصى للإيجار",
-  "errors.maxLessThanMinRentError": "يجب أن يكون الحد الأقصى للإيجار أكبر من أو يساوي الحد الأدنى للإيجار"
+  "errors.maxLessThanMinRentError": "يجب أن يكون الحد الأقصى للإيجار أكبر من أو يساوي الحد الأدنى للإيجار",
+  "errors.negativeMinRent": "يجب أن يكون الحد الأدنى للإيجار قيمة موجبة"
 }
