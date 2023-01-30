@@ -25,11 +25,11 @@ function main() {
 
   const jurisOverrideTracker: JurisdictionOverrideMap[] = []
 
-  const enBaseTranslations = require("../src/locales/general.json")
-  const esBaseTranslations = require("../src/locales/es.json")
-  const zhBaseTranslations = require("../src/locales/zh.json")
-  const viBaseTranslations = require("../src/locales/vi.json")
-  const tlBaseTranslations = require("../src/locales/tl.json")
+  const enBaseTranslations = require("../locales/general.json")
+  const esBaseTranslations = require("../locales/es.json")
+  const zhBaseTranslations = require("../locales/zh.json")
+  const viBaseTranslations = require("../locales/vi.json")
+  const tlBaseTranslations = require("../locales/tl.json")
 
   const baseTranslations = [
     {
