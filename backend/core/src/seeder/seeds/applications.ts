@@ -119,15 +119,10 @@ const getApplicationCreateDtoTemplate = (
         birthDay: "30",
         birthMonth: "01",
         birthYear: "1960",
-        emailAddress: "household@example.com",
         firstName: "First",
         lastName: "Last",
         middleName: "Middle",
-        noEmail: false,
-        noPhone: false,
         orderId: 1,
-        phoneNumber: "(123) 123-1231",
-        phoneNumberType: "cell",
         relationship: "parent",
         sameAddress: "no",
         workAddress: {
@@ -251,8 +246,6 @@ export const makeNewApplication = async (
   // modifications to householdmembers
   if (dto.householdMembers?.length) {
     dto.householdMembers.forEach((mem) => {
-      const splitEmail = mem.emailAddress.split("@")
-      mem.emailAddress = `${splitEmail[0]}${pos}+${modifiedFirstName}@${splitEmail[1]}`
       mem.firstName = `${modifiedFirstName}_${mem.firstName}${pos}`
       mem.lastName = `${modifiedLastName}_${mem.lastName}${pos}`
     })
@@ -277,8 +270,6 @@ export const makeNewApplication = async (
     // modifications to householdmembers
     if (dto.householdMembers?.length) {
       dto.householdMembers.forEach((mem) => {
-        const splitEmail = mem.emailAddress.split("@")
-        mem.emailAddress = `${splitEmail[0]}${pos}+${modifiedFirstName}HHEmail@${splitEmail[1]}`
         mem.firstName = `${modifiedFirstName}_${mem.firstName}${pos} HHEmail`
         mem.lastName = `${modifiedLastName}_${mem.lastName}${pos} HHEmail`
       })
@@ -302,8 +293,6 @@ export const makeNewApplication = async (
     // modifications to householdmembers
     if (dto.householdMembers?.length) {
       dto.householdMembers.forEach((mem) => {
-        const splitEmail = mem.emailAddress.split("@")
-        mem.emailAddress = `${splitEmail[0]}${pos}+${modifiedFirstName}HHName@${splitEmail[1]}`
         mem.firstName = `${modifiedFirstName}_${mem.firstName}${pos} HHName`
         mem.lastName = `${modifiedLastName}_${mem.lastName}${pos} HHName`
       })
