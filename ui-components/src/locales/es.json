@@ -313,6 +313,7 @@
   "authentication.signIn.errorGenericMessage": "Por favor inténtelo de nuevo, o comuníquese con servicio al cliente para recibir asistencia.",
   "authentication.signIn.forgotPassword": "Olvidé la contraseña",
   "authentication.signIn.success": "Bienvenido de nuevo, %{name}",
+  "authentication.signIn.changeYourPassword": "Puede cambiar su contraseña <a href='/forgot-password'>aquí</a>",
   "authentication.timeout.action": "Permanecer en la sesión",
   "authentication.timeout.signOutMessage": "Su seguridad es importante para nosotros. Concluimos su sesión debido a inactividad. Sírvase iniciar sesión para continuar.",
   "authentication.timeout.text": "Para proteger su identidad, su sesión concluirá en un minuto debido a inactividad. Si decide no responder, perderá toda la información que no haya guardado y concluirá su sesión.",

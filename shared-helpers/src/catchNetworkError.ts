@@ -41,9 +41,7 @@ export const useCatchNetworkError = () => {
     if (message === NetworkErrorMessage.PasswordOutdated) {
       setNetworkError({
         title: t("authentication.signIn.passwordOutdated"),
-        description: `${t(
-          "authentication.signIn.changeYourPassword"
-        )} <a href="/forgot-password">${t("t.here")}</a>`,
+        description: t("authentication.signIn.changeYourPassword"),
         error,
       })
     } else if (message === NetworkErrorMessage.MfaUnauthorized) {

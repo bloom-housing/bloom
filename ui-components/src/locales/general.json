@@ -610,6 +610,7 @@
   "authentication.signIn.passwordError": "Please enter a valid password",
   "authentication.signIn.phoneError": "Please enter a valid US phone number.",
   "authentication.signIn.cantFindAccount": "We couldn't find an account with that email address/password.",
+  "authentication.signIn.changeYourPassword": "You can change your password <a href='/forgot-password'>here</a>",
   "authentication.signIn.error": "There was an error signing you in",
   "authentication.signIn.errorGenericMessage": "Please try again, or contact support for help.",
   "authentication.signIn.forgotPassword": "Forgot password?",
