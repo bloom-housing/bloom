@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.0...@bloom-housing/partners@7.6.1) (2023-01-31)
+
+
+### Bug Fixes
+
+* change error message for invalid emails when adding a user in the partners site ([#3302](https://github.com/bloom-housing/bloom/issues/3302)) ([536785c](https://github.com/bloom-housing/bloom/commit/536785c0ef2d0f76f47d5f95203af0774aeacf27))
+
+
+
+
+
 # [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.5.0...@bloom-housing/partners@7.6.0) (2023-01-26)
 
 
