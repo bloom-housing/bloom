@@ -83,6 +83,7 @@ const Layout = (props) => {
               {t("nav.getFeedback")}
             </a>
           }
+          mainContentId="main-content"
           title={t("nav.siteTitle")}
           languages={languages.map((lang) => {
             return {
@@ -94,6 +95,7 @@ const Layout = (props) => {
           })}
           menuLinks={menuLinks}
           logoWidth={"base"}
+          strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
           {props.children}
