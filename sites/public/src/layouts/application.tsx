@@ -95,6 +95,7 @@ const Layout = (props) => {
           })}
           menuLinks={menuLinks}
           logoWidth={"base"}
+          strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
           {props.children}
