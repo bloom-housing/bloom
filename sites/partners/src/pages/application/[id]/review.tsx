@@ -110,7 +110,7 @@ const Flag = () => {
 
       <NavigationHeader
         className="relative"
-        title={<p className="font-sans font-semibold text-3xl">{getTitle()}</p>}
+        title={<p className="font-sans font-semibold text-2xl">{getTitle()}</p>}
       />
 
       <div>
@@ -165,9 +165,7 @@ const Flag = () => {
                     : t("flags.confirmationAlertSingular")}
                 </AlertBox>
               )}
-              <p className={"text-base-alt font-semibold mb-5"}>
-                {t("flags.selectValidApplications")}
-              </p>
+              <p className={"text-lg font-semibold mb-5"}>{t("flags.selectValidApplications")}</p>
               <AgTable
                 id="applications-table"
                 className="w-full m-h-0"
@@ -203,7 +201,7 @@ const Flag = () => {
                   {t("t.save")}
                 </Button>
                 {data?.updatedAt && (
-                  <div className="border-t text-sm flex items-center justify-center md:mt-0 mt-4 pt-4">
+                  <div className="border-t text-xs flex items-center justify-center md:mt-0 mt-4 pt-4">
                     {t("t.lastUpdated")}: {dayjs(data?.updatedAt).format("MMMM DD, YYYY")}
                   </div>
                 )}
@@ -264,7 +262,7 @@ const Flag = () => {
             defaultChecked: data?.status === EnumApplicationFlaggedSetStatus.pending,
           }}
         />
-        <p className={"mb-6 ml-8 text-sm text-gray-800"}>{t("flags.pendingDescription")}</p>
+        <p className={"mb-6 ml-8 text-xs text-gray-800"}>{t("flags.pendingDescription")}</p>
 
         <Field
           id="setStatus.resolved"
@@ -278,7 +276,7 @@ const Flag = () => {
             defaultChecked: data?.status === EnumApplicationFlaggedSetStatus.resolved,
           }}
         />
-        <p className={"ml-8 text-sm text-gray-800"}>{t("flags.resolvedDescription")}</p>
+        <p className={"ml-8 text-xs text-gray-800"}>{t("flags.resolvedDescription")}</p>
       </Modal>
     </Layout>
   )

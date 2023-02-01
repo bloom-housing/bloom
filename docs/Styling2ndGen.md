@@ -1,6 +1,6 @@
 # Styling 2nd Generation Components
 
-This covers preliminary documentation for the "2nd generation" UI components in the Bloom design system. (General styling information can be found in the README for ui-components.)
+This covers preliminary documentation for the "2nd generation" UI components in the Bloom design system. (General styling information can be found in the [README for ui-components](https://github.com/bloom-housing/ui-components).)
 
 First, we'll go over the what & why of the new component architecture, then we'll explain the process for converting a "1st gen" component to 2nd gen.
 
@@ -8,22 +8,22 @@ First, we'll go over the what & why of the new component architecture, then we'l
 
 In this updated system, the Bloom design tokens are defined as [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) (aka CSS Variables). They're values you can insert into (almost) every place you would put an actual property value in CSS.
 
-Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `ui-components/src/global/tokens` folder.
+Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the [src/global/tokens](https://github.com/bloom-housing/ui-components/tree/main/src/global/tokens) folder.
 
 For example, some colors in `tokens/colors.scss`:
 
 ```css
---bloom-color-green-800: #216e1f;
---bloom-color-green-700: #2e8540;
+--bloom-color-green-700: #216e1f;
+--bloom-color-green-500: #2e8540;
 --bloom-color-green-300: #b4e5be;
 ```
 
 and some font sizes in `tokens/fonts.scss`:
 
 ```css
---bloom-font-size-lg: 1.25rem;
---bloom-font-size-xl: 1.375rem;
---bloom-font-size-2xl: 1.5rem;
+--bloom-font-size-xl: 1.25rem;
+--bloom-font-size-2xl: 1.625rem;
+--bloom-font-size-3xl: 2rem;
 ```
 
 Unlike Sass variables, Tailwind theme configs, or other methods of defining design tokens, CSS variables are resolved _at runtime_. In other words, they are evaluated and applied to the styling of the webpage by the browser itself. To use a CSS variable, use the `var` function within a property value:
@@ -107,7 +107,7 @@ Let's compare the `PageHeader` stylesheet before/after:
   @apply text-center;
 
   @screen md {
-    @apply text-5xl;
+    @apply text-4xl;
     @apply text-left;
   }
 }
@@ -129,7 +129,7 @@ Let's compare the `PageHeader` stylesheet before/after:
   --inverse-background-color: var(--bloom-color-primary-dark);
   --inverse-border-color: var(--bloom-color-primary);
   --inverse-text-color: var(--bloom-color-white);
-  --title-font-size: var(--bloom-font-size-5xl);
+  --title-font-size: var(--bloom-font-size-4xl);
 
   /* Base Styles */
   padding: var(--bloom-s8) 0;

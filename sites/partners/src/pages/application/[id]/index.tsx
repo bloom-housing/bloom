@@ -90,7 +90,7 @@ export default function ApplicationsList() {
           className="relative"
           title={
             <>
-              <p className="font-sans font-semibold uppercase text-3xl">
+              <p className="font-sans font-semibold uppercase text-2xl">
                 {application.applicant.firstName} {application.applicant.lastName}
               </p>
 

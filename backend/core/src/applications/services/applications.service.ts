@@ -27,6 +27,7 @@ import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 import { ListingRepository } from "../../listings/db/listing.repository"
 import { Listing } from "../../listings/entities/listing.entity"
+import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -102,6 +103,19 @@ export class ApplicationsService {
     }
 
     const result = await qb.getMany()
+
+    const promiseArray = result.map((application) =>
+      this.getDuplicateFlagsForApplication(application.id)
+    )
+    const flags = await Promise.all(promiseArray)
+    result.forEach((application, index) => {
+      if (flags[index].status) {
+        application.markedAsDuplicate = flags[index].status === ApplicationReviewStatus.duplicate
+      } else {
+        application.markedAsDuplicate = false
+      }
+      application.flagged = !!flags[index].id
+    })
 
     await Promise.all(
       result.map(async (application) => {
@@ -407,5 +421,20 @@ export class ApplicationsService {
     const listing = await repository.findOne({ where: { id: listingId } })
     listing.lastApplicationUpdateAt = new Date()
     await repository.save(listing)
+  }
+
+  private getDuplicateFlagsForApplication(applicationId: string) {
+    return this.repository
+      .createQueryBuilder("applications")
+      .select("applications.id", "appId")
+      .addSelect("application_flagged_set_applications_applications.applications_id", "id")
+      .addSelect("applications.review_status", "status")
+      .leftJoin(
+        "application_flagged_set_applications_applications",
+        "application_flagged_set_applications_applications",
+        "application_flagged_set_applications_applications.applications_id = applications.id"
+      )
+      .where("applications.id = :id", { id: applicationId })
+      .getRawOne()
   }
 }

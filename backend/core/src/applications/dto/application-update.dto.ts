@@ -33,6 +33,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "markedAsDuplicate",
+  "flagged",
   "preferredUnit",
   "confirmationCode",
 ] as const) {

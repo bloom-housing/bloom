@@ -3319,6 +3319,9 @@ export interface Application {
   markedAsDuplicate: boolean
 
   /**  */
+  flagged?: boolean
+
+  /**  */
   confirmationCode: string
 }
 
@@ -3871,6 +3874,9 @@ export interface ApplicationCreate {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  flagged?: boolean
 }
 
 export interface AddressUpdate {
@@ -4203,6 +4209,9 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date
+
+  /**  */
+  flagged?: boolean
 }
 
 export interface CreatePresignedUploadMetadata {

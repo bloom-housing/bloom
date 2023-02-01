@@ -285,7 +285,7 @@ const Edit = () => {
                     register={register}
                     className={"mb-1"}
                   />
-                  <div className="float-left text-tiny font-semibold">
+                  <div className="float-left text-sm font-semibold">
                     <Link href="/forgot-password">{t("authentication.signIn.forgotPassword")}</Link>
                   </div>
                 </div>

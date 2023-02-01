@@ -49,13 +49,7 @@
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
-    "publish:public": "cd sites/public && lerna publish from-package --yes --include-merged-tags --no-verify-access",
-    "version:public": "cd sites/public && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
-    "publish:partners": "cd sites/partners && lerna publish from-package --yes --include-merged-tags --no-verify-access",
-    "version:partners": "cd sites/partners && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
-    "publish:backend": "cd backend/core && lerna publish from-package --yes --include-merged-tags --no-verify-access",
-    "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
-    "version:all": "yarn version:public && yarn version:partners && yarn version:backend --include-merged-tags --force-git-tag"
+    "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -92,8 +86,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo '\n(1) Linting...\n----------' && lint-staged",
-      "commit-msg": "echo '\n(2) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------' && commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "echo '\n(1) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------' && commitlint -E HUSKY_GIT_PARAMS && echo '\n(2) Linting...\n----------' && lint-staged"
     }
   },
   "lint-staged": {
