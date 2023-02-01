@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.2...@bloom-housing/public@7.3.3) (2023-02-01)
+
+
+### Bug Fixes
+
+* add main content id ([#3299](https://github.com/bloom-housing/bloom/issues/3299)) ([062335b](https://github.com/bloom-housing/bloom/commit/062335bd0a1a7af2cc9e7f2bc9a44dad6163d3d9))
+
+
+
+
+
 ## [7.3.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.1...@bloom-housing/public@7.3.2) (2023-02-01)
 
 
