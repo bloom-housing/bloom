@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.1...@bloom-housing/public@7.3.2) (2023-02-01)
+
+
+### Bug Fixes
+
+* use translated labels on the progress bar when at the choose language step ([#3307](https://github.com/bloom-housing/bloom/issues/3307)) ([3a6c6cf](https://github.com/bloom-housing/bloom/commit/3a6c6cfb4f1fa4d5f606f892e01780530e122790))
+
+
+
+
+
 ## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.0...@bloom-housing/public@7.3.1) (2023-02-01)
 
 **Note:** Version bump only for package @bloom-housing/public
