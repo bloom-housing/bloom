@@ -102,8 +102,10 @@ export async function fetchBaseListingData({
     }
     const response = await axios.get(process.env.listingServiceUrl, {
       params,
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
+      paramsSerializer: {
+        serialize: (params) => {
+          return qs.stringify(params)
+        },
       },
     })
 
