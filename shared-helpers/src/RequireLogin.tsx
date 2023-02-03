@@ -20,7 +20,7 @@ type RequireLoginProps = {
 /**
  * Require a login to render children. Will redirect to `signInPath` if not logged in.
  *
- * Props can be specified with either a "whitelist" (list of routes to skip check for) or a "blacklist" (list of
+ * Props can be specified with either an "allowlist" (list of routes to skip check for) or a "blocklist" (list of
  * routes to apply test on). If no list of routes is provided, then will always apply check.
  */
 const RequireLogin: FunctionComponent<RequireLoginProps> = ({
@@ -37,7 +37,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   // Parse just the pathname portion of the signInPath (in case we want to pass URL params)
   const [signInPathname] = signInPath.split("?")
 
-  // Check if this route requires a login or not (can be specified as a whitelist or a blacklist).
+  // Check if this route requires a login or not (can be specified as an allowlist or a blocklist).
   const loginRequiredForPath =
     // by definition, we shouldn't require login on the sign in page itself
     router.pathname !== signInPathname &&
