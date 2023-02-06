@@ -386,8 +386,8 @@ export class migrationReset1675268723433 implements MigrationInterface {
       CountyCode.san_mateo,
     ]) {
       await queryRunner.query(
-        `INSERT INTO "jurisdictions" (name, rental_assistance_default) VALUES ($1, $2)`,
-        [jurisdictionName, jurisDefault]
+        `INSERT INTO "jurisdictions" (name, rental_assistance_default, partner_terms) VALUES ($1, $2, $3)`,
+        [jurisdictionName, jurisDefault, "Example Terms Go here"]
       )
     }
     for (const unitType of [
@@ -432,6 +432,50 @@ export class migrationReset1675268723433 implements MigrationInterface {
         [communityType, jurisdictionId]
       )
     }
+
+    const translations = {
+      changeEmail: {
+        message: "An email address change has been requested for your account.",
+        onChangeEmailMessage:
+          "To confirm the change to your email address, please click the link below:",
+        changeMyEmail: "Confirm email change",
+      },
+      invite: {
+        hello: "Welcome to the Partners Portal",
+        inviteMessage:
+          "Welcome to the Partners Portal on %{appUrl}. You will now be able to manage listings and applications that you are a part of from one centralized location.",
+        inviteManageListings:
+          "You will now be able to manage listings and applications that you are a part of from one centralized location.",
+        inviteWelcomeMessage: "Welcome to the Partners Portal at %{appUrl}.",
+        toCompleteAccountCreation:
+          "To complete your account creation, please click the link below:",
+        confirmMyAccount: "Confirm my account",
+      },
+      mfaCodeEmail: {
+        message: "Access token for your account has been requested.",
+        mfaCode: "Your access token is: %{mfaCode}",
+      },
+      header: {
+        logoUrl:
+          "https://res.cloudinary.com/exygy/image/upload/v1652459319/housingbayarea/163838489-d5a1bc08-7d69-4c4a-8a94-8485617d8b46_dkkqvw.png",
+        logoTitle: "Alameda County Housing Portal",
+      },
+      footer: {
+        line1:
+          "Alameda County Housing Portal is a project of the Alameda County - Housing and Community Development (HCD) Department",
+        line2: "",
+      },
+    }
+
+    await queryRunner.query(
+      `INSERT INTO translations (language, translations, jurisdiction_id) VALUES ($1, $2, $3)`,
+      ["en", JSON.stringify(translations), jurisdictionId]
+    )
+
+    await queryRunner.query(`INSERT INTO translations (language, translations) VALUES ($1, $2)`, [
+      "en",
+      JSON.stringify(translations),
+    ])
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

@@ -1,6 +1,6 @@
 describe("Admin User Mangement Tests", () => {
   before(() => {
-    cy.login("jurisdictionalAdmin")
+    cy.loginAndAcceptTerms("jurisdictionalAdmin")
   })
 
   after(() => {
