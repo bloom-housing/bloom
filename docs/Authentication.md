@@ -112,8 +112,8 @@ in a tree that has both of these providers.
 
 This component waits for `UserProvider` to determine current login status before rendering its children. If no login
 is found, the component will redirect to its `signInPath` component without rendering children. It can be configured
-to require login for all paths other than `signInPath` (default), with a "whitelist" of paths to require login for
-(`requireForRoutes`) or a "blacklist" of paths to skip authentication checks for (`skipForRoutes`). These props are
+to require login for all paths other than `signInPath` (default), with an "allowlist" of paths to require login for
+(`requireForRoutes`) or a "blocklist" of paths to skip authentication checks for (`skipForRoutes`). These props are
 both lists of strings, and may contain RegEx strings.
 
 ```tsx
