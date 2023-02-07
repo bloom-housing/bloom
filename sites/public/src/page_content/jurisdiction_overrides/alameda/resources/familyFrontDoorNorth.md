@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### Family Front Door
 
 Unsheltered families (with a child under 18)
@@ -12,7 +11,6 @@ Emeryville
 
 </RenderIf>
 <RenderIf language="es">
-
 ### Family Front Door
 
 Familias sin hogar y sin acceso a refugios (con hijos menores de 18 años)
@@ -25,7 +23,6 @@ Emeryville
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### 家庭前門
 
 無居所家庭（有 18 歲以下孩童）
@@ -38,7 +35,6 @@ Emeryville
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### Chương trình Family Front Door
 
 Những gia đình không có nơi trú ẩn (có con dưới 18 tuổi)

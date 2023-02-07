@@ -103,7 +103,7 @@ const GetAssistance = () => {
                       component: ({ children, ...props }) => (
                         <h4
                           {...props}
-                          className="font-alt-sans font-semibold text-lg text-black mb-4 mt-5"
+                          className="font-alt-sans font-semibold text-xl text-black mb-4 mt-5"
                         >
                           {children}
                         </h4>

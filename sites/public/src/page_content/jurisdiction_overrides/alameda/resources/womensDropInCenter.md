@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Women’s Daytime Drop-in Center](https://www.womensdropin.org/)
 
 Unsheltered families
@@ -25,7 +24,6 @@ Atención sin turno en 2218 Acton St.
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [婦女日間服務中心 (Women’s Daytime Drop-in Center)](https://www.womensdropin.org/)
 
 無居所家庭
@@ -38,7 +36,6 @@ Atención sin turno en 2218 Acton St.
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Trung Tâm Women’s Daytime Drop-in](https://www.womensdropin.org/)
 
 Những gia đình không có nơi trú ẩn

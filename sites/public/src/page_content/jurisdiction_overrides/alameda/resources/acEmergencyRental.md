@@ -1,12 +1,10 @@
 <RenderIf language="en,tl">
-
 ### [AC Housing Secure - Emergency Rental Assistance Program](https://www.ac-housingsecure.org/?fbclid=IwAR0186ykll8tKe-brqbLkMHiguYJQc0buUF1o6SjhXg_EKebR9fYSJs5hus)
 
 If you’re an Alameda County renter who has fallen behind on rent or utilities payments due to the COVID-19 pandemic, you may qualify for assistance. Income-eligible households pay up to 15 months of rent and utilities, both for past due and future payments.
 
 </RenderIf>
 <RenderIf language="es">
-
 ### [AC Housing Secure - Programa de asistencia de alquiler de emergencia](https://www.ac-housingsecure.org/?fbclid=IwAR0186ykll8tKe-brqbLkMHiguYJQc0buUF1o6SjhXg_EKebR9fYSJs5hus)
 
 Si es un inquilino del condado de Alameda que se atrasó en el pago del alquiler o de los servicios públicos debido a la pandemia de COVID-19, puede calificar para recibir asistencia. Los hogares con ingresos elegibles pagan hasta 15 meses de alquiler y servicios públicos, tanto para pagos vencidos como futuros.

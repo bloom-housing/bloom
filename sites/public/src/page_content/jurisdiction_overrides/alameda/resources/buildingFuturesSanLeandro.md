@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Building Futures - West (San Leandro)](https://bfwc.org)
 
 Unsheltered adults/families
@@ -17,7 +16,6 @@ Llame al [510-357-0205](tel:+1-510-357-0205)
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [Building Futures - West (San Leandro)](https://bfwc.org)
 
 無居所的成年人／家庭
@@ -26,7 +24,6 @@ Llame al [510-357-0205](tel:+1-510-357-0205)
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Tổ chức Building Futures - Phía tây (San Leandro)](https://bfwc.org)
 
 Người trưởng thành/những gia đình không có nơi trú ẩn

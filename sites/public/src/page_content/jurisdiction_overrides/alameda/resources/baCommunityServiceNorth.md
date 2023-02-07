@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Bay Area Community Services](http://www.bayareacs.org/)
 
 Unsheltered adults
@@ -25,7 +24,6 @@ Atención sin turno en 2809 Telegraph Ave.
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [灣區社區服務](http://www.bayareacs.org/)
 
 無居所的成年人
@@ -38,7 +36,6 @@ Atención sin turno en 2809 Telegraph Ave.
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Cơ Quan Dịch Vụ Cộng Đồng Vùng Vịnh](http://www.bayareacs.org/)
 
 Người trưởng thành không nơi trú ẩn

@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Bay Area Community Services - East (Hayward and Unincorporated)](http://www.bayareacs.org/)
 
 Unsheltered adults/families
@@ -25,7 +24,6 @@ Atención sin turno en 590 B Street, Hayward
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [灣區社區服務 - 東部 (Hayward 及 Unincorporated)](http://www.bayareacs.org/)
 
 無居所的成年人／家庭
@@ -38,7 +36,6 @@ Atención sin turno en 590 B Street, Hayward
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Cơ Quan Dịch Vụ Cộng Đồng Vùng Vịnh - Phía đông (Hayward và Unincorporated)](http://www.bayareacs.org/)
 
 Người trưởng thành/những gia đình không có nơi trú ẩn

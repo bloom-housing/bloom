@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [BOSS Coordinated Entry - West Oakland](http://www.self-sufficiency.org/)
 
 Unsheltered adults
@@ -11,7 +10,6 @@ Walk in at 2811 Adeline St.
 
 </RenderIf>
 <RenderIf language="es">
-
 ### [Ingreso coordinado de Construir Oportunidades para la Autosuficiencia (Building Opportunities for Self-Sufficiency, BOSS) de West Oakland](http://www.self-sufficiency.org/)
 
 Adultos sin hogar y sin acceso a refugios
@@ -23,7 +21,6 @@ Atención sin turno en 2811 Adeline St.
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [BOSS 協調進入 - West Oakland](http://www.self-sufficiency.org/)
 
 無居所的成年人
@@ -35,7 +32,6 @@ Atención sin turno en 2811 Adeline St.
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Tiếp nhận Phối hợp BOSS - Tây Oakland](http://www.self-sufficiency.org/)
 
 Người trưởng thành không nơi trú ẩn

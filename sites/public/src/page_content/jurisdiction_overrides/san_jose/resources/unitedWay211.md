@@ -1,5 +1,4 @@
 <RenderIf language="default">
-
 ### 211 United Way Bay Area Health and Human Services
 
 [See all services](https://www.211bayarea.org/santaclara/)
@@ -8,7 +7,6 @@
 
 </RenderIf>
 <RenderIf language="es">
-
 ### Servicios Humanos y de Salud del Área de la Bahía de 211 United Way
 
 [Ver todos los servicios](https://www.211bayarea.org/santaclara/)
@@ -17,7 +15,6 @@
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### 211 United Way 灣區衛生與公眾服務部
 
 [查看所有服務](https://www.211bayarea.org/santaclara/)
@@ -26,7 +23,6 @@
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### 211 United Way Bay Area Health and Human Services (Dịch Vụ Nhân Sinh và Y Tế Khu Vực Vịnh United Way)
 
 [Xem tất cả các dịch vụ](https://www.211bayarea.org/santaclara/)

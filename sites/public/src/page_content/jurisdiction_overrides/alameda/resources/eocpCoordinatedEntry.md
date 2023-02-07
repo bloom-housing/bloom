@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### EOCP Coordinated Entry - East Oakland
 
 Unsheltered Adults
@@ -11,7 +10,6 @@ Walk in at 7515 International Blvd.
 
 </RenderIf>
 <RenderIf language="es">
-
 ### Ingreso coordinado del Proyecto Comunitario de East Oakland (East Oakland Community Project, EOCP) de East Oakland
 
 Adultos en situación de calle
@@ -23,7 +21,6 @@ Preséntese sin turno en 7515 International Blvd.
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### EOCP 協調進入 - East Oakland
 
 無居所的成年人
@@ -35,7 +32,6 @@ Preséntese sin turno en 7515 International Blvd.
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### Tiếp nhận Phối hợp EOCP - Đông Oakland
 
 Người trưởng thành Không có nơi trú ẩn

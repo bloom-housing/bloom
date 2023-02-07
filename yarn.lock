@@ -4509,12 +4509,12 @@
     "@types/mapbox__mapbox-sdk" "*"
     "@types/node" "*"
 
-"@types/markdown-to-jsx@^6.11.2":
-  version "6.11.2"
-  resolved "https://registry.yarnpkg.com/@types/markdown-to-jsx/-/markdown-to-jsx-6.11.2.tgz#05d1aaffbf15be7be12c70535fa4fed65cc7c64f"
-  integrity sha512-ESuCu8Bk7jpTZ3YPdMW1+6wUj13F5N15vXfc7BuUAN0eCp0lrvVL9nzOTzoqvbRzXMciuqXr1KrHt3xQAhfwPA==
+"@types/markdown-to-jsx@7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@types/markdown-to-jsx/-/markdown-to-jsx-7.0.1.tgz#7a7e1981323ff2fe7250b02897ced466e47a72b1"
+  integrity sha512-m9WVgoC+xggBNuaqHj/ONk6erCr2S+ok18/OdDovlqD3UCHyRA66o/y5QvTrQhm2XEeDwz/zA89jyrEykSm2wg==
   dependencies:
-    "@types/react" "*"
+    markdown-to-jsx "*"
 
 "@types/mdx@^2.0.1":
   version "2.0.3"
@@ -12649,6 +12649,11 @@ mapbox-gl@^2.3.0:
     supercluster "^7.1.3"
     tinyqueue "^2.0.3"
     vt-pbf "^3.1.1"
+
+markdown-to-jsx@*:
+  version "7.1.9"
+  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.1.9.tgz#1ffae0cda07c189163d273bd57a5b8f8f8745586"
+  integrity sha512-x4STVIKIJR0mGgZIZ5RyAeQD7FEZd5tS8m/htbcVGlex32J+hlSLj+ExrHCxP6nRKF1EKbcO7i6WhC1GtOpBlA==
 
 markdown-to-jsx@7.1.8:
   version "7.1.8"

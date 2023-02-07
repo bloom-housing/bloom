@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Housing Authority of the City of Alameda](http://www.alamedahsg.org/)
 
 </RenderIf>
@@ -9,12 +8,10 @@
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [阿拉米達市房屋管理局](http://www.alamedahsg.org/)
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Cơ Quan Gia Cư Thành phố Alameda](http://www.alamedahsg.org/)
 
 </RenderIf>

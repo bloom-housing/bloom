@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Abode Services](https://www.abodeservices.org/)
 
 Unsheltered adults
@@ -23,7 +22,6 @@ Atención sin turno en 4075 Papazian Way, Fremont
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [住所服務](https://www.abodeservices.org/)
 
 無居所的成年人
@@ -35,7 +33,6 @@ Atención sin turno en 4075 Papazian Way, Fremont
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Tổ chức Abode Services](https://www.abodeservices.org/)
 
 Người trưởng thành không nơi trú ẩn

@@ -4,7 +4,6 @@
 }
 </style>
 <RenderIf language="en,tl">
-
 ### North County (Berkeley, Albany, Emeryville)
 
 </RenderIf>
@@ -14,12 +13,10 @@
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### North County (Berkeley, Albany, Emeryville)
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### Quận North (Berkeley, Albany, Emeryville)
 
 </RenderIf>

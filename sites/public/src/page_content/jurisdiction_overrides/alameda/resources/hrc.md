@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Housing Resource Centers (HRC)](https://drive.google.com/file/d/1U6d4KIXAFMMF8E2H-VAi3gpLy71L3Tvm/view?usp=sharing)
 
 Alameda County has Housing Resource Centers (HRCs) throughout the County to support people currently experiencing homelessness.
@@ -8,7 +7,6 @@ If you are experiencing homelessness in Alameda County you may connect with an H
 
 </RenderIf>
 <RenderIf language="es">
-
 ### [Centros de Recursos de Vivienda (Housing Resource Centers, HRC)](https://drive.google.com/file/d/1U6d4KIXAFMMF8E2H-VAi3gpLy71L3Tvm/view?usp=sharing)
 
 El condado de Alameda tiene Centros de Recursos de Vivienda (HRC) en el condado para ayudar a personas que actualmente estén en situación de calle.
@@ -17,7 +15,6 @@ Si está en situación de calle en el condado de Alameda, puede comunicarse con 
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [住宅資源中心 (Housing Resource Centers, HRC)](https://drive.google.com/file/d/1U6d4KIXAFMMF8E2H-VAi3gpLy71L3Tvm/view?usp=sharing)
 
 Alameda 縣內都設有住宅資源中心 (Housing Resource Centers, HRCs)，為目前無家可歸的人提供支援。
@@ -26,7 +23,6 @@ Alameda 縣內都設有住宅資源中心 (Housing Resource Centers, HRCs)，為
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Trung tâm Nguồn thông tin Nhà ở (HRC)](https://drive.google.com/file/d/1U6d4KIXAFMMF8E2H-VAi3gpLy71L3Tvm/view?usp=sharing)
 
 Quận Alameda có các Trung tâm Nguồn thông tin Nhà ở (HRC) trên toàn Quận để hỗ trợ những người hiện đang trong tình trạng vô gia cư.

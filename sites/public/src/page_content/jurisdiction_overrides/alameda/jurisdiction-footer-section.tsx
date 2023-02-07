@@ -15,9 +15,9 @@ export const JurisdictionFooterSection = () => {
             {t("footer.headerLink")}
           </a>
         </p>
-        <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
-        <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
-        <p className="mt-10 text-tiny">
+        <p className="mt-10 text-sm">{t("footer.forListingQuestions")}</p>
+        <p className="text-sm">{t("footer.forGeneralInquiries")}</p>
+        <p className="mt-10 text-sm">
           {t("footer.forAdditionalOpportunities")}
           <br />
           <a className="px-2" href={t("footer.SFHousingUrl")} target="_blank" rel="noreferrer">

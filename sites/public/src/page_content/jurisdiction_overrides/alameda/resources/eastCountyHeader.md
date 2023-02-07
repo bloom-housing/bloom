@@ -4,7 +4,6 @@
 }
 </style>
 <RenderIf language="en,tl">
-
 ### East County/Tri-Valley (Livermore, Dublin, Pleasanton)
 
 </RenderIf>
@@ -14,12 +13,10 @@
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### East County/Tri-Valley (Livermore, Dublin, Pleasanton)
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### Quận East/Tri-Valley (Livermore, Dublin, Pleasanton)
 
 </RenderIf>

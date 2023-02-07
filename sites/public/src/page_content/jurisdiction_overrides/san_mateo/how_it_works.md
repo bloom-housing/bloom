@@ -8,8 +8,8 @@
 
   <SubSection closedLabel="Read more about how to find listings" openLabel="Read less about how to find listings">
 
-  Another way to find Affordable Housing is to search the lists of affordable housing sites provided by the jurisdiction in which they are located. The lists can be found on the [Additional Housing Opportunities and Resources](/additional-resources)  page of the Doorway portal.
-
+  Another way to find Affordable Housing is to search the lists of affordable housing sites provided by the jurisdiction in which they are located. The lists can be found on the [Additional Housing Opportunities and Resources](/additional-resources)  page of the Doorway portal.  
+  <br>
   These lists provide the names, locations, and contact information for Affordable Housing properties. Unfortunately, property managers of these apartments are often not able to accept applications because they already have a lot of applications that must be processed before they can accept new applications. You should identify properties that meet your needs and contact the associated properties to find out if those properties are accepting applications.
 
   </SubSection>
@@ -56,8 +56,8 @@
 
   <SubSection closedLabel="Read more about applying online" openLabel="Read less about applying online">
 
-  After you submit your application, you may be contacted by the property manager. If contacted, you will be asked to provide documentation on your income and finances. If you are not immediately selected for a placement interview, this doesn’t mean that you were not eligible to live at the property. A property manager may keep your application for several years before contacting you. Stay in touch with the property manager by periodically checking in regarding the status of your application.
-
+  After you submit your application, you may be contacted by the property manager. If contacted, you will be asked to provide documentation on your income and finances. If you are not immediately selected for a placement interview, this doesn’t mean that you were not eligible to live at the property. A property manager may keep your application for several years before contacting you. Stay in touch with the property manager by periodically checking in regarding the status of your application.  
+  <br>
   Due to the high demand for affordable housing, it can take a while before you get contacted for potential placement at a specific apartment. Therefore, it is important that you apply for housing at multiple properties that meet your housing needs and keep track of the properties that you have applied to. It is also important to complete Step 5 (Get Prepared for Placement ) even if you are not contacted right away by the property manager for placement in an apartment. Getting your finances in order, including reviewing your household budget, taking care of your credit, and gathering the required documents, will prepare you for when you are contacted by a property manager.
 
   </SubSection>
@@ -70,8 +70,8 @@
 
   <SubSection closedLabel="Read more about getting results" openLabel="Read less about getting results">
 
-  There are two methods that property managers use to determine the order in which applicants are selected to move forward in the application process. One method is to organize the applications by the date and time that the application was received (“first come, first serve”). The second method is to randomize the applications on a computer to generate an order for all applications. Randomization of the applications only takes place after the application due date.
-
+  There are two methods that property managers use to determine the order in which applicants are selected to move forward in the application process. One method is to organize the applications by the date and time that the application was received (“first come, first serve”). The second method is to randomize the applications on a computer to generate an order for all applications. Randomization of the applications only takes place after the application due date.  
+  <br>
   If you receive a letter or email from the property manager notifying you that you are moving forward in the application process, you are one step closer to being selected for an apartment. You should keep a record of any documentation that you receive from property managers.
 
   </SubSection>
@@ -139,8 +139,8 @@
 
   <SubSection closedLabel="Lea más sobre cómo buscar listados." openLabel="Lea más sobre cómo buscar listados.">
 
-  Otra manera de encontrar viviendas asequibles es buscar en los sitios de listas que ofrece la jurisdicción en las que se ubican. Las listas se pueden encontrar en la página [Oportunidades de viviendas adicionales](/es/additional-resources) del portal Doorway.
-
+  Otra manera de encontrar viviendas asequibles es buscar en los sitios de listas que ofrece la jurisdicción en las que se ubican. Las listas se pueden encontrar en la página [Oportunidades de viviendas adicionales](/es/additional-resources) del portal Doorway.  
+  <br>
   En estas listas se brindan los nombres, las ubicaciones y la información de contacto de las propiedades de viviendas asequibles. Sin embargo, los gerentes de estos apartamentos con frecuencia no pueden aceptar solicitudes porque ya tienen una gran cantidad que deben procesar antes de poder aceptar las nuevas. Debe identificar las propiedades que se ajustan a sus necesidades y ponerse en contacto con las propiedades asociadas para informarse si aceptan solicitudes.
 
   </SubSection>
@@ -190,8 +190,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="Lea más sobre enviar la solicitud en Internet." openLabel="Lea más sobre enviar la solicitud en Internet.">
 
-  Después de presentar su solicitud, es posible que el gerente de la propiedad se ponga en contacto con usted. Si se pone en contacto con usted, le pedirá que presente documentación sobre sus ingresos y finanzas. Si no se lo selecciona de inmediato para asistir a una entrevista de asignación, no significa que no sea elegible para vivir en la propiedad. Un gerente de la propiedad puede conservar su solicitud durante varios años antes de ponerse en contacto con usted. Manténgase en contacto con el gerente de la propiedad y compruebe de manera periódica el estado de la solicitud.
-
+  Después de presentar su solicitud, es posible que el gerente de la propiedad se ponga en contacto con usted. Si se pone en contacto con usted, le pedirá que presente documentación sobre sus ingresos y finanzas. Si no se lo selecciona de inmediato para asistir a una entrevista de asignación, no significa que no sea elegible para vivir en la propiedad. Un gerente de la propiedad puede conservar su solicitud durante varios años antes de ponerse en contacto con usted. Manténgase en contacto con el gerente de la propiedad y compruebe de manera periódica el estado de la solicitud.  
+  <br>
   Debido a la gran demanda de viviendas asequibles, es posible que pase un tiempo antes de que se pongan en contacto con usted para una posible asignación en un apartamento específico. Por lo tanto, es importante que solicite una vivienda en varias propiedades que se ajusten a sus necesidades de alojamiento y que lleve un registro de las propiedades que solicitó. También es importante completar el paso 5 (prepararse para la asignación) incluso si el gerente de la propiedad no se pone en contacto con usted de inmediato para la asignación de un apartamento. Ordenar sus finanzas, incluida la revisión del presupuesto familiar, el cuidado de su crédito y la recopilación de los documentos requeridos, lo preparará para cuando un gerente de la propiedad lo contacte.
 
   </SubSection>
@@ -204,8 +204,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="Lea más sobre obtener los resultados." openLabel="Lea más sobre obtener los resultados.">
 
-  Existen dos métodos que los gerentes de la propiedad utilizan para determinar el orden en que se seleccionan a los solicitantes para avanzar en el proceso de solicitud. Un método consiste en organizar las solicitudes de acuerdo a la fecha y hora en que se recibieron («por orden de llegada»). El segundo método consiste en aleatorizar las solicitudes en un ordenador para establecer un orden para todas las solicitudes. La distribución aleatoria de las solicitudes solo se realiza después de la fecha de vencimiento de la solicitud.
-
+  Existen dos métodos que los gerentes de la propiedad utilizan para determinar el orden en que se seleccionan a los solicitantes para avanzar en el proceso de solicitud. Un método consiste en organizar las solicitudes de acuerdo a la fecha y hora en que se recibieron («por orden de llegada»). El segundo método consiste en aleatorizar las solicitudes en un ordenador para establecer un orden para todas las solicitudes. La distribución aleatoria de las solicitudes solo se realiza después de la fecha de vencimiento de la solicitud.  
+  <br>
   Si recibe una carta o un correo electrónico del gerente de la propiedad notificándole que está avanzando en el proceso de solicitud, significa que está un paso más cerca de que se lo seleccione para un apartamento. Debe guardar un registro de toda la documentación que reciba de los gerentes de la propiedad.
 
   </SubSection>
@@ -269,8 +269,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="閱讀關於如何尋找刊登物件" openLabel="閱讀關於如何尋找刊登物件">
 
-  另一個尋找社會住宅的方法，是搜尋物業所在轄區所提供的社會住宅據點清單。您可以在 Doorway (好門道) 入口網站的「[其他住宅機會](/zh/additional-resources)」頁面找到清單。
-
+  另一個尋找社會住宅的方法，是搜尋物業所在轄區所提供的社會住宅據點清單。您可以在 Doorway (好門道) 入口網站的「[其他住宅機會](/zh/additional-resources)」頁面找到清單。  
+  <br>
   這些清單提供社會住宅物業的名稱、地點和聯絡資訊。很遺憾，這些公寓的物業管理人通常無法接受申請，因為他們已經有許多必須處理的申請案，要等處理完畢才能接受新申請。您應該可以找到符合需求的物業，並聯絡相關物業，以便找出這些物業是否接受申請。
 
   </SubSection>
@@ -317,8 +317,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="閱讀更多關於線上申請的資訊" openLabel="閱讀更多關於線上申請的資訊">
 
-  在您送出申請後，會有物業管理人聯絡您。若有人聯絡您，物業管理人會請您提供收入及財務文件。若您在入住訪談後沒有立即獲選，這不代表您不符合入住物業的資格。物業管理人可能會保留您的申請數年然後再度聯絡您。定期查看您的申請狀態，與物業管理人保持聯絡。
-
+  在您送出申請後，會有物業管理人聯絡您。若有人聯絡您，物業管理人會請您提供收入及財務文件。若您在入住訪談後沒有立即獲選，這不代表您不符合入住物業的資格。物業管理人可能會保留您的申請數年然後再度聯絡您。定期查看您的申請狀態，與物業管理人保持聯絡。  
+  <br>
   因為社會住宅的需求量很高，您可能要等一段時間，才會有人與您聯絡，跟您洽談入住特定出租公寓的可能安排。因此，務必申請符合您居住需求的多個物業單位，並持續追蹤您申請的物業狀態。務必完成準備步驟 5（做好住宿安排的準備），即使物業管理人沒有立即與您聯絡安排入住公寓。整理好自己的財務資訊，包括檢視您的家戶預算、照顧好您的信用，並備妥所需文件，這樣物業管理人聯絡您時，您已作好萬全準備。
 
   </SubSection>
@@ -331,8 +331,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="閱讀更多關於取得結果的資訊" openLabel="閱讀更多關於取得結果的資訊">
 
-  物業管理人會使用兩種方法，來決定申請人被選上的順序，以便進入下一個申請流程。其中一個方法是依收到申請的日期和時間來整理申請（「先到先租」）。第二個方法是在電腦上將申請人隨機化後，產生所有申請人的順序。物業管理人只會在申請期限後，才會將申請人隨機化。
-
+  物業管理人會使用兩種方法，來決定申請人被選上的順序，以便進入下一個申請流程。其中一個方法是依收到申請的日期和時間來整理申請（「先到先租」）。第二個方法是在電腦上將申請人隨機化後，產生所有申請人的順序。物業管理人只會在申請期限後，才會將申請人隨機化。  
+  <br>
   若您收到物業管理人的信件或電子郵件，通知您獲選進入下一個申請流程，代表您距離獲選入住出租公寓，又更近一步了。您應該保留從物業管理人那邊收到的任何文件記錄。
 
   </SubSection>
@@ -398,8 +398,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="Đọc thêm về cách tìm danh sách" openLabel="Đọc thêm về cách tìm danh sách">
 
-  Một cách khác để tìm Nhà Ở Bình Dân là tìm kiếm danh sách các khu nhà ở giá rẻ được cơ quan có thẩm quyền nơi khu nhà tọa lạc cung cấp. Quý vị có thể tìm thấy danh sách trên trang [Cơ Hội Nhà Ở Bổ Sung](/vi/additional-resources) của cổng thông tin Doorway. 
-
+  Một cách khác để tìm Nhà Ở Bình Dân là tìm kiếm danh sách các khu nhà ở giá rẻ được cơ quan có thẩm quyền nơi khu nhà tọa lạc cung cấp. Quý vị có thể tìm thấy danh sách trên trang [Cơ Hội Nhà Ở Bổ Sung](/vi/additional-resources) của cổng thông tin Doorway.  
+  <br>
   Những danh sách này cung cấp tên, vị trí và thông tin liên hệ của các khu Nhà Ở Bình Dân. Một điều không may là các đơn vị quản lý khu nhà của những căn hộ này thường không thể nhận đơn đăng ký vì họ cần phải xử lý rất nhiều đơn đăng ký trước khi họ có thể nhận đơn đăng ký mới. Quý vị nên xác định các khu nhà đáp ứng nhu cầu của mình và liên hệ các khu nhà liên quan để tìm hiểu xem các khu nhà đó có đang nhận đơn đăng ký hay không.
 
   </SubSection>
@@ -448,8 +448,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="Đọc thêm về đăng kí trực tuyến" openLabel="Đọc thêm về đăng kí trực tuyến">
 
-  Đơn vị quản lý khu nhà có thể liên hệ với quý vị sau khi quý vị nộp đơn đăng kí. Nếu được liên hệ, quý vị sẽ được yêu cầu cung cấp tài liệu về thu nhập và tình hình tài chính của mình. Kể cả khi quý vị không được chọn tham gia cuộc phỏng vấn đánh giá năng lực ngay thì điều đó cũng không có nghĩa là quý vị không đủ điều kiện để sống tại khu nhà. Đơn vị quản lí khu nhà có thể lưu giữ đơn đăng ký của quý vị trong vài năm trước khi liên hệ với quý vị. Hãy giữ liên lạc với đơn vị quản lý khu nhà bằng cách kiểm tra định kì tình trạng đơn đăng ký của quý vị.
-
+  Đơn vị quản lý khu nhà có thể liên hệ với quý vị sau khi quý vị nộp đơn đăng kí. Nếu được liên hệ, quý vị sẽ được yêu cầu cung cấp tài liệu về thu nhập và tình hình tài chính của mình. Kể cả khi quý vị không được chọn tham gia cuộc phỏng vấn đánh giá năng lực ngay thì điều đó cũng không có nghĩa là quý vị không đủ điều kiện để sống tại khu nhà. Đơn vị quản lí khu nhà có thể lưu giữ đơn đăng ký của quý vị trong vài năm trước khi liên hệ với quý vị. Hãy giữ liên lạc với đơn vị quản lý khu nhà bằng cách kiểm tra định kì tình trạng đơn đăng ký của quý vị.  
+  <br>
   Do nhu cầu thuê nhà ở bình dân luôn ở mức cao, quý vị có thể phải chờ một thời gian khá lâu trước khi được liên hệ với tiềm năng tham gia đánh giá năng lực để thuê một căn hộ cụ thể. Do đó, quan trọng là quý vị phải nộp đơn đăng kí nhà ở tại nhiều khu nhà đáp ứng nhu cầu về nhà ở của quý vị và theo dõi tình hình của các khu nhà mà quý vị đã đăng kí. Ngoài ra, quý vị cần hoàn thành Bước 5 (Chuẩn Bị Cho Bước Đánh Giá Năng Lực) kể cả khi quý vị không được đơn vị quản lí khu nhà liên hệ ngay để tiến hành đánh giá năng lực thuê căn hộ. Chuẩn bị ổn thỏa nguồn tài chính của quý vị, bao gồm xem xét ngân sách gia đình, chăm chút cho điểm tín dụng của quý vị và thu thập các giấy tờ cần thiết, sẽ giúp quý vị chuẩn bị khi được đơn vị quản lí khu nhà liên hệ.
 
   </SubSection>
@@ -462,8 +462,8 @@ sitio web de la propiedad antes de ponerse en contacto con el gerente de la prop
 
   <SubSection closedLabel="Đọc thêm về nhận kết quả" openLabel="Đọc thêm về nhận kết quả">
 
-  Đơn vị quản lí khu nhà sử dụng hai phương pháp khác nhau để xác định thứ tự chọn người nộp đơn để tiếp tục bước tiếp theo trong quá trình nộp đơn. Phương pháp đầu tiên là sắp xếp các đơn đăng kí theo ngày và thời gian nhận được đơn đăng kí (“người đến trước được phục vụ trước”). Phương pháp thứ hai là lấy ngẫu nhiên các đơn đăng kí trên máy tính để tạo thứ tự cho tất cả các đơn đăng kí này. Việc lấy ngẫu nhiên đơn đăng kí chỉ diễn ra sau ngày hết hạn nộp đơn.
-
+  Đơn vị quản lí khu nhà sử dụng hai phương pháp khác nhau để xác định thứ tự chọn người nộp đơn để tiếp tục bước tiếp theo trong quá trình nộp đơn. Phương pháp đầu tiên là sắp xếp các đơn đăng kí theo ngày và thời gian nhận được đơn đăng kí (“người đến trước được phục vụ trước”). Phương pháp thứ hai là lấy ngẫu nhiên các đơn đăng kí trên máy tính để tạo thứ tự cho tất cả các đơn đăng kí này. Việc lấy ngẫu nhiên đơn đăng kí chỉ diễn ra sau ngày hết hạn nộp đơn.  
+  <br>
   Nếu quý vị được đơn vị quản lí khu nhà gửi thư hoặc email thông báo về việc tiếp tục tiến hành thủ tục đăng kí, điều đó có nghĩa là quý vị đã tiến gần hơn một bước để được chọn cho thuê căn hộ. Quý vị nên lưu lại tất cả các tài liệu mà quý vị nhận được từ đơn vị quản lí khu nhà.
 
   </SubSection>

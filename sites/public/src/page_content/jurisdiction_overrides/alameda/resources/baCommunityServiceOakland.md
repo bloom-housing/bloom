@@ -1,5 +1,4 @@
 <RenderIf language="en,tl">
-
 ### [Bay Area Community Services - Downtown Oakland](http://www.bayareacs.org/)
 
 Unsheltered adults
@@ -11,7 +10,6 @@ Walk in at 629 Oakland Ave.
 
 </RenderIf>
 <RenderIf language="es">
-
 ### [Servicios de la comunidad del área de la bahía (Bay Area Community Services, BACS), centro de Oakland](http://www.bayareacs.org/)
 
 Adultos sin hogar y sin acceso a refugios
@@ -23,7 +21,6 @@ Atención sin turno en 629 Oakland Ave.
 
 </RenderIf>
 <RenderIf language="zh">
-
 ### [灣區社區服務–奧克蘭市中心 (Bay Area Community Services - Downtown Oakland)](http://www.bayareacs.org/)
 
 無居所的成年人
@@ -35,7 +32,6 @@ Atención sin turno en 629 Oakland Ave.
 
 </RenderIf>
 <RenderIf language="vi">
-
 ### [Cơ Quan Dịch Vụ Cộng Đồng Vùng Vịnh (BACS) - Trung Tâm Thành Phố Oakland](http://www.bayareacs.org/)
 
 Người trưởng thành không nơi trú ẩn
