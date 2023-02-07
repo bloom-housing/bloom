@@ -1,6 +1,6 @@
 import { Listing } from "@bloom-housing/backend-core/types"
 import { cleanup } from "@testing-library/react"
-import { cloudinaryUrlFromId, imageUrlFromListing } from "../src/photos"
+import { cloudinaryUrlFromId, imageUrlFromListing } from "../src/utilities/photos"
 
 afterEach(cleanup)
 
