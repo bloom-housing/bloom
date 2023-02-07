@@ -276,13 +276,11 @@ export const getCheckboxOption = (
 }
 
 export const mapRadiosToApi = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: { [name: string]: any },
+  data: { [name: string]: string },
   question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
   const [key, value] = Object.entries(data)[0]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const options: any = []
+  const options: ApplicationMultiselectQuestionOption[] = []
 
   if (value) {
     options.push({
