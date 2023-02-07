@@ -75,12 +75,12 @@ services:
       - ./backend/core/.env
     # Override database connections to point to the container instead of localhost.
     environment:
-      POSTGRES_USER: "postgres"
+      POSTGRES_USER: "bloom-dev"
       DATABASE_URL: "postgres://postgres:5432/bloom"
       REDIS_TLS_URL: "redis://redis:6379/0"
       REDIS_URL: "redis://redis:6379/0"
-      PGUSER: "postgres"
-      PGPASSWORD: "postgres"
+      PGUSER: "bloom-dev"
+      PGPASSWORD: "bloom"
       PGDATABASE: "bloom"
     depends_on:
       - redis
@@ -96,12 +96,13 @@ services:
     container_name: postgres
     image: postgres:13
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "bloom-dev"
+      POSTGRES_PASSWORD: "bloom"
       POSTGRES_DB: "bloom"
       PG_DATA: /var/lib/postgresql/data
+    # Forward to 5433 in order to avoid collisions with any local Postgres instances on 5432
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - backend
     volumes:
