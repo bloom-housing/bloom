@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.3...@bloom-housing/partners@7.6.4) (2023-02-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.6.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.2...@bloom-housing/partners@7.6.3) (2023-02-01)
+
+
+### Bug Fixes
+
+* add main content id ([#3299](https://github.com/bloom-housing/bloom/issues/3299)) ([062335b](https://github.com/bloom-housing/bloom/commit/062335bd0a1a7af2cc9e7f2bc9a44dad6163d3d9))
+
+
+
+
+
+## [7.6.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.1...@bloom-housing/partners@7.6.2) (2023-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.6.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.0...@bloom-housing/partners@7.6.1) (2023-01-31)
+
+
+### Bug Fixes
+
+* change error message for invalid emails when adding a user in the partners site ([#3302](https://github.com/bloom-housing/bloom/issues/3302)) ([536785c](https://github.com/bloom-housing/bloom/commit/536785c0ef2d0f76f47d5f95203af0774aeacf27))
+
+
+
+
+
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.5.0...@bloom-housing/partners@7.6.0) (2023-01-26)
+
+
+### Features
+
+* add description for FCFS in listing aside ([#3255](https://github.com/bloom-housing/bloom/issues/3255)) ([4905c31](https://github.com/bloom-housing/bloom/commit/4905c3173e96835f072c692934e326b0a0d7f626))
+* add marked and flagged as duplicate to all applications table ([#3214](https://github.com/bloom-housing/bloom/issues/3214)) ([f79f415](https://github.com/bloom-housing/bloom/commit/f79f415a917873e11b12b8795c2915f13737574f))
+* delete ui-c folder ([#3229](https://github.com/bloom-housing/bloom/issues/3229)) ([7472558](https://github.com/bloom-housing/bloom/commit/74725586e0c10c504087ffa4f8f621863a471ebd))
+
+
+
+
+
 # [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.4...@bloom-housing/partners@7.5.0) (2022-12-23)
 
 

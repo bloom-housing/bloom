@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.0...@bloom-housing/backend-core@7.7.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* fix flaky test by configuring the thottler ([#3305](https://github.com/bloom-housing/bloom/issues/3305)) ([82e5755](https://github.com/bloom-housing/bloom/commit/82e5755de248b47eb2e81cfb4bea7dddc1cb9617))
+
+
+
+
+
+# [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.6.0...@bloom-housing/backend-core@7.7.0) (2023-01-26)
+
+
+### Features
+
+* add marked and flagged as duplicate to all applications table ([#3214](https://github.com/bloom-housing/bloom/issues/3214)) ([f79f415](https://github.com/bloom-housing/bloom/commit/f79f415a917873e11b12b8795c2915f13737574f))
+
+
+### Reverts
+
+* Revert "feat: switching to auth cookies" ([b493092](https://github.com/bloom-housing/bloom/commit/b4930925ba0f142078f900ca95a33366752f6c7a))
+* Revert "fix: update to fix hosted envs (#3235)" ([0e50494](https://github.com/bloom-housing/bloom/commit/0e5049454d462fca24036ed664ae2b2faff664f3)), closes [#3235](https://github.com/bloom-housing/bloom/issues/3235)
+
+
+
+
+
 # [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.5.0...@bloom-housing/backend-core@7.6.0) (2022-12-23)
 
 
