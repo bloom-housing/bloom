@@ -7,7 +7,6 @@ Call [510-613-0330](tel:+1-510-613-0330) ext. 2
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Programa Keep Oakland Housed](https://www.keepoaklandhoused.org)
 
 Todas las familias y personas que todavía tengan hogar, pero enfrenten una crisis como pago en 3 días o deshaucio, o un aviso de desalojo.

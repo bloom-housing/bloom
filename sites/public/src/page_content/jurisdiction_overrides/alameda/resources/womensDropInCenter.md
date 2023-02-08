@@ -11,7 +11,6 @@ Walk in at 2218 Acton St.
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Centro de Asistencia Diurno para Mujeres (Women’s Daytime Drop-in Center)](https://www.womensdropin.org/)
 
 Familias sin hogar y sin acceso a refugios

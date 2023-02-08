@@ -12,7 +12,6 @@ Livermore
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Abode Services](https://www.abodeservices.org/)
 
 Adultos y familias sin hogar y sin acceso a refugios

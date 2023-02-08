@@ -7,7 +7,6 @@ Call [510-357-0205](tel:+1-510-357-0205)
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Building Futures, oeste (San Leandro)](https://bfwc.org)
 
 Adultos y familias sin hogar y sin acceso a refugios

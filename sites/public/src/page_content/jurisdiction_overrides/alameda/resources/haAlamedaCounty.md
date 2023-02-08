@@ -3,7 +3,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Autoridad de la vivienda del Condado de Alameda](http://www.haca.net/)
 
 </RenderIf>

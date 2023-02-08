@@ -7,7 +7,6 @@ Call [510-574-2000](tel:+1-510-574-2000)
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Centro de Recursos para Familias de Fremont (Fremont Family Resource Center)](https://www.fremont.gov/government/departments/human-services/fremont-family-resource-center)
 
 Familias sin hogar y sin acceso a refugios

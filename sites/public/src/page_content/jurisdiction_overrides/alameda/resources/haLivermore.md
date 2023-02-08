@@ -3,7 +3,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Autoridad de la vivienda de la Ciudad de Livermore](https://livermoreha.org/index.html)
 
 </RenderIf>

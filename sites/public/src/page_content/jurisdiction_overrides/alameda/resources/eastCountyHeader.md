@@ -8,7 +8,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
 ### Condado del este/Tri-Valley (Livermore, Dublin, Pleasanton)
 
 </RenderIf>

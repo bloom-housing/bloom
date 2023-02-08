@@ -3,7 +3,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Autoridad de la vivienda de Oakland](http://www.oakha.org/Pages/default.aspx)
 
 </RenderIf>

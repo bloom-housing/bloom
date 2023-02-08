@@ -7,7 +7,6 @@ Call [510-201-0203](tel:+1-510-201-0203)
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Building Futures. Oeste (Alameda)](https://bfwc.org)
 
 Adultos y familias en situación de calle

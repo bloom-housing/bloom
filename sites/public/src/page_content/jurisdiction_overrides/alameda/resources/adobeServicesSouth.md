@@ -10,7 +10,6 @@ Walk in at 4075 Papazian Way, Fremont
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Abode Services](https://www.abodeservices.org/)
 
 Adultos sin hogar y sin acceso a refugios

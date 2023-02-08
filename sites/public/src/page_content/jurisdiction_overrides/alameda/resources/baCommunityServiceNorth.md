@@ -11,7 +11,6 @@ Walk in at 2809 Telegraph Ave.
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Servicios comunitarios del área de la bahía (Bay Area Community Services)](http://www.bayareacs.org/)
 
 Adultos sin hogar y sin acceso a refugios

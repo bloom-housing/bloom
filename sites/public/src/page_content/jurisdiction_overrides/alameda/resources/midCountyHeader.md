@@ -8,7 +8,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
 ### Condado medio
 
 </RenderIf>

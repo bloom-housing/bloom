@@ -8,7 +8,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
 ### Condado del sur/Tri-City (Fremont, Newark, Union City)
 
 </RenderIf>

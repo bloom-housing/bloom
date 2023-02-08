@@ -3,7 +3,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Autoridad de la vivienda de Berkeley](https://www.cityofberkeley.info/bha/)
 
 </RenderIf>

@@ -11,7 +11,6 @@ Walk in at 590 B Street, Hayward
 
 </RenderIf>
 <RenderIf language="es">
- 
  ### [Servicios comunitarios del área de la bahía (Bay Area Community Services), este (Hayward y no incorporados)](http://www.bayareacs.org/)
 
 Familias y adultos sin hogar y sin acceso a refugios

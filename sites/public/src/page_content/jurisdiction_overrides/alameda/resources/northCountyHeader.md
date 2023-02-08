@@ -8,7 +8,6 @@
 
 </RenderIf>
 <RenderIf language="es">
- 
 ### Condado del norte (Berkeley, Albany, Emeryville)
 
 </RenderIf>
