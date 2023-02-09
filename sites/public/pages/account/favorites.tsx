@@ -1,14 +1,9 @@
-import {
-  PageHeader,
-  AgPagination,
-  t,
-  LoadingOverlay,
-  AuthContext,
-  LinkButton,
-  RequireLogin,
-  AG_PER_PAGE_OPTIONS,
-} from "@bloom-housing/ui-components"
-import { ListingFilterState } from "@bloom-housing/shared-helpers"
+import { t, AG_PER_PAGE_OPTIONS } from "@bloom-housing/ui-components"
+import { LinkButton } from "../../../../detroit-ui-components/src/actions/LinkButton"
+import { PageHeader } from "../../../../detroit-ui-components/src/headers/PageHeader"
+import { AgPagination } from "../../../../detroit-ui-components/src/global/vendor/AgPagination"
+import { LoadingOverlay } from "../../../../detroit-ui-components/src/overlays/LoadingOverlay"
+import { ListingFilterState, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import React, { useEffect, useState, useContext, useMemo } from "react"
 import { useRouter } from "next/router"

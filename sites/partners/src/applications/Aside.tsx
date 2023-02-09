@@ -3,15 +3,15 @@ import dayjs from "dayjs"
 import {
   t,
   StatusAside,
-  Button,
   GridCell,
   AppearanceStyleType,
   StatusMessages,
   LocalizedLink,
-  Modal,
   AppearanceBorderType,
-  LinkButton,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../detroit-ui-components/src/actions/Button"
+import { LinkButton } from "../../../../detroit-ui-components/src/actions/LinkButton"
+import { Modal } from "../../../../detroit-ui-components/src/overlays/Modal"
 import { ApplicationContext } from "./ApplicationContext"
 
 type AsideProps = {

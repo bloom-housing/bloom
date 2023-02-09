@@ -1,76 +1,80 @@
-.modal {
-  border-radius: 0;
-  height: 100%;
-  max-height: 100vh;
-  max-width: initial;
-  min-width: 20rem;
-  width: 100%;
-  overflow-y: auto;
-  @screen md {
-    max-height: 80vh;
-    max-width: 32rem;
-  }
-
-  .modal__title {
-    @apply text-lg font-bold;
-    @screen sm {
-      @apply text-3xl font-bold;
-    }
-  }
-
-  .modal__close svg {
-    fill: #5f6368;
-  }
-
-  .modal__inner {
-    padding: 1rem 1.5rem;
-
+#__next {
+  .modal {
+    border-radius: 0;
+    height: 100%;
+    max-height: 100vh;
+    max-width: initial;
+    min-width: 20rem;
+    width: 100%;
+    overflow-y: auto;
     @screen md {
-      padding: 1rem 2.25rem;
+      max-height: 80vh;
+      max-width: 32rem;
+    }
+
+    .modal__title {
+      @apply text-lg;
+      @apply font-bold;
+      @screen sm {
+        @apply text-3xl font-bold;
+      }
+    }
+
+    .modal__close svg {
+      fill: #5f6368;
+    }
+
+    .modal__inner {
+      padding: 1rem 1.5rem;
+
+      @screen md {
+        padding: 1rem 2.25rem;
+      }
+    }
+
+    .form-card__group {
+      margin: 0;
+      padding: 0;
+    }
+
+    .filter-section label,
+    .filter-header {
+      @apply text-base;
+      @apply font-bold;
+    }
+
+    .checkbox-filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0.5rem 0 1rem;
+
+      .field {
+        flex: 0 0 50%;
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    .rent-range {
+      margin: 0.5rem 0 1.25rem;
+    }
+
+    .rent-range .field {
+      margin: 0;
+    }
+    .rent-range .control {
+      margin: 0;
+    }
+
+    button.button {
+      padding: 1rem 3rem;
     }
   }
 
-  .form-card__group {
-    margin: 0;
-    padding: 0;
-  }
-
-  .filter-section label,
-  .filter-header {
-    @apply text-base font-bold;
-  }
-
-  .checkbox-filter-group {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0.5rem 0 1rem;
-
-    .field {
-      flex: 0 0 50%;
-      margin-bottom: 0.25rem;
+  .media-modal {
+    border: none;
+    max-width: none;
+    @media (min-width: $screen-md) {
+      width: 48rem;
     }
-  }
-
-  .rent-range {
-    margin: 0.5rem 0 1.25rem;
-  }
-
-  .rent-range .field {
-    margin: 0;
-  }
-  .rent-range .control {
-    margin: 0;
-  }
-
-  button.button {
-    padding: 1rem 3rem;
-  }
-}
-
-.media-modal {
-  border: none;
-  max-width: none;
-  @media (min-width: $screen-md) {
-    width: 48rem;
   }
 }

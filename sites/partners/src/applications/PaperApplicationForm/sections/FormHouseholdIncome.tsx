@@ -1,5 +1,6 @@
 import React from "react"
-import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Field, Select } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
 import { useFormContext } from "react-hook-form"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../FormTypes"

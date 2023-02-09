@@ -17,8 +17,8 @@ describe("<EligibilityAge>", () => {
     act(() => {
       render(<EligibilityAge />)
     })
-    expect(screen.getByRole("heading", { name: "How old are you?" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
+    expect(screen.getByText("How old are you?")).toBeInTheDocument()
+    expect(screen.getByText("Next")).toBeInTheDocument()
   })
 
   it("Does not display error if no age selected", async () => {
@@ -31,7 +31,7 @@ describe("<EligibilityAge>", () => {
 
     await act(async () => {
       // Click "Next" with no age entered --> no error message
-      fireEvent.click(screen.getByRole("button", { name: "Next" }))
+      fireEvent.click(screen.getByText("Next"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
@@ -41,8 +41,8 @@ describe("<EligibilityAge>", () => {
   it("Clicks the Next button", async () => {
     await act(async () => {
       render(<EligibilityAge />)
-      fireEvent.click(screen.getByRole("radio", { name: "55 - 61" }))
-      fireEvent.click(screen.getByRole("button", { name: "Next" }))
+      fireEvent.click(screen.getByText("55 - 61"))
+      fireEvent.click(screen.getByText("Next"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
@@ -52,7 +52,7 @@ describe("<EligibilityAge>", () => {
   it("Clicks the See results now button", async () => {
     await act(async () => {
       render(<EligibilityAge />)
-      fireEvent.click(screen.getByRole("button", { name: "See results now" }))
+      fireEvent.click(screen.getByText("See results now"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)

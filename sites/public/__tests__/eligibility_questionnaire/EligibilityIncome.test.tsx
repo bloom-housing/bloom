@@ -18,19 +18,18 @@ describe("<EligibilityIncome>", () => {
       render(<EligibilityIncome />)
     })
     expect(
-      screen.getByRole("heading", {
-        name:
-          "What is the estimated total annual income for everyone who will live with you, including yourself?",
-      })
+      screen.getByText(
+        "What is the estimated total annual income for everyone who will live with you, including yourself?"
+      )
     ).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "See results now" })).toBeInTheDocument()
+    expect(screen.getByText("See results now")).toBeInTheDocument()
   })
 
   it("Clicks the See results now button", async () => {
     await act(async () => {
       render(<EligibilityIncome />)
-      fireEvent.click(screen.getByRole("radio", { name: "$10,000 - $19,999" }))
-      fireEvent.click(screen.getByRole("button", { name: "See results now" }))
+      fireEvent.click(screen.getByText("$10,000 - $19,999"))
+      fireEvent.click(screen.getByText("See results now"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)

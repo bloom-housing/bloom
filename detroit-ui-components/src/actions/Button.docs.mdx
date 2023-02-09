@@ -1,0 +1,46 @@
+import { Canvas, Story, Source, ArgsTable } from "@storybook/addon-docs"
+import { Button } from "./Button"
+
+# Button
+
+The button component offers flexible usage with a variety of different appearance options. Size, color, and shape can be controlled via standardized props.
+
+<Canvas>
+  <Button>This is a Button</Button>
+</Canvas>
+
+## Variants
+
+There are several props which accept enums to adjust style type, border, and size. For example, to choose the "primary" style and a "small" size, you would pass the `AppearanceStyleType.primary` enum to `styleType` prop and `AppearanceSizeType.small` enum to `size` prop.
+
+<Canvas>
+  <Story id="actions-button--small-and-primary" />
+</Canvas>
+
+Other variants include appearances which aren't button-like such as `unstyled` and `inline`.
+
+## Component Properties
+
+<ArgsTable of={Button} />
+
+## Theming Variables
+
+You can apply CSS variables to the `.button` selector to customize the appearance of the component.
+
+### Typographic & Spacing Variables
+
+| Name                     | Type        | Description                                         | Default                                             |
+| ------------------------ | ----------- | --------------------------------------------------- | --------------------------------------------------- |
+| `--label-font`           | Font        | Font family of the button label                     | `--bloom-font-alt-sans`                             |
+| `--label-transform`      | Case        | Text case of the button label                       | `uppercase`                                         |
+| `--label-letter-spacing` | Size        | The average gap between letters of the button label | `--bloom-letter-spacing-widest`                     |
+| `--label-weight`         | Font Weight | Typographic weight of the button label              | `bold`                                              |
+| `--normal-rounded`       | Size        | Border radius of a normal-size button               | `--bloom-rounded`                                   |
+| `--normal-padding`       | Size        | Padding of the normal-size button interior          | `--bloom-s4` (top/bottom) `--bloom-s6` (left/right) |
+| `--normal-font-size`     | Size        | Font size of the normal-size button                 | `--bloom-font-size-sm`                              |
+| `--small-rounded`        | Size        | Border radius of a small-size button                | `--bloom-rounded`                                   |
+| `--small-padding`        | Size        | Padding of the small-size button interior           | `--bloom-s3` (top/bottom) `--bloom-s6` (left/right) |
+| `--small-font-size`      | Size        | Font size of the small-size button                  | `--bloom-font-size-xs`                              |
+| `--big-rounded`          | Size        | Border radius of a large-size button                | `--bloom-rounded`                                   |
+| `--big-padding`          | Size        | Padding of the large-size button interior           | `--bloom-s6`                                        |
+| `--big-font-size`        | Size        | Font size of the large-size button                  | `--bloom-font-size-sm`                              |

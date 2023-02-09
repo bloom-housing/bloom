@@ -1,15 +1,11 @@
 import React, { useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
-import {
-  PageHeader,
-  Button,
-  t,
-  Drawer,
-  SiteAlert,
-  AgTable,
-  useAgTable,
-} from "@bloom-housing/ui-components"
+import { t, SiteAlert } from "@bloom-housing/ui-components"
+import { Button } from "../../../../detroit-ui-components/src/actions/Button"
+import { PageHeader } from "../../../../detroit-ui-components/src/headers/PageHeader"
+import { Drawer } from "../../../../detroit-ui-components/src/overlays/Drawer"
+import { AgTable, useAgTable } from "../../../../detroit-ui-components/src/tables/AgTable"
 import { User } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import { useUserList, useListingsData } from "../../lib/hooks"

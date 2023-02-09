@@ -7,13 +7,12 @@ import {
   t,
   GridSection,
   Field,
-  FieldGroup,
   GridCell,
   Textarea,
   DateField,
   TimeField,
 } from "@bloom-housing/ui-components"
-
+import { FieldGroup } from "../../../../../../detroit-ui-components/src/forms/FieldGroup"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../formTypes"
 import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"

@@ -3,17 +3,17 @@ import dayjs from "dayjs"
 import {
   t,
   StatusAside,
-  Button,
   GridCell,
   AppearanceStyleType,
   AppearanceBorderType,
   StatusMessages,
   LocalizedLink,
-  LinkButton,
-  Icon,
-  AuthContext,
 } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+
+import { Button } from "../../../../detroit-ui-components/src/actions/Button"
+import { LinkButton } from "../../../../detroit-ui-components/src/actions/LinkButton"
+import { Icon } from "../../../../detroit-ui-components/src/icons/Icon"
+import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 

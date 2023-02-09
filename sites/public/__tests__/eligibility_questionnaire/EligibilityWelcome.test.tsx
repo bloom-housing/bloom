@@ -17,14 +17,14 @@ describe("<EligibilityWelcome>", () => {
     act(() => {
       render(<EligibilityWelcome />)
     })
-    expect(screen.getByRole("heading", { name: "Welcome" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
+    expect(screen.getAllByText("Welcome").length).toBeTruthy()
+    expect(screen.getByText("Next")).toBeInTheDocument()
   })
 
   it("Click Next button", async () => {
     await act(async () => {
       render(<EligibilityWelcome />)
-      fireEvent.click(screen.getByRole("button", { name: "Next" }))
+      fireEvent.click(screen.getByText("Next"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)

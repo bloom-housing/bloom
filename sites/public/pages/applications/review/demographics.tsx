@@ -3,17 +3,11 @@
 Optional demographic questions
 */
 import React, { useContext, useEffect } from "react"
-import {
-  AppearanceStyleType,
-  Button,
-  FieldGroup,
-  Form,
-  FormCard,
-  Select,
-  ProgressNav,
-  t,
-  AuthContext,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Form, Select, t } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { FormCard } from "../../../../../detroit-ui-components/src/blocks/FormCard"
+import { FieldGroup } from "../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { ProgressNav } from "../../../../../detroit-ui-components/src/navigation/ProgressNav"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import {
@@ -24,6 +18,7 @@ import {
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"

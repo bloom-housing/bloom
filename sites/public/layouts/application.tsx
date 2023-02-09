@@ -2,16 +2,10 @@ import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Head from "next/head"
-import {
-  SiteHeader,
-  SiteFooter,
-  FooterNav,
-  FooterSection,
-  MenuLink,
-  t,
-  AuthContext,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
+import { SiteFooter, FooterSection, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { SiteHeader, MenuLink } from "../../../detroit-ui-components/src/headers/SiteHeader"
+import { FooterNav } from "../../../detroit-ui-components/src/navigation/FooterNav"
 import Markdown from "markdown-to-jsx"
 
 const Layout = (props) => {

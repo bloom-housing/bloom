@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, Button } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../../detroit-ui-components/src/actions/Button"
 import { ApplicationContext } from "../../ApplicationContext"
 import { MembersDrawer } from "../DetailsMemberDrawer"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"

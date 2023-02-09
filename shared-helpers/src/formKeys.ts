@@ -1,3 +1,5 @@
+import { Language } from "@bloom-housing/backend-core/types"
+
 export const stateKeys = [
   "",
   "AL",
@@ -262,6 +264,15 @@ export const listingFeatures = [
   "wideDoorways",
   "loweredCabinets",
 ]
+
+export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, Language.vi]
+
+export enum RoleOption {
+  Administrator = "administrator",
+  Partner = "partner",
+}
+
+export const roleKeys = Object.values(RoleOption)
 
 export const listingUtilities = [
   "water",

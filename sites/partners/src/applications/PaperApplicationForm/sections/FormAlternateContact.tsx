@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
-  ViewItem,
   Select,
   GridCell,
   Field,
@@ -11,6 +10,7 @@ import {
   PhoneField,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
 import { altContactRelationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 
 const FormAlternateContact = () => {
@@ -141,7 +141,6 @@ const FormAlternateContact = () => {
         <FormAddress
           subtitle={t("application.contact.mailingAddress")}
           dataKey="application.alternateContact.mailingAddress"
-          type="alternate"
           register={register}
           stateKeys={stateKeys}
         />

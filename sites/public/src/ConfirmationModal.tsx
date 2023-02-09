@@ -1,14 +1,9 @@
-import {
-  AppearanceStyleType,
-  Button,
-  Modal,
-  AuthContext,
-  t,
-  Form,
-  Field,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Form, Field } from "@bloom-housing/ui-components"
+import { Button } from "../../../detroit-ui-components/src/actions/Button"
+import { AlertBox } from "../../../detroit-ui-components/src/notifications/AlertBox"
+import { Modal } from "../../../detroit-ui-components/src/overlays/Modal"
 import { useRouter } from "next/router"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../lib/helpers"

@@ -40,7 +40,7 @@ WORKDIR /usr/src/app/
 # to ensure that breaking changes in local dependencies from those packages are included
 # instead of being pulled from npm.
 COPY backend/core ./backend/core
-COPY ui-components ./ui-components
+COPY detroit-ui-components ./detroit-ui-components
 
 COPY --from=development /usr/src/app/package.json ./package.json
 COPY --from=development /usr/src/app/yarn*.lock ./

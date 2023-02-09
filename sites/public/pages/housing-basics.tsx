@@ -1,14 +1,9 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-import {
-  MarkdownSection,
-  t,
-  PageHeader,
-  MediaCard,
-  Modal,
-  Video,
-  InfoCardGrid,
-} from "@bloom-housing/ui-components"
+import { MarkdownSection, t, MediaCard, Video } from "@bloom-housing/ui-components"
+import { PageHeader } from "../../../detroit-ui-components/src/headers/PageHeader"
+import { InfoCardGrid } from "../../../detroit-ui-components/src/sections/InfoCardGrid"
+import { Modal } from "../../../detroit-ui-components/src/overlays/Modal"
 import Layout from "../layouts/application"
 import RenderIf from "../src/RenderIf"
 import sidebarContent from "../page_content/resources/sidebar.md"

@@ -17,10 +17,10 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^4.4.0",
-    "@bloom-housing/ui-components": "^4.4.0"
+    "@bloom-housing/ui-components": "^8.0.1",
+    "axios": "0.21.2"
   },
   "devDependencies": {
-    "@bloom-housing/ui-components": "^3.0.1-alpha.15",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/jest": "^26.0.14",

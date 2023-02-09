@@ -6,25 +6,23 @@ import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useForm } from "react-hook-form"
 import {
-  Button,
   Field,
-  FormCard,
-  Icon,
-  AuthContext,
   Form,
   emailRegex,
   t,
-  AlertBox,
   SiteAlert,
-  RequireLogin,
-  AlertTypes,
   passwordRegex,
   DOBField,
   DOBFieldValues,
   PhoneField,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../detroit-ui-components/src/actions/Button"
+import { FormCard } from "../../../../detroit-ui-components/src/blocks/FormCard"
+import { Icon } from "../../../../detroit-ui-components/src/icons/Icon"
+import { AlertBox } from "../../../../detroit-ui-components/src/notifications/AlertBox"
+import { AlertTypes } from "../../../../detroit-ui-components/src/notifications/alertTypes"
 import Link from "next/link"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
 import { intlToUsPhone, usToIntlPhone } from "../../lib/helpers"

@@ -2,11 +2,11 @@ import React, { useContext } from "react"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   MinimalTable,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"

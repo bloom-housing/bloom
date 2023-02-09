@@ -2,28 +2,27 @@ import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
-  Button,
   Field,
-  FormCard,
-  Icon,
-  LinkButton,
-  AuthContext,
   Form,
   emailRegex,
   t,
   DOBField,
-  AlertBox,
   SiteAlert,
-  Modal,
   passwordRegex,
   PhoneField,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../detroit-ui-components/src/actions/Button"
+import { LinkButton } from "../../../detroit-ui-components/src/actions/LinkButton"
+import { FormCard } from "../../../detroit-ui-components/src/blocks/FormCard"
+import { Icon } from "../../../detroit-ui-components/src/icons/Icon"
+import { AlertBox } from "../../../detroit-ui-components/src/notifications/AlertBox"
+import { Modal } from "../../../detroit-ui-components/src/overlays/Modal"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
 import { usToIntlPhone } from "../lib/helpers"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 

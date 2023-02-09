@@ -2,15 +2,15 @@ import { EnumListingFilterParamsStatus } from "@bloom-housing/backend-core/types
 import {
   t,
   Form,
-  Field,
-  Button,
   AppearanceStyleType,
-  GridSection,
   GridCell,
   AppearanceBorderType,
-  ViewItem,
-  FieldGroup,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { ViewItem } from "../../../../../detroit-ui-components/src/blocks/ViewItem"
+import { Field } from "../../../../../detroit-ui-components/src/forms/Field"
+import { FieldGroup } from "../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { GridSection } from "../../../../../detroit-ui-components/src/sections/GridSection"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"

@@ -29,6 +29,7 @@ module.exports = {
   },
   setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/sites/partners/.jest/setup-tests.js"],
+  transformIgnorePatterns: ["node_modules/?!(@bloom-housing/ui-components)"],
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
   },

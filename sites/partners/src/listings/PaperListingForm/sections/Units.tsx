@@ -3,17 +3,17 @@ import {
   t,
   GridSection,
   MinimalTable,
-  Button,
   AppearanceSizeType,
-  Drawer,
-  Modal,
   AppearanceStyleType,
   AppearanceBorderType,
   GridCell,
-  FieldGroup,
   Select,
-  ViewItem,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../../detroit-ui-components/src/actions/Button"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
+import { FieldGroup } from "../../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { Drawer } from "../../../../../../detroit-ui-components/src/overlays/Drawer"
+import { Modal } from "../../../../../../detroit-ui-components/src/overlays/Modal"
 import { useFormContext } from "react-hook-form"
 import UnitsSummaryForm from "../UnitsSummaryForm"
 import { FormListing, TempUnit, TempUnitsSummary } from "../formTypes"

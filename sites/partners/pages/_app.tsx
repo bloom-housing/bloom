@@ -2,24 +2,17 @@ import React, { useMemo } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 
-import "@bloom-housing/ui-components/src/global/css-imports.scss"
-import "@bloom-housing/ui-components/src/global/app-css.scss"
-import {
-  addTranslation,
-  ConfigProvider,
-  AuthProvider,
-  RequireLogin,
-  NavigationContext,
-  GenericRouter,
-} from "@bloom-housing/ui-components"
-
-// TODO: Make these not-global
-import "ag-grid-community/dist/styles/ag-grid.css"
-import "ag-grid-community/dist/styles/ag-theme-alpine.css"
+import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
+import { ConfigProvider, AuthProvider, RequireLogin } from "@bloom-housing/shared-helpers"
 
 import LinkComponent from "../src/LinkComponent"
 import { translations, overrideTranslations } from "../src/translations"
 
+import "../../../detroit-ui-components/src/global/css-imports.scss"
+import "../../../detroit-ui-components/src/global/app-css.scss"
+// TODO: Make these not-global
+import "ag-grid-community/dist/styles/ag-grid.css"
+import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 // Note: import overrides.scss last so that it overrides styles defined in imports above
 import "../styles/overrides.scss"
 

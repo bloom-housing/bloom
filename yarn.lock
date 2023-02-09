@@ -3764,6 +3764,50 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bloom-housing/ui-components@^8.0.0", "@bloom-housing/ui-components@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-8.0.1.tgz#23351b9be6a2f57bbdca6d9a6c1e7850975d37c6"
+  integrity sha512-3BzvQls9N949XE3Df6pQVD3WMhFK+EZNyD8ZjYnGUas04l+3oY7em5/PnSBtISaXRL3CT3o8IympV3T+stsw+A==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.1.1"
+    "@fortawesome/free-regular-svg-icons" "^6.1.1"
+    "@fortawesome/free-solid-svg-icons" "^6.1.1"
+    "@fortawesome/react-fontawesome" "^0.1.18"
+    "@mapbox/mapbox-sdk" "^0.13.0"
+    "@types/jwt-decode" "^2.2.1"
+    "@types/mdx" "^2.0.1"
+    "@types/node" "^12.12.67"
+    "@types/node-polyglot" "^2.4.1"
+    "@types/react-beautiful-dnd" "^13.1.1"
+    "@types/react-dom" "^16.9.5"
+    "@types/react-text-mask" "^5.4.6"
+    "@types/react-transition-group" "^4.4.0"
+    ag-grid-community "^26.0.0"
+    ag-grid-react "^26.0.0"
+    aria-autocomplete "^1.4.0"
+    axios "0.21.2"
+    dayjs "^1.10.7"
+    jwt-decode "^2.2.0"
+    markdown-to-jsx "7.1.8"
+    nanoid "^3.1.12"
+    node-polyglot "^2.4.0"
+    react "^17.0.2"
+    react-accessible-accordion "^3.3.5"
+    react-beautiful-dnd "^13.1.0"
+    react-dom "^17.0.2"
+    react-dropzone "^11.3.2"
+    react-focus-lock "^2.5.2"
+    react-hook-form "^6.15.5"
+    react-map-gl "^6.1.16"
+    react-media "^1.10.0"
+    react-remove-scroll "2.5.4"
+    react-tabs "^3.2.2"
+    react-text-mask "^5.4.3"
+    react-transition-group "^4.4.1"
+    tailwindcss "2.2.10"
+    ts-jest "^26.4.1"
+    typesafe-actions "^5.1.0"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -8500,6 +8544,16 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
+aria-autocomplete@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/aria-autocomplete/-/aria-autocomplete-1.4.0.tgz#01436813bb8b47d6c004d32cfb4ce538ab024ebe"
+  integrity sha512-YEkq5YolRYjzzVrOz43HuV2N9jDpUHGClDkmazTlKNCRdioxwAusZuXRFN/xnzFQMSQ++Cc08UEn43LWvcQ0pA==
+  dependencies:
+    element-addclass "^1.0.2"
+    element-removeclass "^1.0.1"
+    input-autowidth "^1.0.3"
+    is-printable-keycode "^1.0.3"
+
 aria-query@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-4.2.2.tgz#0d2ca6c9aceb56b8977e9fed6aed7e15bbd2f83b"
@@ -12130,6 +12184,16 @@ electron@^13.1.7:
     "@types/node" "^14.6.2"
     extract-zip "^1.0.3"
 
+element-addclass@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/element-addclass/-/element-addclass-1.0.2.tgz#e91585ada601aa1f7409ef6eacee809fab91d0d3"
+  integrity sha512-Rx2ZofOL/oLGzHXXpmPTgRLCI/VYb2QK41RVUrqQPXo4jHj/soLEtClut44CCjgPdkMxDAU1pYkOOnoOhawugg==
+
+element-removeclass@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/element-removeclass/-/element-removeclass-1.0.1.tgz#b204851927b0c80df9857cda27e256fa0eea0a4c"
+  integrity sha512-fpH8Nxs+ygSwgrSQwC8a1LEO2kPuPKischcri5WRR+7w6StPSVMwfd0og7d/t5LZYK2E8u2btaD4Dq6Ozf/iDQ==
+
 element-resize-detector@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/element-resize-detector/-/element-resize-detector-1.2.3.tgz#5078d9b99398fe4c589f8c8df94ff99e5d413ff3"
@@ -15141,6 +15205,13 @@ inline-style-parser@0.1.1:
   resolved "https://registry.yarnpkg.com/inline-style-parser/-/inline-style-parser-0.1.1.tgz#ec8a3b429274e9c0a1f1c4ffa9453a7fef72cea1"
   integrity sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==
 
+input-autowidth@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/input-autowidth/-/input-autowidth-1.0.3.tgz#8703c6cbb7b5b52a5197e4b5dcd4d6f53fdde23b"
+  integrity sha512-FWVUJsfTnlR6lSXWjV5SS7fSdAKGTbOfwmdNUgW06U8So+09nMtsDyicpn23B/XvYIy/7RvdNrd8xmAGw1xusQ==
+  dependencies:
+    is-printable-keycode "^1.0.3"
+
 inquirer@6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-6.5.2.tgz#ad50942375d036d327ff528c08bd5fab089928ca"
@@ -15701,6 +15772,11 @@ is-potential-custom-element-name@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-potential-custom-element-name/-/is-potential-custom-element-name-1.0.0.tgz#0c52e54bcca391bb2c494b21e8626d7336c6e397"
   integrity sha1-DFLlS8yjkbssSUsh6GJtczbG45c=
+
+is-printable-keycode@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/is-printable-keycode/-/is-printable-keycode-1.0.3.tgz#d5cc54bb04758bf2d7a34612d5241bc5fbc4cc37"
+  integrity sha512-AlV2FGBdbfOUqLyCEjsW1PZVcptIpttgnMW7pPYYXt9UuoDIi3IiuAiVPso/mBVThOtiMj1/BlUvMV8WS1hvLg==
 
 is-regex@^1.1.0, is-regex@^1.1.1:
   version "1.1.1"
@@ -17610,6 +17686,11 @@ markdown-escapes@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
+
+markdown-to-jsx@7.1.8:
+  version "7.1.8"
+  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.1.8.tgz#49c3bb3c122aa714324034142c8829b93c889338"
+  integrity sha512-rRSa1aFmFnpDRFAhv5vIkWM4nPaoB9vnzIjuIKa1wGupfn2hdCNeaQHKpu4/muoc8n8J7yowjTP2oncA4/Rbgg==
 
 markdown-to-jsx@^6.11.4:
   version "6.11.4"
@@ -21063,6 +21144,25 @@ react-remove-scroll-bar@^2.3.1:
     react-style-singleton "^2.2.0"
     tslib "^2.0.0"
 
+react-remove-scroll-bar@^2.3.3:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.4.tgz#53e272d7a5cb8242990c7f144c44d8bd8ab5afd9"
+  integrity sha512-63C4YQBUt0m6ALadE9XV56hV8BgJWDmmTPY758iIJjfQKt2nYwoUrPk0LXRXcB/yIj82T1/Ixfdpdk68LwIB0A==
+  dependencies:
+    react-style-singleton "^2.2.1"
+    tslib "^2.0.0"
+
+react-remove-scroll@2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/react-remove-scroll/-/react-remove-scroll-2.5.4.tgz#afe6491acabde26f628f844b67647645488d2ea0"
+  integrity sha512-xGVKJJr0SJGQVirVFAUZ2k1QLyO6m+2fy0l8Qawbp5Jgrv3DeLalrfMNBFSlmz5kriGGzsVBtGVnf4pTKIhhWA==
+  dependencies:
+    react-remove-scroll-bar "^2.3.3"
+    react-style-singleton "^2.2.1"
+    tslib "^2.1.0"
+    use-callback-ref "^1.3.0"
+    use-sidecar "^1.1.2"
+
 react-remove-scroll@^2.5.3:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/react-remove-scroll/-/react-remove-scroll-2.5.3.tgz#a152196e710e8e5811be39dc352fd8a90b05c961"
@@ -21110,6 +21210,15 @@ react-style-singleton@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-style-singleton/-/react-style-singleton-2.2.0.tgz#70f45f5fef97fdb9a52eed98d1839fa6b9032b22"
   integrity sha512-nK7mN92DMYZEu3cQcAhfwE48NpzO5RpxjG4okbSqRRbfal9Pk+fG2RdQXTMp+f6all1hB9LIJSt+j7dCYrU11g==
+  dependencies:
+    get-nonce "^1.0.0"
+    invariant "^2.2.4"
+    tslib "^2.0.0"
+
+react-style-singleton@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-style-singleton/-/react-style-singleton-2.2.1.tgz#f99e420492b2d8f34d38308ff660b60d0b1205b4"
+  integrity sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==
   dependencies:
     get-nonce "^1.0.0"
     invariant "^2.2.4"

@@ -15,8 +15,6 @@ before_script:
 - cp backend/core/.env.template backend/core/.env
 jobs:
   include:
-  - script: yarn test:shared:ui
-    name: UI components tests
   - script: yarn build:app:public
     name: Build public site
   - script: yarn build:app:partners

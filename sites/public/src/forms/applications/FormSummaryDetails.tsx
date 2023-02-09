@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
-import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
+import { LocalizedLink, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../detroit-ui-components/src/blocks/ViewItem"
 import { getUniqueUnitTypes, getProgramOptionName } from "@bloom-housing/shared-helpers"
 import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
 

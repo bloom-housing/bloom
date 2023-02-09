@@ -1,17 +1,17 @@
 import Head from "next/head"
 import {
-  PageHeader,
-  AgPagination,
-  Button,
   AppearanceSizeType,
   t,
   LoadingOverlay,
-  Drawer,
   AG_PER_PAGE_OPTIONS,
-  ActionBlock,
-  Icon,
-  LinkButton,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../detroit-ui-components/src/actions/Button"
+import { LinkButton } from "../../../../detroit-ui-components/src/actions/LinkButton"
+import { ActionBlock } from "../../../../detroit-ui-components/src/blocks/ActionBlock"
+import { PageHeader } from "../../../../detroit-ui-components/src/headers/PageHeader"
+import { Icon } from "../../../../detroit-ui-components/src/icons/Icon"
+import { Drawer } from "../../../../detroit-ui-components/src/overlays/Drawer"
+import { AgPagination } from "../../../../detroit-ui-components/src/global/vendor/AgPagination"
 import {
   encodeToFrontendFilterString,
   decodeFiltersFromFrontendUrl,

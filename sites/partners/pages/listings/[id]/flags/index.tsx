@@ -5,7 +5,8 @@ import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts"
-import { t, AgPagination, AG_PER_PAGE_OPTIONS } from "@bloom-housing/ui-components"
+import { t, AG_PER_PAGE_OPTIONS } from "@bloom-housing/ui-components"
+import { AgPagination } from "../../../../../../detroit-ui-components/src/global/vendor/AgPagination"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
 import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 

@@ -1,16 +1,8 @@
 import React, { useEffect, useState, Fragment, useContext } from "react"
 import Head from "next/head"
-import {
-  AuthContext,
-  DashBlock,
-  DashBlocks,
-  HeaderBadge,
-  LinkButton,
-  RequireLogin,
-  t,
-  LoadingOverlay,
-} from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { DashBlock, DashBlocks, HeaderBadge, t, LoadingOverlay } from "@bloom-housing/ui-components"
+import { LinkButton } from "../../../../detroit-ui-components/src/actions/LinkButton"
+import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"

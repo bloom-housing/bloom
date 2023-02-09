@@ -1,4 +1,5 @@
-import { Address, Button, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Address, MultiLineAddress, t } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
 import GeocodeService from "@mapbox/mapbox-sdk/services/geocoding"
 
 export interface FoundAddress {

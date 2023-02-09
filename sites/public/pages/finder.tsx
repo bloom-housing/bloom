@@ -4,17 +4,12 @@ import {
   listingFeatures,
   Region,
 } from "@bloom-housing/shared-helpers"
-import {
-  AppearanceStyleType,
-  Button,
-  ButtonGroup,
-  Card,
-  Form,
-  HeadingGroup,
-  ProgressNav,
-  StepHeader,
-  t,
-} from "@bloom-housing/ui-components"
+import { ButtonGroup, Card, Form, t } from "@bloom-housing/ui-components"
+import { Button } from "../../../detroit-ui-components/src/actions/Button"
+import { HeadingGroup } from "../../../detroit-ui-components/src/headers/HeadingGroup"
+import { StepHeader } from "../../../detroit-ui-components/src/headers/StepHeader"
+import { ProgressNav } from "../../../detroit-ui-components/src/navigation/ProgressNav"
+import { AppearanceStyleType } from "../../../detroit-ui-components/src/global/AppearanceTypes"
 import axios from "axios"
 import router from "next/router"
 

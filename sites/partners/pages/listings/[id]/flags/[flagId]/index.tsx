@@ -5,16 +5,11 @@ import { AgGridReact } from "ag-grid-react"
 import { GridApi, RowNode, GridOptions } from "ag-grid-community"
 
 import Layout from "../../../../../layouts/"
-import {
-  t,
-  Button,
-  PageHeader,
-  AlertBox,
-  AppearanceStyleType,
-  useMutate,
-  AuthContext,
-  StatusBar,
-} from "@bloom-housing/ui-components"
+import { t, AppearanceStyleType, useMutate, StatusBar } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { Button } from "../../../../../../../detroit-ui-components/src/actions/Button"
+import { PageHeader } from "../../../../../../../detroit-ui-components/src/headers/PageHeader"
+import { AlertBox } from "../../../../../../../detroit-ui-components/src/notifications/AlertBox"
 import { useSingleFlaggedApplication } from "../../../../../lib/hooks"
 import { getCols } from "../../../../../src/flags/applicationsCols"
 import {

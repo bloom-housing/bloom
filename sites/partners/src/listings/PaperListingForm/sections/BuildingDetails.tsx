@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
-  GridSection,
   GridCell,
   Field,
-  ViewItem,
   Select,
-  FieldGroup,
   ListingMap,
   LatitudeLongitude,
   SelectOption,
 } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
+import { FieldGroup } from "../../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { GridSection } from "../../../../../../detroit-ui-components/src/sections/GridSection"
 import { stateKeys, neighborhoodRegions } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../formTypes"
 import GeocodeService, {

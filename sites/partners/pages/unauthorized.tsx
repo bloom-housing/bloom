@@ -1,6 +1,7 @@
 import Layout from "../layouts"
 import Head from "next/head"
-import { Hero, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Hero } from "../../../detroit-ui-components/src/headers/Hero"
 
 export default () => {
   const pageTitle = t("errors.unauthorized.title")

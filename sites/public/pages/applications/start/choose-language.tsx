@@ -5,22 +5,19 @@ https://github.com/bloom-housing/bloom/issues/277
 */
 import axios from "axios"
 import { useRouter } from "next/router"
-import {
-  Button,
-  ImageCard,
-  LinkButton,
-  FormCard,
-  AuthContext,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { LinkButton } from "../../../../../detroit-ui-components/src/actions/LinkButton"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { FormCard } from "../../../../../detroit-ui-components/src/blocks/FormCard"
+import { ImageCard } from "../../../../../detroit-ui-components/src/blocks/ImageCard"
+import { ProgressNav } from "../../../../../detroit-ui-components/src/navigation/ProgressNav"
 import {
   imageUrlFromListing,
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
-
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useCallback, useContext, useEffect, useState } from "react"

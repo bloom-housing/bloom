@@ -2,15 +2,15 @@ import React, { useContext } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import {
-  SiteHeader,
   SiteFooter,
-  FooterNav,
   FooterSection,
   t,
-  AuthContext,
   MenuLink,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { SiteHeader } from "../../../detroit-ui-components/src/headers/SiteHeader"
+import { FooterNav } from "../../../detroit-ui-components/src/navigation/FooterNav"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)

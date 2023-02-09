@@ -27,6 +27,6 @@
 **/values.dev.yaml
 backend/core/dist
 backend/core/test
-ui-components/__tests__
-ui-components/storybook-static
+detroit-ui-components/__tests__
+detroit-ui-components/storybook-static
 README.md

@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable, GridCell } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 import { MinMax, MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"

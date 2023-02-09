@@ -1,4 +1,4 @@
-import { Field } from "@bloom-housing/ui-components"
+import { Field } from "../../../../../detroit-ui-components/src/forms/Field"
 import { UseFormMethods } from "react-hook-form"
 import { FinderQuestion } from "../../../pages/finder"
 

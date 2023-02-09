@@ -1,6 +1,7 @@
 import React from "react"
 import { AddressUpdate } from "@bloom-housing/backend-core/types"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
 import dayjs from "dayjs"
 
 export const getDetailFieldNumber = (listingNumber: number) => {

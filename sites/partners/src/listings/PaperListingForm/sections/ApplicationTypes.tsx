@@ -4,17 +4,17 @@ import {
   t,
   AppearanceBorderType,
   AppearanceStyleType,
-  Button,
-  Drawer,
   Dropzone,
   GridSection,
   GridCell,
-  FieldGroup,
   Field,
   MinimalTable,
   Select,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../../detroit-ui-components/src/actions/Button"
+import { FieldGroup } from "../../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { Drawer } from "../../../../../../detroit-ui-components/src/overlays/Drawer"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {

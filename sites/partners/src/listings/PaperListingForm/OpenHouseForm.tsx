@@ -2,11 +2,9 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { nanoid } from "nanoid"
 import {
-  Button,
   AppearanceStyleType,
   t,
   GridSection,
-  ViewItem,
   GridCell,
   Field,
   Textarea,
@@ -18,7 +16,8 @@ import {
   formatDateToTimeField,
   urlRegex,
 } from "@bloom-housing/ui-components"
-
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { ViewItem } from "../../../../../detroit-ui-components/src/blocks/ViewItem"
 import { TempEvent } from "./formTypes"
 import { createDate, createTime } from "../../../lib/helpers"
 import dayjs from "dayjs"

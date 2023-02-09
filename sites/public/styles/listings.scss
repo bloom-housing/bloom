@@ -1,146 +1,148 @@
-.listings-title .page-header__group {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @screen md {
-    flex-direction: row;
-  }
-}
-
-.listings-row_figure {
-  .image-card {
-    --default-background-color: transparent;
-  }
-
-  .image-card img {
-    border-radius: 24px;
-    height: 340px;
-    object-fit: cover;
-  }
-
-  .image-card__overlay {
-    background-image: none;
-    border-radius: 24px;
-  }
-
-  .image-card__figcaption {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 24px 0px 24px 24px;
-    bottom: 12px;
-    left: 12px;
-    margin-right: 48px;
-    max-width: 93%;
-    width: max-content;
+#__next {
+  .listings-title .page-header__group {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     @screen md {
-      bottom: 24px;
-      left: 24px;
-      max-width: 696px;
+      flex-direction: row;
     }
-
-    @screen lg {
-      max-width: 440px;
-    }
-
-    .image-card__title {
-      @apply text-lg;
-      color: $tailwind-primary-darker;
-      font-weight: 700;
-      letter-spacing: initial;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-transform: none;
-      white-space: nowrap;
-
-      @screen md {
-        font-size: 1.5rem;
-      }
-    }
-
-    .image-card__subtitle {
-      @apply text-sm;
-      color: $tailwind-primary-darker;
-      letter-spacing: initial;
-      text-transform: none;
-
-      @screen md {
-        font-size: 0.875rem;
-      }
-    }
-  }
-}
-
-// Toggled off
-.latest-listings {
-  .listings-row_table,
-  .listings-row_footer_container {
-    display: none;
-  }
-
-  .listings-row {
-    margin: 0 15px;
-  }
-
-  .listings-row:hover {
-    opacity: 0.7;
-  }
-
-  .listings-row_content {
-    width: 100%;
-    @apply px-0;
   }
 
   .listings-row_figure {
-    padding: 0;
-  }
-
-  .listings-row_figure {
-    width: 390px;
-
-    @screen md {
-      width: 497px;
+    .image-card {
+      --default-background-color: transparent;
     }
-  }
 
-  .image-card img {
-    height: 258px;
-
-    @screen md {
+    .image-card img {
+      border-radius: 24px;
       height: 340px;
+      object-fit: cover;
+    }
+
+    .image-card__overlay {
+      background-image: none;
+      border-radius: 24px;
+    }
+
+    .image-card__figcaption {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 24px 0px 24px 24px;
+      bottom: 12px;
+      left: 12px;
+      margin-right: 48px;
+      max-width: 93%;
+      width: max-content;
+
+      @screen md {
+        bottom: 24px;
+        left: 24px;
+        max-width: 696px;
+      }
+
+      @screen lg {
+        max-width: 440px;
+      }
+
+      .image-card__title {
+        @apply text-lg;
+        color: $tailwind-primary-darker;
+        font-weight: 700;
+        letter-spacing: initial;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-transform: none;
+        white-space: nowrap;
+
+        @screen md {
+          font-size: 1.5rem;
+        }
+      }
+
+      .image-card__subtitle {
+        @apply text-sm;
+        color: $tailwind-primary-darker;
+        letter-spacing: initial;
+        text-transform: none;
+
+        @screen md {
+          font-size: 0.875rem;
+        }
+      }
     }
   }
-}
 
-.coming-soon-listings {
-  .listings-row_table,
-  .listings-row_footer_container {
-    display: none;
-  }
-  .listings-row {
-    @apply mt-0;
-    @apply mb-2;
-    @apply px-4;
-    flex: 1;
-    @screen lg {
-      display: block;
+  // Toggled off
+  .latest-listings {
+    .listings-row_table,
+    .listings-row_footer_container {
+      display: none;
+    }
+
+    .listings-row {
+      margin: 0 15px;
+    }
+
+    .listings-row:hover {
+      opacity: 0.7;
+    }
+
+    .listings-row_content {
+      width: 100%;
+      @apply px-0;
+    }
+
+    .listings-row_figure {
+      padding: 0;
+    }
+
+    .listings-row_figure {
+      width: 390px;
+
+      @screen md {
+        width: 497px;
+      }
+    }
+
+    .image-card img {
+      height: 258px;
+
+      @screen md {
+        height: 340px;
+      }
     }
   }
-  .listings-row_content {
-    width: 100%;
-    padding: 1rem 0 0 0;
-  }
 
-  .listings-row_figure {
-    width: 100%;
-    border-radius: 24px 24px 0 0;
-    padding: 0;
-  }
-  .image-card {
-    --default-background-color: transparent;
-  }
-  img {
-    border-radius: 24px 24px 0 0;
+  .coming-soon-listings {
+    .listings-row_table,
+    .listings-row_footer_container {
+      display: none;
+    }
+    .listings-row {
+      @apply mt-0;
+      @apply mb-2;
+      @apply px-4;
+      flex: 1;
+      @screen lg {
+        display: block;
+      }
+    }
+    .listings-row_content {
+      width: 100%;
+      padding: 1rem 0 0 0;
+    }
+
+    .listings-row_figure {
+      width: 100%;
+      border-radius: 24px 24px 0 0;
+      padding: 0;
+    }
+    .image-card {
+      --default-background-color: transparent;
+    }
+    img {
+      border-radius: 24px 24px 0 0;
+    }
   }
 }

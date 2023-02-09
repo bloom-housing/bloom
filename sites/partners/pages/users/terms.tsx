@@ -1,6 +1,6 @@
 import React from "react"
 import FormsLayout from "../../layouts/forms"
-import { FormTerms } from "@bloom-housing/ui-components"
+import { FormTerms } from "../../../../detroit-ui-components/src/page_components/sign-in/FormTerms"
 
 const TermsPage = () => {
   return (

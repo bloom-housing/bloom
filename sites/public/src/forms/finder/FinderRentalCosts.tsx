@@ -1,5 +1,6 @@
 import { FrontendListingFilterStateKeys } from "@bloom-housing/shared-helpers"
-import { Field, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { Field } from "../../../../../detroit-ui-components/src/forms/Field"
 import { useRouter } from "next/router"
 import { UseFormMethods } from "react-hook-form"
 import { FinderQuestion } from "../../../pages/finder"

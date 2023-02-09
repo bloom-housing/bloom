@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from "react"
-import { AuthContext, RequireLogin, t, FormCard, dateToString } from "@bloom-housing/ui-components"
+import { t, dateToString } from "@bloom-housing/ui-components"
+import { AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import { FormCard } from "../../../../../detroit-ui-components/src/blocks/FormCard"
 import Link from "next/link"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import FormsLayout from "../../../layouts/forms"

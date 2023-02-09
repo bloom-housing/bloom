@@ -9,7 +9,7 @@
       "sites/partners",
       "backend/core",
       "shared-helpers",
-      "ui-components"
+      "detroit-ui-components"
     ],
     "nohoist": [
       "**/@anchan828/nest-sendgrid"
@@ -38,8 +38,8 @@
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
-    "test:shared:ui": "cd ui-components && yarn && yarn test",
-    "test:shared:ui:a11y": "cd ui-components && yarn && yarn test:a11y",
+    "test:shared:ui": "cd detroit-ui-components && yarn && yarn test",
+    "test:shared:ui:a11y": "cd detroit-ui-components && yarn && yarn test:a11y",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core:testdbsetup": "cd backend/core && yarn test:db:setup",
     "test:backend:core": "cd backend/core && yarn test",
@@ -51,7 +51,7 @@
     "db:reseed": "cd backend/core && yarn db:reseed",
     "install:all": "yarn install && cd backend/core && yarn install",
     "setup": "yarn install:all && yarn db:reseed",
-    "clean": "rm -rf backend/core/dist/ backend/core/node_modules/ node_modules/ sites/partners/.next/ sites/partners/node_modules/ sites/public/.next/ sites/public/node_modules/ ui-components/node_modules/"
+    "clean": "rm -rf backend/core/dist/ backend/core/node_modules/ node_modules/ sites/partners/.next/ sites/partners/node_modules/ sites/public/.next/ sites/public/node_modules/ detroit-ui-components/node_modules/"
   },
   "dependencies": {
     "react-remove-scroll": "^2.5.3",

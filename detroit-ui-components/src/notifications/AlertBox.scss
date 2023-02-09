@@ -1,0 +1,91 @@
+.alert-box {
+  @apply relative;
+  @apply py-3;
+  @apply px-4;
+  @apply leading-snug;
+  @apply flex;
+  @apply items-center;
+
+  .alert-box_inner {
+    @apply m-auto;
+    @apply max-w-5xl;
+    @apply px-4;
+    @apply flex-1;
+    @apply flex;
+    @apply items-center;
+  }
+
+  &.narrow {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  // Inverts color scheme of alert
+  &.invert {
+    @apply text-white;
+    svg {
+      fill: white;
+    }
+
+    .close {
+      @apply text-white;
+    }
+  }
+
+  &.alert {
+    @apply bg-alert-light;
+
+    &.invert {
+      @apply bg-alert;
+    }
+  }
+
+  &.primary {
+    @apply bg-primary-light;
+
+    &.invert {
+      @apply bg-primary;
+    }
+  }
+
+  &.success {
+    @apply bg-success-light;
+
+    &.invert {
+      @apply bg-success;
+    }
+  }
+
+  &.warn {
+    @apply bg-warn-light;
+
+    &.invert {
+      @apply bg-warn;
+    }
+  }
+}
+
+.alert-box__head {
+  @apply flex;
+  @apply justify-between;
+  @apply w-full;
+}
+
+.alert-box__title {
+  @apply flex;
+  @apply justify-between;
+}
+
+.alert-box__body {
+  @apply ml-2;
+  @apply font-semibold;
+  @apply text-tiny;
+}
+
+.alert-box__close {
+  @apply text-3xl;
+  right: 1rem;
+  @apply ml-3;
+  @apply p-0;
+  line-height: 1rem;
+}

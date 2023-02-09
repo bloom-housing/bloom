@@ -1,13 +1,7 @@
-import {
-  AppearanceStyleType,
-  Button,
-  Modal,
-  t,
-  Form,
-  Field,
-  useMutate,
-  AuthContext,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Form, Field, useMutate } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { Button } from "../../../detroit-ui-components/src/actions/Button"
+import { Modal } from "../../../detroit-ui-components/src/overlays/Modal"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useContext } from "react"
 import { useForm } from "react-hook-form"

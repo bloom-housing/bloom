@@ -114,3 +114,25 @@ $header-desktop-min-size: 1024px;
     }
   }
 }
+
+// These will be removed as we sync the remaining components
+.aside-block {
+  svg {
+    fill: var(--bloom-color-primary);
+  }
+}
+
+.header-badge {
+  svg {
+    width: 3rem;
+    height: 3rem;
+    @media (max-width: 640px) {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+}
+
+.alert-box.primary {
+  background-color: var(--bloom-color-gray-400);
+}

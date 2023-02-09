@@ -3,23 +3,17 @@
 Type of alternate contact
 */
 import React, { Fragment, useContext, useEffect } from "react"
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  ErrorMessage,
-  Field,
-  Form,
-  FormCard,
-  ProgressNav,
-  t,
-  AuthContext,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, ErrorMessage, Field, Form, t } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { FormCard } from "../../../../../detroit-ui-components/src/blocks/FormCard"
+import { ProgressNav } from "../../../../../detroit-ui-components/src/navigation/ProgressNav"
+import { AlertBox } from "../../../../../detroit-ui-components/src/notifications/AlertBox"
 import {
   altContactRelationshipKeys,
   OnClientSide,
   PageView,
   pushGtmEvent,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"

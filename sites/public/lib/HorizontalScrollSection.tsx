@@ -1,5 +1,6 @@
-import { Button, debounce } from "@bloom-housing/ui-components"
-import { Icon, IconTypes } from "@bloom-housing/ui-components/src/icons/Icon"
+import { debounce } from "@bloom-housing/ui-components"
+import { Button } from "../../../detroit-ui-components/src/actions/Button"
+import { Icon, IconTypes } from "../../../detroit-ui-components/src/icons/Icon"
 import React, { useEffect, useState } from "react"
 import styles from "../lib/HorizontalScrollSection.module.scss"
 

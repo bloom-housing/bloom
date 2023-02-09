@@ -1,6 +1,6 @@
 import React from "react"
-import { LinkButton, Icon } from "@bloom-housing/ui-components"
-import { IconTypes } from "../../../ui-components/src/icons/Icon"
+import { LinkButton } from "../../../detroit-ui-components/src/actions/LinkButton"
+import { Icon, IconTypes } from "../../../detroit-ui-components/src/icons/Icon"
 
 interface ResourceLinkCardProps {
   iconSymbol: IconTypes

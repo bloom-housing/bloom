@@ -27,7 +27,7 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^4.4.0",
     "@bloom-housing/shared-helpers": "^4.4.0",
-    "@bloom-housing/ui-components": "^4.4.0",
+    "@bloom-housing/ui-components": "^8.0.1",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",

@@ -4,20 +4,15 @@ View of application terms with checkbox
 */
 import React, { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  AuthContext,
-  FieldGroup,
-  Form,
-  AlertBox,
-  ProgressNav,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Form } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { FormCard } from "../../../../../detroit-ui-components/src/blocks/FormCard"
+import { FieldGroup } from "../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { ProgressNav } from "../../../../../detroit-ui-components/src/navigation/ProgressNav"
+import { AlertBox } from "../../../../../detroit-ui-components/src/notifications/AlertBox"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"

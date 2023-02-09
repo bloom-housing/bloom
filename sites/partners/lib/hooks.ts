@@ -2,7 +2,7 @@ import { useContext } from "react"
 import useSWR, { mutate } from "swr"
 import qs from "qs"
 
-import { AuthContext } from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,

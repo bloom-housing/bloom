@@ -8,19 +8,19 @@ ENV PORT=40953
 
 COPY . .
 
-WORKDIR /usr/src/app/ui-components
+WORKDIR /usr/src/app/detroit-ui-components
 
-COPY ui-components/yarn*.lock ui-components/package.json ./
+COPY detroit-ui-components/yarn*.lock detroit-ui-components/package.json ./
 
 RUN yarn install
 
-COPY ./ui-components .
+COPY ./detroit-ui-components .
 
 RUN yarn build-storybook
 
 EXPOSE ${PORT}
 
-WORKDIR /usr/src/app/ui-components/storybook-static
+WORKDIR /usr/src/app/detroit-ui-components/storybook-static
 
 # Can't use the ["", ""] syntax here because it doesn't interpolate variables.
 # This is the "shell" form of CMD

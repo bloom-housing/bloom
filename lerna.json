@@ -1,5 +1,11 @@
 {
-  "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "ui-components"],
+  "packages": [
+    "sites/public",
+    "sites/partners",
+    "backend/core",
+    "shared-helpers",
+    "detroit-ui-components"
+  ],
   "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true,

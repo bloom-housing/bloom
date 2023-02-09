@@ -1,14 +1,10 @@
 import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
-import {
-  PageHeader,
-  AgPagination,
-  Button,
-  AppearanceSizeType,
-  t,
-  AuthContext,
-  Drawer,
-} from "@bloom-housing/ui-components"
+import { AppearanceSizeType, t } from "@bloom-housing/ui-components"
+import { Button } from "../../../detroit-ui-components/src/actions/Button"
+import { Drawer } from "../../../detroit-ui-components/src/overlays/Drawer"
+import { PageHeader } from "../../../detroit-ui-components/src/headers/PageHeader"
+import { AgPagination } from "../../../detroit-ui-components/src/global/vendor/AgPagination"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import { useRouter } from "next/router"
@@ -20,6 +16,7 @@ import {
   pushGtmEvent,
   encodeToFrontendFilterString,
   ListingFilterState,
+  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 

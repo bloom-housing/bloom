@@ -3,13 +3,13 @@ import {
   t,
   GridSection,
   MinimalTable,
-  Button,
   AppearanceSizeType,
-  Drawer,
   AppearanceStyleType,
   Field,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../../detroit-ui-components/src/actions/Button"
+import { Drawer } from "../../../../../../detroit-ui-components/src/overlays/Drawer"
 import { useFormContext } from "react-hook-form"
 import { Preference, Program } from "@bloom-housing/backend-core/types"
 

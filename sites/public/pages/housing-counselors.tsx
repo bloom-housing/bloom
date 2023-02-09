@@ -2,8 +2,8 @@ import { Component } from "react"
 import axios from "axios"
 
 import { HousingCounselor as Counselor } from "@bloom-housing/backend-core/types"
-import { HousingCounselor, PageHeader, t } from "@bloom-housing/ui-components"
-
+import { HousingCounselor, t } from "@bloom-housing/ui-components"
+import { PageHeader } from "../../../detroit-ui-components/src/headers/PageHeader"
 import Layout from "../layouts/application"
 
 interface HousingCounselorsProps {

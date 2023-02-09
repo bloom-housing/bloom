@@ -1,5 +1,5 @@
-import { addTranslation } from "../../../ui-components/src/helpers/translator"
-import general from "../../../ui-components/src/locales/general.json"
+import { addTranslation } from "@bloom-housing/ui-components"
+import general from "../../../detroit-ui-components/src/locales/general.json"
 import general_overrides from "../page_content/locale_overrides/general.json"
 import "@testing-library/jest-dom/extend-expect"
 

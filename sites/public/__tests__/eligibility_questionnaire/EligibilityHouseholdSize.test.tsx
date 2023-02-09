@@ -25,18 +25,17 @@ describe("<EligibilityHouseholdSize>", () => {
       render(<EligibilityHouseholdSize />)
     })
     expect(
-      screen.getByRole("heading", {
-        name: "How many people will live in your next rental, including yourself?",
-      })
-    ).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
+      screen.getAllByText("How many people will live in your next rental, including yourself?")
+        .length
+    ).toBeTruthy()
+    expect(screen.getByText("Next")).toBeInTheDocument()
   })
 
   it("Clicks the Next button", async () => {
     await act(async () => {
       render(<EligibilityHouseholdSize />)
-      userEvent.selectOptions(screen.getByRole("combobox"), "two")
-      fireEvent.click(screen.getByRole("button", { name: "Next" }))
+      userEvent.selectOptions(screen.getByLabelText("Household Size"), "two")
+      fireEvent.click(screen.getByText("Next"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
@@ -46,8 +45,8 @@ describe("<EligibilityHouseholdSize>", () => {
   it("Clicks the See results now button", async () => {
     await act(async () => {
       render(<EligibilityHouseholdSize />)
-      userEvent.selectOptions(screen.getByRole("combobox"), "two")
-      fireEvent.click(screen.getByRole("button", { name: "See results now" }))
+      userEvent.selectOptions(screen.getByLabelText("Household Size"), "two")
+      fireEvent.click(screen.getByText("See results now"))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)

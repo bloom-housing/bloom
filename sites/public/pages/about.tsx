@@ -1,5 +1,6 @@
 import React from "react"
-import { t, PageHeader } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { PageHeader } from "../../../detroit-ui-components/src/headers/PageHeader"
 import Layout from "../layouts/application"
 
 export default function About() {

@@ -1,6 +1,7 @@
 import React from "react"
 import Head from "next/head"
-import { PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
+import { SiteAlert, t } from "@bloom-housing/ui-components"
+import { PageHeader } from "../../../../../../detroit-ui-components/src/headers/PageHeader"
 import Layout from "../../../../layouts"
 import PaperApplicationForm from "../../../../src/applications/PaperApplicationForm/PaperApplicationForm"
 import { useRouter } from "next/router"

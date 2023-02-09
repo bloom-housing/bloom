@@ -3,18 +3,18 @@ import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   DOBField,
   Field,
   Select,
   AppearanceStyleType,
   AppearanceBorderType,
-  FieldGroup,
-  Button,
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { ViewItem } from "../../../../../detroit-ui-components/src/blocks/ViewItem"
+import { FieldGroup } from "../../../../../detroit-ui-components/src/forms/FieldGroup"
 import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "./FormTypes"
@@ -211,7 +211,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <FormAddress
             subtitle={t("application.details.residenceAddress")}
             dataKey="address"
-            type="residence-member"
             register={register}
             stateKeys={stateKeys}
           />
@@ -221,7 +220,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           <FormAddress
             subtitle={t("application.contact.workAddress")}
             dataKey="workAddress"
-            type="work"
             register={register}
             stateKeys={stateKeys}
           />

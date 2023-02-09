@@ -4,13 +4,14 @@ Optional application summary
 */
 import Link from "next/link"
 import dayjs from "dayjs"
-import { AuthContext, FormCard, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { FormCard } from "../../../../detroit-ui-components/src/blocks/FormCard"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
 import { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import { DATE_FORMAT, UserStatus } from "../../lib/constants"
-import { pushGtmEvent, PageView } from "@bloom-housing/shared-helpers"
+import { pushGtmEvent, PageView, AuthContext } from "@bloom-housing/shared-helpers"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)

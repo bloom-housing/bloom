@@ -1,12 +1,8 @@
 import React from "react"
-import {
-  AppearanceStyleType,
-  t,
-  GridSection,
-  ViewItem,
-  Button,
-  Drawer,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, GridSection } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { ViewItem } from "../../../../../detroit-ui-components/src/blocks/ViewItem"
+import { Drawer } from "../../../../../detroit-ui-components/src/overlays/Drawer"
 import { AddressColsType, DetailsAddressColumns } from "./DetailsAddressColumns"
 import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../PaperApplicationForm/FormTypes"

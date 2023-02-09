@@ -1,6 +1,7 @@
 import Link from "next/link"
 
-import { t, AppearanceStyleType, AppearanceSizeType, Tag } from "@bloom-housing/ui-components"
+import { t, AppearanceStyleType, AppearanceSizeType } from "@bloom-housing/ui-components"
+import { Tag } from "../../../../detroit-ui-components/src/text/Tag"
 import { EnumApplicationFlaggedSetStatus } from "@bloom-housing/backend-core/types"
 
 export const getFlagSetCols = () => [

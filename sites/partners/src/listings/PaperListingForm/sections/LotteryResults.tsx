@@ -4,13 +4,13 @@ import {
   t,
   AppearanceBorderType,
   AppearanceStyleType,
-  Button,
-  Drawer,
   Dropzone,
   MinimalTable,
   TableThumbnail,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../../detroit-ui-components/src/actions/Button"
+import { Drawer } from "../../../../../../detroit-ui-components/src/overlays/Drawer"
 import {
   ListingEvent,
   ListingEventCreate,

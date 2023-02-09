@@ -1,4 +1,5 @@
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { PageHeader } from "../../../detroit-ui-components/src/headers/PageHeader"
 import Layout from "../layouts/application"
 
 const Feedback = () => {

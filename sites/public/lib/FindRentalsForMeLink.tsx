@@ -1,4 +1,5 @@
-import { AppearanceSizeType, LinkButton } from "@bloom-housing/ui-components"
+import { AppearanceSizeType } from "@bloom-housing/ui-components"
+import { LinkButton } from "../../../detroit-ui-components/src/actions/LinkButton"
 import React from "react"
 import styles from "../lib/FindRentalsForMeLink.module.scss"
 

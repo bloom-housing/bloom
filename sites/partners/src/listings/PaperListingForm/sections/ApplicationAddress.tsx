@@ -7,11 +7,11 @@ import {
   Field,
   GridCell,
   Select,
-  ViewItem,
   DateField,
-  FieldGroup,
   TimeField,
 } from "@bloom-housing/ui-components"
+import { ViewItem } from "../../../../../../detroit-ui-components/src/blocks/ViewItem"
+import { FieldGroup } from "../../../../../../detroit-ui-components/src/forms/FieldGroup"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../formTypes"

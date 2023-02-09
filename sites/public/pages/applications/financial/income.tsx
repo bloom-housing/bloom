@@ -4,24 +4,17 @@ Total pre-tax household income from all sources
 */
 import React, { useContext, useEffect, useState } from "react"
 import { Listing } from "@bloom-housing/backend-core/types"
-import {
-  AppearanceStyleType,
-  AlertBox,
-  AlertNotice,
-  Button,
-  Field,
-  FieldGroup,
-  Form,
-  FormCard,
-  ProgressNav,
-  t,
-  AuthContext,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, AlertNotice, Field, Form, t } from "@bloom-housing/ui-components"
+import { Button } from "../../../../../detroit-ui-components/src/actions/Button"
+import { FormCard } from "../../../../../detroit-ui-components/src/blocks/FormCard"
+import { FieldGroup } from "../../../../../detroit-ui-components/src/forms/FieldGroup"
+import { ProgressNav } from "../../../../../detroit-ui-components/src/navigation/ProgressNav"
+import { AlertBox } from "../../../../../detroit-ui-components/src/notifications/AlertBox"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 
 type IncomeError = "low" | "high" | null

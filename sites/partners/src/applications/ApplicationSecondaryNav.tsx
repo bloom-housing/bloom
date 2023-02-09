@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
-import { PageHeader, t, TabNav, TabNavItem, AppearanceSizeType } from "@bloom-housing/ui-components"
+import { t, TabNav, TabNavItem, AppearanceSizeType } from "@bloom-housing/ui-components"
+import { PageHeader } from "../../../../detroit-ui-components/src/headers/PageHeader"
 import { useRouter } from "next/router"
 
 type ApplicationSecondaryNavProps = {
