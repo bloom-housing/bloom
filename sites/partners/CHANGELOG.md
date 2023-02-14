@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.6...@bloom-housing/partners@7.7.0) (2023-02-14)
+
+
+### Features
+
+* resetting migrations ([#3309](https://github.com/bloom-housing/bloom/issues/3309)) ([e77ce13](https://github.com/bloom-housing/bloom/commit/e77ce13154cb91be85eb9da5a0268c207295e203))
+
+
+
+
+
 ## [7.6.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.5...@bloom-housing/partners@7.6.6) (2023-02-07)
 
 **Note:** Version bump only for package @bloom-housing/partners
