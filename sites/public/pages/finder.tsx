@@ -5,11 +5,12 @@ import {
   Region,
 } from "@bloom-housing/shared-helpers"
 import { ButtonGroup, Card, Form, t } from "@bloom-housing/ui-components"
-import { Button } from "../../../detroit-ui-components/src/actions/Button"
-import { HeadingGroup } from "../../../detroit-ui-components/src/headers/HeadingGroup"
-import { StepHeader } from "../../../detroit-ui-components/src/headers/StepHeader"
-import { ProgressNav } from "../../../detroit-ui-components/src/navigation/ProgressNav"
-import { AppearanceStyleType } from "../../../detroit-ui-components/src/global/AppearanceTypes"
+import {
+  AppearanceStyleType,
+  Button,
+  StepHeader,
+  ProgressNav,
+} from "../../../detroit-ui-components"
 import axios from "axios"
 import router from "next/router"
 
@@ -42,7 +43,7 @@ const Finder = () => {
   const [questionIndex, setQuestionIndex] = useState<number>(0)
   const [formData, setFormData] = useState<FinderQuestion[]>([])
   const [isDisclaimer, setIsDisclaimer] = useState<boolean>(false)
-  const finderBody = useRef(null)
+  const finderSectionHeader = useRef(null)
   const minRent = watch("minRent")
   const maxRent = watch("maxRent")
 
@@ -237,38 +238,39 @@ const Finder = () => {
       setFormData(formCopy)
       if (questionIndex >= formData.length - 1) setIsDisclaimer(true)
       setQuestionIndex(questionIndex + 1)
-      finderBody.current.focus()
+      finderSectionHeader.current.focus()
     }
   }
   const previousQuestion = () => {
     setIsDisclaimer(false)
     setQuestionIndex(questionIndex - 1)
-    finderBody.current.focus()
+    finderSectionHeader.current.focus()
   }
 
   const skipToListings = () => {
     setIsDisclaimer(true)
     setQuestionIndex(formData.length)
+    finderSectionHeader.current.focus()
   }
 
   return (
     <Layout>
       <Form onSubmit={handleSubmit(onSubmit)} className="bg-gray-300 border-t border-gray-450">
-        <div tabIndex={-1} ref={finderBody} className="md:mb-8 mt-8 mx-auto max-w-5xl">
+        <div className="md:mb-8 mt-8 mx-auto max-w-5xl">
           <ProgressHeader />
           <Card className="finder-card">
             {formData?.length > 0 && (
               <div>
                 <Card.Header>
-                  <HeadingGroup
-                    headingPriority={3}
-                    heading={
-                      !isDisclaimer ? activeQuestion.question : t("finder.disclaimer.header")
-                    }
-                    subheading={
-                      !isDisclaimer ? activeQuestion.subtitle : t("finder.disclaimer.subtitle")
-                    }
-                  />
+                  {/* Deconstructed header group to support ref */}
+                  <hgroup role="group">
+                    <h3 tabIndex={-1} ref={finderSectionHeader}>
+                      {!isDisclaimer ? activeQuestion.question : t("finder.disclaimer.header")}
+                    </h3>
+                    <p aria-roledescription="subtitle">
+                      {!isDisclaimer ? activeQuestion.subtitle : t("finder.disclaimer.subtitle")}
+                    </p>
+                  </hgroup>
                 </Card.Header>
                 <Card.Section className={!isDisclaimer ? "" : "finder-disclaimer"}>
                   {!isDisclaimer ? (
