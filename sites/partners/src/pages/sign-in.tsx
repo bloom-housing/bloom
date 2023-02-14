@@ -6,8 +6,10 @@ import {
   NetworkStatusType,
   NetworkStatusContent,
   AuthContext,
+  FormSignIn,
+  ResendConfirmationModal,
 } from "@bloom-housing/shared-helpers"
-import { FormSignIn, useMutate, t, ResendConfirmationModal } from "@bloom-housing/ui-components"
+import { useMutate, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
   EnumRequestMfaCodeMfaType,
@@ -139,7 +141,7 @@ const SignIn = () => {
         )}
         control={{ register, errors, handleSubmit, watch }}
         networkStatus={{
-          content: { ...networkStatusContent, error: !!networkStatusContent?.error },
+          content: networkStatusContent,
           type: networkStatusType,
           reset: () => {
             reset()

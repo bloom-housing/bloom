@@ -141,7 +141,10 @@ export const mapFormToApi = ({
       return mapCheckboxesToApi(data, pref, ApplicationSection.preferences)
     }
     if (inputType === "radio") {
-      return mapRadiosToApi({ [pref.text]: data.application.preferences[pref.text] }, pref)
+      return mapRadiosToApi(
+        { [pref.text]: data.application.preferences[pref.text] as string },
+        pref
+      )
     }
   })
 
@@ -151,7 +154,10 @@ export const mapFormToApi = ({
       return mapCheckboxesToApi(data, program, ApplicationSection.programs)
     }
     if (inputType === "radio") {
-      return mapRadiosToApi({ [program.text]: data.application.programs[program.text] }, program)
+      return mapRadiosToApi(
+        { [program.text]: data.application.programs[program.text] as string },
+        program
+      )
     }
   })
 

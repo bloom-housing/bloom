@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.5...@bloom-housing/partners@7.6.6) (2023-02-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.6.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.4...@bloom-housing/partners@7.6.5) (2023-02-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.6.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.3...@bloom-housing/partners@7.6.4) (2023-02-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.6.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.2...@bloom-housing/partners@7.6.3) (2023-02-01)
+
+
+### Bug Fixes
+
+* add main content id ([#3299](https://github.com/bloom-housing/bloom/issues/3299)) ([062335b](https://github.com/bloom-housing/bloom/commit/062335bd0a1a7af2cc9e7f2bc9a44dad6163d3d9))
+
+
+
+
+
+## [7.6.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.1...@bloom-housing/partners@7.6.2) (2023-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [7.6.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.0...@bloom-housing/partners@7.6.1) (2023-01-31)
 
 

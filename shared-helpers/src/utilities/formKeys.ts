@@ -155,6 +155,7 @@ interface subCheckboxes {
 
 // Transform an object with keys that may be prepended with a string to an array of only the values with the string
 export const fieldGroupObjectToArray = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formObject: { [key: string]: any },
   rootKey: string
 ): string[] => {

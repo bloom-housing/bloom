@@ -109,15 +109,7 @@ const ApplicationChooseLanguage = () => {
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
-          labels={
-            listing?.applicationConfig.sections || [
-              "You",
-              "Household",
-              "Income",
-              "Preferences",
-              "Review",
-            ]
-          }
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
           mounted={OnClientSide()}
         />
       </FormCard>

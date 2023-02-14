@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.1...@bloom-housing/backend-core@7.7.2) (2023-02-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [7.7.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.0...@bloom-housing/backend-core@7.7.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* fix flaky test by configuring the thottler ([#3305](https://github.com/bloom-housing/bloom/issues/3305)) ([82e5755](https://github.com/bloom-housing/bloom/commit/82e5755de248b47eb2e81cfb4bea7dddc1cb9617))
+
+
+
+
+
 # [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.6.0...@bloom-housing/backend-core@7.7.0) (2023-01-26)
 
 
