@@ -130,6 +130,7 @@ const reducer = createReducer(
     initialStateLoaded: false,
     storageType: "session",
     language: "en",
+    accessToken: undefined,
   } as AuthState,
   {
     SAVE_TOKEN: (state, { payload }) => {
@@ -179,7 +180,10 @@ const reducer = createReducer(
 )
 
 export const AuthContext = createContext<Partial<ContextProps>>({})
-export const AuthProvider: FunctionComponent = ({ children }) => {
+export const AuthProvider: FunctionComponent<{ isTesting?: boolean }> = ({
+  children,
+  isTesting = false, // Set this to true for tests that you need to set the user
+}) => {
   const { apiUrl, storageType } = useContext(ConfigContext)
   const { router } = useContext(NavigationContext)
   const [state, dispatch] = useReducer(reducer, {
@@ -187,6 +191,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     initialStateLoaded: false,
     storageType,
     language: router.locale,
+    accessToken: isTesting ? "fakeToken" : undefined,
   })
 
   const userService = useMemo(() => new UserService(), [])

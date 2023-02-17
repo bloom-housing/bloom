@@ -457,9 +457,30 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
   }
 }
 
+export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string => {
+  const now = new Date()
+  return dayjs(now).format(format)
+}
+
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
   const { applicationsService } = useContext(AuthContext)
 
+  return useCsvExport(
+    () => applicationsService.listAsCsv({ listingId, includeDemographics }),
+    `applications-${listingId}-${createDateStringFromNow()}.csv`
+  )
+}
+
+export const useUsersExport = () => {
+  const { userService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => userService.listAsCsv(),
+    `users-${createDateStringFromNow("YYYY-MM-DD")}.csv`
+  )
+}
+
+const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
 
@@ -468,26 +489,20 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     setCsvExportLoading(true)
 
     try {
-      const content = await applicationsService.listAsCsv({
-        listingId,
-        includeDemographics,
-      })
-
-      const now = new Date()
-      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
+      const content = await endpoint()
 
       const blob = new Blob([content], { type: "text/csv" })
       const fileLink = document.createElement("a")
-      fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
+      fileLink.setAttribute("download", fileName)
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
     } catch (err) {
       setCsvExportError(true)
-      setSiteAlertMessage(err.response.data.error, "alert")
+      setSiteAlertMessage("User Export Failed", "alert")
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, includeDemographics, listingId])
+  }, [endpoint, fileName])
 
   return {
     onExport,

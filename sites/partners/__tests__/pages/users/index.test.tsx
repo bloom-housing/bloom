@@ -47,7 +47,7 @@ describe("users", () => {
         return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
       })
     )
-    const { findByText, getByText } = render(
+    const { findByText, getByText, queryAllByText } = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <Users />
@@ -60,6 +60,7 @@ describe("users", () => {
     expect(getByText("Users")).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
     expect(getByText("Add User")).toBeInTheDocument()
+    expect(queryAllByText("Export")).toHaveLength(0)
 
     const name = await findByText("First Last")
     expect(name).toBeInTheDocument()
@@ -67,5 +68,32 @@ describe("users", () => {
     expect(getByText("Administrator")).toBeInTheDocument()
     expect(getByText("09/04/2022")).toBeInTheDocument()
     expect(getByText("Confirmed")).toBeInTheDocument()
+  })
+
+  it("should render Export when user is admin", async () => {
+    server.use(
+      rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
+        return res(ctx.json([]))
+      }),
+      rest.get("http://localhost:3100/user/list", (_req, res, ctx) => {
+        return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
+      }),
+      // set logged in user as admin
+      rest.get("http://localhost:3100/user", (_req, res, ctx) => {
+        return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
+      })
+    )
+    const { findByText, getByText } = render(
+      <ConfigProvider apiUrl={"http://localhost:3100"}>
+        <AuthProvider isTesting={true}>
+          <Users />
+        </AuthProvider>
+      </ConfigProvider>
+    )
+
+    const header = await findByText("Partners Portal")
+    expect(header).toBeInTheDocument()
+    expect(getByText("Add User")).toBeInTheDocument()
+    expect(getByText("Export")).toBeInTheDocument()
   })
 })
