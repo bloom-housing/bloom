@@ -242,7 +242,7 @@ export const getListings = (listings) => {
         cellClassName: "px-5 py-3",
       }}
       contentProps={{
-        contentHeader: { text: listing.name },
+        contentHeader: { text: listing.name, priority: 3 },
         contentSubheader: { text: getListingCardSubtitle(listing.buildingAddress) },
         tableHeader: { text: listing.showWaitlist ? t("listings.waitlist.open") : null },
       }}

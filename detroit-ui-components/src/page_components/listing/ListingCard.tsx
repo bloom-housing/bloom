@@ -11,6 +11,7 @@ import "./ListingCard.scss"
 
 export interface ListingCardHeader {
   customClass?: string
+  priority?: number
   text: string
 }
 
@@ -91,8 +92,13 @@ const ListingCard = (props: ListingCardProps) => {
   const getContentHeader = () => {
     return (
       <>
-        {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
-        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
+        {getHeader(
+          contentProps?.contentHeader,
+          contentProps?.contentHeader?.priority ?? 2,
+          "cardHeader",
+          "order-1"
+        )}
+        <p className="card-subheader order-2">{contentProps?.contentSubheader?.text}</p>
       </>
     )
   }
@@ -105,8 +111,14 @@ const ListingCard = (props: ListingCardProps) => {
               <hr className={"mb-2"} />
             )}
           <div className={"listings-row_headers"}>
-            {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
-            {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
+            {getHeader(
+              contentProps?.tableHeader,
+              contentProps?.tableHeader?.priority ?? 3,
+              "tableHeader"
+            )}
+            <p className="table-subheader" aria-roledescription="subtitle">
+              {contentProps?.tableSubheader?.text}
+            </p>
             {cardTags && cardTags?.length > 0 && (
               <div className={"inline-flex flex-wrap justify-start w-full"}>
                 {cardTags?.map((cardTag, index) => {
