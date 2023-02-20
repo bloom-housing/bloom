@@ -22,7 +22,6 @@ import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 import dbOptions from "../../ormconfig.test"
 import { EmailService } from "../../src/email/email.service"
 import { ApplicationFlaggedSetsCronjobService } from "../../src/application-flagged-sets/application-flagged-sets-cronjob.service"
-import { ListingRepository } from "../../src/listings/db/listing.repository"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -60,13 +59,7 @@ describe("ApplicationFlaggedSets", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([
-          ApplicationFlaggedSet,
-          Application,
-          HouseholdMember,
-          Listing,
-          ListingRepository,
-        ]),
+        TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,

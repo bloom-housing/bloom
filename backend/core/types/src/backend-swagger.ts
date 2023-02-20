@@ -3691,6 +3691,9 @@ export interface UserRoles {
   user: Id
 
   /**  */
+  userId: string
+
+  /**  */
   isAdmin?: boolean
 
   /**  */
@@ -4058,6 +4061,9 @@ export interface PaginatedUserList {
 
 export interface UserRolesCreate {
   /**  */
+  userId: string
+
+  /**  */
   isAdmin?: boolean
 
   /**  */
@@ -4414,6 +4420,9 @@ export interface ListingImage {
   image: AssetUpdate
 
   /**  */
+  imageId?: string
+
+  /**  */
   ordinal?: number
 }
 
@@ -4495,6 +4504,12 @@ export interface MultiselectQuestion {
 export interface ListingMultiselectQuestion {
   /**  */
   multiselectQuestion: MultiselectQuestion
+
+  /**  */
+  listingId?: string
+
+  /**  */
+  multiselectQuestionId: string
 
   /**  */
   ordinal?: number
@@ -5085,6 +5100,9 @@ export interface ListingImageUpdate {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  imageId?: string
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5209,7 +5227,13 @@ export interface ListingMultiselectQuestionUpdate {
   multiselectQuestion: Id
 
   /**  */
+  multiselectQuestionId: string
+
+  /**  */
   ordinal?: number
+
+  /**  */
+  listingId?: string
 }
 
 export interface ListingCreate {

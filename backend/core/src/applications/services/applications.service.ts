@@ -25,7 +25,7 @@ import { PaginatedApplicationListQueryParams } from "../dto/paginated-applicatio
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
-import { ListingRepository } from "../../listings/db/listing.repository"
+import { createQueryBuilder, getJurisdictionIdByListingId } from "../../listings/db/listing-helpers"
 import { Listing } from "../../listings/entities/listing.entity"
 import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
@@ -37,7 +37,7 @@ export class ApplicationsService {
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
-    @InjectRepository(ListingRepository) private readonly listingsRepository: ListingRepository
+    @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
@@ -137,8 +137,7 @@ export class ApplicationsService {
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
 
-    const listing = await this.listingsRepository
-      .createQueryBuilder("listings")
+    const listing = await createQueryBuilder(this.listingsRepository, "listings")
       .where(`listings.id = :listingId`, { listingId: applicationCreateDto.listing.id })
       .select(["listings.applicationDueDate", "listings.id"])
       .getOne()
@@ -387,7 +386,7 @@ export class ApplicationsService {
     listingId: string,
     action
   ) {
-    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
+    const jurisdictionId = await getJurisdictionIdByListingId(this.listingsRepository, listingId)
 
     const resource: T & { listingId: string; jurisdictionId: string } = {
       ...app,
@@ -402,7 +401,7 @@ export class ApplicationsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
-    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
+    const jurisdictionId = await getJurisdictionIdByListingId(this.listingsRepository, listingId)
 
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
       id: listingId,

@@ -385,8 +385,9 @@ describe("Listings", () => {
       description: "TestDescription",
       applicationSection: ApplicationSection.programs,
     })
-    listing.listingMultiselectQuestions = [{ multiselectQuestion: newProgram, ordinal: 1 }]
-
+    listing.listingMultiselectQuestions = [
+      { multiselectQuestion: newProgram, ordinal: 1, multiselectQuestionId: newProgram.id },
+    ]
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)

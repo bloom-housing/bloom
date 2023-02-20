@@ -1,12 +1,24 @@
-import { Column, Entity, ManyToOne } from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, PrimaryColumn } from "typeorm"
 import { MultiselectQuestion } from "./multiselect-question.entity"
 import { Expose, Type } from "class-transformer"
-import { IsNumber, IsOptional } from "class-validator"
+import { IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "listing_multiselect_questions" })
 export class ListingMultiselectQuestion {
+  @PrimaryGeneratedColumn("uuid")
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  multiselectQuestionId: string
+
+  @PrimaryColumn("uuid")
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  listingId: string
+
   @ManyToOne(() => Listing, (listing) => listing.listingMultiselectQuestions, {
     primary: true,
     orphanedRowAction: "delete",

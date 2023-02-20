@@ -21,9 +21,9 @@ import { getTestAppBody } from "../lib/get-test-app-body"
 import { UserDto } from "../../src/auth/dto/user.dto"
 import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
+import { User } from "../../src/auth/entities/user.entity"
 import { EmailService } from "../../src/email/email.service"
-import { UserRepository } from "../../src/auth/repositories/user-repository"
-import { ListingRepository } from "../../src/listings/db/listing.repository"
+import { findByEmail } from "../../src/auth/helpers/user-helpers"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -55,13 +55,7 @@ describe("Applications", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([
-          Application,
-          HouseholdMember,
-          Listing,
-          UserRepository,
-          ListingRepository,
-        ]),
+        TypeOrmModule.forFeature([Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 2,
@@ -663,8 +657,8 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<UserRepository>(getRepositoryToken(UserRepository))
-    const user = await userRepository.findByEmail(userCreateDto.email)
+    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
+    const user = await findByEmail(userRepository, userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)

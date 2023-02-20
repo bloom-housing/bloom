@@ -125,7 +125,7 @@ describe("Admin User Mangement Tests", () => {
         []
       )
     })
-    cy.getByTestId("jurisdictions").last().click()
+    cy.getByTestId("jurisdictions").first().click()
     cy.getByTestId("listings_Alameda").first().click()
     cy.getByTestId("listings_Alameda").last().click()
     cy.getByTestId("invite-user").click()

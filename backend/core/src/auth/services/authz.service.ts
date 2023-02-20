@@ -7,11 +7,12 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoleEnum } from "../enum/user-role-enum"
 import { authzActions } from "../enum/authz-actions.enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
-import { UserRepository } from "../repositories/user-repository"
+import { Repository } from "typeorm"
+import { findById } from "../helpers/user-helpers"
 
 @Injectable()
 export class AuthzService {
-  constructor(@InjectRepository(UserRepository) private readonly userRepository: UserRepository) {}
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
   /**
    * Check whether this is an authorized action based on the authz rules.
    * @param user User making the request. If not specified, the request will be authorized against a user with role
@@ -38,7 +39,7 @@ export class AuthzService {
       e = await this.addUserPermissions(e, user)
 
       if (type === "user" && obj?.id && !obj?.jurisdictionId) {
-        const accessedUser = await this.userRepository.findById(obj.id)
+        const accessedUser = await findById(this.userRepository, obj.id)
         obj.jurisdictionId = accessedUser.jurisdictions.map((jurisdiction) => jurisdiction.id)[0]
       }
     }

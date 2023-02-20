@@ -11,7 +11,6 @@ import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
-import { ListingRepository } from "./db/listing.repository"
 import { ListingUtilities } from "./entities/listing-utilities.entity"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 import { ListingsCronService } from "./listings-cron.service"
@@ -24,7 +23,6 @@ import { ListingsCronService } from "./listings-cron.service"
       Unit,
       User,
       AmiChart,
-      ListingRepository,
       ListingFeatures,
       ListingUtilities,
     ]),

@@ -183,6 +183,7 @@ const FormUserManage = ({
       isAdmin: role.includes(RoleOption.Administrator),
       isPartner: role.includes(RoleOption.Partner),
       isJurisdictionalAdmin: role.includes(RoleOption.JurisdictionalAdmin),
+      userId: undefined,
     }))()
 
     const leasingAgentInListings = user_listings?.map((id) => ({ id })) || []

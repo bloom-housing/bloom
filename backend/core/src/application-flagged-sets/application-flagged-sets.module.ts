@@ -7,14 +7,14 @@ import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity
 import { Application } from "../applications/entities/application.entity"
 import { ApplicationFlaggedSetsCronjobService } from "./application-flagged-sets-cronjob.service"
 import { SharedModule } from "../shared/shared.module"
-import { ListingRepository } from "../listings/db/listing.repository"
 import { CronJobService } from "../shared/services/cron-job.service"
 import { CronJob } from "../shared/entities/cron-job.entity"
 import { SchedulerRegistry } from "@nestjs/schedule"
+import { Listing } from "../listings/entities/listing.entity"
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, ListingRepository, CronJob]),
+    TypeOrmModule.forFeature([ApplicationFlaggedSet, Listing, Application, CronJob]),
     AuthModule,
     SharedModule,
   ],

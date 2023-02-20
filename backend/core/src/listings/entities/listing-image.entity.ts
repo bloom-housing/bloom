@@ -1,6 +1,6 @@
-import { Column, Entity, Index, ManyToOne } from "typeorm"
+import { Column, Entity, Index, ManyToOne, PrimaryColumn } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsNumber, IsOptional } from "class-validator"
+import { IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Listing } from "./listing.entity"
 import { Asset } from "../../assets/entities/asset.entity"
@@ -14,6 +14,12 @@ export class ListingImage {
   @Index()
   @Type(() => Listing)
   listing: Listing
+
+  @PrimaryColumn("uuid")
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  imageId: string
 
   @ManyToOne(() => Asset, {
     primary: true,

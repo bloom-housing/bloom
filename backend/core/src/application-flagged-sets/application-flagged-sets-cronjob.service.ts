@@ -2,7 +2,7 @@ import { Brackets, LessThan, MoreThanOrEqual, Repository, SelectQueryBuilder } f
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
 import { InjectRepository } from "@nestjs/typeorm"
-import { ListingRepository } from "../listings/db/listing.repository"
+import { createQueryBuilder } from "../listings/db/listing-helpers"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
@@ -19,7 +19,7 @@ const CRON_CONFIG_VALUE = "AFS_PROCESSING_CRON_STRING"
 @Injectable()
 export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   constructor(
-    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
     @InjectRepository(Application) private readonly applicationRepository: Repository<Application>,
@@ -58,8 +58,7 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   public async process() {
     this.logger.warn("running the Application flagged sets cron job")
     await this.cronJobService.saveCronJobByName(CRON_JOB_NAME)
-    const outOfDateListings = await this.listingRepository
-      .createQueryBuilder("listings")
+    const outOfDateListings = await createQueryBuilder(this.listingRepository, "listings")
       .select(["listings.id", "listings.afsLastRunAt"])
       .where("listings.lastApplicationUpdateAt IS NOT NULL")
       .andWhere(

@@ -13,18 +13,18 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 import { authzActions } from "../auth/enum/authz-actions.enum"
-import { ListingRepository } from "./db/listing.repository"
 import { AuthzService } from "../auth/services/authz.service"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
+import { createQueryBuilder, getJurisdictionIdByListingId } from "./db/listing-helpers"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
   constructor(
-    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
@@ -33,12 +33,11 @@ export class ListingsService {
   ) {}
 
   private getFullyJoinedQueryBuilder() {
-    return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
+    return getView(createQueryBuilder(this.listingRepository, "listings"), "full").getViewQb()
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const innerFilteredQuery = this.listingRepository
-      .createQueryBuilder("listings")
+    const innerFilteredQuery = createQueryBuilder(this.listingRepository, "listings")
       .select("listings.id", "listings_id")
       // Those left joines are required for addFilters to work (see
       // backend/core/src/listings/dto/filter-type-to-field-map.ts
@@ -61,7 +60,7 @@ export class ListingsService {
       })
     }
 
-    const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
+    const view = getView(createQueryBuilder(this.listingRepository, "listings"), params.view)
 
     const listingsPaginated = await view
       .getViewQb()
@@ -157,7 +156,7 @@ export class ListingsService {
   }
 
   async findOne(listingId: string, lang: Language = Language.en, view = "full") {
-    const qb = getView(this.listingRepository.createQueryBuilder("listings"), view).getViewQb()
+    const qb = getView(createQueryBuilder(this.listingRepository, "listings"), view).getViewQb()
     const result = await this.getListingAndUnits(qb, listingId)
 
     if (!result) {
@@ -186,7 +185,7 @@ export class ListingsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
-    const jurisdictionId = await this.listingRepository.getJurisdictionIdByListingId(listingId)
+    const jurisdictionId = await getJurisdictionIdByListingId(this.listingRepository, listingId)
 
     return await this.authzService.canOrThrow(user, "listing", action, {
       id: listingId,
