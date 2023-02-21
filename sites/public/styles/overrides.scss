@@ -1,66 +1,115 @@
 /* Overrides the default ui-components styles with Detroit-specific styles. */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
+#__next {
+  // Certain SVG icons should be green.
+  // NOTE: might not need, could delete. -JW
+  .filled-icon .ui-icon svg {
+    fill: $tailwind-primary-darker;
+  }
 
-// Certain SVG icons should be green.
-// NOTE: might not need, could delete. -JW
-.filled-icon .ui-icon svg {
-  fill: $tailwind-primary-darker;
-}
+  $header-desktop-min-size: 1024px;
 
-$header-desktop-min-size: 1024px;
+  @import "blocks.scss";
+  @import "forms.scss";
+  @import "footers.scss";
+  @import "forms.scss";
+  @import "headers.scss";
+  @import "listings.scss";
+  @import "overlays.scss";
 
-@import "blocks.scss";
-@import "forms.scss";
-@import "footers.scss";
-@import "forms.scss";
-@import "headers.scss";
-@import "listings.scss";
-@import "overlays.scss";
+  /* One-offs: */
 
-/* One-offs: */
+  .loading-overlay__spinner circle {
+    stroke: $tailwind-primary;
+  }
 
-.loading-overlay__spinner circle {
-  stroke: $tailwind-primary;
-}
+  // Center the front page.
+  .homepage-extra {
+    @apply text-center;
+    @apply text-base;
+    @apply mb-10;
+  }
 
-// Center the front page.
-.homepage-extra {
-  @apply text-center;
-  @apply text-base;
-  @apply mb-10;
-}
-
-// Fix rtl border between action blocks on the homepage.
-.homepage-extra {
-  .action-blocks {
-    @screen md {
-      > :nth-child(2) {
-        border-left-width: 0;
-        border-inline-width: 1px;
-      }
-      .action-block__header {
-        font-size: (var(--bloom-font-size-base-alt));
+  // Fix rtl border between action blocks on the homepage.
+  .homepage-extra {
+    .action-blocks {
+      @screen md {
+        > :nth-child(2) {
+          border-left-width: 0;
+          border-inline-width: 1px;
+        }
+        .action-block__header {
+          font-size: (var(--bloom-font-size-base-alt));
+        }
       }
     }
   }
-}
 
-.eligibility-disclaimer-header {
-  padding: 20px 80px;
-}
+  .eligibility-disclaimer-header {
+    padding: 20px 80px;
+  }
 
-.eligibility-disclaimer-submit-container {
-  padding-bottom: 40px;
-  text-align: center;
-}
+  .eligibility-disclaimer-submit-container {
+    padding-bottom: 40px;
+    text-align: center;
+  }
 
-.accessibility-eligibility-selector {
-  column-count: 2;
-  font-size: small;
-  margin-bottom: 20px;
-  margin-top: 10px;
-  .field {
-    margin-bottom: 3.5px;
+  .accessibility-eligibility-selector {
+    column-count: 2;
+    font-size: small;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    .field {
+      margin-bottom: 3.5px;
+    }
+  }
+
+  .button {
+    --normal-rounded: 60px;
+    --normal-padding: 0.5rem 1rem;
+    --normal-font-size: var(--bloom-font-size-base);
+    --label-letter-spacing: normal;
+    --label-transform: none;
+    &:hover {
+      svg {
+        fill: var(--bloom-color-white);
+      }
+    }
+    .ui-icon {
+      &.button__icon {
+        margin: 0 0.5rem 0 0;
+      }
+    }
+  }
+
+  .action-block {
+    .action-block__actions .button {
+      @media (max-width: 640px) {
+        @apply text-sm;
+      }
+    }
+  }
+
+  // These will be removed as we sync the remaining components
+  .aside-block {
+    svg {
+      fill: var(--bloom-color-primary);
+    }
+  }
+
+  .header-badge {
+    svg {
+      width: 3rem;
+      height: 3rem;
+      @media (max-width: 640px) {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+  }
+
+  .alert-box.primary {
+    background-color: var(--bloom-color-gray-400);
   }
 }
 
@@ -87,52 +136,4 @@ $header-desktop-min-size: 1024px;
   --primary-appearance-hover-border-color: var(--bloom-color-primary);
   --outlined-appearance-hover-background-color: var(--bloom-color-primary);
   --outlined-appearance-hover-border-color: var(--bloom-color-primary);
-}
-
-.button {
-  --normal-rounded: 60px;
-  --normal-padding: 0.5rem 1rem;
-  --normal-font-size: var(--bloom-font-size-base);
-  --label-letter-spacing: normal;
-  --label-transform: none;
-  &:hover {
-    svg {
-      fill: var(--bloom-color-white);
-    }
-  }
-  .ui-icon {
-    &.button__icon {
-      margin: 0 0.5rem 0 0;
-    }
-  }
-}
-
-.action-block {
-  .action-block__actions .button {
-    @media (max-width: 640px) {
-      @apply text-sm;
-    }
-  }
-}
-
-// These will be removed as we sync the remaining components
-.aside-block {
-  svg {
-    fill: var(--bloom-color-primary);
-  }
-}
-
-.header-badge {
-  svg {
-    width: 3rem;
-    height: 3rem;
-    @media (max-width: 640px) {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  }
-}
-
-.alert-box.primary {
-  background-color: var(--bloom-color-gray-400);
 }
