@@ -2,7 +2,7 @@ import React from "react"
 import { fireEvent, render, within } from "@testing-library/react"
 import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
-import { listing, unit } from "../../../../testHelpers"
+import { listing, unit } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core"
 
 describe("DetailUnits", () => {
