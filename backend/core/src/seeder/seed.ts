@@ -113,7 +113,7 @@ export async function createLeasingAgents(
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
-      const roles: UserRoles = { user: agent, isPartner: true, userId: undefined }
+      const roles: UserRoles = { user: agent, isPartner: true, userId: agent.id }
       await rolesRepo.save(roles)
       await usersService.confirm({ token: agent.confirmationToken })
     }),
