@@ -11,9 +11,10 @@ import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { OrderParam } from "../../applications/types/order-param"
 import { AuthzService } from "../../auth/services/authz.service"
 import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/application-flagged-sets.service"
-import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
-import { UserRepository } from "../../auth/repositories/user-repository"
+import { Listing } from "../entities/listing.entity"
+import { User } from "../../auth/entities/user.entity"
+import * as helpers from "../db/listing-helpers"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -140,13 +141,12 @@ describe("ListingsService", () => {
           useValue: { scheduleAfsProcessing: jest.fn() },
         },
         AuthzService,
-        UserRepository,
         {
-          provide: getRepositoryToken(ListingRepository),
+          provide: getRepositoryToken(Listing),
           useValue: mockListingsRepo,
         },
         {
-          provide: getRepositoryToken(UserRepository),
+          provide: getRepositoryToken(User),
           useValue: mockUserRepo,
         },
         {
@@ -173,9 +173,12 @@ describe("ListingsService", () => {
 
   describe("getListingsList", () => {
     it("should not add a WHERE clause if no filters are applied", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
 
       const listings = await service.list({})
 
@@ -184,9 +187,12 @@ describe("ListingsService", () => {
     })
 
     it("should add a WHERE clause if the neighborhood filter is applied", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
       const expectedNeighborhood = "Fox Creek"
 
       const queryParams: ListingsQueryParams = {
@@ -210,9 +216,12 @@ describe("ListingsService", () => {
     })
 
     it("should support filters with comma-separated arrays", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
       const expectedNeighborhoodString = "Fox Creek, , Coliseum," // intentional extra and trailing commas for test
       // lowercased, trimmed spaces, filtered empty
       const expectedNeighborhoodArray = ["fox creek", "coliseum"]
@@ -238,7 +247,9 @@ describe("ListingsService", () => {
     })
 
     it("should throw an exception if an unsupported filter is used", async () => {
-      mockListingsRepo.createQueryBuilder.mockReturnValueOnce(mockInnerQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
 
       const queryParams: ListingsQueryParams = {
         filter: [
@@ -258,7 +269,9 @@ describe("ListingsService", () => {
 
     //TODO(avaleske): A lot of these tests should be moved to a spec file specific to the filters code.
     it("should throw an exception if an unsupported comparison is used", async () => {
-      mockListingsRepo.createQueryBuilder.mockReturnValueOnce(mockInnerQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
 
       const queryParams: ListingsQueryParams = {
         filter: [
@@ -278,9 +291,12 @@ describe("ListingsService", () => {
     })
 
     it("should not call limit() and offset() if pagination params are not specified", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
 
       // Empty params (no pagination) -> no limit/offset
       const params = {}
@@ -292,9 +308,12 @@ describe("ListingsService", () => {
     })
 
     it("should not call limit() and offset() if incomplete pagination params are specified", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
       const params = { page: 3 }
@@ -313,10 +332,12 @@ describe("ListingsService", () => {
     })
 
     it("should not call limit() and offset() if invalid pagination params are specified", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
-
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
       const params = { page: ("hello" as unknown) as number } // force the type for testing
       const listings = await service.list(params)
@@ -335,9 +356,12 @@ describe("ListingsService", () => {
 
     it("should call limit() and offset() if pagination params are specified", async () => {
       mockQueryBuilder.getMany.mockReturnValueOnce(mockFilteredListings)
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
 
       // Valid pagination params -> offset and limit called appropriately
       const params = { page: 3, limit: 2 }
@@ -359,9 +383,12 @@ describe("ListingsService", () => {
 
   describe("ListingsService.list sorting", () => {
     it("orders by the orderBy param (when set)", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
+      jest
+        .spyOn(helpers, "createQueryBuilder")
+        .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
 
       await service.list({
         orderBy: [OrderByFieldsEnum.mostRecentlyUpdated],

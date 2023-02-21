@@ -4061,9 +4061,6 @@ export interface PaginatedUserList {
 
 export interface UserRolesCreate {
   /**  */
-  userId: string
-
-  /**  */
   isAdmin?: boolean
 
   /**  */
