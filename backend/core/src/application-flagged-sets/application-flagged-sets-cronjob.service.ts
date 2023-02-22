@@ -10,18 +10,18 @@ import {
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
 import { InjectRepository } from "@nestjs/typeorm"
-import { createQueryBuilder } from "../listings/db/listing-helpers"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { getView } from "../applications/views/view"
-import { Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common"
+import { forwardRef, Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common"
 import { SchedulerRegistry } from "@nestjs/schedule"
 import { CronJob } from "cron"
 import { ConfigService } from "@nestjs/config"
 import { CronJobService } from "../shared/services/cron-job.service"
 import dayjs from "dayjs"
 import { ApplicationStatus } from "../applications/types/application-status-enum"
+import { ListingsService } from "../listings/listings.service"
 
 const CRON_JOB_NAME = "AFS_CRON_JOB"
 const CRON_CONFIG_VALUE = "AFS_PROCESSING_CRON_STRING"
@@ -33,6 +33,7 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
     @InjectRepository(Application) private readonly applicationRepository: Repository<Application>,
     @Inject(Logger) private readonly logger = new Logger(ApplicationFlaggedSetsCronjobService.name),
+    @Inject(forwardRef(() => ListingsService)) private readonly listingsService: ListingsService,
     private schedulerRegistry: SchedulerRegistry,
     private readonly config: ConfigService,
     private readonly cronJobService: CronJobService
@@ -67,7 +68,8 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   public async process() {
     this.logger.warn("running the Application flagged sets cron job")
     await this.cronJobService.saveCronJobByName(CRON_JOB_NAME)
-    const outOfDateListings = await createQueryBuilder(this.listingRepository, "listings")
+    const outOfDateListings = await this.listingsService
+      .createQueryBuilder("listings")
       .select(["listings.id", "listings.afsLastRunAt"])
       .where("listings.lastApplicationUpdateAt IS NOT NULL")
       .andWhere(

@@ -49,7 +49,7 @@ import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
 import { Listing } from "../../listings/entities/listing.entity"
-import { getJurisdictionIdByListingId } from "../../listings/db/listing-helpers"
+import { ListingsService } from "../../listings/listings.service"
 
 dayjs.extend(advancedFormat)
 
@@ -66,7 +66,8 @@ export class UserService {
     private readonly jurisdictionResolverService: JurisdictionResolverService,
     private readonly smsMfaService: SmsMfaService,
     @Inject(REQUEST) private req: ExpressRequest,
-    @Inject(forwardRef(() => AuthzService)) private readonly authzService: AuthzService
+    @Inject(forwardRef(() => AuthzService)) private readonly authzService: AuthzService,
+    @Inject(forwardRef(() => ListingsService)) private readonly listingsService: ListingsService
   ) {}
 
   public async findById(id: string) {
@@ -698,7 +699,7 @@ export class UserService {
       // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
       const jurisdictionsIds = await Promise.all(
         dto.leasingAgentInListings.map(async (listing) => {
-          return await getJurisdictionIdByListingId(this.listingRepository, listing.id)
+          return await this.listingsService.getJurisdictionIdByListingId(listing.id)
         })
       )
 

@@ -22,6 +22,7 @@ import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
 import { Listing } from "../listings/entities/listing.entity"
+import { ListingsModule } from "../listings/listings.module"
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { Listing } from "../listings/entities/listing.entity"
     JurisdictionsModule,
     EmailModule,
     forwardRef(() => ActivityLogModule),
+    forwardRef(() => ListingsModule),
   ],
   providers: [
     LocalMfaStrategy,

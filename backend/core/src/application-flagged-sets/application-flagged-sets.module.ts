@@ -1,4 +1,4 @@
-import { Logger, Module } from "@nestjs/common"
+import { forwardRef, Logger, Module } from "@nestjs/common"
 import { ApplicationFlaggedSetsController } from "./application-flagged-sets.controller"
 import { ApplicationFlaggedSetsService } from "./application-flagged-sets.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -11,11 +11,13 @@ import { CronJobService } from "../shared/services/cron-job.service"
 import { CronJob } from "../shared/entities/cron-job.entity"
 import { SchedulerRegistry } from "@nestjs/schedule"
 import { Listing } from "../listings/entities/listing.entity"
+import { ListingsModule } from "../listings/listings.module"
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ApplicationFlaggedSet, Listing, Application, CronJob]),
-    AuthModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => ListingsModule),
     SharedModule,
   ],
   controllers: [ApplicationFlaggedSetsController],

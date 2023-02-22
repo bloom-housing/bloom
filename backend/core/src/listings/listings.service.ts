@@ -19,7 +19,6 @@ import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
-import { createQueryBuilder, getJurisdictionIdByListingId } from "./db/listing-helpers"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -33,11 +32,11 @@ export class ListingsService {
   ) {}
 
   private getFullyJoinedQueryBuilder() {
-    return getView(createQueryBuilder(this.listingRepository, "listings"), "full").getViewQb()
+    return getView(this.createQueryBuilder("listings"), "full").getViewQb()
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const innerFilteredQuery = createQueryBuilder(this.listingRepository, "listings")
+    const innerFilteredQuery = this.createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       // Those left joines are required for addFilters to work (see
       // backend/core/src/listings/dto/filter-type-to-field-map.ts
@@ -60,7 +59,7 @@ export class ListingsService {
       })
     }
 
-    const view = getView(createQueryBuilder(this.listingRepository, "listings"), params.view)
+    const view = getView(this.createQueryBuilder("listings"), params.view)
 
     const listingsPaginated = await view
       .getViewQb()
@@ -156,7 +155,7 @@ export class ListingsService {
   }
 
   async findOne(listingId: string, lang: Language = Language.en, view = "full") {
-    const qb = getView(createQueryBuilder(this.listingRepository, "listings"), view).getViewQb()
+    const qb = getView(this.createQueryBuilder("listings"), view).getViewQb()
     const result = await this.getListingAndUnits(qb, listingId)
 
     if (!result) {
@@ -169,6 +168,24 @@ export class ListingsService {
 
     await this.addUnitsSummarized(result)
     return result
+  }
+
+  public createQueryBuilder(alias: string): ListingsQueryBuilder {
+    return new ListingsQueryBuilder(this.listingRepository.createQueryBuilder(alias))
+  }
+
+  public async getJurisdictionIdByListingId(listingId: string | null): Promise<string | null> {
+    if (!listingId) {
+      return null
+    }
+
+    const listing = await this.createQueryBuilder("listings")
+      .where(`listings.id = :listingId`, { listingId })
+      .leftJoin("listings.jurisdiction", "jurisdiction")
+      .select(["listings.id", "jurisdiction.id"])
+      .getOne()
+
+    return listing.jurisdiction.id
   }
 
   private async addUnitsSummarized(listing: Listing) {
@@ -185,7 +202,7 @@ export class ListingsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
-    const jurisdictionId = await getJurisdictionIdByListingId(this.listingRepository, listingId)
+    const jurisdictionId = await this.getJurisdictionIdByListingId(listingId)
 
     return await this.authzService.canOrThrow(user, "listing", action, {
       id: listingId,

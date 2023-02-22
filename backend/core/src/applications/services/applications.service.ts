@@ -25,7 +25,6 @@ import { PaginatedApplicationListQueryParams } from "../dto/paginated-applicatio
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
-import { createQueryBuilder, getJurisdictionIdByListingId } from "../../listings/db/listing-helpers"
 import { Listing } from "../../listings/entities/listing.entity"
 import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
@@ -137,7 +136,8 @@ export class ApplicationsService {
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
 
-    const listing = await createQueryBuilder(this.listingsRepository, "listings")
+    const listing = await this.listingsService
+      .createQueryBuilder("listings")
       .where(`listings.id = :listingId`, { listingId: applicationCreateDto.listing.id })
       .select(["listings.applicationDueDate", "listings.id"])
       .getOne()
@@ -386,7 +386,7 @@ export class ApplicationsService {
     listingId: string,
     action
   ) {
-    const jurisdictionId = await getJurisdictionIdByListingId(this.listingsRepository, listingId)
+    const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
 
     const resource: T & { listingId: string; jurisdictionId: string } = {
       ...app,
@@ -401,7 +401,7 @@ export class ApplicationsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
-    const jurisdictionId = await getJurisdictionIdByListingId(this.listingsRepository, listingId)
+    const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
 
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
       id: listingId,

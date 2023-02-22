@@ -1,4 +1,4 @@
-import { Logger, Module } from "@nestjs/common"
+import { forwardRef, Logger, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
@@ -26,7 +26,7 @@ import { ListingsCronService } from "./listings-cron.service"
       ListingFeatures,
       ListingUtilities,
     ]),
-    AuthModule,
+    forwardRef(() => AuthModule),
     TranslationsModule,
     ActivityLogModule,
     ApplicationFlaggedSetsModule,
