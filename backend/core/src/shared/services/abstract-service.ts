@@ -28,7 +28,7 @@ export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends Generic
     }
 
     async create(dto: TCreateDto): Promise<T> {
-      return await this.repository.save(dto)
+      return await this.repository.save((dto as unknown) as T)
     }
 
     async findOne(findConditions: FindOneOptions<T>): Promise<T> {
@@ -44,7 +44,9 @@ export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends Generic
     }
 
     async update(dto: TUpdateDto) {
-      const obj = await this.repository.findOne({
+      // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/no-explicit-any
+      const find = this.repository.findOne as (options: FindOneOptions<any>) => Promise<T>
+      const obj = await find({
         where: {
           id: dto.id,
         },

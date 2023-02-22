@@ -13,7 +13,6 @@ export class UserRoles {
   userId: string
 
   @OneToOne(() => User, (user) => user.roles, {
-    primary: true,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

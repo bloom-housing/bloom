@@ -10,7 +10,7 @@ export class ListingDefaultOnePreferenceSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(listing.jurisdiction.name).text,
+            where: { text: getLiveWorkPreference(listing.jurisdiction.name).text },
           }),
           ordinal: 1,
           page: 1,

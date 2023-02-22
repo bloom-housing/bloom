@@ -54,16 +54,24 @@ export class ListingDefaultSeed {
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: PriorityTypes.mobilityHearing }
+      { where: { name: PriorityTypes.mobilityHearing } }
     )
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: "AlamedaCountyTCAC2021",
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
 
     const defaultImage = await this.assetsRepository.save(getDefaultAssets()[0])
@@ -80,43 +88,43 @@ export class ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            where: { text: getLiveWorkPreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+            where: { text: getDisplaceePreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
+            where: { text: getServedInMilitaryProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(alamedaJurisdiction.name).text,
+            where: { text: getTayProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisabilityOrMentalIllnessProgram(alamedaJurisdiction.name).text,
+            where: { text: getDisabilityOrMentalIllnessProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 3,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getHousingSituationProgram(alamedaJurisdiction.name).text,
+            where: { text: getHousingSituationProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 4,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getFlatRentAndRentBasedOnIncomeProgram(alamedaJurisdiction.name).text,
+            where: { text: getFlatRentAndRentBasedOnIncomeProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 5,
         },

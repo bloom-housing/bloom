@@ -8,18 +8,28 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
   async seed() {
     const listing = await super.seed()
 
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
 
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
     const amiChartOne = await this.amiChartRepository.findOneOrFail({
-      name: "San Jose TCAC 2019",
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: "San Jose TCAC 2019",
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
     const amiChartTwo = await this.amiChartRepository.findOneOrFail({
-      name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: "AlamedaCountyTCAC2021",
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
 
     const multipleAMIUnits: Array<UnitSeedType> = [

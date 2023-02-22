@@ -1,4 +1,12 @@
-import { Brackets, LessThan, MoreThanOrEqual, Repository, SelectQueryBuilder } from "typeorm"
+import {
+  Brackets,
+  FindOptionsWhere,
+  LessThan,
+  MoreThanOrEqual,
+  Not,
+  Raw,
+  Repository,
+} from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -13,6 +21,7 @@ import { CronJob } from "cron"
 import { ConfigService } from "@nestjs/config"
 import { CronJobService } from "../shared/services/cron-job.service"
 import dayjs from "dayjs"
+import { ApplicationStatus } from "../applications/types/application-status-enum"
 
 const CRON_JOB_NAME = "AFS_CRON_JOB"
 const CRON_CONFIG_VALUE = "AFS_PROCESSING_CRON_STRING"
@@ -215,20 +224,20 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   }
 
   private async fetchDuplicatesMatchingEmailRule(newApplication: Application) {
+    // TODO: investigate .find
+    const whereClause: FindOptionsWhere<Application> = {
+      id: newApplication.id,
+      status: ApplicationStatus.submitted,
+      listing: {
+        id: Not(newApplication.listingId),
+      },
+      applicant: {
+        emailAddress: newApplication.applicant.emailAddress,
+      },
+    }
     return await this.applicationRepository.find({
       select: ["id"],
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listingId,
-          })
-          .andWhere("Application__applicant.emailAddress = :emailAddress", {
-            emailAddress: newApplication.applicant.emailAddress,
-          })
-          .andWhere("Application.status = :status", { status: "submitted" })
-      },
+      where: whereClause,
     })
   }
 
@@ -271,67 +280,54 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
       ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear),
     ]
 
+    // TODO: investigate .find
+    const whereClause: FindOptionsWhere<Application> = {
+      id: Not(newApplication.id),
+      status: ApplicationStatus.submitted,
+      listing: {
+        id: newApplication.listingId,
+      },
+      householdMembers: {
+        firstName: Raw(
+          (alias) =>
+            `(${alias} IN (:...firstNames) OR Application__applicant.firstName IN (:...firstNames))`,
+          {
+            firstNames,
+          }
+        ),
+        lastName: Raw(
+          (alias) =>
+            `(${alias} IN (:...lastNames) OR Application__applicant.lastName IN (:...lastNames))`,
+          {
+            lastNames,
+          }
+        ),
+        birthMonth: Raw(
+          (alias) =>
+            `(${alias} IN (:...birthMonths) OR Application__applicant.birthMonth IN (:...birthMonths))`,
+          {
+            birthMonths,
+          }
+        ),
+        birthDay: Raw(
+          (alias) =>
+            `(${alias} IN (:...birthDays) OR Application__applicant.birthDay IN (:...birthDays))`,
+          {
+            birthDays,
+          }
+        ),
+        birthYear: Raw(
+          (alias) =>
+            `(${alias} IN (:...birthYears) OR Application__applicant.birthYear IN (:...birthYears))`,
+          {
+            birthYears,
+          }
+        ),
+      },
+    }
     return await this.applicationRepository.find({
       select: ["id"],
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listingId,
-          })
-          .andWhere("Application.status = :status", { status: "submitted" })
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.firstName IN (:...firstNames)", {
-                firstNames: firstNames,
-              })
-              subQb.orWhere("Application__applicant.firstName IN (:...firstNames)", {
-                firstNames: firstNames,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.lastName IN (:...lastNames)", {
-                lastNames: lastNames,
-              })
-              subQb.orWhere("Application__applicant.lastName IN (:...lastNames)", {
-                lastNames: lastNames,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths,
-              })
-              subQb.orWhere("Application__applicant.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthDay IN (:...birthDays)", {
-                birthDays: birthDays,
-              })
-              subQb.orWhere("Application__applicant.birthDay IN (:...birthDays)", {
-                birthDays: birthDays,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthYear IN (:...birthYears)", {
-                birthYears: birthYears,
-              })
-              subQb.orWhere("Application__applicant.birthYear IN (:...birthYears)", {
-                birthYears: birthYears,
-              })
-            })
-          )
-      },
+      where: whereClause,
     })
   }
 }

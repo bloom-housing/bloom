@@ -20,14 +20,12 @@ export class ListingMultiselectQuestion {
   listingId: string
 
   @ManyToOne(() => Listing, (listing) => listing.listingMultiselectQuestions, {
-    primary: true,
     orphanedRowAction: "delete",
   })
   @Type(() => Listing)
   listing: Listing
 
   @ManyToOne(() => MultiselectQuestion, (question) => question.listingMultiselectQuestions, {
-    primary: true,
     eager: true,
   })
   @Expose()

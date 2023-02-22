@@ -1,7 +1,7 @@
 import { AmiChart } from "./entities/ami-chart.entity"
 import { AmiChartCreateDto, AmiChartUpdateDto } from "./dto/ami-chart.dto"
 import { InjectRepository } from "@nestjs/typeorm"
-import { FindOneOptions, Repository } from "typeorm"
+import { FindOneOptions, FindOptionsWhere, Repository } from "typeorm"
 import { NotFoundException } from "@nestjs/common"
 import { AmiChartListQueryParams } from "./dto/ami-chart-list-query-params"
 import { assignDefined } from "../shared/utils/assign-defined"
@@ -13,18 +13,19 @@ export class AmiChartsService {
   ) {}
 
   list(queryParams?: AmiChartListQueryParams): Promise<AmiChart[]> {
+    // TODO: investigate .find
+    const whereClause: FindOptionsWhere<AmiChart> = {}
+    if (queryParams.jurisdictionName) {
+      whereClause.jurisdiction = { name: queryParams.jurisdictionName }
+    } else if (queryParams.jurisdictionId) {
+      whereClause.jurisdiction = { id: queryParams.jurisdictionId }
+    }
     return this.repository.find({
       join: {
         alias: "amiChart",
         leftJoinAndSelect: { jurisdiction: "amiChart.jurisdiction" },
       },
-      where: (qb) => {
-        if (queryParams.jurisdictionName) {
-          qb.where("jurisdiction.name = :jurisdictionName", queryParams)
-        } else if (queryParams.jurisdictionId) {
-          qb.where("jurisdiction.id = :jurisdictionId", queryParams)
-        }
-      },
+      where: whereClause,
     })
   }
 

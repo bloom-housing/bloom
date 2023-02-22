@@ -465,7 +465,7 @@ export class UserService {
   }
 
   async delete(userId: string) {
-    const user = await this.userRepository.findOne({ id: userId })
+    const user = await this.userRepository.findOne({ where: { id: userId } })
 
     if (!user) {
       throw new NotFoundException()

@@ -4420,6 +4420,9 @@ export interface ListingImage {
   imageId?: string
 
   /**  */
+  listingId: string
+
+  /**  */
   ordinal?: number
 }
 
@@ -5094,6 +5097,9 @@ export interface ListingEventCreate {
 export interface ListingImageUpdate {
   /**  */
   image: AssetUpdate
+
+  /**  */
+  listingId: string
 
   /**  */
   ordinal?: number

@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   async isRevokedToken(jwt: string) {
-    const revoked = await this.revokedTokenRepo.findOne({ token: jwt })
+    const revoked = await this.revokedTokenRepo.findOne({ where: { token: jwt } })
     return Boolean(revoked)
   }
 }

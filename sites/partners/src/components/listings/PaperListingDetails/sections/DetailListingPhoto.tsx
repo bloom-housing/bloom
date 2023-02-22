@@ -22,6 +22,7 @@ const DetailListingPhoto = () => {
       ordinal: 0,
       image: { fileId: asset.fileId, label: asset.label },
       imageId: undefined,
+      listingId: listing.id,
     }
   }
 

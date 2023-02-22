@@ -7,8 +7,13 @@ import { Asset } from "../../assets/entities/asset.entity"
 
 @Entity({ name: "listing_images" })
 export class ListingImage {
+  @PrimaryColumn("uuid")
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  listingId: string
+
   @ManyToOne(() => Listing, (listing) => listing.images, {
-    primary: true,
     orphanedRowAction: "delete",
   })
   @Index()
@@ -22,7 +27,6 @@ export class ListingImage {
   imageId: string
 
   @ManyToOne(() => Asset, {
-    primary: true,
     eager: true,
     cascade: true,
   })

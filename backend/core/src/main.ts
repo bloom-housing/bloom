@@ -2,7 +2,7 @@ import { NestFactory } from "@nestjs/core"
 import { applicationSetup, AppModule } from "./app.module"
 import { Logger } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
-import { getConnection } from "typeorm"
+import { DataSource } from "typeorm"
 import { ConfigService } from "@nestjs/config"
 import dbOptions from "../ormconfig"
 
@@ -14,7 +14,8 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   app = applicationSetup(app)
-  const conn = getConnection()
+  const conn = new DataSource({ type: "postgres" })
+  await conn.initialize()
   // showMigrations returns true if there are pending migrations
   if (await conn.showMigrations()) {
     if (process.env.NODE_ENV === "development") {

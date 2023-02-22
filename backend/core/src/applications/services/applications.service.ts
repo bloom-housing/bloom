@@ -232,14 +232,14 @@ export class ApplicationsService {
           transactionalEntityManager.getRepository(Listing)
         )
 
-        return await applicationsRepository.findOne({ id: newApplication.id })
+        return await applicationsRepository.findOne({ where: { id: newApplication.id } })
       }
     )
     return app
   }
 
   async delete(applicationId: string) {
-    const application = await this.repository.findOne({ id: applicationId })
+    const application = await this.repository.findOne({ where: { id: applicationId } })
 
     if (!application) {
       throw new NotFoundException()
@@ -312,7 +312,7 @@ export class ApplicationsService {
           transactionalEntityManager.getRepository(Listing)
         )
 
-        return await applicationsRepository.findOne({ id: application.id })
+        return await applicationsRepository.findOne({ where: { id: application.id } })
       }
     )
   }
