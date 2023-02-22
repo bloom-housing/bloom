@@ -28,7 +28,6 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 import { EmailService } from "../../src/email/email.service"
 import { MfaType } from "../../src/auth/types/mfa-type"
-import { findByEmail } from "../../src/auth/helpers/user-helpers"
 import dayjs from "dayjs"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -226,8 +225,8 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -348,8 +347,8 @@ describe("Applications", () => {
       .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -424,8 +423,8 @@ describe("Applications", () => {
     expect(newUser.leasingAgentInListings[0].id).toBe(listing.id)
     expect(mockInvite.mock.calls.length).toBe(1)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, newUser.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(newUser.email)
     user.mfaEnabled = false
     await usersRepository.save(user)
 
@@ -457,8 +456,8 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -504,8 +503,8 @@ describe("Applications", () => {
         .send(createDto)
         .expect(201)
 
-      const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-      const user = await findByEmail(userRepository, createDto.email)
+      const userService = await app.resolve(UserService)
+      const user = await userService.findByEmail(createDto.email)
 
       await supertest(app.getHttpServer())
         .put(`/user/confirm/`)
@@ -729,8 +728,8 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    let user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -752,7 +751,7 @@ describe("Applications", () => {
     // User should still be able to log in with the old email
     await getUserAccessToken(app, userCreateDto.email, userCreateDto.password)
 
-    user = await findByEmail(userRepository, userCreateDto.email)
+    user = await userService.findByEmail(userCreateDto.email)
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
       .send({ token: user.confirmationToken })
@@ -905,8 +904,8 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    let user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -926,7 +925,7 @@ describe("Applications", () => {
       .expect(200)
 
     // Put password updated at date 190 days in the past
-    user = await findByEmail(userRepository, userCreateDto.email)
+    user = await userService.findByEmail(userCreateDto.email)
     user.roles = { isAdmin: true, isPartner: false } as UserRoles
     user.passwordUpdatedAt = new Date(user.passwordUpdatedAt.getTime() - 190 * 24 * 60 * 60 * 1000)
 
@@ -1025,8 +1024,8 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(429)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
     user.lastLoginAt = dayjs(new Date()).subtract(31, "minutes").toDate()
     await usersRepository.save(user)
 
@@ -1075,7 +1074,8 @@ describe("Applications", () => {
     expect(res.body.items[0].email).toBe(searchableEmailAddress)
 
     const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, searchableEmailAddress)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(searchableEmailAddress)
 
     user.leasingAgentInListings = [{ id: listing.id } as Listing]
     await userRepository.save(user)

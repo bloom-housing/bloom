@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  forwardRef,
   HttpException,
   HttpStatus,
   Inject,
@@ -47,13 +48,6 @@ import advancedFormat from "dayjs/plugin/advancedFormat"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
-import {
-  getQb,
-  findByEmail,
-  findById,
-  findByConfirmationToken,
-  findByResetToken,
-} from "../helpers/user-helpers"
 import { Listing } from "../../listings/entities/listing.entity"
 import { getJurisdictionIdByListingId } from "../../listings/db/listing-helpers"
 
@@ -68,15 +62,15 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,
     private readonly authService: AuthService,
-    private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
     private readonly jurisdictionResolverService: JurisdictionResolverService,
     private readonly smsMfaService: SmsMfaService,
-    @Inject(REQUEST) private req: ExpressRequest
+    @Inject(REQUEST) private req: ExpressRequest,
+    @Inject(forwardRef(() => AuthzService)) private readonly authzService: AuthzService
   ) {}
 
   public async findById(id: string) {
-    const user = await findById(this.userRepository, id)
+    const user = await this.findByIdHelper(id)
 
     if (!user) {
       throw new NotFoundException()
@@ -95,12 +89,12 @@ export class UserService {
       PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
-    const distinctIDQB = getQb(this.userRepository)
+    const distinctIDQB = this.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
     distinctIDQB.orderBy("user.firstName")
     distinctIDQB.addOrderBy("user.lastName")
-    const qb = getQb(this.userRepository)
+    const qb = this.getQb()
 
     if (params.filter) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -225,7 +219,7 @@ export class UserService {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
 
-    const user = await findById(this.userRepository, token.id)
+    const user = await this.findByIdHelper(token.id)
     if (!user) {
       console.error(`Trying to confirm non-existing user ${token.id}.`)
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
@@ -256,7 +250,7 @@ export class UserService {
   }
 
   public async resendPartnerConfirmation(dto: EmailDto) {
-    const user = await findByEmail(this.userRepository, dto.email)
+    const user = await this.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -280,13 +274,13 @@ export class UserService {
   public async isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
       const token = decode(dto.token, process.env.APP_SECRET)
-      const user = await findById(this.userRepository, token.id)
+      const user = await this.findByIdHelper(token.id)
       await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
       console.error("isUserConfirmationTokenValid error = ", e)
       try {
-        const user = await findByConfirmationToken(this.userRepository, dto.token)
+        const user = await this.findByConfirmationToken(dto.token)
         await this.setHitConfirmationURl(user, dto.token)
       } catch (e) {
         console.error("isUserConfirmationTokenValid error = ", e)
@@ -296,7 +290,7 @@ export class UserService {
   }
 
   public async resendPublicConfirmation(dto: EmailDto) {
-    const user = await findByEmail(this.userRepository, dto.email)
+    const user = await this.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -338,7 +332,7 @@ export class UserService {
       await this.authorizeUserAction(this.req.user, dto, authzActions.confirm)
     }
 
-    const existingUser = storedUser ?? (await findByEmail(this.userRepository, dto.email))
+    const existingUser = storedUser ?? (await this.findByEmail(dto.email))
 
     if (existingUser) {
       if (!existingUser.roles && dto.roles) {
@@ -395,7 +389,7 @@ export class UserService {
   }
 
   public async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await findByEmail(this.userRepository, dto.email)
+    const user = await this.findByEmail(dto.email)
     if (user) {
       // Token expires in 1 hour
       const payload = { id: user.id, exp: Number.parseInt(dayjs().add(1, "hour").format("X")) }
@@ -407,7 +401,7 @@ export class UserService {
   }
 
   public async updatePassword(dto: UpdatePasswordDto) {
-    const user = await findByResetToken(this.userRepository, dto.token)
+    const user = await this.findByResetToken(dto.token)
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
@@ -429,7 +423,7 @@ export class UserService {
 
     await this.validateInviteActionPermissionsOrThrow(dto)
 
-    const existingUser = await findByEmail(this.userRepository, dto.email)
+    const existingUser = await this.findByEmail(dto.email)
 
     const user = await this._createUser(
       {
@@ -559,6 +553,37 @@ export class UserService {
       user.roles &&
       (user.roles.isAdmin || user.roles.isPartner || user.roles.isJurisdictionalAdmin)
     )
+  }
+
+  public getQb() {
+    return this.userRepository
+      .createQueryBuilder("user")
+      .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      .leftJoin("user.roles", "userRoles")
+      .select([
+        "user",
+        "jurisdictions.id",
+        "userRoles",
+        "leasingAgentInListings.id",
+        "leasingAgentInListings.name",
+      ])
+  }
+
+  public findByEmail(email: string) {
+    return this.getQb().where("user.email = :email", { email: email.toLowerCase() }).getOne()
+  }
+
+  public findByIdHelper(id: string) {
+    return this.getQb().where("user.id = :id", { id }).getOne()
+  }
+
+  public findByConfirmationToken(token: string) {
+    return this.getQb().where("user.confirmationToken = :token", { token }).getOne()
+  }
+
+  public findByResetToken(token: string) {
+    return this.getQb().where("user.resetToken = :token", { token }).getOne()
   }
 
   private generateMfaCode() {

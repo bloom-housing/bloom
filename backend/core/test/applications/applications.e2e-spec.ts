@@ -21,9 +21,8 @@ import { getTestAppBody } from "../lib/get-test-app-body"
 import { UserDto } from "../../src/auth/dto/user.dto"
 import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
-import { User } from "../../src/auth/entities/user.entity"
 import { EmailService } from "../../src/email/email.service"
-import { findByEmail } from "../../src/auth/helpers/user-helpers"
+import { UserService } from "../../src/auth/services/user.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -657,8 +656,8 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
-    const user = await findByEmail(userRepository, userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)

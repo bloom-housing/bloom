@@ -15,7 +15,6 @@ import { EmailService } from "../../email/email.service"
 import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { Listing } from "../../listings/entities/listing.entity"
-import * as helpers from "../helpers/user-helpers"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -113,7 +112,7 @@ describe("UserService", () => {
 
   describe("createUser", () => {
     it("should return EMAIL_IN_USE error if email is already in use", async () => {
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce({
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce({
         ...defaultUserInfo,
         id: "123",
         email: "abc@xyz.com",
@@ -142,7 +141,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce(null)
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce(null)
       mockUserRepo.save = jest.fn().mockRejectedValue(new Error(USER_ERRORS.ERROR_SAVING.message))
       await expect(service.createPublicUser(user, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
@@ -162,7 +161,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce({
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce({
         ...defaultUserInfo,
         ...user,
         confirmedAt: new Date(),
@@ -203,7 +202,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce(existingUser)
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce(existingUser)
       await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
@@ -239,7 +238,7 @@ describe("UserService", () => {
         roles: {},
       }
 
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce(existingUser)
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce(existingUser)
       mockUserRepo.save = jest.fn().mockResolvedValue(user)
       const savedUser = await service.invite(user)
       expect(savedUser).toBe(user)
@@ -275,7 +274,7 @@ describe("UserService", () => {
         jurisdictions: [],
       }
 
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce(existingUser)
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce(existingUser)
       await expect(service._createUser(user)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
@@ -287,14 +286,14 @@ describe("UserService", () => {
 
   describe("forgotPassword", () => {
     it("should return undefined if email is not found", async () => {
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce(null)
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce(null)
       await expect(service.forgotPassword({ email: "abc@xyz.com" })).resolves.toBeUndefined()
     })
 
     it("should set resetToken", async () => {
       const mockedUser = { id: "123", email: "abc@xyz.com" }
       jest
-        .spyOn(helpers, "findByEmail")
+        .spyOn(service, "findByEmail")
         .mockResolvedValueOnce({ ...defaultUserInfo, ...mockedUser, resetToken: null })
       const user = await service.forgotPassword({ email: "abc@xyz.com" })
       expect(user["resetToken"]).toBeDefined()
@@ -304,7 +303,7 @@ describe("UserService", () => {
   describe("updatePassword", () => {
     const updateDto = { password: "qwerty", passwordConfirmation: "qwerty", token: "abcefg" }
     it("should return 400 if email is not found", async () => {
-      jest.spyOn(helpers, "findByResetToken").mockResolvedValueOnce(null)
+      jest.spyOn(service, "findByResetToken").mockResolvedValueOnce(null)
       await expect(service.updatePassword(updateDto)).rejects.toThrow(
         new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
       )
@@ -312,8 +311,8 @@ describe("UserService", () => {
 
     it("should set resetToken", async () => {
       const mockedUser = { id: "123", email: "abc@xyz.com" }
-      jest.spyOn(helpers, "findByEmail").mockResolvedValueOnce(mockedUser as User)
-      jest.spyOn(helpers, "findByResetToken").mockResolvedValueOnce(mockedUser as User)
+      jest.spyOn(service, "findByEmail").mockResolvedValueOnce(mockedUser as User)
+      jest.spyOn(service, "findByResetToken").mockResolvedValueOnce(mockedUser as User)
       // Sets resetToken
       await service.forgotPassword({ email: "abc@xyz.com" })
       const accessToken = await service.updatePassword(updateDto)
