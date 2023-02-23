@@ -5,7 +5,7 @@ orbs:
 executors:
   standard-node:
     docker:
-      - image: "cimg/node:14.17.6"
+      - image: "cimg/node:18.14.2"
       - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
@@ -14,7 +14,7 @@ executors:
           POSTGRES_DB: bloom
   cypress-node:
     docker:
-      - image: "cypress/base:14.17.0"
+      - image: "cypress/base:18.14.1"
       - image: "cimg/postgres:12.10"
         environment:
           POSTGRES_USER: bloom-ci
@@ -30,9 +30,6 @@ executors:
       # DB URL for the jest tests per ormconfig.test.ts
       TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
-  puppeteer-node:
-    docker:
-      - image: "cimg/node:14.17.6-browsers"
 
 jobs:
   setup:
