@@ -1,16 +1,59 @@
 import React from "react"
-import { Listing, UnitsSummarized, Jurisdiction, Unit } from "@bloom-housing/backend-core/types"
+import dayjs from "dayjs"
+import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { render, cleanup } from "@testing-library/react"
 import { ListingView } from "../../../src/components/listing/ListingView"
 import { listing, jurisdiction } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
-//backend/core/types/src/archer-listing.ts may be useful
 afterEach(cleanup)
 
 describe("<ListingView>", () => {
-  it("liann tests", () => {
-    const { getByText } = render(<ListingView listing={listing} jurisdiction={jurisdiction} />)
+  describe("'Apply Online' button visibility", () => {
+    it("does not show if the due date is in the past", () => {
+      const pastDate = dayjs().subtract(7, "day")
+      const view = render(
+        <ListingView
+          listing={{
+            ...listing,
+            applicationDueDate: pastDate.toDate(),
+          }}
+          jurisdiction={jurisdiction}
+        />
+      )
+      expect(view.getByText(/Applications Closed/)).toBeInTheDocument()
+      expect(view.queryByText("Apply Online")).toBeNull()
+    })
 
-    expect(true).toBeTruthy()
+    it("shows if the due date is in the future", () => {
+      const view = render(
+        <ListingView
+          listing={{
+            ...listing,
+            applicationDueDate: dayjs().add(7, "day").toDate(),
+          }}
+          jurisdiction={jurisdiction}
+        />
+      )
+      expect(view.getByText("Apply Online")).toBeInTheDocument()
+    })
+
+    it("does not show for paper applications even with a future due date", () => {
+      const view = render(
+        <ListingView
+          listing={{
+            ...listing,
+            applicationDueDate: dayjs().add(7, "day").toDate(),
+            applicationMethods: [
+              {
+                ...listing.applicationMethods[0],
+                type: ApplicationMethodType.PaperPickup,
+              },
+            ],
+          }}
+          jurisdiction={jurisdiction}
+        />
+      )
+      expect(view.queryByText("Apply Online")).toBeNull()
+    })
   })
 })

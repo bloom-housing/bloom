@@ -7,6 +7,7 @@ import {
   Unit,
   Jurisdiction,
   EnumJurisdictionLanguages,
+  ApplicationMethodType,
 } from "@bloom-housing/backend-core"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -168,7 +169,20 @@ export const listing: Listing = {
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationMethods: [],
+  applicationMethods: [
+    {
+      type: ApplicationMethodType.Internal,
+      label: "Label",
+      externalReference: "",
+      acceptsPostmarkedApplications: false,
+      phoneNumber: "123",
+      id: "cd42843a-c251-4bcd-97ed-8f6c34752f01",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      paperApplications: [],
+      listing: { id: "Uvbk5qurpB2WI9V6WnNdH" },
+    },
+  ],
   applicationOrganization: "98 Archer Street",
   assets: [
     {

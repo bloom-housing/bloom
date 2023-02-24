@@ -63,7 +63,6 @@ export default function ListingPage(props: ListingProps) {
     listingName: listing.name,
   })
   const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
-  console.log(props.jurisdiction)
   return (
     <Layout>
       <Head>
