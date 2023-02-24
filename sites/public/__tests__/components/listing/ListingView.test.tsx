@@ -10,12 +10,12 @@ afterEach(cleanup)
 describe("<ListingView>", () => {
   describe("'Apply Online' button visibility", () => {
     it("does not show if the due date is in the past", () => {
-      const pastDate = dayjs().subtract(7, "day")
+      const pastDate = dayjs().subtract(7, "day").toDate()
       const view = render(
         <ListingView
           listing={{
             ...listing,
-            applicationDueDate: pastDate.toDate(),
+            applicationDueDate: pastDate,
           }}
           jurisdiction={jurisdiction}
         />
