@@ -8,6 +8,20 @@ import "@testing-library/jest-dom/extend-expect"
 import general from "../page_content/locale_overrides/general.json"
 addTranslation({ ...generalTranslations, ...general })
 
+// see: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
+window.matchMedia = jest.fn().mockImplementation((query) => {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  }
+})
+
 process.env.backendApiBase = "http://localhost:3100"
 
 global.beforeEach(() => {
