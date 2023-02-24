@@ -4,7 +4,7 @@ import { rest } from "msw"
 import { setupServer } from "msw/node"
 import React from "react"
 import Users from "../../../src/pages/users"
-import { user } from "../../testHelpers"
+import { user } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 
 const server = setupServer()
 
