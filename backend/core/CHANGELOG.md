@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.8.0...@bloom-housing/backend-core@7.8.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* limit hmi table to min and max occupancy ([#3321](https://github.com/bloom-housing/bloom/issues/3321)) ([13ce24b](https://github.com/bloom-housing/bloom/commit/13ce24b7d3148817f288c54cb5316fd74b92ef8d))
+
+
+
+
+
 # [7.8.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.2...@bloom-housing/backend-core@7.8.0) (2023-02-14)
 
 

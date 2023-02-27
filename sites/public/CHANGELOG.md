@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.7...@bloom-housing/public@7.3.8) (2023-02-27)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [7.3.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.6...@bloom-housing/public@7.3.7) (2023-02-14)
 
 **Note:** Version bump only for package @bloom-housing/public
