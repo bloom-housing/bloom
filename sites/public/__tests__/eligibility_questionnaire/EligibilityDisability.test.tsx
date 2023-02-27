@@ -1,5 +1,5 @@
-import { render, fireEvent, screen, waitFor } from "@testing-library/react"
-import EligibilityDisability from "../../pages/eligibility/disability"
+import { render, fireEvent, screen } from "@testing-library/react"
+import EligibilityDisability from "../../src/pages/eligibility/disability"
 import React from "react"
 import { act } from "react-dom/test-utils"
 

@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from "@testing-library/react"
-import EligibilityIncome from "../../pages/eligibility/income"
+import EligibilityIncome from "../../src/pages/eligibility/income"
 import React from "react"
 import { act } from "react-dom/test-utils"
 

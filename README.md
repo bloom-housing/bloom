@@ -38,7 +38,7 @@ In some cases the sites diverge slightly to accomodate jurisdictional customizat
 
 ---
 
-- `ui-components` contains our internal component library based on our internal design system. It is comprised of React components that we consume internally and also build to be configurable for outside consumers. We use [Storybook](https://storybook.js.org/), an environment that renders each of our components to provide documentation and display iterations.
+- `detroit-ui-components` contains our internal component library based on our internal design system. It is comprised of React components that we consume internally and also build to be configurable for outside consumers. We use [Storybook](https://storybook.js.org/), an environment that renders each of our components to provide documentation and display iterations.
 - Visit [ui-components/README](https://github.com/bloom-housing/bloom/blob/dev/ui-components/README.md) for more details and view our [published Storybook](https://storybook.bloom.exygy.dev/).
 
 ## Getting Started for Developers

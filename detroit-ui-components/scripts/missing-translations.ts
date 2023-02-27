@@ -22,10 +22,10 @@ function main() {
   const arBaseTranslations = require("../src/locales/ar.json")
   const bnBaseTranslations = require("../src/locales/bn.json")
 
-  const enOverrideTranslations = require("../../sites/public/page_content/locale_overrides/general.json")
-  const esOverrideTranslations = require("../../sites/public/page_content/locale_overrides/es.json")
-  const arOverrideTranslations = require("../../sites/public/page_content/locale_overrides/ar.json")
-  const bnOverrideTranslations = require("../../sites/public/page_content/locale_overrides/bn.json")
+  const enOverrideTranslations = require("../../sites/public/src/page_content/locale_overrides/general.json")
+  const esOverrideTranslations = require("../../sites/public/src/page_content/locale_overrides/es.json")
+  const arOverrideTranslations = require("../../sites/public/src/page_content/locale_overrides/ar.json")
+  const bnOverrideTranslations = require("../../sites/public/src/page_content/locale_overrides/bn.json")
 
   const allTranslations = [
     {

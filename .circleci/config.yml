@@ -112,6 +112,12 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:app:partners:unit
+  unit-test-public:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:app:public:unit
 
 workflows:
   version: 2
@@ -128,6 +134,9 @@ workflows:
           requires:
             - setup
       - build-public:
+          requires:
+            - setup
+      - unit-test-public:
           requires:
             - setup
       - build-partners:

@@ -23,7 +23,7 @@ jobs:
     name: Backend unit tests
   - script: yarn test:e2e:backend:core
     name: Backend e2e tests
-  - script: yarn test:public:unit-tests
+  - script: yarn test:app:public:unit
     name: Public site unit tests
   - stage: longer tests
     name: Partners site Cypress tests

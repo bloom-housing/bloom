@@ -5,7 +5,7 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from "@testing-library/react"
-import EligibilityHouseholdSize from "../../pages/eligibility/household"
+import EligibilityHouseholdSize from "../../src/pages/eligibility/household"
 import React from "react"
 import { act } from "react-dom/test-utils"
 import userEvent from "@testing-library/user-event"
