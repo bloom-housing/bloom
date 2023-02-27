@@ -36,6 +36,10 @@ const minMaxCurrency = (baseValue: MinMaxCurrency, newValue: number): MinMaxCurr
   }
 }
 
+const yearlyCurrencyStringToMonthly = (currency: string) => {
+  return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, "")) / 12)
+}
+
 const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {
   return amiChartItem.householdSize.toString() + "-" + amiChartItem.percentOfAmi.toString()
 }
@@ -62,17 +66,28 @@ export const mergeAmiChartWithOverrides = (amiChart: AmiChart, override: UnitAmi
 
 // Creates data used to display a table of household size/unit size by maximum income per the AMI charts on the units
 // Unit sets can have multiple AMI charts used, in which case the table displays ranges
-const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) => {
-  // Currently, BMR chart is just toggling whether or not the first column shows Household Size or Unit Type
+export const generateHmiData = (
+  units: Units,
+  minMaxHouseholdSize: MinMax[],
+  amiCharts: AmiChart[]
+) => {
   if (!units || units.length === 0) {
     return null
   }
+  // Currently, BMR chart is just toggling whether or not the first column shows Household Size or Unit Type
   const showUnitType = units[0].bmrProgramChart
 
   type ChartAndPercentage = {
     percentage: number
     chart: AmiChart
   }
+
+  const maxAMIChartHouseholdSize = amiCharts.reduce((maxSize, amiChart) => {
+    const amiChartMax = amiChart.items.reduce((max, item) => {
+      return Math.max(max, item.householdSize)
+    }, 0)
+    return Math.max(maxSize, amiChartMax)
+  }, 0)
 
   // All unique AMI percentages across all units
   const allPercentages: number[] = [
@@ -120,6 +135,16 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   ]
   // this is to map currentHouseholdSize to a units max occupancy
   const unitOccupancy = []
+
+  let validHouseholdSizes = minMaxHouseholdSize.reduce((validSizes, minMax) => {
+    // Get all numbers between min and max
+    // If min is more than the largest chart value, make sure we show the largest value
+    const unitHouseholdSizes = [
+      ...Array(Math.min(minMax.max, maxAMIChartHouseholdSize) + 1).keys(),
+    ].filter((value) => value >= Math.min(minMax.min, maxAMIChartHouseholdSize))
+    return [...new Set([...validSizes, ...unitHouseholdSizes])].sort((a, b) => (a < b ? -1 : 1))
+  }, [])
+
   if (showUnitType) {
     // the unit types used by the listing
     const selectedUnitTypes = units.reduce((obj, unit) => {
@@ -146,12 +171,9 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
       unitOccupancy.push(selectedUnitTypes[name].maxOccupancy)
     })
 
-    // if showUnitType, we want to set the maxHouseholdSize to the largest unit.maxOccupancy
-    const largestBedroom = Math.max(...units.map((unit) => unit.unitType?.numBedrooms || 0))
-    maxHouseholdSize = largestBedroom + 1
+    // if showUnitType, we want to set the bedroom sizes to the valid household sizes
+    validHouseholdSizes = [...new Set(units.map((unit) => unit.unitType?.numBedrooms || 0))]
   }
-
-  const hmiRows = [] as AnyDict[]
 
   // 1. If there are multiple AMI levels, show each AMI level (max income per
   //    year only) for each size (number of cols = the size col + # ami levels)
@@ -177,15 +199,12 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
     })?.income
   }
 
-  const yearlyCurrencyStringToMonthly = (currency: string) => {
-    return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, "")) / 12)
-  }
-
   // Build row data by household size
-  new Array(maxHouseholdSize).fill(maxHouseholdSize).forEach((_, index) => {
-    const currentHouseholdSize = showUnitType ? unitOccupancy[index] : index + 1
+  const hmiRows = validHouseholdSizes.reduce((hmiRowsData, householdSize: number) => {
+    const currentHouseholdSize = showUnitType ? unitOccupancy[householdSize - 1] : householdSize
+
     const rowData = {
-      sizeColumn: showUnitType ? bmrHeaders[index] : currentHouseholdSize,
+      sizeColumn: showUnitType ? bmrHeaders[householdSize - 1] : currentHouseholdSize,
     }
 
     let rowHasData = false // Row is valid if at least one column is filled, otherwise don't push the row
@@ -204,7 +223,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
         }
       } else {
         if (!uniquePercentCharts[0].chart) {
-          return
+          return hmiRowsData
         }
         // If we have chart data, create a max income range string
         const firstChartValue = findAmiValueInChart(
@@ -213,7 +232,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
           currentAmiPercent
         )
         if (!firstChartValue) {
-          return
+          return hmiRowsData
         }
         const maxIncomeRange = uniquePercentCharts.reduce(
           (incomeRange, uniqueSet) => {
@@ -236,9 +255,10 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
       }
     })
     if (rowHasData) {
-      hmiRows.push(rowData)
+      hmiRowsData.push(rowData)
     }
-  })
+    return hmiRowsData
+  }, [])
 
   return { columns: hmiHeaders, rows: hmiRows }
 }
@@ -419,11 +439,9 @@ export const summarizeUnits = (
   data.byUnitTypeAndRent = summarizeUnitsByTypeAndRent(units, listing)
   data.byUnitType = summarizeUnitsByType(units, data.unitTypes)
   data.byAMI = summarizeByAmi(units, data.amiPercentages, listing)
-  data.hmi = hmiData(
+  data.hmi = generateHmiData(
     units,
-    data.byUnitType.reduce((maxHousehold, summary) => {
-      return Math.max(maxHousehold, summary.occupancyRange.max)
-    }, 0),
+    data.byUnitType.map((byUnitType) => byUnitType.occupancyRange),
     amiCharts
   )
   return data
