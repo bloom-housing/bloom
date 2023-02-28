@@ -11,6 +11,8 @@ import { applicationSetup } from "../../src/app.module"
 import { INestApplication } from "@nestjs/common"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { AssetsModule } from "../../src/assets/assets.module"
+import { AuthModule } from "../../src/auth/auth.module"
+import { ListingsModule } from "../../src/listings/listings.module"
 
 class FakeUploadService implements UploadService {
   createPresignedUploadMetadata(): { signature: string } {
@@ -26,6 +28,8 @@ describe("AssetsController", () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
+        AuthModule,
+        ListingsModule,
         SharedModule,
         TypeOrmModule.forRoot({ ...dbOptions, keepConnectionAlive: true }),
         TypeOrmModule.forFeature([Asset]),

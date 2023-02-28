@@ -9,6 +9,7 @@ export class ListingImageDto extends OmitType(ListingImage, [
   "listing",
   "image",
   "imageId",
+  "listingId",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -22,4 +23,10 @@ export class ListingImageDto extends OmitType(ListingImage, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   imageId?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  listingId?: string
 }

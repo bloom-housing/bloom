@@ -15,6 +15,7 @@ import { EmailService } from "../../email/email.service"
 import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { Listing } from "../../listings/entities/listing.entity"
+import { ListingsService } from "../../listings/listings.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -95,6 +96,12 @@ describe("UserService", () => {
         {
           provide: ConfigService,
           useValue: { get: jest.fn() },
+        },
+        {
+          provide: ListingsService,
+          useValue: {
+            getJurisdiction: jest.fn(),
+          },
         },
       ],
     }).compile()

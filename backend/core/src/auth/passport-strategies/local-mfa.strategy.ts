@@ -39,7 +39,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
       where: { email: loginDto.email.toLowerCase() },
       relations: ["leasingAgentInListings"],
     })
-    console.log("42:", user)
+
     if (user) {
       if (user.lastLoginAt) {
         const retryAfter = new Date(

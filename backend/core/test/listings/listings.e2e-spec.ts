@@ -44,12 +44,11 @@ describe("Listings", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Jurisdiction]),
+        TypeOrmModule.forFeature([Jurisdiction, MultiselectQuestion]),
         ListingsModule,
         AssetsModule,
         ApplicationMethodsModule,
         PaperApplicationsModule,
-        TypeOrmModule.forFeature([MultiselectQuestion]),
       ],
     }).compile()
 
@@ -214,7 +213,7 @@ describe("Listings", () => {
       .send(image)
       .set(...setAuthorization(adminAccessToken))
       .expect(201)
-    listing.images = [{ image: assetCreateResponse.body, ordinal: 1 }]
+    listing.images = [{ image: assetCreateResponse.body, ordinal: 1, listingId: listing.id }]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)

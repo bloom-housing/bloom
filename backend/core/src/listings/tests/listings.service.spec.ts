@@ -14,6 +14,7 @@ import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/ap
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { Listing } from "../entities/listing.entity"
 import { User } from "../../auth/entities/user.entity"
+import { UserService } from "../../auth/services/user.service"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -155,6 +156,12 @@ describe("ListingsService", () => {
         {
           provide: TranslationsService,
           useValue: { translateListing: jest.fn() },
+        },
+        {
+          provide: UserService,
+          useValue: {
+            getJurisdiction: jest.fn(),
+          },
         },
       ],
     }).compile()

@@ -4420,7 +4420,7 @@ export interface ListingImage {
   imageId?: string
 
   /**  */
-  listingId: string
+  listingId?: string
 
   /**  */
   ordinal?: number
@@ -5099,13 +5099,13 @@ export interface ListingImageUpdate {
   image: AssetUpdate
 
   /**  */
-  listingId: string
-
-  /**  */
   ordinal?: number
 
   /**  */
   imageId?: string
+
+  /**  */
+  listingId?: string
 }
 
 export interface UnitAmiChartOverrideCreate {

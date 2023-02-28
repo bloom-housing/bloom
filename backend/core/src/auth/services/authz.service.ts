@@ -37,7 +37,7 @@ export class AuthzService {
       e = await this.addUserPermissions(e, user)
 
       if (type === "user" && obj?.id && !obj?.jurisdictionId) {
-        const accessedUser = await this.userService.findById(obj.id)
+        const accessedUser = await this.userService.findByIdHelper(obj.id)
         obj.jurisdictionId = accessedUser.jurisdictions.map((jurisdiction) => jurisdiction.id)[0]
       }
     }
