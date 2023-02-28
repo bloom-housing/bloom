@@ -23,6 +23,7 @@ import { makeTestListing } from "../utils/make-test-listing"
 import { UserInviteDto } from "../../src/auth/dto/user-invite.dto"
 import { EmailService } from "../../src/email/email.service"
 import { getTestAppBody } from "../lib/get-test-app-body"
+import { ThrottlerModule } from "@nestjs/throttler"
 
 jest.setTimeout(30000)
 
@@ -52,7 +53,14 @@ describe("Authz", () => {
     }
 
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule.register(dbOptions)],
+      imports: [
+        AppModule.register(dbOptions),
+        ThrottlerModule.forRoot({
+          ttl: 60,
+          limit: 2,
+          ignoreUserAgents: [/^node-superagent.*$/],
+        }),
+      ],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)

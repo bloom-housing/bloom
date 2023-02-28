@@ -1,6 +1,6 @@
 import React from "react"
 import { cleanup } from "@testing-library/react"
-import { occupancyTable, getOccupancyDescription } from "../src/occupancyFormatting"
+import { occupancyTable, getOccupancyDescription } from "../src/views/occupancyFormatting"
 import { t } from "@bloom-housing/ui-components"
 import { Listing, UnitsSummarized, UnitType } from "@bloom-housing/backend-core/types"
 

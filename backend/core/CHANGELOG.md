@@ -3,6 +3,127 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.0...@bloom-housing/backend-core@7.7.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* fix flaky test by configuring the thottler ([#3305](https://github.com/bloom-housing/bloom/issues/3305)) ([82e5755](https://github.com/bloom-housing/bloom/commit/82e5755de248b47eb2e81cfb4bea7dddc1cb9617))
+
+
+
+
+
+# [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.6.0...@bloom-housing/backend-core@7.7.0) (2023-01-26)
+
+
+### Features
+
+* add marked and flagged as duplicate to all applications table ([#3214](https://github.com/bloom-housing/bloom/issues/3214)) ([f79f415](https://github.com/bloom-housing/bloom/commit/f79f415a917873e11b12b8795c2915f13737574f))
+
+
+### Reverts
+
+* Revert "feat: switching to auth cookies" ([b493092](https://github.com/bloom-housing/bloom/commit/b4930925ba0f142078f900ca95a33366752f6c7a))
+* Revert "fix: update to fix hosted envs (#3235)" ([0e50494](https://github.com/bloom-housing/bloom/commit/0e5049454d462fca24036ed664ae2b2faff664f3)), closes [#3235](https://github.com/bloom-housing/bloom/issues/3235)
+
+
+
+
+
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.5.0...@bloom-housing/backend-core@7.6.0) (2022-12-23)
+
+
+### Features
+
+* add 5 bedroom option ([#3230](https://github.com/bloom-housing/bloom/issues/3230)) ([8ada8dc](https://github.com/bloom-housing/bloom/commit/8ada8dcea9d2c3bf3fdd6f574bbe8afd08eb1a9d))
+
+
+
+
+
+# [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.4.0...@bloom-housing/backend-core@7.5.0) (2022-12-13)
+
+
+### Features
+
+* remove redis and correct the throttler ([#3201](https://github.com/bloom-housing/bloom/issues/3201)) ([28c2f33](https://github.com/bloom-housing/bloom/commit/28c2f330816e6b0c0fa8fba8abc48d6d240cc2bf))
+
+
+
+
+
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.3.1...@bloom-housing/backend-core@7.4.0) (2022-12-08)
+
+
+### Features
+
+* Updates from hba 12-07-2022 ([#3210](https://github.com/bloom-housing/bloom/issues/3210)) ([7d55de4](https://github.com/bloom-housing/bloom/commit/7d55de436194de31d91276c68038143c3fd56e92)), closes [#523](https://github.com/bloom-housing/bloom/issues/523) [#537](https://github.com/bloom-housing/bloom/issues/537) [#541](https://github.com/bloom-housing/bloom/issues/541) [#545](https://github.com/bloom-housing/bloom/issues/545) [#551](https://github.com/bloom-housing/bloom/issues/551) [#553](https://github.com/bloom-housing/bloom/issues/553) [#550](https://github.com/bloom-housing/bloom/issues/550)
+
+
+
+
+
+## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.3.0...@bloom-housing/backend-core@7.3.1) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+# [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.2.0...@bloom-housing/backend-core@7.3.0) (2022-12-06)
+
+
+### Features
+
+* migrate afs job off of redis ([#3199](https://github.com/bloom-housing/bloom/issues/3199)) ([2d8afa2](https://github.com/bloom-housing/bloom/commit/2d8afa2836011b206f24c6de40cfebc015def388))
+
+
+
+
+
+# [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.1.0...@bloom-housing/backend-core@7.2.0) (2022-11-30)
+
+
+### Features
+
+* add startDate field to listing events ([#3167](https://github.com/bloom-housing/bloom/issues/3167)) ([3d0aa11](https://github.com/bloom-housing/bloom/commit/3d0aa11abf36db016fa3ce3117a72b5fdad88614))
+
+
+
+
+
+# [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.2...@bloom-housing/backend-core@7.1.0) (2022-11-21)
+
+
+### Features
+
+* adding UUID validation ([#3172](https://github.com/bloom-housing/bloom/issues/3172)) ([320c0f0](https://github.com/bloom-housing/bloom/commit/320c0f0e2e2ec8b40bcdddc39875456d53e7cca4))
+
+
+
+
+
+## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.2-alpha.0...@bloom-housing/backend-core@7.0.2) (2022-11-14)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [7.0.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1...@bloom-housing/backend-core@7.0.2-alpha.0) (2022-11-02)
+
+
+### Bug Fixes
+
+* upgrade ioredis version ([#3161](https://github.com/bloom-housing/bloom/issues/3161)) ([8e8644b](https://github.com/bloom-housing/bloom/commit/8e8644b590e51f07cdcdb715bd09a1d8d09b1386))
+
+
+
+
+
 ## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.0.1-alpha.5...@bloom-housing/backend-core@7.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

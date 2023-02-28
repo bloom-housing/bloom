@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react"
-import { getTimeRangeString, getCurrencyRange } from "../src/stringFormatting"
+import { getTimeRangeString, getCurrencyRange } from "../src/utilities/stringFormatting"
 
 afterEach(cleanup)
 

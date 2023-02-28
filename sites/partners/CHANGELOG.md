@@ -3,6 +3,233 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.1...@bloom-housing/partners@7.6.2) (2023-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.6.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.0...@bloom-housing/partners@7.6.1) (2023-01-31)
+
+
+### Bug Fixes
+
+* change error message for invalid emails when adding a user in the partners site ([#3302](https://github.com/bloom-housing/bloom/issues/3302)) ([536785c](https://github.com/bloom-housing/bloom/commit/536785c0ef2d0f76f47d5f95203af0774aeacf27))
+
+
+
+
+
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.5.0...@bloom-housing/partners@7.6.0) (2023-01-26)
+
+
+### Features
+
+* add description for FCFS in listing aside ([#3255](https://github.com/bloom-housing/bloom/issues/3255)) ([4905c31](https://github.com/bloom-housing/bloom/commit/4905c3173e96835f072c692934e326b0a0d7f626))
+* add marked and flagged as duplicate to all applications table ([#3214](https://github.com/bloom-housing/bloom/issues/3214)) ([f79f415](https://github.com/bloom-housing/bloom/commit/f79f415a917873e11b12b8795c2915f13737574f))
+* delete ui-c folder ([#3229](https://github.com/bloom-housing/bloom/issues/3229)) ([7472558](https://github.com/bloom-housing/bloom/commit/74725586e0c10c504087ffa4f8f621863a471ebd))
+
+
+
+
+
+# [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.4...@bloom-housing/partners@7.5.0) (2022-12-23)
+
+
+### Features
+
+* add 5 bedroom option ([#3230](https://github.com/bloom-housing/bloom/issues/3230)) ([8ada8dc](https://github.com/bloom-housing/bloom/commit/8ada8dcea9d2c3bf3fdd6f574bbe8afd08eb1a9d))
+
+
+
+
+
+## [7.4.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.3...@bloom-housing/partners@7.4.4) (2022-12-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.4.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.2...@bloom-housing/partners@7.4.3) (2022-12-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.4.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.1...@bloom-housing/partners@7.4.2) (2022-12-13)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.4.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.4.0...@bloom-housing/partners@7.4.1) (2022-12-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.5...@bloom-housing/partners@7.4.0) (2022-12-08)
+
+
+### Features
+
+* add email column to duplicates table ([ce2a1a8](https://github.com/bloom-housing/bloom/commit/ce2a1a88e34ab5734e0de3cad9556df3b939efae))
+
+
+
+
+
+## [7.3.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.4...@bloom-housing/partners@7.3.5) (2022-12-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.3...@bloom-housing/partners@7.3.4) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.2...@bloom-housing/partners@7.3.3) (2022-12-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.1...@bloom-housing/partners@7.3.2) (2022-12-05)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.3.0...@bloom-housing/partners@7.3.1) (2022-12-01)
+
+
+### Reverts
+
+* Revert "fix: cypress tests working again (#3180)" (#3194) ([4894a20](https://github.com/bloom-housing/bloom/commit/4894a2017906aae134860eef39c7f70a58c7d182)), closes [#3180](https://github.com/bloom-housing/bloom/issues/3180) [#3194](https://github.com/bloom-housing/bloom/issues/3194)
+
+
+
+
+
+# [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.2...@bloom-housing/partners@7.3.0) (2022-11-30)
+
+
+### Features
+
+* add startDate field to listing events ([#3167](https://github.com/bloom-housing/bloom/issues/3167)) ([3d0aa11](https://github.com/bloom-housing/bloom/commit/3d0aa11abf36db016fa3ce3117a72b5fdad88614))
+
+
+
+
+
+## [7.2.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.1...@bloom-housing/partners@7.2.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* table a11y dynamic linting until performance issues are resolved ([#3178](https://github.com/bloom-housing/bloom/issues/3178)) ([7fe8886](https://github.com/bloom-housing/bloom/commit/7fe8886454621210c439d436d3e36068bed9a6ea))
+
+
+
+
+
+## [7.2.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.2.0...@bloom-housing/partners@7.2.1) (2022-11-22)
+
+
+### Bug Fixes
+
+* cypress tests working again ([#3180](https://github.com/bloom-housing/bloom/issues/3180)) ([f480de5](https://github.com/bloom-housing/bloom/commit/f480de5861f949e45129a0298078f69d4371f1cc))
+
+
+
+
+
+# [7.2.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.1.0...@bloom-housing/partners@7.2.0) (2022-11-21)
+
+
+### Features
+
+* adding last run to pending page ([#3168](https://github.com/bloom-housing/bloom/issues/3168)) ([45fcda2](https://github.com/bloom-housing/bloom/commit/45fcda23364b79e6c88718d70c7bb8c0d5cbb4cd))
+
+
+
+
+
+# [7.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.3...@bloom-housing/partners@7.1.0) (2022-11-21)
+
+
+### Features
+
+* adding UUID validation ([#3172](https://github.com/bloom-housing/bloom/issues/3172)) ([320c0f0](https://github.com/bloom-housing/bloom/commit/320c0f0e2e2ec8b40bcdddc39875456d53e7cca4))
+
+
+
+
+
+## [7.0.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.2...@bloom-housing/partners@7.0.3) (2022-11-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.0.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.2-alpha.2...@bloom-housing/partners@7.0.2) (2022-11-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.0.2-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.2-alpha.1...@bloom-housing/partners@7.0.2-alpha.2) (2022-11-03)
+
+
+### Bug Fixes
+
+* allow for more space for modals on mobile ([#3153](https://github.com/bloom-housing/bloom/issues/3153)) ([7e41703](https://github.com/bloom-housing/bloom/commit/7e41703ad8571eb160f4eaf53f40f9055f7639a3))
+
+
+
+
+
+## [7.0.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.2-alpha.0...@bloom-housing/partners@7.0.2-alpha.1) (2022-11-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.0.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.1...@bloom-housing/partners@7.0.2-alpha.0) (2022-10-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [7.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.0.1-alpha.9...@bloom-housing/partners@7.0.1) (2022-10-26)
 
 **Note:** Version bump only for package @bloom-housing/partners

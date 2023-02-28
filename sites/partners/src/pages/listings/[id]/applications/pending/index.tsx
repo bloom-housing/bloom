@@ -13,7 +13,7 @@ import { useSingleListingData, useFlaggedApplicationsList } from "../../../../..
 import { ListingStatusBar } from "../../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../../layouts"
 import { ApplicationsSideNav } from "../../../../../components/applications/ApplicationsSideNav"
-import { formatDateTime } from "@bloom-housing/shared-helpers/src/DateFormat"
+import { formatDateTime } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
 
