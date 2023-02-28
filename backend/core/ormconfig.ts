@@ -1,5 +1,6 @@
 import { SnakeNamingStrategy } from "typeorm-naming-strategies"
 import { join } from "path"
+import { DataSourceOptions } from "typeorm"
 
 // dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
 try {
@@ -10,19 +11,16 @@ try {
 }
 
 const defaultConnectionForEnv = {
-  development: {
-    host: "localhost",
-    port: 5432,
-    database: "bloom",
-  },
+  host: "localhost",
+  port: 5432,
+  database: "bloom",
+  ssl: undefined,
 }
-
-const env = process.env.NODE_ENV || "development"
 
 // If we have a DATABASE_URL, use that
 const connectionInfo = process.env.DATABASE_URL
-  ? { url: process.env.DATABASE_URL }
-  : defaultConnectionForEnv[env]
+  ? { url: process.env.DATABASE_URL, ssl: undefined }
+  : defaultConnectionForEnv
 
 // Require an SSL connection to the DB in production, and allow self-signed
 if (process.env.NODE_ENV === "production") {
@@ -31,7 +29,7 @@ if (process.env.NODE_ENV === "production") {
 
 // Unfortunately, we need to use CommonJS/AMD style exports rather than ES6-style modules for this due to how
 // TypeORM expects the config to be available.
-export default {
+const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
   ...connectionInfo,
   synchronize: false,
@@ -46,14 +44,11 @@ export default {
   ],
   migrations: [join(__dirname, "src/migration", "*.{js,ts}")],
   subscribers: [join(__dirname, "src/subscriber", "*.{js,ts}")],
-  cli: {
-    entitiesDir: "src/entity",
-    migrationsDir: "src/migration",
-    subscribersDir: "src/subscriber",
-  },
   // extra: {
   //   ssl: {
   //     rejectUnauthorized: false,
   //   },
   // },
 }
+
+export default dataSourceOptions
