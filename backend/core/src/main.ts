@@ -14,7 +14,7 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   app = applicationSetup(app)
-  const conn = new DataSource({ type: "postgres" })
+  const conn = new DataSource({ ...dbOptions })
   await conn.initialize()
   // showMigrations returns true if there are pending migrations
   if (await conn.showMigrations()) {

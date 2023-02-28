@@ -43,7 +43,6 @@ const dataSourceOptions: DataSourceOptions = {
     join(__dirname, "src/**", "*.entity.{js,ts}"),
   ],
   migrations: [join(__dirname, "src/migration", "*.{js,ts}")],
-  subscribers: [join(__dirname, "src/subscriber", "*.{js,ts}")],
   // extra: {
   //   ssl: {
   //     rejectUnauthorized: false,
