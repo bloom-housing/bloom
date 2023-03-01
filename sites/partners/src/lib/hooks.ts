@@ -476,7 +476,7 @@ export const useUsersExport = () => {
 
   return useCsvExport(
     () => userService.listAsCsv(),
-    `users-${createDateStringFromNow("YYYY-MM-DD")}.csv`
+    `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
   )
 }
 

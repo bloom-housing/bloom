@@ -25,12 +25,12 @@ export class UserCsvExporterService {
         "Last Name": user.lastName,
         Email: user.email,
         Role: roles.join(", "),
-        "Date Created": dayjs(user.createdAt).format("MM-DD-YYYY"),
+        "Date Created": dayjs(user.createdAt).format("MM-DD-YYYY HH:mmZ[Z]"),
         Status: user.confirmedAt ? "Confirmed" : "Unconfirmed",
         "Listing Names":
           user.leasingAgentInListings?.map((listing) => listing.name).join(", ") || "",
         "Listing Ids": user.leasingAgentInListings?.map((listing) => listing.id).join(", ") || "",
-        "Last Logged In": dayjs(user.lastLoginAt).format("MM-DD-YYYY"),
+        "Last Logged In": dayjs(user.lastLoginAt).format("MM-DD-YYYY HH:mmZ[Z]"),
       }
       return obj
     }, {})
