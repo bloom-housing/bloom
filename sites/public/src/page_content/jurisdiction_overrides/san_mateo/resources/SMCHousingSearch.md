@@ -1,5 +1,5 @@
 <RenderIf language="en">
-### [SMCHousingSearch](https://www.smchousingsearch.org/) 
+### [SMCHousingSearch](https://www.smchousingsearch.org/)
 
 Rental and Shared Housing Opportunities
 
