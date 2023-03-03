@@ -124,7 +124,7 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": "18",
+    "node": "16",
     "yarn": "^1.22"
   },
   "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
