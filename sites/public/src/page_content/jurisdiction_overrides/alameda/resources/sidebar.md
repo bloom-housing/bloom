@@ -5,7 +5,7 @@ For listing and application questions, please contact the Property Agent display
 
 **Alameda County's Housing & Development Department (HCD)**
 
-**[achousingportal@acgov.org](mailto:achousingportal@acgov.org)**
+**[achousingportal@edenir.org](mailto:achousingportal@edenir.org)**
 
 </RenderIf>
 <RenderIf language="es">
@@ -15,7 +15,7 @@ Si tiene alguna pregunta sobre los listados y la solicitud, sírvase poner en co
 
 **Departamento de Desarrollo Comunitario y de Vivienda (HCD) del Condado de Alameda**
 
-**[achousingportal@acgov.org](mailto:achousingportal@acgov.org)**
+**[achousingportal@edenir.org](mailto:achousingportal@edenir.org)**
 
 </RenderIf>
 <RenderIf language="zh">
@@ -25,7 +25,7 @@ Si tiene alguna pregunta sobre los listados y la solicitud, sírvase poner en co
 
 **阿拉米達縣房屋及社區發展部 (HCD)**
 
-**[achousingportal@acgov.org](mailto:achousingportal@acgov.org)**
+**[achousingportal@edenir.org](mailto:achousingportal@edenir.org)**
 
 </RenderIf>
 <RenderIf language="vi">
@@ -35,7 +35,7 @@ Si tiene alguna pregunta sobre los listados y la solicitud, sírvase poner en co
 
 **Sở Gia cư và Phát triển Cộng đồng (HCD) Quận Alameda**
 
-**[achousingportal@acgov.org](mailto:achousingportal@acgov.org)**
+**[achousingportal@edenir.org](mailto:achousingportal@edenir.org)**
 
 </RenderIf>
 <RenderIf language="tl">
@@ -45,6 +45,6 @@ Para sa mga tanong sa listahan at aplikasyon, mangyaring makipag-ugnayan sa Ahen
 
 **Alameda County's Housing & Development Department (HCD)**
 
-**[achousingportal@acgov.org](mailto:achousingportal@acgov.org)**
+**[achousingportal@edenir.org](mailto:achousingportal@edenir.org)**
 
 </RenderIf>

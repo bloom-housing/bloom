@@ -49,7 +49,7 @@ export const JurisdictionFooterSection = () => {
         >
           {t("footer.giveFeedback")}
         </a>
-        <a href="mailto:achousingportal@acgov.org">{t("footer.contact")}</a>
+        <a href="mailto:achousingportal@edenir.org">{t("footer.contact")}</a>
         <a href="https://www.acgov.org/government/legal.htm" target="_blank" rel="noreferrer">
           {t("footer.disclaimer")}
         </a>
