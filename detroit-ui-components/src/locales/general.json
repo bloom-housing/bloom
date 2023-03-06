@@ -1329,6 +1329,7 @@
   "t.n/a": "n/a",
   "t.name": "Name",
   "t.neighborhood": "Neighborhood",
+  "t.newPage": "New Page",
   "t.next": "Next",
   "t.no": "No",
   "t.none": "None",
@@ -1592,5 +1593,6 @@
   "publicFilter.communityTypes": "Community Types",
   "publicFilter.waitlist.open": "Open Waitlist",
   "publicFilter.waitlist.closed": "Closed Waitlist",
-  "account.noFavorites": "It looks like you haven't favorited any listings yet."
+  "account.noFavorites": "It looks like you haven't favorited any listings yet.",
+  "sr.pageTitle": "Page Title:"
 }
