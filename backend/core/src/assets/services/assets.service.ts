@@ -19,6 +19,7 @@ export class AssetsService {
   ) {}
 
   async create(assetCreateDto: AssetCreateDto) {
+    console.log("22: ssssssssss")
     return await this.repository.save(assetCreateDto)
   }
 

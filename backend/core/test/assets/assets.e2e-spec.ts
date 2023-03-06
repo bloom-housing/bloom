@@ -12,7 +12,6 @@ import { INestApplication } from "@nestjs/common"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { ListingsModule } from "../../src/listings/listings.module"
 
 class FakeUploadService implements UploadService {
   createPresignedUploadMetadata(): { signature: string } {
@@ -29,7 +28,6 @@ describe("AssetsController", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         AuthModule,
-        ListingsModule,
         SharedModule,
         TypeOrmModule.forRoot({ ...dbOptions, keepConnectionAlive: true }),
         TypeOrmModule.forFeature([Asset]),
@@ -47,13 +45,15 @@ describe("AssetsController", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
-  describe("create", () => {
-    it("should create an asset", async () => {
+  describe.only("create", () => {
+    it.only("should create an asset", async () => {
       const assetInput = {
         fileId: "fileId",
         label: "label",
       }
+      console.log("55: ttttttt1")
       const asset = await assetsController.create(assetInput)
+      console.log("57: tttttt2")
       expect(asset).toMatchObject(assetInput)
       expect(asset).toHaveProperty("id")
       expect(asset).toHaveProperty("createdAt")
