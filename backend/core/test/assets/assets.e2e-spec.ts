@@ -45,15 +45,13 @@ describe("AssetsController", () => {
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
-  describe.only("create", () => {
-    it.only("should create an asset", async () => {
+  describe("create", () => {
+    it("should create an asset", async () => {
       const assetInput = {
         fileId: "fileId",
         label: "label",
       }
-      console.log("55: ttttttt1")
       const asset = await assetsController.create(assetInput)
-      console.log("57: tttttt2")
       expect(asset).toMatchObject(assetInput)
       expect(asset).toHaveProperty("id")
       expect(asset).toHaveProperty("createdAt")

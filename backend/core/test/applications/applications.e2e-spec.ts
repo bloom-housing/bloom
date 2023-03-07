@@ -44,7 +44,7 @@ describe("Applications", () => {
   let listing1Id: string
   let listing2Id: string
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
@@ -57,7 +57,7 @@ describe("Applications", () => {
         TypeOrmModule.forFeature([Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
           ttl: 60,
-          limit: 2,
+          limit: 3,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
       ],
@@ -584,7 +584,7 @@ describe("Applications", () => {
 
   it(`should disallow a user to send too much application submits`, async () => {
     const body = getTestAppBody(listing1Id)
-    const failAfter = 2
+    const failAfter = 3
 
     for (let i = 0; i < failAfter + 1; i++) {
       const expect = i < failAfter ? 201 : 429
@@ -701,9 +701,6 @@ describe("Applications", () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()
     jest.clearAllMocks()
-  })
-
-  afterAll(async () => {
     await app.close()
   })
 })

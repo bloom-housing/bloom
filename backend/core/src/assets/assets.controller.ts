@@ -42,7 +42,6 @@ export class AssetsController {
   @Post()
   @ApiOperation({ summary: "Create asset", operationId: "create" })
   async create(@Body() assetCreateDto: AssetCreateDto): Promise<AssetDto> {
-    console.log("45: cccccccccccc")
     const asset = await this.assetsService.create(assetCreateDto)
     return mapTo(AssetDto, asset)
   }
