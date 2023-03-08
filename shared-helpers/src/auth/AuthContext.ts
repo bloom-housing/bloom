@@ -249,7 +249,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       }
     },
     signOut: async () => {
-      await new AuthService().logout()
+      await authService.logout()
       dispatch(saveProfile(null))
       dispatch(signOut())
     },
