@@ -249,7 +249,7 @@ const FilterForm = (props: FilterFormProps) => {
               name={FrontendListingFilterStateKeys.minRent}
               type="number"
               placeholder={t("publicFilter.rentRangeMin")}
-              label={t("publicFilter.rentRangeMin")}
+              label={t("publicFilter.rentRangeMinReader")}
               register={register}
               prepend={"$"}
               defaultValue={localFilterState?.minRent}
@@ -276,7 +276,7 @@ const FilterForm = (props: FilterFormProps) => {
               type="number"
               name={FrontendListingFilterStateKeys.maxRent}
               placeholder={t("publicFilter.rentRangeMax")}
-              label={t("publicFilter.rentRangeMax")}
+              label={t("publicFilter.rentRangeMaxReader")}
               register={register}
               prepend={"$"}
               defaultValue={localFilterState?.maxRent}
