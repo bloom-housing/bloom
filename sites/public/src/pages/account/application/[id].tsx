@@ -51,8 +51,7 @@ export default () => {
           {noApplication && (
             <FormCard
               header={{
-                isVisible: true,
-                title: t("account.application.error"),
+                children: t("account.application.error"),
               }}
             >
               <p className="field-note mb-5">{t("account.application.noApplicationError")}</p>
@@ -64,8 +63,7 @@ export default () => {
           {unauthorized && (
             <FormCard
               header={{
-                isVisible: true,
-                title: t("account.application.error"),
+                children: t("account.application.error"),
               }}
             >
               <p className="field-note mb-5">{t("account.application.noAccessError")}</p>
@@ -78,8 +76,7 @@ export default () => {
             <>
               <FormCard
                 header={{
-                  isVisible: true,
-                  title: t("account.application.confirmation"),
+                  children: t("account.application.confirmation"),
                 }}
               >
                 <div className="py-2">

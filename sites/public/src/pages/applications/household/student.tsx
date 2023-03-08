@@ -68,8 +68,7 @@ const ApplicationHouseholdStudent = () => {
     <FormsLayout>
       <FormCard
         header={{
-          isVisible: true,
-          title: listing?.name,
+          children: listing?.name,
         }}
       >
         <ProgressNav

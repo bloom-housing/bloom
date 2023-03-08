@@ -38,8 +38,7 @@ const ApplicationView = () => {
     <FormsLayout>
       <FormCard
         header={{
-          isVisible: true,
-          title: t("account.application.confirmation"),
+          children: t("account.application.confirmation"),
         }}
       >
         <div className="py-2">

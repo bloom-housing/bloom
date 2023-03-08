@@ -67,8 +67,7 @@ export default () => {
     <FormsLayout>
       <FormCard
         header={{
-          isVisible: true,
-          title: listing?.name,
+          children: listing?.name,
         }}
       >
         <ProgressNav
