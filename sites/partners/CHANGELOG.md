@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.8.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.7.3...@bloom-housing/partners@7.8.0) (2023-03-08)
+
+
+### Features
+
+* upgrade to node 18 and next 12 ([#3343](https://github.com/bloom-housing/bloom/issues/3343)) ([ee7bf77](https://github.com/bloom-housing/bloom/commit/ee7bf77dc3a46ee0795e3e6c4ca282960ec27394))
+
+
+
+
+
 ## [7.7.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.7.2...@bloom-housing/partners@7.7.3) (2023-03-08)
 
 **Note:** Version bump only for package @bloom-housing/partners
