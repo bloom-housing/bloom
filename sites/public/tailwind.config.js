@@ -47,6 +47,8 @@ module.exports = {
       "./src/**/*.tsx",
       "./layouts/**/*.tsx",
       "../../detroit-ui-components/src/**/*.tsx",
+      "../../shared-helpers/src/**/*.tsx",
+      "../../node_modules/@bloom-housing/ui-components/src/**/*.tsx",
     ],
     safelist: [/grid-cols-/, /md:col-span-/],
   },
