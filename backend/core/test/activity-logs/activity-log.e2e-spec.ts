@@ -30,7 +30,7 @@ import cookieParser from "cookie-parser"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("Activiy", () => {
+describe("Activity", () => {
   let app: INestApplication
   let adminId: string
   let adminAccessToken: string
