@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import "./Modal.scss"
 import { Icon, IconFillColors } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
@@ -21,12 +21,15 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
 }
 
 const ModalHeader = (props: { title: string; uniqueId?: string; className?: string }) => {
+  const modalHeader = useRef<HTMLHeadingElement>(null)
+  useEffect(() => modalHeader?.current?.focus(), [props.title])
+
   const classNames = ["modal__title"]
   if (props.className) classNames.push(props.className)
   return (
     <>
       <header className="modal__header">
-        <h1 className={classNames.join(" ")} id={props.uniqueId}>
+        <h1 ref={modalHeader} tabIndex={-1} className={classNames.join(" ")} id={props.uniqueId}>
           {props.title}
         </h1>
       </header>
