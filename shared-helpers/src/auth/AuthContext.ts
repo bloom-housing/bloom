@@ -223,19 +223,19 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     ) => {
       dispatch(startLoading())
       try {
-        // const response = await fetch("/api/auth", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     email,
-        //     password,
-        //     mfaCode,
-        //     mfaType,
-        //   }),
-        // })
-        const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
+        const response = await fetch("/api/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            mfaCode,
+            mfaType,
+          }),
+        })
+        // const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
           const profile = await userService?.userControllerProfile()
           if (profile) {
