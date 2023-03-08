@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [AC Housing Secure - Emergency Rental Assistance Program](https://www.ac-housingsecure.org/?fbclid=IwAR0186ykll8tKe-brqbLkMHiguYJQc0buUF1o6SjhXg_EKebR9fYSJs5hus)
 
 If you’re an Alameda County renter who has fallen behind on rent or utilities payments due to the COVID-19 pandemic, you may qualify for assistance. Income-eligible households pay up to 15 months of rent and utilities, both for past due and future payments.
@@ -20,5 +20,11 @@ Si es un inquilino del condado de Alameda que se atrasó en el pago del alquiler
 ### [AC Housing Secure - Chương trình Hỗ trợ Cho thuê Khẩn cấp](https://www.ac-housingsecure.org/?fbclid=IwAR0186ykll8tKe-brqbLkMHiguYJQc0buUF1o6SjhXg_EKebR9fYSJs5hus)
 
 Nếu bạn là người thuê nhà của Quận Alameda, người đã bị chậm trả tiền thuê nhà hoặc tiền điện nước do đại dịch COVID-19, bạn có thể đủ điều kiện để được hỗ trợ. Các hộ gia đình đủ điều kiện thu nhập phải trả tối đa 15 tháng tiền thuê nhà và tiền điện nước, cho cả các khoản thanh toán trong quá khứ và trong tương lai.
+
+</RenderIf>
+<RenderIf language="tl">
+### [AC Housing Secure - Emergency Rental Assistance Program](https://www.ac-housingsecure.org/?fbclid=IwAR0186ykll8tKe-brqbLkMHiguYJQc0buUF1o6SjhXg_EKebR9fYSJs5hus)
+
+Kung ikaw ay isang nangungupahan sa County ng Alameda na hindi makabayad sa upa o mga utility dahil sa pandemyang COVID-19, maaari kang maging kwalipikado para sa tulong. Ang mga sambahayan na kwalipikado ang kita ay nagbabayad ng hanggang 15 buwan ng upa at mga utilidad, kapwa para sa mga pagbabayad sa nakaraan at hinaharap.
 
 </RenderIf>

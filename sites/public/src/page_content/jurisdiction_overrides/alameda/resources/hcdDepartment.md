@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Housing & Community Development (HCD) Department](https://www.acgov.org/cda/hcd/rhd/index.htm)
 
 Information on the Alameda County Housing & Community Development (HCD) Department’s policies and programs.
@@ -20,5 +20,11 @@ Información sobre las políticas y programas del Departamento de Desarrollo Com
 ### [Sở Gia cư & Phát triển Cộng đồng (HCD) Quận Alameda](https://www.acgov.org/cda/hcd/rhd/index.htm)
 
 Thông tin về các chính sách và chương trình của Sở Gia cư và Phát triển Cộng đồng (HCD) Quận Alameda.
+
+</RenderIf>
+<RenderIf language="tl">
+### [Housing & Community Development (HCD) Department](https://www.acgov.org/cda/hcd/rhd/index.htm)
+
+Impormasyon sa Alameda County Housing & Community Development (HCD) ng mga polisiya at programa ng Departamento.
 
 </RenderIf>

@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Bay Area Community Services - Downtown Oakland](http://www.bayareacs.org/)
 
 Unsheltered adults
@@ -40,4 +40,15 @@ Gọi tới đường dây Tiếp Nhận Được Điều Phối của BACS theo
 
 Đến tận nơi không cần hẹn trước tại 629 Oakland Ave.  
  Giờ làm việc: 1-4 giờ chiều, Thứ Hai, Thứ Ba và Thứ Tư
+</RenderIf>
+<RenderIf language="tl">
+### [Bay Area Community Services - Downtown Oakland](http://www.bayareacs.org/)
+
+Mga pamilyang walang matitirhan
+
+Tawagan ang BACS Coordinated Entry line sa [510-658-9480](tel:+1-510-658-9480)
+
+Magpunta sa 629 Oakland Ave.
+Oras ng opisina: 1-4pm, Lunes, Martes, at Miyerkules
+
 </RenderIf>

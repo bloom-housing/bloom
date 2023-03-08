@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### Family Front Door
 
 Unsheltered families (with a child under 18)
@@ -36,5 +36,15 @@ Những gia đình không có nơi trú ẩn (có con dưới 18 tuổi)
 Gọi [510-808-7410](tel:+1-510-808-7410), số máy lẻ 282
 
 Nếu quý vị đã nhận được dịch vụ và cần cập nhật thông tin của mình, vui lòng nhắn đầy đủ họ tên và thông tin mới/đã cập nhật của quý vị tới số [510-435-2772](sms:+1-510-435-2772).
+
+</RenderIf>
+<RenderIf language="tl">
+### Family Front Door
+
+Mga pamilyang walang matitirhan (na may anak na wala pang 18).
+
+Tawagan ang [510-808-7410](tel:+1-510-808-7410) ext. 282
+
+Kung nakakatanggap ka ng mga serbisyo at kailangang i-update ang iyong impormasyon, i-text ang iyong buong pangalan at ang iyong binago/bagong impormasyon sa [510-435-2772](sms:+1-510-435-2772).
 
 </RenderIf>

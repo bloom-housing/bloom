@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Bay Area Community Services](http://www.bayareacs.org/)
 
 Unsheltered adults
@@ -44,5 +44,17 @@ Gọi số [510-495-0131](tel:+1-510-495-0131)
 
 Đến tận nơi không cần hẹn trước tại 2809 Telegraph Ave.  
  Giờ làm việc: 9 giờ sáng-12 giờ trưa, Thứ Hai, Thứ Yư và Thứ Sáu
+
+</RenderIf>
+<RenderIf language="tl">
+### [Bay Area Community Services](http://www.bayareacs.org/)
+
+Mga adultong walang matitirhan
+
+Tawagan ang [510-495-0131](tel:+1-510-495-0131)  
+Mag-email sa [housinghub@bayareacs.org](mailto:housinghub@bayareacs.org)
+
+Magpunta sa 2809 Telegraph Ave.  
+Oras ng opisina: 9am-12pm, Lunes, Miyerklues, at Biyernes
 
 </RenderIf>

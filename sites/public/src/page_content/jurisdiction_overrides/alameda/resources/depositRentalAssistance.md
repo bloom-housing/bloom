@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Deposit and Rental Assistance](https://achousingchoices.org/deposit-rental-assistance-housing-search-assistance-resources/)
 
 Find resources for rental and deposit assistance.
@@ -20,5 +20,11 @@ Encuentre recursos para ayuda con alquileres y depósitos.
 ### [Hỗ trợ Tiền đặt cọc và Tiền thuê nhà](https://achousingchoices.org/deposit-rental-assistance-housing-search-assistance-resources/)
 
 Tìm các nguồn thông tin về hỗ trợ tiền thuê nhà và tiền đặt cọc.
+
+</RenderIf>
+<RenderIf language="tl">
+### [Deposit and Rental Assistance](https://achousingchoices.org/deposit-rental-assistance-housing-search-assistance-resources/)
+
+Maghanap ng mga resource para sa tulong sa pagrenta at pagdeposito.
 
 </RenderIf>

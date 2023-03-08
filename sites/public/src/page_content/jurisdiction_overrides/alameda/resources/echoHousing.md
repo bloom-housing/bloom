@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [ECHO Housing](https://www.echofairhousing.org/)
 
 Provides rental assistance, housing assistance, tenant/landlord counseling, home-seeking, home-sharing, and mortgage and home purchase counseling.
@@ -20,5 +20,11 @@ Proporciona ayuda en el alquiler, asistencia de vivienda, asesoría a inquilinos
 ### [ECHO Housing](https://www.echofairhousing.org/)
 
 Cung cấp hỗ trợ tiền thuê nhà, hỗ trợ nhà ở, cố vấn cho người thuê nhà/chủ nhà, tìm kiếm nhà, chia sẻ nhà, và cố vấn về tiền mua nhà trả góp và mua nhà.
+
+</RenderIf>
+<RenderIf language="tl">
+### [ECHO Housing](https://www.echofairhousing.org/)
+
+Nagbibigay ng tulong sa pag-upa, tulong sa pabahay, pagpapayo sa nangungupahan/may-ari, paghahanap ng bahay, pagbabahagi ng bahay, at pagpapayo sa mortgage at pagbili ng bahay.
 
 </RenderIf>

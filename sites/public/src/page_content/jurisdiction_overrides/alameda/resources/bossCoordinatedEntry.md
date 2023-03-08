@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [BOSS Coordinated Entry - West Oakland](http://www.self-sufficiency.org/)
 
 Unsheltered adults
@@ -6,7 +6,7 @@ Unsheltered adults
 Call BOSS Coordinated Entry line at [510-844-8221](tel:+1-510-844-8221)
 
 Walk in at 2811 Adeline St.  
- Offce hours: 10am-2pm, Monday, Tuesday, Thurday, and Friday
+ Office hours: 10am-2pm, Monday, Tuesday, Thurday, and Friday
 
 </RenderIf>
 <RenderIf language="es">
@@ -40,5 +40,16 @@ Gọi tới đường dây Tiếp Nhận Được Điều Phối của BOSS theo
 
 Đến tận nơi không cần hẹn trước tại 2811 Adeline St.  
  Giờ làm việc: 10 giờ sáng-2 giờ chiều, Thứ Hai, Thứ Ba, Thứ Năm và Thứ Sáu
+
+</RenderIf>
+<RenderIf language="tl">
+### [BOSS Coordinated Entry - West Oakland](http://www.self-sufficiency.org/)
+
+Mga adultong walang matitirhan
+
+Tawagan ang BOSS Coordinated Entry line sa [510-844-8221](tel:+1-510-844-8221)
+
+Magpunta sa 2811 Adeline St.
+Oras ng opisina: 10am-2pm, Lunes, Martes, Huwebes at Biyernes
 
 </RenderIf>

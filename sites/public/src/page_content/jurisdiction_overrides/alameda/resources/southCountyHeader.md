@@ -12,10 +12,10 @@
 
 </RenderIf>
 <RenderIf language="zh">
-### South County/Tri-City (Fremont, Newark, Union City)
+### 南部縣／三城（佛利蒙、紐瓦克、聯合巿）
 
 </RenderIf>
 <RenderIf language="vi">
-### Quận South/Tri-City (Fremont, Newark, Union City)
+### Quận Phía Nam/Tri-City (Fremont, Newark, Union City)
 
 </RenderIf>

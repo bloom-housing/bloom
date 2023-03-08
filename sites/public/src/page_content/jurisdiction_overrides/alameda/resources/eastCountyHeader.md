@@ -12,10 +12,10 @@
 
 </RenderIf>
 <RenderIf language="zh">
-### East County/Tri-Valley (Livermore, Dublin, Pleasanton)
+### 東部郡／三谷地區（利佛摩爾、都伯林、普萊森頓）
 
 </RenderIf>
 <RenderIf language="vi">
-### Quận East/Tri-Valley (Livermore, Dublin, Pleasanton)
+### Quận Phía Đông/Tri-Valley (Livermore, Dublin, Pleasanton)
 
 </RenderIf>

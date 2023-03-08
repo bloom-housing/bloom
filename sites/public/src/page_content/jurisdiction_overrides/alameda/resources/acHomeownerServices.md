@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [AC Housing Secure - Homeowner Services](https://www.ac-housingsecure.org/otherresources)
 
 Resources for homeowners at risk of foreclosure.
@@ -20,5 +20,11 @@ Recursos para propietarios en riesgo de ejecución hipotecaria.
 ### [AC Housing Secure - Dịch vụ Chủ nhà](https://www.ac-housingsecure.org/otherresources)
 
 Tài lộc cho chủ nhà trước nguy cơ bị xiết nợ.
+
+</RenderIf>
+<RenderIf language="tl">
+### [AC Housing Secure - Homeowner Services](https://www.ac-housingsecure.org/otherresources)
+
+Mga resource para sa mga may-ari ng bahay na nanganganib na mabatak ang bahay.
 
 </RenderIf>

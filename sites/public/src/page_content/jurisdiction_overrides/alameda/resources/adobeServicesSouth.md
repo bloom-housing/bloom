@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Abode Services](https://www.abodeservices.org/)
 
 Unsheltered adults
@@ -40,5 +40,16 @@ Gọi số [510-330-5822](tel:+1-510-330-5822)
 
 Đến tận nơi không cần hẹn trước tại 4075 Papazian Way, Fremont  
  Giờ ghé qua: 9 giờ sáng-1 giờ chiều, Thứ Hai và Thứ Ba
+
+</RenderIf>
+<RenderIf language="tl">
+### [Abode Services](https://www.abodeservices.org/)
+
+Mga adultong walang matitirahan
+
+Tawagan ang [510-330-5822](tel:+1-510-330-5822)
+
+Magpunta sa 4075 Papazian Way, Fremont
+Mga oras ng pagpunta: 9am-1pm, Lunes at Martes
 
 </RenderIf>

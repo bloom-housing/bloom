@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Abode Services](https://www.abodeservices.org/)
 
 Unsheltered adults/families
@@ -46,6 +46,19 @@ Gọi số [510-371-0447](tel:+1-510-371-0447)
 
 Đến tận nơi không cần hẹn trước tại 3311 Pacific Ave.  
  Giờ ghé qua: 8 giờ sáng-12 giờ trưa, Thứ Tư và Thứ Năm
+
+Livermore
+
+</RenderIf>
+<RenderIf language="tl">
+### [Abode Services](https://www.abodeservices.org/)
+
+Mga adultong/pamilyang walang matitirhan
+
+Tawagan ang [510-371-0447](tel:+1-510-371-0447)
+
+Magpunta sa 3311 Pacific Ave.
+Mga oras ng pagpunta: 8am-12pm, Miyerkules at Huwebes
 
 Livermore
 

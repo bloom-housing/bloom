@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Independent Living](https://ilacalifornia.org/alameda-county/directory/)
 
 Search for privately-owned or operated homes or complexes that provide shared housing for adults with disabilities, including mental illness, and others who may benefit from a shared living environment.
@@ -20,5 +20,11 @@ Busque hogares o complejos de propiedad o administración privada que ofrezcan v
 ### [Sống Độc lập](https://ilacalifornia.org/alameda-county/directory/)
 
 Tìm kiếm nhà ở hoặc chung cư do tư nhân sở hữu hoặc điều hành, cung cấp nhà ở chung cho người trưởng thành khuyết tật, bao gồm cả bệnh tâm thần, cùng những người khác có thể hưởng lợi từ môi trường sống chung.
+
+</RenderIf>
+<RenderIf language="tl">
+### [Independent Living](https://ilacalifornia.org/alameda-county/directory/)
+
+Maghanap ng mga pribadong pag-aari o pinamamahalaan na mga bahay o complex na nagbibigay ng shared housing para sa mga nasa hustong gulang na may mga kapansanan, kabilang ang sakit sa pag-iisip, at iba pa na maaaring makinabang mula sa isang kapaligiran ng sama-samang paninirahan.
 
 </RenderIf>

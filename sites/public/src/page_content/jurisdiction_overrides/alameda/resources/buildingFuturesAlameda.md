@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Building Futures - West (Alameda)](https://bfwc.org)
 
 Unsheltered adults/families
@@ -28,5 +28,13 @@ Llame al [510-201-0203](tel:+1-510-201-0203)
 Người trưởng thành/gia đình không có nơi trú ẩn
 
 Hãy gọi số [510-201-0203](tel:+1-510-201-0203)
+
+</RenderIf>
+<RenderIf language="tl">
+### [Building Futures - West (Alameda)](https://bfwc.org)
+
+Mga adultong/pamilyang walang matitirhan
+
+Tawagan ang [510-201-0203](tel:+1-510-201-0203)
 
 </RenderIf>

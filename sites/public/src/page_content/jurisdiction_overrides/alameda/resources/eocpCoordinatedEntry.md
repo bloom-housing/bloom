@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### EOCP Coordinated Entry - East Oakland
 
 Unsheltered Adults
@@ -40,5 +40,16 @@ Hãy gọi cho hệ thống Tiếp nhận Phối hợp EOCP theo số [510-844-8
 
 Quý vị có thể đến 7515 International Blvd.  
  mà không cần hẹn trước Giờ làm việc: 10 giờ sáng - 3 giờ chiều, thứ Năm và thứ Sáu
+
+</RenderIf>
+<RenderIf language="tl">
+### EOCP Coordinated Entry - East Oakland
+
+Mga adultong walang matitirahan
+
+Tawagan ang BOSS Coordinated Entry line sa [510-463-4601](tel:+1-510-463-4601)
+
+Magpunta sa 7515 International Blvd.
+Oras ng opisina: 10am-3pm, Huwebes at Biyernes
 
 </RenderIf>

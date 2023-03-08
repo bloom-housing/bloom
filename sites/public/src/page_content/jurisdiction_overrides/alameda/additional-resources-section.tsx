@@ -88,7 +88,15 @@ export const AdditionalResourcesSection = () => {
                 </p>
               </header>
             </section>
-            <Markdown>{oaklandHeader}</Markdown>
+            <Markdown
+              options={{
+                overrides: {
+                  RenderIf,
+                },
+              }}
+            >
+              {oaklandHeader}
+            </Markdown>
             <div className="info-cards__grid">
               <Resource>{baCommunityServiceOakland}</Resource>
               <Resource>{bossCoordinatedEntry}</Resource>

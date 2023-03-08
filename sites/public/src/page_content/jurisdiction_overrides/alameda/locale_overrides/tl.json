@@ -28,6 +28,7 @@
   "footer.getAssistance": "Humingi ng Tulong",
   "footer.giveFeedback": "Magbigay ng Feedback",
   "footer.header": "Ang Alameda County Housing Portal ay isang proyekto ng",
+  "footer.headerLink": "Alameda County – Departamento ng Housing and Community Development (HCD)",
   "footer.forAdditionalOpportunities": "Para sa karagdagang mga pagkakataon sa Bay Area, mangyaring bumisita",
   "footer.forGeneralInquiries": "Para sa pangkalahatang katanungan ukol sa programa, maaari mo kaming tawagan sa 510-670-5404.",
   "footer.forListingQuestions": "Para sa mga tanong sa listahan at aplikasyon, mangyaring makipag-ugnayan sa Ahente ng Ari-arian na ipinapakita sa bawat listahan.",
@@ -49,6 +50,7 @@
   "pageDescription.additionalResources": "Hinihikayat ka naming mag-browse ng iba pang mapagkukunan ng abot-kayang pabahay",
   "pageDescription.getAssistance": "Matuto nang higit pa tungkol sa paghahanap at pag-aplay para sa abot-kayang pagkakataon sa pag-upa, at maghanap ng mga karagdagang listahan ng pabahay.",
   "pageDescription.howItWorks": "Alamin kung paano ka makakahanap at makakapag-apply para sa abot-kayang pagkakataon sa pag-upa.",
+  "region.name": "Alameda County",
   "timeout.afterMessage": "Pinapahalagahan namin ang iyong seguridad. Tinapos namin ang iyong session dahil sa kawalan ng aktibidad. Mangyaring magsimula ng bagong application upang magpatuloy.",
   "t.units": "Mga Unit",
   "welcome.howDoesItWork": "Paano ito ginagawa?",
@@ -59,5 +61,12 @@
   "whatToExpect.lottery": "<p>Ang mga aplikante ay nag-a-apply para makapasok sa lottery para sa kasalukyuang mga bakanteng apartment.</p><p className='mt-2'>Kapag nagsara na ang oras ang aplikasyon, ang mga kwalipikadong aplikante ay ilalagay sa pila batay sa ranggo ng lottery.</p><p className='mt-2'>Ang lahat ng impormasyon na inyong ibinigay ay i-ve-verify at kukumpirmahin ang inyong pagiging kwalipikado.</p>",
   "whatToExpect.lotteryReadMore": "<p>Ang mga pagpipilian sa pabahay ay makakaapekto sa order ng waitlist, kung naaangkop.</p><p className='mt-2'>Ang inyong aplikasyon ay maaaring tanggalin kapag gumawa kayo ng mga hindi totoong pahayag. Para sa mga property na may mga pagpipilian sa pabahay, kapag  hindi namin ma-verify ang pagpipilian sa pabahay na nakuha mo, hindi mo matatanggap ang napili pero hindi ka magmumulta.</p><p className='my-2'>Kapag tinawagan kayo ng tagapangasiwa ng property, maghanda para sagutan ang higit pang detalyadong aplikasyon at ibigay ang kinakailangang karagdagang mga dokumento.</p>",
   "whatToExpect.fcfs": "<p>Ang mga aplikante ay nag-a-apply para makapasok sa lottery para sa kasalukyuang mga bakanteng apartment.</p><p className='mt-2'>Ang mga kwalipikadong aplikante ay ilalagay sa waitlist sa batayang first come first serve hanggang sa mapuno ang mga puwesto ng waitlist.</p><p className='mt-2'>Ang lahat ng impormasyon na inyong ibinigay ay i-ve-verify at kukumpirmahin ang inyong pagiging kwalipikado.</p>",
-  "whatToExpect.fcfsReadMore": "<p>Ang mga pagpipilian sa pabahay ay makakaapekto sa order ng waitlist, kung naaangkop.</p><p className='mt-2'>Ang inyong aplikasyon ay maaaring tanggalin kapag gumawa kayo ng mga hindi totoong pahayag. Para sa mga property na may mga pagpipilian sa pabahay, kapag hindi namin ma-verify ang pagpipilian sa pabahay na nakuha mo, hindi mo matatanggap ang napili pero hindi ka magmumulta.</p><p className='my-2'>Kapag tinawagan ka para sa isang interbyu, hihilingin sa inyo na sagutan nang mas detalyado ang aplikasyon at magbigay ng karagdagang mga dokumento.</p>"
+  "whatToExpect.fcfsReadMore": "<p>Ang mga pagpipilian sa pabahay ay makakaapekto sa order ng waitlist, kung naaangkop.</p><p className='mt-2'>Ang inyong aplikasyon ay maaaring tanggalin kapag gumawa kayo ng mga hindi totoong pahayag. Para sa mga property na may mga pagpipilian sa pabahay, kapag hindi namin ma-verify ang pagpipilian sa pabahay na nakuha mo, hindi mo matatanggap ang napili pero hindi ka magmumulta.</p><p className='my-2'>Kapag tinawagan ka para sa isang interbyu, hihilingin sa inyo na sagutan nang mas detalyado ang aplikasyon at magbigay ng karagdagang mga dokumento.</p>",
+  "additionalResources.immediateHousing.title": "Agarang Tulong sa Pabahay",
+  "additionalResources.immediateHousing.description": "Kung tinatakasan mo ang karahasan sa tahanan, seksuwal na pag-asulto o pangangalakal ng tao at nasa agarang panganib, tumawag sa 911.",
+  "additionalResources.alaCountyHCD.title": "Alameda County Housing & Community Development (HCD) Mga Programa ng Pabahay",
+  "additionalResources.alaHousingAuthorities.title": "Mga Awtoridad ng Pabahay sa Alameda County",
+  "additionalResources.alaHousingAuthorities.description": "Karaniwang pinangangasiwaan ng mga Public Housing Authority (PHA) ang dalawang programa na nagbibigay ng direktang tulong sa mga nangungupahan: pangangasiwa sa mga yunit ng pampublikong pabahay, at pangangasiwa sa programa ng Seksyon 8 Housing Choice Voucher. Gayunpaman, ang ilan sa mga PHA ay hindi na namamahala sa mga pampublikong yunit, at ang laki ng mga programang ito ay maaaring magbago nang malawakan. Makipag-ugnayan sa iyong lokal na PHA upang malaman kung paano sila maaaring makatulong sa iyo.",
+  "additionalResources.cityRegionServices.title": "Mga Serbisyong Nauugnay sa Lungsod at Rehiyon",
+  "additionalResources.cityRegionServices.description": "Kapag binago ang mga detalye, makikita mo ang pinaka-updated na impormasyon sa mga oras ng drop-in office."
 }

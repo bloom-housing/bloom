@@ -12,10 +12,10 @@
 
 </RenderIf>
 <RenderIf language="zh">
-### North County (Berkeley, Albany, Emeryville)
+### 北部郡（柏克萊、奧爾巴尼、愛莫利維爾）
 
 </RenderIf>
 <RenderIf language="vi">
-### Quận North (Berkeley, Albany, Emeryville)
+### Quận Phía Bắc (Berkeley, Albany, Emeryville)
 
 </RenderIf>

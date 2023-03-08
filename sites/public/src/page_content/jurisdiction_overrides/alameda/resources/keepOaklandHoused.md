@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Keep Oakland Housed Program](https://www.keepoaklandhoused.org)
 
 Any families or individuals who are still sheltered but face a crisis such as a 3 day pay or quit notice, an eviction notice.
@@ -28,5 +28,13 @@ Llame al [510-613-0330](tel:+1-510-613-0330) ext. 2
 Những gia đình và cá nhân có nơi trú ẩn nhưng đang gặp khủng hoảng, ví dụ như thông báo phải trả tiền thuê trong vòng 3 ngày nếu không phải ra khỏi nơi trú ẩn, thông báo trục xuất.
 
 Gọi [510-613-0330](tel:+1-510-613-0330), số máy lẻ 2
+
+</RenderIf>
+<RenderIf language="tl">
+### [Keep Oakland Housed Program](https://www.keepoaklandhoused.org)
+
+Sinumang mga pamilya o indibidwal na may natitirhan pa rin ngunit nahaharap sa isang krisis tulad ng isang 3 araw na pagbabayad o abiso sa pagbibitiw, isang abiso ng pagpapaalis.
+
+Tawagan ang [510-613-0330](tel:+1-510-613-0330) ext. 2
 
 </RenderIf>

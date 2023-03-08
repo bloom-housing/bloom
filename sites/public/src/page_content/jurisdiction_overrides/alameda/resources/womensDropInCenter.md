@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Women’s Daytime Drop-in Center](https://www.womensdropin.org/)
 
 Unsheltered families
@@ -44,5 +44,17 @@ Gọi số [510-548-2884](tel:+1-510-548-2884)
 
 Đến tận nơi không cần hẹn trước tại 2218 Acton St.  
  Giờ làm việc: 8 giờ sáng-4 giờ chiều, Thứ Hai-Thứ Sáu
+
+</RenderIf>
+<RenderIf language="tl">
+### [Women’s Daytime Drop-in Center](https://www.womensdropin.org/)
+
+Mga pamilyang walang matitirhan
+
+Tawagan ang [510-548-2884](tel:+1-510-548-2884)  
+Mag-email sa [help@womensdropin.org](mailto:help@womensdropin.org)
+
+Magpunta sa 2218 Acton St.
+Oras ng opisina: 8am-4pm, Lunes-Biyernes
 
 </RenderIf>

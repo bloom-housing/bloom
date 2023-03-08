@@ -16,6 +16,6 @@
 
 </RenderIf>
 <RenderIf language="vi">
-### Mid-County
+### Quận Trung Tâm
 
 </RenderIf>

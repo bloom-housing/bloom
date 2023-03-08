@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Bay Area Community Services - East (Hayward and Unincorporated)](http://www.bayareacs.org/)
 
 Unsheltered adults/families
@@ -44,5 +44,17 @@ Gọi số [510-247-8235](tel:510-247-8235)
 
 Đến tận nơi không cần hẹn trước tại 590 B Street, Hayward  
  Giờ làm việc: 1-4 giờ chiều, Thứ Ba và Thứ Năm
+
+</RenderIf>
+<RenderIf language="tl">
+### [Bay Area Community Services - East (Hayward and Unincorporated)](http://www.bayareacs.org/)
+
+Mga adultong/pamilyang walang matitirhan
+
+Tawagan ang [510-247-8235](tel:+1-510-247-8235)  
+Mag-email sa [HaywardHRC@bayareacs.org](mailto:HaywardHRC@bayareacs.org)
+
+Magpunta sa 590 B Street, Hayward
+Oras ng opisina: 1-4pm, Martes at Huwebes
 
 </RenderIf>

@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [AC Housing Secure - Anti-Displacement Program](https://www.centrolegal.org/achousingsecure/)
 
 Provides free legal services and emergency financial assistance to tenants and homeowners.
@@ -20,5 +20,11 @@ Proporciona servicios legales gratuitos y asistencia financiera de emergencia a 
 ### [AC Housing Secure - Chương trình Ngăn Chuyển chỗ ở Bắt buộc của Quận Alameda](https://www.centrolegal.org/achousingsecure/)
 
 Cung cấp dịch vụ pháp lý miễn phí và hỗ trợ tài chính khẩn cấp cho người thuê nhà và chủ nhà.
+
+</RenderIf>
+<RenderIf language="tl">
+### [AC Housing Secure - Anti-Displacement Program](https://www.centrolegal.org/achousingsecure/)
+
+Nagbibigay ng mga libreng serbisyong legal at pang-emerhensiyang tulong pinansyal sa mga nangungupahan at may-ari ng bahay.
 
 </RenderIf>

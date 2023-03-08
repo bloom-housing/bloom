@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [AC Boost - Down Payment Loan Assistance Program](https://www.acboost.org/)
 
 Provides down payment assistance loans to eligible, middle-income, first-time homebuyers.
@@ -20,5 +20,11 @@ Proporciona préstamos de asistencia para pagos iniciales a compradores de casas
 ### [AC Boost - Chương trình Hỗ trợ Vay Tiền Trả trước của Quận Alameda](https://www.acboost.org/)
 
 Cung cấp hỗ trợ cho vay tiền trả trước để mua nhà cho những người lần đầu tiên mua nhà hội đủ điều kiện, có thu nhập trung bình.
+
+</RenderIf>
+<RenderIf language="tl">
+### [AC Boost - Down Payment Loan Assistance Program](https://www.acboost.org/)
+
+Nagbibigay ng mga pautang ng tulong sa paunang bayad sa mga karapat-dapat, may katamtamang kita, at mga unang beses na bumibili ng bahay.
 
 </RenderIf>

@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Renew AC - Housing Preservation Loan Program](https://www.renewac.org/)
 
 Provides affordable, low-interest deferred payment loans to assist residents with making home improvements that are necessary to stay, grow, and thrive in their homes.
@@ -20,5 +20,11 @@ Proporciona préstamos accesibles de intereses bajos y pagos diferidos para ayud
 ### [Renew AC - Chương trình Cho vay để Giữ Nhà ở của Quận Alameda](https://www.renewac.org/)
 
 Cung cấp các khoản vay trả chậm lãi suất thấp để hỗ trợ các cư dân nâng cấp nhà cần thiết để ở, phát triển, và thịnh vượng trong nhà mình.
+
+</RenderIf>
+<RenderIf language="tl">
+### [Renew AC - Housing Preservation Loan Program](https://www.renewac.org/)
+
+Nagbibigay ng abot-kaya, mababang interes sa pagbabayad sa hindi pa nababayarang mga pautang upang tulungan ang mga residente sa paggawa ng mga pagsasaayos sa bahay na kinakailangan upang manatili, lumago, at umunlad sa kanilang mga tahanan
 
 </RenderIf>

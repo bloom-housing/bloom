@@ -1,4 +1,4 @@
-<RenderIf language="en,tl">
+<RenderIf language="en">
 ### [Fremont Family Resource Center](https://www.fremont.gov/government/departments/human-services/fremont-family-resource-center)
 
 Unsheltered families
@@ -28,5 +28,13 @@ Llame al [510-574-2000](tel:+1-510-574-2000)
 Những gia đình không có nơi trú ẩn
 
 Gọi số [510-574-2000](tel:+1-510-574-2000)
+
+</RenderIf>
+<RenderIf language="tl">
+### [Fremont Family Resource Center](https://www.fremont.gov/government/departments/human-services/fremont-family-resource-center)
+
+Mga pamilyang walang matitirhan
+
+Tawagan ang [510-574-2000](tel:+1-510-574-2000)
 
 </RenderIf>
