@@ -21,15 +21,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       jar,
     })
   )
-  console.log("req (2):", { req })
   try {
     const { email, password, mfaCode, mfaType } = req.body
     const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
-    console.log("res (9):", { response })
-    console.log("jar (29):", { jar })
+    const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE)
+    res.setHeader("Set-Cookie", cookies)
     res.status(200).json(response)
   } catch (e) {
-    console.log("e (13):", { e })
-    res.status(400).json({ sheesh: 1 })
+    res.status(400).json({ e: JSON.stringify(e) })
   }
 }

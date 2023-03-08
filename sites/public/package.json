@@ -36,6 +36,7 @@
     "axios": "^0.21.1",
     "axios-cookiejar-support": "4.0.6",
     "dayjs": "^1.10.7",
+    "deasync": "0.1.28",
     "dotenv": "^8.2.0",
     "http-cookie-agent": "5.0.2",
     "nanoid": "^3.1.12",
