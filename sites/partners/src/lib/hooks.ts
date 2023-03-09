@@ -12,7 +12,6 @@ import {
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
-import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -483,22 +482,24 @@ export const useUsersExport = () => {
 const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [csvExportError, setCsvExportError] = useState(false)
+  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
 
   const onExport = useCallback(async () => {
     setCsvExportError(false)
+    setCsvExportSuccess(false)
     setCsvExportLoading(true)
 
     try {
       const content = await endpoint()
-
       const blob = new Blob([content], { type: "text/csv" })
       const fileLink = document.createElement("a")
       fileLink.setAttribute("download", fileName)
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
+      setCsvExportSuccess(true)
     } catch (err) {
+      console.log(err)
       setCsvExportError(true)
-      setSiteAlertMessage(t("users.exportFailed"), "alert")
     }
 
     setCsvExportLoading(false)
@@ -508,5 +509,6 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
     onExport,
     csvExportLoading,
     csvExportError,
+    csvExportSuccess,
   }
 }
