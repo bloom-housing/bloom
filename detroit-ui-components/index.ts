@@ -22,7 +22,6 @@ export * from "./src/global/vendor/AgPagination"
 /* Headers */
 export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
-export * from "./src/headers/SiteHeader"
 export * from "./src/headers/Heading"
 export * from "./src/headers/HeadingGroup"
 export * from "./src/headers/StepHeader"

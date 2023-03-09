@@ -7,9 +7,9 @@ import {
   t,
   MenuLink,
   setSiteAlertMessage,
+  SiteHeader,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { SiteHeader } from "../../../../detroit-ui-components/src/headers/SiteHeader"
 import { FooterNav } from "../../../../detroit-ui-components/src/navigation/FooterNav"
 
 const Layout = (props) => {
@@ -54,9 +54,16 @@ const Layout = (props) => {
           siteHeaderWidth={"wide"}
           homeURL={"/"}
           logoClass={"md:h-36 md:mt-0"}
+          strings={{
+            skipToMainContent: t("nav.skip"),
+            menu: t("t.menu"),
+            close: t("t.close"),
+            logoAriaLable: "City of Detroit logo",
+          }}
+          mainContentId={"main-content"}
         />
 
-        <main>{props.children}</main>
+        <main id={"main-content"}>{props.children}</main>
 
         <SiteFooter>
           <FooterSection>

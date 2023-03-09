@@ -72,7 +72,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^4.4.0",
-    "@bloom-housing/ui-components": "^8.0.0",
+    "@bloom-housing/ui-components": "^8.2.0",
     "@bloom-housing/shared-helpers": "^4.4.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",

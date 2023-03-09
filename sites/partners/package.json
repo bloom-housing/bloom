@@ -28,7 +28,7 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^4.4.0",
     "@bloom-housing/shared-helpers": "^4.4.0",
-    "@bloom-housing/ui-components": "^8.0.1",
+    "@bloom-housing/ui-components": "^8.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@zeit/next-sass": "^1.0.1",
     "ag-grid-community": "^26.0.0",

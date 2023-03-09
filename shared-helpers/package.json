@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^4.4.0",
-    "@bloom-housing/ui-components": "^8.0.1",
+    "@bloom-housing/ui-components": "^8.2.0",
     "axios": "0.21.2"
   },
   "devDependencies": {

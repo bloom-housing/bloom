@@ -31,17 +31,17 @@ describe("Navigating around the site", () => {
     cy.contains("Terms and Conditions")
 
     // Click on the listings page link in the header nav
-    cy.get(".navbar").contains("Sign in").click()
+    cy.get(".site-header__base").contains("Sign in").click()
 
     // Should be on the listings page
     cy.location("pathname").should("equal", "/sign-in")
     cy.contains("Sign in")
 
     // Click on the navbar logo to go to the homepage
-    cy.get(".navbar")
+    cy.get(".site-header__base")
       .first()
       .within(() => {
-        cy.get(".logo").click()
+        cy.get(".site-header__logo").click()
       })
 
     // Check that the homepage banner text is present on the page

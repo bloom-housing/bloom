@@ -1,21 +1,38 @@
 /* Overrides the default ui-components styles with Detroit-specific styles. */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
 
-.navbar-logo .logo .logo__image {
-  min-height: 4rem;
-  max-height: 5rem;
-  @screen md {
-    min-height: 6rem;
-    max-height: 7rem;
-  }
-}
+#__next {
+  .site-header {
+    --logo-title-font-size-desktop: var(--bloom-font-size-tiny);
+    --logo-title-font-size-mobile: var(--bloom-font-size-sm);
+    --logo-image-desktop-max-height: var(--bloom-s20);
+    --logo-image-desktop-min-height: var(--bloom-s20);
+    --mobile-menu-font-size: var(--bloom-font-size-sm);
+    --mobile-dropdown-item-font-size: var(--bloom-font-size-tiny);
+    --logo-image-mobile-display: none;
+    --notice-display-mobile: none;
+    --link-text-hover-color: var(--bloom-color-gray-750);
+    --link-text-color: var(--bloom-color-gray-750);
+    --link-font-size: var(--bloom-font-size-sm);
 
-.navbar-logo .logo {
-  max-height: 15rem;
-  max-width: 100%;
+    .button {
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: var(--bloom-letter-spacing-widest);
+      font-size: var(--bloom-font-size-sm);
+      svg {
+        rect {
+          fill: var(--bloom-color-primary);
+        }
+      }
+    }
 
-  .logo__title {
-    @apply text-sm;
+    .site-header__logo-container {
+      a:hover {
+        color: var(--bloom-color-gray-950);
+      }
+    }
   }
 }
 
