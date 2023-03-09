@@ -77,7 +77,7 @@ describe("users", () => {
     expect(getByText("Confirmed")).toBeInTheDocument()
   })
 
-  it.only("should render Export when user is admin and success when clicked", async () => {
+  it("should render Export when user is admin and success when clicked", async () => {
     window.URL.createObjectURL = jest.fn()
     // set a logged in token
     jest.useFakeTimers()
