@@ -25,6 +25,8 @@ import { UserPreferencesController } from "./controllers/user-preferences.contro
 import { UserPreferencesService } from "./services/user-preferences.services"
 import { UserPreferences } from "./entities/user-preferences.entity"
 import { UserRepository } from "./repositories/user-repository"
+import { UserCsvExporterService } from "./services/user-csv-exporter.service"
+import { CsvBuilder } from "../applications/services/csv-builder.service"
 
 @Module({
   imports: [
@@ -62,6 +64,8 @@ import { UserRepository } from "./repositories/user-repository"
     PasswordService,
     SmsMfaService,
     UserPreferencesService,
+    CsvBuilder,
+    UserCsvExporterService,
   ],
   exports: [AuthzService, AuthService, UserService, UserPreferencesService],
   controllers: [AuthController, UserController, UserProfileController, UserPreferencesController],

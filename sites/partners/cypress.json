@@ -3,6 +3,7 @@
   "defaultCommandTimeout": 10000,
   "projectId": "bloom-partners-reference",
   "numTestsKeptInMemory": 0,
+  "trashAssetsBeforeRuns": true,
   "env": {
     "codeCoverage": {
       "url": "/api/__coverage__"

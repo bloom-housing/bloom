@@ -91,6 +91,7 @@
   "authentication.createAccount.firstName": "First Name",
   "authentication.createAccount.lastName": "Last Name",
   "errors.alert.emailConflict": "That email is already in use",
+  "errors.alert.exportFailed": "Export failed. Please try again later. If the problem persists, please email supportbloom@exygy.com",
   "errors.unauthorized.message": "Uh oh, you are not allowed to access this page.",
   "errors.maxLessThanMinBathroomError": "Max must be greater than or equal to Min Number of Bathrooms",
   "errors.maxLessThanMinFloorError": "Max must be greater than or equal to Min Floor",
@@ -367,5 +368,6 @@
   "users.resendInvite": "Resend Invite",
   "users.totalUsers": "total users",
   "users.unconfirmed": "Unconfirmed",
-  "users.userDetails": "User Details"
+  "users.userDetails": "User Details",
+  "users.exportSuccess": "The File has been exported"
 }

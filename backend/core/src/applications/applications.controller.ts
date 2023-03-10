@@ -21,7 +21,6 @@ import { ApplicationDto } from "./dto/application.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { applicationPreferenceApiExtraModels } from "./types/application-preference-api-extra-models"
-import { ListingsService } from "../listings/listings.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
@@ -49,7 +48,6 @@ import { IdDto } from "../shared/dto/id.dto"
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
-    private readonly listingsService: ListingsService,
     private readonly applicationCsvExporter: ApplicationCsvExporterService
   ) {}
 

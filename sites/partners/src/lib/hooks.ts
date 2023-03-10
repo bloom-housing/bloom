@@ -1,7 +1,6 @@
-import { useContext } from "react"
+import { useCallback, useContext, useState } from "react"
 import useSWR, { mutate } from "swr"
 import qs from "qs"
-
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
   EnumApplicationsApiExtraModelOrder,
@@ -13,6 +12,7 @@ import {
   OrderByFieldsEnum,
   OrderDirEnum,
 } from "@bloom-housing/backend-core/types"
+import dayjs from "dayjs"
 
 interface PaginationProps {
   page?: number
@@ -400,5 +400,53 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
     data,
     loading: !error && !data,
     error,
+  }
+}
+
+export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string => {
+  const now = new Date()
+  return dayjs(now).format(format)
+}
+
+export const useUsersExport = () => {
+  const { userService } = useContext(AuthContext)
+
+  return useCsvExport(
+    () => userService.listAsCsv(),
+    `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
+  )
+}
+
+const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
+  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
+
+  const onExport = useCallback(async () => {
+    setCsvExportError(false)
+    setCsvExportSuccess(false)
+    setCsvExportLoading(true)
+
+    try {
+      const content = await endpoint()
+
+      const blob = new Blob([content], { type: "text/csv" })
+      const fileLink = document.createElement("a")
+      fileLink.setAttribute("download", fileName)
+      fileLink.href = URL.createObjectURL(blob)
+      fileLink.click()
+      setCsvExportSuccess(true)
+    } catch (err) {
+      setCsvExportError(true)
+    }
+
+    setCsvExportLoading(false)
+  }, [endpoint, fileName])
+
+  return {
+    onExport,
+    csvExportLoading,
+    csvExportError,
+    csvExportSuccess,
   }
 }

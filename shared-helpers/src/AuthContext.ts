@@ -135,6 +135,7 @@ const reducer = createReducer(
     initialStateLoaded: false,
     storageType: "session",
     language: "en",
+    accessToken: undefined,
   } as AuthState,
   {
     SAVE_TOKEN: (state, { payload }) => {

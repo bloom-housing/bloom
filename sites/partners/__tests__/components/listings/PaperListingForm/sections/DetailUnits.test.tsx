@@ -1,15 +1,19 @@
 import React from "react"
-import { fireEvent, render, within } from "@testing-library/react"
+import { render, within } from "@testing-library/react"
 import { DetailUnits } from "../../../../../src/components/listings/PaperListingDetails/sections/DetailUnits"
 import { ListingContext } from "../../../../../src/components/listings/ListingContext"
-import { listing, unit } from "../../../../testHelpers"
+import { listing } from "../../../../testHelpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core"
 
 describe("DetailUnits", () => {
   it("should render the detail units when no units exist", () => {
     const results = render(
       <ListingContext.Provider
-        value={{ ...listing, reviewOrderType: ListingReviewOrder.waitlist, units: [] }}
+        value={{
+          ...listing,
+          reviewOrderType: ListingReviewOrder.firstComeFirstServe,
+          unitGroups: [],
+        }}
       >
         <DetailUnits setUnitDrawer={jest.fn()} />
       </ListingContext.Provider>
@@ -17,14 +21,11 @@ describe("DetailUnits", () => {
 
     // Above the table
     expect(results.getByText("Listing Units")).toBeInTheDocument()
-    expect(
-      results.getByText("Do you want to show unit types or individual units?")
-    ).toBeInTheDocument()
-    expect(results.getByText("Individual Units")).toBeInTheDocument()
-    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(results.getByText("Open Waitlist")).toBeInTheDocument()
+    expect(results.getByText("Home Type")).toBeInTheDocument()
+    expect(results.getByText("Apartment")).toBeInTheDocument()
 
     // Table
+    expect(results.getByText("Unit Groups")).toBeInTheDocument()
     expect(results.getByText("None")).toBeInTheDocument()
   })
 
@@ -44,31 +45,28 @@ describe("DetailUnits", () => {
 
     // Above the table
     expect(results.getByText("Listing Units")).toBeInTheDocument()
-    expect(
-      results.getByText("Do you want to show unit types or individual units?")
-    ).toBeInTheDocument()
-    expect(results.getByText("Unit Types")).toBeInTheDocument()
-    expect(results.getByText("What is the listing availability?")).toBeInTheDocument()
-    expect(results.getByText("Available Units")).toBeInTheDocument()
+    expect(results.getByText("Home Type")).toBeInTheDocument()
+    expect(results.getByText("Apartment")).toBeInTheDocument()
 
     // Table
     const table = results.getByRole("table")
     const headAndBody = within(table).getAllByRole("rowgroup")
     expect(headAndBody).toHaveLength(2)
     const [head, body] = headAndBody
-    expect(within(head).getAllByRole("columnheader")).toHaveLength(7)
+    expect(within(head).getAllByRole("columnheader")).toHaveLength(8)
     const rows = within(body).getAllByRole("row")
-    expect(rows).toHaveLength(6)
+    expect(rows).toHaveLength(1)
     // Validate first row
-    const [unitNumber, type, ami, rent, sqft, ada, action] = within(rows[0]).getAllByRole("cell")
+    const [type, unitNumber, ami, rent, occupancy, sqft, bath, actions] = within(
+      rows[0]
+    ).getAllByRole("cell")
+    expect(type).toHaveTextContent("1 Bedroom")
     expect(unitNumber).toBeEmptyDOMElement()
-    expect(type).toHaveTextContent("Studio")
-    expect(ami).toHaveTextContent(unit.amiPercentage)
-    expect(rent).toHaveTextContent(unit.monthlyRent)
-    expect(sqft).toHaveTextContent(unit.sqFeet)
-    expect(ada).toBeEmptyDOMElement()
-
-    fireEvent.click(within(action).getByText("View"))
-    expect(callUnitDrawer).toBeCalledWith(unit)
+    expect(ami).toBeEmptyDOMElement()
+    expect(rent).toBeEmptyDOMElement()
+    expect(occupancy).toHaveTextContent("1 - 3")
+    expect(sqft).toBeEmptyDOMElement()
+    expect(bath).toHaveTextContent("1 - 2")
+    expect(actions).toBeEmptyDOMElement()
   })
 })

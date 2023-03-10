@@ -1,61 +1,63 @@
 language: node_js
 node_js:
-- 14
+  - 14
 cache:
   yarn: true
 services:
-- redis-server
+  - redis-server
 before_install:
-- sudo sed -i -e '/local.*peer/s/postgres/all/' -e 's/peer\|md5/trust/g' /etc/postgresql/*/main/pg_hba.conf
-- sudo systemctl restart postgresql@11-main
-- sleep 1
+  - sudo sed -i -e '/local.*peer/s/postgres/all/' -e 's/peer\|md5/trust/g' /etc/postgresql/*/main/pg_hba.conf
+  - sudo systemctl restart postgresql@11-main
+  - sleep 1
 before_script:
-- cp sites/public/.env.template sites/public/.env
-- cp sites/partners/.env.template sites/partners/.env
-- cp backend/core/.env.template backend/core/.env
+  - cp sites/public/.env.template sites/public/.env
+  - cp sites/partners/.env.template sites/partners/.env
+  - cp backend/core/.env.template backend/core/.env
 jobs:
   include:
-  - script: yarn build:app:public
-    name: Build public site
-  - script: yarn build:app:partners
-    name: Build partners site
-  - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
-    name: Backend unit tests
-  - script: yarn test:e2e:backend:core
-    name: Backend e2e tests
-  - script: yarn test:app:public:unit
-    name: Public site unit tests
-  - stage: longer tests
-    name: Partners site Cypress tests
-    script:
-    - yarn cypress install
-    - cd backend/core
-    - yarn db:reseed:detroit
-    - yarn nest start &
-    - cd ../../sites/partners
-    - yarn build
-    - yarn start -p 3001 &
-    - yarn wait-on "http-get://localhost:3001" && yarn cypress run
-    - kill $(jobs -p) || true
-  - stage: longer tests
-    name: Public site Cypress tests
-    script:
-    - yarn cypress install
-    - yarn db:reseed
-    - cd backend/core
-    - yarn nest start &
-    - cd ../../sites/public
-    - yarn build
-    - yarn start -p 3000 &
-    - yarn wait-on "http-get://localhost:3000" && yarn cypress run
-    - kill $(jobs -p) || true
+    - script: yarn build:app:public
+      name: Build public site
+    - script: yarn build:app:partners
+      name: Build partners site
+    - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
+      name: Backend unit tests
+    - script: yarn test:e2e:backend:core
+      name: Backend e2e tests
+    - script: yarn test:app:public:unit
+      name: Public site unit tests
+    - script: yarn test:app:partners:unit
+      name: Partners site unit tests
+    - stage: longer tests
+      name: Partners site Cypress tests
+      script:
+        - yarn cypress install
+        - cd backend/core
+        - yarn db:reseed:detroit
+        - yarn nest start &
+        - cd ../../sites/partners
+        - yarn build
+        - yarn start -p 3001 &
+        - yarn wait-on "http-get://localhost:3001" && yarn cypress run
+        - kill $(jobs -p) || true
+    - stage: longer tests
+      name: Public site Cypress tests
+      script:
+        - yarn cypress install
+        - yarn db:reseed
+        - cd backend/core
+        - yarn nest start &
+        - cd ../../sites/public
+        - yarn build
+        - yarn start -p 3000 &
+        - yarn wait-on "http-get://localhost:3000" && yarn cypress run
+        - kill $(jobs -p) || true
 addons:
-  postgresql: '11'
+  postgresql: "11"
   apt:
     packages:
-    - postgresql-11
-    - postgresql-client-11
-    - libgconf-2-4
+      - postgresql-11
+      - postgresql-client-11
+      - libgconf-2-4
 env:
   global: PGPORT=5433
     PGUSER=travis

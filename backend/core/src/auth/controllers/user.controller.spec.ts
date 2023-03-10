@@ -6,6 +6,7 @@ import { UserService } from "../services/user.service"
 import { AuthzService } from "../services/authz.service"
 import { ActivityLogService } from "../../activity-log/services/activity-log.service"
 import { EmailService } from "../../email/email.service"
+import { UserCsvExporterService } from "../services/user-csv-exporter.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -22,6 +23,7 @@ describe("User Controller", () => {
         { provide: AuthService, useValue: {} },
         { provide: AuthzService, useValue: {} },
         { provide: UserService, useValue: {} },
+        { provide: UserCsvExporterService, useValue: {} },
         { provide: EmailService, useValue: {} },
         { provide: ActivityLogService, useValue: {} },
       ],
