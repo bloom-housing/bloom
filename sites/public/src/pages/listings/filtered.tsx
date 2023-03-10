@@ -132,6 +132,11 @@ const FilteredListingsPage = () => {
             icon={faSliders}
             iconPlacement="left"
             iconSize="md-large"
+            ariaLabel={
+              numberOfFilters
+                ? t("listingFilters.buttonTitleWithNumber", { number: numberOfFilters })
+                : t("listingFilters.buttonTitle")
+            }
             onClick={() => setFilterModalVisible(true)}
           >
             {t("listingFilters.buttonTitle")}
