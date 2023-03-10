@@ -258,11 +258,9 @@ describe("UserService", () => {
   })
 
   describe("forgotPassword", () => {
-    it("should return 400 if email is not found", async () => {
+    it("should return undefined if email is not found", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
-      await expect(service.forgotPassword({ email: "abc@xyz.com" })).rejects.toThrow(
-        new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
-      )
+      await expect(service.forgotPassword({ email: "abc@xyz.com" })).resolves.toBeUndefined()
     })
 
     it("should set resetToken", async () => {

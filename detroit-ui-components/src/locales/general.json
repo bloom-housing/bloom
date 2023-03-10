@@ -598,7 +598,7 @@
   "flags.markedAsDuplicate": "%{quantity} applications marked as duplicate",
   "authentication.forgotPassword.changePassword": "Change Password",
   "authentication.forgotPassword.sendEmail": "Send email",
-  "authentication.forgotPassword.success": "We've sent you an email. You'll receive an email with a link to reset your password.",
+  "authentication.forgotPassword.message": "If there is an account made with that email, you'll receive an email with a link to reset your password.",
   "authentication.forgotPassword.errors.tokenExpired": "Reset password token expired. Please request for a new one.",
   "authentication.forgotPassword.errors.tokenMissing": "Token not found. Please request for a new one.",
   "authentication.forgotPassword.errors.generic": "There was an error. Please try again, or contact support for help.",
