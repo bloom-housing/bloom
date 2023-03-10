@@ -131,7 +131,7 @@ const ApplicationAddMembers = () => {
             <Button
               id="btn-add-member"
               onClick={onAddMember}
-              data-test-id={"app-add-household-member-button"}
+              data-testid={"app-add-household-member-button"}
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
@@ -148,7 +148,7 @@ const ApplicationAddMembers = () => {
                 conductor.returnToReview = false
                 void handleSubmit(onSubmit)()
               }}
-              data-test-id={"app-done-household-members-button"}
+              data-testid={"app-done-household-members-button"}
             >
               {t("application.household.addMembers.done")}
             </Button>

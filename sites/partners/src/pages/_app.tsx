@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 
@@ -19,6 +19,12 @@ const signInMessage = "Login is required to view this page."
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   const skipLoginRoutes = ["/forgot-password", "/reset-password", "/users/confirm", "/users/terms"]
+
+  // fix for rehydation
+  const [hasMounted, setHasMounted] = useState(false)
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   useMemo(() => {
     addTranslation(translations.general, true)
@@ -65,9 +71,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
               signInMessage={signInMessage}
               skipForRoutes={skipLoginRoutes}
             >
-              <div suppressHydrationWarning>
-                {typeof window === "undefined" ? null : <Component {...pageProps} />}
-              </div>
+              {hasMounted && <Component {...pageProps} />}
             </RequireLogin>
           </AuthProvider>
         </ConfigProvider>

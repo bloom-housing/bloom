@@ -133,7 +133,7 @@ const FormSummaryDetails = ({
                         label={question.key}
                         helper={multiselectQuestionAddress(option?.extraData)}
                         key={index}
-                        data-test-id={"app-summary-preference"}
+                        data-testid={"app-summary-preference"}
                       >
                         {option.key}
                       </ViewItem>
@@ -161,13 +161,13 @@ const FormSummaryDetails = ({
       </h3>
 
       <div className="form-card__group mx-0">
-        <ViewItem data-test-id={"app-summary-name"} id="applicantName" label={t("t.name")}>
+        <ViewItem data-testid={"app-summary-name"} id="applicantName" label={t("t.name")}>
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
         </ViewItem>
 
         <ViewItem
-          data-test-id={"app-summary-dob"}
+          data-testid={"app-summary-dob"}
           id="applicantbirthDay"
           label={t("application.household.member.dateOfBirth")}
         >
@@ -177,7 +177,7 @@ const FormSummaryDetails = ({
 
         {application.applicant.phoneNumber && (
           <ViewItem
-            data-test-id={"app-summary-phone"}
+            data-testid={"app-summary-phone"}
             id="applicantPhone"
             label={t("t.phone")}
             helper={t(
@@ -190,7 +190,7 @@ const FormSummaryDetails = ({
 
         {application.additionalPhoneNumber && (
           <ViewItem
-            data-test-id={"app-summary-additional-phone"}
+            data-testid={"app-summary-additional-phone"}
             id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
             helper={t(
@@ -202,14 +202,14 @@ const FormSummaryDetails = ({
         )}
 
         {application.applicant.emailAddress && (
-          <ViewItem data-test-id={"app-summary-email"} id="applicantEmail" label={t("t.email")}>
+          <ViewItem data-testid={"app-summary-email"} id="applicantEmail" label={t("t.email")}>
             {application.applicant.emailAddress}
           </ViewItem>
         )}
 
         <ViewItem id="applicantAddress" label={t("application.contact.address")}>
           <MultiLineAddress
-            data-test-id={"app-summary-address"}
+            data-testid={"app-summary-address"}
             address={reformatAddress(application.applicant.address)}
           />
         </ViewItem>
@@ -217,7 +217,7 @@ const FormSummaryDetails = ({
         {application.sendMailToMailingAddress && (
           <ViewItem id="applicantMailingAddress" label={t("application.contact.mailingAddress")}>
             <MultiLineAddress
-              data-test-id={"app-summary-mailing-address"}
+              data-testid={"app-summary-mailing-address"}
               address={reformatAddress(application.mailingAddress)}
             />
           </ViewItem>
@@ -226,7 +226,7 @@ const FormSummaryDetails = ({
         {application.applicant.workInRegion === "yes" && (
           <ViewItem id="applicantWorkAddress" label={t("application.contact.workAddress")}>
             <MultiLineAddress
-              data-test-id={"app-summary-work-address"}
+              data-testid={"app-summary-work-address"}
               address={reformatAddress(application.applicant.workAddress)}
             />
           </ViewItem>
@@ -234,7 +234,7 @@ const FormSummaryDetails = ({
 
         {application.contactPreferences && (
           <ViewItem
-            data-test-id={"app-summary-contact-type"}
+            data-testid={"app-summary-contact-type"}
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
           >
@@ -256,7 +256,7 @@ const FormSummaryDetails = ({
                 {t(`application.alternateContact.type.description`)}
               </p>
               <ViewItem
-                data-test-id={"app-summary-alternate-name"}
+                data-testid={"app-summary-alternate-name"}
                 id="alternateName"
                 label={t("t.name")}
                 helper={alternateContactName()}
@@ -266,7 +266,7 @@ const FormSummaryDetails = ({
 
               {application.alternateContact.emailAddress && (
                 <ViewItem
-                  data-test-id={"app-summary-alternate-email"}
+                  data-testid={"app-summary-alternate-email"}
                   id="alternateEmail"
                   label={t("t.email")}
                 >
@@ -276,7 +276,7 @@ const FormSummaryDetails = ({
 
               {application.alternateContact.phoneNumber && (
                 <ViewItem
-                  data-test-id={"app-summary-alternate-phone"}
+                  data-testid={"app-summary-alternate-phone"}
                   id="alternatePhone"
                   label={t("t.phone")}
                 >
@@ -288,7 +288,7 @@ const FormSummaryDetails = ({
                 (value) => value !== ""
               ) && (
                 <ViewItem
-                  data-test-id={"app-summary-alternate-mailing-address"}
+                  data-testid={"app-summary-alternate-mailing-address"}
                   id="alternateMailingAddress"
                   label={t("application.contact.address")}
                 >
@@ -312,12 +312,12 @@ const FormSummaryDetails = ({
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
-                <ViewItem data-test-id={"app-summary-household-member-name"}>
+                <ViewItem data-testid={"app-summary-household-member-name"}>
                   {member.firstName} {member.lastName}
                 </ViewItem>
                 <div>
                   <ViewItem
-                    data-test-id={"app-summary-household-member-dob"}
+                    data-testid={"app-summary-household-member-dob"}
                     label={t("application.household.member.dateOfBirth")}
                   >
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
@@ -325,14 +325,14 @@ const FormSummaryDetails = ({
                   {member.sameAddress === "no" && (
                     <ViewItem label={t("application.contact.address")}>
                       <MultiLineAddress
-                        data-test-id={"app-summary-household-member-address"}
+                        data-testid={"app-summary-household-member-address"}
                         address={reformatAddress(member.address)}
                       />
                     </ViewItem>
                   )}
                   {member.sameAddress !== "no" && (
                     <ViewItem
-                      data-test-id={"app-summary-household-member-same-address"}
+                      data-testid={"app-summary-household-member-same-address"}
                       label={t("application.review.sameAddressAsApplicant")}
                     ></ViewItem>
                   )}
@@ -352,7 +352,7 @@ const FormSummaryDetails = ({
         <div className="form-card__group mx-0">
           {preferredUnits && (
             <ViewItem
-              data-test-id={"app-summary-preferred-units"}
+              data-testid={"app-summary-preferred-units"}
               id="householdUnitType"
               label={t("application.household.preferredUnit.preferredUnitType")}
             >
@@ -362,7 +362,7 @@ const FormSummaryDetails = ({
             </ViewItem>
           )}
           <ViewItem
-            data-test-id={"app-summary-ada"}
+            data-testid={"app-summary-ada"}
             id="householdAda"
             label={t("application.ada.label")}
           >
@@ -400,7 +400,7 @@ const FormSummaryDetails = ({
 
         <div className="form-card__group mx-0">
           <ViewItem
-            data-test-id={"app-summary-income-vouchers"}
+            data-testid={"app-summary-income-vouchers"}
             id="incomeVouchers"
             label={t("application.review.voucherOrSubsidy")}
           >
@@ -408,7 +408,7 @@ const FormSummaryDetails = ({
           </ViewItem>
 
           {application.incomePeriod && (
-            <ViewItem data-test-id={"app-summary-income"} id="incomeValue" label={t("t.income")}>
+            <ViewItem data-testid={"app-summary-income"} id="incomeValue" label={t("t.income")}>
               ${application.income} {t(`t.${application.incomePeriod}`)}
             </ViewItem>
           )}

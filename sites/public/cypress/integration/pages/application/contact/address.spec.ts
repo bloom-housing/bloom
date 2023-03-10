@@ -58,7 +58,7 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
+    cy.get(`[data-testid="app-found-address-label"]`).should("not.exist")
 
     // Let's go back and add other weirdness
     cy.getByTestId("app-edit-original-address").click()
@@ -69,6 +69,6 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
+    cy.get(`[data-testid="app-found-address-label"]`).should("not.exist")
   })
 })

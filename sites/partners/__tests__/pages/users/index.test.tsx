@@ -80,7 +80,6 @@ describe("users", () => {
   it("should render Export when user is admin and success when clicked", async () => {
     window.URL.createObjectURL = jest.fn()
     // set a logged in token
-    jest.useFakeTimers()
     const fakeToken =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ZTMxODNhOC0yMGFiLTRiMDYtYTg4MC0xMmE5NjYwNmYwOWMiLCJpYXQiOjE2Nzc2MDAxNDIsImV4cCI6MjM5NzkwMDc0Mn0.ve1U5tAardpFjNyJ_b85QZLtu12MoMTa2aM25E8D1BQ"
     window.sessionStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, fakeToken)
@@ -110,16 +109,16 @@ describe("users", () => {
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
     expect(getByText("Add User")).toBeInTheDocument()
-    expect(getByText("Export to CSV")).toBeInTheDocument()
-    fireEvent.click(getByText("Export to CSV"))
-    jest.clearAllTimers()
+    const exportButton = await findByText("Export to CSV")
+    expect(exportButton).toBeInTheDocument()
+    fireEvent.click(exportButton)
     const successMessage = await findByText("The file has been exported")
     expect(successMessage).toBeInTheDocument()
   })
 
   it("should render error message csv fails", async () => {
     // set a logged in token
-    jest.useFakeTimers()
+    jest.spyOn(console, "log").mockImplementation(jest.fn())
     const fakeToken =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ZTMxODNhOC0yMGFiLTRiMDYtYTg4MC0xMmE5NjYwNmYwOWMiLCJpYXQiOjE2Nzc2MDAxNDIsImV4cCI6MjM5NzkwMDc0Mn0.ve1U5tAardpFjNyJ_b85QZLtu12MoMTa2aM25E8D1BQ"
     window.sessionStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, fakeToken)
@@ -138,7 +137,7 @@ describe("users", () => {
         return res(ctx.status(500), ctx.json(""))
       })
     )
-    const { findByText, getByText } = render(
+    const { findByText } = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <Users />
@@ -148,11 +147,13 @@ describe("users", () => {
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
-    fireEvent.click(getByText("Export to CSV"))
-    jest.clearAllTimers()
+    const exportButton = await findByText("Export to CSV")
+    expect(exportButton).toBeInTheDocument()
+    fireEvent.click(exportButton)
     const errorMessage = await findByText("Export failed. Please try again later.", {
       exact: false,
     })
     expect(errorMessage).toBeInTheDocument()
+    expect(console.log).toHaveBeenCalled()
   })
 })

@@ -279,7 +279,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
           dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
-          const profile = await userService?.userControllerProfile()
+          const profile = await userService?.userControllerProfile({
+            headers: { Authorization: `Bearer ${response.accessToken}` },
+          })
           if (profile) {
             dispatch(saveProfile(profile))
             return profile

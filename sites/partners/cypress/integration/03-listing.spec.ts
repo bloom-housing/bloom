@@ -16,13 +16,13 @@ describe("Listing Management Tests", () => {
       cy.get("#name").type(listing["name"])
       cy.get("#developer").type(listing["developer"])
       cy.getByID("addPhotoButton").contains("Add Photo").click()
-      cy.get(`[data-test-id="dropzone-input"]`).attachFile(
+      cy.get(`[data-testid="dropzone-input"]`).attachFile(
         "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
         {
           subjectType: "drag-n-drop",
         }
       )
-      cy.get(`[data-test-id="listing-photo-uploaded"]`).contains("Save").click()
+      cy.get(`[data-testid="listing-photo-uploaded"]`).contains("Save").click()
       cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
       cy.getByID("neighborhood").type(listing["neighborhood"])
       cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
@@ -140,7 +140,7 @@ describe("Listing Management Tests", () => {
       cy.get("#publishButton").contains("Publish").click()
 
       cy.get("#publishButtonConfirm").contains("Publish").click()
-      cy.get("[data-test-id=page-header]").should("be.visible")
+      cy.get("[data-testid=page-header]").should("be.visible")
       cy.getByTestId("page-header").should("have.text", listing["name"])
     })
   })
