@@ -14,7 +14,7 @@ import {
 import axios from "axios"
 import router from "next/router"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { forwardRef, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import Layout from "../layouts/application"
 import FinderDisclaimer from "../components/finder/FinderDisclaimer"
@@ -28,6 +28,12 @@ interface FinderField {
   type?: string
 }
 
+interface ProgressHeaderProps {
+  isDisclaimer: boolean
+  sectionNumber: number
+  stepLabels: string[]
+}
+
 export interface FinderQuestion {
   formSection: string
   fieldGroupName: string
@@ -37,12 +43,49 @@ export interface FinderQuestion {
   subtitle: string
 }
 
+const ProgressHeader = forwardRef(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (props: ProgressHeaderProps, ref: React.MutableRefObject<any>) => {
+    return (
+      <div className="flex flex-col w-full pb-8 px-2 lg:px-0 sm:pb-0">
+        <div className="flex flex-row flex-wrap justify-between gap-y-4 gap-x-0.5">
+          <h1 className="text-base md:text-lg capitalize font-bold">
+            {t("listingFilters.buttonTitleExtended")}
+          </h1>
+          <div tabIndex={-1} ref={ref}>
+            {!props.isDisclaimer && (
+              <StepHeader
+                currentStep={props.sectionNumber}
+                totalSteps={3}
+                stepPreposition={t("finder.progress.stepPreposition")}
+                stepLabeling={props.stepLabels}
+                priority={2}
+              />
+            )}
+          </div>
+        </div>
+        <div className="hidden sm:block">
+          <ProgressNav
+            currentPageSection={props.sectionNumber}
+            completedSections={props.sectionNumber - 1}
+            labels={props.stepLabels}
+            mounted={true}
+            style="bar"
+            removeSrHeader
+          />
+        </div>
+      </div>
+    )
+  }
+)
+
 const Finder = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, trigger, errors, watch } = useForm()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
   const [formData, setFormData] = useState<FinderQuestion[]>([])
   const [isDisclaimer, setIsDisclaimer] = useState<boolean>(false)
+  const finderSectionQuestion = useRef(null)
   const finderSectionHeader = useRef(null)
   const minRent = watch("minRent")
   const maxRent = watch("maxRent")
@@ -190,37 +233,6 @@ const Finder = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const ProgressHeader = () => {
-    return (
-      <div className="flex flex-col w-full pb-8 px-2 lg:px-0 sm:pb-0">
-        <div className="flex flex-row flex-wrap justify-between gap-y-4 gap-x-0.5">
-          <h1 className="text-base md:text-lg capitalize font-bold">
-            {t("listingFilters.buttonTitleExtended")}
-          </h1>
-          {!isDisclaimer && (
-            <StepHeader
-              currentStep={sectionNumber}
-              totalSteps={3}
-              stepPreposition={t("finder.progress.stepPreposition")}
-              stepLabeling={stepLabels}
-              priority={2}
-            />
-          )}
-        </div>
-        <div className="hidden sm:block">
-          <ProgressNav
-            currentPageSection={sectionNumber}
-            completedSections={sectionNumber - 1}
-            labels={stepLabels}
-            mounted={true}
-            style="bar"
-            removeSrHeader
-          />
-        </div>
-      </div>
-    )
-  }
-
   const nextQuestion = () => {
     if (!Object.keys(errors).length) {
       const formCopy = [...formData]
@@ -236,35 +248,61 @@ const Finder = () => {
         })
       }
       setFormData(formCopy)
-      if (questionIndex >= formData.length - 1) setIsDisclaimer(true)
-      setQuestionIndex(questionIndex + 1)
-      finderSectionHeader.current.focus()
+      // check for disclaimer case
+      if (questionIndex >= formData.length - 1) {
+        setIsDisclaimer(true)
+        setQuestionIndex(questionIndex + 1)
+        finderSectionQuestion.current.focus()
+      }
+      // set focus on stepheader if section change
+      else if (formData[questionIndex]?.formSection !== formData[questionIndex + 1]?.formSection) {
+        setQuestionIndex(questionIndex + 1)
+        finderSectionHeader.current.focus()
+      }
+      // otherwise set focus on question
+      else {
+        setQuestionIndex(questionIndex + 1)
+        finderSectionQuestion.current.focus()
+      }
     }
   }
   const previousQuestion = () => {
     setIsDisclaimer(false)
-    setQuestionIndex(questionIndex - 1)
-    finderSectionHeader.current.focus()
+    // set focus on stepheader if section change
+    if (formData[questionIndex]?.formSection !== formData[questionIndex - 1]?.formSection) {
+      setQuestionIndex(questionIndex - 1)
+      finderSectionHeader.current.focus()
+    }
+    // otherwise set focus on question
+    else {
+      setQuestionIndex(questionIndex - 1)
+      finderSectionQuestion.current.focus()
+    }
   }
 
   const skipToListings = () => {
     setIsDisclaimer(true)
     setQuestionIndex(formData.length)
-    finderSectionHeader.current.focus()
+    finderSectionQuestion.current.focus()
   }
 
   return (
     <Layout>
       <Form onSubmit={handleSubmit(onSubmit)} className="bg-gray-300 border-t border-gray-450">
         <div className="md:mb-8 mt-8 mx-auto max-w-5xl">
-          <ProgressHeader />
+          <ProgressHeader
+            isDisclaimer={isDisclaimer}
+            sectionNumber={sectionNumber}
+            stepLabels={stepLabels}
+            ref={finderSectionHeader}
+          />
           <Card className="finder-card">
             {formData?.length > 0 && (
               <div>
                 <Card.Header>
                   {/* Deconstructed header group to support ref */}
                   <hgroup role="group">
-                    <h3 tabIndex={-1} ref={finderSectionHeader}>
+                    <h3 tabIndex={-1} ref={finderSectionQuestion}>
                       {!isDisclaimer ? activeQuestion.question : t("finder.disclaimer.header")}
                     </h3>
                     <p aria-roledescription="subtitle">
