@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.9.0...@bloom-housing/backend-core@7.10.0) (2023-03-13)
+
+
+### Features
+
+* add user csv export ([#3341](https://github.com/bloom-housing/bloom/issues/3341)) ([1d37535](https://github.com/bloom-housing/bloom/commit/1d375355db1f94565e813ed1853b744acec5a6da))
+
+
+
+
+
 # [7.9.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.8.2...@bloom-housing/backend-core@7.9.0) (2023-03-08)
 
 

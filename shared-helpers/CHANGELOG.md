@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.3.10...@bloom-housing/shared-helpers@7.4.0) (2023-03-13)
+
+
+### Features
+
+* add user csv export ([#3341](https://github.com/bloom-housing/bloom/issues/3341)) ([1d37535](https://github.com/bloom-housing/bloom/commit/1d375355db1f94565e813ed1853b744acec5a6da))
+
+
+
+
+
 ## [7.3.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.3.9...@bloom-housing/shared-helpers@7.3.10) (2023-03-08)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
