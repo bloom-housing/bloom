@@ -20,7 +20,7 @@ import {
   EnumRequestMfaCodeMfaType,
   EnumLoginMfaType,
 } from "@bloom-housing/backend-core/types"
-import { NavigationContext } from "@bloom-housing/ui-components"
+import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
   createContext,
   createElement,
@@ -96,6 +96,7 @@ const reducer = createReducer(
     loading: false,
     initialStateLoaded: false,
     language: "en",
+    accessToken: undefined,
   } as AuthState,
   {
     SAVE_PROFILE: (state, { payload: user }) => {
@@ -111,6 +112,21 @@ const reducer = createReducer(
   }
 )
 
+const axiosConfig = (router: GenericRouter) => {
+  return axiosStatic.create({
+    baseURL: "/api/adapter",
+    withCredentials: true,
+    headers: {
+      language: router.locale,
+      jurisdictionName: process.env.jurisdictionName,
+      appUrl: window.location.origin,
+    },
+    paramsSerializer: (params) => {
+      return qs.stringify(params)
+    },
+  })
+}
+
 export const AuthContext = createContext<Partial<ContextProps>>({})
 export const AuthProvider: FunctionComponent = ({ children }) => {
   const { apiUrl } = useContext(ConfigContext)
@@ -125,18 +141,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   const authService = new AuthService()
 
   useEffect(() => {
-    serviceOptions.axios = axiosStatic.create({
-      baseURL: apiUrl,
-      withCredentials: true,
-      headers: {
-        language: router.locale,
-        jurisdictionName: process.env.jurisdictionName,
-        appUrl: window.location.origin,
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
-      },
-    })
+    serviceOptions.axios = axiosConfig(router)
   }, [router, apiUrl, router.locale])
 
   useEffect(() => {
@@ -235,7 +240,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
             mfaType,
           }),
         })
-        // const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
+
         if (response) {
           const profile = await userService?.userControllerProfile()
           if (profile) {
@@ -278,18 +283,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     confirmAccount: async (token) => {
       dispatch(startLoading())
       try {
-        serviceOptions.axios = axiosStatic.create({
-          baseURL: apiUrl,
-          withCredentials: true,
-          headers: {
-            language: router.locale,
-            jurisdictionName: process.env.jurisdictionName,
-            appUrl: window.location.origin,
-          },
-          paramsSerializer: (params) => {
-            return qs.stringify(params)
-          },
-        })
+        serviceOptions.axios = axiosConfig(router)
 
         const response = await userService?.confirm({ body: { token } })
         if (response) {

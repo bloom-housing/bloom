@@ -29,7 +29,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(req, payload) {
     const rawToken = JwtStrategy.extractJwt(req)
-
     const isRevoked = await this.authService.isRevokedToken(rawToken)
     if (isRevoked) {
       throw new UnauthorizedException()

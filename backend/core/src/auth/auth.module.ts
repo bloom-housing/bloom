@@ -23,6 +23,8 @@ import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
 import { UserRepository } from "./repositories/user-repository"
 import { ListingRepository } from "../listings/db/listing.repository"
+import { UserCsvExporterService } from "./services/user-csv-exporter.service"
+import { CsvBuilder } from "../applications/services/csv-builder.service"
 
 @Module({
   imports: [
@@ -59,6 +61,8 @@ import { ListingRepository } from "../listings/db/listing.repository"
     UserService,
     PasswordService,
     SmsMfaService,
+    CsvBuilder,
+    UserCsvExporterService,
   ],
   exports: [AuthzService, AuthService, UserService],
   controllers: [AuthController, UserController, UserProfileController],

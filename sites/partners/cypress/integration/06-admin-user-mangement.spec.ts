@@ -20,6 +20,22 @@ describe("Admin User Mangement Tests", () => {
     })
   })
 
+  it("as admin user, should be able to download export", () => {
+    cy.visit("/")
+    cy.getByTestId("Users").click()
+    cy.getByTestId("export-users").click()
+    const convertToString = (value: number) => {
+      return value < 10 ? `0${value}` : `${value}`
+    }
+    const now = new Date()
+    const month = now.getMonth() + 1
+    cy.readFile(
+      `cypress/downloads/users-${now.getFullYear()}-${convertToString(month)}-${convertToString(
+        now.getDate()
+      )}_${convertToString(now.getHours())}_${convertToString(now.getMinutes())}.csv`
+    )
+  })
+
   it("as admin user, should be able to create new admin", () => {
     cy.visit("/")
     cy.getByTestId("Users").click()

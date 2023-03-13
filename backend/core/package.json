@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "7.8.1",
+  "version": "7.10.0",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
@@ -57,7 +57,7 @@
     "cache-manager": "^3.4.0",
     "casbin": "5.13.0",
     "class-transformer": "0.3.1",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "cloudinary": "^1.25.2",
     "cookie-parser": "1.4.6",
     "dayjs": "^1.10.7",
