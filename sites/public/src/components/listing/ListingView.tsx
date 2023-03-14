@@ -605,7 +605,12 @@ export const ListingView = (props: ListingProps) => {
                         )}
                       </hgroup>
                     </header>
-                    <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={false} />
+                    <StandardTable
+                      headers={hmiHeaders}
+                      data={hmiData}
+                      responsiveCollapse={false}
+                      ariaLabel={t("listings.householdMaximumIncome")}
+                    />
                   </li>
                 )}
                 {occupancyData.length > 0 && (
@@ -617,6 +622,7 @@ export const ListingView = (props: ListingProps) => {
                       headers={occupancyHeaders}
                       data={occupancyData}
                       responsiveCollapse={false}
+                      ariaLabel={t("t.occupancy")}
                     />
                   </ListSection>
                 )}
