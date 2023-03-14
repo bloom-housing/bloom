@@ -1,5 +1,5 @@
 <RenderIf language="en">
-### [Housing Choices](https://www.housing.org/tenants) 
+### [Housing Choices](https://www.housingchoices.org/)
 
 Housing Choices provides housing navigation services to people with intellectual and developmental disabilities served by the Regional Center.
 
@@ -10,7 +10,7 @@ Call [408-498-5777](tel:+1-408-498-5777)
 Email <intake@housingchoices.org>
 </RenderIf>
 <RenderIf language="es">
-### [Housing Choices](https://www.housing.org/tenants) 
+### [Housing Choices](https://www.housingchoices.org/) 
 
 Housing Choices proporciona servicios de navegación en línea sobre viviendas a personas con discapacidades intelectuales y del desarrollo, a cargo del Centro Regional.
 
@@ -21,7 +21,7 @@ Llamar [408-498-5777](tel:+1-408-498-5777)
 Enviar un correo electrónico <intake@housingchoices.org>
 </RenderIf>
 <RenderIf language="zh">
-### [Housing Choices](https://www.housing.org/tenants) 
+### [Housing Choices](https://www.housingchoices.org/) 
 
 Housing Choices 為區域中心所服務的智力和發展障礙人士提供住房導覽服務。
 
@@ -32,7 +32,7 @@ Housing Choices 為區域中心所服務的智力和發展障礙人士提供住�
 電子郵件 <intake@housingchoices.org>
 </RenderIf>
 <RenderIf language="vi">
-### [Housing Choices](https://www.housing.org/tenants) 
+### [Housing Choices](https://www.housingchoices.org/) 
 
 Housing Choices cung cấp dịch vụ giải quyết nhà ở cho những người khuyết tật phát triển và trí tuệ mà Trung Tâm Khu Vực (Regional Center) phục vụ.
 
