@@ -154,6 +154,8 @@ export default () => {
             <Field
               type="email"
               name="emailConfirmation"
+              label={t("authentication.createAccount.reEnterEmail")}
+              readerOnly
               placeholder="example@web.com"
               validation={{
                 validate: (value) =>
@@ -212,6 +214,8 @@ export default () => {
               type="password"
               name="passwordConfirmation"
               placeholder={t("authentication.createAccount.mustBe8Chars")}
+              label={t("authentication.createAccount.reEnterPassword")}
+              readerOnly
               validation={{
                 validate: (value) =>
                   value === password.current ||
