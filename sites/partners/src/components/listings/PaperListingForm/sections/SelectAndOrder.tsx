@@ -132,7 +132,9 @@ const SelectAndOrder = ({
     if (draftListingData.length > 0 && dragOrder.length > 0) {
       const newDragOrder = []
       dragOrder.forEach((item) => {
-        newDragOrder.push(draftListingData.filter((draftItem) => draftItem.title === item.name)[0])
+        newDragOrder.push(
+          draftListingData.filter((draftItem) => draftItem.title === item.name.content)[0]
+        )
       })
       setDraftListingData(newDragOrder)
     }
