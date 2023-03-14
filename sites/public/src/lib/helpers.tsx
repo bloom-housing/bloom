@@ -240,6 +240,8 @@ export const getListings = (listings) => {
         data: getUnitGroupSummary(listing).data,
         responsiveCollapse: true,
         cellClassName: "px-5 py-3",
+        id: listing.name,
+        ariaLabel: `${listing.name} ${t("t.unitInformation")}`,
       }}
       contentProps={{
         contentHeader: { text: listing.name, priority: 3 },

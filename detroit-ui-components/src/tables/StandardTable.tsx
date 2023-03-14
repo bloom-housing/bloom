@@ -73,6 +73,8 @@ export interface StandardTableProps {
   translateData?: boolean
   /** An id applied to the table */
   id?: string
+  /** An accessible label applied to the table */
+  ariaLabel?: string
 }
 
 const headerName = (header: string | TableHeadersOptions) => {
@@ -221,7 +223,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table id={props.id} className={tableClasses.join(" ")}>
+      <table id={props.id} aria-label={props.ariaLabel} className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>
         </thead>
