@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^7.10.0",
-    "@bloom-housing/ui-components": "^8.0.1"
+    "@bloom-housing/ui-components": "^9.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.11.9",
