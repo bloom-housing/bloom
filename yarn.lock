@@ -2320,10 +2320,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-9.0.0.tgz#43cca75f02e13866ab264a5bdef9e51f1227a8df"
-  integrity sha512-wwRk6NYCvOUnoPje+oYmrbuSmnbCHyLbqAKE+buGq60M8rowA2YESzloCv5W6dz2iPgR9fB79nUEu2dRhx5ACg==
+"@bloom-housing/ui-components@^10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-10.0.1.tgz#6a57867a6a85615a40099bc169d0846d5a800c81"
+  integrity sha512-N/M1QhYty993ZgXe3n9ppaYoupjGySlFwrbHGm5tOL4wbG/YDSQUtAVQCGNhOGlzZZfB9s6s2sUUfOpmBx9ZYA==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"
@@ -2361,6 +2361,7 @@
     react-text-mask "^5.4.3"
     react-transition-group "^4.4.1"
     tailwindcss "2.2.10"
+    tailwindcss-rtl "^0.9.0"
     ts-jest "^26.4.1"
     typesafe-actions "^5.1.0"
 
@@ -17777,6 +17778,11 @@ table@^5.2.3:
     lodash "^4.17.14"
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
+
+tailwindcss-rtl@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-rtl/-/tailwindcss-rtl-0.9.0.tgz#270da04492081620478ebf73819fc285fe724a54"
+  integrity sha512-y7yC8QXjluDBEFMSX33tV6xMYrf0B3sa+tOB5JSQb6/G6laBU313a+Z+qxu55M1Qyn8tDMttjomsA8IsJD+k+w==
 
 tailwindcss@2.2.10:
   version "2.2.10"

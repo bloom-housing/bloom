@@ -159,7 +159,7 @@ const ApplicationChooseLanguage = () => {
             <>
               <ActionBlock
                 className="border-t border-gray-450"
-                header={t("account.haveAnAccount")}
+                header={<Heading priority={2}>{t("account.haveAnAccount")}</Heading>}
                 subheader={t("application.chooseLanguage.signInSaveTime")}
                 background="primary-lighter"
                 actions={[
@@ -174,7 +174,9 @@ const ApplicationChooseLanguage = () => {
               />
               <ActionBlock
                 className="border-t border-gray-450"
-                header={t("authentication.createAccount.noAccount")}
+                header={
+                  <Heading priority={2}>{t("authentication.createAccount.noAccount")}</Heading>
+                }
                 background="primary-lighter"
                 actions={[
                   <LinkButton
