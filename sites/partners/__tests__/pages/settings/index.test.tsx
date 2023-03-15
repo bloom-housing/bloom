@@ -3,7 +3,10 @@ import { setupServer } from "msw/lib/node"
 import { fireEvent, within } from "@testing-library/react"
 import Settings from "../../../src/pages/settings"
 import { rest } from "msw"
-import { listing, multiselectQuestionPreference } from "../../testHelpers"
+import {
+  listing,
+  multiselectQuestionPreference,
+} from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { render } from "../../testUtils"
 
 const server = setupServer()

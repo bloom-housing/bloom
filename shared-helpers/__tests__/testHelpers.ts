@@ -5,6 +5,9 @@ import {
   ListingStatus,
   MultiselectQuestion,
   Unit,
+  Jurisdiction,
+  EnumJurisdictionLanguages,
+  ApplicationMethodType,
 } from "@bloom-housing/backend-core"
 
 export const multiselectQuestionPreference: MultiselectQuestion = {
@@ -95,6 +98,52 @@ export const unit: Unit = {
   monthlyRentAsPercentOfIncome: null,
 }
 
+export const jurisdiction: Jurisdiction = {
+  name: "Alameda",
+  notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
+  languages: [EnumJurisdictionLanguages.en],
+  partnerTerms: null,
+  publicUrl: "",
+  emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+  rentalAssistanceDefault:
+    "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+  enablePartnerSettings: true,
+  enableAccessibilityFeatures: false,
+  enableUtilitiesIncluded: true,
+  id: "67c22813-6080-441d-a496-03f2d06f2635",
+  createdAt: new Date("2023-02-06T22:32:30.397Z"),
+  updatedAt: new Date("2023-02-21T21:57:58.346Z"),
+  multiselectQuestions: [
+    {
+      id: "d2553d08-6095-40b9-a1e2-c95349effe72",
+    },
+    {
+      id: "ca6fedaa-911a-448f-9f54-8d7da4215eaa",
+    },
+    {
+      id: "f808e2a5-6957-4abe-b047-aa933d8ecbb6",
+    },
+    {
+      id: "a49c3e9d-eb97-43e1-9bc6-22ba2de9c38b",
+    },
+    {
+      id: "7064c93b-ec8f-47d5-982b-4a814d322cf3",
+    },
+    {
+      id: "2a13d954-35eb-4824-8616-749ae0bae789",
+    },
+    {
+      id: "3ada9148-b806-40e4-b92b-e0a521910214",
+    },
+    {
+      id: "02de4422-7f5e-41ff-b26a-b24f4e1ec181",
+    },
+    {
+      id: "e847c9bf-4c32-4f02-8746-e9b20e0872af",
+    },
+  ],
+}
+
 export const listing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationConfig: undefined,
@@ -120,7 +169,20 @@ export const listing: Listing = {
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationMethods: [],
+  applicationMethods: [
+    {
+      type: ApplicationMethodType.Internal,
+      label: "Label",
+      externalReference: "",
+      acceptsPostmarkedApplications: false,
+      phoneNumber: "123",
+      id: "cd42843a-c251-4bcd-97ed-8f6c34752f01",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      paperApplications: [],
+      listing: { id: "Uvbk5qurpB2WI9V6WnNdH" },
+    },
+  ],
   applicationOrganization: "98 Archer Street",
   assets: [
     {

@@ -3,9 +3,12 @@
 command = "yarn run build"
 ignore = "/bin/false"
 
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+
 [build.environment]
 
-NODE_VERSION = "14.17.6"
+NODE_VERSION = "18.14.2"
 YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
 NODE_OPTIONS = "--max_old_space_size=4096"

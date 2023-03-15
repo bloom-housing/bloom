@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.9.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.8.0...@bloom-housing/partners@7.9.0) (2023-03-13)
+
+
+### Features
+
+* add user csv export ([#3341](https://github.com/bloom-housing/bloom/issues/3341)) ([1d37535](https://github.com/bloom-housing/bloom/commit/1d375355db1f94565e813ed1853b744acec5a6da))
+
+
+
+
+
+# [7.8.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.7.3...@bloom-housing/partners@7.8.0) (2023-03-08)
+
+
+### Features
+
+* upgrade to node 18 and next 12 ([#3343](https://github.com/bloom-housing/bloom/issues/3343)) ([ee7bf77](https://github.com/bloom-housing/bloom/commit/ee7bf77dc3a46ee0795e3e6c4ca282960ec27394))
+
+
+
+
+
+## [7.7.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.7.2...@bloom-housing/partners@7.7.3) (2023-03-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.7.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.7.1...@bloom-housing/partners@7.7.2) (2023-02-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [7.7.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.7.0...@bloom-housing/partners@7.7.1) (2023-02-27)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 # [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.6.6...@bloom-housing/partners@7.7.0) (2023-02-14)
 
 

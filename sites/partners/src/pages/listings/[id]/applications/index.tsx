@@ -109,7 +109,14 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      {csvExportError && <SiteAlert type="alert" timeout={5000} dismissable sticky={true} />}
+      {csvExportError && (
+        <SiteAlert
+          timeout={5000}
+          dismissable
+          sticky={true}
+          alertMessage={{ message: t("errors.alert.exportFailed"), type: "alert" }}
+        />
+      )}
       <NavigationHeader
         title={listingName}
         listingId={listingId}
