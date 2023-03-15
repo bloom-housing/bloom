@@ -1,4 +1,4 @@
-describe("Admin User Mangement Tests", () => {
+describe("Jurisdictional Admin User Mangement Tests", () => {
   beforeEach(() => {
     cy.loginAndAcceptTerms("jurisdictionalAdmin")
   })
