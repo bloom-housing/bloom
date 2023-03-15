@@ -16,7 +16,7 @@ Cypress.Commands.add("signIn", () => {
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get(`[data-test-id="My Account"]`).trigger("mouseover")
+  cy.get(`[data-test-id="My Account-1"]`).trigger("mouseover")
   cy.get(`[data-test-id="Sign Out"]`).trigger("click")
 })
 
