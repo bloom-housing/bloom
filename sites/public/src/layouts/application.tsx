@@ -7,12 +7,11 @@ import {
   SiteFooter,
   FooterNav,
   FooterSection,
-  ExygyFooter,
   MenuLink,
   t,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -83,6 +82,7 @@ const Layout = (props) => {
               {t("nav.getFeedback")}
             </a>
           }
+          mainContentId="main-content"
           title={t("nav.siteTitle")}
           languages={languages.map((lang) => {
             return {
@@ -94,6 +94,7 @@ const Layout = (props) => {
           })}
           menuLinks={menuLinks}
           logoWidth={"base"}
+          strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
           {props.children}

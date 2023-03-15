@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useContext, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
@@ -10,10 +10,14 @@ import {
   Drawer,
   SiteAlert,
   AlertTypes,
+  AppearanceSizeType,
+  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
+import { AuthContext } from "@bloom-housing/shared-helpers"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
-import { useUserList, useListingsData } from "../../lib/hooks"
+import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
 import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 
@@ -23,6 +27,7 @@ type UserDrawerValue = {
 }
 
 const Users = () => {
+  const { profile } = useContext(AuthContext)
   const { mutate } = useSWRConfig()
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
   const [alertMessage, setAlertMessage] = useState({
@@ -30,6 +35,8 @@ const Users = () => {
     message: undefined,
   })
   const tableOptions = useAgTable()
+
+  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useUsersExport()
 
   const columns = useMemo(() => {
     return [
@@ -121,9 +128,24 @@ const Users = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <SiteAlert dismissable alertMessage={alertMessage} sticky={true} timeout={5000} />
+      {csvExportSuccess && (
+        <SiteAlert
+          timeout={5000}
+          dismissable
+          sticky={true}
+          alertMessage={{ message: t("users.exportSuccess"), type: "success" }}
+        />
+      )}
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+          {csvExportError && (
+            <SiteAlert
+              dismissable
+              className="mb-4"
+              alertMessage={{ message: t("errors.alert.exportFailed"), type: "alert" }}
+            />
+          )}
           <AgTable
             id="users-table"
             pagination={{
@@ -149,12 +171,26 @@ const Users = () => {
               <div className="flex-row">
                 <Button
                   className="mx-1"
+                  size={AppearanceSizeType.small}
+                  styleType={AppearanceStyleType.primary}
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
                   dataTestId={"add-user"}
                 >
                   {t("users.addUser")}
                 </Button>
+                {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
+                  <Button
+                    className="mx-1"
+                    size={AppearanceSizeType.small}
+                    icon={faFileExport}
+                    onClick={() => onExport()}
+                    loading={csvExportLoading}
+                    dataTestId={"export-users"}
+                  >
+                    {t("t.export")}
+                  </Button>
+                )}
               </div>
             }
           />

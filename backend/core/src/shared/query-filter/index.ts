@@ -56,7 +56,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       switch (filterKey) {
         //custom user filters
         case UserFilterKeys.isPortalUser:
-          addIsPortalUserQuery(qb, filterValue, user)
+          addIsPortalUserQuery(qb, filterValue.toString(), user)
           continue
       }
 

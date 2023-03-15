@@ -3,6 +3,77 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.9.0...@bloom-housing/backend-core@7.10.0) (2023-03-13)
+
+
+### Features
+
+* add user csv export ([#3341](https://github.com/bloom-housing/bloom/issues/3341)) ([1d37535](https://github.com/bloom-housing/bloom/commit/1d375355db1f94565e813ed1853b744acec5a6da))
+
+
+
+
+
+# [7.9.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.8.2...@bloom-housing/backend-core@7.9.0) (2023-03-08)
+
+
+### Features
+
+* upgrade to node 18 and next 12 ([#3343](https://github.com/bloom-housing/bloom/issues/3343)) ([ee7bf77](https://github.com/bloom-housing/bloom/commit/ee7bf77dc3a46ee0795e3e6c4ca282960ec27394))
+
+
+
+
+
+## [7.8.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.8.1...@bloom-housing/backend-core@7.8.2) (2023-03-08)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [7.8.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.8.0...@bloom-housing/backend-core@7.8.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* limit hmi table to min and max occupancy ([#3321](https://github.com/bloom-housing/bloom/issues/3321)) ([13ce24b](https://github.com/bloom-housing/bloom/commit/13ce24b7d3148817f288c54cb5316fd74b92ef8d))
+
+
+
+
+
+# [7.8.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.2...@bloom-housing/backend-core@7.8.0) (2023-02-14)
+
+
+### Features
+
+* resetting migrations ([#3309](https://github.com/bloom-housing/bloom/issues/3309)) ([e77ce13](https://github.com/bloom-housing/bloom/commit/e77ce13154cb91be85eb9da5a0268c207295e203))
+
+
+
+
+
+## [7.7.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.1...@bloom-housing/backend-core@7.7.2) (2023-02-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [7.7.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.7.0...@bloom-housing/backend-core@7.7.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* fix flaky test by configuring the thottler ([#3305](https://github.com/bloom-housing/bloom/issues/3305)) ([82e5755](https://github.com/bloom-housing/bloom/commit/82e5755de248b47eb2e81cfb4bea7dddc1cb9617))
+
+
+
+
+
 # [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.6.0...@bloom-housing/backend-core@7.7.0) (2023-01-26)
 
 

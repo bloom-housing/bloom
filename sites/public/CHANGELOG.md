@@ -3,6 +3,111 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.4.0...@bloom-housing/public@7.4.1) (2023-03-13)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+# [7.4.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.10...@bloom-housing/public@7.4.0) (2023-03-08)
+
+
+### Features
+
+* upgrade to node 18 and next 12 ([#3343](https://github.com/bloom-housing/bloom/issues/3343)) ([ee7bf77](https://github.com/bloom-housing/bloom/commit/ee7bf77dc3a46ee0795e3e6c4ca282960ec27394))
+
+
+
+
+
+## [7.3.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.9...@bloom-housing/public@7.3.10) (2023-03-08)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.8...@bloom-housing/public@7.3.9) (2023-02-28)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.7...@bloom-housing/public@7.3.8) (2023-02-27)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.6...@bloom-housing/public@7.3.7) (2023-02-14)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.5...@bloom-housing/public@7.3.6) (2023-02-07)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.4...@bloom-housing/public@7.3.5) (2023-02-07)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.3...@bloom-housing/public@7.3.4) (2023-02-06)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [7.3.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.2...@bloom-housing/public@7.3.3) (2023-02-01)
+
+
+### Bug Fixes
+
+* add main content id ([#3299](https://github.com/bloom-housing/bloom/issues/3299)) ([062335b](https://github.com/bloom-housing/bloom/commit/062335bd0a1a7af2cc9e7f2bc9a44dad6163d3d9))
+
+
+
+
+
+## [7.3.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.1...@bloom-housing/public@7.3.2) (2023-02-01)
+
+
+### Bug Fixes
+
+* use translated labels on the progress bar when at the choose language step ([#3307](https://github.com/bloom-housing/bloom/issues/3307)) ([3a6c6cf](https://github.com/bloom-housing/bloom/commit/3a6c6cfb4f1fa4d5f606f892e01780530e122790))
+
+
+
+
+
+## [7.3.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.3.0...@bloom-housing/public@7.3.1) (2023-02-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 # [7.3.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.2.3...@bloom-housing/public@7.3.0) (2023-01-26)
 
 

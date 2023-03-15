@@ -2,7 +2,6 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose, Type } from "class-transformer"
 import {
-  IsBoolean,
   IsDefined,
   IsIn,
   IsNumber,
@@ -14,7 +13,6 @@ import {
 import { Address } from "../../shared/entities/address.entity"
 import { Application } from "./application.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 @Entity()
 @Index(["application"])
 export class HouseholdMember extends AbstractEntity {
@@ -73,39 +71,6 @@ export class HouseholdMember extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
   birthYear?: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @EnforceLowerCase()
-  emailAddress?: string | null
-
-  @Column({ nullable: true, type: "boolean" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  noEmail?: boolean | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  phoneNumber?: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  phoneNumberType?: string | null
-
-  @Column({ type: "boolean", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  noPhone?: boolean | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
