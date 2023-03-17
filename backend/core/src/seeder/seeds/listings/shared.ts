@@ -87,7 +87,7 @@ export const defaultUnits: Array<UnitSeedType> = [
     monthlyIncomeMin: "3014",
     monthlyRent: "1219",
     monthlyRentAsPercentOfIncome: null,
-    numBathrooms: 1,
+    numBathrooms: 0,
     numBedrooms: 1,
     number: null,
     sqFeet: "635",
@@ -189,7 +189,7 @@ export const defaultListing: ListingSeedType = {
   criminalBackground: "Custom criminal background text",
   depositMax: "500",
   depositMin: "500",
-  disableUnitsAccordion: true,
+  disableUnitsAccordion: false,
   displayWaitlistSize: false,
   images: [],
   leasingAgentAddress: {

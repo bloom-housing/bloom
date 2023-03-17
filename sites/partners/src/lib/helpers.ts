@@ -95,7 +95,7 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
 }
 
 export const stringToNumber = (str: string | number | undefined): number => {
-  return str ? Number(str) : 1
+  return str !== undefined ? Number(str) : 1
 }
 
 export const stringToBoolean = (str: string | boolean | undefined): boolean => {
