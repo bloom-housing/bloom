@@ -539,6 +539,7 @@ export const ListingView = (props: ListingProps) => {
                 headers={groupedUnitHeaders}
                 data={[{ data: groupedUnitData }]}
                 responsiveCollapse={true}
+                ariaLabel={t("t.unitInformation")}
               />
               {listing?.section8Acceptance && (
                 <div className="text-sm leading-5 mt-4 invisible md:visible">
