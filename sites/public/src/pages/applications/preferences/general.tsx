@@ -8,6 +8,7 @@ import {
   AppearanceStyleType,
   Button,
   FormCard,
+  Heading,
   t,
   Form,
   ProgressNav,
