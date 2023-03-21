@@ -19,12 +19,12 @@ import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
 
 const coliseumListing: ListingSeedType = {
-  jurisdictionName: "Alameda",
+  jurisdictionName: "Bay Area",
   digitalApplication: false,
   commonDigitalApplication: false,
   paperApplication: false,
   referralOpportunity: false,
-  countyCode: CountyCode.alameda,
+  countyCode: CountyCode.bay_area,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
@@ -142,12 +142,12 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
     const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
 
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
 
     const coliseumUnits: Array<UnitSeedType> = [
@@ -944,37 +944,37 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            text: getLiveWorkPreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getPbvPreference(alamedaJurisdiction.name).text,
+            text: getPbvPreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getHopwaPreference(alamedaJurisdiction.name).text,
+            text: getHopwaPreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 3,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+            text: getDisplaceePreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 4,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
+            text: getServedInMilitaryProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(alamedaJurisdiction.name).text,
+            text: getTayProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 2,
         },

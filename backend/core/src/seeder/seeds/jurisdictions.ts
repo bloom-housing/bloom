@@ -5,52 +5,16 @@ import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions
 
 export const activeJurisdictions: JurisdictionCreateDto[] = [
   {
-    name: "Alameda",
+    name: "Bay Area",
     multiselectQuestions: [],
     languages: [Language.en],
     publicUrl: "",
-    emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
+    emailFromAddress: "Bay Area: Housing Bay Area <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
-      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+      "[Bay Area seed] Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
     enablePartnerSettings: true,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
-  },
-  {
-    name: "San Jose",
-    multiselectQuestions: [],
-    languages: [Language.en],
-    publicUrl: "",
-    emailFromAddress: "SJ: HousingBayArea.org <bloom-no-reply@exygy.dev>",
-    rentalAssistanceDefault:
-      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-    enablePartnerSettings: false,
-    enableAccessibilityFeatures: false,
-    enableUtilitiesIncluded: true,
-  },
-  {
-    name: "San Mateo",
-    multiselectQuestions: [],
-    languages: [Language.en],
-    publicUrl: "",
-    emailFromAddress: "SMC: HousingBayArea.org <bloom-no-reply@exygy.dev>",
-    rentalAssistanceDefault:
-      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-    enablePartnerSettings: true,
-    enableAccessibilityFeatures: false,
-    enableUtilitiesIncluded: false,
-  },
-  {
-    name: "Detroit",
-    multiselectQuestions: [],
-    languages: [Language.en],
-    publicUrl: "",
-    emailFromAddress: "Detroit Housing <bloom-no-reply@exygy.dev>",
-    rentalAssistanceDefault:
-      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
-    enablePartnerSettings: false,
-    enableAccessibilityFeatures: false,
-    enableUtilitiesIncluded: false,
   },
 ]
 

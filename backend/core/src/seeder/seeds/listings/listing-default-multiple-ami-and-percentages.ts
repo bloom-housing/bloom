@@ -10,16 +10,16 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
 
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
 
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
     const amiChartOne = await this.amiChartRepository.findOneOrFail({
       name: "San Jose TCAC 2019",
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
     const amiChartTwo = await this.amiChartRepository.findOneOrFail({
       name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
 
     const multipleAMIUnits: Array<UnitSeedType> = [

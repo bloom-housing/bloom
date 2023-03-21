@@ -307,12 +307,12 @@ export class AmiChartDefaultSeed {
   ) {}
 
   async seed() {
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
     return await this.amiChartRepository.save({
       ...getDefaultAmiChart(),
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
   }
 }

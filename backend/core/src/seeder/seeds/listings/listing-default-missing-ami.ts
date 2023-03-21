@@ -10,13 +10,13 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
 
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
 
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
 
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "Missing Household Ami Levels",
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
 
     const missingAmiLevelsUnits: Array<UnitSeedType> = [

@@ -380,11 +380,7 @@ export class migrationReset1675268723433 implements MigrationInterface {
 
     const jurisDefault =
       "Housing Choice Vouchers, Section 8, and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after the use of the subsidy."
-    for (const jurisdictionName of [
-      CountyCode.alameda,
-      CountyCode.san_jose,
-      CountyCode.san_mateo,
-    ]) {
+    for (const jurisdictionName of [CountyCode.bay_area]) {
       await queryRunner.query(
         `INSERT INTO "jurisdictions" (name, rental_assistance_default, partner_terms) VALUES ($1, $2, $3)`,
         [jurisdictionName, jurisDefault, "Example Terms Go here"]
@@ -423,7 +419,7 @@ export class migrationReset1675268723433 implements MigrationInterface {
     }
 
     const [{ id: jurisdictionId }] = await queryRunner.query(
-      `SELECT id FROM jurisdictions WHERE name = 'Alameda' LIMIT 1`
+      `SELECT id FROM jurisdictions WHERE name = 'Bay Area' LIMIT 1`
     )
 
     for (const communityType of ["specialNeeds", "senior55", "senior62"]) {

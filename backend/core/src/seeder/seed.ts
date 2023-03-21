@@ -10,7 +10,7 @@ import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-ope
 import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
 import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
-import { ListingTritonSeed, ListingTritonSeedDetroit } from "./seeds/listings/listing-triton-seed"
+import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
@@ -38,7 +38,6 @@ import { createJurisdictions } from "./seeds/jurisdictions"
 import { AmiDefaultMissingAMI } from "./seeds/ami-charts/missing-household-ami-levels"
 import { SeederModule } from "./seeder.module"
 import { AmiDefaultTriton } from "./seeds/ami-charts/triton-ami-chart"
-import { AmiDefaultTritonDetroit } from "./seeds/ami-charts/triton-ami-chart-detroit"
 import { AmiDefaultSanMateo } from "./seeds/ami-charts/default-ami-chart-san-mateo"
 import { makeNewApplication } from "./seeds/applications"
 import { UserRoles } from "../auth/entities/user-roles.entity"
@@ -77,7 +76,6 @@ const listingSeeds: any[] = [
   ListingDefaultLottery,
   ListingDefaultLotteryPending,
   ListingDefaultSanJoseSeed,
-  ListingTritonSeedDetroit,
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -85,7 +83,6 @@ const amiSeeds: any[] = [
   AmiChartDefaultSeed,
   AmiDefaultMissingAMI,
   AmiDefaultTriton,
-  AmiDefaultTritonDetroit,
   AmiDefaultSanJose,
   AmiDefaultSanMateo,
 ]
@@ -331,9 +328,8 @@ async function seed() {
   const mfaRoles: UserRoles = { user: mfaUser, isPartner: false, isAdmin: true }
   await rolesRepo.save(mfaRoles)
   await userService.confirm({ token: mfaUser.confirmationToken })
-
-  const alamedaJurisdiction = jurisdictions.filter((j) => j.name == CountyCode.alameda)[0]
-  const alamedaAdmin = await userService.createPublicUser(
+  const bayAreaJurisdiction = jurisdictions.filter((j) => j.name == CountyCode.bay_area)[0]
+  const bayAreaAdmin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "alameda-admin@example.com",
       emailConfirmation: "alameda-admin@example.com",
@@ -343,19 +339,19 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "abcdef",
-      jurisdictions: [alamedaJurisdiction],
+      jurisdictions: [bayAreaJurisdiction],
     })
   )
-  await userRepo.save(alamedaAdmin)
-  await userService.confirm({ token: alamedaAdmin.confirmationToken })
+  await userRepo.save(bayAreaAdmin)
+  await userService.confirm({ token: bayAreaAdmin.confirmationToken })
 
-  const alamedaAdminRoles: UserRoles = {
-    user: alamedaAdmin,
+  const bayAreaAdminRoles: UserRoles = {
+    user: bayAreaAdmin,
     isPartner: false,
     isAdmin: false,
     isJurisdictionalAdmin: true,
   }
-  await rolesRepo.save(alamedaAdminRoles)
+  await rolesRepo.save(bayAreaAdminRoles)
 
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
 

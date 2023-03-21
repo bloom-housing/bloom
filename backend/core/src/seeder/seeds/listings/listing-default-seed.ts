@@ -58,12 +58,13 @@ export class ListingDefaultSeed {
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
+    // todo update the name of this
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
 
     const defaultImage = await this.assetsRepository.save(getDefaultAssets()[0])
@@ -80,43 +81,43 @@ export class ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            text: getLiveWorkPreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+            text: getDisplaceePreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
+            text: getServedInMilitaryProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(alamedaJurisdiction.name).text,
+            text: getTayProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisabilityOrMentalIllnessProgram(alamedaJurisdiction.name).text,
+            text: getDisabilityOrMentalIllnessProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 3,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getHousingSituationProgram(alamedaJurisdiction.name).text,
+            text: getHousingSituationProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 4,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getFlatRentAndRentBasedOnIncomeProgram(alamedaJurisdiction.name).text,
+            text: getFlatRentAndRentBasedOnIncomeProgram(bayAreaJurisdiction.name).text,
           }),
           ordinal: 5,
         },
@@ -128,8 +129,8 @@ export class ListingDefaultSeed {
           ordinal: 1,
         },
       ],
-      jurisdictionName: "Alameda",
-      jurisdiction: alamedaJurisdiction,
+      jurisdictionName: "Bay Area",
+      jurisdiction: bayAreaJurisdiction,
     }
 
     let listing = await this.listingRepository.save(listingCreateDto)

@@ -50,12 +50,12 @@ export class ListingDefaultSanJoseSeed {
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
 
     const listingCreateDto: Omit<
@@ -69,13 +69,13 @@ export class ListingDefaultSanJoseSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            text: getLiveWorkPreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+            text: getDisplaceePreference(bayAreaJurisdiction.name).text,
           }),
           ordinal: 2,
         },

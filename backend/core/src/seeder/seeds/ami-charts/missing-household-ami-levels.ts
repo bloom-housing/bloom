@@ -3,8 +3,8 @@ import { CountyCode } from "../../../shared/types/county-code"
 
 export class AmiDefaultMissingAMI extends AmiChartDefaultSeed {
   async seed() {
-    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+    const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.bay_area,
     })
     return await this.amiChartRepository.save({
       name: "Missing Household Ami Levels",
@@ -40,7 +40,7 @@ export class AmiDefaultMissingAMI extends AmiChartDefaultSeed {
           income: 96600,
         },
       ],
-      jurisdiction: alamedaJurisdiction,
+      jurisdiction: bayAreaJurisdiction,
     })
   }
 }

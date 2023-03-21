@@ -26,10 +26,7 @@ import { ListingDefaultNoPreferenceSeed } from "../seeder/seeds/listings/listing
 import { MultiselectQuestion } from "../multiselect-question/entities/multiselect-question.entity"
 import { ListingDefaultFCFSSeed } from "../seeder/seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultOpenSoonSeed } from "../seeder/seeds/listings/listing-default-open-soon"
-import {
-  ListingTritonSeed,
-  ListingTritonSeedDetroit,
-} from "../seeder/seeds/listings/listing-triton-seed"
+import { ListingTritonSeed } from "../seeder/seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "../seeder/seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
 import { PaperApplication } from "../paper-applications/entities/paper-application.entity"
@@ -47,7 +44,6 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { AmiChartDefaultSeed } from "../seeder/seeds/ami-charts/default-ami-chart"
 import { AmiDefaultMissingAMI } from "../seeder/seeds/ami-charts/missing-household-ami-levels"
 import { AmiDefaultTriton } from "../seeder/seeds/ami-charts/triton-ami-chart"
-import { AmiDefaultTritonDetroit } from "../seeder/seeds/ami-charts/triton-ami-chart-detroit"
 import { AmiDefaultSanJose } from "../seeder/seeds/ami-charts/default-ami-chart-san-jose"
 import { AmiDefaultSanMateo } from "../seeder/seeds/ami-charts/default-ami-chart-san-mateo"
 import { Asset } from "../assets/entities/asset.entity"
@@ -110,11 +106,9 @@ export class SeederModule {
         ListingDefaultLottery,
         ListingDefaultLotteryPending,
         ListingDefaultSanJoseSeed,
-        ListingTritonSeedDetroit,
         AmiChartDefaultSeed,
         AmiDefaultMissingAMI,
         AmiDefaultTriton,
-        AmiDefaultTritonDetroit,
         AmiDefaultSanJose,
         AmiDefaultSanMateo,
       ],
