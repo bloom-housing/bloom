@@ -213,7 +213,7 @@ describe("Listings", () => {
       .send(image)
       .set(...setAuthorization(adminAccessToken))
       .expect(201)
-    listing.images = [{ image: assetCreateResponse.body, ordinal: 1, listingId: listing.id }]
+    listing.images = [{ image: assetCreateResponse.body, ordinal: 1 }]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
@@ -384,9 +384,7 @@ describe("Listings", () => {
       description: "TestDescription",
       applicationSection: ApplicationSection.programs,
     })
-    listing.listingMultiselectQuestions = [
-      { multiselectQuestion: newProgram, ordinal: 1, multiselectQuestionId: newProgram.id },
-    ]
+    listing.listingMultiselectQuestions = [{ multiselectQuestion: newProgram, ordinal: 1 }]
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)

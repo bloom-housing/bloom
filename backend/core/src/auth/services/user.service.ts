@@ -493,12 +493,6 @@ export class UserService {
   }
 
   async requestMfaCode(requestMfaCodeDto: RequestMfaCodeDto): Promise<RequestMfaCodeResponseDto> {
-    console.log("496:", {
-      requestMfaCodeDto,
-      repo: this.userRepository,
-      t: Object.keys(this),
-      authzService: this.authzService,
-    })
     let user = await this.userRepository.findOne({
       where: { email: requestMfaCodeDto.email.toLowerCase() },
     })
@@ -563,7 +557,6 @@ export class UserService {
   }
 
   public getQb() {
-    console.log("565:", this.userRepository)
     return this.userRepository
       .createQueryBuilder("user")
       .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
