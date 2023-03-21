@@ -23,9 +23,7 @@ const EditListing = (props: { listing: Listing }) => {
    * a user can easily see the old asset on the detail, but not here, so we can upload it properly (this should only apply to older listings)
    */
   if (listing.images.length === 0) {
-    listing.images = [
-      { ordinal: 0, image: { fileId: "", label: "" }, imageId: undefined, listingId: listing.id },
-    ]
+    listing.images = [{ ordinal: 0, image: { fileId: "", label: "" } }]
   }
 
   return (
