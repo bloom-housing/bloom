@@ -8,7 +8,9 @@ import { MultiselectQuestionDto } from "./multiselect-question.dto"
 export class ListingMultiselectQuestionDto extends OmitType(ListingMultiselectQuestion, [
   "listing",
   "multiselectQuestion",
-  "listingId",
+  "id",
+  "updatedAt",
+  "createdAt",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -21,5 +23,5 @@ export class ListingMultiselectQuestionDto extends OmitType(ListingMultiselectQu
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  listingId?: string
+  id?: string
 }

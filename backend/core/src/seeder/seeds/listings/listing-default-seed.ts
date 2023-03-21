@@ -74,8 +74,6 @@ export class ListingDefaultSeed {
       },
     })
 
-    const defaultImage = await this.assetsRepository.save(getDefaultAssets()[0])
-
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
@@ -130,12 +128,6 @@ export class ListingDefaultSeed {
         },
       ],
       events: getDefaultListingEvents(),
-      images: [
-        {
-          image: defaultImage,
-          ordinal: 1,
-        },
-      ],
       jurisdictionName: "Alameda",
       jurisdiction: alamedaJurisdiction,
     }

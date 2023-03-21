@@ -1,32 +1,22 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, PrimaryColumn } from "typeorm"
+import { Column, Entity, ManyToOne } from "typeorm"
 import { MultiselectQuestion } from "./multiselect-question.entity"
 import { Expose, Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
+import { IsNumber, IsOptional } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Listing } from "../../listings/entities/listing.entity"
+import { AbstractEntity } from "../../shared/entities/abstract.entity"
 
 @Entity({ name: "listing_multiselect_questions" })
-export class ListingMultiselectQuestion {
-  @PrimaryGeneratedColumn("uuid")
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  multiselectQuestionId: string
-
-  @PrimaryColumn("uuid")
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  listingId: string
-
+export class ListingMultiselectQuestion extends AbstractEntity {
   @ManyToOne(() => Listing, (listing) => listing.listingMultiselectQuestions, {
     orphanedRowAction: "delete",
   })
   @Type(() => Listing)
   listing: Listing
 
-  @ManyToOne(() => MultiselectQuestion, (question) => question.listingMultiselectQuestions, {
+  @ManyToOne(() => MultiselectQuestion, {
     eager: true,
+    cascade: true,
   })
   @Expose()
   @Type(() => MultiselectQuestion)

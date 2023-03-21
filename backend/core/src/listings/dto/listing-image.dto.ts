@@ -8,8 +8,10 @@ import { AssetUpdateDto } from "../../assets/dto/asset.dto"
 export class ListingImageDto extends OmitType(ListingImage, [
   "listing",
   "image",
-  "imageId",
-  "listingId",
+  "id",
+  "createdAt",
+  "updatedAt",
+  "createdAt",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -28,5 +30,5 @@ export class ListingImageDto extends OmitType(ListingImage, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  listingId?: string
+  id?: string
 }

@@ -1625,7 +1625,7 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Get Listings by multiselect question id
+   * Get multiselect question by id
    */
   retrieveListings(
     params: {
@@ -4435,7 +4435,7 @@ export interface ListingImage {
   imageId?: string
 
   /**  */
-  listingId?: string
+  id?: string
 
   /**  */
   ordinal?: number
@@ -4521,10 +4521,7 @@ export interface ListingMultiselectQuestion {
   multiselectQuestion: MultiselectQuestion
 
   /**  */
-  listingId?: string
-
-  /**  */
-  multiselectQuestionId: string
+  id?: string
 
   /**  */
   ordinal?: number
@@ -5120,7 +5117,7 @@ export interface ListingImageUpdate {
   imageId?: string
 
   /**  */
-  listingId?: string
+  id?: string
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5245,13 +5242,10 @@ export interface ListingMultiselectQuestionUpdate {
   multiselectQuestion: Id
 
   /**  */
-  multiselectQuestionId: string
-
-  /**  */
   ordinal?: number
 
   /**  */
-  listingId?: string
+  id?: string
 }
 
 export interface ListingCreate {
