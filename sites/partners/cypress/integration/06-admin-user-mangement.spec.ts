@@ -9,7 +9,7 @@ describe("Admin User Mangement Tests", () => {
 
   it("as admin user, should show all users regadless of jurisdiction", () => {
     cy.visit("/")
-    cy.getByTestId("Users").click()
+    cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Administrator", "Jurisdictional Admin"]
     cy.getByTestId("ag-page-size").select("100", { force: true })
 
@@ -22,7 +22,7 @@ describe("Admin User Mangement Tests", () => {
 
   it("as admin user, should be able to download export", () => {
     cy.visit("/")
-    cy.getByTestId("Users").click()
+    cy.getByTestId("Users-1").click()
     cy.getByTestId("export-users").click()
     const convertToString = (value: number) => {
       return value < 10 ? `0${value}` : `${value}`
@@ -38,7 +38,7 @@ describe("Admin User Mangement Tests", () => {
 
   it("as admin user, should be able to create new admin", () => {
     cy.visit("/")
-    cy.getByTestId("Users").click()
+    cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
     cy.fixture("createAdminUser").then((obj) => {
       cy.fillFields(
@@ -73,7 +73,7 @@ describe("Admin User Mangement Tests", () => {
 
   it("as admin user, should be able to create new jurisidictional admin", () => {
     cy.visit("/")
-    cy.getByTestId("Users").click()
+    cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
     cy.fixture("createJurisdictionalAdminUser").then((obj) => {
       cy.fillFields(
@@ -112,7 +112,7 @@ describe("Admin User Mangement Tests", () => {
 
   it("as admin user, should be able to create new partner", () => {
     cy.visit("/")
-    cy.getByTestId("Users").click()
+    cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
     cy.fixture("createPartnerUser").then((obj) => {
       cy.fillFields(

@@ -11,6 +11,7 @@ import {
   t,
   Form,
   ProgressNav,
+  Heading,
 } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
@@ -78,12 +79,7 @@ const ApplicationAddMembers = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
