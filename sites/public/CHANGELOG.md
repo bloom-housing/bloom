@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.4.1...@bloom-housing/public@7.4.2) (2023-03-21)
+
+
+### Bug Fixes
+
+* uptake latest uic Modal, ActionBlock, FormCard breaking changes ([#3358](https://github.com/bloom-housing/bloom/issues/3358)) ([5befda9](https://github.com/bloom-housing/bloom/commit/5befda98bac330c29aa5ae4cf1f0670862e81c22))
+
+
+
+
+
 ## [7.4.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.4.0...@bloom-housing/public@7.4.1) (2023-03-13)
 
 **Note:** Version bump only for package @bloom-housing/public

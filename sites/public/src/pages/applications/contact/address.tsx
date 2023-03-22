@@ -15,6 +15,7 @@ import {
   FieldGroup,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useContext, useEffect, useState, useMemo, useCallback } from "react"
@@ -140,12 +141,7 @@ const ApplicationAddress = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

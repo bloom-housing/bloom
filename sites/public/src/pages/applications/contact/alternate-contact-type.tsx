@@ -13,6 +13,7 @@ import {
   FormCard,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import {
   altContactRelationshipKeys,
@@ -61,12 +62,7 @@ const ApplicationAlternateContactType = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
