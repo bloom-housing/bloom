@@ -88,20 +88,22 @@ const FormUserManage = ({
   const { register, errors, getValues, trigger, setValue } = methods
 
   const jurisdictionOptions = useMemo(() => {
-    return jurisdictionList.map((juris) => ({
-      id: juris.id,
-      label: juris.name,
-      value: juris.id,
-      inputProps: {
-        onChange: () => {
-          if (getValues("jurisdictions").length === jurisdictionList.length) {
-            setValue("jurisdiction_all", true)
-          } else {
-            setValue("jurisdiction_all", false)
-          }
+    return jurisdictionList
+      .map((juris) => ({
+        id: juris.id,
+        label: juris.name,
+        value: juris.id,
+        inputProps: {
+          onChange: () => {
+            if (getValues("jurisdictions").length === jurisdictionList.length) {
+              setValue("jurisdiction_all", true)
+            } else {
+              setValue("jurisdiction_all", false)
+            }
+          },
         },
-      },
-    }))
+      }))
+      .sort((a, b) => (a.label < b.label ? -1 : 1))
   }, [jurisdictionList, getValues, setValue])
 
   const listingsOptions = useMemo(() => {
