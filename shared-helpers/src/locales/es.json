@@ -572,6 +572,7 @@
   "listings.singleRoomOccupancyDescription": "Esta propiedad ofrece habitaciones individuales para una persona solamente. Los inquilinos pueden compartir baños y, en ocasiones, cocinas.",
   "listings.singleRoomOccupancy": "Ocupación de habitación individual",
   "listings.specialNotes": "Observaciones especiales",
+  "listings.unit.sharedBathroom": "Compartido",
   "listings.unitTypes.SRO": "Ocupación de habitación individual",
   "listings.unitTypes.fiveBdrm": "5 dormitorios",
   "listings.unitTypes.fourBdrm": "4 dormitorios",

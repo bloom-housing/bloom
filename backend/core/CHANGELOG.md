@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.11.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.10.0...@bloom-housing/backend-core@7.11.0) (2023-03-23)
+
+
+### Features
+
+* add shared bathroom option ([#3362](https://github.com/bloom-housing/bloom/issues/3362)) ([38e77aa](https://github.com/bloom-housing/bloom/commit/38e77aa249611e4274f3a82883d72d6573b8faf6))
+
+
+
+
+
 # [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.9.0...@bloom-housing/backend-core@7.10.0) (2023-03-13)
 
 

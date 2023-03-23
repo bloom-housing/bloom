@@ -549,6 +549,7 @@
   "listings.singleRoomOccupancyDescription": "Toà nhà này cung cấp các phòng đơn chỉ dành cho một người. Những người thuê nhà có thể dùng chung phòng tắm và đôi khi là các tiện nghi ở nhà bếp.",
   "listings.singleRoomOccupancy": "Số người ở Phòng đơn",
   "listings.specialNotes": "Ghi chú đặc biệt",
+  "listings.unit.sharedBathroom": "Chia sẻ",
   "listings.unitTypes.SRO": "Số người ở Phòng đơn",
   "listings.unitTypes.fiveBdrm": "5 Phòng ngủ",
   "listings.unitTypes.fourBdrm": "4 Phòng ngủ",
