@@ -4,31 +4,23 @@ on:
   # Triggers the workflow on push only for the main branch
   push:
     branches: [ main ]
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Config user name
-        run: git config --global user.name github.context.workflow
-
-      - name: Config user email
-        run: git config --global user.email "github-actions@github.com"
-
       - name: Check out git repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.ADMIN_TOKEN }}
       
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 18
           registry-url: 'https://registry.npmjs.org'
 
       - name: Version packages
         run: yarn version:all
-        env:
-          GITHUB_TOKEN: ${{ secrets.ADMIN_TOKEN }}
