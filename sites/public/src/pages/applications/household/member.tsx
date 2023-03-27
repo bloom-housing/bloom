@@ -16,6 +16,7 @@ import {
   FormOptions,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import FormsLayout from "../../../layouts/forms"
@@ -116,12 +117,7 @@ const ApplicationMember = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}

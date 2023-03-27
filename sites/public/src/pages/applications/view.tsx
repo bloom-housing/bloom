@@ -4,7 +4,7 @@ Optional application summary
 */
 import Link from "next/link"
 import dayjs from "dayjs"
-import { FormCard, t } from "@bloom-housing/ui-components"
+import { FormCard, Heading, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/applications/AppSubmissionContext"
 import { useContext, useEffect, useMemo } from "react"
@@ -36,12 +36,7 @@ const ApplicationView = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: t("account.application.confirmation"),
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{t("account.application.confirmation")}</Heading>}>
         <div className="py-2">
           {listing && (
             <span className={"lined text-sm"}>

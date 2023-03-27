@@ -5,6 +5,7 @@ import {
   Button,
   Form,
   FormCard,
+  Heading,
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
@@ -96,12 +97,7 @@ export default () => {
 
   return previousApplication ? (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
