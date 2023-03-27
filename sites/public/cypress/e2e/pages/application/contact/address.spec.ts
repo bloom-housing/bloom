@@ -1,7 +1,7 @@
 describe("applications/contact/address", function () {
   const route = "/applications/contact/address"
 
-  before(() => {
+  beforeEach(() => {
     cy.visit(route)
   })
 
