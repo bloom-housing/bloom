@@ -58,7 +58,7 @@ describe("Authz", () => {
         AppModule.register(dbOptions),
         ThrottlerModule.forRoot({
           ttl: 60,
-          limit: 2,
+          limit: 20,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
       ],

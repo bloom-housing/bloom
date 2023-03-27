@@ -1,6 +1,6 @@
 describe("Jurisdictional Admin User Mangement Tests", () => {
   beforeEach(() => {
-    cy.loginAndAcceptTerms("jurisdictionalAdmin")
+    cy.login("jurisdictionalAdmin")
   })
 
   afterEach(() => {
@@ -8,6 +8,9 @@ describe("Jurisdictional Admin User Mangement Tests", () => {
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
+    cy.getByTestId("agree").check()
+    cy.getByTestId("form-submit").click()
+    cy.contains("Listings")
     cy.visit("/")
     cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Jurisdictional Admin"]
