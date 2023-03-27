@@ -83,6 +83,24 @@ export class ListingsController {
     )
   }
 
+  @Get(`/bloom/:id`)
+  @ApiOperation({ summary: "Get Bloom listing by id", operationId: "retrieve" })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  async retrieveBloom(
+    @Headers("language") language: Language,
+    @Param("id", new ParseUUIDPipe({ version: "4" })) listingId: string,
+    @Query() queryParams: ListingsRetrieveQueryParams
+  ): Promise<ListingDto> {
+    if (listingId === undefined || listingId === "undefined") {
+      return mapTo(ListingDto, {})
+    }
+    return mapTo(
+      ListingDto,
+      await this.listingsService.findOneFromBloom(listingId, language, queryParams)
+    )
+  }
+
   @Put(`:id`)
   @ApiOperation({ summary: "Update listing by id", operationId: "update" })
   @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))

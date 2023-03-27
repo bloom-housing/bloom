@@ -1,3 +1,5 @@
+import { HttpModule } from "@nestjs/axios"
+import { ConfigModule } from "@nestjs/config"
 import { Logger, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsService } from "./listings.service"
@@ -32,6 +34,8 @@ import { ListingsCronService } from "./listings-cron.service"
     TranslationsModule,
     ActivityLogModule,
     ApplicationFlaggedSetsModule,
+    HttpModule,
+    ConfigModule,
   ],
   providers: [ListingsService, ListingsCronService, Logger],
   exports: [ListingsService],

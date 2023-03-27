@@ -1,3 +1,4 @@
+import { HttpModule } from "@nestjs/axios"
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import supertest from "supertest"
@@ -50,6 +51,7 @@ describe("Listings", () => {
         ApplicationMethodsModule,
         PaperApplicationsModule,
         TypeOrmModule.forFeature([MultiselectQuestion]),
+        HttpModule,
       ],
     }).compile()
 
@@ -448,6 +450,19 @@ describe("Listings", () => {
 
     expect(listingsSearchResponse.body.items.length).toBe(1)
     expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
+  })
+
+  // Note: /listings/bloom/:id calls another external API.
+  // We should avoid writing e2e tests that call the Bloom API and instead
+  // write tests using the mockHttpService in
+  // listings.service.spec.ts.
+  describe("/bloom", () => {
+    describe("/:id", () => {
+      // This test is OK becuase it never makes it to the HTTP request phase.
+      it("fails if the id is not a valid uuld", async () => {
+        await supertest(app.getHttpServer()).get(`/listings/bloom/blah`).expect(400)
+      })
+    })
   })
 
   afterEach(() => {

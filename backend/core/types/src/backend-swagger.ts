@@ -1412,6 +1412,30 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get Bloom listing by id
+   */
+  retrieve1(
+    params: {
+      /**  */
+      id: string
+      /**  */
+      view?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/bloom/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { view: params["view"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class PaperApplicationsService {
@@ -1625,7 +1649,7 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Get Listings by multiselect question id
+   * Get multiselect question by id
    */
   retrieveListings(
     params: {

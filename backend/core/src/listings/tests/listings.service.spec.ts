@@ -1,10 +1,14 @@
+import { HttpService } from "@nestjs/axios"
+import { ConfigService } from "@nestjs/config"
 import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { ListingsService } from "../listings.service"
 import { TranslationsService } from "../../translations/services/translations.service"
+import { of } from "rxjs"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingsQueryParams } from "../dto/listings-query-params"
+import { ListingsRetrieveQueryParams } from "../dto/listings-retrieve-query-params"
 import { Compare } from "../../shared/dto/filter.dto"
 import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
@@ -14,6 +18,7 @@ import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/ap
 import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { UserRepository } from "../../auth/repositories/user-repository"
+import { Language } from "../../../types"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -94,6 +99,17 @@ const mockInnerQueryBuilder = {
   addSearchByListingNameCondition: ListingsQueryBuilder.prototype.addOrderConditions,
   paginate: ListingsQueryBuilder.prototype.paginate,
 }
+const mockHttpService = {
+  get: jest.fn().mockImplementation(() => {
+    return of({
+      data: "test",
+      status: 200,
+      statusText: "OK",
+      headers: {},
+      config: {},
+    })
+  }),
+}
 const mockQueryBuilder = {
   select: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
@@ -132,6 +148,8 @@ describe("ListingsService", () => {
   beforeEach(async () => {
     process.env.APP_SECRET = "SECRET"
     process.env.EMAIL_API_KEY = "SG.KEY"
+    process.env.BLOOM_API_BASE = "fake_uri.com"
+    process.env.BLOOM_LISTINGS_QUERY = "/fake"
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ListingsService,
@@ -157,6 +175,11 @@ describe("ListingsService", () => {
           provide: TranslationsService,
           useValue: { translateListing: jest.fn() },
         },
+        {
+          provide: HttpService,
+          useValue: mockHttpService,
+        },
+        ConfigService,
       ],
     }).compile()
 
@@ -389,6 +412,25 @@ describe("ListingsService", () => {
         "listings.updated_at",
         "DESC",
         undefined
+      )
+    })
+  })
+
+  describe("findOneFromBloom", () => {
+    it("should pass the params through using the HttpService", async () => {
+      const queryParams: ListingsRetrieveQueryParams = {
+        view: "test_test", // is an untyped string param
+      }
+      await service.findOneFromBloom("i_am_an_id", Language.zh, queryParams)
+
+      expect(mockHttpService.get).toHaveBeenCalledWith(
+        "fake_uri.com/fake/i_am_an_id",
+        expect.objectContaining({
+          headers: {
+            language: Language.zh,
+          },
+          params: queryParams,
+        })
       )
     })
   })

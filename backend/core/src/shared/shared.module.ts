@@ -26,6 +26,9 @@ import Joi from "joi"
         AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: Joi.number().default(5),
         AUTH_LOCK_LOGIN_COOLDOWN_MS: Joi.number().default(1000 * 60 * 30),
         AFS_PROCESSING_CRON_STRING: Joi.string().default("0 0 * * *"),
+        // Begin Doorway-specific required env variables
+        BLOOM_API_BASE: Joi.string().required(),
+        BLOOM_LISTINGS_QUERY: Joi.string().required(),
       }),
     }),
   ],

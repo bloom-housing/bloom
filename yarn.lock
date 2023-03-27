@@ -3789,6 +3789,11 @@
     strict-event-emitter "^0.2.4"
     web-encoding "^1.1.5"
 
+"@nestjs/axios@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/axios/-/axios-2.0.0.tgz#2116fad483e232ef102a877b503a9f19926bd102"
+  integrity sha512-F6oceoQLEn031uun8NiommeMkRIojQqVryxQy/mK7fx0CI0KbgkJL3SloCQcsOD+agoEnqKJKXZpEvL6FNswJg==
+
 "@nestjs/cli@^8.2.1":
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-8.2.1.tgz#3d107e99058735d7511b774a26bc253e8589aa8b"
