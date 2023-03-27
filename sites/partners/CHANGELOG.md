@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.9.1...@bloom-housing/partners@7.10.0) (2023-03-23)
+
+
+### Features
+
+* add shared bathroom option ([#3362](https://github.com/bloom-housing/bloom/issues/3362)) ([38e77aa](https://github.com/bloom-housing/bloom/commit/38e77aa249611e4274f3a82883d72d6573b8faf6))
+
+
+
+
+
+## [7.9.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.9.0...@bloom-housing/partners@7.9.1) (2023-03-21)
+
+
+### Bug Fixes
+
+* uptake latest uic Modal, ActionBlock, FormCard breaking changes ([#3358](https://github.com/bloom-housing/bloom/issues/3358)) ([5befda9](https://github.com/bloom-housing/bloom/commit/5befda98bac330c29aa5ae4cf1f0670862e81c22))
+
+
+
+
+
 # [7.9.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.8.0...@bloom-housing/partners@7.9.0) (2023-03-13)
 
 

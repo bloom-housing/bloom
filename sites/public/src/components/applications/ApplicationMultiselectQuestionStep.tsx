@@ -8,6 +8,7 @@ import {
   Button,
   AppearanceStyleType,
   ProgressNav,
+  Heading,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import FormBackLink from "./FormBackLink"
@@ -149,12 +150,7 @@ const ApplicationMultiselectQuestionStep = ({
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={applicationSectionNumber}
           completedSections={application.completedSections}
