@@ -1,0 +1,68 @@
+name: Integration tests
+
+on:
+  pull_request:
+    branches:
+      - main
+env:
+  PORT: 3100
+  EMAIL_API_KEY: 'SOME-LONG-SECRET-KEY'
+  APP_SECRET: 'SOME-LONG-SECRET-KEY'
+  CLOUDINARY_SECRET: CLOUDINARY_SECRET
+  CLOUDINARY_KEY: CLOUDINARY_KEY
+  PARTNERS_PORTAL_URL: http://127.0.0.1:3001
+  DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
+  TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
+
+jobs:
+  integration-tests:
+    name: Run integration tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom-dev
+          POSTGRES_USER: bloom-dev
+          POSTGRES_PASSWORD: bloom
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Check postgres
+        run: pg_isready -h 127.0.0.1 -p ${{ job.services.postgres.ports[5432] }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+
+      - name: yarn in root dir
+        run: yarn
+
+      - name: yarn in backend/core dir
+        working-directory: ./backend/core
+        run: yarn
+
+      - name: Check postgres
+        run: pg_isready -h 127.0.0.1 -p 5432
+
+      - name: Not sure why but there is a dependency on this database existing
+        run: psql -c 'CREATE DATABASE bloom_test;'
+        env:
+          PGHOST: 127.0.0.1
+          PGPASSWORD: bloom
+          PGUSER: bloom-dev
+
+      - name: yarn e2e tests backend
+        working-directory: ./backend/core
+        run: yarn test:e2e:local
+        env:
+          PGHOST: 127.0.0.1
+          PGPASSWORD: bloom
+          PGUSER: bloom-dev
