@@ -29,6 +29,7 @@
     "@bloom-housing/backend-core": "^7.11.0",
     "@bloom-housing/shared-helpers": "^7.5.0",
     "@bloom-housing/ui-components": "^11.0.0",
+    "@bloom-housing/ui-seeds": "^1.2.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",

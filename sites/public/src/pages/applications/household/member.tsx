@@ -3,12 +3,12 @@
 Add household members
 */
 import { useRouter } from "next/router"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
-  ErrorMessage,
   Field,
   FieldGroup,
   Form,
@@ -416,9 +416,11 @@ const ApplicationMember = () => {
                       />
                     </select>
                   </div>
-                  <ErrorMessage id="relationship-error" error={errors.relationship}>
-                    {t("errors.selectOption")}
-                  </ErrorMessage>
+                  {errors.relationship && (
+                    <FormErrorMessage id={"relationship-error"}>
+                      {t("errors.selectOption")}
+                    </FormErrorMessage>
+                  )}
                 </div>
               </div>
 
