@@ -146,8 +146,6 @@ workflows:
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
           store_artifacts: true
-          store_test_results: 
-            path: test-results
       - cypress/run:
           name: "cypress-partners"
           requires:
@@ -160,5 +158,3 @@ workflows:
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
-          store_test_results: 
-            path: test-results
