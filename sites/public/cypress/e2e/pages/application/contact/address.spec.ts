@@ -25,6 +25,8 @@ describe("applications/contact/address", function () {
   })
 
   it("should provide a way to validate address via API", function () {
+    // fake the address call to the mocked data
+    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     cy.getByTestId("app-primary-no-phone").check()
 
     cy.getByTestId("app-primary-address-street").type("600 Mongomery St")
@@ -43,6 +45,8 @@ describe("applications/contact/address", function () {
   })
 
   it("should handle garbage input", function () {
+    // fake the address call to the mocked data
+    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address-bad" })
     cy.getByTestId("app-primary-no-phone").check()
 
     // Let's add gibberish

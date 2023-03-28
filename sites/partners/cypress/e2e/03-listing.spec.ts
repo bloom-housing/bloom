@@ -147,6 +147,7 @@ describe("Listing Management Tests", () => {
 
   // TODO: make this not dependent on the previous test
   it("verify details page", () => {
+    cy.visit("/")
     cy.fixture("listing").then((listing) => {
       cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
       cy.get("#name").contains(listing["name"])
