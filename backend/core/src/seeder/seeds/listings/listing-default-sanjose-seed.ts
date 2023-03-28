@@ -82,7 +82,7 @@ export class ListingDefaultSanJoseSeed {
       ],
 
       events: getDefaultListingEvents(),
-      jurisdictionName: "San Jose",
+      jurisdictionName: "Bay Area",
     }
 
     let listing = await this.listingRepository.save(listingCreateDto)

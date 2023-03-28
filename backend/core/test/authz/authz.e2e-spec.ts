@@ -93,7 +93,7 @@ describe("Authz", () => {
       await supertest(app.getHttpServer())
         .post(`/applications/submit`)
         .send(listing1Application)
-        .set("jurisdictionName", "Alameda")
+        .set("jurisdictionName", "Bay Area")
         .set(...setAuthorization(userAccessToken))
         .expect(201)
     ).body

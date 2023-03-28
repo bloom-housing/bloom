@@ -133,14 +133,14 @@ describe("Applications", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(403)
 
     delete userCreateDto.confirmedAt
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
 
@@ -192,7 +192,7 @@ describe("Applications", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
@@ -218,7 +218,7 @@ describe("Applications", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -257,7 +257,7 @@ describe("Applications", () => {
     userCreateDto.emailConfirmation = "a2@b.com"
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
   })
@@ -275,13 +275,13 @@ describe("Applications", () => {
     }
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     expect(res.body).toHaveProperty("id")
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
     expect(res.body).toHaveProperty("id")
   })
@@ -323,7 +323,7 @@ describe("Applications", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -345,7 +345,7 @@ describe("Applications", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     const userRepository = await app.resolve<UserRepository>(UserRepository)
@@ -382,7 +382,7 @@ describe("Applications", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     await supertest(app.getHttpServer())
       .post(`/user?noWelcomeEmail=true`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     expect(mockWelcome.mock.calls.length).toBe(0)
@@ -453,7 +453,7 @@ describe("Applications", () => {
 
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
 
@@ -500,7 +500,7 @@ describe("Applications", () => {
     const createAndConfirmUser = async (createDto: UserCreateDto) => {
       const userCreateResponse = await supertest(app.getHttpServer())
         .post(`/user/`)
-        .set("jurisdictionName", "Alameda")
+        .set("jurisdictionName", "Bay Area")
         .send(createDto)
         .expect(201)
 
@@ -687,7 +687,7 @@ describe("Applications", () => {
     }
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
@@ -725,7 +725,7 @@ describe("Applications", () => {
 
     const res = await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
 
@@ -821,7 +821,7 @@ describe("Applications", () => {
 
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
 
@@ -897,7 +897,7 @@ describe("Applications", () => {
 
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -981,7 +981,7 @@ describe("Applications", () => {
 
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -1064,7 +1064,7 @@ describe("Applications", () => {
 
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
 

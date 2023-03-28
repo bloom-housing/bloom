@@ -74,7 +74,7 @@ describe("Activity", () => {
     await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(appBody)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Bay Area")
       .set(...setAuthorization(adminAccessToken))
   })
 

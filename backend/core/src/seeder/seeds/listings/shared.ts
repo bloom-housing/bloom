@@ -140,8 +140,8 @@ export function getDefaultListing() {
 }
 
 export const defaultListing: ListingSeedType = {
-  jurisdictionName: "Alameda",
-  countyCode: CountyCode.alameda,
+  jurisdictionName: "Bay Area",
+  countyCode: CountyCode.bay_area,
   accessibility: "Custom accessibility text",
   amenities: "Custom property amenities text",
   buildingAddress: {

@@ -11,7 +11,7 @@ import { classToClass } from "class-transformer"
 import dayjs from "dayjs"
 
 const tritonListing: ListingSeedType = {
-  jurisdictionName: "Alameda",
+  jurisdictionName: "Bay Area",
   digitalApplication: false,
   commonDigitalApplication: false,
   paperApplication: false,

@@ -123,58 +123,37 @@ describe("Listings", () => {
     await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
   })
 
-  it("should return listings with matching Alameda jurisdiction", async () => {
+  it("should only have the Bay Area jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
-    const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
-    const queryParams = {
-      limit: "all",
-      filter: [
-        {
-          $comparison: "=",
-          jurisdiction: alameda.id,
-        },
-      ],
-      view: "base",
-    }
-    const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(15)
+    const nonBayArea = jurisdictions.find((jurisdiction) => jurisdiction.name !== "Bay Area")
+    expect(nonBayArea).toBe(undefined)
   })
 
-  it("should return listings with matching San Jose jurisdiction", async () => {
+  it("should associate all listings with the Bay Area", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
-    const sanjose = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Jose")
+    const bayArea = jurisdictions.find((jurisdiction) => jurisdiction.name === "Bay Area")
     const queryParams = {
       limit: "all",
+      view: "base",
+    }
+    const queryParamsOnlyBayArea = {
+      ...queryParams,
       filter: [
         {
           $comparison: "=",
-          jurisdiction: sanjose.id,
+          jurisdiction: bayArea.id,
         },
       ],
-      view: "base",
     }
-    const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(1)
-  })
-
-  it("should return no listings with San Mateo jurisdiction", async () => {
-    const jurisdictions = await jurisdictionsRepository.find()
-    const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
-    const queryParams = {
-      limit: "all",
-      filter: [
-        {
-          $comparison: "=",
-          jurisdiction: sanmateo.id,
-        },
-      ],
-      view: "base",
-    }
-    const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(0)
+    const [resAllJurisdictions, resBayArea] = await Promise.all([
+      supertest(app.getHttpServer())
+        .get(`/listings?${qs.stringify(queryParams)}`)
+        .expect(200),
+      supertest(app.getHttpServer())
+        .get(`/listings?${qs.stringify(queryParamsOnlyBayArea)}`)
+        .expect(200),
+    ])
+    expect(resAllJurisdictions.body.items.length).toEqual(resBayArea.body.items.length)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
@@ -312,13 +291,9 @@ describe("Listings", () => {
     expect(listings[0].name).toBe("Test: Coliseum")
 
     // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
-    // (5 days in the future). Between the two, Triton 2 appears first because it has
-    // the closer applicationOpenDate. (edit sort order between Triton 1 and Triton 2 is random now as
-    // we have removed the default applicationOpenDate sort order
     const secondListing = listings[1]
     const thirdListing = listings[2]
-    const fourthListing = listings[3]
-    expect(fourthListing.name).toBe("Test: Default, No Preferences")
+    expect(thirdListing.name).toBe("Test: Default, No Preferences")
 
     const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
     const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)
