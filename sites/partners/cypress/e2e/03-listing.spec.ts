@@ -1,5 +1,5 @@
 describe("Listing Management Tests", () => {
-  before(() => {
+  beforeEach(() => {
     cy.login()
   })
 
@@ -149,6 +149,8 @@ describe("Listing Management Tests", () => {
   it("verify details page", () => {
     cy.visit("/")
     cy.fixture("listing").then((listing) => {
+      cy.getByTestId("ag-search-input").type(listing["name"])
+      cy.getByTestId(listing["name"]).first().click()
       cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
       cy.get("#name").contains(listing["name"])
       cy.get("#developer").contains(listing["developer"])
@@ -249,6 +251,8 @@ describe("Listing Management Tests", () => {
   // TODO: make this not dependent on the previous test
   it("verify open listing warning happens", () => {
     cy.fixture("listing").then((listing) => {
+      cy.getByTestId("ag-search-input").type(listing["name"])
+      cy.getByTestId(listing["name"]).first().click()
       cy.getByTestId("listingEditButton").contains("Edit").click()
       cy.getByTestId("nameField").type(" (Edited)")
       cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()

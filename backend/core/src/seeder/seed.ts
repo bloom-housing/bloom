@@ -344,6 +344,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [alamedaJurisdiction],
+      agreedToTermsOfService: true,
     })
   )
   await userRepo.save(alamedaAdmin)

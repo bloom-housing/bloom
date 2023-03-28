@@ -58,6 +58,7 @@ class ListingsLink extends formatLinkCell {
   init(params) {
     super.init(params)
     this.link.setAttribute("href", `/listings/${params.data.id}`)
+    this.link.setAttribute("data-testid", params.data.name)
   }
 }
 
