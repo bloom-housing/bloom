@@ -1,8 +1,4 @@
-import {
-  ACCESS_TOKEN_LOCAL_STORAGE_KEY,
-  AuthProvider,
-  ConfigProvider,
-} from "@bloom-housing/shared-helpers"
+import { AuthProvider, ConfigProvider } from "@bloom-housing/shared-helpers"
 import { fireEvent, render } from "@testing-library/react"
 import { rest } from "msw"
 import { setupServer } from "msw/node"
@@ -81,9 +77,7 @@ describe("users", () => {
     window.URL.createObjectURL = jest.fn()
     // set a logged in token
     jest.useFakeTimers()
-    const fakeToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ZTMxODNhOC0yMGFiLTRiMDYtYTg4MC0xMmE5NjYwNmYwOWMiLCJpYXQiOjE2Nzc2MDAxNDIsImV4cCI6MjM5NzkwMDc0Mn0.ve1U5tAardpFjNyJ_b85QZLtu12MoMTa2aM25E8D1BQ"
-    window.sessionStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, fakeToken)
+    document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
         return res(ctx.json([]))
@@ -92,10 +86,10 @@ describe("users", () => {
         return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       // set logged in user as admin
-      rest.get("http://localhost:3100/user", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
       }),
-      rest.get("http://localhost:3100/user/csv", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/user/csv", (_req, res, ctx) => {
         return res(ctx.json(""))
       })
     )
@@ -120,9 +114,7 @@ describe("users", () => {
   it("should render error message csv fails", async () => {
     // set a logged in token
     jest.useFakeTimers()
-    const fakeToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ZTMxODNhOC0yMGFiLTRiMDYtYTg4MC0xMmE5NjYwNmYwOWMiLCJpYXQiOjE2Nzc2MDAxNDIsImV4cCI6MjM5NzkwMDc0Mn0.ve1U5tAardpFjNyJ_b85QZLtu12MoMTa2aM25E8D1BQ"
-    window.sessionStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, fakeToken)
+    document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
         return res(ctx.json([]))
@@ -131,10 +123,10 @@ describe("users", () => {
         return res(ctx.json({ items: [user], meta: { totalItems: 1, totalPages: 1 } }))
       }),
       // set logged in user as admin
-      rest.get("http://localhost:3100/user", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/user", (_req, res, ctx) => {
         return res(ctx.json({ id: "user1", roles: { id: "user1", isAdmin: true } }))
       }),
-      rest.get("http://localhost:3100/user/csv", (_req, res, ctx) => {
+      rest.get("http://localhost/api/adapter/user/csv", (_req, res, ctx) => {
         return res(ctx.status(500), ctx.json(""))
       })
     )
