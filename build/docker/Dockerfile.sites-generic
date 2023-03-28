@@ -1,0 +1,159 @@
+
+# Set a default value for the SITE arg
+ARG SITE=public
+
+# The base image will contain all the source code needed for our site
+FROM node:18.14-alpine AS base
+
+# https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
+RUN apk add --no-cache libc6-compat
+
+ARG SITE
+
+# We don't need a complicated root path
+WORKDIR /app
+
+# Copy over config files to help with local dependency resolution
+COPY --chown=node:node *.json yarn*.lock *config.js ./
+
+# Bring in both sites
+#COPY --chown=node:node sites ./sites
+
+# Bring in just the site we need
+COPY --chown=node:node sites/${SITE} ./sites/${SITE}
+
+# It turns out we do have a hard dependency on backend/core :(
+COPY --chown=node:node backend/core ./backend/core
+
+# And shared helpers
+COPY --chown=node:node shared-helpers ./shared-helpers
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The deps stage installs full dependencies
+FROM base AS deps
+
+ARG SITE
+
+# We need to have this nested 2 layers deep due to hardcoded paths in package.json
+WORKDIR /app/sites/${SITE}
+
+# Install deps
+RUN yarn install --frozen-lockfile
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The test stage can be used to run unit tests
+FROM deps AS test
+
+ARG SITE
+
+# We need to have this nested 2 layers deep due to hardcoded paths in package.json
+WORKDIR /app/sites/${SITE}
+
+# Cypress dependency for `yarn test` and `yarn test:headless`
+# When running:
+# [1] No version of Cypress is installed in: /home/node/.cache/Cypress/9.5.1/Cypress
+# [1] Please reinstall Cypress by running: cypress install
+#
+# When building:
+# Step 17/21 : RUN cypress install
+# ---> Running in eef1a946a802
+#/bin/sh: cypress: not found
+
+# When running this image, make sure to use the built-in node user
+USER node
+
+# Next.js port is needed for some reason?
+#EXPOSE 3000
+
+# Debugger port
+#EXPOSE 9230
+
+# This can be overridden with other test commands
+CMD yarn test:unit --verbose
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The build stage builds the app
+FROM deps AS build
+
+ARG SITE
+
+# We need to have this nested 2 layers deep due to hardcoded paths in package.json
+WORKDIR /app/sites/${SITE}
+
+# Build/compile
+RUN yarn build
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The optimize stage installs only production dependencies
+FROM base AS optimize
+
+ARG SITE
+
+WORKDIR /app/sites/${SITE}
+
+# Reinstall only dependencies required to run the application
+RUN yarn install --frozen-lockfile --only=production
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The run stage is used to run our optimized app
+FROM node:18.14-alpine AS run
+
+ARG SITE
+
+# Copy (almost) everything over to our fresh image
+WORKDIR /app
+
+# node_modules in the root has some necessary binaries
+COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+
+# Just the site we need to reduce size
+COPY --from=optimize --chown=node:node /app/sites/${SITE}/node_modules ./sites/${SITE}/node_modules
+
+# Bring in our local dependencies
+COPY --from=build /app/backend/core ./backend/core
+COPY --from=build /app/shared-helpers ./shared-helpers
+
+# Switch to our site
+WORKDIR /app/sites/${SITE}
+
+# Yarn needs a package.json file to work, even for `yarn start`
+COPY --chown=node:node \
+        ./sites/${SITE}/package*.json \
+        ./sites/${SITE}/tailwind.config.js \
+        ./sites/${SITE}/next.config.js \
+        ./
+
+COPY --from=build --chown=node:node /app/sites/${SITE}/public ./public
+COPY --from=build --chown=node:node /app/sites/${SITE}/.next ./.next
+
+# Make sure to get the minimum dependencies
+COPY --from=optimize --chown=node:node /app/sites/${SITE}/node_modules ./node_modules
+
+# Disable Next.js telemetry by default
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Make sure to use the built-in node user
+USER node
+
+# Start the server
+CMD yarn start

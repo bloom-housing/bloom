@@ -1,0 +1,97 @@
+
+# The deps stage will contain our source and all dependencies for development
+FROM node:18.14-alpine AS deps
+
+# WORKDIR doesn't need to be fancy, but it needs to be consistent
+WORKDIR /app
+
+# Putting this first enables us to change code files without having to rerun the
+# next step to install dependencies. Dependencies only get reinstalled if one of
+# these files changes.
+COPY --chown=node:node package*.json tsconfig*.json ./
+
+# Install deps
+RUN yarn install --frozen-lockfile
+
+# Once dependencies are installed, bring in everything else
+COPY --chown=node:node . .
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The test stage builds an image safe for running tests
+FROM deps AS tests
+
+WORKDIR /app
+
+# When running this image, make sure to use the built-in node user
+USER node
+
+# This can be overridden with other test commands
+CMD yarn test
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The build stage builds the code using the dependencies from the deps stage
+FROM node:18.14-alpine AS build
+
+WORKDIR /app
+
+# Copy over the node_modules from the base image so we don't have to install again
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+
+# Copy over the rest of our local files
+COPY --chown=node:node . .
+
+# Build the app
+RUN yarn build
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The optimize stage contains only dependencies needed to run the service
+FROM node:18.14-alpine AS optimize
+
+WORKDIR /app
+
+# Pull in package files again
+COPY --chown=node:node package*.json tsconfig*.json ./
+
+# Set the NODE_ENV variable
+# Setting it to production can enable optimizations in code
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+# Reinstall only dependencies required to run the application
+RUN yarn install --frozen-lockfile --only=production
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The run stage contains an optimized image for running the application
+FROM node:18.14-alpine AS run
+
+WORKDIR /app
+
+# Yarn needs a package.json file to work, even for `yarn start`
+COPY --chown=node:node package*.json ./
+
+# Add only dependencies required to run the application
+COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+
+# Add the compiled code from the build image
+COPY --from=build --chown=node:node /app/dist ./dist
+
+# When running this image, make sure to use the built-in node user
+USER node
+
+CMD yarn start
