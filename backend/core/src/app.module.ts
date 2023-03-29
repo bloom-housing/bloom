@@ -40,7 +40,7 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
-  const allowList = process.env.CORS_ORIGINS || []
+  const allowList = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3100"] // process.env.CORS_ORIGINS || []
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
