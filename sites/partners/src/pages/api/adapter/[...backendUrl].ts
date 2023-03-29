@@ -46,7 +46,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(response.status).json(response.data)
   } catch (e) {
     console.error("e:", { e })
-    res.statusMessage = e.response.statusText
-    res.status(e.response.status).json(e.response.data)
+    if (e.response) {
+      res.statusMessage = e.response.statusText
+      res.status(e.response.status).json(e.response.data)
+    }
   }
 }
