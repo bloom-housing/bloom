@@ -3,11 +3,11 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  ErrorMessage,
   Form,
   FormCard,
   ProgressNav,
@@ -162,10 +162,11 @@ const ApplicationAda = () => {
               }
             />
           </fieldset>
-
-          <ErrorMessage id="accessibilityCheckboxGroupError" error={errors.none}>
-            {t("errors.selectOption")}
-          </ErrorMessage>
+          {errors.none && (
+            <FormErrorMessage id="accessibilityCheckboxGroupError">
+              {t("errors.selectOption")}
+            </FormErrorMessage>
+          )}
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
