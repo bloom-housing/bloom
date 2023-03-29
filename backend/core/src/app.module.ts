@@ -46,10 +46,12 @@ export function applicationSetup(app: INestApplication) {
       credentials: true,
       origin: false,
     }
-
+    console.warn("before if")
     if (allowList.indexOf(req.header("Origin")) !== -1) {
+      console.warn("inside if")
       options.origin = true
     }
+    console.warn("after if")
     cb(null, options)
   })
   app.use(logger)
