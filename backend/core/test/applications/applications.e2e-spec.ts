@@ -591,21 +591,6 @@ describe("Applications", () => {
       .expect(400)
   })
 
-  // skipping because it is testing the throttle guard instead of our implementation
-  it.skip(`should disallow a user to send too much application submits`, async () => {
-    const body = getTestAppBody(listing1Id)
-    const failAfter = 2
-    for (let i = 0; i < failAfter + 1; i++) {
-      const expect = i < failAfter ? 201 : 429
-      await supertest(app.getHttpServer())
-        .post(`/applications/submit`)
-        .set("User-Agent", "faked")
-        .send(body)
-        .set(...setAuthorization(user1AccessToken))
-        .expect(expect)
-    }
-  })
-
   it(`should disallow a user to create an application post submission due date`, async () => {
     const body = getTestAppBody(listing1Id)
     await supertest(app.getHttpServer())
