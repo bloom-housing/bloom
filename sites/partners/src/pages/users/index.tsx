@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
@@ -11,6 +11,7 @@ import {
   SiteAlert,
   AlertTypes,
   AppearanceStyleType,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -33,9 +34,14 @@ const Users = () => {
     type: "alert" as AlertTypes,
     message: undefined,
   })
+  const [errorAlert, setErrorAlert] = useState(false)
+
   const tableOptions = useAgTable()
 
   const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useUsersExport()
+  useEffect(() => {
+    setErrorAlert(csvExportError)
+  }, [csvExportError])
 
   const columns = useMemo(() => {
     return [
@@ -131,12 +137,16 @@ const Users = () => {
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          {csvExportError && (
-            <SiteAlert
-              dismissable
-              className="mb-4"
-              alertMessage={{ message: t("errors.alert.exportFailed"), type: "alert" }}
-            />
+          {errorAlert && (
+            <AlertBox
+              className="mb-8"
+              onClose={() => setErrorAlert(false)}
+              closeable
+              type="alert"
+              inverted
+            >
+              {t("errors.alert.exportFailed")}
+            </AlertBox>
           )}
           <AgTable
             id="users-table"
