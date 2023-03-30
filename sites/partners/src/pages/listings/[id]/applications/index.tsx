@@ -36,7 +36,7 @@ const ApplicationsList = () => {
 
   const tableOptions = useAgTable()
 
-  const { onExport, csvExportLoading, csvExportError } = useApplicationsExport(
+  const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useApplicationsExport(
     listingId,
     profile?.roles?.isAdmin ?? false
   )
@@ -109,6 +109,7 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
+      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
       {csvExportError && (
         <SiteAlert
           timeout={5000}
