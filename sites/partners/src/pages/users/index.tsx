@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import dayjs from "dayjs"
 import { useSWRConfig } from "swr"
@@ -10,8 +10,8 @@ import {
   Drawer,
   SiteAlert,
   AlertTypes,
-  AppearanceSizeType,
   AppearanceStyleType,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -34,9 +34,14 @@ const Users = () => {
     type: "alert" as AlertTypes,
     message: undefined,
   })
+  const [errorAlert, setErrorAlert] = useState(false)
+
   const tableOptions = useAgTable()
 
   const { onExport, csvExportLoading, csvExportError, csvExportSuccess } = useUsersExport()
+  useEffect(() => {
+    setErrorAlert(csvExportError)
+  }, [csvExportError])
 
   const columns = useMemo(() => {
     return [
@@ -128,23 +133,20 @@ const Users = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <SiteAlert dismissable alertMessage={alertMessage} sticky={true} timeout={5000} />
-      {csvExportSuccess && (
-        <SiteAlert
-          timeout={5000}
-          dismissable
-          sticky={true}
-          alertMessage={{ message: t("users.exportSuccess"), type: "success" }}
-        />
-      )}
+      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
-          {csvExportError && (
-            <SiteAlert
-              dismissable
-              className="mb-4"
-              alertMessage={{ message: t("errors.alert.exportFailed"), type: "alert" }}
-            />
+          {errorAlert && (
+            <AlertBox
+              className="mb-8"
+              onClose={() => setErrorAlert(false)}
+              closeable
+              type="alert"
+              inverted
+            >
+              {t("errors.alert.exportFailed")}
+            </AlertBox>
           )}
           <AgTable
             id="users-table"
@@ -171,7 +173,6 @@ const Users = () => {
               <div className="flex-row">
                 <Button
                   className="mx-1"
-                  size={AppearanceSizeType.small}
                   styleType={AppearanceStyleType.primary}
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
@@ -182,13 +183,12 @@ const Users = () => {
                 {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
-                    size={AppearanceSizeType.small}
-                    icon={faFileExport}
+                    icon={!csvExportLoading ? faFileExport : null}
                     onClick={() => onExport()}
                     loading={csvExportLoading}
                     dataTestId={"export-users"}
                   >
-                    {t("t.export")}
+                    {t("t.exportToCSV")}
                   </Button>
                 )}
               </div>

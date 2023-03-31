@@ -15,6 +15,7 @@ storybook-static
 # Cypress test output videos
 **/cypress/videos
 **/cypress/screenshots
+**/cypress/downloads
 
 # Complied Typescript
 dist
