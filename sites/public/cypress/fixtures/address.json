@@ -1,0 +1,56 @@
+{
+  "type": "FeatureCollection",
+  "query": ["600", "mongomery", "st", "san", "francisco", "ca", "94112"],
+  "features": [
+    {
+      "id": "address.4226420775908864",
+      "type": "Feature",
+      "place_type": ["address"],
+      "relevance": 0.797326,
+      "properties": {
+        "accuracy": "rooftop",
+        "mapbox_id": "dXJuOm1ieGFkcjo3ODFjNjQxYi1mMzI2LTQxMTYtOTg3My1lOWNiNDJmNjg1ZWQ="
+      },
+      "text": "Montgomery Street",
+      "place_name": "600 Montgomery Street, San Francisco, California 94111, United States",
+      "center": [-122.40273, 37.79516],
+      "geometry": { "type": "Point", "coordinates": [-122.40273, 37.79516] },
+      "address": "600",
+      "context": [
+        {
+          "id": "neighborhood.214314220",
+          "mapbox_id": "dXJuOm1ieHBsYzpETVlzN0E",
+          "text": "Financial District"
+        },
+        { "id": "postcode.312487660", "mapbox_id": "dXJuOm1ieHBsYzpFcUF1N0E", "text": "94111" },
+        {
+          "id": "place.292358380",
+          "wikidata": "Q62",
+          "mapbox_id": "dXJuOm1ieHBsYzpFVzBJN0E",
+          "text": "San Francisco"
+        },
+        {
+          "id": "district.20547308",
+          "wikidata": "Q62",
+          "mapbox_id": "dXJuOm1ieHBsYzpBVG1HN0E",
+          "text": "San Francisco County"
+        },
+        {
+          "id": "region.419052",
+          "short_code": "US-CA",
+          "wikidata": "Q99",
+          "mapbox_id": "dXJuOm1ieHBsYzpCbVRz",
+          "text": "California"
+        },
+        {
+          "id": "country.8940",
+          "short_code": "us",
+          "wikidata": "Q30",
+          "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+          "text": "United States"
+        }
+      ]
+    }
+  ],
+  "attribution": "NOTICE: © 2023 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+}

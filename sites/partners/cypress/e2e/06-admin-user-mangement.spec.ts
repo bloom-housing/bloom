@@ -1,5 +1,5 @@
 describe("Admin User Mangement Tests", () => {
-  before(() => {
+  beforeEach(() => {
     cy.login()
   })
 

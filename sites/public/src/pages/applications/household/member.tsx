@@ -408,7 +408,7 @@ const ApplicationMember = () => {
                       defaultValue={member.relationship}
                       ref={register({ required: true })}
                       className="w-full"
-                      data-test-id={"app-household-member-relationship"}
+                      data-testid={"app-household-member-relationship"}
                     >
                       <FormOptions
                         options={relationshipKeys}
@@ -427,7 +427,7 @@ const ApplicationMember = () => {
                   <Button
                     id="save-member"
                     styleType={AppearanceStyleType.primary}
-                    data-test-id={"app-household-member-save"}
+                    data-testid={"app-household-member-save"}
                   >
                     {saveText}
                   </Button>
@@ -438,7 +438,7 @@ const ApplicationMember = () => {
                     className="lined text-sm mt-0"
                     onClick={deleteMember}
                     unstyled={true}
-                    data-test-id={"app-household-member-cancel"}
+                    data-testid={"app-household-member-cancel"}
                   >
                     {cancelText}
                   </Button>

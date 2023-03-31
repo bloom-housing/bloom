@@ -5,6 +5,6 @@ describe("Submit", function () {
     cy.submitApplication("Test: Coliseum", coliseumApplication, false)
   })
   it("should submit a minimal application for the Test: Default, No Preferences", function () {
-    cy.submitApplication("Test: Default, No Preferences", minimalDataApplication, true)
+    cy.submitApplication("Test: Default, No Preferences", minimalDataApplication, false)
   })
 })

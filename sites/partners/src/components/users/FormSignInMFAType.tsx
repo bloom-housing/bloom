@@ -74,7 +74,7 @@ const FormSignInMFAType = ({
           <div className="text-center mt-6">
             <Button
               styleType={AppearanceStyleType.accentCool}
-              data-test-id="verify-by-email"
+              data-testid="verify-by-email"
               onClick={emailOnClick}
             >
               {t("nav.signInMFA.verifyByEmail")}
@@ -83,7 +83,7 @@ const FormSignInMFAType = ({
           <div className="text-center mt-6">
             <Button
               styleType={AppearanceStyleType.accentCool}
-              data-test-id="verify-by-phone"
+              data-testid="verify-by-phone"
               onClick={smsOnClick}
             >
               {t("nav.signInMFA.verifyByPhone")}

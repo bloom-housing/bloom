@@ -1,5 +1,5 @@
 describe("Listing Management Tests", () => {
-  before(() => {
+  beforeEach(() => {
     cy.login()
   })
 
@@ -16,13 +16,13 @@ describe("Listing Management Tests", () => {
       cy.get("#name").type(listing["name"])
       cy.get("#developer").type(listing["developer"])
       cy.getByID("addPhotoButton").contains("Add Photo").click()
-      cy.get(`[data-test-id="dropzone-input"]`).attachFile(
+      cy.get(`[data-testid="dropzone-input"]`).attachFile(
         "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
         {
           subjectType: "drag-n-drop",
         }
       )
-      cy.get(`[data-test-id="listing-photo-uploaded"]`).contains("Save").click()
+      cy.get(`[data-testid="listing-photo-uploaded"]`).contains("Save").click()
       cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
       cy.getByID("neighborhood").type(listing["neighborhood"])
       cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
@@ -140,14 +140,17 @@ describe("Listing Management Tests", () => {
       cy.get("#publishButton").contains("Publish").click()
 
       cy.get("#publishButtonConfirm").contains("Publish").click()
-      cy.get("[data-test-id=page-header]").should("be.visible")
+      cy.get("[data-testid=page-header]").should("be.visible")
       cy.getByTestId("page-header").should("have.text", listing["name"])
     })
   })
 
   // TODO: make this not dependent on the previous test
   it("verify details page", () => {
+    cy.visit("/")
     cy.fixture("listing").then((listing) => {
+      cy.getByTestId("ag-search-input").type(listing["name"])
+      cy.getByTestId(listing["name"]).first().click()
       cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
       cy.get("#name").contains(listing["name"])
       cy.get("#developer").contains(listing["developer"])
@@ -248,8 +251,10 @@ describe("Listing Management Tests", () => {
   // TODO: make this not dependent on the previous test
   it("verify open listing warning happens", () => {
     cy.fixture("listing").then((listing) => {
+      cy.getByTestId("ag-search-input").type(listing["name"])
+      cy.getByTestId(listing["name"]).first().click()
       cy.getByTestId("listingEditButton").contains("Edit").click()
-      cy.getByTestId("nameField").type(" (Edited)")
+      cy.getByTestId("nameField").should("be.visible").click().type(" (Edited)")
       cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
       cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
       cy.getByTestId("page-header").should("have.text", `${listing["name"]} (Edited)`)

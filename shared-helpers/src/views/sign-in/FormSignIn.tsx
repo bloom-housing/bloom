@@ -87,7 +87,7 @@ const FormSignIn = ({
           />
 
           <div className="text-center mt-6">
-            <Button styleType={AppearanceStyleType.primary} data-test-id="sign-in-button">
+            <Button styleType={AppearanceStyleType.primary} data-testid="sign-in-button">
               {t("nav.signIn")}
             </Button>
           </div>
