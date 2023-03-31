@@ -20,7 +20,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   const skipLoginRoutes = ["/forgot-password", "/reset-password", "/users/confirm", "/users/terms"]
 
-  // fix for rehydation
+  // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => {
     setHasMounted(true)

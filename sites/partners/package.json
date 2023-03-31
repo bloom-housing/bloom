@@ -51,7 +51,7 @@
     "@axe-core/react": "4.4.3",
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
-    "@cypress/code-coverage": "^3.9.12",
+    "@cypress/code-coverage": "^3.10.1",
     "@cypress/webpack-preprocessor": "^5.11.1",
     "@netlify/plugin-nextjs": "4.30.4",
     "@next/bundle-analyzer": "^10.1.0",
