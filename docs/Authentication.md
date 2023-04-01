@@ -33,8 +33,7 @@ using the auth route `revoke_token`.
 
 ## Obtain a token
 
-To obtain an access token cookie, a user must first login. Currently, a Multifactor authenticating and email/password strategy is the only way to do this. A
-client can `POST /auth/login` with body `{ username, password }`. This request will either return 401 or 200 with an access cookies attached in the response header.
+To obtain an access token cookie, a user must first login. Currently, a Multifactor authenticating and email/password strategy is the only way to do this. A client can `POST /auth/login` with body `{ username, password }`. This request will either return 401 or 200 with an access cookies attached in the response header.
 
 To renew an access token, `POST /auth/requestNewToken` with an existing valid refresh cookie. That refresh cookie is also provided by the login process.
 

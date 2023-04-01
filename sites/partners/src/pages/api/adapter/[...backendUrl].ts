@@ -5,6 +5,12 @@ import { getConfigs } from "@bloom-housing/backend-core/types"
 import { wrapper } from "axios-cookiejar-support"
 import { CookieJar } from "tough-cookie"
 
+/*
+  This file exists as per https://nextjs.org/docs/api-routes/dynamic-api-routes  
+  it serves as an adapter between the front end making api requests and those requests being sent to the backend api
+  This file functionally works as a proxy to work in the new cookie paradigm
+*/
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const jar = new CookieJar()
   const axios = wrapper(
@@ -45,7 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
   } catch (e) {
-    console.error("e:", { e })
+    console.error("partner's backend url adapter error:", { e })
     if (e.response) {
       res.statusMessage = e.response.statusText
       res.status(e.response.status).json(e.response.data)
