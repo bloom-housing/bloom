@@ -76,7 +76,6 @@ describe("users", () => {
   it("should render Export when user is admin and success when clicked", async () => {
     window.URL.createObjectURL = jest.fn()
     // set a logged in token
-    jest.useFakeTimers()
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
@@ -114,7 +113,6 @@ describe("users", () => {
   it("should render error message csv fails", async () => {
     jest.spyOn(console, "log").mockImplementation(jest.fn())
     // set a logged in token
-    jest.useFakeTimers()
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
