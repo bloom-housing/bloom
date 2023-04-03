@@ -1625,7 +1625,7 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Get Listings by multiselect question id
+   * Get multiselect question by id
    */
   retrieveListings(
     params: {

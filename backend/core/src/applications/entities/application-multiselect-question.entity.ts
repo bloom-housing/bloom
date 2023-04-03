@@ -1,12 +1,11 @@
 import { Expose, Type } from "class-transformer"
-import { ArrayMaxSize, IsBoolean, IsString, MaxLength, ValidateNested } from "class-validator"
+import { ArrayMaxSize, IsBoolean, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApplicationMultiselectQuestionOption } from "../types/application-multiselect-question-option"
 
 export class ApplicationMultiselectQuestion {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   key: string
 
   @Expose()
