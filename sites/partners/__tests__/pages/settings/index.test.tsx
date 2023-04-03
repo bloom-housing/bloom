@@ -7,12 +7,13 @@ import {
   listing,
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { render } from "../../testUtils"
+import { mockNextRouter, render } from "../../testUtils"
 
 const server = setupServer()
 
 beforeAll(() => {
   server.listen()
+  mockNextRouter()
 })
 
 afterEach(() => server.resetHandlers())

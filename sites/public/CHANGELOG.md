@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.5.1...@bloom-housing/public@7.6.0) (2023-04-03)
+
+
+### Features
+
+* upgrade nextjs to 13 ([#3375](https://github.com/bloom-housing/bloom/issues/3375)) ([c71ec15](https://github.com/bloom-housing/bloom/commit/c71ec15859fc8bbd4bcdba1ce9988d2dac7c2b0c))
+
+
+
+
+
+## [7.5.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.5.0...@bloom-housing/public@7.5.1) (2023-04-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 # [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.4.3...@bloom-housing/public@7.5.0) (2023-03-31)
 
 

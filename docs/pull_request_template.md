@@ -34,7 +34,6 @@ Describe the tests that you ran to verify your changes. Please also list any rel
 - [ ] Any dependent changes have been merged and published in downstream modules
 - [ ] I have assigned reviewers
 - [ ] I have run `yarn generate:client` and/or created a migration if I made backend changes that require them
-- [ ] I have exported any new pieces added to ui-components
 - [ ] My commit message(s) is/are polished, and any breaking changes are indicated in the message and are well-described
 - [ ] Commits made across packages purposefully have the same commit message/version change, else are separated into different commits
 
