@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   ParseUUIDPipe,
   Post,
@@ -42,6 +43,8 @@ import { DefaultAuthGuard } from "../guards/default.guard"
 import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
 import { IdDto } from "../../shared/dto/id.dto"
+import { UserCsvExporterService } from "../services/user-csv-exporter.service"
+import { Compare } from "../../shared/dto/filter.dto"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -49,7 +52,10 @@ import { IdDto } from "../../shared/dto/id.dto"
 @ResourceType("user")
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userCsvExporter: UserCsvExporterService
+  ) {}
 
   @Get()
   @UseGuards(DefaultAuthGuard, UserProfileAuthzGuard)
@@ -142,6 +148,24 @@ export class UserController {
   @ApiOperation({ summary: "List users", operationId: "list" })
   async list(@Query() queryParams: UserListQueryParams): Promise<PaginatedUserListDto> {
     return mapTo(PaginatedUserListDto, await this.userService.list(queryParams))
+  }
+
+  @Get("/csv")
+  @UseGuards(OptionalAuthGuard, AdminOrJurisdictionalAdminGuard)
+  @ApiOperation({ summary: "List users in CSV", operationId: "listAsCsv" })
+  @Header("Content-Type", "text/csv")
+  async listAsCsv(): Promise<string> {
+    const users = await this.userService.list({
+      page: 1,
+      limit: 300,
+      filter: [
+        {
+          isPortalUser: true,
+          $comparison: Compare["="],
+        },
+      ],
+    })
+    return this.userCsvExporter.exportFromObject(users)
   }
 
   @Post("/invite")

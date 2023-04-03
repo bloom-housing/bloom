@@ -175,7 +175,13 @@ export const UnitTables = (props: UnitTablesProps) => {
                 </>
               ),
             },
-            numBathrooms: { content: <strong>{unit.numBathrooms}</strong> },
+            numBathrooms: {
+              content: (
+                <strong>
+                  {unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms}
+                </strong>
+              ),
+            },
             floor: { content: <strong>{unit.floor}</strong> },
           })
         })

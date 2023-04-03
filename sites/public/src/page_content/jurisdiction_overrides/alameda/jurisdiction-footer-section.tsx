@@ -1,3 +1,4 @@
+import React from "react"
 import { FooterNav, FooterSection, SiteFooter, t } from "@bloom-housing/ui-components"
 import { ExygyFooter } from "@bloom-housing/shared-helpers"
 import Link from "next/link"

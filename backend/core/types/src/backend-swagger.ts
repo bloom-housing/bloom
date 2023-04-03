@@ -1094,6 +1094,21 @@ export class UserService {
     })
   }
   /**
+   * List users in CSV
+   */
+  listAsCsv(options: IRequestOptions = {}): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Invite user
    */
   invite(
@@ -1610,7 +1625,7 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Get multiselect question by id
+   * Get Listings by multiselect question id
    */
   retrieveListings(
     params: {
