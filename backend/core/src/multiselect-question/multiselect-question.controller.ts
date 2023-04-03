@@ -83,7 +83,10 @@ export class MultiselectQuestionsController {
   }
 
   @Get(`listings/:multiselectQuestionId`)
-  @ApiOperation({ summary: "Get multiselect question by id", operationId: "retrieveListings" })
+  @ApiOperation({
+    summary: "Get listings by multiselect question id",
+    operationId: "retrieveListings",
+  })
   async retrieveListings(
     @Param("multiselectQuestionId") multiselectQuestionId: string
   ): Promise<ListingDto[]> {
