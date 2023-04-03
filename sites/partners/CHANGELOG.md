@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.11.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.10.1...@bloom-housing/partners@7.11.0) (2023-03-31)
+
+
+### Features
+
+* upgrade react to 18 ([#3360](https://github.com/bloom-housing/bloom/issues/3360)) ([e59111d](https://github.com/bloom-housing/bloom/commit/e59111d292202c97d9c0936254c9e96269fbc229))
+
+
+
+
+
+## [7.10.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.10.0...@bloom-housing/partners@7.10.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* user export fixes ([#3371](https://github.com/bloom-housing/bloom/issues/3371)) ([2068f9c](https://github.com/bloom-housing/bloom/commit/2068f9cb1f7f62d2b73fea1506d501772613c096))
+
+
+
+
+
 # [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.9.1...@bloom-housing/partners@7.10.0) (2023-03-23)
 
 

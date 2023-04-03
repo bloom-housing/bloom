@@ -357,6 +357,8 @@
   "t.endTime": "End Time",
   "t.enterAmount": "Enter amount",
   "t.export": "Export",
+  "t.exportSuccess": "The file has been exported",
+  "t.exportToCSV": "Export to CSV",
   "t.fileName": "File Name",
   "t.filter": "Filter",
   "t.hide": "hide",
@@ -411,6 +413,5 @@
   "users.resendInvite": "Resend Invite",
   "users.totalUsers": "total users",
   "users.unconfirmed": "Unconfirmed",
-  "users.userDetails": "User Details",
-  "users.exportSuccess": "The File has been exported"
+  "users.userDetails": "User Details"
 }

@@ -12,6 +12,7 @@ import {
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
+import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -497,6 +498,7 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
       setCsvExportSuccess(true)
+      setSiteAlertMessage(t("t.exportSuccess"), "success")
     } catch (err) {
       console.log(err)
       setCsvExportError(true)

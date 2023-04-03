@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.5.0...@bloom-housing/shared-helpers@7.6.0) (2023-03-31)
+
+
+### Features
+
+* upgrade react to 18 ([#3360](https://github.com/bloom-housing/bloom/issues/3360)) ([e59111d](https://github.com/bloom-housing/bloom/commit/e59111d292202c97d9c0936254c9e96269fbc229))
+
+
+
+
+
 # [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.4.1...@bloom-housing/shared-helpers@7.5.0) (2023-03-23)
 
 

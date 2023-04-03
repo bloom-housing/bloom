@@ -78,7 +78,7 @@ const ApplicationConfirmation = () => {
           <p
             id="confirmationCode"
             className="font-serif text-2xl my-1"
-            data-test-id={"app-confirmation-id"}
+            data-testid={"app-confirmation-id"}
           >
             {application.confirmationCode || application.id}
           </p>
@@ -118,7 +118,7 @@ const ApplicationConfirmation = () => {
                 onClick={() => {
                   void router.push("/create-account")
                 }}
-                data-test-id={"app-confirmation-create-account"}
+                data-testid={"app-confirmation-create-account"}
               >
                 {t("account.createAccount")}
               </Button>
@@ -126,13 +126,13 @@ const ApplicationConfirmation = () => {
           )}
 
           <div className="form-card__pager-row py-6">
-            <span className="lined text-sm" data-test-id={"app-confirmation-browse"}>
+            <span className="lined text-sm" data-testid={"app-confirmation-browse"}>
               <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
             </span>
           </div>
 
           <div className="form-card__pager-row py-6 border-t">
-            <span className="lined text-sm" data-test-id={"app-confirmation-print"}>
+            <span className="lined text-sm" data-testid={"app-confirmation-print"}>
               <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
             </span>
           </div>

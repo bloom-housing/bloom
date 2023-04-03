@@ -63,7 +63,7 @@ describe("users", () => {
     expect(getByText("Users")).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
     expect(getByText("Add User")).toBeInTheDocument()
-    expect(queryAllByText("Export")).toHaveLength(0)
+    expect(queryAllByText("Export to CSV")).toHaveLength(0)
 
     const name = await findByText("First Last")
     expect(name).toBeInTheDocument()
@@ -104,14 +104,15 @@ describe("users", () => {
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
     expect(getByText("Add User")).toBeInTheDocument()
-    expect(getByText("Export")).toBeInTheDocument()
-    fireEvent.click(getByText("Export"))
-    jest.clearAllTimers()
-    const successMessage = await findByText("The File has been exported")
+    const exportButton = await findByText("Export to CSV")
+    expect(exportButton).toBeInTheDocument()
+    fireEvent.click(exportButton)
+    const successMessage = await findByText("The file has been exported")
     expect(successMessage).toBeInTheDocument()
   })
 
   it("should render error message csv fails", async () => {
+    jest.spyOn(console, "log").mockImplementation(jest.fn())
     // set a logged in token
     jest.useFakeTimers()
     document.cookie = "access-token-available=True"
@@ -130,7 +131,7 @@ describe("users", () => {
         return res(ctx.status(500), ctx.json(""))
       })
     )
-    const { findByText, getByText } = render(
+    const { findByText } = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <Users />
@@ -140,11 +141,13 @@ describe("users", () => {
 
     const header = await findByText("Partners Portal")
     expect(header).toBeInTheDocument()
-    fireEvent.click(getByText("Export"))
-    jest.clearAllTimers()
+    const exportButton = await findByText("Export to CSV")
+    expect(exportButton).toBeInTheDocument()
+    fireEvent.click(exportButton)
     const errorMessage = await findByText("Export failed. Please try again later.", {
       exact: false,
     })
     expect(errorMessage).toBeInTheDocument()
+    expect(console.log).toHaveBeenCalled()
   })
 })

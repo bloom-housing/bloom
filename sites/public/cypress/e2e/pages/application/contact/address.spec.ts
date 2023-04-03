@@ -1,7 +1,7 @@
 describe("applications/contact/address", function () {
   const route = "/applications/contact/address"
 
-  before(() => {
+  beforeEach(() => {
     cy.visit(route)
   })
 
@@ -25,6 +25,8 @@ describe("applications/contact/address", function () {
   })
 
   it("should provide a way to validate address via API", function () {
+    // fake the address call to the mocked data
+    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     cy.getByTestId("app-primary-no-phone").check()
 
     cy.getByTestId("app-primary-address-street").type("600 Mongomery St")
@@ -43,6 +45,8 @@ describe("applications/contact/address", function () {
   })
 
   it("should handle garbage input", function () {
+    // fake the address call to the mocked data
+    cy.intercept("GET", "/geocoding/v5/**", { fixture: "address-bad" })
     cy.getByTestId("app-primary-no-phone").check()
 
     // Let's add gibberish
@@ -58,7 +62,7 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
+    cy.get(`[data-testid="app-found-address-label"]`).should("not.exist")
 
     // Let's go back and add other weirdness
     cy.getByTestId("app-edit-original-address").click()
@@ -69,6 +73,6 @@ describe("applications/contact/address", function () {
 
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
-    cy.get(`[data-test-id="app-found-address-label"]`).should("not.exist")
+    cy.get(`[data-testid="app-found-address-label"]`).should("not.exist")
   })
 })
