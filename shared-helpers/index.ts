@@ -1,3 +1,4 @@
+export * from "./src/api/adapter"
 export * from "./src/auth/AuthContext"
 export * from "./src/auth/ConfigContext"
 export * from "./src/auth/RequireLogin"
