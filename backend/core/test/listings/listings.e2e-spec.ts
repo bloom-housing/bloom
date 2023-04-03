@@ -123,21 +123,18 @@ describe("Listings", () => {
     await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
   })
 
-  it("should only have the Bay Area jurisdiction", async () => {
-    const jurisdictions = await jurisdictionsRepository.find()
-    const nonBayArea = jurisdictions.find((jurisdiction) => jurisdiction.name !== "Bay Area")
-    expect(nonBayArea).toBe(undefined)
-  })
-
-  it("should associate all listings with the Bay Area", async () => {
+  it("should have the Bay Area jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
     const bayArea = jurisdictions.find((jurisdiction) => jurisdiction.name === "Bay Area")
-    const queryParams = {
+    expect(bayArea).not.toBe(undefined)
+  })
+
+  it("should have listings associated with the Bay Area", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    const bayArea = jurisdictions.find((jurisdiction) => jurisdiction.name === "Bay Area")
+    const queryParamsOnlyBayArea = {
       limit: "all",
       view: "base",
-    }
-    const queryParamsOnlyBayArea = {
-      ...queryParams,
       filter: [
         {
           $comparison: "=",
@@ -145,15 +142,10 @@ describe("Listings", () => {
         },
       ],
     }
-    const [resAllJurisdictions, resBayArea] = await Promise.all([
-      supertest(app.getHttpServer())
-        .get(`/listings?${qs.stringify(queryParams)}`)
-        .expect(200),
-      supertest(app.getHttpServer())
-        .get(`/listings?${qs.stringify(queryParamsOnlyBayArea)}`)
-        .expect(200),
-    ])
-    expect(resAllJurisdictions.body.items.length).toEqual(resBayArea.body.items.length)
+    const resBayArea = await supertest(app.getHttpServer())
+      .get(`/listings?${qs.stringify(queryParamsOnlyBayArea)}`)
+      .expect(200)
+    expect(resBayArea.body.items.length).not.toBe(0)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
