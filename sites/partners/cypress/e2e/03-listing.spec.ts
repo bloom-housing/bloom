@@ -12,7 +12,9 @@ describe("Listing Management Tests", () => {
     cy.get("a > .button").contains("Add Listing").click()
     cy.contains("New Listing")
     cy.fixture("listing").then((listing) => {
-      cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
+      cy.getByID("jurisdiction.id")
+        .select(listing["jurisdiction.id"])
+        .invoke("eq", listing["jurisdiction.id"])
       cy.get("#name").type(listing["name"])
       cy.get("#developer").type(listing["developer"])
       cy.getByID("addPhotoButton").contains("Add Photo").click()
