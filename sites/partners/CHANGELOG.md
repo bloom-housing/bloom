@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.12.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.11.1...@bloom-housing/partners@7.12.0) (2023-04-03)
+
+
+### Features
+
+* upgrade nextjs to 13 ([#3375](https://github.com/bloom-housing/bloom/issues/3375)) ([c71ec15](https://github.com/bloom-housing/bloom/commit/c71ec15859fc8bbd4bcdba1ce9988d2dac7c2b0c))
+
+
+
+
+
 ## [7.11.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.11.0...@bloom-housing/partners@7.11.1) (2023-04-03)
 
 
