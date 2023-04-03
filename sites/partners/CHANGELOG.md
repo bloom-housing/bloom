@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.11.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.11.0...@bloom-housing/partners@7.11.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* program/preference keys length uncap ([#3376](https://github.com/bloom-housing/bloom/issues/3376)) ([af64287](https://github.com/bloom-housing/bloom/commit/af64287d9f218ef223a9fe6020c9a49c248e323d))
+
+
+
+
+
 # [7.11.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.10.1...@bloom-housing/partners@7.11.0) (2023-03-31)
 
 
