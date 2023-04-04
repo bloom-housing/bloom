@@ -66,7 +66,9 @@ export class AuthService {
         res.clearCookie(REFRESH_COOKIE_NAME, REFRESH_COOKIE_OPTIONS)
         res.clearCookie(ACCESS_TOKEN_AVAILABLE_NAME, ACCESS_TOKEN_AVAILABLE_OPTIONS)
 
-        throw new Error("someone is attempting to use an outdated refresh token")
+        throw new Error(
+          "Someone is attempting to use an outdated refresh token to generate new tokens"
+        )
       }
     }
 

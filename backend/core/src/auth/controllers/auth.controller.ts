@@ -84,7 +84,7 @@ export class AuthController {
     @Response({ passthrough: true }) res: ExpressResponse
   ): Promise<StatusDto> {
     if (!req?.cookies[REFRESH_COOKIE_NAME]) {
-      throw new Error("no refresh token sent")
+      throw new Error("No refresh token sent with request")
     }
     return mapTo(
       StatusDto,
