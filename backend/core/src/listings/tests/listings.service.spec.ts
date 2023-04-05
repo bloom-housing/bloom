@@ -19,6 +19,7 @@ import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { UserRepository } from "../../auth/repositories/user-repository"
 import { Language } from "../../../types"
+import { DoorwayListingsExternalQueryParams } from "../dto/doorway-listings-external-query-params"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -432,6 +433,71 @@ describe("ListingsService", () => {
           params: queryParams,
         })
       )
+    })
+  })
+
+  describe("listIncludeExternal", () => {
+    it("should return the same as /listings", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const listIncludeExternalResponse = await service.list({})
+
+      // It's not clear why, but you have to re-mock with mockReturnValueOnce.
+      // mockReturnValue on its own will not work.
+      // TODO to look into this and update with a more correct method.
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const listResponse = await service.listIncludeExternal([], {})
+      expect(listIncludeExternalResponse).toEqual(listResponse.local)
+    })
+
+    it("will remove the old jurisdiction param and replace with a new one while keeping filters", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const queryParams: DoorwayListingsExternalQueryParams = {
+        filter: [
+          {
+            $comparison: Compare["="],
+            jurisdiction: "i_am_a_doorway_id",
+          },
+          {
+            $comparison: Compare["="],
+            neighborhood: "Fox Creek",
+          },
+        ],
+      }
+      await service.listIncludeExternal(["i_am_a_bloom_id"], queryParams)
+      expect(mockHttpService.get).toHaveBeenCalledTimes(1)
+      expect(mockHttpService.get).toHaveBeenCalledWith(
+        "fake_uri.com/fake",
+        expect.objectContaining({
+          params: {
+            filter: [
+              {
+                $comparison: Compare["="],
+                neighborhood: "Fox Creek",
+              },
+              {
+                $comparison: Compare["="],
+                jurisdiction: "i_am_a_bloom_id",
+              },
+            ],
+          },
+        })
+      )
+    })
+
+    it("will make one http request per id", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const queryParams: DoorwayListingsExternalQueryParams = {}
+
+      await service.listIncludeExternal(["i_am_a_bloom_id", "i_am_another_bloom_id"], queryParams)
+      expect(mockHttpService.get).toHaveBeenCalledTimes(2)
     })
   })
 })

@@ -15,7 +15,7 @@ import {
   Headers,
   ParseUUIDPipe,
 } from "@nestjs/common"
-import { ListingsService } from "./listings.service"
+import { ListingsService, ListingIncludeExternalResponse } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ListingDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
@@ -28,6 +28,7 @@ import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
+import { DoorwayListingsExternalQueryParams } from "./dto/doorway-listings-external-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
@@ -55,6 +56,22 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
     return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
+  }
+
+  @Get("includeExternal")
+  @ApiExtraModels(ListingFilterParams, ListingsQueryParams)
+  @ApiOperation({
+    summary: "List listings and optionally include external listings",
+    operationId: "listIncludeExternal",
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  public async getAllWithExternal(
+    @Query() queryParams: DoorwayListingsExternalQueryParams
+  ): Promise<ListingIncludeExternalResponse> {
+    const jurisdictions: string[] = queryParams.bloomJurisdiction
+    mapTo(ListingsQueryParams, queryParams, { excludeExtraneousValues: true })
+    return await this.listingsService.listIncludeExternal(jurisdictions, queryParams)
   }
 
   @Post()
