@@ -41,7 +41,6 @@ import {
   ExpandableSection,
 } from "@bloom-housing/ui-components"
 import {
-  cloudinaryPdfFromId,
   getOccupancyDescription,
   imageUrlFromListing,
   occupancyTable,
@@ -59,6 +58,7 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
+import { CloudinaryFileService } from "@bloom-housing/shared-services"
 
 interface ListingProps {
   listing: Listing
@@ -73,6 +73,7 @@ export const ListingView = (props: ListingProps) => {
     content: appStatusContent,
     subContent: appStatusSubContent,
   } = useGetApplicationStatusProps(listing)
+  const cloudinaryFileService = new CloudinaryFileService()
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -149,9 +150,8 @@ export const ListingView = (props: ListingProps) => {
     buildingSelectionCriteria = (
       <p>
         <a
-          href={cloudinaryPdfFromId(
-            listing.buildingSelectionCriteriaFile.fileId,
-            process.env.cloudinaryCloudName
+          href={cloudinaryFileService.getDownloadUrlForPdf(
+            listing.buildingSelectionCriteriaFile.fileId
           )}
           className={"text-blue-700"}
         >
@@ -327,10 +327,7 @@ export const ListingView = (props: ListingProps) => {
           return {
             fileURL: paperApp?.file?.fileId.includes("https")
               ? paperApp?.file?.fileId
-              : cloudinaryPdfFromId(
-                  paperApp?.file?.fileId || "",
-                  process.env.cloudinaryCloudName || ""
-                ),
+              : cloudinaryFileService.getDownloadUrlForPdf(paperApp?.file?.fileId || ""),
             languageString: t(`languages.${paperApp.language}`),
           }
         }) ?? null
@@ -583,11 +580,7 @@ export const ListingView = (props: ListingProps) => {
         <div className="mx-4">
           <DownloadLotteryResults
             resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
-            pdfURL={pdfUrlFromListingEvents(
-              [lotteryResults],
-              ListingEventType.lotteryResults,
-              process.env.cloudinaryCloudName
-            )}
+            pdfURL={pdfUrlFromListingEvents([lotteryResults], ListingEventType.lotteryResults)}
             buttonText={t("listings.lotteryResults.downloadResults")}
           />
           {!applicationsClosed && getWaitlist()}
@@ -733,11 +726,7 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
               <DownloadLotteryResults
                 resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
-                pdfURL={pdfUrlFromListingEvents(
-                  [lotteryResults],
-                  ListingEventType.lotteryResults,
-                  process.env.cloudinaryCloudName
-                )}
+                pdfURL={pdfUrlFromListingEvents([lotteryResults], ListingEventType.lotteryResults)}
                 buttonText={t("listings.lotteryResults.downloadResults")}
               />
               {openHouseEvents && (

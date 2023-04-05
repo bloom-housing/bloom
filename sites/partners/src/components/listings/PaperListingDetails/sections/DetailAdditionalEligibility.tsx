@@ -7,12 +7,13 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
-import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
+import { CloudinaryFileService } from "@bloom-housing/shared-services"
 
 const DetailAdditionalEligibility = () => {
   const listing = useContext(ListingContext)
+  const cloudinaryFileService = new CloudinaryFileService()
 
   return (
     <GridSection
@@ -64,7 +65,9 @@ const DetailAdditionalEligibility = () => {
                         <TableThumbnail>
                           <img
                             alt="PDF preview"
-                            src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
+                            src={cloudinaryFileService.getDownloadUrlForPhoto(
+                              listing.buildingSelectionCriteriaFile.fileId
+                            )}
                           />
                         </TableThumbnail>
                       ),

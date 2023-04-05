@@ -1,6 +1,4 @@
-import { SetStateAction } from "react"
 import { t, CloudinaryUpload, TimeFieldPeriod } from "@bloom-housing/ui-components"
-import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
@@ -49,47 +47,48 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
     }
   }
 
-  if (type === ApplicationSubmissionType.electronical) {
-    // convert date and time to PST (electronical applications)
-    const ptFormat = new Intl.DateTimeFormat("en-US", {
-      timeZone: "America/Los_Angeles",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      year: "numeric",
-      day: "numeric",
-      month: "numeric",
-    })
-
-    const originalDate = new Date(dateObj)
-    const ptDateParts = ptFormat.formatToParts(originalDate)
-    const timeValues = ptDateParts.reduce((acc, curr) => {
-      Object.assign(acc, {
-        [curr.type]: curr.value,
+  switch (type) {
+    case ApplicationSubmissionType.electronical: {
+      // convert date and time to PST (electronical applications)
+      const ptFormat = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Los_Angeles",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        year: "numeric",
+        day: "numeric",
+        month: "numeric",
       })
-      return acc
-    }, {} as DateTimePST)
 
-    const { month, day, year, hour, minute, second, dayPeriod } = timeValues
+      const originalDate = new Date(dateObj)
+      const ptDateParts = ptFormat.formatToParts(originalDate)
+      const timeValues = ptDateParts.reduce((acc, curr) => {
+        Object.assign(acc, {
+          [curr.type]: curr.value,
+        })
+        return acc
+      }, {} as DateTimePST)
 
-    const date = `${month}/${day}/${year}`
-    const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
+      const { month, day, year, hour, minute, second, dayPeriod } = timeValues
 
-    return {
-      date,
-      time,
+      const date = `${month}/${day}/${year}`
+      const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
+
+      return {
+        date,
+        time,
+      }
     }
-  }
+    case ApplicationSubmissionType.paper: {
+      const dayjsDate = dayjs(dateObj)
 
-  if (type === ApplicationSubmissionType.paper) {
-    const dayjsDate = dayjs(dateObj)
+      const date = dayjsDate.utc().format("MM/DD/YYYY")
+      const time = dayjsDate.utc().format("hh:mm:ss A")
 
-    const date = dayjsDate.utc().format("MM/DD/YYYY")
-    const time = dayjsDate.utc().format("hh:mm:ss A")
-
-    return {
-      date,
-      time,
+      return {
+        date,
+        time,
+      }
     }
   }
 }
@@ -161,8 +160,7 @@ export const createDate = (formDate: { year: string; month: string; day: string 
 
 interface FileUploaderParams {
   file: File
-  setCloudinaryData: (data: SetStateAction<{ id: string; url: string }>) => void
-  setProgressValue: (value: SetStateAction<number>) => void
+  setProgressValue: (value: number) => void
 }
 
 /**
@@ -171,13 +169,9 @@ interface FileUploaderParams {
  * uploading the file to Cloudinary, setting progress along the way and the
  * id/url of the file when the upload is complete.
  */
-export const cloudinaryFileUploader = async ({
-  file,
-  setCloudinaryData,
-  setProgressValue,
-}: FileUploaderParams) => {
-  const cloudName = process.env.cloudinaryCloudName
-  const uploadPreset = process.env.cloudinarySignedPreset
+export const cloudinaryFileUploader = async ({ file, setProgressValue }: FileUploaderParams) => {
+  const cloudName = process.env.cloudinaryCloudName || ""
+  const uploadPreset = process.env.cloudinarySignedPreset || ""
 
   setProgressValue(1)
 
@@ -198,7 +192,7 @@ export const cloudinaryFileUploader = async ({
 
   setProgressValue(3)
 
-  void CloudinaryUpload({
+  const response = await CloudinaryUpload({
     signature,
     apiKey: process.env.cloudinaryKey,
     timestamp,
@@ -209,13 +203,10 @@ export const cloudinaryFileUploader = async ({
     cloudName,
     uploadPreset,
     tag,
-  }).then((response) => {
-    setProgressValue(100)
-    setCloudinaryData({
-      id: response.data.public_id,
-      url: cloudinaryUrlFromId(response.data.public_id),
-    })
   })
+
+  setProgressValue(100)
+  return response.data.public_id
 }
 
 export function formatIncome(value: number, currentType: IncomePeriod, returnType: IncomePeriod) {

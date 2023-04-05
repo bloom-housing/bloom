@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^7.11.0",
+    "@bloom-housing/shared-services": "^1.0.0",
     "@bloom-housing/ui-components": "^11.0.0"
   },
   "devDependencies": {

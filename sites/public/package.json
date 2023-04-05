@@ -27,6 +27,7 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^7.11.0",
     "@bloom-housing/shared-helpers": "^7.5.0",
+    "@bloom-housing/shared-services": "^1.0.0",
     "@bloom-housing/ui-components": "^11.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",

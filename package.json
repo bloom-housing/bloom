@@ -8,7 +8,8 @@
       "sites/public",
       "sites/partners",
       "backend/core",
-      "shared-helpers"
+      "shared-helpers",
+      "shared-services"
     ],
     "nohoist": [
       "**/@anchan828/nest-sendgrid"
@@ -43,6 +44,7 @@
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
+    "test:shared:services": "cd shared-services && yarn && yarn test",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",

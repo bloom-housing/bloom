@@ -1,5 +1,5 @@
 {
-  "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers"],
+  "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "shared-services"],
   "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true,
