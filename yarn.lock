@@ -3698,6 +3698,51 @@
     ts-jest "^26.4.1"
     typesafe-actions "^5.1.0"
 
+"@bloom-housing/ui-components@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.0.1.tgz#04227541f054a0cc58c327d839a680888f361a29"
+  integrity sha512-Upf7BKb/YI9QTDmPHSEjzuVFY+az4+FX1upRjFXHCwHOIBjJdxm1Ohc9FLOdDjGShYGetynT6GIoGTNbjRxZCA==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.1.1"
+    "@fortawesome/free-regular-svg-icons" "^6.1.1"
+    "@fortawesome/free-solid-svg-icons" "^6.1.1"
+    "@fortawesome/react-fontawesome" "^0.1.18"
+    "@mapbox/mapbox-sdk" "^0.13.0"
+    "@types/jwt-decode" "^2.2.1"
+    "@types/mdx" "^2.0.1"
+    "@types/node-polyglot" "^2.4.1"
+    "@types/react" "^18.0.32"
+    "@types/react-beautiful-dnd" "^13.1.1"
+    "@types/react-dom" "^16.9.5"
+    "@types/react-text-mask" "^5.4.6"
+    "@types/react-transition-group" "^4.4.0"
+    ag-grid-community "^26.0.0"
+    ag-grid-react "^26.0.0"
+    aria-autocomplete "^1.4.0"
+    axios "0.21.2"
+    dayjs "^1.10.7"
+    jwt-decode "^2.2.0"
+    markdown-to-jsx "7.1.8"
+    nanoid "^3.1.12"
+    node-polyglot "^2.4.0"
+    react "18.2.0"
+    react-accessible-accordion "5.0.0"
+    react-beautiful-dnd "^13.1.0"
+    react-dom "18.2.0"
+    react-dropzone "^11.3.2"
+    react-focus-lock "^2.5.2"
+    react-hook-form "^6.15.5"
+    react-map-gl "^6.1.16"
+    react-media "^1.10.0"
+    react-remove-scroll "2.5.4"
+    react-tabs "^3.2.2"
+    react-text-mask "^5.4.3"
+    react-transition-group "^4.4.1"
+    tailwindcss "2.2.10"
+    tailwindcss-rtl "^0.9.0"
+    ts-jest "^26.4.1"
+    typesafe-actions "^5.1.0"
+
 "@bloom-housing/ui-seeds@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.2.0.tgz#d94dae60784fea4ed2d7d727de2ec8caad49f2da"
@@ -3723,6 +3768,25 @@
     storybook "^6.5.16"
     typescript "^4.4.2"
     web-vitals "^2.1.0"
+
+"@bloom-housing/ui-seeds@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.2.1.tgz#aac4cb9e5f7c05cd1d2e50f53881bc3bcae77d41"
+  integrity sha512-Wx/5j922g6qmhgDquGXCdb8Gunp0OdiX826PQk+yxwfFm/UtFo+W6WSEvMzU1/X8A+juSckL/V3FHbyTzUjPFg==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.3.0"
+    "@fortawesome/free-regular-svg-icons" "^6.3.0"
+    "@fortawesome/free-solid-svg-icons" "^6.3.0"
+    "@fortawesome/react-fontawesome" "^0.2.0"
+    "@types/markdown-to-jsx" "^6.11.2"
+    "@types/mdx" "^2.0.3"
+    "@types/node" "^16.7.13"
+    "@types/react" "^18.0.0"
+    "@types/react-dom" "^18.0.0"
+    markdown-to-jsx "^6.11.4"
+    react "^18.2.0"
+    react-dom "^18.2.0"
+    typescript "^4.4.2"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
@@ -7629,6 +7693,15 @@
   version "18.0.31"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.31.tgz#a69ef8dd7bfa849734d258c793a8fe343a338205"
   integrity sha512-EEG67of7DsvRDU6BLLI0p+k1GojDLz9+lZsnCpCRTa/lOokvyPBvp8S5x+A24hME3yyQuIipcP70KJ6H7Qupww==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.0.32":
+  version "18.0.33"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.33.tgz#a1575160cb4376787c2f5fe0312302f824baa61e"
+  integrity sha512-sHxzVxeanvQyQ1lr8NSHaj0kDzcNiGpILEVt69g9S31/7PfMvNCKLKcsHw4lYKjs3cGNJjXSP4mYzX43QlnjNA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -22343,6 +22416,14 @@ react-accessible-accordion@5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/react-accessible-accordion/-/react-accessible-accordion-5.0.0.tgz"
   integrity sha512-MT2obYpTgLIIfPr9d7hEyvPB5rg8uJcHpgA83JSRlEUHvzH48+8HJPvzSs+nM+XprTugDgLfhozO5qyJpBvYRQ==
+<<<<<<< HEAD
+=======
+
+react-accessible-accordion@^3.3.5:
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/react-accessible-accordion/-/react-accessible-accordion-3.3.5.tgz#5d035994a261c832a57e7822f1bbacf914c5a5cc"
+  integrity sha512-yCh3tx+jNuOPs+m58LOBFTGDEaGvM8UfuCNznr855FDAWzwV8V/ZH/TVBvgqH0npP58KrrVrHpj4jcy0EE5hEw==
+>>>>>>> 62986e873 (fix: upgrade)
 
 react-app-polyfill@^3.0.0:
   version "3.0.0"
@@ -22412,19 +22493,19 @@ react-dev-utils@^12.0.1:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
+react-dom@18.2.0, react-dom@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
+  integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
+  dependencies:
+    loose-envify "^1.1.0"
+    scheduler "^0.23.0"
+
 react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
   integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
 >>>>>>> 1a83d4bc1 (refactor: uptake seeds FormErrorMessage)
-  dependencies:
-    loose-envify "^1.1.0"
-    scheduler "^0.23.0"
-
-react-dom@^18.2.0:
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
-  integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
@@ -22653,17 +22734,24 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+<<<<<<< HEAD
 react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
-  dependencies:
-    loose-envify "^1.1.0"
-
-react@^18.2.0:
+=======
+react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
+  dependencies:
+    loose-envify "^1.1.0"
+
+react@^17.0.2:
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
+  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+>>>>>>> 62986e873 (fix: upgrade)
   dependencies:
     loose-envify "^1.1.0"
 
