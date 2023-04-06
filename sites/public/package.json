@@ -27,7 +27,7 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^7.13.0",
     "@bloom-housing/shared-helpers": "^7.7.0",
-    "@bloom-housing/ui-components": "^12.0.0",
+    "@bloom-housing/ui-components": "^12.0.2",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
@@ -62,7 +62,7 @@
     "@testing-library/react": "14.0.0",
     "@types/markdown-to-jsx": "^6.11.2",
     "@types/node": "^12.12.67",
-    "@types/react": "^16.9.52",
+    "@types/react": "^18.0.33",
     "concurrently": "^5.3.0",
     "cypress": "^12.8.1",
     "js-levenshtein": "^1.1.6",

@@ -1438,10 +1438,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@^12.0.0":
-  version "12.0.0"
-  resolved "https://registry.npmjs.org/@bloom-housing/ui-components/-/ui-components-12.0.0.tgz"
-  integrity sha512-asPLVpLEBRKg5xoCBc3WQ4xdKuwJF317VlcV4CeKcPVVpW00wZLYQSzK4elMAaqBPI8FHfVw2J72F0KiXGg8UA==
+"@bloom-housing/ui-components@^12.0.2":
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.0.2.tgz#a60fbd4c317d793f7755c7b416493fab493e4f29"
+  integrity sha512-oHFEpwrT1qOcUp8QgqHWSmKrncMZF+7peNV3nOLCGnP1F2nevVTILgoSGBMLvUk8Ek9a4+joON7faUtrPjHjEQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.1"
     "@fortawesome/free-regular-svg-icons" "^6.1.1"
@@ -1451,6 +1451,7 @@
     "@types/jwt-decode" "^2.2.1"
     "@types/mdx" "^2.0.1"
     "@types/node-polyglot" "^2.4.1"
+    "@types/react" "^18.0.32"
     "@types/react-beautiful-dnd" "^13.1.1"
     "@types/react-dom" "^16.9.5"
     "@types/react-text-mask" "^5.4.6"
@@ -4282,21 +4283,19 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "16.9.46"
-  resolved "https://registry.npmjs.org/@types/react/-/react-16.9.46.tgz"
-  integrity sha512-dbHzO3aAq1lB3jRQuNpuZ/mnu+CdD3H0WVaaBQA8LTT3S33xhVBUj232T8M3tAhSWJs/D/UqORYUlJNl/8VQZg==
+"@types/react@*", "@types/react@^18.0.32", "@types/react@^18.0.33":
+  version "18.0.33"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.33.tgz#a1575160cb4376787c2f5fe0312302f824baa61e"
+  integrity sha512-sHxzVxeanvQyQ1lr8NSHaj0kDzcNiGpILEVt69g9S31/7PfMvNCKLKcsHw4lYKjs3cGNJjXSP4mYzX43QlnjNA==
   dependencies:
     "@types/prop-types" "*"
+    "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^16.9.52":
-  version "16.9.52"
-  resolved "https://registry.npmjs.org/@types/react/-/react-16.9.52.tgz"
-  integrity sha512-EHRjmnxiNivwhGdMh9sz1Yw9AUxTSZFxKqdBWAAzyZx3sufWwx6ogqHYh/WB1m/I4ZpjkoZLExF5QTy2ekVi/Q==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^3.0.2"
+"@types/scheduler@*":
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"
+  integrity sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==
 
 "@types/serve-static@*":
   version "1.13.5"
@@ -16178,12 +16177,12 @@ swr@^0.5.5:
   dependencies:
     dequal "2.0.2"
 
-swr@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/swr/-/swr-1.0.1.tgz"
-  integrity sha512-EPQAxSjoD4IaM49rpRHK0q+/NzcwoT8c0/Ylu/u3/6mFj/CWnQVjNJ0MV2Iuw/U+EJSd2TX5czdAwKPYZIG0YA==
+swr@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/swr/-/swr-2.1.2.tgz#15841cf5bbb8b20f24e2408193f616a41b6734a0"
+  integrity sha512-ocfaD2rnYZKqTDplCEX2bH5Z1++n2JSej9oYi7hVfXXWYm+0RP+H6fVrogWB0mtMclv1guk9kEnAzNLygOy9Hw==
   dependencies:
-    dequal "2.0.2"
+    use-sync-external-store "^1.2.0"
 
 symbol-observable@4.0.0:
   version "4.0.0"
@@ -17135,6 +17134,11 @@ use-sidecar@^1.1.2:
   dependencies:
     detect-node-es "^1.1.0"
     tslib "^2.0.0"
+
+use-sync-external-store@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
 
 use@^3.1.0:
   version "3.1.1"

@@ -92,6 +92,9 @@ describe("users", () => {
       }),
       rest.get("http://localhost/api/adapter/user/csv", (_req, res, ctx) => {
         return res(ctx.json(""))
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
       })
     )
     const { findByText, getByText } = render(
@@ -129,6 +132,9 @@ describe("users", () => {
       }),
       rest.get("http://localhost/api/adapter/user/csv", (_req, res, ctx) => {
         return res(ctx.status(500), ctx.json(""))
+      }),
+      rest.post("http://localhost:3100/auth/token", (_req, res, ctx) => {
+        return res(ctx.json(""))
       })
     )
     const { findByText } = render(
