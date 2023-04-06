@@ -58,7 +58,7 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
-import { CloudinaryFileService } from "@bloom-housing/shared-services"
+import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
 
 interface ListingProps {
   listing: Listing
@@ -73,7 +73,7 @@ export const ListingView = (props: ListingProps) => {
     content: appStatusContent,
     subContent: appStatusSubContent,
   } = useGetApplicationStatusProps(listing)
-  const cloudinaryFileService = new CloudinaryFileService()
+  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods

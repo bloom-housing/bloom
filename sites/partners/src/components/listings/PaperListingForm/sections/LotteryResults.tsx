@@ -16,7 +16,7 @@ import {
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
-import { CloudinaryFileService } from "@bloom-housing/shared-services"
+import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -36,7 +36,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     id: "",
     url: "",
   })
-  const cloudinaryFileService = new CloudinaryFileService()
+  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
 
   const listingEvents = watch("events")
   const uploadedPDF = listingEvents.find(

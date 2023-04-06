@@ -1,15 +1,11 @@
-import { t, CloudinaryUpload, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { t, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 
-import {
-  ApplicationSubmissionType,
-  AssetsService,
-  IncomePeriod,
-} from "@bloom-housing/backend-core/types"
+import { ApplicationSubmissionType, IncomePeriod } from "@bloom-housing/backend-core/types"
 import { TempUnit } from "./listings/formTypes"
 import { FieldError } from "react-hook-form"
 
@@ -156,57 +152,6 @@ export const createDate = (formDate: { year: string; month: string; day: string 
   if (!formDate || !formDate?.year || !formDate?.month || !formDate?.day) return null
 
   return dayjs(`${formDate.year}-${formDate.month}-${formDate.day}`, "YYYY-MM-DD").toDate()
-}
-
-interface FileUploaderParams {
-  file: File
-  setProgressValue: (value: number) => void
-}
-
-/**
- * Accept a file from the Dropzone component along with data and progress state
- * setters. It will then handle obtaining a signature from the backend and
- * uploading the file to Cloudinary, setting progress along the way and the
- * id/url of the file when the upload is complete.
- */
-export const cloudinaryFileUploader = async ({ file, setProgressValue }: FileUploaderParams) => {
-  const cloudName = process.env.cloudinaryCloudName || ""
-  const uploadPreset = process.env.cloudinarySignedPreset || ""
-
-  setProgressValue(1)
-
-  const timestamp = Math.round(new Date().getTime() / 1000)
-  const tag = "browser_upload"
-
-  const assetsService = new AssetsService()
-  const params = {
-    timestamp,
-    tags: tag,
-    upload_preset: uploadPreset,
-  }
-
-  const resp = await assetsService.createPresignedUploadMetadata({
-    body: { parametersToSign: params },
-  })
-  const signature = resp.signature
-
-  setProgressValue(3)
-
-  const response = await CloudinaryUpload({
-    signature,
-    apiKey: process.env.cloudinaryKey,
-    timestamp,
-    file,
-    onUploadProgress: (progress) => {
-      setProgressValue(progress)
-    },
-    cloudName,
-    uploadPreset,
-    tag,
-  })
-
-  setProgressValue(100)
-  return response.data.public_id
 }
 
 export function formatIncome(value: number, currentType: IncomePeriod, returnType: IncomePeriod) {

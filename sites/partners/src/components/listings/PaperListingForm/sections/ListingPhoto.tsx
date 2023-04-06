@@ -14,7 +14,7 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { fieldHasError } from "../../../../lib/helpers"
-import { CloudinaryFileService } from "@bloom-housing/shared-services"
+import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
 
 /**
  *
@@ -36,7 +36,7 @@ const ListingPhoto = () => {
     id: "",
     url: "",
   })
-  const cloudinaryFileService = new CloudinaryFileService()
+  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({

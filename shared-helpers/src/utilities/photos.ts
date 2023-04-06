@@ -1,5 +1,5 @@
 import { Asset, Listing } from "@bloom-housing/backend-core/types"
-import { CloudinaryFileService } from "@bloom-housing/shared-services"
+import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
 
 export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
   const cloudName = process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
@@ -11,7 +11,7 @@ export const imageUrlFromListing = (listing: Listing, size = 400) => {
   const imageAssets =
     listing?.images?.length && listing.images[0].image ? [listing.images[0].image] : listing?.assets
 
-  const cloudinaryFileService = new CloudinaryFileService()
+  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
 
   // Fallback to `assets`
   const cloudinaryBuilding = imageAssets?.find(
