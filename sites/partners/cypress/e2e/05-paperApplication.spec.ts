@@ -1,13 +1,13 @@
 describe("Paper Application Tests", () => {
-  after(() => {
-    cy.signOut()
-  })
-
   beforeEach(() => {
     cy.login()
     cy.visit("/")
     cy.getByTestId("listing-status-cell").eq(1).click()
     cy.getByTestId("addApplicationButton").contains("Add Application").click()
+  })
+
+  afterEach(() => {
+    cy.signOut()
   })
 
   it("fill paper application form completely", () => {

@@ -347,7 +347,7 @@ async function seed() {
       agreedToTermsOfService: true,
     })
   )
-  await userRepo.save(alamedaAdmin)
+  await userRepo.save({ ...alamedaAdmin, agreedToTermsOfService: true })
   await userService.confirm({ token: alamedaAdmin.confirmationToken })
 
   const alamedaAdminRoles: UserRoles = {

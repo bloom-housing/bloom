@@ -3,7 +3,7 @@ describe("Admin User Mangement Tests", () => {
     cy.login()
   })
 
-  after(() => {
+  afterEach(() => {
     cy.signOut()
   })
 

@@ -34,8 +34,11 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
+    "axios-cookiejar-support": "4.0.6",
     "dayjs": "^1.10.7",
+    "deasync": "0.1.28",
     "dotenv": "^8.2.0",
+    "http-cookie-agent": "5.0.2",
     "nanoid": "^3.1.12",
     "next": "^13.2.4",
     "next-plugin-custom-babel-config": "^1.0.5",
@@ -46,7 +49,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^6.15.5",
     "swr": "^0.5.5",
-    "tailwindcss": "2.2.10"
+    "tailwindcss": "2.2.10",
+    "tough-cookie": "4.1.2"
   },
   "devDependencies": {
     "@axe-core/react": "4.4.3",

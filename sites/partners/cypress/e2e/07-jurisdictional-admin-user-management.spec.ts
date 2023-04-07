@@ -1,15 +1,15 @@
-describe("Admin User Mangement Tests", () => {
+describe("Jurisdictional Admin User Mangement Tests", () => {
   beforeEach(() => {
     cy.login("jurisdictionalAdmin")
+    cy.visit("/")
+    cy.getByTestId("Users-1").click()
   })
 
-  after(() => {
+  afterEach(() => {
     cy.signOut()
   })
 
   it("as jurisdictional admin user, should only see partners/jurisdictional admins on the same jurisdiction", () => {
-    cy.visit("/")
-    cy.getByTestId("Users-1").click()
     const rolesArray = ["Partner", "Jurisdictional Admin"]
     cy.getByTestId("ag-page-size").select("100", { force: true })
 
@@ -21,8 +21,6 @@ describe("Admin User Mangement Tests", () => {
   })
 
   it("as jurisdictional admin user, should be able to create new jurisidictional admin", () => {
-    cy.visit("/")
-    cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
     cy.fixture("createJurisdictionalAdminUser2").then((obj) => {
       cy.fillFields(
@@ -56,8 +54,6 @@ describe("Admin User Mangement Tests", () => {
   })
 
   it("as jurisdictional admin user, should be able to create new partner", () => {
-    cy.visit("/")
-    cy.getByTestId("Users-1").click()
     cy.getByTestId("add-user").click()
     cy.fixture("createPartnerUser2").then((obj) => {
       cy.fillFields(

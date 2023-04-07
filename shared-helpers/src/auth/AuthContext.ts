@@ -20,7 +20,7 @@ import {
   EnumRequestMfaCodeMfaType,
   EnumLoginMfaType,
 } from "@bloom-housing/backend-core/types"
-import { NavigationContext } from "@bloom-housing/ui-components"
+import { GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
 import {
   createContext,
   createElement,
@@ -35,7 +35,6 @@ import qs from "qs"
 import axiosStatic from "axios"
 import { ConfigContext } from "./ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
-import { clearToken, getToken, getTokenTtl, setToken } from "../utilities/token"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
@@ -57,7 +56,6 @@ type ContextProps = {
     mfaCode?: string,
     mfaType?: EnumLoginMfaType
   ) => Promise<User | undefined>
-  loginWithToken: (token: string) => Promise<User | undefined>
   resetPassword: (
     token: string,
     password: string,
@@ -68,7 +66,6 @@ type ContextProps = {
   forgotPassword: (email: string) => Promise<string | undefined>
   createUser: (user: UserCreate) => Promise<UserBasic | undefined>
   resendConfirmation: (email: string) => Promise<Status | undefined>
-  accessToken?: string
   initialStateLoaded: boolean
   loading: boolean
   profile?: User
@@ -82,111 +79,61 @@ type ContextProps = {
 
 // Internal Provider State
 type AuthState = {
-  accessToken?: string
   initialStateLoaded: boolean
   language?: string
   loading: boolean
   profile?: User
   refreshTimer?: number
-  storageType: string
 }
 
-type DispatchType = (...arg: [unknown]) => void
-
-// State Mutation Actions
-const saveToken = createAction("SAVE_TOKEN")<{
-  apiUrl: string
-  accessToken: string
-  dispatch: DispatchType
-}>()
 const saveProfile = createAction("SAVE_PROFILE")<User | null>()
 const startLoading = createAction("START_LOADING")()
 const stopLoading = createAction("STOP_LOADING")()
 const signOut = createAction("SIGN_OUT")()
 
-const scheduleTokenRefresh = (accessToken: string, onRefresh: (accessToken: string) => void) => {
-  const ttl = getTokenTtl(accessToken)
-
-  if (ttl < 0) {
-    // If ttl is negative, then our token is already expired, we'll have to re-login to get a new token.
-    //dispatch(signOut())
-    return null
-  } else {
-    // Queue up a refresh for ~1 minute before the token expires
-    return (setTimeout(() => {
-      const run = async () => {
-        const reposne = await new AuthService().token()
-        if (reposne) {
-          onRefresh(reposne.accessToken)
-        }
-      }
-      void run()
-    }, Math.max(ttl - 60000, 0)) as unknown) as number
-  }
-}
 const reducer = createReducer(
   {
     loading: false,
     initialStateLoaded: false,
-    storageType: "session",
     language: "en",
     accessToken: undefined,
   } as AuthState,
   {
-    SAVE_TOKEN: (state, { payload }) => {
-      const { refreshTimer: oldRefresh, ...rest } = state
-      const { accessToken, apiUrl, dispatch } = payload
-
-      // If an existing refresh timer has been defined, remove it as the access token has changed
-      if (oldRefresh) {
-        clearTimeout(oldRefresh)
-      }
-
-      // Save off the token in local storage for persistence across reloads.
-      setToken(state.storageType, accessToken)
-
-      const refreshTimer = scheduleTokenRefresh(accessToken, (newAccessToken) =>
-        dispatch(saveToken({ apiUrl, accessToken: newAccessToken, dispatch }))
-      )
-
-      serviceOptions.axios = axiosStatic.create({
-        baseURL: apiUrl,
-        headers: {
-          language: state.language,
-          jurisdictionName: process.env.jurisdictionName,
-          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-        },
-      })
-
+    SAVE_PROFILE: (state, { payload: user }) => {
       return {
-        ...rest,
-        ...(refreshTimer && { refreshTimer }),
-        accessToken: accessToken,
+        ...state,
+        profile: user,
+        initialStateLoaded: true,
       }
     },
-    SAVE_PROFILE: (state, { payload: user }) => ({
-      ...state,
-      profile: user,
-      initialStateLoaded: true,
-    }),
     START_LOADING: (state) => ({ ...state, loading: true }),
     END_LOADING: (state) => ({ ...state, loading: false }),
-    SIGN_OUT: ({ storageType }) => {
-      clearToken(storageType)
-      // Clear out all existing state other than the storage type
-      return { loading: false, storageType, initialStateLoaded: true }
-    },
+    SIGN_OUT: () => ({ loading: false, initialStateLoaded: true }),
   }
 )
 
+const axiosConfig = (router: GenericRouter) => {
+  return axiosStatic.create({
+    baseURL: "/api/adapter",
+    withCredentials: true,
+    headers: {
+      language: router.locale,
+      jurisdictionName: process.env.jurisdictionName,
+      appUrl: window.location.origin,
+    },
+    paramsSerializer: (params) => {
+      return qs.stringify(params)
+    },
+  })
+}
+
 export const AuthContext = createContext<Partial<ContextProps>>({})
 export const AuthProvider: FunctionComponent = ({ children }) => {
-  const { apiUrl, storageType } = useContext(ConfigContext)
+  const { apiUrl } = useContext(ConfigContext)
   const { router } = useContext(NavigationContext)
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     initialStateLoaded: false,
-    storageType,
     language: router.locale,
   })
 
@@ -194,43 +141,50 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   const authService = new AuthService()
 
   useEffect(() => {
-    serviceOptions.axios = axiosStatic.create({
-      baseURL: apiUrl,
-      headers: {
-        language: router.locale,
-        jurisdictionName: process.env.jurisdictionName,
-        appUrl: window.location.origin,
-        ...(state.accessToken && { Authorization: `Bearer ${state.accessToken}` }),
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
-      },
-    })
-  }, [router, apiUrl, state.accessToken, router.locale])
+    serviceOptions.axios = axiosConfig(router)
+  }, [router, apiUrl, router.locale])
 
-  // On initial load/reload, check localStorage to see if we have a token available
   useEffect(() => {
-    const accessToken = getToken(storageType)
-    if (accessToken) {
-      const ttl = getTokenTtl(accessToken)
-
-      if (ttl > 0) {
-        dispatch(saveToken({ accessToken, apiUrl, dispatch }))
-      } else {
-        dispatch(signOut())
+    const interval = setInterval(() => {
+      if (
+        document.cookie
+          .split("; ")
+          .some((cookie) => cookie.startsWith("access-token-available=True"))
+      ) {
+        authService
+          .requestNewToken()
+          .then(() => {
+            // this auto sets the new cookies so we don't really have to do anything
+            // this set up is to avoid some linting errors
+          })
+          .catch((e) => {
+            console.error(e)
+          })
       }
-    } else {
-      dispatch(signOut())
-    }
-  }, [apiUrl, storageType])
+    }, 1000 * 60 * 59) // runs once every 59 minutes
+    return () => clearInterval(interval)
+  })
 
   const loadProfile = useCallback(
     async (redirect?: string) => {
       try {
-        const profile = await userService?.userControllerProfile()
+        let profile = undefined
+        if (
+          document.cookie
+            .split("; ")
+            .some((cookie) => cookie.startsWith("access-token-available=True"))
+        ) {
+          // if we have an access token
+          profile = await userService?.userControllerProfile()
+        } else {
+          dispatch(saveProfile(null))
+        }
+
         if (profile) {
           dispatch(saveProfile(profile))
         }
+      } catch (_) {
+        dispatch(saveProfile(null))
       } finally {
         dispatch(stopLoading())
 
@@ -244,10 +198,10 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
 
   // Load our profile as soon as we have an access token available
   useEffect(() => {
-    if (!state.profile && state.accessToken && !state.loading) {
+    if (!state.profile && !state.loading && !state.initialStateLoaded) {
       void loadProfile()
     }
-  }, [state.profile, state.accessToken, apiUrl, userService, state.loading, loadProfile])
+  }, [state.profile, apiUrl, userService, state.loading, loadProfile, state.initialStateLoaded])
 
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
@@ -263,7 +217,6 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
     loading: state.loading,
-    accessToken: state.accessToken,
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
     loadProfile,
@@ -273,15 +226,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       mfaCode: string | undefined = undefined,
       mfaType: EnumLoginMfaType | undefined = undefined
     ) => {
-      dispatch(signOut())
       dispatch(startLoading())
       try {
         const response = await authService?.login({ body: { email, password, mfaCode, mfaType } })
         if (response) {
-          dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
-          const profile = await userService?.userControllerProfile({
-            headers: { Authorization: `Bearer ${response.accessToken}` },
-          })
+          const profile = await userService?.userControllerProfile()
           if (profile) {
             dispatch(saveProfile(profile))
             return profile
@@ -292,17 +241,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         dispatch(stopLoading())
       }
     },
-    loginWithToken: async (token: string) => {
-      dispatch(saveToken({ accessToken: token, apiUrl, dispatch }))
-      const profile = await userService?.userControllerProfile()
-      if (profile) {
-        dispatch(saveProfile(profile))
-        return profile
-      }
-
-      return undefined
+    signOut: async () => {
+      await authService.logout()
+      dispatch(saveProfile(null))
+      dispatch(signOut())
     },
-    signOut: () => dispatch(signOut()),
     resetPassword: async (token, password, passwordConfirmation) => {
       dispatch(startLoading())
       try {
@@ -314,7 +257,6 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
           },
         })
         if (response) {
-          dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
           const profile = await userService?.userControllerProfile()
           if (profile) {
             dispatch(saveProfile(profile))
@@ -329,22 +271,10 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     confirmAccount: async (token) => {
       dispatch(startLoading())
       try {
-        serviceOptions.axios = axiosStatic.create({
-          baseURL: apiUrl,
-          headers: {
-            language: router.locale,
-            jurisdictionName: process.env.jurisdictionName,
-            appUrl: window.location.origin,
-            ...(state.accessToken && { Authorization: `Bearer ${state.accessToken}` }),
-          },
-          paramsSerializer: (params) => {
-            return qs.stringify(params)
-          },
-        })
+        serviceOptions.axios = axiosConfig(router)
 
         const response = await userService?.confirm({ body: { token } })
         if (response) {
-          dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
           const profile = await userService?.userControllerProfile()
           if (profile) {
             dispatch(saveProfile(profile))
