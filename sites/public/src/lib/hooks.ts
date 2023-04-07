@@ -89,6 +89,7 @@ export async function fetchBaseListingData({
       filter: ListingFilterParams[]
       orderBy?: OrderByFieldsEnum[]
       orderDir?: OrderParam[]
+      bloomJurisdiction?: string[]
     } = {
       view: "base",
       limit: "all",
@@ -99,6 +100,26 @@ export async function fetchBaseListingData({
     }
     if (orderDir) {
       params.orderDir = orderDir
+    }
+
+    if (process.env.bloomJurisdictionNames.length != 0) {
+      // This function early returns if the jurisdictions have already been.
+      // fetched from the Bloom API.
+      const jurisdictions = await fetchBloomJurisdictionsByName()
+      params.bloomJurisdiction = jurisdictions.map((jurisdiction) => jurisdiction.id)
+
+      const response = await axios.get(process.env.listingsWithExternalServiceUrl, {
+        params,
+        paramsSerializer: (params) => {
+          return qs.stringify(params)
+        },
+      })
+      const listingsWithExternal = response.data
+      let allListings = listingsWithExternal.local.items
+      for (const k in listingsWithExternal.external) {
+        allListings = allListings.concat(listingsWithExternal.external[k].items)
+      }
+      return allListings
     }
     const response = await axios.get(process.env.listingServiceUrl, {
       params,
@@ -142,6 +163,29 @@ export async function fetchClosedListings() {
 }
 
 let jurisdiction: Jurisdiction | null = null
+const bloomJurisdictions: Jurisdiction[] = []
+
+export async function fetchBloomJurisdictionsByName() {
+  if (bloomJurisdictions.length != 0) {
+    return bloomJurisdictions
+  }
+
+  try {
+    for (const jurisdictionName of process.env.bloomJurisdictionNames) {
+      const jurisdictionRes = await axios.get(
+        `${process.env.bloomJurisdictionsUrl}/${jurisdictionName}`
+      )
+      bloomJurisdictions.push(jurisdictionRes?.data)
+    }
+  } catch (error) {
+    console.log("Error fetching Bloom jurisdictions, will not include")
+    console.log("message = ", error)
+    // clear the jurisdictions array to avoid undefined behavior
+    bloomJurisdictions.length = 0
+  }
+
+  return bloomJurisdictions
+}
 
 export async function fetchJurisdictionByName() {
   try {

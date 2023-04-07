@@ -27,6 +27,13 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
+const BLOOM_LISTINGS_QUERY = process.env.BLOOM_LISTINGS_QUERY || "/listings/includeExternal"
+console.log(
+  `Using ${process.env.BLOOM_API_BASE}${BLOOM_LISTINGS_QUERY} for the external listing service.`
+)
+const BLOOM_JURISDICTION_NAMES = process.env.BLOOM_JURISDICTIONS
+  ? process.env.BLOOM_JURISDICTIONS.split(",")
+  : []
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN
 const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 
@@ -49,6 +56,11 @@ module.exports = withBundleAnalyzer(
       jurisdictionName: process.env.JURISDICTION_NAME,
       cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+
+      // start Doorway env variables
+      listingsWithExternalServiceUrl: BACKEND_API_BASE + BLOOM_LISTINGS_QUERY,
+      bloomJurisdictionsUrl: process.env.BLOOM_API_BASE + process.env.BLOOM_JURISDICTIONS_QUERY,
+      bloomJurisdictionNames: BLOOM_JURISDICTION_NAMES,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
