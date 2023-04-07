@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.6.0...@bloom-housing/public@7.7.0) (2023-04-07)
+
+
+### Features
+
+* changing auth over to cookies ([#3357](https://github.com/bloom-housing/bloom/issues/3357)) ([cd03929](https://github.com/bloom-housing/bloom/commit/cd039293346032c7846e7e19ba3cba79a8b094e1))
+
+
+
+
+
 # [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@7.5.1...@bloom-housing/public@7.6.0) (2023-04-03)
 
 
