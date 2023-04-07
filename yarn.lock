@@ -2753,6 +2753,51 @@
     ts-jest "^26.4.1"
     typesafe-actions "^5.1.0"
 
+"@bloom-housing/ui-components@^12.0.2":
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.0.2.tgz#a60fbd4c317d793f7755c7b416493fab493e4f29"
+  integrity sha512-oHFEpwrT1qOcUp8QgqHWSmKrncMZF+7peNV3nOLCGnP1F2nevVTILgoSGBMLvUk8Ek9a4+joON7faUtrPjHjEQ==
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.1.1"
+    "@fortawesome/free-regular-svg-icons" "^6.1.1"
+    "@fortawesome/free-solid-svg-icons" "^6.1.1"
+    "@fortawesome/react-fontawesome" "^0.1.18"
+    "@mapbox/mapbox-sdk" "^0.13.0"
+    "@types/jwt-decode" "^2.2.1"
+    "@types/mdx" "^2.0.1"
+    "@types/node-polyglot" "^2.4.1"
+    "@types/react" "^18.0.32"
+    "@types/react-beautiful-dnd" "^13.1.1"
+    "@types/react-dom" "^16.9.5"
+    "@types/react-text-mask" "^5.4.6"
+    "@types/react-transition-group" "^4.4.0"
+    ag-grid-community "^26.0.0"
+    ag-grid-react "^26.0.0"
+    aria-autocomplete "^1.4.0"
+    axios "0.21.2"
+    dayjs "^1.10.7"
+    jwt-decode "^2.2.0"
+    markdown-to-jsx "7.1.8"
+    nanoid "^3.1.12"
+    node-polyglot "^2.4.0"
+    react "18.2.0"
+    react-accessible-accordion "5.0.0"
+    react-beautiful-dnd "^13.1.0"
+    react-dom "18.2.0"
+    react-dropzone "^11.3.2"
+    react-focus-lock "^2.5.2"
+    react-hook-form "^6.15.5"
+    react-map-gl "^6.1.16"
+    react-media "^1.10.0"
+    react-remove-scroll "2.5.4"
+    react-tabs "^3.2.2"
+    react-text-mask "^5.4.3"
+    react-transition-group "^4.4.1"
+    tailwindcss "2.2.10"
+    tailwindcss-rtl "^0.9.0"
+    ts-jest "^26.4.1"
+    typesafe-actions "^5.1.0"
+
 "@bloom-housing/ui-seeds@^1.2.0", "@bloom-housing/ui-seeds@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.2.1.tgz#aac4cb9e5f7c05cd1d2e50f53881bc3bcae77d41"
@@ -7039,7 +7084,7 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^16", "@types/react@^16.9.52":
+"@types/react@^16":
   version "16.14.38"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.38.tgz#b814d157ca8906603593d5106f6d733af9b79df4"
   integrity sha512-PbEjuhwkdH6IB5Sak6BFAqpVMHY/wJxa0EG3bKkr0vWA2hSDIq3iEMhHyqjXrDFMqRzkiQkdyNXOnoELrh/9aQ==
