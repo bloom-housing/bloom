@@ -64,7 +64,6 @@ const ApplicationAda = () => {
     window.scrollTo(0, 0)
   }
 
-  console.log(errors)
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
