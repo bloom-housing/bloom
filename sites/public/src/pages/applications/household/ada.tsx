@@ -37,7 +37,9 @@ const ApplicationAda = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, setValue, errors, getValues } = useForm<Record<string, any>>({
+  const { register, handleSubmit, setValue, errors, getValues, clearErrors } = useForm<
+    Record<string, any>
+  >({
     defaultValues: {
       none:
         application.accessibility.mobility === false &&
@@ -62,6 +64,7 @@ const ApplicationAda = () => {
     window.scrollTo(0, 0)
   }
 
+  console.log(errors)
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -84,6 +87,7 @@ const ApplicationAda = () => {
         onChange: () => {
           setTimeout(() => {
             setValue("app-accessibility-no-features", false)
+            clearErrors()
           }, 1)
         },
       },
@@ -107,6 +111,7 @@ const ApplicationAda = () => {
           setValue("app-accessibility-mobility", false)
           setValue("app-accessibility-vision", false)
           setValue("app-accessibility-hearing", false)
+          clearErrors()
         }
       },
     },
@@ -162,7 +167,7 @@ const ApplicationAda = () => {
               }
             />
           </fieldset>
-          {errors.none && (
+          {!!Object.keys(errors).length && (
             <FormErrorMessage id="accessibilityCheckboxGroupError">
               {t("errors.selectOption")}
             </FormErrorMessage>

@@ -255,7 +255,9 @@ const PreferenceDrawer = ({
                 {t("settings.preferenceAddOption")}
               </Button>
               {errors["questions"] && (
-                <FormErrorMessage>{errors["questions"].message} </FormErrorMessage>
+                <FormErrorMessage className={"pt-1"}>
+                  {errors["questions"].message}
+                </FormErrorMessage>
               )}
             </div>
           </GridSection>
