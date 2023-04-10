@@ -64,11 +64,7 @@
     "@testing-library/react": "14.0.0",
     "@types/markdown-to-jsx": "^6.11.2",
     "@types/node": "^12.12.67",
-<<<<<<< HEAD
     "@types/react": "^18.0.33",
-=======
-    "@types/react": "^18.0.32",
->>>>>>> b956fc7d3 (fix: update to latest)
     "concurrently": "^5.3.0",
     "cypress": "^12.8.1",
     "js-levenshtein": "^1.1.6",
