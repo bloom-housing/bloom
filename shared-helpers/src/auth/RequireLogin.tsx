@@ -15,6 +15,7 @@ type RequireLoginProps = {
   signInPath: string
   signInMessage: string
   termsPath?: string // partners portal required accepted terms after sign-in
+  children?: React.ReactNode
 } & XOR<{ requireForRoutes?: string[] }, { skipForRoutes: string[] }>
 
 /**
