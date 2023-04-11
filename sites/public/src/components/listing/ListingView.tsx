@@ -505,7 +505,13 @@ export const ListingView = (props: ListingProps) => {
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
         <ImageCard
-          imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+          images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
+            (imageUrl: string) => {
+              return {
+                url: imageUrl,
+              }
+            }
+          )}
           tags={
             listing.reservedCommunityType
               ? [
@@ -518,6 +524,11 @@ export const ListingView = (props: ListingProps) => {
               : undefined
           }
           description={listing.name}
+          moreImagesLabel={t("listings.moreImagesLabel")}
+          moreImagesDescription={t("listings.moreImagesAltDescription", {
+            listingName: listing.name,
+          })}
+          modalCloseLabel={t("t.backToListing")}
         />
         <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
           <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
