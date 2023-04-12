@@ -1,6 +1,7 @@
 import { SetStateAction } from "react"
-import { t, CloudinaryUpload, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { t, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+import { CloudinaryUpload } from "./listings/CloudinaryUpload"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
