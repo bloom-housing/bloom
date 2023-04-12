@@ -15,6 +15,7 @@ import {
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
+import { ListingWithSourceMetadata } from "../../types/ListingWithSourceMetadata"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -115,9 +116,19 @@ export async function fetchBaseListingData({
         },
       })
       const listingsWithExternal = response.data
-      let allListings = listingsWithExternal.local.items
+      let allListings: ListingWithSourceMetadata[] = listingsWithExternal.local.items.map(
+        (item: ListingWithSourceMetadata) => {
+          item.isBloomListing = false
+          return item
+        }
+      )
       for (const k in listingsWithExternal.external) {
-        allListings = allListings.concat(listingsWithExternal.external[k].items)
+        allListings = allListings.concat(
+          listingsWithExternal.external[k].items.map((item: ListingWithSourceMetadata) => {
+            item.isBloomListing = true
+            return item
+          })
+        )
       }
       return allListings
     }
@@ -185,6 +196,19 @@ export async function fetchBloomJurisdictionsByName() {
   }
 
   return bloomJurisdictions
+}
+
+export async function getBloomJurisdictionById(jurisdictionId: string) {
+  try {
+    if (bloomJurisdictions.length == 0) {
+      await fetchBloomJurisdictionsByName()
+    }
+    return bloomJurisdictions.find((jurisdiction) => jurisdiction.id == jurisdictionId)
+  } catch (error) {
+    console.log("error = ", error)
+  }
+
+  return jurisdiction
 }
 
 export async function fetchJurisdictionByName() {

@@ -60,6 +60,7 @@ module.exports = withBundleAnalyzer(
       // start Doorway env variables
       listingsWithExternalServiceUrl: BACKEND_API_BASE + BLOOM_LISTINGS_QUERY,
       bloomJurisdictionsUrl: process.env.BLOOM_API_BASE + process.env.BLOOM_JURISDICTIONS_QUERY,
+      bloomApiBase: process.env.BLOOM_API_BASE,
       bloomJurisdictionNames: BLOOM_JURISDICTION_NAMES,
     },
     i18n: {

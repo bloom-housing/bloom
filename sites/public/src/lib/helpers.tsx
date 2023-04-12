@@ -16,6 +16,7 @@ import {
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
+import { ListingWithSourceMetadata } from "../../types/ListingWithSourceMetadata"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -106,7 +107,7 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   }
 }
 
-export const getListings = (listings) => {
+export const getListings = (listings: ListingWithSourceMetadata[]) => {
   const unitSummariesHeaders = {
     unitType: "t.unitType",
     minimumIncome: "t.minimumIncome",
@@ -129,7 +130,14 @@ export const getListings = (listings) => {
     }
     return null
   }
-  return listings.map((listing: Listing, index) => {
+
+  return listings.map((listing: ListingWithSourceMetadata, index) => {
+    let uri: string
+    if (listing.isBloomListing) {
+      uri = `/listing/ext/${listing.id}`
+    } else {
+      uri = `/listing/${listing.id}/${listing.urlSlug}`
+    }
     return (
       <ListingCard
         key={index}
@@ -155,14 +163,14 @@ export const getListings = (listings) => {
         footerButtons={[
           {
             text: t("t.seeDetails"),
-            href: `/listing/${listing.id}/${listing.urlSlug}`,
+            href: uri,
             ariaHidden: true,
           },
         ]}
         contentProps={{
           contentHeader: {
             content: listing.name,
-            href: `/listing/${listing.id}/${listing.urlSlug}`,
+            href: uri,
           },
           contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
           tableHeader: generateTableSubHeader(listing),
