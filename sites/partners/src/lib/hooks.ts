@@ -48,7 +48,7 @@ export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingId && listingsService.retrieve({ id: listingId })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/listings/${listingId}`, fetcher)
 
   return {
     listingDto: data,
@@ -108,7 +108,7 @@ export function useListingsData({
 
   const paramsString = qs.stringify(params)
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/listings?${paramsString}`, fetcher)
 
   return {
     listingDtos: data,
@@ -119,7 +119,7 @@ export function useListingsData({
 
 export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
-  const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
+  const backendSingleApplicationsEndpointUrl = `/api/adapter/applications/${applicationId}`
 
   const fetcher = () => applicationsService.retrieve({ id: applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
@@ -151,7 +151,7 @@ export function useFlaggedApplicationsList({
 
   const paramString = qs.stringify(params)
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${paramString}`
+  const endpoint = `/api/adapter/applicationFlaggedSets?${paramString}`
 
   const fetcher = () => applicationFlaggedSetsService.list(params)
 
@@ -190,7 +190,7 @@ export function useApplicationsData(
 
   const paramsString = qs.stringify(params)
 
-  const endpoint = `${process.env.backendApiBase}/applications?${paramsString}`
+  const endpoint = `/api/adapter/applications?${paramsString}`
 
   const fetcher = () => applicationsService.list(params)
   const { data, error } = useSWR(endpoint, fetcher)
@@ -216,9 +216,7 @@ export function useFlaggedApplicationsMeta(listingId: string) {
   const queryParams = new URLSearchParams()
   queryParams.append("listingId", listingId)
 
-  const endpoint = `${
-    process.env.backendApiBase
-  }/applicationFlaggedSetsMeta?${queryParams.toString()}`
+  const endpoint = `/api/adapter/applicationFlaggedSetsMeta?${queryParams.toString()}`
 
   const fetcher = () => applicationFlaggedSetsService.meta(params)
 
@@ -238,7 +236,7 @@ export function useSingleFlaggedApplication(afsId: string) {
       afsId,
     })
 
-  const cacheKey = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
+  const cacheKey = `/api/adapter/applicationFlaggedSets/${afsId}`
 
   const { data, error } = useSWR(cacheKey, fetcher)
 
@@ -254,7 +252,7 @@ export function useSingleAmiChartData(amiChartId: string) {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.retrieve({ amiChartId })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/amiCharts/${amiChartId}`, fetcher)
 
   return {
     data,
@@ -266,7 +264,7 @@ export function useAmiChartList(jurisdiction: string) {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.list({ jurisdictionId: jurisdiction })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${jurisdiction}`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/amiCharts/${jurisdiction}`, fetcher)
 
   return {
     data,
@@ -279,7 +277,7 @@ export function useSingleAmiChart(amiChartId: string) {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.retrieve({ amiChartId })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/amiCharts/${amiChartId}`, fetcher)
 
   return {
     data,
@@ -292,10 +290,7 @@ export function useUnitPriorityList() {
   const { unitPriorityService } = useContext(AuthContext)
   const fetcher = () => unitPriorityService.list()
 
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/unitAccessibilityPriorityTypes`,
-    fetcher
-  )
+  const { data, error } = useSWR(`/api/adapter/unitAccessibilityPriorityTypes`, fetcher)
 
   return {
     data,
@@ -308,7 +303,7 @@ export function useUnitTypeList() {
   const { unitTypesService } = useContext(AuthContext)
   const fetcher = () => unitTypesService.list()
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/unitTypes`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/unitTypes`, fetcher)
 
   const sortedData = data?.sort((a, b) => a.numBedrooms - b.numBedrooms)
 
@@ -326,10 +321,7 @@ export function useJurisdiction(jurisdictionId: string) {
       jurisdictionId,
     })
 
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/jurisdictions/${jurisdictionId}`,
-    fetcher
-  )
+  const { data, error } = useSWR(`/api/adapter/jurisdictions/${jurisdictionId}`, fetcher)
 
   return {
     data,
@@ -342,7 +334,7 @@ export function useMultiselectQuestionList() {
   const { multiselectQuestionsService } = useContext(AuthContext)
   const fetcher = () => multiselectQuestionsService.list()
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/multiselectQuestions`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/multiselectQuestions`, fetcher)
 
   return {
     data,
@@ -375,7 +367,7 @@ export function useJurisdictionalMultiselectQuestionList(
 
   const fetcher = () => multiselectQuestionsService.list(params)
 
-  const cacheKey = `${process.env.backendApiBase}/multiselectQuestions/list?${paramsString}`
+  const cacheKey = `/api/adapter/multiselectQuestions/list?${paramsString}`
 
   const { data, error } = useSWR(cacheKey, fetcher)
 
@@ -396,7 +388,7 @@ export function useListingsMultiselectQuestionList(multiselectQuestionId: string
     })
 
   const { data, error } = useSWR(
-    `${process.env.backendApiBase}/muliselectQuestions/listings/${multiselectQuestionId}`,
+    `/api/adapter/muliselectQuestions/listings/${multiselectQuestionId}`,
     fetcher
   )
 
@@ -411,7 +403,7 @@ export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/reservedCommunityTypes`, fetcher)
+  const { data, error } = useSWR(`/api/adapter/reservedCommunityTypes`, fetcher)
 
   return {
     data,
@@ -445,7 +437,7 @@ export function useUserList({ page, limit, search = "" }: UseUserListProps) {
 
   const fetcher = () => userService.list(params)
 
-  const cacheKey = `${process.env.backendApiBase}/user/list?${paramsString}`
+  const cacheKey = `/api/adapter/user/list?${paramsString}`
 
   const { data, error } = useSWR(cacheKey, fetcher)
 
