@@ -14,7 +14,7 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { fieldHasError } from "../../../../lib/helpers"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
 
 /**
  *
@@ -36,7 +36,7 @@ const ListingPhoto = () => {
     id: "",
     url: "",
   })
-  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+  const fileService: FileServiceInterface = new FileServiceProvider().getService()
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -104,7 +104,7 @@ const ListingPhoto = () => {
   if (listingFormPhoto?.image?.fileId && listingFormPhoto.image.fileId != "") {
     const listingPhotoUrl = listingFormPhoto.image.fileId.match(/https?:\/\//)
       ? listingFormPhoto.image.fileId
-      : cloudinaryFileService.getDownloadUrlForPhoto(listingFormPhoto.image.fileId)
+      : fileService.getDownloadUrlForPhoto(listingFormPhoto.image.fileId)
 
     listingPhotoTableRows.push({
       preview: {
@@ -152,14 +152,14 @@ const ListingPhoto = () => {
     const setProgressValueCallback = (value: number) => {
       setProgressValue(value)
     }
-    const generatedId = await cloudinaryFileService.putFile(
+    const generatedId = await fileService.putFile(
       "cloudinaryBuilding",
       file,
       setProgressValueCallback
     )
     setCloudinaryData({
       id: generatedId,
-      url: cloudinaryFileService.getDownloadUrlForPhoto(generatedId),
+      url: fileService.getDownloadUrlForPhoto(generatedId),
     })
   }
 

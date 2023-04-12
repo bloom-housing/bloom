@@ -1,2 +1,2 @@
-export * from "./src/files/cloudinary-file.service"
-export * from "./src/files/cloudinary-file-uploader"
+export * from "./src/files/file-service.provider"
+export * from "./src/files/file-service.interface"

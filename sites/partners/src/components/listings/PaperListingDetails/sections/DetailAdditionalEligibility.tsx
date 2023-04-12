@@ -9,11 +9,11 @@ import {
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceInterface, FileServiceProvider } from "@bloom-housing/shared-services"
 
 const DetailAdditionalEligibility = () => {
   const listing = useContext(ListingContext)
-  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+  const fileService: FileServiceInterface = new FileServiceProvider().getService()
 
   return (
     <GridSection
@@ -65,7 +65,7 @@ const DetailAdditionalEligibility = () => {
                         <TableThumbnail>
                           <img
                             alt="PDF preview"
-                            src={cloudinaryFileService.getDownloadUrlForPhoto(
+                            src={fileService.getDownloadUrlForPhoto(
                               listing.buildingSelectionCriteriaFile.fileId
                             )}
                           />

@@ -16,7 +16,7 @@ import {
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -36,7 +36,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     id: "",
     url: "",
   })
-  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+  const fileService: FileServiceInterface = new FileServiceProvider().getService()
 
   const listingEvents = watch("events")
   const uploadedPDF = listingEvents.find(
@@ -46,7 +46,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
   useEffect(() => {
     if (uploadedPDF) {
       setCloudinaryData({
-        url: cloudinaryFileService.getDownloadUrlForPhoto(uploadedPDF.file?.fileId),
+        url: fileService.getDownloadUrlForPhoto(uploadedPDF.file?.fileId),
         id: uploadedPDF.id,
       })
       // Don't allow a new one to be uploaded if one already exists so setting progress to 100%
@@ -136,14 +136,10 @@ const LotteryResults = (props: LotteryResultsProps) => {
     const setProgressValueCallback = (value: number) => {
       setProgressValue(value)
     }
-    const generatedId = await cloudinaryFileService.putFile(
-      "cloudinaryPDF",
-      file,
-      setProgressValueCallback
-    )
+    const generatedId = await fileService.putFile("cloudinaryPDF", file, setProgressValueCallback)
     setCloudinaryData({
       id: generatedId,
-      url: cloudinaryFileService.getDownloadUrlForPhoto(generatedId),
+      url: fileService.getDownloadUrlForPhoto(generatedId),
     })
   }
 

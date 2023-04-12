@@ -7,7 +7,7 @@ import {
   TableThumbnail,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceInterface, FileServiceProvider } from "@bloom-housing/shared-services"
 
 const DetailListingPhoto = () => {
   const listing = useContext(ListingContext)
@@ -21,12 +21,12 @@ const DetailListingPhoto = () => {
     listingFormPhoto = { ordinal: 0, image: { fileId: asset.fileId, label: asset.label } }
   }
 
-  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+  const fileService: FileServiceInterface = new FileServiceProvider().getService()
   const urlTest = new RegExp(/https?:\/\//)
   const listingPhotoUrl = listingFormPhoto?.image
     ? urlTest.test(listingFormPhoto.image.fileId)
       ? listingFormPhoto.image.fileId
-      : cloudinaryFileService.getDownloadUrlForPhoto(listingFormPhoto.image.fileId)
+      : fileService.getDownloadUrlForPhoto(listingFormPhoto.image.fileId)
     : null
 
   const photoTableHeaders = {

@@ -10,10 +10,10 @@ export class CloudinaryFileUploader {
    */
   public async uploadCloudinaryFile(
     file: File,
-    setProgressValue: (value: number) => void
+    setProgressValue: (value: number) => void,
+    cloudName: string,
+    uploadPreset: string
   ): Promise<string> {
-    const cloudName = process.env.cloudinaryCloudName || ""
-    const uploadPreset = process.env.cloudinarySignedPreset || ""
     setProgressValue(1)
     const timestamp = Math.round(new Date().getTime() / 1000)
     const tag = "browser_upload"

@@ -15,7 +15,7 @@ import {
   StandardTableData,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
 
 const LotteryResults = () => {
   const formMethods = useFormContext()
@@ -36,7 +36,7 @@ const LotteryResults = () => {
     id: "",
     url: "",
   })
-  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+  const fileService: FileServiceInterface = new FileServiceProvider().getService()
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -110,7 +110,7 @@ const LotteryResults = () => {
   */
   const criteriaTableRows: StandardTableData = []
   if (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "") {
-    const listingPhotoUrl = cloudinaryFileService.getDownloadUrlForPhoto(listingCriteriaFile.fileId)
+    const listingPhotoUrl = fileService.getDownloadUrlForPhoto(listingCriteriaFile.fileId)
 
     criteriaTableRows.push({
       preview: {
@@ -192,14 +192,10 @@ const LotteryResults = () => {
     const setProgressValueCallback = (value: number) => {
       setProgressValue(value)
     }
-    const generatedId = await cloudinaryFileService.putFile(
-      "cloudinaryPDF",
-      file,
-      setProgressValueCallback
-    )
+    const generatedId = await fileService.putFile("cloudinaryPDF", file, setProgressValueCallback)
     setCloudinaryData({
       id: generatedId,
-      url: cloudinaryFileService.getDownloadUrlForPhoto(generatedId),
+      url: fileService.getDownloadUrlForPhoto(generatedId),
     })
   }
 

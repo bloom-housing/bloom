@@ -58,7 +58,7 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
 
 interface ListingProps {
   listing: Listing
@@ -73,7 +73,7 @@ export const ListingView = (props: ListingProps) => {
     content: appStatusContent,
     subContent: appStatusSubContent,
   } = useGetApplicationStatusProps(listing)
-  const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+  const fileService: FileServiceInterface = new FileServiceProvider().getService()
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -150,9 +150,7 @@ export const ListingView = (props: ListingProps) => {
     buildingSelectionCriteria = (
       <p>
         <a
-          href={cloudinaryFileService.getDownloadUrlForPdf(
-            listing.buildingSelectionCriteriaFile.fileId
-          )}
+          href={fileService.getDownloadUrlForPdf(listing.buildingSelectionCriteriaFile.fileId)}
           className={"text-blue-700"}
         >
           {t("listings.moreBuildingSelectionCriteria")}
@@ -327,7 +325,7 @@ export const ListingView = (props: ListingProps) => {
           return {
             fileURL: paperApp?.file?.fileId.includes("https")
               ? paperApp?.file?.fileId
-              : cloudinaryFileService.getDownloadUrlForPdf(paperApp?.file?.fileId || ""),
+              : fileService.getDownloadUrlForPdf(paperApp?.file?.fileId || ""),
             languageString: t(`languages.${paperApp.language}`),
           }
         }) ?? null

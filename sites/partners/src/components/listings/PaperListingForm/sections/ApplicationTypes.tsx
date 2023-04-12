@@ -25,7 +25,7 @@ import {
   Language,
 } from "@bloom-housing/backend-core/types"
 import { FormListing } from "../../../../lib/listings/formTypes"
-import { CloudinaryFileService, CloudinaryFileUploader } from "@bloom-housing/shared-services"
+import { FileServiceInterface, FileServiceProvider } from "@bloom-housing/shared-services"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -104,18 +104,14 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    const cloudinaryFileService = new CloudinaryFileService(new CloudinaryFileUploader())
+    const fileService: FileServiceInterface = new FileServiceProvider().getService()
     const setProgressValueCallback = (value: number) => {
       setProgressValue(value)
     }
-    const generatedId = await cloudinaryFileService.putFile(
-      selectedLanguage,
-      file,
-      setProgressValueCallback
-    )
+    const generatedId = await fileService.putFile(selectedLanguage, file, setProgressValueCallback)
     setCloudinaryData({
       id: generatedId,
-      url: cloudinaryFileService.getDownloadUrlForPdf(generatedId),
+      url: fileService.getDownloadUrlForPdf(generatedId),
     })
   }
 

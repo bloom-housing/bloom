@@ -6,15 +6,15 @@ afterEach(cleanup)
 
 describe("pdfs helpers", () => {
   const OLD_ENV = process.env
-  process.env.CLOUDINARY_CLOUD_NAME = "exygy"
+  process.env.cloudinaryCloudName = "exygy"
 
   afterAll(() => {
     process.env = OLD_ENV
   })
 
   it("should format cloudinary url", () => {
-    expect(cloudinaryPdfFromId("1234")).toBe(
-      `https://res.cloudinary.com/exygy/image/upload/1234.pdf`
+    expect(cloudinaryPdfFromId("1234", "test")).toBe(
+      `https://res.cloudinary.com/test/image/upload/1234.pdf`
     )
   })
 

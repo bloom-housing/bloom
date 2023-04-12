@@ -6,26 +6,19 @@ afterEach(cleanup)
 
 describe("photos helper", () => {
   const OLD_ENV = process.env
-
-  beforeEach(() => {
-    jest.resetModules()
-    process.env = { ...OLD_ENV }
-  })
+  process.env.cloudinaryCloudName = "exygy"
 
   afterAll(() => {
     process.env = OLD_ENV
   })
 
   it("should return correct cloudinary url", () => {
-    process.env.CLOUDINARY_CLOUD_NAME = "exygy"
-    expect(cloudinaryUrlFromId("1234")).toBe(
-      `https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/1234.jpg`
+    expect(cloudinaryUrlFromId("1234", "test")).toBe(
+      `https://res.cloudinary.com/test/image/upload/w_400,c_limit,q_65/1234.jpg`
     )
   })
 
   it("should return correct cloudinary url from a listing with new image field", () => {
-    process.env.CLOUDINARY_CLOUD_NAME = "exygy"
-
     const testListing = {
       images: [
         {
@@ -44,8 +37,6 @@ describe("photos helper", () => {
   })
 
   it("should return correct id when falling back to old field", () => {
-    process.env.CLOUDINARY_CLOUD_NAME = "exygy"
-
     const testListing = {
       assets: [
         {
