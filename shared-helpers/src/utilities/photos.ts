@@ -35,5 +35,5 @@ export const imageUrlFromListing = (listing: Listing, size = 400): string[] => {
         : asset.fileId
     })
 
-  return imageUrls
+  return imageUrls?.length > 0 ? imageUrls : [""]
 }
