@@ -89,8 +89,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/core": "^7.21.3",
+    "@babel/plugin-proposal-decorators": "^7.21.0",
     "@nestjs/schematics": "^8.0.7",
     "@nestjs/testing": "^8.3.1",
     "@types/axios": "^0.14.0",

@@ -202,7 +202,7 @@ export default () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

@@ -82,7 +82,7 @@ const ApplicationSummary = () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-summary-confirm"}>
+              <Button styleType={AppearanceStyleType.primary} data-testid={"app-summary-confirm"}>
                 {t("t.confirm")}
               </Button>
             </Form>

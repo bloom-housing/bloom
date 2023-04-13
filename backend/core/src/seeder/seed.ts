@@ -343,6 +343,7 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [bayAreaJurisdiction],
+      agreedToTermsOfService: true,
     })
   )
   await userRepo.save(bayAreaAdmin)

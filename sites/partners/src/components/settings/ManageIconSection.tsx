@@ -15,7 +15,7 @@ const ManageIconSection = (props: IconContentProps) => {
   return (
     <div className={"flex justify-end"}>
       <div className={"w-max"}>
-        <button onClick={props.onEdit} aria-label={"Edit"} data-test-id={props.editTestId}>
+        <button onClick={props.onEdit} aria-label={"Edit"} data-testid={props.editTestId}>
           <Icon
             symbol={faPenToSquare}
             size={"medium"}
@@ -23,7 +23,7 @@ const ManageIconSection = (props: IconContentProps) => {
             className={"mr-5"}
           />
         </button>
-        <button onClick={props.onCopy} aria-label={"Copy"} data-test-id={props.copyTestId}>
+        <button onClick={props.onCopy} aria-label={"Copy"} data-testid={props.copyTestId}>
           <Icon
             symbol={faClone}
             size={"medium"}
@@ -32,7 +32,7 @@ const ManageIconSection = (props: IconContentProps) => {
           />
         </button>
         {props.onDelete && (
-          <button onClick={props.onDelete} aria-label={"Delete"} data-test-id={props.deleteTestId}>
+          <button onClick={props.onDelete} aria-label={"Delete"} data-testid={props.deleteTestId}>
             <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
           </button>
         )}

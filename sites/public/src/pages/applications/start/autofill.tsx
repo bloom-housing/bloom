@@ -122,14 +122,14 @@ export default () => {
           hidePrograms={true}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager" data-test-id={"application-initial-page"}>
+          <div className="form-card__pager" data-testid={"application-initial-page"}>
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => {
                   useDetails = true
                 }}
-                data-test-id={"autofill-accept"}
+                data-testid={"autofill-accept"}
               >
                 {t("application.autofill.start")}
               </Button>

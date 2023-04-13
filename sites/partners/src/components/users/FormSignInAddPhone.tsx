@@ -73,7 +73,7 @@ const FormSignInAddPhone = ({
           <div className="text-center mt-10">
             <Button
               styleType={AppearanceStyleType.primary}
-              data-test-id="request-mfa-code-and-add-phone"
+              data-testid="request-mfa-code-and-add-phone"
             >
               {t("nav.signInMFA.addPhoneNumber")}
             </Button>

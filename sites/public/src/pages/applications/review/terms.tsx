@@ -198,7 +198,7 @@ const ApplicationTerms = () => {
                 loading={submitting}
                 styleType={AppearanceStyleType.primary}
                 type="submit"
-                data-test-id={"app-terms-submit-button"}
+                data-testid={"app-terms-submit-button"}
               >
                 {t("t.submit")}
               </Button>
