@@ -29,6 +29,7 @@
     "@bloom-housing/backend-core": "^7.13.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "^12.0.2",
+    "@bloom-housing/ui-seeds": "^1.2.1",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
@@ -79,5 +80,10 @@
     "sass-loader": "^10.0.3",
     "typescript": "4.6.4",
     "webpack": "^5.69.1"
+  },
+  "prettier": {
+    "singleQuote": false,
+    "printWidth": 100,
+    "semi": false
   }
 }

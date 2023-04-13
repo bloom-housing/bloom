@@ -3,11 +3,11 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  ErrorMessage,
   Field,
   Form,
   FormCard,
@@ -512,13 +512,11 @@ const ApplicationAddress = () => {
                   }}
                   dataTestId={"app-primary-work-in-region-no"}
                 />
-
-                <ErrorMessage
-                  id="applicant.workInRegion-error"
-                  error={errors.applicant?.workInRegion}
-                >
-                  {t("errors.selectOption")}
-                </ErrorMessage>
+                {errors?.applicant?.workInRegion && (
+                  <FormErrorMessage id="applicant.workInRegion-error">
+                    {t("errors.selectOption")}
+                  </FormErrorMessage>
+                )}
               </fieldset>
 
               {(workInRegion == "yes" ||
