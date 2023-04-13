@@ -79,6 +79,11 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
       const event = {
         ...currentEvent,
         startTime: createTime(createDate(data.date), data.startTime),
+        startDate: createTime(createDate(data.date), {
+          hours: "12",
+          minutes: "00",
+          period: "pm",
+        }),
         endTime: createTime(createDate(data.date), data.endTime),
         label: data.label,
         url: data.url,
