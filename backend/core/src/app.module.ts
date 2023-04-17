@@ -46,7 +46,9 @@ export function applicationSetup(app: INestApplication) {
       credentials: true,
       origin: false,
     }
+    console.log("origin", req.header("Origin"))
     if (allowList.indexOf(req.header("Origin")) !== -1) {
+      console.log("accepted header", req.header("Origin"))
       options.origin = true
     }
     cb(null, options)
