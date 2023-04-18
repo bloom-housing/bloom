@@ -6,17 +6,23 @@ To achieve that an NGINX proxy has been created and set up as an entrypoint to t
 ### Running Locally with Docker Desktop
 
 # make sure Docker Desktop is started
+
 # build the image: `docker build --pull --rm -f "backend/proxy/Dockerfile" -t bloom:latest "backend/proxy"`
+
 # In the Docker Desktop Dashboard, go to "Images", find the image and click "Run" (play button)
+
 # Configure Optional Settings before running:
-  # Ports -> Host Port: 9000
-  # Envinronment Variables: 
+
+# Ports -> Host Port: 9000
+
+# Environment Variables:
+
     - PORT: 80
     - BACKEND_HOSTNAME: [Your local IP]:3100 (e.g. 192.168.86.231:3100)
     - PROTOCOL: http
     - ALLOW_LIST: localhost:3000|localhost:3001
-  # Run and you should be able to access listings at http://localhost:9000/listings
 
+# Run and you should be able to access listings at http://localhost:9000/listings
 
 ### Setup
 
@@ -46,6 +52,8 @@ Now you can sign into Container Registry.
 $ heroku container:login
 ```
 
+_Note_ if you are using an Apple M1 device the following steps will not work. You will have to do the following: https://stackoverflow.com/a/67001433
+
 Push your Docker-based app
 Build the Dockerfile in the current directory and push the Docker image.
 
@@ -64,7 +72,6 @@ $ heroku container:release --app bloom-reference-backend-proxy web
 #### Configuration
 
 Heroku Proxy app requires four environment variables to work:
-
 
 PORT: 443
 BACKEND_HOSTNAME: bloom-backend-orm.herokuapp.com
