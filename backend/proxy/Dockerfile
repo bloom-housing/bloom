@@ -1,4 +1,4 @@
-FROM nginx:1.11
+FROM nginx:1.24.0
 
 MAINTAINER David Galoyan <davojan@gmail.com>
 
@@ -44,4 +44,4 @@ RUN cd /tmp/nginx && \
 
 ENV PROTOCOL=https
 
-CMD /bin/bash -c "envsubst '\$PORT,\$BACKEND_HOSTNAME,\$PROTOCOL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && envsubst '\$PORT,\$BACKEND_HOSTNAME,\$PROTOCOL' < /etc/nginx/conf.d/shared-location.conf.template > /etc/nginx/shared-location.conf" && nginx -g 'daemon off;'
+CMD /bin/bash -c "envsubst '\$PORT,\$BACKEND_HOSTNAME,\$PROTOCOL,\$ALLOW_LIST' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && envsubst '\$PORT,\$BACKEND_HOSTNAME,\$PROTOCOL,\$ALLOW_LIST' < /etc/nginx/conf.d/shared-location.conf.template > /etc/nginx/shared-location.conf" && nginx -g 'daemon off;'
