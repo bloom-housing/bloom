@@ -178,7 +178,8 @@ export class ListingsService {
       .createQueryBuilder("user")
       .select("user.id")
       .leftJoin("user.roles", "userRole")
-      .where("user.id = :id", { id: this.req.user?.id })
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      .where("user.id = :id", { id: (this.req.user as User)?.id })
       .andWhere("userRole.is_admin = :is_admin", { is_admin: true })
       .getOne()
 
