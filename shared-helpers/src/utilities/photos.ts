@@ -10,7 +10,7 @@ export const imageUrlFromListing = (listing: Listing, size = 400) => {
   const imageAssets =
     listing?.images?.length && listing.images[0].image ? [listing.images[0].image] : listing?.assets
 
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   // Fallback to `assets`
   const cloudinaryBuilding = imageAssets?.find(

@@ -73,7 +73,7 @@ export const ListingView = (props: ListingProps) => {
     content: appStatusContent,
     subContent: appStatusSubContent,
   } = useGetApplicationStatusProps(listing)
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods

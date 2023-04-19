@@ -36,7 +36,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     id: "",
     url: "",
   })
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   const listingEvents = watch("events")
   const uploadedPDF = listingEvents.find(

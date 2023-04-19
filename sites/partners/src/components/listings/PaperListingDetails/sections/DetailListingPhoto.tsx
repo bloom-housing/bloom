@@ -21,7 +21,7 @@ const DetailListingPhoto = () => {
     listingFormPhoto = { ordinal: 0, image: { fileId: asset.fileId, label: asset.label } }
   }
 
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
   const urlTest = new RegExp(/https?:\/\//)
   const listingPhotoUrl = listingFormPhoto?.image
     ? urlTest.test(listingFormPhoto.image.fileId)

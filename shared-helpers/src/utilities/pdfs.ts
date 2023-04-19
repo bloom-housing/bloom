@@ -10,7 +10,7 @@ export const pdfUrlFromListingEvents = (
   listingEventType: ListingEventType
 ) => {
   const event = events.find((event) => event?.type === listingEventType)
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
   if (event) {
     return event.file?.label == "cloudinaryPDF"
       ? fileService.getDownloadUrlForPdf(event.file.fileId)

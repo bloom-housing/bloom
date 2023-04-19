@@ -2,13 +2,13 @@ import { Injectable } from "@nestjs/common"
 import { cloudinaryPdfFromId, cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { FileServiceInterface } from "./file-service.interface"
 import { CloudinaryFileUploader } from "./cloudinary-file-uploader"
-import { CloudinaryConfig } from "./file-config"
+import { CloudinaryFileServiceConfig } from "./file-service-config"
 
 @Injectable()
 export class CloudinaryFileService implements FileServiceInterface {
   constructor(
     private readonly cloudinaryFileUploader: CloudinaryFileUploader,
-    private readonly cloudinaryConfig: CloudinaryConfig
+    private readonly cloudinaryFileServiceConfig: CloudinaryFileServiceConfig
   ) {}
 
   async putFile(
@@ -19,15 +19,15 @@ export class CloudinaryFileService implements FileServiceInterface {
     const id = await this.cloudinaryFileUploader.uploadCloudinaryFile(
       file,
       setProgressValue,
-      this.cloudinaryConfig.cloudinaryCloudName,
-      this.cloudinaryConfig.cloudinaryUploadPreset
+      this.cloudinaryFileServiceConfig.cloudinaryCloudName,
+      this.cloudinaryFileServiceConfig.cloudinaryUploadPreset
     )
     return id
   }
   getDownloadUrlForPhoto(id: string, size = 400): string {
-    return cloudinaryUrlFromId(id, this.cloudinaryConfig.cloudinaryCloudName, size)
+    return cloudinaryUrlFromId(id, this.cloudinaryFileServiceConfig.cloudinaryCloudName, size)
   }
   getDownloadUrlForPdf(id: string): string {
-    return cloudinaryPdfFromId(id, this.cloudinaryConfig.cloudinaryCloudName)
+    return cloudinaryPdfFromId(id, this.cloudinaryFileServiceConfig.cloudinaryCloudName)
   }
 }

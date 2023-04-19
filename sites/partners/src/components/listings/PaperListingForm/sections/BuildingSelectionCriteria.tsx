@@ -36,7 +36,7 @@ const LotteryResults = () => {
     id: "",
     url: "",
   })
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({

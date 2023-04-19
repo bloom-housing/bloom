@@ -13,7 +13,7 @@ import { FileServiceInterface, FileServiceProvider } from "@bloom-housing/shared
 
 const DetailAdditionalEligibility = () => {
   const listing = useContext(ListingContext)
-  const fileService: FileServiceInterface = new FileServiceProvider().getService()
+  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   return (
     <GridSection

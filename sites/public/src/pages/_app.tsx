@@ -17,6 +17,11 @@ import ApplicationConductor, {
 } from "../lib/applications/ApplicationConductor"
 import { translations, overrideTranslations } from "../lib/translations"
 import LinkComponent from "../components/core/LinkComponent"
+import {
+  FileProviderConfig,
+  FileServiceProvider,
+  FileServiceTypeEnum,
+} from "@bloom-housing/shared-services"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
@@ -27,6 +32,25 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   const [savedListing, setSavedListing] = useState(() => {
     return loadSavedListing()
   })
+
+  const fileProviderConfig: FileProviderConfig = {
+    publicService: {
+      fileServiceType: FileServiceTypeEnum.cloudinary,
+      cloudinaryConfig: {
+        cloudinaryCloudName: process.env.cloudinaryCloudName || "",
+        cloudinaryUploadPreset: process.env.cloudinarySignedPreset || "",
+      },
+    },
+    privateService: {
+      fileServiceType: FileServiceTypeEnum.cloudinary,
+      cloudinaryConfig: {
+        cloudinaryCloudName: process.env.cloudinaryCloudName || "",
+        cloudinaryUploadPreset: process.env.cloudinarySignedPreset || "",
+      },
+    },
+  }
+
+  FileServiceProvider.configure(fileProviderConfig)
 
   const conductor = useMemo(() => {
     return new ApplicationConductor(application, savedListing)

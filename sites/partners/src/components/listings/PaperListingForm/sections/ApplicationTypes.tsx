@@ -104,7 +104,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    const fileService: FileServiceInterface = new FileServiceProvider().getService()
+    const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
     const setProgressValueCallback = (value: number) => {
       setProgressValue(value)
     }
