@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.13.0...@bloom-housing/partners@7.13.1) (2023-04-10)
+
+
+### Bug Fixes
+
+* react type errors ([#3382](https://github.com/bloom-housing/bloom/issues/3382)) ([ed572ce](https://github.com/bloom-housing/bloom/commit/ed572ce40d3e02927a0b076e28dffd9172fbd07b))
+
+
+
+
+
+# [7.13.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.12.0...@bloom-housing/partners@7.13.0) (2023-04-07)
+
+
+### Features
+
+* changing auth over to cookies ([#3357](https://github.com/bloom-housing/bloom/issues/3357)) ([cd03929](https://github.com/bloom-housing/bloom/commit/cd039293346032c7846e7e19ba3cba79a8b094e1))
+
+
+
+
+
+# [7.12.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.11.1...@bloom-housing/partners@7.12.0) (2023-04-03)
+
+
+### Features
+
+* upgrade nextjs to 13 ([#3375](https://github.com/bloom-housing/bloom/issues/3375)) ([c71ec15](https://github.com/bloom-housing/bloom/commit/c71ec15859fc8bbd4bcdba1ce9988d2dac7c2b0c))
+
+
+
+
+
+## [7.11.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.11.0...@bloom-housing/partners@7.11.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* program/preference keys length uncap ([#3376](https://github.com/bloom-housing/bloom/issues/3376)) ([af64287](https://github.com/bloom-housing/bloom/commit/af64287d9f218ef223a9fe6020c9a49c248e323d))
+
+
+
+
+
+# [7.11.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.10.1...@bloom-housing/partners@7.11.0) (2023-03-31)
+
+
+### Features
+
+* upgrade react to 18 ([#3360](https://github.com/bloom-housing/bloom/issues/3360)) ([e59111d](https://github.com/bloom-housing/bloom/commit/e59111d292202c97d9c0936254c9e96269fbc229))
+
+
+
+
+
+## [7.10.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.10.0...@bloom-housing/partners@7.10.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* user export fixes ([#3371](https://github.com/bloom-housing/bloom/issues/3371)) ([2068f9c](https://github.com/bloom-housing/bloom/commit/2068f9cb1f7f62d2b73fea1506d501772613c096))
+
+
+
+
+
 # [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@7.9.1...@bloom-housing/partners@7.10.0) (2023-03-23)
 
 

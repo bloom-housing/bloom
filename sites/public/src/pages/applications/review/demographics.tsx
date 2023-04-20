@@ -162,7 +162,7 @@ const ApplicationDemographics = () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-next-step-button"}>
+              <Button styleType={AppearanceStyleType.primary} data-testid={"app-next-step-button"}>
                 {t("t.next")}
               </Button>
             </div>

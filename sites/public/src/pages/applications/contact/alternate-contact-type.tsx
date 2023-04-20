@@ -3,11 +3,11 @@
 Type of alternate contact
 */
 import React, { Fragment, useContext, useEffect } from "react"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  ErrorMessage,
   Field,
   Form,
   FormCard,
@@ -137,9 +137,13 @@ const ApplicationAlternateContactType = () => {
                       />
                     )}
                     {i === altContactRelationshipKeys.length - 1 && (
-                      <ErrorMessage id="type-error" error={errors.type}>
-                        {t("application.alternateContact.type.validationErrorMessage")}
-                      </ErrorMessage>
+                      <>
+                        {errors.type && (
+                          <FormErrorMessage id="type-error">
+                            {t("application.alternateContact.type.validationErrorMessage")}
+                          </FormErrorMessage>
+                        )}
+                      </>
                     )}
                   </Fragment>
                 )
@@ -151,7 +155,7 @@ const ApplicationAlternateContactType = () => {
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => conductor.setNavigatedBack(false)}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

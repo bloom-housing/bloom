@@ -12,6 +12,7 @@ export const clearToken = (storageType: string) =>
   getStorage(storageType).removeItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY)
 
 export const getTokenTtl = (token: string) => {
-  const { exp = 0 } = jwtDecode(token)
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const { exp = 0 } = jwtDecode(token) as { exp?: number }
   return new Date(exp * 1000).valueOf() - new Date().valueOf()
 }

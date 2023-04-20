@@ -50,13 +50,13 @@ export const user = {
   email: "first.last@bloom.com",
   failedLoginAttemptsCount: 0,
   firstName: "First",
-  hitConfirmationURL: null,
+  hitConfirmationURL: undefined,
   id: "user_1",
   jurisdictions: [
     { id: "e50e64bc-4bc8-4cef-a4d1-1812add9981b" },
     { id: "d6b652a0-9947-418a-b69b-cd72028ed913" },
   ],
-  language: null,
+  language: undefined,
   lastLoginAt: new Date(),
   lastName: "Last",
   leasingAgentInListings: [],
@@ -64,7 +64,7 @@ export const user = {
   middleName: "Middle",
   passwordUpdatedAt: new Date(),
   passwordValidForDays: 180,
-  phoneNumber: null,
+  phoneNumber: undefined,
   phoneNumberVerified: false,
   roles: { user: { id: "user_1" }, isAdmin: true, isJurisdictionalAdmin: false, isPartner: false },
   updatedAt: new Date(),
@@ -80,10 +80,10 @@ export const unit: Unit = {
   maxOccupancy: 2,
   minOccupancy: 1,
   monthlyRent: "1104.0",
-  numBathrooms: null,
-  numBedrooms: null,
-  number: null,
-  priorityType: null,
+  numBathrooms: undefined,
+  numBedrooms: undefined,
+  number: undefined,
+  priorityType: undefined,
   sqFeet: "285",
 
   unitType: {
@@ -95,14 +95,14 @@ export const unit: Unit = {
   },
   createdAt: new Date("2019-07-09T21:20:05.783Z"),
   updatedAt: new Date("2019-08-14T23:05:43.913Z"),
-  monthlyRentAsPercentOfIncome: null,
+  monthlyRentAsPercentOfIncome: undefined,
 }
 
 export const jurisdiction: Jurisdiction = {
   name: "Alameda",
   notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
   languages: [EnumJurisdictionLanguages.en],
-  partnerTerms: null,
+  partnerTerms: undefined,
   publicUrl: "",
   emailFromAddress: "Alameda: Housing Bay Area <bloom-no-reply@exygy.dev>",
   rentalAssistanceDefault:
@@ -151,7 +151,7 @@ export const listing: Listing = {
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
   applicationDropOffAddress: null,
-  applicationDropOffAddressOfficeHours: null,
+  applicationDropOffAddressOfficeHours: undefined,
   applicationMailingAddress: null,
   countyCode: "San Jose",
   jurisdiction: {
@@ -237,7 +237,7 @@ export const listing: Listing = {
   smokingPolicy: "Non-smoking building",
   unitsAvailable: 0,
   unitsSummary: [],
-  unitsSummarized: undefined,
+  unitsSummarized: null,
   unitAmenities: "Dishwasher",
   developer: "Charities Housing ",
   yearBuilt: 2012,
@@ -272,10 +272,10 @@ export const listing: Listing = {
       maxOccupancy: 2,
       minOccupancy: 1,
       monthlyRent: "1104.0",
-      numBathrooms: null,
-      numBedrooms: null,
-      number: null,
-      priorityType: null,
+      numBathrooms: undefined,
+      numBedrooms: undefined,
+      number: undefined,
+      priorityType: undefined,
       sqFeet: "285",
 
       unitType: {
@@ -287,7 +287,7 @@ export const listing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.982Z"),
       updatedAt: new Date("2019-08-14T23:06:59.015Z"),
-      monthlyRentAsPercentOfIncome: null,
+      monthlyRentAsPercentOfIncome: undefined,
     },
     {
       id: "9XQrfuAPOn8wtD7HlhCTR",
@@ -299,10 +299,10 @@ export const listing: Listing = {
       maxOccupancy: 2,
       minOccupancy: 1,
       monthlyRent: "1104.0",
-      numBathrooms: null,
-      numBedrooms: null,
-      number: null,
-      priorityType: null,
+      numBathrooms: undefined,
+      numBedrooms: undefined,
+      number: undefined,
+      priorityType: undefined,
       sqFeet: "285",
 
       unitType: {
@@ -314,7 +314,7 @@ export const listing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.758Z"),
       updatedAt: new Date("2019-08-14T23:06:59.023Z"),
-      monthlyRentAsPercentOfIncome: null,
+      monthlyRentAsPercentOfIncome: undefined,
     },
     {
       id: "bamrJpZA9JmnLSMEbTlI4",
@@ -326,10 +326,10 @@ export const listing: Listing = {
       maxOccupancy: 2,
       minOccupancy: 1,
       monthlyRent: "1104.0",
-      numBathrooms: null,
-      numBedrooms: null,
-      number: null,
-      priorityType: null,
+      numBathrooms: undefined,
+      numBedrooms: undefined,
+      number: undefined,
+      priorityType: undefined,
       sqFeet: "285",
 
       unitType: {
@@ -341,7 +341,7 @@ export const listing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.766Z"),
       updatedAt: new Date("2019-08-14T23:06:59.031Z"),
-      monthlyRentAsPercentOfIncome: null,
+      monthlyRentAsPercentOfIncome: undefined,
     },
     {
       id: "BCwOFAHJDpyPbKcVBjIUM",
@@ -353,10 +353,10 @@ export const listing: Listing = {
       maxOccupancy: 2,
       minOccupancy: 1,
       monthlyRent: "1104.0",
-      numBathrooms: null,
-      numBedrooms: null,
-      number: null,
-      priorityType: null,
+      numBathrooms: undefined,
+      numBedrooms: undefined,
+      number: undefined,
+      priorityType: undefined,
       sqFeet: "285",
 
       unitType: {
@@ -369,7 +369,7 @@ export const listing: Listing = {
       createdAt: new Date("2019-08-14T22:52:08.771Z"),
       updatedAt: new Date("2019-08-14T23:06:59.039Z"),
       // amiChart: SanMateoHUD2019,
-      monthlyRentAsPercentOfIncome: null,
+      monthlyRentAsPercentOfIncome: undefined,
     },
     {
       id: "5t56gXJdJLZiksBuX8BtL",
@@ -381,10 +381,10 @@ export const listing: Listing = {
       maxOccupancy: 2,
       minOccupancy: 1,
       monthlyRent: "1104.0",
-      numBathrooms: null,
-      numBedrooms: null,
-      number: null,
-      priorityType: null,
+      numBathrooms: undefined,
+      numBedrooms: undefined,
+      number: undefined,
+      priorityType: undefined,
       sqFeet: "285",
 
       unitType: {
@@ -396,7 +396,7 @@ export const listing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.777Z"),
       updatedAt: new Date("2019-08-14T23:06:59.046Z"),
-      monthlyRentAsPercentOfIncome: null,
+      monthlyRentAsPercentOfIncome: undefined,
     },
   ],
 }

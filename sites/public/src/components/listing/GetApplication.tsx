@@ -57,7 +57,7 @@ const GetApplication = (props: ApplicationsProps) => {
   if (!showSection) return null
 
   return (
-    <section className="aside-block" data-test-id="get-application-section">
+    <section className="aside-block" data-testid="get-application-section">
       <Heading priority={2} styleType={"underlineWeighted"}>
         {props.strings?.howToApply ?? t("listings.apply.howToApply")}
       </Heading>
@@ -73,7 +73,7 @@ const GetApplication = (props: ApplicationsProps) => {
       {props.applicationsOpen && props.onlineApplicationURL && (
         <>
           {props.preview ? (
-            <Button disabled className="w-full mb-2" data-test-id={"listing-view-apply-button"}>
+            <Button disabled className="w-full mb-2" data-testid={"listing-view-apply-button"}>
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
             </Button>
           ) : (

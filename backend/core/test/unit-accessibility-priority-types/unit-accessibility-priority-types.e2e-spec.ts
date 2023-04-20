@@ -11,6 +11,7 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import dbOptions from "../../ormconfig.test"
 import { UnitAccessibilityPriorityTypesModule } from "../../src/unit-accessbility-priority-types/unit-accessibility-priority-types.module"
 import { EmailService } from "../../src/email/email.service"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -33,6 +34,7 @@ describe("UnitAccessibilityPriorityTypes", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })

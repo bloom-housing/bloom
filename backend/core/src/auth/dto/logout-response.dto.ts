@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer"
 
-export class LoginResponseDto {
+export class LogoutResponseDto {
   @Expose()
-  accessToken: string
+  success: boolean
 }

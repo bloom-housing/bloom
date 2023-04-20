@@ -3,12 +3,12 @@
 Add household members
 */
 import { useRouter } from "next/router"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
-  ErrorMessage,
   Field,
   FieldGroup,
   Form,
@@ -408,7 +408,7 @@ const ApplicationMember = () => {
                       defaultValue={member.relationship}
                       ref={register({ required: true })}
                       className="w-full"
-                      data-test-id={"app-household-member-relationship"}
+                      data-testid={"app-household-member-relationship"}
                     >
                       <FormOptions
                         options={relationshipKeys}
@@ -416,9 +416,11 @@ const ApplicationMember = () => {
                       />
                     </select>
                   </div>
-                  <ErrorMessage id="relationship-error" error={errors.relationship}>
-                    {t("errors.selectOption")}
-                  </ErrorMessage>
+                  {errors.relationship && (
+                    <FormErrorMessage id="relationship-error" className={"pt-2"}>
+                      {t("errors.selectOption")}
+                    </FormErrorMessage>
+                  )}
                 </div>
               </div>
 
@@ -427,7 +429,7 @@ const ApplicationMember = () => {
                   <Button
                     id="save-member"
                     styleType={AppearanceStyleType.primary}
-                    data-test-id={"app-household-member-save"}
+                    data-testid={"app-household-member-save"}
                   >
                     {saveText}
                   </Button>
@@ -438,7 +440,7 @@ const ApplicationMember = () => {
                     className="lined text-sm mt-0"
                     onClick={deleteMember}
                     unstyled={true}
-                    data-test-id={"app-household-member-cancel"}
+                    data-testid={"app-household-member-cancel"}
                   >
                     {cancelText}
                   </Button>

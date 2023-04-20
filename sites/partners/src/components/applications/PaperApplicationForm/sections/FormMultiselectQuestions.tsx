@@ -72,7 +72,7 @@ const FormMultiselectQuestions = ({
               register={register}
               required={true}
               stateKeys={stateKeys}
-              data-test-id={"app-question-extra-field"}
+              data-testid={"app-question-extra-field"}
             />
           </div>
         )}

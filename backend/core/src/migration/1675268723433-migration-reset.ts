@@ -448,8 +448,8 @@ export class migrationReset1675268723433 implements MigrationInterface {
         confirmMyAccount: "Confirm my account",
       },
       mfaCodeEmail: {
-        message: "Access token for your account has been requested.",
-        mfaCode: "Your access token is: %{mfaCode}",
+        message: "Access code for your account has been requested.",
+        mfaCode: "Your access code is: %{mfaCode}",
       },
       header: {
         logoUrl:

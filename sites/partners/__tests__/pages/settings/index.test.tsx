@@ -7,12 +7,13 @@ import {
   listing,
   multiselectQuestionPreference,
 } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
-import { render } from "../../testUtils"
+import { mockNextRouter, render } from "../../testUtils"
 
 const server = setupServer()
 
 beforeAll(() => {
   server.listen()
+  mockNextRouter()
 })
 
 afterEach(() => server.resetHandlers())
@@ -24,6 +25,9 @@ describe("settings", () => {
     server.use(
       rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json([]))
+      }),
+      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([multiselectQuestionPreference]))
       })
     )
 
@@ -39,6 +43,9 @@ describe("settings", () => {
   it("should render the preference table", async () => {
     server.use(
       rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([multiselectQuestionPreference]))
+      }),
+      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json([multiselectQuestionPreference]))
       })
     )
@@ -68,13 +75,19 @@ describe("settings", () => {
       rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json([multiselectQuestionPreference]))
       }),
-      rest.get("http://localhost:3100/multiselectQuestions/listings/id1", (_req, res, ctx) => {
-        return res(ctx.json([]))
+      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([multiselectQuestionPreference]))
       }),
-      rest.delete("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+      rest.get(
+        "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+        (_req, res, ctx) => {
+          return res(ctx.json([]))
+        }
+      ),
+      rest.delete("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json({}))
       }),
-      rest.options("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
+      rest.options("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json({}))
       })
     )
@@ -105,9 +118,15 @@ describe("settings", () => {
       rest.get("http://localhost:3100/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json([multiselectQuestionPreference]))
       }),
-      rest.get("http://localhost:3100/multiselectQuestions/listings/id1", (_req, res, ctx) => {
-        return res(ctx.json([listing]))
-      })
+      rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
+        return res(ctx.json([multiselectQuestionPreference]))
+      }),
+      rest.get(
+        "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+        (_req, res, ctx) => {
+          return res(ctx.json([listing]))
+        }
+      )
     )
 
     const { findByText, getByTestId, findByRole, queryAllByText, getByText } = render(<Settings />)

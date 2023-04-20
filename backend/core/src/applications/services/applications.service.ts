@@ -27,7 +27,6 @@ import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 import { ListingRepository } from "../../listings/db/listing.repository"
 import { Listing } from "../../listings/entities/listing.entity"
-import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -109,11 +108,6 @@ export class ApplicationsService {
     )
     const flags = await Promise.all(promiseArray)
     result.forEach((application, index) => {
-      if (flags[index].status) {
-        application.markedAsDuplicate = flags[index].status === ApplicationReviewStatus.duplicate
-      } else {
-        application.markedAsDuplicate = false
-      }
       application.flagged = !!flags[index].id
     })
 

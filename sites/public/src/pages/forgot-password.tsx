@@ -47,7 +47,7 @@ const ForgotPassword = () => {
   return (
     <FormsLayout>
       <FormForgotPassword
-        onSubmit={onSubmit}
+        onSubmit={(data) => void onSubmit(data)}
         control={{ register, errors, handleSubmit }}
         networkError={{
           error: networkError,

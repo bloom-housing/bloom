@@ -755,7 +755,7 @@ export class AuthService {
       body?: Login
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/auth/login"
 
@@ -768,21 +768,15 @@ export class AuthService {
     })
   }
   /**
-   * Token
+   * Logout
    */
-  token(
-    params: {
-      /** requestBody */
-      body?: Token
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  logout(options: IRequestOptions = {}): Promise<LogoutResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/auth/token"
+      let url = basePath + "/auth/logout"
 
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = params.body
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -825,6 +819,21 @@ export class AuthService {
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Requests a new token given a refresh token
+   */
+  requestNewToken(options: IRequestOptions = {}): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/requestNewToken"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -964,7 +973,7 @@ export class UserService {
       body?: Confirm
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/confirm"
 
@@ -1006,7 +1015,7 @@ export class UserService {
       body?: UpdatePassword
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/update-password"
 
@@ -1693,7 +1702,7 @@ export class MultiselectQuestionsService {
     })
   }
   /**
-   * Get multiselect question by id
+   * Get listings by multiselect question id
    */
   retrieveListings(
     params: {
@@ -3707,12 +3716,10 @@ export interface Login {
   mfaType?: EnumLoginMfaType
 }
 
-export interface LoginResponse {
+export interface LogoutResponse {
   /**  */
-  accessToken: string
+  success: boolean
 }
-
-export interface Token {}
 
 export interface RequestMfaCode {
   /**  */
@@ -3893,6 +3900,12 @@ export interface User {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserCreate {
@@ -3940,6 +3953,12 @@ export interface UserCreate {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserBasic {
@@ -3959,15 +3978,6 @@ export interface UserBasic {
   id: string
 
   /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
   email: string
 
   /**  */
@@ -3980,34 +3990,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob?: Date
-
-  /**  */
   phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
 }
 
 export interface Email {
@@ -4118,6 +4101,12 @@ export interface UserUpdate {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserFilterParams {
@@ -4189,6 +4178,12 @@ export interface UserInvite {
 
   /**  */
   hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
 }
 
 export interface UserProfileUpdate {

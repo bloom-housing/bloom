@@ -16,6 +16,7 @@ import { SmsMfaService } from "./sms-mfa.service"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { UserRepository } from "../repositories/user-repository"
 import { ListingRepository } from "../../listings/db/listing.repository"
+import { Response } from "express"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -78,7 +79,10 @@ describe("UserService", () => {
         },
         {
           provide: AuthService,
-          useValue: { generateAccessToken: jest.fn().mockReturnValue("accessToken") },
+          useValue: {
+            generateAccessToken: jest.fn().mockReturnValue("accessToken"),
+            tokenGen: jest.fn().mockResolvedValue({ status: "ok" }),
+          },
         },
         {
           provide: JurisdictionResolverService,
@@ -290,20 +294,30 @@ describe("UserService", () => {
 
   describe("updatePassword", () => {
     const updateDto = { password: "qwerty", passwordConfirmation: "qwerty", token: "abcefg" }
+    const mockRes = {
+      clearCookie: () => true,
+      cookie: () => true,
+    }
     it("should return 400 if email is not found", async () => {
       mockUserRepo.findByResetToken = jest.fn().mockResolvedValue(null)
-      await expect(service.updatePassword(updateDto)).rejects.toThrow(
+      await expect(
+        service.updatePassword(updateDto, (mockRes as unknown) as Response)
+      ).rejects.toThrow(
         new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
       )
     })
 
     it("should set resetToken", async () => {
       const mockedUser = { id: "123", email: "abc@xyz.com" }
+      const mockRes = {
+        clearCookie: () => true,
+        cookie: () => true,
+      }
       mockUserRepo.findByEmail = jest.fn().mockResolvedValue(mockedUser)
       mockUserRepo.findByResetToken = jest.fn().mockResolvedValue(mockedUser)
       // Sets resetToken
       await service.forgotPassword({ email: "abc@xyz.com" })
-      const accessToken = await service.updatePassword(updateDto)
+      const accessToken = await service.updatePassword(updateDto, (mockRes as unknown) as Response)
       expect(accessToken).toBeDefined()
     })
   })

@@ -216,7 +216,7 @@ const ListingPhoto = () => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
-            data-test-id={!cloudinaryData.url ? "listing-photo-empty" : "listing-photo-uploaded"}
+            data-testid={!cloudinaryData.url ? "listing-photo-empty" : "listing-photo-uploaded"}
             size={AppearanceSizeType.small}
           >
             Save

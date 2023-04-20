@@ -130,7 +130,7 @@ const SignIn = () => {
     <>
       <FormsLayout>
         <FormSignIn
-          onSubmit={onSubmit}
+          onSubmit={(data) => void onSubmit(data)}
           control={{ register, errors, handleSubmit, watch }}
           networkStatus={{
             content: networkStatusContent,

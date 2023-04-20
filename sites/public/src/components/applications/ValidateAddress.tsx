@@ -75,12 +75,12 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               value="found"
               checked={newAddressSelected}
               onChange={(e) => setNewAddressSelected(e.target.checked)}
-              data-test-id="app-found-address-choice"
+              data-testid="app-found-address-choice"
             />
             <label
               htmlFor="foundaddress"
               className="font-alt-sans font-semibold"
-              data-test-id="app-found-address-label"
+              data-testid="app-found-address-label"
             >
               <MultiLineAddress
                 address={{
@@ -129,7 +129,7 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               onClick={() => {
                 setVerifyAddress(false)
               }}
-              data-test-id="app-edit-original-address"
+              data-testid="app-edit-original-address"
             >
               {t("t.edit")}
             </Button>
