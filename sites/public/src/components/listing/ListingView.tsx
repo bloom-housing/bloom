@@ -530,7 +530,7 @@ export const ListingView = (props: ListingProps) => {
           })}
           modalCloseLabel={t("t.backToListing")}
         />
-        <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
+        <div className="py-3 mx-3 mt-4 flex flex-col items-center md:items-start text-center md:text-left">
           <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
             {listing.name}
           </Heading>
