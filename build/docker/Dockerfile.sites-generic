@@ -1,6 +1,8 @@
 
 # Set a default value for the SITE arg
 ARG SITE=public
+ARG CLOUDINARY_NAME
+ARG FILE_SERVICE
 
 # The base image will contain all the source code needed for our site
 FROM node:18.14-alpine AS base
@@ -25,8 +27,9 @@ COPY --chown=node:node sites/${SITE} ./sites/${SITE}
 # It turns out we do have a hard dependency on backend/core :(
 COPY --chown=node:node backend/core ./backend/core
 
-# And shared helpers
+# And shared
 COPY --chown=node:node shared-helpers ./shared-helpers
+COPY --chown=node:node shared-services ./shared-services
 
 
 #####################
@@ -88,9 +91,14 @@ CMD yarn test:unit --verbose
 FROM deps AS build
 
 ARG SITE
+ARG CLOUDINARY_NAME=blank
+ARG FILE_SERVICE=blank
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
+
+ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_NAME
+ENV FILE_SERVICE=$FILE_SERVICE
 
 # Build/compile
 RUN yarn build
@@ -132,6 +140,7 @@ COPY --from=optimize --chown=node:node /app/sites/${SITE}/node_modules ./sites/$
 # Bring in our local dependencies
 COPY --from=build /app/backend/core ./backend/core
 COPY --from=build /app/shared-helpers ./shared-helpers
+COPY --from=build /app/shared-services ./shared-services
 
 # Switch to our site
 WORKDIR /app/sites/${SITE}
