@@ -34,11 +34,7 @@ async function bootstrap() {
       process.exit(1)
     }
   }
-  const options = new DocumentBuilder()
-    .setTitle("Bloom API")
-    .setVersion("1.0")
-    .addBearerAuth()
-    .build()
+  const options = new DocumentBuilder().setTitle("Bloom API").setVersion("1.0").build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup("docs", app, document)
   const configService: ConfigService = app.get(ConfigService)
