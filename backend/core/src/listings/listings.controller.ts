@@ -15,7 +15,7 @@ import {
   Headers,
   ParseUUIDPipe,
 } from "@nestjs/common"
-import { ListingsService, ListingIncludeExternalResponse } from "./listings.service"
+import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ListingDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
@@ -66,12 +66,14 @@ export class ListingsController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  public async getAllWithExternal(
-    @Query() queryParams: DoorwayListingsExternalQueryParams
-  ): Promise<ListingIncludeExternalResponse> {
+  public async getAllWithExternal(@Query() queryParams: DoorwayListingsExternalQueryParams) {
     const jurisdictions: string[] = queryParams.bloomJurisdiction
     mapTo(ListingsQueryParams, queryParams, { excludeExtraneousValues: true })
-    return await this.listingsService.listIncludeExternal(jurisdictions, queryParams)
+    const response = await this.listingsService.listIncludeExternal(jurisdictions, queryParams)
+    return {
+      ...response,
+      local: mapTo(PaginatedListingDto, response.local),
+    }
   }
 
   @Post()
