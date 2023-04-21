@@ -132,8 +132,7 @@ export const useListingZip = () => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
     try {
-      // const content = await listingsService.listAsCsv({ timeZone })
-      const content = { listingCsv: "", unitCsv: "" }
+      const content = await listingsService.listAsCsv({ timeZone })
       const now = new Date()
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
       const zip = new JSZip()
