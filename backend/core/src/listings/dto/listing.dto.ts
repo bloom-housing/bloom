@@ -204,6 +204,12 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
+      // use the provided url slug, if any
+      // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+      if (obj.urlSlug) {
+        return obj.urlSlug
+      }
+
       return listingUrlSlug(obj)
     },
     { toClassOnly: true }
@@ -237,4 +243,15 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => ListingUtilitiesDto)
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   utilities?: ListingUtilitiesDto
+
+  /**
+   * This is used to signal to the frontend whether the listing is internal or
+   * external.  This should only be anything other than `false` if it's coming
+   * from an external listing pulled from combined_listings.
+   *
+   * REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+   */
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  isExternal?: boolean = false
 }

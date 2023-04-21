@@ -52,6 +52,7 @@ import { UnitTypesService } from "../unit-types/unit-types.service"
 import dayjs from "dayjs"
 import { CountyCode } from "../shared/types/county-code"
 import { ApplicationFlaggedSetsCronjobService } from "../application-flagged-sets/application-flagged-sets-cronjob.service"
+import { ExternalListingSeed } from "./seeds/listings/external-listings-seed"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -208,6 +209,14 @@ const seedListings = async (
   return seeds
 }
 
+// REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+const seedExternalListings = async (app: INestApplicationContext) => {
+  // there is no repo for ExternalListing, so get Listing repo instead
+  const listingRepo = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+  const externalListings = new ExternalListingSeed(listingRepo.manager.connection)
+  await externalListings.seed()
+}
+
 async function seed() {
   const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
   // Starts listening for shutdown hooks
@@ -221,6 +230,9 @@ async function seed() {
   const jurisdictions = await createJurisdictions(app)
   await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
+
+  // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+  await seedExternalListings(app)
 
   const user1 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {

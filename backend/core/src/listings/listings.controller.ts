@@ -36,6 +36,8 @@ import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-lo
 import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
 import { ListingsApiExtraModels } from "./types/listings-api-extra-models"
 import { IdDto } from "../shared/dto/id.dto"
+import { CombinedListingsQueryParams } from "./combined/combined-listings-query-params"
+import { CombinedListingFilterParams } from "./combined/combined-listing-filter-params"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -74,6 +76,22 @@ export class ListingsController {
       ...response,
       local: mapTo(PaginatedListingDto, response.local),
     }
+  }
+
+  // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+  @Get("combined")
+  @ApiExtraModels(CombinedListingFilterParams, CombinedListingsQueryParams)
+  @ApiOperation({
+    summary: "List all local and external listings",
+    operationId: "listCombined",
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  public async getCombined(
+    @Query() queryParams: CombinedListingsQueryParams
+  ): Promise<PaginatedListingDto> {
+    mapTo(CombinedListingsQueryParams, queryParams, { excludeExtraneousValues: true })
+    return mapTo(PaginatedListingDto, await this.listingsService.listCombined(queryParams))
   }
 
   @Post()
