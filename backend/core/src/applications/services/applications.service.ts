@@ -324,7 +324,7 @@ export class ApplicationsService {
           try {
             application = await this._createApplication(applicationCreateDto)
           } catch (e) {
-            console.error(e.message)
+            console.error(`${e.message} - listing id: ${applicationCreateDto.listingId}`)
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             if (
