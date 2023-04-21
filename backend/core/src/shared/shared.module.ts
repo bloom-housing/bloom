@@ -12,6 +12,7 @@ import Joi from "joi"
           .default("development"),
         EMAIL_API_KEY: Joi.string().required(),
         DATABASE_URL: Joi.string().required(),
+        PROXY_URL: Joi.string(),
         THROTTLE_TTL: Joi.number().default(1),
         THROTTLE_LIMIT: Joi.number().default(100),
         APP_SECRET: Joi.string().required().min(16),
