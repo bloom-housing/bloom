@@ -279,7 +279,7 @@ export class ApplicationsService {
               "CONCAT(applicant.firstName, ' ', applicant.lastName, ' ', applicant.emailAddress, ' ', applicant.phoneNumber) ILIKE :search",
               { search: `%${search}%` }
             )
-            subQb.where("alternateContact.firstName ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("alternateContact.firstName ILIKE :search", { search: `%${search}%` })
             subQb.orWhere("alternateContact.lastName ILIKE :search", { search: `%${search}%` })
             subQb.orWhere("alternateContact.emailAddress ILIKE :search", {
               search: `%${search}%`,
