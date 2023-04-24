@@ -63,6 +63,7 @@ module.exports = withBundleAnalyzer(
       bloomJurisdictionsUrl: process.env.BLOOM_API_BASE + process.env.BLOOM_JURISDICTIONS_QUERY,
       bloomApiBase: process.env.BLOOM_API_BASE,
       bloomJurisdictionNames: BLOOM_JURISDICTION_NAMES,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
