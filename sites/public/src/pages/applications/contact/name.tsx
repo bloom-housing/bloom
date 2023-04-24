@@ -72,7 +72,6 @@ const ApplicationName = () => {
     })
   }, [profile])
 
-  console.log(errors)
   return (
     <FormsLayout>
       <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
