@@ -1,4 +1,4 @@
-import { CloudinaryUpload } from "@bloom-housing/ui-components"
+import { CloudinaryUpload } from "./CloudinaryUpload"
 import { AssetsService } from "@bloom-housing/backend-core/types"
 
 export class CloudinaryFileUploader {

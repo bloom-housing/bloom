@@ -1,4 +1,4 @@
-import axios from "axios"
+import { axiosUpload } from "./AwsS3Upload"
 
 interface CloudinaryUploadProps {
   file: File
@@ -38,13 +38,6 @@ export const CloudinaryUpload = async ({
     throw err
   }
 
-  const response = await axios.request({
-    method: "post",
-    url: url,
-    data: data,
-    onUploadProgress: (p) => {
-      onUploadProgress(parseInt(((p.loaded / p.total) * 100).toFixed(0), 10))
-    },
-  })
+  const response = await axiosUpload("post", url, data, onUploadProgress)
   return response
 }
