@@ -155,7 +155,7 @@ export class ListingsService {
      * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
      */
     if (process.env.PROXY_URL) {
-      firstValueFrom(
+      await firstValueFrom(
         this.httpService.request({
           baseURL: process.env.PROXY_URL,
           method: "PURGE",
@@ -163,7 +163,7 @@ export class ListingsService {
         })
       ).catch((e) => console.log(`purge listing ${saveResponse.id} error = `, e))
       if (listingDto.status !== ListingStatus.pending || listing.status === ListingStatus.active) {
-        firstValueFrom(
+        await firstValueFrom(
           this.httpService.request({
             baseURL: process.env.PROXY_URL,
             method: "PURGE",
