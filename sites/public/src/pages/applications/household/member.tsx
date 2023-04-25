@@ -159,9 +159,13 @@ const ApplicationMember = () => {
                     placeholder={t("application.name.firstName")}
                     readerOnly={true}
                     defaultValue={member.firstName}
-                    validation={{ required: true }}
+                    validation={{ required: true, maxLength: 64 }}
                     error={errors.firstName}
-                    errorMessage={t("errors.firstNameError")}
+                    errorMessage={
+                      errors.firstName?.type === "maxLength"
+                        ? t("errors.maxLength")
+                        : t("errors.firstNameError")
+                    }
                     register={register}
                     dataTestId={"app-household-member-first-name"}
                   />
@@ -173,6 +177,9 @@ const ApplicationMember = () => {
                     readerOnly={true}
                     placeholder={t("application.name.middleNameOptional")}
                     defaultValue={member.middleName}
+                    validation={{ maxLength: 64 }}
+                    error={errors.middleName}
+                    errorMessage={t("errors.maxLength")}
                     register={register}
                     dataTestId={"app-household-member-middle-name"}
                   />
@@ -184,9 +191,13 @@ const ApplicationMember = () => {
                     label={t("application.name.lastName")}
                     readerOnly={true}
                     defaultValue={member.lastName}
-                    validation={{ required: true }}
+                    validation={{ required: true, maxLength: 64 }}
                     error={errors.lastName}
-                    errorMessage={t("errors.lastNameError")}
+                    errorMessage={
+                      errors.lastName?.type === "maxLength"
+                        ? t("errors.maxLength")
+                        : t("errors.lastNameError")
+                    }
                     register={register}
                     dataTestId={"app-household-member-last-name"}
                   />
@@ -239,9 +250,12 @@ const ApplicationMember = () => {
                       name="address.street"
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.address.street}
-                      validation={{ required: true }}
-                      error={errors.address?.street}
-                      errorMessage={t("errors.streetError")}
+                      validation={{ required: true, maxLength: 64 }}
+                      errorMessage={
+                        errors.address?.street?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.streetError")
+                      }
                       register={register}
                       dataTestId={"app-household-member-address-street"}
                       label={t("application.contact.streetAddress")}
@@ -254,6 +268,9 @@ const ApplicationMember = () => {
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
                       defaultValue={member.address.street2}
+                      error={errors.address?.street2}
+                      validation={{ maxLength: 64 }}
+                      errorMessage={t("errors.maxLength")}
                       register={register}
                       dataTestId={"app-household-member-address-street2"}
                     />
@@ -265,9 +282,12 @@ const ApplicationMember = () => {
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
                         defaultValue={member.address.city}
-                        validation={{ required: true }}
-                        error={errors.address?.city}
-                        errorMessage={t("errors.cityError")}
+                        validation={{ required: true, maxLength: 64 }}
+                        errorMessage={
+                          errors.address?.city?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("errors.cityError")
+                        }
                         register={register}
                         dataTestId={"app-household-member-address-city"}
                       />
@@ -277,9 +297,13 @@ const ApplicationMember = () => {
                         name="address.state"
                         label={t("application.contact.state")}
                         defaultValue={member.address.state}
-                        validation={{ required: true }}
+                        validation={{ required: true, maxLength: 64 }}
                         error={errors.address?.state}
-                        errorMessage={t("errors.stateError")}
+                        errorMessage={
+                          errors.address?.state?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("errors.stateError")
+                        }
                         register={register}
                         controlClassName="control"
                         options={stateKeys}
@@ -294,9 +318,13 @@ const ApplicationMember = () => {
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
                       defaultValue={member.address.zipCode}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
                       error={errors.address?.zipCode}
-                      errorMessage={t("errors.zipCodeError")}
+                      errorMessage={
+                        errors.address?.zipCode?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.zipCodeError")
+                      }
                       register={register}
                       dataTestId={"app-household-member-address-zip"}
                     />
@@ -337,9 +365,13 @@ const ApplicationMember = () => {
                       name="workAddress.street"
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={member.workAddress.street}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
                       error={errors.workAddress?.street}
-                      errorMessage={t("errors.streetError")}
+                      errorMessage={
+                        errors.workAddress?.street?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.streetError")
+                      }
                       register={register}
                       dataTestId={"app-household-member-work-address-street"}
                     />
@@ -350,6 +382,9 @@ const ApplicationMember = () => {
                       label={t("application.contact.apt")}
                       placeholder={t("application.contact.apt")}
                       defaultValue={member.workAddress.street2}
+                      error={errors.workAddress?.street2}
+                      errorMessage={t("errors.maxLength")}
+                      validation={{ maxLength: 64 }}
                       register={register}
                       dataTestId={"app-household-member-work-address-street2"}
                     />
@@ -361,9 +396,13 @@ const ApplicationMember = () => {
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
                         defaultValue={member.workAddress.city}
-                        validation={{ required: true }}
+                        validation={{ required: true, maxLength: 64 }}
                         error={errors.workAddress?.city}
-                        errorMessage={t("errors.cityError")}
+                        errorMessage={
+                          errors.workAddress?.city?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("errors.cityError")
+                        }
                         register={register}
                         dataTestId={"app-household-member-work-address-city"}
                       />
@@ -373,9 +412,13 @@ const ApplicationMember = () => {
                         name="workAddress.state"
                         label={t("application.contact.state")}
                         defaultValue={member.workAddress.state}
-                        validation={{ required: true }}
+                        validation={{ required: true, maxLength: 64 }}
                         error={errors.workAddress?.state}
-                        errorMessage={t("errors.stateError")}
+                        errorMessage={
+                          errors.workAddress?.state?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("errors.stateError")
+                        }
                         register={register}
                         controlClassName="control"
                         options={stateKeys}
@@ -390,9 +433,13 @@ const ApplicationMember = () => {
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
                       defaultValue={member.workAddress.zipCode}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
                       error={errors.workAddress?.zipCode}
-                      errorMessage={t("errors.zipCodeError")}
+                      errorMessage={
+                        errors.workAddress?.zipCode?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.zipCodeError")
+                      }
                       register={register}
                       dataTestId={"app-household-member-work-address-zip"}
                     />

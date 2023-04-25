@@ -303,9 +303,13 @@ const ApplicationAddress = () => {
                   label={t("application.contact.streetAddress")}
                   placeholder={t("application.contact.streetAddress")}
                   defaultValue={application.applicant.address.street}
-                  validation={{ required: true }}
+                  validation={{ required: true, maxLength: 64 }}
+                  errorMessage={
+                    errors.applicant?.address?.street?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.streetError")
+                  }
                   error={errors.applicant?.address?.street}
-                  errorMessage={t("errors.streetError")}
                   register={register}
                   dataTestId={"app-primary-address-street"}
                 />
@@ -318,6 +322,9 @@ const ApplicationAddress = () => {
                   defaultValue={application.applicant.address.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
+                  error={errors.applicant?.address?.street2}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={t("errors.maxLength")}
                 />
 
                 <div className="flex max-w-2xl">
@@ -327,9 +334,13 @@ const ApplicationAddress = () => {
                     label={t("application.contact.cityName")}
                     placeholder={t("application.contact.cityName")}
                     defaultValue={application.applicant.address.city}
-                    validation={{ required: true }}
+                    validation={{ required: true, maxLength: 64 }}
+                    errorMessage={
+                      errors.applicant?.address?.city?.type === "maxLength"
+                        ? t("errors.maxLength")
+                        : t("errors.cityError")
+                    }
                     error={errors.applicant?.address?.city}
-                    errorMessage={t("errors.cityError")}
                     register={register}
                     dataTestId={"app-primary-address-city"}
                   />
@@ -338,9 +349,13 @@ const ApplicationAddress = () => {
                     id="addressState"
                     name="applicant.address.state"
                     label={t("application.contact.state")}
-                    validation={{ required: true }}
+                    validation={{ required: true, maxLength: 64 }}
                     error={errors.applicant?.address?.state}
-                    errorMessage={t("errors.stateError")}
+                    errorMessage={
+                      errors.applicant?.address?.state?.type === "maxLength"
+                        ? t("errors.maxLength")
+                        : t("errors.stateError")
+                    }
                     register={register}
                     controlClassName="control"
                     options={stateKeys}
@@ -354,9 +369,13 @@ const ApplicationAddress = () => {
                   label={t("application.contact.zip")}
                   placeholder={t("application.contact.zipCode")}
                   defaultValue={application.applicant.address.zipCode}
-                  validation={{ required: true }}
+                  validation={{ required: true, maxLength: 64 }}
+                  errorMessage={
+                    errors.applicant?.address?.zipCode?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.zipCodeError")
+                  }
                   error={errors.applicant?.address?.zipCode}
-                  errorMessage={t("errors.zipCodeError")}
                   register={register}
                   dataTestId={"app-primary-address-zip"}
                 />
@@ -391,9 +410,13 @@ const ApplicationAddress = () => {
                     name="mailingAddress.street"
                     placeholder={t("application.contact.streetAddress")}
                     defaultValue={application.mailingAddress.street}
-                    validation={{ required: true }}
+                    validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.street}
-                    errorMessage={t("errors.streetError")}
+                    errorMessage={
+                      errors.mailingAddress?.street?.type === "maxLength"
+                        ? t("errors.maxLength")
+                        : t("errors.streetError")
+                    }
                     register={register}
                     dataTestId={"app-primary-mailing-address-street"}
                   />
@@ -406,6 +429,9 @@ const ApplicationAddress = () => {
                     defaultValue={application.mailingAddress.street2}
                     register={register}
                     dataTestId={"app-primary-mailing-address-street2"}
+                    validation={{ maxLength: 64 }}
+                    error={errors.mailingAddress?.street2}
+                    errorMessage={t("errors.maxLength")}
                   />
 
                   <div className="flex max-w-2xl">
@@ -415,9 +441,13 @@ const ApplicationAddress = () => {
                       label={t("application.contact.cityName")}
                       placeholder={t("application.contact.cityName")}
                       defaultValue={application.mailingAddress.city}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
                       error={errors.mailingAddress?.city}
-                      errorMessage={t("errors.cityError")}
+                      errorMessage={
+                        errors.mailingAddress?.city?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.cityError")
+                      }
                       register={register}
                       dataTestId={"app-primary-mailing-address-city"}
                     />
@@ -427,9 +457,13 @@ const ApplicationAddress = () => {
                       name="mailingAddress.state"
                       label={t("application.contact.state")}
                       defaultValue={application.mailingAddress.state}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
+                      errorMessage={
+                        errors.mailingAddress?.state?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.stateError")
+                      }
                       error={errors.mailingAddress?.state}
-                      errorMessage={t("errors.stateError")}
                       register={register}
                       controlClassName="control"
                       options={stateKeys}
@@ -444,9 +478,13 @@ const ApplicationAddress = () => {
                     label={t("application.contact.zip")}
                     placeholder={t("application.contact.zipCode")}
                     defaultValue={application.mailingAddress.zipCode}
-                    validation={{ required: true }}
+                    validation={{ required: true, maxLength: 64 }}
                     error={errors.mailingAddress?.zipCode}
-                    errorMessage={t("errors.zipCodeError")}
+                    errorMessage={
+                      errors.mailingAddress?.zipCode?.type === "maxLength"
+                        ? t("errors.maxLength")
+                        : t("errors.zipCodeError")
+                    }
                     register={register}
                     dataTestId={"app-primary-mailing-address-zip"}
                   />
@@ -538,9 +576,13 @@ const ApplicationAddress = () => {
                       name="applicant.workAddress.street"
                       placeholder={t("application.contact.streetAddress")}
                       defaultValue={application.applicant.workAddress.street}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.street}
-                      errorMessage={t("errors.streetError")}
+                      errorMessage={
+                        errors.applicant?.workAddress?.street?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.streetError")
+                      }
                       register={register}
                       dataTestId={"app-primary-work-address-street"}
                       label={t("application.contact.streetAddress")}
@@ -554,6 +596,9 @@ const ApplicationAddress = () => {
                       placeholder={t("application.contact.apt")}
                       defaultValue={application.applicant.workAddress.street2}
                       register={register}
+                      error={errors.applicant?.workAddress?.street2}
+                      validation={{ maxLength: 64 }}
+                      errorMessage={"errors.maxLength"}
                       dataTestId={"app-primary-work-address-street2"}
                     />
 
@@ -564,9 +609,13 @@ const ApplicationAddress = () => {
                         label={t("application.contact.cityName")}
                         placeholder={t("application.contact.cityName")}
                         defaultValue={application.applicant.workAddress.city}
-                        validation={{ required: true }}
+                        validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.workAddress?.city}
-                        errorMessage={t("errors.cityError")}
+                        errorMessage={
+                          errors.applicant?.workAddress?.city?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("errors.cityError")
+                        }
                         register={register}
                         dataTestId={"app-primary-work-address-city"}
                       />
@@ -576,9 +625,12 @@ const ApplicationAddress = () => {
                         name="applicant.workAddress.state"
                         label={t("application.contact.state")}
                         defaultValue={application.applicant.workAddress.state}
-                        validation={{ required: true }}
-                        error={errors.applicant?.workAddress?.state}
-                        errorMessage={t("errors.stateError")}
+                        validation={{ required: true, maxLength: 64 }}
+                        errorMessage={
+                          errors.applicant?.workAddress?.state?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("errors.stateError")
+                        }
                         register={register}
                         controlClassName="control"
                         options={stateKeys}
@@ -593,9 +645,13 @@ const ApplicationAddress = () => {
                       label={t("application.contact.zip")}
                       placeholder={t("application.contact.zipCode")}
                       defaultValue={application.applicant.workAddress.zipCode}
-                      validation={{ required: true }}
+                      validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.zipCode}
-                      errorMessage={t("errors.zipCodeError")}
+                      errorMessage={
+                        errors.applicant?.workAddress?.zipCode?.type === "maxLength"
+                          ? t("errors.maxLength")
+                          : t("errors.zipCodeError")
+                      }
                       register={register}
                       dataTestId={"app-primary-work-address-zip"}
                     />
