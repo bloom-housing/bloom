@@ -1,18 +1,17 @@
 import { Injectable, Scope } from "@nestjs/common"
 import { CsvBuilder } from "../applications/services/csv-builder.service"
-// import {
-//   cloudinaryPdfFromId,
-//   formatCurrency,
-//   formatRange,
-//   formatRentRange,
-//   formatStatus,
-//   formatYesNo,
-//   getRentTypes,
-//   convertToTitleCase,
-//   formatBedroom,
-//   getPaperAppUrls,
-// } from "./helpers"
-// import { formatLocalDate } from "../shared/utils/format-local-date"
+import {
+  cloudinaryPdfFromId,
+  formatCurrency,
+  formatRange,
+  formatRentRange,
+  formatStatus,
+  formatYesNo,
+  convertToTitleCase,
+  formatBedroom,
+  getPaperAppUrls,
+} from "./helpers"
+import { formatLocalDate } from "../shared/utils/format-local-date"
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsCsvExporterService {
   constructor(private readonly csvBuilder: CsvBuilder) {}
@@ -29,25 +28,26 @@ export class ListingsCsvExporterService {
       })
     })
     const listingObj = listings.map((listing) => {
+      console.log(listing)
       return {
         ID: listing.id,
-        //       "Created At Date": formatLocalDate(listing.createdAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
-        //       "Listing Status": formatStatus[listing.status],
-        //       "Publish Date": formatLocalDate(listing.publishedAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
-        //       Verified: formatYesNo(listing.isVerified),
-        //       "Verified Date": formatLocalDate(listing.verifiedAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
-        //       "Last Updated": formatLocalDate(listing.updatedAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
-        //       "Listing Name": listing.name,
-        //       "Developer/Property Owner": listing.property.developer,
-        //       "Street Address": listing.property.buildingAddress?.street,
-        //       City: listing.property.buildingAddress?.city,
-        //       State: listing.property.buildingAddress?.state,
-        //       Zip: listing.property.buildingAddress?.zipCode,
-        //       "Year Built": listing.property.yearBuilt,
-        //       Neighborhood: listing.property.neighborhood,
-        //       Region: listing.property.region,
-        //       Latitude: listing.property.buildingAddress?.latitude,
-        //       Longitude: listing.property.buildingAddress?.longitude,
+        "Created at date": formatLocalDate(listing.createdAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
+        Jurisdiction: listing.jurisdiction.name,
+        "Listing Name": listing.name,
+        "Listing Status": formatStatus[listing.status],
+        "Publish Date": formatLocalDate(listing.publishedAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
+        "Last updated": formatLocalDate(listing.updatedAt, "MM-DD-YYYY hh:mm:ssA z", timeZone),
+        Developer: listing.developer,
+        "Building Street Address": listing.buildingAddress?.street,
+        "Building City": listing.buildingAddress?.city,
+        "Building State": listing.buildingAddress?.state,
+        "Building Zip": listing.buildingAddress?.zipCode,
+        "Building Year Built": listing.yearBuilt,
+        "Reserved Community Types": listing.reservedCommunityType,
+        Latitude: listing.buildingAddress?.latitude,
+        Longitude: listing.buildingAddress?.longitude,
+        //       Region: listing.region,
+        //
         //       "Home Type": convertToTitleCase(listing.homeType),
         //       "Accept Section 8": formatYesNo(listing.section8Acceptance),
         //       "Number Of Unit Groups": listing.unitGroups?.length,
@@ -63,12 +63,12 @@ export class ListingsCsvExporterService {
         //         .filter((entry) => entry[1] === true)
         //         .map((entry) => convertToTitleCase(entry[0]))
         //         .join(", "),
-        //       "Property Amenities": listing.property.amenities,
-        //       "Additional Accessibility Details": listing.property.accessibility,
-        //       "Unit Amenities": listing.property.unitAmenities,
-        //       "Smoking Policy": listing.property.smokingPolicy,
-        //       "Pets Policy": listing.property.petPolicy,
-        //       "Services Offered": listing.property.servicesOffered,
+        //       "Property Amenities": listing.amenities,
+        //       "Additional Accessibility Details": listing.accessibility,
+        //       "Unit Amenities": listing.unitAmenities,
+        //       "Smoking Policy": listing.smokingPolicy,
+        //       "Pets Policy": listing.petPolicy,
+        //       "Services Offered": listing.servicesOffered,
         //       "Accessibility Features": Object.entries(listing.features ?? {})
         //         ?.filter((entry) => entry[1] === true)
         //         .map((entry) => convertToTitleCase(entry[0]))
