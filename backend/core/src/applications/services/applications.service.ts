@@ -269,7 +269,8 @@ export class ApplicationsService {
       search: (qb, { search }) => {
         qb.andWhere(
           new Brackets((subQb) => {
-            subQb.where("applicant.firstName ILIKE :search", { search: `%${search}%` })
+            subQb.where("application.confirmationCode ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("applicant.firstName ILIKE :search", { search: `%${search}%` })
             subQb.orWhere("applicant.lastName ILIKE :search", { search: `%${search}%` })
             subQb.orWhere("applicant.emailAddress ILIKE :search", {
               search: `%${search}%`,
