@@ -503,7 +503,7 @@ export const ListingView = (props: ListingProps) => {
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
-      <header className="image-card image-card--leader">
+      <header className="image-card--leader">
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
             (imageUrl: string) => {
