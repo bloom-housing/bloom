@@ -8,10 +8,12 @@ import {
   formatStatus,
   formatYesNo,
   convertToTitleCase,
-  formatBedroom,
   getPaperAppUrls,
+  formatUnitType,
+  formatCommunityType,
 } from "./helpers"
 import { formatLocalDate } from "../shared/utils/format-local-date"
+import { ListingReviewOrder } from "./types/listing-review-order-enum"
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsCsvExporterService {
   constructor(private readonly csvBuilder: CsvBuilder) {}
@@ -62,14 +64,16 @@ export class ListingsCsvExporterService {
         "Building State": listing.buildingAddress?.state,
         "Building Zip": listing.buildingAddress?.zipCode,
         "Building Year Built": listing.yearBuilt,
-        "Reserved Community Types": listing.reservedCommunityType,
+        "Reserved Community Types": formatCommunityType[listing.reservedCommunityType?.name],
         Latitude: listing.buildingAddress?.latitude,
         Longitude: listing.buildingAddress?.longitude,
         "Number of units": listing.numberOfUnits,
-        //needs formatting
-        "Listing Availability": listing.reviewOrderType,
+        "Listing Availability":
+          listing?.reviewOrderType === ListingReviewOrder.waitlist
+            ? "Open Waitlist"
+            : "Available Units",
         "Important Program Rules": listing.programRules,
-        "Review Order": listing.reviewOrderType,
+        "Review Order": convertToTitleCase(listing.reviewOrderType),
         "Lottery Date": formatLocalDate(listing.events[0]?.startTime, "MM-DD-YYYY", timeZone),
         "Lottery Start": formatLocalDate(listing.events[0]?.startTime, "hh:mmA z", timeZone),
         "Lottery End": formatLocalDate(listing.events[0]?.endTime, "hh:mmA z", timeZone),
@@ -77,9 +81,9 @@ export class ListingsCsvExporterService {
         "Housing Preferences": preferencesFormatted.join(", "),
         "Housing Programs": programsFormatted.join(", "),
         "Application Fee": formatCurrency(listing.applicationFee),
+        "Deposit Helper Text": listing.depositHelperText,
         "Deposit Min": formatCurrency(listing.depositMin),
         "Deposit Max": formatCurrency(listing.depositMax),
-        "Deposit Helper Text": listing.depositHelperText,
         "Costs Not Included": listing.costsNotIncluded,
         "Property Amenities": listing.amenities,
         "Additional Accessibility": listing.accessibility,
@@ -151,7 +155,7 @@ export class ListingsCsvExporterService {
   exportUnitsFromObject(listings: any[]): string {
     const reformattedListings = []
     listings.forEach((listing) => {
-      listing.units.forEach((unit) => {
+      listing.units?.forEach((unit) => {
         reformattedListings.push({
           id: listing.id,
           name: listing.name,
@@ -165,7 +169,7 @@ export class ListingsCsvExporterService {
         "Listing ID": listing.id,
         "Listing Name": listing.name,
         "Unit Number": listing.unit?.number,
-        "Unit Type": listing.unit?.unitType?.name,
+        "Unit Type": formatUnitType[listing.unit?.unitType?.name],
         "Number of Bathrooms": listing.unit?.numBathrooms,
         "Unit Floor": listing.unit?.floor,
         "Square footage": listing.unit?.sqFeet,
@@ -175,6 +179,7 @@ export class ListingsCsvExporterService {
         "AMI Level": listing.unit?.amiChart?.items[0]?.percentOfAmi,
         "Rent Type": listing.unit?.monthlyRentAsPercentOfIncome ? "% of income" : "Fixed amount",
         "Monthly Rent": listing.unit?.monthlyRentAsPercentOfIncome ?? listing.unit?.monthlyRent,
+        "Minimum Income": listing.unit?.monthlyIncomeMin,
         "Accessibility Priority Type": listing.unit?.priorityType?.name,
       }
     })

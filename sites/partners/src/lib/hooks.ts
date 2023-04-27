@@ -142,7 +142,7 @@ export const useListingZip = () => {
         const fileLink = document.createElement("a")
         fileLink.setAttribute("download", `${dateString}-complete-listing-data.zip`)
         fileLink.href = URL.createObjectURL(blob)
-        // fileLink.click()
+        fileLink.click()
       })
       setZipCompleted(true)
       setSiteAlertMessage(t("t.exportSuccess"), "success")

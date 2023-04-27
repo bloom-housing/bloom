@@ -28,13 +28,20 @@ export const formatStatus = {
   pending: "Draft",
 }
 
-export const formatBedroom = {
+export const formatUnitType = {
+  SRO: "SRO",
+  studio: "Studio",
   oneBdrm: "1 BR",
   twoBdrm: "2 BR",
   threeBdrm: "3 BR",
   fourBdrm: "4 BR",
   fiveBdrm: "5 BR",
-  studio: "Studio",
+}
+
+export const formatCommunityType = {
+  senior55: "Seniors 55+",
+  senior62: "Seniors 62+",
+  specialNeeds: "Special Needs",
 }
 
 export const formatCurrency = (value: string): string => {
