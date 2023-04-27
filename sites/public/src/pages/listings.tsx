@@ -1,48 +1,16 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
-import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
+import { PageHeader, t } from "@bloom-housing/ui-components"
 import { ListingWithSourceMetadata } from "../../types/ListingWithSourceMetadata"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { MetaTags } from "../components/shared/MetaTags"
-import { ListingsMap } from "../components/listings/ListingsMap"
-import { getListings } from "../lib/helpers"
-import {
-  fetchJurisdictionByName,
-  fetchBloomJurisdictionsByName,
-  fetchClosedListings,
-  fetchOpenListings,
-} from "../lib/hooks"
+import { ListingsCombined } from "../components/listings/ListingsCombined"
+import { fetchOpenListings } from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: ListingWithSourceMetadata[]
-  closedListings: ListingWithSourceMetadata[]
-}
-
-const openListings = (listings) => {
-  return listings?.length > 0 ? (
-    <>{getListings(listings)}</>
-  ) : (
-    <div className="notice-block">
-      <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
-    </div>
-  )
-}
-
-const closedListings = (listings) => {
-  return (
-    listings?.length > 0 && (
-      <ListingsGroup
-        listingsCount={listings.length}
-        header={t("listings.closedListings")}
-        hideButtonText={t("listings.hideClosedListings")}
-        showButtonText={t("listings.showClosedListings")}
-      >
-        {getListings(listings)}
-      </ListingsGroup>
-    )
-  )
 }
 
 export default function ListingsPage(props: ListingsProps) {
@@ -68,29 +36,13 @@ export default function ListingsPage(props: ListingsProps) {
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
-      <ListingsMap listings={props.openListings}></ListingsMap>
-      <div>
-        {openListings(props.openListings)}
-        {closedListings(props.closedListings)}
-      </div>
+      <ListingsCombined listings={props.openListings} />
     </Layout>
   )
 }
 
 export async function getServerSideProps() {
-  // Hack alert: fetchOpenListings and fetchClosedListings call
-  // fetchBloomJurisdictionsByName concurrently which causes a race condition
-  // that calls the Jurisdictions API twice.
-  //
-  // Invoking fetchBloomJurisdictionsByName first avoids that situation by
-  // making sure that the bloomJurisdictions instance variable is populated.
-  // We may as well call fetchJurisdictionByName at the same time here for
-  // performance reasons.
-  await Promise.all([fetchJurisdictionByName(), fetchBloomJurisdictionsByName()])
-  const openListings = fetchOpenListings()
-  const closedListings = fetchClosedListings()
-
   return {
-    props: { openListings: await openListings, closedListings: await closedListings },
+    props: { openListings: await fetchOpenListings() },
   }
 }
