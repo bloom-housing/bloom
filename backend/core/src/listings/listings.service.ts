@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common"
+import { HttpService } from "@nestjs/axios"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
@@ -234,9 +235,10 @@ export class ListingsService {
 
     const unitData = await unitsQb.where("listing.id IN (:...listingIds)", { listingIds }).getMany()
 
-    // unitData.forEach((listing) => {
-    //   this.addUnitsSummarized(listing)
-    // })
+    listingData.forEach((listing) => {
+      const unitQuantity = unitData.find((unit) => unit.id === listing.id)?.units?.length
+      listing["numberOfUnits"] = unitQuantity
+    })
 
     return {
       unitData,

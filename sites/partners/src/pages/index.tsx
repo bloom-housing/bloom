@@ -9,6 +9,7 @@ import {
   AppearanceSizeType,
   AlertBox,
   SiteAlert,
+  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -202,6 +203,7 @@ export default function ListingsList() {
                       <Button
                         size={AppearanceSizeType.small}
                         className="mx-1"
+                        styleType={AppearanceStyleType.primary}
                         onClick={() => false}
                       >
                         {t("listings.addListing")}
