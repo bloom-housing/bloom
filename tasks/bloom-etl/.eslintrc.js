@@ -1,12 +1,12 @@
 module.exports = {
   parser: "@typescript-eslint/parser", // Specifies the ESLint parser
   parserOptions: {
-    project: ["./tsconfig.json", "./sites/public/tsconfig.json", "./sites/partners/tsconfig.json"],
-    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
+    project: ["./tsconfig.json"],
+    ecmaVersion: 2022, // Allows for the parsing of modern ECMAScript features
     sourceType: "module", // Allows for the use of imports
     tsconfigRootDir: ".",
   },
-  plugins: ["react", "@typescript-eslint"],
+  plugins: ["@typescript-eslint"],
   extends: [
     "eslint:recommended", // the set of rules which are recommended for all projects by the ESLint Team
     "plugin:@typescript-eslint/eslint-recommended", // conflict resolution between above and below rulesets.
@@ -15,9 +15,6 @@ module.exports = {
     "plugin:import/errors", // check for imports not resolving correctly
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "plugin:react-hooks/recommended", // Make sure we follow https://reactjs.org/docs/hooks-rules.html
-    "plugin:jsx-a11y/recommended",
-    "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     "plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
   rules: {
@@ -26,8 +23,6 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "react/jsx-uses-vars": "warn",
-    "react/jsx-uses-react": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "error",
       {
@@ -44,14 +39,14 @@ module.exports = {
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
   },
+  // relative paths in root module break linting of test dir
+  root: true,
   ignorePatterns: [
     "node_modules",
-    "storybook-static",
-    ".next",
-    "dist",
-    "migration/",
-    "**/*.stories.tsx",
-    "**/.eslintrc.js",
-    "tasks/bloom-etl"
+    "coverage",
+    // below are ignored by default
+    // comment out to pass checks, retain for documentation
+    //".build",
+    //".eslintrc.js",
   ],
 }
