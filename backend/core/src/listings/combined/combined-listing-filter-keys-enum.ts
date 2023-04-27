@@ -10,6 +10,7 @@
   REMOVE_WHEN_EXTERNAL_NOT_NEEDED
 */
 export enum CombinedListingFilterKeys {
+  // From ListingFilterKeys
   status = "status",
   name = "name",
   neighborhood = "neighborhood",
@@ -17,5 +18,10 @@ export enum CombinedListingFilterKeys {
   zipcode = "zipcode",
   leasingAgents = "leasingAgents",
   jurisdiction = "jurisdiction",
+
+  // Specific to combined listings
   isExternal = "isExternal",
+  //monthlyRent = "monthlyRent", // placeholder
+  county = "county",
+  city = "city",
 }

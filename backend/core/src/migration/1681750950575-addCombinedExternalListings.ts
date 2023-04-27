@@ -150,13 +150,18 @@ SELECT
   jsonb_agg(
     jsonb_build_object(
       'id', u.id,
+      'annualIncomeMin', u.annual_income_min,
+      'annualIncomeMax', u.annual_income_max,
       'monthlyIncomeMin', u.monthly_income_min,
+      'monthlyRent', u.monthly_rent,
+      'monthlyRentAsPercentOfIncome', CAST(u.monthly_rent_as_percent_of_income as text),
+      'amiPercentage', u.ami_percentage,
       'floor', u.floor,
       'maxOccupancy', u.max_occupancy,
       'minOccupancy', u.min_occupancy,
-      'monthlyRent', u.monthly_rent,
       'sqFeet', CAST(u.sq_feet as text),
-      'monthlyRentAsPercentOfIncome', CAST(u.monthly_rent_as_percent_of_income as text),
+      'numBedrooms', u.num_bedrooms,
+      'numBathrooms', u.num_bathrooms,
       'unitType', json_build_object(
         'id', u.unit_type_id,
         'name', t.name

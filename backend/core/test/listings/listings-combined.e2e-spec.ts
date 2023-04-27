@@ -383,6 +383,16 @@ describe("CombinedListings", () => {
         delete result.unitsSummarized
         delete localListing.unitsSummarized
 
+        // these fields do not exist on the base view but are returned by combined
+        // we include them because they are required for filtering
+        result.units.forEach((unit) => {
+          delete unit.amiPercentage
+          delete unit.annualIncomeMax
+          delete unit.annualIncomeMin
+          delete unit.numBathrooms
+          delete unit.numBedrooms
+        })
+
         expect(localListing).toEqual(result)
       })
     })
@@ -446,6 +456,112 @@ describe("CombinedListings", () => {
         // serde should be consistent, so shouldn't need to sort subitems
 
         expect(listing).toEqual(seed)
+      })
+    })
+
+    it("should properly apply county filter", async () => {
+      // this fictional county is set in external listings seed
+      const countyName = "San Alameda"
+      const equalsFilter = [{ $comparison: "=", county: countyName }]
+      const notEqualsFilter = [{ $comparison: "<>", county: countyName }]
+
+      // check equality
+      const equalsQuery = qs.stringify({
+        limit: "all",
+        filter: equalsFilter,
+      })
+
+      const equalRes = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${equalsQuery}`)
+        .expect(200)
+
+      // all values should match filter
+      equalRes.body.items.forEach((listing) => {
+        expect(listing.buildingAddress.county).toBe(countyName)
+      })
+
+      // check inequality
+      const notEqualsQuery = qs.stringify({
+        limit: "all",
+        filter: notEqualsFilter,
+      })
+
+      const notEqualRes = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${notEqualsQuery}`)
+        .expect(200)
+
+      // no values should match filter
+      notEqualRes.body.items.forEach((listing) => {
+        expect(listing.buildingAddress.county).not.toBe(countyName)
+      })
+    })
+
+    it("should properly apply city filter", async () => {
+      // this fictional city is set in external listings seed
+      const cityName = "Anytown"
+      const equalsFilter = [{ $comparison: "=", city: cityName }]
+      const notEqualsFilter = [{ $comparison: "<>", city: cityName }]
+
+      // check equality
+      const equalsQuery = qs.stringify({
+        limit: "all",
+        filter: equalsFilter,
+      })
+
+      const equalRes = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${equalsQuery}`)
+        .expect(200)
+
+      // all values should match filter
+      equalRes.body.items.forEach((listing) => {
+        expect(listing.buildingAddress.city).toBe(cityName)
+      })
+
+      // check inequality
+      const notEqualsQuery = qs.stringify({
+        limit: "all",
+        filter: notEqualsFilter,
+      })
+
+      const notEqualRes = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${notEqualsQuery}`)
+        .expect(200)
+
+      // no values should match filter
+      notEqualRes.body.items.forEach((listing) => {
+        expect(listing.buildingAddress.city).not.toBe(cityName)
+      })
+    })
+
+    it("should properly apply bedrooms filter", async () => {
+      const minBedrooms = 2
+      const gteFilter = [{ $comparison: ">=", bedrooms: minBedrooms }]
+
+      const gteQuery = qs.stringify({
+        limit: "all",
+        filter: gteFilter,
+      })
+
+      const gteRes = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${gteQuery}`)
+        .expect(200)
+
+      // at least one unit should match the bedroom requirement
+      gteRes.body.items.forEach((listing) => {
+        // could just loop on this, but mapping makes duplication of this test easier
+        const bedrooms = listing.units.map((unit) => {
+          return unit.numBedrooms
+        })
+
+        // assume no matches
+        let isMatch = false
+
+        // check each one and set true for listing if any match found
+        bedrooms.forEach((value) => {
+          if (value >= minBedrooms) isMatch = true
+        })
+
+        expect(isMatch).toBe(true)
       })
     })
   })

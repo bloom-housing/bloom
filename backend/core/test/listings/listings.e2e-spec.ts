@@ -396,11 +396,14 @@ describe("Listings", () => {
     const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
     const newListingCreateDto = makeTestListing(anyJurisdiction.id)
 
-    const newListingName = "random-name"
+    // make it highly random to avoid conflicts from elsewhere
+    const now = new Date()
+    const searchValue = `random-${now.getTime()}`
+    const newListingName = `${searchValue}-name`
     newListingCreateDto.name = newListingName
 
     let listingsSearchResponse = await supertest(app.getHttpServer())
-      .get(`/listings?search=random`)
+      .get(`/listings?search=${searchValue}`)
       .expect(200)
 
     expect(listingsSearchResponse.body.items.length).toBe(0)
@@ -415,7 +418,7 @@ describe("Listings", () => {
     expect(listingsSearchResponse.body.items.length).toBeGreaterThan(1)
 
     listingsSearchResponse = await supertest(app.getHttpServer())
-      .get(`/listings?search=random`)
+      .get(`/listings?search=${searchValue}`)
       .expect(200)
 
     expect(listingsSearchResponse.body.items.length).toBe(1)
