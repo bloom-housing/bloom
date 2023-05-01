@@ -64,6 +64,11 @@ module.exports = withBundleAnalyzer(
       bloomApiBase: process.env.BLOOM_API_BASE,
       bloomJurisdictionNames: BLOOM_JURISDICTION_NAMES,
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      awsS3BucketName: process.env.AWS_S3_BUCKET_NAME,
+      awsAccessKey: process.env.AWS_ACCESS_KEY_ID,
+      awsSecretKey: process.env.AWS_SECRET_KEY,
+      awsRegion: process.env.AWS_REGION,
+      fileService: process.env.FILE_SERVICE,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

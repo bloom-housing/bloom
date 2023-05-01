@@ -22,16 +22,14 @@ export const AwsS3Upload = async ({
   // show a progress bar for the upload and is existing behavior that we want to preserve.
   const command = new PutObjectCommand({ Bucket: bucketName, Key: key })
   const url = await getSignedUrl(client, command, { expiresIn: 3600 })
-  const data = new FormData()
-  data.append("file", file)
-  const response = await axiosUpload("put", url, data, onUploadProgress)
+  const response = await axiosUpload("put", url, file, onUploadProgress)
   return response
 }
 
 export const axiosUpload = async (
   method: Method,
   url: string,
-  data: FormData,
+  data: any,
   onUploadProgress: (progress: number) => void
 ) => {
   const response = await axios.request({
