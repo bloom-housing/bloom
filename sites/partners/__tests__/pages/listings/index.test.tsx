@@ -78,9 +78,9 @@ describe("listings", () => {
     expect(exportButton).not.toBeInTheDocument()
   })
 
-  it.only("should render the error text when listings csv api call fails", async () => {
-    // window.URL.createObjectURL = jest.fn()
-    // document.cookie = "access-token-available=True"
+  it("should render the error text when listings csv api call fails", async () => {
+    window.URL.createObjectURL = jest.fn()
+    document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
@@ -124,13 +124,14 @@ describe("listings", () => {
     window.URL.createObjectURL = jest.fn()
     //Prevent error from clicking anchor tag within test
     HTMLAnchorElement.prototype.click = jest.fn()
-    window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
       rest.get("http://localhost:3100/listings", (_req, res, ctx) => {
         return res(ctx.json({ items: [listing], meta: { totalItems: 1, totalPages: 1 } }))
       }),
-
+      rest.get("http://localhost/api/adapter/listings/csv", (_req, res, ctx) => {
+        return res(ctx.json({ listingCSV: "", unitCSV: "" }))
+      }),
       rest.get("http://localhost:3100/listings/csv", (_req, res, ctx) => {
         return res(ctx.json({ listingCSV: "", unitCSV: "" }))
       }),
