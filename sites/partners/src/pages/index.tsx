@@ -70,7 +70,7 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const [errorAlert, setErrorAlert] = useState(false)
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile.roles?.isAdmin || profile.roles?.isJurisdictionalAdmin || false
+  const isAdmin = profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin || false
   const { onExport, zipCompleted, zipExportLoading, zipExportError } = useListingZip()
   useEffect(() => {
     setErrorAlert(zipExportError)
