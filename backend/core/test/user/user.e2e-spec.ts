@@ -144,7 +144,7 @@ describe("UsersService", () => {
       .expect(201)
 
     const userService = await app.resolve<UserService>(UserService)
-    const user = await userService.findById(userCreateResponse.body.id)
+    const user = await userService.findByIdHelper(userCreateResponse.body.id)
 
     expect(user.confirmedAt).toBe(null)
 
@@ -696,7 +696,7 @@ describe("UsersService", () => {
     expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
 
     const userService = await app.resolve<UserService>(UserService)
-    const user = await userService.findById(res.body.id)
+    const user = await userService.findByIdHelper(res.body.id)
 
     const confirmation = await supertest(app.getHttpServer())
       .put(`/user/${res.body.id}`)
@@ -811,7 +811,7 @@ describe("UsersService", () => {
     expect(nonPortalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
   })
 
-  it.skip("should require mfa code for users with mfa enabled", async () => {
+  it("should require mfa code for users with mfa enabled", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "Abcdef1!",
