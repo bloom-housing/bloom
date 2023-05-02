@@ -344,9 +344,10 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [alamedaJurisdiction],
+      agreedToTermsOfService: true,
     })
   )
-  await userRepo.save(alamedaAdmin)
+  await userRepo.save({ ...alamedaAdmin, agreedToTermsOfService: true })
   await userService.confirm({ token: alamedaAdmin.confirmationToken })
 
   const alamedaAdminRoles: UserRoles = {

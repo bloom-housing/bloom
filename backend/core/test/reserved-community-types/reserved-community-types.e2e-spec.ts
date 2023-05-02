@@ -14,6 +14,7 @@ import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.modul
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 import { Repository } from "typeorm"
 import { EmailService } from "../../src/email/email.service"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -42,6 +43,7 @@ describe("ReservedCommunityTypes", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     jurisdictionsRepository = app.get<Repository<Jurisdiction>>(getRepositoryToken(Jurisdiction))

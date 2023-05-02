@@ -94,7 +94,7 @@ const ApplicationName = () => {
         )}
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group border-b" data-test-id={"application-initial-page"}>
+          <div className="form-card__group border-b" data-testid={"application-initial-page"}>
             <fieldset>
               <legend
                 className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
@@ -110,9 +110,13 @@ const ApplicationName = () => {
                 readerOnly={true}
                 disabled={autofilled}
                 defaultValue={application.applicant.firstName}
-                validation={{ required: true }}
+                validation={{ required: true, maxLength: 64 }}
                 error={errors.applicant?.firstName}
-                errorMessage={t("errors.firstNameError")}
+                errorMessage={
+                  errors.applicant?.firstName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.firstNameError")
+                }
                 register={register}
                 dataTestId={"app-primary-first-name"}
               />
@@ -126,6 +130,9 @@ const ApplicationName = () => {
                 defaultValue={application.applicant.middleName}
                 register={register}
                 dataTestId={"app-primary-middle-name"}
+                validation={{ maxLength: 64 }}
+                error={errors.applicant?.middleName}
+                errorMessage={t("errors.maxLength")}
               />
 
               <Field
@@ -135,9 +142,13 @@ const ApplicationName = () => {
                 disabled={autofilled}
                 readerOnly={true}
                 defaultValue={application.applicant.lastName}
-                validation={{ required: true }}
+                validation={{ required: true, maxLength: 64 }}
                 error={errors.applicant?.lastName}
-                errorMessage={t("errors.lastNameError")}
+                errorMessage={
+                  errors.applicant?.lastName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.lastNameError")
+                }
                 register={register}
                 dataTestId={"app-primary-last-name"}
               />
@@ -217,7 +228,7 @@ const ApplicationName = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

@@ -10,6 +10,7 @@ import { applicationSetup } from "../../src/app.module"
 import { INestApplication } from "@nestjs/common"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { AssetsModule } from "../../src/assets/assets.module"
+import cookieParser from "cookie-parser"
 
 class FakeUploadService implements UploadService {
   createPresignedUploadMetadata(): { signature: string } {
@@ -36,6 +37,7 @@ describe("AssetsController", () => {
 
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })

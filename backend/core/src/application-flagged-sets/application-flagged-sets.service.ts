@@ -172,18 +172,21 @@ export class ApplicationFlaggedSetsService {
           await transApplicationsRepository
             .createQueryBuilder()
             .update(Application)
-            .set({ reviewStatus: ApplicationReviewStatus.pendingAndValid })
+            .set({
+              reviewStatus: ApplicationReviewStatus.pendingAndValid,
+              markedAsDuplicate: false,
+            })
             .where("id IN (:...selectedApps)", {
               selectedApps,
             })
             .execute()
         }
 
-        // mark those that were not selected as duplicate
+        // mark those that were not selected as pending
         const qb = transApplicationsRepository
           .createQueryBuilder()
           .update(Application)
-          .set({ reviewStatus: ApplicationReviewStatus.pending })
+          .set({ reviewStatus: ApplicationReviewStatus.pending, markedAsDuplicate: false })
           .where(
             "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
             { afsId: dto.afsId }
@@ -209,12 +212,12 @@ export class ApplicationFlaggedSetsService {
           .where("id = :afsId", { afsId: dto.afsId })
           .execute()
       } else if (dto.status === FlaggedSetStatus.resolved) {
-        // mark selected a valid
+        // mark selected as valid
         if (selectedApps.length) {
           await transApplicationsRepository
             .createQueryBuilder()
             .update(Application)
-            .set({ reviewStatus: ApplicationReviewStatus.valid })
+            .set({ reviewStatus: ApplicationReviewStatus.valid, markedAsDuplicate: false })
             .where("id IN (:...selectedApps)", {
               selectedApps,
             })
@@ -225,7 +228,7 @@ export class ApplicationFlaggedSetsService {
         const qb = transApplicationsRepository
           .createQueryBuilder()
           .update(Application)
-          .set({ reviewStatus: ApplicationReviewStatus.duplicate })
+          .set({ reviewStatus: ApplicationReviewStatus.duplicate, markedAsDuplicate: true })
           .where(
             "exists (SELECT 1 FROM application_flagged_set_applications_applications WHERE applications_id = id AND application_flagged_set_id = :afsId)",
             { afsId: dto.afsId }

@@ -141,7 +141,7 @@ const ApplicationChooseLanguage = () => {
                       onLanguageSelect(lang)
                     }}
                     key={index}
-                    data-test-id={"app-choose-language-button"}
+                    data-testid={"app-choose-language-button"}
                   >
                     {t(`applications.begin.${lang}`)}
                   </Button>

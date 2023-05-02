@@ -35,7 +35,7 @@ import { CsvBuilder } from "../applications/services/csv-builder.service"
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("APP_SECRET"),
         signOptions: {
-          expiresIn: "10m",
+          expiresIn: "1d",
         },
       }),
     }),

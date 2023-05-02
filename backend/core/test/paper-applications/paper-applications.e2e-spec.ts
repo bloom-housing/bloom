@@ -13,6 +13,7 @@ import { Language } from "../../src/shared/types/language-enum"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { EmailService } from "../../src/email/email.service"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -40,6 +41,7 @@ describe("PaperApplications", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })

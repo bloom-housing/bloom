@@ -403,7 +403,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={numberOptions(5)}
+                options={[
+                  { label: t("listings.unit.sharedBathroom"), value: "0" },
+                  ...numberOptions(5),
+                ]}
               />
             </ViewItem>
           </GridCell>

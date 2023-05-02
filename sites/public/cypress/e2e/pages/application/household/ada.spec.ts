@@ -17,13 +17,13 @@ describe("applications/household/ada", function () {
   })
 
   it("should uncheck all other checkboxes when 'No' is selected", function () {
-    cy.get("[data-test-id=app-ada-mobility]").check()
-    cy.get("[data-test-id=app-ada-vision]").check()
-    cy.get("[data-test-id=app-ada-hearing]").check()
+    cy.get("[data-testid=app-ada-mobility]").check()
+    cy.get("[data-testid=app-ada-vision]").check()
+    cy.get("[data-testid=app-ada-hearing]").check()
 
-    cy.get("[data-test-id=app-ada-none]").check()
-    cy.get("[data-test-id=app-ada-mobility]").should("not.be.checked")
-    cy.get("[data-test-id=app-ada-vision]").should("not.be.checked")
-    cy.get("[data-test-id=app-ada-hearing]").should("not.be.checked")
+    cy.get("[data-testid=app-ada-none]").check()
+    cy.get("[data-testid=app-ada-mobility]").should("not.be.checked")
+    cy.get("[data-testid=app-ada-vision]").should("not.be.checked")
+    cy.get("[data-testid=app-ada-hearing]").should("not.be.checked")
   })
 })

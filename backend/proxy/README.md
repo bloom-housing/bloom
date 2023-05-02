@@ -3,6 +3,27 @@
 We want to serve different versions of the API under different paths e.g. `/v2`, `/v3` but not necessarily reflect that convention in the code.
 To achieve that an NGINX proxy has been created and set up as an entrypoint to the entire API. It provides path level routing e.g. `/v2` will be routed to a different heroku APP then `/`.
 
+### Running Locally with Docker Desktop
+
+# make sure Docker Desktop is started
+
+# build the image: `docker build --pull --rm -f "backend/proxy/Dockerfile" -t bloom:latest "backend/proxy"`
+
+# In the Docker Desktop Dashboard, go to "Images", find the image and click "Run" (play button)
+
+# Configure Optional Settings before running:
+
+# Ports -> Host Port: 9000
+
+# Environment Variables:
+
+    - PORT: 80
+    - BACKEND_HOSTNAME: [Your local IP]:3100 (e.g. 192.168.86.231:3100)
+    - PROTOCOL: http
+    - ALLOW_LIST: localhost:3000|localhost:3001
+
+# Run and you should be able to access listings at http://localhost:9000/listings
+
 ### Setup
 
 Based on [this tutorial](https://dashboard.heroku.com/apps/bloom-reference-backend-proxy/deploy/heroku-container). All values are for `bloom-reference-backend-proxy` and each environment requires it's own proxy.
@@ -31,6 +52,8 @@ Now you can sign into Container Registry.
 $ heroku container:login
 ```
 
+_Note_ if you are using an Apple M1 device the following steps will not work. You will have to do the following: https://stackoverflow.com/a/67001433
+
 Push your Docker-based app
 Build the Dockerfile in the current directory and push the Docker image.
 
@@ -48,9 +71,9 @@ $ heroku container:release --app bloom-reference-backend-proxy web
 
 #### Configuration
 
-Heroku Proxy app requires two environment variables to work:
+Heroku Proxy app requires four environment variables to work:
 
-```
-heroku config:set --app bloom-reference-backend-proxy BACKEND_V1_HOSTNAME=example.v1.hostname.com
-heroku config:set --app bloom-reference-backend-proxy BACKEND_V2_HOSTNAME=example.v2.hostname.com
-```
+PORT: 443
+BACKEND_HOSTNAME: bloom-backend-orm.herokuapp.com
+PROTOCOL: https
+ALLOW_LIST: partners.bloom.exygy.dev|bloom.exygy.dev

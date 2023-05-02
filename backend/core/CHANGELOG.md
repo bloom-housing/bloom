@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.13.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.12.1...@bloom-housing/backend-core@7.13.0) (2023-04-07)
+
+
+### Bug Fixes
+
+* resolves issues around markedAsDuplicate ([#3373](https://github.com/bloom-housing/bloom/issues/3373)) ([059291a](https://github.com/bloom-housing/bloom/commit/059291acd44cbcd2217bcf005003029312d68414))
+
+
+### Features
+
+* changing auth over to cookies ([#3357](https://github.com/bloom-housing/bloom/issues/3357)) ([cd03929](https://github.com/bloom-housing/bloom/commit/cd039293346032c7846e7e19ba3cba79a8b094e1))
+
+
+
+
+
+## [7.12.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.12.0...@bloom-housing/backend-core@7.12.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* program/preference keys length uncap ([#3376](https://github.com/bloom-housing/bloom/issues/3376)) ([af64287](https://github.com/bloom-housing/bloom/commit/af64287d9f218ef223a9fe6020c9a49c248e323d))
+
+
+
+
+
+# [7.12.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.11.0...@bloom-housing/backend-core@7.12.0) (2023-03-31)
+
+
+### Features
+
+* upgrade react to 18 ([#3360](https://github.com/bloom-housing/bloom/issues/3360)) ([e59111d](https://github.com/bloom-housing/bloom/commit/e59111d292202c97d9c0936254c9e96269fbc229))
+
+
+
+
+
+# [7.11.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.10.0...@bloom-housing/backend-core@7.11.0) (2023-03-23)
+
+
+### Features
+
+* add shared bathroom option ([#3362](https://github.com/bloom-housing/bloom/issues/3362)) ([38e77aa](https://github.com/bloom-housing/bloom/commit/38e77aa249611e4274f3a82883d72d6573b8faf6))
+
+
+
+
+
 # [7.10.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@7.9.0...@bloom-housing/backend-core@7.10.0) (2023-03-13)
 
 

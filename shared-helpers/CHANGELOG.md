@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.7.0...@bloom-housing/shared-helpers@7.7.1) (2023-04-10)
+
+
+### Bug Fixes
+
+* react type errors ([#3382](https://github.com/bloom-housing/bloom/issues/3382)) ([ed572ce](https://github.com/bloom-housing/bloom/commit/ed572ce40d3e02927a0b076e28dffd9172fbd07b))
+
+
+
+
+
+# [7.7.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.6.1...@bloom-housing/shared-helpers@7.7.0) (2023-04-07)
+
+
+### Features
+
+* changing auth over to cookies ([#3357](https://github.com/bloom-housing/bloom/issues/3357)) ([cd03929](https://github.com/bloom-housing/bloom/commit/cd039293346032c7846e7e19ba3cba79a8b094e1))
+
+
+
+
+
+## [7.6.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.6.0...@bloom-housing/shared-helpers@7.6.1) (2023-04-03)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
+# [7.6.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.5.0...@bloom-housing/shared-helpers@7.6.0) (2023-03-31)
+
+
+### Features
+
+* upgrade react to 18 ([#3360](https://github.com/bloom-housing/bloom/issues/3360)) ([e59111d](https://github.com/bloom-housing/bloom/commit/e59111d292202c97d9c0936254c9e96269fbc229))
+
+
+
+
+
+# [7.5.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.4.1...@bloom-housing/shared-helpers@7.5.0) (2023-03-23)
+
+
+### Features
+
+* add shared bathroom option ([#3362](https://github.com/bloom-housing/bloom/issues/3362)) ([38e77aa](https://github.com/bloom-housing/bloom/commit/38e77aa249611e4274f3a82883d72d6573b8faf6))
+
+
+
+
+
 ## [7.4.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@7.4.0...@bloom-housing/shared-helpers@7.4.1) (2023-03-21)
 
 

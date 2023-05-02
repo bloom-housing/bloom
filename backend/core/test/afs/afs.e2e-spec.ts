@@ -22,6 +22,7 @@ import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 import dbOptions from "../../ormconfig.test"
 import { EmailService } from "../../src/email/email.service"
 import { ApplicationFlaggedSetsCronjobService } from "../../src/application-flagged-sets/application-flagged-sets-cronjob.service"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -64,8 +65,8 @@ describe.skip("ApplicationFlaggedSets", () => {
         ApplicationsModule,
         TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
-          ttl: 60,
-          limit: 5,
+          ttl: 2,
+          limit: 10,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
       ],
@@ -77,6 +78,7 @@ describe.skip("ApplicationFlaggedSets", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
 
     applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))

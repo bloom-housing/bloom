@@ -14,6 +14,7 @@ import { AmiChartCreateDto } from "../../src/ami-charts/dto/ami-chart.dto"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 import { Repository } from "typeorm"
 import { EmailService } from "../../src/email/email.service"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -43,6 +44,7 @@ describe("AmiCharts", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     jurisdictionRepository = app.get<Repository<Jurisdiction>>(getRepositoryToken(Jurisdiction))
+    app.use(cookieParser())
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })

@@ -1,7 +1,6 @@
 // Future home of additional Jest config
 import { addTranslation } from "@bloom-housing/ui-components"
 import generalTranslations from "@bloom-housing/shared-helpers/src/locales/general.json"
-import { configure } from "@testing-library/dom"
 import { serviceOptions } from "@bloom-housing/backend-core"
 import axios from "axios"
 import "@testing-library/jest-dom/extend-expect"
@@ -18,7 +17,6 @@ global.beforeEach(() => {
   })
 })
 
-configure({ testIdAttribute: "data-test-id" })
 
 // Need to set __next on base div to handle the overlay
 const portalRoot = document.createElement("div")

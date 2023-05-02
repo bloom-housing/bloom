@@ -4,6 +4,7 @@ import { Logger } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { DataSource } from "typeorm"
 import { ConfigService } from "@nestjs/config"
+import cookieParser from "cookie-parser"
 import dbOptions from "../ormconfig"
 
 let app
@@ -11,6 +12,9 @@ async function bootstrap() {
   app = await NestFactory.create(AppModule.register(dbOptions), {
     logger: process.env.NODE_ENV === "development" ? ["error", "warn", "log"] : ["error", "warn"],
   })
+
+  app.use(cookieParser())
+
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   app = applicationSetup(app)
@@ -31,11 +35,7 @@ async function bootstrap() {
       process.exit(1)
     }
   }
-  const options = new DocumentBuilder()
-    .setTitle("Bloom API")
-    .setVersion("1.0")
-    .addBearerAuth()
-    .build()
+  const options = new DocumentBuilder().setTitle("Bloom API").setVersion("1.0").build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup("docs", app, document)
   const configService: ConfigService = app.get(ConfigService)

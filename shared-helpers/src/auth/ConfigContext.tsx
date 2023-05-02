@@ -19,6 +19,7 @@ export const ConfigProvider: FunctionComponent<{
   apiUrl: string
   storageType?: ConfigContextProps["storageType"]
   idleTimeout?: number
+  children?: React.ReactNode
 }> = ({ apiUrl, storageType = "session", idleTimeout = defaultTimeout, children }) => {
   return createElement(
     ConfigContext.Provider,

@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { getUserAccessToken } from "../utils/get-user-access-token"
+import { getUserAccessToken, getTokenFromCookie } from "../utils/get-user-access-token"
 import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
@@ -29,6 +29,7 @@ import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 import { EmailService } from "../../src/email/email.service"
 import { MfaType } from "../../src/auth/types/mfa-type"
 import dayjs from "dayjs"
+import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -36,9 +37,8 @@ import dayjs from "dayjs"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("Applications", () => {
+describe("UsersService", () => {
   let app: INestApplication
-  let user1AccessToken: string
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
@@ -77,9 +77,9 @@ describe("Applications", () => {
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    app.use(cookieParser())
     await app.init()
 
-    user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
     user2Profile = (
@@ -143,7 +143,10 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
 
-    expect(userCreateResponse.body.confirmedAt).toBe(null)
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findById(userCreateResponse.body.id)
+
+    expect(user.confirmedAt).toBe(null)
 
     // Not confirmed user should not be able to log in
     await supertest(app.getHttpServer())
@@ -155,7 +158,7 @@ describe("Applications", () => {
       .put(`/user/${userCreateResponse.body.id}`)
       .set(...setAuthorization(adminAccessToken))
       .send({
-        ...userCreateResponse.body,
+        ...user,
         confirmedAt: new Date(),
       })
       .expect(200)
@@ -170,10 +173,10 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .put(`/user/${userCreateResponse.body.id}`)
       .send({
-        ...userCreateResponse.body,
+        ...user,
         confirmedAt: new Date(),
       })
-      .set(...setAuthorization(userLoginResponse.body.accessToken))
+      .set(...setAuthorization(getTokenFromCookie(userLoginResponse)))
       .expect(403)
   })
 
@@ -196,9 +199,8 @@ describe("Applications", () => {
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
-    expect(res.body).toHaveProperty("passwordUpdatedAt")
-    expect(res.body).toHaveProperty("passwordValidForDays")
-    expect(res.body.passwordValidForDays).toBe(180)
+    expect(res.body).not.toHaveProperty("passwordUpdatedAt")
+    expect(res.body).not.toHaveProperty("passwordValidForDays")
   })
 
   it("should not allow user to sign in before confirming the account", async () => {
@@ -300,8 +302,8 @@ describe("Applications", () => {
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
+      .set(...setAuthorization(userAccessToken))
       .send(user2UpdateDto)
-      .set(...setAuthorization(user1AccessToken))
       .expect(403)
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
@@ -475,7 +477,7 @@ describe("Applications", () => {
       createdAt: userCreateResponse.body.createdAt,
       updatedAt: userCreateResponse.body.updatedAt,
       jurisdictions: userCreateResponse.body.jurisdictions,
-      ...userCreateDto,
+      ...user,
       currentPassword: userCreateDto.password,
       firstName: "NewFirstName",
       phoneNumber: "+12025550194",
@@ -693,11 +695,14 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("email")
     expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
 
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findById(res.body.id)
+
     const confirmation = await supertest(app.getHttpServer())
       .put(`/user/${res.body.id}`)
       .set(...setAuthorization(adminAccessToken))
       .send({
-        ...res.body,
+        ...user,
         confirmedAt: new Date(),
       })
       .expect(200)
@@ -722,7 +727,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
 
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .post(`/user/`)
       .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
@@ -744,7 +749,7 @@ describe("Applications", () => {
     const newEmail = "test+confirm@example.com"
     await supertest(app.getHttpServer())
       .put(`/userProfile/${user.id}`)
-      .send({ ...res.body, newEmail, appUrl: "http://localhost" })
+      .send({ ...user, newEmail, appUrl: "http://localhost" })
       .set(...setAuthorization(userAccessToken))
       .expect(200)
 
@@ -982,11 +987,15 @@ describe("Applications", () => {
       .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
+
+    const userService = await app.resolve<UserService>(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
+
     await supertest(app.getHttpServer())
       .put(`/user/${userCreateResponse.body.id}`)
       .set(...setAuthorization(adminAccessToken))
       .send({
-        ...userCreateResponse.body,
+        ...user,
         confirmedAt: new Date(),
       })
       .expect(200)
@@ -1023,8 +1032,7 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(429)
 
-    const userService = await app.resolve(UserService)
-    const user = await userService.findByEmail(userCreateDto.email)
+    user = await userService.findByEmail(userCreateDto.email)
     user.lastLoginAt = dayjs(new Date()).subtract(31, "minutes").toDate()
     await usersRepository.save(user)
 

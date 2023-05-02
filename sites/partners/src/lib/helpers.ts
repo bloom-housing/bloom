@@ -1,6 +1,7 @@
 import { SetStateAction } from "react"
-import { t, CloudinaryUpload, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { t, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+import { CloudinaryUpload } from "./listings/CloudinaryUpload"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
@@ -95,7 +96,7 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
 }
 
 export const stringToNumber = (str: string | number | undefined): number => {
-  return str ? Number(str) : 1
+  return str !== undefined ? Number(str) : 1
 }
 
 export const stringToBoolean = (str: string | boolean | undefined): boolean => {
