@@ -26,7 +26,6 @@ import {
   ListSection,
   ListingDetailItem,
   ListingDetails,
-  ListingMap,
   Message,
   OneLineAddress,
   EventSection,
@@ -59,6 +58,7 @@ import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
 import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
+import ListingGoogleMap from "./ListingGoogleMap"
 
 interface ListingProps {
   listing: Listing
@@ -876,10 +876,7 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingMap
-              address={getGenericAddress(listing.buildingAddress)}
-              listingName={listing.name}
-            />
+            <ListingGoogleMap listing={listing} googleMapsHref={googleMapsHref} />
           </div>
         </ListingDetailItem>
 
