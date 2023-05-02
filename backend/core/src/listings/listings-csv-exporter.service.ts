@@ -3,14 +3,13 @@ import { CsvBuilder } from "../applications/services/csv-builder.service"
 import {
   cloudinaryPdfFromId,
   formatCurrency,
-  formatRange,
-  formatRentRange,
   formatStatus,
   formatYesNo,
   convertToTitleCase,
   getPaperAppUrls,
   formatUnitType,
   formatCommunityType,
+  formatOpenHouse,
 } from "./helpers"
 import { formatLocalDate } from "../shared/utils/format-local-date"
 import { ListingReviewOrder } from "./types/listing-review-order-enum"
@@ -41,12 +40,12 @@ export class ListingsCsvExporterService {
       })
 
       const openHouse = []
-      const lottery = []
-      listing.listingEvents?.forEach((event) => {
+      let lottery
+      listing.events?.forEach((event) => {
         if (event.type === "openHouse") {
           openHouse.push(event)
         } else if (event.type === "publicLottery") {
-          lottery.push(event)
+          lottery = event
         }
       })
 
@@ -74,9 +73,9 @@ export class ListingsCsvExporterService {
             : "Available Units",
         "Important Program Rules": listing.programRules,
         "Review Order": convertToTitleCase(listing.reviewOrderType),
-        "Lottery Date": formatLocalDate(listing.events[0]?.startTime, "MM-DD-YYYY", timeZone),
-        "Lottery Start": formatLocalDate(listing.events[0]?.startTime, "hh:mmA z", timeZone),
-        "Lottery End": formatLocalDate(listing.events[0]?.endTime, "hh:mmA z", timeZone),
+        "Lottery Date": formatLocalDate(lottery?.startTime, "MM-DD-YYYY", timeZone),
+        "Lottery Start": formatLocalDate(lottery?.startTime, "hh:mmA z", timeZone),
+        "Lottery End": formatLocalDate(lottery?.endTime, "hh:mmA z", timeZone),
         "Lottery Notes": listing.events[0]?.note,
         "Housing Preferences": preferencesFormatted.join(", "),
         "Housing Programs": programsFormatted.join(", "),
@@ -140,12 +139,7 @@ export class ListingsCsvExporterService {
         "Additional Application Submission Notes": listing.additionalApplicationSubmissionNotes,
         "Application Due Date": formatLocalDate(listing.applicationDueDate, "MM-DD-YYYY", timeZone),
         "Application Due Time": formatLocalDate(listing.applicationDueDate, "hh:mmA z", timeZone),
-        "Open House Date": "",
-        "Open House Start Time": "",
-        "Open House End Time": "",
-        "	Open House Label": "",
-        "Open House URL": "",
-        "Open House Notes": "",
+        "Open House": formatOpenHouse(openHouse, timeZone),
         "Partners Who Have Access": partnerAccessHelper[listing.id]?.join(", "),
       }
     })
@@ -164,7 +158,6 @@ export class ListingsCsvExporterService {
       })
     })
     const unitsFormatted = reformattedListings.map((listing) => {
-      if (listing.name === "Test: Coliseum") console.log(listing.unit?.amiChart?.items)
       return {
         "Listing ID": listing.id,
         "Listing Name": listing.name,

@@ -1,6 +1,7 @@
 import { MinMax } from "../../types"
 import { PaperApplication } from "../../src/paper-applications/entities/paper-application.entity"
 import { isEmpty } from "../shared/utils/is-empty"
+import { formatLocalDate } from "../shared/utils/format-local-date"
 
 export const cloudinaryPdfFromId = (publicId: string): string => {
   if (isEmpty(publicId)) return ""
@@ -53,6 +54,25 @@ export const convertToTitleCase = (value: string): string => {
   const spacedValue = value.replace(/([A-Z])/g, (match) => ` ${match}`)
   const result = spacedValue.charAt(0).toUpperCase() + spacedValue.slice(1)
   return result
+}
+
+export const formatOpenHouse = (openHouseArr: any[], tz: string): string => {
+  const openHouseFormatted = []
+  openHouseArr.forEach((openHouse) => {
+    let openHouseStr = ""
+    if (openHouse.label) openHouseStr += `${openHouse.label}: `
+    if (openHouse.startTime) {
+      const date = formatLocalDate(openHouse.startTime, "MM-DD-YYYY", tz)
+      openHouseStr += `${date}`
+      if (openHouse.endTime) {
+        const startTime = formatLocalDate(openHouse.startTime, "hh:mmA", tz)
+        const endTime = formatLocalDate(openHouse.endTime, "hh:mmA z", tz)
+        openHouseStr += ` (${startTime} - ${endTime})`
+      }
+    }
+    if (openHouseStr !== "") openHouseFormatted.push(openHouseStr)
+  })
+  return openHouseFormatted.join(", ")
 }
 
 export const formatRange = (
