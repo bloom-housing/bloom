@@ -14,7 +14,7 @@ let service: ListingsCsvExporterService
 describe("ListingsCSVExporterService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ListingsCsvExporterService, { provide: CsvBuilder, useValue: jest.fn() }],
+      providers: [ListingsCsvExporterService, CsvBuilder],
     }).compile()
 
     service = await module.resolve(ListingsCsvExporterService)
