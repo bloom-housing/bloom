@@ -60,10 +60,10 @@ export const formatOpenHouse = (openHouseArr: any[], tz: string): string => {
   const openHouseFormatted = []
   openHouseArr.forEach((openHouse) => {
     let openHouseStr = ""
-    if (openHouse.label) openHouseStr += `${openHouse.label}: `
+    if (openHouse.label) openHouseStr += `${openHouse.label}`
     if (openHouse.startTime) {
       const date = formatLocalDate(openHouse.startTime, "MM-DD-YYYY", tz)
-      openHouseStr += `${date}`
+      openHouseStr += `: ${date}`
       if (openHouse.endTime) {
         const startTime = formatLocalDate(openHouse.startTime, "hh:mmA", tz)
         const endTime = formatLocalDate(openHouse.endTime, "hh:mmA z", tz)
