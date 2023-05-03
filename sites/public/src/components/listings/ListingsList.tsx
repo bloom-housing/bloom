@@ -1,9 +1,9 @@
 import * as React from "react"
-import { ListingWithSourceMetadata } from "../../../types/ListingWithSourceMetadata"
 import { getListings } from "../../lib/helpers"
+import { Listing } from "@bloom-housing/backend-core"
 
 type ListingsListProps = {
-  listings: ListingWithSourceMetadata[]
+  listings: Listing[]
 }
 
 const ListingsList = (props: ListingsListProps) => {

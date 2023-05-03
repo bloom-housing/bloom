@@ -1,12 +1,13 @@
 import * as React from "react"
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
-import { ListingWithSourceMetadata } from "../../../types/ListingWithSourceMetadata"
+import { getListingUrl } from "../../lib/helpers"
+import { Listing } from "@bloom-housing/backend-core"
 
 type ListingsMapProps = {
-  listings?: ListingWithSourceMetadata[]
+  listings?: Listing[]
 }
 
-const containerStyle = {
+const containerStyle: React.CSSProperties = {
   display: "block",
   width: "100%",
   height: "100%",
@@ -25,14 +26,9 @@ const ListingsMap = (props: ListingsMapProps) => {
 
   const markers = []
   let index = 0
-  props.listings.forEach((listing) => {
+  props.listings.forEach((listing: Listing) => {
     const label = (++index).toString()
-    let uri: string
-    if (listing.isBloomListing) {
-      uri = `/listing/ext/${listing.id}`
-    } else {
-      uri = `/listing/${listing.id}/${listing.urlSlug}`
-    }
+    const uri = getListingUrl(listing)
 
     markers.push(
       <Marker

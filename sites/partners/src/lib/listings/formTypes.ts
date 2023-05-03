@@ -171,6 +171,7 @@ export const formDefaults: FormListing = {
       rows: [],
     },
   },
+  isExternal: false,
 }
 
 export type TempUnit = Unit & {

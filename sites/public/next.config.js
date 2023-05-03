@@ -28,13 +28,6 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
-const BLOOM_LISTINGS_QUERY = process.env.BLOOM_LISTINGS_QUERY || "/listings/includeExternal"
-console.log(
-  `Using ${process.env.BLOOM_API_BASE}${BLOOM_LISTINGS_QUERY} for the external listing service.`
-)
-const BLOOM_JURISDICTION_NAMES = process.env.BLOOM_JURISDICTIONS
-  ? process.env.BLOOM_JURISDICTIONS.split(",")
-  : []
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN
 const HOUSING_COUNSELOR_SERVICE_URL = process.env.HOUSING_COUNSELOR_SERVICE_URL
 
@@ -47,8 +40,7 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 module.exports = withBundleAnalyzer(
   withTM({
     env: {
-      backendApiBase: BACKEND_API_BASE,
-      listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+      backendApiBase: BACKEND_API_BASE, // this has to be set for tests
       listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
       mapBoxToken: MAPBOX_TOKEN,
       housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
@@ -59,10 +51,6 @@ module.exports = withBundleAnalyzer(
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
 
       // start Doorway env variables
-      listingsWithExternalServiceUrl: BACKEND_API_BASE + BLOOM_LISTINGS_QUERY,
-      bloomJurisdictionsUrl: process.env.BLOOM_API_BASE + process.env.BLOOM_JURISDICTIONS_QUERY,
-      bloomApiBase: process.env.BLOOM_API_BASE,
-      bloomJurisdictionNames: BLOOM_JURISDICTION_NAMES,
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
       awsS3BucketName: process.env.AWS_S3_BUCKET_NAME,
       awsAccessKey: process.env.AWS_ACCESS_KEY_ID,

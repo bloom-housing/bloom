@@ -5165,6 +5165,9 @@ export interface Listing {
 
   /**  */
   lastApplicationUpdateAt?: Date
+
+  /**  */
+  isExternal: boolean
 }
 
 export interface PaginatedListing {

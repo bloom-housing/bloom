@@ -1,10 +1,10 @@
 import * as React from "react"
-import { ListingWithSourceMetadata } from "../../../types/ListingWithSourceMetadata"
+import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingsMap } from "./ListingsMap"
 import { ListingsList } from "./ListingsList"
 
 type ListingsCombinedProps = {
-  listings: ListingWithSourceMetadata[]
+  listings: Listing[]
 }
 const parentStyle = {
   display: "flex",

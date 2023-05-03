@@ -15,7 +15,6 @@ import { ListingView } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
-import { getBloomJurisdictionById } from "../../../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -81,7 +80,8 @@ export async function getServerSideProps(context: {
 }) {
   let response: AxiosResponse
   try {
-    response = await axios.get(`${process.env.bloomApiBase}/listings/${context.params.id}`, {
+    const extUrl = `${process.env.BLOOM_API_BASE}/listings/${context.params.id}`
+    response = await axios.get(extUrl, {
       headers: { language: context.locale },
     })
   } catch (e) {
@@ -91,7 +91,7 @@ export async function getServerSideProps(context: {
   return {
     props: {
       listing: response.data,
-      jurisdiction: await getBloomJurisdictionById(response.data.jurisdiction.id),
+      jurisdiction: response.data.jurisdiction,
     },
   }
 }

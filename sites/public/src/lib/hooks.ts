@@ -14,8 +14,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
-import { getListingApplicationStatus } from "./helpers"
-import { ListingWithSourceMetadata } from "../../types/ListingWithSourceMetadata"
+import { getListingServiceUrl, getListingApplicationStatus } from "./helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -69,17 +68,7 @@ export async function fetchBaseListingData({
 }) {
   let listings = []
   try {
-    const { id: jurisdictionId } = await fetchJurisdictionByName()
-
-    if (!jurisdictionId) {
-      return listings
-    }
-    let filter: ListingFilterParams[] = [
-      {
-        $comparison: EnumListingFilterParamsComparison["="],
-        jurisdiction: jurisdictionId,
-      },
-    ]
+    let filter: ListingFilterParams[] = []
 
     if (additionalFilters) {
       filter = filter.concat(additionalFilters)
@@ -90,7 +79,6 @@ export async function fetchBaseListingData({
       filter: ListingFilterParams[]
       orderBy?: OrderByFieldsEnum[]
       orderDir?: OrderParam[]
-      bloomJurisdiction?: string[]
     } = {
       view: "base",
       limit: "all",
@@ -103,36 +91,7 @@ export async function fetchBaseListingData({
       params.orderDir = orderDir
     }
 
-    if (process.env.bloomJurisdictionNames.length != 0) {
-      // This function early returns if the jurisdictions have already been.
-      // fetched from the Bloom API.
-      const jurisdictions = await fetchBloomJurisdictionsByName()
-      params.bloomJurisdiction = jurisdictions.map((jurisdiction) => jurisdiction.id)
-
-      const response = await axios.get(process.env.listingsWithExternalServiceUrl, {
-        params,
-        paramsSerializer: (params) => {
-          return qs.stringify(params)
-        },
-      })
-      const listingsWithExternal = response.data
-      let allListings: ListingWithSourceMetadata[] = listingsWithExternal.local.items.map(
-        (item: ListingWithSourceMetadata) => {
-          item.isBloomListing = false
-          return item
-        }
-      )
-      for (const k in listingsWithExternal.external) {
-        allListings = allListings.concat(
-          listingsWithExternal.external[k].items.map((item: ListingWithSourceMetadata) => {
-            item.isBloomListing = true
-            return item
-          })
-        )
-      }
-      return allListings
-    }
-    const response = await axios.get(process.env.listingServiceUrl, {
+    const response = await axios.get(getListingServiceUrl(), {
       params,
       paramsSerializer: (params) => {
         return qs.stringify(params)
@@ -174,42 +133,6 @@ export async function fetchClosedListings() {
 }
 
 let jurisdiction: Jurisdiction | null = null
-const bloomJurisdictions: Jurisdiction[] = []
-
-export async function fetchBloomJurisdictionsByName() {
-  if (bloomJurisdictions.length != 0) {
-    return bloomJurisdictions
-  }
-
-  try {
-    for (const jurisdictionName of process.env.bloomJurisdictionNames) {
-      const jurisdictionRes = await axios.get(
-        `${process.env.bloomJurisdictionsUrl}/${jurisdictionName}`
-      )
-      bloomJurisdictions.push(jurisdictionRes?.data)
-    }
-  } catch (error) {
-    console.log("Error fetching Bloom jurisdictions, will not include")
-    console.log("message = ", error)
-    // clear the jurisdictions array to avoid undefined behavior
-    bloomJurisdictions.length = 0
-  }
-
-  return bloomJurisdictions
-}
-
-export async function getBloomJurisdictionById(jurisdictionId: string) {
-  try {
-    if (bloomJurisdictions.length == 0) {
-      await fetchBloomJurisdictionsByName()
-    }
-    return bloomJurisdictions.find((jurisdiction) => jurisdiction.id == jurisdictionId)
-  } catch (error) {
-    console.log("error = ", error)
-  }
-
-  return jurisdiction
-}
 
 export async function fetchJurisdictionByName() {
   try {

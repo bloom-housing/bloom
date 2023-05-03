@@ -1626,6 +1626,7 @@ export const ArcherListing: Listing = {
       amiChart,
     },
   ],
+  isExternal: false,
   // TODO confirm not used anywhere
   // totalUnits: 2,
 }

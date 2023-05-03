@@ -16,9 +16,27 @@ import {
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
-import { ListingWithSourceMetadata } from "../../types/ListingWithSourceMetadata"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+// Next.js bakes env vars at build time
+// Thie lets us resolve values at runtime instead
+export const getListingServiceUrl = () => {
+  let backendApiBase: string
+
+  if (process.env.BACKEND_PROXY_BASE) {
+    // try proxy base first
+    backendApiBase = process.env.BACKEND_PROXY_BASE
+  } else if (process.env.BACKEND_API_BASE) {
+    // then backend api base
+    backendApiBase = process.env.BACKEND_API_BASE
+  } else {
+    // fall back on next config value if absolutely necessary
+    backendApiBase = process.env.backendApiBase
+  }
+
+  return backendApiBase + process.env.LISTINGS_QUERY
+}
 
 export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
@@ -59,6 +77,14 @@ const getListingTableData = (
   return unitsSummarized !== undefined
     ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingReviewOrder)
     : []
+}
+
+export const getListingUrl = (listing: Listing) => {
+  if (listing.isExternal) {
+    return `/listing/ext/${listing.id}`
+  } else {
+    return `/listing/${listing.id}/${listing.urlSlug}`
+  }
 }
 
 export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
@@ -107,7 +133,7 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   }
 }
 
-export const getListings = (listings: ListingWithSourceMetadata[]) => {
+export const getListings = (listings: Listing[]) => {
   const unitSummariesHeaders = {
     unitType: "t.unitType",
     minimumIncome: "t.minimumIncome",
@@ -131,13 +157,8 @@ export const getListings = (listings: ListingWithSourceMetadata[]) => {
     return null
   }
 
-  return listings.map((listing: ListingWithSourceMetadata, index) => {
-    let uri: string
-    if (listing.isBloomListing) {
-      uri = `/listing/ext/${listing.id}`
-    } else {
-      uri = `/listing/${listing.id}/${listing.urlSlug}`
-    }
+  return listings.map((listing: Listing, index) => {
+    const uri = getListingUrl(listing)
     return (
       <ListingCard
         key={index}

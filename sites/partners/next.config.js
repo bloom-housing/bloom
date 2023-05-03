@@ -24,7 +24,7 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 } else if (process.env.BACKEND_API_BASE) {
   BACKEND_API_BASE = process.env.BACKEND_API_BASE
 }
-const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
+const LISTINGS_QUERY = process.env.LISTINGS_QUERY
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
 const BACKEND_PROXY_BASE = process.env.BACKEND_PROXY_BASE

@@ -399,4 +399,5 @@ export const listing: Listing = {
       monthlyRentAsPercentOfIncome: undefined,
     },
   ],
+  isExternal: false,
 }
