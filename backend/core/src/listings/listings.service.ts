@@ -1,5 +1,6 @@
 import { HttpService } from "@nestjs/axios"
 import {
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -225,6 +226,12 @@ export class ListingsService {
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
     })
+
+    if (listing.commonDigitalApplication === true) {
+      throw new BadRequestException(
+        "Not currently accepting new listings using the common digital application"
+      )
+    }
 
     return await listing.save()
   }
