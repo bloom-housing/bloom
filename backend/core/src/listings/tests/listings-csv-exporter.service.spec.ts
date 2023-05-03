@@ -26,11 +26,25 @@ describe("ListingsCSVExporterService", () => {
     expect(service).toBeDefined()
   })
   it("should correctly format listings into a csv format", () => {
-    const test = service.exportListingsFromObject(mockListings, mockUsers, "America/Los_Angeles")
-    expect(test).toMatch("First Come First Serve")
+    const listingsCSV = service.exportListingsFromObject(
+      mockListings,
+      mockUsers,
+      "America/Los_Angeles"
+    )
+    expect(listingsCSV).toMatch("First Come First Serve")
+    expect(listingsCSV).toMatch("2012")
+    expect(listingsCSV).toMatch(
+      "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request."
+    )
+    expect(listingsCSV).toMatch("Available Units")
+    expect(listingsCSV).toMatch("Marisela Baca")
   })
   it("should correctly format units into a csv format", () => {
-    const test = service.exportUnitsFromObject(mockListings)
-    expect(test).toMatch("1104")
+    const unitsCSV = service.exportUnitsFromObject(mockListings)
+    expect(unitsCSV).toMatch("1104.0")
+    expect(unitsCSV).toMatch("285")
+    expect(unitsCSV).toMatch("2019-08-14")
+    expect(unitsCSV).toMatch("45.0")
+    expect(unitsCSV).toMatch("Studio")
   })
 })
