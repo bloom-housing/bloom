@@ -8,12 +8,12 @@ const jurisdictionIncludeList = jurisdictionIncludeString.split(",").map((name) 
 
 // This is also unlikely to change during the lifetime of this task
 const listingsEndpoint: UrlInfo = {
-  base: process.env.EXTERNAL_ENDPOINT_URL,
+  base: process.env.EXTERNAL_API_BASE,
   path: process.env.LISTINGS_ENDPOINT_PATH || "/listings",
 }
 
 const jurisdictionsEndpoint: UrlInfo = {
-  base: process.env.EXTERNAL_ENDPOINT_URL,
+  base: process.env.EXTERNAL_API_BASE,
   path: process.env.JURISDICTIONS_ENDPOINT_PATH || "/jurisdictions",
 }
 

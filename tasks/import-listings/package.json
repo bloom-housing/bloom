@@ -1,5 +1,5 @@
 {
-  "name": "bloom-etl",
+  "name": "import-listings",
   "version": "1.0.0",
   "description": "A background task to import listings from the Bloom backend",
   "main": ".build/index.js",
