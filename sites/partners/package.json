@@ -52,9 +52,12 @@
     "autoprefixer": "^10.3.4",
     "swr": "^2.1.2",
     "tailwindcss": "2.2.10",
-    "tough-cookie": "4.1.2"
+    "tough-cookie": "4.1.2",
+    "markdown-to-jsx": "^6.11.4"
+
   },
   "devDependencies": {
+    "@types/markdown-to-jsx": "^6.11.2",
     "@axe-core/react": "4.4.3",
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
