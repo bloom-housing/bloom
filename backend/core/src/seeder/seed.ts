@@ -209,7 +209,7 @@ const seedListings = async (
 }
 
 async function seed() {
-  const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+  const app = await NestFactory.create(SeederModule.forRoot({ test: argv["test"] }))
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)

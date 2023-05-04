@@ -7,6 +7,7 @@ import {
   AgTable,
   useAgTable,
   AppearanceSizeType,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -140,6 +141,7 @@ export default function ListingsList() {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
+      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")} />
       <section>

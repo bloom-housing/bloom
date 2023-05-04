@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { HttpService } from "@nestjs/axios"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
@@ -20,6 +21,7 @@ import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
+import { firstValueFrom } from "rxjs"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -29,7 +31,8 @@ export class ListingsService {
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
     @Inject(REQUEST) private req: ExpressRequest,
-    private readonly afsService: ApplicationFlaggedSetsService
+    private readonly afsService: ApplicationFlaggedSetsService,
+    private readonly httpService: HttpService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -131,6 +134,18 @@ export class ListingsService {
       await this.afsService.scheduleAfsProcessing()
     }
 
+    if (listingDto.buildingSelectionCriteria) {
+      listing.buildingSelectionCriteriaFile = null
+      await this.listingRepository.update(
+        { id: listing.id },
+        {
+          buildingSelectionCriteriaFile: null,
+        }
+      )
+    } else if (listingDto.buildingSelectionCriteriaFile) {
+      listing.buildingSelectionCriteria = null
+    }
+
     Object.assign(listing, {
       ...listingDto,
       publishedAt:
@@ -143,7 +158,9 @@ export class ListingsService {
           : listing.closedAt,
     })
 
-    return await this.listingRepository.save(listing)
+    const saveResponse = await this.listingRepository.save(listing)
+    await this.cachePurge(listing, listingDto, saveResponse)
+    return saveResponse
   }
 
   async delete(listingId: string) {
@@ -217,5 +234,40 @@ export class ListingsService {
     result.units = unitData.units
 
     return result
+  }
+
+  /**
+   * Send purge request to Nginx.
+   * Wrapped in try catch, because it's possible that content may not be cached in between edits,
+   * and will return a 404, which is expected.
+   * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
+   * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
+   */
+  private async cachePurge(
+    currentListing: Listing,
+    incomingChanges: ListingCreateDto | ListingUpdateDto,
+    saveReponse: Listing
+  ) {
+    if (process.env.PROXY_URL) {
+      await firstValueFrom(
+        this.httpService.request({
+          baseURL: process.env.PROXY_URL,
+          method: "PURGE",
+          url: `/listings/${saveReponse.id}*`,
+        })
+      ).catch((e) => console.log(`purge listing ${saveReponse.id} error = `, e))
+      if (
+        incomingChanges.status !== ListingStatus.pending ||
+        currentListing.status === ListingStatus.active
+      ) {
+        await firstValueFrom(
+          this.httpService.request({
+            baseURL: process.env.PROXY_URL,
+            method: "PURGE",
+            url: "/listings?*",
+          })
+        ).catch((e) => console.log("purge all listings error = ", e))
+      }
+    }
   }
 }

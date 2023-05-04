@@ -3910,15 +3910,6 @@ export interface UserBasic {
   id: string
 
   /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
   email: string
 
   /**  */
@@ -3931,40 +3922,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob?: Date
-
-  /**  */
   phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
 }
 
 export interface Email {

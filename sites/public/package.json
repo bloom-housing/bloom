@@ -27,7 +27,8 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^7.13.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "^12.0.2",
+    "@bloom-housing/ui-components": "^12.0.8",
+    "@bloom-housing/ui-seeds": "^1.2.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
@@ -39,6 +40,7 @@
     "deasync": "0.1.28",
     "dotenv": "^8.2.0",
     "http-cookie-agent": "5.0.2",
+    "markdown-to-jsx": "^6.11.4",
     "nanoid": "^3.1.12",
     "next": "^13.2.4",
     "next-plugin-custom-babel-config": "^1.0.5",
@@ -74,5 +76,10 @@
     "ts-loader": "^6.0.3",
     "typescript": "4.6.4",
     "webpack": "^5.69.1"
+  },
+  "prettier": {
+    "singleQuote": false,
+    "printWidth": 100,
+    "semi": false
   }
 }

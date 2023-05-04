@@ -97,9 +97,13 @@ export default () => {
               controlClassName="mt-2"
               name="firstName"
               placeholder={t("application.name.firstName")}
-              validation={{ required: true }}
+              validation={{ required: true, maxLength: 64 }}
               error={errors.firstName}
-              errorMessage={t("errors.firstNameError")}
+              errorMessage={
+                errors.firstName?.type === "maxLength"
+                  ? t("errors.maxLength")
+                  : t("errors.firstNameError")
+              }
               register={register}
             />
 
@@ -109,16 +113,23 @@ export default () => {
               register={register}
               label={t("application.name.middleNameOptional")}
               readerOnly
+              error={errors.middleName}
+              validation={{ maxLength: 64 }}
+              errorMessage={t("errors.maxLength")}
             />
 
             <Field
               name="lastName"
               placeholder={t("application.name.lastName")}
-              validation={{ required: true }}
+              validation={{ required: true, maxLength: 64 }}
               error={errors.lastName}
-              errorMessage={t("errors.lastNameError")}
               register={register}
               label={t("application.name.lastName")}
+              errorMessage={
+                errors.lastName?.type === "maxLength"
+                  ? t("errors.maxLength")
+                  : t("errors.lastNameError")
+              }
               readerOnly
             />
           </div>

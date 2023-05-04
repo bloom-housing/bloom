@@ -14,6 +14,7 @@ import { ApplicationFlaggedSetsService } from "../../application-flagged-sets/ap
 import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { UserRepository } from "../../auth/repositories/user-repository"
+import { HttpService } from "@nestjs/axios"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -151,6 +152,10 @@ describe("ListingsService", () => {
         },
         {
           provide: getRepositoryToken(AmiChart),
+          useValue: jest.fn(),
+        },
+        {
+          provide: HttpService,
           useValue: jest.fn(),
         },
         {

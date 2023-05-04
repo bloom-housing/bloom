@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from "react"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -14,7 +15,6 @@ import {
   t,
   MinimalTable,
   StandardTableData,
-  ErrorMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
@@ -255,7 +255,9 @@ const PreferenceDrawer = ({
                 {t("settings.preferenceAddOption")}
               </Button>
               {errors["questions"] && (
-                <ErrorMessage error={true}>{errors["questions"].message}</ErrorMessage>
+                <FormErrorMessage className={"pt-1"}>
+                  {errors["questions"].message}
+                </FormErrorMessage>
               )}
             </div>
           </GridSection>
