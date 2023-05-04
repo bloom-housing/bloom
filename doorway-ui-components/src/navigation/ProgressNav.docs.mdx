@@ -1,0 +1,47 @@
+import { Canvas, Story, ArgsTable } from "@storybook/addon-docs"
+import { ProgressNav } from "./ProgressNav"
+
+# Progress Nav
+
+The progress nav component is used to illustrate progress in a multi-step process. It displays the step labels, and uses color and layout to indicate which steps are completed, in-progress, and unstarted.
+
+## Dot Style
+
+<Canvas>
+  <Story id="navigation-progress-nav--default" />
+</Canvas>
+
+## Bar Style
+
+<Canvas>
+  <Story id="navigation-progress-nav--bar-style" />
+</Canvas>
+
+You can apply CSS variables to the `.progrss-nav` selector to customize the appearance of the component.
+
+| Name                          | Type  | Description                                 | Default                        |
+| ----------------------------- | ----- | ------------------------------------------- | ------------------------------ |
+| `--completed-step-color`      | Color | The color of completed step                 | `--bloom-color-primary-darker` |
+| `--completed-step-font-color` | Color | The color of completed step label           | `--bloom-color-primary-darker` |
+| `--active-step-color`         | Color | The color of active step                    | `--bloom-color-primary`        |
+| `--active-step-font-color`    | Color | The color of active step label              | `--bloom-color-primary-darker` |
+| `--future-step-color`         | Color | The color of future step                    | `--bloom-color-gray-450`       |
+| `--future-step-font-color`    | Color | The color of future step label              | `--bloom-color-gray-750`       |
+|                               |       |                                             |                                |
+| `--dot-size`                  | Size  | The diameter of each dot step               | `--bloom-s3`                   |
+| `--dot-padding-left-mobile`   | Size  | The padding-left of each dot step on mobile | `--bloom-s2`                   |
+| `--dot-label-padding-top`     | Size  | The padding-top of each dot step label      | `--bloom-s4`                   |
+| `--dot-label-padding-left`    | Size  | The padding-left of each dot step label     | `--bloom-s1`                   |
+| `--dot-font-size-desktop`     | Size  | The font size of dot step labels on desktop | `--bloom-font-size-base`       |
+| `--dot-font-size-mobile`      | Size  | The font size of dot step labels on mobile  | `--bloom-font-size-3xs`        |
+| `--dot-line-color`            | Color | The color of the dot connecting line        | `--bloom-color-gray-450`       |
+| `--dot-active-font-weight`    | Size  | The font weight of active dot step label    | `600`                          |
+| `--dot-text-transform`        | Size  | The capitalization of dot step label        | `capitalize`                   |
+|                               |       |                                             |                                |
+| `--bar-height`                | Size  | The height of bar step                      | `--bloom-s4`                   |
+| `--bar-spacing`               | Size  | The spacing between each bar step           | `--bloom-s0_5`                 |
+| `--bar-label-padding-top`     | Size  | The padding-top of each bar step label      | `--bloom-s2`                   |
+| `--bar-label-padding-left`    | Size  | The padding-left of each bar step label     | `--bloom-s0_5`                 |
+| `--bar-font-size`             | Size  | The font size of bar step labels on desktop | `--bloom-font-size-base`       |
+| `--bar-active-font-weight`    | Size  | The font weight of active bar step label    | `600`                          |
+| `--bar-text-transform`        | Size  | The capitalization of dot step label        | `capitalize`                   |

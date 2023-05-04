@@ -1,0 +1,28 @@
+footer.site-footer {
+  @apply text-gray-500;
+  @apply w-full;
+  @apply bg-gray-800;
+  @apply text-center;
+
+  img {
+    @apply inline;
+    width: 130px;
+    opacity: 0.8;
+  }
+
+  a {
+    @apply text-white;
+  }
+
+  p {
+    @apply mb-5;
+  }
+
+  & > .footer-row:first-of-type {
+    @apply pt-12;
+  }
+
+  & > .footer-row:last-of-type {
+    @apply pt-0;
+  }
+}

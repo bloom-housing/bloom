@@ -1,5 +1,5 @@
 {
-  "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "shared-services"],
+  "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "shared-services", "doorway-ui-components"],
   "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true,

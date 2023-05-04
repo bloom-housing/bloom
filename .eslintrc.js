@@ -52,6 +52,7 @@ module.exports = {
     "migration/",
     "**/*.stories.tsx",
     "**/.eslintrc.js",
+    "doorway-ui-components",
     "tasks/import-listings"
   ],
 }

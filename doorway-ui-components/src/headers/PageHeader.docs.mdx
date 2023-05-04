@@ -1,0 +1,45 @@
+import { Canvas, Story, ArgsTable } from "@storybook/addon-docs"
+import { PageHeader } from "./PageHeader"
+
+# Page Header
+
+The page header component displays a title, with an optional subtitle and/or arbitary children elements.
+
+<Canvas>
+  <Story id="headers-page-header--with-content" />
+</Canvas>
+
+<br />
+<br />
+
+## Variants
+
+### Inverse
+
+Set the `inverse` property to `true`.
+
+<Canvas>
+  <Story id="headers-page-header--inversed" />
+</Canvas>
+
+## Component Properties
+
+<ArgsTable of={PageHeader} />
+
+## Theming Variables
+
+<Canvas>
+  <Story id="headers-page-header--style-overrides" />
+</Canvas>
+
+You can apply CSS variables to the `.page-header` selector to customize the appearance of the component.
+
+| Name                         | Type  | Description                                               | Default                         |
+| ---------------------------- | ----- | --------------------------------------------------------- | ------------------------------- |
+| `--background-color`         | Color | The background of the header                              | `--bloom-color-primary-lighter` |
+| `--border-color`             | Color | The color of the top border                               | `--bloom-color-gray-450`        |
+| `--text-color`               | Color | The color of text inside the header                       | `inherit`                       |
+| `--inverse-background-color` | Color | The `inverse` variant background                          | `--bloom-color-primary-darker`  |
+| `--inverse-border-color`     | Color | The `inverse` variant color of the top border             | `--bloom-color-primary`         |
+| `--inverse-text-color`       | Color | The `inverse` variant color of text                       | `--bloom-color-white`           |
+| `--title-font-size`          | Size  | The font size of the title (only on medium+ size screens) | `--bloom-font-size-4xl`         |
