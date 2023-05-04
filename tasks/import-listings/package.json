@@ -1,0 +1,59 @@
+{
+  "name": "import-listings",
+  "version": "1.0.0",
+  "description": "A background task to import listings from the Bloom backend",
+  "main": ".build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint index.ts './src/**/*.ts' './test/**/*.ts'",
+    "test": "jest --runInBand --detectOpenHandles",
+    "test:cov": "jest --coverage",
+    "import:run": "node ./.build/index.js"
+  },
+  "author": "Chris Casto <chriscasto@google.com>",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "1.3.5",
+    "knex": "2.4.2",
+    "pg": "8.10.0",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-typescript": "^7.21.4",
+    "@types/jest": "^29.5.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "babel-jest": "^29.5.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.5.0",
+    "prettier": "^2.8.8"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
+  },
+  "jest": {
+    "testMatch": [
+      "**/test/**/*.spec.ts"
+    ]
+  },
+  "prettier": {
+    "singleQuote": false,
+    "printWidth": 100,
+    "semi": false
+  }
+}

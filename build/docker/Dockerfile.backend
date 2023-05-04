@@ -83,7 +83,7 @@ FROM node:18.14-alpine AS run
 WORKDIR /app
 
 # Yarn needs a package.json file to work, even for `yarn start`
-COPY --chown=node:node package*.json ./
+COPY --chown=node:node package*.json tsconfig*.json ormconfig.* ./
 
 # Add only dependencies required to run the application
 COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
@@ -95,3 +95,27 @@ COPY --from=build --chown=node:node /app/dist ./dist
 USER node
 
 CMD yarn start
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The run stage contains an optimized image for running the application
+FROM run AS migrate
+
+# These parts have to be run as root
+USER root
+
+# yarn db commands require psql
+RUN apk update
+RUN apk add postgresql
+
+# Add src and types so migrations can run
+COPY --chown=node:node index.ts ./
+COPY --chown=node:node ./src ./src
+COPY --chown=node:node ./types ./types
+
+# This should be run as node
+USER node
+
+CMD yarn db:migration:run

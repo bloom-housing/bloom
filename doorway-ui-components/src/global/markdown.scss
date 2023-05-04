@@ -1,0 +1,173 @@
+.markdown {
+  /* Set sizing and gaps for built-in HTML elements */
+
+  h2 {
+    margin-block: var(--bloom-s8) var(--bloom-s5);
+    font-size: var(--bloom-font-size-2xl);
+
+    @media (min-width: $screen-md) {
+      font-size: var(--bloom-font-size-xl);
+    }
+  }
+
+  h2:first-child {
+    margin-block-start: 0;
+  }
+
+  hr {
+    margin-block: var(--bloom-s8);
+    border-block-end: 1px solid var(--bloom-color-gray-450);
+  }
+
+  p:not(:last-child),
+  ul:not(:last-child) {
+    margin-block-end: var(--bloom-s4);
+  }
+
+  ul {
+    list-style: disc;
+    margin-inline-start: var(--bloom-s6);
+  }
+
+  /* Certain text blocks in the application form flow use this extra styling: */
+
+  &.markdown-informational {
+    font-size: var(--bloom-font-size-sm);
+    color: var(--bloom-color-gray-750);
+
+    h3 {
+      font-family: var(--bloom-font-sans);
+      font-weight: bold;
+      font-size: var(--bloom-font-size-base);
+      color: var(--bloom-color-black);
+      margin-block-end: var(--bloom-s4);
+    }
+
+    li {
+      margin-block-end: var(--bloom-s4);
+    }
+
+    a {
+      text-align: underline;
+    }
+  }
+
+  /* Used for a larger lead paragraph: */
+
+  .markdown__lead {
+    font-family: var(--bloom-font-sans);
+    font-size: var(--bloom-font-size-base);
+    color: var(--bloom-color-gray-700);
+    margin-block: var(--bloom-s3) var(--bloom-s4);
+  }
+
+  /* Used for a (1), (2), (3) section on the application form flow: */
+
+  ol.large-numbers {
+    counter-reset: list-number;
+    list-style-type: none;
+    margin-block-end: var(--bloom-s8);
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.8em;
+      counter-increment: list-number;
+      margin-block-end: var(--bloom-s4);
+      font-weight: 600;
+    }
+
+    li::before {
+      content: counter(list-number);
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--bloom-color-gray-600);
+      padding: 3px;
+      border-radius: 100px;
+      text-align: center;
+      font-weight: normal;
+    }
+  }
+
+  /* Used for lengthy (1), (2), (3), etc. such as the How it Works page: */
+
+  ol.process-list {
+    font-size: 1.06rem;
+    line-height: 1.5;
+    margin-block: 0;
+    list-style-type: none;
+    counter-reset: list-number;
+    padding-block: 20px 0;
+    padding-inline: var(--bloom-s5) 0;
+    position: relative;
+
+    & > li {
+      border-inline-start: 1px solid var(--bloom-color-gray-450);
+      font-size: 1.06rem;
+      margin-bottom: 0;
+      padding-block-end: var(--bloom-s8);
+      padding-inline-start: var(--bloom-s8);
+
+      @media (min-width: $screen-md) {
+        padding-inline-start: var(--bloom-s10);
+      }
+
+      &::before {
+        content: counter(list-number, decimal);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--bloom-rounded-full);
+        background-color: var(--bloom-color-white);
+        border: var(--bloom-border-2) solid var(--bloom-color-gray-750);
+        box-shadow: 0 0 0 1px var(--bloom-color-white);
+        color: var(--bloom-color-gray-750);
+        counter-increment: list-number;
+        font-size: var(--bloom-font-size-base);
+        font-weight: normal;
+        line-height: 0.9;
+        width: var(--bloom-s10);
+        height: var(--bloom-s10);
+        margin-block-start: 0;
+        position: absolute;
+        left: 0;
+      }
+
+      &:last-child {
+        border-inline-start-color: transparent;
+      }
+    }
+
+    /* The homepage How it Works section uses a horizontal layout: */
+
+    &.has-horizontal-layout {
+      display: flex;
+      gap: var(--bloom-s8);
+      padding-inline-start: 0;
+      margin-block: var(--bloom-s12);
+
+      @media (max-width: 1100px) {
+        flex-direction: column;
+        gap: var(--bloom-s12);
+      }
+
+      & > li {
+        position: relative;
+        border-inline-start-width: 0;
+        text-align: center;
+        padding-top: var(--bloom-s8);
+        background-color: var(--bloom-color-white);
+        box-shadow: 0px 0px 3px var(--bloom-color-gray-450);
+        padding-inline: var(--bloom-s4);
+
+        &::before {
+          inset-block-start: calc(0rem - var(--bloom-s7));
+          inset-inline-start: 50%;
+          margin-inline-start: calc(0rem - var(--bloom-s0_5));
+        }
+      }
+    }
+  }
+}

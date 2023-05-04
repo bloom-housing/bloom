@@ -1,4 +1,4 @@
-name: ETL
+name: Listings import
 
 # This is mostly copied from the root lint action (lint.yml)
 
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: tasks/bloom-etl
+        working-directory: tasks/import-listings
 
     steps:
       - name: Check out Git repository
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: tasks/bloom-etl
+        working-directory: tasks/import-listings
 
     steps:
       - name: Check out Git repository

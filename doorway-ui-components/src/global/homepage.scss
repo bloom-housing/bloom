@@ -1,0 +1,27 @@
+.homepage-extra {
+  @apply flex;
+  @apply flex-col;
+  @apply justify-center;
+  @apply items-center;
+  @apply w-full;
+
+  .action-blocks {
+    max-width: 1024px;
+    @apply text-center;
+    @apply text-base;
+    @apply flex;
+    @apply flex-col;
+    @apply justify-center;
+    @apply items-center;
+
+    @screen md {
+      @apply text-xl;
+      @apply flex-row;
+      @apply justify-around;
+      > :nth-child(2) {
+        @apply border-l;
+        @apply border-gray-450;
+      }
+    }
+  }
+}

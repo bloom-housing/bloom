@@ -1,0 +1,7 @@
+.list-section {
+  @apply mt-6;
+
+  @screen md {
+    @apply mt-0;
+  }
+}
