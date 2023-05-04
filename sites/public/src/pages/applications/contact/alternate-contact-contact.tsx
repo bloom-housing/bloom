@@ -150,6 +150,9 @@ export default () => {
                 defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
+                error={errors.mailingAddress?.street}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
               />
               <Field
                 id="mailingAddress.street2"
@@ -159,6 +162,9 @@ export default () => {
                 placeholder={t("application.contact.apt")}
                 dataTestId={"app-alternate-mailing-address-street2"}
                 defaultValue={application.alternateContact.mailingAddress.street2}
+                error={errors.mailingAddress?.street2}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
               />
               <div className="flex max-w-2xl">
                 <Field
@@ -169,6 +175,9 @@ export default () => {
                   defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}
+                  error={errors.mailingAddress?.city}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={t("errors.maxLength")}
                 />
 
                 <Select
@@ -181,6 +190,9 @@ export default () => {
                   options={stateKeys}
                   keyPrefix="states"
                   dataTestId={"app-alternate-mailing-address-state"}
+                  error={errors.mailingAddress?.state}
+                  validation={{ maxLength: 64 }}
+                  errorMessage={t("errors.maxLength")}
                 />
               </div>
               <Field
@@ -191,6 +203,9 @@ export default () => {
                 defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}
+                error={errors.mailingAddress?.zipCode}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
               />
             </fieldset>
           </div>

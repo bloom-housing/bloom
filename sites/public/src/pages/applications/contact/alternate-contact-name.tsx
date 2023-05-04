@@ -91,9 +91,13 @@ export default () => {
                 readerOnly={true}
                 placeholder={t("application.name.firstName")}
                 defaultValue={application.alternateContact.firstName}
-                validation={{ required: true }}
+                validation={{ required: true, maxLength: 64 }}
+                errorMessage={
+                  errors.firstName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.firstNameError")
+                }
                 error={errors.firstName}
-                errorMessage={t("errors.firstNameError")}
                 register={register}
                 dataTestId={"app-alternate-first-name"}
               />
@@ -104,9 +108,13 @@ export default () => {
                 readerOnly={true}
                 placeholder={t("application.name.lastName")}
                 defaultValue={application.alternateContact.lastName}
-                validation={{ required: true }}
+                validation={{ required: true, maxLength: 64 }}
                 error={errors.lastName}
-                errorMessage={t("errors.lastNameError")}
+                errorMessage={
+                  errors.lastName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.lastNameError")
+                }
                 register={register}
                 dataTestId={"app-alternate-last-name"}
               />
