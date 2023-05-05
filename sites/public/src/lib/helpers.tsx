@@ -157,8 +157,9 @@ export const getListings = (listings: Listing[]) => {
     return null
   }
 
-  return listings.map((listing: Listing, index) => {
+  return listings.map((listing: Listing, index: number) => {
     const uri = getListingUrl(listing)
+    const displayIndex: string = (index + 1).toString()
     return (
       <ListingCard
         key={index}
@@ -190,7 +191,7 @@ export const getListings = (listings: Listing[]) => {
         ]}
         contentProps={{
           contentHeader: {
-            content: listing.name,
+            content: displayIndex + ". " + listing.name,
             href: uri,
           },
           contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
