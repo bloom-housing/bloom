@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException, Scope, UnauthorizedException } f
 import { HttpService } from "@nestjs/axios"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, Repository } from "typeorm"
+import { Brackets, In, Repository } from "typeorm"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
@@ -181,11 +181,20 @@ export class ListingsService {
   async rawListWithFlagged() {
     const userAccess = await this.userRepository
       .createQueryBuilder("user")
-      .select("user.id")
+      .select(["user.id", "jurisdictions.id"])
       .leftJoin("user.roles", "userRole")
+      .leftJoin("user.jurisdictions", "jurisdictions")
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       .where("user.id = :id", { id: (this.req.user as User)?.id })
-      .andWhere("userRole.is_admin = :is_admin", { is_admin: true })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where("userRole.is_admin = :is_admin", {
+            is_admin: true,
+          }).orWhere("userRole.is_jurisdictional_admin = :is_jurisdictional_admin", {
+            is_jurisdictional_admin: true,
+          })
+        })
+      )
       .getOne()
 
     if (!userAccess) {
@@ -196,6 +205,9 @@ export class ListingsService {
     const permissionedListings = await this.listingRepository
       .createQueryBuilder("listing")
       .select("listing.id")
+      .where("listing.jurisdiction_id IN (:...jurisdiction)", {
+        jurisdiction: userAccess.jurisdictions.map((elem) => elem.id),
+      })
       .getMany()
 
     // pulled out on the ids
@@ -206,6 +218,7 @@ export class ListingsService {
       this.listingRepository.createQueryBuilder("listing"),
       "listingsExport"
     ).getViewQb()
+
     const listingData = await listingsQb
       .where("listing.id IN (:...listingIds)", { listingIds })
       .getMany()

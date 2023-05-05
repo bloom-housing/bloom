@@ -302,7 +302,7 @@ views.listingsExport = {
     "listing.applicationPickUpAddress",
     "listing.applicationDropOffAddressType",
     "listing.applicationDropOffAddress",
-    "applicationMethods.acceptsPostmarkedApplications",
+    "listing.postmarkedApplicationsReceivedByDate",
     "listing.additionalApplicationSubmissionNotes",
     "listing.applicationDueDate",
     "listingEvents.id",

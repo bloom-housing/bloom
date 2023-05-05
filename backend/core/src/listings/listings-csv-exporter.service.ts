@@ -133,8 +133,10 @@ export class ListingsCsvExporterService {
         "Can applications be dropped off?": formatYesNo(
           listing.applicationPickUpAddress || listing?.applicationPickUpAddressType
         ),
-        "Are postmarks considered?": formatYesNo(
-          listing.applicationMethods?.acceptsPostmarkedApplications
+        Postmark: formatLocalDate(
+          listing.postmarkedApplicationsReceivedByDate,
+          "MM-DD-YYYY hh:mm:ssA z",
+          timeZone
         ),
         "Additional Application Submission Notes": listing.additionalApplicationSubmissionNotes,
         "Application Due Date": formatLocalDate(listing.applicationDueDate, "MM-DD-YYYY", timeZone),
