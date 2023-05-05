@@ -22,7 +22,7 @@ COPY --chown=node:node . .
 #####################
 
 # The test stage builds an image safe for running tests
-FROM deps AS tests
+FROM deps AS test
 
 WORKDIR /app
 
