@@ -120,11 +120,6 @@ const ListingPhotos = () => {
    Show a re-orderable list of uploaded images within the drawer
    */
 
-  const drawerTableHeaders = {
-    ordinal: "t.order",
-    ...photoTableHeaders,
-  }
-
   const drawerTableRows: StandardTableData = useMemo(() => {
     return drawerImages.map((item, index) => {
       const image = item.image as Asset
@@ -276,7 +271,7 @@ const ListingPhotos = () => {
                     })
                   )
                 }}
-                headers={drawerTableHeaders}
+                headers={photoTableHeaders}
                 data={drawerTableRows}
               ></MinimalTable>
             </div>
