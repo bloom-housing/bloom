@@ -253,7 +253,7 @@ const ListingPhotos = () => {
         ariaDescription="Form with photo upload dropzone"
       >
         <section className="border rounded-md p-8 bg-white">
-          <h2 className="text-lg mb-8">{t("listings.listingPhoto")}</h2>
+          <h2 className="grid-section__title mb-8">{t("listings.listingPhoto")}</h2>
           {drawerImages.length > 0 && (
             <div className="mb-10" data-testid="drawer-photos-table">
               <span className={"text-tiny text-gray-800 block mb-2"}>{t("t.photos")}</span>
