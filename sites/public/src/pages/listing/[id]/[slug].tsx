@@ -69,7 +69,7 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-      <ListingView listing={listing} jurisdiction={props.jurisdiction} />
+      <ListingView listing={listing} jurisdiction={props.jurisdiction} isExternal={false} />
     </Layout>
   )
 }
