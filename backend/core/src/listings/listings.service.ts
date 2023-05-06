@@ -203,9 +203,9 @@ export class ListingsService {
 
     // generated out list of permissioned listings
     const permissionedListings = await this.listingRepository
-      .createQueryBuilder("listing")
-      .select("listing.id")
-      .where("listing.jurisdiction_id IN (:...jurisdiction)", {
+      .createQueryBuilder("listings")
+      .select("listings.id")
+      .where("listings.jurisdiction_id IN (:...jurisdiction)", {
         jurisdiction: userAccess.jurisdictions.map((elem) => elem.id),
       })
       .getMany()
@@ -215,12 +215,11 @@ export class ListingsService {
 
     // Building and excecuting query for listings csv
     const listingsQb = getView(
-      this.listingRepository.createQueryBuilder("listing"),
+      this.listingRepository.createQueryBuilder("listings"),
       "listingsExport"
     ).getViewQb()
-
     const listingData = await listingsQb
-      .where("listing.id IN (:...listingIds)", { listingIds })
+      .where("listings.id IN (:...listingIds)", { listingIds })
       .getMany()
 
     // User data to determine listing access for csv
@@ -242,11 +241,13 @@ export class ListingsService {
 
     // Building and excecuting query for units csv
     const unitsQb = getView(
-      this.listingRepository.createQueryBuilder("listing"),
+      this.listingRepository.createQueryBuilder("listings"),
       "unitsExport"
     ).getViewQb()
 
-    const unitData = await unitsQb.where("listing.id IN (:...listingIds)", { listingIds }).getMany()
+    const unitData = await unitsQb
+      .where("listings.id IN (:...listingIds)", { listingIds })
+      .getMany()
 
     listingData.forEach((listing) => {
       const unitQuantity = unitData.find((unit) => unit.id === listing.id)?.units?.length
