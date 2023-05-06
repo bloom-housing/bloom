@@ -1,0 +1,1102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Accessibility {
+  id           String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  mobility     Boolean?
+  vision       Boolean?
+  hearing      Boolean?
+  applications Applications?
+
+  @@map("accessibility")
+}
+
+model ActivityLog {
+  id           String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  module       String        @db.VarChar
+  recordId     String        @map("record_id") @db.Uuid
+  action       String        @db.VarChar
+  metadata     Json?
+  userId       String?       @map("user_id") @db.Uuid
+  userAccounts UserAccounts? @relation(fields: [userId], references: [id], onUpdate: NoAction)
+
+  @@map("activity_log")
+}
+
+// Note: [place_name, city, county, state, street, street2, zip_code] formerly had max length of 64 characters
+model Address {
+  id                           String            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                    DateTime          @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                    DateTime          @updatedAt @map("updated_at") @db.Timestamp(6)
+  placeName                    String?           @map("place_name")
+  city                         String?
+  county                       String?
+  state                        String?
+  street                       String?
+  street2                      String?
+  zipCode                      String?           @map("zip_code")
+  latitude                     Decimal?          @db.Decimal
+  longitude                    Decimal?          @db.Decimal
+  alternateContact             AlternateContact?
+  applicantWorkAddress         Applicant?        @relation("applicant_work_address")
+  applicantAddress             Applicant?        @relation("applicant_address")
+  applicationsAlternateAddress Applications?     @relation("applications_alternate_address")
+  applicationsMailingAddress   Applications?     @relation("applications_mailing_address")
+  householdMemberAddress       HouseholdMember?  @relation("household_member_address")
+  householdMemberWorkAddress   HouseholdMember?  @relation("household_member_work_address")
+  applicationDropOffAddress    listings[]        @relation("application_drop_off_address")
+  applicationMailingAddress    listings[]        @relation("application_mailing_address")
+  leasingAgentAddress          listings[]        @relation("leasing_agent_address")
+  applicationPickUpAddress     listings[]        @relation("application_pick_up_address")
+  buildingAddress              listings[]        @relation("building_address")
+
+  @@map("address")
+}
+
+// Note: [type, phone_number] formerly max length 16; [other_type, first_name, last_name] formerly max length 64; [agency] formerly max length 128
+model AlternateContact {
+  id               String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt        DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  type             String?
+  otherType        String?       @map("other_type")
+  firstName        String?       @map("first_name")
+  lastName         String?       @map("last_name")
+  agency           String?
+  phoneNumber      String?       @map("phone_number")
+  emailAddress     String?       @map("email_address")
+  mailingAddressId String?       @unique() @map("mailing_address_id") @db.Uuid
+  address          Address?      @relation(fields: [mailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applications     Applications?
+
+  @@map("alternate_contact")
+}
+
+model AmiChart {
+  id                 String               @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt          DateTime             @updatedAt @map("updated_at") @db.Timestamp(6)
+  items              Json
+  name               String               @db.VarChar
+  jurisdictionId     String               @map("jurisdiction_id") @db.Uuid
+  jurisdictions      Jurisdictions        @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  amiChartItem       AmiChartItem[]
+  unitGroupAmiLevels UnitGroupAmiLevels[]
+  units              Units[]
+
+  @@map("ami_chart")
+}
+
+// Note: [birth_month, birth_day, birth_year] formerly max length 8; [phone_number, phone_number_type] formerly max length 16; 
+//       [first_name, middle_name, last_name] formerly max length 64
+// Note: [first_name, last_name] formerly min length 1
+// Note: [email_address] needs to have lower case enforcement
+model Applicant {
+  id                   String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt            DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt            DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  firstName            String?       @map("first_name")
+  middleName           String?       @map("middle_name")
+  lastName             String?       @map("last_name")
+  birthMonth           String?       @map("birth_month")
+  birthDay             String?       @map("birth_day")
+  birthYear            String?       @map("birth_year")
+  emailAddress         String?       @map("email_address")
+  noEmail              Boolean?      @map("no_email")
+  phoneNumber          String?       @map("phone_number")
+  phoneNumberType      String?       @map("phone_number_type")
+  noPhone              Boolean?      @map("no_phone")
+  workInRegion         YesNoEnum?    @map("work_in_region")
+  workAddressId        String?       @unique() @map("work_address_id") @db.Uuid
+  addressId            String?       @unique() @map("address_id") @db.Uuid
+  applicantWorkAddress Address?      @relation("applicant_work_address", fields: [workAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicantAddress     Address?      @relation("applicant_address", fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applications         Applications?
+
+  @@map("applicant")
+}
+
+// Note: [rule] used to be a different enum but prisma doesn't support that kind of enum yet. See: https://github.com/prisma/prisma/issues/273
+model ApplicationFlaggedSet {
+  id                    String               @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt             DateTime             @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt             DateTime             @updatedAt @map("updated_at") @db.Timestamp(6)
+  rule                  RuleEnum
+  ruleKey               String               @unique() @map("rule_key") @db.VarChar
+  resolvedTime          DateTime?            @map("resolved_time") @db.Timestamptz(6)
+  listingId             String               @map("listing_id") @db.Uuid
+  showConfirmationAlert Boolean              @default(false) @map("show_confirmation_alert")
+  status                FlaggedSetStatusEnum @default(pending)
+  resolvingUserId       String?              @map("resolving_user_id") @db.Uuid
+  userAccounts          UserAccounts?        @relation(fields: [resolvingUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applications          Applications[]
+
+  @@index([listingId])
+  @@map("application_flagged_set")
+}
+
+// model application_flagged_set_applications_applications {
+//   application_flagged_set_id String                  @db.Uuid
+//   applications_id            String                  @db.Uuid
+//   application_flagged_set    application_flagged_set @relation(fields: [application_flagged_set_id], references: [id], onDelete: Cascade, map: "FK_93f583f2d43fb21c5d7ceac57e7")
+//   applications               applications            @relation(fields: [applications_id], references: [id], onDelete: Cascade, map: "FK_bbae218ba0eff977157fad5ea31")
+
+//   @@id([application_flagged_set_id, applications_id])
+//   @@index([application_flagged_set_id], map: "IDX_93f583f2d43fb21c5d7ceac57e")
+//   @@index([applications_id], map: "IDX_bbae218ba0eff977157fad5ea3")
+// }
+
+// Note: [phone_number] formerly max length 16; [label] formerly max length 256; [external_reference] formerly max length 4096
+model ApplicationMethods {
+  id                            String                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                     DateTime                    @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                     DateTime                    @updatedAt @map("updated_at") @db.Timestamp(6)
+  type                          ApplicationReviewStatusEnum
+  label                         String?
+  externalReference             String?                     @map("external_reference")
+  acceptsPostmarkedApplications Boolean?                    @map("accepts_postmarked_applications")
+  phoneNumber                   String?                     @map("phone_number")
+  listingId                     String?                     @map("listing_id") @db.Uuid
+  listings                      listings?                   @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  paperApplications             PaperApplications[]
+
+  @@map("application_methods")
+}
+
+// Note: [additional_phone_number, additional_phone_number_type, household_size] formerly max length 16; 
+//       [contact_preferences, income] formerly max length 64;
+//       [app_url] formerly max length 256; 
+// Note: [contact_preferences] formerly max array length of 8
+// Note: [household_member] formerly had max array lenght of 32
+// Note: missing virtual [flagged] field
+model Applications {
+  id                           String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                    DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                    DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
+  deletedAt                    DateTime?                     @map("deleted_at") @db.Timestamp(6)
+  appUrl                       String?                       @map("app_url")
+  additionalPhone              Boolean?                      @map("additional_phone")
+  additionalPhoneNumber        String?                       @map("additional_phone_number")
+  additionalPhoneNumberType    String?                       @map("additional_phone_number_type")
+  contactPreferences           String[]                      @map("contact_preferences")
+  householdSize                Int?                          @map("household_size")
+  housingStatus                String?                       @map("housing_status")
+  sendMailToMailingAddress     Boolean?                      @map("send_mail_to_mailing_address")
+  householdExpectingChanges    Boolean?                      @map("household_expecting_changes")
+  householdStudent             Boolean?                      @map("household_student")
+  incomeVouchers               Boolean?                      @map("income_vouchers")
+  income                       String?
+  incomePeriod                 IncomePeriodEnum              @map("income_period")
+  preferences                  Json
+  programs                     Json?
+  status                       ApplicationStatusEnum
+  language                     LanguagesEnum
+  submissionType               ApplicationSubmissionTypeEnum @map("submission_type")
+  acceptedTerms                Boolean?                      @map("accepted_terms")
+  submissionDate               DateTime?                     @map("submission_date") @db.Timestamptz(6)
+  // if this field is true then the application is a confirmed duplicate
+  // meaning that the record in the application flagged set table has a status of duplicate
+  markedAsDuplicate            Boolean                       @default(false) @map("marked_as_duplicate")
+  confirmationCode             String                        @map("confirmation_code")
+  reviewStatus                 ApplicationReviewStatusEnum   @default(valid) @map("review_status")
+  userId                       String?                       @map("user_id") @db.Uuid
+  listingId                    String?                       @map("listing_id") @db.Uuid
+  applicantId                  String?                       @unique() @map("applicant_id") @db.Uuid
+  mailingAddressId             String?                       @unique() @map("mailing_address_id") @db.Uuid
+  alternateAddressId           String?                       @unique() @map("alternate_address_id") @db.Uuid
+  alternateContactId           String?                       @unique() @map("alternate_contact_id") @db.Uuid
+  accessibilityId              String?                       @unique() @map("accessibility_id") @db.Uuid
+  demographicsId               String?                       @unique() @map("demographics_id") @db.Uuid
+  applicationFlaggedSet        ApplicationFlaggedSet[]
+  applicant                    Applicant?                    @relation(fields: [applicantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  accessibility                Accessibility?                @relation(fields: [accessibilityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  alternateContact             AlternateContact?             @relation(fields: [alternateContactId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationsAlternateAddress Address?                      @relation("applications_alternate_address", fields: [alternateAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userAccounts                 UserAccounts?                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  applicationsMailingAddress   Address?                      @relation("applications_mailing_address", fields: [mailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                     listings?                     @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  demographics                 Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  preferredUnitTypes           UnitTypes[]
+  householdMember              HouseholdMember[]
+
+  @@unique([listingId, confirmationCode])
+  @@index([listingId])
+  @@map("applications")
+}
+
+// model applications_preferred_unit_unit_types {
+//   applications_id String       @db.Uuid
+//   unit_types_id   String       @db.Uuid
+//   unit_types      unit_types   @relation(fields: [unit_types_id], references: [id], onDelete: Cascade)
+//   applications    Applications @relation(fields: [applications_id], references: [id], onDelete: Cascade)
+
+//   @@id([applications_id, unit_types_id])
+//   @@index([unit_types_id])
+//   @@index([applications_id])
+// }
+
+// Note: [file_id, label] formerly max length 128
+model Assets {
+  id                            String              @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                     DateTime            @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                     DateTime            @updatedAt @map("updated_at") @db.Timestamp(6)
+  fileId                        String              @map("file_id")
+  label                         String
+  listingEvents                 ListingEvents[]
+  listingImages                 ListingImages[]
+  buildingSelectionCriteriaFile listings[]          @relation("building_selection_criteria_file")
+  listingsResult                listings[]          @relation("listings_result")
+  paperApplications             PaperApplications[]
+
+  @@map("assets")
+}
+
+// Note: [name] formerly max length 64
+model CronJob {
+  id          String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String?
+  lastRunDate DateTime? @map("last_run_date") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("cron_job")
+}
+
+// Note: [ethnicity, gender, sexual_orientation, how_did_you_hear] formerly max length 64
+// Note: [how_did_you_hear, race] formerly max array length 64
+model Demographics {
+  id                String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt         DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  ethnicity         String?
+  gender            String?
+  sexualOrientation String?       @map("sexual_orientation")
+  howDidYouHear     String[]      @map("how_did_you_hear")
+  race              String[]
+  applications      Applications?
+
+  @@map("demographics")
+}
+
+model GeneratedListingTranslations {
+  id             String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  listingId      String        @map("listing_id") @db.VarChar
+  jurisdictionId String        @map("jurisdiction_id") @db.VarChar
+  language       LanguagesEnum
+  translations   Json
+  timestamp      DateTime      @db.Timestamp(6)
+
+  @@map("generated_listing_translations")
+}
+
+// Note: [birth_month, birth_day, birth_year] formerly max length 8; 
+//       [phone_number, phone_number_type] formerly max length 16
+//       [first_name, middle_name, last_name, relationship] formerly max length 64;
+// Note: [email_address] formerly enforced lower case
+model HouseholdMember {
+  id                         String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                  DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                  DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  orderId                    Int?          @map("order_id")
+  firstName                  String?       @map("first_name")
+  middleName                 String?       @map("middle_name")
+  lastName                   String?       @map("last_name")
+  birthMonth                 String?       @map("birth_month")
+  birthDay                   String?       @map("birth_day")
+  birthYear                  String?       @map("birth_year")
+  emailAddress               String?       @map("email_address")
+  phoneNumber                String?       @map("phone_number")
+  phoneNumberType            String?       @map("phone_number_type")
+  noPhone                    Boolean?      @map("no_phone")
+  sameAddress                YesNoEnum     @map("same_address")
+  relationship               String?
+  workInRegion               YesNoEnum     @map("work_in_region")
+  addressId                  String?       @unique() @map("address_id") @db.Uuid
+  workAddressId              String?       @unique() @map("work_address_id") @db.Uuid
+  applicationId              String?       @map("application_id") @db.Uuid
+  applications               Applications? @relation(fields: [applicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  householdMemberAddress     Address?      @relation("household_member_address", fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  householdMemberWorkAddress Address?      @relation("household_member_work_address", fields: [workAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([applicationId])
+  @@map("household_member")
+}
+
+// Note: [name] formerly max length 256
+model Jurisdictions {
+  id                          String                   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                   DateTime                 @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                   DateTime                 @updatedAt @map("updated_at") @db.Timestamp(6)
+  name                        String                   @unique()
+  notificationsSignUpUrl      String?                  @map("notifications_sign_up_url")
+  languages                   LanguagesEnum[]          @default([en])
+  partnerTerms                String?                  @map("partner_terms")
+  publicUrl                   String                   @default("") @map("public_url")
+  emailFromAddress            String?                  @map("email_from_address")
+  rentalAssistanceDefault     String                   @map("rental_assistance_default")
+  enablePartnerSettings       Boolean                  @default(false) @map("enable_partner_settings")
+  enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
+  enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
+  amiChart                    AmiChart[]
+  multiselectQuestions        MultiselectQuestions[]
+  listings                    listings[]
+  reservedCommunityTypes      ReservedCommunityTypes[]
+  translations                Translations[]
+  user_accounts               UserAccounts[]
+
+  @@map("jurisdictions")
+}
+
+// model jurisdictions_multiselect_questions_multiselect_questions {
+//   jurisdictions_id         String                @db.Uuid
+//   multiselect_questions_id String                @db.Uuid
+//   jurisdictions            jurisdictions         @relation(fields: [jurisdictions_id], references: [id], onDelete: Cascade, map: "FK_3f7126f5da7c0368aea2f9459c0")
+//   multiselect_questions    multiselect_questions @relation(fields: [multiselect_questions_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_ab91e5d403a6cf21656f7d5ae20")
+
+//   @@id([jurisdictions_id, multiselect_questions_id])
+//   @@index([jurisdictions_id], map: "IDX_3f7126f5da7c0368aea2f9459c")
+//   @@index([multiselect_questions_id], map: "IDX_ab91e5d403a6cf21656f7d5ae2")
+// }
+
+model ListingEvents {
+  id        String            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime          @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime          @updatedAt @map("updated_at") @db.Timestamp(6)
+  type      MarketingTypeEnum
+  startDate DateTime?         @map("start_date") @db.Timestamptz(6)
+  startTime DateTime?         @map("start_time") @db.Timestamptz(6)
+  endTime   DateTime?         @map("end_time") @db.Timestamptz(6)
+  url       String?
+  note      String?
+  label     String?
+  listingId String?           @map("listing_id") @db.Uuid
+  fileId    String?           @map("file_id") @db.Uuid
+  assets    Assets?           @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  listings?         @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("listing_events")
+}
+
+model ListingFeatures {
+  id                      String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt               DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  elevator                Boolean?
+  wheelchairRamp          Boolean?  @map("wheelchair_ramp")
+  serviceAnimalsAllowed   Boolean?  @map("service_animals_allowed")
+  accessibleParking       Boolean?  @map("accessible_parking")
+  parkingOnSite           Boolean?  @map("parking_on_site")
+  inUnitWasherDryer       Boolean?  @map("in_unit_washer_dryer")
+  laundryInBuilding       Boolean?  @map("laundry_in_building")
+  barrierFreeEntrance     Boolean?  @map("barrier_free_entrance")
+  rollInShower            Boolean?  @map("roll_in_shower")
+  grabBars                Boolean?  @map("grab_bars")
+  heatingInUnit           Boolean?  @map("heating_in_unit")
+  acInUnit                Boolean?  @map("ac_in_unit")
+  hearing                 Boolean?
+  visual                  Boolean?
+  mobility                Boolean?
+  barrierFreeUnitEntrance Boolean?  @map("barrier_free_unit_entrance")
+  loweredLightSwitch      Boolean?  @map("lowered_light_switch")
+  barrierFreeBathroom     Boolean?  @map("barrier_free_bathroom")
+  wideDoorways            Boolean?  @map("wide_doorways")
+  loweredCabinets         Boolean?  @map("lowered_cabinets")
+  listings                listings?
+
+  @@map("listing_features")
+}
+
+model ListingImages {
+  ordinal   Int?
+  listingId String   @map("listing_id") @db.Uuid
+  imageId   String   @map("image_id") @db.Uuid
+  assets    Assets   @relation(fields: [imageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  listings @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([listingId, imageId])
+  @@index([listingId])
+  @@map("listing_images")
+}
+
+model ListingMultiselectQuestions {
+  ordinal               Int?
+  listingId             String               @map("listing_id") @db.Uuid
+  multiselectQuestionId String               @map("multiselect_question_id") @db.Uuid
+  multiselectQuestions  MultiselectQuestions @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([listingId, multiselectQuestionId])
+  @@map("listing_multiselect_questions")
+}
+
+model ListingUtilities {
+  id          String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+  water       Boolean?
+  gas         Boolean?
+  trash       Boolean?
+  sewer       Boolean?
+  electricity Boolean?
+  cable       Boolean?
+  phone       Boolean?
+  internet    Boolean?
+  listings    listings?
+
+  @@map("listing_utilities")
+}
+
+// Note: missing [referralApplication, applicationConfig, showWaitlist, unitsSummarized] virtual property
+// Note: [reserved_community_description, result_link] formerly max length 4096;
+model listings {
+  id                                    String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                             DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                             DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
+  additionalApplicationSubmissionNotes  String?                       @map("additional_application_submission_notes")
+  digitalApplication                    Boolean?                      @map("digital_application")
+  commonDigitalApplication              Boolean?                      @map("common_digital_application")
+  paperApplication                      Boolean?                      @map("paper_application")
+  referralOpportunity                   Boolean?                      @map("referral_opportunity")
+  assets                                Json
+  accessibility                         String?
+  amenities                             String?
+  buildingTotalUnits                    Int?                          @map("building_total_units")
+  developer                             String?
+  householdSizeMax                      Int?                          @map("household_size_max")
+  householdSizeMin                      Int?                          @map("household_size_min")
+  neighborhood                          String?
+  petPolicy                             String?                       @map("pet_policy")
+  smokingPolicy                         String?                       @map("smoking_policy")
+  unitsAvailable                        Int?                          @map("units_available")
+  unitAmenities                         String?                       @map("unit_amenities")
+  servicesOffered                       String?                       @map("services_offered")
+  yearBuilt                             Int?                          @map("year_built")
+  applicationDueDate                    DateTime?                     @map("application_due_date") @db.Timestamptz(6)
+  applicationOpenDate                   DateTime?                     @map("application_open_date") @db.Timestamptz(6)
+  applicationFee                        String?                       @map("application_fee")
+  applicationOrganization               String?                       @map("application_organization")
+  applicationPickUpAddressOfficeHours   String?                       @map("application_pick_up_address_office_hours")
+  applicationPickUpAddressType          ApplicationAddressTypeEnum?   @map("application_pick_up_address_type")
+  applicationDropOffDddressOffice_hours String?                       @map("application_drop_off_address_office_hours")
+  applicationDropOffAddress_type        ApplicationAddressTypeEnum?   @map("application_drop_off_address_type")
+  applicationMailingAddressType         ApplicationAddressTypeEnum?   @map("application_mailing_address_type")
+  buildingSelectionCriteria             String?                       @map("building_selection_criteria")
+  costsNotIncluded                      String?                       @map("costs_not_included")
+  creditHistory                         String?                       @map("credit_history")
+  criminalBackground                    String?                       @map("criminal_background")
+  depositMin                            String?                       @map("deposit_min")
+  depositMax                            String?                       @map("deposit_max")
+  depositHelperText                     String?                       @map("deposit_helper_text")
+  disableUnitsAccordion                 Boolean?                      @map("disable_units_accordion")
+  leasingAgentEmail                     String?                       @map("leasing_agent_email")
+  leasingAgentName                      String?                       @map("leasing_agent_name")
+  leasingAgentOfficeHours               String?                       @map("leasing_agent_office_hours")
+  leasingAgentPhone                     String?                       @map("leasing_agent_phone")
+  leasingAgentTitle                     String?                       @map("leasing_agent_title")
+  name                                  String
+  postmarkedApplicationsReceivedByDate  DateTime?                     @map("postmarked_applications_received_by_date") @db.Timestamptz(6)
+  programRules                          String?                       @map("program_rules")
+  rentalAssistance                      String?                       @map("rental_assistance")
+  rentalHistory                         String?                       @map("rental_history")
+  requiredDocuments                     String?                       @map("required_documents")
+  specialNotes                          String?                       @map("special_notes")
+  waitlistCurrentSize                   Int?                          @map("waitlist_current_size")
+  waitlistMaxSize                       Int?                          @map("waitlist_max_size")
+  whatToExpect                          String?                       @map("what_to_expect")
+  status                                ListingsStatusEnum            @default(pending)
+  reviewOrderType                       ReviewOrderTypeEnum?          @map("review_order_type")
+  displayWaitlistSize                   Boolean                       @map("display_waitlist_size")
+  reservedCommunityDescription          String?                       @map("reserved_community_description")
+  reservedCommunityMinAge               Int?                          @map("reserved_community_min_age")
+  resultLink                            String?                       @map("result_link")
+  isWaitlistOpen                        Boolean?                      @map("is_waitlist_open")
+  waitlistOpenSpots                     Int?                          @map("waitlist_open_spots")
+  customMapPin                          Boolean?                      @map("custom_map_pin")
+  publishedAt                           DateTime?                     @map("published_at") @db.Timestamptz(6)
+  closedAt                              DateTime?                     @map("closed_at") @db.Timestamptz(6)
+  afsLastRunAt                          DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("afs_last_run_at") @db.Timestamptz(6)
+  lastApplicationUpdateAt               DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("last_application_update_at") @db.Timestamptz(6)
+  buildingAddressId                     String?                       @map("building_address_id") @db.Uuid
+  applicationPickUpAddressId            String?                       @map("application_pick_up_address_id") @db.Uuid
+  applicationDropOffAddressId           String?                       @map("application_drop_off_address_id") @db.Uuid
+  applicationMailingAddressId           String?                       @map("application_mailing_address_id") @db.Uuid
+  buildingSelectionCriteriaFileId       String?                       @map("building_selection_criteria_file_id") @db.Uuid
+  jurisdictionId                        String?                       @map("jurisdiction_id") @db.Uuid
+  leasingAgentAddressId                 String?                       @map("leasing_agent_address_id") @db.Uuid
+  reservedCommunityTypeId               String?                       @map("reserved_community_type_id") @db.Uuid
+  resultId                              String?                       @map("result_id") @db.Uuid
+  featuresId                            String?                       @unique() @map("features_id") @db.Uuid
+  utilitiesId                           String?                       @unique() @map("utilities_id") @db.Uuid
+  // START DETROIT SPECIFIC
+  hrdId                                 String?                       @map("hrd_id")
+  ownerCompany                          String?                       @map("owner_company")
+  managementCompany                     String?                       @map("management_company")
+  managementWebsite                     String?                       @map("management_website")
+  amiPercentageMin                      Int?                          @map("ami_percentage_min")
+  amiPercentageMax                      Int?                          @map("ami_percentage_max")
+  phoneNumber                           String?                       @map("phone_number")
+  temporaryListingId                    Int?                          @map("temporary_listing_id")
+  isVerified                            Boolean?                      @default(false) @map("is_verified")
+  marketingType                         MarketingTypeEnum             @default(marketing) @map("marketing_type")
+  marketingDate                         DateTime?                     @map("marketing_date") @db.Timestamptz(6)
+  marketingSeason                       MarketingSeasonEnum?          @map("marketing_season")
+  whatToExpectAdditionalText            String?                       @map("what_to_expect_additional_text")
+  section8Acceptance                    Boolean?                      @map("section8_acceptance")
+  neighborhoodAmenitiesId               String?                       @unique() @map("neighborhood_amenities_id") @db.Uuid
+  verifiedAt                            DateTime?                     @map("verified_at") @db.Timestamptz(6)
+  homeType                              HomeTypeEnum?                 @map("home_type")
+  listingNeighborhoodAmenities          ListingNeighborhoodAmenities? @relation(fields: [neighborhoodAmenitiesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  region                                RegionEnum?
+  // END DETROIT SPECIFIC
+  applicationFlaggedSet                 ApplicationFlaggedSet[]
+  applicationMethods                    ApplicationMethods[]
+  applications                          Applications[]
+  listingEvents                         ListingEvents[]
+  listingImages                         ListingImages[]
+  listingMultiselectQuestions           ListingMultiselectQuestions[]
+  listingsApplicationDropOffAddress     Address?                      @relation("application_drop_off_address", fields: [applicationDropOffAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reservedCommunityTypes                ReservedCommunityTypes?       @relation(fields: [reservedCommunityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsBuildingSelectionCriteriaFile Assets?                       @relation("building_selection_criteria_file", fields: [buildingSelectionCriteriaFileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsResult                        Assets?                       @relation("listings_result", fields: [resultId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingUtilities                      ListingUtilities?             @relation(fields: [utilitiesId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsApplicationMailingAddress     Address?                      @relation("application_mailing_address", fields: [applicationMailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsLeasingAgentAddress           Address?                      @relation("leasing_agent_address", fields: [leasingAgentAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingFeatures                       ListingFeatures?              @relation(fields: [featuresId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jurisdictions                         Jurisdictions?                @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsApplicationPickUpAddress      Address?                      @relation("application_pick_up_address", fields: [applicationPickUpAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingsBuildingAddress               Address?                      @relation("building_address", fields: [buildingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userAccounts                          UserAccounts[]
+  units                                 Units[]
+  unitGroup                             UnitGroup[]
+  userPreferences                       UserPreferences[]
+  unitsSummary                          UnitsSummary[]
+
+  @@index([jurisdictionId])
+}
+
+// model listings_leasing_agents_user_accounts {
+//   listings_id      String        @db.Uuid
+//   user_accounts_id String        @db.Uuid
+//   user_accounts    user_accounts @relation(fields: [user_accounts_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   listings         listings      @relation(fields: [listings_id], references: [id], onDelete: Cascade)
+
+//   @@id([listings_id, user_accounts_id])
+//   @@index([user_accounts_id])
+//   @@index([listings_id])
+// }
+
+// Note: hold over from TypeORM 
+model Migrations {
+  id        Int    @id() @default(autoincrement())
+  timestamp BigInt
+  name      String @db.VarChar
+
+  @@map("migrations")
+}
+
+// Note: missing [untranslatedText, untranslatedOptOutText] virtual fields
+// Note: [options] formerly had array max length 64
+model MultiselectQuestions {
+  id                 String                                     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt          DateTime                                   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt          DateTime                                   @updatedAt @map("updated_at") @db.Timestamp(6)
+  text               String
+  subText            String?                                    @map("sub_text")
+  description        String?
+  links              Json?
+  options            Json?
+  optOutText         String?                                    @map("opt_out_text")
+  hideFromListing    Boolean?                                   @map("hide_from_listing")
+  applicationSection MultiselectQuestionsApplicationSectionEnum @map("application_section")
+  jurisdictions      Jurisdictions[]
+  listings           ListingMultiselectQuestions[]
+
+  @@map("multiselect_questions")
+}
+
+model PaperApplications {
+  id                  String              @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt           DateTime            @updatedAt @map("updated_at") @db.Timestamp(6)
+  language            LanguagesEnum
+  fileId              String?             @map("file_id") @db.Uuid
+  applicationMethodId String?             @map("application_method_id") @db.Uuid
+  assets              Assets?             @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicationMethods  ApplicationMethods? @relation(fields: [applicationMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("paper_applications")
+}
+
+// Note: [name] formerly max length 256; [description] formerly max length 2048
+model ReservedCommunityTypes {
+  id             String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamp(6)
+  name           String
+  description    String?
+  jurisdictionId String        @map("jurisdiction_id") @db.Uuid
+  listings       listings[]
+  jurisdictions  Jurisdictions @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("reserved_community_types")
+}
+
+model Translations {
+  id             String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  language       LanguagesEnum
+  translations   Json
+  jurisdictionId String?        @map("jurisdiction_id") @db.Uuid
+  jurisdictions  Jurisdictions? @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([jurisdictionId, language])
+  @@map("translations")
+}
+
+// Note: [name] formerly max length 256
+model UnitAccessibilityPriorityTypes {
+  id           String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name         String
+  units        Units[]
+  unitGroup    UnitGroup[]
+  unitsSummary UnitsSummary[]
+
+  @@map("unit_accessibility_priority_types")
+}
+
+model UnitAmiChartOverrides {
+  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+  items     Json
+  units     Units?
+
+  @@map("unit_ami_chart_overrides")
+}
+
+// Note: [name] formerly max length 256
+model UnitRentTypes {
+  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+  name      String
+  units     Units[]
+
+  @@map("unit_rent_types")
+}
+
+// Note: [name] formerly max length 256
+model UnitTypes {
+  id           String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
+  name         String
+  numBedrooms  Int            @map("num_bedrooms")
+  applications Applications[]
+  units        Units[]
+  unitGroups   UnitGroup[]
+  unitsSummary UnitsSummary[]
+
+  @@map("unit_types")
+}
+
+model Units {
+  id                             String                          @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                      DateTime                        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                      DateTime                        @updatedAt @map("updated_at") @db.Timestamp(6)
+  amiPercentage                  String?                         @map("ami_percentage")
+  annualIncomeMin                String?                         @map("annual_income_min")
+  monthlyIncomeMin               String?                         @map("monthly_income_min")
+  floor                          Int?
+  annualIncomeMax                String?                         @map("annual_income_max")
+  maxOccupancy                   Int?                            @map("max_occupancy")
+  minOccupancy                   Int?                            @map("min_occupancy")
+  monthlyRent                    String?                         @map("monthly_rent")
+  numBathrooms                   Int?                            @map("num_bathrooms")
+  numBedrooms                    Int?                            @map("num_bedrooms")
+  number                         String?
+  sqFeet                         Decimal?                        @map("sq_feet") @db.Decimal(8, 2)
+  monthlyRentAsPercentOfIncome   Decimal?                        @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
+  bmrProgramChart                Boolean?                        @map("bmr_program_chart")
+  amiChartId                     String?                         @map("ami_chart_id") @db.Uuid
+  listingId                      String?                         @map("listing_id") @db.Uuid
+  unitTypeId                     String?                         @map("unit_type_id") @db.Uuid
+  unitRentTypeId                 String?                         @map("unit_rent_type_id") @db.Uuid
+  priorityTypeId                 String?                         @map("priority_type_id") @db.Uuid
+  amiChartOverrideId             String?                         @unique() @map("ami_chart_override_id") @db.Uuid
+  unitTypes                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  amiChart                       AmiChart?                       @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitAmiChartOverrides          UnitAmiChartOverrides?          @relation(fields: [amiChartOverrideId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                       listings?                       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  unitRentTypes                  UnitRentTypes?                  @relation(fields: [unitRentTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  status                         UnitsStatusEnum                 @default(unknown)
+
+  @@map("units")
+}
+
+model UnitsSummary {
+  id                             String                          @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  monthlyRentMin                 Int?                            @map("monthly_rent_min")
+  monthlyRentMax                 Int?                            @map("monthly_rent_max")
+  monthlyRentAsPercentOfIncome   Decimal?                        @map("monthly_rent_as_percent_of_income") @db.Decimal(8, 2)
+  amiPercentage                  Int?                            @map("ami_percentage")
+  minimumIncomeMin               String?                         @map("minimum_income_min")
+  minimumIncomeMax               String?                         @map("minimum_income_max")
+  maxOccupancy                   Int?                            @map("max_occupancy")
+  minOccupancy                   Int?                            @map("min_occupancy")
+  floorMin                       Int?                            @map("floor_min")
+  floorMax                       Int?                            @map("floor_max")
+  sqFeetMin                      Decimal?                        @map("sq_feet_min") @db.Decimal(8, 2)
+  sqFeetMax                      Decimal?                        @map("sq_feet_max") @db.Decimal(8, 2)
+  totalCount                     Int?                            @map("total_count")
+  totalAvailable                 Int?                            @map("total_available")
+  unitTypeId                     String?                         @map("unit_type_id") @db.Uuid
+  listingId                      String?                         @map("listing_id") @db.Uuid
+  priorityTypeId                 String?                         @map("priority_type_id") @db.Uuid
+  unitTypes                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                       listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("units_summary")
+}
+
+// Note: [mfa_code] formerly max length 16; [first_name, middle_name, last_name] formerly max length 64
+// Note: [email] formerly lower case enforced
+model UserAccounts {
+  id                       String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  passwordHash             String                  @map("password_hash") @db.VarChar
+  passwordUpdatedAt        DateTime                @default(now()) @map("password_updated_at") @db.Timestamp(6)
+  passwordValidForDays     Int                     @default(180) @map("password_valid_for_days")
+  resetToken               String?                 @map("reset_token") @db.VarChar
+  confirmationToken        String?                 @map("confirmation_token") @db.VarChar
+  confirmedAt              DateTime?               @map("confirmed_at") @db.Timestamptz(6)
+  email                    String                  @unique() @db.VarChar
+  firstName                String                  @map("first_name") @db.VarChar
+  middleName               String?                 @map("middle_name") @db.VarChar
+  lastName                 String                  @map("last_name") @db.VarChar
+  dob                      DateTime?               @db.Timestamp(6)
+  phoneNumber              String?                 @map("phone_number") @db.VarChar
+  createdAt                DateTime                @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
+  language                 LanguagesEnum
+  mfaEnabled               Boolean                 @default(false) @map("mfa_enabled")
+  mfaCode                  String?                 @map("mfa_code") @db.VarChar
+  mfaCodeUpdatedAt         DateTime?               @map("mfa_code_updated_at") @db.Timestamptz(6)
+  lastLoginAt              DateTime                @default(now()) @map("last_login_at") @db.Timestamp(6)
+  failedLoginAttemptsCount Int                     @default(0) @map("failed_login_attempts_count")
+  phoneNumberVerified      Boolean?                @default(false) @map("phone_number_verified")
+  agreedToTermsOfService   Boolean                 @default(false) @map("agreed_to_terms_of_service")
+  hitConfirmation_url      DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
+  activeAccessToken        String?                 @map("active_access_token") @db.VarChar
+  activeRefreshToken       String?                 @map("active_refresh_token") @db.VarChar
+  activityLogs             ActivityLog[]
+  applicationFlaggedSet    ApplicationFlaggedSet[]
+  applications             Applications[]
+  listings                 listings[]
+  jurisdictions            Jurisdictions[]
+  userPreferences          UserPreferences?
+  userRoles                UserRoles?
+
+  @@map("user_accounts")
+}
+
+// model user_accounts_jurisdictions_jurisdictions {
+//   user_accounts_id String        @db.Uuid
+//   jurisdictions_id String        @db.Uuid
+//   user_accounts    user_accounts @relation(fields: [user_accounts_id], references: [id], onDelete: Cascade)
+//   jurisdictions    jurisdictions @relation(fields: [jurisdictions_id], references: [id], onDelete: Cascade)
+
+//   @@id([user_accounts_id, jurisdictions_id])
+//   @@index([user_accounts_id])
+//   @@index([jurisdictions_id])
+// }
+
+model UserRoles {
+  isAdmin               Boolean      @default(false) @map("is_admin")
+  isJurisdictionalAdmin Boolean      @default(false) @map("is_jurisdictional_admin")
+  isPartner             Boolean      @default(false) @map("is_partner")
+  userId                String       @id() @map("user_id") @db.Uuid
+  userAccounts          UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_roles")
+}
+
+// START DETROIT SPECIFIC
+model AmiChartItem {
+  id            String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime  @default(now()) @map("updated_at") @db.Timestamp(6)
+  percentOfAmi  Int       @map("percent_of_ami")
+  householdSize Int       @map("household_size")
+  income        Int
+  amiChartId    String?   @map("ami_chart_id") @db.Uuid
+  amiChart      AmiChart? @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("ami_chart_item")
+}
+
+model ListingNeighborhoodAmenities {
+  id                       String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                DateTime  @default(now()) @map("updated_at") @db.Timestamp(6)
+  groceryStores            String?   @map("grocery_stores")
+  pharmacies               String?
+  healthCareResources      String?   @map("health_care_resources")
+  parksAndCommunityCenters String?   @map("parks_and_community_centers")
+  schools                  String?
+  publicTransportation     String?   @map("public_transportation")
+  listings                 listings?
+
+  @@map("listing_neighborhood_amenities")
+}
+
+model UnitGroup {
+  maxOccupancy                   Int?                            @map("max_occupancy")
+  minOccupancy                   Int?                            @map("min_occupancy")
+  floorMin                       Int?                            @map("floor_min")
+  floorMax                       Int?                            @map("floor_max")
+  totalCount                     Int?                            @map("total_count")
+  totalAvailable                 Int?                            @map("total_available")
+  priorityTypeId                 String?                         @map("priority_type_id") @db.Uuid
+  id                             String                          @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  listingId                      String?                         @map("listing_id") @db.Uuid
+  bathroomMin                    Decimal?                        @map("bathroom_min") @db.Decimal
+  bathroomMax                    Decimal?                        @map("bathroom_max") @db.Decimal
+  openWaitlist                   Boolean                         @default(true) @map("open_waitlist")
+  sqFeetMin                      Decimal?                        @map("sq_feet_min") @db.Decimal
+  sqFeetMax                      Decimal?                        @map("sq_feet_max") @db.Decimal
+  listings                       listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitGroupAmiLevels             UnitGroupAmiLevels[]
+  unitTypes                      UnitTypes[]
+
+  @@map("unit_group")
+}
+
+model UnitGroupAmiLevels {
+  id                           String                           @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  amiPercentage                Int?                             @map("ami_percentage")
+  monthlyRentDeterminationType MonthlyRentDeterminationTypeEnum @map("monthly_rent_determination_type")
+  percentageOfIncomeValue      Decimal?                         @map("percentage_of_income_value") @db.Decimal
+  amiChartId                   String?                          @map("ami_chart_id") @db.Uuid
+  unitGroupId                  String?                          @map("unit_group_id") @db.Uuid
+  flatRentValue                Decimal?                         @map("flat_rent_value") @db.Decimal
+  unitGroup                    UnitGroup?                       @relation(fields: [unitGroupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  amiChart                     AmiChart?                        @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("unit_group_ami_levels")
+}
+
+// model unit_group_unit_type_unit_types {
+//   unit_group_id String     @db.Uuid
+//   unit_types_id String     @db.Uuid
+//   unit_types    UnitTypes @relation(fields: [unit_types_id], references: [id], onDelete: Cascade)
+//   unit_group    UnitGroup @relation(fields: [unit_group_id], references: [id], onDelete: Cascade)
+
+//   @@id([unit_group_id, unit_types_id])
+//   @@index([unit_types_id])
+//   @@index([unit_group_id])
+// }
+
+model UserPreferences {
+  sendEmailNotifications Boolean      @default(false) @map("send_email_notifications")
+  sendSmsNotifications   Boolean      @default(false) @map("send_sms_notifications")
+  userId                 String       @id() @unique() @map("user_id") @db.Uuid
+  favoriteIds            String[]     @default([]) @map("favorite_ids")
+  userAccounts           UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  favoritesListings      listings[]
+
+  @@map("user_preferences")
+}
+
+// model user_preferences_favorites_listings {
+//   user_preferences_user_id String           @db.Uuid
+//   listings_id              String           @db.Uuid
+//   user_preferences         user_preferences @relation(fields: [user_preferences_user_id], references: [user_id], onDelete: Cascade)
+//   listings                 listings         @relation(fields: [listings_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+//   @@id([user_preferences_user_id, listings_id])
+//   @@index([user_preferences_user_id])
+//   @@index([listings_id])
+// }
+
+// END DETROIT SPECIFIC
+
+enum ApplicationMethodsTypeEnum {
+  Internal
+  FileDownload
+  ExternalLink
+  PaperPickup
+  POBox
+  LeasingAgent
+  Referral
+
+  @@map("application_methods_type_enum")
+}
+
+enum LanguagesEnum {
+  en
+  es
+  vi
+  zh
+  tl
+
+  @@map("languages_enum")
+}
+
+enum ListingEventsTypeEnum {
+  openHouse
+  publicLottery
+  lotteryResults
+
+  @@map("listing_events_type_enum")
+}
+
+enum ApplicationAddressTypeEnum {
+  leasingAgent
+
+  @@map("listings_application_address_type_enum")
+}
+
+enum ReviewOrderTypeEnum {
+  lottery
+  firstComeFirstServe
+  waitlist
+
+  @@map("listings_review_order_type_enum")
+}
+
+enum ListingsStatusEnum {
+  active
+  pending
+  closed
+
+  @@map("listings_status_enum")
+}
+
+enum MultiselectQuestionsApplicationSectionEnum {
+  programs
+  preferences
+
+  @@map("multiselect_questions_application_section_enum")
+}
+
+enum YesNoEnum {
+  yes
+  no
+
+  @@map("yes_no_enum")
+}
+
+enum RuleEnum {
+  nameAndDOB
+  email
+
+  @@map("rule_enum")
+}
+
+enum FlaggedSetStatusEnum {
+  flagged
+  pending
+  resolved
+
+  @@map("flagged_set_status_enum")
+}
+
+enum IncomePeriodEnum {
+  perMonth
+  perYear
+
+  @@map("income_period_enum")
+}
+
+enum ApplicationStatusEnum {
+  draft
+  submitted
+  removed
+
+  @@map("application_status_enum")
+}
+
+enum ApplicationSubmissionTypeEnum {
+  paper
+  electronical
+
+  @@map("application_submission_type_enum")
+}
+
+enum ApplicationReviewStatusEnum {
+  pending
+  pendingAndValid
+  valid
+  duplicate
+
+  @@map("application_review_status_enum")
+}
+
+enum UnitsStatusEnum {
+  unknown
+  available
+  occupied
+  unavailable
+
+  @@map("units_status_enum")
+}
+
+enum HomeTypeEnum {
+  apartment
+  duplex
+  house
+  townhome
+
+  @@map("listings_home_type_enum")
+}
+
+enum MarketingSeasonEnum {
+  spring
+  summer
+  fall
+  winter
+
+  @@map("listings_marketing_season_enum")
+}
+
+enum MarketingTypeEnum {
+  marketing
+  comingSoon
+
+  @@map("listings_marketing_type_enum")
+}
+
+enum RegionEnum {
+  Greater_Downtown
+  Eastside
+  Southwest
+  Westside
+
+  @@map("property_region_enum")
+}
+
+enum MonthlyRentDeterminationTypeEnum {
+  flatRent
+  percentageOfIncome
+
+  @@map("monthly_rent_determination_type_enum")
+}
