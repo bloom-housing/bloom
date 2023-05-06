@@ -26,6 +26,7 @@ export const formatYesNo = (value: boolean | null): string => {
 
 export const formatStatus = {
   active: "Public",
+  closed: "Closed",
   pending: "Draft",
 }
 
