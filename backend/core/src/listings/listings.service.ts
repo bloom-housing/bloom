@@ -132,6 +132,18 @@ export class ListingsService {
       await this.afsService.scheduleAfsProcessing()
     }
 
+    if (listingDto.buildingSelectionCriteria) {
+      listing.buildingSelectionCriteriaFile = null
+      await this.listingRepository.update(
+        { id: listing.id },
+        {
+          buildingSelectionCriteriaFile: null,
+        }
+      )
+    } else if (listingDto.buildingSelectionCriteriaFile) {
+      listing.buildingSelectionCriteria = null
+    }
+
     Object.assign(listing, {
       ...listingDto,
       publishedAt:
