@@ -20,11 +20,11 @@ phases:
   build:
     commands:
       # # Public
-      - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=public --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} -t sites/public:test
+      - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=public --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/public:test
       - docker run sites/public:test
-      - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=public --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/public:run
-      - docker tag sites/public:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker tag sites/public:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:run"
+      - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=public --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/public:run-candidate
+      - docker tag sites/public:run-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
+      - docker tag sites/public:run-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:run-candidate"
 
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:run"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/public:run-candidate"

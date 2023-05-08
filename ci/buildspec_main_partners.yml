@@ -20,12 +20,12 @@ phases:
   build:
     commands:
       # # Partners
-      - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} -t sites/partners:test
+      - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/partners:test
       - docker run sites/partners:test
-      - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/partners:run
-      - docker tag sites/partners:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker tag sites/partners:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:run"
+      - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/partners:run-candidate
+      - docker tag sites/partners:run-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
+      - docker tag sites/partners:run-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:run-candidate"
 
       # Pushing images to ECR
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:run"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:run-candidate"

@@ -1,8 +1,9 @@
 
 # Set a default value for the SITE arg
 ARG SITE=public
-ARG CLOUDINARY_CLOUD_NAME
-ARG FILE_SERVICE
+ARG CLOUDINARY_CLOUD_NAME=blank
+ARG FILE_SERVICE=blank
+ARG LISTINGS_QUERY=/listings
 
 # The base image will contain all the source code needed for our site
 FROM node:18.14-alpine AS base
@@ -61,6 +62,9 @@ RUN yarn install --frozen-lockfile
 FROM deps AS test
 
 ARG SITE
+ARG CLOUDINARY_CLOUD_NAME
+ARG FILE_SERVICE
+ARG LISTINGS_QUERY
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
@@ -96,14 +100,16 @@ CMD yarn test:unit --verbose
 FROM deps AS build
 
 ARG SITE
-ARG CLOUDINARY_CLOUD_NAME=blank
-ARG FILE_SERVICE=blank
+ARG CLOUDINARY_CLOUD_NAME
+ARG FILE_SERVICE
+ARG LISTINGS_QUERY
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
 
 ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
 ENV FILE_SERVICE=$FILE_SERVICE
+ENV LISTINGS_QUERY=$LISTINGS_QUERY
 
 # Build/compile
 RUN yarn build
