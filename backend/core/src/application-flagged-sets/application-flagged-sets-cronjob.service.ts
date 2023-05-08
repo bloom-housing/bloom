@@ -133,7 +133,7 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
       .where(`afs.listing_id = :listingId`, { listingId: application.listingId })
       .getMany()
 
-    afses = afses.filter((afs) => afs.applications.map((app) => app.id).includes(application.id))
+    afses = afses.filter((afs) => afs.applications.some((app) => app.id === application.id))
 
     const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
     const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
@@ -227,12 +227,11 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   }
 
   private async fetchDuplicatesMatchingEmailRule(newApplication: Application) {
-    // TODO: investigate .find
     const whereClause: FindOptionsWhere<Application> = {
-      id: newApplication.id,
+      id: Not(newApplication.id),
       status: ApplicationStatus.submitted,
       listing: {
-        id: Not(newApplication.listingId),
+        id: newApplication.listingId,
       },
       applicant: {
         emailAddress: newApplication.applicant.emailAddress,
@@ -283,7 +282,6 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
       ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear),
     ]
 
-    // TODO: investigate .find
     const whereClause: FindOptionsWhere<Application> = {
       id: Not(newApplication.id),
       status: ApplicationStatus.submitted,

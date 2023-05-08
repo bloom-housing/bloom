@@ -30,7 +30,7 @@ import cookieParser from "cookie-parser"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe.skip("ApplicationFlaggedSets", () => {
+describe("ApplicationFlaggedSets", () => {
   let app: INestApplication
   let adminAccessToken: string
   let applicationsRepository: Repository<Application>
@@ -91,10 +91,12 @@ describe.skip("ApplicationFlaggedSets", () => {
     listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
     const listing = (await listingsRepository.find({ take: 1 }))[0]
-    await listingsRepository.save({
-      ...listing,
-      status: ListingStatus.closed,
-    })
+    await listingsRepository.update(
+      { id: listing.id },
+      {
+        status: ListingStatus.closed,
+      }
+    )
 
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     listing1Id = listing.id
@@ -239,11 +241,12 @@ describe.skip("ApplicationFlaggedSets", () => {
   })
 
   afterAll(async () => {
-    const modifiedListing = await listingsRepository.findOne({ where: { id: listing1Id } })
-    await listingsRepository.save({
-      ...modifiedListing,
-      status: ListingStatus.active,
-    })
+    await listingsRepository.update(
+      { id: listing1Id },
+      {
+        status: ListingStatus.active,
+      }
+    )
     await app.close()
   })
 })

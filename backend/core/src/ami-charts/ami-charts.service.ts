@@ -13,7 +13,6 @@ export class AmiChartsService {
   ) {}
 
   list(queryParams?: AmiChartListQueryParams): Promise<AmiChart[]> {
-    // TODO: investigate .find
     const whereClause: FindOptionsWhere<AmiChart> = {}
     if (queryParams.jurisdictionName) {
       whereClause.jurisdiction = { name: queryParams.jurisdictionName }
