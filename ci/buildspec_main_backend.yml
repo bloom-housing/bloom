@@ -1,0 +1,33 @@
+# AWS CodeBuild config
+# This file is referenced in the infra repo as a CodeBuild buildspec target.
+
+# These variables are set in the codebuild project definition's environment secion.
+# ECR_*
+
+version: 0.2
+env:
+  shell: bash
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
+
+  build:
+    commands:
+      # Backend
+      - docker build backend/core -f build/docker/Dockerfile.backend --target test -t backend/core:test
+      - docker run backend/core:test yarn test
+      - docker build backend/core -f build/docker/Dockerfile.backend --target run -t backend/core:run
+      - docker tag backend/core:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag backend/core:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run"
+
+      - docker build backend/core -f build/docker/Dockerfile.backend --target migrate -t backend/core:migrate
+      - docker tag backend/core:migrate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate"
+
+      # Pushing images to ECR
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate"

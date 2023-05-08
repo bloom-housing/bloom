@@ -1,7 +1,7 @@
 
 # Set a default value for the SITE arg
 ARG SITE=public
-ARG CLOUDINARY_NAME
+ARG CLOUDINARY_CLOUD_NAME
 ARG FILE_SERVICE
 
 # The base image will contain all the source code needed for our site
@@ -96,13 +96,13 @@ CMD yarn test:unit --verbose
 FROM deps AS build
 
 ARG SITE
-ARG CLOUDINARY_NAME=blank
+ARG CLOUDINARY_CLOUD_NAME=blank
 ARG FILE_SERVICE=blank
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
 
-ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_NAME
+ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
 ENV FILE_SERVICE=$FILE_SERVICE
 
 # Build/compile

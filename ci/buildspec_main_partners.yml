@@ -1,0 +1,31 @@
+# AWS CodeBuild config
+# This file is referenced in the infra repo as a CodeBuild buildspec target.
+
+# These variables are set in the codebuild project definition's environment secion.
+# ECR_*
+# CLOUDINARY_CLOUD_NAME
+# FILE_SERVICE
+
+version: 0.2
+env:
+  shell: bash
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
+
+  build:
+    commands:
+      # # Partners
+      - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} -t sites/partners:test
+      - docker run sites/partners:test
+      - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/partners:run
+      - docker tag sites/partners:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag sites/partners:run "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:run"
+
+      # Pushing images to ECR
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/partners:run"
