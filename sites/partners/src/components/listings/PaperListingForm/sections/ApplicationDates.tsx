@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react"
-import { useWatch, useFormContext } from "react-hook-form"
-import { YesNoAnswer } from "../../../../lib/helpers"
+import { useFormContext } from "react-hook-form"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
 
@@ -85,12 +84,7 @@ const ApplicationDates = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
-
-  const enableDueDate = useWatch({
-    control,
-    name: "dueDateQuestion",
-  })
+  const { register, watch } = formMethods
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
@@ -131,7 +125,6 @@ const ApplicationDates = ({
             register={register}
             watch={watch}
             note={t("listings.whenApplicationsClose")}
-            disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
@@ -150,22 +143,15 @@ const ApplicationDates = ({
             id={"applicationDueTimeField"}
             register={register}
             watch={watch}
-            disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
               hours: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                : enableDueDate === YesNoAnswer.No
-                ? null
                 : "05",
               minutes: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                : enableDueDate === YesNoAnswer.No
-                ? null
                 : "00",
               seconds: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                : enableDueDate === YesNoAnswer.No
-                ? null
                 : "00",
               period: listing?.applicationDueDate
                 ? new Date(listing?.applicationDueDate).getHours() >= 12

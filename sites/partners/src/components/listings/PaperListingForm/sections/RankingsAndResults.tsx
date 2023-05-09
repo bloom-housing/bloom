@@ -99,30 +99,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
             </GridCell>
           </GridSection>
         )}
-        {reviewOrder === "reviewOrderFCFS" && (
-          <GridSection columns={2} className={"flex items-center"}>
-            <GridCell>
-              <p className="field-label m-4 ml-0">{t("listings.dueDateQuestion")}</p>
-              <FieldGroup
-                name="dueDateQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    ...yesNoRadioOptions[0],
-                    id: "dueDateQuestionYes",
-                    defaultChecked: listing && listing.applicationDueDate !== null,
-                  },
-                  {
-                    ...yesNoRadioOptions[1],
-                    id: "dueDateQuestionNo",
-                    defaultChecked: listing && !listing.applicationDueDate,
-                  },
-                ]}
-              />
-            </GridCell>
-          </GridSection>
-        )}
         {reviewOrder === "reviewOrderLottery" && (
           <>
             <GridSection columns={3}>
