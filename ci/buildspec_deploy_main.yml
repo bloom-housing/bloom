@@ -3,10 +3,18 @@
 
 # This 1 variable is set in the codebuild project definition's environment secion.
 # SDLC_STAGE
+# AWS CodeBuild config
+# This file is referenced in the infra repo as a CodeBuild buildspec target.
+
+# These variables are set in the infra config repo as `deploy_env_vars`
+# and passed in via the codepipeline/codebuild resource.
+# DEV_ECS_*_CLUSTER
+# DEV_ECS_*_SERVICE
 
 version: 0.2
 env:
   shell: bash
+
 phases:
   install:
     runtime-versions:
@@ -14,6 +22,6 @@ phases:
 
   build:
     commands:
-      - aws ecs update-service --force-new-deployment --cluster "doorway-${SDLC_STAGE}-srv-backend" --service "doorway-${SDLC_STAGE}-srv-backend"
-      - aws ecs update-service --force-new-deployment --cluster "doorway-${SDLC_STAGE}-srv-public" --service "doorway-${SDLC_STAGE}-srv-public"
-      - aws ecs update-service --force-new-deployment --cluster "doorway-${SDLC_STAGE}-srv-partner" --service "doorway-${SDLC_STAGE}-srv-partner"
+      - aws ecs update-service --force-new-deployment --cluster $DEV_ECS_BACKEND_CLUSTER --service $DEV_ECS_BACKEND_SERVICE
+      - aws ecs update-service --force-new-deployment --cluster $DEV_ECS_PUBLIC_CLUSTER --service $DEV_ECS_PUBLIC_SERVICE
+      - aws ecs update-service --force-new-deployment --cluster $DEV_ECS_PARTNER_CLUSTER --service $DEV_ECS_PARTNER_SERVICE
