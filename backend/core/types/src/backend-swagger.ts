@@ -1417,10 +1417,8 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
-
   /**
-   * List combined internal and external listings
-   * REMOVE_WHEN_EXTERNAL_NOT_NEEDED
+   * List all local and external listings
    */
   listCombined(
     params: {
@@ -1429,7 +1427,7 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      filter?: ListingFilterParams[]
+      filter?: CombinedListingFilterParams[]
       /**  */
       view?: string
       /**  */
@@ -1460,7 +1458,6 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
-
   /**
    * Get listing by id
    */
@@ -5001,7 +4998,12 @@ export interface Listing {
   /**  */
   yearBuilt?: number
 
-  /**  */
+  /** This is only added to enable passing directly from external listings since
+the generation code may be different between local and external listings.
+
+No column is needed or wanted
+
+REMOVE_WHEN_EXTERNAL_NOT_NEEDED */
   urlSlug: string
 
   /**  */
@@ -5015,6 +5017,13 @@ export interface Listing {
 
   /**  */
   utilities?: ListingUtilities
+
+  /** This is used to signal to the frontend whether the listing is internal or
+external.  This should only be anything other than `false` if it's coming
+from an external listing pulled from combined_listings.
+
+REMOVE_WHEN_EXTERNAL_NOT_NEEDED */
+  isExternal?: boolean
 
   /**  */
   id: string
@@ -5165,9 +5174,6 @@ export interface Listing {
 
   /**  */
   lastApplicationUpdateAt?: Date
-
-  /**  */
-  isExternal: boolean
 }
 
 export interface PaginatedListing {
@@ -5196,6 +5202,64 @@ export interface ListingsQueryParams {
 
   /**  */
   orderDir?: EnumListingsQueryParamsOrderDir[]
+
+  /**  */
+  search?: string
+}
+
+export interface CombinedListingFilterParams {
+  /**  */
+  $comparison: EnumCombinedListingFilterParamsComparison
+
+  /**  */
+  name?: string
+
+  /**  */
+  status?: EnumCombinedListingFilterParamsStatus
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  bedrooms?: number
+
+  /**  */
+  zipcode?: string
+
+  /**  */
+  leasingAgents?: string
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  isExternal?: boolean
+
+  /**  */
+  county?: string[]
+
+  /**  */
+  city?: string
+}
+
+export interface CombinedListingsQueryParams {
+  /**  */
+  page?: number
+
+  /**  */
+  limit?: number | "all"
+
+  /**  */
+  filter?: string[]
+
+  /**  */
+  view?: string
+
+  /**  */
+  orderBy?: []
+
+  /**  */
+  orderDir?: EnumCombinedListingsQueryParamsOrderDir[]
 
   /**  */
   search?: string
@@ -5594,6 +5658,13 @@ export interface ListingCreate {
 
   /**  */
   lastApplicationUpdateAt?: Date
+
+  /** This is used to signal to the frontend whether the listing is internal or
+external.  This should only be anything other than `false` if it's coming
+from an external listing pulled from combined_listings.
+
+REMOVE_WHEN_EXTERNAL_NOT_NEEDED */
+  isExternal?: boolean
 
   /**  */
   countyCode?: string
@@ -5998,6 +6069,13 @@ export interface ListingUpdate {
   /**  */
   lastApplicationUpdateAt?: Date
 
+  /** This is used to signal to the frontend whether the listing is internal or
+external.  This should only be anything other than `false` if it's coming
+from an external listing pulled from combined_listings.
+
+REMOVE_WHEN_EXTERNAL_NOT_NEEDED */
+  isExternal?: boolean
+
   /**  */
   countyCode?: string
 
@@ -6388,6 +6466,22 @@ export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export enum EnumListingsQueryParamsOrderDir {
+  "ASC" = "ASC",
+  "DESC" = "DESC",
+}
+export enum EnumCombinedListingFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
+export enum EnumCombinedListingFilterParamsStatus {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+}
+export enum EnumCombinedListingsQueryParamsOrderDir {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }

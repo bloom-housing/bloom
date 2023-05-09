@@ -2,7 +2,7 @@ import { ListingFilterParams } from "../dto/listing-filter-params"
 import { CombinedListingFilterKeys } from "./combined-listing-filter-keys-enum"
 import { Expose, Transform } from "class-transformer"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsOptional, IsBoolean, IsString } from "class-validator"
+import { IsOptional, IsBoolean, IsString, IsArray } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class CombinedListingFilterParams extends ListingFilterParams {
@@ -28,13 +28,13 @@ export class CombinedListingFilterParams extends ListingFilterParams {
 
   @Expose()
   @ApiProperty({
-    type: String,
-    example: "Santa Clara",
+    type: Array,
+    example: ["Santa Clara"],
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [CombinedListingFilterKeys.county]?: string;
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.county]?: string[];
 
   @Expose()
   @ApiProperty({
