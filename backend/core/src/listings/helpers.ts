@@ -1,4 +1,3 @@
-import { MinMax } from "../../types"
 import { PaperApplication } from "../../src/paper-applications/entities/paper-application.entity"
 import { isEmpty } from "../shared/utils/is-empty"
 import { formatLocalDate } from "../shared/utils/format-local-date"
@@ -76,28 +75,7 @@ export const formatOpenHouse = (openHouseArr: any[], tz: string): string => {
   return openHouseFormatted.join(", ")
 }
 
-export const formatRange = (
-  min: string | number,
-  max: string | number,
-  prefix: string,
-  postfix: string
-): string => {
-  if (isEmpty(min) && isEmpty(max)) return ""
-  if (min == max || isEmpty(max)) return `${prefix}${min}${postfix}`
-  if (isEmpty(min)) return `${prefix}${max}${postfix}`
-  return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
-}
-
-export function formatRentRange(rent: MinMax, percent: MinMax): string {
-  let toReturn = ""
-  if (rent) {
-    toReturn += formatRange(rent.min, rent.max, "", "")
-  }
-  if (rent && percent) {
-    toReturn += ", "
-  }
-  if (percent) {
-    toReturn += formatRange(percent.min, percent.max, "", "%")
-  }
-  return toReturn
+export const hideZero = (fieldValue: number | string) => {
+  if (isEmpty(fieldValue) || fieldValue === 0 || fieldValue === "0") return ""
+  return fieldValue
 }

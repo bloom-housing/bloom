@@ -10,6 +10,7 @@ import {
   formatUnitType,
   formatCommunityType,
   formatOpenHouse,
+  hideZero,
 } from "./helpers"
 import { formatLocalDate } from "../shared/utils/format-local-date"
 import { ListingReviewOrder } from "./types/listing-review-order-enum"
@@ -62,6 +63,7 @@ export class ListingsCsvExporterService {
         "Building City": listing.buildingAddress?.city,
         "Building State": listing.buildingAddress?.state,
         "Building Zip": listing.buildingAddress?.zipCode,
+        "Building Neighborhood": listing?.neighborhood,
         "Building Year Built": listing.yearBuilt,
         "Reserved Community Types": formatCommunityType[listing.reservedCommunityType?.name],
         Latitude: listing.buildingAddress?.latitude,
@@ -166,11 +168,11 @@ export class ListingsCsvExporterService {
         "Unit Number": listing.unit?.number,
         "Unit Type": formatUnitType[listing.unit?.unitType?.name],
         "Number of Bathrooms": listing.unit?.numBathrooms,
-        "Unit Floor": listing.unit?.floor,
+        "Unit Floor": hideZero(listing.unit?.floor),
         "Square footage": listing.unit?.sqFeet,
-        "Minimum Occupancy": listing.unit?.minOccupancy,
-        "Max Occupancy": listing.unit?.maxOccupancy,
-        "AMI Chart": convertToTitleCase(listing.unit?.name),
+        "Minimum Occupancy": hideZero(listing.unit?.minOccupancy),
+        "Max Occupancy": hideZero(listing.unit?.maxOccupancy),
+        "AMI Chart": listing.unit?.amiChart?.name,
         "AMI Level": listing.unit?.amiChart?.items[0]?.percentOfAmi,
         "Rent Type": listing.unit?.monthlyRentAsPercentOfIncome ? "% of income" : "Fixed amount",
         "Monthly Rent": listing.unit?.monthlyRentAsPercentOfIncome ?? listing.unit?.monthlyRent,
