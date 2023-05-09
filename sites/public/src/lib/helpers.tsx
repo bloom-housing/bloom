@@ -10,11 +10,11 @@ import {
 } from "@bloom-housing/backend-core/types"
 import {
   t,
-  ListingCard,
   ApplicationStatusType,
   StatusBarType,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
+import { ListingCard } from "@bloom-housing/doorway-ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

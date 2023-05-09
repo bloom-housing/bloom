@@ -11,7 +11,7 @@ const parentStyle = {
   alignItems: "stretch",
   // This is a not-ideal way to do "fill window minus header+footer" however I can't find another way to do this.
   // TODO: update header+footer to a not-magic number
-  height: "calc(100vh - 450px)",
+  height: "calc(100vh - 275px)",
 }
 
 const ListingsCombined = (props: ListingsCombinedProps) => (

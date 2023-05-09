@@ -2,7 +2,7 @@
 
 .button {
   /* Component Variables */
-  --normal-rounded: var(--bloom-rounded);
+  --normal-rounded: var(--bloom-rounded-full);
   --normal-padding: var(--bloom-s4) var(--bloom-s6);
   --label-transform: uppercase;
   --label-font: var(--bloom-font-alt-sans);
@@ -15,7 +15,7 @@
   --big-rounded: var(--bloom-rounded);
   --big-padding: var(--bloom-s6);
   --big-font-size: var(--bloom-font-size-xs);
-  --secondary-text-color: var(--bloom-text-color-light);
+  --secondary-text-color: var(--bloom-color-primary-dark);
   --unstyled-inline-font-size: var(--bloom-font-size-sm);
   --inline-font-size: var(--bloom-font-size-sm);
   --caps-font-size: var(--bloom-font-size-sm);
@@ -57,7 +57,8 @@
   }
 
   &.is-secondary {
-    border-color: var(--bloom-color-gray-700);
+    border-color: var(--doorway-color-cyan-300);
+    background-color: var(--doorway-color-cyan-300);
     color: var(--secondary-text-color);
 
     &:hover {

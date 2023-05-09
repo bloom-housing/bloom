@@ -35,7 +35,6 @@ export default function ListingsPage(props: ListingsProps) {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("pageTitle.rent")} />
       <ListingsCombined listings={props.openListings} />
     </Layout>
   )
