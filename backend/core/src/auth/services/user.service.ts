@@ -582,7 +582,7 @@ export class UserService {
     const payload = {
       id: userId,
       email,
-      exp: Number.parseInt(dayjs().add(24, "second").format("X")),
+      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
     }
     return encode(payload, process.env.APP_SECRET)
   }
