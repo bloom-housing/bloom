@@ -52,7 +52,32 @@ export const defaultMap: RecordMap = {
   jurisdiction: (listing: Listing) => jsonOrNull(listing.jurisdiction),
   reserved_community_type: (listing: Listing) => jsonOrNull(listing.reservedCommunityType),
   units: (listing: Listing) => jsonOrNull(listing.units),
-  building_address: (listing: Listing) => jsonOrNull(listing.buildingAddress),
+  building_address: (listing: Listing) => {
+    const address = listing.buildingAddress
+
+    // if we don't have an address, ignore
+    if (!address) return
+
+    if (!address?.county) {
+      const jurisdiction = listing.jurisdiction
+
+      switch (jurisdiction.name) {
+        case "San Jose":
+          address.county = "Santa Clara"
+          break
+        case "Alameda":
+          address.county = "Alameda"
+          break
+        case "San Mateo":
+          address.county = "San Mateo"
+          break
+        default:
+          address.county = jurisdiction.name
+      }
+    }
+
+    return jsonOrNull(address)
+  },
   features: (listing: Listing) => jsonOrNull(listing.features),
   utilities: (listing: Listing) => jsonOrNull(listing.utilities),
 }

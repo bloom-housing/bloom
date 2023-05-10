@@ -1,6 +1,6 @@
 import { Transformer } from "../../src/etl"
 import { defaultMap, jsonOrNull } from "../../src/etl/transform/map"
-import { Listing } from "../../src/types"
+import { Jurisdiction, Listing } from "../../src/types"
 
 describe("Transformer", () => {
   it("treats a string value as a property name", () => {
@@ -208,5 +208,53 @@ describe("Transformer", () => {
     expect(result).toHaveProperty("building_address")
     expect(result).toHaveProperty("features")
     expect(result).toHaveProperty("utilities")
+  })
+
+  it("should generate the correct county", () => {
+    const transformer = new Transformer(defaultMap)
+    transformer.getLogger().printLogs = false
+
+    const tests = [
+      {
+        // specific to Alameda
+        jurisdiction: "Alameda",
+        expect: "Alameda",
+      },
+      {
+        // specific to San Jose
+        jurisdiction: "San Jose",
+        expect: "Santa Clara",
+      },
+      {
+        // specific to San Mateo
+        jurisdiction: "San Mateo",
+        expect: "San Mateo",
+      },
+      {
+        // default behavior
+        jurisdiction: "Detroit",
+        expect: "Detroit",
+      },
+    ]
+
+    // Create a set of listings with different jurisdictions
+    const listings = tests.map((test) => {
+      const listing = new Listing()
+      const jurisdiction = new Jurisdiction()
+      jurisdiction.name = test.jurisdiction
+      listing.jurisdiction = jurisdiction
+      listing.buildingAddress = { city: "" }
+      return listing
+    })
+
+    const results = transformer.mapAll(listings)
+
+    // Check that each mapped result contains a serialized address with the county set
+    results.forEach((mapped, index) => {
+      expect(JSON.parse(mapped.building_address as string)).toHaveProperty(
+        "county",
+        tests[index].expect
+      )
+    })
   })
 })

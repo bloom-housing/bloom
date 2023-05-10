@@ -30,7 +30,7 @@ export class Transformer extends BaseStage implements TransformerInterface {
     }
   }
 
-  public mapAll(listings: Array<Listing>): Array<object> {
+  public mapAll(listings: Array<Listing>): Array<Record<string, unknown>> {
     const rows = listings.map((listing) => {
       return this.mapListingToRow(listing)
     })
@@ -40,7 +40,7 @@ export class Transformer extends BaseStage implements TransformerInterface {
     return rows
   }
 
-  public mapListingToRow(listing: Listing): object {
+  public mapListingToRow(listing: Listing): Record<string, unknown> {
     const row = {}
 
     for (const [key, value] of Object.entries(this.map)) {
