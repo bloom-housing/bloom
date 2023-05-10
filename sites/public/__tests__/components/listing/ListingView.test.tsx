@@ -16,6 +16,7 @@ describe("<ListingView>", () => {
             applicationDueDate: pastDate,
           }}
           jurisdiction={jurisdiction}
+          googleMapsApiKey="GOOGLE_MAPS_KEY"
         />
       )
       expect(view.getByText(/Applications Closed/)).toBeInTheDocument()
@@ -31,6 +32,7 @@ describe("<ListingView>", () => {
             applicationDueDate: futureDate,
           }}
           jurisdiction={jurisdiction}
+          googleMapsApiKey="GOOGLE_MAPS_KEY"
         />
       )
       expect(view.getByText("Apply Online")).toBeInTheDocument()
@@ -51,6 +53,7 @@ describe("<ListingView>", () => {
             ],
           }}
           jurisdiction={jurisdiction}
+          googleMapsApiKey="GOOGLE_MAPS_KEY"
         />
       )
       expect(view.queryByText("Apply Online")).toBeNull()

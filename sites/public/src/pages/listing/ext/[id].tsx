@@ -15,10 +15,12 @@ import { ListingView } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import { ErrorPage } from "../../_error"
 import dayjs from "dayjs"
+import { runtimeConfig } from "../../../lib/runtime-config"
 
 interface ListingProps {
   listing: Listing
   jurisdiction: Jurisdiction
+  googleMapsApiKey: string
 }
 
 export default function ListingPage(props: ListingProps) {
@@ -69,7 +71,12 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-      <ListingView listing={listing} jurisdiction={props.jurisdiction} isExternal={true} />
+      <ListingView
+        listing={listing}
+        jurisdiction={props.jurisdiction}
+        googleMapsApiKey={props.googleMapsApiKey}
+        isExternal={true}
+      />
     </Layout>
   )
 }
@@ -92,6 +99,7 @@ export async function getServerSideProps(context: {
     props: {
       listing: response.data,
       jurisdiction: response.data.jurisdiction,
+      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
     },
   }
 }

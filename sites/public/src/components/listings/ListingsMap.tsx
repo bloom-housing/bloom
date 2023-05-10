@@ -2,9 +2,11 @@ import * as React from "react"
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
 import { getListingUrl } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/backend-core"
+import { runtimeConfig } from "../../lib/runtime-config"
 
 type ListingsMapProps = {
   listings?: Listing[]
+  googleMapsApiKey: string
 }
 
 const containerStyle: React.CSSProperties = {
@@ -21,7 +23,7 @@ const center = {
 
 const ListingsMap = (props: ListingsMapProps) => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.googleMapsApiKey,
+    googleMapsApiKey: props.googleMapsApiKey,
   })
 
   const markers = []

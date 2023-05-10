@@ -5,6 +5,7 @@ import { ListingsList } from "./ListingsList"
 
 type ListingsCombinedProps = {
   listings: Listing[]
+  googleMapsApiKey: string
 }
 const parentStyle = {
   display: "flex",
@@ -17,7 +18,7 @@ const parentStyle = {
 const ListingsCombined = (props: ListingsCombinedProps) => (
   <div className="listings-combined" style={parentStyle}>
     <div style={{ flex: "1" }}>
-      <ListingsMap listings={props.listings} />
+      <ListingsMap listings={props.listings} googleMapsApiKey={props.googleMapsApiKey} />
     </div>
     <div style={{ overflowY: "auto", width: "600px" }}>
       <ListingsList listings={props.listings}></ListingsList>
