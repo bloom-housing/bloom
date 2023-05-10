@@ -24,7 +24,14 @@ const ListingGoogleMap = (props: ListingGoogleMapProps) => {
     lat: listing.buildingAddress.latitude,
     lng: listing.buildingAddress.longitude,
   }
-  const marker = <Marker position={latitudeLongitude}></Marker>
+  const marker = (
+    <Marker
+      position={latitudeLongitude}
+      icon={{
+        url: "/images/map-pin.svg",
+      }}
+    ></Marker>
+  )
 
   return isLoaded ? (
     <a href={props.googleMapsHref} target="_blank">
