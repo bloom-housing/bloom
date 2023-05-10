@@ -163,7 +163,6 @@ export class ListingsCsvExporterService {
       })
     })
     const unitsFormatted = reformattedListings.map((listing) => {
-      if (listing.name === "Test: Coliseum") console.log(listing)
       return {
         "Listing ID": listing.id,
         "Listing Name": listing.name,
