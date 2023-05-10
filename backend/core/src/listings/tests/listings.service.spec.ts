@@ -15,6 +15,7 @@ import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { UserRepository } from "../../auth/repositories/user-repository"
 import { HttpService } from "@nestjs/axios"
+import { User } from "../../../src/auth/entities/user.entity"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -162,6 +163,7 @@ describe("ListingsService", () => {
           provide: TranslationsService,
           useValue: { translateListing: jest.fn() },
         },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile()
 
