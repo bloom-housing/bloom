@@ -86,6 +86,7 @@ export const getExternalListingSeedData = () => {
           monthlyRent: "1234.00",
           sqFeet: "1100",
           numBedrooms: 2,
+          numBathrooms: 1,
           monthlyRentAsPercentOfIncome: null,
         },
         {
@@ -96,6 +97,7 @@ export const getExternalListingSeedData = () => {
           monthlyRent: "5678.00",
           sqFeet: "1500",
           numBedrooms: 3,
+          numBathrooms: 2,
           monthlyRentAsPercentOfIncome: null,
         },
       ],
