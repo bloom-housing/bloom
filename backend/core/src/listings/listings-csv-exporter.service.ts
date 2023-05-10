@@ -11,6 +11,7 @@ import {
   formatCommunityType,
   formatOpenHouse,
   hideZero,
+  formatRentType,
 } from "./helpers"
 import { formatLocalDate } from "../shared/utils/format-local-date"
 import { ListingReviewOrder } from "./types/listing-review-order-enum"
@@ -162,6 +163,7 @@ export class ListingsCsvExporterService {
       })
     })
     const unitsFormatted = reformattedListings.map((listing) => {
+      if (listing.name === "Test: Coliseum") console.log(listing)
       return {
         "Listing ID": listing.id,
         "Listing Name": listing.name,
@@ -174,7 +176,10 @@ export class ListingsCsvExporterService {
         "Max Occupancy": hideZero(listing.unit?.maxOccupancy),
         "AMI Chart": listing.unit?.amiChart?.name,
         "AMI Level": listing.unit?.amiChart?.items[0]?.percentOfAmi,
-        "Rent Type": listing.unit?.monthlyRentAsPercentOfIncome ? "% of income" : "Fixed amount",
+        "Rent Type": formatRentType(
+          listing.unit?.monthlyRentAsPercentOfIncome,
+          listing.unit?.monthlyRent
+        ),
         "Monthly Rent": listing.unit?.monthlyRentAsPercentOfIncome ?? listing.unit?.monthlyRent,
         "Minimum Income": listing.unit?.monthlyIncomeMin,
         "Accessibility Priority Type": listing.unit?.priorityType?.name,

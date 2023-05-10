@@ -79,3 +79,9 @@ export const hideZero = (fieldValue: number | string) => {
   if (isEmpty(fieldValue) || fieldValue === 0 || fieldValue === "0") return ""
   return fieldValue
 }
+
+export const formatRentType = (monthlyRentAsPercentOfIncome: string, monthlyRent: string) => {
+  if (!isEmpty(monthlyRentAsPercentOfIncome)) return "% of income"
+  if (!isEmpty(monthlyRent)) return "Fixed amount"
+  return ""
+}
