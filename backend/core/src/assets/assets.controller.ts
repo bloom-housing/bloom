@@ -1,11 +1,17 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   Param,
+  PayloadTooLargeException,
   Post,
   Query,
+  Req,
+  UnsupportedMediaTypeException,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
@@ -23,8 +29,15 @@ import {
   CreatePresignedUploadMetadataResponseDto,
 } from "./dto/asset.dto"
 import { PaginationFactory, PaginationQueryParams } from "../shared/dto/pagination.dto"
+import { Express, Request } from "express"
+import { FileInterceptor } from "@nestjs/platform-express"
 
 export class PaginatedAssetsDto extends PaginationFactory<AssetDto>(AssetDto) {}
+
+// File upload validation vars
+const maxFileSizeMb = parseFloat(process.env.ASSET_UPLOAD_MAX_SIZE) || 5
+const maxFileSize = maxFileSizeMb * 1024 * 1024
+const allowedFileTypes = ["document/pdf", "image/jpg", "image/jpeg", "image/png"]
 
 @Controller("assets")
 @ApiTags("assets")
@@ -43,6 +56,34 @@ export class AssetsController {
   @ApiOperation({ summary: "Create asset", operationId: "create" })
   async create(@Body() assetCreateDto: AssetCreateDto): Promise<AssetDto> {
     const asset = await this.assetsService.create(assetCreateDto)
+    return mapTo(AssetDto, asset)
+  }
+
+  @Post("/upload")
+  @ApiOperation({ summary: "Upload asset", operationId: "upload" })
+  @UseInterceptors(FileInterceptor("file"))
+  async upload(
+    @Req() request: Request,
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<AssetDto> {
+    // Ideally we would handle validation with a decorator, but ParseFilePipe
+    // is only available in Nest.js 9+
+
+    const label = request.body.label
+
+    if (!file) {
+      throw new BadRequestException("Required file is missing")
+    }
+
+    if (file.size > maxFileSize) {
+      throw new PayloadTooLargeException(`Uploaded files must be less than ${maxFileSizeMb} MB`)
+    }
+
+    if (!allowedFileTypes.includes(file.mimetype)) {
+      throw new UnsupportedMediaTypeException(`Uploaded files must be a pdf or image`)
+    }
+
+    const asset = await this.assetsService.upload(label, file)
     return mapTo(AssetDto, asset)
   }
 

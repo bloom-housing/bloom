@@ -701,6 +701,21 @@ export class AssetsService {
     })
   }
   /**
+   * Upload asset
+   */
+  upload(options: IRequestOptions = {}): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/assets/upload"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Create presigned upload metadata
    */
   createPresignedUploadMetadata(

@@ -49,7 +49,6 @@ import {
   getPostmarkString,
   UnitTables,
   getSummariesTable,
-  getImageUrlFromAsset,
   getPdfUrlFromAsset,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -59,7 +58,7 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
-import ListingGoogleMap from "./ListingGoogleMap"
+import { ListingGoogleMap } from "./ListingGoogleMap"
 import getConfig from "next/config"
 
 // nextConfig may not be set in some unit tests since it relies on app startup
@@ -71,6 +70,7 @@ interface ListingProps {
   listing: Listing
   preview?: boolean
   jurisdiction?: Jurisdiction
+  googleMapsApiKey: string
   isExternal?: boolean
 }
 
@@ -887,7 +887,11 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingGoogleMap listing={listing} googleMapsHref={googleMapsHref} />
+            <ListingGoogleMap
+              listing={listing}
+              googleMapsHref={googleMapsHref}
+              googleMapsApiKey={props.googleMapsApiKey}
+            />
           </div>
         </ListingDetailItem>
 

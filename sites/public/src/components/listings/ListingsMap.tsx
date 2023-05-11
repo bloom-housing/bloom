@@ -2,9 +2,11 @@ import * as React from "react"
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
 import { getListingUrl } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/backend-core"
+import { runtimeConfig } from "../../lib/runtime-config"
 
 type ListingsMapProps = {
   listings?: Listing[]
+  googleMapsApiKey: string
 }
 
 const containerStyle: React.CSSProperties = {
@@ -21,28 +23,40 @@ const center = {
 
 const ListingsMap = (props: ListingsMapProps) => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.googleMapsApiKey,
+    googleMapsApiKey: props.googleMapsApiKey,
   })
 
   const markers = []
   let index = 0
   props.listings.forEach((listing: Listing) => {
-    const label = (++index).toString()
+    const lat = listing.buildingAddress.latitude
+    const lng = listing.buildingAddress.longitude
     const uri = getListingUrl(listing)
+    const label = (++index).toString()
 
-    markers.push(
-      <Marker
-        position={{ lat: listing.buildingAddress.latitude, lng: listing.buildingAddress.longitude }}
-        label={label}
-        onClick={() => (window.location.href = uri)}
-        key={label}
-      ></Marker>
-    )
+    markers.push({ lat, lng, uri, label })
   })
 
   return isLoaded ? (
     <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={9}>
-      {markers}
+      {markers.map((marker) => (
+        <Marker
+          position={{ lat: marker.lat, lng: marker.lng }}
+          label={{
+            text: marker.label,
+            color: "var(--bloom-color-white)",
+            fontFamily: "var(--bloom-font-sans)",
+            fontWeight: "700",
+            fontSize: "var(--bloom-font-size-2xs)",
+          }}
+          onClick={() => (window.location.href = marker.uri)}
+          key={marker.label}
+          icon={{
+            url: "/images/map-pin.svg",
+            labelOrigin: new google.maps.Point(14, 15),
+          }}
+        />
+      ))}
     </GoogleMap>
   ) : (
     <></>

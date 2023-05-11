@@ -24,4 +24,5 @@ export enum CombinedListingFilterKeys {
   //monthlyRent = "monthlyRent", // placeholder
   county = "county",
   city = "city",
+  bathrooms = "bathrooms",
 }

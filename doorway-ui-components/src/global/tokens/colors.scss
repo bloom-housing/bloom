@@ -16,6 +16,8 @@
   --bloom-color-green-300: #b4e5be;
   --bloom-color-green-100: #e7f7ea;
 
+  // TODO -- update this with an actual UX color.
+  --doorway-color-blue-1100: #162f4d;
   --bloom-color-blue-900: #205493;
   --bloom-color-blue-700: #0067be;
   --bloom-color-blue-500: #0077da;
@@ -44,20 +46,29 @@
   --bloom-color-gray-200: #f7f7f7;
   --bloom-color-gray-100: #f9f9f9;
 
+  --doorway-color-cyan-300: #C8F1FF;
+
   /* Semantic Colors */
 
-  --bloom-color-primary: var(--bloom-color-blue-500);
-  --bloom-color-primary-dark: var(--bloom-color-blue-700);
-  --bloom-color-primary-darker: var(--bloom-color-blue-900);
-  --bloom-color-primary-light: var(--bloom-color-blue-300);
-  --bloom-color-primary-lighter: var(--bloom-color-blue-100);
-  
+  // Doorway overrides for primary colors -- Doorway is generally one shade
+  // darker.
+  --bloom-color-primary: var(--bloom-color-blue-700);
+  --bloom-color-primary-dark: var(--bloom-color-blue-900);
+  --bloom-color-primary-darker: var(--doorway-color-blue-1100);
+  --bloom-color-primary-light: var(--bloom-color-blue-500);
+  --bloom-color-primary-lighter: var(--bloom-color-blue-300);
+  // --bloom-color-primary: var(--bloom-color-blue-500);
+  // --bloom-color-primary-dark: var(--bloom-color-blue-700);
+  // --bloom-color-primary-darker: var(--bloom-color-blue-900);
+  // --bloom-color-primary-light: var(--bloom-color-blue-300);
+  // --bloom-color-primary-lighter: var(--bloom-color-blue-100);
+
   --bloom-color-alert: var(--bloom-color-red-500);
   --bloom-color-alert-light: var(--bloom-color-red-300);
   --bloom-color-alert-lighter: var(--bloom-color-red-100);
   --bloom-color-alert-dark: var(--bloom-color-red-700);
   --bloom-color-alert-darker: var(--bloom-color-red-900);
-  
+
   --bloom-color-success: var(--bloom-color-green-500);
   --bloom-color-success-light: var(--bloom-color-green-300);
   --bloom-color-success-lighter: var(--bloom-color-green-100);
@@ -87,4 +98,12 @@
   --bloom-text-color-disabled: var(--bloom-color-gray-450);
   --bloom-text-color-dark: var(--bloom-color-gray-800);
   --bloom-text-color-darker: var(--bloom-color-gray-950);
+
+  /* Begin Doorway component/mixin overrides */
+  --primary-appearance-background-color: var(--bloom-color-blue-700);
+  --primary-appearance-border-color: var(--bloom-color-blue-700);
+  --primary-appearance-hover-background-color: var(--bloom-color-blue-900);
+  --primary-appearance-hover-border-color: var(--bloom-color-blue-900);
+
+  ---text-large-primary--color: var(--bloom-color-blue-700);
 }

@@ -16,4 +16,5 @@ export const combinedListingFilterTypeToFieldMap: Record<
   //monthlyRent: "units->>'monthlyRent'", // placeholder
   county: "building_address->>'county'",
   city: "building_address->>'city'",
+  bathrooms: "units->>'num_bathrooms'",
 }

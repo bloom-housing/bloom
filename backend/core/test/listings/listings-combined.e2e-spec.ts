@@ -566,6 +566,38 @@ describe("CombinedListings", () => {
     })
   })
 
+  it("should properly apply bathrooms filter", async () => {
+    const minBathrooms = 2
+    const gteFilter = [{ $comparison: ">=", bathrooms: minBathrooms }]
+
+    const gteQuery = qs.stringify({
+      limit: "all",
+      filter: gteFilter,
+    })
+
+    const gteRes = await supertest(app.getHttpServer())
+      .get(`/listings/combined?${gteQuery}`)
+      .expect(200)
+
+    // at least one unit should match the bathroom requirement
+    gteRes.body.items.forEach((listing) => {
+      // could just loop on this, but mapping makes duplication of this test easier
+      const bathrooms = listing.units.map((unit) => {
+        return unit.numBathrooms
+      })
+
+      // assume no matches
+      let isMatch = false
+
+      // check each one and set true for listing if any match found
+      bathrooms.forEach((value) => {
+        if (value >= minBathrooms) isMatch = true
+      })
+
+      expect(isMatch).toBe(true)
+    })
+  })
+
   afterEach(() => {
     jest.clearAllMocks()
   })

@@ -29,7 +29,7 @@ export class Listing {
   listingMultiselectQuestions: Array<Record<string, unknown>>
   jurisdiction: { name: string; id: string }
   units: Array<Record<string, unknown>>
-  buildingAddress: { city: string }
+  buildingAddress: { city: string; county?: string }
   features: Record<string, boolean>
   utilities: Record<string, boolean>
 }
