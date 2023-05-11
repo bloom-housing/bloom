@@ -64,12 +64,12 @@ export function generateSearchQuery(params: ListingSearchParams) {
 
   // Find listings that have units with greater than or equal number of bedrooms
   if (params.bedrooms != null) {
-    qb.whereGreaterThanEqual("bedrooms", params.bedrooms)
+    qb.whereGreaterThanEqual("maxBedrooms", params.bedrooms)
   }
 
   // Find listings that have units with greater than or equal number of bathrooms
   if (params.bathrooms != null) {
-    qb.whereGreaterThanEqual("minBathrooms", params.bathrooms)
+    qb.whereGreaterThanEqual("maxBathrooms", params.bathrooms)
   }
 
   // Find listings in these counties

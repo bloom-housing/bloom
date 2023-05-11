@@ -93,18 +93,5 @@ export class ListingService {
     )
 
     return this.searchListings(qb)
-
-    /*
-    return this.searchListings({
-      additionalFilters: [
-        {
-          $comparison: EnumListingFilterParamsComparison["="],
-          status: EnumListingFilterParamsStatus.active,
-        },
-      ],
-      orderBy: [OrderByFieldsEnum.mostRecentlyPublished],
-      orderDir: [OrderParam.DESC],
-    })
-    */
   }
 }
