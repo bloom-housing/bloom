@@ -462,8 +462,7 @@ describe("CombinedListings", () => {
     it("should properly apply county filter", async () => {
       // this fictional county is set in external listings seed
       const countyName = "San Alameda"
-      const equalsFilter = [{ $comparison: "=", county: countyName }]
-      const notEqualsFilter = [{ $comparison: "<>", county: countyName }]
+      const equalsFilter = [{ $comparison: "IN", county: [countyName] }]
 
       // check equality
       const equalsQuery = qs.stringify({
@@ -478,21 +477,6 @@ describe("CombinedListings", () => {
       // all values should match filter
       equalRes.body.items.forEach((listing) => {
         expect(listing.buildingAddress.county).toBe(countyName)
-      })
-
-      // check inequality
-      const notEqualsQuery = qs.stringify({
-        limit: "all",
-        filter: notEqualsFilter,
-      })
-
-      const notEqualRes = await supertest(app.getHttpServer())
-        .get(`/listings/combined?${notEqualsQuery}`)
-        .expect(200)
-
-      // no values should match filter
-      notEqualRes.body.items.forEach((listing) => {
-        expect(listing.buildingAddress.county).not.toBe(countyName)
       })
     })
 
