@@ -6,6 +6,7 @@ import { ListingsCombined } from "../ListingsCombined"
 
 type ListingsSearchCombinedProps = {
   searchString?: string
+  googleMapsApiKey: string
   listingsEndpoint: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
@@ -13,7 +14,6 @@ type ListingsSearchCombinedProps = {
 }
 
 export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
-
   const [listings, setListings] = useState([])
 
   const onFormSubmit = async (params: ListingSearchParams) => {
@@ -21,8 +21,14 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     const listingService = new ListingService(props.listingsEndpoint)
     const result = await listingService.searchListings(qb)
 
+    const listings = result.items
+    const meta = result.meta
+    console.log(
+      `Showing ${meta.itemCount} listings of ${meta.totalItems} total (page ${meta.currentPage} of ${meta.totalPages})`
+    )
+
     console.log(result)
-    setListings(result)
+    setListings(listings)
   }
 
   return (
@@ -34,7 +40,7 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         onSubmit={onFormSubmit}
       />
 
-      <ListingsCombined listings={listings} />
+      <ListingsCombined listings={listings} googleMapsApiKey={props.googleMapsApiKey} />
     </div>
   )
 }

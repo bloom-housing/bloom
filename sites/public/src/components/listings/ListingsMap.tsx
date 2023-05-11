@@ -2,7 +2,6 @@ import * as React from "react"
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
 import { getListingUrl } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/backend-core"
-import { runtimeConfig } from "../../lib/runtime-config"
 
 type ListingsMapProps = {
   listings?: Listing[]

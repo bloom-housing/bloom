@@ -5,9 +5,11 @@ import { PageHeader, t } from "@bloom-housing/doorway-ui-components"
 import { FormOption } from "../components/listings/search/ListingsSearchForm"
 import { ListingsSearchCombined } from "../components/listings/search/ListingsSearchCombined"
 import { getListingServiceUrl } from "../lib/helpers"
+import { runtimeConfig } from "../lib/runtime-config"
 
 type SearchTestProps = {
   listingsEndpoint: string
+  googleMapsApiKey: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
   locations: FormOption[]
@@ -113,10 +115,10 @@ export default function SearchTest(props: SearchTestProps) {
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
-      {/*<ListingsCombined listings={props.listings} />*/}
 
       <ListingsSearchCombined
         listingsEndpoint={props.listingsEndpoint}
+        googleMapsApiKey={props.googleMapsApiKey}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
         counties={props.locations}
@@ -129,9 +131,10 @@ export function getServerSideProps() {
   return {
     props: {
       listingsEndpoint: getListingServiceUrl(),
+      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
       bedrooms: bedroomOptions,
       bathrooms: bathroomOptions,
-      locations: locations
+      locations: locations,
     },
   }
 }

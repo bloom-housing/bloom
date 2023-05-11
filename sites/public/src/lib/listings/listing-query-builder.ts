@@ -1,8 +1,8 @@
-import { 
+import {
   CombinedListingFilterParams,
   EnumCombinedListingFilterParamsComparison,
   OrderByFieldsEnum,
-  OrderParam
+  OrderParam,
 } from "@bloom-housing/backend-core"
 
 type OrderBy = {
@@ -18,8 +18,12 @@ type OrderByParams = {
 export class ListingQueryBuilder {
   filters: Filter[] = []
   orderBy: OrderBy[] = []
-  
-  addFilter(field: string, comparison: EnumCombinedListingFilterParamsComparison, value: string | string[]) {
+
+  addFilter(
+    field: string,
+    comparison: EnumCombinedListingFilterParamsComparison,
+    value: string | string[]
+  ) {
     this.filters.push(new Filter(field, comparison, value))
     return this
   }
@@ -43,7 +47,7 @@ export class ListingQueryBuilder {
   addOrderBy(field: OrderByFieldsEnum, direction: OrderParam) {
     this.orderBy.push({
       field: field,
-      direction: direction
+      direction: direction,
     })
     return this
   }
@@ -55,13 +59,13 @@ export class ListingQueryBuilder {
   }
 
   getOrderByParams(): OrderByParams {
-    if(this.orderBy.length < 1) {
+    if (this.orderBy.length < 1) {
       return
     }
 
     const params = {
       fields: null,
-      direction: null
+      direction: null,
     }
 
     this.orderBy.forEach((orderBy) => {
@@ -78,7 +82,11 @@ class Filter {
   comparison: EnumCombinedListingFilterParamsComparison
   value: string | string[]
 
-  constructor(field: string, comparison: EnumCombinedListingFilterParamsComparison, value: string[] | string ) {
+  constructor(
+    field: string,
+    comparison: EnumCombinedListingFilterParamsComparison,
+    value: string[] | string
+  ) {
     this.field = field
     this.comparison = comparison
     this.value = value
@@ -86,7 +94,7 @@ class Filter {
 
   toFilterParams(): CombinedListingFilterParams {
     // Set the comparison type
-    let value = {
+    const value = {
       $comparison: this.comparison,
     }
 

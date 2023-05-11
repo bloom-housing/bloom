@@ -1,11 +1,17 @@
-import { CombinedListingFilterParams, EnumListingFilterParamsComparison, EnumListingFilterParamsStatus, Listing, ListingFilterParams, OrderByFieldsEnum, OrderParam } from "@bloom-housing/backend-core"
-import { getListingServiceUrl } from "../helpers"
+import {
+  CombinedListingFilterParams,
+  EnumListingFilterParamsStatus,
+  OrderByFieldsEnum,
+  OrderParam,
+  PaginatedListing,
+} from "@bloom-housing/backend-core"
 import axios from "axios"
 import qs from "qs"
 import { ListingQueryBuilder } from "./listing-query-builder"
 
 /**
  * Consolidates listing API calls into a single class
+ * This class is client-side safe
  */
 export class ListingService {
   listingsEndpoint: string
@@ -18,7 +24,7 @@ export class ListingService {
 
   async fetchListingById(id: string, locale: string = null) {
     const request = {
-      headers: null
+      headers: null,
     }
 
     if (locale) {
@@ -29,8 +35,17 @@ export class ListingService {
     return response.data
   }
 
-  async searchListings(qb: ListingQueryBuilder, limit: string = "all") {
-    let listings = []
+  async searchListings(qb: ListingQueryBuilder, limit = "all"): Promise<PaginatedListing> {
+    let results = Promise.resolve({
+      items: [],
+      meta: {
+        currentPage: 0,
+        itemCount: 0,
+        itemsPerPage: 0,
+        totalItems: 0,
+        totalPages: 0,
+      },
+    })
 
     const params: {
       view: string
@@ -53,7 +68,7 @@ export class ListingService {
 
     console.log(params)
 
-   try {
+    try {
       const response = await axios.get(this.searchEndpoint, {
         params,
         paramsSerializer: (params) => {
@@ -61,22 +76,21 @@ export class ListingService {
         },
       })
 
-      console.log(response.request)
-
-      listings = response.data?.items
+      results = response.data
     } catch (e) {
       console.log("fetchBaseListingData error: ", e)
     }
 
-    return listings
+    return results
   }
 
   fetchOpenListings() {
-
     const qb = new ListingQueryBuilder()
 
-    qb.whereEqual("status", EnumListingFilterParamsStatus.active)
-      .addOrderBy(OrderByFieldsEnum.mostRecentlyPublished, OrderParam.DESC)
+    qb.whereEqual("status", EnumListingFilterParamsStatus.active).addOrderBy(
+      OrderByFieldsEnum.mostRecentlyPublished,
+      OrderParam.DESC
+    )
 
     return this.searchListings(qb)
 
@@ -93,6 +107,4 @@ export class ListingService {
     })
     */
   }
-
-  
 }

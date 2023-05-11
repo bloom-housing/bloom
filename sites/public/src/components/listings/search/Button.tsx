@@ -23,7 +23,7 @@ const buttonStyleInactive: React.CSSProperties = {
 const buttonStyleActive: React.CSSProperties = {
   ...buttonStyleBase,
   border: "1px solid black",
-  backgroundColor: "lightgray"
+  backgroundColor: "lightgray",
 }
 
 const Button = (props: ButtonProps) => {

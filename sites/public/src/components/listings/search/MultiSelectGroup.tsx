@@ -29,7 +29,8 @@ export function MultiSelectGroup(props: MultiSelectGroupProps) {
     if (stateCopy[value]) {
       stateCopy[value] = false
       console.log(`Removing value [${value}]`)
-    } else { // otherwise set as true
+    } else {
+      // otherwise set as true
       stateCopy[value] = true
       console.log(`Adding value [${value}]`)
     }
@@ -59,7 +60,9 @@ export function MultiSelectGroup(props: MultiSelectGroupProps) {
               name={props.name}
               value={input.value}
               tabIndex={index}
-              onChange={() => { addRemoveValue(input.value) }}
+              onChange={() => {
+                addRemoveValue(input.value)
+              }}
             />
             <label>{input.label}</label>
           </div>
