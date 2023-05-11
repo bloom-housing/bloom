@@ -3,7 +3,7 @@ import { DbConfig, UrlInfo } from "./src/types"
 import { knex } from "knex"
 import axios from "axios"
 
-const jurisdictionIncludeString = process.env.JURISDICTION_INCLUDE_LIST
+const jurisdictionIncludeString = process.env.JURISDICTION_INCLUDE_LIST || ""
 const jurisdictionIncludeList = jurisdictionIncludeString.split(",").map((name) => name.trim())
 
 // This is also unlikely to change during the lifetime of this task

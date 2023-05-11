@@ -19,10 +19,15 @@ export class JurisdictionResolver extends BaseStage implements JurisdictionResol
   public async fetchJurisdictions(): Promise<Jurisdiction[]> {
     const endpoint = this.urlInfo.base + this.urlInfo.path
 
+    const logger = this.logger
+
+    logger.log(`Fetching jurisdictions from [${endpoint}]`)
+    logger.log(`Expected jurisdictions: [${this.jurisdictionIncludeList.join(",")}]`)
+
     return this.axios
       .get<JurisdictionResponse>(endpoint)
       .catch((error) => {
-        this.logger.error("Unexpected HTTP error fetching jurisdictions")
+        logger.error("Unexpected HTTP error fetching jurisdictions")
         throw error
       })
       .then((response) => {
@@ -37,10 +42,10 @@ export class JurisdictionResolver extends BaseStage implements JurisdictionResol
         }
       })
       .then((jurisdictions) => {
-        this.log(`[${jurisdictions.length}] jurisdictions found`)
+        logger.log(`[${jurisdictions.length}] jurisdictions found`)
 
         // filter jurisdictions
-        this.log(`Filtering jurisdictions`)
+        logger.log(`Filtering jurisdictions`)
         const filteredJurisdictions = jurisdictions.filter((j) => {
           const inList = this.jurisdictionIncludeList.includes(j.name)
 
@@ -52,7 +57,7 @@ export class JurisdictionResolver extends BaseStage implements JurisdictionResol
 
           return inList
         })
-        this.log(
+        logger.log(
           `[${filteredJurisdictions.length} of ${jurisdictions.length}] jurisdictions match include list`
         )
 
