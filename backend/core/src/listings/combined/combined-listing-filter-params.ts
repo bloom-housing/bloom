@@ -2,7 +2,7 @@ import { ListingFilterParams } from "../dto/listing-filter-params"
 import { CombinedListingFilterKeys } from "./combined-listing-filter-keys-enum"
 import { Expose, Transform } from "class-transformer"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsOptional, IsBoolean, IsString, IsNumberString } from "class-validator"
+import { IsOptional, IsBoolean, IsString, IsArray, IsNumberString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class CombinedListingFilterParams extends ListingFilterParams {
@@ -28,13 +28,13 @@ export class CombinedListingFilterParams extends ListingFilterParams {
 
   @Expose()
   @ApiProperty({
-    type: String,
-    example: "Santa Clara",
+    type: Array,
+    example: ["Santa Clara"],
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [CombinedListingFilterKeys.county]?: string;
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.counties]?: string[];
 
   @Expose()
   @ApiProperty({
@@ -49,10 +49,60 @@ export class CombinedListingFilterParams extends ListingFilterParams {
   @Expose()
   @ApiProperty({
     type: Number,
+    example: "1000",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.minMonthlyRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "2000",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.maxMonthlyRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
     example: "1",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [CombinedListingFilterKeys.bathrooms]?: number
+  [CombinedListingFilterKeys.minBathrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "2",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.maxBathrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "1",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.minBedrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "3",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.maxBedrooms]?: number
 }

@@ -5251,10 +5251,28 @@ export interface CombinedListingFilterParams {
   isExternal?: boolean
 
   /**  */
-  county?: string
+  counties?: string[]
 
   /**  */
   city?: string
+
+  /**  */
+  minMonthlyRent?: number
+
+  /**  */
+  maxMonthlyRent?: number
+
+  /**  */
+  minBathrooms?: number
+
+  /**  */
+  maxBathrooms?: number
+
+  /**  */
+  minBedrooms?: number
+
+  /**  */
+  maxBedrooms?: number
 }
 
 export interface CombinedListingsQueryParams {
@@ -6402,6 +6420,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {
@@ -6423,6 +6442,7 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
@@ -6489,6 +6509,7 @@ export enum EnumCombinedListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumCombinedListingFilterParamsStatus {
@@ -6506,5 +6527,6 @@ export enum EnumMultiselectQuestionsFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }

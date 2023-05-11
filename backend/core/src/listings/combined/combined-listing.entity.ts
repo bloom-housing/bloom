@@ -32,10 +32,22 @@ l.updated_at,
 l.last_application_update_at,
 
 -- filter/sort criteria
-addr.county,
-addr.city,
 l.neighborhood,
 rct.name as "reserved_community_type_name",
+units.min_monthly_rent,
+units.max_monthly_rent,
+units.min_bedrooms,
+units.max_bedrooms,
+units.min_bathrooms,
+units.max_bathrooms,
+units.min_monthly_income_min,
+units.max_monthly_income_min,
+units.min_occupancy,
+units.max_occupancy,
+units.min_sq_feet,
+units.max_sq_feet,
+units.lowest_floor,
+units.highest_floor,
 
 null as "url_slug", -- url_slug, intentionally null
 null as "units_summarized", -- units_summarized, intentionally null
@@ -134,10 +146,43 @@ ON l.utilities_id = util.id
 LEFT JOIN "address" addr
 ON l.building_address_id = addr.id
 
+-- Some columns representing numeric data use the "text" type
+-- We need to convert those to numbers so we can filter on them correctly
+-- There is no input validation on these, so we need to validate format before converting
+-- In a perfect world we'd write a function, but that's impractical here compared to a one-liner
+
+-- Breaking down the type conversion logic
+-- CASE WHEN column ~ '^[0-9]+\\.{0,1}[0-9]+$' THEN TO_NUMBER(column, '99999') ELSE 0 END
+-- "if text column matches "(num)+.(num)+", then convert it to a number with up to 5 digits, otherwise use the number 0
+-- examples of matches: "123", "12345", "12345.6", "12345.67"
+-- examples of non-matches: "", " ", "Contact listing agent", "12.", "12.34.5", ".12", "1,234",  "1,234.0"
+-- examples of incorrect results: "123456789" => 12345
+
 -- units
 LEFT JOIN (
 SELECT 
   listing_id,
+
+  -- These agg values are used to filter on unit values
+  -- Some need to be converted from text to number first (see above)
+
+  -- monthly_rent is a text field, so we need to convert it to a number
+  MIN(CASE WHEN monthly_rent ~ '^[0-9]+\\.{0,1}[0-9]+$' THEN TO_NUMBER(monthly_rent, '99999') ELSE 0 END) as "min_monthly_rent",
+  MAX(CASE WHEN monthly_rent ~ '^[0-9]+\\.{0,1}[0-9]+$' THEN TO_NUMBER(monthly_rent, '99999') ELSE 0 END) AS "max_monthly_rent",
+  MIN(u.num_bedrooms) AS "min_bedrooms",
+  MAX(u.num_bedrooms) AS "max_bedrooms",
+  MIN(u.num_bathrooms) AS "min_bathrooms",
+  MAX(u.num_bathrooms) AS "max_bathrooms",
+  -- monthly_income_min is a text field, so we need to convert it to a number
+  MIN(CASE WHEN monthly_income_min ~ '^[0-9]+\\.{0,1}[0-9]+$' THEN TO_NUMBER(monthly_income_min, '99999') ELSE 0 END) AS "min_monthly_income_min",
+  MAX(CASE WHEN monthly_income_min ~ '^[0-9]+\\.{0,1}[0-9]+$' THEN TO_NUMBER(monthly_income_min, '99999') ELSE 0 END) AS "max_monthly_income_min",
+  MIN(min_occupancy) AS "min_occupancy",
+  MAX(max_occupancy) AS "max_occupancy",
+  MIN(sq_feet) AS "min_sq_feet",
+  MAX(sq_feet) AS "max_sq_feet",
+  MIN(floor) as "lowest_floor",
+  MAX(floor) as "highest_floor",
+
   jsonb_agg(
     jsonb_build_object(
       'id', u.id,
@@ -248,10 +293,24 @@ const externalSelect = `SELECT
 "closed_at", 
 "updated_at",
 "last_application_update_at", 
-"county",
-"city",
 "neighborhood", 
 "reserved_community_type_name",
+
+"min_monthly_rent",
+"max_monthly_rent",
+"min_bedrooms",
+"max_bedrooms",
+"min_bathrooms",
+"max_bathrooms",
+"min_monthly_income_min",
+"max_monthly_income_min",
+"min_occupancy",
+"max_occupancy",
+"min_sq_feet",
+"max_sq_feet",
+"lowest_floor",
+"highest_floor",
+
 "url_slug",
 "units_summarized",
 "images",
@@ -330,17 +389,75 @@ export class CombinedListing {
   @ViewColumn({ name: "last_application_update_at" })
   lastApplicationUpdateAt: Date
 
+  /*
   @ViewColumn()
   county: string
 
   @ViewColumn()
   city: string
+  */
 
   @ViewColumn()
   neighborhood: string
 
   @ViewColumn({ name: "reserved_community_type_name" })
   reservedCommunityTypeName: string
+
+  // The lowest monthly rent across all units
+  @ViewColumn({ name: "min_monthly_rent" })
+  minMonthlyRent: number
+
+  // The highest monthly rent across all units
+  @ViewColumn({ name: "max_monthly_rent" })
+  maxMonthlyRent: number
+
+  // The lowest number of bedrooms across all units
+  @ViewColumn({ name: "min_bedrooms" })
+  minBedrooms: number
+
+  // The highest number of bedrooms across all units
+  @ViewColumn({ name: "max_bedrooms" })
+  maxBedrooms: number
+
+  // The lowest number of bathrooms across all units
+  @ViewColumn({ name: "min_bathrooms" })
+  minBathrooms: number
+
+  // The highest number of bathrooms across all units
+  @ViewColumn({ name: "max_bathrooms" })
+  maxBathrooms: number
+
+  // The lowest minimum monthly income across all units
+  @ViewColumn({ name: "max_monthly_income_min" })
+  minMonthlyIncomeMin: number
+
+  // The highest minimum monthly income across all units
+  @ViewColumn({ name: "max_monthly_income_min" })
+  maxMonthlyIncomeMin: number
+
+  // The lowest occupancy across all units
+  @ViewColumn({ name: "min_occupancy" })
+  minOccupancy: number
+
+  // The highest occupancy across all units
+  @ViewColumn({ name: "max_occupancy" })
+  maxOccupancy: number
+
+  // The smallest sq footage across all units
+  @ViewColumn({ name: "min_sq_feet" })
+  minSqFeet: number
+
+  // The largest sq footage across all units
+  @ViewColumn({ name: "max_sq_feet" })
+  maxSqFeet: number
+
+  // The lowest floor across all units
+  @ViewColumn({ name: "lowest_floor" })
+  lowestFloor: number
+
+  // The highest floor across all units
+  @ViewColumn({ name: "highest_floor" })
+  highestFloor: number
 
   @ViewColumn({ name: "url_slug" })
   urlSlug: string

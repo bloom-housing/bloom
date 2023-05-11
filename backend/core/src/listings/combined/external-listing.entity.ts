@@ -111,6 +111,7 @@ class ExternalListing extends BaseEntity {
   // END LISTING FIELDS
   // BEGIN SEARCH FIELDS
 
+  /*
   @Column({ type: "text", nullable: true })
   @Index()
   @Expose()
@@ -119,6 +120,7 @@ class ExternalListing extends BaseEntity {
   @Column({ type: "text", nullable: true })
   @Expose()
   city?: string | null
+  */
 
   @Column({ type: "text", nullable: true })
   @Index()
@@ -128,6 +130,62 @@ class ExternalListing extends BaseEntity {
   @Column({ type: "text", name: "reserved_community_type_name", nullable: true })
   @Expose()
   reservedCommunityTypeName?: string | null
+
+  // The lowest monthly rent across all units
+  @Column({ name: "min_monthly_rent", default: 0 })
+  minMonthlyRent: number
+
+  // The highest monthly rent across all units
+  @Column({ name: "max_monthly_rent", default: 0 })
+  maxMonthlyRent: number
+
+  // The lowest number of bedrooms across all units
+  @Column({ name: "min_bedrooms", default: 0 })
+  minBedrooms: number
+
+  // The highest number of bedrooms across all units
+  @Column({ name: "max_bedrooms", default: 0 })
+  maxBedrooms: number
+
+  // The lowest number of bathrooms across all units
+  @Column({ name: "min_bathrooms", default: 0 })
+  minBathrooms: number
+
+  // The highest number of bathrooms across all units
+  @Column({ name: "max_bathrooms", default: 0 })
+  maxBathrooms: number
+
+  // The lowest minimum monthly income across all units
+  @Column({ name: "min_monthly_income_min", default: 0 })
+  minMonthlyIncomeMin: number
+
+  // The highest minimum monthly income across all units
+  @Column({ name: "max_monthly_income_min", default: 0 })
+  maxMonthlyIncomeMin: number
+
+  // The lowest occupancy across all units
+  @Column({ name: "min_occupancy", default: 0 })
+  minOccupancy: number
+
+  // The highest occupancy across all units
+  @Column({ name: "max_occupancy", default: 0 })
+  maxOccupancy: number
+
+  // The smallest sq footage across all units
+  @Column({ name: "min_sq_feet", default: 0 })
+  minSqFeet: number
+
+  // The largest sq footage across all units
+  @Column({ name: "max_sq_feet", default: 0 })
+  maxSqFeet: number
+
+  // The lowest floor across all units
+  @Column({ name: "lowest_floor", default: 0 })
+  lowestFloor: number
+
+  // The highest floor across all units
+  @Column({ name: "highest_floor", default: 0 })
+  highestFloor: number
 
   @Column({ type: "text", name: "url_slug" })
   @Expose()

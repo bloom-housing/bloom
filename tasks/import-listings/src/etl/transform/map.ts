@@ -126,7 +126,7 @@ export const defaultMap: RecordMap = {
 
   //county: "countyCode",
   //city: (listing: Listing) => listing.buildingAddress?.city,
-  neighborhood: "neighborhood", // not available on view=base but needed for filtering
+  neighborhood: (listing: Listing) => listing.neighborhood,
   reserved_community_type_name: (listing: Listing) => listing.reservedCommunityType?.name,
 
   // Fields for filtering on unit data
