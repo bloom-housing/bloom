@@ -34,6 +34,7 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   return (
     <div>
       <ListingsSearchForm
+        searchString={props.searchString}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
         counties={props.counties}

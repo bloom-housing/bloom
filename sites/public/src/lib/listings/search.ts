@@ -10,7 +10,7 @@ export function parseSearchString<T extends object>(format: T, search: string): 
   // format: name:value;otherName:arrayVal1,arrayVal2
 
   // Fail fast on empty string
-  if (search.length < 1) return
+  if (search == undefined || search == null || search.length < 1) return
 
   // Copy format to our results
   const results = {} as T

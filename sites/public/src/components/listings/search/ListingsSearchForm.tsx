@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ButtonBar } from "./ButtonBar"
 import { MultiSelectGroup } from "./MultiSelectGroup"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
@@ -44,8 +44,9 @@ const clearButtonStyle: React.CSSProperties = {
 }
 
 export function ListingsSearchForm(props: ListingsSearchFormProps) {
-  const searchString = "bedrooms:3;bathrooms:2;counties:Marin,Alameda"
+  const searchString = props.searchString || ""
 
+  console.log(`Search string: ${searchString}`)
   const initialState = parseSearchString(
     {
       bedrooms: null,
@@ -85,6 +86,11 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
     setFormValues(formValues)
     //console.log(`${name} has been set to ${value}`)
   }
+
+  // load listings after render
+  useEffect(() => {
+    onSubmit()
+  }, [])
 
   return (
     <div style={containerStyle}>
