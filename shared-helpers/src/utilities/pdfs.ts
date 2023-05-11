@@ -31,7 +31,7 @@ export const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
  */
 export const getPdfUrlFromAsset = (
   asset: AssetCreate,
-  cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME || ""
+  cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME || "exygy"
 ): string | null => {
   const fileId = asset.fileId
 
