@@ -53,13 +53,20 @@ export class BaseQueryFilter implements IBaseQueryFilter {
         break
       case Compare["<>"]:
       case Compare["="]:
-      case Compare[">="]:
+        //case Compare[">="]:
         qb.andWhere(
           `LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})`,
           {
             [whereParameterName]: filterValue,
           }
         )
+        break
+      // Numeric comparison operators shouldn't be cast to text first
+      case Compare[">="]:
+      case Compare["<="]:
+        qb.andWhere(`${filterField} ${comparison} :${whereParameterName}`, {
+          [whereParameterName]: filterValue,
+        })
         break
       case Compare.NA:
         // If we're here, it's because we expected this filter to be handled by a custom filter handler

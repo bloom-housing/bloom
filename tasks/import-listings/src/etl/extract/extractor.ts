@@ -6,12 +6,14 @@ import { BaseStage } from "../base-stage"
 export class Extractor extends BaseStage implements ExtractorInterface {
   axios: Axios
   urlInfo: UrlInfo
+  listingView: string
 
   // This constructor uses dependency injection for axios to enable easier mocking
-  constructor(axios: Axios, urlInfo: UrlInfo) {
+  constructor(axios: Axios, urlInfo: UrlInfo, listingView = "base") {
     super()
     this.axios = axios
     this.urlInfo = urlInfo
+    this.listingView = listingView
   }
 
   private constructEndpoint(id: string) {
@@ -21,7 +23,7 @@ export class Extractor extends BaseStage implements ExtractorInterface {
     return (
       this.urlInfo.base +
       this.urlInfo.path +
-      "?view=base&limit=all&filter[0][$comparison]==&filter[0][status]=active" +
+      `?view=${this.listingView}&limit=all&filter[0][$comparison]==&filter[0][status]=active` +
       `&filter[1][$comparison]==&filter[1][jurisdiction]=${id}`
     )
   }

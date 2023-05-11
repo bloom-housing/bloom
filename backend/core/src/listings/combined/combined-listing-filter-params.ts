@@ -34,7 +34,7 @@ export class CombinedListingFilterParams extends ListingFilterParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
-  [CombinedListingFilterKeys.county]?: string[];
+  [CombinedListingFilterKeys.counties]?: string[];
 
   @Expose()
   @ApiProperty({
@@ -49,10 +49,60 @@ export class CombinedListingFilterParams extends ListingFilterParams {
   @Expose()
   @ApiProperty({
     type: Number,
+    example: "1000",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.minMonthlyRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "2000",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.maxMonthlyRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
     example: "1",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [CombinedListingFilterKeys.bathrooms]?: number
+  [CombinedListingFilterKeys.minBathrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "2",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.maxBathrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "1",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.minBedrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "3",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [CombinedListingFilterKeys.maxBedrooms]?: number
 }

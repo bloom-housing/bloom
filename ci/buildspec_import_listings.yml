@@ -1,0 +1,37 @@
+
+version: 0.2
+env:
+  shell: bash
+  variables:
+    IMAGE_NAME: "import-listings"
+phases:
+  build:
+    commands:
+      # Set some env vars
+      - export ECR_URL="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
+      - export QUALIFIED_IMAGE_NAME="${ECR_NAMESPACE}/${IMAGE_NAME}"
+      - export TEST_IMAGE="${QUALIFIED_IMAGE_NAME}:test"
+      - export RUN_IMAGE="${QUALIFIED_IMAGE_NAME}:run"
+      - export ECR_GIT_TAG="${ECR_URL}/${QUALIFIED_IMAGE_NAME}:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - export ECR_RUN_TAG="${ECR_URL}/${QUALIFIED_IMAGE_NAME}:run"
+
+      # Log in to ECR
+      - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_URL}"
+
+      # Change to source dir
+      - cd tasks/import-listings
+
+      # Test
+      - docker build --target test -t "${TEST_IMAGE}" .
+      - docker run "${TEST_IMAGE}"
+
+      # Build runtime image
+      - docker build --target run -t "${RUN_IMAGE}" .
+
+      # Tag image
+      - docker tag "${RUN_IMAGE}" "${ECR_GIT_TAG}"
+      - docker tag "${RUN_IMAGE}" "${ECR_RUN_TAG}"
+
+      # Push to ECR
+      - docker push "${ECR_GIT_TAG}"
+      - docker push "${ECR_RUN_TAG}"
