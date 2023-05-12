@@ -20,7 +20,7 @@
   }
 
   &:first-of-type {
-    margin-top: var(--bloom-s12);
+    margin-top: 0;
   }
 }
 .listings-row_figure {
@@ -44,11 +44,14 @@
 }
 
 .listings-row_content {
+  flex-basis: 70%;
+  min-width: 200px;
+
   @media (min-width: $screen-sm) {
-    flex-basis: 66.66%;
-    min-width: 200px;
+    flex-basis: 50%;
   }
-  .listings-row_headers {
+
+  .listings-row_headers, .listings-row_preheader {
     display: flex;
     flex-direction: column;
     align-items: center;

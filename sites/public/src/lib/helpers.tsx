@@ -8,12 +8,7 @@ import {
   ListingStatus,
   ApplicationMultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
-import {
-  t,
-  ApplicationStatusType,
-  StatusBarType,
-  AppearanceStyleType,
-} from "@bloom-housing/ui-components"
+import { t, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
 import { ListingCard } from "@bloom-housing/doorway-ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
@@ -72,10 +67,15 @@ const getListingCardSubtitle = (address: Address) => {
 
 const getListingTableData = (
   unitsSummarized: UnitsSummarized,
-  listingReviewOrder: ListingReviewOrder
+  listingReviewOrder: ListingReviewOrder,
+  includeRentandMinimumIncome: boolean
 ) => {
   return unitsSummarized !== undefined
-    ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingReviewOrder)
+    ? getSummariesTable(
+        unitsSummarized.byUnitTypeAndRent,
+        listingReviewOrder,
+        includeRentandMinimumIncome
+      )
     : []
 }
 
@@ -133,23 +133,6 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   }
 }
 
-const generateTableSubHeader = (listing) => {
-  if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
-    return {
-      content: t("listings.availableUnits"),
-      styleType: AppearanceStyleType.success,
-      isPillType: true,
-    }
-  } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
-    return {
-      content: t("listings.waitlist.open"),
-      styleType: AppearanceStyleType.primary,
-      isPillType: true,
-    }
-  }
-  return null
-}
-
 const unitSummariesHeaders = {
   unitType: "t.unitType",
   minimumIncome: "t.minimumIncome",
@@ -168,6 +151,7 @@ export const getListingCard = (listing: Listing, index: number) => {
   return (
     <ListingCard
       key={index}
+      preheader={listing?.buildingAddress?.county}
       imageCardProps={{
         imageUrl:
           imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
@@ -178,12 +162,12 @@ export const getListingCard = (listing: Listing, index: number) => {
               },
             ]
           : undefined,
-        statuses: [getListingApplicationStatus(listing)],
+        statuses: [],
         description: listing.name,
       }}
       tableProps={{
         headers: unitSummariesHeaders,
-        data: getListingTableData(listing.unitsSummarized, listing.reviewOrderType),
+        data: getListingTableData(listing.unitsSummarized, listing.reviewOrderType, false),
         responsiveCollapse: true,
         cellClassName: "px-5 py-3",
       }}
@@ -200,7 +184,6 @@ export const getListingCard = (listing: Listing, index: number) => {
           href: uri,
         },
         contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
-        tableHeader: generateTableSubHeader(listing),
       }}
     />
   )
