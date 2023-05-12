@@ -19,7 +19,6 @@ phases:
 
   build:
     commands:
-      # # Public
       - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=public --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/public:test
       - docker run sites/public:test
       - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=public --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/public:run-candidate
