@@ -25,7 +25,8 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
       return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
     })
     setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
-    reset()
+    // TODO: figure out why we need to reset
+    // reset()
   }, [reservedCommunityTypes, reset])
 
   return (
