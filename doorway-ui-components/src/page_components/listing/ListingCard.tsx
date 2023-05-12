@@ -126,7 +126,9 @@ const ListingCard = (props: ListingCardProps) => {
             "order-1"
           )}
         {contentProps?.contentSubheader && (
-          <p className="card-subheader order-2">{contentProps?.contentSubheader?.content}</p>
+          <p className="card-subheader order-2 font-serif">
+            {contentProps?.contentSubheader?.content}
+          </p>
         )}
 
         {cardTags && cardTags?.length > 0 && (
@@ -171,7 +173,6 @@ const ListingCard = (props: ListingCardProps) => {
                 contentProps?.tableHeader?.priority ?? 3,
                 "smallWeighted"
               )}
-
             {contentProps?.tableSubheader?.content && (
               <p className="text__small-normal">{contentProps?.tableSubheader?.content}</p>
             )}
@@ -197,6 +198,7 @@ const ListingCard = (props: ListingCardProps) => {
                     href={footerButton.href}
                     ariaHidden={footerButton.ariaHidden}
                     key={index}
+                    className={"is-secondary"}
                   >
                     {footerButton.text}
                   </LinkButton>

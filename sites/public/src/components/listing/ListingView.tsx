@@ -49,6 +49,7 @@ import {
   getPostmarkString,
   UnitTables,
   getSummariesTable,
+  getPdfUrlFromAsset,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
@@ -57,13 +58,20 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
-import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
-import ListingGoogleMap from "./ListingGoogleMap"
+import { ListingGoogleMap } from "./ListingGoogleMap"
+import getConfig from "next/config"
+
+// nextConfig may not be set in some unit tests since it relies on app startup
+const nextConfig = getConfig()
+const publicRuntimeConfig = nextConfig?.publicRuntimeConfig
+const cloudinaryCloudName = publicRuntimeConfig?.cloudinaryCloudName
 
 interface ListingProps {
   listing: Listing
   preview?: boolean
   jurisdiction?: Jurisdiction
+  googleMapsApiKey: string
+  isExternal?: boolean
 }
 
 export const ListingView = (props: ListingProps) => {
@@ -73,7 +81,6 @@ export const ListingView = (props: ListingProps) => {
     content: appStatusContent,
     subContent: appStatusSubContent,
   } = useGetApplicationStatusProps(listing)
-  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
@@ -150,7 +157,7 @@ export const ListingView = (props: ListingProps) => {
     buildingSelectionCriteria = (
       <p>
         <a
-          href={fileService.getDownloadUrlForPdf(listing.buildingSelectionCriteriaFile.fileId)}
+          href={getPdfUrlFromAsset(listing.buildingSelectionCriteriaFile, cloudinaryCloudName)}
           className={"text-blue-700"}
         >
           {t("listings.moreBuildingSelectionCriteria")}
@@ -297,7 +304,13 @@ export const ListingView = (props: ListingProps) => {
   const getOnlineApplicationURL = () => {
     let onlineApplicationURL
     if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
-      onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+      let urlBase
+      if (props.isExternal) {
+        urlBase = listing.jurisdiction.publicUrl
+      } else {
+        urlBase = ""
+      }
+      onlineApplicationURL = `${urlBase}/applications/start/choose-language?listingId=${listing.id}`
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
@@ -323,9 +336,7 @@ export const ListingView = (props: ListingProps) => {
         })
         .map((paperApp) => {
           return {
-            fileURL: paperApp?.file?.fileId.includes("https")
-              ? paperApp?.file?.fileId
-              : fileService.getDownloadUrlForPdf(paperApp?.file?.fileId || ""),
+            fileURL: paperApp ? getPdfUrlFromAsset(paperApp.file, cloudinaryCloudName) : "",
             languageString: t(`languages.${paperApp.language}`),
           }
         }) ?? null
@@ -876,7 +887,11 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingGoogleMap listing={listing} googleMapsHref={googleMapsHref} />
+            <ListingGoogleMap
+              listing={listing}
+              googleMapsHref={googleMapsHref}
+              googleMapsApiKey={props.googleMapsApiKey}
+            />
           </div>
         </ListingDetailItem>
 

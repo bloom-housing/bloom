@@ -443,6 +443,22 @@ describe("CombinedListings", () => {
           // this is only set on the view
           "isExternal",
 
+          // these are only used for filtering in the DB side
+          "minMonthlyRent",
+          "maxMonthlyRent",
+          "minBedrooms",
+          "maxBedrooms",
+          "minBathrooms",
+          "maxBathrooms",
+          "minMonthlyIncomeMin",
+          "maxMonthlyIncomeMin",
+          "minOccupancy",
+          "maxOccupancy",
+          "minSqFeet",
+          "maxSqFeet",
+          "lowestFloor",
+          "highestFloor",
+
           // not included in base listing view
           "householdSizeMin",
           "householdSizeMax",
@@ -462,8 +478,9 @@ describe("CombinedListings", () => {
     it("should properly apply county filter", async () => {
       // this fictional county is set in external listings seed
       const countyName = "San Alameda"
-      const equalsFilter = [{ $comparison: "=", county: countyName }]
-      const notEqualsFilter = [{ $comparison: "<>", county: countyName }]
+
+      // The county filter only takes an array and only supports inclusive searches, not exclusive
+      const equalsFilter = [{ $comparison: "IN", counties: [countyName] }]
 
       // check equality
       const equalsQuery = qs.stringify({
@@ -478,21 +495,6 @@ describe("CombinedListings", () => {
       // all values should match filter
       equalRes.body.items.forEach((listing) => {
         expect(listing.buildingAddress.county).toBe(countyName)
-      })
-
-      // check inequality
-      const notEqualsQuery = qs.stringify({
-        limit: "all",
-        filter: notEqualsFilter,
-      })
-
-      const notEqualRes = await supertest(app.getHttpServer())
-        .get(`/listings/combined?${notEqualsQuery}`)
-        .expect(200)
-
-      // no values should match filter
-      notEqualRes.body.items.forEach((listing) => {
-        expect(listing.buildingAddress.county).not.toBe(countyName)
       })
     })
 
@@ -535,7 +537,8 @@ describe("CombinedListings", () => {
 
     it("should properly apply bedrooms filter", async () => {
       const minBedrooms = 2
-      const gteFilter = [{ $comparison: ">=", bedrooms: minBedrooms }]
+      // where max number of bedrooms is at least as much as requested
+      const gteFilter = [{ $comparison: ">=", maxBedrooms: minBedrooms }]
 
       const gteQuery = qs.stringify({
         limit: "all",
@@ -559,6 +562,90 @@ describe("CombinedListings", () => {
         // check each one and set true for listing if any match found
         bedrooms.forEach((value) => {
           if (value >= minBedrooms) isMatch = true
+        })
+
+        expect(isMatch).toBe(true)
+      })
+    })
+
+    it("should properly apply rent filter", async () => {
+      const minRent = 500
+      const maxRent = 1500
+      const gteFilter = [
+        { $comparison: ">=", minMonthlyRent: minRent },
+        { $comparison: "<=", maxMonthlyRent: maxRent },
+      ]
+
+      const query = qs.stringify({
+        limit: "all",
+        filter: gteFilter,
+      })
+
+      const res = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${query}`)
+        .expect(200)
+
+      const totalListings = res.body.items.length
+      let matchedListings = 0
+
+      // at least one unit should match the rent requirement
+      res.body.items.forEach((listing) => {
+        // could just loop on this, but mapping makes duplication of this test easier
+        const rent = listing.units.map((unit) => {
+          return unit.monthlyRent
+        })
+
+        // assume no matches
+        let isMatch = false
+
+        // check each one and set true for listing if any match found
+        rent.forEach((value) => {
+          const rentNum = parseFloat(value)
+          // skip invalid rent values
+          if (isNaN(rentNum)) return
+
+          if (rentNum >= minRent && rentNum <= maxRent) {
+            isMatch = true
+          }
+        })
+
+        if (isMatch) {
+          matchedListings++
+        } else {
+          console.log(listing.id)
+        }
+      })
+
+      expect(matchedListings).toEqual(totalListings)
+    })
+
+    it("should properly apply bathrooms filter", async () => {
+      const minBathrooms = 2
+      // where max number of bathrooms is at least as much as requested
+      const gteFilter = [{ $comparison: ">=", maxBathrooms: minBathrooms }]
+
+      const gteQuery = qs.stringify({
+        limit: "all",
+        filter: gteFilter,
+      })
+
+      const gteRes = await supertest(app.getHttpServer())
+        .get(`/listings/combined?${gteQuery}`)
+        .expect(200)
+
+      // at least one unit should match the bathroom requirement
+      gteRes.body.items.forEach((listing) => {
+        // could just loop on this, but mapping makes duplication of this test easier
+        const bathrooms = listing.units.map((unit) => {
+          return unit.numBathrooms
+        })
+
+        // assume no matches
+        let isMatch = false
+
+        // check each one and set true for listing if any match found
+        bathrooms.forEach((value) => {
+          if (value >= minBathrooms) isMatch = true
         })
 
         expect(isMatch).toBe(true)

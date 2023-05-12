@@ -9,10 +9,12 @@ import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../../../lib/hooks"
+import { runtimeConfig } from "../../../lib/runtime-config"
 
 interface ListingProps {
   listing: Listing
   jurisdiction: Jurisdiction
+  googleMapsApiKey: string
 }
 
 export default function ListingPage(props: ListingProps) {
@@ -39,7 +41,13 @@ export default function ListingPage(props: ListingProps) {
       >
         {t("listings.listingPreviewOnly")}
       </AlertBox>
-      <ListingView listing={listing} preview={false} jurisdiction={props.jurisdiction} />
+      <ListingView
+        listing={listing}
+        preview={false}
+        jurisdiction={props.jurisdiction}
+        googleMapsApiKey={props.googleMapsApiKey}
+        isExternal={false}
+      />
     </Layout>
   )
 }
@@ -55,5 +63,11 @@ export async function getServerSideProps(context: { params: Record<string, strin
 
   const jurisdiction = fetchJurisdictionByName()
 
-  return { props: { listing: response.data, jurisdiction: await jurisdiction } }
+  return {
+    props: {
+      listing: response.data,
+      jurisdiction: await jurisdiction,
+      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
+    },
+  }
 }

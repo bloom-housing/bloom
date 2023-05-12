@@ -114,6 +114,10 @@ h1.title {
 .icon-item {
   @apply block;
 }
+:root {
+  --text-large-primary-font-weight: 500;
+  --text-large-primary-font-size: var(--bloom-font-size-2xl);
+}
 
 .text__large-primary {
   font-family: var(--text-large-primary-font-family, var(--bloom-font-alt-sans));

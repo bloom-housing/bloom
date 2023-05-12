@@ -10,11 +10,11 @@ import {
 } from "@bloom-housing/backend-core/types"
 import {
   t,
-  ListingCard,
   ApplicationStatusType,
   StatusBarType,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
+import { ListingCard } from "@bloom-housing/doorway-ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -133,72 +133,77 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
   }
 }
 
-export const getListings = (listings: Listing[]) => {
-  const unitSummariesHeaders = {
-    unitType: "t.unitType",
-    minimumIncome: "t.minimumIncome",
-    rent: "t.rent",
-  }
-
-  const generateTableSubHeader = (listing) => {
-    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
-      return {
-        content: t("listings.availableUnits"),
-        styleType: AppearanceStyleType.success,
-        isPillType: true,
-      }
-    } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
-      return {
-        content: t("listings.waitlist.open"),
-        styleType: AppearanceStyleType.primary,
-        isPillType: true,
-      }
+const generateTableSubHeader = (listing) => {
+  if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
+    return {
+      content: t("listings.availableUnits"),
+      styleType: AppearanceStyleType.success,
+      isPillType: true,
     }
-    return null
+  } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
+    return {
+      content: t("listings.waitlist.open"),
+      styleType: AppearanceStyleType.primary,
+      isPillType: true,
+    }
   }
+  return null
+}
 
-  return listings.map((listing: Listing, index) => {
-    const uri = getListingUrl(listing)
-    return (
-      <ListingCard
-        key={index}
-        imageCardProps={{
-          imageUrl:
-            imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          tags: listing.reservedCommunityType
-            ? [
-                {
-                  text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
-                },
-              ]
-            : undefined,
-          statuses: [getListingApplicationStatus(listing)],
-          description: listing.name,
-        }}
-        tableProps={{
-          headers: unitSummariesHeaders,
-          data: getListingTableData(listing.unitsSummarized, listing.reviewOrderType),
-          responsiveCollapse: true,
-          cellClassName: "px-5 py-3",
-        }}
-        footerButtons={[
-          {
-            text: t("t.seeDetails"),
-            href: uri,
-            ariaHidden: true,
-          },
-        ]}
-        contentProps={{
-          contentHeader: {
-            content: listing.name,
-            href: uri,
-          },
-          contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
-          tableHeader: generateTableSubHeader(listing),
-        }}
-      />
-    )
+const unitSummariesHeaders = {
+  unitType: "t.unitType",
+  minimumIncome: "t.minimumIncome",
+  rent: "t.rent",
+}
+
+export const getListings = (listings: Listing[]) => {
+  return listings.map((listing: Listing, index: number) => {
+    return getListingCard(listing, index)
   })
+}
+
+export const getListingCard = (listing: Listing, index: number) => {
+  const uri = getListingUrl(listing)
+  const displayIndex: string = (index + 1).toString()
+  return (
+    <ListingCard
+      key={index}
+      imageCardProps={{
+        imageUrl:
+          imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
+        tags: listing.reservedCommunityType
+          ? [
+              {
+                text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+              },
+            ]
+          : undefined,
+        statuses: [getListingApplicationStatus(listing)],
+        description: listing.name,
+      }}
+      tableProps={{
+        headers: unitSummariesHeaders,
+        data: getListingTableData(listing.unitsSummarized, listing.reviewOrderType),
+        responsiveCollapse: true,
+        cellClassName: "px-5 py-3",
+      }}
+      footerButtons={[
+        {
+          text: t("t.seeDetails"),
+          href: uri,
+          ariaHidden: true,
+        },
+      ]}
+      contentProps={{
+        contentHeader: {
+          content: displayIndex + ". " + listing.name,
+          href: uri,
+        },
+        contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
+        tableHeader: generateTableSubHeader(listing),
+      }}
+    />
+  )
 }
 
 export const untranslateMultiselectQuestion = (

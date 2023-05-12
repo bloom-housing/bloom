@@ -1,35 +1,14 @@
 import { Listing } from "@bloom-housing/backend-core/types"
-import {
-  FileProviderConfig,
-  FileServiceProvider,
-  FileServiceTypeEnum,
-} from "@bloom-housing/shared-services"
 import { cleanup } from "@testing-library/react"
-import { cloudinaryUrlFromId, imageUrlFromListing } from "../src/utilities/photos"
+import {
+  cloudinaryUrlFromId,
+  getImageUrlFromAsset,
+  imageUrlFromListing,
+} from "../src/utilities/photos"
 
 afterEach(cleanup)
 
 describe("photos helper", () => {
-  beforeAll(() => {
-    const fileProviderConfig: FileProviderConfig = {
-      publicService: {
-        fileServiceType: FileServiceTypeEnum.cloudinary,
-        cloudinaryConfig: {
-          cloudinaryCloudName: "exygy",
-          cloudinaryUploadPreset: "testUploadPreset",
-        },
-      },
-      privateService: {
-        fileServiceType: FileServiceTypeEnum.cloudinary,
-        cloudinaryConfig: {
-          cloudinaryCloudName: "exygy",
-          cloudinaryUploadPreset: "testUploadPreset",
-        },
-      },
-    }
-    FileServiceProvider.configure(fileProviderConfig)
-  })
-
   it("should return correct cloudinary url", () => {
     expect(cloudinaryUrlFromId("1234", "test")).toBe(
       `https://res.cloudinary.com/test/image/upload/w_400,c_limit,q_65/1234.jpg`
@@ -49,9 +28,16 @@ describe("photos helper", () => {
       ],
     } as Listing
 
+    // set CLOUDINARY_CLOUD_NAME to known value
+    const prevCloudName = process.env.CLOUDINARY_CLOUD_NAME
+    process.env.CLOUDINARY_CLOUD_NAME = "exygy"
+
     expect(imageUrlFromListing(testListing)).toBe(
       `https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/1234.jpg`
     )
+
+    // change it back to previous value
+    process.env.CLOUDINARY_CLOUD_NAME = prevCloudName
   })
 
   it("should return correct id when falling back to old field", () => {
@@ -65,5 +51,39 @@ describe("photos helper", () => {
     } as Listing
 
     expect(imageUrlFromListing(testListing)).toBe("5678")
+  })
+
+  it("should return correct urls from AssetCreate", () => {
+    const tests = [
+      {
+        asset: {
+          fileId: "https://url.to/asset",
+          label: "url",
+        },
+        expect: "https://url.to/asset",
+      },
+      {
+        asset: {
+          fileId: "1234",
+          label: "cloudinaryBuilding", // should call cloudinaryUrlFromId
+        },
+        size: 400,
+        cloudinaryCloudName: "exygy",
+        expect: "https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/1234.jpg",
+      },
+      {
+        asset: {
+          fileId: "1234",
+          label: "default",
+        },
+        expect: null,
+      },
+    ]
+
+    tests.forEach((test) => {
+      expect(getImageUrlFromAsset(test.asset, test.size, test.cloudinaryCloudName)).toBe(
+        test.expect
+      )
+    })
   })
 })

@@ -1,6 +1,11 @@
 import { Transformer } from "../../src/etl"
-import { defaultMap, jsonOrNull } from "../../src/etl/transform/map"
-import { Listing } from "../../src/types"
+import {
+  defaultMap,
+  getUnitPropMaxValue,
+  getUnitPropMinValue,
+  jsonOrNull,
+} from "../../src/etl/transform/map"
+import { Jurisdiction, Listing } from "../../src/types"
 
 describe("Transformer", () => {
   it("treats a string value as a property name", () => {
@@ -123,8 +128,10 @@ describe("Transformer", () => {
           floor: 2,
           maxOccupancy: 5,
           minOccupancy: 2,
+          numBedrooms: 3,
+          numBathrooms: 2,
           monthlyRent: "1387",
-          sqFeet: 748,
+          sqFeet: "748",
           monthlyRentAsPercentOfIncome: null,
           unitType: {
             name: "twoBdrm",
@@ -137,8 +144,10 @@ describe("Transformer", () => {
           floor: 1,
           maxOccupancy: 3,
           minOccupancy: 1,
+          numBedrooms: 2,
+          numBathrooms: 1,
           monthlyRent: "1219",
-          sqFeet: 635,
+          sqFeet: "635",
           monthlyRentAsPercentOfIncome: null,
           unitType: {
             name: "oneBdrm",
@@ -187,14 +196,27 @@ describe("Transformer", () => {
     expect(result).toHaveProperty("published_at", listing.publishedAt)
     expect(result).toHaveProperty("closed_at", listing.closedAt)
     expect(result).toHaveProperty("updated_at", listing.updatedAt)
-    expect(result).toHaveProperty("county", listing.countyCode)
-    expect(result).toHaveProperty("city", listing.buildingAddress?.city)
     expect(result).toHaveProperty("neighborhood", listing.neighborhood)
     expect(result).toHaveProperty(
       "reserved_community_type_name",
       listing.reservedCommunityType?.name
     )
     expect(result).toHaveProperty("url_slug", listing.urlSlug)
+
+    expect(result).toHaveProperty("min_monthly_rent", 1219)
+    expect(result).toHaveProperty("max_monthly_rent", 1387)
+    expect(result).toHaveProperty("min_bedrooms", listingData.units[1].numBedrooms)
+    expect(result).toHaveProperty("max_bedrooms", listingData.units[0].numBedrooms)
+    expect(result).toHaveProperty("min_bathrooms", listingData.units[1].numBathrooms)
+    expect(result).toHaveProperty("max_bathrooms", listingData.units[0].numBathrooms)
+    expect(result).toHaveProperty("min_monthly_income_min", 3014)
+    expect(result).toHaveProperty("max_monthly_income_min", 3468)
+    expect(result).toHaveProperty("min_occupancy", listingData.units[1].minOccupancy)
+    expect(result).toHaveProperty("max_occupancy", listingData.units[0].maxOccupancy)
+    expect(result).toHaveProperty("min_sq_feet", 635)
+    expect(result).toHaveProperty("max_sq_feet", 748)
+    expect(result).toHaveProperty("lowest_floor", listingData.units[1].floor)
+    expect(result).toHaveProperty("highest_floor", listingData.units[0].floor)
 
     // these are complex types that are converted into JSON by defaultMap
     // we can assume that if the jsonOrNull tests above pass then the values here are as expected
@@ -208,5 +230,131 @@ describe("Transformer", () => {
     expect(result).toHaveProperty("building_address")
     expect(result).toHaveProperty("features")
     expect(result).toHaveProperty("utilities")
+  })
+
+  it("should generate the correct county", () => {
+    const transformer = new Transformer(defaultMap)
+    transformer.getLogger().printLogs = false
+
+    const tests = [
+      {
+        // specific to Alameda
+        jurisdiction: "Alameda",
+        expect: "Alameda",
+      },
+      {
+        // specific to San Jose
+        jurisdiction: "San Jose",
+        expect: "Santa Clara",
+      },
+      {
+        // specific to San Mateo
+        jurisdiction: "San Mateo",
+        expect: "San Mateo",
+      },
+      {
+        // default behavior
+        jurisdiction: "Detroit",
+        expect: "Detroit",
+      },
+    ]
+
+    // Create a set of listings with different jurisdictions
+    const listings = tests.map((test) => {
+      const listing = new Listing()
+      const jurisdiction = new Jurisdiction()
+      jurisdiction.name = test.jurisdiction
+      listing.jurisdiction = jurisdiction
+      listing.buildingAddress = { city: "" }
+      return listing
+    })
+
+    const results = transformer.mapAll(listings)
+
+    // Check that each mapped result contains a serialized address with the county set
+    results.forEach((mapped, index) => {
+      expect(JSON.parse(mapped.building_address as string)).toHaveProperty(
+        "county",
+        tests[index].expect
+      )
+    })
+  })
+})
+
+describe("Mapping functions", () => {
+  it("should return the highest value for a property", () => {
+    const tests = [
+      {
+        // numeric values
+        arr: [{ value: 1 }, { value: 10 }, { value: 100 }],
+        expect: 100,
+      },
+      {
+        // string values
+        arr: [
+          { value: "1" },
+          { value: "123" }, // order shouldn't matter
+          { value: "12" },
+        ],
+        expect: 123,
+      },
+      {
+        // invalid values
+        arr: [{ value: "" }, { value: "one" }, { value: " " }],
+        expect: 0, // zero is the default value
+      },
+      {
+        // missing values
+        arr: [{ wrongName: 1 }],
+        expect: 0, // zero is the default value
+      },
+      {
+        // empty array
+        arr: [],
+        expect: 0, // zero is the default value
+      },
+    ]
+
+    tests.forEach((test) => {
+      expect(getUnitPropMaxValue(test.arr, "value")).toEqual(test.expect)
+    })
+  })
+
+  it("should return the lowest value for a property", () => {
+    const tests = [
+      {
+        // numeric values
+        arr: [{ value: 1 }, { value: 10 }, { value: 100 }],
+        expect: 1,
+      },
+      {
+        // string values
+        arr: [
+          { value: "1" },
+          { value: "123" }, // order shouldn't matter
+          { value: "12" },
+        ],
+        expect: 1,
+      },
+      {
+        // invalid values
+        arr: [{ value: "" }, { value: "one" }, { value: " " }],
+        expect: 0, // zero is the default value
+      },
+      {
+        // missing values
+        arr: [{ wrongName: 1 }],
+        expect: 0, // zero is the default value
+      },
+      {
+        // empty array
+        arr: [],
+        expect: 0, // zero is the default value
+      },
+    ]
+
+    tests.forEach((test) => {
+      expect(getUnitPropMinValue(test.arr, "value")).toEqual(test.expect)
+    })
   })
 })

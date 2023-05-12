@@ -8,9 +8,11 @@ import Layout from "../layouts/application"
 import { MetaTags } from "../components/shared/MetaTags"
 import { ListingsCombined } from "../components/listings/ListingsCombined"
 import { fetchOpenListings } from "../lib/hooks"
+import { runtimeConfig } from "../lib/runtime-config"
 
 export interface ListingsProps {
   openListings: Listing[]
+  googleMapsApiKey: string
 }
 
 export default function ListingsPage(props: ListingsProps) {
@@ -36,13 +38,16 @@ export default function ListingsPage(props: ListingsProps) {
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
-      <ListingsCombined listings={props.openListings} />
+      <ListingsCombined listings={props.openListings} googleMapsApiKey={props.googleMapsApiKey} />
     </Layout>
   )
 }
 
 export async function getServerSideProps() {
   return {
-    props: { openListings: await fetchOpenListings() },
+    props: {
+      openListings: await fetchOpenListings(),
+      googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
+    },
   }
 }

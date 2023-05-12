@@ -1,8 +1,11 @@
-import "@bloom-housing/ui-components/src/global/css-imports.scss"
-import "@bloom-housing/ui-components/src/global/app-css.scss"
+import "@bloom-housing/doorway-ui-components/src/global/css-imports.scss"
+import "@bloom-housing/doorway-ui-components/src/global/app-css.scss"
+
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
+import { addTranslation as addTranslationDoorway } from "@bloom-housing/doorway-ui-components"
+
 import {
   blankApplication,
   LoggedInUserIdleTimeout,
@@ -17,11 +20,6 @@ import ApplicationConductor, {
 } from "../lib/applications/ApplicationConductor"
 import { translations, overrideTranslations } from "../lib/translations"
 import LinkComponent from "../components/core/LinkComponent"
-import {
-  FileProviderConfig,
-  FileServiceProvider,
-  FileServiceTypeEnum,
-} from "@bloom-housing/shared-services"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
@@ -32,51 +30,6 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   const [savedListing, setSavedListing] = useState(() => {
     return loadSavedListing()
   })
-
-  let fileProviderConfig: FileProviderConfig
-  if (process.env.fileService === "aws_s3") {
-    fileProviderConfig = {
-      publicService: {
-        fileServiceType: FileServiceTypeEnum.aws_s3,
-        awsS3Config: {
-          bucketName: process.env.awsS3BucketName || "",
-          accessKey: process.env.awsAccessKey || "",
-          secretKey: process.env.awsSecretKey || "",
-          region: process.env.awsRegion || "",
-        },
-      },
-      privateService: {
-        fileServiceType: FileServiceTypeEnum.aws_s3,
-        awsS3Config: {
-          bucketName: process.env.awsS3BucketName || "",
-          accessKey: process.env.awsAccessKey || "",
-          secretKey: process.env.awsSecretKey || "",
-          region: process.env.awsRegion || "",
-        },
-      },
-    }
-  } else if (process.env.fileService === "cloudinary") {
-    fileProviderConfig = {
-      publicService: {
-        fileServiceType: FileServiceTypeEnum.cloudinary,
-        cloudinaryConfig: {
-          cloudinaryCloudName: process.env.cloudinaryCloudName || "",
-          cloudinaryUploadPreset: process.env.cloudinarySignedPreset || "",
-        },
-      },
-      privateService: {
-        fileServiceType: FileServiceTypeEnum.cloudinary,
-        cloudinaryConfig: {
-          cloudinaryCloudName: process.env.cloudinaryCloudName || "",
-          cloudinaryUploadPreset: process.env.cloudinarySignedPreset || "",
-        },
-      },
-    }
-  } else {
-    throw new Error("Unsupported file service")
-  }
-
-  FileServiceProvider.configure(fileProviderConfig)
 
   const conductor = useMemo(() => {
     return new ApplicationConductor(application, savedListing)
@@ -89,6 +42,19 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   }, [])
 
   useMemo(() => {
+    // Need to add translations to both doorway uic and uic in order for
+    // both sets of components to properly translate.
+    // Note that I tried just adding one as a reference to another --
+    // it worked for the public site but broke Storybook.
+    addTranslationDoorway(translations.general, true)
+    if (locale && locale !== "en" && translations[locale]) {
+      addTranslationDoorway(translations[locale])
+    }
+    addTranslationDoorway(overrideTranslations.en)
+    if (overrideTranslations[locale]) {
+      addTranslationDoorway(overrideTranslations[locale])
+    }
+
     addTranslation(translations.general, true)
     if (locale && locale !== "en" && translations[locale]) {
       addTranslation(translations[locale])

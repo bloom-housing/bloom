@@ -21,7 +21,12 @@ export enum CombinedListingFilterKeys {
 
   // Specific to combined listings
   isExternal = "isExternal",
-  //monthlyRent = "monthlyRent", // placeholder
-  county = "county",
+  counties = "counties",
   city = "city",
+  minMonthlyRent = "minMonthlyRent",
+  maxMonthlyRent = "maxMonthlyRent",
+  minBathrooms = "minBathrooms",
+  maxBathrooms = "maxBathrooms",
+  minBedrooms = "minBedrooms",
+  maxBedrooms = "maxBedrooms",
 }

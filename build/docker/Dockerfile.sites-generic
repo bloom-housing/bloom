@@ -29,7 +29,12 @@ COPY --chown=node:node backend/core ./backend/core
 
 # And shared
 COPY --chown=node:node shared-helpers ./shared-helpers
+
+# And shared services
 COPY --chown=node:node shared-services ./shared-services
+
+# And UIC
+COPY --chown=node:node doorway-ui-components ./doorway-ui-components
 
 
 #####################
@@ -141,6 +146,7 @@ COPY --from=optimize --chown=node:node /app/sites/${SITE}/node_modules ./sites/$
 COPY --from=build /app/backend/core ./backend/core
 COPY --from=build /app/shared-helpers ./shared-helpers
 COPY --from=build /app/shared-services ./shared-services
+COPY --from=build /app/doorway-ui-components ./doorway-ui-components
 
 # Switch to our site
 WORKDIR /app/sites/${SITE}
