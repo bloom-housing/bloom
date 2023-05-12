@@ -115,7 +115,9 @@ COPY --chown=node:node index.ts ./
 COPY --chown=node:node ./src ./src
 COPY --chown=node:node ./types ./types
 
-# This should be run as node
-USER node
+## This CMD should be run as the node user; for now
+## we are using root to mount a volume/chown to get the db
+## credentials, and then using `su - node ...`, when invoking "docker run".
+# USER node
 
 CMD yarn db:migration:run

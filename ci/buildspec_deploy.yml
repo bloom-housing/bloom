@@ -1,0 +1,61 @@
+# AWS CodeBuild config
+# This file is referenced in the infra repo as a CodeBuild buildspec target.
+
+## These variables are set in the infra config repo as `deploy_env_vars`
+# and passed in via the codepipeline/codebuild resource.
+# DEV_ECS_*_CLUSTER
+# DEV_ECS_*_SERVICE
+# PGPASS_*
+
+## These variables are defined in the infra repo, when we define the codebuild resource.
+# ECR_*
+
+version: 0.2
+env:
+  shell: bash
+  secrets-manager:
+    PGPASS_STRING: "${PGPASS_ARN}:${PGPASS_JSON_KEY}"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
+
+      # Write pgpassfile
+      - mkdir /tmp/secrets
+      - echo "${PGPASS_STRING}" > /tmp/secrets/pgpass
+  build:
+    commands:
+      # Pull down all candidate images.
+      - docker pull "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
+      - docker pull "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run-candidate"
+      - docker pull "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate-candidate"
+
+      # Promote candidate images.
+      - docker tag "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate" "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run-candidate" "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run"
+      - docker tag "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate-candidate" "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate"
+
+      # Check current backend desired count
+      - export BACKEND_COUNT=$(aws ecs  describe-services --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" | jq -r .services[0].desiredCount)
+
+      # Scale to 0
+      - aws ecs update-service --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" --desired-count 0
+
+      # Wait for the service to stablize
+      - aws ecs wait services-stable --cluster "${DEV_ECS_BACKEND_CLUSTER}" --services "${DEV_ECS_BACKEND_SERVICE}"
+
+      # db:reseed
+      - docker run -v /tmp/secrets:/secrets --env PGPASSFILE=/secrets/pgpass "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate" sh -c "chown node:node /secrets && su - node -c yarn db:reseed"
+
+      # Push promoted images
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run"
+      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate"
+
+      - aws ecs update-service --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" --desired-count $BACKEND_COUNT
+      - aws ecs update-service --force-new-deployment --cluster "${DEV_ECS_PUBLIC_CLUSTER}" --service "${DEV_ECS_PUBLIC_SERVICE}"
+      - aws ecs update-service --force-new-deployment --cluster "${DEV_ECS_PARTNER_CLUSTER}" --service "${DEV_ECS_PARTNER_SERVICE}"
