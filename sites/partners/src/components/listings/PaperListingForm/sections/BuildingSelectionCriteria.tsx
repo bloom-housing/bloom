@@ -49,6 +49,7 @@ const LotteryResults = () => {
 
   const saveURL = (url) => {
     setValue("buildingSelectionCriteria", url)
+    deletePDF()
   }
   const deleteURL = () => {
     setValue("buildingSelectionCriteria", "")
@@ -58,6 +59,7 @@ const LotteryResults = () => {
       fileId: cloudinaryData.id,
       label: "cloudinaryPDF",
     })
+    deleteURL()
   }
   const deletePDF = () => {
     setValue("buildingSelectionCriteriaFile", { fileId: "", label: "" })

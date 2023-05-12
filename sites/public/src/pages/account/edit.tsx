@@ -171,7 +171,12 @@ const Edit = () => {
                 name="firstName"
                 placeholder={`${t("application.name.firstName")}`}
                 error={errors.firstName}
-                errorMessage={t("errors.firstNameError")}
+                validation={{ maxLength: 64 }}
+                errorMessage={
+                  errors.firstName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.firstNameError")
+                }
                 register={register}
                 defaultValue={profile ? profile.firstName : null}
               />
@@ -183,16 +188,24 @@ const Edit = () => {
                 defaultValue={profile ? profile?.middleName : null}
                 label={t("application.name.middleNameOptional")}
                 readerOnly
+                error={errors.middleName}
+                validation={{ maxLength: 64 }}
+                errorMessage={t("errors.maxLength")}
               />
 
               <Field
                 name="lastName"
                 placeholder={t("application.name.lastName")}
                 error={errors.lastName}
-                errorMessage={t("errors.lastNameError")}
                 register={register}
                 defaultValue={profile ? profile.lastName : null}
                 label={t("application.name.lastName")}
+                validation={{ maxLength: 64 }}
+                errorMessage={
+                  errors.lastName?.type === "maxLength"
+                    ? t("errors.maxLength")
+                    : t("errors.lastNameError")
+                }
                 readerOnly
               />
               <div className="text-center">
