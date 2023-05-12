@@ -28,7 +28,7 @@
     "db:reseed": "yarn db:reseed:print-notice && yarn db:reset && yarn db:migration:run && yarn db:seed",
     "db:import-listings": "cd ../../tasks/import-listings && yarn install && yarn build && DATABASE_URL=\"${DATABASE_URL:-postgres://bloom-dev:bloom@localhost:5432/bloom}\" JURISDICTION_INCLUDE_LIST=\"${JURISDICTION_INCLUDE_LIST:-San Jose,San Mateo,Alameda}\" yarn import:run && cd ../../backend/core",
     "db:reseed:with-external:prod": "SUPPRESS_NOTICE=true yarn db:reseed && EXTERNAL_API_BASE=https://proxy.housingbayarea.org yarn db:import-listings",
-    "db:reseed:with-external:dev": "SUPPRESS_NOTICE=true yarn db:reseed && EXTERNAL_API_BASE=https://hba-dev-proxy.herokuapp.com yarn db:import-listings",
+    "db:reseed:with-external:dev": "SUPPRESS_NOTICE=true yarn db:reseed && EXTERNAL_API_BASE=https://api.housingbayarea.bloom.exygy.dev LISTING_VIEW=full yarn db:import-listings",
     "test": "jest --config ./jest.json --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
