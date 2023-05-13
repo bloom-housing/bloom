@@ -146,17 +146,6 @@ model ApplicationFlaggedSet {
   @@map("application_flagged_set")
 }
 
-// model application_flagged_set_applications_applications {
-//   application_flagged_set_id String                  @db.Uuid
-//   applications_id            String                  @db.Uuid
-//   application_flagged_set    application_flagged_set @relation(fields: [application_flagged_set_id], references: [id], onDelete: Cascade, map: "FK_93f583f2d43fb21c5d7ceac57e7")
-//   applications               applications            @relation(fields: [applications_id], references: [id], onDelete: Cascade, map: "FK_bbae218ba0eff977157fad5ea31")
-
-//   @@id([application_flagged_set_id, applications_id])
-//   @@index([application_flagged_set_id], map: "IDX_93f583f2d43fb21c5d7ceac57e")
-//   @@index([applications_id], map: "IDX_bbae218ba0eff977157fad5ea3")
-// }
-
 // Note: [phone_number] formerly max length 16; [label] formerly max length 256; [external_reference] formerly max length 4096
 model ApplicationMethods {
   id                            String                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
@@ -234,17 +223,6 @@ model Applications {
   @@index([listingId])
   @@map("applications")
 }
-
-// model applications_preferred_unit_unit_types {
-//   applications_id String       @db.Uuid
-//   unit_types_id   String       @db.Uuid
-//   unit_types      unit_types   @relation(fields: [unit_types_id], references: [id], onDelete: Cascade)
-//   applications    Applications @relation(fields: [applications_id], references: [id], onDelete: Cascade)
-
-//   @@id([applications_id, unit_types_id])
-//   @@index([unit_types_id])
-//   @@index([applications_id])
-// }
 
 // Note: [file_id, label] formerly max length 128
 model Assets {
@@ -359,17 +337,6 @@ model Jurisdictions {
 
   @@map("jurisdictions")
 }
-
-// model jurisdictions_multiselect_questions_multiselect_questions {
-//   jurisdictions_id         String                @db.Uuid
-//   multiselect_questions_id String                @db.Uuid
-//   jurisdictions            jurisdictions         @relation(fields: [jurisdictions_id], references: [id], onDelete: Cascade, map: "FK_3f7126f5da7c0368aea2f9459c0")
-//   multiselect_questions    multiselect_questions @relation(fields: [multiselect_questions_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_ab91e5d403a6cf21656f7d5ae20")
-
-//   @@id([jurisdictions_id, multiselect_questions_id])
-//   @@index([jurisdictions_id], map: "IDX_3f7126f5da7c0368aea2f9459c")
-//   @@index([multiselect_questions_id], map: "IDX_ab91e5d403a6cf21656f7d5ae2")
-// }
 
 model ListingEvents {
   id        String            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
@@ -586,17 +553,6 @@ model listings {
 
   @@index([jurisdictionId])
 }
-
-// model listings_leasing_agents_user_accounts {
-//   listings_id      String        @db.Uuid
-//   user_accounts_id String        @db.Uuid
-//   user_accounts    user_accounts @relation(fields: [user_accounts_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-//   listings         listings      @relation(fields: [listings_id], references: [id], onDelete: Cascade)
-
-//   @@id([listings_id, user_accounts_id])
-//   @@index([user_accounts_id])
-//   @@index([listings_id])
-// }
 
 // Note: hold over from TypeORM 
 model Migrations {
@@ -817,17 +773,6 @@ model UserAccounts {
   @@map("user_accounts")
 }
 
-// model user_accounts_jurisdictions_jurisdictions {
-//   user_accounts_id String        @db.Uuid
-//   jurisdictions_id String        @db.Uuid
-//   user_accounts    user_accounts @relation(fields: [user_accounts_id], references: [id], onDelete: Cascade)
-//   jurisdictions    jurisdictions @relation(fields: [jurisdictions_id], references: [id], onDelete: Cascade)
-
-//   @@id([user_accounts_id, jurisdictions_id])
-//   @@index([user_accounts_id])
-//   @@index([jurisdictions_id])
-// }
-
 model UserRoles {
   isAdmin               Boolean      @default(false) @map("is_admin")
   isJurisdictionalAdmin Boolean      @default(false) @map("is_jurisdictional_admin")
@@ -904,17 +849,6 @@ model UnitGroupAmiLevels {
   @@map("unit_group_ami_levels")
 }
 
-// model unit_group_unit_type_unit_types {
-//   unit_group_id String     @db.Uuid
-//   unit_types_id String     @db.Uuid
-//   unit_types    UnitTypes @relation(fields: [unit_types_id], references: [id], onDelete: Cascade)
-//   unit_group    UnitGroup @relation(fields: [unit_group_id], references: [id], onDelete: Cascade)
-
-//   @@id([unit_group_id, unit_types_id])
-//   @@index([unit_types_id])
-//   @@index([unit_group_id])
-// }
-
 model UserPreferences {
   sendEmailNotifications Boolean      @default(false) @map("send_email_notifications")
   sendSmsNotifications   Boolean      @default(false) @map("send_sms_notifications")
@@ -925,17 +859,6 @@ model UserPreferences {
 
   @@map("user_preferences")
 }
-
-// model user_preferences_favorites_listings {
-//   user_preferences_user_id String           @db.Uuid
-//   listings_id              String           @db.Uuid
-//   user_preferences         user_preferences @relation(fields: [user_preferences_user_id], references: [user_id], onDelete: Cascade)
-//   listings                 listings         @relation(fields: [listings_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-//   @@id([user_preferences_user_id, listings_id])
-//   @@index([user_preferences_user_id])
-//   @@index([listings_id])
-// }
 
 // END DETROIT SPECIFIC
 
