@@ -398,6 +398,7 @@
   "errors.agreeError": "Quý vị phải đồng ý với các điều khoản để tiếp tục",
   "errors.alert.badRequest": "Ối! Có vẻ như đã có lỗi xảy ra. Vui lòng thử lại. Liên hệ với bộ phận nhà ở của bạn nếu bạn vẫn gặp sự cố.",
   "errors.alert.timeoutPleaseTryAgain": "Ối! Có vẻ như đã có lỗi xảy ra. Vui lòng thử lại.",
+  "errors.alert.applicationSubmissionVerificationError": "Ứng dụng của bạn thiếu các trường bắt buộc. Vui lòng quay lại và sửa lỗi này trước khi gửi.",
   "errors.cityError": "Vui lòng nhập thành phố",
   "errors.dateError": "Vui lòng nhập ngày hợp lệ",
   "errors.dateOfBirthErrorAge": "Vui lòng nhập Ngày sinh hợp lệ_ phải từ 18 tuổi trở lên",
