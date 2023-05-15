@@ -30,7 +30,6 @@ const ListingIntro = (props: ListingIntroProps) => {
   ]
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
 
-  console.log("errors in intro: ", errors)
   return (
     <GridSection
       columns={3}

@@ -25,7 +25,7 @@ type UnitProps = {
   disableUnitsAccordion: boolean
 }
 
-const FormUnits = ({ units, setUnits }: UnitProps) => {
+const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
@@ -33,7 +33,7 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, getValues, control } = formMethods
+  const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
   const listingAvailability = useWatch({
@@ -54,8 +54,12 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
   }
 
   useEffect(() => {
-    // TODO: figure out what this is used for
-    // reset({ ...getValues(), disableUnitsAccordion: disableUnitsAccordion ? "true" : "false" })
+    if (
+      getValues("disableUnitsAccordion") === undefined ||
+      getValues("disableUnitsAccordion") === null
+    ) {
+      setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

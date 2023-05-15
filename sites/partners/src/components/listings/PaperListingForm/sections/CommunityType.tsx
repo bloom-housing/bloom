@@ -14,7 +14,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, reset } = formMethods
+  const { register, setValue } = formMethods
 
   const [options, setOptions] = useState([])
 
@@ -25,9 +25,11 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
       return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
     })
     setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
-    // TODO: figure out why we need to reset
-    // reset()
-  }, [reservedCommunityTypes, reset])
+  }, [reservedCommunityTypes])
+
+  useEffect(() => {
+    setValue("reservedCommunityType.id", listing?.reservedCommunityType?.id)
+  }, [options, listing?.reservedCommunityType?.id, setValue])
 
   return (
     <GridSection
