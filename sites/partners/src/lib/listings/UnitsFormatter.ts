@@ -52,7 +52,7 @@ export default class UnitsFormatter extends Formatter {
       unit.floor = stringToNumber(unit.floor)
       unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
       unit.minOccupancy = stringToNumber(unit.minOccupancy)
-      unit.numBathrooms = stringToNumber(unit.numBathrooms)
+      unit.numBathrooms = unit.numBathrooms ? stringToNumber(unit.numBathrooms) : null
 
       if (!unit.sqFeet) {
         delete unit.sqFeet
