@@ -16,6 +16,7 @@ import { Listing } from "../entities/listing.entity"
 import { User } from "../../auth/entities/user.entity"
 import { UserService } from "../../auth/services/user.service"
 import { HttpService } from "@nestjs/axios"
+
 /* eslint-disable @typescript-eslint/unbound-method */
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -167,6 +168,7 @@ describe("ListingsService", () => {
             getJurisdiction: jest.fn(),
           },
         },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile()
 

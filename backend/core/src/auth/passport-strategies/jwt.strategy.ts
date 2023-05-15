@@ -42,7 +42,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     if (user && UserService.isPasswordOutdated(user)) {
       throw new HttpException(
-        USER_ERRORS.PASSWORD_OUTDATED.message,
+        {
+          message: USER_ERRORS.PASSWORD_OUTDATED.message,
+          knownError: true,
+        },
         USER_ERRORS.PASSWORD_OUTDATED.status
       )
     }

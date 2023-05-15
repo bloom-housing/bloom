@@ -15,6 +15,8 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { ListingUtilities } from "./entities/listing-utilities.entity"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 import { ListingsCronService } from "./listings-cron.service"
+import { ListingsCsvExporterService } from "./listings-csv-exporter.service"
+import { CsvBuilder } from "../../src/applications/services/csv-builder.service"
 
 @Module({
   imports: [
@@ -33,7 +35,7 @@ import { ListingsCronService } from "./listings-cron.service"
     ApplicationFlaggedSetsModule,
     HttpModule,
   ],
-  providers: [ListingsService, ListingsCronService, Logger],
+  providers: [ListingsService, ListingsCronService, Logger, CsvBuilder, ListingsCsvExporterService],
   exports: [ListingsService],
   controllers: [ListingsController],
 })

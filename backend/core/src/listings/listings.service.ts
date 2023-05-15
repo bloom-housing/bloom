@@ -1,8 +1,8 @@
-import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common"
 import { HttpService } from "@nestjs/axios"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, Repository } from "typeorm"
+import { Brackets, In, Repository } from "typeorm"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
@@ -29,6 +29,7 @@ export class ListingsService {
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(REQUEST) private req: ExpressRequest,
     private readonly afsService: ApplicationFlaggedSetsService,
     private readonly httpService: HttpService
@@ -203,6 +204,84 @@ export class ListingsService {
       .getOne()
 
     return listing.jurisdiction.id
+  }
+
+  async rawListWithFlagged() {
+    const userAccess = await this.userRepository
+      .createQueryBuilder("user")
+      .select(["user.id", "jurisdictions.id"])
+      .leftJoin("user.roles", "userRole")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      .where("user.id = :id", { id: (this.req.user as User)?.id })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where("userRole.is_admin = :is_admin", {
+            is_admin: true,
+          }).orWhere("userRole.is_jurisdictional_admin = :is_jurisdictional_admin", {
+            is_jurisdictional_admin: true,
+          })
+        })
+      )
+      .getOne()
+
+    if (!userAccess) {
+      throw new UnauthorizedException()
+    }
+
+    // generated out list of permissioned listings
+    const permissionedListings = await this.listingRepository
+      .createQueryBuilder("listings")
+      .select("listings.id")
+      .where("listings.jurisdiction_id IN (:...jurisdiction)", {
+        jurisdiction: userAccess.jurisdictions.map((elem) => elem.id),
+      })
+      .getMany()
+
+    // pulled out on the ids
+    const listingIds = permissionedListings.map((listing) => listing.id)
+
+    // Building and excecuting query for listings csv
+    const listingsQb = getView(this.createQueryBuilder("listings"), "listingsExport").getViewQb()
+
+    const listingData = await listingsQb
+      .where("listings.id IN (:...listingIds)", { listingIds })
+      .getMany()
+
+    // User data to determine listing access for csv
+    const userAccessData = await this.userRepository
+      .createQueryBuilder("user")
+      .select([
+        "user.id",
+        "user.firstName",
+        "user.lastName",
+        "userRoles.isAdmin",
+        "userRoles.isPartner",
+        "leasingAgentInListings.id",
+      ])
+      .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      .leftJoin("user.roles", "userRoles")
+      .where("userRoles.is_partner = :is_partner", { is_partner: true })
+      .getMany()
+
+    // Building and excecuting query for units csv
+    const unitsQb = getView(this.createQueryBuilder("listings"), "unitsExport").getViewQb()
+
+    const unitData = await unitsQb
+      .where("listings.id IN (:...listingIds)", { listingIds })
+      .getMany()
+
+    listingData.forEach((listing) => {
+      const unitQuantity = unitData.find((unit) => unit.id === listing.id)?.units?.length
+      listing["numberOfUnits"] = unitQuantity
+    })
+
+    return {
+      unitData,
+      listingData,
+      userAccessData,
+    }
   }
 
   private async addUnitsSummarized(listing: Listing) {

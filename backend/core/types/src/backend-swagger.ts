@@ -1374,6 +1374,27 @@ export class ListingsService {
     })
   }
   /**
+   * Retrieve listings and units in csv
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { timeZone: params["timeZone"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get listing by id
    */
   retrieve(
