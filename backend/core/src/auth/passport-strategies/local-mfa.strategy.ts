@@ -66,14 +66,20 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
 
       if (!user.confirmedAt) {
         throw new HttpException(
-          USER_ERRORS.ACCOUNT_NOT_CONFIRMED.message,
+          {
+            message: USER_ERRORS.ACCOUNT_NOT_CONFIRMED.message,
+            knownError: true,
+          },
           USER_ERRORS.ACCOUNT_NOT_CONFIRMED.status
         )
       }
 
       if (UserService.isPasswordOutdated(user)) {
         throw new HttpException(
-          USER_ERRORS.PASSWORD_OUTDATED.message,
+          {
+            message: USER_ERRORS.PASSWORD_OUTDATED.message,
+            knownError: true,
+          },
           USER_ERRORS.PASSWORD_OUTDATED.status
         )
       }
@@ -85,7 +91,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
         if (!loginDto.mfaCode || !user.mfaCode || !user.mfaCodeUpdatedAt) {
           user.failedLoginAttemptsCount = 0
           await this.userRepository.save(user)
-          throw new UnauthorizedException({ name: "mfaCodeIsMissing" })
+          throw new UnauthorizedException({ name: "mfaCodeIsMissing", knownError: true })
         } else if (
           new Date(
             user.mfaCodeUpdatedAt.getTime() + this.configService.get<number>("MFA_CODE_VALID_MS")
@@ -117,6 +123,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
             this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") +
             1 -
             user.failedLoginAttemptsCount,
+          knownError: true,
         })
       } else if (mfaAuthSuccessful) {
         return user
@@ -127,6 +134,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
             this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") +
             1 -
             user.failedLoginAttemptsCount,
+          knownError: true,
         })
       }
     }

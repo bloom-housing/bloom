@@ -8,6 +8,7 @@ import {
   ValidationPipe,
   Body,
   Get,
+  BadRequestException,
 } from "@nestjs/common"
 import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
@@ -84,7 +85,10 @@ export class AuthController {
     @Response({ passthrough: true }) res: ExpressResponse
   ): Promise<StatusDto> {
     if (!req?.cookies[REFRESH_COOKIE_NAME]) {
-      throw new Error("No refresh token sent with request")
+      throw new BadRequestException({
+        message: "No refresh token sent with request",
+        knownError: true,
+      })
     }
     return mapTo(
       StatusDto,
