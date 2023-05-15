@@ -1,20 +1,19 @@
 # AWS CodeBuild config
 # This file is referenced in the infra repo as a CodeBuild buildspec target.
 
-## These variables are set in the infra config repo as `deploy_env_vars`
-# and passed in via the codepipeline/codebuild resource.
-# DEV_ECS_*_CLUSTER
-# DEV_ECS_*_SERVICE
-# PGPASS_*
-
-## These variables are defined in the infra repo, when we define the codebuild resource.
-# ECR_*
+## The environment variables in this file are passed in through the buildbuild resource.
+## Check the terraform scripts to see where these variables originate from.
 
 version: 0.2
 env:
   shell: bash
   secrets-manager:
-    PGPASS_STRING: "${PGPASS_ARN}:${PGPASS_JSON_KEY}"
+    PGUSER: "${DB_CREDS_ARN}:user"
+    PGPASSWORD: "${DB_CREDS_ARN}:password"
+    PGHOST: "${DB_CREDS_ARN}:host"
+    PGDATABASE: "${DB_CREDS_ARN}:db_name"
+    PGPORT: "${DB_CREDS_ARN}:port"
+    DATABASE_URL: "${DB_CREDS_ARN}:uri"
 
 phases:
   install:
@@ -23,24 +22,26 @@ phases:
   pre_build:
     commands:
       - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
-
-      # Write pgpassfile
-      - mkdir /tmp/secrets
-      - echo "${PGPASS_STRING}" > /tmp/secrets/pgpass
   build:
     commands:
+      - export ECR_REPO="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}"
+
       # Pull down all candidate images.
-      - docker pull "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
-      - docker pull "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run-candidate"
-      - docker pull "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate-candidate"
+      - docker pull "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker pull "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker pull "${ECR_REPO}/public:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker pull "${ECR_REPO}/partners:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
 
       # Promote candidate images.
-      - docker tag "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate" "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker tag "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run-candidate" "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run"
-      - docker tag "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate-candidate" "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate"
+      - docker tag "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" "${ECR_REPO}/backend:run"
+      - docker tag "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" "${ECR_REPO}/backend:migrate"
+      - docker tag "${ECR_REPO}/public:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" "${ECR_REPO}/public:run"
+      - docker tag "${ECR_REPO}/partners:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" "${ECR_REPO}/partners:run"
 
       # Check current backend desired count
-      - export BACKEND_COUNT=$(aws ecs  describe-services --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" | jq -r .services[0].desiredCount)
+      - export FOUND_BACKEND_COUNT=$(aws ecs  describe-services --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" | jq -r .services[0].desiredCount)
+      # We have to quote this line or YAML attempts to interpret the `: ` as a dict key(this is a YAML feature, not a bug)
+      - "export BACKEND_COUNT=$((FOUND_BACKEND_COUNT<1 ? 1 : FOUND_BACKEND_COUNT))"
 
       # Scale to 0
       - aws ecs update-service --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" --desired-count 0
@@ -49,12 +50,33 @@ phases:
       - aws ecs wait services-stable --cluster "${DEV_ECS_BACKEND_CLUSTER}" --services "${DEV_ECS_BACKEND_SERVICE}"
 
       # db:reseed
-      - docker run -v /tmp/secrets:/secrets --env PGPASSFILE=/secrets/pgpass "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate" sh -c "chown node:node /secrets && su - node -c yarn db:reseed"
+      - >
+        docker run
+        --env CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
+        --env FILE_SERVICE=$FILE_SERVICE
+        --env LISTINGS_QUERY=$LISTINGS_QUERY
+        --env PGUSER=$PGUSER
+        --env PGPASSWORD=$PGPASSWORD
+        --env PGHOST=$PGHOST
+        --env PGDATABASE=template1
+        --env PGPORT=$PGPORT
+        --env PORT=$PORT
+        --env EMAIL_API_KEY=$EMAIL_API_KEY
+        --env DATABASE_URL=$DATABASE_URL
+        --env APP_SECRET=$APP_SECRET
+        --env CLOUDINARY_SECRET=$CLOUDINARY_SECRET
+        --env CLOUDINARY_KEY=$CLOUDINARY_KEY
+        --env PARTNERS_BASE_URL=$PARTNERS_BASE_URL
+        --env PARTNERS_PORTAL_URL=$PARTNERS_PORTAL_URL
+        --env BLOOM_API_BASE=$BLOOM_API_BASE
+        --env BLOOM_LISTINGS_QUERY=$BLOOM_LISTINGS_QUERY
+        "${ECR_REPO}/backend:migrate" sh -c "yarn db:reseed"
 
       # Push promoted images
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run"
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate"
+      - docker push "${ECR_REPO}/backend:run"
+      - docker push "${ECR_REPO}/backend:migrate"
+      - docker push "${ECR_REPO}/public:run"
+      - docker push "${ECR_REPO}/partners:run"
 
       - aws ecs update-service --cluster "${DEV_ECS_BACKEND_CLUSTER}" --service "${DEV_ECS_BACKEND_SERVICE}" --desired-count $BACKEND_COUNT
       - aws ecs update-service --force-new-deployment --cluster "${DEV_ECS_PUBLIC_CLUSTER}" --service "${DEV_ECS_PUBLIC_SERVICE}"

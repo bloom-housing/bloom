@@ -85,8 +85,11 @@ WORKDIR /app
 # Yarn needs a package.json file to work, even for `yarn start`
 COPY --chown=node:node package*.json tsconfig*.json ormconfig.* ./
 
+## TODO: use optimize, instead of deps, after figuring out the
+## all of the dependencies for the migrate stage.
 # Add only dependencies required to run the application
-COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+# COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
 
 # Add the compiled code from the build image
 COPY --from=build --chown=node:node /app/dist ./dist
@@ -115,9 +118,7 @@ COPY --chown=node:node index.ts ./
 COPY --chown=node:node ./src ./src
 COPY --chown=node:node ./types ./types
 
-## This CMD should be run as the node user; for now
-## we are using root to mount a volume/chown to get the db
-## credentials, and then using `su - node ...`, when invoking "docker run".
-# USER node
+## This CMD should be run as the node user
+USER node
 
 CMD yarn db:migration:run

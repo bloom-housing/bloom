@@ -71,6 +71,7 @@
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "@types/express": "^4.17.17",
     "handlebars": "^4.7.6",
     "joi": "^17.3.0",
     "jwt-simple": "^0.5.6",

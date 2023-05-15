@@ -7,6 +7,7 @@
 version: 0.2
 env:
   shell: bash
+
 phases:
   install:
     runtime-versions:
@@ -17,16 +18,17 @@ phases:
 
   build:
     commands:
+      - export ECR_HOST="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
+      - export ECR_REPO="${ECR_HOST}/${ECR_NAMESPACE}"
+
       - docker build backend/core -f build/docker/Dockerfile.backend --target test -t backend/core:test
       - docker run backend/core:test yarn test
       - docker build backend/core -f build/docker/Dockerfile.backend --target run -t backend/core:run-candidate
-      - docker tag backend/core:run-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
-      - docker tag backend/core:run-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run-candidate"
       - docker build backend/core -f build/docker/Dockerfile.backend --target migrate -t backend/core:migrate-candidate
-      - docker tag backend/core:migrate-candidate "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate-candidate"
+
+      - docker tag backend/core:migrate-candidate "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag backend/core:run-candidate "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
 
       # Pushing images to ECR
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}-candidate"
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:run-candidate"
-      - docker push "${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com/${ECR_NAMESPACE}/backend:migrate-candidate"
-      - echo skipping
+      - docker push "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker push "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
