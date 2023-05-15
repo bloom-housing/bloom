@@ -6,6 +6,17 @@ export type ListingSearchParams = {
   counties: string[]
 }
 
+/**
+ * Parses a search string into an object
+ * 
+ * The format object describes the expected output.  If the value of a property
+ * in the template is an array, it will attempt to split the value on commas and
+ * assign the result. If not, it will assign the result directly as a string value.
+ * 
+ * @param format 
+ * @param search 
+ * @returns 
+ */
 export function parseSearchString<T extends object>(format: T, search: string): T {
   // format: name:value;otherName:arrayVal1,arrayVal2
 
@@ -57,6 +68,27 @@ export function parseSearchString<T extends object>(format: T, search: string): 
   })
 
   return results
+}
+
+/**
+ * Builds a search string based on input values
+ * 
+ * @param input 
+ * @returns 
+ */
+export function buildSearchString(input: object) {
+  // For each key in the input, return a serialized value, then join all together
+  return Object.entries(input).map(([key, value]) => {
+    let strVal
+
+    if (Array.isArray(value)) {
+      strVal = value.join(',')
+    } else {
+      strVal = value.toString()
+    }
+
+    return`${key}:${strVal}`
+  }).join(';')
 }
 
 export function generateSearchQuery(params: ListingSearchParams) {
