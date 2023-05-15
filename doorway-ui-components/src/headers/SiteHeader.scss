@@ -21,10 +21,12 @@
   --logo-container-min-width: auto;
   --logo-container-padding-desktop: inherit;
   --logo-container-padding-mobile: inherit;
+  --logo-container-margin-desktop: 0;
+  --logo-container-margin-mobile: var(--bloom-s3);
   --logo-content-align-items: center;
   --logo-content-display: block;
   --logo-content-padding: var(--bloom-s1);
-  --logo-desktop-height: 120px;
+  --logo-desktop-height: calc(90px - var(--bloom-s1) - var(--bloom-s3));
   --logo-desktop-padding: var(--bloom-s1) var(--bloom-s3) var(--bloom-s1) var(--bloom-s3);
   --logo-image-desktop-display: inline-block;
   --logo-image-desktop-height: auto;
@@ -54,6 +56,7 @@
   --logo-title-text-transform: uppercase;
   --logo-width-wide: 350px;
   --logo-width-med: 255px;
+  --logo-width-base_expanded: 230px;
   --logo-width-base: 200px;
   --logo-width-slim: 100px;
 
@@ -210,9 +213,11 @@
   flex-grow: 1;
   min-width: var(--logo-container-min-width);
   padding: var(--logo-container-padding-mobile);
+  margin-left: var(--logo-container-margin-mobile);
 
   @media (min-width: $screen-md) {
     padding: var(--logo-container-padding-desktop);
+    margin: var(--logo-container-margin-desktop);
     flex-shrink: 0;
     flex-grow: initial;
   }
@@ -227,7 +232,7 @@
   height: var(--logo-mobile-height);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
 
   margin: var(--logo-margin);
   padding: var(--logo-mobile-padding);
@@ -238,8 +243,7 @@
   @media (min-width: $screen-md) {
     height: var(--logo-desktop-height);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-    margin-bottom: -0.75rem;
-    margin-top: -2.4rem;
+    margin-bottom: -0.3rem;
     padding: var(--logo-desktop-padding);
 
     &:focus {
@@ -544,6 +548,12 @@
 .site-header__logo-width-med {
   @media (min-width: $screen-md) {
     width: var(--logo-width-med);
+  }
+}
+
+.site-header__logo-width-base_expanded {
+  @media (min-width: $screen-md) {
+    width: var(--logo-width-base_expanded);
   }
 }
 

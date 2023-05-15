@@ -8,7 +8,7 @@ import { t } from "../helpers/translator"
 import "./SiteHeader.scss"
 import { NavigationContext } from "../config/NavigationContext"
 
-type LogoWidth = "slim" | "base" | "medium" | "wide"
+type LogoWidth = "slim" | "base" | "base_expanded" | "medium" |"wide"
 type SiteHeaderWidth = "base" | "wide"
 
 export interface MenuLink {
@@ -82,6 +82,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const getLogoWidthClass = () => {
     if (props.logoWidth === "slim") return "site-header__logo-width-slim"
     if (!props.logoWidth || props.logoWidth === "base") return "site-header__logo-width-base"
+    if (props.logoWidth === "base_expanded") return "site-header__logo-width-base_expanded"
     if (props.logoWidth === "medium") return "site-header__logo-width-med"
     if (props.logoWidth === "wide") return "site-header__logo-width-wide"
     return ""
@@ -485,12 +486,13 @@ const SiteHeader = (props: SiteHeaderProps) => {
       {props.languages && (
         <LanguageNav ariaLabel={props.languageNavLabel} languages={props.languages} />
       )}
-
-      <div
-        className={`site-header__notice ${!props.noticeMobile ? `site-header__notice-hide` : ""}`}
-      >
-        <div className="site-header__notice-text">{props.notice ?? ""}</div>
-      </div>
+      {props.notice && (
+        <div
+          className={`site-header__notice ${!props.noticeMobile ? `site-header__notice-hide` : ""}`}
+        >
+          <div className="site-header__notice-text">{props.notice}</div>
+        </div>
+      )}
 
       <nav className="site-header__container" role="navigation" aria-label="main navigation">
         <div
