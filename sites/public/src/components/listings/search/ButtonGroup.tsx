@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button } from "./Button"
 import { FormOption } from "./ListingsSearchForm"
 
-type ButtonBarProps = {
+type ButtonGroupProps = {
   name: string
   options: FormOption[]
   value?: string
@@ -14,7 +14,7 @@ const buttonStyle: React.CSSProperties = {
   border: "1px solid black",
 }
 
-export function ButtonBar(props: ButtonBarProps) {
+export function ButtonGroup(props: ButtonGroupProps) {
   const nullState = {
     index: null,
     value: null,
@@ -61,6 +61,7 @@ export function ButtonBar(props: ButtonBarProps) {
             label={button.label}
             value={button.value}
             index={index}
+            key={index}
             onSelect={setActiveButton}
             onDeselect={deselectHandler}
           />

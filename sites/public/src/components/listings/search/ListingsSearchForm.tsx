@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { ButtonBar } from "./ButtonBar"
+import { ButtonGroup } from "./ButtonGroup"
 import { MultiSelectGroup } from "./MultiSelectGroup"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
 
@@ -33,6 +33,12 @@ const inputSectionStyle: React.CSSProperties = {
   borderTop: "1px solid black",
 }
 
+const textInputStyle: React.CSSProperties = {
+  border: "1px solid black",
+  padding: "2px 4px",
+  margin: "5px"
+}
+
 const footerStyle: React.CSSProperties = {
   display: "flex",
   padding: "3px 15px",
@@ -46,29 +52,25 @@ const clearButtonStyle: React.CSSProperties = {
 export function ListingsSearchForm(props: ListingsSearchFormProps) {
   const searchString = props.searchString || ""
 
-  console.log(`Search string: ${searchString}`)
-  const initialState = parseSearchString(
-    {
-      bedrooms: null,
-      bathrooms: null,
-      // Using an empty array here is how we know to look for an array value
-      counties: [],
-    },
-    searchString
-  )
+  const nullState: ListingSearchParams = {
+    bedrooms: null,
+    bathrooms: null,
+    monthlyRent: "",
+    // Using an empty array here is how we know to look for an array value when parsing
+    counties: [],
+  }
+
+  const initialState = parseSearchString(searchString, nullState)
 
   const [formValues, setFormValues] = useState(initialState)
 
   const clearValues = () => {
-    setFormValues({
-      bedrooms: null,
-      bathrooms: null,
-      counties: [],
-    })
+    setFormValues(nullState)
     console.log(`Clearing all values`)
   }
 
   const onSubmit = () => {
+    console.log(formValues)
     props.onSubmit(formValues)
   }
 
@@ -78,7 +80,7 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
     Object.assign(newValues, formValues)
     newValues[name] = value
     setFormValues(newValues)
-    //console.log(`${name} has been set to ${value}`)
+    console.log(`${name} has been set to ${value}`)
   }
 
   const updateValueMulti = (name: string, value: string[]) => {
@@ -87,7 +89,7 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
     //console.log(`${name} has been set to ${value}`)
   }
 
-  // load listings after render
+  // load listings immediately after render
   useEffect(() => {
     onSubmit()
   }, [])
@@ -100,7 +102,7 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
 
       <div style={inputSectionStyle}>
         <div>Bedrooms</div>
-        <ButtonBar
+        <ButtonGroup
           name="bedrooms"
           options={props.bedrooms}
           onChange={updateValue}
@@ -110,12 +112,25 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
 
       <div style={inputSectionStyle}>
         <div>Bathrooms</div>
-        <ButtonBar
+        <ButtonGroup
           name="bathrooms"
           options={props.bathrooms}
           onChange={updateValue}
           value={formValues.bathrooms}
         />
+      </div>
+
+      <div style={inputSectionStyle}>
+        <div>Monthly Rent</div>
+        <input
+          type="text"
+          name="monthlyRent"
+          value={formValues.monthlyRent}
+          placeholder="Max Price: $"
+          style={textInputStyle}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => {
+            updateValue("monthlyRent", e.currentTarget.value)
+          }} />
       </div>
 
       <div style={inputSectionStyle}>

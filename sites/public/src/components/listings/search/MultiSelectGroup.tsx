@@ -50,16 +50,17 @@ export function MultiSelectGroup(props: MultiSelectGroupProps) {
   }
 
   return (
-    <div>
+    <div key={props.name}>
       {props.inputs.map((input, index) => {
         return (
-          <div>
+          <div key={`${props.name}-${input.value}`}>
             <input
               type="checkbox"
               checked={values[input.value] == true}
               name={props.name}
               value={input.value}
               tabIndex={index}
+              key={index}
               onChange={() => {
                 addRemoveValue(input.value)
               }}

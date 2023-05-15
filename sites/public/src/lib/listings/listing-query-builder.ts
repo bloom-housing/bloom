@@ -44,6 +44,10 @@ export class ListingQueryBuilder {
     return this.addFilter(field, EnumCombinedListingFilterParamsComparison[">="], value)
   }
 
+  whereLessThanEqual(field: string, value: string) {
+    return this.addFilter(field, EnumCombinedListingFilterParamsComparison["<="], value)
+  }
+
   addOrderBy(field: OrderByFieldsEnum, direction: OrderParam) {
     this.orderBy.push({
       field: field,
