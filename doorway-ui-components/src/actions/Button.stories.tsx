@@ -107,6 +107,16 @@ export const SmallAndPrimary = () => (
   </Button>
 )
 
+export const SmallAndSecondary = () => (
+  <Button
+    size={AppearanceSizeType.small}
+    styleType={AppearanceStyleType.secondary}
+    onClick={handleClick}
+  >
+    Small and Primary Button
+  </Button>
+)
+
 export const NormalCase = () => (
   <Button normalCase={true} onClick={handleClick}>
     Button (Normal Case)
@@ -147,6 +157,12 @@ export const inlineIcon = () => (
       Go Forward
     </Button>
   </>
+)
+
+export const disabled = () => (
+  <Button onClick={handleClick} disabled={true}>
+    Button (Disabled)
+  </Button>
 )
 
 export const detroitStyle = () => {
