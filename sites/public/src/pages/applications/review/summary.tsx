@@ -38,7 +38,6 @@ const ApplicationSummary = () => {
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = () => conductor.routeToNextOrReturnUrl()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -48,7 +47,7 @@ const ApplicationSummary = () => {
     })
   }, [profile])
 
-  useEffect(() => {
+  const onSubmit = () => {
     applicationsService
       .submissionValidation({
         body: {
@@ -66,10 +65,13 @@ const ApplicationSummary = () => {
         },
       })
       .then(() => {
-        // if we got a response then we passed validation
+        conductor.routeToNextOrReturnUrl()
       })
-      .catch(() => setValidationError(true))
-  }, [application, applicationsService, listing.id, profile])
+      .catch(() => {
+        setValidationError(true)
+        window.scrollTo(0, 0)
+      })
+  }
 
   return (
     <FormsLayout>
