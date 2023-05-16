@@ -62,8 +62,10 @@ const ListingIntro = (props: ListingIntroProps) => {
             options={jurisdictionOptions}
             inputProps={{
               onChange: () => {
-                fieldHasError(errors?.jurisdiction) ||
-                  (fieldHasError(errors?.["jurisdiction.id"]) && clearErrors("jurisdiction"))
+                console.log("jurisdiction change")
+                ;(fieldHasError(errors?.jurisdiction) ||
+                  fieldHasError(errors?.["jurisdiction.id"])) &&
+                  clearErrors("jurisdiction")
               },
             }}
           />
