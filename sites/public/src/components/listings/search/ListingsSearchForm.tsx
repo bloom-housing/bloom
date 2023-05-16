@@ -36,7 +36,7 @@ const inputSectionStyle: React.CSSProperties = {
 const textInputStyle: React.CSSProperties = {
   border: "1px solid black",
   padding: "2px 4px",
-  margin: "5px"
+  margin: "5px",
 }
 
 const footerStyle: React.CSSProperties = {
@@ -130,7 +130,8 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
           style={textInputStyle}
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
             updateValue("monthlyRent", e.currentTarget.value)
-          }} />
+          }}
+        />
       </div>
 
       <div style={inputSectionStyle}>
