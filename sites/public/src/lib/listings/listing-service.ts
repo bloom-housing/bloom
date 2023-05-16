@@ -100,7 +100,7 @@ export class ListingService {
 
       results = response.data
     } catch (e) {
-      console.log("fetchBaseListingData error: ", e)
+      console.log("ListingService.searchListings error: ", e)
     }
 
     return results
@@ -111,7 +111,7 @@ export class ListingService {
    *
    * @returns Promise<PaginatedListing>
    */
-  fetchOpenListings(): Promise<PaginatedListing> {
+  async fetchOpenListings(): Promise<Array<Listing>> {
     const qb = new ListingQueryBuilder()
 
     qb.whereEqual("status", EnumListingFilterParamsStatus.active).addOrderBy(
@@ -119,6 +119,8 @@ export class ListingService {
       OrderParam.DESC
     )
 
-    return this.searchListings(qb)
+    // We just want the listings, not the extra stuff
+    const result = await this.searchListings(qb)
+    return result.items
   }
 }

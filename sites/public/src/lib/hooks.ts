@@ -57,6 +57,10 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
+// These functions were sparsely used and/or completely ignored, so I'm commenting
+// them out.  If it turns out they are needed later then it should be easy to add
+// them back by uncommenting, but make sure the logic still matches expectations.
+/*
 export async function fetchBaseListingData({
   additionalFilters,
   orderBy,
@@ -131,6 +135,7 @@ export async function fetchClosedListings() {
     orderDir: [OrderParam.DESC],
   })
 }
+*/
 
 let jurisdiction: Jurisdiction | null = null
 

@@ -72,8 +72,8 @@ export class ListingQueryBuilder {
     }
 
     const params = {
-      fields: null,
-      direction: null,
+      fields: [],
+      direction: [],
     }
 
     this.orderBy.forEach((orderBy) => {
