@@ -95,8 +95,8 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
   }
 }
 
-export const stringToNumber = (str: string | number | undefined): number => {
-  return str !== undefined ? Number(str) : 1
+export const stringToNumber = (str: string | number | undefined | null): number => {
+  return str ? Number(str) : null
 }
 
 export const stringToBoolean = (str: string | boolean | undefined): boolean => {
