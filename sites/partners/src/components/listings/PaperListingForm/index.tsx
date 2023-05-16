@@ -229,6 +229,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   }
                   const address = formData.buildingAddress
                   setIfEmpty(`buildingAddress.city`, address.city, readableError)
+                  setIfEmpty(`buildingAddress.county`, address.county, readableError)
                   setIfEmpty(`buildingAddress.state`, address.state, readableError)
                   setIfEmpty(`buildingAddress.street`, address.street, readableError)
                   setIfEmpty(`buildingAddress.zipCode`, address.zipCode, readableError)

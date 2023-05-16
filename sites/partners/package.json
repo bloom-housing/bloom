@@ -54,7 +54,6 @@
     "tailwindcss": "2.2.10",
     "tough-cookie": "4.1.2",
     "markdown-to-jsx": "^6.11.4"
-
   },
   "devDependencies": {
     "@types/markdown-to-jsx": "^6.11.2",

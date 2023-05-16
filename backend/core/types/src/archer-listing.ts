@@ -675,6 +675,7 @@ export const ArcherListing: Listing = {
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
+    county: "San Jose",
     state: "CA",
     latitude: 37.36537,
     longitude: -121.91071,

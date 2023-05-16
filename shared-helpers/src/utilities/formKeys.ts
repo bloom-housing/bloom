@@ -55,6 +55,19 @@ export const stateKeys = [
   "WY",
 ]
 
+export const countyKeys = [
+  "",
+  "Alameda",
+  "ContraCosta",
+  "Marin",
+  "Napa",
+  "SanFrancisco",
+  "SanMateo",
+  "SantaClara",
+  "Solano",
+  "Sonoma",
+]
+
 export const contactPreferencesKeys = [
   {
     id: "email",
