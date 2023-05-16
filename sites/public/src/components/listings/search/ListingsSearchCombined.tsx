@@ -16,9 +16,9 @@ type ListingsSearchCombinedProps = {
 /**
  * This combines the search form with the listings map/list. Listings are updated
  * in both when the search form is submitted.
- * 
- * @param props 
- * @returns 
+ *
+ * @param props
+ * @returns
  */
 export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const [listings, setListings] = useState([])

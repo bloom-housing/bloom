@@ -10,9 +10,9 @@ type MultiSelectGroupProps = {
 
 /**
  * Creates a group of checkboxes and sets an array of selected values onChange()
- * 
- * @param props 
- * @returns 
+ *
+ * @param props
+ * @returns
  */
 export function MultiSelectGroup(props: MultiSelectGroupProps) {
   const startState = {}

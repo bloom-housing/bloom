@@ -28,9 +28,9 @@ const buttonStyleActive: React.CSSProperties = {
 
 /**
  * A generic button that has an active (selected) and inactive (deselected) state
- * 
- * @param props 
- * @returns 
+ *
+ * @param props
+ * @returns
  */
 const Button = (props: ButtonProps) => {
   const toggleState = () => {

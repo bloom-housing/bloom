@@ -51,9 +51,9 @@ const clearButtonStyle: React.CSSProperties = {
 
 /**
  * A form for searching listings
- * 
- * @param props 
- * @returns 
+ *
+ * @param props
+ * @returns
  */
 export function ListingsSearchForm(props: ListingsSearchFormProps) {
   const searchString = props.searchString || ""
