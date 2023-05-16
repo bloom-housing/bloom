@@ -10,6 +10,14 @@ type ButtonGroupProps = {
   onChange: (name: string, value: string) => void
 }
 
+/**
+ * This component groups together multiple buttons, of which only one is
+ * selectable, and sets a value based on the active button's value when a new
+ * buttom is selected.
+ * 
+ * @param props 
+ * @returns 
+ */
 export function ButtonGroup(props: ButtonGroupProps) {
   const nullState = {
     index: null,

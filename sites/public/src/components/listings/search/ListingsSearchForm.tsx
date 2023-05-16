@@ -49,6 +49,12 @@ const clearButtonStyle: React.CSSProperties = {
   textDecoration: "underline",
 }
 
+/**
+ * A form for searching listings
+ * 
+ * @param props 
+ * @returns 
+ */
 export function ListingsSearchForm(props: ListingsSearchFormProps) {
   const searchString = props.searchString || ""
 

@@ -17,6 +17,11 @@ type SearchTestProps = {
   locations: FormOption[]
 }
 
+// Input values/options below are passed into the form to make it easier to
+// reuse it in multiple places.  This may not ultimately be necessary, but it's
+// easier to add it in at the beginning than it is to try to add make the change
+// later.
+
 const bedroomOptions: FormOption[] = [
   {
     label: "Any",

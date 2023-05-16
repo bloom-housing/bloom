@@ -26,6 +26,12 @@ const buttonStyleActive: React.CSSProperties = {
   backgroundColor: "lightgray",
 }
 
+/**
+ * A generic button that has an active (selected) and inactive (deselected) state
+ * 
+ * @param props 
+ * @returns 
+ */
 const Button = (props: ButtonProps) => {
   const toggleState = () => {
     if (!props.isActive) {
