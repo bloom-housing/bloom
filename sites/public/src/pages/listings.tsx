@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -37,7 +37,6 @@ export default function ListingsPage(props: ListingsProps) {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("pageTitle.rent")} />
       <ListingsCombined listings={props.openListings} googleMapsApiKey={props.googleMapsApiKey} />
     </Layout>
   )

@@ -112,11 +112,11 @@ describe("occupancy formatting helper", () => {
     expect(occupancyTable(testListing)).toStrictEqual([
       {
         occupancy: { content: "2-6 people" },
-        unitType: { content: <strong>3 BR</strong> },
+        unitType: { content: <strong>3 beds</strong> },
       },
       {
         occupancy: { content: "at least 1 person" },
-        unitType: { content: <strong>2 BR</strong> },
+        unitType: { content: <strong>2 beds</strong> },
       },
       {
         occupancy: { content: "1 person" },

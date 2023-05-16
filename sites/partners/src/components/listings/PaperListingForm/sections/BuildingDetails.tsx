@@ -11,7 +11,7 @@ import {
   ListingMap,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { countyKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
@@ -54,6 +54,7 @@ const BuildingDetails = ({
 
   interface BuildingAddress {
     city: string
+    county: string
     state: string
     street: string
     zipCode: string
@@ -206,7 +207,6 @@ const BuildingDetails = ({
             }}
             register={register}
           />
-          <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
         <GridCell>
           <ViewItem
@@ -270,6 +270,40 @@ const BuildingDetails = ({
             type={"number"}
             register={register}
           />
+        </GridCell>
+      </GridSection>
+      <GridSection columns={3}>
+        <GridCell>
+          <ViewItem
+            label={t("application.contact.county")}
+            className={"mb-0"}
+            error={fieldHasError(errors?.buildingAddress?.county)}
+          >
+            <Select
+              id={`buildingAddress.county`}
+              name={`buildingAddress.county`}
+              error={
+                !!getAddressErrorMessage(
+                  "buildingAddress.county",
+                  fieldMessage(errors?.buildingAddress?.county)
+                )
+              }
+              errorMessage={getAddressErrorMessage(
+                "buildingAddress.county",
+                fieldMessage(errors?.buildingAddress?.county)
+              )}
+              label={t("application.contact.county")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={countyKeys}
+              keyPrefix="counties"
+              inputProps={{
+                onChange: () => clearErrors("buildingAddress"),
+              }}
+            />
+          </ViewItem>
+          <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
       </GridSection>
       <GridSection columns={3}>

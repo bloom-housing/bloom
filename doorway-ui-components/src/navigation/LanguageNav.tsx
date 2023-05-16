@@ -23,10 +23,12 @@ const LanguageNav = ({ ariaLabel, languages }: LanguageNavProps) => {
                 <button
                   onClick={() => {
                     item.onClick()
-                  } }
-                  className={item.active
-                    ? "language-nav__list-button is-active"
-                    : "language-nav__list-button"}
+                  }}
+                  className={
+                    item.active
+                      ? "language-nav__list-button is-active"
+                      : "language-nav__list-button"
+                  }
                   type="button"
                 >
                   {item.label}

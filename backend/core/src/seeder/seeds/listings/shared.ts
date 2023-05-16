@@ -146,6 +146,7 @@ export const defaultListing: ListingSeedType = {
   amenities: "Custom property amenities text",
   buildingAddress: {
     city: "San Francisco",
+    county: "San Francisco",
     state: "CA",
     street: "548 Market Street",
     street2: "Suite #59930",

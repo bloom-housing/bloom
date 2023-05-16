@@ -92,7 +92,7 @@ export function makeTestListing(jurisdictionId: string): Omit<ListingCreateDto, 
     buildingAddress: {
       placeName: null,
       city: "San Francisco",
-      county: null,
+      county: "San Francisco",
       state: "CA",
       street: "548 Market Street",
       street2: "Suite #59930",

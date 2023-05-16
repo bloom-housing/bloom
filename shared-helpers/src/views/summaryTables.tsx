@@ -16,38 +16,41 @@ const getTranslationFromCurrencyString = (value: string) => {
 
 export const unitSummariesTable = (
   summaries: UnitSummary[],
-  listingReviewOrder: ListingReviewOrder
+  listingReviewOrder: ListingReviewOrder,
+  includeRentandMinimumIncome = true
 ): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
     const unitPluralization =
       unitSummary.totalAvailable == 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")
-    const minIncome =
-      unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
-        <>
-          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
-          {unitSummary.minIncomeRange.min !== "t.n/a" && ` ${t("t.perMonth")}`}
-        </>
-      ) : (
-        <>
-          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}</strong>
-          {` ${t("t.to")} `}
-          <strong>{getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}</strong>
-          {` ${t("t.perMonth")}`}
-        </>
-      )
-
+    let minIncome = null
+    if (includeRentandMinimumIncome) {
+      minIncome =
+        unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
+          <>
+            {getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}
+            {unitSummary.minIncomeRange.min !== "t.n/a" && ` ${t("t.perMonth")}`}
+          </>
+        ) : (
+          <>
+            {getTranslationFromCurrencyString(unitSummary.minIncomeRange.min)}
+            {` ${t("t.to")} `}
+            {getTranslationFromCurrencyString(unitSummary.minIncomeRange.max)}
+            {` ${t("t.perMonth")}`}
+          </>
+        )
+    }
     const getRent = (rentMin: string, rentMax: string, percent = false) => {
       const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
       return rentMin == rentMax ? (
         <>
-          <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
+          {getTranslationFromCurrencyString(rentMin)}
           {rentMin !== "t.n/a" && unit}
         </>
       ) : (
         <>
-          <strong>{getTranslationFromCurrencyString(rentMin)}</strong>
+          {getTranslationFromCurrencyString(rentMin)}
           {` ${t("t.to")} `}
-          <strong>{getTranslationFromCurrencyString(rentMax)}</strong>
+          {getTranslationFromCurrencyString(rentMax)}
           {unit}
         </>
       )
@@ -63,31 +66,26 @@ export const unitSummariesTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = null
-    if (listingReviewOrder !== ListingReviewOrder.waitlist) {
-      availability = (
-        <span>
-          {unitSummary.totalAvailable > 0 ? (
-            <>
-              <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
-            </>
-          ) : (
-            <span>
-              <strong>{t("listings.waitlist.open")}</strong>
-            </span>
-          )}
-        </span>
-      )
-    } else if (listingReviewOrder === ListingReviewOrder.waitlist) {
-      availability = (
-        <span>
-          <strong>{t("listings.waitlist.open")}</strong>
-        </span>
-      )
+    if (includeRentandMinimumIncome) {
+      if (listingReviewOrder !== ListingReviewOrder.waitlist) {
+        availability = (
+          <span>
+            {unitSummary.totalAvailable > 0 ? (
+              <>
+                {unitSummary.totalAvailable} {unitPluralization}
+              </>
+            ) : (
+              <span>{t("listings.waitlist.open")}</span>
+            )}
+          </span>
+        )
+      } else if (listingReviewOrder === ListingReviewOrder.waitlist) {
+        availability = <span>{t("listings.waitlist.open")}</span>
+      }
     }
-
     return {
       unitType: {
-        content: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
+        content: t(`listings.unitTypes.${unitSummary.unitType?.name}`),
       },
       minimumIncome: {
         content: <span>{minIncome}</span>,
@@ -104,12 +102,13 @@ export const unitSummariesTable = (
 
 export const getSummariesTable = (
   summaries: UnitSummary[],
-  listingReviewOrder: ListingReviewOrder
+  listingReviewOrder: ListingReviewOrder,
+  includeRentandMinimumIncome = true
 ): StandardTableData => {
   let unitSummaries: StandardTableData = []
 
   if (summaries?.length > 0) {
-    unitSummaries = unitSummariesTable(summaries, listingReviewOrder)
+    unitSummaries = unitSummariesTable(summaries, listingReviewOrder, includeRentandMinimumIncome)
   }
   return unitSummaries
 }
@@ -167,7 +166,7 @@ export const UnitTables = (props: UnitTablesProps) => {
                 <>
                   {unit.sqFeet ? (
                     <>
-                      <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
+                      {parseInt(unit.sqFeet)} {t("t.sqFeet")}
                     </>
                   ) : (
                     <></>
@@ -176,13 +175,10 @@ export const UnitTables = (props: UnitTablesProps) => {
               ),
             },
             numBathrooms: {
-              content: (
-                <strong>
-                  {unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms}
-                </strong>
-              ),
+              content:
+                unit.numBathrooms === 0 ? t("listings.unit.sharedBathroom") : unit.numBathrooms,
             },
-            floor: { content: <strong>{unit.floor}</strong> },
+            floor: { content: unit.floor },
           })
         })
 
@@ -203,7 +199,7 @@ export const UnitTables = (props: UnitTablesProps) => {
         const getBarContent = () => {
           return (
             <h3 className={"toggle-header-content"}>
-              <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
+              {t("listings.unitTypes." + unitSummary.unitType.name)}:&nbsp;
               {unitsLabel(units)}
               {areaRangeSection}
               {floorSection}

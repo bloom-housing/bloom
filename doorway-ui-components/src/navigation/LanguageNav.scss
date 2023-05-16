@@ -3,7 +3,7 @@
   --inner-width: inherit;
   --inner-desktop-padding: inherit;
   --inner-mobile-padding: inherit;
-  background-color: var(--bloom-color-gray-800);
+  background-color: var(--bloom-color-gray-200);
 }
 
 .language-bar__inner {
@@ -13,30 +13,39 @@
   justify-content: flex-end;
   margin: auto;
   padding: var(--inner-mobile-padding);
+  padding: var(--bloom-s2) 0;
 
-  @media (min-width: $screen-md) {
-    padding: 0 var(--bloom-s3);
-    padding: var(--inner-desktop-padding);
+  @media (max-width: $screen-md) {
+    justify-content: center;
   }
 }
 
 .language-nav__list {
   display: flex;
+  @media (max-width: $screen-md) {
+    justify-content: center;
+  }
+  li:not(:last-child) {
+    border-right: var(--doorway-standard-border);
+  }
 }
 
 .language-nav__list-button {
-  padding: var(--bloom-s2) var(--bloom-s3);
-  color: var(--bloom-color-gray-500);
-  font-weight: 600;
+  padding: var(--bloom-s1) var(--bloom-s3);
+  color: var(--bloom-text-color);
+  border-radius: var(--bloom-rounded-full);
+  font-weight: 500;
+  font-size: var(--bloom-font-size-xs);
   cursor: pointer;
   background-color: transparent;
+  margin: 0 var(--bloom-s1_5);
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px var(--bloom-color-accent-cool);
+  &:hover {
+    background-color: var(--doorway-color-cyan-300);
   }
 
   &.is-active {
-    color: var(--bloom-color-white);
+    color: var(--bloom-text-color);
+    background-color: var(--doorway-color-cyan-300);
   }
 }

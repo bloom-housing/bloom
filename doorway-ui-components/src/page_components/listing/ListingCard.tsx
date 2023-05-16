@@ -1,14 +1,15 @@
 import React, { useContext } from "react"
 import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
-import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
-import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
+import { StackedTableProps } from "../../tables/StackedTable"
+import { StandardTableProps } from "../../tables/StandardTable"
 import { Heading, HeaderType } from "../../text/Heading"
 import { Tag } from "../../text/Tag"
 import { AppearanceShadeType, AppearanceStyleType } from "../../global/AppearanceTypes"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
 import { NavigationContext } from "../../config/NavigationContext"
+import { DoorwayListingTable } from "./DoorwayListingTable"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
@@ -53,6 +54,8 @@ export interface ListingCardProps {
   footerContent?: React.ReactNode
   /** Prop interface for the ImageCard component */
   imageCardProps: ImageCardProps
+  /** Prop for some text to go above the header */
+  preheader?: string
   /** Toggles on the StackedTable component in place of the default StandardTable component - they are functionally equivalent with differing UIs */
   stackedTable?: boolean
   /** Prop interface for the StandardTable and StackedTable components */
@@ -162,10 +165,6 @@ const ListingCard = (props: ListingCardProps) => {
     return (
       <>
         <div className="listings-row_table">
-          {(contentProps?.tableHeader?.content || contentProps?.tableSubheader?.content) &&
-            (contentProps.contentHeader?.content || contentProps?.contentSubheader?.content) && (
-              <hr className={"mb-2"} />
-            )}
           <div className={"listings-row_headers"}>
             {contentProps?.tableHeader &&
               getHeader(
@@ -178,14 +177,9 @@ const ListingCard = (props: ListingCardProps) => {
             )}
           </div>
           {children && children}
-          {tableProps && (tableProps.data || tableProps.stackedData) && (
-            <>
-              {stackedTable ? (
-                <StackedTable {...(tableProps as StackedTableProps)} />
-              ) : (
-                <StandardTable {...(tableProps as StandardTableProps)} />
-              )}
-            </>
+          <hr></hr>
+          {tableProps?.data && tableProps?.headers && (
+            <DoorwayListingTable data={tableProps?.data} headers={tableProps?.headers} />
           )}
         </div>
         <div className={"listings-row_footer_container"}>
@@ -217,6 +211,11 @@ const ListingCard = (props: ListingCardProps) => {
         <ImageCard {...imageCardProps} />
       </div>
       <div className="listings-row_content">
+        {props.preheader && (
+          <div className="listings-row_preheader">
+            <span>{props.preheader}</span>
+          </div>
+        )}
         {getContentHeader()}
         {getContent()}
       </div>

@@ -14,6 +14,7 @@ describe("<ListingCard>", () => {
           tags: [{ text: "reserved community tag" }],
           statuses: [{ content: "status content" }],
         }}
+        preheader={"blah blah preheader"}
         tableProps={{
           headers: {
             unitType: "t.unitType",
@@ -48,9 +49,6 @@ describe("<ListingCard>", () => {
     expect(getByText("child content")).toBeTruthy()
     expect(getAllByText("reserved community tag")).toBeTruthy()
     expect(getAllByText("status content")).toBeTruthy()
-    expect(getAllByText("Unit Type")).toBeTruthy()
-    expect(getAllByText("Income Range")).toBeTruthy()
-    expect(getAllByText("Rent")).toBeTruthy()
     expect(getAllByText("cellA")).toBeTruthy()
     expect(getAllByText("cellB")).toBeTruthy()
     expect(getAllByText("cellC")).toBeTruthy()

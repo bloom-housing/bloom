@@ -5,6 +5,7 @@
   "listingMultiselectQuestions": [],
   "buildingAddress": {
     "city": "Oakland",
+    "county": "Alameda",
     "state": "CA",
     "street": "Main St",
     "zipCode": "94501",

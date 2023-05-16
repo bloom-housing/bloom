@@ -79,15 +79,9 @@ const Layout = (props) => {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         <SiteHeader
-          logoSrc="/images/logo_glyph.svg"
+          logoSrc="/images/doorway_logo_temp.png"
           homeURL="/"
-          notice={
-            <a href="/" target="_blank" className={"cursor-pointer"}>
-              {t("nav.getFeedback")}
-            </a>
-          }
           mainContentId="main-content"
-          title={t("nav.siteTitle")}
           languages={languages.map((lang) => {
             return {
               label: lang.label,
@@ -97,7 +91,7 @@ const Layout = (props) => {
             }
           })}
           menuLinks={menuLinks}
-          logoWidth={"base"}
+          logoWidth={"base_expanded"}
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">

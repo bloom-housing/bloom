@@ -127,11 +127,13 @@ const ApplicationAlternateContactType = () => {
                         )}
                         readerOnly={true}
                         defaultValue={application.alternateContact.otherType}
-                        validation={{ required: true }}
+                        validation={{ required: true, maxLength: 64 }}
                         error={errors.otherType}
-                        errorMessage={t(
-                          "application.alternateContact.type.otherTypeValidationErrorMessage"
-                        )}
+                        errorMessage={
+                          errors.otherType?.type === "maxLength"
+                            ? t("errors.maxLength")
+                            : t("application.alternateContact.type.otherTypeValidationErrorMessage")
+                        }
                         register={register}
                         dataTestId={"app-alternate-other-type"}
                       />

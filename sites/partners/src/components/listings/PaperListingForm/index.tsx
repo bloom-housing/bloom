@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
-import axios from "axios"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import {
@@ -199,32 +198,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           reset(formData)
 
           if (result) {
-            /**
-             * Send purge request to Nginx.
-             * Wrapped in try catch, because it's possible that content may not be cached in between edits,
-             * and will return a 404, which is expected.
-             * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
-             * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
-             */
-            if (process.env.backendProxyBase) {
-              try {
-                // clear individual listing's cache
-                await axios.request({
-                  url: `${process.env.backendProxyBase}/listings/${result.id}*`,
-                  method: "purge",
-                })
-                // clear list caches if published
-                if (result.status !== ListingStatus.pending) {
-                  await axios.request({
-                    url: `${process.env.backendProxyBase}/listings?*`,
-                    method: "purge",
-                  })
-                }
-              } catch (e) {
-                console.log("purge error = ", e)
-              }
-            }
-
             setSiteAlertMessage(
               editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
               "success"
@@ -256,6 +229,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   }
                   const address = formData.buildingAddress
                   setIfEmpty(`buildingAddress.city`, address.city, readableError)
+                  setIfEmpty(`buildingAddress.county`, address.county, readableError)
                   setIfEmpty(`buildingAddress.state`, address.state, readableError)
                   setIfEmpty(`buildingAddress.street`, address.street, readableError)
                   setIfEmpty(`buildingAddress.zipCode`, address.zipCode, readableError)

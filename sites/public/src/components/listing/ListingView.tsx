@@ -38,6 +38,7 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
+  MultiLineAddress,
 } from "@bloom-housing/ui-components"
 import {
   getOccupancyDescription,
@@ -531,6 +532,9 @@ export const ListingView = (props: ListingProps) => {
           </Heading>
           <Heading priority={2} styleType={"mediumNormal"} className={"mb-1"}>
             {oneLineAddress}
+          </Heading>
+          <Heading priority={2} styleType={"mediumNormal"} className={"mb-1"}>
+            {t(`counties.${listing.buildingAddress.county}`)} {t("t.county")}
           </Heading>
           <p className="text-gray-750 text-base mb-1">{listing.developer}</p>
           <p className="text-base">

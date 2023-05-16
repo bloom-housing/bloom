@@ -173,6 +173,10 @@ describe("ListingsService", () => {
           useValue: jest.fn(),
         },
         {
+          provide: HttpService,
+          useValue: jest.fn(),
+        },
+        {
           provide: TranslationsService,
           useValue: { translateListing: jest.fn() },
         },
