@@ -27,17 +27,12 @@ const buttonStyleActive: React.CSSProperties = {
 }
 
 const Button = (props: ButtonProps) => {
-  //const [isActive, setActive] = useState(props.isActive)
-  //const style = isActive ? buttonStyleActive : buttonStyleInactive
-
   const toggleState = () => {
     if (!props.isActive) {
       props.onSelect(props.index)
     } else {
       props.onDeselect(props.index)
     }
-
-    //setActive(!isActive)
   }
 
   const keyDownHandler = (event) => {

@@ -28,6 +28,10 @@ export class ListingQueryBuilder {
     return this
   }
 
+  // We use these convenience methods to keep from polluting files with references
+  // to EnumCombinedListingFilterParamsComparison, which will likely change once
+  // external listings are no longer required.
+
   whereEqual(field: string, value: string) {
     return this.addFilter(field, EnumCombinedListingFilterParamsComparison["="], value)
   }

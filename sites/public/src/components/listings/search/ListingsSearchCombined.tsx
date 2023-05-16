@@ -23,11 +23,12 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
     const listings = result.items
     const meta = result.meta
+
+    // Keeping this until pagination is implemented
     console.log(
       `Showing ${meta.itemCount} listings of ${meta.totalItems} total (page ${meta.currentPage} of ${meta.totalPages})`
     )
 
-    console.log(result)
     setListings(listings)
   }
 

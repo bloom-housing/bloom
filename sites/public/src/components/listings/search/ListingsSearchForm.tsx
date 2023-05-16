@@ -65,12 +65,13 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
   const [formValues, setFormValues] = useState(initialState)
 
   const clearValues = () => {
+    // TODO: fix this
+    // This code gets called but the UI doesn't update in response to state change
     setFormValues(nullState)
     console.log(`Clearing all values`)
   }
 
   const onSubmit = () => {
-    console.log(formValues)
     props.onSubmit(formValues)
   }
 
@@ -80,13 +81,13 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
     Object.assign(newValues, formValues)
     newValues[name] = value
     setFormValues(newValues)
-    console.log(`${name} has been set to ${value}`)
+    //console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
   const updateValueMulti = (name: string, value: string[]) => {
     formValues[name] = value
     setFormValues(formValues)
-    //console.log(`${name} has been set to ${value}`)
+    //console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
   // load listings immediately after render

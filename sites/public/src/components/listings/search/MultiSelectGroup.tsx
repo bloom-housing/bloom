@@ -28,11 +28,11 @@ export function MultiSelectGroup(props: MultiSelectGroupProps) {
     // if the value is already there, mark as false
     if (stateCopy[value]) {
       stateCopy[value] = false
-      console.log(`Removing value [${value}]`)
+      //console.log(`Removing value [${value}]`) // uncomment to debug
     } else {
       // otherwise set as true
       stateCopy[value] = true
-      console.log(`Adding value [${value}]`)
+      //console.log(`Adding value [${value}]`) // uncomment to debug
     }
 
     setValues(stateCopy)

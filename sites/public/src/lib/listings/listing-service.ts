@@ -1,6 +1,7 @@
 import {
   CombinedListingFilterParams,
   EnumListingFilterParamsStatus,
+  Listing,
   OrderByFieldsEnum,
   OrderParam,
   PaginatedListing,
@@ -17,12 +18,26 @@ export class ListingService {
   listingsEndpoint: string
   searchEndpoint: string
 
+  /**
+   * The constructor expects a full URL to the listings endpoint.  This should
+   * usually come from runtimeConfig.getListingServiceUrl().  Note that while
+   * this class is client-side safe, runtimeConfig is not.
+   *
+   * @param listingsEndpoint
+   */
   constructor(listingsEndpoint: string) {
     this.listingsEndpoint = listingsEndpoint
     this.searchEndpoint = listingsEndpoint + "/combined"
   }
 
-  async fetchListingById(id: string, locale: string = null) {
+  /**
+   * Retrieve a single local listing
+   *
+   * @param id
+   * @param locale
+   * @returns Listing
+   */
+  async fetchListingById(id: string, locale: string = null): Promise<Listing> {
     const request = {
       headers: null,
     }
@@ -35,6 +50,13 @@ export class ListingService {
     return response.data
   }
 
+  /**
+   * Search for internal and external listings based on filter an order criteria
+   *
+   * @param qb
+   * @param limit
+   * @returns Promise<PaginatedListing>
+   */
   async searchListings(qb: ListingQueryBuilder, limit = "all"): Promise<PaginatedListing> {
     let results = Promise.resolve({
       items: [],
@@ -84,7 +106,12 @@ export class ListingService {
     return results
   }
 
-  fetchOpenListings() {
+  /**
+   * Convenience method for fetching open listings
+   *
+   * @returns Promise<PaginatedListing>
+   */
+  fetchOpenListings(): Promise<PaginatedListing> {
     const qb = new ListingQueryBuilder()
 
     qb.whereEqual("status", EnumListingFilterParamsStatus.active).addOrderBy(

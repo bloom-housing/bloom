@@ -10,10 +10,6 @@ type ButtonGroupProps = {
   onChange: (name: string, value: string) => void
 }
 
-const buttonStyle: React.CSSProperties = {
-  border: "1px solid black",
-}
-
 export function ButtonGroup(props: ButtonGroupProps) {
   const nullState = {
     index: null,
