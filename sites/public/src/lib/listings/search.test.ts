@@ -8,7 +8,7 @@ describe("parse search string", () => {
     }
 
     const searchStr = "str:abc;arr:one,two"
-    const results = parseSearchString(example, searchStr)
+    const results = parseSearchString(searchStr, example)
 
     expect(results).toEqual({
       str: "abc",
@@ -23,7 +23,7 @@ describe("parse search string", () => {
     }
 
     const searchStr = "str:abc;not-valid:true;arr:one,two"
-    const results = parseSearchString(example, searchStr)
+    const results = parseSearchString(searchStr, example)
 
     expect(results).toEqual({
       str: "abc",
