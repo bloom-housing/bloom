@@ -51,7 +51,7 @@ export class ListingService {
   }
 
   /**
-   * Search for internal and external listings based on filter an order criteria
+   * Search for internal and external listings based on filter and order criteria
    *
    * @param qb
    * @param limit
