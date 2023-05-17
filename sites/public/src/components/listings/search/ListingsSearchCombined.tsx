@@ -22,12 +22,9 @@ type ListingsSearchCombinedProps = {
  * @returns
  */
 export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
-  //const [listings, setListings] = useState([])
-  const [state, setState] = useState({
-    modalOpen: false,
-    listings: [],
-    filterCount: 0,
-  })
+  const [listings, setListings] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
+  const [filterCount, setFilterCount] = useState(0)
 
   const onFormSubmit = async (params: ListingSearchParams) => {
     const qb = generateSearchQuery(params)
@@ -42,28 +39,16 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       `Showing ${meta.itemCount} listings of ${meta.totalItems} total (page ${meta.currentPage} of ${meta.totalPages})`
     )
 
-    //setListings(listings)
-    setState({
-      modalOpen: false,
-      listings: listings,
-      filterCount: state.filterCount,
-    })
+    setListings(listings)
   }
 
   const onModalClose = () => {
-    setState({
-      modalOpen: false,
-      listings: state.listings,
-      filterCount: state.filterCount,
-    })
+    setModalOpen(false)
   }
 
   const updateFilterCount = (count: number) => {
-    setState({
-      modalOpen: state.modalOpen,
-      listings: state.listings,
-      filterCount: count,
-    })
+    console.log(`Updating filter state; setting to ${count}`)
+    setFilterCount(count)
   }
 
   return (
@@ -74,19 +59,15 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
           border={AppearanceBorderType.borderless}
           size={AppearanceSizeType.small}
           onClick={() => {
-            setState({
-              modalOpen: true,
-              listings: state.listings,
-              filterCount: state.filterCount,
-            })
+            setModalOpen(true)
           }}
         >
-          {`Filters ${state.filterCount}`}
+          {`Filters ${filterCount}`}
         </Button>
       </div>
 
       <ListingsSearchModal
-        open={state.modalOpen}
+        open={modalOpen}
         searchString={props.searchString}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
@@ -96,7 +77,7 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         onFilterChange={updateFilterCount}
       />
 
-      <ListingsCombined listings={state.listings} googleMapsApiKey={props.googleMapsApiKey} />
+      <ListingsCombined listings={listings} googleMapsApiKey={props.googleMapsApiKey} />
     </div>
   )
 }

@@ -54,7 +54,6 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }
 
   const initialState = parseSearchString(searchString, nullState)
-
   const [formValues, setFormValues] = useState(initialState)
 
   const clearValues = () => {
@@ -101,8 +100,12 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     //console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
-  // load listings immediately after render
+  // run this once immediately after first render
   useEffect(() => {
+    // set initial filter count
+    props.onFilterChange(countFilters(initialState))
+
+    // fetch listings
     onSubmit()
   }, [])
 
