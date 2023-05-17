@@ -88,8 +88,6 @@ export class ListingService {
       params.orderDir = orderBy.direction
     }
 
-    console.log(params)
-
     try {
       const response = await axios.get(this.searchEndpoint, {
         params,

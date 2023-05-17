@@ -2,8 +2,8 @@ import React from "react"
 import Head from "next/head"
 import Layout from "../layouts/application"
 import { MetaTags } from "../components/shared/MetaTags"
-import { PageHeader, t } from "@bloom-housing/doorway-ui-components"
-import { FormOption } from "../components/listings/search/ListingsSearchForm"
+import { t } from "@bloom-housing/doorway-ui-components"
+import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { ListingsSearchCombined } from "../components/listings/search/ListingsSearchCombined"
 import { getListingServiceUrl } from "../lib/helpers"
 import { runtimeConfig } from "../lib/runtime-config"
@@ -132,7 +132,6 @@ export default function SearchTest(props: SearchTestProps) {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("pageTitle.rent")} />
 
       <ListingsSearchCombined
         listingsEndpoint={props.listingsEndpoint}

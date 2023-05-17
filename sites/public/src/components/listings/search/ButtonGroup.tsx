@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button } from "./Button"
-import { FormOption } from "./ListingsSearchForm"
+import { FormOption } from "./ListingsSearchModal"
 
 type ButtonGroupProps = {
   name: string
@@ -53,6 +53,7 @@ export function ButtonGroup(props: ButtonGroupProps) {
   const deselectHandler = (index: number) => {
     if (selection.index == index) {
       setSelection(nullState)
+      props.onChange(props.name, null)
     }
   }
 

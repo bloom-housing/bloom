@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { FormOption } from "./ListingsSearchForm"
+import { FormOption } from "./ListingsSearchModal"
 
 type MultiSelectGroupProps = {
   name: string

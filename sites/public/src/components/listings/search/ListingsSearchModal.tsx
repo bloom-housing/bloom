@@ -2,30 +2,23 @@ import React, { useEffect, useState } from "react"
 import { ButtonGroup } from "./ButtonGroup"
 import { MultiSelectGroup } from "./MultiSelectGroup"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
+import { Modal } from "@bloom-housing/ui-components"
 
-type ListingsSearchFormProps = {
+type ListingsSearchModalProps = {
+  open: boolean
   searchString?: string
   bedrooms: FormOption[]
   bathrooms: FormOption[]
   counties: FormOption[]
   onSubmit: (params: ListingSearchParams) => void
+  onClose: () => void
+  onFilterChange: (count: number) => void
 }
 
 export type FormOption = {
   label: string
   value: string
   isDisabled?: boolean
-}
-
-const containerStyle: React.CSSProperties = {
-  width: "600px",
-  margin: "15px auto",
-  border: "1px solid black",
-}
-
-const headerStyle: React.CSSProperties = {
-  padding: "3px 15px",
-  borderBottom: "1px solid black",
 }
 
 const inputSectionStyle: React.CSSProperties = {
@@ -39,12 +32,6 @@ const textInputStyle: React.CSSProperties = {
   margin: "5px",
 }
 
-const footerStyle: React.CSSProperties = {
-  display: "flex",
-  padding: "3px 15px",
-  borderTop: "1px solid black",
-}
-
 const clearButtonStyle: React.CSSProperties = {
   textDecoration: "underline",
 }
@@ -55,7 +42,7 @@ const clearButtonStyle: React.CSSProperties = {
  * @param props
  * @returns
  */
-export function ListingsSearchForm(props: ListingsSearchFormProps) {
+export function ListingsSearchModal(props: ListingsSearchModalProps) {
   const searchString = props.searchString || ""
 
   const nullState: ListingSearchParams = {
@@ -74,11 +61,27 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
     // TODO: fix this
     // This code gets called but the UI doesn't update in response to state change
     setFormValues(nullState)
+    props.onFilterChange(0) // should be no active filters
     console.log(`Clearing all values`)
   }
 
   const onSubmit = () => {
     props.onSubmit(formValues)
+  }
+
+  const countFilters = (params: ListingSearchParams) => {
+    let count = 0
+
+    // For each of our search params, count the number that aren't empty
+    Object.values(params).forEach((value) => {
+      if (value == null || value == "") return
+
+      if (Array.isArray(value) && value.length < 1) return
+
+      count++
+    })
+
+    return count
   }
 
   const updateValue = (name: string, value: string) => {
@@ -87,12 +90,14 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
     Object.assign(newValues, formValues)
     newValues[name] = value
     setFormValues(newValues)
+    props.onFilterChange(countFilters(newValues))
     //console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
   const updateValueMulti = (name: string, value: string[]) => {
     formValues[name] = value
     setFormValues(formValues)
+    props.onFilterChange(countFilters(formValues))
     //console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
@@ -102,11 +107,19 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
   }, [])
 
   return (
-    <div style={containerStyle}>
-      <div style={headerStyle}>
-        <span style={{ marginLeft: "15px" }}>Filters</span>
-      </div>
-
+    <Modal
+      open={props.open}
+      onClose={props.onClose}
+      title={"Filters"}
+      ariaDescription="Listing Search Filters"
+      actions={[
+        <button onClick={onSubmit}>Show matching listings</button>,
+        <div style={{ flexGrow: 1 }}></div>,
+        <button style={clearButtonStyle} onClick={clearValues}>
+          Clear all filters
+        </button>,
+      ]}
+    >
       <div style={inputSectionStyle}>
         <div>Bedrooms</div>
         <ButtonGroup
@@ -150,14 +163,6 @@ export function ListingsSearchForm(props: ListingsSearchFormProps) {
           values={formValues.counties}
         />
       </div>
-
-      <div style={footerStyle}>
-        <button style={clearButtonStyle} onClick={clearValues}>
-          Clear all filters
-        </button>
-        <div style={{ flexGrow: 1 }}></div>
-        <button onClick={onSubmit}>Show matching listings</button>
-      </div>
-    </div>
+    </Modal>
   )
 }

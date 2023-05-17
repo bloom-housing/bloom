@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import { FormOption, ListingsSearchForm } from "./ListingsSearchForm"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
+import { AppearanceBorderType, AppearanceSizeType, Button } from "@bloom-housing/ui-components"
+import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
 
 type ListingsSearchCombinedProps = {
   searchString?: string
@@ -21,7 +22,12 @@ type ListingsSearchCombinedProps = {
  * @returns
  */
 export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
-  const [listings, setListings] = useState([])
+  //const [listings, setListings] = useState([])
+  const [state, setState] = useState({
+    modalOpen: false,
+    listings: [],
+    filterCount: 0,
+  })
 
   const onFormSubmit = async (params: ListingSearchParams) => {
     const qb = generateSearchQuery(params)
@@ -36,20 +42,61 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       `Showing ${meta.itemCount} listings of ${meta.totalItems} total (page ${meta.currentPage} of ${meta.totalPages})`
     )
 
-    setListings(listings)
+    //setListings(listings)
+    setState({
+      modalOpen: false,
+      listings: listings,
+      filterCount: state.filterCount,
+    })
+  }
+
+  const onModalClose = () => {
+    setState({
+      modalOpen: false,
+      listings: state.listings,
+      filterCount: state.filterCount,
+    })
+  }
+
+  const updateFilterCount = (count: number) => {
+    setState({
+      modalOpen: state.modalOpen,
+      listings: state.listings,
+      filterCount: count,
+    })
   }
 
   return (
     <div>
-      <ListingsSearchForm
+      <div style={{ width: "100%", display: "flex" }}>
+        <div style={{ flexGrow: 1 }}></div>
+        <Button
+          border={AppearanceBorderType.borderless}
+          size={AppearanceSizeType.small}
+          onClick={() => {
+            setState({
+              modalOpen: true,
+              listings: state.listings,
+              filterCount: state.filterCount,
+            })
+          }}
+        >
+          {`Filters ${state.filterCount}`}
+        </Button>
+      </div>
+
+      <ListingsSearchModal
+        open={state.modalOpen}
         searchString={props.searchString}
         bedrooms={props.bedrooms}
         bathrooms={props.bathrooms}
         counties={props.counties}
         onSubmit={onFormSubmit}
+        onClose={onModalClose}
+        onFilterChange={updateFilterCount}
       />
 
-      <ListingsCombined listings={listings} googleMapsApiKey={props.googleMapsApiKey} />
+      <ListingsCombined listings={state.listings} googleMapsApiKey={props.googleMapsApiKey} />
     </div>
   )
 }
