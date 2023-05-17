@@ -33,7 +33,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, clearErrors, reset, getValues, control } = formMethods
+  const { register, errors, clearErrors, getValues, control, setValue } = formMethods
   const listing = getValues()
 
   const listingAvailability = useWatch({
@@ -54,7 +54,12 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   }
 
   useEffect(() => {
-    reset({ ...getValues(), disableUnitsAccordion: disableUnitsAccordion ? "true" : "false" })
+    if (
+      getValues("disableUnitsAccordion") === undefined ||
+      getValues("disableUnitsAccordion") === null
+    ) {
+      setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

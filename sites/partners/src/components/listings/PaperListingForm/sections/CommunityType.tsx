@@ -14,9 +14,14 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, reset } = formMethods
+  const { register, setValue, watch } = formMethods
+
+  const reservedCommunityType = watch("reservedCommunityType.id")
 
   const [options, setOptions] = useState([])
+  const [currentCommunityType, setCurrentCommunityType] = useState(
+    listing?.reservedCommunityType?.id
+  )
 
   const { data: reservedCommunityTypes = [] } = useReservedCommunityTypeList()
 
@@ -25,8 +30,17 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
       return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
     })
     setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
-    reset()
-  }, [reservedCommunityTypes, reset])
+  }, [reservedCommunityTypes])
+
+  useEffect(() => {
+    setValue("reservedCommunityType.id", currentCommunityType)
+  }, [options, setValue, currentCommunityType])
+
+  useEffect(() => {
+    if (![listing?.reservedCommunityType?.id, undefined, ""].includes(reservedCommunityType)) {
+      setCurrentCommunityType(reservedCommunityType)
+    }
+  }, [reservedCommunityType, listing?.reservedCommunityType?.id])
 
   return (
     <GridSection
@@ -38,16 +52,22 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
     >
       <GridSection columns={2}>
         <ViewItem label={t("listings.reservedCommunityType")}>
-          <Select
-            id={`reservedCommunityType.id`}
-            name={`reservedCommunityType.id`}
-            label={t("listings.reservedCommunityType")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={options}
-            defaultValue={listing?.reservedCommunityType?.id}
-          />
+          {options && (
+            <Select
+              id={`reservedCommunityType.id`}
+              name={`reservedCommunityType.id`}
+              label={t("listings.reservedCommunityType")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={options}
+              inputProps={{
+                onChange: () => {
+                  setCurrentCommunityType(reservedCommunityType)
+                },
+              }}
+            />
+          )}
         </ViewItem>
       </GridSection>
       <GridSection columns={3}>
