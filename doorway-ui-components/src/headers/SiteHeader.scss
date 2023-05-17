@@ -62,21 +62,24 @@
 
   // Link
   --link-align-items: flex-end;
-  --link-bottom-border: 3px solid transparent;
+  --link-bottom-border: 0;
   --link-font-size: var(--bloom-font-size-xs);
-  --link-font-weight: 400;
+  --link-font-weight: 500;
   --link-height: 100%;
-  --link-hover-bottom-border: 3px solid var(--bloom-color-primary);
+  --link-hover-bottom-border: 0;
   --link-padding: var(--bloom-s1) var(--bloom-s3) var(--bloom-s4) var(--bloom-s3);
-  --link-text-color: var(--bloom-color-gray-750);
+  --link-text-color: var(--bloom-text-color-darker);
   --link-text-hover-color: var(--bloom-color-gray-750);
   --link-text-desktop-color: var(--bloom-color-gray-750);
-  --link-text-transform: uppercase;
+  --link-text-transform: initial;
+  --link-secondary-color: var(--bloom-color-primary-light);
+  --link-hover-secondary-color: var(--bloom-color-primary);
+
 
   // Dropdown
   --dropdown-container-border-top: none;
   --dropdown-container-display: inherit;
-  --dropdown-container-margin: 38.5px 0 0 -127px;
+  --dropdown-container-margin: 32.5px 0 0 -127px;
   --dropdown-container-width: 143px;
   --dropdown-item-flex: inherit;
   --dropdown-item-font-size: var(--bloom-font-size-sm);
@@ -84,11 +87,13 @@
   --mobile-dropdown-item-hover-bg-color: var(--bloom-color-gray-400);
   --mobile-dropdown-margin: auto;
   --mobile-menu-button-border: 2px var(--bloom-color-primary);
+  --mobile-menu-button-text-transform: initial;
   --mobile-menu-button-display: inline-block;
   --mobile-menu-button-margin: var(--bloom-s4) var(--bloom-s2);
   --mobile-menu-button-padding: 0 var(--bloom-s2);
   --mobile-menu-button-text-display: inline;
-  --mobile-menu-font-size: var(--bloom-font-size-xs);
+  --mobile-menu-font-size: var(--bloom-font-size-s);
+  --mobile-menu-font-weight: 500;
 
   // Link menu
   --navbar-menu-desktop-height: 75px;
@@ -356,13 +361,12 @@
     position: relative;
     border-radius: var(--bloom-s1);
     text-align: center;
-    text-transform: uppercase;
+    text-transform:  var(--mobile-menu-button-text-transform);
     font-family: var(--bloom-font-alt-sans);
     display: var(--mobile-menu-button-display);
-    letter-spacing: var(--bloom-letter-spacing-widest);
+    letter-spacing: var(--bloom-letter-spacing-wide);
     font-size: var(--mobile-menu-font-size);
-    font-weight: 700;
-    line-height: 1.375;
+    font-weight: var(--mobile-menu-font-weight);
     border: var(--mobile-menu-button-border);
     text-decoration: none;
     margin: var(--mobile-menu-button-margin);
@@ -440,6 +444,15 @@
 
   div {
     text-align: center;
+  }
+
+  &.secondary {
+    color: var(--link-secondary-color);
+
+    &:hover {
+      cursor: pointer;
+      color: var(--link-hover-secondary-color);
+    }
   }
 }
 

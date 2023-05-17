@@ -103,11 +103,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
     const dropdownOptionKeyDown = (event: React.KeyboardEvent<HTMLElement>, index: number) => {
       // Close menu when tabbing out backwards
       if (event.shiftKey && event.key === "Tab" && isDesktop && index === 0 && parentMenu) {
-        changeMenuShow(parentMenu, activeMenus, setActiveMenus)
+        toggleMenuShow(parentMenu, activeMenus, setActiveMenus)
       }
       // Close menu when tabbing out forwards
       if (event.key === "Tab" && isDesktop && index === options.length - 1 && parentMenu) {
-        changeMenuShow(parentMenu, activeMenus, setActiveMenus)
+        toggleMenuShow(parentMenu, activeMenus, setActiveMenus)
       }
     }
 
@@ -201,12 +201,12 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 <button
                   className={dropdownOptionClassName}
                   onClick={() => {
-                    changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
+                    toggleMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
                   }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
                       event.preventDefault()
-                      changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
+                      toggleMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
                     }
                   }}
                 >
@@ -299,13 +299,39 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </>
     )
   }
-  const changeMenuShow = (
+  const toggleMenuShow = (
     title: string,
     menus: string[],
     setMenus: React.Dispatch<React.SetStateAction<string[]>>
   ) => {
     const indexOfTitle = menus.indexOf(title)
     setMenus(indexOfTitle >= 0 ? menus.filter((menu) => menu !== title) : [...menus, title])
+  }
+
+  const setMenuShow = (
+    title: string,
+    menus: string[],
+    setMenus: React.Dispatch<React.SetStateAction<string[]>>,
+    newState: boolean | null = null
+  ) => {
+    const indexOfTitle = menus.indexOf(title)
+    if (indexOfTitle >= 0) {
+      return
+    }
+    setMenus([...menus, title])
+  }
+
+  const unsetMenuShow = (
+    title: string,
+    menus: string[],
+    setMenus: React.Dispatch<React.SetStateAction<string[]>>,
+    newState: boolean | null = null
+  ) => {
+    const indexOfTitle = menus.indexOf(title)
+    if (indexOfTitle < 0) {
+      return
+    }
+    setMenus(menus.filter((menu) => menu !== title))
   }
 
   const getDesktopHeader = () => {
@@ -343,7 +369,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   onClick={() => {
                     menuAction(menuLink.onClick)
                   }}
-                  onKeyPress={(event) => {
+                  onKeyDown={(event) => {
                     if (event.key === "Enter") {
                       menuAction(menuLink.onClick)
                     }
@@ -360,13 +386,14 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 className={`site-header__link site-header__dropdown-title`}
                 tabIndex={0}
                 key={`${menuLink.title}-${index}`}
-                onKeyPress={(event) => {
+                onKeyDown={(event) => {
                   if (event.key === "Enter") {
-                    changeMenuShow(menuLink.title, activeMenus, setActiveMenus)
+                    toggleMenuShow(menuLink.title, activeMenus, setActiveMenus)
                   }
                 }}
-                onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
-                onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+                onMouseEnter={() => setMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+                onMouseLeave={() => unsetMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+                onClick={() => toggleMenuShow(menuLink.title, activeMenus, setActiveMenus)}
                 role={"button"}
                 data-testid={`${menuLink.title}-${index}`}
               >
@@ -425,7 +452,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
               setActiveMobileMenus([])
             }}
             icon={mobileMenu ? "closeSmall" : "hamburger"}
-            iconSize="base"
+            iconSize="medium"
             className={"site-header__mobile-menu-button"}
             unstyled
           >
