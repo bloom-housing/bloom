@@ -66,6 +66,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
 
   const onSubmit = () => {
     props.onSubmit(formValues)
+    props.onClose()
   }
 
   const countFilters = (params: ListingSearchParams) => {
