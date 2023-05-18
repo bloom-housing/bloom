@@ -548,6 +548,7 @@
   "errors.agreeError": "You must agree to the terms in order to continue",
   "errors.alert.badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
   "errors.alert.timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again.",
+  "errors.alert.applicationSubmissionVerificationError": "Your application is missing required fields. Please go back and correct this before submitting.",
   "errors.cityError": "Please enter a city",
   "errors.dateError": "Please enter a valid date",
   "errors.dateOfBirthError": "Please enter a valid Date of Birth",

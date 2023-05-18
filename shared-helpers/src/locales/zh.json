@@ -398,6 +398,7 @@
   "errors.agreeError": "您必須同意有關條款才能繼續",
   "errors.alert.badRequest": "糟糕！好像出了點問題。請再試一次。如果您仍然遇到问题，请联系您的住房部门。",
   "errors.alert.timeoutPleaseTryAgain": "糟糕！好像出了點問題。請再試一次。",
+  "errors.alert.applicationSubmissionVerificationError": "您的申请缺少必填字段。请在提交前返回并更正此问题。",
   "errors.cityError": "請輸入城市名稱",
   "errors.dateError": "請輸入有效的日期",
   "errors.dateOfBirthErrorAge": "請輸入有效的出生日期，且您必須年滿 18 歲以上",
