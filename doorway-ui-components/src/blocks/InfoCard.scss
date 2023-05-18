@@ -1,13 +1,15 @@
 .info-card {
   --padding: var(--bloom-s6);
   --margin-bottom: var(--bloom-s4);
-  --border-color: var(--bloom-color-gray-450);
-  --background-color: var(--bloom-color-white);
-  --background-color-lighter: var(--bloom-color-primary-lighter);
-  --title-color: var(--bloom-color-gray-800);
+  --margin-sides: var(--bloom-s3);
+  --background-color: var(--bloom-color-blue-300);
+  --background-color-lighter: var(--bloom-color-gray-300);
+  --title-color: var(--bloom-text-color-darker);
+  --title-secondary-color: var(--bloom-color-primary-dark);
   --title-font-size: var(--bloom-font-size-xs);
-  --title-font-size-lighter: var(--bloom-font-size-base);
-  --title-font-family: var(--bloom-font-sans);
+  --title-font-size-lighter: var(--bloom-font-size-2xl);
+  --title-font-weight-lighter: 100;
+  --title-font-family: var(--bloom-font-serif);
   --title-text-transform: uppercase;
   --title-text-transform-lighter: none;
   --title-letter-spacing: 0.025em;
@@ -15,14 +17,27 @@
   --content-font-size: inherit;
 
   padding: var(--padding);
-  border-color: var(--border-color);
   margin-bottom: var(--margin-bottom);
-  border-radius: 0.25rem;
-  border-width: 1px;
+  margin-left: var(--margin-sides);
+  margin-right: var(--margin-sides);
+  border-radius: 0.5rem;
+  border-width: 0px;
   background-color: var(--background-color);
 }
 
 .info-card.is-normal-primary-lighter,
+.markdown .info-card {
+  background-color: var(--background-color);
+
+  .info-card__title {
+    font-size: var(--title-font-size-lighter);
+    text-transform: var(--title-text-transform-lighter);
+    letter-spacing: var(--title-letter-spacing-lighter);
+    font-weight: var(--title-font-weight-lighter);
+  }
+}
+
+.info-card.is-normal-secondary-lighter,
 .markdown .info-card {
   background-color: var(--background-color-lighter);
 
@@ -30,6 +45,8 @@
     font-size: var(--title-font-size-lighter);
     text-transform: var(--title-text-transform-lighter);
     letter-spacing: var(--title-letter-spacing-lighter);
+    color: var(--title-secondary-color);
+    font-weight: var(--title-font-weight-lighter);
   }
 }
 

@@ -26,8 +26,27 @@ const Layout = (props) => {
 
   const menuLinks: MenuLink[] = [
     {
-      title: t("nav.listings"),
+      title: t("pageTitle.welcome"),
+      href: "/",
+      className: "secondary",
+    },
+    {
+      title: t("nav.browseAllListings"),
       href: "/listings",
+    },
+    {
+      title: t("nav.helpCenter"),
+      href: "#",
+      subMenuLinks: [
+        {
+          title: "item 1 temp",
+          href: "?temp1",
+        },
+        {
+          title: "item 2 temp",
+          href: "?temp2",
+        },
+      ],
     },
   ]
   if (process.env.housingCounselorServiceUrl) {
@@ -66,10 +85,11 @@ const Layout = (props) => {
       ],
     })
   } else {
-    menuLinks.push({
-      title: t("nav.signIn"),
-      href: "/sign-in",
-    })
+    // TODO: Uncomment when applications are re-enabled
+    // menuLinks.push({
+    //   title: t("nav.signIn"),
+    //   href: "/sign-in",
+    // })
   }
 
   return (

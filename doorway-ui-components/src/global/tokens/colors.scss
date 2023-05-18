@@ -16,8 +16,8 @@
   --bloom-color-green-300: #b4e5be;
   --bloom-color-green-100: #e7f7ea;
 
-  // TODO -- update this with an actual UX color.
-  --doorway-color-blue-1100: #162f4d;
+  --doorway-color-blue-1300: #001830;
+  --doorway-color-blue-1100: #0F2B50;
   --bloom-color-blue-900: #205493;
   --bloom-color-blue-700: #0067be;
   --bloom-color-blue-500: #0077da;
@@ -47,16 +47,18 @@
   --bloom-color-gray-100: #f9f9f9;
 
   --doorway-color-cyan-300: #C8F1FF;
+  --doorway-color-cyan-500: #00BED5;
+  --doorway-color-cyan-700: #009DB0;
 
   /* Semantic Colors */
 
   // Doorway overrides for primary colors -- Doorway is generally one shade
   // darker.
-  --bloom-color-primary: var(--bloom-color-blue-700);
-  --bloom-color-primary-dark: var(--bloom-color-blue-900);
-  --bloom-color-primary-darker: var(--doorway-color-blue-1100);
-  --bloom-color-primary-light: var(--bloom-color-blue-500);
-  --bloom-color-primary-lighter: var(--bloom-color-blue-300);
+  --bloom-color-primary: var(--bloom-color-blue-900);
+  --bloom-color-primary-dark: var(--doorway-color-blue-1100);
+  --bloom-color-primary-darker: var(--doorway-color-blue-1300);
+  --bloom-color-primary-light: var(--bloom-color-blue-700);
+  --bloom-color-primary-lighter: var(--bloom-color-blue-500);
   // --bloom-color-primary: var(--bloom-color-blue-500);
   // --bloom-color-primary-dark: var(--bloom-color-blue-700);
   // --bloom-color-primary-darker: var(--bloom-color-blue-900);
@@ -100,10 +102,10 @@
   --bloom-text-color-darker: var(--bloom-color-gray-950);
 
   /* Begin Doorway component/mixin overrides */
-  --primary-appearance-background-color: var(--bloom-color-blue-700);
-  --primary-appearance-border-color: var(--bloom-color-blue-700);
-  --primary-appearance-hover-background-color: var(--bloom-color-blue-900);
-  --primary-appearance-hover-border-color: var(--bloom-color-blue-900);
+  --primary-appearance-background-color: var(--bloom-color-primary);
+  --primary-appearance-border-color: var(--bloom-color-primary);
+  --primary-appearance-hover-background-color: var(--bloom-color-primary-dark);
+  --primary-appearance-hover-border-color: var(--bloom-color-primary-dark);
 
-  ---text-large-primary--color: var(--bloom-color-blue-700);
+  ---text-large-primary--color: var(--bloom-color-primary);
 }

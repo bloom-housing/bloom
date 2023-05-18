@@ -51,9 +51,9 @@
 
   &:disabled {
     pointer-events: none;
-    background-color: var(--bloom-color-white);
-    border-color: var(--bloom-color-gray-450);
-    color: var(--bloom-color-gray-450);
+    background-color: var(--bloom-color-gray-500);
+    border-color: var(--bloom-color-gray-500);
+    color: var(--bloom-text-color-disabled);
   }
 
   &.is-secondary {
@@ -62,9 +62,15 @@
     color: var(--secondary-text-color);
 
     &:hover {
-      background-color: var(--bloom-color-gray-700);
-      color: var(--bloom-color-white);
-      border-color: var(--bloom-color-gray-700);
+      background-color: var(--doorway-color-cyan-500);
+      color: var(--secondary-text-color);
+      border-color: var(--doorway-color-cyan-500);
+    }
+
+    &:active {
+      background-color: var(--doorway-color-cyan-700);
+      color: var(--secondary-text-color);
+      border-color: var(--doorway-color-cyan-700);
     }
   }
 
