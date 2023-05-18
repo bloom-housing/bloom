@@ -47,7 +47,6 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }
 
   const updateFilterCount = (count: number) => {
-    console.log(`Updating filter state; setting to ${count}`)
     setFilterCount(count)
   }
 
