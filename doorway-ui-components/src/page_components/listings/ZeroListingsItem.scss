@@ -1,0 +1,26 @@
+.zero-listings {
+  --margin: var(--bloom-s3);
+  --bottom-margin: var(--bloom-s6);
+  --border-color: var(--bloom-color-gray-450);
+  --item-padding-top: var(--bloom-s3);
+  --item-padding-bottom: var(--bloom-s6);
+  --description-padding-top: var(--bloom-s3);
+  --description-padding-bottom: var(--bloom-s6);
+
+  margin: var(--margin);
+  margin-bottom: var(--bottom-margin);
+  padding-top: var(--item-padding-top);
+  padding-bottom: var(--item-padding-bottom);
+  list-style-type: none;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.zero-listings-description {
+  padding-top: var(--description-padding-top);
+  padding-bottom: var(--description-padding-bottom);
+  font-weight: 300;
+}
+
+.zero-listings-title {
+  color: var(--bloom-color-primary);
+}

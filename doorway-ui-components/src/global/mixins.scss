@@ -143,9 +143,9 @@
 
 @mixin outlined-appearances() {
   background-color: var(--bloom-color-white);
-  color: var(--bloom-color-primary);
+  color: var(--bloom-color-primary-dark);
   border-width: var(--bloom-border-2);
-  border-color: var(--bloom-color-primary);
+  border-color: var(--bloom-color-gray-450);
 
   &:hover {
     background-color: var(
