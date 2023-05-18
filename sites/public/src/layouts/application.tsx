@@ -50,10 +50,13 @@ const Layout = (props) => {
         },
         {
           title: t("nav.signOut"),
-          onClick: async () => {
-            setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
-            await router.push("/sign-in")
-            signOut()
+          onClick: () => {
+            const signOutFxn = async () => {
+              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+              await router.push("/sign-in")
+              signOut()
+            }
+            void signOutFxn()
           },
         },
       ],

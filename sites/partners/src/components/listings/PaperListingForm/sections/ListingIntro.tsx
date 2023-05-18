@@ -29,6 +29,7 @@ const ListingIntro = (props: ListingIntroProps) => {
     })),
   ]
   const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
+
   return (
     <GridSection
       columns={3}
@@ -60,7 +61,11 @@ const ListingIntro = (props: ListingIntroProps) => {
             keyPrefix={"jurisdictions"}
             options={jurisdictionOptions}
             inputProps={{
-              onChange: () => clearErrors("jurisdiction"),
+              onChange: () => {
+                ;(fieldHasError(errors?.jurisdiction) ||
+                  fieldHasError(errors?.["jurisdiction.id"])) &&
+                  clearErrors("jurisdiction")
+              },
             }}
           />
         </ViewItem>
@@ -72,7 +77,9 @@ const ListingIntro = (props: ListingIntroProps) => {
           label={t("listings.listingName")}
           placeholder={t("listings.listingName")}
           inputProps={{
-            onChange: () => clearErrors("name"),
+            onChange: () => {
+              fieldHasError(errors?.name) && clearErrors("name")
+            },
           }}
           subNote={t("listings.requiredToPublish")}
           register={register}
@@ -90,7 +97,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         error={fieldHasError(errors?.developer)}
         errorMessage={fieldMessage(errors?.developer)}
         inputProps={{
-          onChange: () => clearErrors("developer"),
+          onChange: () => fieldHasError(errors?.developer) && clearErrors("developer"),
         }}
         register={register}
       />

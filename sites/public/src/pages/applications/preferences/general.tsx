@@ -8,6 +8,7 @@ import {
   AppearanceStyleType,
   Button,
   FormCard,
+  Heading,
   t,
   Form,
   ProgressNav,
@@ -53,12 +54,7 @@ const ApplicationPreferencesGeneral = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -89,7 +85,7 @@ const ApplicationPreferencesGeneral = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

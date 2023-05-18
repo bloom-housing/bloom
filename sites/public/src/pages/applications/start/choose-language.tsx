@@ -100,12 +100,7 @@ const ApplicationChooseLanguage = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -146,7 +141,7 @@ const ApplicationChooseLanguage = () => {
                       onLanguageSelect(lang)
                     }}
                     key={index}
-                    data-test-id={"app-choose-language-button"}
+                    data-testid={"app-choose-language-button"}
                   >
                     {t(`applications.begin.${lang}`)}
                   </Button>
@@ -159,7 +154,7 @@ const ApplicationChooseLanguage = () => {
             <>
               <ActionBlock
                 className="border-t border-gray-450"
-                header={t("account.haveAnAccount")}
+                header={<Heading priority={2}>{t("account.haveAnAccount")}</Heading>}
                 subheader={t("application.chooseLanguage.signInSaveTime")}
                 background="primary-lighter"
                 actions={[
@@ -174,7 +169,9 @@ const ApplicationChooseLanguage = () => {
               />
               <ActionBlock
                 className="border-t border-gray-450"
-                header={t("authentication.createAccount.noAccount")}
+                header={
+                  <Heading priority={2}>{t("authentication.createAccount.noAccount")}</Heading>
+                }
                 background="primary-lighter"
                 actions={[
                   <LinkButton

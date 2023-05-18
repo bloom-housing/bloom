@@ -209,7 +209,7 @@ const seedListings = async (
 }
 
 async function seed() {
-  const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+  const app = await NestFactory.create(SeederModule.forRoot({ test: argv["test"] }))
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)
@@ -344,9 +344,10 @@ async function seed() {
       password: "abcdef",
       passwordConfirmation: "abcdef",
       jurisdictions: [alamedaJurisdiction],
+      agreedToTermsOfService: true,
     })
   )
-  await userRepo.save(alamedaAdmin)
+  await userRepo.save({ ...alamedaAdmin, agreedToTermsOfService: true })
   await userService.confirm({ token: alamedaAdmin.confirmationToken })
 
   const alamedaAdminRoles: UserRoles = {

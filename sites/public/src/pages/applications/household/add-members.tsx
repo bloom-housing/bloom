@@ -11,6 +11,7 @@ import {
   t,
   Form,
   ProgressNav,
+  Heading,
 } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
@@ -78,12 +79,7 @@ const ApplicationAddMembers = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -135,7 +131,7 @@ const ApplicationAddMembers = () => {
             <Button
               id="btn-add-member"
               onClick={onAddMember}
-              data-test-id={"app-add-household-member-button"}
+              data-testid={"app-add-household-member-button"}
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
@@ -152,7 +148,7 @@ const ApplicationAddMembers = () => {
                 conductor.returnToReview = false
                 void handleSubmit(onSubmit)()
               }}
-              data-test-id={"app-done-household-members-button"}
+              data-testid={"app-done-household-members-button"}
             >
               {t("application.household.addMembers.done")}
             </Button>

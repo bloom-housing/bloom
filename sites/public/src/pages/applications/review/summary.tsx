@@ -10,6 +10,7 @@ import {
   t,
   Form,
   ProgressNav,
+  Heading,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -47,12 +48,7 @@ const ApplicationSummary = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -86,7 +82,7 @@ const ApplicationSummary = () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-summary-confirm"}>
+              <Button styleType={AppearanceStyleType.primary} data-testid={"app-summary-confirm"}>
                 {t("t.confirm")}
               </Button>
             </Form>

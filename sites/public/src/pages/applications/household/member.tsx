@@ -3,12 +3,12 @@
 Add household members
 */
 import { useRouter } from "next/router"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
   DOBField,
-  ErrorMessage,
   Field,
   FieldGroup,
   Form,
@@ -16,6 +16,7 @@ import {
   FormOptions,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import FormsLayout from "../../../layouts/forms"
@@ -116,12 +117,7 @@ const ApplicationMember = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -459,7 +455,7 @@ const ApplicationMember = () => {
                       defaultValue={member.relationship}
                       ref={register({ required: true })}
                       className="w-full"
-                      data-test-id={"app-household-member-relationship"}
+                      data-testid={"app-household-member-relationship"}
                     >
                       <FormOptions
                         options={relationshipKeys}
@@ -467,9 +463,11 @@ const ApplicationMember = () => {
                       />
                     </select>
                   </div>
-                  <ErrorMessage id="relationship-error" error={errors.relationship}>
-                    {t("errors.selectOption")}
-                  </ErrorMessage>
+                  {errors.relationship && (
+                    <FormErrorMessage id="relationship-error" className={"pt-2"}>
+                      {t("errors.selectOption")}
+                    </FormErrorMessage>
+                  )}
                 </div>
               </div>
 
@@ -478,7 +476,7 @@ const ApplicationMember = () => {
                   <Button
                     id="save-member"
                     styleType={AppearanceStyleType.primary}
-                    data-test-id={"app-household-member-save"}
+                    data-testid={"app-household-member-save"}
                   >
                     {saveText}
                   </Button>
@@ -489,7 +487,7 @@ const ApplicationMember = () => {
                     className="lined text-sm mt-0"
                     onClick={deleteMember}
                     unstyled={true}
-                    data-test-id={"app-household-member-cancel"}
+                    data-testid={"app-household-member-cancel"}
                   >
                     {cancelText}
                   </Button>

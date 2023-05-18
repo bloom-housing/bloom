@@ -3,17 +3,18 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  ErrorMessage,
   Form,
   FormCard,
   ProgressNav,
   t,
   FieldGroup,
   FieldSingle,
+  Heading,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -36,7 +37,9 @@ const ApplicationAda = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, setValue, errors, getValues } = useForm<Record<string, any>>({
+  const { register, handleSubmit, setValue, errors, getValues, clearErrors } = useForm<
+    Record<string, any>
+  >({
     defaultValues: {
       none:
         application.accessibility.mobility === false &&
@@ -83,6 +86,7 @@ const ApplicationAda = () => {
         onChange: () => {
           setTimeout(() => {
             setValue("app-accessibility-no-features", false)
+            clearErrors()
           }, 1)
         },
       },
@@ -106,6 +110,7 @@ const ApplicationAda = () => {
           setValue("app-accessibility-mobility", false)
           setValue("app-accessibility-vision", false)
           setValue("app-accessibility-hearing", false)
+          clearErrors()
         }
       },
     },
@@ -113,12 +118,7 @@ const ApplicationAda = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -166,10 +166,11 @@ const ApplicationAda = () => {
               }
             />
           </fieldset>
-
-          <ErrorMessage id="accessibilityCheckboxGroupError" error={errors.none}>
-            {t("errors.selectOption")}
-          </ErrorMessage>
+          {!!Object.keys(errors).length && (
+            <FormErrorMessage id="accessibilityCheckboxGroupError">
+              {t("errors.selectOption")}
+            </FormErrorMessage>
+          )}
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
@@ -181,7 +182,7 @@ const ApplicationAda = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

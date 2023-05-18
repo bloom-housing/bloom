@@ -12,6 +12,7 @@ import {
   Select,
   ProgressNav,
   t,
+  Heading,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -80,12 +81,7 @@ const ApplicationDemographics = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -166,7 +162,7 @@ const ApplicationDemographics = () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-next-step-button"}>
+              <Button styleType={AppearanceStyleType.primary} data-testid={"app-next-step-button"}>
                 {t("t.next")}
               </Button>
             </div>

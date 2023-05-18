@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react"
+import React, { useMemo, useContext, useState, useEffect } from "react"
 import Head from "next/head"
 import {
   t,
@@ -7,14 +7,18 @@ import {
   AgTable,
   useAgTable,
   AppearanceSizeType,
+  AlertBox,
+  SiteAlert,
+  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
-import { useListingsData } from "../lib/hooks"
+import { useListingsData, useListingZip } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 
 class formatLinkCell {
   link: HTMLAnchorElement
@@ -50,7 +54,7 @@ class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
     this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
-    this.link.setAttribute("data-test-id", "listing-status-cell")
+    this.link.setAttribute("data-testid", "listing-status-cell")
   }
 }
 
@@ -58,14 +62,19 @@ class ListingsLink extends formatLinkCell {
   init(params) {
     super.init(params)
     this.link.setAttribute("href", `/listings/${params.data.id}`)
+    this.link.setAttribute("data-testid", params.data.name)
   }
 }
 
 export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-
+  const [errorAlert, setErrorAlert] = useState(false)
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile.roles?.isAdmin || profile.roles?.isJurisdictionalAdmin || false
+  const isAdmin = profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin || false
+  const { onExport, zipCompleted, zipExportLoading, zipExportError } = useListingZip()
+  useEffect(() => {
+    setErrorAlert(zipExportError)
+  }, [zipExportError])
 
   const tableOptions = useAgTable()
 
@@ -139,10 +148,28 @@ export default function ListingsList() {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
+      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
-      <NavigationHeader title={t("nav.listings")} />
+      <NavigationHeader title={t("nav.listings")}>
+        {zipCompleted && (
+          <div className="flex absolute right-4 z-50 flex-col items-center">
+            <SiteAlert dismissable timeout={5000} sticky={true} type="success" />
+          </div>
+        )}
+      </NavigationHeader>
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
+          {errorAlert && (
+            <AlertBox
+              className="mb-8"
+              onClose={() => setErrorAlert(false)}
+              closeable
+              type="alert"
+              inverted
+            >
+              {t("errors.alert.exportFailed")}
+            </AlertBox>
+          )}
           <AgTable
             id="listings-table"
             pagination={{
@@ -171,11 +198,28 @@ export default function ListingsList() {
             headerContent={
               <div className="flex-row">
                 {isAdmin && (
-                  <LocalizedLink href={`/listings/add`}>
-                    <Button size={AppearanceSizeType.small} className="mx-1" onClick={() => false}>
-                      {t("listings.addListing")}
+                  <div className="flex-row">
+                    <LocalizedLink href={`/listings/add`}>
+                      <Button
+                        size={AppearanceSizeType.small}
+                        className="mx-1"
+                        styleType={AppearanceStyleType.primary}
+                        onClick={() => false}
+                      >
+                        {t("listings.addListing")}
+                      </Button>
+                    </LocalizedLink>
+                    <Button
+                      className="mx-1"
+                      dataTestId="export-listings"
+                      onClick={() => onExport()}
+                      icon={!zipExportLoading ? faFileExport : null}
+                      size={AppearanceSizeType.small}
+                      loading={zipExportLoading}
+                    >
+                      {t("t.exportToCSV")}
                     </Button>
-                  </LocalizedLink>
+                  </div>
                 )}
               </div>
             }

@@ -16,6 +16,20 @@ export class UserBasicDto extends OmitType(User, [
   "jurisdictions",
   "mfaCode",
   "mfaCodeUpdatedAt",
+  "passwordUpdatedAt",
+  "confirmedAt",
+  "createdAt",
+  "updatedAt",
+  "mfaEnabled",
+  "lastLoginAt",
+  "failedLoginAttemptsCount",
+  "phoneNumberVerified",
+  "agreedToTermsOfService",
+  "hitConfirmationURL",
+  "activeAccessToken",
+  "activeRefreshToken",
+  "dob",
+  "passwordValidForDays",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

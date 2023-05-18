@@ -48,7 +48,7 @@ const DetailsMultiselectQuestions = ({
                     if (extra.type === InputType.text)
                       return (
                         <ViewItem key={extra.key} label={t("t.name")}>
-                          {extra.value}
+                          <>{extra.value}</>
                         </ViewItem>
                       )
 

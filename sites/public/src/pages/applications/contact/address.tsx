@@ -3,11 +3,11 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  ErrorMessage,
   Field,
   Form,
   FormCard,
@@ -15,8 +15,9 @@ import {
   FieldGroup,
   ProgressNav,
   t,
-  Select,
   PhoneField,
+  Select,
+  Heading,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useContext, useEffect, useState, useMemo, useCallback } from "react"
@@ -140,12 +141,7 @@ const ApplicationAddress = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -554,13 +550,11 @@ const ApplicationAddress = () => {
                   }}
                   dataTestId={"app-primary-work-in-region-no"}
                 />
-
-                <ErrorMessage
-                  id="applicant.workInRegion-error"
-                  error={errors.applicant?.workInRegion}
-                >
-                  {t("errors.selectOption")}
-                </ErrorMessage>
+                {errors?.applicant?.workInRegion && (
+                  <FormErrorMessage id="applicant.workInRegion-error">
+                    {t("errors.selectOption")}
+                  </FormErrorMessage>
+                )}
               </fieldset>
 
               {(workInRegion == "yes" ||
@@ -675,7 +669,7 @@ const ApplicationAddress = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

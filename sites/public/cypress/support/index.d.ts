@@ -22,8 +22,10 @@ declare namespace Cypress {
     step8PreferredUnits(application: Application): Chainable
     step9Accessibility(application: Application): Chainable
     step10Programs(application: Application): Chainable
-    step11Changes(application: Application): Chainable
+    step10Changes(application: Application): Chainable
+    step11Student(application: Application, programsExist: boolean): Chainable
     step12Student(application: Application): Chainable
+    step12Programs(application: Application): Chainable
     step13IncomeVouchers(application: Application): Chainable
     step14Income(application: Application): Chainable
     step15SelectPreferences(application: Application): Chainable

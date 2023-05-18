@@ -1,7 +1,8 @@
-import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common"
+import { HttpService } from "@nestjs/axios"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, Repository } from "typeorm"
+import { Brackets, In, Repository } from "typeorm"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
@@ -20,6 +21,7 @@ import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
+import { firstValueFrom } from "rxjs"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -28,8 +30,10 @@ export class ListingsService {
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(REQUEST) private req: ExpressRequest,
-    private readonly afsService: ApplicationFlaggedSetsService
+    private readonly afsService: ApplicationFlaggedSetsService,
+    private readonly httpService: HttpService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -132,6 +136,18 @@ export class ListingsService {
       // await this.afsService.scheduleAfsProcessing()
     }
 
+    if (listingDto.buildingSelectionCriteria) {
+      listing.buildingSelectionCriteriaFile = null
+      await this.listingRepository.update(
+        { id: listing.id },
+        {
+          buildingSelectionCriteriaFile: null,
+        }
+      )
+    } else if (listingDto.buildingSelectionCriteriaFile) {
+      listing.buildingSelectionCriteria = null
+    }
+
     Object.assign(listing, {
       ...listingDto,
       publishedAt:
@@ -144,7 +160,9 @@ export class ListingsService {
           : listing.closedAt,
     })
 
-    return await this.listingRepository.save(listing)
+    const saveResponse = await this.listingRepository.save(listing)
+    await this.cachePurge(listing, listingDto, saveResponse)
+    return saveResponse
   }
 
   async delete(listingId: string) {
@@ -171,6 +189,90 @@ export class ListingsService {
 
     await this.addUnitsSummarized(result)
     return result
+  }
+
+  async rawListWithFlagged() {
+    const userAccess = await this.userRepository
+      .createQueryBuilder("user")
+      .select(["user.id", "jurisdictions.id"])
+      .leftJoin("user.roles", "userRole")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      .where("user.id = :id", { id: (this.req.user as User)?.id })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where("userRole.is_admin = :is_admin", {
+            is_admin: true,
+          }).orWhere("userRole.is_jurisdictional_admin = :is_jurisdictional_admin", {
+            is_jurisdictional_admin: true,
+          })
+        })
+      )
+      .getOne()
+
+    if (!userAccess) {
+      throw new UnauthorizedException()
+    }
+
+    // generated out list of permissioned listings
+    const permissionedListings = await this.listingRepository
+      .createQueryBuilder("listings")
+      .select("listings.id")
+      .where("listings.jurisdiction_id IN (:...jurisdiction)", {
+        jurisdiction: userAccess.jurisdictions.map((elem) => elem.id),
+      })
+      .getMany()
+
+    // pulled out on the ids
+    const listingIds = permissionedListings.map((listing) => listing.id)
+
+    // Building and excecuting query for listings csv
+    const listingsQb = getView(
+      this.listingRepository.createQueryBuilder("listings"),
+      "listingsExport"
+    ).getViewQb()
+
+    const listingData = await listingsQb
+      .where("listings.id IN (:...listingIds)", { listingIds })
+      .getMany()
+
+    // User data to determine listing access for csv
+    const userAccessData = await this.userRepository
+      .createQueryBuilder("user")
+      .select([
+        "user.id",
+        "user.firstName",
+        "user.lastName",
+        "userRoles.isAdmin",
+        "userRoles.isPartner",
+        "leasingAgentInListings.id",
+      ])
+      .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      .leftJoin("user.roles", "userRoles")
+      .where("userRoles.is_partner = :is_partner", { is_partner: true })
+      .getMany()
+
+    // Building and excecuting query for units csv
+    const unitsQb = getView(
+      this.listingRepository.createQueryBuilder("listings"),
+      "unitsExport"
+    ).getViewQb()
+
+    const unitData = await unitsQb
+      .where("listings.id IN (:...listingIds)", { listingIds })
+      .getMany()
+
+    listingData.forEach((listing) => {
+      const unitQuantity = unitData.find((unit) => unit.id === listing.id)?.units?.length
+      listing["numberOfUnits"] = unitQuantity
+    })
+
+    return {
+      unitData,
+      listingData,
+      userAccessData,
+    }
   }
 
   private async addUnitsSummarized(listing: Listing) {
@@ -218,5 +320,40 @@ export class ListingsService {
     result.units = unitData.units
 
     return result
+  }
+
+  /**
+   * Send purge request to Nginx.
+   * Wrapped in try catch, because it's possible that content may not be cached in between edits,
+   * and will return a 404, which is expected.
+   * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
+   * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
+   */
+  private async cachePurge(
+    currentListing: Listing,
+    incomingChanges: ListingCreateDto | ListingUpdateDto,
+    saveReponse: Listing
+  ) {
+    if (process.env.PROXY_URL) {
+      await firstValueFrom(
+        this.httpService.request({
+          baseURL: process.env.PROXY_URL,
+          method: "PURGE",
+          url: `/listings/${saveReponse.id}*`,
+        })
+      ).catch((e) => console.log(`purge listing ${saveReponse.id} error = `, e))
+      if (
+        incomingChanges.status !== ListingStatus.pending ||
+        currentListing.status === ListingStatus.active
+      ) {
+        await firstValueFrom(
+          this.httpService.request({
+            baseURL: process.env.PROXY_URL,
+            method: "PURGE",
+            url: "/listings?*",
+          })
+        ).catch((e) => console.log("purge all listings error = ", e))
+      }
+    }
   }
 }

@@ -8,7 +8,7 @@ import {
   Scope,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, QueryFailedError, Repository } from "typeorm"
+import { Brackets, DeepPartial, QueryFailedError, Repository } from "typeorm"
 import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
@@ -27,7 +27,6 @@ import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 import { ListingRepository } from "../../listings/db/listing.repository"
 import { Listing } from "../../listings/entities/listing.entity"
-import { ApplicationReviewStatus } from "../types/application-review-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -109,11 +108,6 @@ export class ApplicationsService {
     )
     const flags = await Promise.all(promiseArray)
     result.forEach((application, index) => {
-      if (flags[index].status) {
-        application.markedAsDuplicate = flags[index].status === ApplicationReviewStatus.duplicate
-      } else {
-        application.markedAsDuplicate = false
-      }
       application.flagged = !!flags[index].id
     })
 
@@ -272,13 +266,33 @@ export class ApplicationsService {
       listingId: (qb, { listingId }) =>
         qb.andWhere("application.listing_id = :lid", { lid: listingId }),
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order, "NULLS LAST"),
-      search: (qb, { search }) =>
+      search: (qb, { search }) => {
         qb.andWhere(
-          `to_tsvector('english', REGEXP_REPLACE(concat_ws(' ', applicant, alternateContact.emailAddress), '[_]|[-]', '/', 'g')) @@ to_tsquery(CONCAT(CAST(REGEXP_REPLACE(:search, '[_]|[-]', '/', 'g') as text), ':*'))`,
-          {
-            search,
-          }
-        ),
+          new Brackets((subQb) => {
+            subQb.where("application.confirmationCode ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("applicant.firstName ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("applicant.lastName ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("applicant.emailAddress ILIKE :search", {
+              search: `%${search}%`,
+            })
+            subQb.orWhere("applicant.phoneNumber ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere(
+              "CONCAT(applicant.firstName, ' ', applicant.lastName, ' ', applicant.emailAddress, ' ', applicant.phoneNumber) ILIKE :search",
+              { search: `%${search}%` }
+            )
+            subQb.orWhere("alternateContact.firstName ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("alternateContact.lastName ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere("alternateContact.emailAddress ILIKE :search", {
+              search: `%${search}%`,
+            })
+            subQb.orWhere("alternateContact.phoneNumber ILIKE :search", { search: `%${search}%` })
+            subQb.orWhere(
+              "CONCAT(alternateContact.firstName, ' ', alternateContact.lastName, ' ', alternateContact.emailAddress, ' ', alternateContact.phoneNumber) ILIKE :search",
+              { search: `%${search}%` }
+            )
+          })
+        )
+      },
     }
 
     // --> Build main query

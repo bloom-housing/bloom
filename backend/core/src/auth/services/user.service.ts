@@ -48,7 +48,7 @@ import { UserFilterParams } from "../dto/user-filter-params"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
-import { Request as ExpressRequest } from "express"
+import { Request as ExpressRequest, Response } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
 import { ListingRepository } from "../../listings/db/listing.repository"
 
@@ -212,12 +212,15 @@ export class UserService {
     return await this.userRepository.save(user)
   }
 
-  public async confirm(dto: ConfirmDto) {
+  public async confirm(dto: ConfirmDto, res?: Response) {
     let token: Record<string, string> = {}
     try {
       token = decode(dto.token, process.env.APP_SECRET)
     } catch (e) {
-      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
+      throw new HttpException(
+        { message: USER_ERRORS.TOKEN_EXPIRED.message, knownError: true },
+        USER_ERRORS.TOKEN_EXPIRED.status
+      )
     }
 
     const user = await this.userRepository.findById(token.id)
@@ -244,7 +247,11 @@ export class UserService {
         ...user,
         ...(token.email && { email: token.email }),
       })
-      return this.authService.generateAccessToken(user)
+      if (res) {
+        return await this.authService.tokenGen(res, user)
+      } else {
+        return { status: "ok" }
+      }
     } catch (err) {
       throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }
@@ -279,7 +286,6 @@ export class UserService {
       await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
-      console.error("isUserConfirmationTokenValid error = ", e)
       try {
         const user = await this.userRepository.findByConfirmationToken(dto.token)
         await this.setHitConfirmationURl(user, dto.token)
@@ -364,7 +370,10 @@ export class UserService {
         })
       } else {
         // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
-        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+        throw new HttpException(
+          { message: USER_ERRORS.EMAIL_IN_USE.message, knownError: true },
+          USER_ERRORS.EMAIL_IN_USE.status
+        )
       }
     }
     const newUser = await this.userRepository.save(dto)
@@ -401,7 +410,7 @@ export class UserService {
     }
   }
 
-  public async updatePassword(dto: UpdatePasswordDto) {
+  public async updatePassword(dto: UpdatePasswordDto, res: Response) {
     const user = await this.userRepository.findByResetToken(dto.token)
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
@@ -416,7 +425,7 @@ export class UserService {
     user.passwordUpdatedAt = new Date()
     user.resetToken = null
     await this.userRepository.save(user)
-    return this.authService.generateAccessToken(user)
+    return await this.authService.tokenGen(res, user)
   }
 
   async invite(dto: UserInviteDto) {

@@ -1,15 +1,15 @@
 describe("Preference Management Tests", () => {
-  before(() => {
+  beforeEach(() => {
     cy.login()
   })
 
-  after(() => {
+  afterEach(() => {
     cy.signOut()
   })
 
   beforeEach(() => {
     cy.visit("/")
-    cy.getByTestId("Settings").click()
+    cy.getByTestId("Settings-2").click()
     cy.location("pathname").should("include", "/settings")
   })
 

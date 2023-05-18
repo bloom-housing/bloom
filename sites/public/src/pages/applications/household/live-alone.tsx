@@ -9,6 +9,7 @@ import {
   Button,
   Form,
   FormCard,
+  Heading,
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
@@ -43,12 +44,7 @@ const ApplicationLiveAlone = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -93,7 +89,7 @@ const ApplicationLiveAlone = () => {
                   application.householdMembers = []
                   setValidateHousehold(true)
                 }}
-                data-test-id={"app-household-live-alone"}
+                data-testid={"app-household-live-alone"}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
               </Button>
@@ -107,7 +103,7 @@ const ApplicationLiveAlone = () => {
                   if (application.householdSize === 1) application.householdSize = 0
                   setValidateHousehold(false)
                 }}
-                data-test-id={"app-household-live-with-others"}
+                data-testid={"app-household-live-with-others"}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}
               </Button>

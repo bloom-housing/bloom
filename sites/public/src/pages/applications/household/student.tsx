@@ -8,6 +8,7 @@ import {
   FieldGroup,
   Form,
   FormCard,
+  Heading,
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
@@ -66,12 +67,7 @@ const ApplicationHouseholdStudent = () => {
 
   return (
     <FormsLayout>
-      <FormCard
-        header={{
-          isVisible: true,
-          title: listing?.name,
-        }}
-      >
+      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
         <ProgressNav
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
@@ -128,7 +124,7 @@ const ApplicationHouseholdStudent = () => {
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => conductor.setNavigatedBack(false)}
-                data-test-id={"app-next-step-button"}
+                data-testid={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

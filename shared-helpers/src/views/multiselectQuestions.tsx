@@ -267,7 +267,7 @@ export const getCheckboxOption = (
             errors={errors}
             required={true}
             stateKeys={stateKeys}
-            data-test-id={"app-question-extra-field"}
+            data-testid={"app-question-extra-field"}
           />
         </div>
       )}
