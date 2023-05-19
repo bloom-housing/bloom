@@ -35,6 +35,25 @@ export const runtimeConfig = {
   */
 
   getGoogleMapsApiKey() {
+    //console.log(this.env)
+    //console.log(`GOOGLE_MAPS_API_KEY = ${this.env.GOOGLE_MAPS_API_KEY}`)
     return this.env.GOOGLE_MAPS_API_KEY
+  },
+
+  getBackendApiBase() {
+    if (this.env.BACKEND_PROXY_BASE) {
+      // try proxy base first
+      return this.env.BACKEND_PROXY_BASE
+    } else if (process.env.BACKEND_API_BASE) {
+      // then backend api base
+      return process.env.BACKEND_API_BASE
+    }
+
+    // fall back on next config value if absolutely necessary
+    return process.env.backendApiBase
+  },
+
+  getListingServiceUrl() {
+    return `${this.getBackendApiBase()}${this.env.LISTINGS_QUERY}`
   },
 }

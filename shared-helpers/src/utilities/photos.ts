@@ -33,7 +33,7 @@ export const cloudinaryUrlFromId = (publicId: string, cloudName: string, size = 
 export const getImageUrlFromAsset = (
   asset: AssetCreate,
   size = 400,
-  cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME || ""
+  cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME || "exygy"
 ): string | null => {
   const fileId = asset.fileId
 

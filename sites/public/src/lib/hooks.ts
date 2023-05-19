@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import qs from "qs"
+//import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink } from "@bloom-housing/ui-components"
 import {
-  EnumListingFilterParamsComparison,
-  EnumListingFilterParamsStatus,
+  //EnumListingFilterParamsComparison,
+  //EnumListingFilterParamsStatus,
   Jurisdiction,
   Listing,
-  ListingFilterParams,
-  OrderByFieldsEnum,
-  OrderParam,
+  //ListingFilterParams,
+  //OrderByFieldsEnum,
+  //OrderParam,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
-import { getListingServiceUrl, getListingApplicationStatus } from "./helpers"
+import { getListingApplicationStatus } from "./helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -57,6 +57,10 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
+// These functions were sparsely used and/or completely ignored, so I'm commenting
+// them out.  If it turns out they are needed later then it should be easy to add
+// them back by uncommenting, but make sure the logic still matches expectations.
+/*
 export async function fetchBaseListingData({
   additionalFilters,
   orderBy,
@@ -131,6 +135,7 @@ export async function fetchClosedListings() {
     orderDir: [OrderParam.DESC],
   })
 }
+*/
 
 let jurisdiction: Jurisdiction | null = null
 
