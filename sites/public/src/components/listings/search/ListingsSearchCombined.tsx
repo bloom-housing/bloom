@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
-import { AppearanceBorderType, AppearanceSizeType, Button } from "@bloom-housing/ui-components"
+import { AppearanceBorderType, AppearanceSizeType, Button, t } from "@bloom-housing/ui-components"
 import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
 
 type ListingsSearchCombinedProps = {
@@ -61,7 +61,7 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
             setModalOpen(true)
           }}
         >
-          {`Filters ${filterCount}`}
+          {`${t("search.filters")} ${filterCount}`}
         </Button>
       </div>
 
