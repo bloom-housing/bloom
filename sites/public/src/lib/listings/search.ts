@@ -107,7 +107,7 @@ export function generateSearchQuery(params: ListingSearchParams) {
     qb.whereGreaterThanEqual("maxBathrooms", params.bathrooms)
   }
 
-  // Find listings that have units with greater than or equal number of bathrooms
+  // Find listings that have units with rent less than or equal to requested amount
   if (params.monthlyRent && params.monthlyRent != "") {
     qb.whereLessThanEqual("minMonthlyRent", params.monthlyRent)
   }
