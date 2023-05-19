@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
-import { AppearanceBorderType, AppearanceSizeType, Button, t } from "@bloom-housing/ui-components"
+import { AppearanceBorderType, AppearanceSizeType, Button, t } from "@bloom-housing/doorway-ui-components"
 import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
 
 type ListingsSearchCombinedProps = {

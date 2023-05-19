@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { ButtonGroup } from "./ButtonGroup"
 import { MultiSelectGroup } from "./MultiSelectGroup"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
-import { Modal } from "@bloom-housing/ui-components"
+import { Modal } from "@bloom-housing/doorway-ui-components"
 
 type ListingsSearchModalProps = {
   open: boolean
