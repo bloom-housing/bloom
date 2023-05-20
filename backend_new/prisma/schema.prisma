@@ -54,16 +54,17 @@ model Address {
   applicationsMailingAddress   Applications?     @relation("applications_mailing_address")
   householdMemberAddress       HouseholdMember?  @relation("household_member_address")
   householdMemberWorkAddress   HouseholdMember?  @relation("household_member_work_address")
-  applicationDropOffAddress    listings[]        @relation("application_drop_off_address")
-  applicationMailingAddress    listings[]        @relation("application_mailing_address")
-  leasingAgentAddress          listings[]        @relation("leasing_agent_address")
-  applicationPickUpAddress     listings[]        @relation("application_pick_up_address")
-  buildingAddress              listings[]        @relation("building_address")
+  applicationDropOffAddress    Listings[]        @relation("application_drop_off_address")
+  applicationMailingAddress    Listings[]        @relation("application_mailing_address")
+  leasingAgentAddress          Listings[]        @relation("leasing_agent_address")
+  applicationPickUpAddress     Listings[]        @relation("application_pick_up_address")
+  buildingAddress              Listings[]        @relation("building_address")
 
   @@map("address")
 }
 
 // Note: [type, phone_number] formerly max length 16; [other_type, first_name, last_name] formerly max length 64; [agency] formerly max length 128
+// Note: [email_address] has an isEmail validator attached to it
 model AlternateContact {
   id               String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
@@ -82,6 +83,7 @@ model AlternateContact {
   @@map("alternate_contact")
 }
 
+// Note: [items] was formerly type protected as AmiChartItem
 model AmiChart {
   id                 String               @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamp(6)
@@ -100,7 +102,7 @@ model AmiChart {
 // Note: [birth_month, birth_day, birth_year] formerly max length 8; [phone_number, phone_number_type] formerly max length 16; 
 //       [first_name, middle_name, last_name] formerly max length 64
 // Note: [first_name, last_name] formerly min length 1
-// Note: [email_address] needs to have lower case enforcement
+// Note: [email_address] needs to have lower case enforcement and needs isEmail validator
 model Applicant {
   id                   String        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt            DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
@@ -139,7 +141,7 @@ model ApplicationFlaggedSet {
   status                FlaggedSetStatusEnum @default(pending)
   resolvingUserId       String?              @map("resolving_user_id") @db.Uuid
   userAccounts          UserAccounts?        @relation(fields: [resolvingUserId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings              listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              Listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   applications          Applications[]
 
   @@index([listingId])
@@ -157,7 +159,7 @@ model ApplicationMethods {
   acceptsPostmarkedApplications Boolean?                    @map("accepts_postmarked_applications")
   phoneNumber                   String?                     @map("phone_number")
   listingId                     String?                     @map("listing_id") @db.Uuid
-  listings                      listings?                   @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                      Listings?                   @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paperApplications             PaperApplications[]
 
   @@map("application_methods")
@@ -186,11 +188,11 @@ model Applications {
   householdStudent             Boolean?                      @map("household_student")
   incomeVouchers               Boolean?                      @map("income_vouchers")
   income                       String?
-  incomePeriod                 IncomePeriodEnum              @map("income_period")
+  incomePeriod                 IncomePeriodEnum?             @map("income_period")
   preferences                  Json
   programs                     Json?
   status                       ApplicationStatusEnum
-  language                     LanguagesEnum
+  language                     LanguagesEnum?
   submissionType               ApplicationSubmissionTypeEnum @map("submission_type")
   acceptedTerms                Boolean?                      @map("accepted_terms")
   submissionDate               DateTime?                     @map("submission_date") @db.Timestamptz(6)
@@ -214,7 +216,7 @@ model Applications {
   applicationsAlternateAddress Address?                      @relation("applications_alternate_address", fields: [alternateAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userAccounts                 UserAccounts?                 @relation(fields: [userId], references: [id], onUpdate: NoAction)
   applicationsMailingAddress   Address?                      @relation("applications_mailing_address", fields: [mailingAddressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                     listings?                     @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                     Listings?                     @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   demographics                 Demographics?                 @relation(fields: [demographicsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   preferredUnitTypes           UnitTypes[]
   householdMember              HouseholdMember[]
@@ -233,8 +235,8 @@ model Assets {
   label                         String
   listingEvents                 ListingEvents[]
   listingImages                 ListingImages[]
-  buildingSelectionCriteriaFile listings[]          @relation("building_selection_criteria_file")
-  listingsResult                listings[]          @relation("listings_result")
+  buildingSelectionCriteriaFile Listings[]          @relation("building_selection_criteria_file")
+  listingsResult                Listings[]          @relation("listings_result")
   paperApplications             PaperApplications[]
 
   @@map("assets")
@@ -330,7 +332,7 @@ model Jurisdictions {
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
   amiChart                    AmiChart[]
   multiselectQuestions        MultiselectQuestions[]
-  listings                    listings[]
+  listings                    Listings[]
   reservedCommunityTypes      ReservedCommunityTypes[]
   translations                Translations[]
   user_accounts               UserAccounts[]
@@ -339,20 +341,20 @@ model Jurisdictions {
 }
 
 model ListingEvents {
-  id        String            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt DateTime          @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime          @updatedAt @map("updated_at") @db.Timestamp(6)
-  type      MarketingTypeEnum
-  startDate DateTime?         @map("start_date") @db.Timestamptz(6)
-  startTime DateTime?         @map("start_time") @db.Timestamptz(6)
-  endTime   DateTime?         @map("end_time") @db.Timestamptz(6)
+  id        String                @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime              @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime              @updatedAt @map("updated_at") @db.Timestamp(6)
+  type      ListingEventsTypeEnum
+  startDate DateTime?             @map("start_date") @db.Timestamptz(6)
+  startTime DateTime?             @map("start_time") @db.Timestamptz(6)
+  endTime   DateTime?             @map("end_time") @db.Timestamptz(6)
   url       String?
   note      String?
   label     String?
-  listingId String?           @map("listing_id") @db.Uuid
-  fileId    String?           @map("file_id") @db.Uuid
-  assets    Assets?           @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings  listings?         @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listingId String?               @map("listing_id") @db.Uuid
+  fileId    String?               @map("file_id") @db.Uuid
+  assets    Assets?               @relation(fields: [fileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  Listings?             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("listing_events")
 }
@@ -381,7 +383,7 @@ model ListingFeatures {
   barrierFreeBathroom     Boolean?  @map("barrier_free_bathroom")
   wideDoorways            Boolean?  @map("wide_doorways")
   loweredCabinets         Boolean?  @map("lowered_cabinets")
-  listings                listings?
+  listings                Listings?
 
   @@map("listing_features")
 }
@@ -391,7 +393,7 @@ model ListingImages {
   listingId String   @map("listing_id") @db.Uuid
   imageId   String   @map("image_id") @db.Uuid
   assets    Assets   @relation(fields: [imageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings  listings @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings  Listings @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([listingId, imageId])
   @@index([listingId])
@@ -403,7 +405,7 @@ model ListingMultiselectQuestions {
   listingId             String               @map("listing_id") @db.Uuid
   multiselectQuestionId String               @map("multiselect_question_id") @db.Uuid
   multiselectQuestions  MultiselectQuestions @relation(fields: [multiselectQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings              listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings              Listings             @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([listingId, multiselectQuestionId])
   @@map("listing_multiselect_questions")
@@ -421,14 +423,15 @@ model ListingUtilities {
   cable       Boolean?
   phone       Boolean?
   internet    Boolean?
-  listings    listings?
+  listings    Listings?
 
   @@map("listing_utilities")
 }
 
 // Note: missing [referralApplication, applicationConfig, showWaitlist, unitsSummarized] virtual property
 // Note: [reserved_community_description, result_link] formerly max length 4096;
-model listings {
+// Note: [leasing_agent_email] formerly had an isEmail validator
+model Listings {
   id                                    String                        @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt                             DateTime                      @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt                             DateTime                      @updatedAt @map("updated_at") @db.Timestamp(6)
@@ -457,7 +460,7 @@ model listings {
   applicationOrganization               String?                       @map("application_organization")
   applicationPickUpAddressOfficeHours   String?                       @map("application_pick_up_address_office_hours")
   applicationPickUpAddressType          ApplicationAddressTypeEnum?   @map("application_pick_up_address_type")
-  applicationDropOffDddressOffice_hours String?                       @map("application_drop_off_address_office_hours")
+  applicationDropOffAddressOffice_hours String?                       @map("application_drop_off_address_office_hours")
   applicationDropOffAddress_type        ApplicationAddressTypeEnum?   @map("application_drop_off_address_type")
   applicationMailingAddressType         ApplicationAddressTypeEnum?   @map("application_mailing_address_type")
   buildingSelectionCriteria             String?                       @map("building_selection_criteria")
@@ -552,6 +555,7 @@ model listings {
   unitsSummary                          UnitsSummary[]
 
   @@index([jurisdictionId])
+  @@map("listings")
 }
 
 // Note: hold over from TypeORM 
@@ -604,7 +608,7 @@ model ReservedCommunityTypes {
   name           String
   description    String?
   jurisdictionId String        @map("jurisdiction_id") @db.Uuid
-  listings       listings[]
+  listings       Listings[]
   jurisdictions  Jurisdictions @relation(fields: [jurisdictionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("reserved_community_types")
@@ -700,7 +704,7 @@ model Units {
   amiChart                       AmiChart?                       @relation(fields: [amiChartId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitAmiChartOverrides          UnitAmiChartOverrides?          @relation(fields: [amiChartOverrideId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                       listings?                       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: Cascade)
   unitRentTypes                  UnitRentTypes?                  @relation(fields: [unitRentTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   status                         UnitsStatusEnum                 @default(unknown)
 
@@ -728,13 +732,14 @@ model UnitsSummary {
   priorityTypeId                 String?                         @map("priority_type_id") @db.Uuid
   unitTypes                      UnitTypes?                      @relation(fields: [unitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  listings                       listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("units_summary")
 }
 
 // Note: [mfa_code] formerly max length 16; [first_name, middle_name, last_name] formerly max length 64
-// Note: [email] formerly lower case enforced
+// Note: [email] formerly lower case enforced formerly had an isEmail validator
+// Note: [phone_number] formerly had a phone number validator
 model UserAccounts {
   id                       String                  @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   passwordHash             String                  @map("password_hash") @db.VarChar
@@ -751,7 +756,7 @@ model UserAccounts {
   phoneNumber              String?                 @map("phone_number") @db.VarChar
   createdAt                DateTime                @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt                DateTime                @updatedAt @map("updated_at") @db.Timestamp(6)
-  language                 LanguagesEnum
+  language                 LanguagesEnum?
   mfaEnabled               Boolean                 @default(false) @map("mfa_enabled")
   mfaCode                  String?                 @map("mfa_code") @db.VarChar
   mfaCodeUpdatedAt         DateTime?               @map("mfa_code_updated_at") @db.Timestamptz(6)
@@ -759,13 +764,13 @@ model UserAccounts {
   failedLoginAttemptsCount Int                     @default(0) @map("failed_login_attempts_count")
   phoneNumberVerified      Boolean?                @default(false) @map("phone_number_verified")
   agreedToTermsOfService   Boolean                 @default(false) @map("agreed_to_terms_of_service")
-  hitConfirmation_url      DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
+  hitConfirmationUrl       DateTime?               @map("hit_confirmation_url") @db.Timestamptz(6)
   activeAccessToken        String?                 @map("active_access_token") @db.VarChar
   activeRefreshToken       String?                 @map("active_refresh_token") @db.VarChar
   activityLogs             ActivityLog[]
   applicationFlaggedSet    ApplicationFlaggedSet[]
   applications             Applications[]
-  listings                 listings[]
+  listings                 Listings[]
   jurisdictions            Jurisdictions[]
   userPreferences          UserPreferences?
   userRoles                UserRoles?
@@ -783,7 +788,6 @@ model UserRoles {
   @@map("user_roles")
 }
 
-// START DETROIT SPECIFIC
 model AmiChartItem {
   id            String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
@@ -797,6 +801,7 @@ model AmiChartItem {
   @@map("ami_chart_item")
 }
 
+// START DETROIT SPECIFIC
 model ListingNeighborhoodAmenities {
   id                       String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt                DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
@@ -807,7 +812,7 @@ model ListingNeighborhoodAmenities {
   parksAndCommunityCenters String?   @map("parks_and_community_centers")
   schools                  String?
   publicTransportation     String?   @map("public_transportation")
-  listings                 listings?
+  listings                 Listings?
 
   @@map("listing_neighborhood_amenities")
 }
@@ -827,7 +832,7 @@ model UnitGroup {
   openWaitlist                   Boolean                         @default(true) @map("open_waitlist")
   sqFeetMin                      Decimal?                        @map("sq_feet_min") @db.Decimal
   sqFeetMax                      Decimal?                        @map("sq_feet_max") @db.Decimal
-  listings                       listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  listings                       Listings?                       @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitAccessibilityPriorityTypes UnitAccessibilityPriorityTypes? @relation(fields: [priorityTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   unitGroupAmiLevels             UnitGroupAmiLevels[]
   unitTypes                      UnitTypes[]
@@ -855,7 +860,7 @@ model UserPreferences {
   userId                 String       @id() @unique() @map("user_id") @db.Uuid
   favoriteIds            String[]     @default([]) @map("favorite_ids")
   userAccounts           UserAccounts @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  favoritesListings      listings[]
+  favoritesListings      Listings[]
 
   @@map("user_preferences")
 }

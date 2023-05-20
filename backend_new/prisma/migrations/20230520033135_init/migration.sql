@@ -203,11 +203,11 @@ CREATE TABLE "applications" (
     "household_student" BOOLEAN,
     "income_vouchers" BOOLEAN,
     "income" TEXT,
-    "income_period" "income_period_enum" NOT NULL,
+    "income_period" "income_period_enum",
     "preferences" JSONB NOT NULL,
     "programs" JSONB,
     "status" "application_status_enum" NOT NULL,
-    "language" "languages_enum" NOT NULL,
+    "language" "languages_enum",
     "submission_type" "application_submission_type_enum" NOT NULL,
     "accepted_terms" BOOLEAN,
     "submission_date" TIMESTAMPTZ(6),
@@ -326,7 +326,7 @@ CREATE TABLE "listing_events" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
-    "type" "listings_marketing_type_enum" NOT NULL,
+    "type" "listing_events_type_enum" NOT NULL,
     "start_date" TIMESTAMPTZ(6),
     "start_time" TIMESTAMPTZ(6),
     "end_time" TIMESTAMPTZ(6),
@@ -679,7 +679,7 @@ CREATE TABLE "user_accounts" (
     "phone_number" VARCHAR,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
-    "language" "languages_enum" NOT NULL,
+    "language" "languages_enum",
     "mfa_enabled" BOOLEAN NOT NULL DEFAULT false,
     "mfa_code" VARCHAR,
     "mfa_code_updated_at" TIMESTAMPTZ(6),
@@ -800,19 +800,19 @@ CREATE TABLE "_JurisdictionsToUserAccounts" (
 );
 
 -- CreateTable
-CREATE TABLE "_UserAccountsTolistings" (
+CREATE TABLE "_ListingsToUserAccounts" (
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_ListingsToUserPreferences" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_UnitGroupToUnitTypes" (
-    "A" UUID NOT NULL,
-    "B" UUID NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_UserPreferencesTolistings" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
 );
@@ -920,22 +920,22 @@ CREATE UNIQUE INDEX "_JurisdictionsToUserAccounts_AB_unique" ON "_JurisdictionsT
 CREATE INDEX "_JurisdictionsToUserAccounts_B_index" ON "_JurisdictionsToUserAccounts"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_UserAccountsTolistings_AB_unique" ON "_UserAccountsTolistings"("A", "B");
+CREATE UNIQUE INDEX "_ListingsToUserAccounts_AB_unique" ON "_ListingsToUserAccounts"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_UserAccountsTolistings_B_index" ON "_UserAccountsTolistings"("B");
+CREATE INDEX "_ListingsToUserAccounts_B_index" ON "_ListingsToUserAccounts"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ListingsToUserPreferences_AB_unique" ON "_ListingsToUserPreferences"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_ListingsToUserPreferences_B_index" ON "_ListingsToUserPreferences"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_UnitGroupToUnitTypes_AB_unique" ON "_UnitGroupToUnitTypes"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_UnitGroupToUnitTypes_B_index" ON "_UnitGroupToUnitTypes"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_UserPreferencesTolistings_AB_unique" ON "_UserPreferencesTolistings"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_UserPreferencesTolistings_B_index" ON "_UserPreferencesTolistings"("B");
 
 -- AddForeignKey
 ALTER TABLE "activity_log" ADD CONSTRAINT "activity_log_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user_accounts"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
@@ -1133,19 +1133,19 @@ ALTER TABLE "_JurisdictionsToUserAccounts" ADD CONSTRAINT "_JurisdictionsToUserA
 ALTER TABLE "_JurisdictionsToUserAccounts" ADD CONSTRAINT "_JurisdictionsToUserAccounts_B_fkey" FOREIGN KEY ("B") REFERENCES "user_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_UserAccountsTolistings" ADD CONSTRAINT "_UserAccountsTolistings_A_fkey" FOREIGN KEY ("A") REFERENCES "user_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ListingsToUserAccounts" ADD CONSTRAINT "_ListingsToUserAccounts_A_fkey" FOREIGN KEY ("A") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_UserAccountsTolistings" ADD CONSTRAINT "_UserAccountsTolistings_B_fkey" FOREIGN KEY ("B") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ListingsToUserAccounts" ADD CONSTRAINT "_ListingsToUserAccounts_B_fkey" FOREIGN KEY ("B") REFERENCES "user_accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ListingsToUserPreferences" ADD CONSTRAINT "_ListingsToUserPreferences_A_fkey" FOREIGN KEY ("A") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_ListingsToUserPreferences" ADD CONSTRAINT "_ListingsToUserPreferences_B_fkey" FOREIGN KEY ("B") REFERENCES "user_preferences"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UnitGroupToUnitTypes" ADD CONSTRAINT "_UnitGroupToUnitTypes_A_fkey" FOREIGN KEY ("A") REFERENCES "unit_group"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UnitGroupToUnitTypes" ADD CONSTRAINT "_UnitGroupToUnitTypes_B_fkey" FOREIGN KEY ("B") REFERENCES "unit_types"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_UserPreferencesTolistings" ADD CONSTRAINT "_UserPreferencesTolistings_A_fkey" FOREIGN KEY ("A") REFERENCES "user_preferences"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_UserPreferencesTolistings" ADD CONSTRAINT "_UserPreferencesTolistings_B_fkey" FOREIGN KEY ("B") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE;
