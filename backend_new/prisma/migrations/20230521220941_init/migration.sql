@@ -175,7 +175,7 @@ CREATE TABLE "application_methods" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
-    "type" "application_review_status_enum" NOT NULL,
+    "type" "application_methods_type_enum" NOT NULL,
     "label" TEXT,
     "external_reference" TEXT,
     "accepts_postmarked_applications" BOOLEAN,

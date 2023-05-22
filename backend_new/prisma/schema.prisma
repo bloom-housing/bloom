@@ -150,16 +150,16 @@ model ApplicationFlaggedSet {
 
 // Note: [phone_number] formerly max length 16; [label] formerly max length 256; [external_reference] formerly max length 4096
 model ApplicationMethods {
-  id                            String                      @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt                     DateTime                    @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt                     DateTime                    @updatedAt @map("updated_at") @db.Timestamp(6)
-  type                          ApplicationReviewStatusEnum
+  id                            String                     @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt                     DateTime                   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                     DateTime                   @updatedAt @map("updated_at") @db.Timestamp(6)
+  type                          ApplicationMethodsTypeEnum
   label                         String?
-  externalReference             String?                     @map("external_reference")
-  acceptsPostmarkedApplications Boolean?                    @map("accepts_postmarked_applications")
-  phoneNumber                   String?                     @map("phone_number")
-  listingId                     String?                     @map("listing_id") @db.Uuid
-  listings                      Listings?                   @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  externalReference             String?                    @map("external_reference")
+  acceptsPostmarkedApplications Boolean?                   @map("accepts_postmarked_applications")
+  phoneNumber                   String?                    @map("phone_number")
+  listingId                     String?                    @map("listing_id") @db.Uuid
+  listings                      Listings?                  @relation(fields: [listingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paperApplications             PaperApplications[]
 
   @@map("application_methods")
@@ -460,8 +460,8 @@ model Listings {
   applicationOrganization               String?                       @map("application_organization")
   applicationPickUpAddressOfficeHours   String?                       @map("application_pick_up_address_office_hours")
   applicationPickUpAddressType          ApplicationAddressTypeEnum?   @map("application_pick_up_address_type")
-  applicationDropOffAddressOffice_hours String?                       @map("application_drop_off_address_office_hours")
-  applicationDropOffAddress_type        ApplicationAddressTypeEnum?   @map("application_drop_off_address_type")
+  applicationDropOffAddressOfficeHours  String?                       @map("application_drop_off_address_office_hours")
+  applicationDropOffAddressType         ApplicationAddressTypeEnum?   @map("application_drop_off_address_type")
   applicationMailingAddressType         ApplicationAddressTypeEnum?   @map("application_mailing_address_type")
   buildingSelectionCriteria             String?                       @map("building_selection_criteria")
   costsNotIncluded                      String?                       @map("costs_not_included")
