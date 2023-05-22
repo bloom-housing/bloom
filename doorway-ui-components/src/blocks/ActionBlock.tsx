@@ -8,8 +8,10 @@ export enum ActionBlockLayout {
 
 export enum ActionBlockBackground {
   none = "none",
+  primaryLightest = "primary-lightest",
   primaryLighter = "primary-lighter",
   primaryDarker = "primary-darker",
+  secondaryLighter = "secondary-lighter",
 }
 interface ActionBlockProps {
   actions: React.ReactNode[]

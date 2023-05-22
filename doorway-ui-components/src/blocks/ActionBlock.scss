@@ -3,6 +3,10 @@
   text-align: center;
   @apply p-4;
 
+  &.primary-lightest {
+    background-color: var(--bloom-color-blue-300);
+  }
+
   &.primary-lighter {
     @apply bg-primary-lighter;
   }
@@ -13,6 +17,11 @@
       @apply border-white;
     }
   }
+
+  &.secondary-lighter {
+    background-color: var(--bloom-color-gray-300);
+  }
+
   .action-block__actions {
     @media (max-width: 640px) {
       display: flex;
@@ -39,6 +48,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    max-width: var(--bloom-width-2xl);
   }
 
   .action-block__icon {

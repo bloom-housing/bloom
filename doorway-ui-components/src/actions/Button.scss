@@ -9,7 +9,7 @@
   --label-letter-spacing: var(--bloom-letter-spacing-widest);
   --normal-font-size: var(--bloom-font-size-xs);
   --label-weight: bold;
-  --small-rounded: var(--bloom-rounded);
+  --small-rounded: var(--bloom-rounded-full);
   --small-padding: var(--bloom-s3) var(--bloom-s6);
   --small-font-size: var(--bloom-font-size-2xs);
   --big-rounded: var(--bloom-rounded);
@@ -57,8 +57,8 @@
   }
 
   &.is-secondary {
-    border-color: var(--doorway-color-cyan-300);
-    background-color: var(--doorway-color-cyan-300);
+    border-color: var(--doorway-color-secondary);
+    background-color: var(--doorway-color-secondary);
     color: var(--secondary-text-color);
 
     &:hover {
@@ -114,7 +114,7 @@
 
   &.is-inline {
     color: var(--bloom-color-primary);
-    font-weight: 600;
+    font-weight: 500;
     font-size: var(--inline-font-size);
     margin: 0;
     text-decoration: none;
