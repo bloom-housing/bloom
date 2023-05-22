@@ -142,7 +142,9 @@ export class ApplicationsService {
       listing.applicationDueDate &&
       applicationCreateDto.submissionDate > listing.applicationDueDate
     ) {
-      throw new BadRequestException("Listing is not open for application submission.")
+      throw new BadRequestException(
+        `Listing ${applicationCreateDto?.listing?.id} is not open for application submission.`
+      )
     }
 
     await this.authorizeUserAction(

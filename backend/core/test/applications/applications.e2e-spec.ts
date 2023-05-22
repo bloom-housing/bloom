@@ -615,7 +615,7 @@ describe("Applications", () => {
       .send(body)
       .set(...setAuthorization(user1AccessToken))
       .expect(400)
-    expect(res.body.message).toBe("Listing is not open for application submission.")
+    expect(res.body.message).toBe(`Listing ${listing1Id} is not open for application submission.`)
 
     listing.applicationDueDate = oldApplicationDueDate
     await supertest(app.getHttpServer())
