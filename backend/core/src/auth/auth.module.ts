@@ -21,8 +21,8 @@ import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
-import { UserRepository } from "./repositories/user-repository"
-import { ListingRepository } from "../listings/db/listing.repository"
+import { Listing } from "../listings/entities/listing.entity"
+import { ListingsModule } from "../listings/listings.module"
 import { UserCsvExporterService } from "./services/user-csv-exporter.service"
 import { CsvBuilder } from "../applications/services/csv-builder.service"
 
@@ -47,11 +47,12 @@ import { CsvBuilder } from "../applications/services/csv-builder.service"
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([RevokedToken, User, UserRepository, Application, ListingRepository]),
+    TypeOrmModule.forFeature([RevokedToken, User, Application, Listing]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,
     forwardRef(() => ActivityLogModule),
+    forwardRef(() => ListingsModule),
   ],
   providers: [
     LocalMfaStrategy,

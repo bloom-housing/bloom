@@ -14,8 +14,8 @@ export class JurisdictionResolverService {
   ) {}
 
   async getJurisdiction(): Promise<Jurisdiction> {
-    const jurisdictionName = this.req.get("jurisdictionName")
-    if (jurisdictionName === "undefined") return undefined
+    const jurisdictionName = this.req?.get("jurisdictionName")
+    if (jurisdictionName === "undefined" || jurisdictionName === undefined) return undefined
 
     const jurisdiction = await this.jurisdictionRepository.findOne({
       where: { name: jurisdictionName },

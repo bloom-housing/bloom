@@ -109,16 +109,24 @@ const tritonListing: ListingSeedType = {
 
 export class ListingTritonSeed extends ListingDefaultSeed {
   async seed() {
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
 
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
 
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "San Jose TCAC 2019",
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: "San Jose TCAC 2019",
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
 
     const tritonUnits: Array<UnitSeedType> = [
@@ -220,7 +228,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            where: { text: getLiveWorkPreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
@@ -256,15 +264,23 @@ export class ListingTritonSeed extends ListingDefaultSeed {
 
 export class ListingTritonSeedDetroit extends ListingDefaultSeed {
   async seed() {
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
 
     const detroitJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.detroit,
+      where: { name: CountyCode.detroit },
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "Detroit TCAC 2019",
-      jurisdiction: detroitJurisdiction,
+      where: {
+        name: "Detroit TCAC 2019",
+        jurisdiction: {
+          name: detroitJurisdiction.name,
+        },
+      },
     })
 
     const tritonUnits: Array<UnitSeedType> = [

@@ -151,32 +151,37 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
   async seed() {
     const priorityTypeMobilityAndHearingWithVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: PriorityTypes.mobilityHearingVisual,
+        where: { name: PriorityTypes.mobilityHearingVisual },
       }
     )
     const priorityTypeMobilityAndMobilityWithHearingAndVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: PriorityTypes.mobilityHearingVisual,
+        where: { name: PriorityTypes.mobilityHearingVisual },
       }
     )
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: PriorityTypes.mobilityHearing,
+        where: { name: PriorityTypes.mobilityHearing },
       }
     )
     const priorityMobility = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail({
-      name: PriorityTypes.mobility,
+      where: { name: PriorityTypes.mobility },
     })
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
+    const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "threeBdrm" },
+    })
 
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      where: { name: "AlamedaCountyTCAC2021", jurisdiction: { name: alamedaJurisdiction.name } },
     })
 
     const coliseumUnits: Array<UnitSeedType> = [
@@ -973,37 +978,37 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            where: { text: getLiveWorkPreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getPbvPreference(alamedaJurisdiction.name).text,
+            where: { text: getPbvPreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getHopwaPreference(alamedaJurisdiction.name).text,
+            where: { text: getHopwaPreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 3,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+            where: { text: getDisplaceePreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 4,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram(alamedaJurisdiction.name).text,
+            where: { text: getServedInMilitaryProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(alamedaJurisdiction.name).text,
+            where: { text: getTayProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 2,
         },

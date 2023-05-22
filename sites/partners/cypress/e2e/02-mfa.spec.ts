@@ -4,9 +4,10 @@ describe("Log in using MFA Tests", () => {
       statusCode: 201,
       body: {
         email: "mfauser@bloom.com",
-        yazeedTest: "yest",
       },
     })
     cy.loginWithMfa()
+    cy.visit("/")
+    cy.signOut()
   })
 })
