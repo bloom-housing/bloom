@@ -41,11 +41,11 @@
   margin: 0 var(--bloom-s1_5);
 
   &:hover {
-    background-color: var(--doorway-color-cyan-300);
+    background-color: var(--doorway-color-secondary);
   }
 
   &.is-active {
     color: var(--bloom-text-color);
-    background-color: var(--doorway-color-cyan-300);
+    background-color: var(---doorway-color-secondary);
   }
 }

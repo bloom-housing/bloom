@@ -71,7 +71,14 @@ module.exports = {
       "accent-warm-darker": "var(--bloom-color-accent-warm-darker)",
       white: "var(--bloom-color-white)",
       black: "var(--bloom-color-black)",
+      cyan: {
+        700: "var(--doorway-color-cyan-700)",
+        500: "var(--doorway-color-cyan-500)",
+        300: "var(--doorway-color-cyan-300)",
+      },
       blue: {
+        1300: "var(--doorway-color-blue-1300)",
+        1100: "var(--doorway-color-blue-1100)",
         900: "var(--bloom-color-blue-900)",
         700: "var(--bloom-color-blue-700)",
         500: "var(--bloom-color-blue-500)",
