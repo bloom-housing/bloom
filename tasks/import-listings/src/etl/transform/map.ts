@@ -129,24 +129,6 @@ export const defaultMap: RecordMap = {
   neighborhood: (listing: Listing) => listing.neighborhood,
   reserved_community_type_name: (listing: Listing) => listing.reservedCommunityType?.name,
 
-  // Fields for filtering on unit data
-  min_monthly_rent: (listing: Listing) => getUnitPropMinValue(listing.units, "monthlyRent"),
-  max_monthly_rent: (listing: Listing) => getUnitPropMaxValue(listing.units, "monthlyRent"),
-  min_bedrooms: (listing: Listing) => getUnitPropMinValue(listing.units, "numBedrooms"),
-  max_bedrooms: (listing: Listing) => getUnitPropMaxValue(listing.units, "numBedrooms"),
-  min_bathrooms: (listing: Listing) => getUnitPropMinValue(listing.units, "numBathrooms"),
-  max_bathrooms: (listing: Listing) => getUnitPropMaxValue(listing.units, "numBathrooms"),
-  min_monthly_income_min: (listing: Listing) =>
-    getUnitPropMinValue(listing.units, "monthlyIncomeMin"),
-  max_monthly_income_min: (listing: Listing) =>
-    getUnitPropMaxValue(listing.units, "monthlyIncomeMin"),
-  min_occupancy: (listing: Listing) => getUnitPropMinValue(listing.units, "minOccupancy"),
-  max_occupancy: (listing: Listing) => getUnitPropMaxValue(listing.units, "maxOccupancy"),
-  min_sq_feet: (listing: Listing) => getUnitPropMinValue(listing.units, "sqFeet"),
-  max_sq_feet: (listing: Listing) => getUnitPropMaxValue(listing.units, "sqFeet"),
-  lowest_floor: (listing: Listing) => getUnitPropMinValue(listing.units, "floor"),
-  highest_floor: (listing: Listing) => getUnitPropMaxValue(listing.units, "floor"),
-
   url_slug: "urlSlug",
 
   units_summarized: (listing: Listing) => jsonOrNull(listing.unitsSummarized),
@@ -154,7 +136,38 @@ export const defaultMap: RecordMap = {
   multiselect_questions: (listing: Listing) => jsonOrNull(listing.listingMultiselectQuestions),
   jurisdiction: (listing: Listing) => jsonOrNull(listing.jurisdiction),
   reserved_community_type: (listing: Listing) => jsonOrNull(listing.reservedCommunityType),
-  units: (listing: Listing) => jsonOrNull(listing.units),
+  units: (listing: Listing) => {
+    const units = listing.units
+
+    // Add numeric values for some string fields
+    if (Array.isArray(units)) {
+      units.forEach((unit) => {
+        // Convert all of these properties to numeric values
+        ;[
+          "monthlyRent",
+          "sqFeet",
+          "monthlyIncomeMin",
+          "annualIncomeMin",
+          "annualIncomeMax",
+          "amiPercentage",
+          "monthlyRentAsPercentOfIncome",
+        ].forEach((propName) => {
+          if (propName in unit && typeof unit[propName] == "string") {
+            const numVal = parseFloat(unit[propName] as string)
+
+            // Create a new property name for the numeric value based on the old one
+            // eg monthlyRent -> numMonthlyRent
+            const newPropName = "num" + propName[0].toUpperCase() + propName.slice(1)
+
+            // Set the new value but retain the old one
+            unit[newPropName] = isNaN(numVal) ? null : numVal
+          }
+        })
+      })
+    }
+
+    return jsonOrNull(units)
+  },
   building_address: (listing: Listing) => {
     const address = listing.buildingAddress
 

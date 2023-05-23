@@ -21,6 +21,7 @@ import dbOptions from "../../ormconfig.test"
 import { getExternalListingSeedData } from "../../src/seeder/seeds/listings/external-listings-seed"
 
 import cookieParser from "cookie-parser"
+import { UnitDto } from "../../src/units/dto/unit.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -535,121 +536,117 @@ describe("CombinedListings", () => {
       })
     })
 
-    it("should properly apply bedrooms filter", async () => {
-      const minBedrooms = 2
-      // where max number of bedrooms is at least as much as requested
-      const gteFilter = [{ $comparison: ">=", maxBedrooms: minBedrooms }]
+    it("should properly apply unit filters", async () => {
+      const tests: Array<{
+        // an identifier for the test
+        name: string
+        // test data
+        data: Record<string, number>
+        // a function for generating filters based on test data
+        filters: (data: Record<string, number>) => Array<object>
+        // a function for verifying that a unit matches the filter criteria
+        match: (unit: UnitDto, data: Record<string, number>) => boolean
+      }> = [
+        {
+          name: "unit has at least 2 bedrooms",
+          data: {
+            minBedrooms: 2,
+          },
+          filters: (data) => [{ $comparison: ">=", numBedrooms: data.minBedrooms }],
+          match: (unit, data) => unit.numBedrooms >= data.minBedrooms,
+        },
+        {
+          name: "unit has at least 2 bathrooms",
+          data: {
+            minBathrooms: 2,
+          },
+          filters: (data) => [{ $comparison: ">=", numBathrooms: data.minBathrooms }],
+          match: (unit, data) => unit.numBathrooms >= data.minBathrooms,
+        },
+        {
+          name: "unit rent is less <= $2000/month",
+          data: {
+            maxRent: 2000,
+          },
+          filters: (data) => [{ $comparison: "<=", monthlyRent: data.maxRent }],
+          match: (unit, data) => {
+            // monthlyRent is still a string value and needs to be converted
+            const parsedRent = parseInt(unit.monthlyRent)
+            // If not a valid number, treat it as a zero
+            const numMonthlyRent = isNaN(parsedRent) ? 0 : parsedRent
 
-      const gteQuery = qs.stringify({
-        limit: "all",
-        filter: gteFilter,
-      })
+            return numMonthlyRent <= data.maxRent
+          },
+        },
+        {
+          name: "unit has at least 2 bedrooms and 1 bath",
+          data: {
+            minBedrooms: 2,
+            minBathrooms: 1,
+          },
+          filters: (data) => [
+            { $comparison: ">=", numBedrooms: data.minBedrooms },
+            { $comparison: ">=", numBathrooms: data.minBathrooms },
+          ],
+          match: (unit, data) => {
+            return unit.numBathrooms >= data.minBathrooms && unit.numBedrooms >= data.minBedrooms
+          },
+        },
+        {
+          name: "unit has at least 2 bedrooms for under $1400/month",
+          data: {
+            minBedrooms: 2,
+            maxRent: 1400,
+          },
+          filters: (data) => [
+            { $comparison: ">=", numBedrooms: data.minBedrooms },
+            { $comparison: "<=", monthlyRent: data.maxRent },
+          ],
+          match: (unit, data) => {
+            // monthlyRent is still a string value and needs to be converted
+            const parsedRent = parseInt(unit.monthlyRent)
+            // If not a valid number, treat it as a zero
+            const numMonthlyRent = isNaN(parsedRent) ? 0 : parsedRent
 
-      const gteRes = await supertest(app.getHttpServer())
-        .get(`/listings/combined?${gteQuery}`)
-        .expect(200)
-
-      // at least one unit should match the bedroom requirement
-      gteRes.body.items.forEach((listing) => {
-        // could just loop on this, but mapping makes duplication of this test easier
-        const bedrooms = listing.units.map((unit) => {
-          return unit.numBedrooms
-        })
-
-        // assume no matches
-        let isMatch = false
-
-        // check each one and set true for listing if any match found
-        bedrooms.forEach((value) => {
-          if (value >= minBedrooms) isMatch = true
-        })
-
-        expect(isMatch).toBe(true)
-      })
-    })
-
-    it("should properly apply rent filter", async () => {
-      const minRent = 500
-      const maxRent = 1500
-      const gteFilter = [
-        { $comparison: ">=", minMonthlyRent: minRent },
-        { $comparison: "<=", maxMonthlyRent: maxRent },
+            return numMonthlyRent <= data.maxRent && unit.numBedrooms >= data.minBedrooms
+          },
+        },
       ]
 
-      const query = qs.stringify({
-        limit: "all",
-        filter: gteFilter,
-      })
-
-      const res = await supertest(app.getHttpServer())
-        .get(`/listings/combined?${query}`)
-        .expect(200)
-
-      const totalListings = res.body.items.length
-      let matchedListings = 0
-
-      // at least one unit should match the rent requirement
-      res.body.items.forEach((listing) => {
-        // could just loop on this, but mapping makes duplication of this test easier
-        const rent = listing.units.map((unit) => {
-          return unit.monthlyRent
+      // Run each test and validate results
+      for (const test of tests) {
+        const query = qs.stringify({
+          limit: "all",
+          filter: test.filters(test.data),
         })
 
-        // assume no matches
-        let isMatch = false
+        const res = await supertest(app.getHttpServer())
+          .get(`/listings/combined?${query}`)
+          .expect(200)
 
-        // check each one and set true for listing if any match found
-        rent.forEach((value) => {
-          const rentNum = parseFloat(value)
-          // skip invalid rent values
-          if (isNaN(rentNum)) return
+        // We need at least one result returned, otherwise the test isn't very useful
+        expect(res.body.items.length).toBeGreaterThan(0)
 
-          if (rentNum >= minRent && rentNum <= maxRent) {
-            isMatch = true
+        // at least one unit should match the bathroom requirement
+        res.body.items.forEach((listing) => {
+          // assume no matches
+          let isMatch = false
+
+          // It's only a match if all values are as expected
+          listing.units.forEach((unit) => {
+            if (test.match(unit, test.data)) {
+              isMatch = true
+            }
+          })
+
+          // If we don't have any matches, print out test name for debugging
+          if (!isMatch) {
+            console.log(test.name)
           }
+
+          expect(isMatch).toBe(true)
         })
-
-        if (isMatch) {
-          matchedListings++
-        } else {
-          console.log(listing.id)
-        }
-      })
-
-      expect(matchedListings).toEqual(totalListings)
-    })
-
-    it("should properly apply bathrooms filter", async () => {
-      const minBathrooms = 2
-      // where max number of bathrooms is at least as much as requested
-      const gteFilter = [{ $comparison: ">=", maxBathrooms: minBathrooms }]
-
-      const gteQuery = qs.stringify({
-        limit: "all",
-        filter: gteFilter,
-      })
-
-      const gteRes = await supertest(app.getHttpServer())
-        .get(`/listings/combined?${gteQuery}`)
-        .expect(200)
-
-      // at least one unit should match the bathroom requirement
-      gteRes.body.items.forEach((listing) => {
-        // could just loop on this, but mapping makes duplication of this test easier
-        const bathrooms = listing.units.map((unit) => {
-          return unit.numBathrooms
-        })
-
-        // assume no matches
-        let isMatch = false
-
-        // check each one and set true for listing if any match found
-        bathrooms.forEach((value) => {
-          if (value >= minBathrooms) isMatch = true
-        })
-
-        expect(isMatch).toBe(true)
-      })
+      }
     })
   })
 

@@ -90,7 +90,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
         case Compare[">="]:
         case Compare["<="]:
           qb.andWhere(
-            `(${filterField} ${comparison} :${whereParameterName}${
+            `("${filterField}" ${comparison} :${whereParameterName}${
               includeNulls ? ` OR ${filterField} IS NULL` : ""
             })`,
             {

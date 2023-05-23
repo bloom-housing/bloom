@@ -5257,22 +5257,13 @@ export interface CombinedListingFilterParams {
   city?: string
 
   /**  */
-  minMonthlyRent?: number
+  numBedrooms?: number
 
   /**  */
-  maxMonthlyRent?: number
+  numBathrooms?: number
 
   /**  */
-  minBathrooms?: number
-
-  /**  */
-  maxBathrooms?: number
-
-  /**  */
-  minBedrooms?: number
-
-  /**  */
-  maxBedrooms?: number
+  monthlyRent?: number
 }
 
 export interface CombinedListingsQueryParams {

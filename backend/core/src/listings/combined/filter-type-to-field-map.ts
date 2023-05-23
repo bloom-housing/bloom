@@ -1,4 +1,7 @@
-import { CombinedListingFilterKeys } from "./combined-listing-filter-keys-enum"
+import {
+  CombinedListingFilterKeys,
+  CombinedListingUnitFilterKeys,
+} from "./combined-listing-filter-keys-enum"
 
 // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
 export const combinedListingFilterTypeToFieldMap: Record<
@@ -8,17 +11,20 @@ export const combinedListingFilterTypeToFieldMap: Record<
   status: "status",
   name: "name",
   neighborhood: "neighborhood",
-  bedrooms: "max_bedrooms", // this name is preserved from CombinedListingFilterKeys
+  bedrooms: "bedrooms", // unused, but necessary to include
   zipcode: "building_address->>'zip_code'",
   leasingAgents: "leasing_agents->>'id'",
   jurisdiction: "jurisdiction->>'id'",
   isExternal: "is_external",
   counties: "building_address->>'county'",
   city: "building_address->>'city'",
-  minMonthlyRent: "min_monthly_rent",
-  maxMonthlyRent: "max_monthly_rent",
-  minBathrooms: "min_bathrooms",
-  maxBathrooms: "max_bathrooms",
-  minBedrooms: "min_bedrooms",
-  maxBedrooms: "max_bedrooms",
+}
+
+export const combinedListingUnitFilterTypeToFieldMap: Record<
+  keyof typeof CombinedListingUnitFilterKeys,
+  string
+> = {
+  numBedrooms: "numBedrooms",
+  numBathrooms: "numBathrooms",
+  monthlyRent: "numMonthlyRent", // use the numeric field
 }

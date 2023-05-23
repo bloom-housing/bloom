@@ -14,7 +14,7 @@ export enum CombinedListingFilterKeys {
   status = "status",
   name = "name",
   neighborhood = "neighborhood",
-  bedrooms = "bedrooms",
+  bedrooms = "bedrooms", // unused, but necessary to include
   zipcode = "zipcode",
   leasingAgents = "leasingAgents",
   jurisdiction = "jurisdiction",
@@ -23,10 +23,13 @@ export enum CombinedListingFilterKeys {
   isExternal = "isExternal",
   counties = "counties",
   city = "city",
-  minMonthlyRent = "minMonthlyRent",
-  maxMonthlyRent = "maxMonthlyRent",
-  minBathrooms = "minBathrooms",
-  maxBathrooms = "maxBathrooms",
-  minBedrooms = "minBedrooms",
-  maxBedrooms = "maxBedrooms",
+}
+
+// These filters are only applied to listing units
+// In the event of a naming conflict with CombinedListingFilterKeys, these
+// take precedence
+export enum CombinedListingUnitFilterKeys {
+  numBedrooms = "numBedrooms",
+  numBathrooms = "numBathrooms",
+  monthlyRent = "monthlyRent",
 }

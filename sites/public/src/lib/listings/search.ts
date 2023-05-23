@@ -99,17 +99,17 @@ export function generateSearchQuery(params: ListingSearchParams) {
 
   // Find listings that have units with greater than or equal number of bedrooms
   if (params.bedrooms != null) {
-    qb.whereGreaterThanEqual("maxBedrooms", params.bedrooms)
+    qb.whereGreaterThanEqual("numBedrooms", params.bedrooms)
   }
 
   // Find listings that have units with greater than or equal number of bathrooms
   if (params.bathrooms != null) {
-    qb.whereGreaterThanEqual("maxBathrooms", params.bathrooms)
+    qb.whereGreaterThanEqual("numBathrooms", params.bathrooms)
   }
 
   // Find listings that have units with rent less than or equal to requested amount
   if (params.monthlyRent && params.monthlyRent != "") {
-    qb.whereLessThanEqual("minMonthlyRent", params.monthlyRent)
+    qb.whereLessThanEqual("monthlyRent", params.monthlyRent)
   }
 
   // Find listings in these counties

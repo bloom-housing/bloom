@@ -203,21 +203,6 @@ describe("Transformer", () => {
     )
     expect(result).toHaveProperty("url_slug", listing.urlSlug)
 
-    expect(result).toHaveProperty("min_monthly_rent", 1219)
-    expect(result).toHaveProperty("max_monthly_rent", 1387)
-    expect(result).toHaveProperty("min_bedrooms", listingData.units[1].numBedrooms)
-    expect(result).toHaveProperty("max_bedrooms", listingData.units[0].numBedrooms)
-    expect(result).toHaveProperty("min_bathrooms", listingData.units[1].numBathrooms)
-    expect(result).toHaveProperty("max_bathrooms", listingData.units[0].numBathrooms)
-    expect(result).toHaveProperty("min_monthly_income_min", 3014)
-    expect(result).toHaveProperty("max_monthly_income_min", 3468)
-    expect(result).toHaveProperty("min_occupancy", listingData.units[1].minOccupancy)
-    expect(result).toHaveProperty("max_occupancy", listingData.units[0].maxOccupancy)
-    expect(result).toHaveProperty("min_sq_feet", 635)
-    expect(result).toHaveProperty("max_sq_feet", 748)
-    expect(result).toHaveProperty("lowest_floor", listingData.units[1].floor)
-    expect(result).toHaveProperty("highest_floor", listingData.units[0].floor)
-
     // these are complex types that are converted into JSON by defaultMap
     // we can assume that if the jsonOrNull tests above pass then the values here are as expected
     expect(result).toHaveProperty("assets")
