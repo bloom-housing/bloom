@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
@@ -27,24 +27,56 @@ type ListingsSearchCombinedProps = {
  * @returns
  */
 export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
-  const [listings, setListings] = useState([])
+  //const [listings, setListings] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
 
-  const onFormSubmit = async (params: ListingSearchParams) => {
+  // Store the current search params for pagination
+  const searchParams = useRef({
+    bedrooms: null,
+    bathrooms: null,
+    monthlyRent: null,
+    counties: [],
+  } as ListingSearchParams)
+
+  const [searchResults, setSearchResults] = useState({
+    listings: [],
+    currentPage: 0,
+    lastPage: 0,
+  })
+
+  // The search function expects a string
+  // This can be changed later if needed
+  const pageSize = "10"
+
+  const search = async (params: ListingSearchParams, page: number) => {
     const qb = generateSearchQuery(params)
     const listingService = new ListingService(props.listingsEndpoint)
-    const result = await listingService.searchListings(qb)
+    const result = await listingService.searchListings(qb, pageSize, page)
 
     const listings = result.items
     const meta = result.meta
+
+    setSearchResults({
+      listings: listings,
+      currentPage: meta.currentPage,
+      lastPage: meta.totalPages,
+    })
+
+    searchParams.current = params
 
     // Keeping this until pagination is implemented
     console.log(
       `Showing ${meta.itemCount} listings of ${meta.totalItems} total (page ${meta.currentPage} of ${meta.totalPages})`
     )
+  }
 
-    setListings(listings)
+  const onFormSubmit = async (params: ListingSearchParams) => {
+    await search(params, 1)
+  }
+
+  const onPageChange = async (page: number) => {
+    await search(searchParams.current, page)
   }
 
   const onModalClose = () => {
@@ -81,7 +113,13 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         onFilterChange={updateFilterCount}
       />
 
-      <ListingsCombined listings={listings} googleMapsApiKey={props.googleMapsApiKey} />
+      <ListingsCombined
+        listings={searchResults.listings}
+        currentPage={searchResults.currentPage}
+        lastPage={searchResults.lastPage}
+        googleMapsApiKey={props.googleMapsApiKey}
+        onPageChange={onPageChange}
+      />
     </div>
   )
 }

@@ -5,6 +5,9 @@ import { ListingsList } from "./ListingsList"
 
 type ListingsCombinedProps = {
   listings: Listing[]
+  currentPage: number
+  lastPage: number
+  onPageChange: (page: number) => void
   googleMapsApiKey: string
 }
 const parentStyle = {
@@ -21,7 +24,12 @@ const ListingsCombined = (props: ListingsCombinedProps) => (
       <ListingsMap listings={props.listings} googleMapsApiKey={props.googleMapsApiKey} />
     </div>
     <div style={{ overflowY: "auto", width: "600px" }}>
-      <ListingsList listings={props.listings}></ListingsList>
+      <ListingsList
+        listings={props.listings}
+        currentPage={props.currentPage}
+        lastPage={props.lastPage}
+        onPageChange={props.onPageChange}
+      ></ListingsList>
     </div>
   </div>
 )

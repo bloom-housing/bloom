@@ -101,12 +101,14 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     //console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
-  // run this once immediately after first render
+  // Run this once immediately after first render
+  // Empty array is intentional; it's how we make sure it only runs once
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    // set initial filter count
+    // Set initial filter count
     props.onFilterChange(countFilters(initialState))
 
-    // fetch listings
+    // Fetch listings
     onSubmit()
   }, [])
 

@@ -58,4 +58,23 @@
       flex-direction: row-reverse;
     }
   }
+
+  &.pagination {
+    background-color: var(--bloom-color-white);
+    justify-content: center;
+
+    .button {
+      margin: 0 var(--bloom-s1);
+      border-radius: var(--bloom-rounded-full);
+      padding: var(--bloom-s2_5) var(--bloom-s3);
+      border: none;
+      text-align: center;
+      width: var(--bloom-s9);
+      height: var(--bloom-s9);
+
+      &:disabled {
+        background-color: var(--bloom-color-white);
+      }
+    }
+  }
 }

@@ -37,7 +37,15 @@ export default function ListingsPage(props: ListingsProps) {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <ListingsCombined listings={props.openListings} googleMapsApiKey={props.googleMapsApiKey} />
+      <ListingsCombined
+        listings={props.openListings}
+        googleMapsApiKey={props.googleMapsApiKey}
+        currentPage={1}
+        lastPage={1}
+        onPageChange={(page: number) => {
+          console.log(page)
+        }}
+      />
     </Layout>
   )
 }

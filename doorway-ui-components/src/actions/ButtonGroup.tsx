@@ -15,6 +15,8 @@ export interface ButtonGroupProps {
   fullwidthMobile?: boolean
   /** When true, the flex ordering of columns will reverse (aka RTL) */
   reversed?: boolean
+  /** When true, pagination styling will be applied */
+  pagination?: boolean
 }
 
 const ButtonGroup = ({
@@ -22,11 +24,13 @@ const ButtonGroup = ({
   columns,
   fullwidthMobile,
   reversed,
+  pagination
 }: ButtonGroupProps) => {
   const spacingClassName = `has-${spacing}-spacing`
   const classNames = ["button-group", spacingClassName]
   if (fullwidthMobile) classNames.push("has-fullwidth-mobile-buttons")
   if (reversed) classNames.push("is-reversed")
+  if (pagination) classNames.push("pagination")
 
   return (
     <div className={classNames.join(" ")}>

@@ -57,7 +57,11 @@ export class ListingService {
    * @param limit
    * @returns Promise<PaginatedListing>
    */
-  async searchListings(qb: ListingQueryBuilder, limit = "all"): Promise<PaginatedListing> {
+  async searchListings(
+    qb: ListingQueryBuilder,
+    limit = "all",
+    page = 1
+  ): Promise<PaginatedListing> {
     let results = Promise.resolve({
       items: [],
       meta: {
@@ -72,12 +76,14 @@ export class ListingService {
     const params: {
       view: string
       limit: string
+      page: number
       filter: CombinedListingFilterParams[]
       orderBy?: OrderByFieldsEnum[]
       orderDir?: OrderParam[]
     } = {
       view: "base",
       limit: limit,
+      page: page,
       filter: qb.getFilterParams(),
     }
 
