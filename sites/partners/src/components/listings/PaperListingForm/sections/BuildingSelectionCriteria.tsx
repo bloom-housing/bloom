@@ -18,11 +18,11 @@ import {
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
-const LotteryResults = () => {
+const BuildingSelectionCriteria = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, setValue, watch } = formMethods
+  const { register, getValues, setValue, watch, errors, trigger } = formMethods
 
   const listingCriteriaURL = watch("buildingSelectionCriteria")
   const listingCriteriaFile = watch("buildingSelectionCriteriaFile")
@@ -234,19 +234,21 @@ const LotteryResults = () => {
         actions={[
           <Button
             key={0}
-            onClick={() => {
+            onClick={async () => {
               // Only try to save values if an attachment type has been selected
               if (criteriaAttachType) {
                 const value = getValues("buildingSelectionCriteriaURL")
                 if (value) {
+                  const validation = await trigger()
+                  if (!validation) return
                   deletePDF()
                   saveURL(value)
                 } else {
                   deleteURL()
                   savePDF()
                 }
+                resetDrawerState()
               }
-              resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
             size={AppearanceSizeType.small}
@@ -310,10 +312,13 @@ const LotteryResults = () => {
           )}
           {criteriaAttachType === "url" && (
             <Field
+              type="url"
               label="Informational Webpage URL"
               name="buildingSelectionCriteriaURL"
               id="buildingSelectionCriteriaURL"
               register={register}
+              error={errors?.buildingSelectionCriteriaURL}
+              errorMessage={t("errors.urlHttpsError")}
             />
           )}
         </section>
@@ -322,4 +327,4 @@ const LotteryResults = () => {
   )
 }
 
-export default LotteryResults
+export default BuildingSelectionCriteria
