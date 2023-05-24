@@ -608,6 +608,7 @@
   "listings.applicationPerApplicantAgeDescription": "per applicant age 18 and over",
   "listings.applications": "Applications",
   "listings.applicationsClosed": "Applications Closed",
+  "listings.applicationsClosedRedirect": "This listing is no longer accepting applications.",
   "listings.apply.applicationWillBeAvailableOn": "Application will be available for download and pick up on %{openDate}",
   "listings.apply.applyOnline": "Apply Online",
   "listings.apply.downloadApplication": "Download Application",

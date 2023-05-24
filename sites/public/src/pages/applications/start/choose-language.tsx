@@ -15,6 +15,7 @@ import {
   t,
   Heading,
   AppearanceSizeType,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
@@ -77,6 +78,13 @@ const ApplicationChooseLanguage = () => {
       setListing(context.listing)
     }
   }, [router, conductor, context, listingId])
+
+  useEffect(() => {
+    if (listing?.status === "closed") {
+      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+      void router.push(`/listing/${listing?.id}`)
+    }
+  }, [listing, router])
 
   const currentPageSection = 1
 
