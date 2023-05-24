@@ -36,11 +36,6 @@ export function buildFilter(
         .filter((s) => s.length !== 0),
       mode: Prisma.QueryMode.insensitive,
     });
-    if (includeNulls) {
-      toReturn.push({
-        equals: null,
-      });
-    }
   } else if (comparison === Compare['<>']) {
     toReturn.push({
       not: {
@@ -48,41 +43,21 @@ export function buildFilter(
       },
       mode: Prisma.QueryMode.insensitive,
     });
-    if (includeNulls) {
-      toReturn.push({
-        equals: null,
-      });
-    }
   } else if (comparison === Compare['=']) {
     toReturn.push({
       equals: filterValue,
       mode: Prisma.QueryMode.insensitive,
     });
-    if (includeNulls) {
-      toReturn.push({
-        equals: null,
-      });
-    }
   } else if (comparison === Compare['>=']) {
     toReturn.push({
       gte: filterValue,
       mode: Prisma.QueryMode.insensitive,
     });
-    if (includeNulls) {
-      toReturn.push({
-        equals: null,
-      });
-    }
   } else if (comparison === Compare['<=']) {
     toReturn.push({
       lte: filterValue,
       mode: Prisma.QueryMode.insensitive,
     });
-    if (includeNulls) {
-      toReturn.push({
-        equals: null,
-      });
-    }
   } else if (Compare.NA) {
     throw new HttpException(
       `Filter "${filter.key}" expected to be handled by a custom filter handler, but one was not implemented.`,
@@ -93,6 +68,12 @@ export function buildFilter(
       'Comparison Not Implemented',
       HttpStatus.NOT_IMPLEMENTED,
     );
+  }
+
+  if (includeNulls) {
+    toReturn.push({
+      equals: null,
+    });
   }
 
   return toReturn;

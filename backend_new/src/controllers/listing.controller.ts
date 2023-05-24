@@ -59,7 +59,7 @@ export class ListingController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) listingId: string,
     @Query() queryParams: ListingsRetrieveParams,
   ) {
-    if (listingId === undefined || listingId === 'undefined') {
+    if (listingId === undefined) {
       return {} as ListingGet;
     }
     return await this.listingService.findOne(

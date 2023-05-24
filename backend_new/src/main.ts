@@ -7,7 +7,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Bloom API')
     .setDescription('The API for Bloom')
-    .setVersion('1.0')
+    .setVersion('2.0')
     .addTag('listings')
     .build();
   const document = SwaggerModule.createDocument(app, config);
