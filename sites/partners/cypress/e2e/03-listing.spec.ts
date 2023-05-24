@@ -20,6 +20,7 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
+    console.log(listing)
     cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
@@ -125,7 +126,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
     cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
     cy.get("#digitalApplicationChoiceYes").check()
-    cy.get("#commonDigitalApplicationChoiceYes").check()
+    cy.get("#commonDigitalApplicationChoiceNo").check()
+    cy.get("#customOnlineApplicationUrl").type(listing["url"])
     cy.get("#paperApplicationNo").check()
     cy.get("#referralOpportunityNo").check()
 
@@ -243,6 +245,7 @@ describe("Listing Management Tests", () => {
     cy.get("#leasingAgentTitle").contains(listing["leasingAgentTitle"])
     cy.get("#digitalApplication").contains("Yes")
     cy.getByID("digitalMethod.type").contains("Yes")
+    cy.get("#customOnlineApplicationUrl").contains(listing["url"])
     cy.get("#paperApplication").contains("No")
     cy.get("#referralOpportunity").contains("No")
     cy.getByID("leasingAgentAddress.street").contains(listing["leasingAgentAddress.street"])
