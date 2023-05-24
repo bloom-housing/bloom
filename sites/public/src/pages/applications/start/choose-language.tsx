@@ -82,7 +82,7 @@ const ApplicationChooseLanguage = () => {
   useEffect(() => {
     if (listing?.status === "closed") {
       setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
-      void router.push(`/listing/${listing?.id}`)
+      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
     }
   }, [listing, router])
 
