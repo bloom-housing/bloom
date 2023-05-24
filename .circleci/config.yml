@@ -67,9 +67,8 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            yarn test:backend:core:dbsetup
-            yarn test:backend:core
-            yarn test:e2e:backend:core
+            yarn test:backend:new
+            yarn test:backend:new:e2e
           environment:
             PORT: "3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
