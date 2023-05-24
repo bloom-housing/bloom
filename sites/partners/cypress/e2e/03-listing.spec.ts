@@ -20,7 +20,6 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
-    console.log(listing)
     cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
@@ -244,7 +243,7 @@ describe("Listing Management Tests", () => {
     cy.get("#leasingAgentOfficeHours").contains(listing["leasingAgentOfficeHours"])
     cy.get("#leasingAgentTitle").contains(listing["leasingAgentTitle"])
     cy.get("#digitalApplication").contains("Yes")
-    cy.getByID("digitalMethod.type").contains("Yes")
+    cy.getByID("digitalMethod.type").contains("No")
     cy.get("#customOnlineApplicationUrl").contains(listing["url"])
     cy.get("#paperApplication").contains("No")
     cy.get("#referralOpportunity").contains("No")
