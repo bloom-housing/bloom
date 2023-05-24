@@ -80,6 +80,7 @@ class MultiselectQuestion extends AbstractDTO {
     enum: MultiselectQuestionsApplicationSectionEnum,
     enumName: 'MultiselectQuestionsApplicationSectionEnum',
   })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   applicationSection: MultiselectQuestionsApplicationSectionEnum;
 }
 

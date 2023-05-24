@@ -399,6 +399,7 @@ class ListingGet extends AbstractDTO {
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
   jurisdictions: Jurisdiction;
 

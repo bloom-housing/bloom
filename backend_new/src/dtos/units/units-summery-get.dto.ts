@@ -21,6 +21,7 @@ class UnitsSummary {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitType)
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   unitTypes: UnitType;
 
   @Expose()

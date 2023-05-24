@@ -32,6 +32,7 @@ export class Jurisdiction extends AbstractDTO {
     groups: [ValidationsGroupsEnum.default],
     each: true,
   })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   languages: LanguagesEnum[];
 
   @Expose()

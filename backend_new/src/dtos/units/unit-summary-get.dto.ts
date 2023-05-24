@@ -8,7 +8,6 @@ import { UnitType } from './unit-type-get.dto';
 
 export class UnitSummary {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   unitTypes?: UnitType | null;
