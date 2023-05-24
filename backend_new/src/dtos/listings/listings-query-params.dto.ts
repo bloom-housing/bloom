@@ -6,7 +6,6 @@ import {
   ArrayMaxSize,
   IsArray,
   IsEnum,
-  IsOptional,
   IsString,
   MinLength,
   Validate,
@@ -28,7 +27,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     },
     example: { $comparison: '=', status: 'active', name: 'Coliseum' },
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFilterParams)
@@ -41,7 +39,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     required: false,
     type: String,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   view?: string;
 
@@ -53,7 +50,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     example: '["updatedAt"]',
     isArray: true,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingFilterParams)
@@ -74,7 +70,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     required: false,
     isArray: true,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderByEnum, { groups: [ValidationsGroupsEnum.default], each: true })
@@ -89,7 +84,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     example: 'search',
     required: false,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MinLength(3, {
     message: 'Search must be at least 3 characters',

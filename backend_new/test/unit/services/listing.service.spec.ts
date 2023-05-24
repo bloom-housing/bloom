@@ -8,6 +8,9 @@ import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
 import { LanguagesEnum } from '@prisma/client';
+import { Unit } from '../../../src/dtos/units/unit-get.dto';
+import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
+
 describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
@@ -500,6 +503,461 @@ describe('Testing listing service', () => {
                 unitGroupAmiLevels: true,
               },
             },
+          },
+        },
+      },
+    });
+  });
+
+  it('testing list() with params and units', async () => {
+    const date = new Date();
+
+    const genUnits = (numberToMake: number): Unit[] => {
+      const toReturn: Unit[] = [];
+
+      for (let i = 0; i < numberToMake; i++) {
+        toReturn.push({
+          id: `unit ${i}`,
+          createdAt: date,
+          updatedAt: date,
+          amiPercentage: `${i}`,
+          annualIncomeMin: `${i}`,
+          monthlyIncomeMin: `${i}`,
+          floor: i,
+          annualIncomeMax: `${i}`,
+          maxOccupancy: i,
+          minOccupancy: i,
+          monthlyRent: `${i}`,
+          numBathrooms: i,
+          numBedrooms: i,
+          number: `unit ${i}`,
+          sqFeet: `${i}`,
+          monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
+          bmrProgramChart: !(i % 2),
+          unitTypes: {
+            id: `unitType ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            name: UnitTypeSort[i % UnitTypeSort.length],
+            numBedrooms: i,
+          },
+          unitAmiChartOverrides: {
+            id: `unitAmiChartOverrides ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            items: [
+              {
+                percentOfAmi: i,
+                householdSize: i,
+                income: i,
+              },
+            ],
+          },
+        });
+      }
+      return toReturn;
+    };
+
+    prisma.listings.findMany = jest
+      .fn()
+      .mockResolvedValue([{ id: 9, name: 'listing 10', units: genUnits(9) }]);
+
+    prisma.listings.count = jest.fn().mockResolvedValue(20);
+
+    const params: ListingsQueryParams = {
+      view: 'base',
+      page: 2,
+      limit: 10,
+      orderBy: [ListingOrderByKeys.name],
+      orderDir: [OrderByEnum.ASC],
+      search: 'simple search',
+      filter: [
+        {
+          [ListingFilterKeys.name]: 'Listing,name',
+          $comparison: Compare.IN,
+        },
+        {
+          [ListingFilterKeys.bedrooms]: 2,
+          $comparison: Compare['>='],
+        },
+      ],
+    };
+
+    const res = await service.list(params);
+
+    expect(res.items[0].name).toEqual(`listing ${10}`);
+    expect(res.items[0].units).toEqual(genUnits(9));
+    expect(res.items[0].unitsSummarized).toEqual({
+      byUnitTypeAndRent: [
+        {
+          unitTypes: {
+            createdAt: date,
+            updatedAt: date,
+            id: 'unitType 0',
+            name: UnitTypeSort[0],
+            numBedrooms: 0,
+          },
+          minIncomeRange: {
+            max: '$5',
+            min: '$0',
+          },
+          occupancyRange: {
+            max: 5,
+            min: 0,
+          },
+          rentAsPercentIncomeRange: {
+            max: 0,
+            min: 0,
+          },
+          rentRange: {
+            max: '$5',
+            min: '$0',
+          },
+          totalAvailable: 2,
+          areaRange: {
+            max: 5,
+            min: 0,
+          },
+          floorRange: {
+            max: 5,
+            min: 0,
+          },
+        },
+        {
+          unitTypes: {
+            createdAt: date,
+            updatedAt: date,
+            id: 'unitType 1',
+            name: UnitTypeSort[1],
+            numBedrooms: 1,
+          },
+          minIncomeRange: {
+            max: '$6',
+            min: '$1',
+          },
+          occupancyRange: {
+            max: 6,
+            min: 1,
+          },
+          rentAsPercentIncomeRange: {
+            max: 1,
+            min: 1,
+          },
+          rentRange: {
+            max: '$6',
+            min: '$1',
+          },
+          totalAvailable: 2,
+          areaRange: {
+            max: 6,
+            min: 1,
+          },
+          floorRange: {
+            max: 6,
+            min: 1,
+          },
+        },
+        {
+          unitTypes: {
+            createdAt: date,
+            updatedAt: date,
+            id: 'unitType 2',
+            name: UnitTypeSort[2],
+            numBedrooms: 2,
+          },
+          minIncomeRange: {
+            max: '$7',
+            min: '$2',
+          },
+          occupancyRange: {
+            max: 7,
+            min: 2,
+          },
+          rentAsPercentIncomeRange: {
+            max: 2,
+            min: 2,
+          },
+          rentRange: {
+            max: '$7',
+            min: '$2',
+          },
+          totalAvailable: 2,
+          areaRange: {
+            max: 7,
+            min: 2,
+          },
+          floorRange: {
+            max: 7,
+            min: 2,
+          },
+        },
+        {
+          unitTypes: {
+            createdAt: date,
+            updatedAt: date,
+            id: 'unitType 3',
+            name: UnitTypeSort[3],
+            numBedrooms: 3,
+          },
+          minIncomeRange: {
+            max: '$8',
+            min: '$3',
+          },
+          occupancyRange: {
+            max: 8,
+            min: 3,
+          },
+          rentAsPercentIncomeRange: {
+            max: 3,
+            min: 3,
+          },
+          rentRange: {
+            max: '$8',
+            min: '$3',
+          },
+          totalAvailable: 2,
+          areaRange: {
+            max: 8,
+            min: 3,
+          },
+          floorRange: {
+            max: 8,
+            min: 3,
+          },
+        },
+        {
+          unitTypes: {
+            createdAt: date,
+            updatedAt: date,
+            id: 'unitType 4',
+            name: UnitTypeSort[4],
+            numBedrooms: 4,
+          },
+          minIncomeRange: {
+            max: '$4',
+            min: '$4',
+          },
+          occupancyRange: {
+            max: 4,
+            min: 4,
+          },
+          rentAsPercentIncomeRange: {
+            max: 4,
+            min: 4,
+          },
+          rentRange: {
+            max: '$4',
+            min: '$4',
+          },
+          totalAvailable: 1,
+          areaRange: {
+            max: 4,
+            min: 4,
+          },
+          floorRange: {
+            max: 4,
+            min: 4,
+          },
+        },
+      ],
+    });
+
+    expect(res.meta).toEqual({
+      currentPage: 2,
+      itemCount: 1,
+      itemsPerPage: 10,
+      totalItems: 20,
+      totalPages: 2,
+    });
+
+    expect(prisma.listings.findMany).toHaveBeenCalledWith({
+      skip: 10,
+      take: 10,
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                name: {
+                  in: ['listing', 'name'],
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBedrooms: {
+                      gte: 2,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            name: {
+              contains: 'simple search',
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        reservedCommunityTypes: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingFeatures: true,
+        listingUtilities: true,
+        units: {
+          include: {
+            unitTypes: true,
+            unitAmiChartOverrides: true,
+          },
+        },
+      },
+    });
+
+    expect(prisma.listings.count).toHaveBeenCalledWith({
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                name: {
+                  in: ['listing', 'name'],
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                units: {
+                  some: {
+                    numBedrooms: {
+                      gte: 2,
+                      mode: 'insensitive',
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            name: {
+              contains: 'simple search',
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  // work in progress
+  it.skip('testing findOne() base view found record and units', async () => {
+    const date = new Date();
+    const genUnits = (numberToMake: number): Unit[] => {
+      const toReturn: Unit[] = [];
+
+      for (let i = 0; i < numberToMake; i++) {
+        toReturn.push({
+          id: `unit ${i}`,
+          createdAt: date,
+          updatedAt: date,
+          amiPercentage: `${i}`,
+          annualIncomeMin: `${i}`,
+          monthlyIncomeMin: `${i}`,
+          floor: i,
+          annualIncomeMax: `${i}`,
+          maxOccupancy: i,
+          minOccupancy: i,
+          monthlyRent: `${i}`,
+          numBathrooms: i,
+          numBedrooms: i,
+          number: `unit ${i}`,
+          sqFeet: `${i}`,
+          monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
+          bmrProgramChart: !(i % 2),
+          unitTypes: {
+            id: `unitType ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            name: UnitTypeSort[i % UnitTypeSort.length],
+            numBedrooms: i,
+          },
+          unitAmiChartOverrides: {
+            id: `unitAmiChartOverrides ${i}`,
+            createdAt: date,
+            updatedAt: date,
+            items: [
+              {
+                percentOfAmi: i,
+                householdSize: i,
+                income: i,
+              },
+            ],
+          },
+        });
+      }
+      return toReturn;
+    };
+
+    prisma.listings.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: 0, name: 'listing 1' });
+
+    expect(
+      await service.findOne('listingId', LanguagesEnum.en, 'base'),
+    ).toEqual({ id: 0, name: 'listing 1' });
+
+    expect(prisma.listings.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: {
+          equals: 'listingId',
+        },
+      },
+      include: {
+        jurisdictions: true,
+        listingsBuildingAddress: true,
+        reservedCommunityTypes: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingFeatures: true,
+        listingUtilities: true,
+        units: {
+          include: {
+            unitTypes: true,
+            unitAmiChartOverrides: true,
           },
         },
       },

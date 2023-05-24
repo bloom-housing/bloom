@@ -1,22 +1,17 @@
 import { Expose, Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsDefined, IsString, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { MinMaxCurrency } from '../shared/min-max-currency.dto';
 import { MinMax } from '../shared/min-max.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { UnitTypes } from '@prisma/client';
+import { UnitType } from './unit-type-get.dto';
 
-export class SummaryOfUnits {
+export class UnitSummary {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  unitType?: UnitTypes | null;
+  unitTypes?: UnitType | null;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -60,7 +55,6 @@ export class SummaryOfUnits {
   areaRange: MinMax;
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => MinMax)
   @ApiProperty({ type: MinMax, required: false })

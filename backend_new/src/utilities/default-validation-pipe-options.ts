@@ -12,4 +12,5 @@ export const defaultValidationPipeOptions: ValidationPipeOptions = {
   },
   groups: [ValidationsGroupsEnum.default],
   forbidUnknownValues: true,
+  skipMissingProperties: true,
 };

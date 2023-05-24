@@ -1,12 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import {
-  LanguagesEnum,
-  Prisma,
-  ReviewOrderTypeEnum,
-  Units,
-  UnitsSummary,
-} from '@prisma/client';
+import { LanguagesEnum, Prisma } from '@prisma/client';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import {
   calculateSkip,
@@ -17,7 +11,13 @@ import { buildOrderBy } from '../utilities/build-order-by';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { buildFilter } from '../utilities/build-filter';
-import { SummaryOfUnits } from '../dtos/units/summary-of-units.dto';
+import { ListingGet } from '../dtos/listings/listing-get.dto';
+import { mapTo } from '../utilities/mapTo';
+import {
+  summarizeUnitsByTypeAndRent,
+  summarizeUnits,
+} from '../utilities/unit-utilities';
+import { AmiChart } from '../dtos/units/ami-chart-get.dto';
 
 export type getListingsArgs = {
   skip: number;
@@ -25,84 +25,6 @@ export type getListingsArgs = {
   orderBy: any;
   where: Prisma.ListingsWhereInput;
 };
-
-export const FullListing = Prisma.validator<Prisma.ListingsArgs>()({
-  include: {
-    listingNeighborhoodAmenities: true,
-    applicationMethods: {
-      include: {
-        paperApplications: {
-          include: {
-            assets: true,
-          },
-        },
-      },
-    },
-    listingEvents: {
-      include: {
-        assets: true,
-      },
-    },
-    listingImages: {
-      include: {
-        assets: true,
-      },
-    },
-    listingMultiselectQuestions: {
-      include: {
-        multiselectQuestions: true,
-      },
-    },
-    listingsApplicationDropOffAddress: true,
-    reservedCommunityTypes: true,
-    listingsBuildingSelectionCriteriaFile: true,
-    listingsResult: true,
-    listingUtilities: true,
-    listingsApplicationMailingAddress: true,
-    listingsLeasingAgentAddress: true,
-    listingFeatures: true,
-    jurisdictions: true,
-    listingsApplicationPickUpAddress: true,
-    listingsBuildingAddress: true,
-    units: {
-      include: {
-        unitTypes: true,
-        amiChart: {
-          include: {
-            amiChartItem: true,
-          },
-        },
-        unitAmiChartOverrides: true,
-        unitAccessibilityPriorityTypes: true,
-        unitRentTypes: true,
-      },
-    },
-    unitGroup: {
-      include: {
-        unitAccessibilityPriorityTypes: true,
-        unitGroupAmiLevels: {
-          include: {
-            amiChart: {
-              include: {
-                amiChartItem: true,
-                unitGroupAmiLevels: true,
-              },
-            },
-          },
-        },
-        unitTypes: true,
-      },
-    },
-    unitsSummary: {
-      include: {
-        unitTypes: true,
-        unitAccessibilityPriorityTypes: true,
-      },
-    },
-  },
-});
-
-export type FullListingType = Prisma.ListingsGetPayload<typeof FullListing>;
 
 const views: Record<string, Prisma.ListingsInclude> = {
   fundamentals: {
@@ -198,20 +120,26 @@ export class ListingService {
       where: whereClause,
     });
 
-    const listings = (await this.prisma.listings.findMany({
+    const listingsRaw = await this.prisma.listings.findMany({
       skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
       orderBy: buildOrderBy(params.orderBy, params.orderDir),
       include: views[params.view ?? 'full'],
       where: whereClause,
-    })) as FullListingType[];
+    });
 
-    // listings.forEach((listing) => {
-    //   listing.unitsSummarized = {
-    //     byUnitTypeAndRent: this.summarizeUnitsByTypeAndRent(listing),
-    //   };
-    // });
+    const listings = mapTo(ListingGet, listingsRaw);
 
+    listings.forEach((listing) => {
+      if (Array.isArray(listing.units) && listing.units.length > 0) {
+        listing.unitsSummarized = {
+          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(
+            listing.units,
+            listing,
+          ),
+        };
+      }
+    });
     const itemsPerPage = isPaginated ? params.limit : listings.length;
     const totalItems = isPaginated ? count : listings.length;
 
@@ -361,14 +289,16 @@ export class ListingService {
     lang: LanguagesEnum = LanguagesEnum.en,
     view = 'full',
   ) {
-    const result = (await this.prisma.listings.findFirst({
+    const listingRaw = await this.prisma.listings.findFirst({
       include: views[view],
       where: {
         id: {
           equals: listingId,
         },
       },
-    })) as FullListingType;
+    });
+
+    const result = mapTo(ListingGet, listingRaw);
 
     if (!result) {
       throw new NotFoundException();
@@ -378,39 +308,22 @@ export class ListingService {
       // TODO: await this.translationService.translateListing(result, lang);
     }
 
-    // await this.addUnitsSummarized(result);
+    await this.addUnitsSummarized(result);
     return result;
   }
 
-  // summarizeUnitsByTypeAndRent = (listing: FullListingType): UnitsSummary[] => {
-  //   const summaries: UnitSummary[] = [];
-  //   const unitMap: Record<string, Units[]> = {};
-  //   const UnitTypeSort = ['SRO', 'studio', 'oneBdrm', 'twoBdrm', 'threeBdrm'];
-
-  //   listing.units.forEach((unit) => {
-  //     const currentUnitType = unit.unitTypes;
-  //     const currentUnitRent = unit.monthlyRentAsPercentOfIncome;
-  //     const thisKey = currentUnitType?.name.concat(`${currentUnitRent}`);
-  //     if (!(thisKey in unitMap)) unitMap[thisKey] = [];
-  //     unitMap[thisKey].push(unit);
-  //   });
-
-  //   for (const key in unitMap) {
-  //     const finalSummary = unitMap[key].reduce((summary, unit, index) => {
-  //       return getUnitsSummary(unit, index === 0 ? null : summary);
-  //     }, {} as UnitSummary);
-  //     if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
-  //       finalSummary.totalAvailable = unitMap[key].length;
-  //     }
-  //     summaries.push(finalSummary);
-  //   }
-
-  //   return summaries.sort((a, b) => {
-  //     return (
-  //       UnitTypeSort.indexOf(a.unitType.name) -
-  //         UnitTypeSort.indexOf(b.unitType.name) ||
-  //       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
-  //     );
-  //   });
-  // };
+  addUnitsSummarized = async (listing: ListingGet) => {
+    if (Array.isArray(listing.units) && listing.units.length > 0) {
+      const amiChartsRaw = await this.prisma.amiChart.findMany({
+        where: {
+          id: {
+            in: listing.units.map((unit) => unit.amiChart.id),
+          },
+        },
+      });
+      const amiCharts = mapTo(AmiChart, amiChartsRaw);
+      listing.unitsSummarized = summarizeUnits(listing, amiCharts);
+    }
+    return listing;
+  };
 }

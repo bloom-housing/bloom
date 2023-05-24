@@ -3,7 +3,6 @@ import { IPaginationMeta } from 'nestjs-typeorm-paginate/dist/interfaces';
 import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsNumber,
-  IsOptional,
   registerDecorator,
   ValidationOptions,
 } from 'class-validator';
@@ -50,7 +49,6 @@ export class PaginationQueryParams {
     required: false,
     default: 1,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
@@ -64,7 +62,6 @@ export class PaginationQueryParams {
     required: false,
     default: 10,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
     toClassOnly: true,
@@ -80,7 +77,6 @@ export class PaginationAllowsAllQueryParams {
     required: false,
     default: 1,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
@@ -94,7 +90,6 @@ export class PaginationAllowsAllQueryParams {
     required: false,
     default: 10,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberOrAll({
     message: 'Limit must be a number or "All"',
     groups: [ValidationsGroupsEnum.default],
