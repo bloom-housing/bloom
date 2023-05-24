@@ -83,7 +83,7 @@ jobs:
             CLOUDINARY_CLOUD_NAME: "exygy"
             CLOUDINARY_SECRET: "fake_secret"
             PARTNERS_PORTAL_URL: "http://localhost:3001"
-    jest-backend-new:
+    jest-new-backend:
       executor: standard-node
       steps:
         - restore_cache:
@@ -139,7 +139,7 @@ workflows:
       - jest-backend:
           requires:
             - setup
-      - jest-backend-new:
+      - jest-new-backend:
           requires:
             - setup
       - build-public:
