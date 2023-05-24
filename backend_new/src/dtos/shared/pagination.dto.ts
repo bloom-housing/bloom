@@ -1,5 +1,4 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IPaginationMeta } from 'nestjs-typeorm-paginate/dist/interfaces';
 import { Expose, Transform, Type } from 'class-transformer';
 import {
   IsNumber,
@@ -9,7 +8,7 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ClassType } from 'class-transformer/ClassTransformer';
 
-export class PaginationMeta implements IPaginationMeta {
+export class PaginationMeta {
   @Expose()
   currentPage: number;
   @Expose()

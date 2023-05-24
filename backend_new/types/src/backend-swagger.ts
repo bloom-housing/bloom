@@ -124,7 +124,7 @@ export class ListingsService {
       search?: string;
     } = {} as any,
     options: IRequestOptions = {},
-  ): Promise<any> {
+  ): Promise<PaginatedListing> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/listings';
 
@@ -160,7 +160,7 @@ export class ListingsService {
       view?: string;
     } = {} as any,
     options: IRequestOptions = {},
-  ): Promise<any> {
+  ): Promise<ListingGet> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/listings/{id}';
       url = url.replace('{id}', params['id'] + '');
@@ -241,6 +241,127 @@ export interface PaginationAllowsAllQueryParams {
   /**  */
   limit?: number | 'all';
 }
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodsTypeEnum;
+}
+
+export interface UnitType {}
+
+export interface UnitAccessibilityPriorityType {}
+
+export interface MinMaxCurrency {
+  /**  */
+  min: string;
+
+  /**  */
+  max: string;
+}
+
+export interface MinMax {
+  /**  */
+  min: number;
+
+  /**  */
+  max: number;
+}
+
+export interface UnitSummary {
+  /**  */
+  unitTypes: UnitType;
+
+  /**  */
+  minIncomeRange: MinMaxCurrency;
+
+  /**  */
+  occupancyRange: MinMax;
+
+  /**  */
+  rentAsPercentIncomeRange: MinMax;
+
+  /**  */
+  rentRange: MinMaxCurrency;
+
+  /**  */
+  totalAvailable: number;
+
+  /**  */
+  areaRange: MinMax;
+
+  /**  */
+  floorRange?: MinMax;
+}
+
+export interface UnitSummaryByAMI {
+  /**  */
+  percent: string;
+
+  /**  */
+  byUnitType: UnitSummary[];
+}
+
+export interface HMI {
+  /**  */
+  columns: object;
+
+  /**  */
+  rows: object[];
+}
+
+export interface UnitsSummarized {
+  /**  */
+  unitTypes: UnitType[];
+
+  /**  */
+  priorityTypes: UnitAccessibilityPriorityType[];
+
+  /**  */
+  amiPercentages: string[];
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[];
+
+  /**  */
+  byUnitType: UnitSummary[];
+
+  /**  */
+  byAMI: UnitSummaryByAMI[];
+
+  /**  */
+  hmi: HMI;
+}
+
+export interface ListingGet {
+  /**  */
+  applicationPickUpAddressType: ApplicationAddressTypeEnum;
+
+  /**  */
+  applicationDropOffAddressType: ApplicationAddressTypeEnum;
+
+  /**  */
+  applicationMailingAddressType: ApplicationAddressTypeEnum;
+
+  /**  */
+  status: ListingsStatusEnum;
+
+  /**  */
+  reviewOrderType: ReviewOrderTypeEnum;
+
+  /**  */
+  showWaitlist: boolean;
+
+  /**  */
+  referralApplication?: ApplicationMethod;
+
+  /**  */
+  unitsSummarized: UnitsSummarized;
+}
+
+export interface PaginatedListing {
+  /**  */
+  items: ListingGet[];
+}
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',
   'desc' = 'desc',
@@ -257,4 +378,29 @@ export enum EnumListingFilterParamsStatus {
   'active' = 'active',
   'pending' = 'pending',
   'closed' = 'closed',
+}
+export enum ApplicationAddressTypeEnum {
+  'leasingAgent' = 'leasingAgent',
+}
+
+export enum ListingsStatusEnum {
+  'active' = 'active',
+  'pending' = 'pending',
+  'closed' = 'closed',
+}
+
+export enum ReviewOrderTypeEnum {
+  'lottery' = 'lottery',
+  'firstComeFirstServe' = 'firstComeFirstServe',
+  'waitlist' = 'waitlist',
+}
+
+export enum ApplicationMethodsTypeEnum {
+  'Internal' = 'Internal',
+  'FileDownload' = 'FileDownload',
+  'ExternalLink' = 'ExternalLink',
+  'PaperPickup' = 'PaperPickup',
+  'POBox' = 'POBox',
+  'LeasingAgent' = 'LeasingAgent',
+  'Referral' = 'Referral',
 }

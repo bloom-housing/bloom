@@ -140,7 +140,8 @@ export class ListingService {
         };
       }
     });
-    const itemsPerPage = isPaginated ? params.limit : listings.length;
+    const itemsPerPage =
+      isPaginated && params.limit !== 'all' ? params.limit : listings.length;
     const totalItems = isPaginated ? count : listings.length;
 
     const paginationInfo = {
@@ -149,7 +150,7 @@ export class ListingService {
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,
       totalPages: Math.ceil(
-        totalItems / (itemsPerPage !== 'all' ? itemsPerPage : totalItems),
+        totalItems / itemsPerPage ? itemsPerPage : totalItems,
       ),
     };
 
