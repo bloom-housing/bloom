@@ -470,6 +470,7 @@
   "listings.applicationOpenPeriod": "Solicitudes abiertas",
   "listings.applicationPerApplicantAgeDescription": "por solicitante de 18 años o más",
   "listings.applicationsClosed": "Solicitudes cerradas",
+  "listings.applicationsClosedRedirect": "Esta lista ya no acepta solicitudes.",
   "listings.applications": "Solicitudes",
   "listings.apply.applicationWillBeAvailableOn": "La solicitud podrá ser descargada y recogida el %{openDate}",
   "listings.apply.applyOnline": "Haga su solicitud por Internet",

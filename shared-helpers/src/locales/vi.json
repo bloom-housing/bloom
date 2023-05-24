@@ -447,6 +447,7 @@
   "listings.applicationOpenPeriod": "Bắt đầu nhận đơn Ghi danh",
   "listings.applicationPerApplicantAgeDescription": "mỗi ứng viên từ 18 tuổi trở lên",
   "listings.applicationsClosed": "Ngừng nhận Đơn ghi danh",
+  "listings.applicationsClosedRedirect": "Danh sách này không còn chấp nhận các ứng dụng.",
   "listings.applications": "Đơn đăng ký",
   "listings.apply.applicationWillBeAvailableOn": "Đơn ghi danh sẽ có sẵn để tải xuống và tới nhận vào %{openDate}",
   "listings.apply.applyOnline": "Ghi danh Trực tuyến",
