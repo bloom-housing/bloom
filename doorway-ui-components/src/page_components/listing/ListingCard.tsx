@@ -20,6 +20,7 @@ export interface ListingCardHeader {
   styleType?: AppearanceStyleType
   isPillType?: boolean
   priority?: number
+  makeCardClickable?: boolean
 }
 
 export interface ListingFooterButton {
@@ -81,6 +82,12 @@ const ListingCard = (props: ListingCardProps) => {
     tableProps,
   } = props
   const { LinkComponent } = useContext(NavigationContext)
+  const linkRef = React.useRef<HTMLAnchorElement>(null)
+  const simulateLinkClick = () => {
+    if (linkRef.current) {
+      linkRef.current.click()
+    }
+  }
 
   const getHeader = (
     header: ListingCardHeader | undefined,
@@ -105,7 +112,7 @@ const ListingCard = (props: ListingCardProps) => {
       return (
         <Heading priority={priority} styleType={styleType} className={customClass}>
           {header.href ? (
-            <LinkComponent className="is-card-link" href={header.href}>
+            <LinkComponent className="is-card-link" href={header.href} linkRef={linkRef}>
               {header.content}
             </LinkComponent>
           ) : (
@@ -205,8 +212,14 @@ const ListingCard = (props: ListingCardProps) => {
     )
   }
 
+  const componentIsClickable =
+    contentProps?.contentHeader?.makeCardClickable && contentProps?.contentHeader?.href
   return (
-    <article className="listings-row" data-testid={"listing-card-component"}>
+    <article
+      className={`listings-row ${componentIsClickable ? "cursor-pointer" : ""}`}
+      data-testid={"listing-card-component"}
+      onClick={componentIsClickable ? simulateLinkClick : undefined}
+    >
       <div className="listings-row_figure">
         <ImageCard {...imageCardProps} />
       </div>

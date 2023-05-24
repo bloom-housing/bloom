@@ -3,6 +3,7 @@ import React, {
   FunctionComponent,
   AnchorHTMLAttributes,
   DetailedHTMLProps,
+  RefObject,
 } from "react"
 import { UrlObject } from "url"
 
@@ -15,6 +16,7 @@ type DefaultLinkProps = DetailedHTMLProps<
 
 export interface LinkProps extends DefaultLinkProps {
   className?: string
+  linkRef?: React.RefObject<HTMLAnchorElement>
 }
 
 export interface GenericRouterOptions {
@@ -35,11 +37,14 @@ export interface NavigationContextProps {
 }
 
 export const NavigationContext = createContext<NavigationContextProps>({
-  LinkComponent: (props) => (
-    <a className={props.className} {...props}>
-      {props.children}
-    </a>
-  ),
+  LinkComponent: (props) => {
+    const { className, linkRef, ...defaultProps } = props
+    return (
+      <a className={className} ref={linkRef} {...defaultProps}>
+        {props.children}
+      </a>
+    )
+  },
   router: {
     push: () => {
       // no-op

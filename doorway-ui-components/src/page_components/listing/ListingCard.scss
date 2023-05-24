@@ -1,6 +1,6 @@
 .listings-row {
   --tags-flex-order: 0;
-  --inter-row-gap: var(--bloom-s12);
+  --inter-row-gap: var(--bloom-s5);
   --max-width: var(--bloom-width-3xl);
   --max-width-large-screen: var(--bloom-width-5xl);
   --cell-padding: var(--bloom-s3);
@@ -22,7 +22,12 @@
   &:first-of-type {
     margin-top: 0;
   }
+
+  &:hover {
+    background-color: var(--bloom-color-gray-300);
+  }
 }
+
 .listings-row_figure {
   display: flex;
 
@@ -40,7 +45,6 @@
 .listings-row_figure,
 .listings-row_content {
   padding: var(--cell-padding);
-  padding-bottom: 0px;
 }
 
 .listings-row_content {
@@ -94,6 +98,8 @@
     top: 0;
     right: 0;
     bottom: 0;
+    width: 0;
+    height: 0;
   }
 }
 

@@ -182,6 +182,7 @@ export const getListingCard = (listing: Listing, index: number) => {
         contentHeader: {
           content: displayIndex + ". " + listing.name,
           href: uri,
+          makeCardClickable: true,
         },
         contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
       }}
