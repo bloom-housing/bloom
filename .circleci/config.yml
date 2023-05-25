@@ -91,7 +91,7 @@ jobs:
       - run:
           name: DB Setup + New Backend Core Tests
           command: |
-            backend:new:install
+            yarn backend:new:install
             yarn test:backend:new
             yarn test:backend:new:e2e
           environment:
