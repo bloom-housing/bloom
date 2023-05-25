@@ -22,7 +22,7 @@ export default Factory.define<Listing>(({ sequence, factories }) => ({
     street: "55 Triton Park Lane",
     zipCode: "94404",
     state: "CA",
-    county: "San Jose",
+    county: "Santa Clara",
     latitude: 37.55695,
     longitude: -122.27521,
   },

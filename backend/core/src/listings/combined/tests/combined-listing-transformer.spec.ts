@@ -234,6 +234,7 @@ describe("CombinedListingTransformer", () => {
       },
       building_address: {
         city: "Oakland",
+        county: "Alameda",
         state: "CA",
         street: "3300 Hawley Street",
         street2: null,
@@ -299,6 +300,7 @@ describe("CombinedListingTransformer", () => {
     // building address
     testObjectTransformation(raw.building_address, listing.buildingAddress, Address, [
       "city",
+      "county",
       "state",
       "street",
       "street2",

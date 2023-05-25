@@ -157,6 +157,7 @@ describe("Transformer", () => {
       ],
       buildingAddress: {
         city: "San Francisco",
+        county: "San Francisco",
         state: "CA",
         street: "548 Market Street",
         street2: "Suite #59930",

@@ -37,6 +37,7 @@ export const getGenericAddress = (bloomAddress: Address) => {
   return bloomAddress
     ? {
         city: bloomAddress.city,
+        county: bloomAddress.county,
         street: bloomAddress.street,
         street2: bloomAddress.street2,
         state: bloomAddress.state,

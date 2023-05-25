@@ -29,7 +29,16 @@ export class BaseView {
 }
 
 export const getBaseAddressSelect = (schemas: string[]): string[] => {
-  const fields = ["city", "state", "street", "street2", "zipCode", "latitude", "longitude"]
+  const fields = [
+    "city",
+    "county",
+    "state",
+    "street",
+    "street2",
+    "zipCode",
+    "latitude",
+    "longitude",
+  ]
 
   let select: string[] = []
   schemas.forEach((schema) => {

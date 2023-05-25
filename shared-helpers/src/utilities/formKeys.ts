@@ -58,12 +58,12 @@ export const stateKeys = [
 export const countyKeys = [
   "",
   "Alameda",
-  "ContraCosta",
+  "Contra Costa",
   "Marin",
   "Napa",
-  "SanFrancisco",
-  "SanMateo",
-  "SantaClara",
+  "San Francisco",
+  "San Mateo",
+  "Santa Clara",
   "Solano",
   "Sonoma",
 ]

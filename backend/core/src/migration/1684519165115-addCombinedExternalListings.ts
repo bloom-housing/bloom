@@ -70,6 +70,7 @@ units.json AS "units",
 -- building address
 jsonb_build_object(
   'city', addr.city,
+  'county', addr.county,
   'state', addr.state,
   'street', addr.street,
   'street2', addr.street2,
