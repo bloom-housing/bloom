@@ -11,6 +11,81 @@ import { LanguagesEnum } from '@prisma/client';
 import { Unit } from '../../../src/dtos/units/unit-get.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 
+/*
+  generates a super simple mock listing for us to test logic with
+*/
+const mockListing = (
+  pos: number,
+  genUnits?: { numberToMake: number; date: Date },
+) => {
+  const toReturn = { id: pos, name: `listing ${pos + 1}`, units: undefined };
+  if (genUnits) {
+    const units: Unit[] = [];
+    const { numberToMake, date } = genUnits;
+    for (let i = 0; i < numberToMake; i++) {
+      units.push({
+        id: `unit ${i}`,
+        createdAt: date,
+        updatedAt: date,
+        amiPercentage: `${i}`,
+        annualIncomeMin: `${i}`,
+        monthlyIncomeMin: `${i}`,
+        floor: i,
+        annualIncomeMax: `${i}`,
+        maxOccupancy: i,
+        minOccupancy: i,
+        monthlyRent: `${i}`,
+        numBathrooms: i,
+        numBedrooms: i,
+        number: `unit ${i}`,
+        sqFeet: `${i}`,
+        monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
+        bmrProgramChart: !(i % 2),
+        unitTypes: {
+          id: `unitType ${i}`,
+          createdAt: date,
+          updatedAt: date,
+          name: UnitTypeSort[i % UnitTypeSort.length],
+          numBedrooms: i,
+        },
+        unitAmiChartOverrides: {
+          id: `unitAmiChartOverrides ${i}`,
+          createdAt: date,
+          updatedAt: date,
+          items: [
+            {
+              percentOfAmi: i,
+              householdSize: i,
+              income: i,
+            },
+          ],
+        },
+        amiChart: {
+          id: `AMI${i}`,
+          items: [],
+          name: `AMI Name ${i}`,
+          createdAt: date,
+          updatedAt: date,
+        },
+      });
+    }
+    toReturn.units = units;
+  }
+
+  return toReturn;
+};
+
+const mockListingSet = (
+  pos: number,
+  genUnits?: { numberToMake: number; date: Date },
+) => {
+  const toReturn = [];
+  for (let i = 0; i < pos; i++) {
+    toReturn.push(mockListing(i, genUnits));
+  }
+  return toReturn;
+};
+
 describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
@@ -25,18 +100,7 @@ describe('Testing listing service', () => {
   });
 
   it('testing list() with no params', async () => {
-    prisma.listings.findMany = jest.fn().mockResolvedValue([
-      { id: 0, name: 'listing 1' },
-      { id: 1, name: 'listing 2' },
-      { id: 2, name: 'listing 3' },
-      { id: 3, name: 'listing 4' },
-      { id: 4, name: 'listing 5' },
-      { id: 5, name: 'listing 6' },
-      { id: 6, name: 'listing 7' },
-      { id: 7, name: 'listing 8' },
-      { id: 8, name: 'listing 9' },
-      { id: 9, name: 'listing 10' },
-    ]);
+    prisma.listings.findMany = jest.fn().mockResolvedValue(mockListingSet(10));
 
     prisma.listings.count = jest.fn().mockResolvedValue(10);
 
@@ -132,18 +196,7 @@ describe('Testing listing service', () => {
   });
 
   it('testing list() with params', async () => {
-    prisma.listings.findMany = jest.fn().mockResolvedValue([
-      { id: 0, name: 'listing 1' },
-      { id: 1, name: 'listing 2' },
-      { id: 2, name: 'listing 3' },
-      { id: 3, name: 'listing 4' },
-      { id: 4, name: 'listing 5' },
-      { id: 5, name: 'listing 6' },
-      { id: 6, name: 'listing 7' },
-      { id: 7, name: 'listing 8' },
-      { id: 8, name: 'listing 9' },
-      { id: 9, name: 'listing 10' },
-    ]);
+    prisma.listings.findMany = jest.fn().mockResolvedValue(mockListingSet(10));
 
     prisma.listings.count = jest.fn().mockResolvedValue(20);
 
@@ -397,9 +450,7 @@ describe('Testing listing service', () => {
   });
 
   it('testing findOne() base view found record', async () => {
-    prisma.listings.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: 0, name: 'listing 1' });
+    prisma.listings.findFirst = jest.fn().mockResolvedValue(mockListing(0));
 
     expect(
       await service.findOne('listingId', LanguagesEnum.en, 'base'),
@@ -512,55 +563,9 @@ describe('Testing listing service', () => {
   it('testing list() with params and units', async () => {
     const date = new Date();
 
-    const genUnits = (numberToMake: number): Unit[] => {
-      const toReturn: Unit[] = [];
-
-      for (let i = 0; i < numberToMake; i++) {
-        toReturn.push({
-          id: `unit ${i}`,
-          createdAt: date,
-          updatedAt: date,
-          amiPercentage: `${i}`,
-          annualIncomeMin: `${i}`,
-          monthlyIncomeMin: `${i}`,
-          floor: i,
-          annualIncomeMax: `${i}`,
-          maxOccupancy: i,
-          minOccupancy: i,
-          monthlyRent: `${i}`,
-          numBathrooms: i,
-          numBedrooms: i,
-          number: `unit ${i}`,
-          sqFeet: `${i}`,
-          monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
-          bmrProgramChart: !(i % 2),
-          unitTypes: {
-            id: `unitType ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            name: UnitTypeSort[i % UnitTypeSort.length],
-            numBedrooms: i,
-          },
-          unitAmiChartOverrides: {
-            id: `unitAmiChartOverrides ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            items: [
-              {
-                percentOfAmi: i,
-                householdSize: i,
-                income: i,
-              },
-            ],
-          },
-        });
-      }
-      return toReturn;
-    };
-
     prisma.listings.findMany = jest
       .fn()
-      .mockResolvedValue([{ id: 9, name: 'listing 10', units: genUnits(9) }]);
+      .mockResolvedValue([mockListing(9, { numberToMake: 9, date })]);
 
     prisma.listings.count = jest.fn().mockResolvedValue(20);
 
@@ -586,7 +591,9 @@ describe('Testing listing service', () => {
     const res = await service.list(params);
 
     expect(res.items[0].name).toEqual(`listing ${10}`);
-    expect(res.items[0].units).toEqual(genUnits(9));
+    expect(res.items[0].units).toEqual(
+      mockListing(9, { numberToMake: 9, date }).units,
+    );
     expect(res.items[0].unitsSummarized).toEqual({
       byUnitTypeAndRent: [
         {
@@ -875,62 +882,36 @@ describe('Testing listing service', () => {
     });
   });
 
-  // work in progress
-  it.skip('testing findOne() base view found record and units', async () => {
+  it.only('testing findOne() base view found record and units', async () => {
     const date = new Date();
-    const genUnits = (numberToMake: number): Unit[] => {
-      const toReturn: Unit[] = [];
 
-      for (let i = 0; i < numberToMake; i++) {
-        toReturn.push({
-          id: `unit ${i}`,
-          createdAt: date,
-          updatedAt: date,
-          amiPercentage: `${i}`,
-          annualIncomeMin: `${i}`,
-          monthlyIncomeMin: `${i}`,
-          floor: i,
-          annualIncomeMax: `${i}`,
-          maxOccupancy: i,
-          minOccupancy: i,
-          monthlyRent: `${i}`,
-          numBathrooms: i,
-          numBedrooms: i,
-          number: `unit ${i}`,
-          sqFeet: `${i}`,
-          monthlyRentAsPercentOfIncome: `${i % UnitTypeSort.length}`,
-          bmrProgramChart: !(i % 2),
-          unitTypes: {
-            id: `unitType ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            name: UnitTypeSort[i % UnitTypeSort.length],
-            numBedrooms: i,
-          },
-          unitAmiChartOverrides: {
-            id: `unitAmiChartOverrides ${i}`,
-            createdAt: date,
-            updatedAt: date,
-            items: [
-              {
-                percentOfAmi: i,
-                householdSize: i,
-                income: i,
-              },
-            ],
-          },
-        });
-      }
-      return toReturn;
-    };
+    const mockedListing = mockListing(0, { numberToMake: 10, date });
 
-    prisma.listings.findFirst = jest
-      .fn()
-      .mockResolvedValue({ id: 0, name: 'listing 1' });
+    prisma.listings.findFirst = jest.fn().mockResolvedValue(mockedListing);
 
-    expect(
-      await service.findOne('listingId', LanguagesEnum.en, 'base'),
-    ).toEqual({ id: 0, name: 'listing 1' });
+    prisma.amiChart.findMany = jest.fn().mockResolvedValue([
+      {
+        id: 'AMI0',
+        items: [],
+        name: '`AMI Name 0`',
+      },
+      {
+        id: 'AMI1',
+        items: [],
+        name: '`AMI Name 1`',
+      },
+    ]);
+
+    const listing = await service.findOne(
+      'listingId',
+      LanguagesEnum.en,
+      'base',
+    );
+
+    expect(listing.id).toEqual(0);
+    expect(listing.name).toEqual('listing 1');
+    expect(listing.units).toEqual(mockedListing.units);
+    expect(listing.unitsSummarized).toEqual({});
 
     expect(prisma.listings.findFirst).toHaveBeenCalledWith({
       where: {
@@ -959,6 +940,14 @@ describe('Testing listing service', () => {
             unitTypes: true,
             unitAmiChartOverrides: true,
           },
+        },
+      },
+    });
+
+    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: {
+          in: mockedListing.units.map((unit) => unit.amiChart.id),
         },
       },
     });

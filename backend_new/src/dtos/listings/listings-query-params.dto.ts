@@ -25,7 +25,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     items: {
       $ref: getSchemaPath(ListingFilterParams),
     },
-    example: { $comparison: '=', status: 'active', name: 'Coliseum' },
+    example: { $comparison: '=', status: 'active' },
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })

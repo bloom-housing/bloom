@@ -52,6 +52,11 @@ views.base = {
     include: {
       unitTypes: true,
       unitAmiChartOverrides: true,
+      amiChart: {
+        include: {
+          amiChartItem: true,
+        },
+      },
     },
   },
 };
@@ -150,7 +155,7 @@ export class ListingService {
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,
       totalPages: Math.ceil(
-        totalItems / itemsPerPage ? itemsPerPage : totalItems,
+        totalItems / (itemsPerPage ? itemsPerPage : totalItems),
       ),
     };
 
