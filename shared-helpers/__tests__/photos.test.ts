@@ -38,7 +38,7 @@ describe("photos helper", () => {
       ],
     } as Listing
 
-    expect(imageUrlFromListing(testListing)).toBe(
+    expect(imageUrlFromListing(testListing)[0]).toBe(
       `https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/1234.jpg`
     )
   })
@@ -55,6 +55,6 @@ describe("photos helper", () => {
       ],
     } as Listing
 
-    expect(imageUrlFromListing(testListing)).toBe("5678")
+    expect(imageUrlFromListing(testListing)[0]).toBe("5678")
   })
 })

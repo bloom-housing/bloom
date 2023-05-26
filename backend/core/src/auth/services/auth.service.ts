@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { BadRequestException, Injectable } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   async isRevokedToken(jwt: string) {
-    const revoked = await this.revokedTokenRepo.findOne({ token: jwt })
+    const revoked = await this.revokedTokenRepo.findOne({ where: { token: jwt } })
     return Boolean(revoked)
   }
 
@@ -66,9 +66,10 @@ export class AuthService {
         res.clearCookie(REFRESH_COOKIE_NAME, REFRESH_COOKIE_OPTIONS)
         res.clearCookie(ACCESS_TOKEN_AVAILABLE_NAME, ACCESS_TOKEN_AVAILABLE_OPTIONS)
 
-        throw new Error(
-          "Someone is attempting to use an outdated refresh token to generate new tokens"
-        )
+        throw new BadRequestException({
+          message: "Someone is attempting to use an outdated refresh token to generate new tokens",
+          knownError: true,
+        })
       }
     }
 

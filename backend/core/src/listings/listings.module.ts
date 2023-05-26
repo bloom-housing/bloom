@@ -1,4 +1,4 @@
-import { Logger, Module } from "@nestjs/common"
+import { forwardRef, Logger, Module } from "@nestjs/common"
 import { HttpModule } from "@nestjs/axios"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsService } from "./listings.service"
@@ -12,10 +12,11 @@ import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
-import { ListingRepository } from "./db/listing.repository"
 import { ListingUtilities } from "./entities/listing-utilities.entity"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 import { ListingsCronService } from "./listings-cron.service"
+import { ListingsCsvExporterService } from "./listings-csv-exporter.service"
+import { CsvBuilder } from "../../src/applications/services/csv-builder.service"
 
 @Module({
   imports: [
@@ -25,17 +26,16 @@ import { ListingsCronService } from "./listings-cron.service"
       Unit,
       User,
       AmiChart,
-      ListingRepository,
       ListingFeatures,
       ListingUtilities,
     ]),
-    AuthModule,
+    forwardRef(() => AuthModule),
     TranslationsModule,
     ActivityLogModule,
     ApplicationFlaggedSetsModule,
     HttpModule,
   ],
-  providers: [ListingsService, ListingsCronService, Logger],
+  providers: [ListingsService, ListingsCronService, Logger, CsvBuilder, ListingsCsvExporterService],
   exports: [ListingsService],
   controllers: [ListingsController],
 })

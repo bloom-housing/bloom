@@ -113,7 +113,7 @@ export async function createLeasingAgents(
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
-      const roles: UserRoles = { user: agent, isPartner: true }
+      const roles: UserRoles = { user: agent, isPartner: true, userId: agent.id }
       await rolesRepo.save(roles)
       await usersService.confirm({ token: agent.confirmationToken })
     }),
@@ -304,7 +304,7 @@ async function seed() {
       jurisdictions,
     })
   )
-  const roles: UserRoles = { user: admin, isPartner: false, isAdmin: true }
+  const roles: UserRoles = { user: admin, isPartner: false, isAdmin: true, userId: undefined }
   await rolesRepo.save(roles)
   await userService.confirm({ token: admin.confirmationToken })
 
@@ -328,7 +328,7 @@ async function seed() {
     mfaCode: "123456",
     mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
   })
-  const mfaRoles: UserRoles = { user: mfaUser, isPartner: false, isAdmin: true }
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: false, isAdmin: true, userId: undefined }
   await rolesRepo.save(mfaRoles)
   await userService.confirm({ token: mfaUser.confirmationToken })
 
@@ -355,6 +355,7 @@ async function seed() {
     isPartner: false,
     isAdmin: false,
     isJurisdictionalAdmin: true,
+    userId: undefined,
   }
   await rolesRepo.save(alamedaAdminRoles)
 

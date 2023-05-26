@@ -18,6 +18,7 @@ type FormSummaryDetailsProps = {
   editMode?: boolean
   hidePreferences?: boolean
   hidePrograms?: boolean
+  validationError?: boolean
 }
 
 const EditLink = (props: { href: string }) => (
@@ -62,6 +63,7 @@ const FormSummaryDetails = ({
   editMode = false,
   hidePreferences = false,
   hidePrograms = false,
+  validationError = false,
 }: FormSummaryDetailsProps) => {
   // fix for rehydration
   const [hasMounted, setHasMounted] = useState(false)
@@ -113,7 +115,7 @@ const FormSummaryDetails = ({
       <>
         <h3 className="form--card__sub-header">
           {header}
-          {editMode && <EditLink href={appLink} />}
+          {editMode && !validationError && <EditLink href={appLink} />}
         </h3>
         <div
           id={applicationSection}
@@ -248,7 +250,9 @@ const FormSummaryDetails = ({
           <div id="alternateContact">
             <h3 className="form--card__sub-header">
               {t("application.alternateContact.type.label")}
-              {editMode && <EditLink href="/applications/contact/alternate-contact-type" />}
+              {editMode && !validationError && (
+                <EditLink href="/applications/contact/alternate-contact-type" />
+              )}
             </h3>
 
             <div className="form-card__group mx-0">
@@ -303,7 +307,9 @@ const FormSummaryDetails = ({
         <div id="householdMembers">
           <h3 className="form--card__sub-header">
             {t("application.household.householdMembers")}
-            {editMode && <EditLink href="/applications/household/add-members" />}
+            {editMode && !validationError && (
+              <EditLink href="/applications/household/add-members" />
+            )}
           </h3>
 
           <div id="members" className="form-card__group info-group mx-0">
@@ -346,7 +352,9 @@ const FormSummaryDetails = ({
       <div id="householdDetails">
         <h3 className="form--card__sub-header">
           {t("application.review.householdDetails")}
-          {editMode && <EditLink href="/applications/household/preferred-units" />}
+          {editMode && !validationError && (
+            <EditLink href="/applications/household/preferred-units" />
+          )}
         </h3>
 
         <div className="form-card__group mx-0">
@@ -395,7 +403,7 @@ const FormSummaryDetails = ({
 
         <h3 className="form--card__sub-header">
           {t("t.income")}
-          {editMode && <EditLink href="/applications/financial/vouchers" />}
+          {editMode && !validationError && <EditLink href="/applications/financial/vouchers" />}
         </h3>
 
         <div className="form-card__group mx-0">

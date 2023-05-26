@@ -171,7 +171,8 @@ const BuildingDetails = ({
             )}
             placeholder={t("application.contact.streetAddress")}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress"),
+              onChange: () =>
+                fieldHasError(errors?.buildingAddress?.street) && clearErrors("buildingAddress"),
             }}
             register={register}
           />
@@ -202,7 +203,8 @@ const BuildingDetails = ({
             )}
             placeholder={t("application.contact.city")}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress"),
+              onChange: () =>
+                fieldHasError(errors?.buildingAddress?.city) && clearErrors("buildingAddress"),
             }}
             register={register}
           />
@@ -234,7 +236,8 @@ const BuildingDetails = ({
               options={stateKeys}
               keyPrefix="states"
               inputProps={{
-                onChange: () => clearErrors("buildingAddress"),
+                onChange: () =>
+                  fieldHasError(errors?.buildingAddress?.state) && clearErrors("buildingAddress"),
               }}
             />
           </ViewItem>
@@ -256,7 +259,8 @@ const BuildingDetails = ({
               fieldMessage(errors?.buildingAddress?.zipCode)
             )}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress"),
+              onChange: () =>
+                fieldHasError(errors?.buildingAddress?.zipCode) && clearErrors("buildingAddress"),
             }}
             register={register}
           />
