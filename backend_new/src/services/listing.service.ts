@@ -145,6 +145,7 @@ export class ListingService {
         };
       }
     });
+
     const itemsPerPage =
       isPaginated && params.limit !== 'all' ? params.limit : listings.length;
     const totalItems = isPaginated ? count : listings.length;

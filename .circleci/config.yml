@@ -12,6 +12,15 @@ executors:
           # Never do this in production or with any sensitive / non-test data:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom
+  standard-node-new:
+    docker:
+      - image: "cimg/node:18.14.2"
+      - image: "cimg/postgres:12.10"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom_prisma
   cypress-node:
     docker:
       - image: "cypress/base:18.14.1"
@@ -84,7 +93,7 @@ jobs:
             CLOUDINARY_SECRET: "fake_secret"
             PARTNERS_PORTAL_URL: "http://localhost:3001"
   jest-new-backend:
-    executor: standard-node
+    executor: standard-node-new
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}

@@ -24,5 +24,6 @@ export function mapTo<T>(
   return plainToClass(cls, plain, {
     ...options,
     excludeExtraneousValues: true,
+    enableImplicitConversion: true,
   });
 }

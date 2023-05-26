@@ -58,6 +58,7 @@ describe('Listing Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(100),
     });
+
     const listingA = await prisma.listings.create({
       data: listingFactory(10, jurisdiction.id),
     });
