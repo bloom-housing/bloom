@@ -108,16 +108,16 @@ describe('Testing listing service', () => {
 
     expect(await service.list(params)).toEqual({
       items: [
-        { id: 0, name: 'listing 1' },
-        { id: 1, name: 'listing 2' },
-        { id: 2, name: 'listing 3' },
-        { id: 3, name: 'listing 4' },
-        { id: 4, name: 'listing 5' },
-        { id: 5, name: 'listing 6' },
-        { id: 6, name: 'listing 7' },
-        { id: 7, name: 'listing 8' },
-        { id: 8, name: 'listing 9' },
-        { id: 9, name: 'listing 10' },
+        { id: '0', name: 'listing 1' },
+        { id: '1', name: 'listing 2' },
+        { id: '2', name: 'listing 3' },
+        { id: '3', name: 'listing 4' },
+        { id: '4', name: 'listing 5' },
+        { id: '5', name: 'listing 6' },
+        { id: '6', name: 'listing 7' },
+        { id: '7', name: 'listing 8' },
+        { id: '8', name: 'listing 9' },
+        { id: '9', name: 'listing 10' },
       ],
       meta: {
         currentPage: 1,
@@ -221,16 +221,16 @@ describe('Testing listing service', () => {
 
     expect(await service.list(params)).toEqual({
       items: [
-        { id: 0, name: 'listing 1' },
-        { id: 1, name: 'listing 2' },
-        { id: 2, name: 'listing 3' },
-        { id: 3, name: 'listing 4' },
-        { id: 4, name: 'listing 5' },
-        { id: 5, name: 'listing 6' },
-        { id: 6, name: 'listing 7' },
-        { id: 7, name: 'listing 8' },
-        { id: 8, name: 'listing 9' },
-        { id: 9, name: 'listing 10' },
+        { id: '0', name: 'listing 1' },
+        { id: '1', name: 'listing 2' },
+        { id: '2', name: 'listing 3' },
+        { id: '3', name: 'listing 4' },
+        { id: '4', name: 'listing 5' },
+        { id: '5', name: 'listing 6' },
+        { id: '6', name: 'listing 7' },
+        { id: '7', name: 'listing 8' },
+        { id: '8', name: 'listing 9' },
+        { id: '9', name: 'listing 10' },
       ],
       meta: {
         currentPage: 2,
@@ -459,7 +459,7 @@ describe('Testing listing service', () => {
 
     expect(
       await service.findOne('listingId', LanguagesEnum.en, 'base'),
-    ).toEqual({ id: 0, name: 'listing 1' });
+    ).toEqual({ id: '0', name: 'listing 1' });
 
     expect(prisma.listings.findFirst).toHaveBeenCalledWith({
       where: {
@@ -923,7 +923,7 @@ describe('Testing listing service', () => {
       'base',
     );
 
-    expect(listing.id).toEqual(0);
+    expect(listing.id).toEqual('0');
     expect(listing.name).toEqual('listing 1');
     expect(listing.units).toEqual(mockedListing.units);
     expect(listing.unitsSummarized).toEqual({
