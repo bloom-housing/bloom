@@ -653,6 +653,27 @@ export class ApplicationsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Verify application can be saved
+   */
+  submissionValidation(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/verify"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class AssetsService {
@@ -1368,6 +1389,27 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retrieve listings and units in csv
+   */
+  listAsCsv(
+    params: {
+      /**  */
+      timeZone?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { timeZone: params["timeZone"] }
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -3713,6 +3755,9 @@ export interface UserRoles {
   user: Id
 
   /**  */
+  userId: string
+
+  /**  */
   isAdmin?: boolean
 
   /**  */
@@ -4424,6 +4469,12 @@ export interface ListingImage {
   image: AssetUpdate
 
   /**  */
+  imageId?: string
+
+  /**  */
+  id?: string
+
+  /**  */
   ordinal?: number
 }
 
@@ -4505,6 +4556,9 @@ export interface MultiselectQuestion {
 export interface ListingMultiselectQuestion {
   /**  */
   multiselectQuestion: MultiselectQuestion
+
+  /**  */
+  id?: string
 
   /**  */
   ordinal?: number
@@ -5095,6 +5149,12 @@ export interface ListingImageUpdate {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  imageId?: string
+
+  /**  */
+  id?: string
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5220,6 +5280,9 @@ export interface ListingMultiselectQuestionUpdate {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  id?: string
 }
 
 export interface ListingCreate {

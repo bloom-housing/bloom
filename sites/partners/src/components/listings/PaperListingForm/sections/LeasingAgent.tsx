@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -20,6 +20,7 @@ const LeasingAgent = () => {
   const { register, control, errors, clearErrors, watch, getValues } = formMethods
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
+  const [phoneField, setPhoneField] = useState(leasingAgentPhoneField)
 
   const getErrorMessage = (fieldKey: string) => {
     if (fieldHasError(errors?.leasingAgentAddress) && !getValues(fieldKey)) {
@@ -28,8 +29,12 @@ const LeasingAgent = () => {
   }
 
   useEffect(() => {
-    clearErrors("leasingAgentPhone")
-  }, [leasingAgentPhoneField, clearErrors])
+    // only clear the leasingAgentPhone if the user has changed the field
+    if (leasingAgentPhoneField && leasingAgentPhoneField !== phoneField) {
+      clearErrors("leasingAgentPhone")
+    }
+    setPhoneField(leasingAgentPhoneField)
+  }, [leasingAgentPhoneField, clearErrors, phoneField])
 
   return (
     <div>

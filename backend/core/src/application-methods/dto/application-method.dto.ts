@@ -13,7 +13,6 @@ import {
 export class ApplicationMethodDto extends OmitType(ApplicationMethod, [
   "listing",
   "paperApplications",
-  "listing",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

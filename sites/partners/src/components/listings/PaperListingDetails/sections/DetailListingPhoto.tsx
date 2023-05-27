@@ -18,7 +18,10 @@ const DetailListingPhoto = () => {
   // TODO: get rid of assets entirely
   if (listing.images?.length === 0 && listing.assets.length > 0) {
     const asset = listing.assets.find((asset) => asset.label == "building")
-    listingFormPhoto = { ordinal: 0, image: { fileId: asset.fileId, label: asset.label } }
+    listingFormPhoto = {
+      ordinal: 0,
+      image: { fileId: asset.fileId, label: asset.label },
+    }
   }
 
   const urlTest = new RegExp(/https?:\/\//)

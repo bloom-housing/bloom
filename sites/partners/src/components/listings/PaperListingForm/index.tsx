@@ -42,7 +42,7 @@ import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
-import ListingPhoto from "./sections/ListingPhoto"
+import ListingPhotos from "./sections/ListingPhotos"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
@@ -306,7 +306,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         </TabList>
                         <TabPanel>
                           <ListingIntro jurisdictions={profile.jurisdictions} />
-                          <ListingPhoto />
+                          <ListingPhotos />
                           <BuildingDetails
                             listing={listing}
                             setLatLong={setLatitudeLongitude}

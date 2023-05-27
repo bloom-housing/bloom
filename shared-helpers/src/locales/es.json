@@ -416,6 +416,7 @@
   "errors.agreeError": "Debe estar de acuerdo con los términos para poder continuar",
   "errors.alert.badRequest": "¡Oops! Parece que algo salió mal. Por favor, inténtelo de nuevo. Comuníquese con su departamento de vivienda si sigue teniendo problemas.",
   "errors.alert.timeoutPleaseTryAgain": "¡Oops! Parece que algo salió mal. Por favor, inténtelo de nuevo.",
+  "errors.alert.applicationSubmissionVerificationError": "A su solicitud le faltan campos obligatorios. Vuelva atrás y corrija esto antes de enviarlo.",
   "errors.cityError": "Por favor ingrese una ciudad",
   "errors.dateError": "Por favor_ deberá introducir una fecha valida",
   "errors.dateOfBirthErrorAge": "Ingrese una fecha de nacimiento válida. Para poder registrarse_ debe ser mayor de 18 años",

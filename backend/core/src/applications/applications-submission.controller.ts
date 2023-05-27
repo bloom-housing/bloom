@@ -36,4 +36,13 @@ export class ApplicationsSubmissionController {
     const application = await this.applicationsService.submit(applicationCreateDto)
     return mapTo(ApplicationDto, application)
   }
+
+  @Post("verify")
+  @ApiOperation({ summary: "Verify application can be saved", operationId: "submissionValidation" })
+  @ResourceAction(authzActions.submit)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  submissionValidation(@Body() applicationDraft: ApplicationCreateDto): boolean {
+    // if we succeeded then the record is good to submit
+    return true
+  }
 }

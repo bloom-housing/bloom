@@ -8,15 +8,21 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
   async seed() {
     const listing = await super.seed()
 
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
 
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
 
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "Missing Household Ami Levels",
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: "Missing Household Ami Levels",
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
 
     const missingAmiLevelsUnits: Array<UnitSeedType> = [

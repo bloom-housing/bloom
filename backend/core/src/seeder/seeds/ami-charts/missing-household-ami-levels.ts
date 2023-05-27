@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 export class AmiDefaultMissingAMI extends AmiChartDefaultSeed {
   async seed() {
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
     return await this.amiChartRepository.save({
       name: "Missing Household Ami Levels",

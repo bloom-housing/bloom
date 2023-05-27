@@ -351,6 +351,7 @@
   "errors.agreeError": "Dapat kang sumang-ayon sa mga tuntunin upang magpatuloy",
   "errors.alert.badRequest": "Mukhang nagkaproblema. Pakisubukan muli. \n\nMakipag-ugnayan sa iyong departamento ng pabahay kung nakakaranas ka pa rin ng mga isyu.",
   "errors.alert.timeoutPleaseTryAgain": "Teka! Mukhang nagkaproblema. Pakisubukan muli.",
+  "errors.alert.applicationSubmissionVerificationError": "Walang kinakailangang field ang iyong aplikasyon. Mangyaring bumalik at itama ito bago isumite.",
   "errors.cityError": "Pakilagay ang lungsod",
   "errors.dateError": "Pakilagay ang tamang petsa",
   "errors.dateOfBirthErrorAge": "Pakilagay ang tamang Petsa ng Kapanganakan_ dapat 18 o mas matanda",
