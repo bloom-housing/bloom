@@ -101,7 +101,7 @@ describe('Listing Controller Tests', () => {
     const query = stringify(queryParams as any);
 
     const res = await request(app.getHttpServer())
-      .get(`/listings?${query}'`)
+      .get(`/listings?${query}`)
       .expect(200);
 
     expect(res.body).toEqual({

@@ -17,7 +17,7 @@ import {
   summarizeUnitsByTypeAndRent,
   summarizeUnits,
 } from '../utilities/unit-utilities';
-import { AmiChart } from '../dtos/units/ami-chart-get.dto';
+import { AmiChart } from '../dtos/ami-charts/ami-chart-get.dto';
 
 export type getListingsArgs = {
   skip: number;
