@@ -8,6 +8,7 @@ import {
   ValidationPipe,
   Body,
   Get,
+  BadRequestException,
 } from "@nestjs/common"
 import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
@@ -27,16 +28,15 @@ import { UserErrorExtraModel } from "../user-errors"
 import { REFRESH_COOKIE_NAME } from "../constants"
 import { Response as ExpressResponse } from "express"
 import { OptionalAuthGuard } from "../guards/optional-auth.guard"
+import { ModuleRef } from "@nestjs/core"
 
 @Controller("auth")
 @ApiTags("auth")
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(UserErrorExtraModel)
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly userService: UserService
-  ) {}
+  userService: UserService
+  constructor(private readonly authService: AuthService, private moduleRef: ModuleRef) {}
 
   @UseGuards(LocalMfaAuthGuard)
   @Post("login")
@@ -61,6 +61,7 @@ export class AuthController {
   async requestMfaCode(
     @Body() requestMfaCodeDto: RequestMfaCodeDto
   ): Promise<RequestMfaCodeResponseDto> {
+    this.userService = await this.moduleRef.resolve(UserService)
     const requestMfaCodeResponse = await this.userService.requestMfaCode(requestMfaCodeDto)
     return mapTo(RequestMfaCodeResponseDto, requestMfaCodeResponse)
   }
@@ -68,6 +69,7 @@ export class AuthController {
   @Post("mfa-info")
   @ApiOperation({ summary: "Get mfa info", operationId: "getMfaInfo" })
   async getMfaInfo(@Body() getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
+    this.userService = await this.moduleRef.resolve(UserService)
     const getMfaInfoResponseDto = await this.userService.getMfaInfo(getMfaInfoDto)
     return mapTo(GetMfaInfoResponseDto, getMfaInfoResponseDto)
   }
@@ -84,7 +86,10 @@ export class AuthController {
     @Response({ passthrough: true }) res: ExpressResponse
   ): Promise<StatusDto> {
     if (!req?.cookies[REFRESH_COOKIE_NAME]) {
-      throw new Error("No refresh token sent with request")
+      throw new BadRequestException({
+        message: "No refresh token sent with request",
+        knownError: true,
+      })
     }
     return mapTo(
       StatusDto,

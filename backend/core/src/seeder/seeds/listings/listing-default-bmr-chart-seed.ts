@@ -10,15 +10,23 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
     const listing = await super.seed()
     const defaultUnits = getDefaultUnits()
 
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
 
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: defaultAmiChart.name,
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: defaultAmiChart.name,
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
 
     const bmrUnits = [
@@ -32,9 +40,32 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(alamedaJurisdiction.name).text,
+            where: { text: getTayProgram(alamedaJurisdiction.name).text },
           }),
           ordinal: 1,
+        },
+      ],
+      images: [
+        {
+          image: {
+            label: "building",
+            fileId:
+              "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+          },
+        },
+        {
+          image: {
+            label: "building",
+            fileId:
+              "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+          },
+        },
+        {
+          image: {
+            label: "building",
+            fileId:
+              "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/oakhouse_cgdqmx.jpg",
+          },
         },
       ],
     })

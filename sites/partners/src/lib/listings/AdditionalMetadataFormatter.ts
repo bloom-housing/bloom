@@ -6,10 +6,20 @@ export default class AdditionalMetadataFormatter extends Formatter {
   /** Format a final set of various values */
   process() {
     const preferences = this.metadata.preferences.map((preference, index) => {
-      return { multiselectQuestion: preference, ordinal: index + 1 }
+      return {
+        multiselectQuestion: preference,
+        ordinal: index + 1,
+        multiselectQuestionId: preference.id,
+        listingId: this.data.id,
+      }
     })
     const programs = this.metadata.programs.map((program, index) => {
-      return { multiselectQuestion: program, ordinal: index + 1 }
+      return {
+        multiselectQuestion: program,
+        ordinal: index + 1,
+        multiselectQuestionId: program.id,
+        listingId: this.data.id,
+      }
     })
 
     this.data.listingMultiselectQuestions = [...preferences, ...programs]

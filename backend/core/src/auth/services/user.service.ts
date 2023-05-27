@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  forwardRef,
   HttpException,
   HttpStatus,
   Inject,
@@ -21,7 +22,6 @@ import { UpdatePasswordDto } from "../dto/update-password.dto"
 import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
-
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { EmailDto } from "../dto/email.dto"
@@ -44,34 +44,34 @@ import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 import { addFilters } from "../../shared/query-filter"
 import { UserFilterParams } from "../dto/user-filter-params"
-
 import advancedFormat from "dayjs/plugin/advancedFormat"
-import { UserRepository } from "../repositories/user-repository"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest, Response } from "express"
 import { UserProfileUpdateDto } from "../dto/user-profile.dto"
-import { ListingRepository } from "../../listings/db/listing.repository"
+import { Listing } from "../../listings/entities/listing.entity"
+import { ListingsService } from "../../listings/listings.service"
 
 dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
   constructor(
-    @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
-    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(Application) private readonly applicationsRepository: Repository<Application>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,
     private readonly authService: AuthService,
-    private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
     private readonly jurisdictionResolverService: JurisdictionResolverService,
     private readonly smsMfaService: SmsMfaService,
-    @Inject(REQUEST) private req: ExpressRequest
+    @Inject(REQUEST) private req: ExpressRequest,
+    @Inject(forwardRef(() => AuthzService)) private readonly authzService: AuthzService,
+    @Inject(forwardRef(() => ListingsService)) private readonly listingsService: ListingsService
   ) {}
 
   public async findById(id: string) {
-    const user = await this.userRepository.findById(id)
+    const user = await this.findByIdHelper(id)
 
     if (!user) {
       throw new NotFoundException()
@@ -90,12 +90,12 @@ export class UserService {
       PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
-    const distinctIDQB = this.userRepository.getQb()
+    const distinctIDQB = this.getQb()
     distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
     distinctIDQB.orderBy("user.firstName")
     distinctIDQB.addOrderBy("user.lastName")
-    const qb = this.userRepository.getQb()
+    const qb = this.getQb()
 
     if (params.filter) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -217,10 +217,13 @@ export class UserService {
     try {
       token = decode(dto.token, process.env.APP_SECRET)
     } catch (e) {
-      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
+      throw new HttpException(
+        { message: USER_ERRORS.TOKEN_EXPIRED.message, knownError: true },
+        USER_ERRORS.TOKEN_EXPIRED.status
+      )
     }
 
-    const user = await this.userRepository.findById(token.id)
+    const user = await this.findByIdHelper(token.id)
     if (!user) {
       console.error(`Trying to confirm non-existing user ${token.id}.`)
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
@@ -255,7 +258,7 @@ export class UserService {
   }
 
   public async resendPartnerConfirmation(dto: EmailDto) {
-    const user = await this.userRepository.findByEmail(dto.email)
+    const user = await this.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -279,13 +282,12 @@ export class UserService {
   public async isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
       const token = decode(dto.token, process.env.APP_SECRET)
-      const user = await this.userRepository.findById(token.id)
+      const user = await this.findByIdHelper(token.id)
       await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
-      console.error("isUserConfirmationTokenValid error = ", e)
       try {
-        const user = await this.userRepository.findByConfirmationToken(dto.token)
+        const user = await this.findByConfirmationToken(dto.token)
         await this.setHitConfirmationURl(user, dto.token)
       } catch (e) {
         console.error("isUserConfirmationTokenValid error = ", e)
@@ -295,7 +297,7 @@ export class UserService {
   }
 
   public async resendPublicConfirmation(dto: EmailDto) {
-    const user = await this.userRepository.findByEmail(dto.email)
+    const user = await this.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
@@ -337,7 +339,7 @@ export class UserService {
       await this.authorizeUserAction(this.req.user, dto, authzActions.confirm)
     }
 
-    const existingUser = storedUser ?? (await this.userRepository.findByEmail(dto.email))
+    const existingUser = storedUser ?? (await this.findByEmail(dto.email))
 
     if (existingUser) {
       if (!existingUser.roles && dto.roles) {
@@ -368,7 +370,10 @@ export class UserService {
         })
       } else {
         // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
-        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+        throw new HttpException(
+          { message: USER_ERRORS.EMAIL_IN_USE.message, knownError: true },
+          USER_ERRORS.EMAIL_IN_USE.status
+        )
       }
     }
     const newUser = await this.userRepository.save(dto)
@@ -394,7 +399,7 @@ export class UserService {
   }
 
   public async forgotPassword(dto: ForgotPasswordDto) {
-    const user = await this.userRepository.findByEmail(dto.email)
+    const user = await this.findByEmail(dto.email)
     if (user) {
       // Token expires in 1 hour
       const payload = { id: user.id, exp: Number.parseInt(dayjs().add(1, "hour").format("X")) }
@@ -406,7 +411,7 @@ export class UserService {
   }
 
   public async updatePassword(dto: UpdatePasswordDto, res: Response) {
-    const user = await this.userRepository.findByResetToken(dto.token)
+    const user = await this.findByResetToken(dto.token)
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
@@ -428,7 +433,7 @@ export class UserService {
 
     await this.validateInviteActionPermissionsOrThrow(dto)
 
-    const existingUser = await this.userRepository.findByEmail(dto.email)
+    const existingUser = await this.findByEmail(dto.email)
 
     const user = await this._createUser(
       {
@@ -464,7 +469,7 @@ export class UserService {
   }
 
   async delete(userId: string) {
-    const user = await this.userRepository.findOne({ id: userId })
+    const user = await this.userRepository.findOne({ where: { id: userId } })
 
     if (!user) {
       throw new NotFoundException()
@@ -558,6 +563,37 @@ export class UserService {
       user.roles &&
       (user.roles.isAdmin || user.roles.isPartner || user.roles.isJurisdictionalAdmin)
     )
+  }
+
+  public getQb() {
+    return this.userRepository
+      .createQueryBuilder("user")
+      .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      .leftJoin("user.roles", "userRoles")
+      .select([
+        "user",
+        "jurisdictions.id",
+        "userRoles",
+        "leasingAgentInListings.id",
+        "leasingAgentInListings.name",
+      ])
+  }
+
+  public findByEmail(email: string) {
+    return this.getQb().where("user.email = :email", { email: email.toLowerCase() }).getOne()
+  }
+
+  public findByIdHelper(id: string) {
+    return this.getQb().where("user.id = :id", { id }).getOne()
+  }
+
+  public findByConfirmationToken(token: string) {
+    return this.getQb().where("user.confirmationToken = :token", { token }).getOne()
+  }
+
+  public findByResetToken(token: string) {
+    return this.getQb().where("user.resetToken = :token", { token }).getOne()
   }
 
   private generateMfaCode() {
@@ -672,7 +708,7 @@ export class UserService {
       // For each jurisdiction we need to check if this requesting user is allowed to invite new users to it
       const jurisdictionsIds = await Promise.all(
         dto.leasingAgentInListings.map(async (listing) => {
-          return await this.listingRepository.getJurisdictionIdByListingId(listing.id)
+          return await this.listingsService.getJurisdictionIdByListingId(listing.id)
         })
       )
 
