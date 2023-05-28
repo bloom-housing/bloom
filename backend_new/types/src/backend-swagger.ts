@@ -727,6 +727,135 @@ export class UnitAccessibilityPriorityTypesService {
   }
 }
 
+export class UnitRentTypesService {
+  /**
+   * List unitRentTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitRentType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitRentType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitRentType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitRentType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitRentTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+      url = url.replace('{unitRentTypeId}', params['unitRentTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitRentType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitRentType;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -1063,6 +1192,25 @@ export interface UnitTypeCreate {
 }
 
 export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitRentType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
   /**  */
   name: string;
 }

@@ -4,6 +4,7 @@ import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
 import { reservedCommunityTypeFactory } from './seed-helpers/reserved-community-type-factory';
 import { unitAccessibilityPriorityTypeFactory } from './seed-helpers/unit-accessibility-priority-type-factory';
+import { unitRentTypeFactory } from './seed-helpers/unit-rent-type-factory';
 import { unitTypeFactory } from './seed-helpers/unit-type-factory';
 
 const prisma = new PrismaClient();
@@ -34,6 +35,14 @@ async function main() {
     unitAccessibilityPriorityTypeIds.push(res.id);
   }
 
+  const unitRentTypeIds: string[] = [];
+  for (let i = 0; i < 2; i++) {
+    const res = await prisma.unitRentTypes.create({
+      data: unitRentTypeFactory(i),
+    });
+    unitRentTypeIds.push(res.id);
+  }
+
   for (let i = 0; i < 5; i++) {
     await prisma.listings.create({
       data: listingFactory(
@@ -43,6 +52,7 @@ async function main() {
         reservedCommunityType.id,
         unitTypeIds[i],
         unitAccessibilityPriorityTypeIds[i],
+        unitRentTypeIds[i % 2],
       ),
     });
   }

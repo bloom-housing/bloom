@@ -1,0 +1,78 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { UnitRentTypeService } from '../services/unit-rent-type.service';
+import { UnitRentType } from '../dtos/unit-rent-types/unit-rent-type-get.dto';
+import { UnitRentTypeCreate } from '../dtos/unit-rent-types/unit-rent-type-create.dto';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+
+@Controller('unitRentTypes')
+@ApiTags('unitRentTypes')
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+@ApiExtraModels(UnitRentTypeCreate, IdDTO)
+export class UnitRentTypeController {
+  constructor(private readonly unitRentTypeService: UnitRentTypeService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'List unitRentTypes', operationId: 'list' })
+  @ApiOkResponse({ type: UnitRentType, isArray: true })
+  async list() {
+    return await this.unitRentTypeService.list();
+  }
+
+  @Get(`:unitRentTypeId`)
+  @ApiOperation({
+    summary: 'Get unitRentType by id',
+    operationId: 'retrieve',
+  })
+  @ApiOkResponse({ type: UnitRentType })
+  async retrieve(@Param('unitRentTypeId') unitRentTypeId: string) {
+    return this.unitRentTypeService.findOne(unitRentTypeId);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Create unitRentType',
+    operationId: 'create',
+  })
+  @ApiOkResponse({ type: UnitRentType })
+  async create(@Body() unitRentType: UnitRentTypeCreate) {
+    return await this.unitRentTypeService.create(unitRentType);
+  }
+
+  @Put(`:unitRentTypeId`)
+  @ApiOperation({
+    summary: 'Update unitRentType',
+    operationId: 'update',
+  })
+  @ApiOkResponse({ type: UnitRentType })
+  async update(@Body() unitRentType: UnitRentType) {
+    return await this.unitRentTypeService.update(unitRentType);
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Delete unitRentType by id',
+    operationId: 'delete',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async delete(@Body() dto: IdDTO) {
+    return await this.unitRentTypeService.delete(dto.id);
+  }
+}
