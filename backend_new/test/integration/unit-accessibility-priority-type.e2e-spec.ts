@@ -3,12 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { unitTypeFactory } from '../../prisma/seed-helpers/unit-type-factory';
-import { UnitTypeCreate } from '../../src/dtos/unit-types/unit-type-create.dto';
-import { UnitType } from '../../src/dtos/unit-types/unit-type-get.dto';
+import { unitAccessibilityPriorityTypeFactory } from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import { UnitAccessibilityPriorityTypeCreate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create';
+import { UnitAccessibilityPriorityType } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-get.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
-describe('UnitType Controller Tests', () => {
+describe('UnitAccessibilityPriorityType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -28,7 +28,7 @@ describe('UnitType Controller Tests', () => {
 
   const cleanUpDb = async (unitTypeIds: string[]) => {
     for (let i = 0; i < unitTypeIds.length; i++) {
-      await prisma.unitTypes.delete({
+      await prisma.unitAccessibilityPriorityTypes.delete({
         where: {
           id: unitTypeIds[i],
         },
@@ -37,15 +37,15 @@ describe('UnitType Controller Tests', () => {
   };
 
   it('testing list endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(7),
+    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
+      data: unitAccessibilityPriorityTypeFactory(7),
     });
-    const unitTypeB = await prisma.unitTypes.create({
-      data: unitTypeFactory(8),
+    const unitTypeB = await prisma.unitAccessibilityPriorityTypes.create({
+      data: unitAccessibilityPriorityTypeFactory(8),
     });
 
     const res = await request(app.getHttpServer())
-      .get(`/unitTypes?`)
+      .get(`/unitAccessibilityPriorityTypes?`)
       .expect(200);
 
     expect(res.body.length).toEqual(2);
@@ -59,12 +59,12 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing retrieve endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(10),
+    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
+      data: unitAccessibilityPriorityTypeFactory(10),
     });
 
     const res = await request(app.getHttpServer())
-      .get(`/unitTypes/${unitTypeA.id}`)
+      .get(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
       .expect(200);
 
     expect(res.body.name).toEqual(unitTypeA.name);
@@ -74,11 +74,10 @@ describe('UnitType Controller Tests', () => {
 
   it('testing create endpoint', async () => {
     const res = await request(app.getHttpServer())
-      .post('/unitTypes')
+      .post('/unitAccessibilityPriorityTypes')
       .send({
         name: 'name: 10',
-        numBedrooms: 10,
-      } as UnitTypeCreate)
+      } as UnitAccessibilityPriorityTypeCreate)
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
@@ -87,34 +86,32 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing update endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(10),
+    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
+      data: unitAccessibilityPriorityTypeFactory(10),
     });
 
     const res = await request(app.getHttpServer())
-      .put(`/unitTypes/${unitTypeA.id}`)
+      .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
       .send({
         id: unitTypeA.id,
         name: 'name: 11',
-        numBedrooms: 11,
         createdAt: unitTypeA.createdAt,
         updatedAt: unitTypeA.updatedAt,
-      } as UnitType)
+      } as UnitAccessibilityPriorityType)
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');
-    expect(res.body.numBedrooms).toEqual(11);
 
     await cleanUpDb([unitTypeA.id]);
   });
 
   it('testing delete endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(16),
+    const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
+      data: unitAccessibilityPriorityTypeFactory(16),
     });
 
     const res = await request(app.getHttpServer())
-      .delete(`/unitTypes`)
+      .delete(`/unitAccessibilityPriorityTypes`)
       .send({
         id: unitTypeA.id,
       } as IdDTO)

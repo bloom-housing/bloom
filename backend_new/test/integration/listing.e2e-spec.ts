@@ -25,6 +25,10 @@ describe('Listing Controller Tests', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   const clearDb = async (listingIds: string[], jurisdictionId: string) => {
     await prisma.applicationMethods.deleteMany();
     await prisma.listingEvents.deleteMany();

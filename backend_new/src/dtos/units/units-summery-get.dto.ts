@@ -9,7 +9,7 @@ import {
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { UnitType } from '../unit-types/unit-type-get.dto';
-import { UnitAccessibilityPriorityType } from './unit-accessibility-priority-type-get.dto';
+import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type-get.dto';
 
 class UnitsSummary {
   @Expose()

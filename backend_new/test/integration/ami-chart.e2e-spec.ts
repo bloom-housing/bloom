@@ -25,6 +25,10 @@ describe('AmiChart Controller Tests', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   const cleanUpDb = async (
     amiChartIds: string[],
     jurisdictionIds: string[],

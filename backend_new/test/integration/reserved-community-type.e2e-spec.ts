@@ -25,6 +25,10 @@ describe('ReservedCommunityType Controller Tests', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    await app.close();
+  });
+
   const cleanUpDb = async (
     reservedCommunityTypeIds: string[],
     jurisdictionIds: string[],
