@@ -321,6 +321,145 @@ export class AmiChartsService {
   }
 }
 
+export class ReservedCommunityTypesService {
+  /**
+   * List reservedCommunityTypes
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionName?: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<ReservedCommunityType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reservedCommunityTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+      configs.params = { jurisdictionName: params['jurisdictionName'] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create reservedCommunityType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ReservedCommunitTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reservedCommunityTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete reservedCommunityType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reservedCommunityTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get reservedCommunityType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      reservedCommunityTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reservedCommunityTypes/{reservedCommunityTypeId}';
+      url = url.replace(
+        '{reservedCommunityTypeId}',
+        params['reservedCommunityTypeId'] + '',
+      );
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update reservedCommunityType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ReservedCommunityType;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<ReservedCommunityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reservedCommunityTypes/{reservedCommunityTypeId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -601,6 +740,42 @@ export interface AmiChart {
 export interface SuccessDTO {
   /**  */
   success: boolean;
+}
+
+export interface ReservedCommunitTypeCreate {
+  /**  */
+  name: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  jurisdictions: IdDTO;
+}
+
+export interface ReservedCommunityTypeQueryParams {
+  /**  */
+  jurisdictionName?: string;
+}
+
+export interface ReservedCommunityType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  jurisdictions: IdDTO;
 }
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',
