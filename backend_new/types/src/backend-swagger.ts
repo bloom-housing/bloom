@@ -460,6 +460,135 @@ export class ReservedCommunityTypesService {
   }
 }
 
+export class UnitTypesService {
+  /**
+   * List unitTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes/{unitTypeId}';
+      url = url.replace('{unitTypeId}', params['unitTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitType;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes/{unitTypeId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -545,6 +674,12 @@ export interface UnitType {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  name: string;
+
+  /**  */
+  numBedrooms: number;
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -776,6 +911,14 @@ export interface ReservedCommunityType {
 
   /**  */
   jurisdictions: IdDTO;
+}
+
+export interface UnitTypeCreate {
+  /**  */
+  name: string;
+
+  /**  */
+  numBedrooms: number;
 }
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',

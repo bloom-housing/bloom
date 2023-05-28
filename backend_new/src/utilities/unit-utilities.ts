@@ -6,7 +6,7 @@ import listingGetDto, { ListingGet } from '../dtos/listings/listing-get.dto';
 import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
-import { UnitType } from '../dtos/units/unit-type-get.dto';
+import { UnitType } from '../dtos/unit-types/unit-type-get.dto';
 import { UnitAccessibilityPriorityType } from '../dtos/units/unit-accessibility-priority-type-get.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item-get.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override-get.dto';

@@ -5,7 +5,7 @@ import { UnitSummary } from './unit-summary-get.dto';
 import { UnitSummaryByAMI } from './unit-summary-by-ami-get.dto';
 import { HMI } from './hmi-get.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { UnitType } from './unit-type-get.dto';
+import { UnitType } from '../unit-types/unit-type-get.dto';
 import { UnitAccessibilityPriorityType } from './unit-accessibility-priority-type-get.dto';
 
 export class UnitsSummarized {

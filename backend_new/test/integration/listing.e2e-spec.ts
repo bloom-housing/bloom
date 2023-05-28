@@ -32,6 +32,7 @@ describe('Listing Controller Tests', () => {
     await prisma.listingMultiselectQuestions.deleteMany();
     await prisma.units.deleteMany();
     await prisma.amiChart.deleteMany();
+    await prisma.unitTypes.deleteMany();
     for (let i = 0; i < listingIds.length; i++) {
       await prisma.listings.delete({ where: { id: listingIds[i] } });
     }
