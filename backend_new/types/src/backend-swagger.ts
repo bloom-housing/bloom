@@ -856,6 +856,138 @@ export class UnitRentTypesService {
   }
 }
 
+export class PaperApplicationsService {
+  /**
+   * List paperApplications
+   */
+  list(options: IRequestOptions = {}): Promise<PaperApplication[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/paperApplications';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create paperApplication
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: PaperApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<PaperApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/paperApplications';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete paperApplication by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/paperApplications';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get paperApplication by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      paperApplicationId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<PaperApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/paperApplications/{paperApplicationId}';
+      url = url.replace(
+        '{paperApplicationId}',
+        params['paperApplicationId'] + '',
+      );
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update paperApplication
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: PaperApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<PaperApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/paperApplications/{paperApplicationId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -1214,6 +1346,59 @@ export interface UnitRentType {
   /**  */
   name: string;
 }
+
+export interface AssetCreate {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface PaperApplicationCreate {
+  /**  */
+  language: EnumPaperApplicationCreateLanguage;
+
+  /**  */
+  id: string;
+
+  /**  */
+  assets: AssetCreate;
+}
+
+export interface Asset {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface PaperApplication {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  language: EnumPaperApplicationLanguage;
+
+  /**  */
+  assets: Asset;
+}
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',
   'desc' = 'desc',
@@ -1255,4 +1440,18 @@ export enum ApplicationMethodsTypeEnum {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent',
   'Referral' = 'Referral',
+}
+export enum EnumPaperApplicationCreateLanguage {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh',
+  'tl' = 'tl',
+}
+export enum EnumPaperApplicationLanguage {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh',
+  'tl' = 'tl',
 }

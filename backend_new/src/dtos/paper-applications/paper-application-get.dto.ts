@@ -10,12 +10,12 @@ export class PaperApplication extends AbstractDTO {
   @Expose()
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: LanguagesEnum, enumName: 'LanguagesEnum' })
+  @ApiProperty({ enum: LanguagesEnum })
   language: LanguagesEnum;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
-  assets: Asset;
+  @ApiProperty()
+  assets?: Asset;
 }
