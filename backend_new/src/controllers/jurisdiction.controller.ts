@@ -1,0 +1,91 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JurisdictionService } from '../services/jurisdiction.service';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction-get.dto';
+import { JurisdictionCreate } from '../dtos/jurisdictions/jurisdiction-create.dto';
+import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
+import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
+import { IdDTO } from '../dtos/shared/id.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+
+@Controller('jurisdictions')
+@ApiTags('jurisdictions')
+@UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+@ApiExtraModels(JurisdictionCreate, JurisdictionUpdate, IdDTO)
+export class JurisdictionController {
+  constructor(private readonly jurisdictionService: JurisdictionService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'List jurisdictions', operationId: 'list' })
+  @ApiOkResponse({ type: Jurisdiction, isArray: true })
+  async list() {
+    return await this.jurisdictionService.list();
+  }
+
+  @Get(`:jurisdictionId`)
+  @ApiOperation({
+    summary: 'Get jurisdiction by id',
+    operationId: 'retrieve',
+  })
+  @ApiOkResponse({ type: Jurisdiction })
+  async retrieve(@Param('jurisdictionId') jurisdictionId: string) {
+    return this.jurisdictionService.findOne({ jurisdictionId });
+  }
+
+  @Get(`byName/:jurisdictionName`)
+  @ApiOperation({
+    summary: 'Get jurisdiction by name',
+    operationId: 'retrieveByName',
+  })
+  @ApiOkResponse({ type: Jurisdiction })
+  async retrieveByName(@Param('jurisdictionName') jurisdictionName: string) {
+    return await this.jurisdictionService.findOne({
+      jurisdictionName,
+    });
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Create jurisdiction',
+    operationId: 'create',
+  })
+  @ApiOkResponse({ type: Jurisdiction })
+  async create(@Body() jurisdiction: JurisdictionCreate) {
+    return await this.jurisdictionService.create(jurisdiction);
+  }
+
+  @Put(`:jurisdictionId`)
+  @ApiOperation({
+    summary: 'Update jurisdiction',
+    operationId: 'update',
+  })
+  @ApiOkResponse({ type: Jurisdiction })
+  async update(@Body() jurisdiction: JurisdictionUpdate) {
+    return await this.jurisdictionService.update(jurisdiction);
+  }
+
+  @Delete()
+  @ApiOperation({
+    summary: 'Delete jurisdiction by id',
+    operationId: 'delete',
+  })
+  @ApiOkResponse({ type: SuccessDTO })
+  async delete(@Body() dto: IdDTO) {
+    return await this.jurisdictionService.delete(dto.id);
+  }
+}

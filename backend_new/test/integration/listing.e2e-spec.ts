@@ -15,7 +15,7 @@ describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -25,7 +25,7 @@ describe('Listing Controller Tests', () => {
     await app.init();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close();
   });
 
@@ -36,6 +36,7 @@ describe('Listing Controller Tests', () => {
     await prisma.listingMultiselectQuestions.deleteMany();
     await prisma.units.deleteMany();
     await prisma.amiChart.deleteMany();
+    await prisma.unitRentTypes.deleteMany();
     await prisma.unitTypes.deleteMany();
     for (let i = 0; i < listingIds.length; i++) {
       await prisma.listings.delete({ where: { id: listingIds[i] } });

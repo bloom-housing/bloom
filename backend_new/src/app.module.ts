@@ -7,6 +7,7 @@ import { ReservedCommunityTypeModule } from './modules/reserved-community-type.m
 import { UnitAccessibilityPriorityTypeServiceModule } from './modules/unit-accessibility-priority-type.module';
 import { UnitTypeModule } from './modules/unit-type.module';
 import { UnitRentTypeModule } from './modules/unit-rent-type.module';
+import { JurisdictionModule } from './modules/jurisdiction.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UnitRentTypeModule } from './modules/unit-rent-type.module';
     UnitTypeModule,
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
+    JurisdictionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -26,6 +28,7 @@ import { UnitRentTypeModule } from './modules/unit-rent-type.module';
     UnitTypeModule,
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
+    JurisdictionModule,
   ],
 })
 export class AppModule {}

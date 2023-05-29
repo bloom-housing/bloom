@@ -12,7 +12,7 @@ describe('UnitRentType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -22,7 +22,7 @@ describe('UnitRentType Controller Tests', () => {
     await app.init();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close();
   });
 
