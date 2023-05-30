@@ -103,6 +103,7 @@ jobs:
       - run:
           name: DB Setup + New Backend Core Tests
           command: |
+            yarn test:backend:new:dbsetup
             yarn test:backend:new
             yarn test:backend:new:e2e
           environment:
@@ -137,7 +138,6 @@ jobs:
       - run: yarn test:app:public:unit
 
 workflows:
-  version: 2
   build:
     jobs:
       - setup
