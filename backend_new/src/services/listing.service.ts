@@ -319,6 +319,9 @@ export class ListingService {
     return result;
   }
 
+  /*
+    this builds the units summarized for the list()
+  */
   addUnitsSummarized = async (listing: ListingGet) => {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
       const amiChartsRaw = await this.prisma.amiChart.findMany({
@@ -332,5 +335,27 @@ export class ListingService {
       listing.unitsSummarized = summarizeUnits(listing, amiCharts);
     }
     return listing;
+  };
+
+  /*
+    returns id, name of listing given a multiselect question id
+  */
+  findListingsWithMultiSelectQuestion = async (
+    multiselectQuestionId: string,
+  ) => {
+    const listingsRaw = await this.prisma.listings.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+      where: {
+        listingMultiselectQuestions: {
+          some: {
+            multiselectQuestionId: multiselectQuestionId,
+          },
+        },
+      },
+    });
+    return mapTo(ListingGet, listingsRaw);
   };
 }

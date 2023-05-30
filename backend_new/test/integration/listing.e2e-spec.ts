@@ -34,6 +34,7 @@ describe('Listing Controller Tests', () => {
     await prisma.listingEvents.deleteMany();
     await prisma.listingImages.deleteMany();
     await prisma.listingMultiselectQuestions.deleteMany();
+    await prisma.multiselectQuestions.deleteMany();
     await prisma.units.deleteMany();
     await prisma.amiChart.deleteMany();
     await prisma.unitRentTypes.deleteMany();
@@ -191,6 +192,35 @@ describe('Listing Controller Tests', () => {
     });
     expect(res.body.items.length).toEqual(1);
     expect(res.body.items[0].name).toEqual('name: 50');
+
+    await clearDb([listingA.id, listingB.id], jurisdiction.id);
+  });
+
+  it('retrieveListings test', async () => {
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(100),
+    });
+    const listingA = await prisma.listings.create({
+      data: listingFactory(10, jurisdiction.id),
+      include: {
+        listingMultiselectQuestions: true,
+      },
+    });
+    const listingB = await prisma.listings.create({
+      data: listingFactory(50, jurisdiction.id),
+      include: {
+        listingMultiselectQuestions: true,
+      },
+    });
+
+    const res = await request(app.getHttpServer())
+      .get(
+        `/listings/byMultiselectQuestion/${listingA.listingMultiselectQuestions[0].multiselectQuestionId}`,
+      )
+      .expect(200);
+
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].name).toEqual('name: 10');
 
     await clearDb([listingA.id, listingB.id], jurisdiction.id);
   });

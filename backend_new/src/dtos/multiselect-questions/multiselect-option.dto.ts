@@ -19,7 +19,7 @@ export class MultiselectOption {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiProperty()
   untranslatedText?: string;
 
   @Expose()
@@ -30,22 +30,22 @@ export class MultiselectOption {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiProperty()
   description?: string | null;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectLink)
-  @ApiProperty({ type: [MultiselectLink], required: false })
+  @ApiProperty({ type: MultiselectLink, isArray: true })
   links?: MultiselectLink[] | null;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiProperty()
   collectAddress?: boolean | null;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiProperty()
   exclusive?: boolean | null;
 }
