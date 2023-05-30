@@ -92,7 +92,7 @@ const GetApplication = (props: ApplicationsProps) => {
       {props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length && (
         <>
           {props.onlineApplicationURL && <OrDivider bgColor="white" />}
-          <div className="text-serif-lg">
+          <div className="text-serif-xl">
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
           <Button
