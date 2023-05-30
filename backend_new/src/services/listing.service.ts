@@ -117,7 +117,16 @@ export class ListingService {
     this set can either be paginated or not depending on the params
     it will return both the set of listings, and some meta information to help with pagination
   */
-  async list(params: ListingsQueryParams) {
+  async list(params: ListingsQueryParams): Promise<{
+    items: ListingGet[];
+    meta: {
+      currentPage: number;
+      itemCount: number;
+      itemsPerPage: number;
+      totalItems: number;
+      totalPages: number;
+    };
+  }> {
     const whereClause = this.buildWhereClause(params.filter, params.search);
     const isPaginated = shouldPaginate(params.limit, params.page);
 
