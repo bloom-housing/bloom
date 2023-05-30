@@ -50,12 +50,11 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
-  setup-with-db:
+  setup-with-new-db:
     executor: standard-node
     steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:backend:core:dbsetup
+      - checkout
+      - run: yarn backend:new:install
   lint:
     executor: standard-node
     steps:
@@ -100,7 +99,6 @@ jobs:
       - run:
           name: DB Setup + New Backend Core Tests
           command: |
-            yarn backend:new:install
             yarn test:backend:new
             yarn test:backend:new:e2e
           environment:
@@ -139,6 +137,7 @@ workflows:
   build:
     jobs:
       - setup
+      - setup-with-new-db
       - lint:
           requires:
             - setup
@@ -150,7 +149,7 @@ workflows:
             - setup
       - jest-new-backend:
           requires:
-            - setup
+            - setup-with-new-db
       - build-public:
           requires:
             - setup
