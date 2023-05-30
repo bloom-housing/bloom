@@ -172,7 +172,11 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                     register={register}
                     readerOnly
                     error={!!errors?.url}
-                    errorMessage={t("errors.urlHttpsError")}
+                    errorMessage={
+                      errors?.url?.type === "https"
+                        ? t("errors.urlHttpsError")
+                        : t("errors.urlError")
+                    }
                   />
                 </ViewItem>
               </GridCell>

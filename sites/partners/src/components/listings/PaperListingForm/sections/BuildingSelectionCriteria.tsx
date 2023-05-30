@@ -318,7 +318,11 @@ const BuildingSelectionCriteria = () => {
               id="buildingSelectionCriteriaURL"
               register={register}
               error={errors?.buildingSelectionCriteriaURL}
-              errorMessage={t("errors.urlHttpsError")}
+              errorMessage={
+                errors?.buildingSelectionCriteriaURL?.type === "https"
+                  ? t("errors.urlHttpsError")
+                  : t("errors.urlError")
+              }
             />
           )}
         </section>
