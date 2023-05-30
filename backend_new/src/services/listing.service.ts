@@ -304,7 +304,7 @@ export class ListingService {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view = 'full',
-  ) {
+  ): Promise<ListingGet> {
     const listingRaw = await this.prisma.listings.findFirst({
       include: views[view],
       where: {
