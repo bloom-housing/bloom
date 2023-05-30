@@ -55,6 +55,10 @@ jobs:
     steps:
       - checkout
       - run: yarn backend:new:install
+      - save_cache:
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
   lint:
     executor: standard-node
     steps:
@@ -95,7 +99,7 @@ jobs:
     executor: standard-node-new
     steps:
       - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: DB Setup + New Backend Core Tests
           command: |
