@@ -51,7 +51,7 @@
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
     "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
     "test:backend:new": "cd backend_new && yarn test",
-    "test:backend:new:e2e": "cd backend_new && yarn test:e2e",
+    "test:backend:new:e2e": "cd backend_new && jest --config ./test/jest-e2e.json",
     "test:backend:new:dbsetup": "cd backend_new && yarn db:migration:run && yarn db:seed",
     "backend:new:install": "cd backend_new && yarn install"
   },
