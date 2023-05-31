@@ -353,7 +353,7 @@ const PreferenceDrawer = ({
                     profile?.jurisdictions
                       ? [
                           { label: "", value: "" },
-                          ...profile?.jurisdictions?.map((jurisdiction) => ({
+                          ...profile.jurisdictions.map((jurisdiction) => ({
                             label: jurisdiction.name,
                             value: jurisdiction.id,
                           })),
