@@ -23,14 +23,40 @@ describe("Listing Management Tests", () => {
     cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
-    cy.getByID("addPhotoButton").contains("Add Photo").click()
-    cy.get(`[data-testid="dropzone-input"]`).attachFile(
+    // Test photo upload
+    cy.getByTestId("add-photos-button").contains("Add Photo").click()
+    cy.getByTestId("dropzone-input").attachFile(
       "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
       {
         subjectType: "drag-n-drop",
       }
     )
-    cy.get(`[data-testid="listing-photo-uploaded"]`).contains("Save").click()
+    cy.getByTestId("drawer-photos-table").contains(
+      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+    )
+    cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    cy.getByTestId("photos-table").contains(
+      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+    )
+
+    cy.getByTestId("add-photos-button").contains("Edit Photos").click()
+    cy.getByTestId("dropzone-input").attachFile(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+      {
+        subjectType: "drag-n-drop",
+      }
+    )
+    cy.getByTestId("drawer-photos-table").contains(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
+    )
+    cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    cy.getByTestId("photos-table").contains(
+      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
+    )
+    cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
+    cy.getByTestId("photos-table")
+      .get("tbody > tr:nth-of-type(2)")
+      .should("not.contain", "Primary photo")
     cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
     cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
@@ -271,4 +297,20 @@ describe("Listing Management Tests", () => {
     cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }
+  it("as admin user, should be able to download listings export zip", () => {
+    const convertToString = (value: number) => {
+      return value < 10 ? `0${value}` : `${value}`
+    }
+    cy.visit("/")
+    cy.getByTestId("export-listings").click()
+    const now = new Date()
+    const dateString = `${now.getFullYear()}-${convertToString(
+      now.getMonth() + 1
+    )}-${convertToString(now.getDate())}`
+    const timeString = `${convertToString(now.getHours())}-${convertToString(now.getMinutes())}`
+    const zipName = `${dateString}_${timeString}-complete-listing-data.zip`
+    const downloadFolder = Cypress.config("downloadsFolder")
+    const completeZipPath = `${downloadFolder}/${zipName}`
+    cy.readFile(completeZipPath)
+  })
 })

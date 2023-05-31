@@ -9,6 +9,10 @@ export function getView(qb: ListingsQueryBuilder, view?: string) {
       return new BaseListingView(qb)
     case views.detail:
       return new DetailView(qb)
+    case views.listingsExport:
+      return new ListingsExportView(qb)
+    case views.unitsExport:
+      return new UnitsExportView(qb)
     case views.full:
     default:
       return new FullView(qb)
@@ -47,6 +51,19 @@ export class DetailView extends BaseListingView {
   constructor(qb: ListingsQueryBuilder) {
     super(qb)
     this.view = views.detail
+  }
+}
+export class ListingsExportView extends BaseListingView {
+  constructor(qb: ListingsQueryBuilder) {
+    super(qb)
+    this.view = views.listingsExport
+  }
+}
+
+export class UnitsExportView extends BaseListingView {
+  constructor(qb: ListingsQueryBuilder) {
+    super(qb)
+    this.view = views.unitsExport
   }
 }
 

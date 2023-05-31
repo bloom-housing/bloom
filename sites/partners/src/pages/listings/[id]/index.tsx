@@ -11,7 +11,7 @@ import Aside from "../../../components/listings/Aside"
 import { ListingContext } from "../../../components/listings/ListingContext"
 import DetailListingData from "../../../components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../components/listings/PaperListingDetails/sections/DetailListingIntro"
-import DetailListingPhoto from "../../../components/listings/PaperListingDetails/sections/DetailListingPhoto"
+import DetailListingPhotos from "../../../components/listings/PaperListingDetails/sections/DetailListingPhotos"
 import DetailBuildingDetails from "../../../components/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailAdditionalDetails from "../../../components/listings/PaperListingDetails/sections/DetailAdditionalDetails"
 import DetailAdditionalEligibility from "../../../components/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
@@ -87,7 +87,7 @@ export default function ListingDetail(props: ListingProps) {
                   <div className="info-card md:w-9/12 overflow-hidden">
                     <DetailListingData />
                     <DetailListingIntro />
-                    <DetailListingPhoto />
+                    <DetailListingPhotos />
                     <DetailBuildingDetails />
                     <DetailCommunityType />
                     <DetailUnits setUnitDrawer={setUnitDrawer} />

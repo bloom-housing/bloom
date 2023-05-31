@@ -37,6 +37,29 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
           ordinal: 1,
         },
       ],
+      images: [
+        {
+          image: {
+            label: "building",
+            fileId:
+              "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+          },
+        },
+        {
+          image: {
+            label: "building",
+            fileId:
+              "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+          },
+        },
+        {
+          image: {
+            label: "building",
+            fileId:
+              "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/oakhouse_cgdqmx.jpg",
+          },
+        },
+      ],
     })
 
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = bmrUnits.map((unit) => {

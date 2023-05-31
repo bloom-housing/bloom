@@ -154,8 +154,7 @@ export const getListingCard = (listing: Listing, index: number) => {
       key={index}
       preheader={listing?.buildingAddress?.county}
       imageCardProps={{
-        imageUrl:
-          imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
+        imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || "",
         tags: listing.reservedCommunityType
           ? [
               {

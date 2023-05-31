@@ -217,7 +217,10 @@ export class UserService {
     try {
       token = decode(dto.token, process.env.APP_SECRET)
     } catch (e) {
-      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
+      throw new HttpException(
+        { message: USER_ERRORS.TOKEN_EXPIRED.message, knownError: true },
+        USER_ERRORS.TOKEN_EXPIRED.status
+      )
     }
 
     const user = await this.userRepository.findById(token.id)
@@ -283,7 +286,6 @@ export class UserService {
       await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
-      console.error("isUserConfirmationTokenValid error = ", e)
       try {
         const user = await this.userRepository.findByConfirmationToken(dto.token)
         await this.setHitConfirmationURl(user, dto.token)
@@ -368,7 +370,10 @@ export class UserService {
         })
       } else {
         // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
-        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+        throw new HttpException(
+          { message: USER_ERRORS.EMAIL_IN_USE.message, knownError: true },
+          USER_ERRORS.EMAIL_IN_USE.status
+        )
       }
     }
     const newUser = await this.userRepository.save(dto)

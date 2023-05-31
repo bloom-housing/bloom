@@ -1,5 +1,7 @@
 import { Asset, AssetCreate, Listing } from "@bloom-housing/backend-core/types"
 
+export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
+
 export const cloudinaryUrlFromId = (publicId: string, cloudName: string, size = 400) => {
   return `https://res.cloudinary.com/${cloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
 }
@@ -59,18 +61,33 @@ export const getImageUrlFromAsset = (
   return null
 }
 
-export const imageUrlFromListing = (listing: Listing, size = 400) => {
-  // Use the new `image` field
+// export const getUrlForListingImage = (image: Asset, size = 400) => {
+//   if (!image) return null
+
+//   if (image.label == CLOUDINARY_BUILDING_LABEL) {
+//     return cloudinaryUrlFromId(image.fileId, CLOUDINARY_BUILDING_LABEL, size)
+//   } else {
+//     return image.fileId
+//   }
+// }
+
+export const imageUrlFromListing = (listing: Listing, size = 400): (string | null)[] => {
   const imageAssets =
-    listing?.images?.length && listing.images[0].image ? [listing.images[0].image] : listing?.assets
+    listing?.images?.length && listing.images[0].image
+      ? listing.images
+          .sort((imageA, imageB) => (imageA.ordinal ?? 10) - (imageB?.ordinal ?? 10))
+          .map((imageObj) => imageObj.image)
+      : listing?.assets
 
-  // Fallback to `assets`
-  const building = imageAssets?.find(
-    (asset: Asset) => asset.label == "cloudinaryBuilding" || asset.label == "building"
-  )
+  const imageUrls = imageAssets
+    ?.filter(
+      (asset: Asset) => asset.label === CLOUDINARY_BUILDING_LABEL || asset.label === "building"
+    )
+    ?.map((asset: Asset) => {
+      return asset ? getImageUrlFromAsset(asset, size) : null
+    })
 
-  return building ? getImageUrlFromAsset(building, size) : null
-
+  return imageUrls
   // we can omit this by searching for both "cloudinaryBuilding" and "building" above
   //return imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId
 }

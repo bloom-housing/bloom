@@ -5,7 +5,8 @@ import { serviceOptions } from "@bloom-housing/backend-core"
 import axios from "axios"
 import "@testing-library/jest-dom/extend-expect"
 import general from "../page_content/locale_overrides/general.json"
-addTranslation({ ...generalTranslations, ...general })
+import generalSharedHelpers from "../../../shared-helpers/src/locales/general.json"
+addTranslation({ ...generalTranslations, ...generalSharedHelpers, ...general })
 
 // see: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 window.matchMedia = jest.fn().mockImplementation((query) => {

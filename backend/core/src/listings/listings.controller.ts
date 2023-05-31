@@ -14,6 +14,7 @@ import {
   ClassSerializerInterceptor,
   Headers,
   ParseUUIDPipe,
+  Header,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -38,6 +39,9 @@ import { ListingsApiExtraModels } from "./types/listings-api-extra-models"
 import { IdDto } from "../shared/dto/id.dto"
 import { CombinedListingsQueryParams } from "./combined/combined-listings-query-params"
 import { CombinedListingFilterParams } from "./combined/combined-listing-filter-params"
+import { AuthzGuard } from "../../src/auth/guards/authz.guard"
+import { ListingsCsvExporterService } from "./listings-csv-exporter.service"
+import { ListingsZipQueryParams } from "./dto/listings-zip-query-params"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -48,7 +52,10 @@ import { CombinedListingFilterParams } from "./combined/combined-listing-filter-
 @ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
 @UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
-  constructor(private readonly listingsService: ListingsService) {}
+  constructor(
+    private readonly listingsService: ListingsService,
+    private readonly listingsCsvExporter: ListingsCsvExporterService
+  ) {}
 
   // TODO: Limit requests to defined fields
   @Get()
@@ -100,6 +107,24 @@ export class ListingsController {
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
     const listing = await this.listingsService.create(listingDto)
     return mapTo(ListingDto, listing)
+  }
+
+  @Get(`csv`)
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Retrieve listings and units in csv", operationId: "listAsCsv" })
+  @Header("Content-Type", "text/csv")
+  async listAsCsv(
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ListingsZipQueryParams
+  ): Promise<{ listingCsv: string; unitCsv: string }> {
+    const data = await this.listingsService.rawListWithFlagged()
+    const listingCsv = this.listingsCsvExporter.exportListingsFromObject(
+      data?.listingData,
+      data?.userAccessData,
+      queryParams.timeZone
+    )
+    const unitCsv = this.listingsCsvExporter.exportUnitsFromObject(data?.unitData)
+    return { listingCsv, unitCsv }
   }
 
   @Get(`:id`)

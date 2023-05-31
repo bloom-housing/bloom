@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea, GridCell } from "@bloom-housing/ui-components"
-import { fieldMessage } from "../../../../lib/helpers"
+import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { useJurisdiction } from "../../../../lib/hooks"
 
 type AdditionalEligibilityProps = {
@@ -81,7 +81,8 @@ const AdditionalEligibility = (props: AdditionalEligibilityProps) => {
             }
             errorMessage={fieldMessage(errors?.rentalAssistance)}
             inputProps={{
-              onChange: () => clearErrors("rentalAssistance"),
+              onChange: () =>
+                fieldHasError(errors?.rentalAssistance) && clearErrors("rentalAssistance"),
             }}
           />
         </GridCell>

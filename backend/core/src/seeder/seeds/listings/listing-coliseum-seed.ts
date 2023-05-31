@@ -62,7 +62,36 @@ const coliseumListing: ListingSeedType = {
   smokingPolicy: "No Smoking",
   unitAmenities: null,
   yearBuilt: 2021,
-  images: [],
+  images: [
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+      },
+    },
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/oakhouse_cgdqmx.jpg",
+      },
+    },
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/house_goo3cp.jpg",
+      },
+    },
+    {
+      image: {
+        label: "building",
+        fileId:
+          "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
+      },
+    },
+  ],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
   costsNotIncluded:

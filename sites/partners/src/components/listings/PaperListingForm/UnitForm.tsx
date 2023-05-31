@@ -189,6 +189,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
   type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
@@ -343,9 +344,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     if (defaultUnit) {
       setValue("amiChart.id", defaultUnit.amiChart?.id)
       setValue("priorityType.id", defaultUnit.priorityType?.id)
-      setValue("unitType.id", defaultUnit.unitType?.id)
     }
   }, [defaultUnit, setValue])
+
+  useEffect(() => {
+    if (defaultUnit && options.unitTypes) {
+      setValue("unitType.id", defaultUnit.unitType?.id)
+    }
+  }, [defaultUnit, options, setValue])
 
   useEffect(() => {
     if (defaultUnit) {

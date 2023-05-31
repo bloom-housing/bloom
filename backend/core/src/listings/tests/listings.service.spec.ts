@@ -20,6 +20,7 @@ import { ListingsQueryBuilder } from "../db/listing-query-builder"
 import { UserRepository } from "../../auth/repositories/user-repository"
 import { Language } from "../../../types"
 import { DoorwayListingsExternalQueryParams } from "../dto/doorway-listings-external-query-params"
+import { User } from "../../../src/auth/entities/user.entity"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -184,6 +185,7 @@ describe("ListingsService", () => {
           provide: HttpService,
           useValue: mockHttpService,
         },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
         ConfigService,
       ],
     }).compile()
