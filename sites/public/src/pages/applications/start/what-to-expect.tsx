@@ -53,6 +53,7 @@ const ApplicationWhatToExpect = () => {
       default:
         return { steps: "", finePrint: "" }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listing, router.locale])
 
   useEffect(() => {

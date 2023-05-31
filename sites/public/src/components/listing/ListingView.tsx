@@ -39,6 +39,7 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -504,6 +505,7 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
+        <SiteAlert type="alert" dismissable />
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
             (imageUrl: string) => {

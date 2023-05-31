@@ -12,6 +12,7 @@ import {
   ProgressNav,
   Heading,
   AlertBox,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -26,8 +27,10 @@ import {
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
+import { useRouter } from "next/router"
 
 const ApplicationSummary = () => {
+  const router = useRouter()
   const { profile, applicationsService } = useContext(AuthContext)
   const [validationError, setValidationError] = useState(false)
   const { conductor, application, listing } = useFormConductor("summary")
@@ -46,6 +49,13 @@ const ApplicationSummary = () => {
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
+
+  useEffect(() => {
+    if (listing?.status === "closed") {
+      setSiteAlertMessage(t("listings.applicationsClosedRedirect"), "alert")
+      void router.push(`/${router.locale}/listing/${listing?.id}/${listing.urlSlug}`)
+    }
+  }, [listing, router])
 
   const onSubmit = () => {
     applicationsService

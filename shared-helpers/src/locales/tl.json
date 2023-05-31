@@ -405,6 +405,7 @@
   "listings.applicationOpenPeriod": "Mga bukas na application",
   "listings.applicationPerApplicantAgeDescription": "bawat aplikante na edad 18 at mas matanda",
   "listings.applicationsClosed": "Mga Isinarang Application",
+  "listings.applicationsClosedRedirect": "Ang listahang ito ay hindi na tumatanggap ng mga aplikasyon.",
   "listings.applications": "Mga Application",
   "listings.apply.applicationWillBeAvailableOn": "Magiging available ang application para i-download at kunin sa %{openDate}",
   "listings.apply.applyOnline": "Mag-apply Online",
