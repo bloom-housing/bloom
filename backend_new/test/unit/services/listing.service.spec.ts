@@ -10,6 +10,7 @@ import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-
 import { LanguagesEnum } from '@prisma/client';
 import { Unit } from '../../../src/dtos/units/unit-get.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
+import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
 
 /*
@@ -918,7 +919,7 @@ describe('Testing listing service', () => {
       },
     ]);
 
-    const listing = await service.findOne(
+    const listing: ListingGet = await service.findOne(
       'listingId',
       LanguagesEnum.en,
       ListingViews.base,

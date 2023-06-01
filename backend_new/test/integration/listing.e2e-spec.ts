@@ -24,20 +24,19 @@ describe('Listing Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+    await clearAllDb();
   });
 
-  const clearDb = async (listingIds: string[], jurisdictionId: string) => {
+  const clearAllDb = async () => {
     await prisma.applicationMethods.deleteMany();
     await prisma.listingEvents.deleteMany();
     await prisma.listingImages.deleteMany();
     await prisma.listingMultiselectQuestions.deleteMany();
     await prisma.units.deleteMany();
     await prisma.amiChart.deleteMany();
-    for (let i = 0; i < listingIds.length; i++) {
-      await prisma.listings.delete({ where: { id: listingIds[i] } });
-    }
+    await prisma.listings.deleteMany();
     await prisma.reservedCommunityTypes.deleteMany();
-    await prisma.jurisdictions.delete({ where: { id: jurisdictionId } });
+    await prisma.jurisdictions.deleteMany();
   };
 
   it('list test no params no data', async () => {
@@ -60,11 +59,11 @@ describe('Listing Controller Tests', () => {
       data: jurisdictionFactory(100),
     });
 
-    const listingA = await prisma.listings.create({
+    await prisma.listings.create({
       data: listingFactory(10, jurisdiction.id),
     });
 
-    const listingB = await prisma.listings.create({
+    await prisma.listings.create({
       data: listingFactory(50, jurisdiction.id),
     });
 
@@ -83,8 +82,6 @@ describe('Listing Controller Tests', () => {
     expect(res.body.items.length).toEqual(2);
     expect(items[0].name).toEqual('name: 10');
     expect(items[1].name).toEqual('name: 50');
-
-    await clearDb([listingA.id, listingB.id], jurisdiction.id);
   });
 
   it('list test params no data', async () => {
@@ -121,10 +118,10 @@ describe('Listing Controller Tests', () => {
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(100),
     });
-    const listingA = await prisma.listings.create({
+    await prisma.listings.create({
       data: listingFactory(10, jurisdiction.id),
     });
-    const listingB = await prisma.listings.create({
+    await prisma.listings.create({
       data: listingFactory(50, jurisdiction.id),
     });
 
@@ -186,7 +183,5 @@ describe('Listing Controller Tests', () => {
     });
     expect(res.body.items.length).toEqual(1);
     expect(res.body.items[0].name).toEqual('name: 50');
-
-    await clearDb([listingA.id, listingB.id], jurisdiction.id);
   });
 });

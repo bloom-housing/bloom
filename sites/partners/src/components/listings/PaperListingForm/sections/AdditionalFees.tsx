@@ -34,8 +34,9 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
     }))
   }, [props.existingUtilities, register])
 
-  const enableUtilitiesIncluded = profile?.jurisdictions?.find((j) => j.id === jurisdiction)
-    ?.enableUtilitiesIncluded
+  const enableUtilitiesIncluded = profile?.jurisdictions?.find(
+    (j) => j.id === jurisdiction
+  )?.enableUtilitiesIncluded
 
   return (
     <div>
