@@ -27,9 +27,7 @@ export class ListingDefaultSanJoseSeed {
   constructor(
     @InjectRepository(Listing) protected readonly listingRepository: Repository<Listing>,
     @InjectRepository(UnitAccessibilityPriorityType)
-    protected readonly unitAccessibilityPriorityTypeRepository: Repository<
-      UnitAccessibilityPriorityType
-    >,
+    protected readonly unitAccessibilityPriorityTypeRepository: Repository<UnitAccessibilityPriorityType>,
     @InjectRepository(UnitType) protected readonly unitTypeRepository: Repository<UnitType>,
     @InjectRepository(ReservedCommunityType)
     protected readonly reservedTypeRepository: Repository<ReservedCommunityType>,
@@ -45,9 +43,10 @@ export class ListingDefaultSanJoseSeed {
   ) {}
 
   async seed() {
-    const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { where: { name: PriorityTypes.mobilityHearing } }
-    )
+    const priorityTypeMobilityAndHearing =
+      await this.unitAccessibilityPriorityTypeRepository.findOneOrFail({
+        where: { name: PriorityTypes.mobilityHearing },
+      })
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
       where: { name: "oneBdrm" },
     })

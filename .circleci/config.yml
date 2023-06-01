@@ -12,6 +12,15 @@ executors:
           # Never do this in production or with any sensitive / non-test data:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom
+  standard-node-new:
+    docker:
+      - image: "cimg/node:18.14.2"
+      - image: "cimg/postgres:12.10"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom_prisma
   cypress-node:
     docker:
       - image: "cypress/base:18.14.1"
@@ -41,12 +50,15 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
-  setup-with-db:
+  setup-with-new-db:
     executor: standard-node
     steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:backend:core:dbsetup
+      - checkout
+      - run: yarn backend:new:install
+      - save_cache:
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
   lint:
     executor: standard-node
     steps:
@@ -83,6 +95,23 @@ jobs:
             CLOUDINARY_CLOUD_NAME: "exygy"
             CLOUDINARY_SECRET: "fake_secret"
             PARTNERS_PORTAL_URL: "http://localhost:3001"
+  jest-new-backend:
+    executor: standard-node-new
+    steps:
+      - restore_cache:
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: DB Setup + New Backend Core Tests
+          command: |
+            yarn test:backend:new:dbsetup
+            yarn test:backend:new
+            yarn test:backend:new:e2e
+          environment:
+            PORT: "3100"
+            EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
+            APP_SECRET: "CI-LONG-SECRET-KEY"
+            # DB URL for migration and seeds:
+            DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom_prisma"
   build-public:
     executor: standard-node
     steps:
@@ -109,10 +138,10 @@ jobs:
       - run: yarn test:app:public:unit
 
 workflows:
-  version: 2
   build:
     jobs:
       - setup
+      - setup-with-new-db
       - lint:
           requires:
             - setup
@@ -122,6 +151,9 @@ workflows:
       - jest-backend:
           requires:
             - setup
+      - jest-new-backend:
+          requires:
+            - setup-with-new-db
       - build-public:
           requires:
             - setup
