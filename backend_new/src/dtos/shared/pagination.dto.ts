@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
   IsNumber,
   registerDecorator,
@@ -49,9 +49,12 @@ export class PaginationQueryParams {
     default: 1,
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
-    toClassOnly: true,
-  })
+  @Transform(
+    (value: TransformFnParams) => (value?.value ? parseInt(value.value) : 1),
+    {
+      toClassOnly: true,
+    },
+  )
   page?: number;
 
   @Expose()
@@ -62,9 +65,12 @@ export class PaginationQueryParams {
     default: 10,
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
-    toClassOnly: true,
-  })
+  @Transform(
+    (value: TransformFnParams) => (value?.value ? parseInt(value.value) : 10),
+    {
+      toClassOnly: true,
+    },
+  )
   limit?: number;
 }
 
@@ -77,9 +83,12 @@ export class PaginationAllowsAllQueryParams {
     default: 1,
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
-    toClassOnly: true,
-  })
+  @Transform(
+    (value: TransformFnParams) => (value?.value ? parseInt(value.value) : 1),
+    {
+      toClassOnly: true,
+    },
+  )
   page?: number;
 
   @Expose()
@@ -94,11 +103,11 @@ export class PaginationAllowsAllQueryParams {
     groups: [ValidationsGroupsEnum.default],
   })
   @Transform(
-    (value: string | undefined) => {
-      if (value === 'all') {
+    (value: TransformFnParams) => {
+      if (value?.value === 'all') {
         return value;
       }
-      return value ? parseInt(value) : 10;
+      return value?.value ? parseInt(value.value) : 10;
     },
     {
       toClassOnly: true,
