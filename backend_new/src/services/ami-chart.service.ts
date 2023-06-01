@@ -3,6 +3,7 @@ import { PrismaService } from './prisma.service';
 import { Prisma } from '@prisma/client';
 import { AmiChart } from '../dtos/ami-charts/ami-chart-get.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
+import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartQueryParams } from '../dtos/ami-charts/ami-chart-query-params.dto';
 import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -102,7 +103,7 @@ export class AmiChartService {
     this will update an ami chart's name or items field
     if no ami chart has the id of the incoming argument an error is thrown
   */
-  async update(incomingData: AmiChart) {
+  async update(incomingData: AmiChartUpdate) {
     const amiChart = await this.prisma.amiChart.findFirst({
       where: {
         id: incomingData.id,
@@ -116,8 +117,10 @@ export class AmiChartService {
     const rawResults = await this.prisma.amiChart.update({
       include: view,
       data: {
-        name: incomingData.name,
+        ...incomingData,
         items: JSON.stringify(incomingData.items),
+        jurisdictions: undefined,
+        id: undefined,
       },
       where: {
         id: incomingData.id,

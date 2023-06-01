@@ -8,7 +8,7 @@ import { stringify } from 'qs';
 import { AmiChartQueryParams } from '../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
 import { AmiChartCreate } from '../../src/dtos/ami-charts/ami-chart-create.dto';
-import { AmiChart } from '../../src/dtos/ami-charts/ami-chart-get.dto';
+import { AmiChartUpdate } from '../../src/dtos/ami-charts/ami-chart-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 describe('AmiChart Controller Tests', () => {
@@ -153,9 +153,7 @@ describe('AmiChart Controller Tests', () => {
         jurisdictions: {
           id: jurisdictionA.id,
         },
-        createdAt: amiChartA.createdAt,
-        updatedAt: amiChartA.updatedAt,
-      } as AmiChart)
+      } as AmiChartUpdate)
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');

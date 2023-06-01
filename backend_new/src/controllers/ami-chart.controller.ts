@@ -19,6 +19,7 @@ import {
 import { AmiChartService } from '../services/ami-chart.service';
 import { AmiChart } from '../dtos/ami-charts/ami-chart-get.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
+import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { AmiChartQueryParams } from '../dtos/ami-charts/ami-chart-query-params.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -27,7 +28,7 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 @Controller('/amiCharts')
 @ApiTags('amiCharts')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(AmiChartCreate, IdDTO, AmiChartQueryParams)
+@ApiExtraModels(AmiChartCreate, AmiChartUpdate, IdDTO, AmiChartQueryParams)
 export class AmiChartController {
   constructor(private readonly AmiChartService: AmiChartService) {}
 
@@ -55,7 +56,7 @@ export class AmiChartController {
   @Put(`:amiChartId`)
   @ApiOperation({ summary: 'Update amiChart', operationId: 'update' })
   @ApiOkResponse({ type: AmiChart })
-  async update(@Body() amiChart: AmiChart) {
+  async update(@Body() amiChart: AmiChartUpdate) {
     return await this.AmiChartService.update(amiChart);
   }
 

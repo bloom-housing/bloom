@@ -3,7 +3,7 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
 import { AmiChartQueryParams } from '../../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { AmiChartCreate } from '../../../src/dtos/ami-charts/ami-chart-create.dto';
-import { AmiChart } from '../../../src/dtos/ami-charts/ami-chart-get.dto';
+import { AmiChartUpdate } from '../../../src/dtos/ami-charts/ami-chart-update.dto';
 
 describe('Testing ami chart service', () => {
   let service: AmiChartService;
@@ -356,7 +356,7 @@ describe('Testing ami chart service', () => {
       ],
     });
 
-    const params: AmiChart = {
+    const params: AmiChartUpdate = {
       jurisdictions: jurisdictionData,
       items: [
         {
@@ -382,8 +382,6 @@ describe('Testing ami chart service', () => {
       ],
       name: 'ami name 4',
       id: 'ami Id 3',
-      createdAt: date,
-      updatedAt: date,
     };
 
     expect(await service.update(params)).toEqual({
@@ -458,7 +456,6 @@ describe('Testing ami chart service', () => {
   });
 
   it('testing update() existing record not found', async () => {
-    const date = new Date();
     const jurisdictionData = {
       id: 'example Id',
       name: 'example name',
@@ -466,7 +463,7 @@ describe('Testing ami chart service', () => {
     prisma.amiChart.findFirst = jest.fn().mockResolvedValue(null);
     prisma.amiChart.update = jest.fn().mockResolvedValue(null);
 
-    const params: AmiChart = {
+    const params: AmiChartUpdate = {
       jurisdictions: jurisdictionData,
       items: [
         {
@@ -492,8 +489,6 @@ describe('Testing ami chart service', () => {
       ],
       name: 'ami name 4',
       id: 'ami Id 3',
-      createdAt: date,
-      updatedAt: date,
     };
 
     await expect(
