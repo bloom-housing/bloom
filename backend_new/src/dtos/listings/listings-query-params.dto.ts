@@ -13,6 +13,7 @@ import {
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingOrderByKeys } from '../../enums/listings/order-by-enum';
+import { ListingViews } from '../../enums/listings/view-enum';
 import { OrderByEnum } from '../../enums/shared/order-by-enum';
 import { OrderQueryParamValidator } from '../../utilities/order-by-validator';
 
@@ -35,18 +36,21 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiProperty({
-    name: 'view',
+    enum: ListingViews,
     required: false,
-    type: String,
+    enumName: 'ListingViews',
+    example: 'full',
   })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  view?: string;
+  @IsEnum(ListingViews, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  view?: ListingViews;
 
   @Expose()
   @ApiProperty({
     name: 'orderBy',
     required: false,
-    enumName: 'OrderByFieldsEnum',
+    enumName: 'ListingOrderByKeys',
     example: '["updatedAt"]',
     isArray: true,
   })

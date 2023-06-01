@@ -115,7 +115,7 @@ export class ListingsService {
       /**  */
       filter?: ListingFilterParams[];
       /**  */
-      view?: string;
+      view?: ListingViews;
       /**  */
       orderBy?: any | null[];
       /**  */
@@ -157,7 +157,7 @@ export class ListingsService {
       /**  */
       id: string;
       /**  */
-      view?: string;
+      view?: ListingViews;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ListingGet> {
@@ -191,7 +191,7 @@ export interface ListingsQueryParams {
   filter?: string[];
 
   /**  */
-  view?: string;
+  view?: ListingViews;
 
   /**  */
   orderBy?: [];
@@ -231,7 +231,7 @@ export interface ListingFilterParams {
 
 export interface ListingsRetrieveParams {
   /**  */
-  view?: string;
+  view?: ListingViews;
 }
 
 export interface PaginationAllowsAllQueryParams {
@@ -361,6 +361,13 @@ export interface ListingGet {
 export interface PaginatedListing {
   /**  */
   items: ListingGet[];
+}
+
+export enum ListingViews {
+  'fundamentals' = 'fundamentals',
+  'base' = 'base',
+  'full' = 'full',
+  'details' = 'details',
 }
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',
