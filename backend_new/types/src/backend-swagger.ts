@@ -180,6 +180,147 @@ export class ListingsService {
   }
 }
 
+export class AmiChartsService {
+  /**
+   * List amiCharts
+   */
+  list(
+    params: {
+      /**  */
+      jurisdictionName?: string;
+      /**  */
+      jurisdictionId?: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<AmiChart[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+      configs.params = {
+        jurisdictionName: params['jurisdictionName'],
+        jurisdictionId: params['jurisdictionId'],
+      };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create amiChart
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AmiChartCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete amiChart by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get amiChart by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      amiChartId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts/{amiChartId}';
+      url = url.replace('{amiChartId}', params['amiChartId'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update amiChart
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: AmiChartUpdate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<AmiChart> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/amiCharts/{amiChartId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -397,6 +538,83 @@ export interface ListingGet {
 export interface PaginatedListing {
   /**  */
   items: ListingGet[];
+}
+
+export interface AmiChartItem {
+  /**  */
+  percentOfAmi: number;
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  income: number;
+}
+
+export interface IdDTO {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+}
+
+export interface AmiChartCreate {
+  /**  */
+  items: AmiChartItem[];
+
+  /**  */
+  name: string;
+
+  /**  */
+  jurisdictions: IdDTO;
+}
+
+export interface AmiChartUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  items: AmiChartItem[];
+
+  /**  */
+  name: string;
+
+  /**  */
+  jurisdictions: IdDTO;
+}
+
+export interface AmiChartQueryParams {
+  /**  */
+  jurisdictionName?: string;
+
+  /**  */
+  jurisdictionId?: string;
+}
+
+export interface AmiChart {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  items: AmiChartItem[];
+
+  /**  */
+  name: string;
+
+  /**  */
+  jurisdictions: IdDTO;
+}
+
+export interface SuccessDTO {
+  /**  */
+  success: boolean;
 }
 
 export enum ListingViews {
