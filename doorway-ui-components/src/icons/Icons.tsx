@@ -603,6 +603,14 @@ export const Messages = (props: IconProps) => {
   )
 }
 
+export const Minus = (props: IconProps) => {
+  return (
+    <svg viewBox={"0 0 30 30"} fill={props.fill ?? "currentColor"}>
+      <path d="M6.25 15.9375V14.0625H23.75V15.9375H6.25Z"/>
+    </svg>
+  )
+}
+
 export const Oval = (props: IconProps) => {
   return (
     <svg viewBox={"0 0 32 32"} fill={props.fill ?? "currentColor"}>
@@ -625,8 +633,8 @@ export const Phone = (props: IconProps) => {
 
 export const Plus = (props: IconProps) => {
   return (
-    <svg viewBox={"0 0 32 32"} fill={props.fill ?? "currentColor"}>
-      <path d="M25.6 16c0 0.885-0.077 1.6-0.962 1.6h-7.038v7.038c0 0.883-0.715 0.962-1.6 0.962s-1.6-0.078-1.6-0.962v-7.038h-7.038c-0.883 0-0.962-0.715-0.962-1.6s0.078-1.6 0.962-1.6h7.038v-7.038c0-0.885 0.715-0.962 1.6-0.962s1.6 0.077 1.6 0.962v7.038h7.038c0.885 0 0.962 0.715 0.962 1.6z"></path>
+    <svg viewBox={"0 0 30 30"} fill={props.fill ?? "currentColor"}>
+      <path d="M14.0625 23.75V15.9375H6.25V14.0625H14.0625V6.25H15.9375V14.0625H23.75V15.9375H15.9375V23.75H14.0625Z"></path>
     </svg>
   )
 }

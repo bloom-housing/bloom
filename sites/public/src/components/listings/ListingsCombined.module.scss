@@ -14,17 +14,6 @@
     display: block;
   }
 
-  .listings-map {
-    flex: 1;
-
-    @media (max-width: $screen-md) {
-      position: absolute;
-      z-index: 0;
-      height: var(--listings-component-height);
-      width: 100%;
-    }
-  }
-
   .listings-list {
     --listings-list-width: 600px;
 

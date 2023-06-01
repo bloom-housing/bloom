@@ -15,9 +15,7 @@ type ListingsCombinedProps = {
 const ListingsCombined = (props: ListingsCombinedProps) => {
   return (
     <div className={styles["listings-combined"]}>
-      <div className={styles["listings-map"]}>
-        <ListingsMap listings={props.listings} googleMapsApiKey={props.googleMapsApiKey} />
-      </div>
+      <ListingsMap listings={props.listings} googleMapsApiKey={props.googleMapsApiKey} />
       <div className={styles["listings-list"]}>
         <ListingsList
           listings={props.listings}

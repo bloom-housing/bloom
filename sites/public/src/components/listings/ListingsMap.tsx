@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from "@react-google-maps/api"
 import { getListingUrl, getListingCard } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/backend-core"
+import styles from "./ListingsMap.module.scss"
+import { MapControl } from "../shared/MapControl"
 
 type ListingsMapProps = {
   listings?: Listing[]
@@ -9,7 +11,7 @@ type ListingsMapProps = {
 }
 
 const containerStyle: React.CSSProperties = {
-  display: "block",
+  display: "flex",
   width: "100%",
   height: "100%",
   position: "relative",
@@ -43,34 +45,43 @@ const ListingsMap = (props: ListingsMapProps) => {
 
   const [openInfoWindow, setOpenInfoWindow] = useState(false)
   const [infoWindowIndex, setInfoWindowIndex] = useState(null)
-
+  const mapRef = React.useRef(null)
   return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={9}>
-      {markers.map((marker) => (
-        <Marker
-          position={{ lat: marker.lat, lng: marker.lng }}
-          label={{
-            text: marker.key.toString(),
-            color: "var(--bloom-color-white)",
-            fontFamily: "var(--bloom-font-sans)",
-            fontWeight: "700",
-            fontSize: "var(--bloom-font-size-2xs)",
-          }}
-          onClick={() => {
-            setOpenInfoWindow(true)
-            setInfoWindowIndex(marker.key)
-          }}
-          key={marker.key.toString()}
-          icon={{
-            url: "/images/map-pin.svg",
-            labelOrigin: new google.maps.Point(14, 15),
-          }}
-        >
-          {/* Only display the info window when the corresponding marker has been clicked. */}
-          {openInfoWindow && infoWindowIndex === marker.key && marker.infoWindow}
-        </Marker>
-      ))}
-    </GoogleMap>
+    <div className={styles["listings-map"]}>
+      <MapControl mapRef={mapRef} />
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={9}
+        options={{ disableDefaultUI: true }}
+        ref={mapRef}
+      >
+        {markers.map((marker) => (
+          <Marker
+            position={{ lat: marker.lat, lng: marker.lng }}
+            label={{
+              text: marker.key.toString(),
+              color: "var(--bloom-color-white)",
+              fontFamily: "var(--bloom-font-sans)",
+              fontWeight: "700",
+              fontSize: "var(--bloom-font-size-2xs)",
+            }}
+            onClick={() => {
+              setOpenInfoWindow(true)
+              setInfoWindowIndex(marker.key)
+            }}
+            key={marker.key.toString()}
+            icon={{
+              url: "/images/map-pin.svg",
+              labelOrigin: new google.maps.Point(14, 15),
+            }}
+          >
+            {/* Only display the info window when the corresponding marker has been clicked. */}
+            {openInfoWindow && infoWindowIndex === marker.key && marker.infoWindow}
+          </Marker>
+        ))}
+      </GoogleMap>
+    </div>
   ) : (
     <></>
   )

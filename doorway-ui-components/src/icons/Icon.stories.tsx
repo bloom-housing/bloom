@@ -50,6 +50,7 @@ export const IconMap = () => <Icon size="large" symbol="map" />
 export const IconMapThin = () => <Icon size="large" symbol="mapThin" />
 export const IconMenu = () => <Icon size="large" symbol="menu" />
 export const IconMessages = () => <Icon size="large" symbol="messages" />
+export const IconMinus = () => <Icon size="large" symbol="minus" />
 export const IconOval = () => <Icon size="large" symbol="oval" />
 export const IconPhone = () => <Icon size="large" symbol="phone" />
 export const IconPlus = () => <Icon size="large" symbol="plus" />
