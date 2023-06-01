@@ -10,6 +10,7 @@ import { ListingsQueryParams } from '../../src/dtos/listings/listings-query-para
 import { Compare } from '../../src/dtos/shared/base-filter.dto';
 import { ListingOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
+import { ListingViews } from '../../src/enums/listings/view-enum';
 
 describe('Listing Controller Tests', () => {
   let app: INestApplication;
@@ -87,7 +88,7 @@ describe('Listing Controller Tests', () => {
     const queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
-      view: 'base',
+      view: ListingViews.base,
       filter: [
         {
           $comparison: Compare.IN,
@@ -127,7 +128,7 @@ describe('Listing Controller Tests', () => {
     let queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
-      view: 'base',
+      view: ListingViews.base,
       filter: [
         {
           $comparison: Compare.IN,
@@ -157,7 +158,7 @@ describe('Listing Controller Tests', () => {
     queryParams = {
       limit: 1,
       page: 2,
-      view: 'base',
+      view: ListingViews.base,
       filter: [
         {
           $comparison: Compare.IN,

@@ -18,6 +18,7 @@ import {
   summarizeUnits,
 } from '../utilities/unit-utilities';
 import { AmiChart } from '../dtos/units/ami-chart-get.dto';
+import { ListingViews } from '../enums/listings/view-enum';
 
 export type getListingsArgs = {
   skip: number;
@@ -26,7 +27,7 @@ export type getListingsArgs = {
   where: Prisma.ListingsWhereInput;
 };
 
-const views: Record<string, Prisma.ListingsInclude> = {
+const views: Partial<Record<ListingViews, Prisma.ListingsInclude>> = {
   fundamentals: {
     jurisdictions: true,
     listingsBuildingAddress: true,
@@ -303,7 +304,7 @@ export class ListingService {
   async findOne(
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
-    view = 'full',
+    view: ListingViews = ListingViews.full,
   ): Promise<ListingGet> {
     const listingRaw = await this.prisma.listings.findFirst({
       include: views[view],
