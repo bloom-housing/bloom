@@ -9,6 +9,7 @@ import { UnitTypeModule } from './modules/unit-type.module';
 import { UnitRentTypeModule } from './modules/unit-rent-type.module';
 import { JurisdictionModule } from './modules/jurisdiction.module';
 import { MultiselectQuestionModule } from './modules/multiselect-question.module';
+import { ApplicationModule } from './modules/application.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MultiselectQuestionModule } from './modules/multiselect-question.module
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -32,6 +34,7 @@ import { MultiselectQuestionModule } from './modules/multiselect-question.module
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
+    ApplicationModule,
   ],
 })
 export class AppModule {}
