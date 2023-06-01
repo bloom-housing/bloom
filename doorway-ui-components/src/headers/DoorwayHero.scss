@@ -1,0 +1,56 @@
+.doorway-hero {
+  --doorway-hero-background-color: var(--bloom-color-white);
+  --doorway-hero-between-margin: var(--bloom-s6);
+  --doorway-hero-max-width: var(--bloom-width-5xl);
+  --doorway-hero-inner-background-color: var(--doorway-color-secondary);
+  --doorway-hero-inner-max-width: var(--bloom-width-3xl);
+  --doorway-hero-inner-offset: calc(-1 * var(--bloom-s20));
+  --doorway-hero-image-width-desktop: var(bloom-width-1-3rd);
+  --doorway-hero-image-offset-top: var(--bloom-s20);
+  --doorway-hero-image-offset-right: calc(-1 * var(--bloom-s40));
+  --doorway-hero-image-width: 50%;
+
+  margin: auto;
+
+  @media (min-width: $screen-md) {
+    position: relative;
+    max-width: var(--doorway-hero-max-width);
+    @apply py-16;
+    @apply px-12;
+  }
+}
+
+.doorway-hero_inner {
+  background-color: var(--doorway-hero-inner-background-color);
+  position: relative;
+  width: 100%;
+  @apply p-8;
+
+  @media (min-width: $screen-md) {
+    max-width: var(--doorway-hero-inner-max-width);
+
+    @apply p-12;
+    @apply pr-72;
+    @apply rounded-3xl;
+  }
+
+  @media (min-width: $screen-lg) {
+    left: var(--doorway-hero-inner-offset);
+  }
+
+  h1 {
+    margin-bottom: var(--doorway-hero-between-margin);
+  }
+}
+
+.doorway-hero_image {
+  @apply rounded-3xl;
+  margin-bottom: var(--doorway-hero-between-margin);
+
+  @media (min-width: $screen-md) {
+    position: absolute;
+    top: var(--doorway-hero-image-offset-top);
+    right: var(--doorway-hero-image-offset-right);
+    width: var(--doorway-hero-image-width);
+  }
+}

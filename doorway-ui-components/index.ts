@@ -52,6 +52,7 @@ export * from "./src/global/ApplicationStatusType"
 
 /* Headers */
 export * from "./src/headers/Hero"
+export * from "./src/headers/DoorwayHero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
 export * from "./src/headers/StepHeader"

@@ -4,14 +4,12 @@ import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
   AlertBox,
   LinkButton,
-  Hero,
   Heading,
   t,
   SiteAlert,
-  Icon,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { ActionBlock } from "@bloom-housing/doorway-ui-components"
+import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
@@ -39,13 +37,7 @@ export default function Home(props: IndexProps) {
     })
   }, [profile])
 
-  const heroTitle = (
-    <>
-      {t("welcome.title")} <em>{t("region.name")}</em>
-    </>
-  )
-
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+  const metaDescription = t("welcome.findAffordableHousing", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
   return (
@@ -67,7 +59,12 @@ export default function Home(props: IndexProps) {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
+      <DoorwayHero
+        title={t("welcome.findAffordableHousing")}
+        offsetImage={"images/placeholder_temp_delete_me.jpg"}
+      >
+        <p className="bg-gray-300 h-64">TODO: Add search component here</p>
+      </DoorwayHero>
       <ActionBlock
         className="p-12"
         header={<Heading priority={2}>{t("welcome.introduction")}</Heading>}
@@ -109,24 +106,6 @@ export default function Home(props: IndexProps) {
           ]}
         />
       )}
-      <div className="homepage-extra">
-        <div className="action-blocks mt-4 mb-4 w-full">
-          <ActionBlock
-            className="flex-1"
-            header={<Heading priority={2}>{t("welcome.seeMoreOpportunitiesTruncated")}</Heading>}
-            icon={<Icon size="3xl" symbol="building" />}
-            actions={[
-              <LinkButton
-                href="/additional-resources"
-                key={"additional-resources"}
-                size={AppearanceSizeType.small}
-              >
-                {t("welcome.viewAdditionalHousingTruncated")}
-              </LinkButton>,
-            ]}
-          />
-        </div>
-      </div>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
       />
