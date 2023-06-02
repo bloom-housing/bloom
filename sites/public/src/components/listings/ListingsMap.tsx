@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from "@react-google-maps/api"
 import { getListingUrl, getListingCard } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/backend-core"
@@ -8,6 +8,7 @@ import { MapControl } from "../shared/MapControl"
 type ListingsMapProps = {
   listings?: Listing[]
   googleMapsApiKey: string
+  desktopMinWidth?: number
 }
 
 const containerStyle: React.CSSProperties = {
@@ -29,6 +30,27 @@ const ListingsMap = (props: ListingsMapProps) => {
 
   const [openInfoWindow, setOpenInfoWindow] = useState(false)
   const [infoWindowIndex, setInfoWindowIndex] = useState(null)
+
+  const [isDesktop, setIsDesktop] = useState(true)
+
+  const DESKTOP_MIN_WIDTH = props.desktopMinWidth || 767 // @screen md
+  useEffect(() => {
+    if (window.innerWidth > DESKTOP_MIN_WIDTH) {
+      setIsDesktop(true)
+    } else {
+      setIsDesktop(false)
+    }
+
+    const updateMedia = () => {
+      if (window.innerWidth > DESKTOP_MIN_WIDTH) {
+        setIsDesktop(true)
+      } else {
+        setIsDesktop(false)
+      }
+    }
+    window.addEventListener("resize", updateMedia)
+    return () => window.removeEventListener("resize", updateMedia)
+  }, [DESKTOP_MIN_WIDTH])
 
   const markers = []
   let index = 0
@@ -70,8 +92,13 @@ const ListingsMap = (props: ListingsMapProps) => {
               fontSize: "var(--bloom-font-size-2xs)",
             }}
             onClick={() => {
-              setOpenInfoWindow(true)
-              setInfoWindowIndex(marker.key)
+              if (isDesktop) {
+                setOpenInfoWindow(true)
+                setInfoWindowIndex(marker.key)
+              } else {
+                const element = document.getElementsByClassName("listings-row")[marker.key - 1]
+                element.scrollIntoView()
+              }
             }}
             key={marker.key.toString()}
             icon={{
