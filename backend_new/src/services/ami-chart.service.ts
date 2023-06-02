@@ -63,12 +63,10 @@ export class AmiChartService {
     this will return 1 ami chart or error
   */
   async findOne(amiChartId: string) {
-    const amiChartRaw = await this.prisma.amiChart.findFirst({
+    const amiChartRaw = await this.prisma.amiChart.findUnique({
       include: view,
       where: {
-        id: {
-          equals: amiChartId,
-        },
+        id: amiChartId,
       },
     });
 
@@ -104,7 +102,7 @@ export class AmiChartService {
     if no ami chart has the id of the incoming argument an error is thrown
   */
   async update(incomingData: AmiChartUpdate) {
-    const amiChart = await this.prisma.amiChart.findFirst({
+    const amiChart = await this.prisma.amiChart.findUnique({
       where: {
         id: incomingData.id,
       },

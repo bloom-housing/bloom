@@ -171,7 +171,7 @@ describe('Testing ami chart service', () => {
       id: 'example Id',
       name: 'example name',
     };
-    prisma.amiChart.findFirst = jest
+    prisma.amiChart.findUnique = jest
       .fn()
       .mockResolvedValue(mockAmiChart(3, date, jurisdictionData));
 
@@ -200,33 +200,29 @@ describe('Testing ami chart service', () => {
       ],
     });
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       include: {
         jurisdictions: true,
       },
       where: {
-        id: {
-          equals: 'example Id',
-        },
+        id: 'example Id',
       },
     });
   });
 
   it('testing findOne() with id not present', async () => {
-    prisma.amiChart.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
       async () => await service.findOne('example Id'),
     ).rejects.toThrowError();
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       include: {
         jurisdictions: true,
       },
       where: {
-        id: {
-          equals: 'example Id',
-        },
+        id: 'example Id',
       },
     });
   });
@@ -328,7 +324,7 @@ describe('Testing ami chart service', () => {
     };
     const mockedAmi = mockAmiChart(3, date, jurisdictionData);
 
-    prisma.amiChart.findFirst = jest.fn().mockResolvedValue(mockedAmi);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(mockedAmi);
     prisma.amiChart.update = jest.fn().mockResolvedValue({
       ...mockedAmi,
       name: 'ami name 4',
@@ -414,7 +410,7 @@ describe('Testing ami chart service', () => {
       ],
     });
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       where: {
         id: 'ami Id 3',
       },
@@ -460,7 +456,7 @@ describe('Testing ami chart service', () => {
       id: 'example Id',
       name: 'example name',
     };
-    prisma.amiChart.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(null);
     prisma.amiChart.update = jest.fn().mockResolvedValue(null);
 
     const params: AmiChartUpdate = {
@@ -495,7 +491,7 @@ describe('Testing ami chart service', () => {
       async () => await service.update(params),
     ).rejects.toThrowError();
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       where: {
         id: 'ami Id 3',
       },

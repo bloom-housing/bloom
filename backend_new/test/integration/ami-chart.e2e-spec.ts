@@ -116,15 +116,13 @@ describe('AmiChart Controller Tests', () => {
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
-    expect(res.body.items).toEqual(
-      JSON.stringify([
-        {
-          percentOfAmi: 80,
-          householdSize: 2,
-          income: 5000,
-        },
-      ]),
-    );
+    expect(res.body.items).toEqual([
+      {
+        percentOfAmi: 80,
+        householdSize: 2,
+        income: 5000,
+      },
+    ]);
 
     await cleanUpDb([res.body.id], [jurisdictionA.id]);
   });
@@ -157,15 +155,13 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');
-    expect(res.body.items).toEqual(
-      JSON.stringify([
-        {
-          percentOfAmi: 80,
-          householdSize: 2,
-          income: 5000,
-        },
-      ]),
-    );
+    expect(res.body.items).toEqual([
+      {
+        percentOfAmi: 80,
+        householdSize: 2,
+        income: 5000,
+      },
+    ]);
 
     await cleanUpDb([amiChartA.id], [jurisdictionA.id]);
   });

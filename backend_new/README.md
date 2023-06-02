@@ -5,6 +5,7 @@ Make sure the .env file's db placement is what works for your set up, Then run t
 ```bash
 $ yarn install
 $ yarn db:setup
+$ yarn prisma generate
 ```
 
 
