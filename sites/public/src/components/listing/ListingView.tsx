@@ -39,6 +39,7 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -524,8 +525,15 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
+        <SiteAlert type="alert" dismissable />
         <ImageCard
-          imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+          images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
+            (imageUrl: string) => {
+              return {
+                url: imageUrl,
+              }
+            }
+          )}
           tags={
             listing.reservedCommunityType
               ? [
@@ -538,8 +546,14 @@ export const ListingView = (props: ListingProps) => {
               : undefined
           }
           description={listing.name}
+          moreImagesLabel={t("listings.moreImagesLabel")}
+          moreImagesDescription={t("listings.moreImagesAltDescription", {
+            listingName: listing.name,
+          })}
+          modalCloseLabel={t("t.backToListing")}
+          modalCloseInContent
         />
-        <div className="py-3 mx-3 flex flex-col items-center md:items-start text-center md:text-left">
+        <div className="py-3 mx-3 mt-4 flex flex-col items-center md:items-start text-center md:text-left">
           <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
             {listing.name}
           </Heading>
