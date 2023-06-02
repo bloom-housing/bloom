@@ -556,7 +556,7 @@ export interface IdDTO {
   id: string;
 
   /**  */
-  name: string;
+  name?: string;
 }
 
 export interface AmiChartCreate {

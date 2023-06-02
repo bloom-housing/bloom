@@ -14,14 +14,9 @@ export const amiChartFactory = (
 });
 
 const amiChartItemsFactory = (numberToCreate: number) => {
-  const toReturn = [];
-  for (let i = 0; i < numberToCreate; i++) {
-    toReturn.push({
-      percentOfAmi: i,
-      householdSize: i,
-      income: i,
-    });
-  }
-
-  return JSON.stringify(toReturn);
+  return JSON.stringify(
+    new Array(numberToCreate).map((_, index) => {
+      return { percentOfAmi: index, householdSize: index, income: index };
+    }),
+  );
 };
