@@ -12,7 +12,7 @@ import { ApplicationQueryParams } from '../../../src/dtos/applications/applicati
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ApplicationOrderByKeys } from '../../../src/enums/applications/order-by-enum';
 
-describe('Testing unit rent type service', () => {
+describe('Testing application service', () => {
   let service: ApplicationService;
   let prisma: PrismaService;
 
@@ -329,11 +329,6 @@ describe('Testing unit rent type service', () => {
       where: {
         AND: [
           {
-            id: {
-              not: null,
-            },
-          },
-          {
             listingId: 'example listing id',
           },
         ],
@@ -347,11 +342,7 @@ describe('Testing unit rent type service', () => {
       where: {
         id: `application id 0`,
         applicationFlaggedSet: {
-          some: {
-            id: {
-              not: null,
-            },
-          },
+          some: {},
         },
       },
     });
@@ -362,11 +353,7 @@ describe('Testing unit rent type service', () => {
       where: {
         id: `application id 1`,
         applicationFlaggedSet: {
-          some: {
-            id: {
-              not: null,
-            },
-          },
+          some: {},
         },
       },
     });
@@ -377,11 +364,7 @@ describe('Testing unit rent type service', () => {
       where: {
         id: `application id 2`,
         applicationFlaggedSet: {
-          some: {
-            id: {
-              not: null,
-            },
-          },
+          some: {},
         },
       },
     });
