@@ -1,12 +1,12 @@
 import React from "react"
 import Head from "next/head"
-import Layout from "../layouts/application"
 import { MetaTags } from "../components/shared/MetaTags"
 import { t } from "@bloom-housing/doorway-ui-components"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { ListingsSearchCombined } from "../components/listings/search/ListingsSearchCombined"
 import { getListingServiceUrl } from "../lib/helpers"
 import { runtimeConfig } from "../lib/runtime-config"
+import LayoutWithoutFooter from "../layouts/LayoutWithoutFooter"
 
 type SearchTestProps = {
   listingsEndpoint: string
@@ -126,7 +126,7 @@ export default function SearchTest(props: SearchTestProps) {
   }
 
   return (
-    <Layout>
+    <LayoutWithoutFooter>
       <Head>
         <title>{pageTitle}</title>
       </Head>
@@ -141,7 +141,7 @@ export default function SearchTest(props: SearchTestProps) {
         bathrooms={props.bathrooms}
         counties={props.locations}
       />
-    </Layout>
+    </LayoutWithoutFooter>
   )
 }
 

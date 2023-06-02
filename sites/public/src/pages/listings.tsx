@@ -4,7 +4,7 @@ import { t } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
-import Layout from "../layouts/application"
+import LayoutWithoutFooter from "../layouts/LayoutWithoutFooter"
 import { MetaTags } from "../components/shared/MetaTags"
 import { ListingsCombined } from "../components/listings/ListingsCombined"
 import { runtimeConfig } from "../lib/runtime-config"
@@ -31,7 +31,7 @@ export default function ListingsPage(props: ListingsProps) {
     })
   }, [profile, props.openListings])
   return (
-    <Layout>
+    <LayoutWithoutFooter>
       <Head>
         <title>{pageTitle}</title>
       </Head>
@@ -46,7 +46,7 @@ export default function ListingsPage(props: ListingsProps) {
           console.log(page)
         }}
       />
-    </Layout>
+    </LayoutWithoutFooter>
   )
 }
 
