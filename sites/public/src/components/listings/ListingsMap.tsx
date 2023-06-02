@@ -27,6 +27,9 @@ const ListingsMap = (props: ListingsMapProps) => {
     googleMapsApiKey: props.googleMapsApiKey,
   })
 
+  const [openInfoWindow, setOpenInfoWindow] = useState(false)
+  const [infoWindowIndex, setInfoWindowIndex] = useState(null)
+
   const markers = []
   let index = 0
   props.listings.forEach((listing: Listing) => {
@@ -38,13 +41,13 @@ const ListingsMap = (props: ListingsMapProps) => {
     // Create an info window that is associated to each marker and that contains the listing card
     // for that listing.
     const infoWindow = (
-      <InfoWindow position={{ lat: lat, lng: lng }}>{getListingCard(listing, key - 1)}</InfoWindow>
+      <InfoWindow position={{ lat: lat, lng: lng }} onCloseClick={() => setOpenInfoWindow(false)}>
+        {getListingCard(listing, key - 1)}
+      </InfoWindow>
     )
     markers.push({ lat, lng, uri, key, infoWindow })
   })
 
-  const [openInfoWindow, setOpenInfoWindow] = useState(false)
-  const [infoWindowIndex, setInfoWindowIndex] = useState(null)
   const mapRef = React.useRef(null)
   return isLoaded ? (
     <div className={styles["listings-map"]}>
