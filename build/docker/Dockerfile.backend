@@ -1,6 +1,6 @@
 
-# The deps stage will contain our source and all dependencies for development
-FROM node:18.14-alpine AS deps
+# The source stage will contain only the necessary source code
+FROM node:18.14-alpine AS source
 
 # WORKDIR doesn't need to be fancy, but it needs to be consistent
 WORKDIR /app
@@ -8,13 +8,30 @@ WORKDIR /app
 # Putting this first enables us to change code files without having to rerun the
 # next step to install dependencies. Dependencies only get reinstalled if one of
 # these files changes.
-COPY --chown=node:node package*.json tsconfig*.json ./
+COPY --chown=node:node *.json yarn*.lock *config.js ./
 
-# Install deps
+# Bring in backend code
+COPY --chown=node:node backend/core ./backend/core
+
+# This is only needed for a single import in a single unit test
+COPY --chown=node:node shared-helpers ./shared-helpers
+
+# And this has to be brought in as a depency for shared-helpers
+COPY --chown=node:node doorway-ui-components ./doorway-ui-components
+
+
+#####################
+##### NEW STAGE #####
+#####################
+
+# The deps stage installs full dependencies
+FROM source AS deps
+
+# Go deep into backend/core due to shared-helpers dependency
+WORKDIR /app/backend/core
+
+# Install dependencies
 RUN yarn install --frozen-lockfile
-
-# Once dependencies are installed, bring in everything else
-COPY --chown=node:node . .
 
 
 #####################
@@ -24,7 +41,8 @@ COPY --chown=node:node . .
 # The test stage builds an image safe for running tests
 FROM deps AS test
 
-WORKDIR /app
+# Go deep into backend/core due to shared-helpers dependency
+WORKDIR /app/backend/core
 
 # When running this image, make sure to use the built-in node user
 USER node
@@ -40,13 +58,14 @@ CMD yarn test
 # The build stage builds the code using the dependencies from the deps stage
 FROM node:18.14-alpine AS build
 
+# Start in the root
 WORKDIR /app
 
-# Copy over the node_modules from the base image so we don't have to install again
-COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+# We have to copy over all of the files due to the way dependencies are scattered across directories
+COPY --from=deps --chown=node:node /app .
 
-# Copy over the rest of our local files
-COPY --chown=node:node . .
+# Go into backend/core to build
+WORKDIR /app/backend/core
 
 # Build the app
 RUN yarn build
@@ -59,10 +78,13 @@ RUN yarn build
 # The optimize stage contains only dependencies needed to run the service
 FROM node:18.14-alpine AS optimize
 
+# No need to keep nested dirs since shared-helpers is only needed for testing
 WORKDIR /app
 
 # Pull in package files again
-COPY --chown=node:node package*.json tsconfig*.json ./
+COPY --from=source --chown=node:node \
+    /app/backend/core/package*.json \
+    /app/backend/core/tsconfig*.json ./
 
 # Set the NODE_ENV variable
 # Setting it to production can enable optimizations in code
@@ -80,19 +102,20 @@ RUN yarn install --frozen-lockfile --only=production
 # The run stage contains an optimized image for running the application
 FROM node:18.14-alpine AS run
 
+# No need to keep nested dirs since shared-helpers is only needed for testing
 WORKDIR /app
 
-# Yarn needs a package.json file to work, even for `yarn start`
-COPY --chown=node:node package*.json tsconfig*.json ormconfig.* ./
+# Pull in package files again
+COPY --from=source --chown=node:node \
+    /app/backend/core/package*.json \
+    /app/backend/core/tsconfig*.json \
+    /app/backend/core/ormconfig.* ./
 
-## TODO: use optimize, instead of deps, after figuring out the
-## all of the dependencies for the migrate stage.
 # Add only dependencies required to run the application
-# COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
-COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --from=optimize --chown=node:node /app/node_modules ./node_modules
 
 # Add the compiled code from the build image
-COPY --from=build --chown=node:node /app/dist ./dist
+COPY --from=build --chown=node:node /app/backend/core/dist ./dist
 
 # When running this image, make sure to use the built-in node user
 USER node
@@ -106,6 +129,8 @@ CMD yarn start
 # The run stage contains an optimized image for running the application
 FROM run AS migrate
 
+WORKDIR /app
+
 # These parts have to be run as root
 USER root
 
@@ -114,9 +139,9 @@ RUN apk update
 RUN apk add postgresql
 
 # Add src and types so migrations can run
-COPY --chown=node:node index.ts ./
-COPY --chown=node:node ./src ./src
-COPY --chown=node:node ./types ./types
+COPY --from=source --chown=node:node /app/backend/core/index.ts ./
+COPY --from=source --chown=node:node /app/backend/core/src ./src
+COPY --from=source --chown=node:node /app/backend/core/types ./types
 
 ## This CMD should be run as the node user
 USER node
