@@ -63,7 +63,8 @@ export default function ListingPage(props: ListingProps) {
     regionName: t("region.name"),
     listingName: listing.name,
   })
-  const metaImage = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
+  const metaImages = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
+  const metaImage = metaImages[0]
 
   return (
     <Layout>
