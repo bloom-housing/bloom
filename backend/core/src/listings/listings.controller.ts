@@ -29,7 +29,6 @@ import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
-import { DoorwayListingsExternalQueryParams } from "./dto/doorway-listings-external-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
@@ -65,24 +64,6 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
     return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
-  }
-
-  @Get("includeExternal")
-  @ApiExtraModels(ListingFilterParams, ListingsQueryParams)
-  @ApiOperation({
-    summary: "List listings and optionally include external listings",
-    operationId: "listIncludeExternal",
-  })
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  public async getAllWithExternal(@Query() queryParams: DoorwayListingsExternalQueryParams) {
-    const jurisdictions: string[] = queryParams.bloomJurisdiction
-    mapTo(ListingsQueryParams, queryParams, { excludeExtraneousValues: true })
-    const response = await this.listingsService.listIncludeExternal(jurisdictions, queryParams)
-    return {
-      ...response,
-      local: mapTo(PaginatedListingDto, response.local),
-    }
   }
 
   // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
@@ -142,24 +123,6 @@ export class ListingsController {
     return mapTo(
       ListingDto,
       await this.listingsService.findOne(listingId, language, queryParams.view)
-    )
-  }
-
-  @Get(`/bloom/:id`)
-  @ApiOperation({ summary: "Get Bloom listing by id", operationId: "retrieve" })
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  async retrieveBloom(
-    @Headers("language") language: Language,
-    @Param("id", new ParseUUIDPipe({ version: "4" })) listingId: string,
-    @Query() queryParams: ListingsRetrieveQueryParams
-  ): Promise<ListingDto> {
-    if (listingId === undefined || listingId === "undefined") {
-      return mapTo(ListingDto, {})
-    }
-    return mapTo(
-      ListingDto,
-      await this.listingsService.findOneFromBloom(listingId, language, queryParams)
     )
   }
 
