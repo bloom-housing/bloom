@@ -20,6 +20,7 @@
   .listings-map {
     flex: 1;
     position: relative;
+    display: flex;
     @media (max-width: $screen-md) {
       position: absolute;
       z-index: 0;
