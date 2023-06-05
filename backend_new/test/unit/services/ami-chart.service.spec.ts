@@ -295,7 +295,7 @@ describe('Testing ami chart service', () => {
             id: 'example Id',
           },
         },
-        items: JSON.stringify([
+        items: [
           {
             percentOfAmi: 0,
             householdSize: 0,
@@ -311,7 +311,7 @@ describe('Testing ami chart service', () => {
             householdSize: 2,
             income: 2,
           },
-        ]),
+        ],
       },
     });
   });
@@ -422,7 +422,7 @@ describe('Testing ami chart service', () => {
       },
       data: {
         name: 'ami name 4',
-        items: JSON.stringify([
+        items: [
           {
             percentOfAmi: 0,
             householdSize: 0,
@@ -443,7 +443,7 @@ describe('Testing ami chart service', () => {
             householdSize: 3,
             income: 3,
           },
-        ]),
+        ],
       },
       where: {
         id: 'ami Id 3',

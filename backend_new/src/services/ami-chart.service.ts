@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { Prisma } from '@prisma/client';
-import { AmiChart } from '../dtos/ami-charts/ami-chart-get.dto';
+import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { AmiChartCreate } from '../dtos/ami-charts/ami-chart-create.dto';
 import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartQueryParams } from '../dtos/ami-charts/ami-chart-query-params.dto';
 import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { AmiChartItem } from '../dtos/units/ami-chart-item-get.dto';
 
 /*
   this is the service for ami charts
@@ -24,7 +25,7 @@ export class AmiChartService {
   /*
     this will get a set of ami charts given the params passed in
   */
-  async list(params: AmiChartQueryParams) {
+  async list(params: AmiChartQueryParams): Promise<AmiChart[]> {
     const rawAmiCharts = await this.prisma.amiChart.findMany({
       include: view,
       where: this.buildWhereClause(params),
@@ -38,22 +39,25 @@ export class AmiChartService {
   buildWhereClause(params: AmiChartQueryParams): Prisma.AmiChartWhereInput {
     const filters: Prisma.AmiChartWhereInput[] = [];
 
-    if (params) {
-      if ('jurisdictionName' in params && params.jurisdictionName) {
-        filters.push({
-          jurisdictions: {
-            name: params.jurisdictionName,
-          },
-        });
-      } else if ('jurisdictionId' in params && params.jurisdictionId) {
-        filters.push({
-          jurisdictions: {
-            id: params.jurisdictionId,
-          },
-        });
-      }
+    if (!params) {
+      return {
+        AND: filters,
+      };
     }
 
+    if ('jurisdictionName' in params && params.jurisdictionName) {
+      filters.push({
+        jurisdictions: {
+          name: params.jurisdictionName,
+        },
+      });
+    } else if ('jurisdictionId' in params && params.jurisdictionId) {
+      filters.push({
+        jurisdictions: {
+          id: params.jurisdictionId,
+        },
+      });
+    }
     return {
       AND: filters,
     };
@@ -62,7 +66,7 @@ export class AmiChartService {
   /*
     this will return 1 ami chart or error
   */
-  async findOne(amiChartId: string) {
+  async findOne(amiChartId: string): Promise<AmiChart> {
     const amiChartRaw = await this.prisma.amiChart.findUnique({
       include: view,
       where: {
@@ -71,7 +75,9 @@ export class AmiChartService {
     });
 
     if (!amiChartRaw) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `amiChartId ${amiChartId} was requested but not found`,
+      );
     }
 
     return mapTo(AmiChart, amiChartRaw);
@@ -80,11 +86,11 @@ export class AmiChartService {
   /*
     this will create an ami chart
   */
-  async create(incomingData: AmiChartCreate) {
+  async create(incomingData: AmiChartCreate): Promise<AmiChart> {
     const rawResult = await this.prisma.amiChart.create({
       data: {
         ...incomingData,
-        items: JSON.stringify(incomingData.items),
+        items: this.reconstructItems(incomingData.items),
         jurisdictions: {
           connect: {
             id: incomingData.jurisdictions.id,
@@ -101,7 +107,7 @@ export class AmiChartService {
     this will update an ami chart's name or items field
     if no ami chart has the id of the incoming argument an error is thrown
   */
-  async update(incomingData: AmiChartUpdate) {
+  async update(incomingData: AmiChartUpdate): Promise<AmiChart> {
     const amiChart = await this.prisma.amiChart.findUnique({
       where: {
         id: incomingData.id,
@@ -109,14 +115,16 @@ export class AmiChartService {
     });
 
     if (!amiChart) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `amiChartId ${incomingData.id} was requested but not found`,
+      );
     }
 
     const rawResults = await this.prisma.amiChart.update({
       include: view,
       data: {
         ...incomingData,
-        items: JSON.stringify(incomingData.items),
+        items: this.reconstructItems(incomingData.items),
         jurisdictions: undefined,
         id: undefined,
       },
@@ -130,7 +138,7 @@ export class AmiChartService {
   /*
     this will delete an ami chart
   */
-  async delete(amiChartId: string) {
+  async delete(amiChartId: string): Promise<SuccessDTO> {
     await this.prisma.amiChart.delete({
       where: {
         id: amiChartId,
@@ -139,5 +147,13 @@ export class AmiChartService {
     return {
       success: true,
     } as SuccessDTO;
+  }
+
+  reconstructItems(items: AmiChartItem[]): Prisma.JsonArray {
+    return items.map((item) => ({
+      percentOfAmi: item.percentOfAmi,
+      householdSize: item.householdSize,
+      income: item.income,
+    })) as Prisma.JsonArray;
   }
 }

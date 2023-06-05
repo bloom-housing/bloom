@@ -1,7 +1,7 @@
 import { ReviewOrderTypeEnum } from '@prisma/client';
 import { UnitSummary } from '../dtos/units/unit-summary-get.dto';
 import Unit from '../dtos/units/unit-get.dto';
-import { AmiChart } from '../dtos/ami-charts/ami-chart-get.dto';
+import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import listingGetDto, { ListingGet } from '../dtos/listings/listing-get.dto';
 import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';

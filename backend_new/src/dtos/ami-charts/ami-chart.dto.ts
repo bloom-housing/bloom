@@ -1,5 +1,5 @@
 import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { Expose, Type, Transform, TransformFnParams } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { AmiChartItem } from '../units/ami-chart-item-get.dto';
@@ -16,15 +16,6 @@ export class AmiChart extends AbstractDTO {
     isArray: true,
     required: true,
   })
-  @Transform(
-    (value: TransformFnParams) =>
-      value?.value && typeof value.value === 'string'
-        ? JSON.parse(value.value)
-        : value.value,
-    {
-      toClassOnly: true,
-    },
-  )
   items: AmiChartItem[];
 
   @Expose()

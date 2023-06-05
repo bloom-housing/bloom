@@ -363,7 +363,7 @@ const unitFactory = (
         ? { connect: { id: amiChartId } }
         : {
             create: {
-              items: {},
+              items: [],
               name: `listing: ${i} unit: ${j} amiChart: ${j}`,
               jurisdictions: {
                 connect: {
