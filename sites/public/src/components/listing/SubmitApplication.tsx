@@ -32,7 +32,7 @@ const SubmitApplication = ({
   return (
     <>
       <section className="aside-block is-tinted bg-gray-100">
-        <div className="text-serif-xl">{strings.sectionHeader}</div>
+        <div className="text-serif-xl mb-6">{strings.sectionHeader}</div>
         {applicationMailingAddress && (
           <>
             <Heading priority={3} styleType={"capsWeighted"}>
