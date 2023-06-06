@@ -9,7 +9,7 @@ import {
   SiteAlert,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
+import { ActionBlock, DoorwayHero, InfoCard } from "@bloom-housing/doorway-ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
@@ -84,6 +84,55 @@ export default function Home(props: IndexProps) {
           </LinkButton>,
         ]}
       />
+      <div className="homepage-extra warn">
+        <div className="action-blocks pb-4 pt-4 w-full space-between items-start">
+          <InfoCard title="I am a title" className="flex-1 is-inline is-normal text-left">
+            <img
+              src={"images/placeholder_temp_delete_me.jpg"}
+              alt={"temporary"}
+              className={"mt-4 mb-4 rounded-3xl"}
+            />
+            <ul className="text__medium-normal list-disc ml-5">
+              <li>List Item 1</li>
+              <li>List Item 2</li>
+            </ul>
+            <p className="text-gray-950 text__medium-normal mb-4 font-semibold">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, labore animi autem
+              rerum nostrum impedit amet velit, eveniet perspiciatis maiores tenetur natus porro
+              tempore atque ad praesentium hic eos cupiditate!
+            </p>
+            <LinkButton
+              key={"temporary"}
+              className="is-primary"
+              href={props.jurisdiction.notificationsSignUpURL}
+              size={AppearanceSizeType.small}
+            >
+              Blah blah
+            </LinkButton>
+          </InfoCard>
+          <InfoCard title={"I am another title"} className="flex-1 is-inline is-normal text-left">
+            <img
+              src={"images/placeholder_temp_delete_me.jpg"}
+              alt={"temporary"}
+              className={"mt-4 mb-4 rounded-3xl"}
+            />
+            <ul className="text__medium-normal list-disc ml-5">
+              <li>List Item 1</li>
+              <li>List Item 2</li>
+              <li>List Item 3</li>
+              <li>List Item 4</li>
+            </ul>
+            <LinkButton
+              key={"temporary"}
+              className="is-primary"
+              href={props.jurisdiction.notificationsSignUpURL}
+              size={AppearanceSizeType.small}
+            >
+              Blah blah
+            </LinkButton>
+          </InfoCard>
+        </div>
+      </div>
       {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
         <ActionBlock
           className="p-12"

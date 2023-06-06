@@ -4,16 +4,17 @@
   --margin-sides: var(--bloom-s3);
   --background-color: var(--bloom-color-blue-300);
   --background-color-lighter: var(--bloom-color-gray-300);
+  --background-color-inline: inherit;
   --title-color: var(--bloom-text-color-darker);
   --title-secondary-color: var(--bloom-color-primary-dark);
   --title-font-size: var(--bloom-font-size-xs);
-  --title-font-size-lighter: var(--bloom-font-size-2xl);
-  --title-font-weight-lighter: 100;
+  --title-font-size-normal: var(--bloom-font-size-2xl);
+  --title-font-weight-normal: 100;
   --title-font-family: var(--bloom-font-serif);
   --title-text-transform: uppercase;
-  --title-text-transform-lighter: none;
+  --title-text-transform-normal: none;
   --title-letter-spacing: 0.025em;
-  --title-letter-spacing-lighter: 0;
+  --title-letter-spacing-normal: 0;
   --content-font-size: inherit;
 
   padding: var(--padding);
@@ -23,6 +24,19 @@
   border-radius: 0.5rem;
   border-width: 0px;
   background-color: var(--background-color);
+
+  &.is-inline {
+    background-color: var(--background-color-inline);
+  }
+
+  &.is-normal {
+    .info-card__title {
+      font-size: var(--title-font-size-normal);
+      text-transform: var(--title-text-transform-normal);
+      letter-spacing: var(--title-letter-spacing-normal);
+      font-weight: var(--title-font-weight-normal);
+    }
+  }
 }
 
 .info-card.is-normal-primary-lighter,
@@ -30,10 +44,10 @@
   background-color: var(--background-color);
 
   .info-card__title {
-    font-size: var(--title-font-size-lighter);
-    text-transform: var(--title-text-transform-lighter);
-    letter-spacing: var(--title-letter-spacing-lighter);
-    font-weight: var(--title-font-weight-lighter);
+    font-size: var(--title-font-size-normal);
+    text-transform: var(--title-text-transform-normal);
+    letter-spacing: var(--title-letter-spacing-normal);
+    font-weight: var(--title-font-weight-normal);
   }
 }
 
@@ -42,11 +56,11 @@
   background-color: var(--background-color-lighter);
 
   .info-card__title {
-    font-size: var(--title-font-size-lighter);
-    text-transform: var(--title-text-transform-lighter);
-    letter-spacing: var(--title-letter-spacing-lighter);
+    font-size: var(--title-font-size-normal);
+    text-transform: var(--title-text-transform-normal);
+    letter-spacing: var(--title-letter-spacing-normal);
     color: var(--title-secondary-color);
-    font-weight: var(--title-font-weight-lighter);
+    font-weight: var(--title-font-weight-normal);
   }
 }
 

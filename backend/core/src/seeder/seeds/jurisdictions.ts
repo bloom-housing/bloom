@@ -9,7 +9,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     multiselectQuestions: [],
     languages: [Language.en],
     publicUrl: "",
-    notificationsSignUpURL: "#",
+    notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
     emailFromAddress: "Bay Area: Housing Bay Area <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:
       "[Bay Area seed] Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
