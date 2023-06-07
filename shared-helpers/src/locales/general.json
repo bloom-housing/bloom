@@ -620,6 +620,7 @@
   "listings.applicationsClosed": "Applications Closed",
   "listings.apply.applicationWillBeAvailableOn": "Application will be available for download and pick up on %{openDate}",
   "listings.apply.applyOnline": "Apply Online",
+  "listings.apply.applyOnlineMessage": "*This button brings you to an external web site where you can create an account and apply for this listing.",
   "listings.apply.downloadApplication": "Download Application",
   "listings.apply.dropOffApplication": "Drop Off Application",
   "listings.apply.dropOffApplicationOrMail": "Drop Off Application or Send by US Mail",

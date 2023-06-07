@@ -418,6 +418,7 @@
   "listings.applications": "Mga Application",
   "listings.apply.applicationWillBeAvailableOn": "Magiging available ang application para i-download at kunin sa %{openDate}",
   "listings.apply.applyOnline": "Mag-apply Online",
+  "listings.apply.applyOnlineMessage": "<to add after Localize translation>",
   "listings.apply.downloadApplication": "I-download ang Application",
   "listings.apply.dropOffApplicationOrMail": "Ihulog ang Application o Ipadala sa US Mail",
   "listings.apply.dropOffApplication": "Ihulog ang Application",

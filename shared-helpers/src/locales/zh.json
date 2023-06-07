@@ -465,6 +465,7 @@
   "listings.applications": "申請",
   "listings.apply.applicationWillBeAvailableOn": "申請表將可供下載，亦可在 %{openDate} 領取",
   "listings.apply.applyOnline": "線上申請",
+  "listings.apply.applyOnlineMessage": "<to add after Localize translation>",
   "listings.apply.downloadApplication": "下載申請表",
   "listings.apply.dropOffApplicationOrMail": "交回申請表或透過美國郵政寄回",
   "listings.apply.dropOffApplication": "交回申請表",

@@ -38,6 +38,7 @@ export interface ApplicationsProps {
   strings?: {
     applicationsOpenInFuture?: string
     applyOnline?: string
+    applyOnlineMessage?: string
     downloadApplication?: string
     getAPaperApplication?: string
     getDirections?: string
@@ -87,6 +88,9 @@ const GetApplication = (props: ApplicationsProps) => {
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
             </LinkButton>
           )}
+          <div className="text-gray-800 text-sm">
+            {props.strings?.applyOnlineMessage ?? t("listings.apply.applyOnlineMessage")}
+          </div>
         </>
       )}
 

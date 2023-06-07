@@ -460,6 +460,7 @@
   "listings.applications": "Đơn đăng ký",
   "listings.apply.applicationWillBeAvailableOn": "Đơn ghi danh sẽ có sẵn để tải xuống và tới nhận vào %{openDate}",
   "listings.apply.applyOnline": "Ghi danh Trực tuyến",
+  "listings.apply.applyOnlineMessage": "<to add after Localize translation>",
   "listings.apply.downloadApplication": "Tải xuống Đơn ghi danh",
   "listings.apply.dropOffApplicationOrMail": "Thả Đơn ghi danh hoặc Gửi qua đường bưu điện US Mail",
   "listings.apply.dropOffApplication": "Thả Đơn ghi danh",
