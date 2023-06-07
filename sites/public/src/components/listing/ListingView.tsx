@@ -15,7 +15,6 @@ import {
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
-  ApplicationStatus,
   Description,
   ExpandableText,
   GroupedTable,
@@ -39,6 +38,7 @@ import {
   StandardTableData,
   ExpandableSection,
 } from "@bloom-housing/ui-components"
+import { ApplicationStatus } from "@bloom-housing/doorway-ui-components"
 import {
   getOccupancyDescription,
   imageUrlFromListing,
@@ -623,7 +623,7 @@ export const ListingView = (props: ListingProps) => {
           imageSrc="/images/listing-eligibility.svg"
           title={t("listings.sections.eligibilityTitle")}
           subtitle={t("listings.sections.eligibilitySubtitle")}
-          desktopClass="bg-primary-lighter"
+          desktopClass="doorway-bg-primary-light"
         >
           <ul>
             {listing.reservedCommunityType && (
@@ -899,7 +899,7 @@ export const ListingView = (props: ListingProps) => {
           imageSrc="/images/listing-neighborhood.svg"
           title={t("t.neighborhood")}
           subtitle={t("listings.sections.neighborhoodSubtitle")}
-          desktopClass="bg-primary-lighter"
+          desktopClass="doorway-bg-primary-lighter"
         >
           <div className="listing-detail-panel">
             <ListingGoogleMap

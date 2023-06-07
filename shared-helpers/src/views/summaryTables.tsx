@@ -4,9 +4,9 @@ import {
   StandardTableData,
   t,
   numberOrdinal,
-  ContentAccordion,
   getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
+import { ContentAccordion } from "@bloom-housing/doorway-ui-components"
 import { MinMax, UnitSummary, Unit, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 const getTranslationFromCurrencyString = (value: string) => {

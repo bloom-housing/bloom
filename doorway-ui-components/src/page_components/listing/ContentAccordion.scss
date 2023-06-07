@@ -1,5 +1,5 @@
 .accordion-blue-theme__bar {
-  @apply bg-primary-light;
+  background-color: var(--doorway-color-secondary-background);
   @apply p-4;
   @apply border-b;
   @apply border-primary;

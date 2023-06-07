@@ -18,7 +18,7 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     }
 
     td:nth-of-type(even) {
-      @apply bg-primary-lighter;
+      @apply doorway-bg-primary-light;
     }
 
     td {
@@ -71,7 +71,7 @@ table {
   thead tr th {
     @apply text-left;
     @apply uppercase;
-    @apply bg-primary-lighter;
+    @apply doorway-bg-primary-light;
     @apply p-5;
     @apply font-semibold;
     @apply tracking-wider;
@@ -338,7 +338,7 @@ table {
 }
 
 table tr:nth-of-type(even) {
-  @apply bg-primary-lighter;
+  @apply doorway-bg-primary-light;
 }
 
 td.reserved {

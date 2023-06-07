@@ -41,7 +41,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
 
   switch (status) {
     case ApplicationStatusType.Open:
-      bgColor = vivid ? "bg-primary" : "bg-primary-light"
+      bgColor = vivid ? "doorway-bg-primary" : "doorway-bg-primary-light"
       break
     case ApplicationStatusType.Closed:
       bgColor = vivid ? "bg-alert" : "bg-alert-light"
