@@ -10,13 +10,16 @@ import {
   FieldGroup,
   ListingMap,
   LatitudeLongitude,
+  AlertNotice,
 } from "@bloom-housing/ui-components"
+import { Icon, Tooltip } from "@bloom-housing/doorway-ui-components"
 import { countyKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
+import Link from "next/link"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -308,6 +311,37 @@ const BuildingDetails = ({
             />
           </ViewItem>
           <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+        </GridCell>
+        <GridCell span={2}>
+          <AlertNotice inverted>
+            <p className="text__small-weighted" color="bloom-color-alert-dark">
+              {t("county.goToOtherPortalsTitle")}
+              <Tooltip className="ml-0" id="county-helper" text={t("county.goToOtherPortalsHover")}>
+                <Icon size="medium" symbol="info" />
+              </Tooltip>
+            </p>
+            <li className="list-disc list-inside">
+              {t("county.goToOtherPortalsCitySanJose")}
+              <Link href="https://partners.housingbayarea.org/">
+                {" "}
+                <Icon size="small" symbol="externalLink" />{" "}
+              </Link>
+            </li>
+            <li className="list-disc list-inside">
+              {t("county.goToOtherPortalsAlamedaSanMateo")}
+              <Link href="https://partners.housingbayarea.org/">
+                {" "}
+                <Icon size="small" symbol="externalLink" />{" "}
+              </Link>
+            </li>
+            <li className="list-disc list-inside">
+              {t("county.goToOtherPortalsSanFrancisco")}
+              <Link href="https://www.partner.housing.sfgov.org/">
+                {" "}
+                <Icon size="small" symbol="externalLink" />{" "}
+              </Link>
+            </li>
+          </AlertNotice>
         </GridCell>
       </GridSection>
       <GridSection columns={3}>

@@ -29,6 +29,7 @@ export const IconEdit = () => <Icon size="large" symbol="edit" />
 export const IconEligibility = () => <Icon size="large" symbol="eligibility" />
 export const IconEnvelope = () => <Icon size="large" symbol="envelope" />
 export const IconEye = () => <Icon size="large" symbol="eye" />
+export const ExternalLink = () => <Icon size="large" symbol="externalLink" />
 export const IconFavorite = () => <Icon size="large" symbol="favorite" />
 export const IconFile = () => <Icon size="large" symbol="file" />
 export const IconForward = () => <Icon size="large" symbol="forward" />

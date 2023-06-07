@@ -7,12 +7,11 @@
 .tooltip__element {
   @apply w-full;
   @apply fixed;
-  @apply bg-primary-dark;
-  @apply text-white;
+  @apply bg-alert-light;
+  @apply text-black;
   @apply rounded;
   @apply p-2;
   @apply text-sm;
-  @apply font-bold;
   @apply text-center;
   @apply normal-case;
   @apply opacity-0;
