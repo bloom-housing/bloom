@@ -4,7 +4,7 @@
 .image-card {
   /* Component Variables */
   --default-background-color: var(--bloom-color-gray-500);
-  --border-radius: 0px;
+  --border-radius: var(--bloom-rounded-md);
   --image-height: auto;
   --tags-justify-mobile: center;
   --tags-justify-desktop: flex-start;
