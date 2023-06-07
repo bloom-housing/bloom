@@ -1,35 +1,38 @@
-import React, { useEffect, useContext } from "react"
+import React from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
-import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../lib/constants"
 import LayoutWithoutFooter from "../layouts/LayoutWithoutFooter"
 import { MetaTags } from "../components/shared/MetaTags"
-import { ListingsCombined } from "../components/listings/ListingsCombined"
+import ListingsSearchCombined, {
+  locations,
+  bedroomOptions,
+  bathroomOptions,
+} from "../components/listings/search/ListingsSearchCombined"
+import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
-import { ListingService } from "../lib/listings/listing-service"
+import { getListingServiceUrl } from "../lib/helpers"
 
 export interface ListingsProps {
-  openListings: Listing[]
+  listingsEndpoint: string
   googleMapsApiKey: string
+  initialSearch?: string
+  bedrooms: FormOption[]
+  bathrooms: FormOption[]
+  locations: FormOption[]
 }
 
 export default function ListingsPage(props: ListingsProps) {
-  const { profile } = useContext(AuthContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
+  let searchString = props.initialSearch || ""
+  const url = new URL(document.location.toString())
+  const searchParam = url.searchParams.get("search")
 
-  useEffect(() => {
-    pushGtmEvent<ListingList>({
-      event: "pageView",
-      pageTitle: "Rent Affordable Housing - Housing Portal",
-      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
-      numberOfListings: props.openListings.length,
-      listingIds: props.openListings.map((listing) => listing.id),
-    })
-  }, [profile, props.openListings])
+  // override the search value if present in url
+  if (searchParam) {
+    searchString = searchParam
+  }
   return (
     <LayoutWithoutFooter>
       <Head>
@@ -37,26 +40,28 @@ export default function ListingsPage(props: ListingsProps) {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <ListingsCombined
-        listings={props.openListings}
+      <ListingsSearchCombined
+        listingsEndpoint={props.listingsEndpoint}
         googleMapsApiKey={props.googleMapsApiKey}
-        currentPage={1}
-        lastPage={1}
-        onPageChange={(page: number) => {
-          console.log(page)
-        }}
+        searchString={searchString}
+        bedrooms={props.bedrooms}
+        bathrooms={props.bathrooms}
+        counties={props.locations}
       />
     </LayoutWithoutFooter>
   )
 }
 
-export async function getServerSideProps() {
-  const listingService = new ListingService(runtimeConfig.getListingServiceUrl())
-
+export function getServerSideProps() {
   return {
     props: {
-      openListings: await listingService.fetchOpenListings(),
+      listingsEndpoint: getListingServiceUrl(),
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
+      // show Bloom counties by default
+      initialSearch: "counties:Alameda,San Mateo,Santa Clara",
+      bedrooms: bedroomOptions,
+      bathrooms: bathroomOptions,
+      locations: locations,
     },
   }
 }

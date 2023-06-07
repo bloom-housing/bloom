@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect, useContext } from "react"
+import { UserStatus } from "../../../lib/constants"
+import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
@@ -26,8 +28,8 @@ type ListingsSearchCombinedProps = {
  * @param props
  * @returns
  */
-export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
-  //const [listings, setListings] = useState([])
+function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
+  const { profile } = useContext(AuthContext)
   const [modalOpen, setModalOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
 
@@ -44,6 +46,16 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     currentPage: 0,
     lastPage: 0,
   })
+
+  useEffect(() => {
+    pushGtmEvent<ListingList>({
+      event: "pageView",
+      pageTitle: "Rent Affordable Housing - Housing Portal",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+      numberOfListings: searchResults.listings.length,
+      listingIds: searchResults.listings.map((listing) => listing.id),
+    })
+  }, [profile, searchResults])
 
   // The search function expects a string
   // This can be changed later if needed
@@ -123,3 +135,96 @@ export function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     </div>
   )
 }
+
+// Input values/options below are passed into the form to make it easier to
+// reuse it in multiple places.  This may not ultimately be necessary, but it's
+// easier to add it in at the beginning than it is to try to add make the change
+// later.
+
+const bedroomOptions: FormOption[] = [
+  {
+    label: "Any",
+    value: null,
+  },
+  {
+    label: "Studio",
+    value: "0",
+  },
+  {
+    label: "1",
+    value: "1",
+  },
+  {
+    label: "2",
+    value: "2",
+  },
+  {
+    label: "3",
+    value: "3",
+  },
+  {
+    label: "4+",
+    value: "4",
+  },
+]
+
+const bathroomOptions: FormOption[] = [
+  {
+    label: "Any",
+    value: null,
+  },
+  {
+    label: "1",
+    value: "1",
+  },
+  {
+    label: "2",
+    value: "2",
+  },
+  {
+    label: "3",
+    value: "3",
+  },
+  {
+    label: "4+",
+    value: "4",
+  },
+]
+
+const locations: FormOption[] = [
+  {
+    label: "Alameda",
+    value: "Alameda",
+  },
+  {
+    label: "Contra Costa",
+    value: "Contra Costa",
+  },
+  {
+    label: "Marin",
+    value: "Marin",
+  },
+  {
+    label: "San Francisco",
+    value: "San Francisco",
+    //isDisabled: true,
+  },
+  {
+    label: "San Mateo",
+    value: "San Mateo",
+  },
+  {
+    label: "Santa Clara",
+    value: "Santa Clara",
+  },
+  {
+    label: "Solano",
+    value: "Solano",
+  },
+  {
+    label: "Sonoma",
+    value: "Sonoma",
+  },
+]
+
+export { ListingsSearchCombined as default, locations, bedroomOptions, bathroomOptions }
