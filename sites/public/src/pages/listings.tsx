@@ -10,7 +10,6 @@ import ListingsSearchCombined, {
 } from "../components/listings/search/ListingsSearchCombined"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
-import { getListingServiceUrl } from "../lib/helpers"
 
 export interface ListingsProps {
   listingsEndpoint: string
@@ -55,7 +54,7 @@ export default function ListingsPage(props: ListingsProps) {
 export function getServerSideProps() {
   return {
     props: {
-      listingsEndpoint: getListingServiceUrl(),
+      listingsEndpoint: runtimeConfig.getListingServiceUrl(),
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
       // show Bloom counties by default
       initialSearch: "counties:Alameda,San Mateo,Santa Clara",
