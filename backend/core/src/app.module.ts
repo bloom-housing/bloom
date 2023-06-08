@@ -40,7 +40,29 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
-  const allowList = process.env.CORS_ORIGINS || []
+
+  // It isn't usually possible to pass in an array via env var, so we'll turn
+  // a string into an array when needed
+
+  // Default to empty array
+  let allowList = []
+
+  // If CORS_ORIGINS is set...
+  if (process.env.CORS_ORIGINS) {
+    // use it directly if it's an array
+    if (Array.isArray(process.env.CORS_ORIGINS)) {
+      allowList = process.env.CORS_ORIGINS
+      // otherwise split on "," if it's a string
+    } else if (typeof process.env.CORS_ORIGINS == "string") {
+      allowList = process.env.CORS_ORIGINS.split(",")
+
+      // Trim the results to prevent whitespace from breaking header matching
+      allowList.forEach((value, idx, arr) => {
+        arr[idx] = value.trim()
+      })
+    }
+  }
+
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
