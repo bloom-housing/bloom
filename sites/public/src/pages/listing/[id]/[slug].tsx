@@ -128,8 +128,10 @@ export async function getServerSideProps(context: {
 }) {
   let response
 
+  const listingServiceUrl = runtimeConfig.getListingServiceUrl()
+
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+    response = await axios.get(`${listingServiceUrl}/${context.params.id}`, {
       headers: { language: context.locale },
     })
   } catch (e) {

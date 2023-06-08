@@ -139,15 +139,14 @@ export async function fetchClosedListings() {
 
 let jurisdiction: Jurisdiction | null = null
 
-export async function fetchJurisdictionByName() {
+export async function fetchJurisdictionByName(backendApiBase: string, jurisdictionName: string) {
   try {
     if (jurisdiction) {
       return jurisdiction
     }
 
-    const jurisdictionName = process.env.jurisdictionName
     const jurisdictionRes = await axios.get(
-      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
+      `${backendApiBase}/jurisdictions/byName/${jurisdictionName}`
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {

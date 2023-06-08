@@ -56,4 +56,8 @@ export const runtimeConfig = {
   getListingServiceUrl() {
     return `${this.getBackendApiBase()}${this.env.LISTINGS_QUERY}`
   },
+
+  getJurisdictionName() {
+    return this.env.JURISDICTION_NAME
+  },
 }

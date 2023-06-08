@@ -33,9 +33,17 @@ import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { runtimeConfig } from "../../../lib/runtime-config"
 
-const loadListing = async (listingId, stateFunction, conductor, context, language) => {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
+const loadListing = async (
+  backendApiBase,
+  listingId,
+  stateFunction,
+  conductor,
+  context,
+  language
+) => {
+  const response = await axios.get(`${backendApiBase}/listings/${listingId}`, {
     headers: { language },
   })
   conductor.listing = response.data
@@ -45,7 +53,11 @@ const loadListing = async (listingId, stateFunction, conductor, context, languag
   context.syncListing(conductor.listing)
 }
 
-const ApplicationChooseLanguage = () => {
+type ChooseLanguageProps = {
+  backendApiBase: string
+}
+
+const ApplicationChooseLanguage = (props: ChooseLanguageProps) => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
@@ -71,12 +83,12 @@ const ApplicationChooseLanguage = () => {
     }
 
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(listingId, setListing, conductor, context, "en")
+      void loadListing(props.backendApiBase, listingId, setListing, conductor, context, "en")
     } else {
       conductor.listing = context.listing
       setListing(context.listing)
     }
-  }, [router, conductor, context, listingId])
+  }, [router, conductor, context, listingId, props])
 
   const currentPageSection = 1
 
@@ -89,11 +101,18 @@ const ApplicationChooseLanguage = () => {
       conductor.currentStep.save({
         language,
       })
-      void loadListing(listingId, setListing, conductor, context, language).then(() => {
+      void loadListing(
+        props.backendApiBase,
+        listingId,
+        setListing,
+        conductor,
+        context,
+        language
+      ).then(() => {
         void router.push(conductor.determineNextUrl(), null, { locale: language })
       })
     },
-    [conductor, context, listingId, router]
+    [conductor, context, listingId, router, props]
   )
 
   const { content: appStatusContent } = useGetApplicationStatusProps(listing)
@@ -192,3 +211,11 @@ const ApplicationChooseLanguage = () => {
 }
 
 export default ApplicationChooseLanguage
+
+export function getServerSideProps() {
+  const backendApiBase = runtimeConfig.getBackendApiBase()
+
+  return {
+    props: { backendApiBase: backendApiBase },
+  }
+}

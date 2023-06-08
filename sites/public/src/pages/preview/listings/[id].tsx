@@ -8,7 +8,6 @@ import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../components/listing/ListingView"
 import { MetaTags } from "../../../components/shared/MetaTags"
-import { fetchJurisdictionByName } from "../../../lib/hooks"
 import { runtimeConfig } from "../../../lib/runtime-config"
 
 interface ListingProps {
@@ -55,18 +54,20 @@ export default function ListingPage(props: ListingProps) {
 export async function getServerSideProps(context: { params: Record<string, string> }) {
   let response
 
+  const listingServiceUrl = runtimeConfig.getListingServiceUrl()
+
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+    response = await axios.get(`${listingServiceUrl}/${context.params.id}`)
   } catch (e) {
     return { notFound: true }
   }
 
-  const jurisdiction = fetchJurisdictionByName()
-
   return {
     props: {
       listing: response.data,
-      jurisdiction: await jurisdiction,
+      // There's nothing missing from the listing jurisdiction that
+      // requires another call to the jurisdiction endpoint
+      jurisdiction: response.data.jurisdiction,
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
     },
   }

@@ -16,6 +16,7 @@ import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import { runtimeConfig } from "../lib/runtime-config"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -162,8 +163,11 @@ export default function Home(props: IndexProps) {
   )
 }
 
-export async function getStaticProps() {
-  const jurisdiction = await fetchJurisdictionByName()
+export async function getServerSideProps() {
+  const jurisdiction = await fetchJurisdictionByName(
+    runtimeConfig.getBackendApiBase(),
+    runtimeConfig.getJurisdictionName()
+  )
 
   return {
     props: { jurisdiction },
