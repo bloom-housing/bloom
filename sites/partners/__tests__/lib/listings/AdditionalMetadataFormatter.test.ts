@@ -3,8 +3,8 @@ import AdditionalMetadataFormatter from "../../../src/lib/listings/AdditionalMet
 import { FormListing, FormMetadata } from "../../../src/lib/listings/formTypes"
 
 const latLong: LatitudeLongitude = {
-  latitude: 37.36537,
-  longitude: -121.91071,
+  latitude: 37.44522,
+  longitude: -121.81524,
 }
 
 const formatData = (data, metadata) => {

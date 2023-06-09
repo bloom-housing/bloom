@@ -39,6 +39,6 @@ describe("listingUrlSlug", () => {
         buildingAddress: listing.buildingAddress,
       },
     })
-    expect(slug).toEqual("archer_studios_98_archer_street_san_jose_ca")
+    expect(slug).toEqual("archer_studios_98_archer_place_dixon_ca")
   })
 })

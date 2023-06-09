@@ -5,7 +5,7 @@
   "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
   "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
   "applicationMethods": [],
-  "applicationOrganization": "98 Archer Street",
+  "applicationOrganization": "98 Archer Place",
   "applicationPhone": "(408) 217-8562",
   "assets": [
     {
@@ -16,12 +16,12 @@
     }
   ],
   "buildingAddress": {
-    "city": "San Jose",
-    "street": "98 Archer Street",
-    "zipCode": "95112",
+    "city": "Dixon",
+    "street": "98 Archer Place",
+    "zipCode": "95620",
     "state": "CA",
-    "latitude": 37.36537,
-    "longitude": -121.91071
+    "latitude": 37.44522,
+    "longitude": -121.81524
   },
   "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
   "costsNotIncluded": "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
@@ -51,12 +51,12 @@
   "applicationFee": "30.0",
   "criminalBackground": "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   "leasingAgentAddress": {
-    "city": "San Jose",
-    "street": "98 Archer Street",
-    "zipCode": "95112",
+    "city": "Dixon",
+    "street": "98 Archer Place",
+    "zipCode": "95620",
     "state": "CA",
-    "latitude": 37.36537,
-    "longitude": -121.91071
+    "latitude": 37.44522,
+    "longitude": -121.81524
   },
   "leasingAgentEmail": "mbaca@charitieshousing.org",
   "leasingAgentName": "Marisela Baca",
