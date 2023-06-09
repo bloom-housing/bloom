@@ -79,7 +79,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
   }
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div className="table-container">
       <table className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>

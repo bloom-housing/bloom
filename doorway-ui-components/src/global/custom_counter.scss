@@ -12,13 +12,15 @@
   @screen md {
     @apply absolute;
     @apply font-serif;
-    @apply text-gray-850;
-    top: 0;
+    @apply text-primary;
+    top: var(--bloom-s6);
     left: -1rem;
     content: counter(step-counter);
+    background: var(--doorway-color-secondary);
+    padding: var(--bloom-s2) var(--bloom-s4);
+    border-radius: var(--bloom-rounded-full);
     margin-right: 5px;
-    font-size: 4.375rem;
-    line-height: 0.85;
+    font-size: var(--bloom-font-size-lg);
   }
 }
 
@@ -26,13 +28,11 @@
   @apply pb-4;
 
   @screen md {
-    @apply -ml-4;
-    @apply pl-4;
     @apply border-solid;
-    @apply border-l-2;
+    border-top-width: var(--bloom-border-1);
     @apply border-gray-450;
-    @apply mb-4;
-    @apply mt-4;
+    @apply mb-6;
+    @apply pt-6;
   }
 }
 

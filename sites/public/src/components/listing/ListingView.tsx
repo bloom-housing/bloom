@@ -17,9 +17,7 @@ import {
   AdditionalFees,
   Description,
   ExpandableText,
-  GroupedTable,
   Heading,
-  ImageCard,
   InfoCard,
   Contact,
   ListSection,
@@ -30,7 +28,6 @@ import {
   EventSection,
   PreferencesList,
   ReferralApplication,
-  StandardTable,
   TableHeaders,
   QuantityRowSection,
   t,
@@ -38,7 +35,13 @@ import {
   StandardTableData,
   ExpandableSection,
 } from "@bloom-housing/ui-components"
-import { ApplicationStatus } from "@bloom-housing/doorway-ui-components"
+import {
+  ApplicationStatus,
+  GroupedTable,
+  ImageCard,
+  Icon,
+  StandardTable,
+} from "@bloom-housing/doorway-ui-components"
 import {
   getOccupancyDescription,
   imageUrlFromListing,
@@ -60,6 +63,7 @@ import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
 import { ListingGoogleMap } from "./ListingGoogleMap"
 import getConfig from "next/config"
+import Link from "next/link"
 
 // nextConfig may not be set in some unit tests since it relies on app startup
 const nextConfig = getConfig()
@@ -508,7 +512,7 @@ export const ListingView = (props: ListingProps) => {
   }
 
   return (
-    <article className="flex flex-wrap relative max-w-5xl m-auto">
+    <article className="flex flex-wrap relative max-w-5xl m-auto md:mt-8">
       <header className="image-card--leader">
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
@@ -535,10 +539,13 @@ export const ListingView = (props: ListingProps) => {
             listingName: listing.name,
           })}
           modalCloseLabel={t("t.backToListing")}
-          modalCloseInContent
         />
         <div className="py-3 mx-3 mt-4 flex flex-col items-center md:items-start text-center md:text-left">
-          <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
+          <Heading
+            priority={1}
+            styleType={"largePrimary"}
+            className={"text-primary-dark font-serif font-semibold"}
+          >
             {listing.name}
           </Heading>
           <Heading priority={2} styleType={"mediumNormal"} className={"mb-1"}>
@@ -549,9 +556,14 @@ export const ListingView = (props: ListingProps) => {
           </Heading>
           <p className="text-gray-750 text-base mb-1">{listing.developer}</p>
           <p className="text-base">
-            <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
-              {t("t.viewOnMap")}
-            </a>
+            <Link
+              href={googleMapsHref}
+              target="_blank"
+              aria-label="Opens in new window"
+              className="lighter-uppercase"
+            >
+              {t("t.viewOnMap")} <Icon size="small" symbol="externalLink" />
+            </Link>
           </p>
         </div>
       </header>

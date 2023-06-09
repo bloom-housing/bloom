@@ -66,6 +66,16 @@ a {
   &.darker {
     @apply text-primary-darker;
   }
+
+  &.lighter-uppercase {
+    text-transform: uppercase;
+    @apply text__caps-spaced;
+    @apply text-primary-lighter;
+
+    &:hover {
+      @apply text-primary;
+    }
+  }
 }
 
 h1.title {

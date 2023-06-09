@@ -4,7 +4,7 @@
 .image-card {
   /* Component Variables */
   --default-background-color: var(--bloom-color-gray-500);
-  --border-radius: var(--bloom-rounded-md);
+  --border-radius: var(--doorway-standard-border-radius);
   --image-height: auto;
   --tags-justify-mobile: center;
   --tags-justify-desktop: flex-start;
@@ -153,7 +153,7 @@
 
   @media (min-width: $screen-md) {
     width: var(--leader-width);
-    padding-block-start: var(--bloom-s8);
+    padding-block-start: 0;
     padding-inline-end: var(--bloom-s8);
   }
 }

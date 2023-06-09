@@ -57,6 +57,12 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
   }
 }
 
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--doorway-standard-border-radius);
+  border-collapse: separate;
+}
+
 table {
   @apply text-gray-750;
 
@@ -70,14 +76,10 @@ table {
 
   thead tr th {
     @apply text-left;
-    @apply uppercase;
-    @apply doorway-bg-primary-light;
+    @apply bg-white;
     @apply p-5;
     @apply font-semibold;
     @apply tracking-wider;
-    @apply border-0;
-    @apply border-b;
-    @apply border-primary;
   }
 
   &.th-plain {
@@ -338,8 +340,14 @@ table {
 }
 
 table tr:nth-of-type(even) {
+  @apply doorway-bg-primary;
+}
+
+table tr:nth-of-type(odd) {
   @apply doorway-bg-primary-light;
 }
+
+
 
 td.reserved {
   @apply font-sans;
