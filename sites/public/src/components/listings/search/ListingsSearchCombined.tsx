@@ -59,7 +59,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
   // The search function expects a string
   // This can be changed later if needed
-  const pageSize = "10"
+  const pageSize = "25"
 
   const search = async (params: ListingSearchParams, page: number) => {
     const qb = generateSearchQuery(params)
