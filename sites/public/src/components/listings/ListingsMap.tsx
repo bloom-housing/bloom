@@ -9,6 +9,8 @@ type ListingsMapProps = {
   listings?: Listing[]
   googleMapsApiKey: string
   desktopMinWidth?: number
+  isMapExpanded: boolean
+  setShowListingsList?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const containerStyle: React.CSSProperties = {
@@ -96,8 +98,18 @@ const ListingsMap = (props: ListingsMapProps) => {
                 setOpenInfoWindow(true)
                 setInfoWindowIndex(marker.key)
               } else {
-                const element = document.getElementsByClassName("listings-row")[marker.key - 1]
-                element.scrollIntoView()
+                if (props.isMapExpanded) {
+                  // Bring up the listings list with the correct listing at the top. A short timeout
+                  // is needed so the listings row element can be found in the document.
+                  props.setShowListingsList(true)
+                  setTimeout(() => {
+                    const element = document.getElementsByClassName("listings-row")[marker.key - 1]
+                    element.scrollIntoView()
+                  }, 1)
+                } else {
+                  const element = document.getElementsByClassName("listings-row")[marker.key - 1]
+                  element.scrollIntoView()
+                }
               }
             }}
             key={marker.key.toString()}

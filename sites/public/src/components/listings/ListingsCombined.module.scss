@@ -1,7 +1,8 @@
 .listings-combined {
-  // This is a not-ideal way to do "fill window minus header" however I can't find another way to do this.
-  // TODO: update header to a not-magic number
-  --listings-component-height: calc(100vh - 138px);
+  // This is a not-ideal way to do "fill window minus header and filter modal" however
+  // I can't find another way to do this.
+  // TODO: update header + filter modal to a not-magic number
+  --listings-component-height: calc(100vh - 183px);
   --listings-component-half-height: calc(var(--listings-component-height) / 2);
   --swipe-area-height: var(--bloom-s14);
   --listings-list-width: 600px;
