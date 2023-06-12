@@ -1,5 +1,4 @@
 import {
-  ApplicationMethodsTypeEnum,
   LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,

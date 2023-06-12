@@ -4,7 +4,6 @@ import { LanguagesEnum, Prisma } from '@prisma/client';
 import { ListingGet } from '../dtos/listings/listing-get.dto';
 import { GoogleTranslateService } from './google-translate.service';
 import * as lodash from 'lodash';
-import { NotFoundError } from '@prisma/client/runtime';
 
 @Injectable()
 export class TranslationService {
