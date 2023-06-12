@@ -1,0 +1,53 @@
+# AWS CodeBuild config
+# This file is referenced in the infra repo as a CodeBuild buildspec target.
+
+## The environment variables in this file are passed in through the buildbuild resource.
+## Check the terraform scripts to see where these variables originate from.
+
+version: 0.2
+env:
+  shell: bash
+phases:
+  build:
+    commands:
+      # Use SRC_REPO_ACCOUNT_ID if set, otherwise default to ECR_ACCOUNT_ID
+      - export SRC_REPO_ACCOUNT_ID="${SRC_REPO_ACCOUNT_ID:-${ECR_ACCOUNT_ID}}"
+      # Use SRC_REPO_REGION if set, otherwise default to ECR_REGION
+      - export SRC_REPO_REGION="${SRC_REPO_REGION:-${ECR_REGION}}"
+      # Use DEST_REPO_ACCOUNT_ID if set, otherwise default to ECR_ACCOUNT_ID
+      - export DEST_REPO_ACCOUNT_ID="${DEST_REPO_ACCOUNT_ID:-${ECR_ACCOUNT_ID}}"
+      # Use DEST_REPO_REGION if set, otherwise default to ECR_REGION
+      - export DEST_REPO_REGION="${DEST_REPO_REGION:-${ECR_REGION}}"
+
+      # Build host values from repo vars
+      - export SRC_REPO_HOST="${SRC_REPO_ACCOUNT_ID}.dkr.ecr.${SRC_REPO_REGION}.amazonaws.com"
+      - export DEST_REPO_HOST="${DEST_REPO_ACCOUNT_ID}.dkr.ecr.${DEST_REPO_REGION}.amazonaws.com"
+
+      # Log in to source
+      - aws ecr get-login-password --region "${SRC_REPO_REGION}" | docker login --username AWS --password-stdin "${SRC_REPO_HOST}"
+
+      # If destination is different, log into that, too
+      - > 
+        if [[ "${SRC_REPO_HOST}" == "${DEST_REPO_HOST}" ]]; then 
+          echo "Source and destination are the same"
+        else
+          aws ecr get-login-password --region "${DEST_REPO_REGION}" | docker login --username AWS --password-stdin "${DEST_REPO_HOST}"
+        fi
+
+      - export SOURCE_REPO="${SRC_REPO_HOST}/${SOURCE_REPO_NAMESPACE}"
+      - export SOURCE_IMAGE_URL="${SOURCE_REPO}/${SOURCE_IMAGE}"
+
+      - export DEST_REPO="${DEST_REPO_HOST}/${DEST_REPO_NAMESPACE}"
+      - export DEST_IMAGE_URL="${DEST_REPO}/${DEST_IMAGE}"
+
+      - echo "${SOURCE_IMAGE_URL}"
+      - echo "${DEST_IMAGE_URL}"
+
+      # Pull down image from source repo
+      - docker pull "${SOURCE_IMAGE_URL}"
+
+      # Retag to new repo
+      - docker tag "${SOURCE_IMAGE_URL}" "${DEST_IMAGE_URL}"
+
+      # Push to new repo
+      - docker push "${DEST_IMAGE_URL}"
