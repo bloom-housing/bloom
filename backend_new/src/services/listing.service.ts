@@ -19,6 +19,7 @@ import {
 } from '../utilities/unit-utilities';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { ListingViews } from '../enums/listings/view-enum';
+import { TranslationService } from './translation.service';
 
 export type getListingsArgs = {
   skip: number;
@@ -111,7 +112,10 @@ views.details = {
 */
 @Injectable()
 export class ListingService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private translationService: TranslationService,
+  ) {}
 
   /*
     this will get a set of listings given the params passed in
@@ -315,14 +319,14 @@ export class ListingService {
       },
     });
 
-    const result = mapTo(ListingGet, listingRaw);
+    let result = mapTo(ListingGet, listingRaw);
 
     if (!result) {
       throw new NotFoundException();
     }
 
     if (lang !== LanguagesEnum.en) {
-      // TODO: await this.translationService.translateListing(result, lang);
+      result = await this.translationService.translateListing(result, lang);
     }
 
     await this.addUnitsSummarized(result);
