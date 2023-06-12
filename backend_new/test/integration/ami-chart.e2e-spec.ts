@@ -25,10 +25,26 @@ describe('AmiChart Controller Tests', () => {
     await app.init();
   });
 
-  afterEach(async () => {
-    await prisma.amiChart.deleteMany();
-    await prisma.jurisdictions.deleteMany();
-  });
+  const clearDb = async (amiChartIds: string[], jurisdictionIds: string[]) => {
+    if (amiChartIds.length) {
+      await prisma.amiChart.deleteMany({
+        where: {
+          id: {
+            in: amiChartIds,
+          },
+        },
+      });
+    }
+    if (jurisdictionIds.length) {
+      await prisma.jurisdictions.deleteMany({
+        where: {
+          id: {
+            in: jurisdictionIds,
+          },
+        },
+      });
+    }
+  };
 
   it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
@@ -40,7 +56,7 @@ describe('AmiChart Controller Tests', () => {
     const amiChartA = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionA.id),
     });
-    await prisma.amiChart.create({
+    const amiChartB = await prisma.amiChart.create({
       data: amiChartFactory(15, jurisdictionB.id),
     });
     const queryParams: AmiChartQueryParams = {
@@ -54,6 +70,10 @@ describe('AmiChart Controller Tests', () => {
 
     expect(res.body.length).toEqual(1);
     expect(res.body[0].name).toEqual(amiChartA.name);
+    await clearDb(
+      [amiChartA.id, amiChartB.id],
+      [jurisdictionA.id, jurisdictionB.id],
+    );
   });
 
   it('testing retrieve endpoint', async () => {
@@ -69,6 +89,8 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(amiChartA.name);
+
+    await clearDb([amiChartA.id], [jurisdictionA.id]);
   });
 
   it('testing create endpoint', async () => {
@@ -101,6 +123,8 @@ describe('AmiChart Controller Tests', () => {
         income: 5000,
       },
     ]);
+
+    await clearDb([res.body.id], [jurisdictionA.id]);
   });
 
   it('testing update endpoint', async () => {
@@ -138,6 +162,7 @@ describe('AmiChart Controller Tests', () => {
         income: 5000,
       },
     ]);
+    await clearDb([amiChartA.id], [jurisdictionA.id]);
   });
 
   it('testing delete endpoint', async () => {
@@ -157,5 +182,7 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.success).toEqual(true);
+
+    await clearDb([], [jurisdictionA.id]);
   });
 });
