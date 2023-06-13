@@ -4,6 +4,7 @@ import type { AppProps } from "next/app"
 
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
+import "@bloom-housing/ui-seeds/src/global/app-css.scss"
 import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
 import { AuthProvider, ConfigProvider, RequireLogin } from "@bloom-housing/shared-helpers"
 
