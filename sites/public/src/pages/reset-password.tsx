@@ -7,12 +7,13 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   t,
   AlertBox,
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
@@ -61,7 +62,7 @@ const ResetPassword = () => {
     <FormsLayout>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
+          <Icon size="xl" icon={faCircleUser} />
           <h2 className="form-card__title">{t("authentication.forgotPassword.changePassword")}</h2>
         </div>
         {requestError && (

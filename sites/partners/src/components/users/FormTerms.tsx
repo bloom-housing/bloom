@@ -5,10 +5,11 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   MarkdownSection,
   t,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faGear } from "@fortawesome/free-solid-svg-icons"
 import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
 
@@ -29,7 +30,7 @@ const FormTerms = (props: FormTermsProps) => {
     <Form id="terms" className="mt-10" onSubmit={handleSubmit(props.onSubmit)}>
       <FormCard>
         <div className="form-card__lead text-center">
-          <Icon size="2xl" symbol="settings" />
+          <Icon size="xl" icon={faGear} />
           <h2 className="form-card__title">{t(`authentication.terms.reviewToc`)}</h2>
           <p className="field-note mt-4 text-center">
             {t(`authentication.terms.youMustAcceptToc`)}

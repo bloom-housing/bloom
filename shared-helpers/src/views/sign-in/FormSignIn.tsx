@@ -5,11 +5,12 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   LinkButton,
   NavigationContext,
   t,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
 import { FormSignInErrorBox } from "./FormSignInErrorBox"
 import { NetworkStatus } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
@@ -47,7 +48,7 @@ const FormSignIn = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center">
-        <Icon size="2xl" symbol="profile" />
+        <Icon size="xl" icon={faCircleUser} />
         <h1 className="form-card__title">{t(`nav.signIn`)}</h1>
       </div>
       <FormSignInErrorBox

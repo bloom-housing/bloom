@@ -1,5 +1,7 @@
 import React from "react"
-import { Icon, IconFillColors, ViewItem, t } from "@bloom-housing/ui-components"
+import { ViewItem, t } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faLock } from "@fortawesome/free-solid-svg-icons"
 
 export interface HouseholdMemberFormProps {
   editMember?: (memberId: number | undefined) => void
@@ -31,10 +33,8 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
         </button>
       ) : (
         <Icon
-          className="ml-2 absolute top-0 right-0"
-          size="medium"
-          symbol="lock"
-          fill={IconFillColors.primary}
+          icon={faLock}
+          className="ml-2 absolute top-0 right-0 text-primary"
         />
       )}
     </ViewItem>

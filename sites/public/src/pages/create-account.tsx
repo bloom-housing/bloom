@@ -5,7 +5,6 @@ import {
   Button,
   Field,
   FormCard,
-  Icon,
   LinkButton,
   Form,
   emailRegex,
@@ -17,6 +16,8 @@ import {
   passwordRegex,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
@@ -77,7 +78,7 @@ export default () => {
     <FormsLayout>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
+          <Icon size="xl" icon={faCircleUser} />
           <h1 className="form-card__title">{t("account.createAccount")}</h1>
           {requestError && (
             <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">

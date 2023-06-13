@@ -9,9 +9,10 @@ import {
   t,
   SiteAlert,
   ActionBlock,
-  Icon,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faEnvelope, faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
@@ -74,11 +75,11 @@ export default function Home(props: IndexProps) {
             <ActionBlock
               className="flex-1"
               header={<Heading priority={2}>{t("welcome.signUp")}</Heading>}
-              icon={<Icon size="3xl" symbol="mailThin" />}
+              icon={<Icon size="xl" icon={faEnvelope} />}
               actions={[
                 <LinkButton
                   key={"sign-up"}
-                  href={props.jurisdiction.notificationsSignUpURL}
+                  href={"props.jurisdiction.notificationsSignUpURL"}
                   size={AppearanceSizeType.small}
                 >
                   {t("welcome.signUpToday")}
@@ -89,7 +90,7 @@ export default function Home(props: IndexProps) {
           <ActionBlock
             className="flex-1"
             header={<Heading priority={2}>{t("welcome.seeMoreOpportunitiesTruncated")}</Heading>}
-            icon={<Icon size="3xl" symbol="building" />}
+            icon={<Icon size="xl" icon={faHouseChimney} />}
             actions={[
               <LinkButton
                 href="/additional-resources"

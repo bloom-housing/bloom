@@ -9,7 +9,6 @@ import {
   Button,
   Field,
   FormCard,
-  Icon,
   Form,
   emailRegex,
   t,
@@ -20,6 +19,8 @@ import {
   DOBField,
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faGear } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
@@ -151,7 +152,7 @@ const Edit = () => {
       <FormsLayout>
         <FormCard>
           <div className="form-card__lead text-center border-b mx-0">
-            <Icon size="2xl" symbol="settings" />
+            <Icon size="xl" icon={faGear} />
             <h1 className="form-card__title">{t("account.accountSettings")}</h1>
           </div>
           <SiteAlert type="notice" dismissable />

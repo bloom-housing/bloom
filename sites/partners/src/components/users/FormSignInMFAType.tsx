@@ -5,12 +5,13 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   t,
   SiteAlert,
   FormSignInErrorBox,
   NetworkStatus,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
 import type { UseFormMethods } from "react-hook-form"
 
 export type FormSignInMFAProps = {
@@ -42,7 +43,7 @@ const FormSignInMFAType = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center">
-        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <Icon size="xl" icon={faCircleUser} className="form-card__header-icon" />
         <h2 className="form-card__title is-borderless">
           {t("nav.signInMFA.verificationChoiceMainTitle")}
         </h2>

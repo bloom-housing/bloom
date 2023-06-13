@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import {
   t,
   FormCard,
-  Icon,
   Form,
   Field,
   Button,
@@ -14,6 +13,8 @@ import {
   AlertBox,
   Modal,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faGear } from "@fortawesome/free-solid-svg-icons"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { Status } from "@bloom-housing/backend-core/types"
@@ -98,7 +99,7 @@ const FormUserConfirm = () => {
     <>
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0 px-5">
-          <Icon size="2xl" symbol="settings" />
+          <Icon size="xl" icon={faGear} />
           <h2 className="form-card__title">{t("users.addPassword")}</h2>
           <p className="mt-4 field-note">{t("users.needUniquePassword")}</p>
 

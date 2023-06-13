@@ -5,7 +5,6 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   t,
   AlertBox,
   SiteAlert,
@@ -14,6 +13,8 @@ import {
   NavigationContext,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 
@@ -52,7 +53,7 @@ const FormForgotPassword = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
+        <Icon size="xl" icon={faCircleUser} />
         <h1 className="form-card__title">{t("authentication.forgotPassword.sendEmail")}</h1>
       </div>
 

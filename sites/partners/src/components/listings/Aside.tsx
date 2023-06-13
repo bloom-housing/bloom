@@ -9,8 +9,9 @@ import {
   StatusMessages,
   LocalizedLink,
   LinkButton,
-  Icon,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faPenToSquare, faLink } from "@fortawesome/free-solid-svg-icons"
 import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
@@ -177,7 +178,7 @@ const Aside = ({
             >
               {t("listings.actions.resultsPosted")}{" "}
               {dayjs(lotteryResults?.startTime).format("MMMM DD, YYYY")}
-              <Icon size="medium" symbol="edit" className="ml-2" />
+              <Icon icon={faPenToSquare} className="ml-2" />
             </Button>
           </GridCell>
         )
@@ -222,7 +223,7 @@ const Aside = ({
             <a href={eventUrl} target="_blank" className="inline-flex w-full">
               <Button type="button" unstyled fullWidth className="bg-opacity-0">
                 {t("listings.actions.previewLotteryResults")}{" "}
-                <Icon size="medium" symbol="link" className="ml-2" />
+                <Icon icon={faLink} className="ml-2" />
               </Button>
             </a>
           </GridCell>

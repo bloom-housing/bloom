@@ -1,6 +1,6 @@
 import React from "react"
 import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { Icon, IconFillColors } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
 
 type IconContentProps = {
   onCopy: () => void
@@ -17,23 +17,19 @@ const ManageIconSection = (props: IconContentProps) => {
       <div className={"w-max"}>
         <button onClick={props.onEdit} aria-label={"Edit"} data-testid={props.editTestId}>
           <Icon
-            symbol={faPenToSquare}
-            size={"medium"}
-            fill={IconFillColors.primary}
-            className={"mr-5"}
+            icon={faPenToSquare}
+            className={"mr-5 text-primary"}
           />
         </button>
         <button onClick={props.onCopy} aria-label={"Copy"} data-testid={props.copyTestId}>
           <Icon
-            symbol={faClone}
-            size={"medium"}
-            fill={IconFillColors.primary}
-            className={`${props.onDelete && "mr-5"}`}
+            icon={faClone}
+            className={`${props.onDelete && "mr-5"} text-primary`}
           />
         </button>
         {props.onDelete && (
           <button onClick={props.onDelete} aria-label={"Delete"} data-testid={props.deleteTestId}>
-            <Icon symbol={faTrashCan} size={"medium"} fill={IconFillColors.alert} />
+            <Icon icon={faTrashCan} className="text-alert" />
           </button>
         )}
       </div>

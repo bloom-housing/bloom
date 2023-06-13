@@ -5,11 +5,12 @@ import {
   DashBlock,
   DashBlocks,
   HeaderBadge,
-  Icon,
   t,
   SiteAlert,
   AlertBox,
 } from "@bloom-housing/ui-components"
+import { Icon } from "@bloom-housing/ui-seeds"
+import { faGear } from "@fortawesome/free-solid-svg-icons"
 import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
@@ -46,7 +47,7 @@ function Dashboard(props: DashboardProps) {
 
   const settingsIcon = (
     <span className="header-badge">
-      <Icon size="medium" symbol="settings" />
+      <Icon icon={faGear} />
     </span>
   )
 
