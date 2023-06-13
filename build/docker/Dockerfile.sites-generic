@@ -4,6 +4,9 @@ ARG SITE=public
 ARG CLOUDINARY_CLOUD_NAME=blank
 ARG FILE_SERVICE=blank
 ARG LISTINGS_QUERY=/listings
+ARG BACKEND_API_BASE=http://localhost:3100
+ARG JURISDICTION_NAME=Bay Area
+ARG BLOOM_API_BASE=https://hba-dev-proxy.herokuapp.com
 
 # The base image will contain all the source code needed for our site
 FROM node:18.14-alpine AS base
@@ -103,13 +106,21 @@ ARG SITE
 ARG CLOUDINARY_CLOUD_NAME
 ARG FILE_SERVICE
 ARG LISTINGS_QUERY
+ARG BACKEND_API_BASE
+ARG JURISDICTION_NAME
+ARG BLOOM_API_BASE
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
 
+# Nest.js only uses build-time vars, not run time
+# Until that gets fixed, each service needs to be rebuilt with new vars for each env
 ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
 ENV FILE_SERVICE=$FILE_SERVICE
 ENV LISTINGS_QUERY=$LISTINGS_QUERY
+ENV BACKEND_API_BASE=$BACKEND_API_BASE
+ENV JURISDICTION_NAME=$JURISDICTION_NAME
+ENV BLOOM_API_BASE=$BLOOM_API_BASE
 
 # Build/compile
 RUN yarn build

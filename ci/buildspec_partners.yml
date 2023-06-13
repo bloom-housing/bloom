@@ -5,6 +5,7 @@
 # ECR_*
 # CLOUDINARY_CLOUD_NAME
 # FILE_SERVICE
+# BACKEND_API_BASE
 
 version: 0.2
 env:
@@ -23,10 +24,31 @@ phases:
       - export ECR_HOST="${ECR_ACCOUNT_ID}.dkr.ecr.${ECR_REGION}.amazonaws.com"
       - export ECR_REPO="${ECR_HOST}/${ECR_NAMESPACE}"
 
-      - docker build . -f build/docker/Dockerfile.sites-generic --target test --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/partners:test
+      # Build test image
+      - >
+        docker build . -f build/docker/Dockerfile.sites-generic
+        --target test
+        --build-arg SITE=partners
+        --build-arg "CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}"
+        --build-arg "FILE_SERVICE=${FILE_SERVICE}"
+        --build-arg "BACKEND_API_BASE=${BACKEND_API_BASE}"
+        -t sites/partners:test
+      
+      # Run tests
       - docker run sites/partners:test
-      - docker build . -f build/docker/Dockerfile.sites-generic --target run --build-arg SITE=partners --build-arg CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME} --build-arg FILE_SERVICE=${FILE_SERVICE} -t sites/partners:run-candidate
+
+      # Build prod/run image
+      - >
+        docker build . -f build/docker/Dockerfile.sites-generic
+        --target run
+        --build-arg SITE=partners
+        --build-arg "CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}"
+        --build-arg "FILE_SERVICE=${FILE_SERVICE}"
+        --build-arg "BACKEND_API_BASE=${BACKEND_API_BASE}"
+        -t sites/partners:run-candidate
+      
+      # Tag the run image
       - docker tag sites/partners:run-candidate "${ECR_REPO}/partners:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
 
-      # Pushing images to ECR
+      # Push the run image to ECR
       - docker push "${ECR_REPO}/partners:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
