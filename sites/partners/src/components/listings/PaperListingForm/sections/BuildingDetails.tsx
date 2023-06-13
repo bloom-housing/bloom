@@ -144,6 +144,10 @@ const BuildingDetails = ({
   }, [mapPinPosition])
 
   const getAddressErrorMessage = (fieldKey: string, defaultMessage: string) => {
+    if (fieldKey === "buildingAddress.county" && !getValues("buildingAddress.county")) {
+      defaultMessage = t("errors.countyError")
+      return t("errors.countyError")
+    }
     return errors?.buildingAddress && !getValues("buildingAddress.street")
       ? t("errors.partialAddress")
       : defaultMessage
@@ -306,7 +310,8 @@ const BuildingDetails = ({
               options={countyKeys}
               keyPrefix="counties"
               inputProps={{
-                onChange: () => clearErrors("buildingAddress"),
+                onChange: () =>
+                  fieldHasError(errors?.buildingAddress?.county) && clearErrors("buildingAddress"),
               }}
             />
           </ViewItem>
