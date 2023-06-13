@@ -14,8 +14,9 @@ import { IdDTO } from 'src/dtos/shared/id.dto';
 describe('AmiChart Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jurisdictionAId: string;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -23,44 +24,25 @@ describe('AmiChart Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-  });
 
-  const clearDb = async (amiChartIds: string[], jurisdictionIds: string[]) => {
-    if (amiChartIds.length) {
-      await prisma.amiChart.deleteMany({
-        where: {
-          id: {
-            in: amiChartIds,
-          },
-        },
-      });
-    }
-    if (jurisdictionIds.length) {
-      await prisma.jurisdictions.deleteMany({
-        where: {
-          id: {
-            in: jurisdictionIds,
-          },
-        },
-      });
-    }
-  };
-
-  it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(10),
     });
+    jurisdictionAId = jurisdictionA.id;
+  });
+
+  it('testing list endpoint', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(11),
     });
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
-    const amiChartB = await prisma.amiChart.create({
+    await prisma.amiChart.create({
       data: amiChartFactory(15, jurisdictionB.id),
     });
     const queryParams: AmiChartQueryParams = {
-      jurisdictionId: jurisdictionA.id,
+      jurisdictionId: jurisdictionAId,
     };
     const query = stringify(queryParams as any);
 
@@ -70,18 +52,11 @@ describe('AmiChart Controller Tests', () => {
 
     expect(res.body.length).toEqual(1);
     expect(res.body[0].name).toEqual(amiChartA.name);
-    await clearDb(
-      [amiChartA.id, amiChartB.id],
-      [jurisdictionA.id, jurisdictionB.id],
-    );
   });
 
   it('testing retrieve endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -89,15 +64,9 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(amiChartA.name);
-
-    await clearDb([amiChartA.id], [jurisdictionA.id]);
   });
 
   it('testing create endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
-
     const res = await request(app.getHttpServer())
       .post('/amiCharts')
       .send({
@@ -110,7 +79,7 @@ describe('AmiChart Controller Tests', () => {
           },
         ],
         jurisdictions: {
-          id: jurisdictionA.id,
+          id: jurisdictionAId,
         },
       } as AmiChartCreate)
       .expect(201);
@@ -123,17 +92,11 @@ describe('AmiChart Controller Tests', () => {
         income: 5000,
       },
     ]);
-
-    await clearDb([res.body.id], [jurisdictionA.id]);
   });
 
   it('testing update endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
-
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -148,9 +111,6 @@ describe('AmiChart Controller Tests', () => {
             income: 5000,
           },
         ],
-        jurisdictions: {
-          id: jurisdictionA.id,
-        },
       } as AmiChartUpdate)
       .expect(200);
 
@@ -162,16 +122,11 @@ describe('AmiChart Controller Tests', () => {
         income: 5000,
       },
     ]);
-    await clearDb([amiChartA.id], [jurisdictionA.id]);
   });
 
   it('testing delete endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
-
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -182,7 +137,5 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.success).toEqual(true);
-
-    await clearDb([], [jurisdictionA.id]);
   });
 });

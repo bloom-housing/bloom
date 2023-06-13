@@ -4,4 +4,5 @@ import { AmiChart } from './ami-chart.dto';
 export class AmiChartUpdate extends OmitType(AmiChart, [
   'createdAt',
   'updatedAt',
+  'jurisdictions',
 ]) {}

@@ -95,18 +95,7 @@ export class AmiChartService {
     if no ami chart has the id of the incoming argument an error is thrown
   */
   async update(incomingData: AmiChartUpdate): Promise<AmiChart> {
-    const amiChart = await this.prisma.amiChart.findUnique({
-      where: {
-        id: incomingData.id,
-      },
-    });
-
-    if (!amiChart) {
-      throw new NotFoundException(
-        `amiChartId ${incomingData.id} was requested but not found`,
-      );
-    }
-
+    await this.findOrThrow(incomingData.id);
     const rawResults = await this.prisma.amiChart.update({
       include: view,
       data: {
@@ -126,6 +115,7 @@ export class AmiChartService {
     this will delete an ami chart
   */
   async delete(amiChartId: string): Promise<SuccessDTO> {
+    await this.findOrThrow(amiChartId);
     await this.prisma.amiChart.delete({
       where: {
         id: amiChartId,
@@ -142,5 +132,20 @@ export class AmiChartService {
       householdSize: item.householdSize,
       income: item.income,
     })) as Prisma.JsonArray;
+  }
+
+  async findOrThrow(amiChartId: string): Promise<boolean> {
+    const amiChart = await this.prisma.amiChart.findUnique({
+      where: {
+        id: amiChartId,
+      },
+    });
+
+    if (!amiChart) {
+      throw new NotFoundException(
+        `amiChartId ${amiChartId} was requested but not found`,
+      );
+    }
+    return true;
   }
 }
