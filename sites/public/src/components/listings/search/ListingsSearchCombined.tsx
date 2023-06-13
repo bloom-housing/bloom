@@ -84,6 +84,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }
 
   const onFormSubmit = async (params: ListingSearchParams) => {
+    console.log("onFormSubmit params: ", params)
     await search(params, 1)
   }
 
@@ -207,7 +208,8 @@ const locations: FormOption[] = [
   {
     label: "San Francisco",
     value: "San Francisco",
-    //isDisabled: true,
+    isDisabled: true,
+    labelNoteHTML: `(For San Francisco listings, please go to <a href="https://housing.sfgov.org/">DHALIA</a>)`,
   },
   {
     label: "San Mateo",
