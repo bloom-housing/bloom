@@ -67,7 +67,17 @@ const PreferenceDrawer = ({
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, trigger, errors, clearErrors, setError, watch, setValue } = useForm()
+  const {
+    register,
+    getValues,
+    trigger,
+    errors,
+    clearErrors,
+    setError,
+    watch,
+    setValue,
+    formState,
+  } = useForm()
 
   useEffect(() => {
     if (!optOutQuestion) {
@@ -200,9 +210,15 @@ const PreferenceDrawer = ({
                   label={t("t.url")}
                   placeholder={"https://"}
                   register={register}
-                  type="text"
+                  type="url"
                   readerOnly
                   dataTestId={"preference-link"}
+                  error={errors?.preferenceUrl}
+                  errorMessage={
+                    errors?.preferenceUrl?.type === "https"
+                      ? t("errors.urlHttpsError")
+                      : t("errors.urlError")
+                  }
                   defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
                 />
               </ViewItem>
@@ -445,7 +461,7 @@ const PreferenceDrawer = ({
                   dataTestId={"preference-option-title"}
                   defaultValue={optionData?.text}
                   errorMessage={t("errors.requiredFieldError")}
-                  error={!!errors["optionTitle"]}
+                  error={errors["optionTitle"]}
                   inputProps={{
                     onChange: () => {
                       clearErrors("optionTitle")
@@ -478,7 +494,13 @@ const PreferenceDrawer = ({
                   label={t("t.url")}
                   placeholder={"https://"}
                   register={register}
-                  type="text"
+                  type="url"
+                  error={!!errors?.optionUrl}
+                  errorMessage={
+                    errors?.optionUrl?.type === "https"
+                      ? t("errors.urlHttpsError")
+                      : t("errors.urlError")
+                  }
                   readerOnly
                   dataTestId={"preference-option-link"}
                   defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
@@ -559,6 +581,7 @@ const PreferenceDrawer = ({
               setError("optionTitle", { message: t("errors.requiredFieldError") })
               return
             }
+            if (formState.errors.optionUrl) return
             const existingOptionData = questionData?.options?.find(
               (option) => optionData?.ordinal === option.ordinal
             )
@@ -589,7 +612,6 @@ const PreferenceDrawer = ({
                 ? [...questionData.options, newOptionData]
                 : [newOptionData]
             }
-
             setQuestionData({ ...questionData, options: newOptions })
             setOptionDrawerOpen(null)
           }}
