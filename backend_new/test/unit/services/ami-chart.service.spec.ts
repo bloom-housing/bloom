@@ -61,21 +61,6 @@ describe('Testing ami chart service', () => {
     });
   });
 
-  it('testing buildWhereClause() jurisdictionName param present', () => {
-    const params: AmiChartQueryParams = {
-      jurisdictionName: 'test name',
-    };
-    expect(service.buildWhereClause(params)).toEqual({
-      AND: [
-        {
-          jurisdictions: {
-            name: 'test name',
-          },
-        },
-      ],
-    });
-  });
-
   it('testing buildWhereClause() jurisdictionId param present', () => {
     const params: AmiChartQueryParams = {
       jurisdictionId: 'test id',
@@ -91,7 +76,7 @@ describe('Testing ami chart service', () => {
     });
   });
 
-  it('testing list() with jurisdictionName param present', async () => {
+  it('testing list() with jurisdictionId param present', async () => {
     const date = new Date();
     const jurisdictionData = {
       id: 'example Id',
@@ -102,7 +87,7 @@ describe('Testing ami chart service', () => {
       .mockResolvedValue(mockAmiChartSet(3, date, jurisdictionData));
 
     const params: AmiChartQueryParams = {
-      jurisdictionName: 'test name',
+      jurisdictionId: 'test name',
     };
 
     expect(await service.list(params)).toEqual([
@@ -157,7 +142,7 @@ describe('Testing ami chart service', () => {
         AND: [
           {
             jurisdictions: {
-              name: 'test name',
+              id: 'test name',
             },
           },
         ],

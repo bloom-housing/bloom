@@ -38,20 +38,7 @@ export class AmiChartService {
   */
   buildWhereClause(params: AmiChartQueryParams): Prisma.AmiChartWhereInput {
     const filters: Prisma.AmiChartWhereInput[] = [];
-
-    if (!params) {
-      return {
-        AND: filters,
-      };
-    }
-
-    if ('jurisdictionName' in params && params.jurisdictionName) {
-      filters.push({
-        jurisdictions: {
-          name: params.jurisdictionName,
-        },
-      });
-    } else if ('jurisdictionId' in params && params.jurisdictionId) {
+    if (params && 'jurisdictionId' in params && params.jurisdictionId) {
       filters.push({
         jurisdictions: {
           id: params.jurisdictionId,

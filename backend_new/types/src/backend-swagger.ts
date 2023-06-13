@@ -187,8 +187,6 @@ export class AmiChartsService {
   list(
     params: {
       /**  */
-      jurisdictionName?: string;
-      /**  */
       jurisdictionId?: string;
     } = {} as any,
     options: IRequestOptions = {},
@@ -202,10 +200,7 @@ export class AmiChartsService {
         url,
         options,
       );
-      configs.params = {
-        jurisdictionName: params['jurisdictionName'],
-        jurisdictionId: params['jurisdictionId'],
-      };
+      configs.params = { jurisdictionId: params['jurisdictionId'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -585,9 +580,6 @@ export interface AmiChartUpdate {
 }
 
 export interface AmiChartQueryParams {
-  /**  */
-  jurisdictionName?: string;
-
   /**  */
   jurisdictionId?: string;
 }
