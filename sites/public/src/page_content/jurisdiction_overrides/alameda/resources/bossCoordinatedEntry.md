@@ -3,10 +3,11 @@
 
 Unsheltered adults
 
-Call BOSS Coordinated Entry line at [510-844-8221](tel:+1-510-844-8221)
+Call BOSS Coordinated Entry line at [510-844-8580](tel:+1-510-844-8580)
 
 Walk in at 2811 Adeline St.  
- Office hours: 10am-2pm, Monday, Tuesday, Thurday, and Friday
+
+Office hours: 10am-2pm, Monday, Tuesday, Thurday, and Friday
 
 </RenderIf>
 <RenderIf language="es">
@@ -14,10 +15,11 @@ Walk in at 2811 Adeline St.
 
 Adultos sin hogar y sin acceso a refugios
 
-Llame a la línea de ingreso coordinado de BOSS al [510-844-8221](tel:+1-510-844-8221)
+Llame a la línea de ingreso coordinado de BOSS al [510-844-8580](tel:+1-510-844-8580)
 
 Atención sin turno en 2811 Adeline St.  
- Horarios de atención: De 10 a. m. a 2 p. m. los lunes, martes, jueves y viernes
+
+Horarios de atención: De 10 a. m. a 2 p. m. los lunes, martes, jueves y viernes
 
 </RenderIf>
 <RenderIf language="zh">
@@ -25,10 +27,11 @@ Atención sin turno en 2811 Adeline St.
 
 無居所的成年人
 
-致電 BOSS 協調入口專線 [510-844-8221](tel:+1-510-844-8221)
+致電 BOSS 協調入口專線 [510-844-8580](tel:+1-510-844-8580)
 
 直接前往 2811 Adeline St.  
- 辦公室服務時間：週一、週二、週四及週五上午 10 點至下午 2 點
+
+辦公室服務時間：週一、週二、週四及週五上午 10 點至下午 2 點
 
 </RenderIf>
 <RenderIf language="vi">
@@ -36,10 +39,11 @@ Atención sin turno en 2811 Adeline St.
 
 Người trưởng thành không nơi trú ẩn
 
-Gọi tới đường dây Tiếp Nhận Được Điều Phối của BOSS theo số [510-844-8221](tel:+1-510-844-8221)
+Gọi tới đường dây Tiếp Nhận Được Điều Phối của BOSS theo số [510-844-8580](tel:+1-510-844-8580)
 
-Đến tận nơi không cần hẹn trước tại 2811 Adeline St.  
- Giờ làm việc: 10 giờ sáng-2 giờ chiều, Thứ Hai, Thứ Ba, Thứ Năm và Thứ Sáu
+Đến tận nơi không cần hẹn trước tại 2811 Adeline St. 
+
+Giờ làm việc: 10 giờ sáng-2 giờ chiều, Thứ Hai, Thứ Ba, Thứ Năm và Thứ Sáu
 
 </RenderIf>
 <RenderIf language="tl">
@@ -47,9 +51,10 @@ Gọi tới đường dây Tiếp Nhận Được Điều Phối của BOSS theo
 
 Mga adultong walang matitirhan
 
-Tawagan ang BOSS Coordinated Entry line sa [510-844-8221](tel:+1-510-844-8221)
+Tawagan ang BOSS Coordinated Entry line sa [510-844-8580](tel:+1-510-844-8580)
 
 Magpunta sa 2811 Adeline St.
+
 Oras ng opisina: 10am-2pm, Lunes, Martes, Huwebes at Biyernes
 
 </RenderIf>

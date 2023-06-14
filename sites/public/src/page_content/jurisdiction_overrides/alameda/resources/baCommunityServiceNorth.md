@@ -6,8 +6,9 @@ Unsheltered adults
 Call [510-495-0131](tel:+1-510-495-0131)  
  Email [housinghub@bayareacs.org](mailto:housinghub@bayareacs.org)
 
-Walk in at 2809 Telegraph Ave.  
- Office hours: 9am-12pm, Monday, Wednesday, and Friday
+Walk in at 2809 Telegraph Ave.
+
+Office hours: 9am-12pm, Monday, Wednesday, and Friday
 
 </RenderIf>
 <RenderIf language="es">
@@ -18,8 +19,9 @@ Adultos sin hogar y sin acceso a refugios
 Llame al [510-495-0131](tel:+1-510-495-0131)  
  Correo electrónico: [housinghub@bayareacs.org](mailto:housinghub@bayareacs.org)
 
-Atención sin turno en 2809 Telegraph Ave.  
- Horarios de atención: De 9 a. m. a 12 p. m. los lunes, miércoles y viernes
+Atención sin turno en 2809 Telegraph Ave.
+
+Horarios de atención: De 9 a. m. a 12 p. m. los lunes, miércoles y viernes
 
 </RenderIf>
 <RenderIf language="zh">
@@ -30,8 +32,9 @@ Atención sin turno en 2809 Telegraph Ave.
 致電 [510-495-0131](tel:+1-510-495-0131)  
  電子郵件 [housinghub@bayareacs.org](mailto:housinghub@bayareacs.org)
 
-直接前往 2809 Telegraph Ave.  
- 辦公室服務時間：週一、週三及週五上午 9 點至中午 12 點
+直接前往 2809 Telegraph Ave.
+
+辦公室服務時間：週一、週三及週五上午 9 點至中午 12 點
 
 </RenderIf>
 <RenderIf language="vi">
@@ -42,8 +45,9 @@ Người trưởng thành không nơi trú ẩn
 Gọi số [510-495-0131](tel:+1-510-495-0131)  
  Email [housinghub@bayareacs.org](mailto:housinghub@bayareacs.org)
 
-Đến tận nơi không cần hẹn trước tại 2809 Telegraph Ave.  
- Giờ làm việc: 9 giờ sáng-12 giờ trưa, Thứ Hai, Thứ Yư và Thứ Sáu
+Đến tận nơi không cần hẹn trước tại 2809 Telegraph Ave.
+
+Giờ làm việc: 9 giờ sáng-12 giờ trưa, Thứ Hai, Thứ Yư và Thứ Sáu
 
 </RenderIf>
 <RenderIf language="tl">
@@ -54,7 +58,8 @@ Mga adultong walang matitirhan
 Tawagan ang [510-495-0131](tel:+1-510-495-0131)  
 Mag-email sa [housinghub@bayareacs.org](mailto:housinghub@bayareacs.org)
 
-Magpunta sa 2809 Telegraph Ave.  
+Magpunta sa 2809 Telegraph Ave.
+
 Oras ng opisina: 9am-12pm, Lunes, Miyerklues, at Biyernes
 
 </RenderIf>

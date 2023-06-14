@@ -7,7 +7,6 @@ import RenderIf from "../../../RenderIf"
 // Import Markdown resource cards:
 import sidebarContent from "./resources/sidebar.md"
 import alaResourceFinder211 from "./resources/alaResourceFinder211.md"
-import independentLiving from "./resources/independentLiving.md"
 import echoHousing from "./resources/echoHousing.md"
 import hrc from "./resources/hrc.md"
 import depositRentalAssistance from "./resources/depositRentalAssistance.md"
@@ -28,6 +27,7 @@ import bossCoordinatedEntry from "./resources/bossCoordinatedEntry.md"
 import eocpCoordinatedEntry from "./resources/eocpCoordinatedEntry.md"
 import familyFrontDoorOakland from "./resources/familyFrontDoorOakland.md"
 import keepOaklandHoused from "./resources/keepOaklandHoused.md"
+import transitionalAgedYouth from "./resources/transitionalAgedYouth.md"
 import northCountyHeader from "./resources/northCountyHeader.md"
 import baCommunityServiceNorth from "./resources/baCommunityServiceNorth.md"
 import familyFrontDoorNorth from "./resources/familyFrontDoorNorth.md"
@@ -53,7 +53,6 @@ export const AdditionalResourcesSection = () => {
               subtitle={t("additionalResources.immediateHousing.description")}
             >
               <Resource>{alaResourceFinder211}</Resource>
-              <Resource>{independentLiving}</Resource>
               <Resource>{echoHousing}</Resource>
               <Resource>{hrc}</Resource>
               <Resource>{depositRentalAssistance}</Resource>
@@ -103,6 +102,7 @@ export const AdditionalResourcesSection = () => {
               <Resource>{eocpCoordinatedEntry}</Resource>
               <Resource>{familyFrontDoorOakland}</Resource>
               <Resource>{keepOaklandHoused}</Resource>
+              <Resource>{transitionalAgedYouth}</Resource>
             </div>
             <Markdown
               options={{

@@ -5,8 +5,9 @@ Unsheltered adults
 
 Call [510-330-5822](tel:+1-510-330-5822)
 
-Walk in at 4075 Papazian Way, Fremont  
- Drop-in hours: 9am-1pm, Monday and Tuesday
+Walk in at 4075 Papazian Way, Fremont
+
+Drop-in hours: 9am-1pm, Monday and Tuesday
 
 </RenderIf>
 <RenderIf language="es">
@@ -16,8 +17,9 @@ Adultos sin hogar y sin acceso a refugios
 
 Llame al [510-330-5822](tel:+1-510-330-5822)
 
-Atención sin turno en 4075 Papazian Way, Fremont  
- Horarios de atención sin turno: De 9 a. m. a 1 p. m. los lunes y martes
+Atención sin turno en 4075 Papazian Way, Fremont
+
+Horarios de atención sin turno: De 9 a. m. a 1 p. m. los lunes y martes
 
 </RenderIf>
 <RenderIf language="zh">
@@ -27,8 +29,9 @@ Atención sin turno en 4075 Papazian Way, Fremont
 
 致電 [510-330-5822](tel:+1-510-330-5822)
 
-直接前往 4075 Papazian Way, Fremont  
- 服務時間：週一及週二上午 9 點至下午 1 點
+直接前往 4075 Papazian Way, Fremont
+
+服務時間：週一及週二上午 9 點至下午 1 點
 
 </RenderIf>
 <RenderIf language="vi">
@@ -38,8 +41,9 @@ Người trưởng thành không nơi trú ẩn
 
 Gọi số [510-330-5822](tel:+1-510-330-5822)
 
-Đến tận nơi không cần hẹn trước tại 4075 Papazian Way, Fremont  
- Giờ ghé qua: 9 giờ sáng-1 giờ chiều, Thứ Hai và Thứ Ba
+Đến tận nơi không cần hẹn trước tại 4075 Papazian Way, Fremont
+
+Giờ ghé qua: 9 giờ sáng-1 giờ chiều, Thứ Hai và Thứ Ba
 
 </RenderIf>
 <RenderIf language="tl">
@@ -50,6 +54,7 @@ Mga adultong walang matitirahan
 Tawagan ang [510-330-5822](tel:+1-510-330-5822)
 
 Magpunta sa 4075 Papazian Way, Fremont
+
 Mga oras ng pagpunta: 9am-1pm, Lunes at Martes
 
 </RenderIf>

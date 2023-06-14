@@ -7,7 +7,7 @@ Call [510-808-7410](tel:+1-510-808-7410) ext. 282
 
 If you are already receiving services and need to update your information, text your full name and your updated/new information to [510-435-2772](sms:+1-510-435-2772).
 
-Emeryville
+Emeryville Families Included
 
 </RenderIf>
 <RenderIf language="es">
@@ -19,7 +19,7 @@ Llame al [510-808-7410](tel:+1-510-808-7410) ext. 282
 
 Si ya recibe servicios y necesita actualizar su información, envíe su nombre completo y su información actualizada o nueva por mensaje de texto al [510-435-2772](sms:+1-510-435-2772).
 
-Emeryville
+Emeryville Families Included
 
 </RenderIf>
 <RenderIf language="zh">
@@ -31,7 +31,7 @@ Emeryville
 
 如果您已接受服務並需要更新您的資訊，請將全名及更新後／新資訊傳送至 [510-435-2772](sms:+1-510-435-2772)。
 
-Emeryville
+Emeryville Families Included
 
 </RenderIf>
 <RenderIf language="vi">
@@ -43,7 +43,7 @@ Gọi [510-808-7410](tel:+1-510-808-7410), số máy lẻ 282
 
 Nếu quý vị đã nhận được dịch vụ và cần cập nhật thông tin của mình, vui lòng nhắn đầy đủ họ tên và thông tin mới/đã cập nhật của quý vị tới số [510-435-2772](sms:+1-510-435-2772).
 
-Emeryville
+Emeryville Families Included
 
 </RenderIf>
 <RenderIf language="tl">
@@ -55,6 +55,6 @@ Tawagan [510-808-7410](tel:+1-510-808-7410) ext. 282
 
 Kung nakakatanggap ka na ng mga serbisyo at kailangan mong i-update ang iyong impormasyon, i-text ang iyong buong pangalan at ang iyong binago/bagong impormasyon sa [510-435-2772](sms:+1-510-435-2772).
 
-Emeryville
+Emeryville Families Included
 
 </RenderIf>
