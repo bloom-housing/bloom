@@ -115,7 +115,12 @@ const Users = () => {
     ]
   }, [])
 
-  const { data: userList, loading, error, cacheKey } = useUserList({
+  const {
+    data: userList,
+    loading,
+    error,
+    cacheKey,
+  } = useUserList({
     page: tableOptions.pagination.currentPage,
     limit: tableOptions.pagination.itemsPerPage,
     search: tableOptions.filter.filterValue,

@@ -39,7 +39,7 @@ export class Address extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(10, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   zipCode: string;
 

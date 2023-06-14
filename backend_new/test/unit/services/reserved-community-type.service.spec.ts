@@ -2,8 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { ReservedCommunityTypeService } from '../../../src/services/reserved-community-type.service';
 import { ReservedCommunityTypeQueryParams } from '../../../src/dtos/reserved-community-types/reserved-community-type-query-params.dto';
-import { ReservedCommunitTypeCreate } from '../../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
-import { ReservedCommunityType } from '../../../src/dtos/reserved-community-types/reserved-community-type-get.dto';
+import { ReservedCommunityTypeCreate } from '../../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
+import { ReservedCommunityTypeUpdate } from '../../../src/dtos/reserved-community-types/reserved-community-type-update.dto';
+import { randomUUID } from 'crypto';
 
 describe('Testing reserved community type service', () => {
   let service: ReservedCommunityTypeService;
@@ -15,12 +16,12 @@ describe('Testing reserved community type service', () => {
     jurisdictionData: any,
   ) => {
     return {
-      id: `reserved community type id ${position}`,
-      name: `reserved community type name ${position}`,
+      id: randomUUID(),
+      name: `reserved community type ${position}`,
       jurisdictions: jurisdictionData,
       createdAt: date,
       updatedAt: date,
-      description: `reserved community type description ${position}`,
+      description: `description ${position}`,
     };
   };
 
@@ -36,7 +37,7 @@ describe('Testing reserved community type service', () => {
     return toReturn;
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ReservedCommunityTypeService, PrismaService],
     }).compile();
@@ -54,15 +55,15 @@ describe('Testing reserved community type service', () => {
     });
   });
 
-  it('testing buildWhereClause() jurisdictionName param present', () => {
+  it('testing buildWhereClause() jurisdictionId param present', () => {
     const params: ReservedCommunityTypeQueryParams = {
-      jurisdictionName: 'test name',
+      jurisdictionId: 'test name',
     };
     expect(service.buildWhereClause(params)).toEqual({
       AND: [
         {
           jurisdictions: {
-            name: 'test name',
+            id: 'test name',
           },
         },
       ],
@@ -75,40 +76,39 @@ describe('Testing reserved community type service', () => {
       id: 'example Id',
       name: 'example name',
     };
+    const mockedValue = mockReservedCommunityTypeSet(3, date, jurisdictionData);
     prisma.reservedCommunityTypes.findMany = jest
       .fn()
-      .mockResolvedValue(
-        mockReservedCommunityTypeSet(3, date, jurisdictionData),
-      );
+      .mockResolvedValue(mockedValue);
 
     const params: ReservedCommunityTypeQueryParams = {
-      jurisdictionName: 'test name',
+      jurisdictionId: 'test name',
     };
 
     expect(await service.list(params)).toEqual([
       {
-        id: 'reserved community type id 0',
-        name: 'reserved community type name 0',
+        id: mockedValue[0].id,
+        name: 'reserved community type 0',
         jurisdictions: jurisdictionData,
         createdAt: date,
         updatedAt: date,
-        description: 'reserved community type description 0',
+        description: 'description 0',
       },
       {
-        id: 'reserved community type id 1',
-        name: 'reserved community type name 1',
+        id: mockedValue[1].id,
+        name: 'reserved community type 1',
         jurisdictions: jurisdictionData,
         createdAt: date,
         updatedAt: date,
-        description: 'reserved community type description 1',
+        description: 'description 1',
       },
       {
-        id: 'reserved community type id 2',
-        name: 'reserved community type name 2',
+        id: mockedValue[2].id,
+        name: 'reserved community type 2',
         jurisdictions: jurisdictionData,
         createdAt: date,
         updatedAt: date,
-        description: 'reserved community type description 2',
+        description: 'description 2',
       },
     ]);
 
@@ -120,7 +120,7 @@ describe('Testing reserved community type service', () => {
         AND: [
           {
             jurisdictions: {
-              name: 'test name',
+              id: 'test name',
             },
           },
         ],
@@ -134,19 +134,22 @@ describe('Testing reserved community type service', () => {
       id: 'example Id',
       name: 'example name',
     };
+    const mockedValue = mockReservedCommunityTypeChart(
+      3,
+      date,
+      jurisdictionData,
+    );
     prisma.reservedCommunityTypes.findFirst = jest
       .fn()
-      .mockResolvedValue(
-        mockReservedCommunityTypeChart(3, date, jurisdictionData),
-      );
+      .mockResolvedValue(mockedValue);
 
     expect(await service.findOne('example Id')).toEqual({
-      id: 'reserved community type id 3',
-      name: 'reserved community type name 3',
+      id: mockedValue.id,
+      name: 'reserved community type 3',
       jurisdictions: jurisdictionData,
       createdAt: date,
       updatedAt: date,
-      description: 'reserved community type description 3',
+      description: 'description 3',
     });
 
     expect(prisma.reservedCommunityTypes.findFirst).toHaveBeenCalledWith({
@@ -186,25 +189,28 @@ describe('Testing reserved community type service', () => {
       id: 'example Id',
       name: 'example name',
     };
+    const mockedValue = mockReservedCommunityTypeChart(
+      3,
+      date,
+      jurisdictionData,
+    );
     prisma.reservedCommunityTypes.create = jest
       .fn()
-      .mockResolvedValue(
-        mockReservedCommunityTypeChart(3, date, jurisdictionData),
-      );
+      .mockResolvedValue(mockedValue);
 
-    const params: ReservedCommunitTypeCreate = {
+    const params: ReservedCommunityTypeCreate = {
       jurisdictions: jurisdictionData,
-      description: 'reserved community type description 3',
-      name: 'reserved community type name 3',
+      description: 'description 3',
+      name: 'reserved community type 3',
     };
 
     expect(await service.create(params)).toEqual({
-      id: 'reserved community type id 3',
-      name: 'reserved community type name 3',
+      id: mockedValue.id,
+      name: 'reserved community type 3',
       jurisdictions: jurisdictionData,
       createdAt: date,
       updatedAt: date,
-      description: 'reserved community type description 3',
+      description: 'description 3',
     });
 
     expect(prisma.reservedCommunityTypes.create).toHaveBeenCalledWith({
@@ -212,13 +218,13 @@ describe('Testing reserved community type service', () => {
         jurisdictions: true,
       },
       data: {
-        name: 'reserved community type name 3',
+        name: 'reserved community type 3',
         jurisdictions: {
           connect: {
             id: 'example Id',
           },
         },
-        description: 'reserved community type description 3',
+        description: 'description 3',
       },
     });
   });
@@ -240,31 +246,28 @@ describe('Testing reserved community type service', () => {
       .mockResolvedValue(mockedReservedCommunityType);
     prisma.reservedCommunityTypes.update = jest.fn().mockResolvedValue({
       ...mockedReservedCommunityType,
-      name: 'reserved community type name 4',
-      description: 'reserved community type description 4',
+      name: 'updated reserved community type 3',
+      description: 'updated description 3',
     });
 
-    const params: ReservedCommunityType = {
-      jurisdictions: jurisdictionData,
-      description: 'reserved community type description 4',
-      name: 'reserved community type name 4',
-      id: 'reserved community type id 3',
-      createdAt: date,
-      updatedAt: date,
+    const params: ReservedCommunityTypeUpdate = {
+      description: 'updated description 3',
+      name: 'updated reserved community type 3',
+      id: mockedReservedCommunityType.id,
     };
 
     expect(await service.update(params)).toEqual({
-      id: 'reserved community type id 3',
-      name: 'reserved community type name 4',
+      id: mockedReservedCommunityType.id,
+      name: 'updated reserved community type 3',
       jurisdictions: jurisdictionData,
       createdAt: date,
       updatedAt: date,
-      description: 'reserved community type description 4',
+      description: 'updated description 3',
     });
 
     expect(prisma.reservedCommunityTypes.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'reserved community type id 3',
+        id: mockedReservedCommunityType.id,
       },
     });
 
@@ -273,31 +276,23 @@ describe('Testing reserved community type service', () => {
         jurisdictions: true,
       },
       data: {
-        name: 'reserved community type name 4',
-        description: 'reserved community type description 4',
+        name: 'updated reserved community type 3',
+        description: 'updated description 3',
       },
       where: {
-        id: 'reserved community type id 3',
+        id: mockedReservedCommunityType.id,
       },
     });
   });
 
   it('testing update() existing record not found', async () => {
-    const date = new Date();
-    const jurisdictionData = {
-      id: 'example Id',
-      name: 'example name',
-    };
     prisma.reservedCommunityTypes.findFirst = jest.fn().mockResolvedValue(null);
     prisma.reservedCommunityTypes.update = jest.fn().mockResolvedValue(null);
 
-    const params: ReservedCommunityType = {
-      jurisdictions: jurisdictionData,
-      description: 'reserved community type name 4',
-      name: 'reserved community type name 4',
-      id: 'reserved community type Id 3',
-      createdAt: date,
-      updatedAt: date,
+    const params: ReservedCommunityTypeUpdate = {
+      description: 'updated description 3',
+      name: 'updated name 3',
+      id: 'example id',
     };
 
     await expect(
@@ -306,7 +301,7 @@ describe('Testing reserved community type service', () => {
 
     expect(prisma.reservedCommunityTypes.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'reserved community type Id 3',
+        id: 'example id',
       },
     });
   });
@@ -314,6 +309,11 @@ describe('Testing reserved community type service', () => {
   it('testing delete()', async () => {
     const date = new Date();
     const jurisdictionData = undefined;
+    prisma.reservedCommunityTypes.findFirst = jest
+      .fn()
+      .mockResolvedValue(
+        mockReservedCommunityTypeChart(3, date, jurisdictionData),
+      );
     prisma.reservedCommunityTypes.delete = jest
       .fn()
       .mockResolvedValue(
