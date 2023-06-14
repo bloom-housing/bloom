@@ -314,7 +314,7 @@ export const ListingView = (props: ListingProps) => {
       } else {
         urlBase = ""
       }
-      onlineApplicationURL = `${urlBase}/applications/start/choose-language?listingId=${listing.id}`
+      onlineApplicationURL = `${urlBase}/applications/start/choose-language?listingId=${listing.id}&source=dhp`
     } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
       onlineApplicationURL =
         getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
