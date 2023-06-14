@@ -32,6 +32,8 @@ const views: Views = {
       "units.monthlyRent",
       "units.monthlyRentAsPercentOfIncome",
       "units.sqFeet",
+      "units.numBedrooms",
+      "units.numBathrooms",
       "amiChartOverride.id",
       "amiChartOverride.items",
       "unitType.id",

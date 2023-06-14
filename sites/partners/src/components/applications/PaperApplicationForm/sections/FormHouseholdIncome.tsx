@@ -59,8 +59,7 @@ const FormHouseholdIncome = () => {
           <ViewItem label={t("application.details.annualIncome")}>
             <Field
               id="incomeYear"
-              // TODO: Commenting out temporarily due to application issues
-              // type="number"
+              type="number"
               name="incomeYear"
               label={t("application.details.annualIncome")}
               placeholder={t("t.enterAmount")}
@@ -75,8 +74,7 @@ const FormHouseholdIncome = () => {
           <ViewItem label={t("application.details.monthlyIncome")}>
             <Field
               id="incomeMonth"
-              // TODO: Commenting out temporarily due to application issues
-              // type="number"
+              type="number"
               name="incomeMonth"
               label={t("application.details.monthlyIncome")}
               placeholder={t("t.enterAmount")}

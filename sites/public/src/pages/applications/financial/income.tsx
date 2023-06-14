@@ -80,14 +80,11 @@ const ApplicationIncome = () => {
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
     const incomeValue = income.replaceAll(",", "")
-    // TODO: Commenting out temporarily due to application issues
     // Skip validation of total income if the applicant has income vouchers.
-    // const validationError = application.incomeVouchers
-    //   ? null
-    //   : verifyIncome(listing, incomeValue, incomePeriod)
-    // setIncomeError(validationError)
-
-    const validationError = false
+    const validationError = application.incomeVouchers
+      ? null
+      : verifyIncome(listing, incomeValue, incomePeriod)
+    setIncomeError(validationError)
 
     if (!validationError) {
       const toSave = { income: incomeValue, incomePeriod }
@@ -182,14 +179,11 @@ const ApplicationIncome = () => {
             <Field
               id="income"
               name="income"
-              // TODO: Commenting out temporarily due to application issues
-              // type="currency"
+              type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
               placeholder={t("application.financial.income.placeholder")}
-              // TODO: Commenting out temporarily due to application issues
-              // validation={{ required: true, min: 0.01 }}
-              validation={{ required: true }}
+              validation={{ required: true, min: 0.01 }}
               error={errors.income}
               register={register}
               errorMessage={t("errors.numberError")}

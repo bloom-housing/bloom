@@ -15,31 +15,25 @@ const DetailsHouseholdIncome = () => {
     >
       <GridCell>
         <ViewItem label={t("application.details.annualIncome")} dataTestId="annualIncome">
-          {/* 
-           // TODO: Commenting out temporarily due to application issues
           {application.incomePeriod === IncomePeriod.perYear
             ? formatIncome(
                 parseFloat(application.income),
                 application.incomePeriod,
                 IncomePeriod.perYear
               )
-            : t("t.n/a")} */}
-          {application.incomePeriod === IncomePeriod.perYear ? application.income : t("t.n/a")}
+            : t("t.n/a")}
         </ViewItem>
       </GridCell>
 
       <GridCell>
         <ViewItem label={t("application.details.monthlyIncome")} dataTestId="monthlyIncome">
-          {/* 
-          // TODO: Commenting out temporarily due to application issues
           {application.incomePeriod === IncomePeriod.perMonth
             ? formatIncome(
                 parseFloat(application.income),
                 application.incomePeriod,
                 IncomePeriod.perMonth
               )
-            : t("t.n/a")} */}
-          {application.incomePeriod === IncomePeriod.perMonth ? application.income : t("t.n/a")}
+            : t("t.n/a")}
         </ViewItem>
       </GridCell>
 

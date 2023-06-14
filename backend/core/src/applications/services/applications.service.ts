@@ -25,7 +25,6 @@ import { PaginatedApplicationListQueryParams } from "../dto/paginated-applicatio
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
-import { ListingRepository } from "../../listings/db/listing.repository"
 import { Listing } from "../../listings/entities/listing.entity"
 
 @Injectable({ scope: Scope.REQUEST })
@@ -36,7 +35,7 @@ export class ApplicationsService {
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
-    @InjectRepository(ListingRepository) private readonly listingsRepository: ListingRepository
+    @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
@@ -131,7 +130,7 @@ export class ApplicationsService {
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
 
-    const listing = await this.listingsRepository
+    const listing = await this.listingsService
       .createQueryBuilder("listings")
       .where(`listings.id = :listingId`, { listingId: applicationCreateDto.listing.id })
       .select(["listings.applicationDueDate", "listings.id"])
@@ -229,14 +228,14 @@ export class ApplicationsService {
           transactionalEntityManager.getRepository(Listing)
         )
 
-        return await applicationsRepository.findOne({ id: newApplication.id })
+        return await applicationsRepository.findOne({ where: { id: newApplication.id } })
       }
     )
     return app
   }
 
   async delete(applicationId: string) {
-    const application = await this.repository.findOne({ id: applicationId })
+    const application = await this.repository.findOne({ where: { id: applicationId } })
 
     if (!application) {
       throw new NotFoundException()
@@ -329,7 +328,7 @@ export class ApplicationsService {
           transactionalEntityManager.getRepository(Listing)
         )
 
-        return await applicationsRepository.findOne({ id: application.id })
+        return await applicationsRepository.findOne({ where: { id: application.id } })
       }
     )
   }
@@ -405,7 +404,7 @@ export class ApplicationsService {
     listingId: string,
     action
   ) {
-    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
+    const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
 
     const resource: T & { listingId: string; jurisdictionId: string } = {
       ...app,
@@ -420,7 +419,7 @@ export class ApplicationsService {
     /**
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
-    const jurisdictionId = await this.listingsRepository.getJurisdictionIdByListingId(listingId)
+    const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
 
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
       id: listingId,

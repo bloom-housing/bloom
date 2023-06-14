@@ -1,5 +1,4 @@
 import { Test } from "@nestjs/testing"
-import { AssetsController } from "../../src/assets/assets.controller"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import dbOptions from "../../ormconfig.test"
 import { Asset } from "../../src/assets/entities/asset.entity"
@@ -21,14 +20,13 @@ class FakeUploadService implements UploadService {
 
 describe("AssetsController", () => {
   let app: INestApplication
-  let assetsController: AssetsController
   let adminAccessToken: string
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         SharedModule,
-        TypeOrmModule.forRoot({ ...dbOptions, keepConnectionAlive: true }),
+        TypeOrmModule.forRoot(dbOptions),
         TypeOrmModule.forFeature([Asset]),
         AssetsModule,
       ],
@@ -41,7 +39,6 @@ describe("AssetsController", () => {
     app = applicationSetup(app)
     app.use(cookieParser())
     await app.init()
-    assetsController = moduleRef.get<AssetsController>(AssetsController)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
@@ -51,7 +48,12 @@ describe("AssetsController", () => {
         fileId: "fileId",
         label: "label",
       }
-      const asset = await assetsController.create(assetInput)
+      const response = await supertest(app.getHttpServer())
+        .post(`/assets/`)
+        .set(...setAuthorization(adminAccessToken))
+        .send(assetInput)
+        .expect(201)
+      const asset = JSON.parse(response.text)
       expect(asset).toMatchObject(assetInput)
       expect(asset).toHaveProperty("id")
       expect(asset).toHaveProperty("createdAt")
@@ -61,9 +63,12 @@ describe("AssetsController", () => {
     it("should create a presigned url for upload", async () => {
       const publicId = "publicId"
       const eager = "eager"
-      const createPresignedUploadMetadataResponseDto = await assetsController.createPresignedUploadMetadata(
-        { parametersToSign: { publicId, eager } }
-      )
+      const response = await supertest(app.getHttpServer())
+        .post(`/assets/presigned-upload-metadata/`)
+        .set(...setAuthorization(adminAccessToken))
+        .send({ parametersToSign: { publicId, eager } })
+        .expect(201)
+      const createPresignedUploadMetadataResponseDto = JSON.parse(response.text)
       expect(createPresignedUploadMetadataResponseDto).toHaveProperty("signature")
       expect(createPresignedUploadMetadataResponseDto.signature).toBe("fake")
     })
@@ -101,5 +106,13 @@ describe("AssetsController", () => {
       expect(asset).toHaveProperty("fileId")
       expect(asset).toHaveProperty("label")
     })
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  afterAll(async () => {
+    await app.close()
   })
 })
