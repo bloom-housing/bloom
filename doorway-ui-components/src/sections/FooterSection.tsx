@@ -5,11 +5,18 @@ export interface FooterSectionProps {
   children: React.ReactNode
   className?: string
   small?: boolean
+  sectionClassName?: string
 }
 
 const FooterSection = (props: FooterSectionProps) => (
   <div className={`footer-row ${props.className || ""}`}>
-    <div className={`footer-row__section ${props.small ? "py-2" : "pb-8"}`}>{props.children}</div>
+    <div
+      className={`footer-row__section ${props.small ? "py-0" : "pb-8"} ${
+        props.sectionClassName || ""
+      }`}
+    >
+      {props.children}
+    </div>
   </div>
 )
 

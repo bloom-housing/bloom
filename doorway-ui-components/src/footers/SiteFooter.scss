@@ -2,12 +2,13 @@ footer.site-footer {
   @apply text-gray-500;
   @apply w-full;
   @apply bg-gray-800;
-  @apply text-center;
+  @apply text-left;
 
+  display: flex;
+  flex-direction: column;
   img {
     @apply inline;
-    width: 130px;
-    opacity: 0.8;
+    opacity: 1;
   }
 
   a {
@@ -18,11 +19,11 @@ footer.site-footer {
     @apply mb-5;
   }
 
-  & > .footer-row:first-of-type {
-    @apply pt-12;
-  }
+  .footer-row {
+    @apply py-8;
 
-  & > .footer-row:last-of-type {
-    @apply pt-0;
+    @media (max-width: $screen-lg) {
+      @apply px-4;
+    }
   }
 }
