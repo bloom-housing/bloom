@@ -323,7 +323,7 @@ export class ReservedCommunityTypesService {
   list(
     params: {
       /**  */
-      jurisdictionName?: string;
+      jurisdictionId?: string;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ReservedCommunityType[]> {
@@ -336,7 +336,7 @@ export class ReservedCommunityTypesService {
         url,
         options,
       );
-      configs.params = { jurisdictionName: params['jurisdictionName'] };
+      configs.params = { jurisdictionId: params['jurisdictionId'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -349,7 +349,7 @@ export class ReservedCommunityTypesService {
   create(
     params: {
       /** requestBody */
-      body?: ReservedCommunitTypeCreate;
+      body?: ReservedCommunityTypeCreate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ReservedCommunityType> {
@@ -432,7 +432,7 @@ export class ReservedCommunityTypesService {
   update(
     params: {
       /** requestBody */
-      body?: ReservedCommunityType;
+      body?: ReservedCommunityTypeUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ReservedCommunityType> {
@@ -745,7 +745,7 @@ export interface SuccessDTO {
   success: boolean;
 }
 
-export interface ReservedCommunitTypeCreate {
+export interface ReservedCommunityTypeCreate {
   /**  */
   name: string;
 
@@ -756,9 +756,20 @@ export interface ReservedCommunitTypeCreate {
   jurisdictions: IdDTO;
 }
 
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  description: string;
+}
+
 export interface ReservedCommunityTypeQueryParams {
   /**  */
-  jurisdictionName?: string;
+  jurisdictionId?: string;
 }
 
 export interface ReservedCommunityType {
