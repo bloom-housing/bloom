@@ -1,5 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
+import { NextRouter } from "next/router"
 import {
   Address,
   Listing,
@@ -8,8 +9,8 @@ import {
   ListingStatus,
   ApplicationMultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
-import { t, ApplicationStatusType, StatusBarType } from "@bloom-housing/ui-components"
-import { ListingCard } from "@bloom-housing/doorway-ui-components"
+import { t, ApplicationStatusType, MenuLink, StatusBarType } from "@bloom-housing/ui-components"
+import { ListingCard, SiteHeader } from "@bloom-housing/doorway-ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -204,4 +205,105 @@ export const untranslateMultiselectQuestion = (
       }
     }
   })
+}
+
+// FYI when auth/logging in is re-enabled, you'll need to pass in
+// call `const { profile, signOut } = useContext(AuthContext)`
+// from the layout and pass into this function.
+export const getSiteHeader = (router: NextRouter) => {
+  const languages =
+    router?.locales?.map((item) => ({
+      prefix: item === "en" ? "" : item,
+      label: t(`languages.${item}`),
+    })) || []
+
+  const menuLinks: MenuLink[] = [
+    {
+      title: t("pageTitle.welcome"),
+      href: "/",
+    },
+    {
+      title: t("nav.browseAllListings"),
+      href: "/listings",
+    },
+    {
+      title: t("nav.helpCenter"),
+      href: "#",
+      subMenuLinks: [
+        {
+          title: "item 1 temp",
+          href: "?temp1",
+        },
+        {
+          title: "item 2 temp",
+          href: "?temp2",
+        },
+      ],
+    },
+  ]
+  if (process.env.housingCounselorServiceUrl) {
+    menuLinks.push({
+      title: t("pageTitle.getAssistance"),
+      href: process.env.housingCounselorServiceUrl,
+    })
+  }
+  // TODO: Uncomment when applications are re-enabled
+  // if (profile) {
+  //   menuLinks.push({
+  //     title: t("nav.myAccount"),
+  //     subMenuLinks: [
+  //       {
+  //         title: t("nav.myDashboard"),
+  //         href: "/account/dashboard",
+  //       },
+  //       {
+  //         title: t("account.myApplications"),
+  //         href: "/account/applications",
+  //       },
+  //       {
+  //         title: t("account.accountSettings"),
+  //         href: "/account/edit",
+  //       },
+  //       {
+  //         title: t("nav.signOut"),
+  //         onClick: () => {
+  //           const signOutFxn = async () => {
+  //             setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+  //             await router.push("/sign-in")
+  //             signOut()
+  //           }
+  //           void signOutFxn()
+  //         },
+  //       },
+  //     ],
+  //   })
+  // } else {
+  // menuLinks.push({
+  //   title: t("nav.signIn"),
+  //   href: "/sign-in",
+  // })
+  // }
+  return (
+    <SiteHeader
+      logoSrc="/images/doorway_logo_temp.png"
+      homeURL="/"
+      mainContentId="main-content"
+      languages={languages.map((lang) => {
+        return {
+          label: lang.label,
+          onClick: () =>
+            void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
+          active: t("config.routePrefix") === lang.prefix,
+        }
+      })}
+      menuLinks={menuLinks.map((menuLink) => {
+        return {
+          ...menuLink,
+          className: router.pathname === menuLink.href ? "secondary" : "",
+        }
+      })}
+      logoWidth={"base_expanded"}
+      strings={{ skipToMainContent: t("t.skipToMainContent") }}
+    />
+  )
 }
