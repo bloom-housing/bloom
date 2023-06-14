@@ -115,7 +115,7 @@ export class ListingsService {
       /**  */
       filter?: ListingFilterParams[];
       /**  */
-      view?: string;
+      view?: ListingViews;
       /**  */
       orderBy?: any | null[];
       /**  */
@@ -157,7 +157,7 @@ export class ListingsService {
       /**  */
       id: string;
       /**  */
-      view?: string;
+      view?: ListingViews;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ListingGet> {
@@ -187,8 +187,6 @@ export class AmiChartsService {
   list(
     params: {
       /**  */
-      jurisdictionName?: string;
-      /**  */
       jurisdictionId?: string;
     } = {} as any,
     options: IRequestOptions = {},
@@ -202,10 +200,7 @@ export class AmiChartsService {
         url,
         options,
       );
-      configs.params = {
-        jurisdictionName: params['jurisdictionName'],
-        jurisdictionId: params['jurisdictionId'],
-      };
+      configs.params = { jurisdictionId: params['jurisdictionId'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -298,7 +293,7 @@ export class AmiChartsService {
   update(
     params: {
       /** requestBody */
-      body?: AmiChart;
+      body?: AmiChartUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<AmiChart> {
@@ -471,7 +466,7 @@ export interface ListingsQueryParams {
   filter?: string[];
 
   /**  */
-  view?: string;
+  view?: ListingViews;
 
   /**  */
   orderBy?: [];
@@ -511,7 +506,7 @@ export interface ListingFilterParams {
 
 export interface ListingsRetrieveParams {
   /**  */
-  view?: string;
+  view?: ListingViews;
 }
 
 export interface PaginationAllowsAllQueryParams {
@@ -695,7 +690,7 @@ export interface IdDTO {
   id: string;
 
   /**  */
-  name: string;
+  name?: string;
 }
 
 export interface AmiChartCreate {
@@ -709,10 +704,21 @@ export interface AmiChartCreate {
   jurisdictions: IdDTO;
 }
 
-export interface AmiChartQueryParams {
+export interface AmiChartUpdate {
   /**  */
-  jurisdictionName?: string;
+  id: string;
 
+  /**  */
+  items: AmiChartItem[];
+
+  /**  */
+  name: string;
+
+  /**  */
+  jurisdictions: IdDTO;
+}
+
+export interface AmiChartQueryParams {
   /**  */
   jurisdictionId?: string;
 }
@@ -742,40 +748,11 @@ export interface SuccessDTO {
   success: boolean;
 }
 
-export interface ReservedCommunitTypeCreate {
-  /**  */
-  name: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  jurisdictions: IdDTO;
-}
-
-export interface ReservedCommunityTypeQueryParams {
-  /**  */
-  jurisdictionName?: string;
-}
-
-export interface ReservedCommunityType {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  name: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  jurisdictions: IdDTO;
+export enum ListingViews {
+  'fundamentals' = 'fundamentals',
+  'base' = 'base',
+  'full' = 'full',
+  'details' = 'details',
 }
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',

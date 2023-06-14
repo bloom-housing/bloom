@@ -8,11 +8,11 @@ export class IdDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ required: true })
   id: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ required: false })
   name?: string;
 }

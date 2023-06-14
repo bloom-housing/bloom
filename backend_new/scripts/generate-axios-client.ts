@@ -1,10 +1,11 @@
 import { codegen } from 'swagger-axios-codegen';
 import * as fs from 'fs';
+import 'dotenv/config';
 
 async function codeGen() {
   await codegen({
     methodNameMode: 'operationId',
-    remoteUrl: 'http://localhost:3000/api-json',
+    remoteUrl: `http://localhost:${process.env.PORT}/api-json`,
     outputDir: 'types/src',
     useStaticMethod: false,
     fileName: 'backend-swagger.ts',

@@ -15,7 +15,7 @@ export const getFlagSetCols = () => [
     cellRendererFramework: ({ data }) => {
       if (!data?.applications || !data?.rule || !data?.id) return ""
 
-      const { applicant } = data?.applications?.[0]
+      const applicant = data?.applications?.[0]?.applicant
       const rule = data?.rule
 
       const firstApplicant = `${applicant?.firstName} ${applicant?.lastName}`
@@ -41,8 +41,9 @@ export const getFlagSetCols = () => [
       const uniqueNames = value
         .map((item) => [item.applicant?.firstName, item.applicant?.lastName])
         .reduce((acc, curr) => {
-          const includesName = acc.filter((item) => item[0] === curr[0] && item[1] === curr[1])
-            .length
+          const includesName = acc.filter(
+            (item) => item[0] === curr[0] && item[1] === curr[1]
+          ).length
 
           if (!includesName) {
             acc.push(curr)

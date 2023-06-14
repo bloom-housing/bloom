@@ -32,8 +32,9 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
     }))
   }, [register, props.existingFeatures])
 
-  const enableAccessibilityFeatures = profile?.jurisdictions?.find((j) => j.id === jurisdiction)
-    ?.enableAccessibilityFeatures
+  const enableAccessibilityFeatures = profile?.jurisdictions?.find(
+    (j) => j.id === jurisdiction
+  )?.enableAccessibilityFeatures
 
   return (
     <div>

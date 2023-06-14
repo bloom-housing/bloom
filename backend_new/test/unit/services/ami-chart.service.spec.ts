@@ -3,7 +3,7 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { AmiChartService } from '../../../src/services/ami-chart.service';
 import { AmiChartQueryParams } from '../../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { AmiChartCreate } from '../../../src/dtos/ami-charts/ami-chart-create.dto';
-import { AmiChart } from '../../../src/dtos/ami-charts/ami-chart-get.dto';
+import { AmiChartUpdate } from '../../../src/dtos/ami-charts/ami-chart-update.dto';
 
 describe('Testing ami chart service', () => {
   let service: AmiChartService;
@@ -61,21 +61,6 @@ describe('Testing ami chart service', () => {
     });
   });
 
-  it('testing buildWhereClause() jurisdictionName param present', () => {
-    const params: AmiChartQueryParams = {
-      jurisdictionName: 'test name',
-    };
-    expect(service.buildWhereClause(params)).toEqual({
-      AND: [
-        {
-          jurisdictions: {
-            name: 'test name',
-          },
-        },
-      ],
-    });
-  });
-
   it('testing buildWhereClause() jurisdictionId param present', () => {
     const params: AmiChartQueryParams = {
       jurisdictionId: 'test id',
@@ -91,7 +76,7 @@ describe('Testing ami chart service', () => {
     });
   });
 
-  it('testing list() with jurisdictionName param present', async () => {
+  it('testing list() with jurisdictionId param present', async () => {
     const date = new Date();
     const jurisdictionData = {
       id: 'example Id',
@@ -102,7 +87,7 @@ describe('Testing ami chart service', () => {
       .mockResolvedValue(mockAmiChartSet(3, date, jurisdictionData));
 
     const params: AmiChartQueryParams = {
-      jurisdictionName: 'test name',
+      jurisdictionId: 'test name',
     };
 
     expect(await service.list(params)).toEqual([
@@ -157,7 +142,7 @@ describe('Testing ami chart service', () => {
         AND: [
           {
             jurisdictions: {
-              name: 'test name',
+              id: 'test name',
             },
           },
         ],
@@ -171,7 +156,7 @@ describe('Testing ami chart service', () => {
       id: 'example Id',
       name: 'example name',
     };
-    prisma.amiChart.findFirst = jest
+    prisma.amiChart.findUnique = jest
       .fn()
       .mockResolvedValue(mockAmiChart(3, date, jurisdictionData));
 
@@ -200,33 +185,29 @@ describe('Testing ami chart service', () => {
       ],
     });
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       include: {
         jurisdictions: true,
       },
       where: {
-        id: {
-          equals: 'example Id',
-        },
+        id: 'example Id',
       },
     });
   });
 
   it('testing findOne() with id not present', async () => {
-    prisma.amiChart.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
       async () => await service.findOne('example Id'),
     ).rejects.toThrowError();
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       include: {
         jurisdictions: true,
       },
       where: {
-        id: {
-          equals: 'example Id',
-        },
+        id: 'example Id',
       },
     });
   });
@@ -299,7 +280,7 @@ describe('Testing ami chart service', () => {
             id: 'example Id',
           },
         },
-        items: JSON.stringify([
+        items: [
           {
             percentOfAmi: 0,
             householdSize: 0,
@@ -315,7 +296,7 @@ describe('Testing ami chart service', () => {
             householdSize: 2,
             income: 2,
           },
-        ]),
+        ],
       },
     });
   });
@@ -328,7 +309,7 @@ describe('Testing ami chart service', () => {
     };
     const mockedAmi = mockAmiChart(3, date, jurisdictionData);
 
-    prisma.amiChart.findFirst = jest.fn().mockResolvedValue(mockedAmi);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(mockedAmi);
     prisma.amiChart.update = jest.fn().mockResolvedValue({
       ...mockedAmi,
       name: 'ami name 4',
@@ -356,8 +337,7 @@ describe('Testing ami chart service', () => {
       ],
     });
 
-    const params: AmiChart = {
-      jurisdictions: jurisdictionData,
+    const params: AmiChartUpdate = {
       items: [
         {
           percentOfAmi: 0,
@@ -382,8 +362,6 @@ describe('Testing ami chart service', () => {
       ],
       name: 'ami name 4',
       id: 'ami Id 3',
-      createdAt: date,
-      updatedAt: date,
     };
 
     expect(await service.update(params)).toEqual({
@@ -416,7 +394,7 @@ describe('Testing ami chart service', () => {
       ],
     });
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       where: {
         id: 'ami Id 3',
       },
@@ -428,7 +406,7 @@ describe('Testing ami chart service', () => {
       },
       data: {
         name: 'ami name 4',
-        items: JSON.stringify([
+        items: [
           {
             percentOfAmi: 0,
             householdSize: 0,
@@ -449,7 +427,7 @@ describe('Testing ami chart service', () => {
             householdSize: 3,
             income: 3,
           },
-        ]),
+        ],
       },
       where: {
         id: 'ami Id 3',
@@ -458,16 +436,10 @@ describe('Testing ami chart service', () => {
   });
 
   it('testing update() existing record not found', async () => {
-    const date = new Date();
-    const jurisdictionData = {
-      id: 'example Id',
-      name: 'example name',
-    };
-    prisma.amiChart.findFirst = jest.fn().mockResolvedValue(null);
+    prisma.amiChart.findUnique = jest.fn().mockResolvedValue(null);
     prisma.amiChart.update = jest.fn().mockResolvedValue(null);
 
-    const params: AmiChart = {
-      jurisdictions: jurisdictionData,
+    const params: AmiChartUpdate = {
       items: [
         {
           percentOfAmi: 0,
@@ -492,15 +464,13 @@ describe('Testing ami chart service', () => {
       ],
       name: 'ami name 4',
       id: 'ami Id 3',
-      createdAt: date,
-      updatedAt: date,
     };
 
     await expect(
       async () => await service.update(params),
     ).rejects.toThrowError();
 
-    expect(prisma.amiChart.findFirst).toHaveBeenCalledWith({
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
       where: {
         id: 'ami Id 3',
       },
@@ -510,12 +480,22 @@ describe('Testing ami chart service', () => {
   it('testing delete()', async () => {
     const date = new Date();
     const jurisdictionData = undefined;
+    prisma.amiChart.findUnique = jest
+      .fn()
+      .mockResolvedValue(mockAmiChart(3, date, jurisdictionData));
+
     prisma.amiChart.delete = jest
       .fn()
       .mockResolvedValue(mockAmiChart(3, date, jurisdictionData));
 
     expect(await service.delete('example Id')).toEqual({
       success: true,
+    });
+
+    expect(prisma.amiChart.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: 'example Id',
+      },
     });
 
     expect(prisma.amiChart.delete).toHaveBeenCalledWith({
