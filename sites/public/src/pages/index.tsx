@@ -62,7 +62,8 @@ export default function Home(props: IndexProps) {
       )}
       <DoorwayHero
         title={t("welcome.findAffordableHousing")}
-        offsetImage={"images/placeholder_temp_delete_me.jpg"}
+        offsetImage={"images/person-with-child.jpg"}
+        offsetImageAlt={t("welcome.personWithChildAlt")}
       >
         <p className="bg-gray-300 h-64">TODO: Add search component here</p>
       </DoorwayHero>
@@ -89,8 +90,8 @@ export default function Home(props: IndexProps) {
         <div className="action-blocks pb-4 pt-4 w-full space-between items-start">
           <InfoCard title="I am a title" className="flex-1 is-inline is-normal text-left">
             <img
-              src={"images/placeholder_temp_delete_me.jpg"}
-              alt={"temporary"}
+              src={"images/person-holding-hands.jpg"}
+              alt={t("welcome.peopleHoldingHandsAlt")}
               className={"mt-4 mb-4 rounded-3xl"}
             />
             <ul className="text__medium-normal list-disc ml-5">
@@ -113,8 +114,8 @@ export default function Home(props: IndexProps) {
           </InfoCard>
           <InfoCard title={"I am another title"} className="flex-1 is-inline is-normal text-left">
             <img
-              src={"images/placeholder_temp_delete_me.jpg"}
-              alt={"temporary"}
+              src={"images/person-laptop.jpg"}
+              alt={t("welcome.personLaptopAlt")}
               className={"mt-4 mb-4 rounded-3xl"}
             />
             <ul className="text__medium-normal list-disc ml-5">

@@ -4,6 +4,7 @@ import "./DoorwayHero.scss"
 export interface DoorwayHeroProps {
   title: string
   offsetImage?: string
+  offsetImageAlt?: string
   children?: React.ReactNode
 }
 
@@ -12,10 +13,10 @@ const DoorwayHero = (props: DoorwayHeroProps) => {
     <div className="doorway-hero">
       <div className="doorway-hero_inner">
         <h1>{props.title}</h1>
-        {props?.offsetImage && (
+        {props?.offsetImage && props?.offsetImageAlt && (
           <img
             src={props.offsetImage}
-            alt={"temporary"}
+            alt={props.offsetImageAlt}
             className={"rounded-3xl doorway-hero_image"}
           />
         )}
