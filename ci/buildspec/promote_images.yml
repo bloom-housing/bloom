@@ -1,0 +1,20 @@
+version: 0.2
+env:
+  shell: bash
+phases:
+  build:
+    commands:
+      # Retag these images to the expected run tag to promote them as the new version
+
+      # Backend
+      - bash ./ci/scripts/add_image_tag.sh ${ECR_NAMESPACE}/backend "run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" run
+      - bash ./ci/scripts/add_image_tag.sh ${ECR_NAMESPACE}/backend "migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" migrate
+
+      # Public site
+      - bash ./ci/scripts/add_image_tag.sh ${ECR_NAMESPACE}/public "run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" run
+
+      # Partner site
+      - bash ./ci/scripts/add_image_tag.sh ${ECR_NAMESPACE}/partners "run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" run
+
+      # Import listings task
+      - bash ./ci/scripts/add_image_tag.sh ${ECR_NAMESPACE}/import-listings run-"${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}" run

@@ -34,6 +34,12 @@ phases:
           aws ecr get-login-password --region "${DEST_REPO_REGION}" | docker login --username AWS --password-stdin "${DEST_REPO_HOST}"
         fi
 
+      # If the name of the destination image isn't set, use the name of the source image
+      - export DEST_IMAGE="${DEST_IMAGE:-${SOURCE_IMAGE}}"
+
+      # If ADD_GIT_HASH == "true", add the source hash onto the end
+      - if [[ "$ADD_GIT_HASH" == "true" ]]; then DEST_IMAGE="${DEST_IMAGE}-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"; fi
+
       - export SOURCE_REPO="${SRC_REPO_HOST}/${SOURCE_REPO_NAMESPACE}"
       - export SOURCE_IMAGE_URL="${SOURCE_REPO}/${SOURCE_IMAGE}"
 
@@ -42,6 +48,8 @@ phases:
 
       - echo "${SOURCE_IMAGE_URL}"
       - echo "${DEST_IMAGE_URL}"
+
+      - echo "Copying image from ${SOURCE_IMAGE_URL} to ${DEST_IMAGE_URL}"
 
       # Pull down image from source repo
       - docker pull "${SOURCE_IMAGE_URL}"

@@ -1,0 +1,16 @@
+# AWS CodeBuild config
+# This file is referenced in the infra repo as a CodeBuild buildspec target.
+
+## The environment variables in this file are passed in through the buildbuild resource.
+## Check the terraform scripts to see where these variables originate from.
+
+version: 0.2
+env:
+  shell: bash
+phases:
+  build:
+    commands:
+      # Force ECS to use the new images
+      - aws ecs update-service --force-new-deployment --cluster "${ECS_BACKEND_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_BACKEND_SERVICE}"
+      - aws ecs update-service --force-new-deployment --cluster "${ECS_PUBLIC_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_PUBLIC_SERVICE}"
+      - aws ecs update-service --force-new-deployment --cluster "${ECS_PARTNER_CLUSTER:-${ECS_DEFAULT_CLUSTER}}" --service "${ECS_PARTNER_SERVICE}"

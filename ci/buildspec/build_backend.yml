@@ -26,9 +26,18 @@ phases:
       - docker build . -f build/docker/Dockerfile.backend --target run -t backend/core:run-candidate
       - docker build . -f build/docker/Dockerfile.backend --target migrate -t backend/core:migrate-candidate
 
+      # Add hash and candidate tags to migration image
       - docker tag backend/core:migrate-candidate "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - docker tag backend/core:run-candidate "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag backend/core:migrate-candidate "${ECR_REPO}/backend:migrate-candidate"
 
-      # Pushing images to ECR
+      # Add hash and candidate tags to run image
+      - docker tag backend/core:run-candidate "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker tag backend/core:run-candidate "${ECR_REPO}/backend:run-candidate"
+
+      # Push run image(s)
       - docker push "${ECR_REPO}/backend:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker push "${ECR_REPO}/backend:run-candidate"
+
+      # Push migration image(s)
       - docker push "${ECR_REPO}/backend:migrate-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - docker push "${ECR_REPO}/backend:migrate-candidate"

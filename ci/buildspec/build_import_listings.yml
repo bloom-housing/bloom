@@ -1,4 +1,3 @@
-
 version: 0.2
 env:
   shell: bash
@@ -12,8 +11,8 @@ phases:
       - export QUALIFIED_IMAGE_NAME="${ECR_NAMESPACE}/${IMAGE_NAME}"
       - export TEST_IMAGE="${QUALIFIED_IMAGE_NAME}:test"
       - export RUN_IMAGE="${QUALIFIED_IMAGE_NAME}:run"
-      - export ECR_GIT_TAG="${ECR_URL}/${QUALIFIED_IMAGE_NAME}:${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
-      - export ECR_RUN_TAG="${ECR_URL}/${QUALIFIED_IMAGE_NAME}:run"
+      - export ECR_GIT_TAG="${ECR_URL}/${QUALIFIED_IMAGE_NAME}:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
+      - export ECR_RUN_TAG="${ECR_URL}/${QUALIFIED_IMAGE_NAME}:run-candidate"
 
       # Log in to ECR
       - aws ecr get-login-password --region "${ECR_REGION}" | docker login --username AWS --password-stdin "${ECR_URL}"
