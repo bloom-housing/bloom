@@ -1,12 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import {
-  t,
-  GridSection,
-  MinimalTable,
-  Button,
-  ViewItem,
-  GridCell,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable, Button, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 import { ListingReviewOrder } from "@bloom-housing/backend-core"
@@ -72,9 +66,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       columns={2}
     >
       <GridCell span={1}>
-        <ViewItem
+        <FieldValue
           id="unitTypesOrIndividual"
-          dataTestId={"unit-types-or-individual"}
+          data-testid={"unit-types-or-individual"}
           label={t("listings.unitTypesOrIndividual")}
           children={
             listing.disableUnitsAccordion
@@ -84,9 +78,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         />
       </GridCell>
       <GridCell span={1}>
-        <ViewItem
+        <FieldValue
           id="listings.listingAvailabilityQuestion"
-          dataTestId={"listing-availability-question"}
+          data-testid={"listing-availability-question"}
           label={t("listings.listingAvailabilityQuestion")}
           children={listingAvailabilityText}
         />

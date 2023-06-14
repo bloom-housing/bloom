@@ -8,11 +8,11 @@ import {
   Drawer,
   Modal,
   AppearanceStyleType,
-  ViewItem,
   GridCell,
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
@@ -164,51 +164,55 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       >
         <GridSection columns={2}>
           <GridCell>
-            <ViewItem label={t("listings.unitTypesOrIndividual")} className="mb-1" />
-            <FieldGroup
-              name="disableUnitsAccordion"
-              type="radio"
-              register={register}
-              fields={disableUnitsAccordionOptions}
-              fieldClassName="m-0"
-              fieldGroupClassName="flex h-12 items-center"
-            />
+            {/* todo: required children */}
+            <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
+              <FieldGroup
+                name="disableUnitsAccordion"
+                type="radio"
+                register={register}
+                fields={disableUnitsAccordionOptions}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+              />
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem
+            {/* todo: required children */}
+            <FieldValue
               label={t("listings.listingAvailabilityQuestion")}
               className={`mb-1 ${
                 fieldHasError(errors?.listingAvailability) &&
                 listingAvailability === null &&
                 "text-alert"
               }`}
-            />
-            <FieldGroup
-              name="listingAvailabilityQuestion"
-              type="radio"
-              register={register}
-              groupSubNote={t("listings.requiredToPublish")}
-              error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
-              errorMessage={fieldMessage(errors?.listingAvailability)}
-              fieldClassName="m-0"
-              fieldGroupClassName="flex h-12 items-center"
-              fields={[
-                {
-                  label: t("listings.availableUnits"),
-                  value: "availableUnits",
-                  id: "availableUnits",
-                  dataTestId: "listingAvailability.availableUnits",
-                  defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
-                },
-                {
-                  label: t("listings.waitlist.open"),
-                  value: "openWaitlist",
-                  id: "openWaitlist",
-                  dataTestId: "listingAvailability.openWaitlist",
-                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
-                },
-              ]}
-            />
+            >
+              <FieldGroup
+                name="listingAvailabilityQuestion"
+                type="radio"
+                register={register}
+                groupSubNote={t("listings.requiredToPublish")}
+                error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
+                errorMessage={fieldMessage(errors?.listingAvailability)}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
+                fields={[
+                  {
+                    label: t("listings.availableUnits"),
+                    value: "availableUnits",
+                    id: "availableUnits",
+                    dataTestId: "listingAvailability.availableUnits",
+                    defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
+                  },
+                  {
+                    label: t("listings.waitlist.open"),
+                    value: "openWaitlist",
+                    id: "openWaitlist",
+                    dataTestId: "listingAvailability.openWaitlist",
+                    defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
+                  },
+                ]}
+              />
+            </FieldValue>
           </GridCell>
         </GridSection>
         <span className={"text-sm text-gray-800 block mb-2"}>{t("listings.units")}</span>

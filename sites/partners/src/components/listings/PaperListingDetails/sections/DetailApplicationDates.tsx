@@ -3,7 +3,6 @@ import dayjs from "dayjs"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   MinimalTable,
   Button,
@@ -11,6 +10,7 @@ import {
   AppearanceStyleType,
   LinkButton,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
 import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
@@ -78,20 +78,20 @@ const DetailApplicationDates = () => {
       >
         <GridSection columns={3}>
           <GridCell>
-            <ViewItem id="applicationDeadline" label={t("listings.applicationDeadline")}>
+            <FieldValue id="applicationDeadline" label={t("listings.applicationDeadline")}>
               {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem id="applicationDueTime" label={t("listings.applicationDueTime")}>
+            <FieldValue id="applicationDueTime" label={t("listings.applicationDueTime")}>
               {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
 
         {!!openHouseEvents.length && (
           <GridSection columns={1}>
-            <ViewItem id="openHouseEvent.header" label={t("listings.openHouseEvent.header")}>
+            <FieldValue id="openHouseEvent.header" label={t("listings.openHouseEvent.header")}>
               <div className="mt-5">
                 <div className="mb-5">
                   <MinimalTable
@@ -101,7 +101,7 @@ const DetailApplicationDates = () => {
                   />
                 </div>
               </div>
-            </ViewItem>
+            </FieldValue>
           </GridSection>
         )}
 
@@ -114,16 +114,16 @@ const DetailApplicationDates = () => {
           <section className="border rounded-md p-8 bg-white mb-8">
             <GridSection tinted={true} inset={true} grid={false}>
               <GridSection grid columns={3}>
-                <ViewItem id="drawer.startTime.date" label={t("t.date")}>
+                <FieldValue id="drawer.startTime.date" label={t("t.date")}>
                   {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
-                </ViewItem>
-                <ViewItem id="drawer.startTime.time" label={t("t.startTime")}>
+                </FieldValue>
+                <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
                   {getDetailFieldTime(drawer?.startTime)}
-                </ViewItem>
-                <ViewItem id="drawer.endTime.time" label={t("t.endTime")}>
+                </FieldValue>
+                <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
                   {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
-                </ViewItem>
-                <ViewItem id="drawer.url" label={t("t.url")}>
+                </FieldValue>
+                <FieldValue id="drawer.url" label={t("t.url")}>
                   {drawer?.url ? (
                     <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
                       {drawer?.label ?? t("t.url")}
@@ -131,10 +131,10 @@ const DetailApplicationDates = () => {
                   ) : (
                     t("t.n/a")
                   )}
-                </ViewItem>
-                <ViewItem id="events.openHouseNotes" label={t("listings.events.openHouseNotes")}>
+                </FieldValue>
+                <FieldValue id="events.openHouseNotes" label={t("listings.events.openHouseNotes")}>
                   {drawer?.note || t("t.n/a")}
-                </ViewItem>
+                </FieldValue>
               </GridSection>
             </GridSection>
           </section>

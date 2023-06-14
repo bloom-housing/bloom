@@ -7,9 +7,9 @@ import {
   Field,
   PhoneField,
   GridCell,
-  ViewItem,
   Select,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
@@ -139,7 +139,7 @@ const LeasingAgent = () => {
             />
           </GridCell>
           <GridCell span={2}>
-            <ViewItem label={t("application.contact.state")} className="mb-0">
+            <FieldValue label={t("application.contact.state")} className="mb-0">
               <Select
                 id={`leasingAgentAddress.state`}
                 name={`leasingAgentAddress.state`}
@@ -155,7 +155,7 @@ const LeasingAgent = () => {
                   onChange: () => clearErrors("leasingAgentAddress"),
                 }}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell span={2}>
             <Field

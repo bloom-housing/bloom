@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailAddress } from "./helpers"
 
@@ -15,31 +16,31 @@ const DetailLeasingAgent = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem id="leasingAgentName" label={t("leasingAgent.name")}>
+          <FieldValue id="leasingAgentName" label={t("leasingAgent.name")}>
             {getDetailFieldString(listing.leasingAgentName)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem id="leasingAgentEmail" label={t("t.email")}>
+          <FieldValue id="leasingAgentEmail" label={t("t.email")}>
             {getDetailFieldString(listing.leasingAgentEmail)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem id="leasingAgentPhone" label={t("t.phone")}>
+          <FieldValue id="leasingAgentPhone" label={t("t.phone")}>
             {getDetailFieldString(listing.leasingAgentPhone)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem id="leasingAgentTitle" label={t("leasingAgent.title")}>
+          <FieldValue id="leasingAgentTitle" label={t("leasingAgent.title")}>
             {getDetailFieldString(listing.leasingAgentTitle)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem id="leasingAgentOfficeHours" label={t("leasingAgent.officeHours")}>
+          <FieldValue id="leasingAgentOfficeHours" label={t("leasingAgent.officeHours")}>
             {getDetailFieldString(listing.leasingAgentOfficeHours)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       {getDetailAddress(

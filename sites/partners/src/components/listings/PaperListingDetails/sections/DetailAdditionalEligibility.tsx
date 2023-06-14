@@ -2,11 +2,11 @@ import React, { useContext } from "react"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
@@ -23,72 +23,76 @@ const DetailAdditionalEligibility = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="creditHistory" label={t("listings.creditHistory")}>
+          <FieldValue id="creditHistory" label={t("listings.creditHistory")}>
             {getDetailFieldString(listing.creditHistory)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="rentalHistory" label={t("listings.rentalHistory")}>
+          <FieldValue id="rentalHistory" label={t("listings.rentalHistory")}>
             {getDetailFieldString(listing.rentalHistory)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="criminalBackground" label={t("listings.criminalBackground")}>
+          <FieldValue id="criminalBackground" label={t("listings.criminalBackground")}>
             {getDetailFieldString(listing.criminalBackground)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
+          <FieldValue id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
             {getDetailFieldString(listing.rentalAssistance)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
         <GridSection columns={1}>
           <GridCell>
-            <ViewItem label={t("listings.buildingSelectionCriteria")} />
-            {listing.buildingSelectionCriteriaFile?.fileId ? (
-              <MinimalTable
-                id="buildingSelectionCriteriaTable"
-                headers={{ preview: "t.preview", fileName: "t.fileName" }}
-                data={[
-                  {
-                    preview: {
-                      content: (
-                        <TableThumbnail>
-                          <img
-                            alt="PDF preview"
-                            src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
-                          />
-                        </TableThumbnail>
-                      ),
+            {/* todo: required children */}
+            <FieldValue label={t("listings.buildingSelectionCriteria")}>
+              {listing.buildingSelectionCriteriaFile?.fileId ? (
+                <MinimalTable
+                  id="buildingSelectionCriteriaTable"
+                  headers={{ preview: "t.preview", fileName: "t.fileName" }}
+                  data={[
+                    {
+                      preview: {
+                        content: (
+                          <TableThumbnail>
+                            <img
+                              alt="PDF preview"
+                              src={cloudinaryUrlFromId(
+                                listing.buildingSelectionCriteriaFile.fileId
+                              )}
+                            />
+                          </TableThumbnail>
+                        ),
+                      },
+                      fileName: {
+                        content: `${listing.buildingSelectionCriteriaFile.fileId
+                          .split("/")
+                          .slice(-1)
+                          .join()}.pdf`,
+                      },
                     },
-                    fileName: {
-                      content: `${listing.buildingSelectionCriteriaFile.fileId
-                        .split("/")
-                        .slice(-1)
-                        .join()}.pdf`,
+                  ]}
+                />
+              ) : (
+                <MinimalTable
+                  id="buildingSelectionCriteriaTable"
+                  headers={{ url: "t.url" }}
+                  data={[
+                    {
+                      url: { content: listing.buildingSelectionCriteria },
                     },
-                  },
-                ]}
-              />
-            ) : (
-              <MinimalTable
-                id="buildingSelectionCriteriaTable"
-                headers={{ url: "t.url" }}
-                data={[
-                  {
-                    url: { content: listing.buildingSelectionCriteria },
-                  },
-                ]}
-              />
-            )}
+                  ]}
+                />
+              )}
+            </FieldValue>
           </GridCell>
         </GridSection>
       )}

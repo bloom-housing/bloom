@@ -1,5 +1,6 @@
 import React from "react"
-import { Icon, IconFillColors, ViewItem, t } from "@bloom-housing/ui-components"
+import { Icon, IconFillColors, t } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 
 export interface HouseholdMemberFormProps {
   editMember?: (memberId: number | undefined) => void
@@ -17,7 +18,7 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
   const editMode = props.editMode !== false && props.editMember // undefined should default to true
 
   return (
-    <ViewItem helper={props.subtitle} className="pb-4 border-b text-left">
+    <FieldValue helper={props.subtitle} className="pb-4 border-b text-left">
       {props.memberFirstName} {props.memberLastName}
       {editMode ? (
         <button
@@ -37,7 +38,7 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
           fill={IconFillColors.primary}
         />
       )}
-    </ViewItem>
+    </FieldValue>
   )
 }
 

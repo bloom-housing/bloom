@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { YesNoAnswer } from "../../../../lib/helpers"
@@ -16,25 +17,28 @@ const DetailsPrimaryApplicant = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.name.firstName")} dataTestId="firstName">
+          <FieldValue label={t("application.name.firstName")} data-testid="firstName">
             {application.applicant.firstName || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.middleName")} dataTestId="middleName">
+          <FieldValue label={t("application.name.middleName")} data-testid="middleName">
             {application.applicant.middleName || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.lastName")} dataTestId="lastName">
+          <FieldValue label={t("application.name.lastName")} data-testid="lastName">
             {application.applicant.lastName || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.household.member.dateOfBirth")} dataTestId="dateOfBirth">
+          <FieldValue
+            label={t("application.household.member.dateOfBirth")}
+            data-testid="dateOfBirth"
+          >
             {(() => {
               const { birthMonth, birthDay, birthYear } = application?.applicant
 
@@ -44,43 +48,47 @@ const DetailsPrimaryApplicant = () => {
 
               return t("t.n/a")
             })()}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.email")} truncated dataTestId="emailAddress">
+          {/* todo: check truncated  */}
+          <FieldValue label={t("t.email")} data-testid="emailAddress">
             {application.applicant.emailAddress || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem
+          <FieldValue
             label={t("t.phone")}
-            helper={
+            helpText={
               application.applicant.phoneNumberType &&
               t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
             }
-            dataTestId="phoneNumber"
+            data-testid="phoneNumber"
           >
             {application.applicant.phoneNumber || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem
+          <FieldValue
             label={t("t.secondPhone")}
-            helper={
+            helpText={
               application.additionalPhoneNumber &&
               t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
             }
-            dataTestId="additionalPhoneNumber"
+            data-testid="additionalPhoneNumber"
           >
             {application.additionalPhoneNumber || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.preferredContact")} dataTestId="preferredContact">
+          <FieldValue
+            label={t("application.details.preferredContact")}
+            data-testid="preferredContact"
+          >
             {(() => {
               if (!application.contactPreferences.length) return t("t.n/a")
 
@@ -91,17 +99,17 @@ const DetailsPrimaryApplicant = () => {
                 </span>
               ))
             })()}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.workInRegion")} dataTestId="workInRegion">
+          <FieldValue label={t("application.details.workInRegion")} data-testid="workInRegion">
             {(() => {
               if (!application.applicant.workInRegion) return t("t.n/a")
 
               return application.applicant.workInRegion === YesNoAnswer.Yes ? t("t.yes") : t("t.no")
             })()}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
 

@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect, useMemo } from "react"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -11,11 +10,11 @@ import {
   GridSection,
   Select,
   Textarea,
-  ViewItem,
   t,
   MinimalTable,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { FormErrorMessage, FieldValue } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../lib/helpers"
@@ -166,7 +165,7 @@ const PreferenceDrawer = ({
         <div className="border rounded-md p-8 bg-white">
           <GridSection title={t("settings.preference")} columns={3}>
             <GridCell span={2}>
-              <ViewItem label={t("t.title")}>
+              <FieldValue label={t("t.title")}>
                 <Field
                   id="text"
                   name="text"
@@ -184,7 +183,7 @@ const PreferenceDrawer = ({
                     onChange: () => clearErrors("text"),
                   }}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           <GridSection columns={3} className={"mb-4"}>
@@ -203,7 +202,7 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection columns={3} className={"mt-4 mb-6"}>
             <GridCell>
-              <ViewItem label={t("t.url")}>
+              <FieldValue label={t("t.url")}>
                 <Field
                   id="preferenceUrl"
                   name="preferenceUrl"
@@ -221,10 +220,10 @@ const PreferenceDrawer = ({
                   }
                   defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
             <GridCell>
-              <ViewItem label={t("settings.preferenceLinkTitle")}>
+              <FieldValue label={t("settings.preferenceLinkTitle")}>
                 <Field
                   id="preferenceLinkTitle"
                   name="preferenceLinkTitle"
@@ -236,7 +235,7 @@ const PreferenceDrawer = ({
                   dataTestId={"preference-link-title"}
                   defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].title : ""}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           {questionData?.options?.length > 0 && (
@@ -279,35 +278,37 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
-              <ViewItem label={t("settings.preferenceOptOut")} className="mb-1" />
-              <FieldGroup
-                name="canYouOptOutQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    id: "optOutYes",
-                    label: t("t.yes"),
-                    value: YesNoAnswer.Yes,
-                    defaultChecked: questionData === null || questionData?.optOutText !== null,
-                    dataTestId: "opt-out-question-yes",
-                  },
-                  {
-                    id: "optOutNo",
-                    label: t("t.no"),
-                    value: YesNoAnswer.No,
-                    defaultChecked: questionData && questionData?.optOutText === null,
-                    dataTestId: "opt-out-question-no",
-                  },
-                ]}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                dataTestId={"preference-can-you-opt-out"}
-              />
+              {/* todo: required children */}
+              <FieldValue label={t("settings.preferenceOptOut")} className="mb-1">
+                <FieldGroup
+                  name="canYouOptOutQuestion"
+                  type="radio"
+                  register={register}
+                  fields={[
+                    {
+                      id: "optOutYes",
+                      label: t("t.yes"),
+                      value: YesNoAnswer.Yes,
+                      defaultChecked: questionData === null || questionData?.optOutText !== null,
+                      dataTestId: "opt-out-question-yes",
+                    },
+                    {
+                      id: "optOutNo",
+                      label: t("t.no"),
+                      value: YesNoAnswer.No,
+                      defaultChecked: questionData && questionData?.optOutText === null,
+                      dataTestId: "opt-out-question-no",
+                    },
+                  ]}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                  dataTestId={"preference-can-you-opt-out"}
+                />
+              </FieldValue>
             </GridCell>
             {optOutQuestion === YesNoAnswer.Yes && (
               <GridCell>
-                <ViewItem label={t("settings.preferenceOptOutLabel")}>
+                <FieldValue label={t("settings.preferenceOptOutLabel")}>
                   <Field
                     id="optOutText"
                     name="optOutText"
@@ -321,42 +322,44 @@ const PreferenceDrawer = ({
                       questionData?.optOutText ?? t("application.preferences.dontWantSingular")
                     }
                   />
-                </ViewItem>
+                </FieldValue>
               </GridCell>
             )}
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
-              <ViewItem label={t("settings.preferenceShowOnListing")} className="mb-1" />
-              <FieldGroup
-                name="showOnListingQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    id: "showOnListingYes",
-                    label: t("t.yes"),
-                    value: YesNoAnswer.Yes,
-                    defaultChecked: questionData === null || !questionData?.hideFromListing,
-                    dataTestId: "show-on-listing-question-yes",
-                  },
-                  {
-                    id: "showOnListingNo",
-                    label: t("t.no"),
-                    value: YesNoAnswer.No,
-                    defaultChecked: questionData?.hideFromListing,
-                    dataTestId: "show-on-listing-question-no",
-                  },
-                ]}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                dataTestId={"preference-show-on-listing"}
-              />
+              todo: required children
+              <FieldValue label={t("settings.preferenceShowOnListing")} className="mb-1">
+                <FieldGroup
+                  name="showOnListingQuestion"
+                  type="radio"
+                  register={register}
+                  fields={[
+                    {
+                      id: "showOnListingYes",
+                      label: t("t.yes"),
+                      value: YesNoAnswer.Yes,
+                      defaultChecked: questionData === null || !questionData?.hideFromListing,
+                      dataTestId: "show-on-listing-question-yes",
+                    },
+                    {
+                      id: "showOnListingNo",
+                      label: t("t.no"),
+                      value: YesNoAnswer.No,
+                      defaultChecked: questionData?.hideFromListing,
+                      dataTestId: "show-on-listing-question-no",
+                    },
+                  ]}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                  dataTestId={"preference-show-on-listing"}
+                />
+              </FieldValue>
             </GridCell>
           </GridSection>
           <GridSection columns={3}>
             <GridCell span={1}>
-              <ViewItem label={t("t.jurisdiction")}>
+              <FieldValue label={t("t.jurisdiction")}>
                 <Select
                   id={"jurisdictionId"}
                   name={"jurisdictionId"}
@@ -389,7 +392,7 @@ const PreferenceDrawer = ({
                     onChange: () => clearErrors("jurisdictionId"),
                   }}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
         </div>
@@ -449,7 +452,7 @@ const PreferenceDrawer = ({
         <div className="border rounded-md p-8 bg-white">
           <GridSection title={t("t.option")} columns={3}>
             <GridCell span={2}>
-              <ViewItem label={t("t.title")}>
+              <FieldValue label={t("t.title")}>
                 <Field
                   id="optionTitle"
                   name="optionTitle"
@@ -468,7 +471,7 @@ const PreferenceDrawer = ({
                     },
                   }}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           <GridSection columns={3} className={"mb-4"}>
@@ -487,7 +490,7 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
-              <ViewItem label={t("t.url")}>
+              <FieldValue label={t("t.url")}>
                 <Field
                   id="optionUrl"
                   name="optionUrl"
@@ -505,10 +508,10 @@ const PreferenceDrawer = ({
                   dataTestId={"preference-option-link"}
                   defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
             <GridCell>
-              <ViewItem label={t("settings.preferenceLinkTitle")}>
+              <FieldValue label={t("settings.preferenceLinkTitle")}>
                 <Field
                   id="optionLinkTitle"
                   name="optionLinkTitle"
@@ -520,7 +523,7 @@ const PreferenceDrawer = ({
                   dataTestId={"preference-option-link-title"}
                   defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           <GridSection columns={3} className={"mt-8"}>
@@ -541,31 +544,33 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection>
             <GridCell>
-              <ViewItem label={t("settings.preferenceExclusiveQuestion")} className="mb-1" />
-              <FieldGroup
-                name="exclusiveQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    id: "multiselect",
-                    label: t("settings.preferenceMultiSelect"),
-                    value: "multiselect",
-                    defaultChecked: optionData === null || !optionData?.exclusive,
-                    dataTestId: "exclusive-question-multiselect",
-                  },
-                  {
-                    id: "exclusive",
-                    label: t("settings.preferenceExclusive"),
-                    value: "exclusive",
-                    defaultChecked: optionData?.exclusive,
-                    dataTestId: "exclusive-question-exclusive",
-                  },
-                ]}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                dataTestId={"preference-exclusive-question"}
-              />
+              {/* todo: required children */}
+              <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
+                <FieldGroup
+                  name="exclusiveQuestion"
+                  type="radio"
+                  register={register}
+                  fields={[
+                    {
+                      id: "multiselect",
+                      label: t("settings.preferenceMultiSelect"),
+                      value: "multiselect",
+                      defaultChecked: optionData === null || !optionData?.exclusive,
+                      dataTestId: "exclusive-question-multiselect",
+                    },
+                    {
+                      id: "exclusive",
+                      label: t("settings.preferenceExclusive"),
+                      value: "exclusive",
+                      defaultChecked: optionData?.exclusive,
+                      dataTestId: "exclusive-question-exclusive",
+                    },
+                  ]}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                  dataTestId={"preference-exclusive-question"}
+                />
+              </FieldValue>
             </GridCell>
           </GridSection>
         </div>

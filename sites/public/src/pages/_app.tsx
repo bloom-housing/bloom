@@ -1,5 +1,6 @@
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
+import "@bloom-housing/ui-seeds/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"

@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -16,46 +17,49 @@ const DetailBuildingDetails = () => {
         <>
           <GridSection columns={3} subtitle={"Building Address"}>
             <GridCell span={2}>
-              <ViewItem id="buildingAddress.street" label={t("application.contact.streetAddress")}>
+              <FieldValue
+                id="buildingAddress.street"
+                label={t("application.contact.streetAddress")}
+              >
                 {listing.buildingAddress?.street}
-              </ViewItem>
+              </FieldValue>
             </GridCell>
-            <ViewItem id="neighborhood" label={t("t.neighborhood")}>
+            <FieldValue id="neighborhood" label={t("t.neighborhood")}>
               {listing?.neighborhood}
-            </ViewItem>
+            </FieldValue>
           </GridSection>
           <GridSection columns={6}>
             <GridCell span={2}>
-              <ViewItem id="buildingAddress.city" label={t("application.contact.city")}>
+              <FieldValue id="buildingAddress.city" label={t("application.contact.city")}>
                 {listing.buildingAddress?.city}
-              </ViewItem>
+              </FieldValue>
             </GridCell>
-            <ViewItem id="buildingAddress.state" label={t("application.contact.state")}>
+            <FieldValue id="buildingAddress.state" label={t("application.contact.state")}>
               {listing.buildingAddress?.state}
-            </ViewItem>
-            <ViewItem id="buildingAddress.zipCode" label={t("application.contact.zip")}>
+            </FieldValue>
+            <FieldValue id="buildingAddress.zipCode" label={t("application.contact.zip")}>
               {listing.buildingAddress?.zipCode}
-            </ViewItem>
+            </FieldValue>
 
             <GridCell span={2}>
-              <ViewItem id="yearBuilt" label={t("listings.yearBuilt")}>
+              <FieldValue id="yearBuilt" label={t("listings.yearBuilt")}>
                 {listing.yearBuilt}
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           <GridSection columns={3}>
-            <ViewItem id="longitude" label={t("listings.longitude")}>
+            <FieldValue id="longitude" label={t("listings.longitude")}>
               {listing.buildingAddress?.longitude && listing.buildingAddress.longitude.toString()}
-            </ViewItem>
-            <ViewItem id="latitude" label={t("listings.latitude")}>
+            </FieldValue>
+            <FieldValue id="latitude" label={t("listings.latitude")}>
               {listing.buildingAddress?.latitude && listing.buildingAddress.latitude.toString()}
-            </ViewItem>
+            </FieldValue>
           </GridSection>
         </>
       ) : (
-        <ViewItem>
+        <FieldValue>
           <GridSection subtitle={"Building Address"}>{getDetailFieldString(null)}</GridSection>
-        </ViewItem>
+        </FieldValue>
       )}
     </GridSection>
   )

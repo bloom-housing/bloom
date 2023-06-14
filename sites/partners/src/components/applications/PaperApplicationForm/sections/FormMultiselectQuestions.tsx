@@ -3,12 +3,11 @@ import {
   Field,
   t,
   GridSection,
-  ViewItem,
   GridCell,
   FormAddress,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
 import {
@@ -111,7 +110,7 @@ const FormMultiselectQuestions = ({
           const inputType = getInputType(question.options)
           return (
             <GridCell key={question.text}>
-              <ViewItem label={question.text}>
+              <FieldValue label={question.text}>
                 {inputType === "checkbox" ? (
                   <fieldset className={"mt-4"}>
                     {question?.options
@@ -135,7 +134,7 @@ const FormMultiselectQuestions = ({
                 ) : (
                   getRadioFields(question?.options, question)
                 )}
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           )
         })}
