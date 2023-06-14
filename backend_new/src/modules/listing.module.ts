@@ -7,6 +7,6 @@ import { PrismaService } from '../services/prisma.service';
   imports: [],
   controllers: [ListingController],
   providers: [ListingService, PrismaService],
-  exports: [ListingService],
+  exports: [ListingService, PrismaService],
 })
 export class ListingModule {}

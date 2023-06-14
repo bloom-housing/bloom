@@ -1,4 +1,4 @@
-import { AmiChart } from '../../../src/dtos/units/ami-chart-get.dto';
+import { AmiChart } from '../../../src/dtos/ami-charts/ami-chart.dto';
 import { UnitAmiChartOverride } from '../../../src/dtos/units/ami-chart-override-get.dto';
 import {
   generateHmiData,
@@ -22,6 +22,9 @@ const unit: Unit = {
     updatedAt: new Date(),
     items: [],
     name: 'ami1',
+    jurisdictions: {
+      id: 'id',
+    },
   },
   id: 'example',
 };
@@ -45,6 +48,9 @@ const generateAmiChart = (): AmiChart => {
     ...defaultValues,
     id: 'ami1',
     name: 'ami1',
+    jurisdictions: {
+      id: 'id',
+    },
     items: generateAmiChartItems(8, 30, 30_000),
   };
 };
@@ -148,6 +154,9 @@ describe('Unit Transformations', () => {
               updatedAt: new Date(),
               items: [],
               name: 'ami2',
+              jurisdictions: {
+                id: 'id',
+              },
             },
           },
         ],

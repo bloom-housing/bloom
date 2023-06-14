@@ -16,6 +16,7 @@ import {
 export const listingFactory = (
   i: number,
   jurisdictionId: string,
+  amiChartId?: string,
 ): Prisma.ListingsCreateInput => ({
   additionalApplicationSubmissionNotes: `additionalApplicationSubmissionNotes: ${i}`,
   digitalApplication: true,
@@ -325,13 +326,14 @@ export const listingFactory = (
       },
     ],
   },
-  units: unitFactory(i, i, jurisdictionId),
+  units: unitFactory(i, i, jurisdictionId, amiChartId),
 });
 
 const unitFactory = (
   numberToMake: number,
   i: number,
   jurisdictionId: string,
+  amiChartId?: string,
 ): Prisma.UnitsCreateNestedManyWithoutListingsInput => {
   const createArray: Prisma.UnitsCreateWithoutListingsInput[] = [];
   for (let j = 0; j < numberToMake; j++) {
@@ -357,17 +359,19 @@ const unitFactory = (
           numBedrooms: i,
         },
       },
-      amiChart: {
-        create: {
-          items: {},
-          name: `listing: ${i} unit: ${j} amiChart: ${j}`,
-          jurisdictions: {
-            connect: {
-              id: jurisdictionId,
+      amiChart: amiChartId
+        ? { connect: { id: amiChartId } }
+        : {
+            create: {
+              items: [],
+              name: `listing: ${i} unit: ${j} amiChart: ${j}`,
+              jurisdictions: {
+                connect: {
+                  id: jurisdictionId,
+                },
+              },
             },
           },
-        },
-      },
       unitAccessibilityPriorityTypes: {
         create: {
           name: `listing: ${i} unit: ${j} unitAccessibilityPriorityTypes: ${j}`,

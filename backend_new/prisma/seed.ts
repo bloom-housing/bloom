@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
 
@@ -7,9 +8,13 @@ async function main() {
   const jurisdiction = await prisma.jurisdictions.create({
     data: jurisdictionFactory(0),
   });
+  const amiChart = await prisma.amiChart.create({
+    data: amiChartFactory(10, jurisdiction.id),
+  });
+
   for (let i = 0; i < 5; i++) {
     await prisma.listings.create({
-      data: listingFactory(i, jurisdiction.id),
+      data: listingFactory(i, jurisdiction.id, amiChart.id),
     });
   }
 }

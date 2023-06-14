@@ -68,6 +68,9 @@ const mockListing = (
           name: `AMI Name ${i}`,
           createdAt: date,
           updatedAt: date,
+          jurisdictions: {
+            id: 'jurisdiction ID',
+          },
         },
       });
     }
