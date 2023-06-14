@@ -164,8 +164,8 @@ export const listingFactory = (
     ? { connect: { id: reservedCommunityTypeId } }
     : {
         create: {
-          name: `reservedCommunityTypes: ${i} name: ${i}`,
-          description: `reservedCommunityTypes: ${i} description: ${i}`,
+          name: `reservedCommunityType: ${i}`,
+          description: `description: ${i}`,
           jurisdictions: {
             connect: {
               id: jurisdictionId,

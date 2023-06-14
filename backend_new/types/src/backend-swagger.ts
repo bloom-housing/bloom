@@ -713,9 +713,6 @@ export interface AmiChartUpdate {
 
   /**  */
   name: string;
-
-  /**  */
-  jurisdictions: IdDTO;
 }
 
 export interface AmiChartQueryParams {
@@ -746,6 +743,42 @@ export interface AmiChart {
 export interface SuccessDTO {
   /**  */
   success: boolean;
+}
+
+export interface ReservedCommunitTypeCreate {
+  /**  */
+  name: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  jurisdictions: IdDTO;
+}
+
+export interface ReservedCommunityTypeQueryParams {
+  /**  */
+  jurisdictionName?: string;
+}
+
+export interface ReservedCommunityType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  jurisdictions: IdDTO;
 }
 
 export enum ListingViews {

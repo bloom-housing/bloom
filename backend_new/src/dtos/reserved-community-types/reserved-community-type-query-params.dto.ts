@@ -10,5 +10,5 @@ export class ReservedCommunityTypeQueryParams {
     type: String,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  jurisdictionName?: string;
+  jurisdictionId?: string;
 }
