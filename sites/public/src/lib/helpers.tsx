@@ -285,7 +285,7 @@ export const getSiteHeader = (router: NextRouter) => {
   // }
   return (
     <SiteHeader
-      logoSrc="/images/doorway_logo_temp.png"
+      logoSrc="/images/doorway-logo.png"
       homeURL="/"
       mainContentId="main-content"
       languages={languages.map((lang) => {
@@ -302,7 +302,6 @@ export const getSiteHeader = (router: NextRouter) => {
           className: router.pathname === menuLink.href ? "secondary" : "",
         }
       })}
-      logoWidth={"base_expanded"}
       strings={{ skipToMainContent: t("t.skipToMainContent") }}
     />
   )

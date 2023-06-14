@@ -25,9 +25,10 @@
   --logo-container-margin-mobile: var(--bloom-s3);
   --logo-content-align-items: center;
   --logo-content-display: block;
-  --logo-content-padding: var(--bloom-s1);
-  --logo-desktop-height: calc(90px - var(--bloom-s1) - var(--bloom-s3));
-  --logo-desktop-padding: var(--bloom-s1) var(--bloom-s3) var(--bloom-s1) var(--bloom-s3);
+  --logo-content-padding: 0;
+  --logo-desktop-height: var(--base-height);
+  --logo-desktop-padding: 0;
+  --logo-tablet-padding: 0 0 0 var(--bloom-s4);
   --logo-image-desktop-display: inline-block;
   --logo-image-desktop-height: auto;
   --logo-image-desktop-margin: var(--bloom-s3) 0 var(--bloom-s2) 0;
@@ -74,7 +75,6 @@
   --link-text-transform: initial;
   --link-secondary-color: var(--bloom-color-primary-light);
   --link-hover-secondary-color: var(--bloom-color-primary);
-
 
   // Dropdown
   --dropdown-container-border-top: none;
@@ -247,13 +247,17 @@
 
   @media (min-width: $screen-md) {
     height: var(--logo-desktop-height);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-    margin-bottom: -0.3rem;
+    box-shadow: none;
+    margin-bottom: 0;
     padding: var(--logo-desktop-padding);
 
     &:focus {
       box-shadow: 0 0 3px 4px var(--bloom-color-accent-cool);
     }
+  }
+
+  @media (min-width: $screen-md) and (max-width: $screen-lg) {
+    padding: var(--logo-tablet-padding);
   }
 
   @media (min-width: $screen-print) {
@@ -361,7 +365,7 @@
     position: relative;
     border-radius: var(--bloom-s1);
     text-align: center;
-    text-transform:  var(--mobile-menu-button-text-transform);
+    text-transform: var(--mobile-menu-button-text-transform);
     font-family: var(--bloom-font-alt-sans);
     display: var(--mobile-menu-button-display);
     letter-spacing: var(--bloom-letter-spacing-wide);
