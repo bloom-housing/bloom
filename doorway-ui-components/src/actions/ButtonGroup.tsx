@@ -68,7 +68,6 @@ const ButtonGroup = (props: ButtonGroupProps) => {
 
   const setActiveButton = (index: number) => {
     const value = options[index].value
-    console.log("in select handler", index, value)
     setSelection({
       index: index,
       value: value,
@@ -80,7 +79,6 @@ const ButtonGroup = (props: ButtonGroupProps) => {
 
   const deselectHandler = (index: number) => {
     if (selection.index == index) {
-      console.log("in deselect handler")
       setSelection(nullState)
       if (props.onChange) {
         props.onChange(name, null)

@@ -3,6 +3,7 @@ import { ListingQueryBuilder } from "./listing-query-builder"
 export type ListingSearchParams = {
   bedrooms: string
   bathrooms: string
+  minRent: string
   monthlyRent: string
   counties: string[]
 }
@@ -105,6 +106,10 @@ export function generateSearchQuery(params: ListingSearchParams) {
   // Find listings that have units with greater than or equal number of bathrooms
   if (params.bathrooms != null) {
     qb.whereGreaterThanEqual("numBathrooms", params.bathrooms)
+  }
+
+  if (params.minRent && params.minRent != "") {
+    qb.whereGreaterThanEqual("monthlyRent", params.minRent)
   }
 
   // Find listings that have units with rent less than or equal to requested amount

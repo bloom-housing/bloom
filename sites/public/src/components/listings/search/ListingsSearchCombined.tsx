@@ -84,7 +84,6 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   }
 
   const onFormSubmit = async (params: ListingSearchParams) => {
-    console.log("onFormSubmit params: ", params)
     await search(params, 1)
   }
 

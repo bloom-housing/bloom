@@ -50,6 +50,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   const nullState: ListingSearchParams = {
     bedrooms: null,
     bathrooms: null,
+    minRent: "",
     monthlyRent: "",
     counties: countyLabels,
   }
@@ -122,6 +123,9 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     counties.forEach((county, idx) => {
       // FieldGroup uses the label attribute to check for selected inputs.
       check = selected[county.label] !== undefined
+      if (county.isDisabled) {
+        check = false
+      }
       countyFields.push({
         id: `county-item-${idx}`,
         index: idx,
@@ -171,9 +175,18 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
           value={formValues.bathrooms}
         />
       </div>
-
       <div style={inputSectionStyle}>
         <div>Monthly Rent</div>
+        <input
+          type="text"
+          name="minRent"
+          value={formValues.minRent}
+          placeholder="Min Price: $"
+          style={textInputStyle}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => {
+            updateValue("minRent", e.currentTarget.value)
+          }}
+        />
         <input
           type="text"
           name="monthlyRent"
