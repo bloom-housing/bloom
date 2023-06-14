@@ -119,6 +119,7 @@ describe('Testing translations service', () => {
   let service: TranslationService;
   let prisma: PrismaService;
   let googleTranslateServiceMock;
+
   beforeEach(async () => {
     googleTranslateServiceMock = {
       isConfigured: () => true,
@@ -152,14 +153,10 @@ describe('Testing translations service', () => {
         translation2: 'translation 2',
       },
     };
-    prisma.translations.findUniqueOrThrow = jest.fn().mockRejectedValueOnce(
-      new Prisma.PrismaClientKnownRequestError('Not Found', {
-        code: 'P2025',
-        clientVersion: '1',
-      }),
-    );
+    // first call fails to find value so moves to the fallback
     prisma.translations.findUnique = jest
       .fn()
+      .mockResolvedValueOnce(null)
       .mockResolvedValueOnce(translations);
 
     const result =
@@ -169,8 +166,7 @@ describe('Testing translations service', () => {
       );
 
     expect(result).toEqual(translations);
-    expect(prisma.translations.findUniqueOrThrow).toHaveBeenCalledTimes(1);
-    expect(prisma.translations.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.translations.findUnique).toHaveBeenCalledTimes(2);
   });
 
   it('Should get unique translations by language and jurisdiction', async () => {
@@ -186,7 +182,7 @@ describe('Testing translations service', () => {
         translation2: 'translation 2',
       },
     };
-    prisma.translations.findUniqueOrThrow = jest
+    prisma.translations.findUnique = jest
       .fn()
       .mockResolvedValueOnce(translations);
 
@@ -197,7 +193,7 @@ describe('Testing translations service', () => {
       );
 
     expect(result).toEqual(translations);
-    expect(prisma.translations.findUniqueOrThrow).toHaveBeenCalledTimes(1);
+    expect(prisma.translations.findUnique).toHaveBeenCalledTimes(1);
   });
 
   it('Should fetch translations and translate listing if not in db', async () => {

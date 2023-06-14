@@ -16,32 +16,26 @@ export class TranslationService {
     language: LanguagesEnum,
     jurisdictionId: string | null,
   ) {
-    try {
-      return await this.prisma.translations.findUniqueOrThrow({
+    let translations = await this.prisma.translations.findUnique({
+      where: {
+        jurisdictionId_language: { language, jurisdictionId },
+      },
+    });
+
+    if (translations === null) {
+      console.warn(
+        `Fetching translations for ${language} failed on jurisdiction ${jurisdictionId}, defaulting to english.`,
+      );
+      translations = await this.prisma.translations.findUnique({
         where: {
-          jurisdictionId_language: { language, jurisdictionId },
+          jurisdictionId_language: {
+            language: LanguagesEnum.en,
+            jurisdictionId,
+          },
         },
       });
-    } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
-        console.warn(
-          `Fetching translations for ${language} failed, defaulting to english.`,
-        );
-        return await this.prisma.translations.findUnique({
-          where: {
-            jurisdictionId_language: {
-              language: LanguagesEnum.en,
-              jurisdictionId,
-            },
-          },
-        });
-      } else {
-        throw e;
-      }
     }
+    return translations;
   }
 
   public async translateListing(listing: ListingGet, language: LanguagesEnum) {
