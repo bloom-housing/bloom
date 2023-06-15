@@ -7,14 +7,14 @@
   --content-padding-block: 0 var(--bloom-s6);
   --content-padding-inline: var(--bloom-s6);
   --content-margin-top: var(--bloom-s6);
-  --title-padding-block: var(--bloom-s6) 0px;
+  --title-padding-block: var(--bloom-s6);
   --title-padding-inline: var(--bloom-s6) var(--bloom-s12);
   --footer-padding-block: var(--bloom-s6);
   --footer-padding-inline: var(--bloom-s6);
   --max-width: var(--bloom-width-5xl);
   --desktop-min-width: var(--bloom-width-xl);
   --scroll-max-height: 100vh;
-  --footer-background-color: var(--bloom-color-primary-lighter);
+  --footer-background-color: var(--bloom-color-white);
   --border-radius: var(--bloom-rounded);
   --mobile-border-radius: 0;
   --background-color: var(--bloom-color-white);
@@ -58,6 +58,7 @@
 
 .modal__header {
   min-height: var(--modal-header-min-height);
+  border-bottom: 2px solid var(--bloom-color-gray-450);
 }
 
 .modal__title {
@@ -99,6 +100,7 @@
   padding-inline: var(--footer-padding-inline);
   border-bottom-right-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
+  border-top: 2px solid var(--bloom-color-gray-450);
   background-color: var(--footer-background-color);
 
   display: flex;

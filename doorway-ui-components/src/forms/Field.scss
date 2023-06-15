@@ -1,15 +1,26 @@
 .doorway-field {
   width: 100%;
   margin: 0;
-  padding: 0 0 1.5rem 0;
-  .rent-input {
+  padding: 0 0 1.5rem 0;;
+  font-size: .75rem;
+  font-weight: 500;
+
+  input.rent-input {
     border-radius: 12px;
-    border-width: 3px;
+    border-width: 2px;
     background-color: white;
+    height: 3.5rem;
   }
+
   ::-webkit-input-placeholder {
-    color: black;
-    font-family: var(--bloom-font-sans);
-    text-transform: var(--label-transform);
-  }
+    color: var(--doorway-blue-800);
+    font-family: var(--bloom-font-alt-sans);
+    text-transform: uppercase;
+    }
+}
+
+.county-input {
+    font-family: var(--bloom-font-alt-sans);
+    text-transform: uppercase;
+    font-weight: 500;
 }

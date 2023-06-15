@@ -1,17 +1,45 @@
 import React, { useEffect, useState } from "react"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
-import { Modal, ButtonGroup, FieldGroup, FieldSingle } from "@bloom-housing/doorway-ui-components"
+import {
+  Modal,
+  ButtonGroup,
+  ButtonGroupSpacing,
+  Button,
+  Field,
+  FieldGroup,
+  FieldSingle,
+} from "@bloom-housing/doorway-ui-components"
 import { useForm } from "react-hook-form"
 
 const inputSectionStyle: React.CSSProperties = {
   margin: "0px 15px",
-  borderTop: "1px solid black",
 }
 
-const textInputStyle: React.CSSProperties = {
-  border: "1px solid black",
-  padding: "2px 4px",
-  margin: "5px",
+const hyphenContainerStyle: React.CSSProperties = {
+  position: "relative",
+}
+
+const hyphenStyle: React.CSSProperties = {
+  fontSize: "2rem",
+  position: "relative",
+  bottom: "1px",
+  padding: ".7rem",
+  width: "100%",
+}
+
+const sectionTitle: React.CSSProperties = {
+  fontWeight: "bold",
+}
+
+const sectionTitleTopBorder: React.CSSProperties = {
+  fontWeight: "bold",
+  borderTop: "2px solid var(--bloom-color-gray-450)",
+  padding: "1rem 0 1rem 0",
+}
+
+const rentStyle: React.CSSProperties = {
+  margin: "0px 0px",
+  display: "flex",
 }
 
 const clearButtonStyle: React.CSSProperties = {
@@ -146,10 +174,13 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     <Modal
       open={props.open}
       onClose={props.onClose}
-      title={"Filters"}
+      title="Filters"
+      headerClassNames="bottom-border"
       ariaDescription="Listing Search Filters"
       actions={[
-        <button onClick={onSubmit}>Show matching listings</button>,
+        <Button type="button" className="is-secondary" onClick={onSubmit}>
+          Show matching listings
+        </Button>,
         <div style={{ flexGrow: 1 }}></div>,
         <button style={clearButtonStyle} onClick={clearValues}>
           Clear all filters
@@ -157,55 +188,68 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
       ]}
     >
       <div style={inputSectionStyle}>
-        <div>Bedrooms</div>
+        <div style={sectionTitle}>Bedrooms</div>
         <ButtonGroup
           name="bedrooms"
           options={props.bedrooms}
           onChange={updateValue}
           value={formValues.bedrooms}
+          spacing={ButtonGroupSpacing.left}
         />
       </div>
 
       <div style={inputSectionStyle}>
-        <div>Bathrooms</div>
+        <div style={sectionTitle}>Bathrooms</div>
         <ButtonGroup
           name="bathrooms"
           options={props.bathrooms}
           onChange={updateValue}
           value={formValues.bathrooms}
+          spacing={ButtonGroupSpacing.left}
         />
       </div>
       <div style={inputSectionStyle}>
-        <div>Monthly Rent</div>
-        <input
-          type="text"
-          name="minRent"
-          value={formValues.minRent}
-          placeholder="Min Price: $"
-          style={textInputStyle}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            updateValue("minRent", e.currentTarget.value)
-          }}
-        />
-        <input
-          type="text"
-          name="monthlyRent"
-          value={formValues.monthlyRent}
-          placeholder="Max Price: $"
-          style={textInputStyle}
-          onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            updateValue("monthlyRent", e.currentTarget.value)
-          }}
-        />
+        <div style={sectionTitleTopBorder}>Monthly Rent</div>
+        <div style={rentStyle}>
+          <Field
+            type="text"
+            name="minRent"
+            defaultValue={formValues.minRent}
+            placeholder="Min Price: $"
+            className="doorway-field"
+            inputClassName="rent-input"
+            labelClassName="input-label"
+            onChange={(e: React.FormEvent<HTMLInputElement>) => {
+              updateValue("minRent", e.currentTarget.value)
+            }}
+          ></Field>
+          <div style={hyphenContainerStyle}>
+            <div style={hyphenStyle}>-</div>
+          </div>
+          <Field
+            type="text"
+            name="monthlyRent"
+            defaultValue={formValues.monthlyRent}
+            placeholder="Max Price: $"
+            className="doorway-field"
+            inputClassName="rent-input"
+            labelClassName="input-label"
+            onChange={(e: React.FormEvent<HTMLInputElement>) => {
+              updateValue("monthlyRent", e.currentTarget.value)
+            }}
+          ></Field>
+        </div>
       </div>
 
       <div style={inputSectionStyle}>
-        <div>Locations</div>
+        <div style={sectionTitleTopBorder}>Counties</div>
         <FieldGroup
           name="counties"
           fields={countyFields}
           onChange={updateValueMulti}
           register={register}
+          fieldGroupClassName="grid grid-cols-2"
+          fieldLabelClassName="county-input"
         />
       </div>
     </Modal>

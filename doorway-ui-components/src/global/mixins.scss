@@ -150,9 +150,9 @@
   &:hover {
     background-color: var(
       --outlined-appearance-hover-background-color,
-      var(--bloom-color-primary-dark)
+      var(--doorway-color-cyan-500)
     );
-    border-color: var(--outlined-appearance-hover-border-color, var(--bloom-color-primary-dark));
+    border-color: var(--outlined-appearance-hover-border-color, var(--doorway-color-cyan-500));
     color: var(--outlined-appearance-hover-label-color, var(--bloom-color-white));
   }
 
