@@ -70,7 +70,7 @@ describe('Testing reserved community type service', () => {
     });
   });
 
-  it('testing list() with jurisdictionName param present', async () => {
+  it('testing list() with jurisdictionId param present', async () => {
     const date = new Date();
     const jurisdictionData = {
       id: 'example Id',
