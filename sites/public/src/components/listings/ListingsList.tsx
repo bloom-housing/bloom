@@ -32,7 +32,7 @@ const ListingsList = (props: ListingsListProps) => {
       <div>
         <InfoCard
           title={t("t.signUpForAlerts")}
-          subtitle={t("t.subscribeToNewsletter")}
+          subtitle={t("t.subscribeToListingAlerts")}
           className="is-normal-primary-lighter"
         >
           <LinkButton

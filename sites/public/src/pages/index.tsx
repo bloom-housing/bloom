@@ -71,12 +71,24 @@ export default function Home(props: IndexProps) {
         className="p-12"
         header={<Heading priority={2}>{t("welcome.introduction")}</Heading>}
         subheader={t("welcome.useDoorway")}
+        body={
+          <span>
+            {t("welcome.useDoorwayBAHFAtext")}
+            <br />
+            <a
+              href="https://mtc.ca.gov/about-mtc/authorities/bay-area-housing-finance-authority-bahfa"
+              target="_blank"
+            >
+              {t("welcome.useDoorwayBAHFAlink")}
+            </a>
+          </span>
+        }
         background="secondary-lighter"
         actions={[
           <LinkButton
             className="is-borderless is-inline is-unstyled underline text-primary-lighter"
-            href="/additional-resources"
-            key={"additional-resources"}
+            href="/help/get-started"
+            key={"get-started"}
             size={AppearanceSizeType.small}
             normalCase
             icon="arrowForward"
@@ -88,49 +100,55 @@ export default function Home(props: IndexProps) {
       />
       <div className="homepage-extra warn">
         <div className="action-blocks pb-4 pt-4 w-full space-between items-start">
-          <InfoCard title="I am a title" className="flex-1 is-inline is-normal text-left">
+          <InfoCard
+            title={t("welcome.needOtherHelp")}
+            className="flex-1 is-inline is-normal text-left"
+          >
             <img
               src={"images/person-holding-hands.jpg"}
               alt={t("welcome.peopleHoldingHandsAlt")}
               className={"mt-4 mb-4 rounded-3xl"}
             />
-            <ul className="text__medium-normal list-disc ml-5">
-              <li>List Item 1</li>
-              <li>List Item 2</li>
-            </ul>
             <p className="text-gray-950 text__medium-normal mb-4 font-semibold">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, labore animi autem
-              rerum nostrum impedit amet velit, eveniet perspiciatis maiores tenetur natus porro
-              tempore atque ad praesentium hic eos cupiditate!
+              {t("welcome.emergencyHousing")}
             </p>
+            <ul className="text__medium-normal list-disc ml-5">
+              <li>{t("welcome.call211")}</li>
+              <li>{t("welcome.findRelatedServices")}</li>
+            </ul>
             <LinkButton
-              key={"temporary"}
+              key={"get-help"}
               className="is-primary"
-              href={props.jurisdiction.notificationsSignUpURL}
+              href={"/help/housing-help"}
               size={AppearanceSizeType.small}
             >
-              Blah blah
+              {t("welcome.getHelp")}
             </LinkButton>
           </InfoCard>
-          <InfoCard title={"I am another title"} className="flex-1 is-inline is-normal text-left">
+          <InfoCard
+            title={t("welcome.haveQuestions")}
+            className="flex-1 is-inline is-normal text-left"
+          >
             <img
               src={"images/person-laptop.jpg"}
               alt={t("welcome.personLaptopAlt")}
               className={"mt-4 mb-4 rounded-3xl"}
             />
+            <p className="text-gray-950 text__medium-normal mb-4 font-semibold">
+              {t("welcome.getAnswers")}
+            </p>
             <ul className="text__medium-normal list-disc ml-5">
-              <li>List Item 1</li>
-              <li>List Item 2</li>
-              <li>List Item 3</li>
-              <li>List Item 4</li>
+              <li>{t("welcome.whatHappens")}</li>
+              <li>{t("welcome.incomeAffectRent")}</li>
+              <li>{t("welcome.whatDoesAffordableMean")}</li>
             </ul>
             <LinkButton
-              key={"temporary"}
+              key={"learn-more"}
               className="is-primary"
-              href={props.jurisdiction.notificationsSignUpURL}
+              href={"/help/questions"}
               size={AppearanceSizeType.small}
             >
-              Blah blah
+              {t("welcome.learnMore")}
             </LinkButton>
           </InfoCard>
         </div>
@@ -143,13 +161,14 @@ export default function Home(props: IndexProps) {
               {t("t.signUpForAlerts")}
             </Heading>
           }
-          subheader={t("t.subscribeToNewsletter")}
+          subheader={t("t.subscribeToListingAlerts")}
           background="primary-lightest"
           actions={[
             <LinkButton
               key={"sign-up"}
               className="is-primary"
               href={props.jurisdiction.notificationsSignUpURL}
+              newTab={true}
               size={AppearanceSizeType.small}
             >
               {t("t.signUp")}
