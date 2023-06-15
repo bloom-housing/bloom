@@ -1,7 +1,6 @@
 import React from "react"
 import Head from "next/head"
 import { t } from "@bloom-housing/ui-components"
-import LayoutWithoutFooter from "../layouts/LayoutWithoutFooter"
 import { MetaTags } from "../components/shared/MetaTags"
 import ListingsSearchCombined, {
   locations,
@@ -10,6 +9,7 @@ import ListingsSearchCombined, {
 } from "../components/listings/search/ListingsSearchCombined"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
+import Layout from "../layouts/application"
 
 export interface ListingsProps {
   listingsEndpoint: string
@@ -33,7 +33,7 @@ export default function ListingsPage(props: ListingsProps) {
     searchString = searchParam
   }
   return (
-    <LayoutWithoutFooter>
+    <Layout>
       <Head>
         <title>{pageTitle}</title>
       </Head>
@@ -47,7 +47,7 @@ export default function ListingsPage(props: ListingsProps) {
         bathrooms={props.bathrooms}
         counties={props.locations}
       />
-    </LayoutWithoutFooter>
+    </Layout>
   )
 }
 
