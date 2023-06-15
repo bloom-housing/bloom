@@ -561,7 +561,7 @@ export class UnitTypesService {
   update(
     params: {
       /** requestBody */
-      body?: UnitType;
+      body?: UnitTypeUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<UnitType> {
@@ -934,6 +934,18 @@ export interface UnitTypeCreate {
   /**  */
   numBedrooms: number;
 }
+
+export interface UnitTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  numBedrooms: number;
+}
+
 export enum ListingViews {
   'fundamentals' = 'fundamentals',
   'base' = 'base',
