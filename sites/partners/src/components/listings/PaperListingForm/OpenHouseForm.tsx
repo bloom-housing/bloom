@@ -168,7 +168,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                     id="url"
                     name="url"
                     label={t("t.url")}
-                    placeholder={t("t.url")}
+                    placeholder={"https://"}
                     register={register}
                     readerOnly
                     error={!!errors?.url}

@@ -313,6 +313,7 @@ const BuildingSelectionCriteria = () => {
           {criteriaAttachType === "url" && (
             <Field
               type="url"
+              placeholder="https://"
               label="Informational Webpage URL"
               name="buildingSelectionCriteriaURL"
               id="buildingSelectionCriteriaURL"

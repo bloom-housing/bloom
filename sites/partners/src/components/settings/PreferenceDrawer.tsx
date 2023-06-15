@@ -213,7 +213,7 @@ const PreferenceDrawer = ({
                   type="url"
                   readerOnly
                   dataTestId={"preference-link"}
-                  error={errors?.preferenceUrl}
+                  error={!!errors?.preferenceUrl}
                   errorMessage={
                     errors?.preferenceUrl?.type === "https"
                       ? t("errors.urlHttpsError")
@@ -461,7 +461,7 @@ const PreferenceDrawer = ({
                   dataTestId={"preference-option-title"}
                   defaultValue={optionData?.text}
                   errorMessage={t("errors.requiredFieldError")}
-                  error={errors["optionTitle"]}
+                  error={!!errors["optionTitle"]}
                   inputProps={{
                     onChange: () => {
                       clearErrors("optionTitle")
