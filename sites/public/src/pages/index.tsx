@@ -7,12 +7,11 @@ import {
   Hero,
   Heading,
   t,
-  SiteAlert,
   ActionBlock,
   Icon,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, SiteAlert } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"

@@ -8,13 +8,13 @@ import {
   Icon,
   t,
   AlertBox,
-  SiteAlert,
   AlertNotice,
   ErrorMessage,
   NavigationContext,
   emailRegex,
 } from "@bloom-housing/ui-components"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
+import { SiteAlert } from "../SiteAlert"
 import type { UseFormMethods } from "react-hook-form"
 
 export type FormForgotPasswordProps = {

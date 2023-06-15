@@ -10,10 +10,9 @@ import {
   Icon,
   t,
   AlertBox,
-  SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, SiteAlert } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 

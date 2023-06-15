@@ -1,7 +1,8 @@
 import React from "react"
 import Head from "next/head"
 import Layout from "../../layouts"
-import { t, SiteAlert } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
+import { SiteAlert } from "@bloom-housing/shared-helpers"
 import { FormUserConfirm } from "../../components/users/FormUserConfirm"
 
 const ConfirmPage = () => {

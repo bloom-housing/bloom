@@ -1,16 +1,14 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
+import { DashBlock, DashBlocks, HeaderBadge, Icon, t, AlertBox } from "@bloom-housing/ui-components"
 import {
-  DashBlock,
-  DashBlocks,
-  HeaderBadge,
-  Icon,
-  t,
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  RequireLogin,
   SiteAlert,
-  AlertBox,
-} from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+} from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"

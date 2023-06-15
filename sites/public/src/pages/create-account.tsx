@@ -12,7 +12,6 @@ import {
   t,
   DOBField,
   AlertBox,
-  SiteAlert,
   Modal,
   passwordRegex,
   AppearanceSizeType,
@@ -21,7 +20,7 @@ import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, SiteAlert } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 

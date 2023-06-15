@@ -13,7 +13,6 @@ import {
   Button,
   LoadingOverlay,
   MinimalTable,
-  SiteAlert,
   StandardCard,
   t,
   AlertTypes,
@@ -22,7 +21,7 @@ import {
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, SiteAlert } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import PreferenceDrawer from "../../components/settings/PreferenceDrawer"
 import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"

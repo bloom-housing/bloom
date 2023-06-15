@@ -1,6 +1,7 @@
 import React from "react"
 import Head from "next/head"
-import { SiteAlert, t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { SiteAlert } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts"
 import PaperListingForm from "../../components/listings/PaperListingForm"
 import { MetaTags } from "../../components/shared/MetaTags"

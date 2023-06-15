@@ -39,7 +39,6 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
-  SiteAlert,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -52,6 +51,7 @@ import {
   getPostmarkString,
   UnitTables,
   getSummariesTable,
+  SiteAlert,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"

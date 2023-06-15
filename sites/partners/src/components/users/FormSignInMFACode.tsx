@@ -7,11 +7,11 @@ import {
   FormCard,
   Icon,
   t,
-  SiteAlert,
   FormSignInErrorBox,
   NetworkStatus,
   FormSignInControl,
 } from "@bloom-housing/ui-components"
+import { SiteAlert } from "@bloom-housing/shared-helpers"
 
 export enum RequestType {
   email = "email",
