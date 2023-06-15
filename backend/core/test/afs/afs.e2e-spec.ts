@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing"
-import { INestApplication } from "@nestjs/common"
+import { INestApplication, Logger } from "@nestjs/common"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
@@ -22,7 +22,6 @@ import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 import dbOptions from "../../ormconfig.test"
 import { EmailService } from "../../src/email/email.service"
 import { ApplicationFlaggedSetsCronjobService } from "../../src/application-flagged-sets/application-flagged-sets-cronjob.service"
-import { ListingRepository } from "../../src/listings/db/listing.repository"
 import cookieParser from "cookie-parser"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -54,6 +53,9 @@ describe("ApplicationFlaggedSets", () => {
     const testEmailService = {
       confirmation: async () => {},
     }
+    const testLogger = {
+      warn: () => {},
+    }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -61,13 +63,7 @@ describe("ApplicationFlaggedSets", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([
-          ApplicationFlaggedSet,
-          Application,
-          HouseholdMember,
-          Listing,
-          ListingRepository,
-        ]),
+        TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
           ttl: 2,
           limit: 10,
@@ -77,6 +73,8 @@ describe("ApplicationFlaggedSets", () => {
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
+      .overrideProvider(Logger)
+      .useValue(testLogger)
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
@@ -93,10 +91,12 @@ describe("ApplicationFlaggedSets", () => {
     listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
     const listing = (await listingsRepository.find({ take: 1 }))[0]
-    await listingsRepository.save({
-      ...listing,
-      status: ListingStatus.closed,
-    })
+    await listingsRepository.update(
+      { id: listing.id },
+      {
+        status: ListingStatus.closed,
+      }
+    )
 
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     listing1Id = listing.id
@@ -241,11 +241,12 @@ describe("ApplicationFlaggedSets", () => {
   })
 
   afterAll(async () => {
-    const modifiedListing = await listingsRepository.findOne({ id: listing1Id })
-    await listingsRepository.save({
-      ...modifiedListing,
-      status: ListingStatus.active,
-    })
+    await listingsRepository.update(
+      { id: listing1Id },
+      {
+        status: ListingStatus.active,
+      }
+    )
     await app.close()
   })
 })

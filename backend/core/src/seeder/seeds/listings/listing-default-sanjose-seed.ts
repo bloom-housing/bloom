@@ -46,16 +46,24 @@ export class ListingDefaultSanJoseSeed {
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: PriorityTypes.mobilityHearing }
+      { where: { name: PriorityTypes.mobilityHearing } }
     )
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.alameda,
+      where: { name: CountyCode.alameda },
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "AlamedaCountyTCAC2021",
-      jurisdiction: alamedaJurisdiction,
+      where: {
+        name: "AlamedaCountyTCAC2021",
+        jurisdiction: {
+          name: alamedaJurisdiction.name,
+        },
+      },
     })
 
     const listingCreateDto: Omit<
@@ -69,13 +77,13 @@ export class ListingDefaultSanJoseSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(alamedaJurisdiction.name).text,
+            where: { text: getLiveWorkPreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(alamedaJurisdiction.name).text,
+            where: { text: getDisplaceePreference(alamedaJurisdiction.name).text },
           }),
           ordinal: 2,
         },

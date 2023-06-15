@@ -1,29 +1,39 @@
-import { Brackets, LessThan, MoreThanOrEqual, Repository, SelectQueryBuilder } from "typeorm"
+import {
+  Brackets,
+  FindOptionsWhere,
+  LessThan,
+  MoreThanOrEqual,
+  Not,
+  Raw,
+  Repository,
+} from "typeorm"
 import { Application } from "../applications/entities/application.entity"
 import { Rule } from "./types/rule-enum"
 import { InjectRepository } from "@nestjs/typeorm"
-import { ListingRepository } from "../listings/db/listing.repository"
 import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { getView } from "../applications/views/view"
-import { Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common"
+import { Inject, Injectable, Logger, OnModuleInit, Scope } from "@nestjs/common"
 import { SchedulerRegistry } from "@nestjs/schedule"
 import { CronJob } from "cron"
 import { ConfigService } from "@nestjs/config"
 import { CronJobService } from "../shared/services/cron-job.service"
 import dayjs from "dayjs"
+import { ApplicationStatus } from "../applications/types/application-status-enum"
+import { ListingsQueryBuilder } from "../listings/db/listing-query-builder"
 
 const CRON_JOB_NAME = "AFS_CRON_JOB"
 const CRON_CONFIG_VALUE = "AFS_PROCESSING_CRON_STRING"
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   constructor(
-    @InjectRepository(ListingRepository) private readonly listingRepository: ListingRepository,
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(ApplicationFlaggedSet)
     private readonly afsRepository: Repository<ApplicationFlaggedSet>,
     @InjectRepository(Application) private readonly applicationRepository: Repository<Application>,
-    @Inject(Logger) private readonly logger = new Logger(ApplicationFlaggedSetsCronjobService.name),
+    @Inject(Logger)
+    private readonly logger = new Logger(ApplicationFlaggedSetsCronjobService.name),
     private schedulerRegistry: SchedulerRegistry,
     private readonly config: ConfigService,
     private readonly cronJobService: CronJobService
@@ -58,8 +68,9 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   public async process() {
     this.logger.warn("running the Application flagged sets cron job")
     await this.cronJobService.saveCronJobByName(CRON_JOB_NAME)
-    const outOfDateListings = await this.listingRepository
-      .createQueryBuilder("listings")
+    const outOfDateListings = await new ListingsQueryBuilder(
+      this.listingRepository.createQueryBuilder("listings")
+    )
       .select(["listings.id", "listings.afsLastRunAt"])
       .where("listings.lastApplicationUpdateAt IS NOT NULL")
       .andWhere(
@@ -122,7 +133,7 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
       .where(`afs.listing_id = :listingId`, { listingId: application.listingId })
       .getMany()
 
-    afses = afses.filter((afs) => afs.applications.map((app) => app.id).includes(application.id))
+    afses = afses.filter((afs) => afs.applications.some((app) => app.id === application.id))
 
     const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
     const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
@@ -216,20 +227,19 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   }
 
   private async fetchDuplicatesMatchingEmailRule(newApplication: Application) {
+    const whereClause: FindOptionsWhere<Application> = {
+      id: Not(newApplication.id),
+      status: ApplicationStatus.submitted,
+      listing: {
+        id: newApplication.listingId,
+      },
+      applicant: {
+        emailAddress: newApplication.applicant.emailAddress,
+      },
+    }
     return await this.applicationRepository.find({
       select: ["id"],
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listingId,
-          })
-          .andWhere("Application__applicant.emailAddress = :emailAddress", {
-            emailAddress: newApplication.applicant.emailAddress,
-          })
-          .andWhere("Application.status = :status", { status: "submitted" })
-      },
+      where: whereClause,
     })
   }
 
@@ -272,67 +282,53 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
       ...newApplication.householdMembers.map((householdMember) => householdMember.birthYear),
     ]
 
+    const whereClause: FindOptionsWhere<Application> = {
+      id: Not(newApplication.id),
+      status: ApplicationStatus.submitted,
+      listing: {
+        id: newApplication.listingId,
+      },
+      householdMembers: {
+        firstName: Raw(
+          (alias) =>
+            `(${alias} IN (:...firstNames) OR Application__applicant.firstName IN (:...firstNames))`,
+          {
+            firstNames,
+          }
+        ),
+        lastName: Raw(
+          (alias) =>
+            `(${alias} IN (:...lastNames) OR Application__applicant.lastName IN (:...lastNames))`,
+          {
+            lastNames,
+          }
+        ),
+        birthMonth: Raw(
+          (alias) =>
+            `(${alias} IN (:...birthMonths) OR Application__applicant.birthMonth IN (:...birthMonths))`,
+          {
+            birthMonths,
+          }
+        ),
+        birthDay: Raw(
+          (alias) =>
+            `(${alias} IN (:...birthDays) OR Application__applicant.birthDay IN (:...birthDays))`,
+          {
+            birthDays,
+          }
+        ),
+        birthYear: Raw(
+          (alias) =>
+            `(${alias} IN (:...birthYears) OR Application__applicant.birthYear IN (:...birthYears))`,
+          {
+            birthYears,
+          }
+        ),
+      },
+    }
     return await this.applicationRepository.find({
       select: ["id"],
-      where: (qb: SelectQueryBuilder<Application>) => {
-        qb.where("Application.id != :id", {
-          id: newApplication.id,
-        })
-          .andWhere("Application.listing.id = :listingId", {
-            listingId: newApplication.listingId,
-          })
-          .andWhere("Application.status = :status", { status: "submitted" })
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.firstName IN (:...firstNames)", {
-                firstNames: firstNames,
-              })
-              subQb.orWhere("Application__applicant.firstName IN (:...firstNames)", {
-                firstNames: firstNames,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.lastName IN (:...lastNames)", {
-                lastNames: lastNames,
-              })
-              subQb.orWhere("Application__applicant.lastName IN (:...lastNames)", {
-                lastNames: lastNames,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths,
-              })
-              subQb.orWhere("Application__applicant.birthMonth IN (:...birthMonths)", {
-                birthMonths: birthMonths,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthDay IN (:...birthDays)", {
-                birthDays: birthDays,
-              })
-              subQb.orWhere("Application__applicant.birthDay IN (:...birthDays)", {
-                birthDays: birthDays,
-              })
-            })
-          )
-          .andWhere(
-            new Brackets((subQb) => {
-              subQb.where("Application__householdMembers.birthYear IN (:...birthYears)", {
-                birthYears: birthYears,
-              })
-              subQb.orWhere("Application__applicant.birthYear IN (:...birthYears)", {
-                birthYears: birthYears,
-              })
-            })
-          )
-      },
+      where: whereClause,
     })
   }
 }

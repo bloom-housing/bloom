@@ -2,7 +2,8 @@ import { BadRequestException, Inject, Injectable, NotFoundException, Scope } fro
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { getManager, Repository, SelectQueryBuilder } from "typeorm"
+import { Repository, SelectQueryBuilder, DataSource } from "typeorm"
+import dbOptions from "../../ormconfig"
 import { Application } from "../applications/entities/application.entity"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
@@ -155,7 +156,9 @@ export class ApplicationFlaggedSetsService {
   }
 
   async resolve(dto: ApplicationFlaggedSetResolveDto) {
-    return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+    const ormDataSource = new DataSource(dbOptions)
+    await ormDataSource.initialize()
+    return await ormDataSource.transaction("SERIALIZABLE", async (transactionalEntityManager) => {
       const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
       const afs = await this.findOneById(dto.afsId, dto.applications)
