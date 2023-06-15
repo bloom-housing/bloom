@@ -15,7 +15,7 @@ const DoorwayCollapsibleSection = ({
   className,
 }: DoorwayCollapsibleSectionProps) => {
   const [isExpanded, setExpanded] = useState(false)
-  const rootClassNames = className ? `${className}` : undefined
+  const rootClassNames = className ? `${className}` : ""
 
   return (
     <div

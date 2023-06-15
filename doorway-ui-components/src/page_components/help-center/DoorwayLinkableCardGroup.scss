@@ -1,0 +1,17 @@
+.doorway-linkable-card-group {
+  max-width: var(--bloom-width-5xl);
+  display: flex;
+}
+
+.doorway-linkable-card-group_nav {
+  min-width: var(--bloom-width-sm);
+
+  @media (max-width: $screen-lg) {
+    // TODO: add responsive styling here instead of hiding.
+    display: none;
+  }
+}
+
+.doorway-linkable-card-group-main {
+  flex: 1;
+}

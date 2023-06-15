@@ -34,6 +34,11 @@ describe("<Card>", () => {
     expect(getByText("Footer content here.")).toBeTruthy()
   })
 
+  it("properly adds jumplink ids", () => {
+    const { getByText } = render(<Card jumplinkData={{ title: "I like cheese" }}>test</Card>)
+    expect(getByText("test").id).toEqual("i-like-cheese-section")
+  })
+
   it("renders headers and buttons", () => {
     const { getByText } = render(
       <Card>

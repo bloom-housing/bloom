@@ -237,12 +237,16 @@ export const getSiteHeader = (router: NextRouter) => {
       href: "#",
       subMenuLinks: [
         {
-          title: "item 1 temp",
-          href: "?temp1",
+          title: t("pageTitle.getStarted"),
+          href: "/help/get-started",
         },
         {
-          title: "item 2 temp",
-          href: "?temp2",
+          title: t("pageTitle.housingHelp"),
+          href: "/help/housing-help",
+        },
+        {
+          title: t("pageTitle.questions"),
+          href: "/help/questions",
         },
       ],
     },

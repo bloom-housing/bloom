@@ -2,17 +2,17 @@
   /* Component Variables */
   --background-color: var(--bloom-color-white);
   --border-radius: var(--bloom-rounded-lg);
-  --border-width: var(--bloom-border-1);
+  --border-width: var(--bloom-border-0);
   --border-color: var(--bloom-color-gray-450);
   --rule-width: var(--border-width);
   --rule-color: var(--border-color);
 
-  --content-padding-block: var(--bloom-s8);
+  --content-padding-block: var(--bloom-s4);
   --content-margin-inline-desktop: var(--bloom-s16);
   --content-margin-inline-mobile: var(--bloom-s4);
   --content-margin-inline: var(--content-margin-inline-desktop);
 
-  --header-padding-block: var(--bloom-s8) var(--bloom-s3);
+  --header-padding-block: var(--bloom-s6) var(--bloom-s4);
   --header-margin-inline-desktop: var(--content-margin-inline-desktop);
   --header-margin-inline-mobile: var(--content-margin-inline-mobile);
   --header-margin-inline: var(--header-margin-inline-desktop);
