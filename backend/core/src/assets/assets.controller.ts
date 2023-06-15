@@ -31,13 +31,14 @@ import {
 import { PaginationFactory, PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { Express, Request } from "express"
 import { FileInterceptor } from "@nestjs/platform-express"
+import { FileUploadResult } from "../../src/shared/uploads"
 
 export class PaginatedAssetsDto extends PaginationFactory<AssetDto>(AssetDto) {}
 
 // File upload validation vars
 const maxFileSizeMb = parseFloat(process.env.ASSET_UPLOAD_MAX_SIZE) || 5
 const maxFileSize = maxFileSizeMb * 1024 * 1024
-const allowedFileTypes = ["document/pdf", "image/jpg", "image/jpeg", "image/png"]
+const allowedFileTypes = ["application/pdf", "document/pdf", "image/jpg", "image/jpeg", "image/png"]
 
 @Controller("assets")
 @ApiTags("assets")
@@ -65,7 +66,7 @@ export class AssetsController {
   async upload(
     @Req() request: Request,
     @UploadedFile() file: Express.Multer.File
-  ): Promise<AssetDto> {
+  ): Promise<FileUploadResult> {
     // Ideally we would handle validation with a decorator, but ParseFilePipe
     // is only available in Nest.js 9+
 
@@ -79,12 +80,18 @@ export class AssetsController {
       throw new PayloadTooLargeException(`Uploaded files must be less than ${maxFileSizeMb} MB`)
     }
 
+    // Allowlisting on extension instead of mimetype is also reasonable
     if (!allowedFileTypes.includes(file.mimetype)) {
       throw new UnsupportedMediaTypeException(`Uploaded files must be a pdf or image`)
     }
 
-    const asset = await this.assetsService.upload(label, file)
-    return mapTo(AssetDto, asset)
+    // The service used to create an asset instead of just returning a file upload result.
+    // Keeping this for now in case the original behavior needs to be restored.
+
+    //const asset = await this.assetsService.upload(label, file)
+    //return mapTo(AssetDto, asset)
+
+    return await this.assetsService.upload(label, file)
   }
 
   @Post("/presigned-upload-metadata")

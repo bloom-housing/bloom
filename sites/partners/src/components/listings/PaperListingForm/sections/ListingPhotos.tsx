@@ -13,9 +13,9 @@ import {
   Button,
   Drawer,
 } from "@bloom-housing/ui-components"
-import { CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
-import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
+import { CLOUDINARY_BUILDING_LABEL, getImageUrlFromAsset } from "@bloom-housing/shared-helpers"
 import { fieldHasError } from "../../../../lib/helpers"
+import { uploadAssetAndSetData } from "../../../../lib/assets"
 import { ListingImage, Asset } from "@bloom-housing/backend-core"
 
 const ListingPhotos = () => {
@@ -51,7 +51,6 @@ const ListingPhotos = () => {
     url: "",
   })
   const [drawerImages, setDrawerImages] = useState<ListingImage[]>([])
-  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   const resetDrawerState = () => {
     setDrawerState(false)
@@ -88,9 +87,7 @@ const ListingPhotos = () => {
 
   const listingPhotoTableRows: StandardTableData = []
   listingFormPhotos.forEach((image, index) => {
-    const listingPhotoUrl = image.image.fileId.match(/https?:\/\//)
-      ? image.image.fileId
-      : fileService.getDownloadUrlForPhoto(image.image.fileId)
+    const listingPhotoUrl = getImageUrlFromAsset(image.image)
 
     listingPhotoTableRows.push({
       preview: {
@@ -127,9 +124,9 @@ const ListingPhotos = () => {
   const drawerTableRows: StandardTableData = useMemo(() => {
     return drawerImages.map((item, index) => {
       const image = item.image as Asset
-      const imageUrl = image.fileId.match(/https?:\/\//)
-        ? image.fileId
-        : fileService.getDownloadUrlForPhoto(image.fileId)
+
+      const imageUrl = getImageUrlFromAsset(image)
+
       return {
         ordinal: {
           content: item.ordinal + 1,
@@ -185,24 +182,13 @@ const ListingPhotos = () => {
         },
       }
     })
-  }, [drawerImages, fileService])
+  }, [drawerImages])
 
   /*
    Pass the file for the dropzone callback along to the uploader
    */
   const photoUploader = async (file: File) => {
-    const setProgressValueCallback = (value: number) => {
-      setProgressValue(value)
-    }
-    const generatedId = await fileService.putFile(
-      "cloudinaryBuilding",
-      file,
-      setProgressValueCallback
-    )
-    setLatestUpload({
-      id: generatedId,
-      url: fileService.getDownloadUrlForPhoto(generatedId),
-    })
+    await uploadAssetAndSetData(file, "building", setProgressValue, setLatestUpload)
   }
 
   /*

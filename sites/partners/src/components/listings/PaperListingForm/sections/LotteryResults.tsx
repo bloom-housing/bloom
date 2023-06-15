@@ -16,7 +16,9 @@ import {
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
-import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
+import { uploadAssetAndSetData } from "../../../../lib/assets"
+import { getPdfUrlFromAsset } from "@bloom-housing/shared-helpers"
+import { Icon } from "@bloom-housing/doorway-ui-components"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -36,7 +38,6 @@ const LotteryResults = (props: LotteryResultsProps) => {
     id: "",
     url: "",
   })
-  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
 
   const listingEvents = watch("events")
   const uploadedPDF = listingEvents.find(
@@ -46,7 +47,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
   useEffect(() => {
     if (uploadedPDF) {
       setCloudinaryData({
-        url: fileService.getDownloadUrlForPhoto(uploadedPDF.file?.fileId),
+        url: uploadedPDF.file ? getPdfUrlFromAsset(uploadedPDF.file) : "",
         id: uploadedPDF.id,
       })
       // Don't allow a new one to be uploaded if one already exists so setting progress to 100%
@@ -103,7 +104,12 @@ const LotteryResults = (props: LotteryResultsProps) => {
       preview: {
         content: (
           <TableThumbnail>
-            <img alt="PDF preview" src={cloudinaryData.url} />
+            {/* 
+              Using a PDF URL for an image usually doesn't work.
+              Switching to UIC icon instead
+            */}
+            {/*<img alt="PDF preview" src={cloudinaryData.url} />*/}
+            <Icon size="md-large" symbol="document" />
           </TableThumbnail>
         ),
       },
@@ -133,14 +139,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    const setProgressValueCallback = (value: number) => {
-      setProgressValue(value)
-    }
-    const generatedId = await fileService.putFile("cloudinaryPDF", file, setProgressValueCallback)
-    setCloudinaryData({
-      id: generatedId,
-      url: fileService.getDownloadUrlForPhoto(generatedId),
-    })
+    await uploadAssetAndSetData(file, "lottery", setProgressValue, setCloudinaryData)
   }
 
   return (

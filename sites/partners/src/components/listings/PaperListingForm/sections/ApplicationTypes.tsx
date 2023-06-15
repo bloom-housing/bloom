@@ -18,14 +18,19 @@ import {
   StandardTableData,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { fieldMessage, fieldHasError, YesNoAnswer } from "../../../../lib/helpers"
+import {
+  fieldMessage,
+  fieldHasError,
+  YesNoAnswer,
+  pdfFileNameFromFileId,
+} from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
   ApplicationMethodType,
   Language,
 } from "@bloom-housing/backend-core/types"
 import { FormListing } from "../../../../lib/listings/formTypes"
-import { FileServiceInterface, FileServiceProvider } from "@bloom-housing/shared-services"
+import { uploadAssetAndSetData } from "../../../../lib/assets"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -95,6 +100,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       paper: {
         ...methods.paper,
         paperApplications,
+        type: ApplicationMethodType.FileDownload,
       },
     })
   }
@@ -103,15 +109,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
-    const setProgressValueCallback = (value: number) => {
-      setProgressValue(value)
-    }
-    const generatedId = await fileService.putFile(selectedLanguage, file, setProgressValueCallback)
-    setCloudinaryData({
-      id: generatedId,
-      url: fileService.getDownloadUrlForPdf(generatedId),
-    })
+    await uploadAssetAndSetData(file, "application", setProgressValue, setCloudinaryData)
   }
 
   /*
@@ -120,7 +118,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const previewPaperApplicationsTableRows: StandardTableData = []
   if (cloudinaryData.url != "") {
     previewPaperApplicationsTableRows.push({
-      fileName: { content: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf` },
+      fileName: { content: pdfFileNameFromFileId(cloudinaryData.id) },
       language: { content: t(`languages.${selectedLanguage}`) },
       actions: {
         content: (
@@ -393,7 +391,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   className="mb-8"
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
-                    fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+                    fileName: { content: pdfFileNameFromFileId(item.file.fileId) },
                     language: { content: t(`languages.${item.language}`) },
                     actions: {
                       content: (
@@ -411,6 +409,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                                 paper: {
                                   ...methods.paper,
                                   paperApplications: items,
+                                  type: ApplicationMethodType.FileDownload,
                                 },
                               })
                             }}

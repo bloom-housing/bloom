@@ -226,3 +226,15 @@ export const fieldHasError = (errorObj: FieldError) => {
 export const fieldMessage = (errorObj: FieldError) => {
   return errorObj?.message
 }
+
+export function pdfFileNameFromFileId(fileId: string) {
+  // Pull out the part after the last "/"
+  let name = fileId.split("/").slice(-1).join()
+
+  // If it doesn't already end with ".pdf", add it
+  if (!name.endsWith(".pdf")) {
+    name += ".pdf"
+  }
+
+  return name
+}

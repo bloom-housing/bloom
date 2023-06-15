@@ -10,6 +10,7 @@ import {
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
+import { pdfFileNameFromFileId } from "../../../../lib/helpers"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
@@ -36,7 +37,7 @@ const DetailApplicationTypes = () => {
   if (paperMethod) {
     paperMethod.paperApplications.forEach((item) => {
       paperApplicationsTableRows.push({
-        fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+        fileName: { content: pdfFileNameFromFileId(item.file.fileId) },
         language: { content: t(`languages.${item.language}`) },
       })
     })

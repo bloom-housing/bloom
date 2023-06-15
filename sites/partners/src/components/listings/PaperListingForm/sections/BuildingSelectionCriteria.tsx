@@ -15,7 +15,8 @@ import {
   StandardTableData,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { FileServiceProvider, FileServiceInterface } from "@bloom-housing/shared-services"
+import { uploadAssetAndSetData } from "../../../../lib/assets"
+import { Icon } from "@bloom-housing/doorway-ui-components"
 
 const LotteryResults = () => {
   const formMethods = useFormContext()
@@ -36,7 +37,6 @@ const LotteryResults = () => {
     id: "",
     url: "",
   })
-  const fileService: FileServiceInterface = FileServiceProvider.getPublicUploadService()
   const resetDrawerState = () => {
     setProgressValue(0)
     setCloudinaryData({
@@ -81,7 +81,12 @@ const LotteryResults = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img alt="PDF preview" src={cloudinaryData.url} />
+            {/* 
+              Using a PDF URL for an image usually doesn't work.
+              Switching to UIC icon instead
+            */}
+            {/* <img alt="PDF preview" src={cloudinaryData.url} /> */}
+            <Icon size="md-large" symbol="document" />
           </TableThumbnail>
         ),
       },
@@ -112,13 +117,15 @@ const LotteryResults = () => {
   */
   const criteriaTableRows: StandardTableData = []
   if (listingCriteriaFile?.fileId && listingCriteriaFile.fileId != "") {
-    const listingPhotoUrl = fileService.getDownloadUrlForPhoto(listingCriteriaFile.fileId)
+    //const listingPhotoUrl = getImageUrlFromAsset(listingCriteriaFile)
 
     criteriaTableRows.push({
       preview: {
         content: (
           <TableThumbnail>
-            <img src={listingPhotoUrl} alt={"Upload preview"} />
+            {/* Same as above */}
+            {/* <img src={listingPhotoUrl} alt={"Upload preview"} /> */}
+            <Icon size="md-large" symbol="document" />
           </TableThumbnail>
         ),
       },
@@ -191,14 +198,7 @@ const LotteryResults = () => {
     Pass the file for the dropzone callback along to the uploader
   */
   const pdfUploader = async (file: File) => {
-    const setProgressValueCallback = (value: number) => {
-      setProgressValue(value)
-    }
-    const generatedId = await fileService.putFile("cloudinaryPDF", file, setProgressValueCallback)
-    setCloudinaryData({
-      id: generatedId,
-      url: fileService.getDownloadUrlForPhoto(generatedId),
-    })
+    await uploadAssetAndSetData(file, "selection-criteria", setProgressValue, setCloudinaryData)
   }
 
   return (

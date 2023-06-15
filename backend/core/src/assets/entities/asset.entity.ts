@@ -9,7 +9,7 @@ export class Asset extends AbstractEntity {
   @Column({ type: "text" })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   fileId: string
 
   @Column({ type: "text" })

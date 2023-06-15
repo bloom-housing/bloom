@@ -703,7 +703,7 @@ export class AssetsService {
   /**
    * Upload asset
    */
-  upload(options: IRequestOptions = {}): Promise<Asset> {
+  upload(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/assets/upload"
 

@@ -6,11 +6,6 @@ import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
 import { addTranslation, NavigationContext, GenericRouter } from "@bloom-housing/ui-components"
 import { AuthProvider, ConfigProvider, RequireLogin } from "@bloom-housing/shared-helpers"
-import {
-  FileProviderConfig,
-  FileServiceProvider,
-  FileServiceTypeEnum,
-} from "@bloom-housing/shared-services"
 
 // TODO: Make these not-global
 import "ag-grid-community/dist/styles/ag-grid.css"
@@ -30,51 +25,6 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   useEffect(() => {
     setHasMounted(true)
   }, [])
-
-  let fileProviderConfig: FileProviderConfig
-  if (process.env.fileService === "aws_s3") {
-    fileProviderConfig = {
-      publicService: {
-        fileServiceType: FileServiceTypeEnum.aws_s3,
-        awsS3Config: {
-          bucketName: process.env.awsS3BucketName || "",
-          accessKey: process.env.awsAccessKey || "",
-          secretKey: process.env.awsSecretKey || "",
-          region: process.env.awsRegion || "",
-        },
-      },
-      privateService: {
-        fileServiceType: FileServiceTypeEnum.aws_s3,
-        awsS3Config: {
-          bucketName: process.env.awsS3BucketName || "",
-          accessKey: process.env.awsAccessKey || "",
-          secretKey: process.env.awsSecretKey || "",
-          region: process.env.awsRegion || "",
-        },
-      },
-    }
-  } else if (process.env.fileService === "cloudinary") {
-    fileProviderConfig = {
-      publicService: {
-        fileServiceType: FileServiceTypeEnum.cloudinary,
-        cloudinaryConfig: {
-          cloudinaryCloudName: process.env.cloudinaryCloudName || "",
-          cloudinaryUploadPreset: process.env.cloudinarySignedPreset || "",
-        },
-      },
-      privateService: {
-        fileServiceType: FileServiceTypeEnum.cloudinary,
-        cloudinaryConfig: {
-          cloudinaryCloudName: process.env.cloudinaryCloudName || "",
-          cloudinaryUploadPreset: process.env.cloudinarySignedPreset || "",
-        },
-      },
-    }
-  } else {
-    throw new Error("Unsupported file service")
-  }
-
-  FileServiceProvider.configure(fileProviderConfig)
 
   useMemo(() => {
     addTranslation(translations.general, true)
