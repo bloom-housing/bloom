@@ -16,8 +16,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UnitAccessibilityPriorityTypeService } from '../services/unit-accessibility-priority-type.service';
-import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-get.dto';
-import { UnitAccessibilityPriorityTypeCreate } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create';
+import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
+import { UnitAccessibilityPriorityTypeCreate } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
+import { UnitAccessibilityPriorityTypeUpdate } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -25,7 +26,11 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 @Controller('unitAccessibilityPriorityTypes')
 @ApiTags('unitAccessibilityPriorityTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(UnitAccessibilityPriorityTypeCreate, IdDTO)
+@ApiExtraModels(
+  UnitAccessibilityPriorityTypeCreate,
+  UnitAccessibilityPriorityTypeUpdate,
+  IdDTO,
+)
 export class UnitAccessibilityPriorityTypeController {
   constructor(
     private readonly unitAccessibilityPriorityTypeService: UnitAccessibilityPriorityTypeService,
@@ -37,7 +42,7 @@ export class UnitAccessibilityPriorityTypeController {
     operationId: 'list',
   })
   @ApiOkResponse({ type: UnitAccessibilityPriorityType, isArray: true })
-  async list() {
+  async list(): Promise<UnitAccessibilityPriorityType[]> {
     return await this.unitAccessibilityPriorityTypeService.list();
   }
 
@@ -50,7 +55,7 @@ export class UnitAccessibilityPriorityTypeController {
   async retrieve(
     @Param('unitAccessibilityPriorityTypeId')
     unitAccessibilityPriorityTypeId: string,
-  ) {
+  ): Promise<UnitAccessibilityPriorityType> {
     return this.unitAccessibilityPriorityTypeService.findOne(
       unitAccessibilityPriorityTypeId,
     );
@@ -64,7 +69,7 @@ export class UnitAccessibilityPriorityTypeController {
   @ApiOkResponse({ type: UnitAccessibilityPriorityType })
   async create(
     @Body() unitAccessibilityPriorityType: UnitAccessibilityPriorityTypeCreate,
-  ) {
+  ): Promise<UnitAccessibilityPriorityType> {
     return await this.unitAccessibilityPriorityTypeService.create(
       unitAccessibilityPriorityType,
     );
@@ -77,8 +82,8 @@ export class UnitAccessibilityPriorityTypeController {
   })
   @ApiOkResponse({ type: UnitAccessibilityPriorityType })
   async update(
-    @Body() unitAccessibilityPriorityType: UnitAccessibilityPriorityType,
-  ) {
+    @Body() unitAccessibilityPriorityType: UnitAccessibilityPriorityTypeUpdate,
+  ): Promise<UnitAccessibilityPriorityType> {
     return await this.unitAccessibilityPriorityTypeService.update(
       unitAccessibilityPriorityType,
     );
@@ -90,7 +95,7 @@ export class UnitAccessibilityPriorityTypeController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.unitAccessibilityPriorityTypeService.delete(dto.id);
   }
 }

@@ -697,7 +697,7 @@ export class UnitAccessibilityPriorityTypesService {
   update(
     params: {
       /** requestBody */
-      body?: UnitAccessibilityPriorityType;
+      body?: UnitAccessibilityPriorityTypeUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<UnitAccessibilityPriorityType> {
@@ -1076,10 +1076,6 @@ export interface UnitTypeCreate {
   numBedrooms: number;
 }
 
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string;
-}
 export interface UnitTypeUpdate {
   /**  */
   id: string;
@@ -1089,6 +1085,19 @@ export interface UnitTypeUpdate {
 
   /**  */
   numBedrooms: number;
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
 }
 
 export enum ListingViews {

@@ -4,15 +4,15 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { unitAccessibilityPriorityTypeFactory } from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
-import { UnitAccessibilityPriorityTypeCreate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create';
-import { UnitAccessibilityPriorityType } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-get.dto';
+import { UnitAccessibilityPriorityTypeCreate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
+import { UnitAccessibilityPriorityTypeUpdate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 describe('UnitAccessibilityPriorityType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -21,20 +21,6 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
   });
-
-  afterEach(async () => {
-    await app.close();
-  });
-
-  const cleanUpDb = async (unitTypeIds: string[]) => {
-    for (let i = 0; i < unitTypeIds.length; i++) {
-      await prisma.unitAccessibilityPriorityTypes.delete({
-        where: {
-          id: unitTypeIds[i],
-        },
-      });
-    }
-  };
 
   it('testing list endpoint', async () => {
     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
@@ -54,8 +40,6 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     );
     expect(sortedResults[0].name).toEqual(unitTypeA.name);
     expect(sortedResults[1].name).toEqual(unitTypeB.name);
-
-    await cleanUpDb([unitTypeA.id, unitTypeB.id]);
   });
 
   it('testing retrieve endpoint', async () => {
@@ -68,8 +52,6 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(unitTypeA.name);
-
-    await cleanUpDb([unitTypeA.id]);
   });
 
   it('testing create endpoint', async () => {
@@ -81,8 +63,6 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
-
-    await cleanUpDb([res.body.id]);
   });
 
   it('testing update endpoint', async () => {
@@ -95,14 +75,10 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
       .send({
         id: unitTypeA.id,
         name: 'name: 11',
-        createdAt: unitTypeA.createdAt,
-        updatedAt: unitTypeA.updatedAt,
-      } as UnitAccessibilityPriorityType)
+      } as UnitAccessibilityPriorityTypeUpdate)
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');
-
-    await cleanUpDb([unitTypeA.id]);
   });
 
   it('testing delete endpoint', async () => {
