@@ -88,8 +88,11 @@ export const mapFormToApi = ({
     const TIME_24H_FORMAT = "MM/DD/YYYY HH:mm:ss"
 
     // rename default (wrong property names)
-    const { day: submissionDay, month: submissionMonth, year: submissionYear } =
-      data.dateSubmitted || {}
+    const {
+      day: submissionDay,
+      month: submissionMonth,
+      year: submissionYear,
+    } = data.dateSubmitted || {}
     const { hours, minutes = 0, seconds = 0, period } = data?.timeSubmitted || {}
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
@@ -220,13 +223,11 @@ export const mapFormToApi = ({
     }
   }
 
-  const accessibility: Omit<
-    Accessibility,
-    "id" | "createdAt" | "updatedAt"
-  > = adaFeatureKeys.reduce((acc, feature) => {
-    acc[feature] = data.application.accessibility.includes(feature)
-    return acc
-  }, {})
+  const accessibility: Omit<Accessibility, "id" | "createdAt" | "updatedAt"> =
+    adaFeatureKeys.reduce((acc, feature) => {
+      acc[feature] = data.application.accessibility.includes(feature)
+      return acc
+    }, {})
 
   const result: ApplicationUpdate = {
     submissionDate,

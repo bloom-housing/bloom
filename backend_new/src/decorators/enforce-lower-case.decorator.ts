@@ -1,5 +1,7 @@
-import { Transform } from 'class-transformer';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export function EnforceLowerCase() {
-  return Transform((value: string) => (value ? value.toLowerCase() : value));
+  return Transform((param: TransformFnParams) =>
+    param?.value ? param.value.toLowerCase() : param.value,
+  );
 }

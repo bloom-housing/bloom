@@ -36,10 +36,10 @@ const DetailsPrimaryApplicant = () => {
         <GridCell>
           <ViewItem label={t("application.household.member.dateOfBirth")} dataTestId="dateOfBirth">
             {(() => {
-              const { birthMonth, birthDay, birthYear } = application?.applicant
+              const applicant = application?.applicant
 
-              if (birthMonth && birthDay && birthYear) {
-                return `${birthMonth}/${birthDay}/${birthYear}`
+              if (applicant.birthMonth && applicant.birthDay && applicant.birthYear) {
+                return `${applicant.birthMonth}/${applicant.birthDay}/${applicant.birthYear}`
               }
 
               return t("t.n/a")

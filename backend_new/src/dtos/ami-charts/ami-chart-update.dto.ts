@@ -1,8 +1,8 @@
 import { OmitType } from '@nestjs/swagger';
 import { AmiChart } from './ami-chart.dto';
 
-export class AmiChartCreate extends OmitType(AmiChart, [
-  'id',
+export class AmiChartUpdate extends OmitType(AmiChart, [
   'createdAt',
   'updatedAt',
+  'jurisdictions',
 ]) {}

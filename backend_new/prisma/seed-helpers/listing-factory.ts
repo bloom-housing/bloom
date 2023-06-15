@@ -168,8 +168,8 @@ export const listingFactory = (
     ? { connect: { id: reservedCommunityTypeId } }
     : {
         create: {
-          name: `reservedCommunityTypes: ${i} name: ${i}`,
-          description: `reservedCommunityTypes: ${i} description: ${i}`,
+          name: `reservedCommunityType: ${i}`,
+          description: `description: ${i}`,
           jurisdictions: {
             connect: {
               id: jurisdictionId,
@@ -380,7 +380,7 @@ const unitFactory = (
         ? { connect: { id: amiChartId } }
         : {
             create: {
-              items: {},
+              items: [],
               name: `listing: ${i} unit: ${j} amiChart: ${j}`,
               jurisdictions: {
                 connect: {

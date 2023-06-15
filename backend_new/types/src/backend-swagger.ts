@@ -115,7 +115,7 @@ export class ListingsService {
       /**  */
       filter?: ListingFilterParams[];
       /**  */
-      view?: string;
+      view?: ListingViews;
       /**  */
       orderBy?: any | null[];
       /**  */
@@ -157,7 +157,7 @@ export class ListingsService {
       /**  */
       id: string;
       /**  */
-      view?: string;
+      view?: ListingViews;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ListingGet> {
@@ -187,8 +187,6 @@ export class AmiChartsService {
   list(
     params: {
       /**  */
-      jurisdictionName?: string;
-      /**  */
       jurisdictionId?: string;
     } = {} as any,
     options: IRequestOptions = {},
@@ -202,10 +200,7 @@ export class AmiChartsService {
         url,
         options,
       );
-      configs.params = {
-        jurisdictionName: params['jurisdictionName'],
-        jurisdictionId: params['jurisdictionId'],
-      };
+      configs.params = { jurisdictionId: params['jurisdictionId'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -298,7 +293,7 @@ export class AmiChartsService {
   update(
     params: {
       /** requestBody */
-      body?: AmiChart;
+      body?: AmiChartUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<AmiChart> {
@@ -328,7 +323,7 @@ export class ReservedCommunityTypesService {
   list(
     params: {
       /**  */
-      jurisdictionName?: string;
+      jurisdictionId?: string;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ReservedCommunityType[]> {
@@ -341,7 +336,7 @@ export class ReservedCommunityTypesService {
         url,
         options,
       );
-      configs.params = { jurisdictionName: params['jurisdictionName'] };
+      configs.params = { jurisdictionId: params['jurisdictionId'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -354,7 +349,7 @@ export class ReservedCommunityTypesService {
   create(
     params: {
       /** requestBody */
-      body?: ReservedCommunitTypeCreate;
+      body?: ReservedCommunityTypeCreate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ReservedCommunityType> {
@@ -437,7 +432,7 @@ export class ReservedCommunityTypesService {
   update(
     params: {
       /** requestBody */
-      body?: ReservedCommunityType;
+      body?: ReservedCommunityTypeUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<ReservedCommunityType> {
@@ -566,7 +561,7 @@ export class UnitTypesService {
   update(
     params: {
       /** requestBody */
-      body?: UnitType;
+      body?: UnitTypeUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<UnitType> {
@@ -738,7 +733,7 @@ export interface ListingsQueryParams {
   filter?: string[];
 
   /**  */
-  view?: string;
+  view?: ListingViews;
 
   /**  */
   orderBy?: [];
@@ -778,7 +773,7 @@ export interface ListingFilterParams {
 
 export interface ListingsRetrieveParams {
   /**  */
-  view?: string;
+  view?: ListingViews;
 }
 
 export interface PaginationAllowsAllQueryParams {
@@ -971,7 +966,7 @@ export interface IdDTO {
   id: string;
 
   /**  */
-  name: string;
+  name?: string;
 }
 
 export interface AmiChartCreate {
@@ -985,10 +980,18 @@ export interface AmiChartCreate {
   jurisdictions: IdDTO;
 }
 
-export interface AmiChartQueryParams {
+export interface AmiChartUpdate {
   /**  */
-  jurisdictionName?: string;
+  id: string;
 
+  /**  */
+  items: AmiChartItem[];
+
+  /**  */
+  name: string;
+}
+
+export interface AmiChartQueryParams {
   /**  */
   jurisdictionId?: string;
 }
@@ -1018,7 +1021,7 @@ export interface SuccessDTO {
   success: boolean;
 }
 
-export interface ReservedCommunitTypeCreate {
+export interface ReservedCommunityTypeCreate {
   /**  */
   name: string;
 
@@ -1029,9 +1032,20 @@ export interface ReservedCommunitTypeCreate {
   jurisdictions: IdDTO;
 }
 
+export interface ReservedCommunityTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  description: string;
+}
+
 export interface ReservedCommunityTypeQueryParams {
   /**  */
-  jurisdictionName?: string;
+  jurisdictionId?: string;
 }
 
 export interface ReservedCommunityType {
@@ -1065,6 +1079,23 @@ export interface UnitTypeCreate {
 export interface UnitAccessibilityPriorityTypeCreate {
   /**  */
   name: string;
+}
+export interface UnitTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  numBedrooms: number;
+}
+
+export enum ListingViews {
+  'fundamentals' = 'fundamentals',
+  'base' = 'base',
+  'full' = 'full',
+  'details' = 'details',
 }
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',
