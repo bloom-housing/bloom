@@ -22,11 +22,18 @@ export interface ButtonProps extends AppearanceProps {
   inline?: boolean
   inlineIcon?: "left" | "right"
   loading?: boolean
-  onClick?: (e: React.MouseEvent) => void
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => void
   passToIconClass?: string
   transition?: boolean
   type?: "button" | "submit" | "reset"
   unstyled?: boolean
+
+  isActive?: boolean
+  index?: number
+  label?: string
+  value?: string
+  onSelect?: (index: number) => void
+  onDeselect?: (index: number) => void
 }
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
@@ -86,17 +93,41 @@ export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
 const Button = (props: ButtonProps) => {
   const buttonClasses = buttonClassesForProps(props)
 
+  const toggleState = () => {
+    if (!props.onSelect || !props.onDeselect || typeof(props.index) != 'number') {
+      return
+    }
+    if (!props.isActive ) {
+      props.onSelect(props.index)
+    } else {
+      props.onDeselect(props.index)
+    }
+  }
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    // TODO: keyboard-based navigation?
+    if (event.charCode == 32) {
+      toggleState()
+    }
+  }
+  const onClickWrap = (event: React.MouseEvent<Element, MouseEvent> ) => {
+    toggleState()
+    if (props.onClick) {
+      props.onClick(event)
+    }
+  }
+
   return (
     <button
       id={props.id}
       type={props.type}
       className={buttonClasses.join(" ")}
-      onClick={props.onClick}
+      onClick={onClickWrap}
       disabled={props.disabled || props.loading}
       aria-hidden={props.ariaHidden}
       tabIndex={props.ariaHidden ? -1 : 0}
       aria-label={props.ariaLabel}
       data-testid={props.dataTestId || props["data-testid"]}
+      onKeyDown={keyDownHandler}
     >
       {buttonInner(props)}
     </button>

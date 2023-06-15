@@ -16,10 +16,11 @@ export interface FieldSingle {
   inputProps?: Record<string, unknown>
   label: string
   uniqueName?: boolean
-  note?: string
+  note?: string  // Using dangerouslySetInnerHTML
   subFields?: FieldSingle[]
   type?: string
   value?: string
+  index?: number
 }
 
 interface FieldGroupProps {
@@ -42,6 +43,7 @@ interface FieldGroupProps {
     readLess?: string
     readMore?: string
   }
+  onChange?: (name: string, value: string[]) => void
 }
 
 const FieldGroup = ({
@@ -60,20 +62,28 @@ const FieldGroup = ({
   groupSubNote,
   dataTestId,
   strings,
+  onChange,
 }: FieldGroupProps) => {
   // Always default align two-option radio groups side by side
   if (fields?.length === 2) {
     fieldGroupClassName = `${fieldGroupClassName || ""} flex`
     fieldClassName = `${fieldClassName || ""} flex-initial mr-4`
   }
+  const initiallyChecked: string[] = []
+  fields?.forEach((f) => {
+    if (f.defaultChecked) {
+      initiallyChecked.push(f.label)
+    }
+  })
 
-  const [checkedInputs, setCheckedInputs] = useState<string[]>([])
+  const [checkedInputs, setCheckedInputs] = useState<string[]>(initiallyChecked)
 
   const subfieldsExist = () => {
     return fields?.filter((field) => field.subFields).length
   }
 
   const getIndividualInput = (item: FieldSingle): React.ReactNode => {
+    const [checked, setChecked] = useState<boolean>(checkedInputs.indexOf(item.label) > -1)
     return (
       <div key={item.value}>
         <input
@@ -83,15 +93,33 @@ const FieldGroup = ({
           id={item.id}
           defaultValue={item.value || item.id}
           name={subfieldsExist() || item.uniqueName ? `${name}-${item.value || ""}` : name}
-          onClick={(e) => {
-            // We cannot reliably target an individual checkbox in a field group since they have the same name, so we keep track on our own
-            if (e.currentTarget.checked) {
-              setCheckedInputs([...checkedInputs, item.label])
-            } else {
-              setCheckedInputs(checkedInputs.filter((subset) => item.label !== subset))
-            }
-          }}
-          defaultChecked={item.defaultChecked || false}
+      onClick={(e) => {
+        if (item.disabled) {
+          return
+        }
+        // We cannot reliably target an individual checkbox in a field group,
+        // since they have the same name, so we keep track on our own.
+        let currentLabels = []
+        if (e.currentTarget.checked) {
+          currentLabels = [...checkedInputs, item.label]
+        } else {
+          currentLabels = checkedInputs.filter((subset) => item.label !== subset)
+        }
+        setCheckedInputs(currentLabels)
+
+        if (onChange) {
+          // Update values in parent component
+          onChange(name, currentLabels)
+        }
+      }}
+      checked={checkedInputs.indexOf(item.label) > -1}
+      // Setting `onChange` is to avoid a warning for using a mutable checked attribute, rather
+      // than using defaultChecked.
+      onChange={(e) => {
+        if (!checkedInputs) {
+          setChecked(e.currentTarget.checked)
+        }
+      }}
           disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
@@ -103,10 +131,9 @@ const FieldGroup = ({
             item.disabled ? "text-gray-600 cursor-not-allowed" : ""
           }`}
         >
-          {item.label}
-        </label>
-        {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
-
+        {item.label}
+      </label>
+        {item.note && <span className={"field-note font-normal"} dangerouslySetInnerHTML={{ __html: item.note}}></span>}
         {item.description && (
           <div className="ml-8 -mt-1 mb-5">
             <ExpandableContent
@@ -163,6 +190,7 @@ const FieldGroup = ({
       </div>
     )
   }
+
   return (
     <div>
       {groupLabel && <label className="text__caps-spaced">{groupLabel}</label>}

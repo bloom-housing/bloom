@@ -205,9 +205,14 @@ const locations: FormOption[] = [
     value: "Marin",
   },
   {
+    label: "Napa",
+    value: "Napa",
+  },
+  {
     label: "San Francisco",
     value: "San Francisco",
-    //isDisabled: true,
+    isDisabled: true,
+    labelNoteHTML: `(For San Francisco listings, please go to <a href="https://housing.sfgov.org/">DAHLIA</a>)`,
   },
   {
     label: "San Mateo",
