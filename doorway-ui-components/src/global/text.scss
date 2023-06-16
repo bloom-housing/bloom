@@ -146,6 +146,14 @@ h1.title {
   margin-block: var(--text-medium-normal-margin-block, 0 var(--bloom-s3));
 }
 
+.text__medium-weighted {
+  font-family: var(--text-medium-weighted-font-family, var(--bloom-font-alt-sans));
+  font-weight: var(--text-medium-weighted-font-weight, 600);
+  color: var(--text-medium-weighted-color, var(--bloom-color-black));
+  font-size: var(--text-medium-weighted-font-size, var(--bloom-font-size-base));
+  margin-block: var(--text-medium-weighted-margin-block, 0 var(--bloom-s3));
+}
+
 .text__small-weighted {
   font-family: var(--text-small-weighted-font-family, var(--bloom-font-alt-sans));
   font-weight: var(--text-small-weighted-font-weight, 600);

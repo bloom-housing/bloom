@@ -229,7 +229,7 @@ export const getSiteHeader = (router: NextRouter) => {
       href: "/",
     },
     {
-      title: t("nav.browseAllListings"),
+      title: t("nav.viewListings"),
       href: "/listings",
     },
     {

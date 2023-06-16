@@ -7,114 +7,126 @@ import {
   Heading,
 } from "@bloom-housing/doorway-ui-components"
 
-export const getStartedCardIntro: React.ReactElement<CardProps> = (
-  <Card className="border-0 p-0">
-    <Card.Section>
-      GET STARTED Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt
-      veniam officiis quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis,
-      sunt cumque delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-      Esse illo ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto.
-      Velit totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-      voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-      inventore illo.
-    </Card.Section>
-  </Card>
-)
-
-export const getStartedLinkableCards: React.ReactElement<CardProps>[] = [
-  <Card
-    className="border-0"
-    key="blah-1"
-    jumplinkData={{ title: "I'm just a heading for blah 1 jumplink" }}
-  >
-    <Card.Header>
-      <Heading priority={2} className={"text-primary-lighter font-semibold"}>
-        {t("I'm just a heading for blah 1")}
-      </Heading>
-    </Card.Header>
-    <Card.Section>
-      GET STARTED Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt
-      veniam officiis quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis,
-      sunt cumque delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-      Esse illo ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto.
-      Velit totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-      voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-      inventore illo.
-    </Card.Section>
-    <Card.Section>
-      <DoorwayCollapsibleSection title="blah title">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt veniam officiis
-        quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis, sunt cumque
-        delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse illo
-        ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto. Velit
-        totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-        voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-        inventore illo.
-      </DoorwayCollapsibleSection>
-      <DoorwayCollapsibleSection title="blah title 2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt veniam officiis
-        quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis, sunt cumque
-        delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse illo
-        ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto. Velit
-        totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-        voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-        inventore illo.
-      </DoorwayCollapsibleSection>
-    </Card.Section>
-    <Card.Footer>
+// These are static, however they need to be exported as a function and
+// not a const due to a race condition around translations.
+export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
+  return [
+    <Card
+      className="border-0"
+      key="get-started-how-to-start"
+      jumplinkData={{ title: t("help.getStarted.howDoIGetStarted") }}
+    >
+      <Card.Header>
+        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+          {t("help.getStarted.howDoIGetStarted")}
+        </Heading>
+      </Card.Header>
       <Card.Section>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt veniam officiis
-        quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis, sunt cumque
-        delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse illo
-        ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto. Velit
-        totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-        voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-        inventore illo.
+        <DoorwayCollapsibleSection title={t("help.getStarted.howDoorwayCanHelp")}>
+          {t("help.getStarted.howDoorwayCanHelpResp")}
+        </DoorwayCollapsibleSection>
       </Card.Section>
-    </Card.Footer>
-  </Card>,
-  <Card
-    className="border-0"
-    key="blah-2"
-    jumplinkData={{ title: "I'm just a heading for blah 2 jumplink" }}
-  >
-    <Card.Header>
-      <Heading priority={2} className={"text-primary-lighter font-semibold"}>
-        {"I'm just a heading for blah 2"}
-      </Heading>
-    </Card.Header>
-    <Card.Section>this blah blah blah is text</Card.Section>
-    <Card.Section>
-      <DoorwayCollapsibleSection title="blah title">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt veniam officiis
-        quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis, sunt cumque
-        delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse illo
-        ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto. Velit
-        totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-        voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-        inventore illo.
-      </DoorwayCollapsibleSection>
-      <DoorwayCollapsibleSection title="blah title 2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ullam a sunt veniam officiis
-        quae vitae similique non odio, minus minima nisi voluptatem? Sequi veritatis, sunt cumque
-        delectus culpa harum? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse illo
-        ullam nulla possimus, incidunt mollitia culpa quam, ex sequi totam provident iusto. Velit
-        totam deleniti unde fugiat minima omnis commodi! Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Voluptatem excepturi nemo doloribus est consequatur praesentium enim
-        voluptate fuga qui earum repellendus, placeat facere debitis ex eaque repudiandae provident
-        inventore illo.
-      </DoorwayCollapsibleSection>
-    </Card.Section>
-    <Card.Footer>
       <Card.Section>
-        <p>Footer content here.</p>
+        <DoorwayCollapsibleSection title={t("help.getStarted.iNeedMoreHelp")}>
+          <span>
+            {t("help.getStarted.iNeedMoreHelpResp")}
+            <a href="/help/housing-help">{t("help.getStarted.iNeedMoreHelpRespLink")}</a>.
+            <br />
+            <br />
+            {t("help.getStarted.iNeedMoreHelpRespTip")}
+          </span>
+        </DoorwayCollapsibleSection>
       </Card.Section>
-    </Card.Footer>
-  </Card>,
-]
+    </Card>,
+    <Card
+      className="border-0"
+      key="get-started-find-apply"
+      jumplinkData={{ title: t("help.getStarted.howFindApply") }}
+    >
+      <Card.Header>
+        <Heading priority={2} className={"text-primary-lighter font-semibold"}>
+          {t("help.getStarted.howFindApply")}
+        </Heading>
+      </Card.Header>
+      <Card.Section>
+        <DoorwayCollapsibleSection title={t("help.getStarted.seeDoorwayListings")}>
+          <span>
+            {t("help.getStarted.seeDoorwayListingsResp")}
+            <span className="text__medium-weighted">{t("nav.viewListings")}</span>
+            {t("help.getStarted.seeDoorwayListingsResp1")}
+          </span>
+        </DoorwayCollapsibleSection>
+      </Card.Section>
+      <Card.Section>
+        <DoorwayCollapsibleSection title={t("help.getStarted.seeListingsHousehold")}>
+          <span>
+            <ol className="text__medium-normal numbered-list-small ml-5">
+              <li>{t("help.getStarted.seeListingsHouseholdResp1")}</li>
+              <li>{t("help.getStarted.seeListingsHouseholdResp2")}</li>
+              <ul className="text__medium-normal list-disc ml-5">
+                <li>{t("help.getStarted.seeListingsHouseholdResp2a")}</li>
+                <li>{t("help.getStarted.seeListingsHouseholdResp2b")}</li>
+                <li>{t("help.getStarted.seeListingsHouseholdResp2c")}</li>
+                <li>{t("help.getStarted.seeListingsHouseholdResp2note")}</li>
+              </ul>
+              <li>{t("help.getStarted.seeListingsHouseholdResp3")}</li>
+            </ol>
+          </span>
+        </DoorwayCollapsibleSection>
+      </Card.Section>
+      <Card.Section>
+        <DoorwayCollapsibleSection title={t("help.getStarted.applyLotteryWaitlist")}>
+          <span>
+            <ol className="text__medium-normal numbered-list-small ml-5">
+              <li>{t("help.getStarted.applyLotteryWaitlistResp1")}</li>
+              <li>
+                {t("help.getStarted.applyLotteryWaitlistResp2")} {t("t.seeDetails")}.
+                {t("help.getStarted.applyLotteryWaitlistResp2a")}
+              </li>
+              <li>{t("help.getStarted.applyLotteryWaitlistResp3")}</li>
+              <ul className="text__medium-normal list-disc ml-5">
+                <li>{t("help.getStarted.applyLotteryWaitlistResp3a")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp3b")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp3c")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp3d")}</li>
+              </ul>
+              <li>{t("help.getStarted.applyLotteryWaitlistResp4")}</li>
+              <li>{t("help.getStarted.applyLotteryWaitlistResp5")}</li>
+              <ul className="text__medium-normal list-disc ml-5">
+                <li>{t("help.getStarted.applyLotteryWaitlistResp5a")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp5b")}</li>
+                <li>{t("help.getStarted.applyLotteryWaitlistResp5c")}</li>
+              </ul>
+              <li>{t("help.getStarted.applyLotteryWaitlistResp6")}</li>
+            </ol>
+          </span>
+        </DoorwayCollapsibleSection>
+      </Card.Section>
+      <Card.Section>
+        <DoorwayCollapsibleSection title={t("help.getStarted.checkApplications")}>
+          <span>
+            {t("help.getStarted.checkApplicationsResp")}
+            <ul className="text__medium-normal list-disc ml-5">
+              <li>
+                <a href="https://housing.acgov.org" target="_blank">
+                  {t("help.getStarted.checkApplicationsResp1")}
+                </a>
+              </li>
+              <li>
+                <a href="https://housing.sanjoseca.gov" target="_blank">
+                  {t("help.getStarted.checkApplicationsResp2")}
+                </a>
+              </li>
+              <li>
+                <a href="https://smc.housingbayarea.org" target="_blank">
+                  {t("help.getStarted.checkApplicationsResp3")}
+                </a>
+              </li>
+            </ul>
+            {t("help.getStarted.checkApplicationsResp4")}
+          </span>
+        </DoorwayCollapsibleSection>
+      </Card.Section>
+    </Card>,
+  ]
+}

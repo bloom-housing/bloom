@@ -26,8 +26,8 @@ const HousingHelp = () => {
     <Layout>
       <PageHeader title={pageTitle} />
       <div className="my-14">
-        <DoorwayLinkableCardGroup cards={housingHelpLinkableCards} className="m-auto">
-          {housingHelpCardIntro}
+        <DoorwayLinkableCardGroup cards={housingHelpLinkableCards()} className="m-auto">
+          {housingHelpCardIntro()}
         </DoorwayLinkableCardGroup>
       </div>
     </Layout>
