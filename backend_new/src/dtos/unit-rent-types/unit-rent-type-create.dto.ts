@@ -1,8 +1,4 @@
 import { OmitType } from '@nestjs/swagger';
-import { UnitRentType } from './unit-rent-type-get.dto';
+import { UnitRentTypeUpdate } from './unit-rent-type-update.dto';
 
-export class UnitRentTypeCreate extends OmitType(UnitRentType, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {}
+export class UnitRentTypeCreate extends OmitType(UnitRentTypeUpdate, ['id']) {}

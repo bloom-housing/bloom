@@ -5,14 +5,14 @@ import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
-import { UnitRentType } from '../../src/dtos/unit-rent-types/unit-rent-type-get.dto';
+import { UnitRentTypeUpdate } from '../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 describe('UnitRentType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -21,20 +21,6 @@ describe('UnitRentType Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
   });
-
-  afterEach(async () => {
-    await app.close();
-  });
-
-  const cleanUpDb = async (unitRentTypeIds: string[]) => {
-    for (let i = 0; i < unitRentTypeIds.length; i++) {
-      await prisma.unitRentTypes.delete({
-        where: {
-          id: unitRentTypeIds[i],
-        },
-      });
-    }
-  };
 
   it('testing list endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
@@ -52,8 +38,6 @@ describe('UnitRentType Controller Tests', () => {
     const sortedResults = res.body.sort((a, b) => (a.name < b.name ? 1 : -1));
     expect(sortedResults[0].name).toEqual(unitRentTypeA.name);
     expect(sortedResults[1].name).toEqual(unitRentTypeB.name);
-
-    await cleanUpDb([unitRentTypeA.id, unitRentTypeB.id]);
   });
 
   it('testing retrieve endpoint', async () => {
@@ -66,8 +50,6 @@ describe('UnitRentType Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(unitRentTypeA.name);
-
-    await cleanUpDb([unitRentTypeA.id]);
   });
 
   it('testing create endpoint', async () => {
@@ -79,8 +61,6 @@ describe('UnitRentType Controller Tests', () => {
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
-
-    await cleanUpDb([res.body.id]);
   });
 
   it('testing update endpoint', async () => {
@@ -93,14 +73,10 @@ describe('UnitRentType Controller Tests', () => {
       .send({
         id: unitRentTypeA.id,
         name: 'name: 11',
-        createdAt: unitRentTypeA.createdAt,
-        updatedAt: unitRentTypeA.updatedAt,
-      } as UnitRentType)
+      } as UnitRentTypeUpdate)
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');
-
-    await cleanUpDb([unitRentTypeA.id]);
   });
 
   it('testing delete endpoint', async () => {
