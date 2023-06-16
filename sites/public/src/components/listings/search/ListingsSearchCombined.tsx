@@ -250,7 +250,7 @@ const locations: FormOption[] = [
     label: "San Francisco",
     value: "San Francisco",
     isDisabled: true,
-    labelNoteHTML: `(For San Francisco listings, please go to <a href="https://housing.sfgov.org/">DAHLIA</a>)`,
+    labelNoteHTML: `(For San Francisco listings, please go to <a href="https://housing.sfgov.org/" target="_blank">DAHLIA</a>)`,
   },
 ]
 

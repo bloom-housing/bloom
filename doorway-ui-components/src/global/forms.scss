@@ -70,8 +70,7 @@
     .input {
       @apply border;
       @apply border-gray-500;
-      @apply bg-gray-200;
-      @apply rounded;
+
       @apply w-full;
       @apply py-3;
       @apply text-gray-950;
@@ -87,6 +86,9 @@
 
     input.input {
       @apply px-3;
+      border-width: 2px;
+      border-color: var(--bloom-color-gray-450);
+      font-size: .75rem;
     }
 
     .prepend {
@@ -156,8 +158,8 @@
 
   input[type="checkbox"]:checked + label::before,
   input[type="radio"]:checked + label::before {
-    background-color: $tailwind-primary;
-    box-shadow: 0 0 0 1px $tailwind-primary;
+    background-color: var(--bloom-color-accent-cool-light);
+    box-shadow: 0 0 0 1px var(--bloom-color-accent-cool-light);
   }
 
   input[type="radio"]:checked + label::before {
@@ -166,7 +168,7 @@
 
   input[type="checkbox"]:checked + label::before {
     background-image: url("/images/check.png");
-    background-image: url("/images/check.svg");
+    background-image: url("/images/check-black.svg");
     background-position: 50%;
     background-repeat: no-repeat;
   }
@@ -296,6 +298,7 @@ input[type="number"] {
   @apply pb-2;
   @apply text-sm;
   @apply text-gray-800;
+  font-size: 1.5rem;
 }
 
 .field--inline {

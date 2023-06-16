@@ -28,7 +28,7 @@ const ModalHeader = (props: { title: string; uniqueId?: string; className?: stri
       <header className="modal__header">
         <h1 className={classNames.join(" ")} id={props.uniqueId}>
           {props.title}
-        </h1>
+    </h1>
       </header>
     </>
   )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingsMap } from "./ListingsMap"
 import { ListingsList } from "./ListingsList"
