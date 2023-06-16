@@ -1,4 +1,4 @@
-import { buildSearchString, parseSearchString } from "./search"
+import { ListingSearchParams, buildSearchString, parseSearchString } from "./search"
 
 describe("parse search string", () => {
   it("should parse expected values", () => {
@@ -34,12 +34,15 @@ describe("parse search string", () => {
 
 describe("build search string", () => {
   it("should build expected string", () => {
-    const example = {
-      str: "abc",
-      arr: ["one", "two"],
+    const example: ListingSearchParams = {
+      bedrooms: "2",
+      counties: ["county1", "county2"],
+      bathrooms: null,
+      minRent: null,
+      monthlyRent: null,
     }
 
-    const expectedStr = "str:abc;arr:one,two"
+    const expectedStr = "bedrooms:2;counties:county1,county2"
     const actualStr = buildSearchString(example)
 
     expect(actualStr).toEqual(expectedStr)

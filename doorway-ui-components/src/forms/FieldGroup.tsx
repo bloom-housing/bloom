@@ -4,6 +4,7 @@ import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import { Field } from "./Field"
 import { t } from "../helpers/translator"
+import "./FieldGroup.scss"
 
 export interface FieldSingle {
   additionalText?: boolean
@@ -16,7 +17,7 @@ export interface FieldSingle {
   inputProps?: Record<string, unknown>
   label: string
   uniqueName?: boolean
-  note?: string  // Using dangerouslySetInnerHTML
+  note?: string // Using dangerouslySetInnerHTML
   subFields?: FieldSingle[]
   type?: string
   value?: string
@@ -93,33 +94,33 @@ const FieldGroup = ({
           id={item.id}
           defaultValue={item.value || item.id}
           name={subfieldsExist() || item.uniqueName ? `${name}-${item.value || ""}` : name}
-      onClick={(e) => {
-        if (item.disabled) {
-          return
-        }
-        // We cannot reliably target an individual checkbox in a field group,
-        // since they have the same name, so we keep track on our own.
-        let currentLabels = []
-        if (e.currentTarget.checked) {
-          currentLabels = [...checkedInputs, item.label]
-        } else {
-          currentLabels = checkedInputs.filter((subset) => item.label !== subset)
-        }
-        setCheckedInputs(currentLabels)
+          onClick={(e) => {
+            if (item.disabled) {
+              return
+            }
+            // We cannot reliably target an individual checkbox in a field group,
+            // since they have the same name, so we keep track on our own.
+            let currentLabels = []
+            if (e.currentTarget.checked) {
+              currentLabels = [...checkedInputs, item.label]
+            } else {
+              currentLabels = checkedInputs.filter((subset) => item.label !== subset)
+            }
+            setCheckedInputs(currentLabels)
 
-        if (onChange) {
-          // Update values in parent component
-          onChange(name, currentLabels)
-        }
-      }}
-      checked={checkedInputs.indexOf(item.label) > -1}
-      // Setting `onChange` is to avoid a warning for using a mutable checked attribute, rather
-      // than using defaultChecked.
-      onChange={(e) => {
-        if (!checkedInputs) {
-          setChecked(e.currentTarget.checked)
-        }
-      }}
+            if (onChange) {
+              // Update values in parent component
+              onChange(name, currentLabels)
+            }
+          }}
+          checked={checkedInputs.indexOf(item.label) > -1}
+          // Setting `onChange` is to avoid a warning for using a mutable checked attribute, rather
+          // than using defaultChecked.
+          onChange={(e) => {
+            if (!checkedInputs) {
+              setChecked(e.currentTarget.checked)
+            }
+          }}
           disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
@@ -127,13 +128,16 @@ const FieldGroup = ({
         />
         <label
           htmlFor={item.id}
-          className={`font-semibold ${fieldLabelClassName || ""} ${
-            item.disabled ? "text-gray-600 cursor-not-allowed" : ""
-          }`}
+          className={`${fieldLabelClassName || ""} ${item.disabled ? "cursor-not-allowed" : ""}`}
         >
-        {item.label}
-      </label>
-        {item.note && <span className={"field-note font-normal"} dangerouslySetInnerHTML={{ __html: item.note}}></span>}
+          {item.label}
+        </label>
+        {item.note && (
+          <span
+            className={"field-note font-normal"}
+            dangerouslySetInnerHTML={{ __html: item.note }}
+          ></span>
+        )}
         {item.description && (
           <div className="ml-8 -mt-1 mb-5">
             <ExpandableContent

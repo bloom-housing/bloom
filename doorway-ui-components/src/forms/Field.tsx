@@ -1,12 +1,14 @@
 import React, { ChangeEvent, useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
+import "./Field.scss"
 
 export interface FieldProps {
   error?: boolean
   errorMessage?: string
   className?: string
   controlClassName?: string
+  inputClassName?: string
   caps?: boolean
   primary?: boolean
   readerOnly?: boolean
@@ -130,6 +132,11 @@ const Field = (props: FieldProps) => {
     note = <p className="field-note mb-4">{props.note}</p>
   }
 
+  const inputClasses: string[] = ["input"]
+  if (props.inputClassName) {
+    inputClasses.push(props.inputClassName)
+  }
+
   return (
     <div className={classes.join(" ")}>
       {!isRadioOrCheckbox && !props.hidden && label}
@@ -139,7 +146,7 @@ const Field = (props: FieldProps) => {
         <input
           aria-describedby={props.describedBy ? props.describedBy : `${idOrName}`}
           aria-invalid={!!props.error || false}
-          className="input"
+          className={inputClasses.join(" ")}
           type={type}
           id={idOrName}
           name={props.name}

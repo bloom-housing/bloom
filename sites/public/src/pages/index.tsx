@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
@@ -17,9 +17,16 @@ import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { runtimeConfig } from "../lib/runtime-config"
+import { FormOption, LandingSearch } from "../components/listings/search/LandingSearch"
+import {
+  locations,
+  bedroomOptionsForLandingPage,
+} from "../components/listings/search/ListingsSearchCombined"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
+  bedrooms: FormOption[]
+  counties: FormOption[]
 }
 
 export default function Home(props: IndexProps) {
@@ -65,7 +72,7 @@ export default function Home(props: IndexProps) {
         offsetImage={"images/person-with-child.jpg"}
         offsetImageAlt={t("welcome.personWithChildAlt")}
       >
-        <p className="bg-gray-300 h-64">TODO: Add search component here</p>
+        <LandingSearch bedrooms={props.bedrooms} counties={props.counties} />
       </DoorwayHero>
       <ActionBlock
         className="p-12"
@@ -190,6 +197,10 @@ export async function getServerSideProps() {
   )
 
   return {
-    props: { jurisdiction },
+    props: {
+      jurisdiction,
+      bedrooms: bedroomOptionsForLandingPage,
+      counties: locations,
+    },
   }
 }

@@ -78,12 +78,14 @@ export function parseSearchString<T extends object>(search: string, format: T): 
  * @param input
  * @returns
  */
-export function buildSearchString(input: object) {
-  // For each key in the input, return a serialized value, then join all together
+export function buildSearchString(input: ListingSearchParams) {
+  // For each non-null key in the input, return a serialized value, then join all together
   return Object.entries(input)
+    .filter(([key, value]) => {
+      return value !== null && value != ""
+    })
     .map(([key, value]) => {
       let strVal
-
       if (Array.isArray(value)) {
         strVal = value.join(",")
       } else {

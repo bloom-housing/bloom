@@ -5,8 +5,7 @@
   --doorway-hero-inner-background-color: var(--doorway-color-secondary);
   --doorway-hero-inner-max-width: var(--bloom-width-3xl);
   --doorway-hero-inner-offset: calc(-1 * var(--bloom-s20));
-  --doorway-hero-image-width-desktop: var(bloom-width-1-3rd);
-  --doorway-hero-image-offset-top: var(--bloom-s20);
+  --doorway-hero-image-width-desktop: var(--bloom-width-1-3rd);
   --doorway-hero-image-offset-right: calc(-1 * var(--bloom-s40));
   --doorway-hero-image-width: 50%;
 
@@ -20,22 +19,51 @@
   }
 }
 
-.doorway-hero_inner {
+.doorway-hero_title {
+  @apply font-serif;
+  @apply text-2xl;
+  @apply text-primary-dark;
+  @apply font-semibold;
+  margin-bottom: var(--doorway-hero-between-margin);
+
+  @media (min-width: $screen-md) {
+    @apply text-3xl;
+  }
+}
+
+.doorway-hero_outer {
   background-color: var(--doorway-hero-inner-background-color);
   position: relative;
   width: 100%;
   @apply p-8;
 
   @media (min-width: $screen-md) {
-    max-width: var(--doorway-hero-inner-max-width);
+    max-width: var(--doorway-hero-max-width);
 
     @apply p-12;
-    @apply pr-72;
     @apply rounded-3xl;
   }
 
   @media (min-width: $screen-lg) {
     left: var(--doorway-hero-inner-offset);
+  }
+}
+
+.doorway-hero_inner {
+  background-color: var(--doorway-hero-inner-background-color);
+  position: relative;
+  width: 100%;
+
+  @media (min-width: $screen-md) {
+    max-width: var(--doorway-hero-inner-max-width);
+
+    @apply pr-36;
+  }
+
+  @media (min-width: $screen-lg) {
+    max-width: var(--doorway-hero-inner-max-width);
+
+    @apply pr-72;
   }
 
   h1 {
@@ -49,7 +77,6 @@
 
   @media (min-width: $screen-md) {
     position: absolute;
-    top: var(--doorway-hero-image-offset-top);
     right: var(--doorway-hero-image-offset-right);
     width: var(--doorway-hero-image-width);
   }

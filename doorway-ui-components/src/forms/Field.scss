@@ -1,0 +1,15 @@
+.doorway-field {
+  width: 100%;
+  margin: 0;
+  padding: 0 0 1.5rem 0;
+  .rent-input {
+    border-radius: 12px;
+    border-width: 3px;
+    background-color: white;
+  }
+  ::-webkit-input-placeholder {
+    color: black;
+    font-family: var(--bloom-font-sans);
+    text-transform: var(--label-transform);
+  }
+}

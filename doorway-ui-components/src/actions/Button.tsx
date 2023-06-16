@@ -48,6 +48,7 @@ export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
   if (props.className) classNames.push(props.className)
   if (props.loading) classNames.push("is-loading")
   if (props.transition) classNames.push("transition")
+  if (props.isActive) classNames.push("is-secondary")
   return classNames
 }
 
@@ -94,10 +95,10 @@ const Button = (props: ButtonProps) => {
   const buttonClasses = buttonClassesForProps(props)
 
   const toggleState = () => {
-    if (!props.onSelect || !props.onDeselect || typeof(props.index) != 'number') {
+    if (!props.onSelect || !props.onDeselect || typeof props.index != "number") {
       return
     }
-    if (!props.isActive ) {
+    if (!props.isActive) {
       props.onSelect(props.index)
     } else {
       props.onDeselect(props.index)
@@ -109,7 +110,7 @@ const Button = (props: ButtonProps) => {
       toggleState()
     }
   }
-  const onClickWrap = (event: React.MouseEvent<Element, MouseEvent> ) => {
+  const onClickWrap = (event: React.MouseEvent<Element, MouseEvent>) => {
     toggleState()
     if (props.onClick) {
       props.onClick(event)

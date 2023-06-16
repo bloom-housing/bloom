@@ -11,16 +11,18 @@ export interface DoorwayHeroProps {
 const DoorwayHero = (props: DoorwayHeroProps) => {
   return (
     <div className="doorway-hero">
-      <div className="doorway-hero_inner">
-        <h1>{props.title}</h1>
-        {props?.offsetImage && props?.offsetImageAlt && (
-          <img
-            src={props.offsetImage}
-            alt={props.offsetImageAlt}
-            className={"rounded-3xl doorway-hero_image"}
-          />
-        )}
-        <div className="doorway-body_container">{props?.children}</div>
+      <div className="doorway-hero_outer">
+        <div className={"doorway-hero_title"}>{props.title}</div>
+        <div className="doorway-hero_inner">
+          {props?.offsetImage && props?.offsetImageAlt && (
+            <img
+              src={props.offsetImage}
+              alt={props.offsetImageAlt}
+              className={"rounded-3xl doorway-hero_image"}
+            />
+          )}
+          <div className="doorway-body_container">{props?.children}</div>
+        </div>
       </div>
     </div>
   )

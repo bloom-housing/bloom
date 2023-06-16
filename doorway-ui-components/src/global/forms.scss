@@ -177,7 +177,7 @@
   }
 
   input[type="checkbox"]:disabled + label {
-    color: map-get($tailwind-gray, 450) !important;
+    color: inherit;
   }
 
   input[type="checkbox"]:disabled + label::before,
@@ -345,6 +345,7 @@ input[type="number"] {
   @apply text-sm;
   @apply text-gray-700;
   white-space: pre-line;
+  @apply normal-case;
 }
 
 .error-message {
