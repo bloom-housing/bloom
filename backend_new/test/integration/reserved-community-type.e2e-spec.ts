@@ -31,7 +31,7 @@ describe('ReservedCommunityType Controller Tests', () => {
     jurisdictionAId = jurisdictionA.id;
   });
 
-  it('testing list endpoint', async () => {
+  it('testing list endpoint with params and without params', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(13),
     });
@@ -46,12 +46,23 @@ describe('ReservedCommunityType Controller Tests', () => {
     };
     const query = stringify(queryParams as any);
 
-    const res = await request(app.getHttpServer())
+    // testing with params
+    let res = await request(app.getHttpServer())
       .get(`/reservedCommunityTypes?${query}`)
       .expect(200);
 
     expect(res.body.length).toEqual(1);
     expect(res.body[0].name).toEqual(reservedCommunityTypeA.name);
+
+    // testing without params
+    res = await request(app.getHttpServer())
+      .get(`/reservedCommunityTypes`)
+      .expect(200);
+
+    expect(res.body.length).toEqual(2);
+    expect(res.body[0].name).toEqual('name: 10');
+    expect(res.body[1].name).toEqual('name: 10');
+    expect(res.body[0].jurisdictions.id).not.toBe(res.body[1].jurisdictions.id);
   });
 
   it('testing retrieve endpoint', async () => {
