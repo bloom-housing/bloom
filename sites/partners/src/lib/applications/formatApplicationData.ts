@@ -96,7 +96,7 @@ export const mapFormToApi = ({
 
     const dateString = dayjs(
       `${submissionMonth}/${submissionDay}/${submissionYear} ${hours}:${minutes}:${seconds} ${period}`,
-      "MM/DD/YYYY hh:mm:ss A"
+      "MM/DD/YYYY hh:mm:ss a"
     ).format(TIME_24H_FORMAT)
 
     const formattedDate = dayjs(dateString, TIME_24H_FORMAT).utc(true).toDate()
@@ -290,7 +290,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
     const hours = submissionDate.format("hh")
     const minutes = submissionDate.format("mm")
     const seconds = submissionDate.format("ss")
-    const period = submissionDate.format("A").toLowerCase() as TimeFieldPeriod
+    const period = submissionDate.format("a").toLowerCase() as TimeFieldPeriod
 
     return {
       hours,
