@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { AlertBox, AlertTypes } from "@bloom-housing/ui-components"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 type SiteAlertProps = {
   timeout?: number
@@ -72,13 +73,13 @@ export const SiteAlert = ({
   }, [alertMessage, timeout])
 
   return open ? (
-    <AlertBox
-      onClose={dismissable ? () => setOpen(false) : undefined}
+    <Toast
+      closeable={dismissable}
       className={className}
       type={alertMessage?.type ?? type}
       sticky={sticky}
     >
       {message}
-    </AlertBox>
+    </Toast>
   ) : null
 }
