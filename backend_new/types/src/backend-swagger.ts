@@ -828,7 +828,7 @@ export class UnitRentTypesService {
   update(
     params: {
       /** requestBody */
-      body?: UnitRentType;
+      body?: UnitRentTypeUpdate;
     } = {} as any,
     options: IRequestOptions = {},
   ): Promise<UnitRentType> {
@@ -1221,13 +1221,28 @@ export interface UnitAccessibilityPriorityTypeCreate {
   name: string;
 }
 
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+}
+
 export interface UnitRentTypeCreate {
   /**  */
   name: string;
 }
 
-export interface UnitRentType {}
-export interface UnitAccessibilityPriorityTypeUpdate {
+export interface UnitRentTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+}
+
+export interface UnitRentType {
   /**  */
   id: string;
 
