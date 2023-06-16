@@ -11,12 +11,156 @@ import {
   ListingEventsTypeEnum,
   MultiselectQuestionsApplicationSectionEnum,
   UnitsStatusEnum,
+  AmiChart,
+  MultiselectQuestions,
+  PrismaClient,
 } from '@prisma/client';
-import { unitAccessibilityPriorityTypeFactory } from './unit-accessibility-priority-type-factory';
-import { unitTypeFactory } from './unit-type-factory';
 import { unitRentTypeFactory } from './unit-rent-type-factory';
+import { unitAccessibilityPriorityTypeFactorySingle } from './unit-accessibility-priority-type-factory';
+import { randomName } from './word-generator';
+import { addressFactory } from './address-factory';
+import { unitFactoryMany } from './unit-factory';
+import { reservedCommunityTypeFactory } from './reserved-community-type-factory';
 
-export const listingFactory = (
+export const listingFactory = async (
+  jurisdictionId: string,
+  prismaClient: PrismaClient,
+  optionalParams?: {
+    amiChart?: AmiChart;
+    numberOfUnits?: number;
+    units?: Prisma.UnitsCreateWithoutListingsInput[];
+    listing?: Prisma.ListingsCreateInput;
+    includeBuildingFeatures?: boolean;
+    includeEligibilityRules?: boolean;
+    multiselectQuestions?: MultiselectQuestions[];
+  },
+): Promise<Prisma.ListingsCreateInput> => {
+  const previousListing = optionalParams?.listing || {};
+  let units = optionalParams?.units;
+  if (!units && optionalParams?.numberOfUnits) {
+    units = await unitFactoryMany(optionalParams.numberOfUnits, prismaClient, {
+      randomizePriorityType: true,
+      amiChart: optionalParams?.amiChart,
+    });
+  }
+  return {
+    createdAt: new Date(),
+    assets: [],
+    name: randomName(),
+    displayWaitlistSize: Math.random() < 0.5,
+    listingsBuildingAddress: {
+      create: addressFactory(),
+    },
+    listingsApplicationMailingAddress: {
+      create: addressFactory(),
+    },
+    listingsApplicationPickUpAddress: {
+      create: addressFactory(),
+    },
+    listingsLeasingAgentAddress: {
+      create: addressFactory(),
+    },
+    listingsApplicationDropOffAddress: {
+      create: addressFactory(),
+    },
+    reservedCommunityTypes: {
+      create: reservedCommunityTypeFactory(jurisdictionId),
+    },
+    listingMultiselectQuestions: optionalParams?.multiselectQuestions
+      ? {
+          create: optionalParams.multiselectQuestions.map(
+            (question, index) => ({
+              ordinal: index,
+              multiselectQuestionId: question.id,
+            }),
+          ),
+        }
+      : undefined,
+    ...featuresAndUtilites(),
+    ...buildingFeatures(optionalParams?.includeBuildingFeatures),
+    ...additionalEligibilityRules(optionalParams?.includeEligibilityRules),
+    ...previousListing,
+    jurisdictions: {
+      connect: {
+        id: jurisdictionId,
+      },
+    },
+    units: units
+      ? {
+          create: units,
+        }
+      : undefined,
+  };
+};
+
+const buildingFeatures = (includeBuildingFeatures: boolean) => {
+  if (!includeBuildingFeatures) return {};
+  return {
+    amenities:
+      'Laundry facilities, Elevators, Beautifully landscaped garden, walkways',
+    unitAmenities: 'All-electric kitchen, Dishwasher',
+    petPolicy: 'Allow pets with a deposit of $500',
+    accessibility: 'ADA units available',
+    smokingPolicy: 'Non-smoking building',
+    servicesOffered: 'Resident services on-site.',
+  };
+};
+
+const additionalEligibilityRules = (includeEligibilityRules: boolean) => {
+  if (!includeEligibilityRules) return {};
+  return {
+    rentalHistory: 'Two years of rental history will be verified',
+    rentalAssistance: 'additional rental assistance',
+    creditHistory:
+      'A poor credit history may be grounds to deem an applicant ineligible for housing.',
+    criminalBackground:
+      'A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ',
+  };
+};
+
+// Tables that aren't currently used by bloom but are getting set.
+// Setting all fields to false for now
+const featuresAndUtilites = () => ({
+  listingFeatures: {
+    create: {
+      elevator: false,
+      wheelchairRamp: false,
+      serviceAnimalsAllowed: false,
+      accessibleParking: false,
+      parkingOnSite: false,
+      inUnitWasherDryer: false,
+      laundryInBuilding: false,
+      barrierFreeEntrance: false,
+      rollInShower: false,
+      grabBars: false,
+      heatingInUnit: false,
+      acInUnit: false,
+      hearing: false,
+      visual: false,
+      mobility: false,
+      barrierFreeUnitEntrance: false,
+      loweredLightSwitch: false,
+      barrierFreeBathroom: false,
+      wideDoorways: false,
+      loweredCabinets: false,
+    },
+  },
+  listingUtilities: {
+    create: {
+      water: false,
+      gas: false,
+      trash: false,
+      sewer: false,
+      electricity: false,
+      cable: false,
+      phone: false,
+      internet: false,
+    },
+  },
+});
+
+// Temporarily keeping this for reference
+export const listingFactory2 = (
   i: number,
   jurisdictionId: string,
   amiChartId?: string,
@@ -337,7 +481,7 @@ export const listingFactory = (
       },
     ],
   },
-  units: unitFactory(
+  units: unitFactory2(
     i,
     i,
     jurisdictionId,
@@ -348,7 +492,8 @@ export const listingFactory = (
   ),
 });
 
-const unitFactory = (
+// Temporarily keeping this for reference
+const unitFactory2 = (
   numberToMake: number,
   i: number,
   jurisdictionId: string,
@@ -375,13 +520,13 @@ const unitFactory = (
       monthlyRentAsPercentOfIncome: i,
       bmrProgramChart: true,
       status: UnitsStatusEnum.available,
-      unitTypes: unitTypeId
-        ? {
-            connect: {
-              id: unitTypeId,
-            },
-          }
-        : { create: unitTypeFactory(i) },
+      // unitTypes: unitTypeId
+      //   ? {
+      //       connect: {
+      //         id: unitTypeId,
+      //       },
+      //     }
+      //   : { create: unitTypeFactory(i) },
       amiChart: amiChartId
         ? { connect: { id: amiChartId } }
         : {
@@ -398,12 +543,12 @@ const unitFactory = (
       unitAccessibilityPriorityTypes: unitAccessibilityPriorityTypeId
         ? { connect: { id: unitAccessibilityPriorityTypeId } }
         : {
-            create: unitAccessibilityPriorityTypeFactory(i),
+            create: unitAccessibilityPriorityTypeFactorySingle(),
           },
       unitRentTypes: unitRentTypeId
         ? { connect: { id: unitRentTypeId } }
         : {
-            create: unitRentTypeFactory(i),
+            create: unitRentTypeFactory(),
           },
     });
   }

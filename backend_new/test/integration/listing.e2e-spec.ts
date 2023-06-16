@@ -27,7 +27,7 @@ describe('Listing Controller Tests', () => {
     await app.init();
 
     const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(100),
+      data: jurisdictionFactory(),
     });
 
     jurisdictionAId = jurisdiction.id;
@@ -49,12 +49,14 @@ describe('Listing Controller Tests', () => {
   });
 
   it('list test no params some data', async () => {
-    await prisma.listings.create({
-      data: listingFactory(10, jurisdictionAId),
+    const listing1 = await listingFactory(jurisdictionAId, prisma);
+    const listing1Created = await prisma.listings.create({
+      data: listing1,
     });
 
-    await prisma.listings.create({
-      data: listingFactory(50, jurisdictionAId),
+    const listing2 = await listingFactory(jurisdictionAId, prisma);
+    const listing2Created = await prisma.listings.create({
+      data: listing2,
     });
 
     const res = await request(app.getHttpServer()).get('/listings').expect(200);
@@ -67,11 +69,11 @@ describe('Listing Controller Tests', () => {
       totalPages: 1,
     });
 
-    const items = res.body.items.sort((a, b) => (a.name < b.name ? -1 : 1));
+    const items = res.body.items.map((item) => item.name);
 
-    expect(res.body.items.length).toEqual(2);
-    expect(items[0].name).toEqual('name: 10');
-    expect(items[1].name).toEqual('name: 50');
+    expect(items.length).toBeGreaterThanOrEqual(2);
+    expect(items).toContain(listing1Created.name);
+    expect(items).toContain(listing2Created.name);
   });
 
   it('list test params no data', async () => {
@@ -82,7 +84,7 @@ describe('Listing Controller Tests', () => {
       filter: [
         {
           $comparison: Compare.IN,
-          name: 'name: 11,name: 51',
+          name: 'random name',
         },
       ],
     };
@@ -105,12 +107,19 @@ describe('Listing Controller Tests', () => {
   });
 
   it('list test params some data', async () => {
-    await prisma.listings.create({
-      data: listingFactory(11, jurisdictionAId),
+    const listing1 = await listingFactory(jurisdictionAId, prisma);
+    const listing1Created = await prisma.listings.create({
+      data: listing1,
     });
-    await prisma.listings.create({
-      data: listingFactory(51, jurisdictionAId),
+
+    const listing2 = await listingFactory(jurisdictionAId, prisma);
+    const listing2Created = await prisma.listings.create({
+      data: listing2,
     });
+
+    const orderedNames = [listing1Created.name, listing2Created.name].sort(
+      (a, b) => a.localeCompare(b),
+    );
 
     let queryParams: ListingsQueryParams = {
       limit: 1,
@@ -119,7 +128,7 @@ describe('Listing Controller Tests', () => {
       filter: [
         {
           $comparison: Compare.IN,
-          name: 'name: 11,name: 51',
+          name: orderedNames.toString(),
         },
       ],
       orderBy: [ListingOrderByKeys.name],
@@ -140,7 +149,7 @@ describe('Listing Controller Tests', () => {
     });
 
     expect(res.body.items.length).toEqual(1);
-    expect(res.body.items[0].name).toEqual('name: 11');
+    expect(res.body.items[0].name).toEqual(orderedNames[0]);
 
     queryParams = {
       limit: 1,
@@ -149,7 +158,7 @@ describe('Listing Controller Tests', () => {
       filter: [
         {
           $comparison: Compare.IN,
-          name: 'name: 11,name: 51',
+          name: orderedNames.toString(),
         },
       ],
       orderBy: [ListingOrderByKeys.name],
@@ -169,6 +178,6 @@ describe('Listing Controller Tests', () => {
       totalPages: 2,
     });
     expect(res.body.items.length).toEqual(1);
-    expect(res.body.items[0].name).toEqual('name: 51');
+    expect(res.body.items[0].name).toEqual(orderedNames[1]);
   });
 });
