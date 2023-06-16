@@ -9,7 +9,6 @@
       "sites/partners",
       "backend/core",
       "shared-helpers",
-      "shared-services",
       "doorway-ui-components"
     ],
     "nohoist": [
@@ -46,7 +45,6 @@
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "start:uic": "cd doorway-ui-components && yarn start",
     "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
-    "test:shared:services": "cd shared-services && yarn && yarn test",
     "test:doorway-ui-components": "cd doorway-ui-components && yarn && yarn test",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",
