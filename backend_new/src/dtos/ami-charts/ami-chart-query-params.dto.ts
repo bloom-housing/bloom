@@ -6,15 +6,6 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 export class AmiChartQueryParams {
   @Expose()
   @ApiProperty({
-    name: 'jurisdictionName',
-    required: false,
-    type: String,
-  })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  jurisdictionName?: string;
-
-  @Expose()
-  @ApiProperty({
     name: 'jurisdictionId',
     required: false,
     type: String,

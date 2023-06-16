@@ -5,14 +5,14 @@ import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { unitTypeFactory } from '../../prisma/seed-helpers/unit-type-factory';
 import { UnitTypeCreate } from '../../src/dtos/unit-types/unit-type-create.dto';
-import { UnitType } from '../../src/dtos/unit-types/unit-type-get.dto';
+import { UnitType } from '../../src/dtos/unit-types/unit-type.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 describe('UnitType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -21,20 +21,6 @@ describe('UnitType Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
   });
-
-  afterEach(async () => {
-    await app.close();
-  });
-
-  const cleanUpDb = async (unitTypeIds: string[]) => {
-    for (let i = 0; i < unitTypeIds.length; i++) {
-      await prisma.unitTypes.delete({
-        where: {
-          id: unitTypeIds[i],
-        },
-      });
-    }
-  };
 
   it('testing list endpoint', async () => {
     const unitTypeA = await prisma.unitTypes.create({
@@ -54,8 +40,6 @@ describe('UnitType Controller Tests', () => {
     );
     expect(sortedResults[0].name).toEqual(unitTypeA.name);
     expect(sortedResults[1].name).toEqual(unitTypeB.name);
-
-    await cleanUpDb([unitTypeA.id, unitTypeB.id]);
   });
 
   it('testing retrieve endpoint', async () => {
@@ -68,8 +52,6 @@ describe('UnitType Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(unitTypeA.name);
-
-    await cleanUpDb([unitTypeA.id]);
   });
 
   it('testing create endpoint', async () => {
@@ -82,8 +64,6 @@ describe('UnitType Controller Tests', () => {
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
-
-    await cleanUpDb([res.body.id]);
   });
 
   it('testing update endpoint', async () => {
@@ -104,8 +84,6 @@ describe('UnitType Controller Tests', () => {
 
     expect(res.body.name).toEqual('name: 11');
     expect(res.body.numBedrooms).toEqual(11);
-
-    await cleanUpDb([unitTypeA.id]);
   });
 
   it('testing delete endpoint', async () => {

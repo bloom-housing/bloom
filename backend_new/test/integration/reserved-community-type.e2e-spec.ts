@@ -7,15 +7,16 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { stringify } from 'qs';
 import { ReservedCommunityTypeQueryParams } from '../../src/dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import { reservedCommunityTypeFactory } from '../../prisma/seed-helpers/reserved-community-type-factory';
-import { ReservedCommunitTypeCreate } from '../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
-import { ReservedCommunityType } from '../../src/dtos/reserved-community-types/reserved-community-type-get.dto';
+import { ReservedCommunityTypeCreate } from '../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
+import { ReservedCommunityType } from '../../src/dtos/reserved-community-types/reserved-community-type.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 describe('ReservedCommunityType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jurisdictionAId: string;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -23,47 +24,25 @@ describe('ReservedCommunityType Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-  });
 
-  afterEach(async () => {
-    await app.close();
-  });
-
-  const cleanUpDb = async (
-    reservedCommunityTypeIds: string[],
-    jurisdictionIds: string[],
-  ) => {
-    for (let i = 0; i < reservedCommunityTypeIds.length; i++) {
-      await prisma.reservedCommunityTypes.delete({
-        where: {
-          id: reservedCommunityTypeIds[i],
-        },
-      });
-    }
-    for (let i = 0; i < jurisdictionIds.length; i++) {
-      await prisma.jurisdictions.delete({
-        where: {
-          id: jurisdictionIds[i],
-        },
-      });
-    }
-  };
-
-  it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(12),
     });
+    jurisdictionAId = jurisdictionA.id;
+  });
+
+  it('testing list endpoint', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(13),
     });
     const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(10, jurisdictionA.id),
+      data: reservedCommunityTypeFactory(10, jurisdictionAId),
     });
-    const reservedCommunityTypeB = await prisma.reservedCommunityTypes.create({
+    await prisma.reservedCommunityTypes.create({
       data: reservedCommunityTypeFactory(10, jurisdictionB.id),
     });
     const queryParams: ReservedCommunityTypeQueryParams = {
-      jurisdictionName: jurisdictionA.name,
+      jurisdictionId: jurisdictionAId,
     };
     const query = stringify(queryParams as any);
 
@@ -73,19 +52,11 @@ describe('ReservedCommunityType Controller Tests', () => {
 
     expect(res.body.length).toEqual(1);
     expect(res.body[0].name).toEqual(reservedCommunityTypeA.name);
-
-    await cleanUpDb(
-      [reservedCommunityTypeA.id, reservedCommunityTypeB.id],
-      [jurisdictionA.id, jurisdictionB.id],
-    );
   });
 
   it('testing retrieve endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(12),
-    });
     const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(10, jurisdictionA.id),
+      data: reservedCommunityTypeFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -93,39 +64,27 @@ describe('ReservedCommunityType Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(reservedCommunityTypeA.name);
-
-    await cleanUpDb([reservedCommunityTypeA.id], [jurisdictionA.id]);
   });
 
   it('testing create endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(12),
-    });
-
     const res = await request(app.getHttpServer())
       .post('/reservedCommunityTypes')
       .send({
         name: 'name: 10',
         description: 'description: 10',
         jurisdictions: {
-          id: jurisdictionA.id,
+          id: jurisdictionAId,
         },
-      } as ReservedCommunitTypeCreate)
+      } as ReservedCommunityTypeCreate)
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
     expect(res.body.description).toEqual('description: 10');
-
-    await cleanUpDb([res.body.id], [jurisdictionA.id]);
   });
 
   it('testing update endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(12),
-    });
-
     const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(10, jurisdictionA.id),
+      data: reservedCommunityTypeFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -135,7 +94,7 @@ describe('ReservedCommunityType Controller Tests', () => {
         name: 'name: 11',
         description: 'description: 11',
         jurisdictions: {
-          id: jurisdictionA.id,
+          id: jurisdictionAId,
         },
         createdAt: reservedCommunityTypeA.createdAt,
         updatedAt: reservedCommunityTypeA.updatedAt,
@@ -144,17 +103,11 @@ describe('ReservedCommunityType Controller Tests', () => {
 
     expect(res.body.name).toEqual('name: 11');
     expect(res.body.description).toEqual('description: 11');
-
-    await cleanUpDb([reservedCommunityTypeA.id], [jurisdictionA.id]);
   });
 
   it('testing delete endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(12),
-    });
-
     const reservedCommunityTypeA = await prisma.reservedCommunityTypes.create({
-      data: reservedCommunityTypeFactory(16, jurisdictionA.id),
+      data: reservedCommunityTypeFactory(16, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -165,7 +118,5 @@ describe('ReservedCommunityType Controller Tests', () => {
       .expect(200);
 
     expect(res.body.success).toEqual(true);
-
-    await cleanUpDb([], [jurisdictionA.id]);
   });
 });

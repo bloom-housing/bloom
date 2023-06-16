@@ -17,8 +17,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ReservedCommunityTypeService } from '../services/reserved-community-type.service';
-import { ReservedCommunityType } from '../dtos/reserved-community-types/reserved-community-type-get.dto';
-import { ReservedCommunitTypeCreate } from '../dtos/reserved-community-types/reserved-community-type-create.dto';
+import { ReservedCommunityType } from '../dtos/reserved-community-types/reserved-community-type.dto';
+import { ReservedCommunityTypeCreate } from '../dtos/reserved-community-types/reserved-community-type-create.dto';
+import { ReservedCommunityTypeUpdate } from '../dtos/reserved-community-types/reserved-community-type-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ReservedCommunityTypeQueryParams } from '../dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -28,7 +29,8 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 @ApiTags('reservedCommunityTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 @ApiExtraModels(
-  ReservedCommunitTypeCreate,
+  ReservedCommunityTypeCreate,
+  ReservedCommunityTypeUpdate,
   IdDTO,
   ReservedCommunityTypeQueryParams,
 )
@@ -40,7 +42,9 @@ export class ReservedCommunityTypeController {
   @Get()
   @ApiOperation({ summary: 'List reservedCommunityTypes', operationId: 'list' })
   @ApiOkResponse({ type: ReservedCommunityType, isArray: true })
-  async list(@Query() queryParams: ReservedCommunityTypeQueryParams) {
+  async list(
+    @Query() queryParams: ReservedCommunityTypeQueryParams,
+  ): Promise<ReservedCommunityType[]> {
     return await this.ReservedCommunityTypeService.list(queryParams);
   }
 
@@ -52,7 +56,7 @@ export class ReservedCommunityTypeController {
   @ApiOkResponse({ type: ReservedCommunityType })
   async retrieve(
     @Param('reservedCommunityTypeId') reservedCommunityTypeId: string,
-  ) {
+  ): Promise<ReservedCommunityType> {
     return this.ReservedCommunityTypeService.findOne(reservedCommunityTypeId);
   }
 
@@ -62,7 +66,9 @@ export class ReservedCommunityTypeController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: ReservedCommunityType })
-  async create(@Body() reservedCommunityType: ReservedCommunitTypeCreate) {
+  async create(
+    @Body() reservedCommunityType: ReservedCommunityTypeCreate,
+  ): Promise<ReservedCommunityType> {
     return await this.ReservedCommunityTypeService.create(
       reservedCommunityType,
     );
@@ -74,7 +80,9 @@ export class ReservedCommunityTypeController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: ReservedCommunityType })
-  async update(@Body() reservedCommunityType: ReservedCommunityType) {
+  async update(
+    @Body() reservedCommunityType: ReservedCommunityTypeUpdate,
+  ): Promise<ReservedCommunityType> {
     return await this.ReservedCommunityTypeService.update(
       reservedCommunityType,
     );
@@ -86,7 +94,7 @@ export class ReservedCommunityTypeController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.ReservedCommunityTypeService.delete(dto.id);
   }
 }

@@ -22,7 +22,7 @@ function useIdleTimeout(timeoutMs: number, onTimeout: () => void) {
       if (timer) {
         clearTimeout(timer)
       }
-      timer = (setTimeout(onTimeout, timeoutMs) as unknown) as number
+      timer = setTimeout(onTimeout, timeoutMs) as unknown as number
     }
 
     // Listen for any activity events & reset the timer when they are found
@@ -71,7 +71,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
 
     // Give the user 1 minute to respond to the prompt before the onTimeout action
     setPromptTimeout(
-      (setTimeout(() => {
+      setTimeout(() => {
         const timeoutAction = async () => {
           setPromptTimeout(undefined)
           await onTimeout()
@@ -79,7 +79,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
           void router.push(redirectPath)
         }
         void timeoutAction()
-      }, PROMPT_TIMEOUT) as unknown) as number
+      }, PROMPT_TIMEOUT) as unknown as number
     )
   })
 

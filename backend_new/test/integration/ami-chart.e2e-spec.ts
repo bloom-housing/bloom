@@ -8,14 +8,15 @@ import { stringify } from 'qs';
 import { AmiChartQueryParams } from '../../src/dtos/ami-charts/ami-chart-query-params.dto';
 import { amiChartFactory } from '../../prisma/seed-helpers/ami-chart-factory';
 import { AmiChartCreate } from '../../src/dtos/ami-charts/ami-chart-create.dto';
-import { AmiChart } from '../../src/dtos/ami-charts/ami-chart-get.dto';
+import { AmiChartUpdate } from '../../src/dtos/ami-charts/ami-chart-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 describe('AmiChart Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jurisdictionAId: string;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -23,47 +24,25 @@ describe('AmiChart Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-  });
 
-  afterEach(async () => {
-    await app.close();
-  });
-
-  const cleanUpDb = async (
-    amiChartIds: string[],
-    jurisdictionIds: string[],
-  ) => {
-    for (let i = 0; i < amiChartIds.length; i++) {
-      await prisma.amiChart.delete({
-        where: {
-          id: amiChartIds[i],
-        },
-      });
-    }
-    for (let i = 0; i < jurisdictionIds.length; i++) {
-      await prisma.jurisdictions.delete({
-        where: {
-          id: jurisdictionIds[i],
-        },
-      });
-    }
-  };
-
-  it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(10),
     });
+    jurisdictionAId = jurisdictionA.id;
+  });
+
+  it('testing list endpoint', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(11),
     });
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
-    const amiChartB = await prisma.amiChart.create({
+    await prisma.amiChart.create({
       data: amiChartFactory(15, jurisdictionB.id),
     });
     const queryParams: AmiChartQueryParams = {
-      jurisdictionId: jurisdictionA.id,
+      jurisdictionId: jurisdictionAId,
     };
     const query = stringify(queryParams as any);
 
@@ -73,19 +52,11 @@ describe('AmiChart Controller Tests', () => {
 
     expect(res.body.length).toEqual(1);
     expect(res.body[0].name).toEqual(amiChartA.name);
-
-    await cleanUpDb(
-      [amiChartA.id, amiChartB.id],
-      [jurisdictionA.id, jurisdictionB.id],
-    );
   });
 
   it('testing retrieve endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -93,15 +64,9 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(amiChartA.name);
-
-    await cleanUpDb([amiChartA.id], [jurisdictionA.id]);
   });
 
   it('testing create endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
-
     const res = await request(app.getHttpServer())
       .post('/amiCharts')
       .send({
@@ -114,32 +79,24 @@ describe('AmiChart Controller Tests', () => {
           },
         ],
         jurisdictions: {
-          id: jurisdictionA.id,
+          id: jurisdictionAId,
         },
       } as AmiChartCreate)
       .expect(201);
 
     expect(res.body.name).toEqual('name: 10');
-    expect(res.body.items).toEqual(
-      JSON.stringify([
-        {
-          percentOfAmi: 80,
-          householdSize: 2,
-          income: 5000,
-        },
-      ]),
-    );
-
-    await cleanUpDb([res.body.id], [jurisdictionA.id]);
+    expect(res.body.items).toEqual([
+      {
+        percentOfAmi: 80,
+        householdSize: 2,
+        income: 5000,
+      },
+    ]);
   });
 
   it('testing update endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
-
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -154,35 +111,22 @@ describe('AmiChart Controller Tests', () => {
             income: 5000,
           },
         ],
-        jurisdictions: {
-          id: jurisdictionA.id,
-        },
-        createdAt: amiChartA.createdAt,
-        updatedAt: amiChartA.updatedAt,
-      } as AmiChart)
+      } as AmiChartUpdate)
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');
-    expect(res.body.items).toEqual(
-      JSON.stringify([
-        {
-          percentOfAmi: 80,
-          householdSize: 2,
-          income: 5000,
-        },
-      ]),
-    );
-
-    await cleanUpDb([amiChartA.id], [jurisdictionA.id]);
+    expect(res.body.items).toEqual([
+      {
+        percentOfAmi: 80,
+        householdSize: 2,
+        income: 5000,
+      },
+    ]);
   });
 
   it('testing delete endpoint', async () => {
-    const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
-    });
-
     const amiChartA = await prisma.amiChart.create({
-      data: amiChartFactory(10, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer())
@@ -193,7 +137,5 @@ describe('AmiChart Controller Tests', () => {
       .expect(200);
 
     expect(res.body.success).toEqual(true);
-
-    await cleanUpDb([], [jurisdictionA.id]);
   });
 });
