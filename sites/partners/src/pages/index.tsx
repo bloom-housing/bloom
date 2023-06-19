@@ -8,10 +8,10 @@ import {
   useAgTable,
   AppearanceSizeType,
   AlertBox,
-  SiteAlert,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, getSiteMessage } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 import { ColDef, ColGroupDef } from "ag-grid-community"
 import { useListingsData, useListingZip } from "../lib/hooks"
@@ -19,7 +19,7 @@ import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
-
+import styles from "../../seeds-customization.module.scss"
 class formatLinkCell {
   link: HTMLAnchorElement
 
@@ -143,17 +143,25 @@ export default function ListingsList() {
     userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
+  const successSiteMessage = getSiteMessage("success")
+
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+      {/* <div className={styles["toast-placement"]}> */}
+      <Toast variant="success" className={styles["toast-placement"]}>
+        Testing
+      </Toast>
+      {/* </div> */}
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}>
-        {zipCompleted && (
+        {zipCompleted && successSiteMessage && (
           <div className="flex absolute right-4 z-50 flex-col items-center">
-            <SiteAlert dismissable timeout={5000} sticky={true} type="success" />
+            <Toast variant="success" hideTimeout={5000}>
+              {successSiteMessage}
+            </Toast>
           </div>
         )}
       </NavigationHeader>

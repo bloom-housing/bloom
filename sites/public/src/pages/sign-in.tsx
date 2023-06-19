@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
-import { t, setSiteAlertMessage, useMutate } from "@bloom-housing/ui-components"
+import { t, useMutate } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
 import {
@@ -12,6 +12,7 @@ import {
   AuthContext,
   FormSignIn,
   ResendConfirmationModal,
+  setSiteMessage,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
@@ -54,7 +55,7 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      setSiteMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
     } catch (error) {
       const { status } = error.response || {}

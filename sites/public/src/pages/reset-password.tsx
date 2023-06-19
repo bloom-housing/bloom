@@ -11,9 +11,8 @@ import {
   t,
   AlertBox,
   SiteAlert,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, setSiteMessage } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
@@ -44,7 +43,7 @@ const ResetPassword = () => {
 
     try {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
+      setSiteMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await router.push("/account/applications")
     } catch (err) {
       const { status, data } = err.response || {}

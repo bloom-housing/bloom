@@ -8,7 +8,7 @@ import {
   AlertBox,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, setSiteMessage } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -37,7 +37,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     try {
       await resendConfirmation(email)
 
-      setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
+      setSiteMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
     } catch (err) {
       const { data } = err.response || {}

@@ -3,7 +3,7 @@ import useSWR from "swr"
 import qs from "qs"
 import dayjs from "dayjs"
 import JSZip from "jszip"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, setSiteMessage } from "@bloom-housing/shared-helpers"
 import {
   ApplicationSection,
   EnumApplicationsApiExtraModelOrder,
@@ -13,7 +13,7 @@ import {
   EnumUserFilterParamsComparison,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
-import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -145,7 +145,7 @@ export const useListingZip = () => {
         fileLink.click()
       })
       setZipCompleted(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      setSiteMessage(t("t.exportSuccess"), "success")
     } catch (err) {
       setZipExportError(true)
     }
@@ -533,7 +533,7 @@ const useCsvExport = (endpoint: () => Promise<string>, fileName: string) => {
       fileLink.href = URL.createObjectURL(blob)
       fileLink.click()
       setCsvExportSuccess(true)
-      setSiteAlertMessage(t("t.exportSuccess"), "success")
+      setSiteMessage(t("t.exportSuccess"), "success")
     } catch (err) {
       console.log(err)
       setCsvExportError(true)
