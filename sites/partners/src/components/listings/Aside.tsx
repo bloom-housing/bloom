@@ -11,7 +11,7 @@ import {
   LinkButton,
 } from "@bloom-housing/ui-components"
 import { Icon } from "@bloom-housing/ui-seeds"
-import { faPenToSquare, faLink } from "@fortawesome/free-solid-svg-icons"
+import { faReceipt, faLink } from "@fortawesome/free-solid-svg-icons"
 import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
@@ -178,7 +178,7 @@ const Aside = ({
             >
               {t("listings.actions.resultsPosted")}{" "}
               {dayjs(lotteryResults?.startTime).format("MMMM DD, YYYY")}
-              <Icon icon={faPenToSquare} className="ml-2" />
+              <Icon icon={faReceipt} className="ml-2" />
             </Button>
           </GridCell>
         )
