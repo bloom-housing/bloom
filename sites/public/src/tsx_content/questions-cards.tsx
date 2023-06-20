@@ -137,6 +137,12 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
           </span>
         </DoorwayCollapsibleSection>
       </Card.Section>
+    </Card>,
+    <Card
+    className="border-0"
+    key="whatsNext"
+    jumplinkData={{ title: t("help.faq.whatsNextHeader") }}
+    >
       <Card.Header>
         <Heading priority={2} className={"text-primary-lighter font-semibold"}>
           {t("help.faq.whatsNextHeader")}
@@ -192,6 +198,12 @@ export function questionsLinkableCards(): React.ReactElement<CardProps>[] {
           </span>
         </DoorwayCollapsibleSection>
       </Card.Section>
+    </Card>,
+    <Card
+    className="border-0"
+    key="whatElseToKnow"
+    jumplinkData={{ title: t("help.faq.whatElseToKnowHeader") }}
+    >
       <Card.Header>
         <Heading priority={2} className={"text-primary-lighter font-semibold"}>
           {t("help.faq.whatElseToKnowHeader")}
