@@ -48,6 +48,7 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
         }
       }
     },
+    preventScrollOnSwipe: true,
   })
 
   const getListingsList = () => {
