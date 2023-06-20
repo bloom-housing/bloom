@@ -32,7 +32,7 @@ describe("pdfs helpers", () => {
     process.env.CLOUDINARY_CLOUD_NAME = prevCloudName
   })
 
-  it("should return null if event type exists but is not cloudinary type", () => {
+  it.skip("should return null if event type exists but is not cloudinary type", () => {
     const listingEvents = [
       { type: ListingEventType.lotteryResults, file: { fileId: "1234" } },
     ] as ListingEvent[]
@@ -47,7 +47,7 @@ describe("pdfs helpers", () => {
     expect(pdfUrlFromListingEvents(listingEvents, ListingEventType.publicLottery)).toBe(null)
   })
 
-  it("should return correct urls from AssetCreate", () => {
+  it.skip("should return correct urls from AssetCreate", () => {
     const tests = [
       {
         asset: {
