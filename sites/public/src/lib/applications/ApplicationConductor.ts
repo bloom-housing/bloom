@@ -208,6 +208,7 @@ export default class ApplicationConductor {
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")
       window.sessionStorage.removeItem("bloom-app-listing")
+      window.sessionStorage.removeItem("bloom-app-doorway")
     }
   }
 

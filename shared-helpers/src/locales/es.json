@@ -243,6 +243,7 @@
   "application.review.confirmation.applicationsClosed": "Solicitudes  \ncerradas",
   "application.review.confirmation.applicationsRanked": "Solicitudes  \nclasificadas",
   "application.review.confirmation.browseMore": "Ver más listados",
+  "application.review.confirmation.browseMoreDoorway": "Busque más listados en Doorway Housing Portal",
   "application.review.confirmation.createAccount": "### ¿Desea crear una cuenta?\n\nCrear una cuenta le permite guardar su información para solicitudes futuras, y usted puede verificar el estatus de esta solicitud en cualquier momento.",
   "application.review.confirmation.createAccountParagraph": "Crear una cuenta le permite guardar su información para solicitudes futuras, y usted puede verificar el estatus de esta solicitud en cualquier momento.",
   "application.review.confirmation.createAccountTitle": "¿Desea crear una cuenta?",

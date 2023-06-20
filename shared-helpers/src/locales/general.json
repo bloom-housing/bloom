@@ -363,6 +363,7 @@
   "application.review.confirmation.applicationsClosed": "Application  \nclosed",
   "application.review.confirmation.applicationsRanked": "Application  \nranked",
   "application.review.confirmation.browseMore": "Browse more listings",
+  "application.review.confirmation.browseMoreDoorway": "Browse more listings on Doorway Housing Portal",
   "application.review.confirmation.createAccount": "### Would you like to create an account?\n\nCreating an account will save your information for future applications, and you can check the status of this application anytime.",
   "application.review.confirmation.createAccountParagraph": "Creating an account will save your information for future applications, and you can check the status of this application anytime.",
   "application.review.confirmation.createAccountTitle": "Would you like to create an account?",

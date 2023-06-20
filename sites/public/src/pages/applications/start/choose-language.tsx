@@ -54,7 +54,6 @@ const ApplicationChooseLanguage = () => {
   const { conductor, application } = context
 
   const listingId = router.query.listingId
-
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
@@ -76,6 +75,9 @@ const ApplicationChooseLanguage = () => {
     } else {
       conductor.listing = context.listing
       setListing(context.listing)
+    }
+    if (typeof window !== "undefined" && router.query.source === "dhp") {
+      window.sessionStorage.setItem("bloom-app-source", "dhp")
     }
   }, [router, conductor, context, listingId])
 

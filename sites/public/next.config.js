@@ -50,6 +50,7 @@ module.exports = withBundleAnalyzer(
       jurisdictionName: process.env.JURISDICTION_NAME,
       cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      doorwayUrl: process.env.DOORWAY_URL,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

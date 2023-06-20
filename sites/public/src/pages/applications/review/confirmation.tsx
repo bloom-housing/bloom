@@ -30,6 +30,7 @@ const ApplicationConfirmation = () => {
   const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
+  const doorwayApp = window?.sessionStorage?.getItem("bloom-app-source") === "dhp"
 
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
@@ -127,7 +128,13 @@ const ApplicationConfirmation = () => {
 
           <div className="form-card__pager-row py-6">
             <span className="lined text-sm" data-testid={"app-confirmation-browse"}>
-              <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
+              {doorwayApp ? (
+                <Link href={`${process.env.doorwayUrl}/${router.locale}/listings`}>
+                  {t("application.review.confirmation.browseMoreDoorway")}
+                </Link>
+              ) : (
+                <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
+              )}
             </span>
           </div>
 
