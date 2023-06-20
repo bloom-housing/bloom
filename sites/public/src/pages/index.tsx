@@ -45,8 +45,8 @@ export default function Home(props: IndexProps) {
     })
   }, [profile])
 
-  const metaDescription = t("welcome.doorwayMetaHomepage")
-  const metaImage = "" // TODO: replace with hero image
+  const metaDescription = t("pageDescription.welcome")
+  const metaImage = t("welcome.personWithChildAlt")
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
   return (
     <Layout>
