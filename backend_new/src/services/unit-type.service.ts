@@ -36,7 +36,9 @@ export class UnitTypeService {
     });
 
     if (!rawUnitType) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `unitTypeId ${unitTypeId} was requested but not found`,
+      );
     }
 
     return mapTo(UnitType, rawUnitType);
