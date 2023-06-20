@@ -10,10 +10,12 @@ import { ListingsQueryParams } from '../../src/dtos/listings/listings-query-para
 import { Compare } from '../../src/dtos/shared/base-filter.dto';
 import { ListingOrderByKeys } from '../../src/enums/listings/order-by-enum';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
+import { ListingViews } from '../../src/enums/listings/view-enum';
 
 describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let jurisdictionAId: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -23,27 +25,13 @@ describe('Listing Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-  });
 
-  afterAll(async () => {
-    await app.close();
-  });
+    const jurisdiction = await prisma.jurisdictions.create({
+      data: jurisdictionFactory(100),
+    });
 
-  const clearDb = async (listingIds: string[], jurisdictionId: string) => {
-    await prisma.applicationMethods.deleteMany();
-    await prisma.listingEvents.deleteMany();
-    await prisma.listingImages.deleteMany();
-    await prisma.listingMultiselectQuestions.deleteMany();
-    await prisma.units.deleteMany();
-    await prisma.amiChart.deleteMany();
-    await prisma.unitRentTypes.deleteMany();
-    await prisma.unitTypes.deleteMany();
-    for (let i = 0; i < listingIds.length; i++) {
-      await prisma.listings.delete({ where: { id: listingIds[i] } });
-    }
-    await prisma.reservedCommunityTypes.deleteMany();
-    await prisma.jurisdictions.delete({ where: { id: jurisdictionId } });
-  };
+    jurisdictionAId = jurisdiction.id;
+  });
 
   it('list test no params no data', async () => {
     const res = await request(app.getHttpServer()).get('/listings').expect(200);
@@ -61,16 +49,12 @@ describe('Listing Controller Tests', () => {
   });
 
   it('list test no params some data', async () => {
-    const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(100),
+    await prisma.listings.create({
+      data: listingFactory(10, jurisdictionAId),
     });
 
-    const listingA = await prisma.listings.create({
-      data: listingFactory(10, jurisdiction.id),
-    });
-
-    const listingB = await prisma.listings.create({
-      data: listingFactory(50, jurisdiction.id),
+    await prisma.listings.create({
+      data: listingFactory(50, jurisdictionAId),
     });
 
     const res = await request(app.getHttpServer()).get('/listings').expect(200);
@@ -88,19 +72,17 @@ describe('Listing Controller Tests', () => {
     expect(res.body.items.length).toEqual(2);
     expect(items[0].name).toEqual('name: 10');
     expect(items[1].name).toEqual('name: 50');
-
-    await clearDb([listingA.id, listingB.id], jurisdiction.id);
   });
 
   it('list test params no data', async () => {
     const queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
-      view: 'base',
+      view: ListingViews.base,
       filter: [
         {
           $comparison: Compare.IN,
-          name: 'name: 10,name: 50',
+          name: 'name: 11,name: 51',
         },
       ],
     };
@@ -123,24 +105,21 @@ describe('Listing Controller Tests', () => {
   });
 
   it('list test params some data', async () => {
-    const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(100),
+    await prisma.listings.create({
+      data: listingFactory(11, jurisdictionAId),
     });
-    const listingA = await prisma.listings.create({
-      data: listingFactory(10, jurisdiction.id),
-    });
-    const listingB = await prisma.listings.create({
-      data: listingFactory(50, jurisdiction.id),
+    await prisma.listings.create({
+      data: listingFactory(51, jurisdictionAId),
     });
 
     let queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
-      view: 'base',
+      view: ListingViews.base,
       filter: [
         {
           $comparison: Compare.IN,
-          name: 'name: 10,name: 50',
+          name: 'name: 11,name: 51',
         },
       ],
       orderBy: [ListingOrderByKeys.name],
@@ -161,16 +140,16 @@ describe('Listing Controller Tests', () => {
     });
 
     expect(res.body.items.length).toEqual(1);
-    expect(res.body.items[0].name).toEqual('name: 10');
+    expect(res.body.items[0].name).toEqual('name: 11');
 
     queryParams = {
       limit: 1,
       page: 2,
-      view: 'base',
+      view: ListingViews.base,
       filter: [
         {
           $comparison: Compare.IN,
-          name: 'name: 10,name: 50',
+          name: 'name: 11,name: 51',
         },
       ],
       orderBy: [ListingOrderByKeys.name],
@@ -190,8 +169,6 @@ describe('Listing Controller Tests', () => {
       totalPages: 2,
     });
     expect(res.body.items.length).toEqual(1);
-    expect(res.body.items[0].name).toEqual('name: 50');
-
-    await clearDb([listingA.id, listingB.id], jurisdiction.id);
+    expect(res.body.items[0].name).toEqual('name: 51');
   });
 });

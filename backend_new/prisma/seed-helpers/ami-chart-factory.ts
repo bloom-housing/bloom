@@ -13,15 +13,9 @@ export const amiChartFactory = (
   },
 });
 
-const amiChartItemsFactory = (numberToCreate: number) => {
-  const toReturn = [];
-  for (let i = 0; i < numberToCreate; i++) {
-    toReturn.push({
-      percentOfAmi: i,
-      householdSize: i,
-      income: i,
-    });
-  }
-
-  return JSON.stringify(toReturn);
-};
+const amiChartItemsFactory = (numberToCreate: number): Prisma.JsonArray =>
+  [...Array(numberToCreate)].map((_, index) => ({
+    percentOfAmi: index,
+    householdSize: index,
+    income: index,
+  }));

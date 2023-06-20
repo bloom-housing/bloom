@@ -16,9 +16,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
     protected reflector: Reflector
   ) {}
 
-  getBasicRequestInfo(
-    context: ExecutionContext
-  ): {
+  getBasicRequestInfo(context: ExecutionContext): {
     module?: string
     action?: string
     resourceId?: string
