@@ -19,7 +19,7 @@ import Layout from "../layouts"
 import { MetaTags } from "../components/shared/MetaTags"
 import { NavigationHeader } from "../components/shared/NavigationHeader"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
-import styles from "../../seeds-customization.module.scss"
+
 class formatLinkCell {
   link: HTMLAnchorElement
 
@@ -151,9 +151,7 @@ export default function ListingsList() {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       {/* <div className={styles["toast-placement"]}> */}
-      <Toast variant="success" className={styles["toast-placement"]}>
-        Testing
-      </Toast>
+      <Toast variant="success">Testing</Toast>
       {/* </div> */}
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}>

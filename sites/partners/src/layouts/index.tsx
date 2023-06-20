@@ -11,6 +11,7 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -63,8 +64,10 @@ const Layout = (props) => {
           siteHeaderWidth={"wide"}
           homeURL={"/"}
         />
-
-        <main>{props.children}</main>
+        <main>
+          {/* <Toast variant="success">Testing</Toast> */}
+          {props.children}
+        </main>
 
         <SiteFooter>
           <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
