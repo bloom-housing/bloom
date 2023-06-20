@@ -40,12 +40,12 @@ export default function Home(props: IndexProps) {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: "🚪 Housing Portal",
+      pageTitle: "Doorway Housing Portal",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
 
-  const metaDescription = t("welcome.findAffordableHousing", { regionName: t("region.name") })
+  const metaDescription = t("welcome.doorwayMetaHomepage")
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
   return (
