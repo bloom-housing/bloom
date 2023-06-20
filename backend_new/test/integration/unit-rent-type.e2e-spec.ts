@@ -7,6 +7,7 @@ import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-fa
 import { UnitRentTypeCreate } from '../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
+import { randomUUID } from 'crypto';
 
 describe('UnitRentType Controller Tests', () => {
   let app: INestApplication;
@@ -40,6 +41,16 @@ describe('UnitRentType Controller Tests', () => {
     expect(sortedResults[1].name).toEqual(unitRentTypeB.name);
   });
 
+  it("retrieve endpoint with id that doesn't exist should error", async () => {
+    const id = randomUUID();
+    const res = await request(app.getHttpServer())
+      .get(`/unitRentTypes/${id}`)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `unitRentTypeId ${id} was requested but not found`,
+    );
+  });
+
   it('testing retrieve endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(10),
@@ -63,6 +74,20 @@ describe('UnitRentType Controller Tests', () => {
     expect(res.body.name).toEqual('name: 10');
   });
 
+  it("update endpoint with id that doesn't exist should error", async () => {
+    const id = randomUUID();
+    const res = await request(app.getHttpServer())
+      .put(`/unitRentTypes/${id}`)
+      .send({
+        id: id,
+        name: 'example name',
+      } as UnitRentTypeUpdate)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `unitRentTypeId ${id} was requested but not found`,
+    );
+  });
+
   it('testing update endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(10),
@@ -77,6 +102,19 @@ describe('UnitRentType Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual('name: 11');
+  });
+
+  it("delete endpoint with id that doesn't exist should error", async () => {
+    const id = randomUUID();
+    const res = await request(app.getHttpServer())
+      .delete(`/unitRentTypes`)
+      .send({
+        id: id,
+      } as IdDTO)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `unitRentTypeId ${id} was requested but not found`,
+    );
   });
 
   it('testing delete endpoint', async () => {
