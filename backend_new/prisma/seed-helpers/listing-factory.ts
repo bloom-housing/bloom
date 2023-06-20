@@ -17,6 +17,7 @@ export const listingFactory = (
   i: number,
   jurisdictionId: string,
   amiChartId?: string,
+  reservedCommunityTypeId?: string,
 ): Prisma.ListingsCreateInput => ({
   additionalApplicationSubmissionNotes: `additionalApplicationSubmissionNotes: ${i}`,
   digitalApplication: true,
@@ -159,17 +160,19 @@ export const listingFactory = (
       id: jurisdictionId,
     },
   },
-  reservedCommunityTypes: {
-    create: {
-      name: `reservedCommunityTypes: ${i} name: ${i}`,
-      description: `reservedCommunityTypes: ${i} description: ${i}`,
-      jurisdictions: {
-        connect: {
-          id: jurisdictionId,
+  reservedCommunityTypes: reservedCommunityTypeId
+    ? { connect: { id: reservedCommunityTypeId } }
+    : {
+        create: {
+          name: `reservedCommunityType: ${i}`,
+          description: `description: ${i}`,
+          jurisdictions: {
+            connect: {
+              id: jurisdictionId,
+            },
+          },
         },
       },
-    },
-  },
   listingsResult: {
     create: {
       label: `listingsResult: ${i} label: ${i}`,
