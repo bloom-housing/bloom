@@ -5,6 +5,7 @@ import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpe
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
 import { questionsLinkableCards } from "../../tsx_content/questions-cards"
+import { MetaTags } from "../../components/shared/MetaTags"
 
 const FrequentlyAskedQuestions = () => {
   const { profile } = useContext(AuthContext)
@@ -17,11 +18,12 @@ const FrequentlyAskedQuestions = () => {
     })
   }, [profile])
 
-  const pageTitle = <>{t("pageTitle.questions")}</>
+  const metaDescription = t("pageDescription.questions")
 
   return (
     <Layout>
-      <PageHeader title={pageTitle} />
+      <PageHeader title={t("pageTitle.questions")} />
+      <MetaTags title={t("pageTitle.questions")} description={metaDescription} />
       <div className="my-14">
         <DoorwayLinkableCardGroup
           cards={questionsLinkableCards()}

@@ -4,6 +4,7 @@ import { DoorwayLinkableCardGroup, PageHeader } from "@bloom-housing/doorway-ui-
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../lib/constants"
 import Layout from "../../layouts/application"
+import { MetaTags } from "../../components/shared/MetaTags"
 import {
   housingHelpCardIntro,
   housingHelpLinkableCards,
@@ -20,11 +21,12 @@ const HousingHelp = () => {
     })
   }, [profile])
 
-  const pageTitle = <>{t("pageTitle.housingHelp")}</>
+  const metaDescription = t("pageDescription.housingHelp")
 
   return (
     <Layout>
-      <PageHeader title={pageTitle} />
+      <PageHeader title={t("pageTitle.housingHelp")} />
+      <MetaTags title={t("pageTitle.housingHelp")} description={metaDescription} />
       <div className="my-14">
         <DoorwayLinkableCardGroup cards={housingHelpLinkableCards()} className="m-auto">
           {housingHelpCardIntro()}

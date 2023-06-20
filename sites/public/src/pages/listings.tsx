@@ -22,7 +22,7 @@ export interface ListingsProps {
 
 export default function ListingsPage(props: ListingsProps) {
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+  const metaDescription = t("pageDescription.welcome")
   const metaImage = "" // TODO: replace with hero image
   let searchString = props.initialSearch || ""
   const url = new URL(document.location.toString())
