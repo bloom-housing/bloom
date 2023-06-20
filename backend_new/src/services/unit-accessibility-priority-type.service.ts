@@ -40,7 +40,9 @@ export class UnitAccessibilityPriorityTypeService {
       });
 
     if (!rawunitPriortyTypes) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `unitAccessibilityPriorityTypeId ${unitAccessibilityPriorityTypeId} was requested but not found`,
+      );
     }
 
     return mapTo(UnitAccessibilityPriorityType, rawunitPriortyTypes);
