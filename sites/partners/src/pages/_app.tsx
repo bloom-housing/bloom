@@ -13,7 +13,8 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"
-import "../../styles/seeds-customization.scss"
+
+import "../../styles/overrides.scss"
 
 const signInMessage = "Login is required to view this page."
 

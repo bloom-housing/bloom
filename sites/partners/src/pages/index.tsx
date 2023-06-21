@@ -71,7 +71,7 @@ export default function ListingsList() {
   const [errorAlert, setErrorAlert] = useState(false)
   const { profile } = useContext(AuthContext)
   const isAdmin = profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin || false
-  const { onExport, zipCompleted, zipExportLoading, zipExportError } = useListingZip()
+  const { onExport, zipExportLoading, zipExportError } = useListingZip()
   useEffect(() => {
     setErrorAlert(zipExportError)
   }, [zipExportError])
@@ -143,26 +143,16 @@ export default function ListingsList() {
     userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 
-  const successSiteMessage = getSiteMessage("success")
+  const successToastMessage = getSiteMessage("success")
 
   return (
     <Layout>
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      {/* <div className={styles["toast-placement"]}> */}
-      <Toast variant="success">Testing</Toast>
-      {/* </div> */}
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
-      <NavigationHeader title={t("nav.listings")}>
-        {zipCompleted && successSiteMessage && (
-          <div className="flex absolute right-4 z-50 flex-col items-center">
-            <Toast variant="success" hideTimeout={5000}>
-              {successSiteMessage}
-            </Toast>
-          </div>
-        )}
-      </NavigationHeader>
+      <NavigationHeader title={t("nav.listings")} />
+      {successToastMessage && <Toast variant="success">{successToastMessage}</Toast>}
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           {errorAlert && (
