@@ -74,7 +74,9 @@ export function getStartedLinkableCards(): React.ReactElement<CardProps>[] {
             <ol className="text__medium-normal numbered-list-small ml-5">
               <li>{t("help.getStarted.applyLotteryWaitlistResp1")}</li>
               <li>
-                {t("help.getStarted.applyLotteryWaitlistResp2")} {t("t.seeDetails")}.
+                {t("help.getStarted.applyLotteryWaitlistResp2")}
+                <span className="text__medium-weighted">{t("t.seeDetails")}</span>.
+                <br />
                 {t("help.getStarted.applyLotteryWaitlistResp2a")}
               </li>
               <li>{t("help.getStarted.applyLotteryWaitlistResp3")}</li>
