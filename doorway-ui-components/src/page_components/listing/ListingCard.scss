@@ -5,7 +5,7 @@
   --max-width-large-screen: var(--bloom-width-5xl);
   --cell-padding: var(--bloom-s3);
   --wider-cell-padding: var(--bloom-s5);
-  --margin: var(--inter-row-gap);
+  --margin: 0 var(--inter-row-gap);
   --card-tag-padding: var(--bloom-s3) var(--bloom-s5);
   --card-tag-font-weight: inherit;
 
@@ -17,6 +17,7 @@
   position: relative;
   border-bottom: var(--bloom-border-1) solid var(--bloom-color-gray-450);
   padding-bottom: var(--inter-row-gap);
+  padding-top: var(--inter-row-gap);
 
   @media (min-width: $screen-xl) {
     --max-width: var(--max-width-large-screen);
@@ -28,6 +29,10 @@
 
   &:first-of-type {
     margin-top: 0;
+  }
+
+  &:last-of-type {
+    border-bottom: 0px;
   }
 
   &:hover {
