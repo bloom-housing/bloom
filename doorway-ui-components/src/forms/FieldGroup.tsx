@@ -13,6 +13,7 @@ export interface FieldSingle {
   defaultText?: string
   description?: React.ReactNode
   disabled?: boolean
+  doubleColumn?: boolean
   id: string
   inputProps?: Record<string, unknown>
   label: string
@@ -202,7 +203,12 @@ const FieldGroup = ({
 
       <div className={`field ${error ? "error" : ""} ${fieldGroupClassName || ""} mb-0`}>
         {fields?.map((item) => (
-          <div className={`field ${fieldClassName || ""} mb-1`} key={item.id}>
+          <div
+            className={`field ${fieldClassName || ""} ${
+              item.doubleColumn ? "col-span-2" : ""
+            } mb-1`}
+            key={item.id}
+          >
             {getInputSet(item)}
             {item.subFields && checkedInputs.indexOf(item.label) >= 0 && (
               <div className={"ml-8"} key={`${item.value || ""}-subfields`}>

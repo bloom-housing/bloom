@@ -1,7 +1,7 @@
 .county-checkbox-group {
   .field input[type="checkbox"]:checked + label::before {
-    background-color: var(--bloom-color-blue-500);
-    box-shadow: 0 0 0 1px var(--bloom-color-blue-500);
-    @apply mr-2;
+    background-color: var(--bloom-color-primary-lighter);
+    background-image: url("/images/check.svg");
+    box-shadow: 0 0 0 1px var(--bloom-color-primary-lighter);
   }
 }

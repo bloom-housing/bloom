@@ -51,6 +51,7 @@ export type FormOption = {
   value: string
   isDisabled?: boolean
   labelNoteHTML?: string
+  doubleColumn?: boolean
 }
 
 type ListingsSearchModalProps = {
@@ -161,6 +162,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         value: county.value,
         defaultChecked: check,
         disabled: county.isDisabled || false,
+        doubleColumn: county.doubleColumn || false,
         note: county.labelNoteHTML || "",
       } as FieldSingle)
     })
@@ -249,7 +251,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
           onChange={updateValueMulti}
           register={register}
           fieldGroupClassName="grid grid-cols-2"
-          fieldLabelClassName="county-input"
+          fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
         />
       </div>
     </Modal>

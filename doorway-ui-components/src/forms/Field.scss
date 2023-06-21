@@ -1,8 +1,8 @@
 .doorway-field {
   width: 100%;
   margin: 0;
-  padding: 0 0 1.5rem 0;;
-  font-size: .75rem;
+  padding: 0 0 1.5rem 0;
+  font-size: 0.75rem;
   font-weight: 500;
 
   input.rent-input {
@@ -16,11 +16,5 @@
     color: var(--doorway-blue-800);
     font-family: var(--bloom-font-alt-sans);
     text-transform: uppercase;
-    }
-}
-
-.county-input {
-    font-family: var(--bloom-font-alt-sans);
-    text-transform: uppercase;
-    font-weight: 500;
+  }
 }

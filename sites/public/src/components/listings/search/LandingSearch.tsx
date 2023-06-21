@@ -14,13 +14,7 @@ import {
 import { useForm } from "react-hook-form"
 import { LinkButton, t } from "@bloom-housing/ui-components"
 import styles from "./LandingSearch.module.scss"
-
-export type FormOption = {
-  label: string
-  value: string
-  isDisabled?: boolean
-  labelNoteHTML?: string
-}
+import { FormOption } from "./ListingsSearchModal"
 
 type LandingSearchProps = {
   bedrooms: FormOption[]
@@ -90,6 +84,7 @@ export function LandingSearch(props: LandingSearchProps) {
         value: county.value,
         defaultChecked: check,
         disabled: county.isDisabled || false,
+        doubleColumn: county.doubleColumn || false,
         note: county.labelNoteHTML || "",
       } as FieldSingle)
     })
@@ -120,7 +115,7 @@ export function LandingSearch(props: LandingSearchProps) {
           name="monthlyRent"
           defaultValue={formValues.monthlyRent}
           placeholder="$"
-          className="doorway-field md:pl-6"
+          className="doorway-field p-0 md:pl-6"
           inputClassName="rent-input"
           labelClassName="input-label"
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
@@ -136,15 +131,15 @@ export function LandingSearch(props: LandingSearchProps) {
           fields={countyFields}
           onChange={updateValueMulti}
           register={register}
-          fieldGroupClassName="county-checkbox-group grid grid-cols-2 md:pl-16 uppercase"
-          fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs"
+          fieldGroupClassName="county-checkbox-group grid grid-cols-2 md:pl-16 "
+          fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
         />
       </div>
 
-      <div className="flex justify-start">
+      <div className="flex justify-start p-2">
         <LinkButton
           href={createListingsUrl(formValues)}
-          className="is-primary bg-primary-dark text-3xs md:text-xs text-white mr-8"
+          className="is-primary is-borderless bg-primary-dark text-3xs md:text-xs text-white mr-8"
           size={AppearanceSizeType.small}
         >
           {t("welcome.viewListings")}

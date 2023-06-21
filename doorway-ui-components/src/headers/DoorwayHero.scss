@@ -24,6 +24,7 @@
   @apply text-2xl;
   @apply text-primary-dark;
   @apply font-semibold;
+  @apply px-2;
   margin-bottom: var(--doorway-hero-between-margin);
 
   @media (min-width: $screen-md) {
