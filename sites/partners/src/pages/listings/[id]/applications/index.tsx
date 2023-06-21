@@ -6,13 +6,12 @@ import {
   t,
   Button,
   LocalizedLink,
-  SiteAlert,
   useAgTable,
   Breadcrumbs,
   BreadcrumbLink,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, getSiteMessage } from "@bloom-housing/shared-helpers"
 import {
   useSingleListingData,
   useFlaggedApplicationsList,
@@ -28,6 +27,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const ApplicationsList = () => {
   const { profile } = useContext(AuthContext)
@@ -60,6 +60,7 @@ const ApplicationsList = () => {
     tableOptions.sort.sortOptions?.[0]?.orderBy as EnumApplicationsApiExtraModelOrderBy,
     tableOptions.sort.sortOptions?.[0]?.orderDir as EnumApplicationsApiExtraModelOrder
   )
+  const successToastMessage = getSiteMessage("success")
 
   class formatLinkCell {
     linkWithId: HTMLSpanElement
@@ -109,14 +110,15 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
+      {successToastMessage && csvExportSuccess && (
+        <Toast variant="success" hideTimeout={5000}>
+          {successToastMessage}
+        </Toast>
+      )}
       {csvExportError && (
-        <SiteAlert
-          timeout={5000}
-          dismissable
-          sticky={true}
-          alertMessage={{ message: t("errors.alert.exportFailed"), type: "alert" }}
-        />
+        <Toast hideTimeout={5000} variant="alert">
+          {t("errors.alert.exportFailed")}
+        </Toast>
       )}
       <NavigationHeader
         title={listingName}

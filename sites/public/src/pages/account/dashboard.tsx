@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useContext } from "react"
 import Head from "next/head"
 import { NextRouter, withRouter } from "next/router"
+import { DashBlock, DashBlocks, HeaderBadge, Icon, t, AlertBox } from "@bloom-housing/ui-components"
 import {
-  DashBlock,
-  DashBlocks,
-  HeaderBadge,
-  Icon,
-  t,
-  SiteAlert,
-  AlertBox,
-} from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  RequireLogin,
+  getSiteMessage,
+} from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 interface DashboardProps {
   router: NextRouter
@@ -49,7 +48,7 @@ function Dashboard(props: DashboardProps) {
       <Icon size="medium" symbol="settings" />
     </span>
   )
-
+  const successToastMessage = getSiteMessage("success")
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
@@ -64,8 +63,12 @@ function Dashboard(props: DashboardProps) {
         )}
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="max-w-5xl mx-auto md:py-8">
-            <SiteAlert type="success" className="md:mb-8" timeout={30000} />
-
+            {successToastMessage && (
+              <Toast variant="success" className="md:mb-8" hideTimeout={30000}>
+                {successToastMessage}
+              </Toast>
+            )}
+            x
             <div className="flex flex-wrap relative">
               <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
               <DashBlocks>

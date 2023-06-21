@@ -7,17 +7,17 @@ import {
   Hero,
   Heading,
   t,
-  SiteAlert,
   ActionBlock,
   Icon,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, getSiteMessage } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -48,6 +48,8 @@ export default function Home(props: IndexProps) {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
+  const successToastMessage = getSiteMessage("success")
+  const alertToastMessage = getSiteMessage("alert")
   return (
     <Layout>
       <Head>
@@ -55,8 +57,16 @@ export default function Home(props: IndexProps) {
       </Head>
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <div className="flex absolute w-full flex-col items-center">
-        <SiteAlert type="alert" className={alertClasses} />
-        <SiteAlert type="success" className={alertClasses} timeout={30000} />
+        {alertToastMessage && (
+          <Toast variant="alert" className={alertClasses}>
+            {alertToastMessage}
+          </Toast>
+        )}
+        {successToastMessage && (
+          <Toast variant="success" className={alertClasses} hideTimeout={30000}>
+            {successToastMessage}
+          </Toast>
+        )}
       </div>
       {alertInfo.alertMessage && (
         <AlertBox

@@ -13,7 +13,6 @@ import {
   Button,
   LoadingOverlay,
   MinimalTable,
-  SiteAlert,
   StandardCard,
   t,
   AlertTypes,
@@ -29,6 +28,7 @@ import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 export type DrawerType = "add" | "edit"
 
@@ -190,7 +190,11 @@ const Settings = () => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        <SiteAlert timeout={5000} dismissable alertMessage={alertMessage} sticky={true} />
+        {alertMessage.type != "notice" && (
+          <Toast hideTimeout={5000} variant={alertMessage.type}>
+            {alertMessage.message}
+          </Toast>
+        )}
         <NavigationHeader className="relative" title={t("t.settings")} />
         <section>
           <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">

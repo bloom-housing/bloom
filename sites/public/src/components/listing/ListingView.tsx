@@ -39,7 +39,6 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
-  SiteAlert,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -52,6 +51,7 @@ import {
   getPostmarkString,
   UnitTables,
   getSummariesTable,
+  getSiteMessage,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
@@ -60,6 +60,7 @@ import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
 import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 interface ListingProps {
   listing: Listing
@@ -501,11 +502,11 @@ export const ListingView = (props: ListingProps) => {
     if (listing?.costsNotIncluded) footerContent.push(listing.costsNotIncluded)
     return footerContent
   }
-
+  const alertToastMessage = getSiteMessage("alert")
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
-        <SiteAlert type="alert" dismissable />
+        {alertToastMessage && <Toast variant="alert">{alertToastMessage}</Toast>}
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
             (imageUrl: string) => {

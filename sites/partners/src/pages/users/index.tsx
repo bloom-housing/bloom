@@ -8,18 +8,18 @@ import {
   Button,
   t,
   Drawer,
-  SiteAlert,
   AlertTypes,
   AppearanceStyleType,
   AlertBox,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, getSiteMessage } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
 import { useUserList, useListingsData, useUsersExport } from "../../lib/hooks"
 import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 type UserDrawerValue = {
   type: "add" | "edit"
@@ -125,6 +125,8 @@ const Users = () => {
     limit: "all",
   })
 
+  const successToastMessage = getSiteMessage("success")
+
   if (error) return <div>An error has occurred.</div>
 
   return (
@@ -132,8 +134,16 @@ const Users = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      <SiteAlert dismissable alertMessage={alertMessage} sticky={true} timeout={5000} />
-      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
+      {successToastMessage && csvExportSuccess && (
+        <Toast variant="success" hideTimeout={5000}>
+          {successToastMessage}
+        </Toast>
+      )}
+      {alertMessage && alertMessage.type !== "notice" && (
+        <Toast variant={alertMessage.type} hideTimeout={5000}>
+          {alertMessage.message}
+        </Toast>
+      )}
       <NavigationHeader className="relative" title={t("nav.users")} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
@@ -196,7 +206,6 @@ const Users = () => {
           />
         </article>
       </section>
-
       <Drawer
         open={!!userDrawer}
         title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}

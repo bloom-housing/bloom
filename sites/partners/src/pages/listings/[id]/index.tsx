@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
-import { t, AlertBox, SiteAlert, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { t, AlertBox, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
@@ -29,6 +29,8 @@ import DetailApplicationDates from "../../../components/listings/PaperListingDet
 import DetailPreferences from "../../../components/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../components/listings/PaperListingDetails/sections/DetailPrograms"
+import { getSiteMessage } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 interface ListingProps {
   listing: Listing
@@ -38,7 +40,7 @@ export default function ListingDetail(props: ListingProps) {
   const { listing } = props
   const [errorAlert, setErrorAlert] = useState(false)
   const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
-
+  const successToastMessage = getSiteMessage("success")
   if (!listing) return null
 
   return (
@@ -49,7 +51,11 @@ export default function ListingDetail(props: ListingProps) {
             <Head>
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
-            <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+            {successToastMessage && (
+              <Toast variant="success" hideTimeout={5000}>
+                {successToastMessage}
+              </Toast>
+            )}
             <NavigationHeader
               title={listing.name}
               listingId={listing.id}
@@ -67,9 +73,7 @@ export default function ListingDetail(props: ListingProps) {
                 </Breadcrumbs>
               }
             />
-
             <ListingStatusBar status={listing.status} />
-
             <section className="bg-primary-lighter">
               <div className="mx-auto px-5 mt-5 max-w-screen-xl">
                 {errorAlert && (

@@ -6,12 +6,11 @@ import {
   t,
   Tag,
   AlertBox,
-  SiteAlert,
   Breadcrumbs,
   BreadcrumbLink,
 } from "@bloom-housing/ui-components"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, getSiteMessage } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts"
 import { ApplicationSection, ApplicationStatus } from "@bloom-housing/backend-core/types"
 import {
@@ -29,6 +28,7 @@ import { DetailsMultiselectQuestions } from "../../../components/applications/Pa
 import { DetailsHouseholdIncome } from "../../../components/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../components/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../components/applications/Aside"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -44,6 +44,8 @@ export default function ApplicationsList() {
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
+
+  const successToastMessage = getSiteMessage("success")
 
   async function deleteApplication() {
     try {
@@ -85,7 +87,11 @@ export default function ApplicationsList() {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+        {successToastMessage && (
+          <Toast variant="success" hideTimeout={5000}>
+            {successToastMessage}
+          </Toast>
+        )}
         <NavigationHeader
           className="relative"
           title={
