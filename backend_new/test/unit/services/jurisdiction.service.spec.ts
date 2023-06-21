@@ -4,6 +4,7 @@ import { JurisdictionService } from '../../../src/services/jurisdiction.service'
 import { JurisdictionCreate } from '../../../src/dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../../../src/dtos/jurisdictions/jurisdiction-update.dto';
 import { LanguagesEnum } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 describe('Testing jurisdiction service', () => {
   let service: JurisdictionService;
@@ -11,10 +12,10 @@ describe('Testing jurisdiction service', () => {
 
   const mockJurisdiction = (position: number, date: Date) => {
     return {
-      id: `jurisdiction id ${position}`,
+      id: randomUUID(),
       createdAt: date,
       updatedAt: date,
-      name: `name: ${position}`,
+      name: `jurisdiction ${position}`,
       notificationsSignUpUrl: `notificationsSignUpUrl: ${position}`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: ${position}`,
@@ -35,7 +36,7 @@ describe('Testing jurisdiction service', () => {
     return toReturn;
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [JurisdictionService, PrismaService],
     }).compile();
@@ -46,16 +47,15 @@ describe('Testing jurisdiction service', () => {
 
   it('testing list()', async () => {
     const date = new Date();
-    prisma.jurisdictions.findMany = jest
-      .fn()
-      .mockResolvedValue(mockJurisdictionSet(3, date));
+    const mockedValue = mockJurisdictionSet(3, date);
+    prisma.jurisdictions.findMany = jest.fn().mockResolvedValue(mockedValue);
 
     expect(await service.list()).toEqual([
       {
-        id: `jurisdiction id 0`,
+        id: mockedValue[0].id,
         createdAt: date,
         updatedAt: date,
-        name: `name: 0`,
+        name: 'jurisdiction 0',
         notificationsSignUpUrl: `notificationsSignUpUrl: 0`,
         languages: [LanguagesEnum.en],
         partnerTerms: `partnerTerms: 0`,
@@ -67,10 +67,10 @@ describe('Testing jurisdiction service', () => {
         enableUtilitiesIncluded: true,
       },
       {
-        id: `jurisdiction id 1`,
+        id: mockedValue[1].id,
         createdAt: date,
         updatedAt: date,
-        name: `name: 1`,
+        name: 'jurisdiction 1',
         notificationsSignUpUrl: `notificationsSignUpUrl: 1`,
         languages: [LanguagesEnum.en],
         partnerTerms: `partnerTerms: 1`,
@@ -82,10 +82,10 @@ describe('Testing jurisdiction service', () => {
         enableUtilitiesIncluded: true,
       },
       {
-        id: `jurisdiction id 2`,
+        id: mockedValue[2].id,
         createdAt: date,
         updatedAt: date,
-        name: `name: 2`,
+        name: 'jurisdiction 2',
         notificationsSignUpUrl: `notificationsSignUpUrl: 2`,
         languages: [LanguagesEnum.en],
         partnerTerms: `partnerTerms: 2`,
@@ -107,16 +107,14 @@ describe('Testing jurisdiction service', () => {
 
   it('testing findOne() with id present', async () => {
     const date = new Date();
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue(mockJurisdiction(3, date));
+    const mockedValue = mockJurisdiction(3, date);
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(mockedValue);
 
     expect(await service.findOne({ jurisdictionId: 'example Id' })).toEqual({
-      id: `jurisdiction id 3`,
+      id: mockedValue.id,
       createdAt: date,
       updatedAt: date,
-      name: `name: 3`,
+      name: 'jurisdiction 3',
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -142,16 +140,14 @@ describe('Testing jurisdiction service', () => {
 
   it('testing findOne() with name present', async () => {
     const date = new Date();
-
-    prisma.jurisdictions.findFirst = jest
-      .fn()
-      .mockResolvedValue(mockJurisdiction(3, date));
+    const mockedValue = mockJurisdiction(3, date);
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(mockedValue);
 
     expect(await service.findOne({ jurisdictionName: 'example Id' })).toEqual({
-      id: `jurisdiction id 3`,
+      id: mockedValue.id,
       createdAt: date,
       updatedAt: date,
-      name: `name: 3`,
+      name: 'jurisdiction 3',
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -196,13 +192,11 @@ describe('Testing jurisdiction service', () => {
 
   it('testing create()', async () => {
     const date = new Date();
-
-    prisma.jurisdictions.create = jest
-      .fn()
-      .mockResolvedValue(mockJurisdiction(3, date));
+    const mockedValue = mockJurisdiction(3, date);
+    prisma.jurisdictions.create = jest.fn().mockResolvedValue(mockedValue);
 
     const params: JurisdictionCreate = {
-      name: 'jurisdiction name 3',
+      name: 'jurisdiction 3',
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -215,10 +209,10 @@ describe('Testing jurisdiction service', () => {
     };
 
     expect(await service.create(params)).toEqual({
-      id: `jurisdiction id 3`,
+      id: mockedValue.id,
       createdAt: date,
       updatedAt: date,
-      name: `name: 3`,
+      name: 'jurisdiction 3',
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -232,7 +226,7 @@ describe('Testing jurisdiction service', () => {
 
     expect(prisma.jurisdictions.create).toHaveBeenCalledWith({
       data: {
-        name: 'jurisdiction name 3',
+        name: 'jurisdiction 3',
         notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
         languages: [LanguagesEnum.en],
         partnerTerms: `partnerTerms: 3`,
@@ -259,12 +253,12 @@ describe('Testing jurisdiction service', () => {
       .mockResolvedValue(mockedJurisdiction);
     prisma.jurisdictions.update = jest.fn().mockResolvedValue({
       ...mockedJurisdiction,
-      name: 'jurisdiction name 4',
+      name: 'updated jurisdiction 3',
     });
 
     const params: JurisdictionUpdate = {
-      name: 'jurisdiction name 4',
-      id: 'jurisdiction id 3',
+      name: 'updated jurisdiction 3',
+      id: mockedJurisdiction.id,
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -277,8 +271,8 @@ describe('Testing jurisdiction service', () => {
     };
 
     expect(await service.update(params)).toEqual({
-      id: 'jurisdiction id 3',
-      name: `jurisdiction name 4`,
+      id: mockedJurisdiction.id,
+      name: `updated jurisdiction 3`,
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -294,13 +288,13 @@ describe('Testing jurisdiction service', () => {
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'jurisdiction id 3',
+        id: mockedJurisdiction.id,
       },
     });
 
     expect(prisma.jurisdictions.update).toHaveBeenCalledWith({
       data: {
-        name: 'jurisdiction name 4',
+        name: 'updated jurisdiction 3',
         notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
         languages: [LanguagesEnum.en],
         partnerTerms: `partnerTerms: 3`,
@@ -312,7 +306,7 @@ describe('Testing jurisdiction service', () => {
         enableUtilitiesIncluded: true,
       },
       where: {
-        id: 'jurisdiction id 3',
+        id: mockedJurisdiction.id,
       },
       include: {
         multiselectQuestions: true,
@@ -325,8 +319,8 @@ describe('Testing jurisdiction service', () => {
     prisma.jurisdictions.update = jest.fn().mockResolvedValue(null);
 
     const params: JurisdictionUpdate = {
-      name: 'jurisdiction name 4',
-      id: 'jurisdiction id 3',
+      name: 'example jurisdiction',
+      id: 'example id',
       notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
       languages: [LanguagesEnum.en],
       partnerTerms: `partnerTerms: 3`,
@@ -344,19 +338,26 @@ describe('Testing jurisdiction service', () => {
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'jurisdiction id 3',
+        id: 'example id',
       },
     });
   });
 
   it('testing delete()', async () => {
     const date = new Date();
-    prisma.jurisdictions.delete = jest
-      .fn()
-      .mockResolvedValue(mockJurisdiction(3, date));
+    const mockedValue = mockJurisdiction(3, date);
+
+    prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(mockedValue);
+    prisma.jurisdictions.delete = jest.fn().mockResolvedValue(mockedValue);
 
     expect(await service.delete('example Id')).toEqual({
       success: true,
+    });
+
+    expect(prisma.jurisdictions.delete).toHaveBeenCalledWith({
+      where: {
+        id: 'example Id',
+      },
     });
 
     expect(prisma.jurisdictions.delete).toHaveBeenCalledWith({

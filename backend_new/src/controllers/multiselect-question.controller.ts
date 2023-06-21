@@ -42,7 +42,9 @@ export class MultiselectQuestionController {
   @Get()
   @ApiOperation({ summary: 'List multiselect questions', operationId: 'list' })
   @ApiOkResponse({ type: MultiselectQuestion, isArray: true })
-  async list(@Query() queryParams: MultiselectQuestionQueryParams) {
+  async list(
+    @Query() queryParams: MultiselectQuestionQueryParams,
+  ): Promise<MultiselectQuestion[]> {
     return await this.multiselectQuestionService.list(queryParams);
   }
 
@@ -54,7 +56,7 @@ export class MultiselectQuestionController {
   @ApiOkResponse({ type: MultiselectQuestion })
   async retrieve(
     @Param('multiselectQuestionId') multiselectQuestionId: string,
-  ) {
+  ): Promise<MultiselectQuestion> {
     return this.multiselectQuestionService.findOne(multiselectQuestionId);
   }
 
@@ -64,7 +66,9 @@ export class MultiselectQuestionController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: MultiselectQuestion })
-  async create(@Body() multiselectQuestion: MultiselectQuestionCreate) {
+  async create(
+    @Body() multiselectQuestion: MultiselectQuestionCreate,
+  ): Promise<MultiselectQuestion> {
     return await this.multiselectQuestionService.create(multiselectQuestion);
   }
 
@@ -74,7 +78,9 @@ export class MultiselectQuestionController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: MultiselectQuestion })
-  async update(@Body() multiselectQuestion: MultiselectQuestionUpdate) {
+  async update(
+    @Body() multiselectQuestion: MultiselectQuestionUpdate,
+  ): Promise<MultiselectQuestion> {
     return await this.multiselectQuestionService.update(multiselectQuestion);
   }
 
@@ -84,7 +90,7 @@ export class MultiselectQuestionController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.multiselectQuestionService.delete(dto.id);
   }
 }

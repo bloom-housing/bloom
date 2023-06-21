@@ -1,7 +1,7 @@
 import { OmitType } from '@nestjs/swagger';
-import { ReservedCommunityType } from './reserved-community-type-get.dto';
+import { ReservedCommunityType } from './reserved-community-type.dto';
 
-export class ReservedCommunitTypeCreate extends OmitType(
+export class ReservedCommunityTypeCreate extends OmitType(
   ReservedCommunityType,
   ['id', 'createdAt', 'updatedAt'],
 ) {}

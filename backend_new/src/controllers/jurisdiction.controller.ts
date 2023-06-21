@@ -16,7 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JurisdictionService } from '../services/jurisdiction.service';
-import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction-get.dto';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { JurisdictionCreate } from '../dtos/jurisdictions/jurisdiction-create.dto';
 import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
@@ -33,7 +33,7 @@ export class JurisdictionController {
   @Get()
   @ApiOperation({ summary: 'List jurisdictions', operationId: 'list' })
   @ApiOkResponse({ type: Jurisdiction, isArray: true })
-  async list() {
+  async list(): Promise<Jurisdiction[]> {
     return await this.jurisdictionService.list();
   }
 
@@ -43,7 +43,9 @@ export class JurisdictionController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: Jurisdiction })
-  async retrieve(@Param('jurisdictionId') jurisdictionId: string) {
+  async retrieve(
+    @Param('jurisdictionId') jurisdictionId: string,
+  ): Promise<Jurisdiction> {
     return this.jurisdictionService.findOne({ jurisdictionId });
   }
 
@@ -53,7 +55,9 @@ export class JurisdictionController {
     operationId: 'retrieveByName',
   })
   @ApiOkResponse({ type: Jurisdiction })
-  async retrieveByName(@Param('jurisdictionName') jurisdictionName: string) {
+  async retrieveByName(
+    @Param('jurisdictionName') jurisdictionName: string,
+  ): Promise<Jurisdiction> {
     return await this.jurisdictionService.findOne({
       jurisdictionName,
     });
@@ -65,7 +69,9 @@ export class JurisdictionController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: Jurisdiction })
-  async create(@Body() jurisdiction: JurisdictionCreate) {
+  async create(
+    @Body() jurisdiction: JurisdictionCreate,
+  ): Promise<Jurisdiction> {
     return await this.jurisdictionService.create(jurisdiction);
   }
 
@@ -75,7 +81,9 @@ export class JurisdictionController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: Jurisdiction })
-  async update(@Body() jurisdiction: JurisdictionUpdate) {
+  async update(
+    @Body() jurisdiction: JurisdictionUpdate,
+  ): Promise<Jurisdiction> {
     return await this.jurisdictionService.update(jurisdiction);
   }
 
@@ -85,7 +93,7 @@ export class JurisdictionController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.jurisdictionService.delete(dto.id);
   }
 }

@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { UnitTypeService } from '../../../src/services/unit-type.service';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
-import { UnitType } from '../../../src/dtos/unit-types/unit-type-get.dto';
+import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
+import { randomUUID } from 'crypto';
 
 describe('Testing unit type service', () => {
   let service: UnitTypeService;
@@ -10,8 +11,8 @@ describe('Testing unit type service', () => {
 
   const mockUnitType = (position: number, date: Date) => {
     return {
-      id: `unit type id ${position}`,
-      name: `unit type name ${position}`,
+      id: randomUUID(),
+      name: `unit type ${position}`,
       createdAt: date,
       updatedAt: date,
       numBedrooms: position,
@@ -26,7 +27,7 @@ describe('Testing unit type service', () => {
     return toReturn;
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [UnitTypeService, PrismaService],
     }).compile();
@@ -37,28 +38,27 @@ describe('Testing unit type service', () => {
 
   it('testing list()', async () => {
     const date = new Date();
-    prisma.unitTypes.findMany = jest
-      .fn()
-      .mockResolvedValue(mockUnitTypeSet(3, date));
+    const mockedValue = mockUnitTypeSet(3, date);
+    prisma.unitTypes.findMany = jest.fn().mockResolvedValue(mockedValue);
 
     expect(await service.list()).toEqual([
       {
-        id: 'unit type id 0',
-        name: 'unit type name 0',
+        id: mockedValue[0].id,
+        name: 'unit type 0',
         createdAt: date,
         updatedAt: date,
         numBedrooms: 0,
       },
       {
-        id: 'unit type id 1',
-        name: 'unit type name 1',
+        id: mockedValue[1].id,
+        name: 'unit type 1',
         createdAt: date,
         updatedAt: date,
         numBedrooms: 1,
       },
       {
-        id: 'unit type id 2',
-        name: 'unit type name 2',
+        id: mockedValue[2].id,
+        name: 'unit type 2',
         createdAt: date,
         updatedAt: date,
         numBedrooms: 2,
@@ -70,14 +70,12 @@ describe('Testing unit type service', () => {
 
   it('testing findOne() with id present', async () => {
     const date = new Date();
-
-    prisma.unitTypes.findFirst = jest
-      .fn()
-      .mockResolvedValue(mockUnitType(3, date));
+    const mockedValue = mockUnitType(3, date);
+    prisma.unitTypes.findFirst = jest.fn().mockResolvedValue(mockedValue);
 
     expect(await service.findOne('example Id')).toEqual({
-      id: 'unit type id 3',
-      name: 'unit type name 3',
+      id: mockedValue.id,
+      name: 'unit type 3',
       createdAt: date,
       updatedAt: date,
       numBedrooms: 3,
@@ -110,19 +108,17 @@ describe('Testing unit type service', () => {
 
   it('testing create()', async () => {
     const date = new Date();
-
-    prisma.unitTypes.create = jest
-      .fn()
-      .mockResolvedValue(mockUnitType(3, date));
+    const mockedValue = mockUnitType(3, date);
+    prisma.unitTypes.create = jest.fn().mockResolvedValue(mockedValue);
 
     const params: UnitTypeCreate = {
       numBedrooms: 3,
-      name: 'unit type name 3',
+      name: 'unit type 3',
     };
 
     expect(await service.create(params)).toEqual({
-      id: 'unit type id 3',
-      name: 'unit type name 3',
+      id: mockedValue.id,
+      name: 'unit type 3',
       createdAt: date,
       updatedAt: date,
       numBedrooms: 3,
@@ -130,7 +126,7 @@ describe('Testing unit type service', () => {
 
     expect(prisma.unitTypes.create).toHaveBeenCalledWith({
       data: {
-        name: 'unit type name 3',
+        name: 'unit type 3',
         numBedrooms: 3,
       },
     });
@@ -144,21 +140,19 @@ describe('Testing unit type service', () => {
     prisma.unitTypes.findFirst = jest.fn().mockResolvedValue(mockedUnitType);
     prisma.unitTypes.update = jest.fn().mockResolvedValue({
       ...mockedUnitType,
-      name: 'unit type name 4',
+      name: 'updated unit type 3',
       numBedrooms: 4,
     });
 
-    const params: UnitType = {
+    const params: UnitTypeUpdate = {
       numBedrooms: 4,
-      name: 'unit type name 4',
-      id: 'unit type id 3',
-      createdAt: date,
-      updatedAt: date,
+      name: 'updated unit type 3',
+      id: mockedUnitType.id,
     };
 
     expect(await service.update(params)).toEqual({
-      id: 'unit type id 3',
-      name: 'unit type name 4',
+      id: mockedUnitType.id,
+      name: 'updated unit type 3',
       createdAt: date,
       updatedAt: date,
       numBedrooms: 4,
@@ -166,33 +160,29 @@ describe('Testing unit type service', () => {
 
     expect(prisma.unitTypes.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'unit type id 3',
+        id: mockedUnitType.id,
       },
     });
 
     expect(prisma.unitTypes.update).toHaveBeenCalledWith({
       data: {
-        name: 'unit type name 4',
+        name: 'updated unit type 3',
         numBedrooms: 4,
       },
       where: {
-        id: 'unit type id 3',
+        id: mockedUnitType.id,
       },
     });
   });
 
   it('testing update() existing record not found', async () => {
-    const date = new Date();
-
     prisma.unitTypes.findFirst = jest.fn().mockResolvedValue(null);
     prisma.unitTypes.update = jest.fn().mockResolvedValue(null);
 
-    const params: UnitType = {
+    const params: UnitTypeUpdate = {
       numBedrooms: 4,
-      name: 'unit type name 4',
-      id: 'unit type Id 3',
-      createdAt: date,
-      updatedAt: date,
+      name: 'updated unit type 4',
+      id: 'example id',
     };
 
     await expect(
@@ -201,16 +191,18 @@ describe('Testing unit type service', () => {
 
     expect(prisma.unitTypes.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'unit type Id 3',
+        id: 'example id',
       },
     });
   });
 
   it('testing delete()', async () => {
     const date = new Date();
-    prisma.unitTypes.delete = jest
-      .fn()
-      .mockResolvedValue(mockUnitType(3, date));
+
+    const mockedUnitType = mockUnitType(3, date);
+
+    prisma.unitTypes.findFirst = jest.fn().mockResolvedValue(mockedUnitType);
+    prisma.unitTypes.delete = jest.fn().mockResolvedValue(mockedUnitType);
 
     expect(await service.delete('example Id')).toEqual({
       success: true,

@@ -1,4 +1,4 @@
-import { AmiChart } from '../../../src/dtos/ami-charts/ami-chart-get.dto';
+import { AmiChart } from '../../../src/dtos/ami-charts/ami-chart.dto';
 import { UnitAmiChartOverride } from '../../../src/dtos/units/ami-chart-override-get.dto';
 import {
   generateHmiData,

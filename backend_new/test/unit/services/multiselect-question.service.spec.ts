@@ -6,6 +6,7 @@ import { MultiselectQuestionUpdate } from '../../../src/dtos/multiselect-questio
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { MultiselectQuestionQueryParams } from '../../../src/dtos/multiselect-questions/multiselect-question-query-params.dto';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
+import { randomUUID } from 'crypto';
 
 describe('Testing multiselect question service', () => {
   let service: MultiselectQuestionService;
@@ -13,7 +14,7 @@ describe('Testing multiselect question service', () => {
 
   const mockMultiselectQuestion = (position: number, date: Date) => {
     return {
-      id: `multiselect question id ${position}`,
+      id: randomUUID(),
       createdAt: date,
       updatedAt: date,
       text: `text ${position}`,
@@ -35,7 +36,7 @@ describe('Testing multiselect question service', () => {
     return toReturn;
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [MultiselectQuestionService, PrismaService],
     }).compile();
@@ -48,13 +49,14 @@ describe('Testing multiselect question service', () => {
 
   it('testing list() no params', async () => {
     const date = new Date();
+    const mockedValue = mockMultiselectQuestionSet(3, date);
     prisma.multiselectQuestions.findMany = jest
       .fn()
-      .mockResolvedValue(mockMultiselectQuestionSet(3, date));
+      .mockResolvedValue(mockedValue);
 
     expect(await service.list({})).toEqual([
       {
-        id: `multiselect question id 0`,
+        id: mockedValue[0].id,
         createdAt: date,
         updatedAt: date,
         text: `text 0`,
@@ -67,7 +69,7 @@ describe('Testing multiselect question service', () => {
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
       {
-        id: `multiselect question id 1`,
+        id: mockedValue[1].id,
         createdAt: date,
         updatedAt: date,
         text: `text 1`,
@@ -80,7 +82,7 @@ describe('Testing multiselect question service', () => {
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
       {
-        id: `multiselect question id 2`,
+        id: mockedValue[2].id,
         createdAt: date,
         updatedAt: date,
         text: `text 2`,
@@ -106,9 +108,10 @@ describe('Testing multiselect question service', () => {
 
   it('testing list() params', async () => {
     const date = new Date();
+    const mockedValue = mockMultiselectQuestionSet(3, date);
     prisma.multiselectQuestions.findMany = jest
       .fn()
-      .mockResolvedValue(mockMultiselectQuestionSet(3, date));
+      .mockResolvedValue(mockedValue);
 
     const params: MultiselectQuestionQueryParams = {
       filter: [
@@ -122,7 +125,7 @@ describe('Testing multiselect question service', () => {
 
     expect(await service.list(params)).toEqual([
       {
-        id: `multiselect question id 0`,
+        id: mockedValue[0].id,
         createdAt: date,
         updatedAt: date,
         text: `text 0`,
@@ -135,7 +138,7 @@ describe('Testing multiselect question service', () => {
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
       {
-        id: `multiselect question id 1`,
+        id: mockedValue[1].id,
         createdAt: date,
         updatedAt: date,
         text: `text 1`,
@@ -148,7 +151,7 @@ describe('Testing multiselect question service', () => {
         applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
       },
       {
-        id: `multiselect question id 2`,
+        id: mockedValue[2].id,
         createdAt: date,
         updatedAt: date,
         text: `text 2`,
@@ -185,13 +188,13 @@ describe('Testing multiselect question service', () => {
 
   it('testing findOne() with id present', async () => {
     const date = new Date();
-
+    const mockedValue = mockMultiselectQuestion(3, date);
     prisma.multiselectQuestions.findFirst = jest
       .fn()
-      .mockResolvedValue(mockMultiselectQuestion(3, date));
+      .mockResolvedValue(mockedValue);
 
     expect(await service.findOne('example Id')).toEqual({
-      id: `multiselect question id 3`,
+      id: mockedValue.id,
       createdAt: date,
       updatedAt: date,
       text: `text 3`,
@@ -237,10 +240,10 @@ describe('Testing multiselect question service', () => {
 
   it('testing create()', async () => {
     const date = new Date();
-
+    const mockedValue = mockMultiselectQuestion(3, date);
     prisma.multiselectQuestions.create = jest
       .fn()
-      .mockResolvedValue(mockMultiselectQuestion(3, date));
+      .mockResolvedValue(mockedValue);
 
     const params: MultiselectQuestionCreate = {
       text: `text 4`,
@@ -255,7 +258,7 @@ describe('Testing multiselect question service', () => {
     };
 
     expect(await service.create(params)).toEqual({
-      id: `multiselect question id 3`,
+      id: mockedValue.id,
       createdAt: date,
       updatedAt: date,
       text: `text 3`,
@@ -296,11 +299,13 @@ describe('Testing multiselect question service', () => {
       .mockResolvedValue(mockedMultiselectQuestions);
     prisma.multiselectQuestions.update = jest.fn().mockResolvedValue({
       ...mockedMultiselectQuestions,
-      name: 'unit rent type name 4',
+      text: '',
+      applicationSection:
+        MultiselectQuestionsApplicationSectionEnum.preferences,
     });
 
     const params: MultiselectQuestionUpdate = {
-      id: 'multiselect question id 3',
+      id: mockedMultiselectQuestions.id,
       jurisdictions: [],
       text: '',
       applicationSection:
@@ -308,22 +313,23 @@ describe('Testing multiselect question service', () => {
     };
 
     expect(await service.update(params)).toEqual({
-      id: `multiselect question id 3`,
+      id: mockedMultiselectQuestions.id,
       createdAt: date,
       updatedAt: date,
-      text: `text 3`,
+      text: '',
       subText: `subText 3`,
       description: `description 3`,
       links: `{}`,
       options: `{}`,
       optOutText: `optOutText 3`,
       hideFromListing: false,
-      applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
+      applicationSection:
+        MultiselectQuestionsApplicationSectionEnum.preferences,
     });
 
     expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'multiselect question id 3',
+        id: mockedMultiselectQuestions.id,
       },
     });
 
@@ -337,7 +343,7 @@ describe('Testing multiselect question service', () => {
           MultiselectQuestionsApplicationSectionEnum.preferences,
       },
       where: {
-        id: 'multiselect question id 3',
+        id: mockedMultiselectQuestions.id,
       },
       include: {
         jurisdictions: true,
@@ -350,7 +356,7 @@ describe('Testing multiselect question service', () => {
     prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
     const params: MultiselectQuestionUpdate = {
-      id: 'multiselect question 3',
+      id: 'example id',
       text: '',
       jurisdictions: [],
       applicationSection: MultiselectQuestionsApplicationSectionEnum.programs,
@@ -362,22 +368,32 @@ describe('Testing multiselect question service', () => {
 
     expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
       where: {
-        id: 'multiselect question 3',
+        id: 'example id',
       },
     });
   });
 
   it('testing delete()', async () => {
     const date = new Date();
+    const mockedValue = mockMultiselectQuestion(3, date);
+    prisma.multiselectQuestions.findFirst = jest
+      .fn()
+      .mockResolvedValue(mockedValue);
     prisma.multiselectQuestions.delete = jest
       .fn()
-      .mockResolvedValue(mockMultiselectQuestion(3, date));
+      .mockResolvedValue(mockedValue);
 
     expect(await service.delete('example Id')).toEqual({
       success: true,
     });
 
     expect(prisma.multiselectQuestions.delete).toHaveBeenCalledWith({
+      where: {
+        id: 'example Id',
+      },
+    });
+
+    expect(prisma.multiselectQuestions.findFirst).toHaveBeenCalledWith({
       where: {
         id: 'example Id',
       },

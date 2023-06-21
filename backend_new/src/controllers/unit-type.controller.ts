@@ -16,8 +16,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UnitTypeService } from '../services/unit-type.service';
-import { UnitType } from '../dtos/unit-types/unit-type-get.dto';
+import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { UnitTypeCreate } from '../dtos/unit-types/unit-type-create.dto';
+import { UnitTypeUpdate } from '../dtos/unit-types/unit-type-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -25,14 +26,14 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 @Controller('unitTypes')
 @ApiTags('unitTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(UnitTypeCreate, IdDTO)
+@ApiExtraModels(UnitTypeCreate, UnitTypeUpdate, IdDTO)
 export class UnitTypeController {
   constructor(private readonly unitTypeService: UnitTypeService) {}
 
   @Get()
   @ApiOperation({ summary: 'List unitTypes', operationId: 'list' })
   @ApiOkResponse({ type: UnitType, isArray: true })
-  async list() {
+  async list(): Promise<UnitType[]> {
     return await this.unitTypeService.list();
   }
 
@@ -42,7 +43,7 @@ export class UnitTypeController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: UnitType })
-  async retrieve(@Param('unitTypeId') unitTypeId: string) {
+  async retrieve(@Param('unitTypeId') unitTypeId: string): Promise<UnitType> {
     return this.unitTypeService.findOne(unitTypeId);
   }
 
@@ -52,7 +53,7 @@ export class UnitTypeController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: UnitType })
-  async create(@Body() unitType: UnitTypeCreate) {
+  async create(@Body() unitType: UnitTypeCreate): Promise<UnitType> {
     return await this.unitTypeService.create(unitType);
   }
 
@@ -62,7 +63,7 @@ export class UnitTypeController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: UnitType })
-  async update(@Body() unitType: UnitType) {
+  async update(@Body() unitType: UnitTypeUpdate): Promise<UnitType> {
     return await this.unitTypeService.update(unitType);
   }
 
@@ -72,7 +73,7 @@ export class UnitTypeController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.unitTypeService.delete(dto.id);
   }
 }

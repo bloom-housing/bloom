@@ -8,20 +8,20 @@ export class AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ required: true })
   id: string;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiProperty({ required: true })
   createdAt: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiProperty({ required: true })
   updatedAt: Date;
 }

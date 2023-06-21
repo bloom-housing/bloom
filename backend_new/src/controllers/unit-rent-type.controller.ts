@@ -16,8 +16,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UnitRentTypeService } from '../services/unit-rent-type.service';
-import { UnitRentType } from '../dtos/unit-rent-types/unit-rent-type-get.dto';
+import { UnitRentType } from '../dtos/unit-rent-types/unit-rent-type.dto';
 import { UnitRentTypeCreate } from '../dtos/unit-rent-types/unit-rent-type-create.dto';
+import { UnitRentTypeUpdate } from '../dtos/unit-rent-types/unit-rent-type-update.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
@@ -25,14 +26,14 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 @Controller('unitRentTypes')
 @ApiTags('unitRentTypes')
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-@ApiExtraModels(UnitRentTypeCreate, IdDTO)
+@ApiExtraModels(UnitRentTypeCreate, UnitRentTypeUpdate, IdDTO)
 export class UnitRentTypeController {
   constructor(private readonly unitRentTypeService: UnitRentTypeService) {}
 
   @Get()
   @ApiOperation({ summary: 'List unitRentTypes', operationId: 'list' })
   @ApiOkResponse({ type: UnitRentType, isArray: true })
-  async list() {
+  async list(): Promise<UnitRentType[]> {
     return await this.unitRentTypeService.list();
   }
 
@@ -42,7 +43,9 @@ export class UnitRentTypeController {
     operationId: 'retrieve',
   })
   @ApiOkResponse({ type: UnitRentType })
-  async retrieve(@Param('unitRentTypeId') unitRentTypeId: string) {
+  async retrieve(
+    @Param('unitRentTypeId') unitRentTypeId: string,
+  ): Promise<UnitRentType> {
     return this.unitRentTypeService.findOne(unitRentTypeId);
   }
 
@@ -52,7 +55,9 @@ export class UnitRentTypeController {
     operationId: 'create',
   })
   @ApiOkResponse({ type: UnitRentType })
-  async create(@Body() unitRentType: UnitRentTypeCreate) {
+  async create(
+    @Body() unitRentType: UnitRentTypeCreate,
+  ): Promise<UnitRentType> {
     return await this.unitRentTypeService.create(unitRentType);
   }
 
@@ -62,7 +67,9 @@ export class UnitRentTypeController {
     operationId: 'update',
   })
   @ApiOkResponse({ type: UnitRentType })
-  async update(@Body() unitRentType: UnitRentType) {
+  async update(
+    @Body() unitRentType: UnitRentTypeUpdate,
+  ): Promise<UnitRentType> {
     return await this.unitRentTypeService.update(unitRentType);
   }
 
@@ -72,7 +79,7 @@ export class UnitRentTypeController {
     operationId: 'delete',
   })
   @ApiOkResponse({ type: SuccessDTO })
-  async delete(@Body() dto: IdDTO) {
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
     return await this.unitRentTypeService.delete(dto.id);
   }
 }
