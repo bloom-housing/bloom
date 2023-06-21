@@ -103,7 +103,7 @@ export function LandingSearch(props: LandingSearchProps) {
           options={props.bedrooms}
           onChange={updateValue}
           value={formValues.bedrooms}
-          className="bg-accent-cool-light py-0 px-0 md:pl-12"
+          className="bg-accent-cool-light py-0 px-0 md:pl-12 landing-search-button-group"
           spacing={ButtonGroupSpacing.left}
         />
       </div>

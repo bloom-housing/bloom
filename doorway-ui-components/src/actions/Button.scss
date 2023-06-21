@@ -187,3 +187,31 @@ button {
   transform: translate(-50%, -50%);
   margin-top: 2px;
 }
+
+// This is an override to update the style of the landing page buttons when selected.
+// This is not ideal but is needed since the landing page search buttons and the listing
+// search modal buttons have to have different styles when selected.
+.landing-search-button-group {
+  --landing-button-color: var(--bloom-color-primary-lighter);
+  --landing-button-hover-color: var(--bloom-color-primary-light);
+  --landing-button-active-color: var(--bloom-color-primary);
+  --landing-button-text-color: var(--bloom-color-white);
+
+  .button.is-secondary {
+    background-color: var(--landing-button-color);
+    border-color: var(--landing-button-color);
+    color: var(--landing-button-text-color);
+
+    &:hover {
+      background-color: var(--landing-button-hover-color);
+      border-color: var(--landing-button-hover-color);
+      color: var(--landing-button-text-color);
+    }
+
+    &:active {
+      background-color: var(--landing-button-active-color);
+      border-color: var(--landing-button-active-color);
+      color: var(--landing-button-text-color);
+    }
+  }
+}
