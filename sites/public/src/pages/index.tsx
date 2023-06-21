@@ -17,7 +17,8 @@ import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
 import { runtimeConfig } from "../lib/runtime-config"
-import { FormOption, LandingSearch } from "../components/listings/search/LandingSearch"
+import { LandingSearch } from "../components/listings/search/LandingSearch"
+import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import {
   locations,
   bedroomOptionsForLandingPage,
