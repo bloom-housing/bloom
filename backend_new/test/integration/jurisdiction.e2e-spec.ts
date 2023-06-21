@@ -8,6 +8,7 @@ import { JurisdictionCreate } from '../../src/dtos/jurisdictions/jurisdiction-cr
 import { JurisdictionUpdate } from '../../src/dtos/jurisdictions/jurisdiction-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 import { LanguagesEnum } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 describe('Jurisdiction Controller Tests', () => {
   let app: INestApplication;
@@ -23,26 +24,12 @@ describe('Jurisdiction Controller Tests', () => {
     await app.init();
   });
 
-  afterAll(async () => {
-    await app.close();
-  });
-
-  const cleanUpDb = async (jurisdictionIds: string[]) => {
-    for (let i = 0; i < jurisdictionIds.length; i++) {
-      await prisma.jurisdictions.delete({
-        where: {
-          id: jurisdictionIds[i],
-        },
-      });
-    }
-  };
-
   it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(7),
+      data: jurisdictionFactory(70),
     });
     const jurisdictionB = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(8),
+      data: jurisdictionFactory(80),
     });
 
     const res = await request(app.getHttpServer())
@@ -53,13 +40,21 @@ describe('Jurisdiction Controller Tests', () => {
     const sortedResults = res.body.sort((a, b) => (a.name < b.name ? -1 : 1));
     expect(sortedResults[0].name).toEqual(jurisdictionA.name);
     expect(sortedResults[1].name).toEqual(jurisdictionB.name);
+  });
 
-    await cleanUpDb([jurisdictionA.id, jurisdictionB.id]);
+  it("retrieve endpoint with id that doesn't exist should error", async () => {
+    const id = randomUUID();
+    const res = await request(app.getHttpServer())
+      .get(`/jurisdictions/${id}`)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `jurisdiction ${id} was requested but not found`,
+    );
   });
 
   it('testing retrieve endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
+      data: jurisdictionFactory(101),
     });
 
     const res = await request(app.getHttpServer())
@@ -67,13 +62,21 @@ describe('Jurisdiction Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(jurisdictionA.name);
+  });
 
-    await cleanUpDb([jurisdictionA.id]);
+  it("retrieve endpoint with id that doesn't exist should error", async () => {
+    const name = 'a nonexistant name';
+    const res = await request(app.getHttpServer())
+      .get(`/jurisdictions/byName/${name}`)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `jurisdiction ${name} was requested but not found`,
+    );
   });
 
   it('testing retrieveByName endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
+      data: jurisdictionFactory(110),
     });
 
     const res = await request(app.getHttpServer())
@@ -81,15 +84,13 @@ describe('Jurisdiction Controller Tests', () => {
       .expect(200);
 
     expect(res.body.name).toEqual(jurisdictionA.name);
-
-    await cleanUpDb([jurisdictionA.id]);
   });
 
   it('testing create endpoint', async () => {
     const res = await request(app.getHttpServer())
       .post('/jurisdictions')
       .send({
-        name: 'name: 10',
+        name: 'new jurisdiction',
         notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
         languages: [LanguagesEnum.en],
         partnerTerms: `partnerTerms: 10`,
@@ -102,42 +103,74 @@ describe('Jurisdiction Controller Tests', () => {
       } as JurisdictionCreate)
       .expect(201);
 
-    expect(res.body.name).toEqual('name: 10');
+    expect(res.body.name).toEqual('new jurisdiction');
+  });
 
-    await cleanUpDb([res.body.id]);
+  it("update endpoint with id that doesn't exist should error", async () => {
+    const id = randomUUID();
+    const res = await request(app.getHttpServer())
+      .put(`/jurisdictions/${id}`)
+      .send({
+        id: id,
+        name: 'updated name: 10',
+        notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
+        languages: [LanguagesEnum.en],
+        partnerTerms: `partnerTerms: 10`,
+        publicUrl: `updated publicUrl: 11`,
+        emailFromAddress: `emailFromAddress: 10`,
+        rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
+        enablePartnerSettings: true,
+        enableAccessibilityFeatures: true,
+        enableUtilitiesIncluded: true,
+      } as JurisdictionUpdate)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `jurisdictionId ${id} was requested but not found`,
+    );
   });
 
   it('testing update endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
+      data: jurisdictionFactory(120),
     });
 
     const res = await request(app.getHttpServer())
       .put(`/jurisdictions/${jurisdictionA.id}`)
       .send({
         id: jurisdictionA.id,
-        name: 'name: 11',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 11`,
+        name: 'updated name: 10',
+        notificationsSignUpUrl: `notificationsSignUpUrl: 10`,
         languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 11`,
-        publicUrl: `publicUrl: 11`,
-        emailFromAddress: `emailFromAddress: 11`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 11`,
+        partnerTerms: `partnerTerms: 10`,
+        publicUrl: `updated publicUrl: 10`,
+        emailFromAddress: `emailFromAddress: 10`,
+        rentalAssistanceDefault: `rentalAssistanceDefault: 10`,
         enablePartnerSettings: true,
         enableAccessibilityFeatures: true,
         enableUtilitiesIncluded: true,
       } as JurisdictionUpdate)
       .expect(200);
 
-    expect(res.body.name).toEqual('name: 11');
-    expect(res.body.publicUrl).toEqual('publicUrl: 11');
+    expect(res.body.name).toEqual('updated name: 10');
+    expect(res.body.publicUrl).toEqual('updated publicUrl: 10');
+  });
 
-    await cleanUpDb([jurisdictionA.id]);
+  it("delete endpoint with id that doesn't exist should error", async () => {
+    const id = randomUUID();
+    const res = await request(app.getHttpServer())
+      .delete(`/jurisdictions`)
+      .send({
+        id: id,
+      } as IdDTO)
+      .expect(404);
+    expect(res.body.message).toEqual(
+      `jurisdictionId ${id} was requested but not found`,
+    );
   });
 
   it('testing delete endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(16),
+      data: jurisdictionFactory(160),
     });
 
     const res = await request(app.getHttpServer())

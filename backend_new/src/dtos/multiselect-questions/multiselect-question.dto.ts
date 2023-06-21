@@ -12,7 +12,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { ListingMultiselectQuestion } from '../listings/listing-multiselect-question.dto';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
-import { Jurisdiction } from '../jurisdictions/jurisdiction-get.dto';
+import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
 import { MultiselectLink } from './multiselect-link.dto';
 import { MultiselectOption } from './multiselect-option.dto';
 
