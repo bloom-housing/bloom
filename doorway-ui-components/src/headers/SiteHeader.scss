@@ -64,7 +64,7 @@
   // Link
   --link-align-items: flex-end;
   --link-bottom-border: 0;
-  --link-font-size: var(--bloom-font-size-xs);
+  --link-font-size: var(--bloom-font-size-sm);
   --link-font-weight: 500;
   --link-height: 100%;
   --link-hover-bottom-border: 0;
@@ -72,7 +72,7 @@
   --link-text-color: var(--bloom-text-color-darker);
   --link-text-hover-color: var(--bloom-color-gray-750);
   --link-text-desktop-color: var(--bloom-color-gray-750);
-  --link-text-transform: initial;
+  --link-text-transform: uppercase;
   --link-secondary-color: var(--bloom-color-primary-light);
   --link-hover-secondary-color: var(--bloom-color-primary);
 
@@ -483,7 +483,7 @@
   color: var(--link-text-color);
   padding: var(--bloom-s3);
   border-top: 1px solid var(--border-color);
-  text-transform: none;
+  text-transform: uppercase;
   font-size: var(--dropdown-item-font-size);
   text-align: left;
   width: 100%;
