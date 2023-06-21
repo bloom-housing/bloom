@@ -217,9 +217,8 @@ export class ApplicationCsvExporterService {
       } else if (
         obj[app.application_id]["Household Members"][app.householdMembers_id] === undefined
       ) {
-        obj[app.application_id]["Household Members"][
-          app.householdMembers_id
-        ] = this.mapHouseholdMembers(app)
+        obj[app.application_id]["Household Members"][app.householdMembers_id] =
+          this.mapHouseholdMembers(app)
         extraHeaders["Household Members"] = Math.max(
           extraHeaders["Household Members"],
           Object.keys(obj[app.application_id]["Household Members"]).length
@@ -227,9 +226,8 @@ export class ApplicationCsvExporterService {
       } else if (
         obj[app.application_id]["Requested Unit Types"][app.preferredUnit_id] === undefined
       ) {
-        obj[app.application_id]["Requested Unit Types"][
-          app.preferredUnit_id
-        ] = this.unitTypeToReadable(app.preferredUnit_name)
+        obj[app.application_id]["Requested Unit Types"][app.preferredUnit_id] =
+          this.unitTypeToReadable(app.preferredUnit_name)
       }
       return obj
     }, {})

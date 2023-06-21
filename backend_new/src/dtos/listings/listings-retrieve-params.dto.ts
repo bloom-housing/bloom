@@ -1,15 +1,19 @@
 import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
+import { ListingViews } from '../../enums/listings/view-enum';
 
 export class ListingsRetrieveParams {
   @Expose()
   @ApiProperty({
-    name: 'view',
+    enum: ListingViews,
     required: false,
-    type: String,
+    enumName: 'ListingViews',
+    example: 'full',
   })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  view?: string;
+  @IsEnum(ListingViews, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  view?: ListingViews;
 }

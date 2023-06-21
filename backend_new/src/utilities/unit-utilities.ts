@@ -1,13 +1,13 @@
 import { ReviewOrderTypeEnum } from '@prisma/client';
 import { UnitSummary } from '../dtos/units/unit-summary-get.dto';
 import Unit from '../dtos/units/unit-get.dto';
-import { AmiChart } from '../dtos/ami-charts/ami-chart-get.dto';
+import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import listingGetDto, { ListingGet } from '../dtos/listings/listing-get.dto';
 import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
-import { UnitType } from '../dtos/unit-types/unit-type-get.dto';
-import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-get.dto';
+import { UnitType } from '../dtos/unit-types/unit-type.dto';
+import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item-get.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override-get.dto';
 

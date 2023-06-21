@@ -5,6 +5,7 @@ Make sure the .env file's db placement is what works for your set up, Then run t
 ```bash
 $ yarn install
 $ yarn db:setup
+$ yarn prisma generate
 ```
 
 
@@ -114,3 +115,7 @@ Running the following will run all unit tests:
 ```bash
 $ yarn test
 ```
+
+# Considerations For Detroit
+As it stands right now `core` uses the AmiChart items column and `detroit` uses the AmiChartItem table.
+As we move through converting detroit over to prisma we will unify those and choose one of the two approaches.

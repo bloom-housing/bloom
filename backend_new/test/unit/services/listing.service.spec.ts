@@ -10,6 +10,8 @@ import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-
 import { LanguagesEnum } from '@prisma/client';
 import { Unit } from '../../../src/dtos/units/unit-get.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
+import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
+import { ListingViews } from '../../../src/enums/listings/view-enum';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -204,7 +206,7 @@ describe('Testing listing service', () => {
     prisma.listings.count = jest.fn().mockResolvedValue(20);
 
     const params: ListingsQueryParams = {
-      view: 'base',
+      view: ListingViews.base,
       page: 2,
       limit: 10,
       orderBy: [ListingOrderByKeys.name],
@@ -461,7 +463,7 @@ describe('Testing listing service', () => {
     prisma.listings.findFirst = jest.fn().mockResolvedValue(mockListing(0));
 
     expect(
-      await service.findOne('listingId', LanguagesEnum.en, 'base'),
+      await service.findOne('listingId', LanguagesEnum.en, ListingViews.base),
     ).toEqual({ id: '0', name: 'listing 1' });
 
     expect(prisma.listings.findFirst).toHaveBeenCalledWith({
@@ -509,7 +511,7 @@ describe('Testing listing service', () => {
         await service.findOne(
           'a different listingId',
           LanguagesEnum.en,
-          'details',
+          ListingViews.details,
         ),
     ).rejects.toThrowError();
 
@@ -583,7 +585,7 @@ describe('Testing listing service', () => {
     prisma.listings.count = jest.fn().mockResolvedValue(20);
 
     const params: ListingsQueryParams = {
-      view: 'base',
+      view: ListingViews.base,
       page: 2,
       limit: 10,
       orderBy: [ListingOrderByKeys.name],
@@ -920,10 +922,10 @@ describe('Testing listing service', () => {
       },
     ]);
 
-    const listing = await service.findOne(
+    const listing: ListingGet = await service.findOne(
       'listingId',
       LanguagesEnum.en,
-      'base',
+      ListingViews.base,
     );
 
     expect(listing.id).toEqual('0');

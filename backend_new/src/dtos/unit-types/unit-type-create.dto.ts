@@ -1,8 +1,4 @@
 import { OmitType } from '@nestjs/swagger';
-import { UnitType } from './unit-type-get.dto';
+import { UnitTypeUpdate } from './unit-type-update.dto';
 
-export class UnitTypeCreate extends OmitType(UnitType, [
-  'id',
-  'createdAt',
-  'updatedAt',
-]) {}
+export class UnitTypeCreate extends OmitType(UnitTypeUpdate, ['id']) {}

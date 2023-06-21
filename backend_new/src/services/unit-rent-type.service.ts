@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { UnitRentType } from '../dtos/unit-rent-types/unit-rent-type-get.dto';
+import { UnitRentType } from '../dtos/unit-rent-types/unit-rent-type.dto';
 import { UnitRentTypeCreate } from '../dtos/unit-rent-types/unit-rent-type-create.dto';
+import { UnitRentTypeUpdate } from '../dtos/unit-rent-types/unit-rent-type-update.dto';
 import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 
@@ -17,7 +18,7 @@ export class UnitRentTypeService {
   /*
     this will get a set of unit rent types given the params passed in
   */
-  async list() {
+  async list(): Promise<UnitRentType[]> {
     const rawUnitRentTypes = await this.prisma.unitRentTypes.findMany();
     return mapTo(UnitRentType, rawUnitRentTypes);
   }
@@ -25,7 +26,7 @@ export class UnitRentTypeService {
   /*
     this will return 1 unit rent type or error
   */
-  async findOne(unitRentTypeId: string) {
+  async findOne(unitRentTypeId: string): Promise<UnitRentType> {
     const rawUnitRentType = await this.prisma.unitRentTypes.findFirst({
       where: {
         id: {
@@ -35,7 +36,9 @@ export class UnitRentTypeService {
     });
 
     if (!rawUnitRentType) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `unitRentTypeId ${unitRentTypeId} was requested but not found`,
+      );
     }
 
     return mapTo(UnitRentType, rawUnitRentType);
@@ -44,10 +47,11 @@ export class UnitRentTypeService {
   /*
     this will create a unit rent type
   */
-  async create(incomingData: UnitRentTypeCreate) {
+  async create(incomingData: UnitRentTypeCreate): Promise<UnitRentType> {
     const rawResult = await this.prisma.unitRentTypes.create({
       data: {
         ...incomingData,
+        id: undefined,
       },
     });
 
@@ -58,16 +62,8 @@ export class UnitRentTypeService {
     this will update a unit rent type's name or items field
     if no unit rent type has the id of the incoming argument an error is thrown
   */
-  async update(incomingData: UnitRentType) {
-    const unitRentType = await this.prisma.unitRentTypes.findFirst({
-      where: {
-        id: incomingData.id,
-      },
-    });
-
-    if (!unitRentType) {
-      throw new NotFoundException();
-    }
+  async update(incomingData: UnitRentTypeUpdate): Promise<UnitRentType> {
+    await this.findOrThrow(incomingData.id);
 
     const rawResults = await this.prisma.unitRentTypes.update({
       data: {
@@ -83,7 +79,8 @@ export class UnitRentTypeService {
   /*
     this will delete a unit rent type
   */
-  async delete(unitRentTypeId: string) {
+  async delete(unitRentTypeId: string): Promise<SuccessDTO> {
+    await this.findOrThrow(unitRentTypeId);
     await this.prisma.unitRentTypes.delete({
       where: {
         id: unitRentTypeId,
@@ -92,5 +89,24 @@ export class UnitRentTypeService {
     return {
       success: true,
     } as SuccessDTO;
+  }
+
+  /*
+    this will either find a record or throw a customized error
+  */
+  async findOrThrow(unitRentTypeId: string): Promise<boolean> {
+    const unitRentType = await this.prisma.unitRentTypes.findFirst({
+      where: {
+        id: unitRentTypeId,
+      },
+    });
+
+    if (!unitRentType) {
+      throw new NotFoundException(
+        `unitRentTypeId ${unitRentTypeId} was requested but not found`,
+      );
+    }
+
+    return true;
   }
 }
