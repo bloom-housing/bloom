@@ -1250,7 +1250,7 @@ export interface IdDTO {
   id: string;
 
   /**  */
-  name: string;
+  name?: string;
 }
 
 export interface MultiselectLink {
@@ -1867,14 +1867,6 @@ export interface AmiChartItem {
   income: number;
 }
 
-export interface IdDTO {
-  /**  */
-  id: string;
-
-  /**  */
-  name?: string;
-}
-
 export interface AmiChartCreate {
   /**  */
   items: AmiChartItem[];
@@ -1901,8 +1893,6 @@ export interface AmiChartQueryParams {
   /**  */
   jurisdictionId?: string;
 }
-
-export interface ListingViews {}
 
 export interface AmiChart {
   /**  */
@@ -2163,6 +2153,13 @@ export interface MultiselectQuestionFilterParams {
 export interface MultiselectQuestionQueryParams {
   /**  */
   filter?: MultiselectQuestionFilterParams[];
+}
+
+export enum ListingViews {
+  'fundamentals' = 'fundamentals',
+  'base' = 'base',
+  'full' = 'full',
+  'details' = 'details',
 }
 export enum EnumListingsQueryParamsOrderDir {
   'asc' = 'asc',

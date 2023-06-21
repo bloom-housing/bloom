@@ -25,7 +25,9 @@ export class MultiselectQuestionService {
   /*
     this will get a set of multiselect questions given the params passed in
   */
-  async list(params: MultiselectQuestionQueryParams) {
+  async list(
+    params: MultiselectQuestionQueryParams,
+  ): Promise<MultiselectQuestion[]> {
     const rawMultiselectQuestions =
       await this.prisma.multiselectQuestions.findMany({
         include: view,
@@ -84,7 +86,7 @@ export class MultiselectQuestionService {
   /*
     this will return 1 multiselect question or error
   */
-  async findOne(multiSelectQuestionId: string) {
+  async findOne(multiSelectQuestionId: string): Promise<MultiselectQuestion> {
     const rawMultiselectQuestion =
       await this.prisma.multiselectQuestions.findFirst({
         where: {
@@ -96,7 +98,9 @@ export class MultiselectQuestionService {
       });
 
     if (!rawMultiselectQuestion) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `multiselectQuestionId ${multiSelectQuestionId} was requested but not found`,
+      );
     }
 
     return mapTo(MultiselectQuestion, rawMultiselectQuestion);
@@ -105,7 +109,9 @@ export class MultiselectQuestionService {
   /*
     this will create a multiselect question
   */
-  async create(incomingData: MultiselectQuestionCreate) {
+  async create(
+    incomingData: MultiselectQuestionCreate,
+  ): Promise<MultiselectQuestion> {
     const rawResult = await this.prisma.multiselectQuestions.create({
       data: {
         ...incomingData,
@@ -127,17 +133,10 @@ export class MultiselectQuestionService {
     this will update a multiselect question's name or items field
     if no multiselect question has the id of the incoming argument an error is thrown
   */
-  async update(incomingData: MultiselectQuestionUpdate) {
-    const multiSelectQuestion =
-      await this.prisma.multiselectQuestions.findFirst({
-        where: {
-          id: incomingData.id,
-        },
-      });
-
-    if (!multiSelectQuestion) {
-      throw new NotFoundException();
-    }
+  async update(
+    incomingData: MultiselectQuestionUpdate,
+  ): Promise<MultiselectQuestion> {
+    await this.findOrThrow(incomingData.id);
 
     const rawResults = await this.prisma.multiselectQuestions.update({
       data: {
@@ -162,7 +161,8 @@ export class MultiselectQuestionService {
   /*
     this will delete a multiselect question
   */
-  async delete(multiSelectQuestionId: string) {
+  async delete(multiSelectQuestionId: string): Promise<SuccessDTO> {
+    await this.findOrThrow(multiSelectQuestionId);
     await this.prisma.multiselectQuestions.delete({
       where: {
         id: multiSelectQuestionId,
@@ -171,5 +171,25 @@ export class MultiselectQuestionService {
     return {
       success: true,
     } as SuccessDTO;
+  }
+
+  /*
+    this will either find a record or throw a customized error
+  */
+  async findOrThrow(multiselectQuestionId: string): Promise<boolean> {
+    const multiselectQuestion =
+      await this.prisma.multiselectQuestions.findFirst({
+        where: {
+          id: multiselectQuestionId,
+        },
+      });
+
+    if (!multiselectQuestion) {
+      throw new NotFoundException(
+        `multiselectQuestionId ${multiselectQuestionId} was requested but not found`,
+      );
+    }
+
+    return true;
   }
 }
