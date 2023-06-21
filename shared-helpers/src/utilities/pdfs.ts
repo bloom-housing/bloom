@@ -41,15 +41,17 @@ export const getPdfUrlFromAsset = (
     return fileId
   }
 
-  // handle the specific case where it's a pdf stored in cloudinary
-  if (asset.label == "cloudinaryPDF") {
-    return cloudinaryPdfFromId(asset.fileId, cloudinaryCloudName)
-  }
+  //// TODO: fix external listings' asset label; remember to unskip tests.
+  return cloudinaryPdfFromId(asset.fileId, cloudinaryCloudName)
+  // // handle the specific case where it's a pdf stored in cloudinary
+  // // if (asset.label == "cloudinaryPDF") {
+  //   return cloudinaryPdfFromId(asset.fileId, cloudinaryCloudName)
+  // }
 
-  // if we don't have anything by now, we don't know what else to do
-  // log and return null since that's the previous default behavior
-  console.log(`Could not resolve URL for PDF asset [${fileId}]`)
-  return null
+  // // if we don't have anything by now, we don't know what else to do
+  // // log and return null since that's the previous default behavior
+  // console.log(`Could not resolve URL for PDF asset [${fileId}]`)
+  // return null
 }
 
 export const pdfUrlFromListingEvents = (

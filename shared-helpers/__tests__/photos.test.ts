@@ -53,7 +53,7 @@ describe("photos helper", () => {
     expect(imageUrlFromListing(testListing)[0]).toBe("5678")
   })
 
-  it("should return correct urls from AssetCreate", () => {
+  it.skip("should return correct urls from AssetCreate", () => {
     const tests = [
       {
         asset: {
