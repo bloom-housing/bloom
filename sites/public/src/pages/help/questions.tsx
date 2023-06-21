@@ -24,7 +24,7 @@ const FrequentlyAskedQuestions = () => {
     <Layout>
       <PageHeader title={t("pageTitle.questions")} />
       <MetaTags title={t("pageTitle.questions")} description={metaDescription} />
-      <div className="my-14">
+      <div className="lg:my-14">
         <DoorwayLinkableCardGroup
           cards={questionsLinkableCards()}
           className="m-auto"

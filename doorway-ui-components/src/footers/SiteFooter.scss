@@ -23,7 +23,7 @@ footer.site-footer {
     @apply py-8;
 
     @media (max-width: $screen-lg) {
-      @apply px-4;
+      padding: var(--bloom-s8) var(--doorway-standard-spacing);
     }
   }
 }

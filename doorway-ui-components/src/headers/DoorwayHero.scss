@@ -36,7 +36,7 @@
   background-color: var(--doorway-hero-inner-background-color);
   position: relative;
   width: 100%;
-  @apply p-8;
+  @apply p-6;
 
   @media (min-width: $screen-md) {
     max-width: var(--doorway-hero-max-width);

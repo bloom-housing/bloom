@@ -33,7 +33,7 @@ const DoorwayLinkableCardGroup = (props: DoorwayLinkableCardGroupProps) => {
   return (
     <div className={`doorway-linkable-card-group ${rootClassNames}`}>
       <div className="doorway-linkable-card-group_nav font-serif mt-4">
-        <Card className="border-0 space-y-3">{getLinks()}</Card>
+        <Card className="border-0 space-y-5">{getLinks()}</Card>
       </div>
       <div className="doorway-linkable-card-group_main">
         {props.children}

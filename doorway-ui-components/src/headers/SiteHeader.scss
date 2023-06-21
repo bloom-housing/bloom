@@ -22,7 +22,7 @@
   --logo-container-padding-desktop: inherit;
   --logo-container-padding-mobile: inherit;
   --logo-container-margin-desktop: 0;
-  --logo-container-margin-mobile: var(--bloom-s3);
+  --logo-container-margin-mobile: var(--doorway-standard-spacing);
   --logo-content-align-items: center;
   --logo-content-display: block;
   --logo-content-padding: 0;
@@ -89,7 +89,7 @@
   --mobile-menu-button-border: 2px var(--bloom-color-primary);
   --mobile-menu-button-text-transform: initial;
   --mobile-menu-button-display: inline-block;
-  --mobile-menu-button-margin: var(--bloom-s4) var(--bloom-s2);
+  --mobile-menu-button-margin: var(--bloom-s4) var(--bloom-s4);
   --mobile-menu-button-padding: 0 var(--bloom-s2);
   --mobile-menu-button-text-display: inline;
   --mobile-menu-font-size: var(--bloom-font-size-s);

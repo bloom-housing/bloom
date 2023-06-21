@@ -24,7 +24,7 @@ const GetStarted = () => {
     <Layout>
       <PageHeader title={t("pageTitle.getStarted")} />
       <MetaTags title={t("pageTitle.getStarted")} description={metaDescription} />
-      <div className="my-14">
+      <div className="lg:my-14">
         <DoorwayLinkableCardGroup
           cards={getStartedLinkableCards()}
           className="m-auto"

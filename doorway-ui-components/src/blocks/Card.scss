@@ -9,7 +9,7 @@
 
   --content-padding-block: var(--bloom-s4);
   --content-margin-inline-desktop: var(--bloom-s16);
-  --content-margin-inline-mobile: var(--bloom-s4);
+  --content-margin-inline-mobile: var(--doorway-standard-spacing);
   --content-margin-inline: var(--content-margin-inline-desktop);
 
   --header-padding-block: var(--bloom-s6) var(--bloom-s4);
@@ -17,7 +17,7 @@
   --header-margin-inline-mobile: var(--content-margin-inline-mobile);
   --header-margin-inline: var(--header-margin-inline-desktop);
 
-  @media (max-width: $screen-sm) {
+  @media (max-width: $screen-lg) {
     --content-margin-inline: var(--content-margin-inline-mobile);
     --header-margin-inline: var(--header-margin-inline-mobile);
   }

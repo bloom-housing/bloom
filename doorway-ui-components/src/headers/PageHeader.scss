@@ -1,16 +1,18 @@
 .page-header {
   /* Component Variables */
-  --background-color: var(--bloom-color-gray-300);
-  --border-color: var(--bloom-color-gray-450);
+  --background-color: var(--doorway-color-secondary);
+  --border-color: transparent;
   --text-color: inherit;
-  --text-font-family: var(--bloom-font-serif);
+  --text-font-family: var(--bloom-font-sans-serif);
   --inverse-background-color: var(--bloom-color-primary-darker);
   --inverse-border-color: var(--bloom-color-primary);
   --inverse-text-color: var(--bloom-color-white);
   --title-font-size-desktop: var(--bloom-font-size-4xl);
   --title-font-size-mobile: var(--bloom-font-size-2xl);
-  --title-font-weight: inherit;
-  --padding-desktop: var(--bloom-s10) 0;
+  --title-font-weight-desktop: 400;
+  --title-font-weight-mobile: 500;
+
+  --padding-desktop: var(--bloom-s12) 0;
   --padding-mobile: var(--bloom-s8) 0;
 
   /* Base Styles */
@@ -34,12 +36,13 @@
 .page-header__group {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 var(--bloom-s5);
+  align-items: baseline;
+  padding: 0 var(--doorway-standard-spacing);
   margin: auto;
   max-width: var(--bloom-width-5xl);
 
-  @media (min-width: $screen-sm) {
+  @media (min-width: $screen-lg) {
+    padding: 0;
     align-items: flex-start;
   }
 }
@@ -54,16 +57,17 @@
   text-align: center;
   font-family: var(--text-font-family);
   word-break: break-word;
-  font-weight: var(--title-font-weight);
+  font-weight: var(--title-font-weight-mobile);
 
   @media (min-width: $screen-md) {
     font-size: var(--title-font-size-desktop);
+    font-weight: var(--title-font-weight-desktop);
     text-align: left;
   }
 }
 
 .page-header__lead {
-  text-align: center;
+  text-align: left;
   font-family: var(--text-font-family);
   max-width: var(--bloom-width-5xl);
   @media (min-width: $screen-md) {

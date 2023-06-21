@@ -1,6 +1,10 @@
 .doorway-linkable-card-group {
   max-width: var(--bloom-width-5xl);
   display: flex;
+  flex-direction: row;
+  @media (max-width: $screen-lg) {
+    flex-direction: column;
+  }
 }
 
 .doorway-linkable-card-group_nav {
@@ -8,7 +12,7 @@
 
   @media (max-width: $screen-lg) {
     // TODO: add responsive styling here instead of hiding.
-    display: none;
+    padding: var(--doorway-standard-spacing);
   }
 }
 

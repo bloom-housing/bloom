@@ -27,7 +27,7 @@ const HousingHelp = () => {
     <Layout>
       <PageHeader title={t("pageTitle.housingHelp")} />
       <MetaTags title={t("pageTitle.housingHelp")} description={metaDescription} />
-      <div className="my-14">
+      <div className="lg:my-14">
         <DoorwayLinkableCardGroup cards={housingHelpLinkableCards()} className="m-auto">
           {housingHelpCardIntro()}
         </DoorwayLinkableCardGroup>
