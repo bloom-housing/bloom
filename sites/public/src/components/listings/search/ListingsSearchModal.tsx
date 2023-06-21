@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { ListingSearchParams, parseSearchString } from "../../../lib/listings/search"
+import { t } from "@bloom-housing/ui-components"
 import {
   Modal,
   ButtonGroup,
@@ -176,21 +177,21 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     <Modal
       open={props.open}
       onClose={props.onClose}
-      title="Filters"
+      title={t("search.filters")}
       headerClassNames="bottom-border"
       ariaDescription="Listing Search Filters"
       actions={[
         <Button type="button" className="is-secondary" onClick={onSubmit}>
-          Show matching listings
+          {t("t.showMatchingListings")}
         </Button>,
         <div style={{ flexGrow: 1 }}></div>,
         <button style={clearButtonStyle} onClick={clearValues}>
-          Clear all filters
+          {t("t.clearAllFilters")}
         </button>,
       ]}
     >
       <div style={inputSectionStyle}>
-        <div style={sectionTitle}>Bedrooms</div>
+        <div style={sectionTitle}>{t("t.bedrooms")}</div>
         <ButtonGroup
           name="bedrooms"
           options={props.bedrooms}
@@ -201,7 +202,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
       </div>
 
       <div style={inputSectionStyle}>
-        <div style={sectionTitle}>Bathrooms</div>
+        <div style={sectionTitle}>{t("t.bathrooms")}</div>
         <ButtonGroup
           name="bathrooms"
           options={props.bathrooms}
@@ -211,13 +212,13 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         />
       </div>
       <div style={inputSectionStyle}>
-        <div style={sectionTitleTopBorder}>Monthly Rent</div>
+        <div style={sectionTitleTopBorder}>{t("t.monthlyRent")}</div>
         <div style={rentStyle}>
           <Field
             type="text"
             name="minRent"
             defaultValue={formValues.minRent}
-            placeholder="Min Price: $"
+            placeholder={t("t.minPrice")}
             className="doorway-field"
             inputClassName="rent-input"
             labelClassName="input-label"
@@ -232,7 +233,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
             type="text"
             name="monthlyRent"
             defaultValue={formValues.monthlyRent}
-            placeholder="Max Price: $"
+            placeholder={t("t.maxPrice")}
             className="doorway-field"
             inputClassName="rent-input"
             labelClassName="input-label"
@@ -244,7 +245,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
       </div>
 
       <div style={inputSectionStyle}>
-        <div style={sectionTitleTopBorder}>Counties</div>
+        <div style={sectionTitleTopBorder}>{t("t.counties")}</div>
         <FieldGroup
           name="counties"
           fields={countyFields}

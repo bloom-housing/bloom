@@ -142,7 +142,7 @@ export function LandingSearch(props: LandingSearchProps) {
           className="is-primary is-borderless bg-primary-dark text-3xs md:text-xs text-white mr-8"
           size={AppearanceSizeType.small}
         >
-          {t("welcome.viewListings")}
+          {t("nav.viewListings")}
         </LinkButton>
 
         <Button

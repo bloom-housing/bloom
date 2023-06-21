@@ -50,7 +50,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   useEffect(() => {
     pushGtmEvent<ListingList>({
       event: "pageView",
-      pageTitle: "Rent Affordable Housing - Housing Portal",
+      pageTitle: t("nav.siteTitle"),
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       numberOfListings: searchResults.listings.length,
       listingIds: searchResults.listings.map((listing) => listing.id),
