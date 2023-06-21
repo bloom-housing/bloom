@@ -64,6 +64,7 @@ type ListingsSearchModalProps = {
   onSubmit: (params: ListingSearchParams) => void
   onClose: () => void
   onFilterChange: (count: number) => void
+  clearButtonState?: boolean
 }
 
 export function ListingsSearchModal(props: ListingsSearchModalProps) {
@@ -102,7 +103,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   const filterChange = props.onFilterChange
   useEffect(() => {
     filterChange(countFilters(formValues))
-  }, [formValues, filterChange, countFilters])
+  }, [formValues, countFilters])
 
   // Run this once immediately after first render
   // Empty array is intentional; it's how we make sure it only runs once
@@ -115,11 +116,24 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
   }, [])
 
   const clearValues = () => {
-    // TODO: fix this
-    // This code gets called but the UI doesn't update in response to state change
     setFormValues(nullState)
   }
 
+  // props.clearButtonState is passed in from an ancestor component and used to reset the query filters
+  // from a button on an ancestor's child component. TODO: move logic to the ancestor component
+  // so we can avoid checking states across the component graph.
+  useEffect(() => {
+    if (props.clearButtonState === undefined) {
+      return
+    }
+    // Clear the component's formValues, which will correct the search modal's query form state.
+    clearValues()
+    // Call the parent's onSubmit handler with nullState, which will reload the page with the
+    // results of the nullState query.
+    props.onSubmit(nullState)
+  }, [props.clearButtonState])
+
+  // Used to clear the filters from a button on this component.
   const onSubmit = () => {
     props.onSubmit(formValues)
     props.onClose()
