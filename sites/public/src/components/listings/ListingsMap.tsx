@@ -104,11 +104,11 @@ const ListingsMap = (props: ListingsMapProps) => {
                   props.setShowListingsList(true)
                   setTimeout(() => {
                     const element = document.getElementsByClassName("listings-row")[marker.key - 1]
-                    element.scrollIntoView()
+                    element.scrollIntoView(false)
                   }, 1)
                 } else {
                   const element = document.getElementsByClassName("listings-row")[marker.key - 1]
-                  element.scrollIntoView()
+                  element.scrollIntoView(false)
                 }
               }
             }}
