@@ -31,13 +31,15 @@ describe("Listing Management Tests", () => {
         subjectType: "drag-n-drop",
       }
     )
-    cy.getByTestId("drawer-photos-table").contains(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
-    )
+    cy.getByTestId("drawer-photos-table")
+      .find("img")
+      .should("have.attr", "src")
+      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table").contains(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
-    )
+    cy.getByTestId("photos-table")
+      .find("img")
+      .should("have.attr", "src")
+      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
 
     cy.getByTestId("add-photos-button").contains("Edit Photos").click()
     cy.getByTestId("dropzone-input").attachFile(
@@ -46,13 +48,17 @@ describe("Listing Management Tests", () => {
         subjectType: "drag-n-drop",
       }
     )
-    cy.getByTestId("drawer-photos-table").contains(
-      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
-    )
+    cy.getByTestId("drawer-photos-table")
+      .find("img")
+      .eq(1)
+      .should("have.attr", "src")
+      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table").contains(
-      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08"
-    )
+    cy.getByTestId("photos-table")
+      .find("img")
+      .eq(1)
+      .should("have.attr", "src")
+      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
     cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
     cy.getByTestId("photos-table")
       .get("tbody > tr:nth-of-type(2)")
@@ -187,9 +193,10 @@ describe("Listing Management Tests", () => {
     cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
     cy.get("#name").contains(listing["name"])
     cy.get("#developer").contains(listing["developer"])
-    cy.get('[data-label="File Name"]').contains(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
-    )
+    cy.get('[data-label="Preview"]')
+      .find("img")
+      .should("have.attr", "src")
+      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
     cy.getByID("buildingAddress.street").contains(listing["buildingAddress.street"])
     cy.get("#neighborhood").contains(listing.neighborhood)
     cy.get("#neighborhood").contains(listing.neighborhood)
