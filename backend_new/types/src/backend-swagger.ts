@@ -671,7 +671,7 @@ export interface UnitType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -929,7 +929,7 @@ export interface ReservedCommunityType {
 
 export interface UnitTypeCreate {
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -940,7 +940,7 @@ export interface UnitTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -993,4 +993,14 @@ export enum ApplicationMethodsTypeEnum {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent',
   'Referral' = 'Referral',
+}
+
+export enum UnitTypeEnum {
+  'studio' = 'studio',
+  'oneBdrm' = 'oneBdrm',
+  'twoBdrm' = 'twoBdrm',
+  'threeBdrm' = 'threeBdrm',
+  'fourBdrm' = 'fourBdrm',
+  'SRO' = 'SRO',
+  'fiveBdrm' = 'fiveBdrm',
 }
