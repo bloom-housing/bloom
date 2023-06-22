@@ -165,7 +165,7 @@ export function LandingSearch(props: LandingSearchProps) {
         ariaDescription={t("welcome.bayAreaCountyMap")}
         onClose={() => setOpenCountyMapModal(!openCountyMapModal)}
       >
-        <img src={"images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
+        <img src={"/images/county-map.png"} alt={t("welcome.bayAreaCountyMap")} />
       </Modal>
     </Card>
   )
