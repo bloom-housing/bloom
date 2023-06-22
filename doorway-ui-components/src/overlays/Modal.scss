@@ -109,6 +109,10 @@
   gap: var(--bloom-s5);
   justify-content: var(--footer-justify);
   align-items: center;
+
+  @media (max-width: $screen-md) {
+    margin-bottom: var(--bloom-s12);
+  };
 }
 
 .modal__close {
