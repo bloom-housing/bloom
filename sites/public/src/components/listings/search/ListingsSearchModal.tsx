@@ -215,13 +215,15 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         <div style={sectionTitleTopBorder}>{t("t.monthlyRent")}</div>
         <div style={rentStyle}>
           <Field
-            type="text"
+            type="number"
             name="minRent"
             defaultValue={formValues.minRent}
             placeholder={t("t.minPrice")}
             className="doorway-field"
             inputClassName="rent-input"
             labelClassName="input-label"
+            inputMode="numeric"
+            pattern="\d*"
             onChange={(e: React.FormEvent<HTMLInputElement>) => {
               updateValue("minRent", e.currentTarget.value)
             }}
@@ -230,13 +232,15 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
             <div style={hyphenStyle}>-</div>
           </div>
           <Field
-            type="text"
+            type="number"
             name="monthlyRent"
             defaultValue={formValues.monthlyRent}
             placeholder={t("t.maxPrice")}
             className="doorway-field"
             inputClassName="rent-input"
             labelClassName="input-label"
+            inputMode="numeric"
+            pattern="\d*"
             onChange={(e: React.FormEvent<HTMLInputElement>) => {
               updateValue("monthlyRent", e.currentTarget.value)
             }}

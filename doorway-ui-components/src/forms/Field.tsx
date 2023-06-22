@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useMemo } from "react"
+import React, { ChangeEvent, HTMLAttributes, useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import "./Field.scss"
@@ -35,7 +35,8 @@ export interface FieldProps {
   hidden?: boolean
   labelClassName?: string
   bordered?: boolean
-
+  inputMode?: HTMLAttributes<HTMLInputElement>["inputMode"]
+  pattern?: string
 }
 
 const Field = (props: FieldProps) => {
@@ -161,6 +162,8 @@ const Field = (props: FieldProps) => {
           data-testid={props.dataTestId}
           {...inputProps}
           hidden={props.hidden}
+          inputMode={props.inputMode}
+          pattern={props.pattern}
         />
         {isRadioOrCheckbox && label}
       </div>

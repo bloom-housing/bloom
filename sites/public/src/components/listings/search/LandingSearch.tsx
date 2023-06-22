@@ -111,13 +111,15 @@ export function LandingSearch(props: LandingSearchProps) {
       <div className={styles["input-section"]}>
         <div className={styles["input-section_title"]}>{t("t.maxMonthlyRent")}</div>
         <Field
-          type="text"
+          type="number"
           name="monthlyRent"
           defaultValue={formValues.monthlyRent}
           placeholder="$"
           className="doorway-field p-0 md:pl-6"
           inputClassName="rent-input"
           labelClassName="input-label"
+          inputMode="numeric"
+          pattern="\d*"
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
             updateValue("monthlyRent", e.currentTarget.value)
           }}
