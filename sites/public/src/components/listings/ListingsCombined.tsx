@@ -11,6 +11,8 @@ type ListingsCombinedProps = {
   lastPage: number
   onPageChange: (page: number) => void
   googleMapsApiKey: string
+  setClearButtonState?: React.Dispatch<React.SetStateAction<boolean>>
+  clearButtonState?: boolean
 }
 
 const ListingsCombined = (props: ListingsCombinedProps) => {
@@ -70,6 +72,8 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
             currentPage={props.currentPage}
             lastPage={props.lastPage}
             onPageChange={props.onPageChange}
+            setClearButtonState={props.setClearButtonState}
+            clearButtonState={props.clearButtonState}
           ></ListingsList>
         </div>
       </div>
@@ -114,6 +118,8 @@ const ListingsCombined = (props: ListingsCombinedProps) => {
               currentPage={props.currentPage}
               lastPage={props.lastPage}
               onPageChange={props.onPageChange}
+              setClearButtonState={props.setClearButtonState}
+              clearButtonState={props.clearButtonState}
             ></ListingsList>
           </div>
         </div>
