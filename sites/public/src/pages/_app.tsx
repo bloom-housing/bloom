@@ -4,7 +4,10 @@ import "@bloom-housing/doorway-ui-components/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
-import { addTranslation as addTranslationDoorway } from "@bloom-housing/doorway-ui-components"
+import {
+  addTranslation as addTranslationDoorway,
+  NavigationContext as NavigationContextDoorway,
+} from "@bloom-housing/doorway-ui-components"
 
 import {
   blankApplication,
@@ -42,8 +45,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   }, [])
 
   useMemo(() => {
-    // Need to add translations to both doorway uic and uic in order for
-    // both sets of components to properly translate.
+    // HACK ALERT: we need to add translations to both doorway uic and uic in
+    // order for both sets of components to properly translate.
     // Note that I tried just adding one as a reference to another --
     // it worked for the public site but broke Storybook.
     addTranslationDoorway(translations.general, true)
@@ -94,6 +97,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   //   }
   // }, [])
 
+  // HACK ALERT: we need to add the Next link context to both doorway uic and
+  // uic in order for routing to work
   return (
     <NavigationContext.Provider
       value={{
@@ -101,22 +106,29 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         router: router as GenericRouter,
       }}
     >
-      <AppSubmissionContext.Provider
+      <NavigationContextDoorway.Provider
         value={{
-          conductor: conductor,
-          application: application,
-          listing: savedListing,
-          syncApplication: setApplication,
-          syncListing: setSavedListing,
+          LinkComponent,
+          router: router as GenericRouter,
         }}
       >
-        <ConfigProvider apiUrl={process.env.backendApiBase}>
-          <AuthProvider>
-            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-            {hasMounted && <Component {...pageProps} />}
-          </AuthProvider>
-        </ConfigProvider>
-      </AppSubmissionContext.Provider>
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: application,
+            listing: savedListing,
+            syncApplication: setApplication,
+            syncListing: setSavedListing,
+          }}
+        >
+          <ConfigProvider apiUrl={process.env.backendApiBase}>
+            <AuthProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+              {hasMounted && <Component {...pageProps} />}
+            </AuthProvider>
+          </ConfigProvider>
+        </AppSubmissionContext.Provider>
+      </NavigationContextDoorway.Provider>
     </NavigationContext.Provider>
   )
 }
