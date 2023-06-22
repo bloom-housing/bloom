@@ -28,7 +28,7 @@ const ListingsList = (props: ListingsListProps) => {
     )
 
   const infoCards =
-    props.currentPage == props.lastPage ? (
+    props.currentPage == props.lastPage || props.lastPage == 0 ? (
       <div>
         <InfoCard
           title={t("t.signUpForAlerts")}
@@ -65,15 +65,20 @@ const ListingsList = (props: ListingsListProps) => {
     ) : (
       <div></div>
     )
-
-  return (
-    <div>
-      {listingsDiv}
+  const pagination =
+    props.lastPage != 0 ? (
       <Pagination
         currentPage={props.currentPage}
         lastPage={props.lastPage}
         onPageChange={props.onPageChange}
       />
+    ) : (
+      <></>
+    )
+  return (
+    <div>
+      {listingsDiv}
+      {pagination}
       {infoCards}
     </div>
   )
