@@ -140,7 +140,7 @@ export const getListingCard = (listing: Listing, index: number) => {
   return (
     <ListingCard
       key={index}
-      preheader={listing?.buildingAddress?.county}
+      preheader={getCountyName(listing?.buildingAddress?.county)}
       imageCardProps={{
         imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || "",
         tags: listing.reservedCommunityType
@@ -176,6 +176,31 @@ export const getListingCard = (listing: Listing, index: number) => {
       }}
     />
   )
+}
+
+export const getCountyName = (county: string) => {
+  switch (county) {
+    case "Alameda":
+      return t("counties.fullname.Alameda")
+    case "Contra Costa":
+      return t("counties.fullname.ContraCosta")
+    case "Marin":
+      return t("counties.fullname.Marin")
+    case "Napa":
+      return t("counties.fullname.Napa")
+    case "San Francisco":
+      return t("counties.fullname.SanFrancisco")
+    case "San Mateo":
+      return t("counties.fullname.SanMateo")
+    case "Santa Clara":
+      return t("counties.fullname.SantaClara")
+    case "Solano":
+      return t("counties.fullname.Solano")
+    case "Sonoma":
+      return t("counties.fullname.Sonoma")
+    default:
+      return county
+  }
 }
 
 export const untranslateMultiselectQuestion = (
