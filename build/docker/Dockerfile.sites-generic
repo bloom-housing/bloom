@@ -2,7 +2,6 @@
 # Set a default value for the SITE arg
 ARG SITE=public
 ARG CLOUDINARY_CLOUD_NAME=blank
-ARG FILE_SERVICE=blank
 ARG LISTINGS_QUERY=/listings
 ARG BACKEND_API_BASE=http://localhost:3100
 ARG JURISDICTION_NAME=Bay Area
@@ -10,6 +9,7 @@ ARG BLOOM_API_BASE=https://hba-dev-proxy.herokuapp.com
 ARG CACHE_REVALIDATE=60
 ARG IDLE_TIMEOUT=5
 ARG LANGUAGES=en
+ARG MAPBOX_TOKEN
 
 # The base image will contain all the source code needed for our site
 FROM node:18.14-alpine AS base
@@ -66,7 +66,6 @@ FROM deps AS test
 
 ARG SITE
 ARG CLOUDINARY_CLOUD_NAME
-ARG FILE_SERVICE
 ARG LISTINGS_QUERY
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
@@ -104,7 +103,6 @@ FROM deps AS build
 
 ARG SITE
 ARG CLOUDINARY_CLOUD_NAME
-ARG FILE_SERVICE
 ARG LISTINGS_QUERY
 ARG BACKEND_API_BASE
 ARG JURISDICTION_NAME
@@ -112,6 +110,7 @@ ARG BLOOM_API_BASE
 ARG CACHE_REVALIDATE
 ARG IDLE_TIMEOUT
 ARG LANGUAGES
+ARG MAPBOX_TOKEN
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
@@ -127,6 +126,7 @@ ENV BLOOM_API_BASE=$BLOOM_API_BASE
 ENV CACHE_REVALIDATE=$CACHE_REVALIDATE
 ENV IDLE_TIMEOUT=$IDLE_TIMEOUT
 ENV LANGUAGES=$LANGUAGES
+ENV MAPBOX_TOKEN=$MAPBOX_TOKEN
 
 # Build/compile
 RUN yarn build

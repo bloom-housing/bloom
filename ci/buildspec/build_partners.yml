@@ -32,6 +32,7 @@ phases:
         --build-arg "CACHE_REVALIDATE=${CACHE_REVALIDATE}"
         --build-arg "IDLE_TIMEOUT=${IDLE_TIMEOUT}"
         --build-arg "LANGUAGES=${LANGUAGES}"
+        --build-arg "MAPBOX_TOKEN=${MAPBOX_TOKEN}"
         -t sites/partners:test
       
       # Run tests
@@ -48,6 +49,7 @@ phases:
         --build-arg "CACHE_REVALIDATE=${CACHE_REVALIDATE}"
         --build-arg "IDLE_TIMEOUT=${IDLE_TIMEOUT}"
         --build-arg "LANGUAGES=${LANGUAGES}"
+        --build-arg "MAPBOX_TOKEN=${MAPBOX_TOKEN}"
         -t sites/partners:run-candidate
       
       # Tag the run image
