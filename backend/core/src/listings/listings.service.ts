@@ -31,6 +31,8 @@ import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
 import { CombinedListingsQueryParams } from "./combined/combined-listings-query-params"
+import { CombinedListingFilterParams } from "./combined/combined-listing-filter-params"
+import { Compare } from "../shared/dto/filter.dto"
 
 type JurisdictionIdToExternalResponse = { [Identifier: string]: Pagination<Listing> }
 export type ListingIncludeExternalResponse = {
@@ -116,6 +118,17 @@ export class ListingsService {
   // REMOVE_WHEN_EXTERNAL_NOT_NEEDED
   public async listCombined(params: CombinedListingsQueryParams): Promise<Pagination<Listing>> {
     const qb = this.listingRepository.createCombinedListingsQueryBuilder("combined")
+
+    // Only show active listings
+    const statusParam = new CombinedListingFilterParams()
+    statusParam.$comparison = Compare["="]
+    statusParam.status = ListingStatus.active
+
+    if (Array.isArray(params.filter)) {
+      params.filter.push(statusParam)
+    } else {
+      params.filter = [statusParam]
+    }
 
     qb.addFilters(params.filter)
       .addOrderConditions(params.orderBy, params.orderDir)
