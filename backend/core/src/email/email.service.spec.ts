@@ -253,7 +253,7 @@ describe("EmailService", () => {
       expect(emailMock.to).toEqual(user.email)
       expect(emailMock.subject).toEqual("Your Application Confirmation")
       expect(emailMock.html).toMatch(
-        `<img src="https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png" alt="Alameda County Housing Portal" width="254" height="137" />`
+        `<img src="https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png" alt="Alameda County Housing Portal" width="300" height="65" />`
       )
       expect(emailMock.html).toMatch("Your Confirmation Number")
       expect(emailMock.html).toMatch("Marisela Baca")
