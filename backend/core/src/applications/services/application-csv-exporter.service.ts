@@ -1,11 +1,11 @@
 import { Injectable, Scope } from "@nestjs/common"
-import dayjs from "dayjs"
 import { CsvBuilder, KeyNumber } from "./csv-builder.service"
 import { getBirthday } from "../../shared/utils/get-birthday"
 import { formatBoolean } from "../../shared/utils/format-boolean"
 import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 import { ApplicationReviewStatus } from "../types/application-review-status-enum"
+import { formatLocalDate } from "../../shared/utils/format-local-date"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationCsvExporterService {
@@ -114,7 +114,11 @@ export class ApplicationCsvExporterService {
     }, {})
   }
 
-  exportFromObject(applications: { [key: string]: any }, includeDemographics?: boolean): string {
+  exportFromObject(
+    applications: { [key: string]: any },
+    timeZone: string,
+    includeDemographics?: boolean
+  ): string {
     const extraHeaders: KeyNumber = {
       "Household Members": 1,
       Preference: 1,
@@ -141,8 +145,10 @@ export class ApplicationCsvExporterService {
             app.application_submission_type === "electronical"
               ? "electronic"
               : app.application_submission_type,
-          "Application Submission Date": dayjs(app.application_submission_date).format(
-            "MM-DD-YYYY h:mm:ssA"
+          "Application Submission Date": formatLocalDate(
+            app.application_submission_date,
+            "MM-DD-YYYY hh:mm:ssA z",
+            timeZone
           ),
           "Primary Applicant First Name": app.applicant_first_name,
           "Primary Applicant Middle Name": app.applicant_middle_name,
