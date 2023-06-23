@@ -5,6 +5,7 @@ import { UnitAccessibilityPriorityTypeCreate } from '../../../src/dtos/unit-acce
 import { UnitAccessibilityPriorityTypeUpdate } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { UnitAccessibilityPriorityType } from '../../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { randomUUID } from 'crypto';
+import { unitPriorityTypeArray } from '../../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 
 describe('Testing unit accessibility priority type service', () => {
   let service: UnitAccessibilityPriorityTypeService;
@@ -13,7 +14,7 @@ describe('Testing unit accessibility priority type service', () => {
   const mockUnitAccessibilityPriorityType = (position: number, date: Date) => {
     return {
       id: randomUUID(),
-      name: `unit accessibility priority type ${position}`,
+      name: unitPriorityTypeArray[position].name,
       createdAt: date,
       updatedAt: date,
     };
@@ -51,19 +52,19 @@ describe('Testing unit accessibility priority type service', () => {
     expect(await service.list()).toEqual([
       {
         id: mockedValue[0].id,
-        name: 'unit accessibility priority type 0',
+        name: unitPriorityTypeArray[0].name,
         createdAt: date,
         updatedAt: date,
       },
       {
         id: mockedValue[1].id,
-        name: 'unit accessibility priority type 1',
+        name: unitPriorityTypeArray[1].name,
         createdAt: date,
         updatedAt: date,
       },
       {
         id: mockedValue[2].id,
-        name: 'unit accessibility priority type 2',
+        name: unitPriorityTypeArray[2].name,
         createdAt: date,
         updatedAt: date,
       },
@@ -75,30 +76,28 @@ describe('Testing unit accessibility priority type service', () => {
   it('testing findOne() with id present', async () => {
     const date = new Date();
     const mockedValue = mockUnitAccessibilityPriorityType(3, date);
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(mockedValue);
 
     expect(await service.findOne('example Id')).toEqual({
       id: mockedValue.id,
-      name: 'unit accessibility priority type 3',
+      name: unitPriorityTypeArray[3].name,
       createdAt: date,
       updatedAt: date,
     });
 
     expect(
-      prisma.unitAccessibilityPriorityTypes.findFirst,
+      prisma.unitAccessibilityPriorityTypes.findUnique,
     ).toHaveBeenCalledWith({
       where: {
-        id: {
-          equals: 'example Id',
-        },
+        id: 'example Id',
       },
     });
   });
 
   it('testing findOne() with id not present', async () => {
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(null);
 
@@ -107,12 +106,10 @@ describe('Testing unit accessibility priority type service', () => {
     ).rejects.toThrowError();
 
     expect(
-      prisma.unitAccessibilityPriorityTypes.findFirst,
+      prisma.unitAccessibilityPriorityTypes.findUnique,
     ).toHaveBeenCalledWith({
       where: {
-        id: {
-          equals: 'example Id',
-        },
+        id: 'example Id',
       },
     });
   });
@@ -125,19 +122,19 @@ describe('Testing unit accessibility priority type service', () => {
       .mockResolvedValue(mockedValue);
 
     const params: UnitAccessibilityPriorityTypeCreate = {
-      name: 'unit accessibility priority type 3',
+      name: unitPriorityTypeArray[3].name,
     };
 
     expect(await service.create(params)).toEqual({
       id: mockedValue.id,
-      name: 'unit accessibility priority type 3',
+      name: unitPriorityTypeArray[3].name,
       createdAt: date,
       updatedAt: date,
     });
 
     expect(prisma.unitAccessibilityPriorityTypes.create).toHaveBeenCalledWith({
       data: {
-        name: 'unit accessibility priority type 3',
+        name: unitPriorityTypeArray[3].name,
       },
     });
   });
@@ -147,28 +144,28 @@ describe('Testing unit accessibility priority type service', () => {
 
     const mockedUnitType = mockUnitAccessibilityPriorityType(3, date);
 
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(mockedUnitType);
     prisma.unitAccessibilityPriorityTypes.update = jest.fn().mockResolvedValue({
       ...mockedUnitType,
-      name: 'updated unit accessibility priority type 3',
+      name: unitPriorityTypeArray[4].name,
     });
 
     const params: UnitAccessibilityPriorityTypeUpdate = {
-      name: 'updated unit accessibility priority type 3',
+      name: unitPriorityTypeArray[4].name,
       id: mockedUnitType.id,
     };
 
     expect(await service.update(params)).toEqual({
       id: mockedUnitType.id,
-      name: 'updated unit accessibility priority type 3',
+      name: unitPriorityTypeArray[4].name,
       createdAt: date,
       updatedAt: date,
     });
 
     expect(
-      prisma.unitAccessibilityPriorityTypes.findFirst,
+      prisma.unitAccessibilityPriorityTypes.findUnique,
     ).toHaveBeenCalledWith({
       where: {
         id: mockedUnitType.id,
@@ -177,7 +174,7 @@ describe('Testing unit accessibility priority type service', () => {
 
     expect(prisma.unitAccessibilityPriorityTypes.update).toHaveBeenCalledWith({
       data: {
-        name: 'updated unit accessibility priority type 3',
+        name: unitPriorityTypeArray[4].name,
       },
       where: {
         id: mockedUnitType.id,
@@ -188,7 +185,7 @@ describe('Testing unit accessibility priority type service', () => {
   it('testing update() existing record not found', async () => {
     const date = new Date();
 
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(null);
     prisma.unitAccessibilityPriorityTypes.update = jest
@@ -196,7 +193,7 @@ describe('Testing unit accessibility priority type service', () => {
       .mockResolvedValue(null);
 
     const params: UnitAccessibilityPriorityType = {
-      name: 'updated unit accessibility priority type 3',
+      name: unitPriorityTypeArray[4].name,
       id: 'example id',
       createdAt: date,
       updatedAt: date,
@@ -207,7 +204,7 @@ describe('Testing unit accessibility priority type service', () => {
     ).rejects.toThrowError();
 
     expect(
-      prisma.unitAccessibilityPriorityTypes.findFirst,
+      prisma.unitAccessibilityPriorityTypes.findUnique,
     ).toHaveBeenCalledWith({
       where: {
         id: 'example id',
@@ -220,7 +217,7 @@ describe('Testing unit accessibility priority type service', () => {
 
     const mockedUnitType = mockUnitAccessibilityPriorityType(3, date);
 
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(mockedUnitType);
     prisma.unitAccessibilityPriorityTypes.delete = jest
@@ -239,7 +236,7 @@ describe('Testing unit accessibility priority type service', () => {
   });
 
   it('testing findOrThrow() record found', async () => {
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(null);
 
@@ -248,7 +245,7 @@ describe('Testing unit accessibility priority type service', () => {
     ).rejects.toThrowError();
 
     expect(
-      prisma.unitAccessibilityPriorityTypes.findFirst,
+      prisma.unitAccessibilityPriorityTypes.findUnique,
     ).toHaveBeenCalledWith({
       where: {
         id: 'example id',
@@ -259,14 +256,14 @@ describe('Testing unit accessibility priority type service', () => {
   it('testing findOrThrow() record not found', async () => {
     const date = new Date();
     const mockedAmi = mockUnitAccessibilityPriorityType(3, date);
-    prisma.unitAccessibilityPriorityTypes.findFirst = jest
+    prisma.unitAccessibilityPriorityTypes.findUnique = jest
       .fn()
       .mockResolvedValue(mockedAmi);
 
     expect(await service.findOrThrow('example id')).toEqual(true);
 
     expect(
-      prisma.unitAccessibilityPriorityTypes.findFirst,
+      prisma.unitAccessibilityPriorityTypes.findUnique,
     ).toHaveBeenCalledWith({
       where: {
         id: 'example id',

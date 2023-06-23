@@ -631,10 +631,10 @@ model Translations {
 
 // Note: [name] formerly max length 256
 model UnitAccessibilityPriorityTypes {
-  id           String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
-  name         String
+  id           String                            @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt    DateTime                          @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime                          @updatedAt @map("updated_at") @db.Timestamp(6)
+  name         UnitAccessibilityPriorityTypeEnum
   units        Units[]
   unitGroup    UnitGroup[]
   unitsSummary UnitsSummary[]
@@ -1041,4 +1041,16 @@ enum UnitTypeEnum {
   fiveBdrm
 
   @@map("unit_type_enum")
+}
+
+enum UnitAccessibilityPriorityTypeEnum {
+  mobility
+  mobilityAndHearing
+  hearing
+  visual
+  hearingAndVisual
+  mobilityAndVisual
+  mobilityHearingAndVisual
+
+  @@map("unit_accessibility_priority_type_enum")
 }

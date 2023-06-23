@@ -64,6 +64,9 @@ CREATE TYPE "monthly_rent_determination_type_enum" AS ENUM ('flatRent', 'percent
 -- CreateEnum
 CREATE TYPE "unit_type_enum" AS ENUM ('studio', 'oneBdrm', 'twoBdrm', 'threeBdrm', 'fourBdrm', 'SRO', 'fiveBdrm');
 
+-- CreateEnum
+CREATE TYPE "unit_accessibility_priority_type_enum" AS ENUM ('mobility', 'mobilityAndHearing', 'hearing', 'visual', 'hearingAndVisual', 'mobilityAndVisual', 'mobilityHearingAndVisual');
+
 -- CreateTable
 CREATE TABLE "accessibility" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
@@ -578,7 +581,7 @@ CREATE TABLE "unit_accessibility_priority_types" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" "unit_accessibility_priority_type_enum" NOT NULL,
 
     CONSTRAINT "unit_accessibility_priority_types_pkey" PRIMARY KEY ("id")
 );
