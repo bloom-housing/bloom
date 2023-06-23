@@ -52,7 +52,6 @@ const DetailsPrimaryApplicant = () => {
         </GridCell>
 
         <GridCell>
-          {/* todo: check truncated  */}
           <FieldValue label={t("t.email")} data-testid="emailAddress">
             {application.applicant.emailAddress || t("t.n/a")}
           </FieldValue>

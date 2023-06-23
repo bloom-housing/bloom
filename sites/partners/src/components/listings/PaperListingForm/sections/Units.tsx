@@ -164,7 +164,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       >
         <GridSection columns={2}>
           <GridCell>
-            {/* todo: required children */}
             <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
               <FieldGroup
                 name="disableUnitsAccordion"
@@ -177,7 +176,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             </FieldValue>
           </GridCell>
           <GridCell>
-            {/* todo: required children */}
             <FieldValue
               label={t("listings.listingAvailabilityQuestion")}
               className={`mb-1 ${

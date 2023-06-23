@@ -278,7 +278,6 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
-              {/* todo: required children */}
               <FieldValue label={t("settings.preferenceOptOut")} className="mb-1">
                 <FieldGroup
                   name="canYouOptOutQuestion"
@@ -328,7 +327,6 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection columns={3} className={"mt-4"}>
             <GridCell>
-              todo: required children
               <FieldValue label={t("settings.preferenceShowOnListing")} className="mb-1">
                 <FieldGroup
                   name="showOnListingQuestion"
@@ -544,7 +542,6 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection>
             <GridCell>
-              {/* todo: required children */}
               <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
                 <FieldGroup
                   name="exclusiveQuestion"

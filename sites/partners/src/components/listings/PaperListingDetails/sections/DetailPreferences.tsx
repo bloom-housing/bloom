@@ -34,7 +34,6 @@ const DetailPreferences = () => {
       tinted
       inset
     >
-      {/* todo: required values */}
       <FieldValue label={t("listings.activePreferences")} className={"mb-2"}>
         {preferenceTableData.length ? (
           <MinimalTable

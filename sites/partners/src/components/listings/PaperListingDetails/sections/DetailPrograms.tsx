@@ -34,7 +34,6 @@ const DetailPrograms = () => {
       tinted
       inset
     >
-      {/* todo: required children */}
       <FieldValue label={"Active Programs"} className={"mb-2"}>
         {programsTableData.length ? (
           <MinimalTable headers={programsTableHeaders} data={programsTableData} />

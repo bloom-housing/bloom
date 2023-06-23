@@ -30,8 +30,14 @@ const ListingIntro = (props: ListingIntroProps) => {
       description={t("listings.sections.introSubtitle")}
     >
       <GridCell span={2} className={`${defaultJurisdiction ? "hidden" : ""}`}>
-        {/* todo: error */}
-        <FieldValue label={t("t.jurisdiction")}>
+        <FieldValue
+          label={t("t.jurisdiction")}
+          className={`mb-0 ${
+            fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
+              ? "field-value-error"
+              : ""
+          }`}
+        >
           <Select
             id={"jurisdiction.id"}
             defaultValue={defaultJurisdiction}

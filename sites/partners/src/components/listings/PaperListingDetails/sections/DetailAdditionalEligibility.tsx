@@ -52,7 +52,6 @@ const DetailAdditionalEligibility = () => {
       {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
         <GridSection columns={1}>
           <GridCell>
-            {/* todo: required children */}
             <FieldValue label={t("listings.buildingSelectionCriteria")}>
               {listing.buildingSelectionCriteriaFile?.fileId ? (
                 <MinimalTable

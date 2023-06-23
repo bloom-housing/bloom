@@ -211,8 +211,17 @@ const BuildingDetails = ({
           <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
         <GridCell>
-          {/* todo: error state */}
-          <FieldValue label={t("application.contact.state")} className={"mb-0"}>
+          <FieldValue
+            label={t("application.contact.state")}
+            className={`mb-0 ${
+              getAddressErrorMessage(
+                "buildingAddress.state",
+                fieldMessage(errors?.buildingAddress?.state)
+              )
+                ? "field-value-error"
+                : ""
+            }`}
+          >
             <Select
               id={`buildingAddress.state`}
               name={`buildingAddress.state`}
@@ -275,7 +284,6 @@ const BuildingDetails = ({
       </GridSection>
       <GridSection columns={3}>
         <GridCell span={2}>
-          {/* todo: required children */}
           <FieldValue label={t("listings.mapPreview")}>
             {displayMapPreview() ? (
               <ListingMap
