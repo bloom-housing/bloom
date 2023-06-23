@@ -5,7 +5,7 @@ import { formatBoolean } from "../../shared/utils/format-boolean"
 import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 import { ApplicationReviewStatus } from "../types/application-review-status-enum"
-import { formatLocalDate } from "../../shared/utils/format-local-date"
+import { formatApplicationDate } from "../helpers"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationCsvExporterService {
@@ -145,9 +145,9 @@ export class ApplicationCsvExporterService {
             app.application_submission_type === "electronical"
               ? "electronic"
               : app.application_submission_type,
-          "Application Submission Date": formatLocalDate(
+          "Application Submission Date": formatApplicationDate(
+            app.application_submission_type,
             app.application_submission_date,
-            "MM-DD-YYYY hh:mm:ssA z",
             timeZone
           ),
           "Primary Applicant First Name": app.applicant_first_name,
