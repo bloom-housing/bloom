@@ -1600,25 +1600,6 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.6.0.tgz#ea866a98042380a42be97dd26d5950179e8bf4f4"
-  integrity sha512-QWuPwSHebPdM5p1rLXiFpPKeEUSXc/0B1KAoAHbiz+yWWYCAXW72FQeWhL00JMJ8s7Af8/oVyj+WIwMD5OnHuA==
-  dependencies:
-    "@fortawesome/fontawesome-svg-core" "^6.3.0"
-    "@fortawesome/free-regular-svg-icons" "^6.3.0"
-    "@fortawesome/free-solid-svg-icons" "^6.3.0"
-    "@fortawesome/react-fontawesome" "^0.2.0"
-    "@types/markdown-to-jsx" "^6.11.2"
-    "@types/mdx" "^2.0.3"
-    "@types/node" "^16.7.13"
-    "@types/react" "^18.0.0"
-    "@types/react-dom" "^18.0.0"
-    markdown-to-jsx "^6.11.4"
-    react "^18.2.0"
-    react-dom "^18.2.0"
-    typescript "^4.4.2"
-
 "@bloom-housing/ui-seeds@^1.7.1":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.7.1.tgz#56a005aa2387ee415cd320d799123036715d8503"
