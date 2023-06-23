@@ -12,6 +12,8 @@ import { Unit } from '../../../src/dtos/units/unit-get.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
+import { TranslationService } from '../../../src/services/translation.service';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -95,9 +97,21 @@ describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
 
+  const googleTranslateServiceMock = {
+    isConfigured: () => true,
+    fetch: jest.fn(),
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ListingService, PrismaService],
+      providers: [
+        ListingService,
+        PrismaService,
+        TranslationService,
+        {
+          provide: GoogleTranslateService,
+          useValue: googleTranslateServiceMock,
+        },
+      ],
     }).compile();
 
     service = module.get<ListingService>(ListingService);

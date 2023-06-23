@@ -26,6 +26,7 @@
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed"
   },
   "dependencies": {
+    "@google-cloud/translate": "^7.2.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
@@ -33,6 +34,7 @@
     "@prisma/client": "^4.14.0",
     "class-validator": "^0.14.0",
     "class-transformer": "^0.5.1",
+    "lodash": "^4.17.21",
     "prisma": "^4.13.0",
     "qs": "^6.11.2",
     "reflect-metadata": "^0.1.13",

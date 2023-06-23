@@ -295,7 +295,9 @@ export const listingFactory = (
             subText: `multiselectQuestions: ${i} subText: ${i}`,
             description: `multiselectQuestions: ${i} description: ${i}`,
             links: {},
-            options: {},
+            options: [
+              { text: `multiselectQuestions: ${i} option: ${i}`, ordinal: 1 },
+            ],
             optOutText: `multiselectQuestions: ${i} optOutText: ${i}`,
             hideFromListing: true,
             applicationSection:
@@ -316,7 +318,7 @@ export const listingFactory = (
             subText: `multiselectQuestions: ${i} subText: ${i}`,
             description: `multiselectQuestions: ${i} description: ${i}`,
             links: {},
-            options: {},
+            options: [],
             optOutText: `multiselectQuestions: ${i} optOutText: ${i}`,
             hideFromListing: true,
             applicationSection:
