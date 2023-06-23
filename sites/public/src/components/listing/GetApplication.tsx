@@ -104,7 +104,7 @@ const GetApplication = (props: ApplicationsProps) => {
             styleType={
               !props.preview && props.onlineApplicationURL ? AppearanceStyleType.primary : undefined
             }
-            className="w-full mb-2"
+            className="w-full mb-2 mt-4"
             onClick={toggleDownload}
             disabled={props.preview}
           >
