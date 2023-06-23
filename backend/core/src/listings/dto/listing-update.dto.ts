@@ -3,7 +3,7 @@ import { Expose, Type } from "class-transformer"
 import { ArrayMaxSize, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
-import { AddressUpdateDto } from "../../shared/dto/address.dto"
+import { AddressCountyRequiredUpdateDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ListingEventUpdateDto } from "./listing-event.dto"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
 import { UnitsSummaryUpdateDto } from "../../units-summary/dto/units-summary.dto"
@@ -112,8 +112,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressUpdateDto)
-  buildingAddress?: AddressUpdateDto | null
+  @Type(() => AddressCountyRequiredUpdateDto)
+  buildingAddress?: AddressCountyRequiredUpdateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

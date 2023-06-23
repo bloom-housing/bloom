@@ -1,4 +1,4 @@
-import { AddressUpdateDto } from "../../shared/dto/address.dto"
+import { AddressCountyRequiredUpdateDto } from "../../shared/dto/address.dto"
 import { Expose, Type } from "class-transformer"
 import {
   ArrayMaxSize,
@@ -47,8 +47,8 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressUpdateDto)
-  buildingAddress: AddressUpdateDto
+  @Type(() => AddressCountyRequiredUpdateDto)
+  buildingAddress: AddressCountyRequiredUpdateDto
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

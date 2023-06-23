@@ -319,12 +319,12 @@ const BuildingDetails = ({
         </GridCell>
         <GridCell span={2}>
           <AlertNotice inverted>
-            <p className="text__small-weighted" color="bloom-color-alert-dark">
+            <div className="text__small-weighted" color="bloom-color-alert-dark">
               {t("county.goToOtherPortalsTitle")}
               <Tooltip className="ml-0" id="county-helper" text={t("county.goToOtherPortalsHover")}>
                 <Icon size="medium" symbol="info" />
               </Tooltip>
-            </p>
+            </div>
             <li className="list-disc list-inside">
               {t("county.goToOtherPortalsCitySanJose")}
               <Link href="https://partners.housingbayarea.org/">

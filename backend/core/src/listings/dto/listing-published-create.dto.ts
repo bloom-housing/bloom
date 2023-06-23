@@ -1,6 +1,6 @@
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
-import { AddressCreateDto } from "../../shared/dto/address.dto"
+import { AddressCountyRequiredCreateDto } from "../../shared/dto/address.dto"
 import { ListingCreateDto } from "./listing-create.dto"
 import { Expose, Type } from "class-transformer"
 import {
@@ -47,8 +47,8 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  buildingAddress: AddressCreateDto
+  @Type(() => AddressCountyRequiredCreateDto)
+  buildingAddress: AddressCountyRequiredCreateDto
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

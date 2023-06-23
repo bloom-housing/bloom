@@ -242,6 +242,26 @@ describe("Listings", () => {
     expect(modifiedListing.applicationMethods[0]).toHaveProperty("id")
   })
 
+  it("should not allow a listing to be updated without a county", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const listing: Listing = { ...res.body.items[0] }
+
+    delete listing.buildingAddress.county
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(400)
+
+    expect(putResponse.body.message).toEqual(
+      expect.arrayContaining([
+        "buildingAddress.county must be shorter than or equal to 64 characters",
+        "buildingAddress.county must be a string",
+      ])
+    )
+  })
+
   it("should add/overwrite listing events in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
@@ -398,7 +418,7 @@ describe("Listings", () => {
 
     // make it highly random to avoid conflicts from elsewhere
     const now = new Date()
-    const searchValue = `random-${now.getTime()}`
+    const searchValue = `random-${now.getTime()}-${Math.random().toString()}`
     const newListingName = `${searchValue}-name`
     newListingCreateDto.name = newListingName
 
@@ -423,6 +443,51 @@ describe("Listings", () => {
 
     expect(listingsSearchResponse.body.items.length).toBe(1)
     expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
+  })
+
+  describe("POST /listings", () => {
+    it("should save a listing", async () => {
+      const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+      const newListingCreateDto = makeTestListing(anyJurisdiction.id)
+
+      // make it highly random to avoid conflicts from elsewhere
+      const now = new Date()
+      const searchValue = `random-${now.getTime()}-${Math.random().toString()}`
+      const newListingName = `${searchValue}-name`
+      newListingCreateDto.name = newListingName
+
+      const listingResponse = await supertest(app.getHttpServer())
+        .post(`/listings`)
+        .send(newListingCreateDto)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(201)
+      expect(listingResponse.body.name).toBe(newListingName)
+    })
+
+    it("should not save when there is no county", async () => {
+      const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+      const newListingCreateDto = makeTestListing(anyJurisdiction.id)
+
+      delete newListingCreateDto.buildingAddress.county
+
+      // make it highly random to avoid conflicts from elsewhere
+      const now = new Date()
+      const searchValue = `random-${now.getTime()}-${Math.random().toString()}`
+      const newListingName = `${searchValue}-name`
+      newListingCreateDto.name = newListingName
+
+      const listingResponse = await supertest(app.getHttpServer())
+        .post(`/listings`)
+        .send(newListingCreateDto)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(400)
+      expect(listingResponse.body.message).toEqual(
+        expect.arrayContaining([
+          "buildingAddress.county must be shorter than or equal to 64 characters",
+          "buildingAddress.county must be a string",
+        ])
+      )
+    })
   })
 
   afterEach(() => {
