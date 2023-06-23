@@ -83,7 +83,7 @@ export default function ListingDetail(props: ListingProps) {
                   </AlertBox>
                 )}
 
-                <div className="flex flex-row flex-wrap ">
+                <div className="flex flex-row">
                   <div className="info-card md:w-9/12 overflow-hidden">
                     <DetailListingData />
                     <DetailListingIntro />
