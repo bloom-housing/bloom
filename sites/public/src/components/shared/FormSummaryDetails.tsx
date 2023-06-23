@@ -134,9 +134,10 @@ const FormSummaryDetails = ({
                     .map((option: ApplicationMultiselectQuestionOption, index) => (
                       <FieldValue
                         label={question.key}
-                        helper={multiselectQuestionAddress(option?.extraData)}
+                        helpText={multiselectQuestionAddress(option?.extraData)}
                         key={index}
                         data-testid={"app-summary-preference"}
+                        className={"pb-4"}
                       >
                         {option.key}
                       </FieldValue>
@@ -164,7 +165,12 @@ const FormSummaryDetails = ({
       </h3>
 
       <div className="form-card__group mx-0">
-        <FieldValue data-testid={"app-summary-name"} id="applicantName" label={t("t.name")}>
+        <FieldValue
+          data-testid={"app-summary-name"}
+          id="applicantName"
+          label={t("t.name")}
+          className={"pb-4"}
+        >
           {application.applicant.firstName} {application.applicant.middleName}{" "}
           {application.applicant.lastName}
         </FieldValue>
@@ -173,6 +179,7 @@ const FormSummaryDetails = ({
           data-testid={"app-summary-dob"}
           id="applicantbirthDay"
           label={t("application.household.member.dateOfBirth")}
+          className={"pb-4"}
         >
           {application.applicant.birthMonth}/{application.applicant.birthDay}/
           {application.applicant.birthYear}
@@ -183,9 +190,10 @@ const FormSummaryDetails = ({
             data-testid={"app-summary-phone"}
             id="applicantPhone"
             label={t("t.phone")}
-            helper={t(
+            helpText={t(
               `application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`
             )}
+            className={"pb-4"}
           >
             {application.applicant.phoneNumber}
           </FieldValue>
@@ -196,21 +204,31 @@ const FormSummaryDetails = ({
             data-testid={"app-summary-additional-phone"}
             id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
-            helper={t(
+            helpText={t(
               `application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`
             )}
+            className={"pb-4"}
           >
             {application.additionalPhoneNumber}
           </FieldValue>
         )}
 
         {application.applicant.emailAddress && (
-          <FieldValue data-testid={"app-summary-email"} id="applicantEmail" label={t("t.email")}>
+          <FieldValue
+            data-testid={"app-summary-email"}
+            id="applicantEmail"
+            label={t("t.email")}
+            className={"pb-4"}
+          >
             {application.applicant.emailAddress}
           </FieldValue>
         )}
 
-        <FieldValue id="applicantAddress" label={t("application.contact.address")}>
+        <FieldValue
+          id="applicantAddress"
+          label={t("application.contact.address")}
+          className={"pb-4"}
+        >
           <MultiLineAddress
             data-testid={"app-summary-address"}
             address={reformatAddress(application.applicant.address)}
@@ -218,7 +236,11 @@ const FormSummaryDetails = ({
         </FieldValue>
 
         {application.sendMailToMailingAddress && (
-          <FieldValue id="applicantMailingAddress" label={t("application.contact.mailingAddress")}>
+          <FieldValue
+            id="applicantMailingAddress"
+            label={t("application.contact.mailingAddress")}
+            className={"pb-4"}
+          >
             <MultiLineAddress
               data-testid={"app-summary-mailing-address"}
               address={reformatAddress(application.mailingAddress)}
@@ -227,7 +249,11 @@ const FormSummaryDetails = ({
         )}
 
         {application.applicant.workInRegion === "yes" && (
-          <FieldValue id="applicantWorkAddress" label={t("application.contact.workAddress")}>
+          <FieldValue
+            id="applicantWorkAddress"
+            label={t("application.contact.workAddress")}
+            className={"pb-4"}
+          >
             <MultiLineAddress
               data-testid={"app-summary-work-address"}
               address={reformatAddress(application.applicant.workAddress)}
@@ -240,6 +266,7 @@ const FormSummaryDetails = ({
             data-testid={"app-summary-contact-type"}
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
+            className={"pb-4"}
           >
             {application.contactPreferences?.map((item) => t(`t.${item}`)).join(", ")}
           </FieldValue>
@@ -264,7 +291,8 @@ const FormSummaryDetails = ({
                 data-testid={"app-summary-alternate-name"}
                 id="alternateName"
                 label={t("t.name")}
-                helper={alternateContactName()}
+                helpText={alternateContactName()}
+                className={"pb-4"}
               >
                 {application.alternateContact.firstName} {application.alternateContact.lastName}
               </FieldValue>
@@ -274,6 +302,7 @@ const FormSummaryDetails = ({
                   data-testid={"app-summary-alternate-email"}
                   id="alternateEmail"
                   label={t("t.email")}
+                  className={"pb-4"}
                 >
                   {application.alternateContact.emailAddress}
                 </FieldValue>
@@ -284,6 +313,7 @@ const FormSummaryDetails = ({
                   data-testid={"app-summary-alternate-phone"}
                   id="alternatePhone"
                   label={t("t.phone")}
+                  className={"pb-4"}
                 >
                   {application.alternateContact.phoneNumber}
                 </FieldValue>
@@ -296,6 +326,7 @@ const FormSummaryDetails = ({
                   data-testid={"app-summary-alternate-mailing-address"}
                   id="alternateMailingAddress"
                   label={t("application.contact.address")}
+                  className={"pb-4"}
                 >
                   <MultiLineAddress address={application.alternateContact.mailingAddress} />
                 </FieldValue>
@@ -319,18 +350,19 @@ const FormSummaryDetails = ({
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
-                <FieldValue data-testid={"app-summary-household-member-name"}>
+                <FieldValue data-testid={"app-summary-household-member-name"} className={"pb-4"}>
                   {member.firstName} {member.lastName}
                 </FieldValue>
                 <div>
                   <FieldValue
                     data-testid={"app-summary-household-member-dob"}
                     label={t("application.household.member.dateOfBirth")}
+                    className={"pb-4"}
                   >
                     {member.birthMonth}/{member.birthDay}/{member.birthYear}
                   </FieldValue>
                   {member.sameAddress === "no" && (
-                    <FieldValue label={t("application.contact.address")}>
+                    <FieldValue label={t("application.contact.address")} className={"pb-4"}>
                       <MultiLineAddress
                         data-testid={"app-summary-household-member-address"}
                         address={reformatAddress(member.address)}
@@ -338,10 +370,12 @@ const FormSummaryDetails = ({
                     </FieldValue>
                   )}
                   {member.sameAddress !== "no" && (
-                    <FieldValue
+                    <p
                       data-testid={"app-summary-household-member-same-address"}
-                      label={t("application.review.sameAddressAsApplicant")}
-                    ></FieldValue>
+                      className={"text-xs text-gray-750"}
+                    >
+                      {t("application.review.sameAddressAsApplicant")}
+                    </p>
                   )}
                 </div>
               </div>
@@ -364,6 +398,7 @@ const FormSummaryDetails = ({
               data-testid={"app-summary-preferred-units"}
               id="householdUnitType"
               label={t("application.household.preferredUnit.preferredUnitType")}
+              className={"pb-4"}
             >
               {preferredUnits
                 ?.map((item) => t(`application.household.preferredUnit.options.${item}`))
@@ -374,6 +409,7 @@ const FormSummaryDetails = ({
             data-testid={"app-summary-ada"}
             id="householdAda"
             label={t("application.ada.label")}
+            className={"pb-4"}
           >
             {accessibilityLabels(application.accessibility).map((item) => (
               <Fragment key={item}>
@@ -385,12 +421,14 @@ const FormSummaryDetails = ({
           <FieldValue
             id="householdChanges"
             label={t("application.household.expectingChanges.title")}
+            className={"pb-4"}
           >
             {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
           </FieldValue>
           <FieldValue
             id="householdStudent"
             label={t("application.household.householdStudent.title")}
+            className={"pb-4"}
           >
             {application.householdStudent ? t("t.yes") : t("t.no")}
           </FieldValue>
@@ -418,12 +456,18 @@ const FormSummaryDetails = ({
             data-testid={"app-summary-income-vouchers"}
             id="incomeVouchers"
             label={t("application.review.voucherOrSubsidy")}
+            className={"pb-4"}
           >
             {application.incomeVouchers ? t("t.yes") : t("t.no")}
           </FieldValue>
 
           {application.incomePeriod && (
-            <FieldValue data-testid={"app-summary-income"} id="incomeValue" label={t("t.income")}>
+            <FieldValue
+              data-testid={"app-summary-income"}
+              id="incomeValue"
+              label={t("t.income")}
+              className={"pb-4"}
+            >
               ${application.income} {t(`t.${application.incomePeriod}`)}
             </FieldValue>
           )}

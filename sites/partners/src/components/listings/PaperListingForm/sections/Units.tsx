@@ -176,14 +176,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             </FieldValue>
           </GridCell>
           <GridCell>
-            <FieldValue
-              label={t("listings.listingAvailabilityQuestion")}
-              className={`mb-1 ${
-                fieldHasError(errors?.listingAvailability) &&
-                listingAvailability === null &&
-                "text-alert"
-              }`}
-            >
+            <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
               <FieldGroup
                 name="listingAvailabilityQuestion"
                 type="radio"
