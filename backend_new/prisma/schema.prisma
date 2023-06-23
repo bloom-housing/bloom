@@ -668,7 +668,7 @@ model UnitTypes {
   id           String         @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamp(6)
-  name         String
+  name         UnitTypeEnum
   numBedrooms  Int            @map("num_bedrooms")
   applications Applications[]
   units        Units[]
@@ -1029,4 +1029,16 @@ enum MonthlyRentDeterminationTypeEnum {
   percentageOfIncome
 
   @@map("monthly_rent_determination_type_enum")
+}
+
+enum UnitTypeEnum {
+  studio
+  oneBdrm
+  twoBdrm
+  threeBdrm
+  fourBdrm
+  SRO
+  fiveBdrm
+
+  @@map("unit_type_enum")
 }

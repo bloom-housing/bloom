@@ -12,12 +12,14 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   UnitsStatusEnum,
 } from '@prisma/client';
+import { unitTypeFactory } from './unit-type-factory';
 
 export const listingFactory = (
   i: number,
   jurisdictionId: string,
   amiChartId?: string,
   reservedCommunityTypeId?: string,
+  unitTypeId?: string,
 ): Prisma.ListingsCreateInput => ({
   additionalApplicationSubmissionNotes: `additionalApplicationSubmissionNotes: ${i}`,
   digitalApplication: true,
@@ -329,7 +331,7 @@ export const listingFactory = (
       },
     ],
   },
-  units: unitFactory(i, i, jurisdictionId, amiChartId),
+  units: unitFactory(i, i, jurisdictionId, amiChartId, unitTypeId),
 });
 
 const unitFactory = (
@@ -337,6 +339,7 @@ const unitFactory = (
   i: number,
   jurisdictionId: string,
   amiChartId?: string,
+  unitTypeId?: string,
 ): Prisma.UnitsCreateNestedManyWithoutListingsInput => {
   const createArray: Prisma.UnitsCreateWithoutListingsInput[] = [];
   for (let j = 0; j < numberToMake; j++) {
@@ -356,12 +359,13 @@ const unitFactory = (
       monthlyRentAsPercentOfIncome: i,
       bmrProgramChart: true,
       status: UnitsStatusEnum.available,
-      unitTypes: {
-        create: {
-          name: `listing: ${i} unit: ${j} unitTypes: ${j}`,
-          numBedrooms: i,
-        },
-      },
+      unitTypes: unitTypeId
+        ? {
+            connect: {
+              id: unitTypeId,
+            },
+          }
+        : { create: unitTypeFactory(i) },
       amiChart: amiChartId
         ? { connect: { id: amiChartId } }
         : {
