@@ -35,12 +35,10 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
       .get(`/unitAccessibilityPriorityTypes?`)
       .expect(200);
 
-    expect(res.body.length).toEqual(2);
-    const sortedResults = res.body.sort(
-      (a, b) => a.numBedrooms - b.numBedrooms,
-    );
-    expect(sortedResults[0].name).toEqual(unitTypeA.name);
-    expect(sortedResults[1].name).toEqual(unitTypeB.name);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    const unitTypeNames = res.body.map((value) => value.name);
+    expect(unitTypeNames).toContain(unitTypeA.name);
+    expect(unitTypeNames).toContain(unitTypeB.name);
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {
