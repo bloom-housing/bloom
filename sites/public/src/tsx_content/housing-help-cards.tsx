@@ -125,7 +125,7 @@ export function housingHelpLinkableCards(): React.ReactElement<CardProps>[] {
         </DoorwayCollapsibleSection>
         <DoorwayCollapsibleSection title={t("counties.fullname.Alameda")}>
           <a href="http://edenir.org" target="_blank">
-            {t("help.housingHelp.counseling.alamedaEden")} target="_blank"
+            {t("help.housingHelp.counseling.alamedaEden")}
           </a>
           {t("help.housingHelp.counseling.alamedaEdeninfo")}
           <br />
