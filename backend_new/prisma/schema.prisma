@@ -654,10 +654,10 @@ model UnitAmiChartOverrides {
 
 // Note: [name] formerly max length 256
 model UnitRentTypes {
-  id        String   @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
-  name      String
+  id        String           @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime         @updatedAt @map("updated_at") @db.Timestamp(6)
+  name      UnitRentTypeEnum
   units     Units[]
 
   @@map("unit_rent_types")
@@ -1029,4 +1029,11 @@ enum MonthlyRentDeterminationTypeEnum {
   percentageOfIncome
 
   @@map("monthly_rent_determination_type_enum")
+}
+
+enum UnitRentTypeEnum {
+  fixed
+  percentageOfIncome
+
+  @@map("unit_rent_type_enum")
 }

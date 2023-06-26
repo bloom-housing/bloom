@@ -64,14 +64,15 @@ describe('UnitRentType Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
+    const name = unitRentTypeFactory(10).name;
     const res = await request(app.getHttpServer())
       .post('/unitRentTypes')
       .send({
-        name: 'name: 10',
+        name: name,
       } as UnitRentTypeCreate)
       .expect(201);
 
-    expect(res.body.name).toEqual('name: 10');
+    expect(res.body.name).toEqual(name);
   });
 
   it("update endpoint with id that doesn't exist should error", async () => {
@@ -80,7 +81,7 @@ describe('UnitRentType Controller Tests', () => {
       .put(`/unitRentTypes/${id}`)
       .send({
         id: id,
-        name: 'example name',
+        name: unitRentTypeFactory(10).name,
       } as UnitRentTypeUpdate)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -92,16 +93,16 @@ describe('UnitRentType Controller Tests', () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(10),
     });
-
+    const name = unitRentTypeFactory(11).name;
     const res = await request(app.getHttpServer())
       .put(`/unitRentTypes/${unitRentTypeA.id}`)
       .send({
         id: unitRentTypeA.id,
-        name: 'name: 11',
+        name: name,
       } as UnitRentTypeUpdate)
       .expect(200);
 
-    expect(res.body.name).toEqual('name: 11');
+    expect(res.body.name).toEqual(name);
   });
 
   it("delete endpoint with id that doesn't exist should error", async () => {
