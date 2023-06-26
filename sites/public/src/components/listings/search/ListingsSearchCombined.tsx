@@ -4,6 +4,8 @@ import { ListingList, pushGtmEvent, AuthContext } from "@bloom-housing/shared-he
 import { ListingSearchParams, generateSearchQuery } from "../../../lib/listings/search"
 import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
+import { Jurisdiction } from "@bloom-housing/backend-core"
+
 import {
   AppearanceBorderType,
   AppearanceSizeType,
@@ -13,6 +15,7 @@ import {
 import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
 
 type ListingsSearchCombinedProps = {
+  jurisdiction: Jurisdiction
   searchString?: string
   googleMapsApiKey: string
   listingsEndpoint: string
@@ -128,6 +131,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       />
 
       <ListingsCombined
+        jurisdiction={props.jurisdiction}
         listings={searchResults.listings}
         currentPage={searchResults.currentPage}
         lastPage={searchResults.lastPage}

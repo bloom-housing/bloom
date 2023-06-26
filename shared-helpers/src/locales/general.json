@@ -522,7 +522,7 @@
   "authentication.signOut.success": "You have successfully logged out of your account.",
   "authentication.terms.acceptToc": "I accept the Terms of Service",
   "authentication.terms.reviewToc": "Review Terms of Service",
-  "authentication.terms.termsOfService": "Terms of Service",
+  "authentication.terms.termsOfService": "View the Terms of Service here",
   "authentication.terms.youMustAcceptToc": "To continue you must accept the Terms of Service",
   "authentication.timeout.action": "Stay logged in",
   "authentication.timeout.signOutMessage": "We care about your security. We logged you out due to inactivity. Please sign in to continue.",

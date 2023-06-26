@@ -9,9 +9,12 @@ import ListingsSearchCombined, {
 } from "../components/listings/search/ListingsSearchCombined"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
+import { fetchJurisdictionByName } from "../lib/hooks"
+
 import Layout from "../layouts/application"
 
 export interface ListingsProps {
+  jursidiction: Jursidiction
   listingsEndpoint: string
   googleMapsApiKey: string
   initialSearch?: string
@@ -40,6 +43,7 @@ export default function ListingsPage(props: ListingsProps) {
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <ListingsSearchCombined
+        jurisdiction={props.jurisdiction}
         listingsEndpoint={props.listingsEndpoint}
         googleMapsApiKey={props.googleMapsApiKey}
         searchString={searchString}
@@ -51,9 +55,15 @@ export default function ListingsPage(props: ListingsProps) {
   )
 }
 
-export function getServerSideProps() {
+export async function getServerSideProps() {
+  const jurisdiction = await fetchJurisdictionByName(
+    runtimeConfig.getBackendApiBase(),
+    runtimeConfig.getJurisdictionName()
+  )
+
   return {
     props: {
+      jurisdiction,
       listingsEndpoint: runtimeConfig.getListingServiceUrl(),
       googleMapsApiKey: runtimeConfig.getGoogleMapsApiKey(),
       // show Bloom counties by default

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { getListings } from "../../lib/helpers"
-import { Listing } from "@bloom-housing/backend-core"
+import { Listing, Jurisdiction } from "@bloom-housing/backend-core"
 import {
   Button,
   InfoCard,
@@ -11,6 +11,7 @@ import {
 import { Pagination } from "./Pagination"
 
 type ListingsListProps = {
+  jurisdiction: Jurisdiction
   listings: Listing[]
   currentPage: number
   lastPage: number
@@ -55,7 +56,7 @@ const ListingsList = (props: ListingsListProps) => {
           className="is-normal-primary-lighter"
         >
           <LinkButton
-            href="https://public.govdelivery.com/accounts/CAMTC/signup/36832"
+            href={props.jurisdiction.notificationsSignUpURL}
             newTab={true}
             className="is-primary"
           >

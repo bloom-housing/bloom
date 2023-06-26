@@ -100,7 +100,7 @@ export const unit: Unit = {
 
 export const jurisdiction: Jurisdiction = {
   name: "Alameda",
-  notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAALAME/signup/29652",
+  notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
   languages: [EnumJurisdictionLanguages.en],
   partnerTerms: undefined,
   publicUrl: "",
