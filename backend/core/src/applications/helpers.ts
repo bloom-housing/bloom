@@ -12,5 +12,5 @@ export const formatApplicationDate = (
   if (submissionType === "electronical") {
     return formatLocalDate(dateString, "MM-DD-YYYY hh:mm:ssA z", timeZone)
   }
-  return dayjs(dateString).utc().format("MM-DD-YYYY hh:mm:ssA z")
+  return dayjs(dateString).format("MM-DD-YYYY hh:mm:ssA")
 }
