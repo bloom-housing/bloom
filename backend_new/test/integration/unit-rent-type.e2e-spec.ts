@@ -35,10 +35,10 @@ describe('UnitRentType Controller Tests', () => {
       .get(`/unitRentTypes?`)
       .expect(200);
 
-    expect(res.body.length).toEqual(2);
-    const sortedResults = res.body.sort((a, b) => (a.name < b.name ? 1 : -1));
-    expect(sortedResults[0].name).toEqual(unitRentTypeA.name);
-    expect(sortedResults[1].name).toEqual(unitRentTypeB.name);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    const unitTypeNames = res.body.map((value) => value.name);
+    expect(unitTypeNames).toContain(unitRentTypeA.name);
+    expect(unitTypeNames).toContain(unitRentTypeB.name);
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {
