@@ -31,11 +31,9 @@ export class UnitAccessibilityPriorityTypeService {
     unitAccessibilityPriorityTypeId: string,
   ): Promise<UnitAccessibilityPriorityType> {
     const rawunitPriortyTypes =
-      await this.prisma.unitAccessibilityPriorityTypes.findFirst({
+      await this.prisma.unitAccessibilityPriorityTypes.findUnique({
         where: {
-          id: {
-            equals: unitAccessibilityPriorityTypeId,
-          },
+          id: unitAccessibilityPriorityTypeId,
         },
       });
 
@@ -103,13 +101,12 @@ export class UnitAccessibilityPriorityTypeService {
     this will either find a record or throw a customized error
   */
   async findOrThrow(unitAccessibilityPriorityTypeId: string): Promise<boolean> {
-    const unitType = await this.prisma.unitAccessibilityPriorityTypes.findFirst(
-      {
+    const unitType =
+      await this.prisma.unitAccessibilityPriorityTypes.findUnique({
         where: {
           id: unitAccessibilityPriorityTypeId,
         },
-      },
-    );
+      });
 
     if (!unitType) {
       throw new NotFoundException(

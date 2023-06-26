@@ -1304,3 +1304,13 @@ export enum ApplicationMethodsTypeEnum {
   'LeasingAgent' = 'LeasingAgent',
   'Referral' = 'Referral',
 }
+
+export enum UnitTypeEnum {
+  'studio' = 'studio',
+  'oneBdrm' = 'oneBdrm',
+  'twoBdrm' = 'twoBdrm',
+  'threeBdrm' = 'threeBdrm',
+  'fourBdrm' = 'fourBdrm',
+  'SRO' = 'SRO',
+  'fiveBdrm' = 'fiveBdrm',
+}

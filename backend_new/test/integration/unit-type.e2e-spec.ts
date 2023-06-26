@@ -64,24 +64,26 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
+    const name = unitTypeFactory(10).name;
     const res = await request(app.getHttpServer())
       .post('/unitTypes')
       .send({
-        name: 'name: 10',
+        name: name,
         numBedrooms: 10,
       } as UnitTypeCreate)
       .expect(201);
 
-    expect(res.body.name).toEqual('name: 10');
+    expect(res.body.name).toEqual(name);
   });
 
   it("update endpoint with id that doesn't exist should error", async () => {
     const id = randomUUID();
+    const name = unitTypeFactory(10).name;
     const res = await request(app.getHttpServer())
       .put(`/unitTypes/${id}`)
       .send({
         id: id,
-        name: 'example name',
+        name: name,
         numBedrooms: 11,
       } as UnitTypeUpdate)
       .expect(404);
@@ -94,17 +96,17 @@ describe('UnitType Controller Tests', () => {
     const unitTypeA = await prisma.unitTypes.create({
       data: unitTypeFactory(10),
     });
-
+    const name = unitTypeFactory(11).name;
     const res = await request(app.getHttpServer())
       .put(`/unitTypes/${unitTypeA.id}`)
       .send({
         id: unitTypeA.id,
-        name: 'name: 11',
+        name: name,
         numBedrooms: 11,
       } as UnitTypeUpdate)
       .expect(200);
 
-    expect(res.body.name).toEqual('name: 11');
+    expect(res.body.name).toEqual(name);
     expect(res.body.numBedrooms).toEqual(11);
   });
 

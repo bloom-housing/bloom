@@ -50,8 +50,8 @@
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js' && cd backend_new && yarn lint",
     "version:all": "lerna version --yes --no-commit-hooks --ignore-scripts --conventional-graduate --include-merged-tags --force-git-tag",
-    "test:backend:new": "cd backend_new && yarn test",
-    "test:backend:new:e2e": "cd backend_new && yarn jest --config ./test/jest-e2e.config.js",
+    "test:backend:new": "cd backend_new && yarn test --detectOpenHandles",
+    "test:backend:new:e2e": "cd backend_new && yarn jest --config ./test/jest-e2e.config.js --detectOpenHandles",
     "test:backend:new:dbsetup": "cd backend_new && yarn db:migration:run",
     "backend:new:install": "cd backend_new && yarn install",
     "prettier": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\""
