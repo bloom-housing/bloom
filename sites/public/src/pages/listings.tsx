@@ -10,11 +10,12 @@ import ListingsSearchCombined, {
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import { Jurisdiction } from "@bloom-housing/backend-core/types"
 
 import Layout from "../layouts/application"
 
 export interface ListingsProps {
-  jursidiction: Jursidiction
+  jurisdiction: Jurisdiction
   listingsEndpoint: string
   googleMapsApiKey: string
   initialSearch?: string
