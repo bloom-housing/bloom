@@ -227,6 +227,10 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
   }
 
   private async fetchDuplicatesMatchingEmailRule(newApplication: Application) {
+    const emailAddress = newApplication.applicant.emailAddress
+    if (!emailAddress) {
+      return []
+    }
     const whereClause: FindOptionsWhere<Application> = {
       id: Not(newApplication.id),
       status: ApplicationStatus.submitted,
@@ -234,7 +238,7 @@ export class ApplicationFlaggedSetsCronjobService implements OnModuleInit {
         id: newApplication.listingId,
       },
       applicant: {
-        emailAddress: newApplication.applicant.emailAddress,
+        emailAddress: emailAddress,
       },
     }
     return await this.applicationRepository.find({
