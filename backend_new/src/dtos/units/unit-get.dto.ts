@@ -11,7 +11,7 @@ import { AbstractDTO } from '../shared/abstract.dto';
 import { AmiChart } from '../ami-charts/ami-chart.dto';
 import { UnitType } from '../unit-types/unit-type.dto';
 import { UnitRentType } from './unit-rent-type-get.dto';
-import { UnitAccessibilityPriorityType } from './unit-accessibility-priority-type-get.dto';
+import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { UnitAmiChartOverride } from './ami-chart-override-get.dto';
 
 class Unit extends AbstractDTO {

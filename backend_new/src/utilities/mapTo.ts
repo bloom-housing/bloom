@@ -1,13 +1,16 @@
-import { ClassTransformOptions, plainToClass } from 'class-transformer';
-import { ClassType } from 'class-transformer/ClassTransformer';
+import {
+  ClassTransformOptions,
+  plainToClass,
+  ClassConstructor,
+} from 'class-transformer';
 
 export function mapTo<T, V>(
-  cls: ClassType<T>,
+  cls: ClassConstructor<T>,
   plain: V[],
   options?: ClassTransformOptions,
 ): T[];
 export function mapTo<T, V>(
-  cls: ClassType<T>,
+  cls: ClassConstructor<T>,
   plain: V,
   options?: ClassTransformOptions,
 ): T;
@@ -17,7 +20,7 @@ export function mapTo<T, V>(
   This is mostly used by controllers to map the result of a service to the type returned by the endpoint
 */
 export function mapTo<T>(
-  cls: ClassType<T>,
+  cls: ClassConstructor<T>,
   plain,
   options?: ClassTransformOptions,
 ) {

@@ -51,10 +51,13 @@ describe('ReservedCommunityType Controller Tests', () => {
       .get(`/reservedCommunityTypes`)
       .expect(200);
 
-    expect(res.body.length).toEqual(2);
-    expect(res.body[0].name).toEqual('name: 10');
-    expect(res.body[1].name).toEqual('name: 10');
-    expect(res.body[0].jurisdictions.id).not.toBe(res.body[1].jurisdictions.id);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    const typeNames = res.body.map((value) => value.name);
+    const jurisdictions = res.body.map((value) => value.jurisdictions.id);
+    expect(typeNames).toContain('name: 10');
+    expect(typeNames).toContain('name: 10');
+    expect(jurisdictions).toContain(jurisdictionA.id);
+    expect(jurisdictions).toContain(jurisdictionB.id);
   });
 
   it('testing list endpoint with params', async () => {

@@ -1,4 +1,4 @@
-import { ReviewOrderTypeEnum } from '@prisma/client';
+import { ReviewOrderTypeEnum, UnitTypeEnum } from '@prisma/client';
 import { UnitSummary } from '../dtos/units/unit-summary-get.dto';
 import Unit from '../dtos/units/unit-get.dto';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
@@ -7,7 +7,7 @@ import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
-import { UnitAccessibilityPriorityType } from '../dtos/units/unit-accessibility-priority-type-get.dto';
+import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { AmiChartItem } from '../dtos/units/ami-chart-item-get.dto';
 import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override-get.dto';
 
@@ -17,11 +17,11 @@ type UnitMap = {
 };
 
 export const UnitTypeSort = [
-  'SRO',
-  'studio',
-  'oneBdrm',
-  'twoBdrm',
-  'threeBdrm',
+  UnitTypeEnum.SRO,
+  UnitTypeEnum.studio,
+  UnitTypeEnum.oneBdrm,
+  UnitTypeEnum.twoBdrm,
+  UnitTypeEnum.threeBdrm,
 ];
 
 const usd = new Intl.NumberFormat('en-US', {
@@ -427,9 +427,10 @@ export const summarizeUnitsByTypeAndRent = (
 
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitTypes.name) -
-        UnitTypeSort.indexOf(b.unitTypes.name) ||
-      Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
+      UnitTypeSort.findIndex((sortedType) => a.unitTypes.name === sortedType) -
+        UnitTypeSort.findIndex(
+          (sortedType) => b.unitTypes.name === sortedType,
+        ) || Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     );
   });
 };
@@ -454,9 +455,10 @@ export const summarizeUnitsByType = (
   });
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitTypes.name) -
-        UnitTypeSort.indexOf(b.unitTypes.name) ||
-      Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
+      UnitTypeSort.findIndex((sortedType) => a.unitTypes.name === sortedType) -
+        UnitTypeSort.findIndex(
+          (sortedType) => b.unitTypes.name === sortedType,
+        ) || Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     );
   });
 };

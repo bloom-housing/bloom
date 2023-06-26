@@ -584,6 +584,144 @@ export class UnitTypesService {
   }
 }
 
+export class UnitAccessibilityPriorityTypesService {
+  /**
+   * List unitAccessibilityPriorityTypes
+   */
+  list(
+    options: IRequestOptions = {},
+  ): Promise<UnitAccessibilityPriorityType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitAccessibilityPriorityType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitAccessibilityPriorityTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitAccessibilityPriorityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitAccessibilityPriorityType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitAccessibilityPriorityType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitAccessibilityPriorityTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitAccessibilityPriorityType> {
+    return new Promise((resolve, reject) => {
+      let url =
+        basePath +
+        '/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}';
+      url = url.replace(
+        '{unitAccessibilityPriorityTypeId}',
+        params['unitAccessibilityPriorityTypeId'] + '',
+      );
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitAccessibilityPriorityType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitAccessibilityPriorityTypeUpdate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitAccessibilityPriorityType> {
+    return new Promise((resolve, reject) => {
+      let url =
+        basePath +
+        '/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -686,6 +824,9 @@ export interface UnitAccessibilityPriorityType {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  name: string;
 }
 
 export interface MinMaxCurrency {
@@ -944,6 +1085,19 @@ export interface UnitTypeUpdate {
 
   /**  */
   numBedrooms: number;
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
 }
 
 export enum ListingViews {

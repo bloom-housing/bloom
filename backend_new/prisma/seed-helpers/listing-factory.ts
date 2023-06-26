@@ -12,6 +12,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   UnitsStatusEnum,
 } from '@prisma/client';
+import { unitAccessibilityPriorityTypeFactory } from './unit-accessibility-priority-type-factory';
 import { unitTypeFactory } from './unit-type-factory';
 
 export const listingFactory = (
@@ -20,6 +21,7 @@ export const listingFactory = (
   amiChartId?: string,
   reservedCommunityTypeId?: string,
   unitTypeId?: string,
+  unitAccessibilityPriorityTypeId?: string,
 ): Prisma.ListingsCreateInput => ({
   additionalApplicationSubmissionNotes: `additionalApplicationSubmissionNotes: ${i}`,
   digitalApplication: true,
@@ -333,7 +335,14 @@ export const listingFactory = (
       },
     ],
   },
-  units: unitFactory(i, i, jurisdictionId, amiChartId, unitTypeId),
+  units: unitFactory(
+    i,
+    i,
+    jurisdictionId,
+    amiChartId,
+    unitTypeId,
+    unitAccessibilityPriorityTypeId,
+  ),
 });
 
 const unitFactory = (
@@ -342,6 +351,7 @@ const unitFactory = (
   jurisdictionId: string,
   amiChartId?: string,
   unitTypeId?: string,
+  unitAccessibilityPriorityTypeId?: string,
 ): Prisma.UnitsCreateNestedManyWithoutListingsInput => {
   const createArray: Prisma.UnitsCreateWithoutListingsInput[] = [];
   for (let j = 0; j < numberToMake; j++) {
@@ -381,11 +391,11 @@ const unitFactory = (
               },
             },
           },
-      unitAccessibilityPriorityTypes: {
-        create: {
-          name: `listing: ${i} unit: ${j} unitAccessibilityPriorityTypes: ${j}`,
-        },
-      },
+      unitAccessibilityPriorityTypes: unitAccessibilityPriorityTypeId
+        ? { connect: { id: unitAccessibilityPriorityTypeId } }
+        : {
+            create: unitAccessibilityPriorityTypeFactory(i),
+          },
       unitRentTypes: {
         create: {
           name: `listing: ${i} unit: ${j} unitRentTypes: ${j}`,
