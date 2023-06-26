@@ -2,7 +2,6 @@ import {
   LanguagesEnum,
   ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
-  Prisma,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
