@@ -74,7 +74,7 @@ const FormUserConfirm = () => {
 
       if (response) {
         loadProfile("/")
-        setSiteMessage(t(`users.accountConfirmed`), "success")
+        setSiteMessage(t("users.accountConfirmed"), "success")
       }
     } catch (err) {
       setSubmitting(false)
