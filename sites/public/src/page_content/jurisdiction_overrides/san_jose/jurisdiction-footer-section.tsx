@@ -37,10 +37,6 @@ export const JurisdictionFooterSection = () => {
         <p className="mt-10 text-sm">
           {t("footer.forAdditionalOpportunities")}
           <br />
-          <a className="px-2" href={process.env.doorwayUrl} target="_blank" rel="noreferrer">
-            {t("footer.DoorwayHousingPortal")}
-          </a>
-          |
           <a className="px-2" href={t("footer.SFHousingUrl")} target="_blank" rel="noreferrer">
             {t("footer.SFHousingPortal")}
           </a>

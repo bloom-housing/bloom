@@ -4,12 +4,14 @@ import { Interval } from "@nestjs/schedule"
 import { ListingStatus } from "./types/listing-status-enum"
 import { Repository } from "typeorm"
 import { Listing } from "./entities/listing.entity"
+import { CachePurgeService } from "./cache-purge.service"
 
 @Injectable()
 export class ListingsCronService {
   constructor(
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
-    @Inject(Logger) private readonly logger = new Logger(ListingsCronService.name)
+    @Inject(Logger) private readonly logger = new Logger(ListingsCronService.name),
+    private readonly cachePurgeService: CachePurgeService
   ) {}
 
   @Interval(1000 * 60 * 60)
@@ -30,5 +32,8 @@ export class ListingsCronService {
 
     await this.listingRepository.save(listings)
     this.logger.warn(`Changed the status of ${listings?.length} listings`)
+    if (listings?.length) {
+      await this.cachePurgeService.cachePurgeListings()
+    }
   }
 }
