@@ -139,7 +139,7 @@ const Users = () => {
           {successToastMessage}
         </Toast>
       )}
-      {alertMessage && alertMessage.type !== "notice" && (
+      {alertMessage.message && alertMessage.type !== "notice" && (
         <Toast variant={alertMessage.type} hideTimeout={5000}>
           {alertMessage.message}
         </Toast>

@@ -190,7 +190,7 @@ const Settings = () => {
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-        {alertMessage.type != "notice" && (
+        {alertMessage.message && alertMessage.type != "notice" && (
           <Toast hideTimeout={5000} variant={alertMessage.type}>
             {alertMessage.message}
           </Toast>
