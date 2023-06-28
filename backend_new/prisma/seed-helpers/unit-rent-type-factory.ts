@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, UnitRentTypeEnum } from '@prisma/client';
 
 export const unitRentTypeFactory = (
   i: number,
@@ -6,4 +6,7 @@ export const unitRentTypeFactory = (
   ...unitRentTypeArray[i % unitRentTypeArray.length],
 });
 
-const unitRentTypeArray = [{ name: 'fixed' }, { name: 'percentageOfIncome' }];
+export const unitRentTypeArray = [
+  { name: UnitRentTypeEnum.fixed },
+  { name: UnitRentTypeEnum.percentageOfIncome },
+];

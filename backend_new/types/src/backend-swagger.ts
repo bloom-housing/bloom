@@ -938,7 +938,7 @@ export interface UnitType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -955,7 +955,7 @@ export interface UnitAccessibilityPriorityType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface MinMaxCurrency {
@@ -1199,7 +1199,7 @@ export interface ReservedCommunityType {
 
 export interface UnitTypeCreate {
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -1210,7 +1210,7 @@ export interface UnitTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -1218,7 +1218,7 @@ export interface UnitTypeUpdate {
 
 export interface UnitAccessibilityPriorityTypeCreate {
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface UnitAccessibilityPriorityTypeUpdate {
@@ -1226,12 +1226,12 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface UnitRentTypeCreate {
   /**  */
-  name: string;
+  name: UnitRentTypeEnum;
 }
 
 export interface UnitRentTypeUpdate {
@@ -1239,7 +1239,7 @@ export interface UnitRentTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitRentTypeEnum;
 }
 
 export interface UnitRentType {
@@ -1253,7 +1253,7 @@ export interface UnitRentType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitRentTypeEnum;
 }
 
 export enum ListingViews {
@@ -1303,4 +1303,29 @@ export enum ApplicationMethodsTypeEnum {
   'POBox' = 'POBox',
   'LeasingAgent' = 'LeasingAgent',
   'Referral' = 'Referral',
+}
+
+export enum UnitTypeEnum {
+  'studio' = 'studio',
+  'oneBdrm' = 'oneBdrm',
+  'twoBdrm' = 'twoBdrm',
+  'threeBdrm' = 'threeBdrm',
+  'fourBdrm' = 'fourBdrm',
+  'SRO' = 'SRO',
+  'fiveBdrm' = 'fiveBdrm',
+}
+
+export enum UnitAccessibilityPriorityTypeEnum {
+  'mobility' = 'mobility',
+  'mobilityAndHearing' = 'mobilityAndHearing',
+  'hearing' = 'hearing',
+  'visual' = 'visual',
+  'hearingAndVisual' = 'hearingAndVisual',
+  'mobilityAndVisual' = 'mobilityAndVisual',
+  'mobilityHearingAndVisual' = 'mobilityHearingAndVisual',
+}
+
+export enum UnitRentTypeEnum {
+  'fixed' = 'fixed',
+  'percentageOfIncome' = 'percentageOfIncome',
 }
