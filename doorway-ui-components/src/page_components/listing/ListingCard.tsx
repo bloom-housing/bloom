@@ -135,7 +135,7 @@ const ListingCard = (props: ListingCardProps) => {
       return (
         <Heading priority={priority} styleType={styleType} className={customClass}>
           {header.href ? (
-            <LinkComponent className="is-card-link" href={header.href} linkRef={linkRef}>
+            <LinkComponent className="is-card-link" href={header.href} linkref={linkRef}>
               {header.content}
             </LinkComponent>
           ) : (

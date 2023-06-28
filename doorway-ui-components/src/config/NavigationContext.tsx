@@ -16,7 +16,7 @@ type DefaultLinkProps = DetailedHTMLProps<
 
 export interface LinkProps extends DefaultLinkProps {
   className?: string
-  linkRef?: React.RefObject<HTMLAnchorElement>
+  linkref?: React.RefObject<HTMLAnchorElement>
 }
 
 export interface GenericRouterOptions {
@@ -38,9 +38,9 @@ export interface NavigationContextProps {
 
 export const NavigationContext = createContext<NavigationContextProps>({
   LinkComponent: (props) => {
-    const { className, linkRef, ...defaultProps } = props
+    const { className, linkref, ...defaultProps } = props
     return (
-      <a className={className} ref={linkRef} {...defaultProps}>
+      <a className={className} ref={linkref} {...defaultProps}>
         {props.children}
       </a>
     )
