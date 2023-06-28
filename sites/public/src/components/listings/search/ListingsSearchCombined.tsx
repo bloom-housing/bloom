@@ -48,6 +48,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
     listings: [],
     currentPage: 0,
     lastPage: 0,
+    loading: true,
   })
 
   useEffect(() => {
@@ -76,6 +77,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
       listings: listings,
       currentPage: meta.currentPage,
       lastPage: meta.totalPages,
+      loading: false,
     })
 
     searchParams.current = params
@@ -135,6 +137,7 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         listings={searchResults.listings}
         currentPage={searchResults.currentPage}
         lastPage={searchResults.lastPage}
+        loading={searchResults.loading}
         googleMapsApiKey={props.googleMapsApiKey}
         onPageChange={onPageChange}
         setClearButtonState={setClearButton}
