@@ -10,6 +10,7 @@ ARG CACHE_REVALIDATE=60
 ARG IDLE_TIMEOUT=5
 ARG LANGUAGES=en
 ARG MAPBOX_TOKEN
+ARG GTM_KEY
 
 # The base image will contain all the source code needed for our site
 FROM node:18.14-alpine AS base
@@ -111,6 +112,7 @@ ARG CACHE_REVALIDATE
 ARG IDLE_TIMEOUT
 ARG LANGUAGES
 ARG MAPBOX_TOKEN
+ARG GTM_KEY
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
@@ -127,6 +129,7 @@ ENV CACHE_REVALIDATE=$CACHE_REVALIDATE
 ENV IDLE_TIMEOUT=$IDLE_TIMEOUT
 ENV LANGUAGES=$LANGUAGES
 ENV MAPBOX_TOKEN=$MAPBOX_TOKEN
+ENV GTM_KEY=$GTM_KEY
 
 # Build/compile
 RUN yarn build
