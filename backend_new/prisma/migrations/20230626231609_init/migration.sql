@@ -62,6 +62,9 @@ CREATE TYPE "property_region_enum" AS ENUM ('Greater_Downtown', 'Eastside', 'Sou
 CREATE TYPE "monthly_rent_determination_type_enum" AS ENUM ('flatRent', 'percentageOfIncome');
 
 -- CreateEnum
+CREATE TYPE "unit_rent_type_enum" AS ENUM ('fixed', 'percentageOfIncome');
+
+-- CreateEnum
 CREATE TYPE "unit_type_enum" AS ENUM ('studio', 'oneBdrm', 'twoBdrm', 'threeBdrm', 'fourBdrm', 'SRO', 'fiveBdrm');
 
 -- CreateEnum
@@ -601,7 +604,7 @@ CREATE TABLE "unit_rent_types" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" "unit_rent_type_enum" NOT NULL,
 
     CONSTRAINT "unit_rent_types_pkey" PRIMARY KEY ("id")
 );

@@ -6,6 +6,7 @@ import { ListingModule } from './modules/listing.module';
 import { ReservedCommunityTypeModule } from './modules/reserved-community-type.module';
 import { UnitAccessibilityPriorityTypeServiceModule } from './modules/unit-accessibility-priority-type.module';
 import { UnitTypeModule } from './modules/unit-type.module';
+import { UnitRentTypeModule } from './modules/unit-rent-type.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UnitTypeModule } from './modules/unit-type.module';
     ReservedCommunityTypeModule,
     UnitTypeModule,
     UnitAccessibilityPriorityTypeServiceModule,
+    UnitRentTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -23,6 +25,7 @@ import { UnitTypeModule } from './modules/unit-type.module';
     ReservedCommunityTypeModule,
     UnitTypeModule,
     UnitAccessibilityPriorityTypeServiceModule,
+    UnitRentTypeModule,
   ],
 })
 export class AppModule {}

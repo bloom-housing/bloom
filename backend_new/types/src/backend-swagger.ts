@@ -722,6 +722,135 @@ export class UnitAccessibilityPriorityTypesService {
   }
 }
 
+export class UnitRentTypesService {
+  /**
+   * List unitRentTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitRentType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitRentType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitRentType by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitRentType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitRentTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+      url = url.replace('{unitRentTypeId}', params['unitRentTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitRentType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeUpdate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -826,7 +955,7 @@ export interface UnitAccessibilityPriorityType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface MinMaxCurrency {
@@ -1089,7 +1218,7 @@ export interface UnitTypeUpdate {
 
 export interface UnitAccessibilityPriorityTypeCreate {
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface UnitAccessibilityPriorityTypeUpdate {
@@ -1097,7 +1226,34 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: UnitRentTypeEnum;
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: UnitRentTypeEnum;
+}
+
+export interface UnitRentType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: UnitRentTypeEnum;
 }
 
 export enum ListingViews {
@@ -1157,4 +1313,19 @@ export enum UnitTypeEnum {
   'fourBdrm' = 'fourBdrm',
   'SRO' = 'SRO',
   'fiveBdrm' = 'fiveBdrm',
+}
+
+export enum UnitAccessibilityPriorityTypeEnum {
+  'mobility' = 'mobility',
+  'mobilityAndHearing' = 'mobilityAndHearing',
+  'hearing' = 'hearing',
+  'visual' = 'visual',
+  'hearingAndVisual' = 'hearingAndVisual',
+  'mobilityAndVisual' = 'mobilityAndVisual',
+  'mobilityHearingAndVisual' = 'mobilityHearingAndVisual',
+}
+
+export enum UnitRentTypeEnum {
+  'fixed' = 'fixed',
+  'percentageOfIncome' = 'percentageOfIncome',
 }
