@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import * as React from "react"
 import { getListings } from "../../lib/helpers"
 import { Listing, Jurisdiction } from "@bloom-housing/backend-core"
 import {
@@ -18,34 +18,15 @@ type ListingsListProps = {
   lastPage: number
   onPageChange: (page: number) => void
   loading: boolean
-  setClearButtonState?: (boolean) => void
-  clearButtonState?: boolean
 }
 
 const ListingsList = (props: ListingsListProps) => {
-  // Flip the state and call the callers setClearButtonState,
-  // which is intended to cause a reset on the filters
-  // and then reload the page with no query filters applied.
-  const [initialClear, setInitialClear] = useState(props.clearButtonState)
-  const { setClearButtonState } = props
-  useEffect(() => {
-    // On state change, use the function the caller passed in with the new state.
-    if (!setClearButtonState) {
-      return
-    }
-    setClearButtonState(initialClear)
-  }, [initialClear, setClearButtonState])
-  const clearFilter = () => {
-    // Invert the state stored in this component.
-    setInitialClear(!initialClear)
-  }
-
   const listingsDiv =
     props.listings.length > 0 || props.loading ? (
       <div className="listingsList">{getListings(props.listings)}</div>
     ) : (
       <ZeroListingsItem title={t("t.noMatchingListings")} description={t("t.tryRemovingFilters")}>
-        <Button onClick={clearFilter}>{t("t.clearAllFilters")}</Button>
+        <Button>{t("t.clearAllFilters")}</Button>
       </ZeroListingsItem>
     )
 

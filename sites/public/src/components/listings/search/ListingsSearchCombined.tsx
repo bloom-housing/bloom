@@ -103,7 +103,6 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
   const updateFilterCount = (count: number) => {
     setFilterCount(count)
   }
-  const [clearButton, setClearButton] = useState(false)
 
   return (
     <div>
@@ -129,7 +128,6 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         onSubmit={onFormSubmit}
         onClose={onModalClose}
         onFilterChange={updateFilterCount}
-        clearButtonState={clearButton}
       />
 
       <ListingsCombined
@@ -140,8 +138,6 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
         loading={searchResults.loading}
         googleMapsApiKey={props.googleMapsApiKey}
         onPageChange={onPageChange}
-        setClearButtonState={setClearButton}
-        clearButtonState={clearButton}
       />
     </div>
   )
