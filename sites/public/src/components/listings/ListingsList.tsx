@@ -26,7 +26,7 @@ const ListingsList = (props: ListingsListProps) => {
       <div className="listingsList">{getListings(props.listings)}</div>
     ) : (
       <ZeroListingsItem title={t("t.noMatchingListings")} description={t("t.tryRemovingFilters")}>
-        <Button>{t("t.clearAllFilters")}</Button>
+        {/* <Button>{t("t.clearAllFilters")}</Button> */}
       </ZeroListingsItem>
     )
 
