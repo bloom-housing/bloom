@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { t } from "@bloom-housing/ui-components"
-import { convertDataToPst } from "../../lib/helpers"
+import { convertDataToLocal } from "../../lib/helpers"
 import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 export const getCols = () => [
@@ -76,7 +76,7 @@ export const getCols = () => [
 
       const { submissionDate } = data
 
-      const dateTime = convertDataToPst(
+      const dateTime = convertDataToLocal(
         submissionDate,
         data?.submissionType || ApplicationSubmissionType.electronical
       )
