@@ -33,7 +33,6 @@ type DateTimeLocal = {
   year: string
   day: string
   month: string
-  timeZoneName: string
 }
 
 interface FormOption {
