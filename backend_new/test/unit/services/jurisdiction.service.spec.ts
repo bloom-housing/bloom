@@ -176,7 +176,9 @@ describe('Testing jurisdiction service', () => {
 
     await expect(
       async () => await service.findOne({ jurisdictionId: 'example Id' }),
-    ).rejects.toThrowError();
+    ).rejects.toThrowError(
+      'jurisdiction example Id was requested but not found',
+    );
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {
@@ -332,9 +334,9 @@ describe('Testing jurisdiction service', () => {
       enableUtilitiesIncluded: true,
     };
 
-    await expect(
-      async () => await service.update(params),
-    ).rejects.toThrowError();
+    await expect(async () => await service.update(params)).rejects.toThrowError(
+      'jurisdictionId example id was requested but not found',
+    );
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {

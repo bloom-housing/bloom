@@ -851,6 +851,161 @@ export class UnitRentTypesService {
   }
 }
 
+export class JurisdictionsService {
+  /**
+   * List jurisdictions
+   */
+  list(options: IRequestOptions = {}): Promise<Jurisdiction[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/jurisdictions';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create jurisdiction
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: JurisdictionCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/jurisdictions';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete jurisdiction by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/jurisdictions';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get jurisdiction by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      jurisdictionId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/jurisdictions/{jurisdictionId}';
+      url = url.replace('{jurisdictionId}', params['jurisdictionId'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update jurisdiction
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: JurisdictionUpdate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/jurisdictions/{jurisdictionId}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/jurisdictions/byName/{jurisdictionName}';
+      url = url.replace('{jurisdictionName}', params['jurisdictionName'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -1254,6 +1409,117 @@ export interface UnitRentType {
 
   /**  */
   name: UnitRentTypeEnum;
+}
+
+export interface JurisdictionCreate {
+  /**  */
+  name: string;
+
+  /**  */
+  notificationsSignUpUrl: string;
+
+  /**  */
+  languages: string[];
+
+  /**  */
+  partnerTerms: string;
+
+  /**  */
+  publicUrl: string;
+
+  /**  */
+  emailFromAddress: string;
+
+  /**  */
+  rentalAssistanceDefault: string;
+
+  /**  */
+  enablePartnerSettings: boolean;
+
+  /**  */
+  enableAccessibilityFeatures: boolean;
+
+  /**  */
+  enableUtilitiesIncluded: boolean;
+}
+
+export interface JurisdictionUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  notificationsSignUpUrl: string;
+
+  /**  */
+  languages: string[];
+
+  /**  */
+  partnerTerms: string;
+
+  /**  */
+  publicUrl: string;
+
+  /**  */
+  emailFromAddress: string;
+
+  /**  */
+  rentalAssistanceDefault: string;
+
+  /**  */
+  enablePartnerSettings: boolean;
+
+  /**  */
+  enableAccessibilityFeatures: boolean;
+
+  /**  */
+  enableUtilitiesIncluded: boolean;
+}
+
+export interface Jurisdiction {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+
+  /**  */
+  notificationsSignUpUrl: string;
+
+  /**  */
+  languages: string[];
+
+  /**  */
+  multiselectQuestions: string[];
+
+  /**  */
+  partnerTerms: string;
+
+  /**  */
+  publicUrl: string;
+
+  /**  */
+  emailFromAddress: string;
+
+  /**  */
+  rentalAssistanceDefault: string;
+
+  /**  */
+  enablePartnerSettings: boolean;
+
+  /**  */
+  enableAccessibilityFeatures: boolean;
+
+  /**  */
+  enableUtilitiesIncluded: boolean;
 }
 
 export enum ListingViews {
