@@ -12,18 +12,21 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { LanguagesEnum } from '@prisma/client';
 import { Expose, Type } from 'class-transformer';
-import { MultiselectQuestion } from '../multiselect-questions/multiselect-question.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IdDTO } from '../shared/id.dto';
 
 export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   name: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  notificationsSignUpURL?: string | null;
+  @ApiProperty()
+  notificationsSignUpUrl?: string | null;
 
   @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
@@ -33,44 +36,53 @@ export class Jurisdiction extends AbstractDTO {
     each: true,
   })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   languages: LanguagesEnum[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => MultiselectQuestion)
+  @Type(() => IdDTO)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  multiselectQuestions: MultiselectQuestion[];
+  @ApiProperty()
+  multiselectQuestions: IdDTO[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   partnerTerms?: string | null;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   publicUrl: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   emailFromAddress: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   rentalAssistanceDefault: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   enablePartnerSettings?: boolean | null;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   enableAccessibilityFeatures: boolean | null;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   enableUtilitiesIncluded: boolean | null;
 }

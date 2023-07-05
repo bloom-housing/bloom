@@ -25,7 +25,7 @@ import { ApplicationMethod } from '../application-methods/application-method-get
 import { Asset } from '../assets/asset-get.dto';
 import { ListingEvent } from './listing-event.dto';
 import { Address } from '../addresses/address-get.dto';
-import { Jurisdiction } from '../jurisdictions/jurisdiction-get.dto';
+import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
 import { ReservedCommunityType } from '../reserved-community-types/reserved-community-type.dto';
 import { ListingImage } from './listing-image.dto';
 import { ListingFeatures } from './listing-feature.dto';
