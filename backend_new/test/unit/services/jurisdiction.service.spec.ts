@@ -50,53 +50,7 @@ describe('Testing jurisdiction service', () => {
     const mockedValue = mockJurisdictionSet(3, date);
     prisma.jurisdictions.findMany = jest.fn().mockResolvedValue(mockedValue);
 
-    expect(await service.list()).toEqual([
-      {
-        id: mockedValue[0].id,
-        createdAt: date,
-        updatedAt: date,
-        name: 'jurisdiction 0',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 0`,
-        languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 0`,
-        publicUrl: `publicUrl: 0`,
-        emailFromAddress: `emailFromAddress: 0`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 0`,
-        enablePartnerSettings: true,
-        enableAccessibilityFeatures: true,
-        enableUtilitiesIncluded: true,
-      },
-      {
-        id: mockedValue[1].id,
-        createdAt: date,
-        updatedAt: date,
-        name: 'jurisdiction 1',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 1`,
-        languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 1`,
-        publicUrl: `publicUrl: 1`,
-        emailFromAddress: `emailFromAddress: 1`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 1`,
-        enablePartnerSettings: true,
-        enableAccessibilityFeatures: true,
-        enableUtilitiesIncluded: true,
-      },
-      {
-        id: mockedValue[2].id,
-        createdAt: date,
-        updatedAt: date,
-        name: 'jurisdiction 2',
-        notificationsSignUpUrl: `notificationsSignUpUrl: 2`,
-        languages: [LanguagesEnum.en],
-        partnerTerms: `partnerTerms: 2`,
-        publicUrl: `publicUrl: 2`,
-        emailFromAddress: `emailFromAddress: 2`,
-        rentalAssistanceDefault: `rentalAssistanceDefault: 2`,
-        enablePartnerSettings: true,
-        enableAccessibilityFeatures: true,
-        enableUtilitiesIncluded: true,
-      },
-    ]);
+    expect(await service.list()).toEqual(mockedValue);
 
     expect(prisma.jurisdictions.findMany).toHaveBeenCalledWith({
       include: {
@@ -110,21 +64,9 @@ describe('Testing jurisdiction service', () => {
     const mockedValue = mockJurisdiction(3, date);
     prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(mockedValue);
 
-    expect(await service.findOne({ jurisdictionId: 'example Id' })).toEqual({
-      id: mockedValue.id,
-      createdAt: date,
-      updatedAt: date,
-      name: 'jurisdiction 3',
-      notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
-      languages: [LanguagesEnum.en],
-      partnerTerms: `partnerTerms: 3`,
-      publicUrl: `publicUrl: 3`,
-      emailFromAddress: `emailFromAddress: 3`,
-      rentalAssistanceDefault: `rentalAssistanceDefault: 3`,
-      enablePartnerSettings: true,
-      enableAccessibilityFeatures: true,
-      enableUtilitiesIncluded: true,
-    });
+    expect(await service.findOne({ jurisdictionId: 'example Id' })).toEqual(
+      mockedValue,
+    );
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {
@@ -143,21 +85,9 @@ describe('Testing jurisdiction service', () => {
     const mockedValue = mockJurisdiction(3, date);
     prisma.jurisdictions.findFirst = jest.fn().mockResolvedValue(mockedValue);
 
-    expect(await service.findOne({ jurisdictionName: 'example Id' })).toEqual({
-      id: mockedValue.id,
-      createdAt: date,
-      updatedAt: date,
-      name: 'jurisdiction 3',
-      notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
-      languages: [LanguagesEnum.en],
-      partnerTerms: `partnerTerms: 3`,
-      publicUrl: `publicUrl: 3`,
-      emailFromAddress: `emailFromAddress: 3`,
-      rentalAssistanceDefault: `rentalAssistanceDefault: 3`,
-      enablePartnerSettings: true,
-      enableAccessibilityFeatures: true,
-      enableUtilitiesIncluded: true,
-    });
+    expect(await service.findOne({ jurisdictionName: 'example Id' })).toEqual(
+      mockedValue,
+    );
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {
@@ -176,7 +106,9 @@ describe('Testing jurisdiction service', () => {
 
     await expect(
       async () => await service.findOne({ jurisdictionId: 'example Id' }),
-    ).rejects.toThrowError();
+    ).rejects.toThrowError(
+      'jurisdiction example Id was requested but not found',
+    );
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {
@@ -208,21 +140,7 @@ describe('Testing jurisdiction service', () => {
       enableUtilitiesIncluded: true,
     };
 
-    expect(await service.create(params)).toEqual({
-      id: mockedValue.id,
-      createdAt: date,
-      updatedAt: date,
-      name: 'jurisdiction 3',
-      notificationsSignUpUrl: `notificationsSignUpUrl: 3`,
-      languages: [LanguagesEnum.en],
-      partnerTerms: `partnerTerms: 3`,
-      publicUrl: `publicUrl: 3`,
-      emailFromAddress: `emailFromAddress: 3`,
-      rentalAssistanceDefault: `rentalAssistanceDefault: 3`,
-      enablePartnerSettings: true,
-      enableAccessibilityFeatures: true,
-      enableUtilitiesIncluded: true,
-    });
+    expect(await service.create(params)).toEqual(mockedValue);
 
     expect(prisma.jurisdictions.create).toHaveBeenCalledWith({
       data: {
@@ -332,9 +250,9 @@ describe('Testing jurisdiction service', () => {
       enableUtilitiesIncluded: true,
     };
 
-    await expect(
-      async () => await service.update(params),
-    ).rejects.toThrowError();
+    await expect(async () => await service.update(params)).rejects.toThrowError(
+      'jurisdictionId example id was requested but not found',
+    );
 
     expect(prisma.jurisdictions.findFirst).toHaveBeenCalledWith({
       where: {

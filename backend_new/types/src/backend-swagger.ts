@@ -1482,7 +1482,7 @@ export interface UnitType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -1499,7 +1499,7 @@ export interface UnitAccessibilityPriorityType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface MinMaxCurrency {
@@ -2155,6 +2155,176 @@ export interface MultiselectQuestionQueryParams {
   filter?: MultiselectQuestionFilterParams[];
 }
 
+export interface UnitTypeCreate {
+  /**  */
+  name: UnitTypeEnum;
+
+  /**  */
+  numBedrooms: number;
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: UnitTypeEnum;
+
+  /**  */
+  numBedrooms: number;
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: UnitAccessibilityPriorityTypeEnum;
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: UnitAccessibilityPriorityTypeEnum;
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: UnitRentTypeEnum;
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: UnitRentTypeEnum;
+}
+
+export interface UnitRentType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: UnitRentTypeEnum;
+}
+
+export interface JurisdictionCreate {
+  /**  */
+  name: string;
+
+  /**  */
+  notificationsSignUpUrl: string;
+
+  /**  */
+  languages: string[];
+
+  /**  */
+  partnerTerms: string;
+
+  /**  */
+  publicUrl: string;
+
+  /**  */
+  emailFromAddress: string;
+
+  /**  */
+  rentalAssistanceDefault: string;
+
+  /**  */
+  enablePartnerSettings: boolean;
+
+  /**  */
+  enableAccessibilityFeatures: boolean;
+
+  /**  */
+  enableUtilitiesIncluded: boolean;
+}
+
+export interface JurisdictionUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  notificationsSignUpUrl: string;
+
+  /**  */
+  languages: string[];
+
+  /**  */
+  partnerTerms: string;
+
+  /**  */
+  publicUrl: string;
+
+  /**  */
+  emailFromAddress: string;
+
+  /**  */
+  rentalAssistanceDefault: string;
+
+  /**  */
+  enablePartnerSettings: boolean;
+
+  /**  */
+  enableAccessibilityFeatures: boolean;
+
+  /**  */
+  enableUtilitiesIncluded: boolean;
+}
+
+export interface Jurisdiction {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+
+  /**  */
+  notificationsSignUpUrl: string;
+
+  /**  */
+  languages: string[];
+
+  /**  */
+  multiselectQuestions: string[];
+
+  /**  */
+  partnerTerms: string;
+
+  /**  */
+  publicUrl: string;
+
+  /**  */
+  emailFromAddress: string;
+
+  /**  */
+  rentalAssistanceDefault: string;
+
+  /**  */
+  enablePartnerSettings: boolean;
+
+  /**  */
+  enableAccessibilityFeatures: boolean;
+
+  /**  */
+  enableUtilitiesIncluded: boolean;
+}
+
 export enum ListingViews {
   'fundamentals' = 'fundamentals',
   'base' = 'base',
@@ -2215,4 +2385,29 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   '>=' = '>=',
   '<=' = '<=',
   'NA' = 'NA',
+}
+
+export enum UnitTypeEnum {
+  'studio' = 'studio',
+  'oneBdrm' = 'oneBdrm',
+  'twoBdrm' = 'twoBdrm',
+  'threeBdrm' = 'threeBdrm',
+  'fourBdrm' = 'fourBdrm',
+  'SRO' = 'SRO',
+  'fiveBdrm' = 'fiveBdrm',
+}
+
+export enum UnitAccessibilityPriorityTypeEnum {
+  'mobility' = 'mobility',
+  'mobilityAndHearing' = 'mobilityAndHearing',
+  'hearing' = 'hearing',
+  'visual' = 'visual',
+  'hearingAndVisual' = 'hearingAndVisual',
+  'mobilityAndVisual' = 'mobilityAndVisual',
+  'mobilityHearingAndVisual' = 'mobilityHearingAndVisual',
+}
+
+export enum UnitRentTypeEnum {
+  'fixed' = 'fixed',
+  'percentageOfIncome' = 'percentageOfIncome',
 }

@@ -1,16 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsDefined, IsNumber, IsString, MaxLength } from 'class-validator';
+import { IsDefined, IsNumber, IsEnum } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
+import { UnitTypeEnum } from '@prisma/client';
 
 export class UnitType extends AbstractDTO {
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
-  name: string;
+  @IsEnum(UnitTypeEnum, {
+    groups: [ValidationsGroupsEnum.default],
+  })
+  @ApiProperty({
+    enum: UnitTypeEnum,
+    enumName: 'UnitTypeEnum',
+  })
+  name: UnitTypeEnum;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })

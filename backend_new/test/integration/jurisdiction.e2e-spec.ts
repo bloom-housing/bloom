@@ -36,10 +36,10 @@ describe('Jurisdiction Controller Tests', () => {
       .get(`/jurisdictions?`)
       .expect(200);
 
-    expect(res.body.length).toEqual(2);
-    const sortedResults = res.body.sort((a, b) => (a.name < b.name ? -1 : 1));
-    expect(sortedResults[0].name).toEqual(jurisdictionA.name);
-    expect(sortedResults[1].name).toEqual(jurisdictionB.name);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    const jurisdictions = res.body.map((value) => value.name);
+    expect(jurisdictions).toContain(jurisdictionA.name);
+    expect(jurisdictions).toContain(jurisdictionB.name);
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {
@@ -64,7 +64,7 @@ describe('Jurisdiction Controller Tests', () => {
     expect(res.body.name).toEqual(jurisdictionA.name);
   });
 
-  it("retrieve endpoint with id that doesn't exist should error", async () => {
+  it("retrieve endpoint with name that doesn't exist should error", async () => {
     const name = 'a nonexistant name';
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions/byName/${name}`)

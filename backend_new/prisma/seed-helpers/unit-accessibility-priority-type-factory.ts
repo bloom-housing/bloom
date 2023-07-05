@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, UnitAccessibilityPriorityTypeEnum } from '@prisma/client';
 
 export const unitAccessibilityPriorityTypeFactory = (
   i: number,
@@ -6,12 +6,12 @@ export const unitAccessibilityPriorityTypeFactory = (
   ...unitPriorityTypeArray[i % unitPriorityTypeArray.length],
 });
 
-const unitPriorityTypeArray = [
-  { name: 'Mobility' },
-  { name: 'Mobility and Hearing' },
-  { name: 'Hearing' },
-  { name: 'Visual' },
-  { name: 'Hearing and Visual' },
-  { name: 'Mobility and Visual' },
-  { name: 'Mobility, Hearing and Visual' },
+export const unitPriorityTypeArray = [
+  { name: UnitAccessibilityPriorityTypeEnum.mobility },
+  { name: UnitAccessibilityPriorityTypeEnum.mobilityAndHearing },
+  { name: UnitAccessibilityPriorityTypeEnum.hearing },
+  { name: UnitAccessibilityPriorityTypeEnum.visual },
+  { name: UnitAccessibilityPriorityTypeEnum.hearingAndVisual },
+  { name: UnitAccessibilityPriorityTypeEnum.mobilityAndVisual },
+  { name: UnitAccessibilityPriorityTypeEnum.mobilityHearingAndVisual },
 ];

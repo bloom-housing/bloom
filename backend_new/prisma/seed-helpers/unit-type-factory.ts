@@ -1,15 +1,15 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, UnitTypeEnum } from '@prisma/client';
 
 export const unitTypeFactory = (i: number): Prisma.UnitTypesCreateInput => ({
   ...unitTypeArray[i % unitTypeArray.length],
 });
 
-const unitTypeArray = [
-  { name: 'studio', numBedrooms: 0 },
-  { name: 'oneBdrm', numBedrooms: 1 },
-  { name: 'twoBdrm', numBedrooms: 2 },
-  { name: 'threeBdrm', numBedrooms: 3 },
-  { name: 'fourBdrm', numBedrooms: 4 },
-  { name: 'SRO', numBedrooms: 0 },
-  { name: 'fiveBdrm', numBedrooms: 5 },
+export const unitTypeArray = [
+  { name: UnitTypeEnum.studio, numBedrooms: 0 },
+  { name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
+  { name: UnitTypeEnum.twoBdrm, numBedrooms: 2 },
+  { name: UnitTypeEnum.threeBdrm, numBedrooms: 3 },
+  { name: UnitTypeEnum.fourBdrm, numBedrooms: 4 },
+  { name: UnitTypeEnum.SRO, numBedrooms: 0 },
+  { name: UnitTypeEnum.fiveBdrm, numBedrooms: 5 },
 ];
