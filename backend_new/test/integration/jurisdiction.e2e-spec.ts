@@ -64,7 +64,7 @@ describe('Jurisdiction Controller Tests', () => {
     expect(res.body.name).toEqual(jurisdictionA.name);
   });
 
-  it("retrieve endpoint with id that doesn't exist should error", async () => {
+  it("retrieve endpoint with name that doesn't exist should error", async () => {
     const name = 'a nonexistant name';
     const res = await request(app.getHttpServer())
       .get(`/jurisdictions/byName/${name}`)
