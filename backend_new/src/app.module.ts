@@ -8,6 +8,7 @@ import { UnitAccessibilityPriorityTypeServiceModule } from './modules/unit-acces
 import { UnitTypeModule } from './modules/unit-type.module';
 import { UnitRentTypeModule } from './modules/unit-rent-type.module';
 import { JurisdictionModule } from './modules/jurisdiction.module';
+import { MultiselectQuestionModule } from './modules/multiselect-question.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JurisdictionModule } from './modules/jurisdiction.module';
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
+    MultiselectQuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -29,6 +31,7 @@ import { JurisdictionModule } from './modules/jurisdiction.module';
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
+    MultiselectQuestionModule,
   ],
 })
 export class AppModule {}

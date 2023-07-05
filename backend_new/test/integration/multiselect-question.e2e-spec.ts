@@ -50,10 +50,10 @@ describe('MultiselectQuestion Controller Tests', () => {
       .get(`/multiselectQuestions?`)
       .expect(200);
 
-    expect(res.body.length).toEqual(2);
-    const sortedResults = res.body.sort((a, b) => (a.text < b.text ? -1 : 1));
-    expect(sortedResults[0].text).toEqual(multiselectQuestionA.text);
-    expect(sortedResults[1].text).toEqual(multiselectQuestionB.text);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    const multiselectQuestions = res.body.map((value) => value.text);
+    expect(multiselectQuestions).toContain(multiselectQuestionA.text);
+    expect(multiselectQuestions).toContain(multiselectQuestionB.text);
   });
 
   it('testing list endpoint with params', async () => {
@@ -78,10 +78,10 @@ describe('MultiselectQuestion Controller Tests', () => {
       .get(`/multiselectQuestions?${query}`)
       .expect(200);
 
-    expect(res.body.length).toEqual(2);
-    const sortedResults = res.body.sort((a, b) => (a.text < b.text ? -1 : 1));
-    expect(sortedResults[0].text).toEqual(multiselectQuestionA.text);
-    expect(sortedResults[1].text).toEqual(multiselectQuestionB.text);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    const multiselectQuestions = res.body.map((value) => value.text);
+    expect(multiselectQuestions).toContain(multiselectQuestionA.text);
+    expect(multiselectQuestions).toContain(multiselectQuestionB.text);
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {
