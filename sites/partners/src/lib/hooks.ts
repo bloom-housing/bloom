@@ -499,9 +499,10 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
   const { applicationsService } = useContext(AuthContext)
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
   return useCsvExport(
-    () => applicationsService.listAsCsv({ listingId, includeDemographics }),
+    () => applicationsService.listAsCsv({ listingId, timeZone, includeDemographics }),
     `applications-${listingId}-${createDateStringFromNow()}.csv`
   )
 }

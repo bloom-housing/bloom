@@ -561,6 +561,8 @@ export class ApplicationsService {
       /**  */
       listingId: string
       /**  */
+      timeZone?: string
+      /**  */
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
@@ -578,6 +580,7 @@ export class ApplicationsService {
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
         listingId: params["listingId"],
+        timeZone: params["timeZone"],
         includeDemographics: params["includeDemographics"],
       }
       let data = null
