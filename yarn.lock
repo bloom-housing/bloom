@@ -1600,10 +1600,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.7.1.tgz#56a005aa2387ee415cd320d799123036715d8503"
-  integrity sha512-Qezw6GCA38UfAW7bUOHjZxQ9y7MRNFv3ZjDYLf2wpm//5G7CHYfFUm8YymjzM8dRG5j8nmoiMa+3X2qPHQemKQ==
+"@bloom-housing/ui-seeds@^1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.7.4.tgz#33526b2335b2d46e056315f74591e6b767b08f2c"
+  integrity sha512-AhnDOs8u/4uhOLQCn/abtJA2n+OJdNj7Gy1NW/z9Ax37uV6AQ0T3phJt1iciVkGGsR1MsWnE9TTItyJ5xdEUsg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/free-regular-svg-icons" "^6.3.0"
