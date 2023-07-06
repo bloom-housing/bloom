@@ -8,7 +8,7 @@ const DetailListingData = () => {
 
   return (
     <GridSection className="bg-primary-lighter" title={t("listings.details.listingData")} inset>
-      <GridCell>
+      <GridCell span={2}>
         <ViewItem label={t("listings.details.id")}>{listing.id}</ViewItem>
       </GridCell>
 
@@ -17,14 +17,6 @@ const DetailListingData = () => {
           {getDetailFieldDate(listing.createdAt)}
           <br />
           {getDetailFieldTime(listing.createdAt)}
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("listings.details.updatedDate")}>
-          {getDetailFieldDate(listing.updatedAt)}
-          <br />
-          {getDetailFieldTime(listing.updatedAt)}
         </ViewItem>
       </GridCell>
     </GridSection>
