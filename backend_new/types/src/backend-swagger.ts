@@ -1948,7 +1948,7 @@ export interface ReservedCommunityTypeQueryParams {
 
 export interface UnitTypeCreate {
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -1959,7 +1959,7 @@ export interface UnitTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitTypeEnum;
 
   /**  */
   numBedrooms: number;
@@ -1967,7 +1967,7 @@ export interface UnitTypeUpdate {
 
 export interface UnitAccessibilityPriorityTypeCreate {
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface UnitAccessibilityPriorityTypeUpdate {
@@ -1975,12 +1975,12 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitAccessibilityPriorityTypeEnum;
 }
 
 export interface UnitRentTypeCreate {
   /**  */
-  name: string;
+  name: UnitRentTypeEnum;
 }
 
 export interface UnitRentTypeUpdate {
@@ -1988,7 +1988,7 @@ export interface UnitRentTypeUpdate {
   id: string;
 
   /**  */
-  name: string;
+  name: UnitRentTypeEnum;
 }
 
 export interface UnitRentType {
@@ -2002,7 +2002,7 @@ export interface UnitRentType {
   updatedAt: Date;
 
   /**  */
-  name: string;
+  name: UnitRentTypeEnum;
 }
 
 export interface JurisdictionCreate {
@@ -2155,176 +2155,6 @@ export interface MultiselectQuestionQueryParams {
   filter?: MultiselectQuestionFilterParams[];
 }
 
-export interface UnitTypeCreate {
-  /**  */
-  name: UnitTypeEnum;
-
-  /**  */
-  numBedrooms: number;
-}
-
-export interface UnitTypeUpdate {
-  /**  */
-  id: string;
-
-  /**  */
-  name: UnitTypeEnum;
-
-  /**  */
-  numBedrooms: number;
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: UnitAccessibilityPriorityTypeEnum;
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  id: string;
-
-  /**  */
-  name: UnitAccessibilityPriorityTypeEnum;
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: UnitRentTypeEnum;
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  id: string;
-
-  /**  */
-  name: UnitRentTypeEnum;
-}
-
-export interface UnitRentType {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  name: UnitRentTypeEnum;
-}
-
-export interface JurisdictionCreate {
-  /**  */
-  name: string;
-
-  /**  */
-  notificationsSignUpUrl: string;
-
-  /**  */
-  languages: string[];
-
-  /**  */
-  partnerTerms: string;
-
-  /**  */
-  publicUrl: string;
-
-  /**  */
-  emailFromAddress: string;
-
-  /**  */
-  rentalAssistanceDefault: string;
-
-  /**  */
-  enablePartnerSettings: boolean;
-
-  /**  */
-  enableAccessibilityFeatures: boolean;
-
-  /**  */
-  enableUtilitiesIncluded: boolean;
-}
-
-export interface JurisdictionUpdate {
-  /**  */
-  id: string;
-
-  /**  */
-  name: string;
-
-  /**  */
-  notificationsSignUpUrl: string;
-
-  /**  */
-  languages: string[];
-
-  /**  */
-  partnerTerms: string;
-
-  /**  */
-  publicUrl: string;
-
-  /**  */
-  emailFromAddress: string;
-
-  /**  */
-  rentalAssistanceDefault: string;
-
-  /**  */
-  enablePartnerSettings: boolean;
-
-  /**  */
-  enableAccessibilityFeatures: boolean;
-
-  /**  */
-  enableUtilitiesIncluded: boolean;
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  name: string;
-
-  /**  */
-  notificationsSignUpUrl: string;
-
-  /**  */
-  languages: string[];
-
-  /**  */
-  multiselectQuestions: string[];
-
-  /**  */
-  partnerTerms: string;
-
-  /**  */
-  publicUrl: string;
-
-  /**  */
-  emailFromAddress: string;
-
-  /**  */
-  rentalAssistanceDefault: string;
-
-  /**  */
-  enablePartnerSettings: boolean;
-
-  /**  */
-  enableAccessibilityFeatures: boolean;
-
-  /**  */
-  enableUtilitiesIncluded: boolean;
-}
-
 export enum ListingViews {
   'fundamentals' = 'fundamentals',
   'base' = 'base',
@@ -2378,14 +2208,6 @@ export enum ApplicationMethodsTypeEnum {
   'LeasingAgent' = 'LeasingAgent',
   'Referral' = 'Referral',
 }
-export enum EnumMultiselectQuestionFilterParamsComparison {
-  '=' = '=',
-  '<>' = '<>',
-  'IN' = 'IN',
-  '>=' = '>=',
-  '<=' = '<=',
-  'NA' = 'NA',
-}
 
 export enum UnitTypeEnum {
   'studio' = 'studio',
@@ -2410,4 +2232,12 @@ export enum UnitAccessibilityPriorityTypeEnum {
 export enum UnitRentTypeEnum {
   'fixed' = 'fixed',
   'percentageOfIncome' = 'percentageOfIncome',
+}
+export enum EnumMultiselectQuestionFilterParamsComparison {
+  '=' = '=',
+  '<>' = '<>',
+  'IN' = 'IN',
+  '>=' = '>=',
+  '<=' = '<=',
+  'NA' = 'NA',
 }
