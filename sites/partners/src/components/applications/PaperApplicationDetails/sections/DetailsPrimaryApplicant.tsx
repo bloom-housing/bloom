@@ -17,28 +17,25 @@ const DetailsPrimaryApplicant = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <FieldValue label={t("application.name.firstName")} data-testid="firstName">
+          <FieldValue label={t("application.name.firstName")} testId="firstName">
             {application.applicant.firstName || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue label={t("application.name.middleName")} data-testid="middleName">
+          <FieldValue label={t("application.name.middleName")} testId="middleName">
             {application.applicant.middleName || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue label={t("application.name.lastName")} data-testid="lastName">
+          <FieldValue label={t("application.name.lastName")} testId="lastName">
             {application.applicant.lastName || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue
-            label={t("application.household.member.dateOfBirth")}
-            data-testid="dateOfBirth"
-          >
+          <FieldValue label={t("application.household.member.dateOfBirth")} testId="dateOfBirth">
             {(() => {
               const { birthMonth, birthDay, birthYear } = application?.applicant
 
@@ -52,7 +49,7 @@ const DetailsPrimaryApplicant = () => {
         </GridCell>
 
         <GridCell>
-          <FieldValue label={t("t.email")} data-testid="emailAddress">
+          <FieldValue label={t("t.email")} testId="emailAddress">
             {application.applicant.emailAddress || t("t.n/a")}
           </FieldValue>
         </GridCell>
@@ -64,7 +61,7 @@ const DetailsPrimaryApplicant = () => {
               application.applicant.phoneNumberType &&
               t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
             }
-            data-testid="phoneNumber"
+            testId="phoneNumber"
           >
             {application.applicant.phoneNumber || t("t.n/a")}
           </FieldValue>
@@ -77,17 +74,14 @@ const DetailsPrimaryApplicant = () => {
               application.additionalPhoneNumber &&
               t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
             }
-            data-testid="additionalPhoneNumber"
+            testId="additionalPhoneNumber"
           >
             {application.additionalPhoneNumber || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue
-            label={t("application.details.preferredContact")}
-            data-testid="preferredContact"
-          >
+          <FieldValue label={t("application.details.preferredContact")} testId="preferredContact">
             {(() => {
               if (!application.contactPreferences.length) return t("t.n/a")
 
@@ -102,7 +96,7 @@ const DetailsPrimaryApplicant = () => {
         </GridCell>
 
         <GridCell>
-          <FieldValue label={t("application.details.workInRegion")} data-testid="workInRegion">
+          <FieldValue label={t("application.details.workInRegion")} testId="workInRegion">
             {(() => {
               if (!application.applicant.workInRegion) return t("t.n/a")
 

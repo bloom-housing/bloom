@@ -26,10 +26,7 @@ const DetailsHouseholdDetails = () => {
       inset
     >
       <GridCell>
-        <FieldValue
-          label={t("application.details.preferredUnitSizes")}
-          data-testid="preferredUnitSizes"
-        >
+        <FieldValue label={t("application.details.preferredUnitSizes")} testId="preferredUnitSizes">
           {(() => {
             if (!preferredUnits.length) return t("t.n/a")
 
@@ -44,7 +41,7 @@ const DetailsHouseholdDetails = () => {
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.details.adaPriorities")} data-testid="adaPriorities">
+        <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
           {accessibilityLabels(application.accessibility).map((item) => (
             <Fragment key={item}>
               {item}
@@ -57,7 +54,7 @@ const DetailsHouseholdDetails = () => {
         <FieldValue
           id="householdChanges"
           label={t("application.household.expectingChanges.title")}
-          data-testid="expectingChanges"
+          testId="expectingChanges"
         >
           {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
         </FieldValue>
@@ -67,7 +64,7 @@ const DetailsHouseholdDetails = () => {
         <FieldValue
           id="householdStudent"
           label={t("application.household.householdStudent.title")}
-          data-testid="householdStudent"
+          testId="householdStudent"
         >
           {application.householdStudent ? t("t.yes") : t("t.no")}
         </FieldValue>

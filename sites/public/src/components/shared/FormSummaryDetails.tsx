@@ -136,7 +136,7 @@ const FormSummaryDetails = ({
                         label={question.key}
                         helpText={multiselectQuestionAddress(option?.extraData)}
                         key={index}
-                        data-testid={"app-summary-preference"}
+                        testId={"app-summary-preference"}
                         className={"pb-4"}
                       >
                         {option.key}
@@ -166,7 +166,7 @@ const FormSummaryDetails = ({
 
       <div className="form-card__group mx-0">
         <FieldValue
-          data-testid={"app-summary-name"}
+          testId={"app-summary-name"}
           id="applicantName"
           label={t("t.name")}
           className={"pb-4"}
@@ -176,7 +176,7 @@ const FormSummaryDetails = ({
         </FieldValue>
 
         <FieldValue
-          data-testid={"app-summary-dob"}
+          testId={"app-summary-dob"}
           id="applicantbirthDay"
           label={t("application.household.member.dateOfBirth")}
           className={"pb-4"}
@@ -187,7 +187,7 @@ const FormSummaryDetails = ({
 
         {application.applicant.phoneNumber && (
           <FieldValue
-            data-testid={"app-summary-phone"}
+            testId={"app-summary-phone"}
             id="applicantPhone"
             label={t("t.phone")}
             helpText={t(
@@ -201,7 +201,7 @@ const FormSummaryDetails = ({
 
         {application.additionalPhoneNumber && (
           <FieldValue
-            data-testid={"app-summary-additional-phone"}
+            testId={"app-summary-additional-phone"}
             id="applicantAdditionalPhone"
             label={t("t.additionalPhone")}
             helpText={t(
@@ -215,7 +215,7 @@ const FormSummaryDetails = ({
 
         {application.applicant.emailAddress && (
           <FieldValue
-            data-testid={"app-summary-email"}
+            testId={"app-summary-email"}
             id="applicantEmail"
             label={t("t.email")}
             className={"pb-4"}
@@ -263,7 +263,7 @@ const FormSummaryDetails = ({
 
         {application.contactPreferences && (
           <FieldValue
-            data-testid={"app-summary-contact-type"}
+            testId={"app-summary-contact-type"}
             id="applicantPreferredContactType"
             label={t("application.contact.preferredContactType")}
             className={"pb-4"}
@@ -288,7 +288,7 @@ const FormSummaryDetails = ({
                 {t(`application.alternateContact.type.description`)}
               </p>
               <FieldValue
-                data-testid={"app-summary-alternate-name"}
+                testId={"app-summary-alternate-name"}
                 id="alternateName"
                 label={t("t.name")}
                 helpText={alternateContactName()}
@@ -299,7 +299,7 @@ const FormSummaryDetails = ({
 
               {application.alternateContact.emailAddress && (
                 <FieldValue
-                  data-testid={"app-summary-alternate-email"}
+                  testId={"app-summary-alternate-email"}
                   id="alternateEmail"
                   label={t("t.email")}
                   className={"pb-4"}
@@ -310,7 +310,7 @@ const FormSummaryDetails = ({
 
               {application.alternateContact.phoneNumber && (
                 <FieldValue
-                  data-testid={"app-summary-alternate-phone"}
+                  testId={"app-summary-alternate-phone"}
                   id="alternatePhone"
                   label={t("t.phone")}
                   className={"pb-4"}
@@ -323,7 +323,7 @@ const FormSummaryDetails = ({
                 (value) => value !== ""
               ) && (
                 <FieldValue
-                  data-testid={"app-summary-alternate-mailing-address"}
+                  testId={"app-summary-alternate-mailing-address"}
                   id="alternateMailingAddress"
                   label={t("application.contact.address")}
                   className={"pb-4"}
@@ -350,12 +350,12 @@ const FormSummaryDetails = ({
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
-                <FieldValue data-testid={"app-summary-household-member-name"} className={"pb-4"}>
+                <FieldValue testId={"app-summary-household-member-name"} className={"pb-4"}>
                   {member.firstName} {member.lastName}
                 </FieldValue>
                 <div>
                   <FieldValue
-                    data-testid={"app-summary-household-member-dob"}
+                    testId={"app-summary-household-member-dob"}
                     label={t("application.household.member.dateOfBirth")}
                     className={"pb-4"}
                   >
@@ -395,7 +395,7 @@ const FormSummaryDetails = ({
         <div className="form-card__group mx-0">
           {preferredUnits && (
             <FieldValue
-              data-testid={"app-summary-preferred-units"}
+              testId={"app-summary-preferred-units"}
               id="householdUnitType"
               label={t("application.household.preferredUnit.preferredUnitType")}
               className={"pb-4"}
@@ -406,7 +406,7 @@ const FormSummaryDetails = ({
             </FieldValue>
           )}
           <FieldValue
-            data-testid={"app-summary-ada"}
+            testId={"app-summary-ada"}
             id="householdAda"
             label={t("application.ada.label")}
             className={"pb-4"}
@@ -453,7 +453,7 @@ const FormSummaryDetails = ({
 
         <div className="form-card__group mx-0">
           <FieldValue
-            data-testid={"app-summary-income-vouchers"}
+            testId={"app-summary-income-vouchers"}
             id="incomeVouchers"
             label={t("application.review.voucherOrSubsidy")}
             className={"pb-4"}
@@ -463,7 +463,7 @@ const FormSummaryDetails = ({
 
           {application.incomePeriod && (
             <FieldValue
-              data-testid={"app-summary-income"}
+              testId={"app-summary-income"}
               id="incomeValue"
               label={t("t.income")}
               className={"pb-4"}

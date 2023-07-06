@@ -68,7 +68,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       <GridCell span={1}>
         <FieldValue
           id="unitTypesOrIndividual"
-          data-testid={"unit-types-or-individual"}
+          testId={"unit-types-or-individual"}
           label={t("listings.unitTypesOrIndividual")}
           children={
             listing.disableUnitsAccordion
@@ -80,7 +80,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       <GridCell span={1}>
         <FieldValue
           id="listings.listingAvailabilityQuestion"
-          data-testid={"listing-availability-question"}
+          testId={"listing-availability-question"}
           label={t("listings.listingAvailabilityQuestion")}
           children={listingAvailabilityText}
         />

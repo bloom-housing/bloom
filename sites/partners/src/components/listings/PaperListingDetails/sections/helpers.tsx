@@ -65,7 +65,7 @@ export const getDetailAddress = (
           <FieldValue
             id={`${addressName}.street`}
             label={t("listings.streetAddressOrPOBox")}
-            data-testid={`${addressName}.street`}
+            testId={`${addressName}.street`}
           >
             {getDetailFieldString(address?.street)}
           </FieldValue>
@@ -74,7 +74,7 @@ export const getDetailAddress = (
           <FieldValue
             id={`${addressName}.street2`}
             label={t("application.contact.apt")}
-            data-testid={`${addressName}.street2`}
+            testId={`${addressName}.street2`}
           >
             {getDetailFieldString(address?.street2)}
           </FieldValue>
@@ -85,7 +85,7 @@ export const getDetailAddress = (
           <FieldValue
             id={`${addressName}.city`}
             label={t("application.contact.city")}
-            data-testid={`${addressName}.city`}
+            testId={`${addressName}.city`}
           >
             {getDetailFieldString(address?.city)}
           </FieldValue>
@@ -93,14 +93,14 @@ export const getDetailAddress = (
         <FieldValue
           id={`${addressName}.state`}
           label={t("application.contact.state")}
-          data-testid={`${addressName}.state`}
+          testId={`${addressName}.state`}
         >
           {getDetailFieldString(address?.state)}
         </FieldValue>
         <FieldValue
           id={`${addressName}.zipCode`}
           label={t("application.contact.zip")}
-          data-testid={`${addressName}.zipCode`}
+          testId={`${addressName}.zipCode`}
         >
           {getDetailFieldString(address?.zipCode)}
         </FieldValue>

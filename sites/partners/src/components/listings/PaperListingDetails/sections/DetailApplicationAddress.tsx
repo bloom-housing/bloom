@@ -139,7 +139,7 @@ const DetailApplicationAddress = () => {
               <FieldValue
                 id="postmarkedApplicationsReceivedByDate"
                 label={t("listings.receivedByDate")}
-                data-testid={"postmark-date"}
+                testId={"postmark-date"}
               >
                 {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
               </FieldValue>
@@ -148,7 +148,7 @@ const DetailApplicationAddress = () => {
               <FieldValue
                 id="postmarkedApplicationsReceivedByDateTime"
                 label={t("listings.receivedByTime")}
-                data-testid={"postmark-time"}
+                testId={"postmark-time"}
               >
                 {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
               </FieldValue>

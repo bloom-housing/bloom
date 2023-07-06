@@ -24,45 +24,45 @@ const DetailsApplicationData = () => {
       inset
     >
       <GridCell>
-        <FieldValue label={t("application.details.number")} data-testid="number">
+        <FieldValue label={t("application.details.number")} testId="number">
           {application.confirmationCode || application.id}
         </FieldValue>
       </GridCell>
 
       {application.submissionType && (
         <GridCell>
-          <FieldValue label={t("application.details.type")} data-testid="type">
+          <FieldValue label={t("application.details.type")} testId="type">
             {t(`application.details.submissionType.${application.submissionType}`)}
           </FieldValue>
         </GridCell>
       )}
 
       <GridCell>
-        <FieldValue label={t("application.details.submittedDate")} data-testid="submittedDate">
+        <FieldValue label={t("application.details.submittedDate")} testId="submittedDate">
           {applicationDate.date}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.details.timeDate")} data-testid="timeDate">
+        <FieldValue label={t("application.details.timeDate")} testId="timeDate">
           {applicationDate.time}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.details.language")} data-testid="language">
+        <FieldValue label={t("application.details.language")} testId="language">
           {application.language ? t(`languages.${application.language}`) : t("t.n/a")}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.details.totalSize")} data-testid="totalSize">
+        <FieldValue label={t("application.details.totalSize")} testId="totalSize">
           {!application.householdSize ? 1 : application.householdSize}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.details.submittedBy")} data-testid="submittedBy">
+        <FieldValue label={t("application.details.submittedBy")} testId="submittedBy">
           {application.applicant.firstName && application.applicant.lastName
             ? `${application.applicant.firstName} ${application.applicant.lastName}`
             : t("t.n/a")}

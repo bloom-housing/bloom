@@ -14,10 +14,7 @@ const DetailsTerms = () => {
       grid={false}
     >
       <GridCell>
-        <FieldValue
-          label={t("application.details.signatureOnTerms")}
-          data-testid="signatureOnTerms"
-        >
+        <FieldValue label={t("application.details.signatureOnTerms")} testId="signatureOnTerms">
           {(() => {
             if (application.acceptedTerms === null) {
               return t("t.n/a")

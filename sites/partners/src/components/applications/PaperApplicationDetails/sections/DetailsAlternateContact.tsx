@@ -16,25 +16,19 @@ const DetailsAlternateContact = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <FieldValue
-            label={t("application.name.firstName")}
-            data-testid="alternateContact.firstName"
-          >
+          <FieldValue label={t("application.name.firstName")} testId="alternateContact.firstName">
             {application.alternateContact.firstName || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue
-            label={t("application.name.lastName")}
-            data-testid="alternateContact.lastName"
-          >
+          <FieldValue label={t("application.name.lastName")} testId="alternateContact.lastName">
             {application.alternateContact.lastName || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue label={t("t.relationship")} data-testid="relationship">
+          <FieldValue label={t("t.relationship")} testId="relationship">
             {(() => {
               if (!application.alternateContact.type) return t("t.n/a")
 
@@ -50,23 +44,20 @@ const DetailsAlternateContact = () => {
 
         {
           <GridCell>
-            <FieldValue
-              label={t("application.details.agency")}
-              data-testid="alternateContact.agency"
-            >
+            <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
               {application.alternateContact.agency || t("t.n/a")}
             </FieldValue>
           </GridCell>
         }
 
         <GridCell>
-          <FieldValue label={t("t.email")} data-testid="alternateContact.emailAddress">
+          <FieldValue label={t("t.email")} testId="alternateContact.emailAddress">
             {application.alternateContact.emailAddress || t("t.n/a")}
           </FieldValue>
         </GridCell>
 
         <GridCell>
-          <FieldValue label={t("t.phone")} data-testid="alternateContact.phoneNumber">
+          <FieldValue label={t("t.phone")} testId="alternateContact.phoneNumber">
             {application.alternateContact.phoneNumber || t("t.n/a")}
           </FieldValue>
         </GridCell>

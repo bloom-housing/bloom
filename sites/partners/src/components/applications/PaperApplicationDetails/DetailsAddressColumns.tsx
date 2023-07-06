@@ -93,32 +93,32 @@ const DetailsAddressColumns = ({
       <GridCell>
         <FieldValue
           label={t("application.contact.streetAddress")}
-          data-testid={`${dataTestId}.streetAddress`}
+          testId={`${dataTestId}.streetAddress`}
         >
           {address.street}
         </FieldValue>
       </GridCell>
 
       <GridCell span={2}>
-        <FieldValue label={t("application.contact.apt")} data-testid={`${dataTestId}.street2`}>
+        <FieldValue label={t("application.contact.apt")} testId={`${dataTestId}.street2`}>
           {address.street2}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.contact.city")} data-testid={`${dataTestId}.city`}>
+        <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
           {address.city}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.contact.state")} data-testid={`${dataTestId}.state`}>
+        <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
           {address.state}
         </FieldValue>
       </GridCell>
 
       <GridCell>
-        <FieldValue label={t("application.contact.zip")} data-testid={`${dataTestId}.zipCode`}>
+        <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
           {address.zipCode}
         </FieldValue>
       </GridCell>
