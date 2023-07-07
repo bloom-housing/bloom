@@ -9,7 +9,6 @@ import {
   Button,
   passwordRegex,
   AppearanceStyleType,
-  setSiteAlertMessage,
   useMutate,
   AlertBox,
   Modal,
@@ -75,7 +74,6 @@ const FormUserConfirm = () => {
 
       if (response) {
         loadProfile("/")
-        setSiteAlertMessage(t(`users.accountConfirmed`), "success")
       }
     } catch (err) {
       setSubmitting(false)

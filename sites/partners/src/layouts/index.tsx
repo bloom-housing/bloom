@@ -10,10 +10,12 @@ import {
   MenuLink,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const { getToastMessage, getToastProps } = useContext(MessageContext)
   const router = useRouter()
   const currentYear = new Date().getFullYear()
   const menuLinks: MenuLink[] = []
@@ -48,13 +50,13 @@ const Layout = (props) => {
       },
     })
   }
+
   return (
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
         </Head>
-
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           title={t("nav.siteTitlePartners")}
@@ -63,9 +65,13 @@ const Layout = (props) => {
           siteHeaderWidth={"wide"}
           homeURL={"/"}
         />
-
-        <main>{props.children}</main>
-
+        <main>
+          {/* KEY is set to a random number to force a re-render. This is not ideal and I do not recommend it */}
+          <Toast {...getToastProps()} testId="toast-alert" key={Math.random()}>
+            {getToastMessage()}
+          </Toast>
+          {props.children}
+        </main>
         <SiteFooter>
           <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
           <FooterSection className="bg-black" small>

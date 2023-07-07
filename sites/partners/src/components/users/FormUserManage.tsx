@@ -15,7 +15,13 @@ import {
   Modal,
 } from "@bloom-housing/ui-components"
 import { FieldValue, Tag } from "@bloom-housing/ui-seeds"
-import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
+import {
+  RoleOption,
+  roleKeys,
+  AuthContext,
+  alertTypes,
+  MessageContext,
+} from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 
@@ -59,6 +65,7 @@ const FormUserManage = ({
   setAlertMessage,
 }: FormUserManageProps) => {
   const { userService, profile } = useContext(AuthContext)
+  const { setToast } = useContext(MessageContext)
   const jurisdictionList = profile.jurisdictions
 
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false)
@@ -224,7 +231,7 @@ const FormUserManage = ({
           body,
         })
         .then(() => {
-          setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
+          setToast(t(`users.inviteSent`), { variant: alertTypes.success, hideTimeout: 3000 })
         })
         .catch((e) => {
           if (e?.response?.status === 409) {

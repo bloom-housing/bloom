@@ -68,7 +68,7 @@ describe("Admin User Mangement Tests", () => {
       )
     })
     cy.getByTestId("invite-user").click()
-    cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
+    cy.getByTestId("toast-alert").contains("Invite sent").should("have.text", "Invite sent")
   })
 
   it("as admin user, should be able to create new jurisidictional admin", () => {
@@ -107,7 +107,7 @@ describe("Admin User Mangement Tests", () => {
       )
     })
     cy.getByTestId("invite-user").click()
-    cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
+    cy.getByTestId("toast-alert").contains("Invite sent").should("have.text", "Invite sent")
   })
 
   it("as admin user, should be able to create new partner", () => {
@@ -145,6 +145,6 @@ describe("Admin User Mangement Tests", () => {
     cy.getByTestId("listings_Alameda").first().click()
     cy.getByTestId("listings_Alameda").last().click()
     cy.getByTestId("invite-user").click()
-    cy.getByTestId("alert-box").contains("Invite sent").should("have.text", "Invite sent")
+    cy.getByTestId("toast-alert").contains("Invite sent").should("have.text", "Invite sent")
   })
 })

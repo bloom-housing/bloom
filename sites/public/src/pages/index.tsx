@@ -12,12 +12,13 @@ import {
   Icon,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -29,6 +30,7 @@ export default function Home(props: IndexProps) {
     alertType: null,
   }
   const { profile } = useContext(AuthContext)
+  const { getToastMessage, getToastProps } = useContext(MessageContext)
   const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
   useEffect(() => {
@@ -56,7 +58,10 @@ export default function Home(props: IndexProps) {
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <div className="flex absolute w-full flex-col items-center">
         <SiteAlert type="alert" className={alertClasses} />
-        <SiteAlert type="success" className={alertClasses} timeout={30000} />
+        <SiteAlert type="success" />
+        <Toast {...getToastProps()} className={alertClasses} hideTimeout={30000}>
+          {getToastMessage()}
+        </Toast>
       </div>
       {alertInfo.alertMessage && (
         <AlertBox

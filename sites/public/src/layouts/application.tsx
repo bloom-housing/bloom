@@ -11,10 +11,12 @@ import {
   t,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext, ExygyFooter } from "@bloom-housing/shared-helpers"
+import { AuthContext, ExygyFooter, MessageContext } from "@bloom-housing/shared-helpers"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const { getToastProps, getToastMessage } = useContext(MessageContext)
   const router = useRouter()
 
   const languages =
@@ -100,6 +102,7 @@ const Layout = (props) => {
           strings={{ skipToMainContent: t("t.skipToMainContent") }}
         />
         <main id="main-content" className="md:overflow-x-hidden">
+          <Toast {...getToastProps()}>{getToastMessage()}</Toast>
           {props.children}
         </main>
       </div>

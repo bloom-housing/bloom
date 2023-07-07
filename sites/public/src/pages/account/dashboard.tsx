@@ -10,10 +10,17 @@ import {
   SiteAlert,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent, AuthContext, RequireLogin } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  AuthContext,
+  RequireLogin,
+  MessageContext,
+} from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../components/shared/MetaTags"
 import { UserStatus } from "../../lib/constants"
+import { Toast } from "@bloom-housing/ui-seeds"
 
 interface DashboardProps {
   router: NextRouter
@@ -21,6 +28,7 @@ interface DashboardProps {
 
 function Dashboard(props: DashboardProps) {
   const { profile } = useContext(AuthContext)
+  const { getToastMessage, getToastProps } = useContext(MessageContext)
   const [alertMessage, setAlertMessage] = useState<string | null>(null)
 
   useEffect(() => {
@@ -59,13 +67,15 @@ function Dashboard(props: DashboardProps) {
         <MetaTags title={t("nav.myDashboard")} description="" />
         {alertMessage && (
           <AlertBox className="" onClose={() => closeAlert()} type="success">
-            {t(alertMessage)}
+            {alertMessage}
           </AlertBox>
         )}
         <section className="bg-gray-300 border-t border-gray-450">
           <div className="max-w-5xl mx-auto md:py-8">
             <SiteAlert type="success" className="md:mb-8" timeout={30000} />
-
+            <Toast {...getToastProps()} className="md:mb-8" hideTimeout={30000}>
+              {getToastMessage()}
+            </Toast>
             <div className="flex flex-wrap relative">
               <h1 className={"sr-only"}>{t("nav.myDashboard")}</h1>
               <DashBlocks>

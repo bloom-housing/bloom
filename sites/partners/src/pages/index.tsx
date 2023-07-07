@@ -155,6 +155,7 @@ export default function ListingsList() {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
       <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+
       <MetaTags title={t("nav.siteTitlePartners")} description={metaDescription} />
       <NavigationHeader title={t("nav.listings")}>
         {zipCompleted && (

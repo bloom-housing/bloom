@@ -8,7 +8,7 @@ import {
   AlertBox,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -21,6 +21,7 @@ export interface ConfirmationModalProps {
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
   const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
+  const { setToast } = useContext(MessageContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
@@ -37,7 +38,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     try {
       await resendConfirmation(email)
 
-      setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
+      setToast(t(`authentication.createAccount.emailSent`), { variant: "success" })
       setOpenModal(false)
     } catch (err) {
       const { data } = err.response || {}
@@ -52,7 +53,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         .then(() => {
           void router.push({
             pathname: "/account/dashboard",
-            query: { alert: `authentication.createAccount.accountConfirmed` },
+            query: { alert: t(`authentication.createAccount.accountConfirmed`) },
           })
           window.scrollTo(0, 0)
         })

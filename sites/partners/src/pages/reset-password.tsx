@@ -11,15 +11,15 @@ import {
   t,
   AlertBox,
   SiteAlert,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
+import { AuthContext, MessageContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {
   const router = useRouter()
   const { token } = router.query
   const { resetPassword } = useContext(AuthContext)
+  const { setToast } = useContext(MessageContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -35,9 +35,9 @@ const ResetPassword = () => {
 
     try {
       const user = await resetPassword(token.toString(), password, passwordConfirmation)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await router.push("/")
       window.scrollTo(0, 0)
+      setToast(t(`authentication.signIn.success`, { name: user.firstName }), "success")
     } catch (err) {
       const { status, data } = err.response || {}
       if (status === 400) {

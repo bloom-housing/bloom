@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
-import { t, setSiteAlertMessage, useMutate } from "@bloom-housing/ui-components"
+import { setSiteAlertMessage, t, useMutate } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
 import {
@@ -18,6 +18,7 @@ import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend
 
 const SignIn = () => {
   const { login, userService } = useContext(AuthContext)
+
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
@@ -54,8 +55,8 @@ const SignIn = () => {
 
     try {
       const user = await login(email, password)
-      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
+      setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
     } catch (error) {
       const { status } = error.response || {}
       determineNetworkError(status, error)
