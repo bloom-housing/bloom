@@ -73,6 +73,7 @@ export class ApplicationsController {
     const applications = await this.applicationsService.rawListWithFlagged(queryParams)
     return this.applicationCsvExporter.exportFromObject(
       applications,
+      queryParams.timeZone,
       queryParams.includeDemographics
     )
   }

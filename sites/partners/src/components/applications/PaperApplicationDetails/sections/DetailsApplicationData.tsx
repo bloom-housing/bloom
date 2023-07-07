@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
-import { convertDataToPst } from "../../../../lib/helpers"
+import { convertDataToLocal } from "../../../../lib/helpers"
 import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 const DetailsApplicationData = () => {
@@ -10,7 +10,7 @@ const DetailsApplicationData = () => {
   const applicationDate = useMemo(() => {
     if (!application) return null
 
-    return convertDataToPst(
+    return convertDataToLocal(
       application?.submissionDate,
       application?.submissionType || ApplicationSubmissionType.electronical
     )
