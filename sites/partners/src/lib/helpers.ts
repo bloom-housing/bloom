@@ -4,8 +4,12 @@ import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { CloudinaryUpload } from "./listings/CloudinaryUpload"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
+import tz from "dayjs/plugin/timezone"
+import advanced from "dayjs/plugin/advancedFormat"
 import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(utc)
+dayjs.extend(tz)
+dayjs.extend(advanced)
 dayjs.extend(customParseFormat)
 
 import {
@@ -21,7 +25,7 @@ export enum YesNoAnswer {
   "No" = "no",
 }
 
-type DateTimePST = {
+type DateTimeLocal = {
   hour: string
   minute: string
   second: string
@@ -42,7 +46,7 @@ export interface FormOptions {
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType) => {
+export const convertDataToLocal = (dateObj: Date, type: ApplicationSubmissionType) => {
   if (!dateObj) {
     return {
       date: t("t.n/a"),
@@ -51,9 +55,10 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
   }
 
   if (type === ApplicationSubmissionType.electronical) {
-    // convert date and time to PST (electronical applications)
-    const ptFormat = new Intl.DateTimeFormat("en-US", {
-      timeZone: "America/Los_Angeles",
+    // convert date and time to user's local timezone (electronical applications)
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const localFormat = new Intl.DateTimeFormat("en-US", {
+      timeZone: timeZone,
       hour: "numeric",
       minute: "numeric",
       second: "numeric",
@@ -63,18 +68,19 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
     })
 
     const originalDate = new Date(dateObj)
-    const ptDateParts = ptFormat.formatToParts(originalDate)
-    const timeValues = ptDateParts.reduce((acc, curr) => {
+    const dateParts = localFormat.formatToParts(originalDate)
+    const timeValues = dateParts.reduce((acc, curr) => {
       Object.assign(acc, {
         [curr.type]: curr.value,
       })
       return acc
-    }, {} as DateTimePST)
+    }, {} as DateTimeLocal)
 
     const { month, day, year, hour, minute, second, dayPeriod } = timeValues
+    const timeZoneFormatted = dayjs().tz(timeZone).format("z")
 
     const date = `${month}/${day}/${year}`
-    const time = `${hour}:${minute}:${second} ${dayPeriod} PT`
+    const time = `${hour}:${minute}:${second} ${dayPeriod} ${timeZoneFormatted}`
 
     return {
       date,

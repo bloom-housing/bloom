@@ -16,7 +16,6 @@ import {
   TimeField,
   TimeFieldValues,
   formatDateToTimeField,
-  urlRegex,
 } from "@bloom-housing/ui-components"
 
 import { TempEvent } from "../../../lib/listings/formTypes"
@@ -165,17 +164,19 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
               <GridCell>
                 <ViewItem label={t("t.url")}>
                   <Field
+                    type="url"
                     id="url"
                     name="url"
                     label={t("t.url")}
-                    placeholder={t("t.url")}
+                    placeholder={"https://"}
                     register={register}
                     readerOnly
                     error={!!errors?.url}
-                    errorMessage={t("errors.urlError")}
-                    validation={{
-                      pattern: urlRegex,
-                    }}
+                    errorMessage={
+                      errors?.url?.type === "https"
+                        ? t("errors.urlHttpsError")
+                        : t("errors.urlError")
+                    }
                   />
                 </ViewItem>
               </GridCell>
