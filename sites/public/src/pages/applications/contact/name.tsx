@@ -57,11 +57,7 @@ const ApplicationName = () => {
   if (!autofilled && clientLoaded && application.autofilled) setAutofilled(true)
 
   const LockIcon = () => {
-    return (
-      autofilled && (
-        <Icon icon={faLock} className="ml-2 text-primary" />
-      )
-    )
+    return autofilled && <Icon icon={faLock} className="ml-2 text-primary" />
   }
 
   useEffect(() => {

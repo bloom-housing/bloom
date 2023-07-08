@@ -16,16 +16,10 @@ const ManageIconSection = (props: IconContentProps) => {
     <div className={"flex justify-end"}>
       <div className={"w-max"}>
         <button onClick={props.onEdit} aria-label={"Edit"} data-testid={props.editTestId}>
-          <Icon
-            icon={faPenToSquare}
-            className={"mr-5 text-primary"}
-          />
+          <Icon icon={faPenToSquare} className={"mr-5 text-primary"} />
         </button>
         <button onClick={props.onCopy} aria-label={"Copy"} data-testid={props.copyTestId}>
-          <Icon
-            icon={faClone}
-            className={`${props.onDelete && "mr-5"} text-primary`}
-          />
+          <Icon icon={faClone} className={`${props.onDelete && "mr-5"} text-primary`} />
         </button>
         {props.onDelete && (
           <button onClick={props.onDelete} aria-label={"Delete"} data-testid={props.deleteTestId}>

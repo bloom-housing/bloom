@@ -32,10 +32,7 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
           {props.strings?.edit ?? t("t.edit")}
         </button>
       ) : (
-        <Icon
-          icon={faLock}
-          className="ml-2 absolute top-0 right-0 text-primary"
-        />
+        <Icon icon={faLock} className="ml-2 absolute top-0 right-0 text-primary" />
       )}
     </ViewItem>
   )
