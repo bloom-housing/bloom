@@ -12,7 +12,8 @@ import {
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { Icon } from "@bloom-housing/ui-seeds"
-import { faEnvelope, faHouseChimney } from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons"
+import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"

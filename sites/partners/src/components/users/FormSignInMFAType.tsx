@@ -11,7 +11,7 @@ import {
   NetworkStatus,
 } from "@bloom-housing/ui-components"
 import { Icon } from "@bloom-housing/ui-seeds"
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons"
 import type { UseFormMethods } from "react-hook-form"
 
 export type FormSignInMFAProps = {

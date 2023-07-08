@@ -13,7 +13,7 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { Icon } from "@bloom-housing/ui-seeds"
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"

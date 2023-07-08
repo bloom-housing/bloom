@@ -47,7 +47,7 @@ function Dashboard(props: DashboardProps) {
 
   const settingsIcon = (
     <span className="header-badge">
-      <Icon icon={faGear} />
+      <Icon icon={faGear} size="xl" />
     </span>
   )
 

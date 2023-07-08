@@ -14,7 +14,7 @@ import {
   emailRegex,
 } from "@bloom-housing/ui-components"
 import { Icon } from "@bloom-housing/ui-seeds"
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons"
 import { NetworkErrorReset, NetworkStatusContent } from "../../auth/catchNetworkError"
 import type { UseFormMethods } from "react-hook-form"
 
