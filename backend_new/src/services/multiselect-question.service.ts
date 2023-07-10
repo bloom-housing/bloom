@@ -43,41 +43,44 @@ export class MultiselectQuestionService {
     params: MultiselectQuestionQueryParams,
   ): Prisma.MultiselectQuestionsWhereInput {
     const filters: Prisma.MultiselectQuestionsWhereInput[] = [];
-    if (params?.filter?.length) {
-      params.filter.forEach((filter) => {
-        if (MultiselectQuestionFilterKeys.jurisdiction in filter) {
-          const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
-            $include_nulls: false,
-            value: filter[MultiselectQuestionFilterKeys.jurisdiction],
-            key: MultiselectQuestionFilterKeys.jurisdiction,
-            caseSensitive: true,
-          });
-          filters.push({
-            OR: builtFilter.map((filt) => ({
-              jurisdictions: {
-                some: {
-                  id: filt,
-                },
-              },
-            })),
-          });
-        } else if (MultiselectQuestionFilterKeys.applicationSection in filter) {
-          const builtFilter = buildFilter({
-            $comparison: filter.$comparison,
-            $include_nulls: false,
-            value: filter[MultiselectQuestionFilterKeys.applicationSection],
-            key: MultiselectQuestionFilterKeys.applicationSection,
-            caseSensitive: true,
-          });
-          filters.push({
-            OR: builtFilter.map((filt) => ({
-              applicationSection: filt,
-            })),
-          });
-        }
-      });
+    if (!params?.filter?.length) {
+      return {
+        AND: filters,
+      };
     }
+    params.filter.forEach((filter) => {
+      if (MultiselectQuestionFilterKeys.jurisdiction in filter) {
+        const builtFilter = buildFilter({
+          $comparison: filter.$comparison,
+          $include_nulls: false,
+          value: filter[MultiselectQuestionFilterKeys.jurisdiction],
+          key: MultiselectQuestionFilterKeys.jurisdiction,
+          caseSensitive: true,
+        });
+        filters.push({
+          OR: builtFilter.map((filt) => ({
+            jurisdictions: {
+              some: {
+                id: filt,
+              },
+            },
+          })),
+        });
+      } else if (MultiselectQuestionFilterKeys.applicationSection in filter) {
+        const builtFilter = buildFilter({
+          $comparison: filter.$comparison,
+          $include_nulls: false,
+          value: filter[MultiselectQuestionFilterKeys.applicationSection],
+          key: MultiselectQuestionFilterKeys.applicationSection,
+          caseSensitive: true,
+        });
+        filters.push({
+          OR: builtFilter.map((filt) => ({
+            applicationSection: filt,
+          })),
+        });
+      }
+    });
     return {
       AND: filters,
     };
