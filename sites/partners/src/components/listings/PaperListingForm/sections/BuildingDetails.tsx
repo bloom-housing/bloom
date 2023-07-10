@@ -5,12 +5,12 @@ import {
   GridSection,
   GridCell,
   Field,
-  ViewItem,
   Select,
   FieldGroup,
   ListingMap,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
 import GeocodeService, {
@@ -211,10 +211,16 @@ const BuildingDetails = ({
           <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
         <GridCell>
-          <ViewItem
+          <FieldValue
             label={t("application.contact.state")}
-            className={"mb-0"}
-            error={fieldHasError(errors?.buildingAddress?.state)}
+            className={`mb-0 ${
+              getAddressErrorMessage(
+                "buildingAddress.state",
+                fieldMessage(errors?.buildingAddress?.state)
+              )
+                ? "field-value-error"
+                : ""
+            }`}
           >
             <Select
               id={`buildingAddress.state`}
@@ -240,7 +246,7 @@ const BuildingDetails = ({
                   fieldHasError(errors?.buildingAddress?.state) && clearErrors("buildingAddress"),
               }}
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
           <Field
@@ -278,30 +284,31 @@ const BuildingDetails = ({
       </GridSection>
       <GridSection columns={3}>
         <GridCell span={2}>
-          <ViewItem label={t("listings.mapPreview")} />
-          {displayMapPreview() ? (
-            <ListingMap
-              listingName={listing?.name}
-              address={{
-                city: buildingAddress.city,
-                state: buildingAddress.state,
-                street: buildingAddress.street,
-                zipCode: buildingAddress.zipCode,
-                latitude: latLong.latitude,
-                longitude: latLong.longitude,
-              }}
-              enableCustomPinPositioning={getValues("mapPinPosition") === "custom"}
-              setCustomMapPositionChosen={setCustomMapPositionChosen}
-              setLatLong={setLatLong}
-            />
-          ) : (
-            <div
-              className={"w-full bg-gray-400 p-3 flex items-center justify-center"}
-              style={{ height: "400px" }}
-            >
-              {t("listings.mapPreviewNoAddress")}
-            </div>
-          )}
+          <FieldValue label={t("listings.mapPreview")}>
+            {displayMapPreview() ? (
+              <ListingMap
+                listingName={listing?.name}
+                address={{
+                  city: buildingAddress.city,
+                  state: buildingAddress.state,
+                  street: buildingAddress.street,
+                  zipCode: buildingAddress.zipCode,
+                  latitude: latLong.latitude,
+                  longitude: latLong.longitude,
+                }}
+                enableCustomPinPositioning={getValues("mapPinPosition") === "custom"}
+                setCustomMapPositionChosen={setCustomMapPositionChosen}
+                setLatLong={setLatLong}
+              />
+            ) : (
+              <div
+                className={"w-full bg-gray-400 p-3 flex items-center justify-center"}
+                style={{ height: "400px" }}
+              >
+                {t("listings.mapPreviewNoAddress")}
+              </div>
+            )}
+          </FieldValue>
         </GridCell>
         <GridCell>
           <GridCell>

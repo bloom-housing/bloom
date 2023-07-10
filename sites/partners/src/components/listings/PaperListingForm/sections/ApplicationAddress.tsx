@@ -7,11 +7,11 @@ import {
   Field,
   GridCell,
   Select,
-  ViewItem,
   DateField,
   FieldGroup,
   TimeField,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { YesNoAnswer, isNullOrUndefined, fieldHasError } from "../../../../lib/helpers"
@@ -385,7 +385,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   />
                 </GridCell>
                 <GridCell span={2}>
-                  <ViewItem label={t("application.contact.state")} className="mb-0">
+                  <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationMailingAddress.state`}
                       name={`applicationMailingAddress.state`}
@@ -410,7 +410,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                         onChange: () => clearErrors("applicationMailingAddress"),
                       }}
                     />
-                  </ViewItem>
+                  </FieldValue>
                 </GridCell>
                 <GridCell span={2}>
                   <Field
@@ -493,7 +493,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   />
                 </GridCell>
                 <GridCell span={2}>
-                  <ViewItem label={t("application.contact.state")} className="mb-0">
+                  <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationPickUpAddress.state`}
                       name={`applicationPickUpAddress.state`}
@@ -517,7 +517,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                         onChange: () => clearErrors("applicationPickUpAddress"),
                       }}
                     />
-                  </ViewItem>
+                  </FieldValue>
                 </GridCell>
                 <GridCell span={2}>
                   <Field
@@ -614,7 +614,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   />
                 </GridCell>
                 <GridCell span={2}>
-                  <ViewItem label={t("application.contact.state")} className="mb-0">
+                  <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationDropOffAddress.state`}
                       name={`applicationDropOffAddress.state`}
@@ -638,7 +638,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                         onChange: () => clearErrors("applicationDropOffAddress"),
                       }}
                     />
-                  </ViewItem>
+                  </FieldValue>
                 </GridCell>
                 <GridCell span={2}>
                   <Field

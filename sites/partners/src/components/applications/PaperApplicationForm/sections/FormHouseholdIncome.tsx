@@ -1,5 +1,6 @@
 import React from "react"
-import { t, GridSection, ViewItem, GridCell, Field, Select } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Field, Select } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../../lib/helpers"
@@ -16,7 +17,7 @@ const FormHouseholdIncome = () => {
     <GridSection title={t("application.details.householdIncome")} grid={false} separator>
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.add.incomePeriod")}>
+          <FieldValue label={t("application.add.incomePeriod")}>
             <div className="flex h-12 items-center">
               <Field
                 id="application.incomePeriodYear"
@@ -50,13 +51,13 @@ const FormHouseholdIncome = () => {
                 }}
               />
             </div>
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
 
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.details.annualIncome")}>
+          <FieldValue label={t("application.details.annualIncome")}>
             <Field
               id="incomeYear"
               type="number"
@@ -67,11 +68,11 @@ const FormHouseholdIncome = () => {
               disabled={incomePeriodValue !== IncomePeriod.perYear}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.monthlyIncome")}>
+          <FieldValue label={t("application.details.monthlyIncome")}>
             <Field
               id="incomeMonth"
               type="number"
@@ -82,11 +83,11 @@ const FormHouseholdIncome = () => {
               disabled={incomePeriodValue !== IncomePeriod.perMonth}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.vouchers")}>
+          <FieldValue label={t("application.details.vouchers")}>
             <Select
               id="application.incomeVouchers"
               name="application.incomeVouchers"
@@ -98,7 +99,7 @@ const FormHouseholdIncome = () => {
               options={[YesNoAnswer.Yes, YesNoAnswer.No]}
               keyPrefix="t"
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
     </GridSection>

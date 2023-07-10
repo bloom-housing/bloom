@@ -6,7 +6,6 @@ import {
   Form,
   GridSection,
   GridCell,
-  ViewItem,
   Field,
   Select,
   useMutate,
@@ -16,6 +15,7 @@ import {
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
@@ -334,7 +334,7 @@ const FormUserManage = ({
             columns={4}
           >
             <GridCell>
-              <ViewItem label={t("authentication.createAccount.firstName")}>
+              <FieldValue label={t("authentication.createAccount.firstName")}>
                 <Field
                   id="firstName"
                   name="firstName"
@@ -347,11 +347,11 @@ const FormUserManage = ({
                   type="text"
                   readerOnly
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
 
             <GridCell>
-              <ViewItem label={t("authentication.createAccount.lastName")}>
+              <FieldValue label={t("authentication.createAccount.lastName")}>
                 <Field
                   id="lastName"
                   name="lastName"
@@ -364,11 +364,11 @@ const FormUserManage = ({
                   type="text"
                   readerOnly
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
 
             <GridCell>
-              <ViewItem label={t("t.email")}>
+              <FieldValue label={t("t.email")}>
                 <Field
                   id="email"
                   name="email"
@@ -381,11 +381,11 @@ const FormUserManage = ({
                   type="email"
                   readerOnly
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
 
             <GridCell>
-              <ViewItem label={t("t.role")}>
+              <FieldValue label={t("t.role")}>
                 <Select
                   id="role"
                   name="role"
@@ -407,7 +407,7 @@ const FormUserManage = ({
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           <JurisdictionAndListingSelection

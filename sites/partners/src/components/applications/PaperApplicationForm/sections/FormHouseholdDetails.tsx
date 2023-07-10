@@ -1,6 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, ViewItem, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
 import { Accessibility, Unit, UnitType } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../../lib/helpers"
@@ -53,7 +54,7 @@ const FormHouseholdDetails = ({
   return (
     <GridSection title={t("application.review.householdDetails")} separator>
       <GridCell>
-        <ViewItem label={t("application.details.preferredUnitSizes")}>
+        <FieldValue label={t("application.details.preferredUnitSizes")}>
           <FieldGroup
             type="checkbox"
             name="application.preferredUnit"
@@ -62,10 +63,10 @@ const FormHouseholdDetails = ({
             fieldGroupClassName="grid grid-cols-1 mt-4"
             fieldClassName="ml-0"
           />
-        </ViewItem>
+        </FieldValue>
       </GridCell>
       <GridCell>
-        <ViewItem label={t("application.details.adaPriorities")}>
+        <FieldValue label={t("application.details.adaPriorities")}>
           <fieldset>
             <legend className="sr-only">{t("application.details.adaPriorities")}</legend>
             <FieldGroup
@@ -77,10 +78,10 @@ const FormHouseholdDetails = ({
               fieldClassName="ml-0"
             />
           </fieldset>
-        </ViewItem>
+        </FieldValue>
       </GridCell>
       <GridCell>
-        <ViewItem label={t("application.household.expectingChanges.title")}>
+        <FieldValue label={t("application.household.expectingChanges.title")}>
           <div className="flex h-12 items-center">
             <Field
               id="application.householdExpectingChangesYes"
@@ -106,10 +107,10 @@ const FormHouseholdDetails = ({
               }}
             />
           </div>
-        </ViewItem>
+        </FieldValue>
       </GridCell>
       <GridCell>
-        <ViewItem label={t("application.household.householdStudent.title")}>
+        <FieldValue label={t("application.household.householdStudent.title")}>
           <div className="flex h-12 items-center">
             <Field
               id="application.householdStudentYes"
@@ -135,7 +136,7 @@ const FormHouseholdDetails = ({
               }}
             />
           </div>
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

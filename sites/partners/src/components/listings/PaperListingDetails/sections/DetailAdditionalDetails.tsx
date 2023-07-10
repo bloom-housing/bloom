@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -15,23 +16,23 @@ const DetailAdditionalDetails = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="requiredDocuments" label={t("listings.requiredDocuments")}>
+          <FieldValue id="requiredDocuments" label={t("listings.requiredDocuments")}>
             {getDetailFieldString(listing.requiredDocuments)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="programRules" label={t("listings.importantProgramRules")}>
+          <FieldValue id="programRules" label={t("listings.importantProgramRules")}>
             {getDetailFieldString(listing.programRules)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="specialNotes" label={t("listings.specialNotes")}>
+          <FieldValue id="specialNotes" label={t("listings.specialNotes")}>
             {getDetailFieldString(listing.specialNotes)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
     </GridSection>

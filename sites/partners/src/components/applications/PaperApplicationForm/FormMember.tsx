@@ -3,7 +3,6 @@ import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   DOBField,
   Field,
@@ -14,6 +13,7 @@ import {
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../../lib/helpers"
@@ -115,7 +115,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("application.review.householdDetails")} columns={4}>
           <GridCell>
-            <ViewItem label={t("application.name.firstName")}>
+            <FieldValue label={t("application.name.firstName")}>
               <Field
                 id="firstName"
                 name="firstName"
@@ -124,10 +124,10 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 register={register}
                 readerOnly
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("application.name.middleName")}>
+            <FieldValue label={t("application.name.middleName")}>
               <Field
                 id="middleName"
                 name="middleName"
@@ -136,10 +136,10 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 register={register}
                 readerOnly
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("application.name.lastName")}>
+            <FieldValue label={t("application.name.lastName")}>
               <Field
                 id="lastName"
                 name="lastName"
@@ -148,10 +148,10 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 register={register}
                 readerOnly
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("application.household.member.dateOfBirth")}>
+            <FieldValue label={t("application.household.member.dateOfBirth")}>
               <DOBField
                 id="dateOfBirth"
                 name="dateOfBirth"
@@ -161,11 +161,11 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 label={t("application.name.yourDateOfBirth")}
                 readerOnly
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
 
           <GridCell>
-            <ViewItem label={t("t.relationship")}>
+            <FieldValue label={t("t.relationship")}>
               <Select
                 id="relationship"
                 name="relationship"
@@ -176,11 +176,11 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 options={relationshipKeys}
                 keyPrefix="application.form.options.relationship"
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
 
           <GridCell>
-            <ViewItem label={t("application.add.sameAddressAsPrimary")}>
+            <FieldValue label={t("application.add.sameAddressAsPrimary")}>
               <FieldGroup
                 name="sameAddress"
                 type="radio"
@@ -189,11 +189,11 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
 
           <GridCell>
-            <ViewItem label={t("application.details.workInRegion")}>
+            <FieldValue label={t("application.details.workInRegion")}>
               <FieldGroup
                 name="workInRegion"
                 type="radio"
@@ -202,7 +202,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
 

@@ -1,6 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, ViewItem, GridCell, Field } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Field } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { YesNoAnswer } from "../../../../lib/helpers"
 
 const FormTerms = () => {
@@ -11,7 +12,7 @@ const FormTerms = () => {
   return (
     <GridSection title={t("application.review.terms.title")} separator>
       <GridCell>
-        <ViewItem label={t("application.details.signatureOnTerms")}>
+        <FieldValue label={t("application.details.signatureOnTerms")}>
           <div className="flex h-12 items-center">
             <Field
               id="application.acceptedTermsYes"
@@ -37,7 +38,7 @@ const FormTerms = () => {
               }}
             />
           </div>
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

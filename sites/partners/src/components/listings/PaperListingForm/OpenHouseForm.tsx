@@ -6,7 +6,6 @@ import {
   AppearanceStyleType,
   t,
   GridSection,
-  ViewItem,
   GridCell,
   Field,
   Textarea,
@@ -17,7 +16,7 @@ import {
   TimeFieldValues,
   formatDateToTimeField,
 } from "@bloom-housing/ui-components"
-
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { TempEvent } from "../../../lib/listings/formTypes"
 import { createDate, createTime } from "../../../lib/helpers"
 import dayjs from "dayjs"
@@ -102,7 +101,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("listings.sections.openHouse")} columns={3}>
           <GridCell>
-            <ViewItem label={t("t.date")}>
+            <FieldValue label={t("t.date")}>
               <DateField
                 label={t("t.date")}
                 name="date"
@@ -115,10 +114,10 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 required
                 defaultDate={defaultValues?.date}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("t.startTime")}>
+            <FieldValue label={t("t.startTime")}>
               <TimeField
                 label={t("t.startTime")}
                 name="startTime"
@@ -130,10 +129,10 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 required
                 defaultValues={defaultValues?.startTime}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("t.end")}>
+            <FieldValue label={t("t.end")}>
               <TimeField
                 label={t("t.end")}
                 name="endTime"
@@ -145,12 +144,12 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 required
                 defaultValues={defaultValues?.endTime}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
             <GridSection columns={1}>
               <GridCell>
-                <ViewItem label={t("t.label")}>
+                <FieldValue label={t("t.label")}>
                   <Field
                     id="label"
                     name="label"
@@ -159,10 +158,10 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                     register={register}
                     readerOnly
                   />
-                </ViewItem>
+                </FieldValue>
               </GridCell>
               <GridCell>
-                <ViewItem label={t("t.url")}>
+                <FieldValue label={t("t.url")}>
                   <Field
                     type="url"
                     id="url"
@@ -178,13 +177,13 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                         : t("errors.urlError")
                     }
                   />
-                </ViewItem>
+                </FieldValue>
               </GridCell>
             </GridSection>
           </GridCell>
 
           <GridCell>
-            <ViewItem label={t("listings.events.openHouseNotes")}>
+            <FieldValue label={t("listings.events.openHouseNotes")}>
               <Textarea
                 id="note"
                 name="note"
@@ -195,7 +194,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 note={t("t.optional")}
                 rows={5}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
       </div>

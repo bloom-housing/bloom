@@ -1600,10 +1600,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.2.1.tgz#aac4cb9e5f7c05cd1d2e50f53881bc3bcae77d41"
-  integrity sha512-Wx/5j922g6qmhgDquGXCdb8Gunp0OdiX826PQk+yxwfFm/UtFo+W6WSEvMzU1/X8A+juSckL/V3FHbyTzUjPFg==
+"@bloom-housing/ui-seeds@^1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.7.4.tgz#33526b2335b2d46e056315f74591e6b767b08f2c"
+  integrity sha512-AhnDOs8u/4uhOLQCn/abtJA2n+OJdNj7Gy1NW/z9Ax37uV6AQ0T3phJt1iciVkGGsR1MsWnE9TTItyJ5xdEUsg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/free-regular-svg-icons" "^6.3.0"
@@ -1617,6 +1617,7 @@
     markdown-to-jsx "^6.11.4"
     react "^18.2.0"
     react-dom "^18.2.0"
+    react-tabs "^6.0.0"
     typescript "^4.4.2"
 
 "@cnakazawa/watch@^1.0.3":
@@ -15490,6 +15491,14 @@ react-tabs@^3.2.2:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/react-tabs/-/react-tabs-3.2.3.tgz#ccbb3e1241ad3f601047305c75db661239977f2f"
   integrity sha512-jx325RhRVnS9DdFbeF511z0T0WEqEoMl1uCE3LoZ6VaZZm7ytatxbum0B8bCTmaiV0KsU+4TtLGTGevCic7SWg==
+  dependencies:
+    clsx "^1.1.0"
+    prop-types "^15.5.0"
+
+react-tabs@^6.0.0:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/react-tabs/-/react-tabs-6.0.1.tgz#3fdb6fd7408f38adfa7b1815b607cd5228e76c8b"
+  integrity sha512-XE5D/iCcwUsr06wf6fWrjA/HbUaj3G2+6NMVJygZuKALHkWYp+D3ZPcG2VctuaOHHzMU48eSOuxwBALBnuXldA==
   dependencies:
     clsx "^1.1.0"
     prop-types "^15.5.0"
