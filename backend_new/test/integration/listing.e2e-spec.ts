@@ -33,7 +33,7 @@ describe('Listing Controller Tests', () => {
     jurisdictionAId = jurisdiction.id;
   });
 
-  it('list test no params no data', async () => {
+  it('should not get listings from list endpoint when no params are sent', async () => {
     const res = await request(app.getHttpServer()).get('/listings').expect(200);
 
     expect(res.body).toEqual({
@@ -48,7 +48,7 @@ describe('Listing Controller Tests', () => {
     });
   });
 
-  it('list test no params some data', async () => {
+  it('should get listings from list endpoint when no params are sent', async () => {
     await prisma.listings.create({
       data: listingFactory(10, jurisdictionAId),
     });
@@ -74,7 +74,7 @@ describe('Listing Controller Tests', () => {
     expect(items[1].name).toEqual('name: 50');
   });
 
-  it('list test params no data', async () => {
+  it('should not get listings from list endpoint when params are sent', async () => {
     const queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
@@ -104,7 +104,7 @@ describe('Listing Controller Tests', () => {
     });
   });
 
-  it('list test params some data', async () => {
+  it('should get listings from list endpoint when params are sent', async () => {
     await prisma.listings.create({
       data: listingFactory(11, jurisdictionAId),
     });
@@ -172,7 +172,7 @@ describe('Listing Controller Tests', () => {
     expect(res.body.items[0].name).toEqual('name: 51');
   });
 
-  it('retrieveListings test', async () => {
+  it('should get listings from retrieveListings endpoint', async () => {
     const listingA = await prisma.listings.create({
       data: listingFactory(10, jurisdictionAId),
       include: {
