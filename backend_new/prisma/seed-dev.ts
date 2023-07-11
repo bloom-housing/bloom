@@ -1,4 +1,5 @@
 import {
+  ListingsStatusEnum,
   MultiselectQuestionsApplicationSectionEnum,
   PrismaClient,
 } from '@prisma/client';
@@ -9,6 +10,9 @@ import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-
 import { listingFactory } from './seed-helpers/listing-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
+import { randomInt } from 'node:crypto';
+
+const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
 const createMultiselect = async (
   jurisdictionId: string,
@@ -53,6 +57,7 @@ export const devSeeding = async (prismaClient: PrismaClient) => {
       numberOfUnits: index,
       includeBuildingFeatures: index > 1,
       includeEligibilityRules: index > 2,
+      status: listingStatusEnumArray[randomInt(listingStatusEnumArray.length)],
       multiselectQuestions:
         index > 0 ? multiselectQuestions.slice(0, index - 1) : [],
     });

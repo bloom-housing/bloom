@@ -13,6 +13,11 @@ import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { unitAccessibilityPriorityTypeFactoryAll } from './seed-helpers/unit-accessibility-priority-type-factory';
 import { multiselectQuestionFactory } from './seed-helpers/multiselect-question-factory';
+import {
+  lincolnMemorial,
+  washingtonMonument,
+  whiteHouse,
+} from './seed-helpers/address-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -137,6 +142,9 @@ export const stagingSeed = async (
         waitlistOpenSpots: null,
         customMapPin: false,
         publishedAt: new Date(),
+        listingsBuildingAddress: {
+          create: whiteHouse,
+        },
         listingsApplicationPickUpAddress: undefined,
         listingsLeasingAgentAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
@@ -356,9 +364,21 @@ export const stagingSeed = async (
         waitlistOpenSpots: null,
         customMapPin: false,
         publishedAt: new Date(),
-        listingsApplicationPickUpAddress: undefined,
-        listingsApplicationDropOffAddress: undefined,
-        listingsApplicationMailingAddress: undefined,
+        listingsBuildingAddress: {
+          create: whiteHouse,
+        },
+        listingsApplicationMailingAddress: {
+          create: lincolnMemorial,
+        },
+        listingsApplicationPickUpAddress: {
+          create: washingtonMonument,
+        },
+        listingsLeasingAgentAddress: {
+          create: lincolnMemorial,
+        },
+        listingsApplicationDropOffAddress: {
+          create: washingtonMonument,
+        },
         reservedCommunityTypes: undefined,
         listingImages: {
           create: [
@@ -536,7 +556,7 @@ export const stagingSeed = async (
         waitlistMaxSize: null,
         whatToExpect:
           'Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.',
-        status: ListingsStatusEnum.active,
+        status: ListingsStatusEnum.pending,
         reviewOrderType: ReviewOrderTypeEnum.waitlist,
         displayWaitlistSize: false,
         reservedCommunityDescription: null,

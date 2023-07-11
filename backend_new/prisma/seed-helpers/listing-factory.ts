@@ -3,6 +3,7 @@ import {
   AmiChart,
   MultiselectQuestions,
   PrismaClient,
+  ListingsStatusEnum,
 } from '@prisma/client';
 import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
@@ -15,6 +16,7 @@ export const listingFactory = async (
   optionalParams?: {
     amiChart?: AmiChart;
     numberOfUnits?: number;
+    status?: ListingsStatusEnum;
     units?: Prisma.UnitsCreateWithoutListingsInput[];
     listing?: Prisma.ListingsCreateInput;
     includeBuildingFeatures?: boolean;
@@ -34,6 +36,7 @@ export const listingFactory = async (
     createdAt: new Date(),
     assets: [],
     name: randomName(),
+    status: optionalParams?.status || ListingsStatusEnum.active,
     displayWaitlistSize: Math.random() < 0.5,
     listingsBuildingAddress: {
       create: addressFactory(),
