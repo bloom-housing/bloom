@@ -51,7 +51,7 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   @IsEnum(ApplicationOrderByKeys, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @Transform((value: string | undefined) =>
+  @Transform(({ value }) =>
     value
       ? ApplicationOrderByKeys[value]
         ? ApplicationOrderByKeys[value]
@@ -72,7 +72,7 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   @IsEnum(OrderByEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @Transform((value: string | undefined) => (value ? value : OrderByEnum.DESC))
+  @Transform(({ value }) => (value ? value : OrderByEnum.DESC))
   order?: OrderByEnum;
 
   @Expose()
@@ -83,7 +83,7 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
-    (value: string | undefined) => {
+    ({ value }) => {
       switch (value) {
         case 'true':
           return true;
