@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
@@ -81,6 +81,8 @@ export default function Home(props: IndexProps) {
         subheader={t("welcome.useDoorway")}
         body={
           <span>
+            {t("welcome.moreListingsComing")}
+            <br />
             {t("welcome.useDoorwayBAHFAtext")}
             <br />
             <a
