@@ -26,14 +26,14 @@ describe('AmiChart Controller Tests', () => {
     await app.init();
 
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(10),
+      data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdictionA.id;
   });
 
   it('testing list endpoint', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(11),
+      data: jurisdictionFactory(),
     });
     const amiChartA = await prisma.amiChart.create({
       data: amiChartFactory(10, jurisdictionAId),
@@ -103,7 +103,7 @@ describe('AmiChart Controller Tests', () => {
       .put(`/amiCharts/${amiChartA.id}`)
       .send({
         id: amiChartA.id,
-        name: 'name: 11',
+        name: 'updated name',
         items: [
           {
             percentOfAmi: 80,
@@ -114,7 +114,7 @@ describe('AmiChart Controller Tests', () => {
       } as AmiChartUpdate)
       .expect(200);
 
-    expect(res.body.name).toEqual('name: 11');
+    expect(res.body.name).toEqual('updated name');
     expect(res.body.items).toEqual([
       {
         percentOfAmi: 80,

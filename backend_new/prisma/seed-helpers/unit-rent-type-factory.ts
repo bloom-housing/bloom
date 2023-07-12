@@ -1,12 +1,10 @@
 import { Prisma, UnitRentTypeEnum } from '@prisma/client';
+import { randomInt } from 'crypto';
 
 export const unitRentTypeFactory = (
-  i: number,
+  type?: UnitRentTypeEnum,
 ): Prisma.UnitRentTypesCreateInput => ({
-  ...unitRentTypeArray[i % unitRentTypeArray.length],
+  name: type || unitRentTypeArray[randomInt(unitRentTypeArray.length)],
 });
 
-export const unitRentTypeArray = [
-  { name: UnitRentTypeEnum.fixed },
-  { name: UnitRentTypeEnum.percentageOfIncome },
-];
+export const unitRentTypeArray = Object.values(UnitRentTypeEnum);
