@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { Prisma, UserAccounts, UserRoles } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { Compare } from '../dtos/shared/base-filter.dto';
-import { UserFilterKeys } from '../enums/user_accounts/filter-key-enum';
 
 type filter = {
   $comparison: Compare;
@@ -15,18 +14,11 @@ type filter = {
   Because the where clause is specific to each model we are working with this has to be very generic.
   It only constructs the actual body of the where statement, how that clause is used must be managed by the service calling this helper function
 */
-export function buildFilter(
-  filter: filter,
-  user?: UserAccounts & { roles: UserRoles },
-): any {
+export function buildFilter(filter: filter): any {
   const toReturn = [];
   const comparison = filter['$comparison'];
   const includeNulls = filter['$include_nulls'];
   const filterValue = filter.value;
-
-  if (filter.key === UserFilterKeys.isPortalUser) {
-    // TODO: addIsPortalUserQuery(filter.value, user);
-  }
 
   if (comparison === Compare.IN) {
     toReturn.push({

@@ -8,7 +8,7 @@ import { UnitAccessibilityPriorityTypeServiceModule } from './modules/unit-acces
 import { UnitTypeModule } from './modules/unit-type.module';
 import { UnitRentTypeModule } from './modules/unit-rent-type.module';
 import { JurisdictionModule } from './modules/jurisdiction.module';
-
+import { UserModule } from './modules/user.module';
 @Module({
   imports: [
     ListingModule,
@@ -18,6 +18,7 @@ import { JurisdictionModule } from './modules/jurisdiction.module';
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -29,6 +30,7 @@ import { JurisdictionModule } from './modules/jurisdiction.module';
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
+    UserModule,
   ],
 })
 export class AppModule {}

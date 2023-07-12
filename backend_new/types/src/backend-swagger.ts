@@ -1006,6 +1006,94 @@ export class JurisdictionsService {
   }
 }
 
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get a paginated set of users
+   */
+  list(
+    params: {
+      /**  */
+      page?: number;
+      /**  */
+      limit?: number | 'all';
+      /**  */
+      isPartner?: boolean;
+      /**  */
+      isPortalUser?: boolean;
+      /**  */
+      search?: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<PaginatedUser> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/list';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+      configs.params = {
+        page: params['page'],
+        limit: params['limit'],
+        isPartner: params['isPartner'],
+        isPortalUser: params['isPortalUser'],
+        search: params['search'],
+      };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -1522,6 +1610,102 @@ export interface Jurisdiction {
   enableUtilitiesIncluded: boolean;
 }
 
+export interface UserRole {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  isAdmin?: boolean;
+
+  /**  */
+  isJurisdictionalAdmin?: boolean;
+
+  /**  */
+  isPartner?: boolean;
+}
+
+export interface User {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  passwordUpdatedAt: Date;
+
+  /**  */
+  passwordValidForDays: number;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob?: Date;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  listings: IdDTO[];
+
+  /**  */
+  userRoles?: UserRole;
+
+  /**  */
+  language?: LanguagesEnum;
+
+  /**  */
+  jurisdictions: IdDTO[];
+
+  /**  */
+  mfaEnabled?: boolean;
+
+  /**  */
+  lastLoginAt?: Date;
+
+  /**  */
+  failedLoginAttemptsCount?: number;
+
+  /**  */
+  phoneNumberVerified?: boolean;
+
+  /**  */
+  agreedToTermsOfService: boolean;
+
+  /**  */
+  hitConfirmationURL?: Date;
+
+  /**  */
+  activeAccessToken?: string;
+
+  /**  */
+  activeRefreshToken?: string;
+}
+
+export interface PaginatedUser {
+  /**  */
+  items: User[];
+}
+
 export enum ListingViews {
   'fundamentals' = 'fundamentals',
   'base' = 'base',
@@ -1594,4 +1778,12 @@ export enum UnitAccessibilityPriorityTypeEnum {
 export enum UnitRentTypeEnum {
   'fixed' = 'fixed',
   'percentageOfIncome' = 'percentageOfIncome',
+}
+
+export enum LanguagesEnum {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh',
+  'tl' = 'tl',
 }

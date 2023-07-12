@@ -2,6 +2,7 @@ import {
   shouldPaginate,
   calculateSkip,
   calculateTake,
+  buildPaginationMetaInfo,
 } from '../../../src/utilities/pagination-helpers';
 describe('Testing pagination helpers', () => {
   describe('Testing shouldPaginate', () => {
@@ -35,6 +36,37 @@ describe('Testing pagination helpers', () => {
     });
     it('should return limit for numeric limit', () => {
       expect(calculateTake(1)).toBe(1);
+    });
+  });
+  describe('Testing buildPaginationMetaInfo', () => {
+    it('should return 1 page for 1 full page', () => {
+      expect(buildPaginationMetaInfo({ limit: 10, page: 1 }, 10, 10)).toEqual({
+        currentPage: 1,
+        itemCount: 10,
+        itemsPerPage: 10,
+        totalItems: 10,
+        totalPages: 1,
+      });
+    });
+    it('should return 2 page for 1 full page', () => {
+      expect(buildPaginationMetaInfo({ limit: 10, page: 1 }, 20, 10)).toEqual({
+        currentPage: 1,
+        itemCount: 10,
+        itemsPerPage: 10,
+        totalItems: 20,
+        totalPages: 2,
+      });
+    });
+    it('should return all records for unpaginated', () => {
+      expect(
+        buildPaginationMetaInfo({ limit: 'all', page: 1 }, 10, 10),
+      ).toEqual({
+        currentPage: 1,
+        itemCount: 10,
+        itemsPerPage: 10,
+        totalItems: 10,
+        totalPages: 1,
+      });
     });
   });
 });

@@ -1,3 +1,5 @@
+import { PaginationMeta } from '../dtos/shared/pagination.dto';
+
 /*
   takes in the params for limit and page
   responds true if we should account for pagination
@@ -25,4 +27,36 @@ export const calculateSkip = (limit?: number | 'all', page?: number) => {
 */
 export const calculateTake = (limit?: number | 'all') => {
   return limit !== 'all' ? limit : undefined;
+};
+
+interface paginationMetaParams {
+  limit?: number | 'all';
+  page?: number;
+}
+
+/*
+  takes in params for limit and page, the results from the "count" query (the total number of records that meet whatever criteria) and the current "page" of record's length
+  responds with the meta info needed for the pagination meta info section
+*/
+export const buildPaginationMetaInfo = (
+  params: paginationMetaParams,
+  count: number,
+  recordArrayLength: number,
+): PaginationMeta => {
+  const isPaginated = shouldPaginate(params.limit, params.page);
+  const itemsPerPage =
+    isPaginated && params.limit !== 'all' ? params.limit : recordArrayLength;
+  const totalItems = isPaginated ? count : recordArrayLength;
+
+  const paginationInfo = {
+    currentPage: isPaginated ? params.page : 1,
+    itemCount: recordArrayLength,
+    itemsPerPage: itemsPerPage,
+    totalItems: totalItems,
+    totalPages: Math.ceil(
+      totalItems / (itemsPerPage ? itemsPerPage : totalItems),
+    ),
+  };
+
+  return paginationInfo;
 };
