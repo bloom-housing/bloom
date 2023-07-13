@@ -4,8 +4,6 @@ import { t } from "@bloom-housing/ui-components"
 import { MetaTags } from "../components/shared/MetaTags"
 import ListingsSearchCombined, {
   locations,
-  bedroomOptions,
-  bathroomOptions,
 } from "../components/listings/search/ListingsSearchCombined"
 import { FormOption } from "../components/listings/search/ListingsSearchModal"
 import { runtimeConfig } from "../lib/runtime-config"
@@ -70,8 +68,6 @@ export async function getServerSideProps() {
       // show Bloom counties by default
       initialSearch:
         "counties:Alameda,Contra Costa,Marin,Napa,San Francisco,San Mateo,Santa Clara,Solano,Sonoma",
-      bedrooms: bedroomOptions,
-      bathrooms: bathroomOptions,
       locations: locations,
     },
   }

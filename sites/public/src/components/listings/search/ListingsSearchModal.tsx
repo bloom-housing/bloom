@@ -11,6 +11,7 @@ import {
   FieldSingle,
 } from "@bloom-housing/doorway-ui-components"
 import { useForm } from "react-hook-form"
+import { numericSearchFieldGenerator } from "./helpers"
 
 const inputSectionStyle: React.CSSProperties = {
   margin: "0px 15px",
@@ -141,6 +142,32 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
     // console.log(`${name} has been set to ${value}`) // uncomment to debug
   }
 
+  const translatedBedroomOptions: FormOption[] = [
+    {
+      label: t("listings.unitTypes.any"),
+      value: null,
+    },
+    {
+      label: t("listings.unitTypes.studio"),
+      value: "0",
+    },
+  ]
+
+  const translatedBathroomOptions: FormOption[] = [
+    {
+      label: t("listings.unitTypes.any"),
+      value: null,
+    },
+  ]
+
+  const bedroomOptions: FormOption[] = [
+    ...translatedBedroomOptions,
+    ...numericSearchFieldGenerator(1, 4),
+  ]
+  const bathroomOptions: FormOption[] = [
+    ...translatedBathroomOptions,
+    ...numericSearchFieldGenerator(1, 4),
+  ]
   const mkCountyFields = (counties: FormOption[]): FieldSingle[] => {
     const countyFields: FieldSingle[] = [] as FieldSingle[]
 
@@ -150,6 +177,9 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
       selected[label] = true
     })
     let check = false
+    const dahliaNote = `(${t(
+      "filter.goToDahlia"
+    )} <a href="https://housing.sfgov.org/" target="_blank">DAHLIA</a>)`
     counties.forEach((county, idx) => {
       // FieldGroup uses the label attribute to check for selected inputs.
       check = selected[county.label] !== undefined
@@ -164,7 +194,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         defaultChecked: check,
         disabled: county.isDisabled || false,
         doubleColumn: county.doubleColumn || false,
-        note: county.labelNoteHTML || "",
+        note: county.label === "San Francisco" ? dahliaNote : county.labelNoteHTML || "",
       } as FieldSingle)
     })
     return countyFields
@@ -194,7 +224,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         <div style={sectionTitle}>{t("t.bedrooms")}</div>
         <ButtonGroup
           name="bedrooms"
-          options={props.bedrooms}
+          options={bedroomOptions}
           onChange={updateValue}
           value={formValues.bedrooms}
           spacing={ButtonGroupSpacing.left}
@@ -205,7 +235,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
         <div style={sectionTitle}>{t("t.bathrooms")}</div>
         <ButtonGroup
           name="bathrooms"
-          options={props.bathrooms}
+          options={bathroomOptions}
           onChange={updateValue}
           value={formValues.bathrooms}
           spacing={ButtonGroupSpacing.left}
