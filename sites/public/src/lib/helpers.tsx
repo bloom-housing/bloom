@@ -15,7 +15,11 @@ import {
   StatusBarType,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
-import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
+import {
+  imageUrlFromListing,
+  getSummariesTable,
+  IMAGE_FALLBACK_URL,
+} from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -144,6 +148,8 @@ export const getListings = (listings) => {
             : undefined,
           statuses: [getListingApplicationStatus(listing)],
           description: listing.name,
+          lazyLoadImages: true,
+          fallbackImageUrl: IMAGE_FALLBACK_URL,
         }}
         tableProps={{
           headers: unitSummariesHeaders,

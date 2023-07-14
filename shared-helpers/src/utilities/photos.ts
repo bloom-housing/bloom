@@ -1,6 +1,7 @@
 import { Asset, Listing } from "@bloom-housing/backend-core/types"
 
 export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
+export const IMAGE_FALLBACK_URL = "/images/listing-fallback.png"
 
 export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
   const cloudName = process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
