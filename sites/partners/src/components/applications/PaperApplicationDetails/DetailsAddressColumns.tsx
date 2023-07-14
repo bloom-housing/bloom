@@ -1,9 +1,10 @@
-import { t, GridCell, ViewItem } from "@bloom-housing/ui-components"
+import { t, GridCell } from "@bloom-housing/ui-components"
 import {
   Application,
   HouseholdMemberUpdate,
   AddressCreate,
 } from "@bloom-housing/backend-core/types"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { YesNoAnswer } from "../../../lib/helpers"
 
 type DetailsAddressColumnsProps = {
@@ -90,36 +91,36 @@ const DetailsAddressColumns = ({
   return (
     <>
       <GridCell>
-        <ViewItem
+        <FieldValue
           label={t("application.contact.streetAddress")}
-          dataTestId={`${dataTestId}.streetAddress`}
+          testId={`${dataTestId}.streetAddress`}
         >
           {address.street}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell span={2}>
-        <ViewItem label={t("application.contact.apt")} dataTestId={`${dataTestId}.street2`}>
+        <FieldValue label={t("application.contact.apt")} testId={`${dataTestId}.street2`}>
           {address.street2}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.contact.city")} dataTestId={`${dataTestId}.city`}>
+        <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
           {address.city}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.contact.state")} dataTestId={`${dataTestId}.state`}>
+        <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
           {address.state}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.contact.zip")} dataTestId={`${dataTestId}.zipCode`}>
+        <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
           {address.zipCode}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </>
   )

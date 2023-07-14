@@ -1,13 +1,7 @@
 import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  ViewItem,
-  GridCell,
-  Select,
-  FieldGroup,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Select, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
 import { Demographics } from "@bloom-housing/backend-core/types"
 
@@ -68,13 +62,13 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   return (
     <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>
       <GridCell>
-        <ViewItem label={t("application.add.race")}>
+        <FieldValue label={t("application.add.race")}>
           <FieldGroup name="race" fields={raceOptions} type="checkbox" register={register} />
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.add.ethnicity")}>
+        <FieldValue label={t("application.add.ethnicity")}>
           <Select
             id="application.demographics.ethnicity"
             name="application.demographics.ethnicity"
@@ -86,11 +80,11 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
             options={ethnicityKeys}
             keyPrefix="application.review.demographics.ethnicityOptions"
           />
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell span={2}>
-        <ViewItem label={t("application.add.howDidYouHearAboutUs")}>
+        <FieldValue label={t("application.add.howDidYouHearAboutUs")}>
           <FieldGroup
             type="checkbox"
             name="application.demographics.howDidYouHear"
@@ -98,7 +92,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
             register={register}
             fieldGroupClassName="grid grid-cols-2 mt-4"
           />
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

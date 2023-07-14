@@ -15,6 +15,8 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 import LinkComponent from "../components/core/LinkComponent"
 import { translations, overrideTranslations } from "../lib/translations"
 
+import "../../styles/overrides.scss"
+
 const signInMessage = "Login is required to view this page."
 
 function BloomApp({ Component, router, pageProps }: AppProps) {

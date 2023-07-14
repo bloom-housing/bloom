@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, ViewItem } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
@@ -33,16 +34,17 @@ const DetailPreferences = () => {
       tinted
       inset
     >
-      <ViewItem label={t("listings.activePreferences")} className={"mb-2"} />
-      {preferenceTableData.length ? (
-        <MinimalTable
-          id="preferenceTable"
-          headers={preferencesTableHeaders}
-          data={preferenceTableData}
-        />
-      ) : (
-        <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-      )}
+      <FieldValue label={t("listings.activePreferences")} className={"mb-2"}>
+        {preferenceTableData.length ? (
+          <MinimalTable
+            id="preferenceTable"
+            headers={preferencesTableHeaders}
+            data={preferenceTableData}
+          />
+        ) : (
+          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
+        )}
+      </FieldValue>
     </GridSection>
   )
 }

@@ -115,7 +115,7 @@ const ApplicationAddMembers = () => {
               validate={true}
             />
           </div>
-          <div className="form-card__group my-0 mx-0 pb-4 pt-4">
+          <div className="form-card__group my-0 mx-0 pb-4 pt-0">
             <HouseholdMemberForm
               editMember={editMember}
               editMode={!application.autofilled}
