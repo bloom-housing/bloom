@@ -7,7 +7,7 @@ import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
-import { LanguagesEnum } from '@prisma/client';
+import { LanguagesEnum, UnitTypeEnum } from '@prisma/client';
 import { Unit } from '../../../src/dtos/units/unit-get.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
@@ -49,7 +49,7 @@ const mockListing = (
           id: `unitType ${i}`,
           createdAt: date,
           updatedAt: date,
-          name: UnitTypeSort[i % UnitTypeSort.length],
+          name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
           numBedrooms: i,
         },
         unitAmiChartOverrides: {

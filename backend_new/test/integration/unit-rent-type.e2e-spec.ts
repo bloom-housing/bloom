@@ -25,10 +25,10 @@ describe('UnitRentType Controller Tests', () => {
 
   it('testing list endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
-      data: unitRentTypeFactory(7),
+      data: unitRentTypeFactory(),
     });
     const unitRentTypeB = await prisma.unitRentTypes.create({
-      data: unitRentTypeFactory(8),
+      data: unitRentTypeFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -53,7 +53,7 @@ describe('UnitRentType Controller Tests', () => {
 
   it('testing retrieve endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
-      data: unitRentTypeFactory(10),
+      data: unitRentTypeFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -64,7 +64,7 @@ describe('UnitRentType Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
-    const name = unitRentTypeFactory(10).name;
+    const name = unitRentTypeFactory().name;
     const res = await request(app.getHttpServer())
       .post('/unitRentTypes')
       .send({
@@ -81,7 +81,7 @@ describe('UnitRentType Controller Tests', () => {
       .put(`/unitRentTypes/${id}`)
       .send({
         id: id,
-        name: unitRentTypeFactory(10).name,
+        name: unitRentTypeFactory().name,
       } as UnitRentTypeUpdate)
       .expect(404);
     expect(res.body.message).toEqual(
@@ -91,9 +91,9 @@ describe('UnitRentType Controller Tests', () => {
 
   it('testing update endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
-      data: unitRentTypeFactory(10),
+      data: unitRentTypeFactory(),
     });
-    const name = unitRentTypeFactory(11).name;
+    const name = unitRentTypeFactory().name;
     const res = await request(app.getHttpServer())
       .put(`/unitRentTypes/${unitRentTypeA.id}`)
       .send({
@@ -120,7 +120,7 @@ describe('UnitRentType Controller Tests', () => {
 
   it('testing delete endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
-      data: unitRentTypeFactory(16),
+      data: unitRentTypeFactory(),
     });
 
     const res = await request(app.getHttpServer())

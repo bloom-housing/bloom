@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { unitAccessibilityPriorityTypeFactory } from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
+import { unitAccessibilityPriorityTypeFactorySingle } from '../../prisma/seed-helpers/unit-accessibility-priority-type-factory';
 import { UnitAccessibilityPriorityTypeCreate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-create.dto';
 import { UnitAccessibilityPriorityTypeUpdate } from '../../src/dtos/unit-accessibility-priority-types/unit-accessibility-priority-type-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
@@ -25,10 +25,10 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
   it('testing list endpoint', async () => {
     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactory(7),
+      data: unitAccessibilityPriorityTypeFactorySingle(),
     });
     const unitTypeB = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactory(8),
+      data: unitAccessibilityPriorityTypeFactorySingle(),
     });
 
     const res = await request(app.getHttpServer())
@@ -53,7 +53,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
   it('testing retrieve endpoint', async () => {
     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactory(10),
+      data: unitAccessibilityPriorityTypeFactorySingle(),
     });
 
     const res = await request(app.getHttpServer())
@@ -64,7 +64,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
-    const name = unitAccessibilityPriorityTypeFactory(10).name;
+    const name = unitAccessibilityPriorityTypeFactorySingle().name;
     const res = await request(app.getHttpServer())
       .post('/unitAccessibilityPriorityTypes')
       .send({
@@ -76,7 +76,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
   });
 
   it("update endpoint with id that doesn't exist should error", async () => {
-    const name = unitAccessibilityPriorityTypeFactory(10).name;
+    const name = unitAccessibilityPriorityTypeFactorySingle().name;
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/unitAccessibilityPriorityTypes/${id}`)
@@ -92,9 +92,9 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
   it('testing update endpoint', async () => {
     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactory(10),
+      data: unitAccessibilityPriorityTypeFactorySingle(),
     });
-    const name = unitAccessibilityPriorityTypeFactory(11).name;
+    const name = unitAccessibilityPriorityTypeFactorySingle().name;
     const res = await request(app.getHttpServer())
       .put(`/unitAccessibilityPriorityTypes/${unitTypeA.id}`)
       .send({
@@ -121,7 +121,7 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
 
   it('testing delete endpoint', async () => {
     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
-      data: unitAccessibilityPriorityTypeFactory(16),
+      data: unitAccessibilityPriorityTypeFactorySingle(),
     });
 
     const res = await request(app.getHttpServer())

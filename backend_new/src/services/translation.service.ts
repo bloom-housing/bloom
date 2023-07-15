@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { LanguagesEnum, Prisma } from '@prisma/client';
+import { LanguagesEnum } from '@prisma/client';
 import { ListingGet } from '../dtos/listings/listing-get.dto';
 import { GoogleTranslateService } from './google-translate.service';
 import * as lodash from 'lodash';

@@ -3,16 +3,19 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
-import { unitTypeFactory } from '../../prisma/seed-helpers/unit-type-factory';
+import {
+  unitTypeFactoryAll,
+  unitTypeFactorySingle,
+} from '../../prisma/seed-helpers/unit-type-factory';
 import { UnitTypeCreate } from '../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../src/dtos/unit-types/unit-type-update.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 import { randomUUID } from 'crypto';
+import { UnitTypeEnum } from '@prisma/client';
 
 describe('UnitType Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
-
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -21,24 +24,19 @@ describe('UnitType Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+    await unitTypeFactoryAll(prisma);
   });
 
   it('testing list endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(7),
-    });
-    const unitTypeB = await prisma.unitTypes.create({
-      data: unitTypeFactory(8),
-    });
-
     const res = await request(app.getHttpServer())
       .get(`/unitTypes?`)
       .expect(200);
-
-    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    // all unit types are returned
+    expect(res.body.length).toEqual(7);
+    // check for random unit types
     const unitTypeNames = res.body.map((value) => value.name);
-    expect(unitTypeNames).toContain(unitTypeA.name);
-    expect(unitTypeNames).toContain(unitTypeB.name);
+    expect(unitTypeNames).toContain(UnitTypeEnum.SRO);
+    expect(unitTypeNames).toContain(UnitTypeEnum.threeBdrm);
   });
 
   it("retrieve endpoint with id that doesn't exist should error", async () => {
@@ -52,9 +50,7 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing retrieve endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(10),
-    });
+    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const res = await request(app.getHttpServer())
       .get(`/unitTypes/${unitTypeA.id}`)
@@ -64,7 +60,7 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing create endpoint', async () => {
-    const name = unitTypeFactory(10).name;
+    const name = UnitTypeEnum.twoBdrm;
     const res = await request(app.getHttpServer())
       .post('/unitTypes')
       .send({
@@ -78,7 +74,7 @@ describe('UnitType Controller Tests', () => {
 
   it("update endpoint with id that doesn't exist should error", async () => {
     const id = randomUUID();
-    const name = unitTypeFactory(10).name;
+    const name = UnitTypeEnum.fourBdrm;
     const res = await request(app.getHttpServer())
       .put(`/unitTypes/${id}`)
       .send({
@@ -93,10 +89,8 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing update endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(10),
-    });
-    const name = unitTypeFactory(11).name;
+    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
+    const name = UnitTypeEnum.SRO;
     const res = await request(app.getHttpServer())
       .put(`/unitTypes/${unitTypeA.id}`)
       .send({
@@ -124,9 +118,7 @@ describe('UnitType Controller Tests', () => {
   });
 
   it('testing delete endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(16),
-    });
+    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.studio);
 
     const res = await request(app.getHttpServer())
       .delete(`/unitTypes`)

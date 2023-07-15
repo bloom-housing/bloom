@@ -1,15 +1,41 @@
-import { Prisma, UnitTypeEnum } from '@prisma/client';
+import { PrismaClient, UnitTypeEnum, UnitTypes } from '@prisma/client';
 
-export const unitTypeFactory = (i: number): Prisma.UnitTypesCreateInput => ({
-  ...unitTypeArray[i % unitTypeArray.length],
-});
+export const unitTypeFactorySingle = async (
+  prismaClient: PrismaClient,
+  type: UnitTypeEnum,
+): Promise<UnitTypes> => {
+  const unitType = await prismaClient.unitTypes.findFirst({
+    where: {
+      name: {
+        equals: type,
+      },
+    },
+  });
+  if (!unitType) {
+    console.warn(`Unit type ${type} was not created, run unitTypeFactoryAll`);
+  }
+  return unitType;
+};
 
-export const unitTypeArray = [
-  { name: UnitTypeEnum.studio, numBedrooms: 0 },
-  { name: UnitTypeEnum.oneBdrm, numBedrooms: 1 },
-  { name: UnitTypeEnum.twoBdrm, numBedrooms: 2 },
-  { name: UnitTypeEnum.threeBdrm, numBedrooms: 3 },
-  { name: UnitTypeEnum.fourBdrm, numBedrooms: 4 },
-  { name: UnitTypeEnum.SRO, numBedrooms: 0 },
-  { name: UnitTypeEnum.fiveBdrm, numBedrooms: 5 },
-];
+export const unitTypeFactoryAll = async (prismaClient: PrismaClient) => {
+  return Promise.all(
+    Object.values(UnitTypeEnum).map(async (value) => {
+      return await prismaClient.unitTypes.create({
+        data: {
+          name: value,
+          numBedrooms: unitTypeMapping[value],
+        },
+      });
+    }),
+  );
+};
+
+export const unitTypeMapping = {
+  [UnitTypeEnum.studio]: 0,
+  [UnitTypeEnum.SRO]: 0,
+  [UnitTypeEnum.oneBdrm]: 1,
+  [UnitTypeEnum.twoBdrm]: 2,
+  [UnitTypeEnum.threeBdrm]: 3,
+  [UnitTypeEnum.fourBdrm]: 4,
+  [UnitTypeEnum.fiveBdrm]: 5,
+};

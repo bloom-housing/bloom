@@ -29,21 +29,21 @@ describe('MultiselectQuestion Controller Tests', () => {
     await app.init();
 
     const jurisdiction = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(41),
+      data: jurisdictionFactory(),
     });
     jurisdictionId = jurisdiction.id;
   });
 
   it('testing list endpoint without params', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(18),
+      data: jurisdictionFactory(),
     });
 
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(7, jurisdictionB.id),
+      data: multiselectQuestionFactory(jurisdictionB.id),
     });
     const multiselectQuestionB = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(8, jurisdictionB.id),
+      data: multiselectQuestionFactory(jurisdictionB.id),
     });
 
     const res = await request(app.getHttpServer())
@@ -58,10 +58,10 @@ describe('MultiselectQuestion Controller Tests', () => {
 
   it('testing list endpoint with params', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(7, jurisdictionId),
+      data: multiselectQuestionFactory(jurisdictionId),
     });
     const multiselectQuestionB = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(8, jurisdictionId),
+      data: multiselectQuestionFactory(jurisdictionId),
     });
 
     const queryParams: MultiselectQuestionQueryParams = {
@@ -96,7 +96,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
   it('testing retrieve endpoint', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(10, jurisdictionId),
+      data: multiselectQuestionFactory(jurisdictionId),
     });
 
     const res = await request(app.getHttpServer())
@@ -221,7 +221,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
   it('testing update endpoint', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(10, jurisdictionId),
+      data: multiselectQuestionFactory(jurisdictionId),
     });
 
     const res = await request(app.getHttpServer())
@@ -294,7 +294,7 @@ describe('MultiselectQuestion Controller Tests', () => {
 
   it('testing delete endpoint', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
-      data: multiselectQuestionFactory(16, jurisdictionId),
+      data: multiselectQuestionFactory(jurisdictionId),
     });
 
     const res = await request(app.getHttpServer())

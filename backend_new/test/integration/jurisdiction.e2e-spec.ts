@@ -26,10 +26,10 @@ describe('Jurisdiction Controller Tests', () => {
 
   it('testing list endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(70),
+      data: jurisdictionFactory(),
     });
     const jurisdictionB = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(80),
+      data: jurisdictionFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -54,7 +54,7 @@ describe('Jurisdiction Controller Tests', () => {
 
   it('testing retrieve endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(101),
+      data: jurisdictionFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -76,7 +76,7 @@ describe('Jurisdiction Controller Tests', () => {
 
   it('testing retrieveByName endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(110),
+      data: jurisdictionFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -131,7 +131,7 @@ describe('Jurisdiction Controller Tests', () => {
 
   it('testing update endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(120),
+      data: jurisdictionFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -170,7 +170,7 @@ describe('Jurisdiction Controller Tests', () => {
 
   it('testing delete endpoint', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
-      data: jurisdictionFactory(160),
+      data: jurisdictionFactory(),
     });
 
     const res = await request(app.getHttpServer())
