@@ -48,10 +48,10 @@ describe('User Controller Tests', () => {
 
   it('should get users from list() when params sent', async () => {
     const userA = await prisma.userAccounts.create({
-      data: userFactory({ isPartner: true }, '1110'),
+      data: userFactory({ roles: { isPartner: true }, firstName: '1110' }),
     });
     const userB = await prisma.userAccounts.create({
-      data: userFactory({ isPartner: true }, '1111'),
+      data: userFactory({ roles: { isPartner: true }, firstName: '1111' }),
     });
 
     const queryParams: UserQueryParams = {
