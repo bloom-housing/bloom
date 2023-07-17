@@ -368,6 +368,7 @@
   "authentication.createAccount.resendTheEmail": "Volver a enviar el email",
   "authentication.forgotPassword.changePassword": "Cambia la contraseña",
   "authentication.forgotPassword.errors.emailNotFound": "El correo electrónico no fue encontrado. Por favor_ revise que si ha creado una cuenta con nosotros con ese correo electrónico y haya sido confirmado confirmado.",
+  "authentication.forgotPassword.errors.passwordTooWeak": "La contraseña es demasiado débil. Debe tener al menos 8 caracteres y deberá incluir por lo menos 1 letra y 1 número.",
   "authentication.forgotPassword.errors.tokenExpired": "El token de restablecimiento de contraseña caducó. Por favor_ solicite uno nuevo.",
   "authentication.forgotPassword.errors.tokenMissing": "El token no fue encontrado. Por favor_ solicite uno nuevo.",
   "authentication.forgotPassword.sendEmail": "Enviar correo electrónico",

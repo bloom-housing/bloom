@@ -368,6 +368,7 @@
   "authentication.createAccount.resendTheEmail": "重新發送電子郵件",
   "authentication.forgotPassword.changePassword": "變更密碼",
   "authentication.forgotPassword.errors.emailNotFound": "找不到電子郵件。請確保您以此電子郵件向我們註冊帳戶並確認完畢。",
+  "authentication.forgotPassword.errors.passwordTooWeak": "密碼強度太弱。至少必須為 8 個字元，並至少包含 1 個字母及 1 個數字。",
   "authentication.forgotPassword.errors.tokenExpired": "重設密碼權杖已到期。請要求新的權杖。",
   "authentication.forgotPassword.errors.tokenMissing": "找不到權杖。請要求新的權杖。",
   "authentication.forgotPassword.sendEmail": "傳送電子郵件",
