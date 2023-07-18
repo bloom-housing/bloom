@@ -25,7 +25,7 @@ export const stagingSeed = async (
 ) => {
   // create admin user
   await prismaClient.userAccounts.create({
-    data: userFactory({ roles: { isAdmin: true } }),
+    data: userFactory({ roles: { isAdmin: true }, email: 'admin@example.com' }),
   });
   // create single jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
