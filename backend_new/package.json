@@ -37,6 +37,7 @@
     "@prisma/client": "^4.14.0",
     "class-validator": "^0.14.0",
     "class-transformer": "^0.5.1",
+    "cloudinary": "^1.37.3",
     "lodash": "^4.17.21",
     "prisma": "^4.15.0",
     "qs": "^6.11.2",
