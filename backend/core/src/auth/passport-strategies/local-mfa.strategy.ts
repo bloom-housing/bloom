@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Logger,
   UnauthorizedException,
   ValidationPipe,
 } from "@nestjs/common"
@@ -41,6 +42,13 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
     })
 
     if (user) {
+      if (
+        req.headers["appurl"] === this.configService.get<string>("PARTNERS_BASE_URL") &&
+        !user.roles
+      ) {
+        Logger.log("public user attempting to log into partner site")
+        throw new UnauthorizedException()
+      }
       if (user.lastLoginAt) {
         const retryAfter = new Date(
           user.lastLoginAt.getTime() + this.configService.get<number>("AUTH_LOCK_LOGIN_COOLDOWN_MS")
