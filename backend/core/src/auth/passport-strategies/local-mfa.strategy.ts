@@ -42,8 +42,12 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
     })
 
     if (user) {
+      // Public users should not be able to log into the partner site.
+      // Validate the origin url vs the env variable to see if it is the partner url
+      const originUrl = req.headers["appurl"]
       if (
-        req.headers["appurl"] === this.configService.get<string>("PARTNERS_BASE_URL") &&
+        originUrl &&
+        originUrl === this.configService.get<string>("PARTNERS_PORTAL_URL") &&
         !user.roles
       ) {
         Logger.log("public user attempting to log into partner site")
