@@ -25,14 +25,15 @@ const DoorwayCollapsibleSection = ({
       }}
     >
       <div className="doorway-collapsible-section_heading-container">
-        <Heading priority={4} className={"text__large-primary"}>
-          {title}
-        </Heading>
         <button
           type="button"
-          className="button is-unstyled m-0 no-underline has-toggle"
+          className="button is-unstyled m-0 no-underline has-toggle flex items-center"
           aria-expanded={isExpanded}
-        />
+        >
+          <Heading priority={4} className={"text__large-primary"}>
+            {title}
+          </Heading>
+        </button>
       </div>
       {isExpanded && <div className="doorway-collapsible-section_section">{children}</div>}
     </div>

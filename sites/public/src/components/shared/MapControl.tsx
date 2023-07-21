@@ -2,7 +2,7 @@ import React, { RefObject } from "react"
 import { GoogleMap } from "@react-google-maps/api"
 import styles from "./MapControl.module.scss"
 
-import { Icon } from "@bloom-housing/doorway-ui-components"
+import { Icon, t } from "@bloom-housing/doorway-ui-components"
 
 export interface MapControlProps {
   mapRef: RefObject<GoogleMap>
@@ -21,6 +21,7 @@ const MapControlZoomIn = (props: MapControlProps) => {
       onKeyDown={click}
       role="button"
       tabIndex={0}
+      aria-label={t("t.zoomIn")}
     >
       <Icon symbol="plus" fill={styles.controlBorderColor} size="md-large" />
     </div>
@@ -41,6 +42,7 @@ const MapControlZoomOut = (props: MapControlProps) => {
       onKeyDown={click}
       role="button"
       tabIndex={0}
+      aria-label={t("t.zoomOut")}
     >
       <Icon symbol="minus" fill={styles.controlBorderColor} size="md-large" />
     </div>
@@ -49,7 +51,7 @@ const MapControlZoomOut = (props: MapControlProps) => {
 
 const MapControl = (props: MapControlProps) => {
   return (
-    <div className={styles["map-control"]}>
+    <div aria-label={t("t.mapControls")} role="group" className={styles["map-control"]}>
       <MapControlZoomIn mapRef={props.mapRef} />
       <MapControlZoomOut mapRef={props.mapRef} />
     </div>

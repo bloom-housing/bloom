@@ -1,11 +1,11 @@
 import React from "react"
 import {
-  AppearanceSizeType,
   AppearanceStyleType,
   Button,
   ButtonGroup,
   ButtonGroupSpacing,
   Icon,
+  t,
 } from "@bloom-housing/doorway-ui-components"
 
 type PaginationProps = {
@@ -81,13 +81,21 @@ export function Pagination(props: PaginationProps) {
       spacing={ButtonGroupSpacing.even}
       pagination={true}
       columns={[
-        <Button disabled={!canNavBackward} onClick={() => setPage(props.currentPage - 1)}>
+        <Button
+          disabled={!canNavBackward}
+          onClick={() => setPage(props.currentPage - 1)}
+          ariaLabel={t("t.previous")}
+        >
           <div style={iconAdjustment}>
             <Icon className="button__icon" size="small" symbol="arrowBack" />
           </div>
         </Button>,
         ...pageButtons,
-        <Button disabled={!canNavForward} onClick={() => setPage(props.currentPage + 1)}>
+        <Button
+          disabled={!canNavForward}
+          onClick={() => setPage(props.currentPage + 1)}
+          ariaLabel={t("t.next")}
+        >
           <div style={iconAdjustment}>
             <Icon className="button__icon" size="small" symbol="arrowForward" />
           </div>
