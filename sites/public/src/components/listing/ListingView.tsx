@@ -448,7 +448,7 @@ export const ListingView = (props: ListingProps) => {
     return (
       <div className="info-card">
         <h3 className="text-serif-xl">{cardTitle}</h3>
-        <p className="text-xs text-gray-700 break-words">
+        <p className="text-xs text-gray-750 break-words">
           <Markdown children={cardData} options={{ disableParsingRawHTML: true }} />
         </p>
       </div>
@@ -700,7 +700,7 @@ export const ListingView = (props: ListingProps) => {
                   {listing.creditHistory && (
                     <InfoCard title={t("listings.creditHistory")}>
                       <ExpandableText
-                        className="text-xs text-gray-700"
+                        className="text-xs text-gray-750"
                         buttonClassName="ml-4"
                         markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
@@ -715,7 +715,7 @@ export const ListingView = (props: ListingProps) => {
                   {listing.rentalHistory && (
                     <InfoCard title={t("listings.rentalHistory")}>
                       <ExpandableText
-                        className="text-xs text-gray-700"
+                        className="text-xs text-gray-750"
                         buttonClassName="ml-4"
                         markdownProps={{ disableParsingRawHTML: true }}
                         strings={{
@@ -730,7 +730,7 @@ export const ListingView = (props: ListingProps) => {
                   {listing.criminalBackground && (
                     <InfoCard title={t("listings.criminalBackground")}>
                       <ExpandableText
-                        className="text-xs text-gray-700"
+                        className="text-xs text-gray-750"
                         buttonClassName="ml-4"
                         markdownProps={{ disableParsingRawHTML: true }}
                         strings={{

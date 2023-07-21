@@ -68,6 +68,10 @@
   h1 {
     margin-bottom: var(--doorway-hero-between-margin);
   }
+
+  .field {
+    --field-note-font-color: var(--bloom-color-gray-750);
+  }
 }
 
 .doorway-hero_image {

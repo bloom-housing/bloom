@@ -168,7 +168,7 @@ export function LandingSearch(props: LandingSearchProps) {
         </LinkButton>
 
         <Button
-          className="is-borderless is-inline is-unstyled underline text-primary-lighter uppercase tracking-widest text-3xs md:text-xs"
+          className="is-borderless is-inline is-unstyled underline text-primary uppercase tracking-widest text-3xs md:text-xs"
           size={AppearanceSizeType.small}
           onClick={() => {
             setOpenCountyMapModal(!openCountyMapModal)

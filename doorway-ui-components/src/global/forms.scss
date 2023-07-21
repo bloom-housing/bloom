@@ -5,6 +5,7 @@
   --bordered-leftward-padding: 2.875rem;
   --bordered-checked-bg-color: var(--bloom-color-gray-100);
   --input-prepend-font-size: var(--bloom-font-size-xl);
+  --field-note-font-color: var(--bloom-color-700)
 
   margin-bottom: 1.25rem;
 
@@ -88,7 +89,7 @@
       @apply px-3;
       border-width: 2px;
       border-color: var(--bloom-color-gray-450);
-      font-size: .75rem;
+      font-size: 0.75rem;
     }
 
     .prepend {
@@ -346,7 +347,7 @@ input[type="number"] {
 
 .field-note {
   @apply text-sm;
-  @apply text-gray-700;
+  color: var(--field-note-font-color);
   white-space: pre-line;
   @apply normal-case;
 }

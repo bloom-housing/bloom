@@ -31,7 +31,7 @@ const SubmitApplication = ({
 }: ApplicationAddressesProps) => {
   return (
     <>
-      <section className="aside-block is-tinted bg-gray-100">
+      <section className="aside-block is-tinted">
         <div className="text-serif-lg">{strings.sectionHeader}</div>
         {applicationMailingAddress && (
           <>

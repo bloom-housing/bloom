@@ -93,7 +93,7 @@ export default function Home(props: IndexProps) {
         background="secondary-lighter"
         actions={[
           <LinkButton
-            className="is-borderless is-inline is-unstyled underline text-primary-lighter"
+            className="is-borderless is-inline is-unstyled underline text-primary"
             href="/help/get-started"
             key={"get-started"}
             size={AppearanceSizeType.small}
