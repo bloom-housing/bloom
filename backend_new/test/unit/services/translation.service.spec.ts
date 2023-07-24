@@ -79,12 +79,10 @@ const mockListing = (): ListingGet => {
           description: 'untranslated multiselect description',
           subText: 'untranslated multiselect subtext',
           optOutText: 'untranslated multiselect opt out text',
-          listings: [],
           jurisdictions: [],
           applicationSection:
             MultiselectQuestionsApplicationSectionEnum.preferences,
         },
-        listings: basicListing,
       },
     ],
   };

@@ -8,6 +8,7 @@ import { UnitAccessibilityPriorityTypeServiceModule } from './modules/unit-acces
 import { UnitTypeModule } from './modules/unit-type.module';
 import { UnitRentTypeModule } from './modules/unit-rent-type.module';
 import { JurisdictionModule } from './modules/jurisdiction.module';
+import { MultiselectQuestionModule } from './modules/multiselect-question.module';
 import { AssetModule } from './modules/asset.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { AssetModule } from './modules/asset.module';
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
+    MultiselectQuestionModule,
     AssetModule,
   ],
   controllers: [AppController],
@@ -31,6 +33,7 @@ import { AssetModule } from './modules/asset.module';
     UnitAccessibilityPriorityTypeServiceModule,
     UnitRentTypeModule,
     JurisdictionModule,
+    MultiselectQuestionModule,
     AssetModule,
   ],
 })

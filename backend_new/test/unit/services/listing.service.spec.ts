@@ -1988,4 +1988,35 @@ describe('Testing listing service', () => {
       },
     });
   });
+
+  it('testing findListingsWithMultiSelectQuestion()', async () => {
+    prisma.listings.findMany = jest.fn().mockResolvedValue([
+      {
+        id: 'example id',
+        name: 'example name',
+      },
+    ]);
+
+    const listings = await service.findListingsWithMultiSelectQuestion(
+      'multiselectQuestionId 1',
+    );
+
+    expect(listings.length).toEqual(1);
+    expect(listings[0].id).toEqual('example id');
+    expect(listings[0].name).toEqual('example name');
+
+    expect(prisma.listings.findMany).toHaveBeenCalledWith({
+      select: {
+        id: true,
+        name: true,
+      },
+      where: {
+        listingMultiselectQuestions: {
+          some: {
+            multiselectQuestionId: 'multiselectQuestionId 1',
+          },
+        },
+      },
+    });
+  });
 });
