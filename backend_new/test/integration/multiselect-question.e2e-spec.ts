@@ -34,7 +34,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     jurisdictionId = jurisdiction.id;
   });
 
-  it('testing list endpoint without params', async () => {
+  it('should get multiselect questions from list endpoint when no params are sent', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
@@ -56,7 +56,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     expect(multiselectQuestions).toContain(multiselectQuestionB.text);
   });
 
-  it('testing list endpoint with params', async () => {
+  it('should get multiselect questions from list endpoint when params are sent', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId),
     });
@@ -84,7 +84,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     expect(multiselectQuestions).toContain(multiselectQuestionB.text);
   });
 
-  it("retrieve endpoint with id that doesn't exist should error", async () => {
+  it('should throw error when retrieve endpoint is hit with nonexistent id', async () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .get(`/multiselectQuestions/${id}`)
@@ -94,7 +94,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     );
   });
 
-  it('testing retrieve endpoint', async () => {
+  it('should get multiselect question when retrieve endpoint is called and id exists', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId),
     });
@@ -106,7 +106,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     expect(res.body.text).toEqual(multiselectQuestionA.text);
   });
 
-  it('testing create endpoint', async () => {
+  it('should create a multiselect question', async () => {
     const res = await request(app.getHttpServer())
       .post('/multiselectQuestions')
       .send({
@@ -161,7 +161,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     expect(res.body.text).toEqual('example text');
   });
 
-  it("update endpoint with id that doesn't exist should error", async () => {
+  it('should throw error when update endpoint is hit with nonexistent id', async () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .put(`/multiselectQuestions/${id}`)
@@ -219,7 +219,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     );
   });
 
-  it('testing update endpoint', async () => {
+  it('should update multiselect question', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId),
     });
@@ -279,7 +279,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     expect(res.body.text).toEqual('example text');
   });
 
-  it("delete endpoint with id that doesn't exist should error", async () => {
+  it('should throw error when delete endpoint is hit with nonexistent id', async () => {
     const id = randomUUID();
     const res = await request(app.getHttpServer())
       .delete(`/multiselectQuestions`)
@@ -292,7 +292,7 @@ describe('MultiselectQuestion Controller Tests', () => {
     );
   });
 
-  it('testing delete endpoint', async () => {
+  it('should delete multiselect question', async () => {
     const multiselectQuestionA = await prisma.multiselectQuestions.create({
       data: multiselectQuestionFactory(jurisdictionId),
     });
