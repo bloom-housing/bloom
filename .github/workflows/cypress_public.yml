@@ -67,14 +67,10 @@ jobs:
           PGPASSWORD: bloom
           PGUSER: bloom-dev
 
-      - name: Start app
-        working-directory: ./sites/public
-        run: yarn dev:all-cypress
-        wait-on: "http://localhost:3000"
-
-      - name: Run tests
+      - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./sites/public
-       
+          build: yarn dev:all-cypress
+          wait-on: "http://localhost:3000"
        
