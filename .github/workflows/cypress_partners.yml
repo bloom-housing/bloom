@@ -1,4 +1,4 @@
-name: Backend Integration
+name: Partners Cypress
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ env:
   BLOOM_LISTINGS_QUERY: "/fake"
 
 jobs:
-  integration-tests:
+  partners-cypress:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -60,9 +60,12 @@ jobs:
           PGPASSWORD: bloom
           PGUSER: bloom-dev
 
-      - name: yarn e2e tests backend
-        working-directory: ./backend/core
-        run: yarn test:e2e:local
+      - name: Setup backend
+        run: yarn test:backend:core:dbsetup
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        run: yarn test:app:partners
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom

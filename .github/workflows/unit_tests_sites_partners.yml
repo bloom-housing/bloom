@@ -1,4 +1,4 @@
-name: Unit tests for sites/partners
+name: Partners Unit
 
 on:
   pull_request:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   unit-tests-for-sites-partners:
-    name: Run unit tests for sites/partners
     runs-on: ubuntu-latest
 
     steps:

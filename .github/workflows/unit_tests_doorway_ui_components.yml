@@ -1,4 +1,4 @@
-name: Unit tests for doorway-ui-components
+name: DUIC Unit
 
 on:
   pull_request:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   unit-tests-for-doorway-ui-components:
-    name: Run unit tests for doorway-ui-components
     runs-on: ubuntu-latest
 
     steps:
