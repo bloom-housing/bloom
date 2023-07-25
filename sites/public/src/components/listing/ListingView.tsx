@@ -533,7 +533,6 @@ export const ListingView = (props: ListingProps) => {
           })}
           modalCloseLabel={t("t.backToListing")}
           modalCloseInContent
-          lazyLoadImages
           fallbackImageUrl={IMAGE_FALLBACK_URL}
         />
         <div className="py-3 mx-3 mt-4 flex flex-col items-center md:items-start text-center md:text-left">

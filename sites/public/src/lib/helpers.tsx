@@ -148,7 +148,6 @@ export const getListings = (listings) => {
             : undefined,
           statuses: [getListingApplicationStatus(listing)],
           description: listing.name,
-          lazyLoadImages: true,
           fallbackImageUrl: IMAGE_FALLBACK_URL,
         }}
         tableProps={{
