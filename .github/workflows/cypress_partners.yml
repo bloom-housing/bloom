@@ -71,7 +71,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           project: ./sites/partners
-          start: yarn dev
+          start: yarn dev:app:partners
           wait-on: 'http://localhost:3100/listings'
           command: yarn test
        
