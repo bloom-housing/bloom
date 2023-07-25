@@ -68,9 +68,8 @@ jobs:
           PGUSER: bloom-dev
 
       - name: Cypress run
-        working-directory: ./sites/partners
         uses: cypress-io/github-action@v5
         with:
-          project: ./sites/partners
+          working-directory: ./sites/partners
           command: yarn dev:all-cypress
        
