@@ -67,11 +67,13 @@ jobs:
           PGPASSWORD: bloom
           PGUSER: bloom-dev
 
+      - name: Start backend
+        run: yarn dev:backend
+
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           project: ./sites/partners
           start: yarn dev:app:partners
-          wait-on: 'http://localhost:3100/listings'
           command: yarn test
        
