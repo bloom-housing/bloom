@@ -366,7 +366,7 @@ describe("CombinedListings", () => {
 
       // sort images by id
       const sortImages = (a, b) => {
-        return a.image.id.localeCompare(b.image.id)
+        return a.fileId.localeCompare(b.fileId)
       }
 
       // sort questions by id
@@ -385,8 +385,12 @@ describe("CombinedListings", () => {
         localListing.units.sort(sortUnits)
 
         // sort images
-        result.images.sort(sortImages)
-        localListing.images.sort(sortImages)
+        result.assets.sort(sortImages)
+        localListing.assets.sort(sortImages)
+
+        // images is no longer used - assets are the primary info on images
+        delete result.images
+        delete localListing.images
 
         // sort multiselect questions
         result.listingMultiselectQuestions.sort(sortQuestions)
@@ -407,8 +411,6 @@ describe("CombinedListings", () => {
           delete unit.amiPercentage
           delete unit.annualIncomeMax
           delete unit.annualIncomeMin
-          delete unit.numBathrooms
-          delete unit.numBedrooms
         })
 
         expect(localListing).toEqual(result)
