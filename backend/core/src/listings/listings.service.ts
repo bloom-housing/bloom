@@ -20,6 +20,8 @@ import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
 import { CachePurgeService } from "./cache-purge.service"
+import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
+import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -31,7 +33,8 @@ export class ListingsService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(REQUEST) private req: ExpressRequest,
     private readonly afsService: ApplicationFlaggedSetsService,
-    private readonly cachePurgeService: CachePurgeService
+    private readonly cachePurgeService: CachePurgeService,
+    private readonly jurisdictionService: JurisdictionsService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -94,14 +97,38 @@ export class ListingsService {
     }
   }
 
+  getCountyName = (jurisdiction: Jurisdiction) => {
+    switch (jurisdiction.name) {
+      case "Alameda":
+        return "Alameda"
+      case "San Jose":
+        return "Santa Clara"
+      case "San Mateo":
+        return "San Mateo"
+      default:
+        return null
+    }
+  }
+
   async create(listingDto: ListingCreateDto) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
       jurisdictionId: listingDto.jurisdiction.id,
     })
 
+    // Add the county to the listing. This is required for Doorway so that the county can be displayed
+    // on the listing details page. Only needed while Doorway is pulling listings from HBA
+    let buildingAddress = listingDto.buildingAddress
+    if (buildingAddress) {
+      const jurisdiction = await this.jurisdictionService.findOne({
+        where: { id: listingDto.jurisdiction.id },
+      })
+      buildingAddress = { ...buildingAddress, county: this.getCountyName(jurisdiction) }
+    }
+
     const listing = this.listingRepository.create({
       ...listingDto,
+      buildingAddress: buildingAddress,
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
     })
@@ -145,8 +172,19 @@ export class ListingsService {
       listing.buildingSelectionCriteria = null
     }
 
+    // Add the county to the listing. This is required for Doorway so that the county can be displayed
+    // on the listing details page. Only needed while Doorway is pulling listings from HBA
+    let buildingAddress = listingDto.buildingAddress
+    if (buildingAddress) {
+      const jurisdiction = await this.jurisdictionService.findOne({
+        where: { id: listingDto.jurisdiction.id },
+      })
+      buildingAddress = { ...buildingAddress, county: this.getCountyName(jurisdiction) }
+    }
+
     Object.assign(listing, {
       ...listingDto,
+      buildingAddress: buildingAddress,
       publishedAt:
         listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
           ? new Date()

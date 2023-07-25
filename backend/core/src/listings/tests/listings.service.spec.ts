@@ -17,6 +17,7 @@ import { User } from "../../auth/entities/user.entity"
 import { UserService } from "../../auth/services/user.service"
 import { HttpService } from "@nestjs/axios"
 import { CachePurgeService } from "../cache-purge.service"
+import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -168,6 +169,12 @@ describe("ListingsService", () => {
           provide: UserService,
           useValue: {
             getJurisdiction: jest.fn(),
+          },
+        },
+        {
+          provide: JurisdictionsService,
+          useValue: {
+            findOne: jest.fn(),
           },
         },
         { provide: getRepositoryToken(User), useValue: jest.fn() },

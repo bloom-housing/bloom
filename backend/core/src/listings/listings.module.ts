@@ -16,8 +16,9 @@ import { ListingUtilities } from "./entities/listing-utilities.entity"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 import { ListingsCronService } from "./listings-cron.service"
 import { ListingsCsvExporterService } from "./listings-csv-exporter.service"
-import { CsvBuilder } from "../../src/applications/services/csv-builder.service"
+import { CsvBuilder } from "../applications/services/csv-builder.service"
 import { CachePurgeService } from "./cache-purge.service"
+import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CachePurgeService } from "./cache-purge.service"
     ActivityLogModule,
     ApplicationFlaggedSetsModule,
     HttpModule,
+    JurisdictionsModule,
   ],
   providers: [
     ListingsService,

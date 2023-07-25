@@ -199,6 +199,18 @@ describe("Listings", () => {
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
   })
 
+  it("should add county to new listing", async () => {
+    const sanJoseJurisdiction = (await jurisdictionsRepository.findBy({ name: "San Jose" }))[0]
+    const newListingCreateDto = makeTestListing(sanJoseJurisdiction.id)
+
+    newListingCreateDto.name = "new-listing"
+    const listingResponse = await supertest(app.getHttpServer())
+      .post(`/listings`)
+      .send(newListingCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+    expect(listingResponse.body.buildingAddress.county).toBe("Santa Clara")
+  })
+
   it("should add/overwrite image in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
