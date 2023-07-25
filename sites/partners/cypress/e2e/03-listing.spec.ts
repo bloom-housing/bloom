@@ -20,7 +20,6 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
-    cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
     // Test photo upload
@@ -132,8 +131,6 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
     cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
     cy.get("#digitalApplicationChoiceYes").check()
-    cy.get("#commonDigitalApplicationChoiceNo").check()
-    cy.get("#customOnlineApplicationUrl").type(listing["url"])
     cy.get("#paperApplicationNo").check()
     cy.get("#referralOpportunityNo").check()
 
@@ -206,8 +203,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("buildingAddress.state").contains("CA")
     cy.getByID("buildingAddress.zipCode").contains(listing["buildingAddress.zipCode"])
     cy.get("#yearBuilt").contains(listing["yearBuilt"])
-    cy.get("#longitude").contains("-122.40078")
-    cy.get("#latitude").contains("37.79006")
+    cy.get("#longitude").contains("-121.950481")
+    cy.get("#latitude").contains("37.762983")
     cy.get("#reservedCommunityType").contains(listing["reservedCommunityType.id"])
     cy.get("#reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
     cy.getByTestId("unit-types-or-individual").contains("Unit Types")
