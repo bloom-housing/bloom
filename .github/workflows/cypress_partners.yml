@@ -62,11 +62,19 @@ jobs:
 
       - name: Setup backend
         run: yarn test:backend:core:dbsetup
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
-        run: yarn test:app:partners
         env:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
           PGUSER: bloom-dev
+
+      - name: Setup partners site
+        working-directory: ./sites/partners
+        run: yarn dev
+
+
+      - name: Cypress run
+        working-directory: ./sites/partners
+        uses: cypress-io/github-action@v5
+        with:
+          start: yarn test
+       
