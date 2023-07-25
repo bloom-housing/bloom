@@ -46,7 +46,7 @@ export function applicationSetup(app: INestApplication) {
       credentials: true,
       origin: false,
     }
-    if (allowList.indexOf(req.header("Origin")) !== -1) {
+    if (allowList.indexOf(req.header("Origin")) !== -1 || process.env.NODE_ENV !== "production") {
       options.origin = true
     }
     cb(null, options)
