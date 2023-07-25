@@ -67,13 +67,10 @@ jobs:
           PGPASSWORD: bloom
           PGUSER: bloom-dev
 
-      - name: Start backend
-        run: yarn dev:backend
-
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           project: ./sites/public
-          start: yarn dev:app:public
-          command: yarn test
+          start: yarn dev:all-cypress
+       
        
