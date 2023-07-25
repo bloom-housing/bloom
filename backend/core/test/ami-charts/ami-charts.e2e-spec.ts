@@ -60,7 +60,7 @@ describe("AmiCharts", () => {
   })
 
   it(`should create and return a new ami chart`, async () => {
-    const jurisdiction = (await jurisdictionRepository.find({ name: "Bay Area" }))[0]
+    const jurisdiction = (await jurisdictionRepository.find({ where: { name: "Bay Area" } }))[0]
     const amiChartCreateDto: AmiChartCreateDto = {
       items: [
         {

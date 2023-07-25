@@ -10,15 +10,23 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
     const listing = await super.seed()
     const defaultUnits = getDefaultUnits()
 
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
 
     const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.bay_area,
+      where: { name: CountyCode.bay_area },
     })
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: defaultAmiChart.name,
-      jurisdiction: bayAreaJurisdiction,
+      where: {
+        name: defaultAmiChart.name,
+        jurisdiction: {
+          name: bayAreaJurisdiction.name,
+        },
+      },
     })
 
     const bmrUnits = [
@@ -32,7 +40,7 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(bayAreaJurisdiction.name).text,
+            where: { text: getTayProgram(bayAreaJurisdiction.name).text },
           }),
           ordinal: 1,
         },

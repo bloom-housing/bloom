@@ -1,11 +1,18 @@
 import { Expose } from "class-transformer"
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm"
+import { IsString, IsUUID } from "class-validator"
+import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm"
 import { User } from "./user.entity"
 
 @Entity({ name: "user_roles" })
 export class UserRoles {
+  @PrimaryColumn("uuid")
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  userId: string
+
   @OneToOne(() => User, (user) => user.roles, {
-    primary: true,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

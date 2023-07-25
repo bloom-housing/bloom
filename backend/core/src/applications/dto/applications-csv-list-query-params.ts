@@ -1,7 +1,7 @@
 import { PaginatedApplicationListQueryParams } from "./paginated-application-list-query-params"
 import { Expose, Transform } from "class-transformer"
 import { ApiProperty, OmitType } from "@nestjs/swagger"
-import { IsBoolean, IsOptional, IsUUID } from "class-validator"
+import { IsBoolean, IsOptional, IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class ApplicationsCsvListQueryParams extends OmitType(PaginatedApplicationListQueryParams, [
@@ -14,6 +14,15 @@ export class ApplicationsCsvListQueryParams extends OmitType(PaginatedApplicatio
   })
   @IsUUID()
   listingId: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  timeZone?: string
 
   @Expose()
   @ApiProperty({

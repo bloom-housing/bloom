@@ -308,7 +308,7 @@ export class AmiChartDefaultSeed {
 
   async seed() {
     const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.bay_area,
+      where: { name: CountyCode.bay_area },
     })
     return await this.amiChartRepository.save({
       ...getDefaultAmiChart(),

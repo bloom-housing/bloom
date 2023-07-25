@@ -1,5 +1,6 @@
 import React, { useContext, Fragment } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { sortUnitTypes } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 
@@ -25,10 +26,7 @@ const DetailsHouseholdDetails = () => {
       inset
     >
       <GridCell>
-        <ViewItem
-          label={t("application.details.preferredUnitSizes")}
-          dataTestId="preferredUnitSizes"
-        >
+        <FieldValue label={t("application.details.preferredUnitSizes")} testId="preferredUnitSizes">
           {(() => {
             if (!preferredUnits.length) return t("t.n/a")
 
@@ -39,37 +37,37 @@ const DetailsHouseholdDetails = () => {
               </Fragment>
             ))
           })()}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.adaPriorities")} dataTestId="adaPriorities">
+        <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
           {accessibilityLabels(application.accessibility).map((item) => (
             <Fragment key={item}>
               {item}
               <br />
             </Fragment>
           ))}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
       <GridCell>
-        <ViewItem
+        <FieldValue
           id="householdChanges"
           label={t("application.household.expectingChanges.title")}
-          dataTestId="expectingChanges"
+          testId="expectingChanges"
         >
           {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem
+        <FieldValue
           id="householdStudent"
           label={t("application.household.householdStudent.title")}
-          dataTestId="householdStudent"
+          testId="householdStudent"
         >
           {application.householdStudent ? t("t.yes") : t("t.no")}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

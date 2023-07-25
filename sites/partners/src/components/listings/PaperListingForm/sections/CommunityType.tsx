@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, GridCell, ViewItem, Select, Textarea } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Select, Textarea } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { useReservedCommunityTypeList } from "../../../../lib/hooks"
 import { arrayToFormOptions } from "../../../../lib/helpers"
 import { ReservedCommunityType } from "@bloom-housing/backend-core/types"
@@ -51,7 +52,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
       description={t("listings.sections.communityTypeSubtitle")}
     >
       <GridSection columns={2}>
-        <ViewItem label={t("listings.reservedCommunityType")}>
+        <FieldValue label={t("listings.reservedCommunityType")}>
           {options && (
             <Select
               id={`reservedCommunityType.id`}
@@ -68,7 +69,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
               }}
             />
           )}
-        </ViewItem>
+        </FieldValue>
       </GridSection>
       <GridSection columns={3}>
         <GridCell span={2}>

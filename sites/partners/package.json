@@ -28,9 +28,9 @@
   "dependencies": {
     "@bloom-housing/backend-core": "^7.13.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
-    "@bloom-housing/ui-components": "^12.0.9",
     "@bloom-housing/doorway-ui-components": "^1.0.0",
-    "@bloom-housing/ui-seeds": "^1.2.1",
+    "@bloom-housing/ui-components": "^12.0.15",
+    "@bloom-housing/ui-seeds": "^1.7.4",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",

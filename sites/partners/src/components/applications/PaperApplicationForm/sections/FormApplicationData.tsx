@@ -2,12 +2,12 @@ import React, { useEffect } from "react"
 import {
   t,
   GridSection,
-  ViewItem,
   Select,
   TimeField,
   DateField,
   DateFieldValues,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { applicationLanguageKeys } from "@bloom-housing/shared-helpers"
 import { useFormContext } from "react-hook-form"
 
@@ -36,7 +36,7 @@ const FormApplicationData = () => {
   return (
     <GridSection title={t("application.details.applicationData")} grid={false}>
       <GridSection columns={3}>
-        <ViewItem label={t("application.add.dateSubmitted")}>
+        <FieldValue label={t("application.add.dateSubmitted")}>
           <DateField
             id="dateSubmitted"
             name="dateSubmitted"
@@ -49,9 +49,9 @@ const FormApplicationData = () => {
             required={!!isDateRequired}
             labelClass={"text__caps-spaced"}
           />
-        </ViewItem>
+        </FieldValue>
 
-        <ViewItem label={t("application.add.timeSubmitted")}>
+        <FieldValue label={t("application.add.timeSubmitted")}>
           <TimeField
             id="timeSubmitted"
             name="timeSubmitted"
@@ -64,9 +64,9 @@ const FormApplicationData = () => {
             required={!!isDateFilled}
             labelClass={"text__caps-spaced"}
           />
-        </ViewItem>
+        </FieldValue>
 
-        <ViewItem label={t("application.add.languageSubmittedIn")}>
+        <FieldValue label={t("application.add.languageSubmittedIn")}>
           <Select
             id="application.language"
             name="application.language"
@@ -77,7 +77,7 @@ const FormApplicationData = () => {
             options={["", ...applicationLanguageKeys]}
             keyPrefix="languages"
           />
-        </ViewItem>
+        </FieldValue>
       </GridSection>
     </GridSection>
   )

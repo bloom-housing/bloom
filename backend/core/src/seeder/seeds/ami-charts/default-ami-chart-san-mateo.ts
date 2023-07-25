@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 export class AmiDefaultSanMateo extends AmiChartDefaultSeed {
   async seed() {
     const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.bay_area,
+      where: { name: CountyCode.bay_area },
     })
     return await this.amiChartRepository.save({
       ...getDefaultAmiChart(),

@@ -1,12 +1,13 @@
 // Future home of additional Jest config
 import { addTranslation } from "@bloom-housing/ui-components"
-import generalTranslations from "@bloom-housing/ui-components/src/locales/general.json"
+import generalTranslations from "../../../shared-helpers/src/locales/general.json"
 import { serviceOptions } from "@bloom-housing/backend-core"
 import axios from "axios"
 import "@testing-library/jest-dom/extend-expect"
 import general from "../page_content/locale_overrides/general.json"
 import generalSharedHelpers from "../../../shared-helpers/src/locales/general.json"
 addTranslation({ ...generalTranslations, ...generalSharedHelpers, ...general })
+import "@testing-library/jest-dom"
 
 // see: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 window.matchMedia = jest.fn().mockImplementation((query) => {

@@ -28,7 +28,6 @@ import { Application } from "../../src/applications/entities/application.entity"
 import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 import { EmailService } from "../../src/email/email.service"
 import { MfaType } from "../../src/auth/types/mfa-type"
-import { UserRepository } from "../../src/auth/repositories/user-repository"
 import dayjs from "dayjs"
 import cookieParser from "cookie-parser"
 
@@ -44,7 +43,7 @@ describe("UsersService", () => {
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
   let applicationsRepository: Repository<Application>
-  let userRepository: UserService
+  let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
   let usersRepository: Repository<User>
   let adminAccessToken: string
@@ -94,7 +93,7 @@ describe("UsersService", () => {
       getRepositoryToken(Jurisdiction)
     )
     usersRepository = moduleRef.get<Repository<User>>(getRepositoryToken(User))
-    userRepository = await moduleRef.resolve<UserService>(UserService)
+    userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
@@ -144,8 +143,8 @@ describe("UsersService", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findById(userCreateResponse.body.id)
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findByIdHelper(userCreateResponse.body.id)
 
     expect(user.confirmedAt).toBe(null)
 
@@ -228,8 +227,8 @@ describe("UsersService", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findByEmail(userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -350,8 +349,8 @@ describe("UsersService", () => {
       .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findByEmail(userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -426,8 +425,8 @@ describe("UsersService", () => {
     expect(newUser.leasingAgentInListings[0].id).toBe(listing.id)
     expect(mockInvite.mock.calls.length).toBe(1)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findByEmail(newUser.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(newUser.email)
     user.mfaEnabled = false
     await usersRepository.save(user)
 
@@ -459,8 +458,8 @@ describe("UsersService", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findByEmail(userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -506,8 +505,8 @@ describe("UsersService", () => {
         .send(createDto)
         .expect(201)
 
-      const userRepository = await app.resolve<UserRepository>(UserRepository)
-      const user = await userRepository.findByEmail(createDto.email)
+      const userService = await app.resolve(UserService)
+      const user = await userService.findByEmail(createDto.email)
 
       await supertest(app.getHttpServer())
         .put(`/user/confirm/`)
@@ -571,7 +570,7 @@ describe("UsersService", () => {
   })
 
   it("should allow filtering by isPartner user role", async () => {
-    const user = await userRepository._createUser({
+    const user = await userService._createUser({
       dob: new Date(),
       email: "michalp@airnauts.com",
       firstName: "Michal",
@@ -607,7 +606,7 @@ describe("UsersService", () => {
   })
 
   it("should get and delete a user by ID", async () => {
-    const user = await userRepository._createUser({
+    const user = await userService._createUser({
       dob: new Date(),
       email: "test+1@test.com",
       firstName: "test",
@@ -642,7 +641,7 @@ describe("UsersService", () => {
 
   it("should create and delete a user with existing application by ID", async () => {
     const listing = (await listingRepository.find({ take: 1 }))[0]
-    const user = await userRepository._createUser({
+    const user = await userService._createUser({
       dob: new Date(),
       email: "test+1@test.com",
       firstName: "test",
@@ -696,8 +695,8 @@ describe("UsersService", () => {
     expect(res.body).toHaveProperty("email")
     expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findById(res.body.id)
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findByIdHelper(res.body.id)
 
     const confirmation = await supertest(app.getHttpServer())
       .put(`/user/${res.body.id}`)
@@ -734,8 +733,8 @@ describe("UsersService", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    let user = await userRepository.findByEmail(userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -757,7 +756,7 @@ describe("UsersService", () => {
     // User should still be able to log in with the old email
     await getUserAccessToken(app, userCreateDto.email, userCreateDto.password)
 
-    user = await userRepository.findByEmail(userCreateDto.email)
+    user = await userService.findByEmail(userCreateDto.email)
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
       .send({ token: user.confirmationToken })
@@ -767,7 +766,7 @@ describe("UsersService", () => {
   })
 
   it("should allow filtering by isPortalUser", async () => {
-    const usersRepository = app.get<UserRepository>(UserRepository)
+    const usersRepository = app.get<Repository<User>>(getRepositoryToken(User))
 
     const totalUsersCount = await usersRepository.count()
 
@@ -829,8 +828,7 @@ describe("UsersService", () => {
       .set("jurisdictionName", "Bay Area")
       .send(userCreateDto)
       .expect(201)
-
-    let user = await usersRepository.findOne({ email: userCreateDto.email })
+    let user = await usersRepository.findOne({ where: { email: userCreateDto.email } })
     user.mfaEnabled = true
     user = await usersRepository.save(user)
 
@@ -863,7 +861,7 @@ describe("UsersService", () => {
       })
       .expect(201)
 
-    user = await usersRepository.findOne({ email: userCreateDto.email })
+    user = await usersRepository.findOne({ where: { email: userCreateDto.email } })
     expect(typeof user.mfaCode).toBe("string")
     expect(user.mfaCodeUpdatedAt).toBeDefined()
     expect(testEmailService.sendMfaCode).toBeCalled()
@@ -910,8 +908,8 @@ describe("UsersService", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    let user = await userRepository.findByEmail(userCreateDto.email)
+    const userService = await app.resolve(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
@@ -931,7 +929,7 @@ describe("UsersService", () => {
       .expect(200)
 
     // Put password updated at date 190 days in the past
-    user = await userRepository.findByEmail(userCreateDto.email)
+    user = await userService.findByEmail(userCreateDto.email)
     user.roles = { isAdmin: true, isPartner: false } as UserRoles
     user.passwordUpdatedAt = new Date(user.passwordUpdatedAt.getTime() - 190 * 24 * 60 * 60 * 1000)
 
@@ -954,7 +952,7 @@ describe("UsersService", () => {
       .send({ email: user.email })
       .expect(200)
 
-    user = await usersRepository.findOne({ email: user.email })
+    user = await usersRepository.findOne({ where: { email: user.email } })
 
     const newPassword = "Abcefghjijk90!"
     await supertest(app.getHttpServer())
@@ -990,8 +988,8 @@ describe("UsersService", () => {
       .send(userCreateDto)
       .expect(201)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    let user = await userRepository.findByEmail(userCreateDto.email)
+    const userService = await app.resolve<UserService>(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
       .put(`/user/${userCreateResponse.body.id}`)
@@ -1034,7 +1032,7 @@ describe("UsersService", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(429)
 
-    user = await userRepository.findByEmail(userCreateDto.email)
+    user = await userService.findByEmail(userCreateDto.email)
     user.lastLoginAt = dayjs(new Date()).subtract(31, "minutes").toDate()
     await usersRepository.save(user)
 
@@ -1045,7 +1043,7 @@ describe("UsersService", () => {
   })
 
   it("should not crash with empty search query param", async () => {
-    const usersRepository = app.get<UserRepository>(UserRepository)
+    const usersRepository = app.get<Repository<User>>(getRepositoryToken(User))
 
     const totalUsersCount = await usersRepository.count()
 
@@ -1082,8 +1080,9 @@ describe("UsersService", () => {
       .expect(200)
     expect(res.body.items[0].email).toBe(searchableEmailAddress)
 
-    const userRepository = await app.resolve<UserRepository>(UserRepository)
-    const user = await userRepository.findByEmail(searchableEmailAddress)
+    const userRepository = await app.resolve<Repository<User>>(getRepositoryToken(User))
+    const userService = await app.resolve(UserService)
+    const user = await userService.findByEmail(searchableEmailAddress)
 
     user.leasingAgentInListings = [{ id: listing.id } as Listing]
     await userRepository.save(user)
