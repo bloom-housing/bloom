@@ -72,4 +72,5 @@ jobs:
         with:
           working-directory: ./sites/partners
           command: yarn dev:all-cypress
+          wait-on: "http://localhost:3001"
        
