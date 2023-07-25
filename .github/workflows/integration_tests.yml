@@ -17,7 +17,7 @@ env:
   BLOOM_LISTINGS_QUERY: "/fake"
 
 jobs:
-  integration-tests:
+  backend-integration:
     runs-on: ubuntu-latest
     services:
       postgres:

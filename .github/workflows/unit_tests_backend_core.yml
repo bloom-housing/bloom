@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-backend-core:
+  backend-unit:
     runs-on: ubuntu-latest
 
     steps:

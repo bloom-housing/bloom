@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-doorway-ui-components:
+  duic-unit:
     runs-on: ubuntu-latest
 
     steps:

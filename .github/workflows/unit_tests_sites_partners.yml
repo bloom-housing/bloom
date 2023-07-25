@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-sites-partners:
+  partners-unit:
     runs-on: ubuntu-latest
 
     steps:

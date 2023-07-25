@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-sites-public:
+  public-unit:
     runs-on: ubuntu-latest
 
     steps:
