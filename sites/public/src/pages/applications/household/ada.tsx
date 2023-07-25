@@ -3,6 +3,7 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
+import React, { useContext, useEffect } from "react"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AppearanceStyleType,
@@ -27,7 +28,6 @@ import {
   adaFeatureKeys,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAda = () => {

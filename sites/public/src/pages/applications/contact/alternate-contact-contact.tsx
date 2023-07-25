@@ -2,6 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+import React, { useContext, useEffect } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -27,7 +28,6 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 
 export default () => {
