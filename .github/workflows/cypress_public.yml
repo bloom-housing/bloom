@@ -73,8 +73,10 @@ jobs:
 
 
       - name: Cypress run
-        working-directory: ./sites/public
         uses: cypress-io/github-action@v5
         with:
-          start: yarn test
+          project: ./sites/public
+          start: yarn dev
+          wait-on: 'http://localhost:3100/listings'
+          command: yarn test
        
