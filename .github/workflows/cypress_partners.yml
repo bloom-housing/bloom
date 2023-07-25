@@ -67,11 +67,6 @@ jobs:
           PGPASSWORD: bloom
           PGUSER: bloom-dev
 
-      - name: Setup partners site
-        working-directory: ./sites/partners
-        run: yarn dev
-
-
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
