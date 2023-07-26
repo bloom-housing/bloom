@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
@@ -34,7 +35,7 @@ const DetailsMultiselectQuestions = ({
       {listingQuestions?.map((listingQuestion) => {
         return (
           <GridCell key={listingQuestion?.multiselectQuestion.text}>
-            <ViewItem label={listingQuestion?.multiselectQuestion.text}>
+            <FieldValue label={listingQuestion?.multiselectQuestion.text}>
               {(() => {
                 const appQuestion = questions?.find(
                   (question) => question.key === listingQuestion?.multiselectQuestion.text
@@ -47,21 +48,21 @@ const DetailsMultiselectQuestions = ({
                   const extra = option.extraData?.map((extra) => {
                     if (extra.type === InputType.text)
                       return (
-                        <ViewItem key={extra.key} label={t("t.name")}>
+                        <FieldValue key={extra.key} label={t("t.name")}>
                           <>{extra.value}</>
-                        </ViewItem>
+                        </FieldValue>
                       )
 
                     if (extra.type === InputType.boolean)
                       return (
-                        <ViewItem
+                        <FieldValue
                           key={extra.key}
                           label={t(`application.preferences.options.${extra.key}`, {
                             county: listingDto?.countyCode,
                           })}
                         >
                           {extra.value ? t("t.yes") : t("t.no")}
-                        </ViewItem>
+                        </FieldValue>
                       )
 
                     if (extra.type === InputType.address)
@@ -89,7 +90,7 @@ const DetailsMultiselectQuestions = ({
                   )
                 })
               })()}
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         )
       })}

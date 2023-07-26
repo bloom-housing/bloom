@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
-  ViewItem,
   Select,
   GridCell,
   Field,
@@ -11,6 +10,7 @@ import {
   PhoneField,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { altContactRelationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 
 const FormAlternateContact = () => {
@@ -35,7 +35,7 @@ const FormAlternateContact = () => {
     <GridSection title={t("application.alternateContact.type.label")} grid={false} separator>
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.name.firstName")}>
+          <FieldValue label={t("application.name.firstName")}>
             <Field
               id="application.alternateContact.firstName"
               name="application.alternateContact.firstName"
@@ -44,11 +44,11 @@ const FormAlternateContact = () => {
               register={register}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.lastName")}>
+          <FieldValue label={t("application.name.lastName")}>
             <Field
               id="application.alternateContact.lastName"
               name="application.alternateContact.lastName"
@@ -57,11 +57,11 @@ const FormAlternateContact = () => {
               label={t("application.name.lastName")}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.agency")}>
+          <FieldValue label={t("application.details.agency")}>
             <Field
               id="application.alternateContact.agency"
               name="application.alternateContact.agency"
@@ -70,11 +70,11 @@ const FormAlternateContact = () => {
               register={register}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.email")}>
+          <FieldValue label={t("t.email")}>
             <Field
               id="application.alternateContact.emailAddress"
               name="application.alternateContact.emailAddress"
@@ -87,11 +87,11 @@ const FormAlternateContact = () => {
               register={register}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.phone")}>
+          <FieldValue label={t("t.phone")}>
             <PhoneField
               id="application.alternateContact.phoneNumber"
               name="application.alternateContact.phoneNumber"
@@ -103,11 +103,11 @@ const FormAlternateContact = () => {
               label={t("t.phone")}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.relationship")}>
+          <FieldValue label={t("t.relationship")}>
             <Select
               id="application.alternateContact.type"
               name="application.alternateContact.type"
@@ -118,12 +118,12 @@ const FormAlternateContact = () => {
               options={altContactRelationshipOptions}
               keyPrefix="application.alternateContact.type.options"
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         {alternateContactType === "other" && (
           <GridCell>
-            <ViewItem label={t("t.otherRelationShip")}>
+            <FieldValue label={t("t.otherRelationShip")}>
               <Field
                 id="application.alternateContact.otherType"
                 name="application.alternateContact.otherType"
@@ -132,7 +132,7 @@ const FormAlternateContact = () => {
                 register={register}
                 readerOnly
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         )}
       </GridSection>

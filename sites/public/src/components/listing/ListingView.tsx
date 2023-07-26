@@ -34,6 +34,7 @@ import {
   EventType,
   StandardTableData,
   ExpandableSection,
+  SiteAlert,
 } from "@bloom-housing/ui-components"
 import {
   ApplicationStatus,
@@ -514,6 +515,7 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto md:mt-8">
       <header className="image-card--leader">
+        <SiteAlert type="alert" dismissable />
         <ImageCard
           images={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize)).map(
             (imageUrl: string) => {
@@ -539,13 +541,10 @@ export const ListingView = (props: ListingProps) => {
             listingName: listing.name,
           })}
           modalCloseLabel={t("t.backToListing")}
+          modalCloseInContent
         />
         <div className="py-3 mx-3 mt-4 flex flex-col items-center md:items-start text-center md:text-left">
-          <Heading
-            priority={1}
-            styleType={"largePrimary"}
-            className={"text-primary-dark font-serif font-semibold"}
-          >
+          <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>
             {listing.name}
           </Heading>
           <Heading priority={2} styleType={"mediumNormal"} className={"mb-1"}>

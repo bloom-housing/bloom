@@ -109,16 +109,24 @@ const tritonListing: ListingSeedType = {
 
 export class ListingTritonSeed extends ListingDefaultSeed {
   async seed() {
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
 
     const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.bay_area,
+      where: { name: CountyCode.bay_area },
     })
 
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "San Jose TCAC 2019",
-      jurisdiction: bayAreaJurisdiction,
+      where: {
+        name: "San Jose TCAC 2019",
+        jurisdiction: {
+          name: bayAreaJurisdiction.name,
+        },
+      },
     })
 
     const tritonUnits: Array<UnitSeedType> = [
@@ -220,11 +228,157 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(bayAreaJurisdiction.name).text,
+            where: { text: getLiveWorkPreference(bayAreaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
       ],
+      events: [],
+    }
+
+    const listing = await this.listingRepository.save(listingCreateDto)
+
+    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = tritonUnits.map(
+      (unit) => {
+        return {
+          ...unit,
+          listing: {
+            id: listing.id,
+          },
+          amiChart,
+        }
+      }
+    )
+
+    unitsToBeCreated[0].unitType = unitTypeTwoBdrm
+    unitsToBeCreated[1].unitType = unitTypeOneBdrm
+    unitsToBeCreated[2].unitType = unitTypeOneBdrm
+    unitsToBeCreated[3].unitType = unitTypeOneBdrm
+    unitsToBeCreated[4].unitType = unitTypeOneBdrm
+
+    await this.unitsRepository.save(unitsToBeCreated)
+
+    return listing
+  }
+}
+
+export class ListingTritonSeedDetroit extends ListingDefaultSeed {
+  async seed() {
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
+
+    const detroitJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      where: { name: CountyCode.detroit },
+    })
+    const amiChart = await this.amiChartRepository.findOneOrFail({
+      where: {
+        name: "Detroit TCAC 2019",
+        jurisdiction: {
+          name: detroitJurisdiction.name,
+        },
+      },
+    })
+
+    const tritonUnits: Array<UnitSeedType> = [
+      {
+        amiChart: amiChart,
+        amiPercentage: "120.0",
+        annualIncomeMax: "177300.0",
+        annualIncomeMin: "84696.0",
+        floor: 1,
+        maxOccupancy: 5,
+        minOccupancy: 2,
+        monthlyIncomeMin: "7058.0",
+        monthlyRent: "3340.0",
+        monthlyRentAsPercentOfIncome: null,
+        numBathrooms: null,
+        numBedrooms: 2,
+        number: null,
+        priorityType: null,
+        sqFeet: "1100",
+      },
+      {
+        amiChart: amiChart,
+        amiPercentage: "80.0",
+        annualIncomeMax: "103350.0",
+        annualIncomeMin: "58152.0",
+        floor: 1,
+        maxOccupancy: 2,
+        minOccupancy: 1,
+        monthlyIncomeMin: "4858.0",
+        monthlyRent: "2624.0",
+        monthlyRentAsPercentOfIncome: null,
+        numBathrooms: null,
+        numBedrooms: 1,
+        number: null,
+        priorityType: null,
+        sqFeet: "750",
+      },
+      {
+        amiChart: amiChart,
+        amiPercentage: "80.0",
+        annualIncomeMax: "103350.0",
+        annualIncomeMin: "58152.0",
+        floor: 1,
+        maxOccupancy: 2,
+        minOccupancy: 1,
+        monthlyIncomeMin: "4858.0",
+        monthlyRent: "2624.0",
+        monthlyRentAsPercentOfIncome: null,
+        numBathrooms: null,
+        numBedrooms: 1,
+        number: null,
+        priorityType: null,
+        sqFeet: "750",
+      },
+      {
+        amiChart: amiChart,
+        amiPercentage: "80.0",
+        annualIncomeMax: "103350.0",
+        annualIncomeMin: "58152.0",
+        floor: 1,
+        maxOccupancy: 2,
+        minOccupancy: 1,
+        monthlyIncomeMin: "4858.0",
+        monthlyRent: "2624.0",
+        monthlyRentAsPercentOfIncome: null,
+        numBathrooms: null,
+        numBedrooms: 1,
+        number: null,
+        priorityType: null,
+        sqFeet: "750",
+      },
+      {
+        amiChart: amiChart,
+        amiPercentage: "50.0",
+        annualIncomeMax: "103350.0",
+        annualIncomeMin: "38952.0",
+        floor: 1,
+        maxOccupancy: 2,
+        minOccupancy: 1,
+        monthlyIncomeMin: "3246.0",
+        monthlyRent: "1575.0",
+        monthlyRentAsPercentOfIncome: null,
+        numBathrooms: null,
+        numBedrooms: 1,
+        number: null,
+        priorityType: null,
+        sqFeet: "750",
+      },
+    ]
+
+    const listingCreateDto: Omit<
+      DeepPartial<Listing>,
+      keyof BaseEntity | "urlSlug" | "showWaitlist"
+    > = {
+      ...classToClass(tritonListing),
+      name: "Test: Triton 1",
+      applicationOpenDate: getDate(-5),
+      assets: getDefaultAssets(),
       events: [],
     }
 

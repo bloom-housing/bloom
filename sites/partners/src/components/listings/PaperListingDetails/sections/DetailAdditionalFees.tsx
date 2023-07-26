@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -36,38 +37,38 @@ const DetailAdditionalFees = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem id="applicationFee" label={t("listings.applicationFee")}>
+          <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
             {getDetailFieldString(listing.applicationFee)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem id="depositMin" label={t("listings.depositMin")}>
+          <FieldValue id="depositMin" label={t("listings.depositMin")}>
             {getDetailFieldString(listing.depositMin)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem id="depositMax" label={t("listings.depositMax")}>
+          <FieldValue id="depositMax" label={t("listings.depositMax")}>
             {getDetailFieldString(listing.depositMax)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={t("listings.sections.depositHelperText")}>
+          <FieldValue label={t("listings.sections.depositHelperText")}>
             {getDetailFieldString(listing.depositHelperText)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
+          <FieldValue id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
             {getDetailFieldString(listing.costsNotIncluded)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         {enableUtilitiesIncluded && (
           <GridSection columns={1}>
             <GridCell className={"m-h-1"}>
-              <ViewItem label={t("listings.sections.utilities")}>
+              <FieldValue label={t("listings.sections.utilities")}>
                 <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
         )}

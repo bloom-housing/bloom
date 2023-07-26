@@ -12,7 +12,6 @@ import { Asset } from "@bloom-housing/backend-core/types"
 
 const photoTableHeaders = {
   preview: "t.preview",
-  fileName: "t.fileName",
   primary: "t.primary",
 }
 
@@ -32,7 +31,7 @@ const DetailListingPhotos = () => {
           </TableThumbnail>
         ),
       },
-      fileName: { content: image.fileId.split("/").slice(-1).join() },
+
       primary: {
         content: index == 0 ? t("listings.sections.photo.primaryPhoto") : "",
       },

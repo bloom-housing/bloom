@@ -49,6 +49,8 @@ export interface ImageCardProps {
   statuses?: StatusBarType[]
   /** A list of image tags, a Tag component is rendered for each over the image */
   tags?: ImageTag[]
+  /** When true, close button will be placed inside content section on desktop  */
+  modalCloseInContent?: boolean
   /** The label text of the close button when the gallery modal is displayed */
   modalCloseLabel?: string
   /** The title text of the gallery modal, only for screen readers */
@@ -197,6 +199,7 @@ const ImageCard = (props: ImageCardProps) => {
           onClose={() => setShowModal(!showModal)}
           className="image-card__overlay"
           modalClassNames="image-card__gallery-modal"
+          innerClassNames="image-card__inner-modal"
           headerClassNames="sr-only"
           closeIconColor={IconFillColors.white}
           actions={[
@@ -204,9 +207,10 @@ const ImageCard = (props: ImageCardProps) => {
               {props.modalCloseLabel || "Close"}
             </Button>,
           ]}
+          actionsInContent={props.modalCloseInContent}
         >
           {props.images?.map((image, index) => (
-            <p key={index} className="mb-7">
+            <p key={index} className="md:mb-8">
               <picture>
                 {image.mobileUrl && <source media="(max-width: 767px)" srcSet={image.mobileUrl} />}
                 <img

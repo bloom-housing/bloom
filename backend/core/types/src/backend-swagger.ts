@@ -561,6 +561,8 @@ export class ApplicationsService {
       /**  */
       listingId: string
       /**  */
+      timeZone?: string
+      /**  */
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
@@ -578,6 +580,7 @@ export class ApplicationsService {
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
         listingId: params["listingId"],
+        timeZone: params["timeZone"],
         includeDemographics: params["includeDemographics"],
       }
       let data = null
@@ -644,6 +647,27 @@ export class ApplicationsService {
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/submit"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Verify application can be saved
+   */
+  submissionValidation(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applications/verify"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
@@ -3790,6 +3814,9 @@ export interface UserRoles {
   user: Id
 
   /**  */
+  userId: string
+
+  /**  */
   isAdmin?: boolean
 
   /**  */
@@ -4501,6 +4528,12 @@ export interface ListingImage {
   image: AssetUpdate
 
   /**  */
+  imageId?: string
+
+  /**  */
+  id?: string
+
+  /**  */
   ordinal?: number
 }
 
@@ -4582,6 +4615,9 @@ export interface MultiselectQuestion {
 export interface ListingMultiselectQuestion {
   /**  */
   multiselectQuestion: MultiselectQuestion
+
+  /**  */
+  id?: string
 
   /**  */
   ordinal?: number
@@ -5251,6 +5287,12 @@ export interface ListingImageUpdate {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  imageId?: string
+
+  /**  */
+  id?: string
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5376,6 +5418,9 @@ export interface ListingMultiselectQuestionUpdate {
 
   /**  */
   ordinal?: number
+
+  /**  */
+  id?: string
 }
 
 export interface ListingCreate {

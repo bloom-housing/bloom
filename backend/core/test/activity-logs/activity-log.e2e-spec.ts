@@ -61,7 +61,7 @@ describe("Activity", () => {
 
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     const userRepository = app.get<Repository<User>>(getRepositoryToken(User))
-    adminId = (await userRepository.findOne({ email: "admin@example.com" })).id
+    adminId = (await userRepository.findOne({ where: { email: "admin@example.com" } })).id
     activityLogsRepository = app.get<Repository<ActivityLog>>(getRepositoryToken(ActivityLog))
     applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))
     jurisdictionsRepository = app.get<Repository<Jurisdiction>>(getRepositoryToken(Jurisdiction))

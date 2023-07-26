@@ -2,11 +2,11 @@ import React, { useContext } from "react"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   MinimalTable,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
 import { getDetailBoolean } from "./helpers"
@@ -49,42 +49,42 @@ const DetailApplicationTypes = () => {
     >
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem id="digitalApplication" label={"Online Applications"}>
+          <FieldValue id="digitalApplication" label={"Online Applications"}>
             {getDetailBoolean(listing.digitalApplication)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         {digitalMethod && (
           <GridCell>
-            <ViewItem id="digitalMethod.type" label={"Common Digital Application"}>
+            <FieldValue id="digitalMethod.type" label={"Common Digital Application"}>
               {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         )}
         {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
-          <ViewItem
+          <FieldValue
             id="customOnlineApplicationUrl"
             label={t("listings.customOnlineApplicationUrl")}
           >
             {digitalMethod.externalReference}
-          </ViewItem>
+          </FieldValue>
         )}
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="paperApplication" label={"Paper Applications"}>
+          <FieldValue id="paperApplication" label={"Paper Applications"}>
             {getDetailBoolean(listing.paperApplication)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         {paperApplicationsTableRows.length > 0 && (
           <GridCell>
-            <ViewItem label={"Paper Applications"}>
+            <FieldValue label={"Paper Applications"}>
               <MinimalTable
                 id="paperApplicationTable"
                 headers={paperApplicationsTableHeaders}
                 data={paperApplicationsTableRows}
                 flushLeft={true}
               ></MinimalTable>
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         )}
       </GridSection>

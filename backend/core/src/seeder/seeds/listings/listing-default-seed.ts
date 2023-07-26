@@ -54,20 +54,26 @@ export class ListingDefaultSeed {
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: PriorityTypes.mobilityHearing }
+      { where: { name: PriorityTypes.mobilityHearing } }
     )
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "oneBdrm" },
+    })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({
+      where: { name: "twoBdrm" },
+    })
     const bayAreaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
-      name: CountyCode.bay_area,
+      where: { name: CountyCode.bay_area },
     })
     // todo update the name of this
     const amiChart = await this.amiChartRepository.findOneOrFail({
-      name: "AlamedaCountyTCAC2021",
-      jurisdiction: bayAreaJurisdiction,
+      where: {
+        name: "AlamedaCountyTCAC2021",
+        jurisdiction: {
+          name: bayAreaJurisdiction.name,
+        },
+      },
     })
-
-    const defaultImage = await this.assetsRepository.save(getDefaultAssets()[0])
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -81,54 +87,48 @@ export class ListingDefaultSeed {
       listingMultiselectQuestions: [
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getLiveWorkPreference(bayAreaJurisdiction.name).text,
+            where: { text: getLiveWorkPreference(bayAreaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisplaceePreference(bayAreaJurisdiction.name).text,
+            where: { text: getDisplaceePreference(bayAreaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getServedInMilitaryProgram(bayAreaJurisdiction.name).text,
+            where: { text: getServedInMilitaryProgram(bayAreaJurisdiction.name).text },
           }),
           ordinal: 1,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getTayProgram(bayAreaJurisdiction.name).text,
+            where: { text: getTayProgram(bayAreaJurisdiction.name).text },
           }),
           ordinal: 2,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getDisabilityOrMentalIllnessProgram(bayAreaJurisdiction.name).text,
+            where: { text: getDisabilityOrMentalIllnessProgram(bayAreaJurisdiction.name).text },
           }),
           ordinal: 3,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getHousingSituationProgram(bayAreaJurisdiction.name).text,
+            where: { text: getHousingSituationProgram(bayAreaJurisdiction.name).text },
           }),
           ordinal: 4,
         },
         {
           multiselectQuestion: await this.multiselectQuestionsRepository.findOneOrFail({
-            text: getFlatRentAndRentBasedOnIncomeProgram(bayAreaJurisdiction.name).text,
+            where: { text: getFlatRentAndRentBasedOnIncomeProgram(bayAreaJurisdiction.name).text },
           }),
           ordinal: 5,
         },
       ],
       events: getDefaultListingEvents(),
-      images: [
-        {
-          image: defaultImage,
-          ordinal: 1,
-        },
-      ],
       jurisdictionName: "Bay Area",
       jurisdiction: bayAreaJurisdiction,
     }

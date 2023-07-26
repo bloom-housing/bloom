@@ -10,6 +10,11 @@
   --tags-justify-desktop: flex-start;
   --grid-gap-mobile: var(--bloom-s2);
   --grid-gap-desktop: var(--bloom-s4);
+  --grid-template-columns-mobile: 1fr 1fr;
+  --grid-template-rows-mobile: 1.2fr 0.5fr;
+  --grid-template-areas-mobile:
+    "Main Main"
+    "Secondary-1 Secondary-2";
 
   position: relative;
 }
@@ -34,15 +39,17 @@
   &.has-grid-layout {
     --grid-gap: var(--grid-gap-desktop);
 
-    @media (max-width: $screen-sm) {
-      --grid-gap: var(--grid-gap-mobile);
-    }
 
     background-color: transparent;
     display: grid;
     grid-template-columns: 1.3fr 0.7fr;
     grid-template-rows: 1fr 1fr;
     gap: var(--grid-gap);
+
+    @media (max-width: $screen-sm) {
+      grid-template-columns: var(--grid-template-columns-mobile);
+      grid-template-rows: var(--grid-template-rows-mobile);
+    }
 
     &.has-2-images {
       grid-template-columns: 1.2fr 0.8fr;
@@ -183,5 +190,16 @@
   }
   footer button:focus {
     box-shadow: 0 0 3px 4px var(--bloom-color-accent-cool);
+  }
+}
+
+.image-card__inner-modal {
+  --content-padding-inline: 0;
+  --content-padding-block: 0;
+  --content-margin-top: 0;
+  margin-inline: 0;
+  height: 100vh;
+  @media (min-width: $screen-md) {
+    height: calc(100vh - var(--bloom-s32));
   }
 }

@@ -1,7 +1,7 @@
 import { NotFoundException } from "@nestjs/common"
 import { ReservedCommunityType } from "./entities/reserved-community-type.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { FindOneOptions, Repository } from "typeorm"
+import { FindOneOptions, FindOptionsWhere, Repository } from "typeorm"
 import {
   ReservedCommunityTypeCreateDto,
   ReservedCommunityTypeUpdateDto,
@@ -16,16 +16,16 @@ export class ReservedCommunityTypesService {
   ) {}
 
   list(queryParams?: ReservedCommunityTypeListQueryParams): Promise<ReservedCommunityType[]> {
+    const whereClause: FindOptionsWhere<ReservedCommunityType> = {}
+    if (queryParams.jurisdictionName) {
+      whereClause.jurisdiction = { name: queryParams.jurisdictionName }
+    }
     return this.repository.find({
       join: {
         alias: "rct",
         leftJoinAndSelect: { jurisdiction: "rct.jurisdiction" },
       },
-      where: (qb) => {
-        if (queryParams.jurisdictionName) {
-          qb.where("jurisdiction.name = :jurisdictionName", queryParams)
-        }
-      },
+      where: whereClause,
     })
   }
 

@@ -80,7 +80,6 @@ const ListingPhotos = () => {
    */
   const photoTableHeaders = {
     preview: "t.preview",
-    fileName: "t.fileName",
     primary: "t.primary",
     actions: "",
   }
@@ -88,7 +87,6 @@ const ListingPhotos = () => {
   const listingPhotoTableRows: StandardTableData = []
   listingFormPhotos.forEach((image, index) => {
     const listingPhotoUrl = getImageUrlFromAsset(image.image)
-
     listingPhotoTableRows.push({
       preview: {
         content: (
@@ -121,12 +119,11 @@ const ListingPhotos = () => {
   /*
    Show a re-orderable list of uploaded images within the drawer
    */
+
   const drawerTableRows: StandardTableData = useMemo(() => {
     return drawerImages.map((item, index) => {
       const image = item.image as Asset
-
       const imageUrl = getImageUrlFromAsset(image)
-
       return {
         ordinal: {
           content: item.ordinal + 1,

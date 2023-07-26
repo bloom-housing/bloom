@@ -68,7 +68,15 @@ const ApplicationMember = () => {
   }
   const deleteMember = () => {
     if (member.orderId != undefined) {
-      application.householdMembers.splice(member.orderId, 1)
+      application.householdMembers = application.householdMembers.reduce((acc, householdMember) => {
+        if (householdMember.orderId !== member.orderId) {
+          acc.push({
+            ...householdMember,
+            orderId: acc.length,
+          })
+        }
+        return acc
+      }, [])
       conductor.sync()
     }
     void router.push("/applications/household/add-members")
@@ -485,6 +493,7 @@ const ApplicationMember = () => {
                   <Button
                     id="cancel-add"
                     className="lined text-sm mt-0"
+                    type="button"
                     onClick={deleteMember}
                     unstyled={true}
                     data-testid={"app-household-member-cancel"}

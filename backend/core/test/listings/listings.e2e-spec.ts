@@ -47,12 +47,11 @@ describe("Listings", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Jurisdiction]),
+        TypeOrmModule.forFeature([Jurisdiction, MultiselectQuestion]),
         ListingsModule,
         AssetsModule,
         ApplicationMethodsModule,
         PaperApplicationsModule,
-        TypeOrmModule.forFeature([MultiselectQuestion]),
         HttpModule,
       ],
     }).compile()
@@ -378,7 +377,6 @@ describe("Listings", () => {
       applicationSection: ApplicationSection.programs,
     })
     listing.listingMultiselectQuestions = [{ multiselectQuestion: newProgram, ordinal: 1 }]
-
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
