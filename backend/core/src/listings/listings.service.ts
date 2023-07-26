@@ -144,6 +144,8 @@ export class ListingsService {
       listing.buildingSelectionCriteria = null
     }
 
+    const previousStatus = listing.status
+    const newStatus = listingDto.status
     Object.assign(listing, {
       ...listingDto,
       publishedAt:
@@ -157,7 +159,7 @@ export class ListingsService {
     })
 
     const saveResponse = await this.listingRepository.save(listing)
-    await this.cachePurgeService.cachePurgeForSingleListing(listing, listingDto, saveResponse)
+    await this.cachePurgeService.cachePurgeForSingleListing(previousStatus, newStatus, saveResponse)
     return saveResponse
   }
 
