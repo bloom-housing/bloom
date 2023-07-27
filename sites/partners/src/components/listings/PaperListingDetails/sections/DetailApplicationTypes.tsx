@@ -23,9 +23,6 @@ const DetailApplicationTypes = () => {
   const paperMethod = listing.applicationMethods.find(
     (method) => method.type === ApplicationMethodType.FileDownload
   )
-  const referralMethod = listing.applicationMethods.find(
-    (method) => method.type === ApplicationMethodType.Referral
-  )
 
   const paperApplicationsTableHeaders = {
     fileName: "t.fileName",
@@ -89,28 +86,6 @@ const DetailApplicationTypes = () => {
               ></MinimalTable>
             </FieldValue>
           </GridCell>
-        )}
-      </GridSection>
-
-      <GridSection columns={2}>
-        <GridCell>
-          <FieldValue id="referralOpportunity" label={"Referral"}>
-            {getDetailBoolean(listing.referralOpportunity)}
-          </FieldValue>
-        </GridCell>
-        {referralMethod && (
-          <>
-            <GridCell>
-              <FieldValue id="referralContactPhone" label={t("listings.referralContactPhone")}>
-                {referralMethod.phoneNumber}
-              </FieldValue>
-            </GridCell>
-            <GridCell>
-              <FieldValue id="referralSummary" label={t("listings.referralSummary")}>
-                {referralMethod.externalReference}
-              </FieldValue>
-            </GridCell>
-          </>
         )}
       </GridSection>
     </GridSection>

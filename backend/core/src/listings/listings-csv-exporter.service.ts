@@ -129,7 +129,6 @@ export class ListingsCsvExporterService {
         "Digital Application URL": listing.applicationMethods[1]?.externalReference,
         "Paper Application": formatYesNo(listing.paperApplication),
         "Paper Application URL": getPaperAppUrls(listing.applicationMethods[0]?.paperApplications),
-        "Referral opportunity?": formatYesNo(listing.referralOpportunity),
         "Can applications be mailed in?": formatYesNo(
           listing.applicationMailingAddress || listing.applicationMailingAddressType
         ),
