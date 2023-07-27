@@ -21,13 +21,13 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { Address } from '../addresses/address-get.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { UnitType } from '../unit-types/unit-type-get.dto';
 import { Accessibility } from './accessibility.dto';
 import { AlternateContact } from './alternate-contact.dto';
 import { Applicant } from './applicant.dto';
 import { ApplicationMultiselectQuestion } from './application-multiselect-question.dto';
 import { Demographic } from './demographic.dto';
 import { HouseholdMember } from './household-member.dto';
+import { UnitType } from '../unit-types/unit-type.dto';
 
 export class Application extends AbstractDTO {
   @Expose()

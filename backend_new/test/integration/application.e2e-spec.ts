@@ -4,11 +4,15 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
-import { unitTypeFactory } from '../../prisma/seed-helpers/unit-type-factory';
+import {
+  unitTypeFactoryAll,
+  unitTypeFactorySingle,
+} from '../../prisma/seed-helpers/unit-type-factory';
 import { ApplicationQueryParams } from '../../src/dtos/applications/application-query-params.dto';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { ApplicationOrderByKeys } from '../../src/enums/applications/order-by-enum';
 import { stringify } from 'qs';
+import { UnitTypeEnum } from '@prisma/client';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
@@ -22,6 +26,7 @@ describe('Application Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+    await unitTypeFactoryAll(prisma);
   });
 
   afterAll(async () => {
@@ -86,9 +91,7 @@ describe('Application Controller Tests', () => {
   };
 
   it('testing list endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(10),
-    });
+    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
       data: applicationFactory(7, unitTypeA.id),
@@ -137,9 +140,7 @@ describe('Application Controller Tests', () => {
   });
 
   it('testing retrieve endpoint', async () => {
-    const unitTypeA = await prisma.unitTypes.create({
-      data: unitTypeFactory(10),
-    });
+    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
       data: applicationFactory(10, unitTypeA.id),

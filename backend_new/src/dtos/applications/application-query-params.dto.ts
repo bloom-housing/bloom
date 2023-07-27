@@ -1,5 +1,5 @@
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, TransformFnParams } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -51,10 +51,10 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   @IsEnum(ApplicationOrderByKeys, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @Transform((value: string | undefined) =>
-    value
-      ? ApplicationOrderByKeys[value]
-        ? ApplicationOrderByKeys[value]
+  @Transform((value: TransformFnParams) =>
+    value?.value
+      ? ApplicationOrderByKeys[value.value]
+        ? ApplicationOrderByKeys[value.value]
         : value
       : ApplicationOrderByKeys.createdAt,
   )
@@ -72,7 +72,9 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   @IsEnum(OrderByEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @Transform((value: string | undefined) => (value ? value : OrderByEnum.DESC))
+  @Transform((value: TransformFnParams) =>
+    value?.value ? value.value : OrderByEnum.DESC,
+  )
   order?: OrderByEnum;
 
   @Expose()
@@ -83,8 +85,8 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
-    (value: string | undefined) => {
-      switch (value) {
+    (value: TransformFnParams) => {
+      switch (value?.value) {
         case 'true':
           return true;
         case 'false':
