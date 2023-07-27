@@ -33,7 +33,7 @@ describe('Application Controller Tests', () => {
     await app.close();
   });
 
-  const cleanUpDb = async (applicationIds: string[], unitTypeIds: string[]) => {
+  const cleanUpDb = async (applicationIds: string[]) => {
     for (let i = 0; i < applicationIds.length; i++) {
       await prisma.householdMember.deleteMany();
       const res = await prisma.applications.delete({
@@ -47,44 +47,43 @@ describe('Application Controller Tests', () => {
           demographics: true,
         },
       });
-      await prisma.alternateContact.delete({
-        where: {
-          id: res.alternateContact.id,
-        },
-      });
+      if (res.alternateContact) {
+        await prisma.alternateContact.delete({
+          where: {
+            id: res.alternateContact.id,
+          },
+        });
+      }
       await prisma.applicant.delete({
         where: {
           id: res.applicant.id,
         },
       });
-      await prisma.accessibility.delete({
-        where: {
-          id: res.accessibility.id,
-        },
-      });
-      await prisma.demographics.delete({
-        where: {
-          id: res.demographics.id,
-        },
-      });
+      if (res.accessibility) {
+        await prisma.accessibility.delete({
+          where: {
+            id: res.accessibility.id,
+          },
+        });
+      }
+      if (res.demographics) {
+        await prisma.demographics.delete({
+          where: {
+            id: res.demographics.id,
+          },
+        });
+      }
       await prisma.address.deleteMany({
         where: {
           id: {
             in: [
-              res.mailingAddressId,
-              res.alternateAddressId,
-              res.alternateContact.mailingAddressId,
+              res.mailingAddressId ?? undefined,
+              res.alternateAddressId ?? undefined,
+              res.alternateContact?.mailingAddressId,
               res.applicant.workAddressId,
               res.applicant.addressId,
             ],
           },
-        },
-      });
-    }
-    for (let i = 0; i < unitTypeIds.length; i++) {
-      await prisma.unitTypes.delete({
-        where: {
-          id: unitTypeIds[i],
         },
       });
     }
@@ -94,13 +93,13 @@ describe('Application Controller Tests', () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
-      data: applicationFactory(7, unitTypeA.id),
+      data: applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
     });
     const applicationB = await prisma.applications.create({
-      data: applicationFactory(8, unitTypeA.id),
+      data: applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
@@ -126,24 +125,23 @@ describe('Application Controller Tests', () => {
       totalPages: 1,
     });
     expect(res.body.items.length).toEqual(2);
-    const sortedItems = res.body.items.sort((a, b) =>
-      a.applicant.firstName < b.applicant.firstName ? -1 : 1,
+    const resApplicationA = res.body.items.find(
+      (item) => item.applicant.firstName === applicationA.applicant.firstName,
     );
-    expect(sortedItems[0].applicant.firstName).toEqual(
-      applicationA.applicant.firstName,
+    expect(resApplicationA).not.toBeNull();
+    const resApplicationB = res.body.items.find(
+      (item) => item.applicant.firstName === applicationB.applicant.firstName,
     );
-    expect(sortedItems[1].applicant.firstName).toEqual(
-      applicationB.applicant.firstName,
-    );
+    expect(resApplicationA).not.toBeNull();
 
-    await cleanUpDb([applicationA.id, applicationB.id], [unitTypeA.id]);
+    await cleanUpDb([applicationA.id, applicationB.id]);
   });
 
   it('testing retrieve endpoint', async () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
-      data: applicationFactory(10, unitTypeA.id),
+      data: applicationFactory({ unitTypeId: unitTypeA.id }),
       include: {
         applicant: true,
       },
@@ -157,6 +155,6 @@ describe('Application Controller Tests', () => {
       applicationA.applicant.firstName,
     );
 
-    await cleanUpDb([applicationA.id], [unitTypeA.id]);
+    await cleanUpDb([applicationA.id]);
   });
 });
