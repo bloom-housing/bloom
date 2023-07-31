@@ -1,6 +1,14 @@
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsBoolean, IsEnum, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator"
+import {
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUrl,
+  MaxLength,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { ApiProperty } from "@nestjs/swagger"
@@ -29,6 +37,7 @@ export class ApplicationMethod extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  @IsUrl({ require_protocol: true }, { groups: [ValidationsGroupsEnum.default] })
   externalReference?: string | null
 
   @Column({ type: "bool", nullable: true })

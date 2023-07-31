@@ -315,6 +315,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     })
                   },
                 }}
+                error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
+                errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
               />
             </GridCell>
           </GridSection>
