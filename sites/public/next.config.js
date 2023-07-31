@@ -70,7 +70,7 @@ module.exports = withBundleAnalyzer(
   })
 )
 
-if (process.env.SENTY_ORG) {
+if (process.env.SENTRY_ORG) {
   // Injected content via Sentry wizard below
 
   const { withSentryConfig } = require("@sentry/nextjs")
@@ -84,7 +84,7 @@ if (process.env.SENTY_ORG) {
       // Suppresses source map uploading logs during build
       silent: true,
 
-      org: process.env.SENTY_ORG,
+      org: process.env.SENTRY_ORG,
       project: "public",
     },
     {
