@@ -182,6 +182,8 @@ export class ListingsService {
       buildingAddress = { ...buildingAddress, county: this.getCountyName(jurisdiction) }
     }
 
+    const previousStatus = listing.status
+    const newStatus = listingDto.status
     Object.assign(listing, {
       ...listingDto,
       buildingAddress: buildingAddress,
@@ -196,7 +198,7 @@ export class ListingsService {
     })
 
     const saveResponse = await this.listingRepository.save(listing)
-    await this.cachePurgeService.cachePurgeForSingleListing(listing, listingDto, saveResponse)
+    await this.cachePurgeService.cachePurgeForSingleListing(previousStatus, newStatus, saveResponse)
     return saveResponse
   }
 

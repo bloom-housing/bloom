@@ -1,8 +1,6 @@
 import { HttpService } from "@nestjs/axios"
 import { firstValueFrom } from "rxjs"
 import { Listing } from "./entities/listing.entity"
-import { ListingCreateDto } from "./dto/listing-create.dto"
-import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingStatus } from "./types/listing-status-enum"
 import { Injectable } from "@nestjs/common"
 
@@ -18,8 +16,8 @@ export class CachePurgeService {
    * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
    */
   public async cachePurgeForSingleListing(
-    currentListing: Listing,
-    incomingChanges: ListingCreateDto | ListingUpdateDto,
+    previousStatus: ListingStatus,
+    newStatus: ListingStatus,
     saveReponse: Listing
   ) {
     if (process.env.PROXY_URL) {
@@ -30,10 +28,7 @@ export class CachePurgeService {
           url: `/listings/${saveReponse.id}*`,
         })
       ).catch((e) => console.log(`purge listing ${saveReponse.id} error = `, e))
-      if (
-        incomingChanges.status !== ListingStatus.pending ||
-        currentListing.status === ListingStatus.active
-      ) {
+      if (newStatus !== ListingStatus.pending || previousStatus === ListingStatus.active) {
         await this.cachePurgeListings()
       }
     }
