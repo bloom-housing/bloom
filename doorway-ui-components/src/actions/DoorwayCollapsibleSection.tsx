@@ -30,7 +30,7 @@ const DoorwayCollapsibleSection = ({
           className="button is-unstyled m-0 no-underline has-toggle flex items-center"
           aria-expanded={isExpanded}
         >
-          <Heading priority={4} className={"text__large-primary"}>
+          <Heading priority={4} className={"text__large-primary text-left"}>
             {title}
           </Heading>
         </button>
