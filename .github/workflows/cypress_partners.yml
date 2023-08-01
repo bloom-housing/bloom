@@ -15,6 +15,7 @@ env:
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://fake_website.fake
   BLOOM_LISTINGS_QUERY: "/fake"
+  JURISDICTION_NAME: 'Bay Area'
 
 jobs:
   partners-cypress:
@@ -33,7 +34,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Check postgres
         run: pg_isready -h 127.0.0.1 -p ${{ job.services.postgres.ports[5432] }}
@@ -71,6 +72,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./sites/partners
-          build: yarn dev:all-cypress
-          start: yarn start
+          build: yarn build
+          start: yarn dev:listings, yarn start
+          wait-on: 'http://localhost:3100/listings'
        
