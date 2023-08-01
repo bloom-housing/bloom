@@ -72,5 +72,4 @@ jobs:
         with:
           working-directory: ./sites/public
           build: yarn dev:all-cypress
-          start: yarn start
        
