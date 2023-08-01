@@ -106,7 +106,7 @@ export class RootService {
   /**
    * Health check endpoint
    */
-  heartbeat(options: IRequestOptions = {}): Promise<SuccessDTO> {
+  healthCheck(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/';
 

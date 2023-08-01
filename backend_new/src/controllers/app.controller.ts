@@ -15,7 +15,10 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Health check endpoint', operationId: 'heartbeat' })
+  @ApiOperation({
+    summary: 'Health check endpoint',
+    operationId: 'healthCheck',
+  })
   @ApiOkResponse({ type: SuccessDTO })
   async healthCheck(): Promise<SuccessDTO> {
     return await this.appService.healthCheck();
