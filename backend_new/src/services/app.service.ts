@@ -6,7 +6,7 @@ import { PrismaService } from './prisma.service';
 export class AppService {
   constructor(private prisma: PrismaService) {}
 
-  async heartbeat(): Promise<SuccessDTO> {
+  async healthCheck(): Promise<SuccessDTO> {
     await this.prisma.$queryRaw`SELECT 1`;
     return {
       success: true,

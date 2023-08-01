@@ -16,7 +16,7 @@ describe('Testing app service', () => {
 
   it('should return a successDTO with success true', async () => {
     prisma.$queryRaw = jest.fn().mockResolvedValue(1);
-    expect(await service.heartbeat()).toEqual({
+    expect(await service.healthCheck()).toEqual({
       success: true,
     });
     expect(prisma.$queryRaw).toHaveBeenCalled();

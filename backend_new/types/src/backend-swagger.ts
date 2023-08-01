@@ -104,7 +104,7 @@ export class PagedResult<T = any> implements IPagedResult<T> {
 
 export class RootService {
   /**
-   * Heartbeat endpoint
+   * Health check endpoint
    */
   heartbeat(options: IRequestOptions = {}): Promise<SuccessDTO> {
     return new Promise((resolve, reject) => {
