@@ -30,6 +30,21 @@
     }
   }
 
+  .listings-map-skip-link {
+    @apply sr-only;
+
+    &:focus {
+      @apply not-sr-only;
+      position: absolute;
+      z-index: 20;
+      padding: var(--bloom-s2) var(--bloom-s4);
+      text-decoration: underline;
+      font-size: var(--bloom-font-size-base);
+      color: var(--bloom-color-primary);
+      background-color: var(--bloom-color-white);
+    }
+  }
+
   .listings-map-expanded {
     display: none;
 

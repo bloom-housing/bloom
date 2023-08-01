@@ -1,13 +1,7 @@
 import * as React from "react"
 import { getListings } from "../../lib/helpers"
 import { Listing, Jurisdiction } from "@bloom-housing/backend-core"
-import {
-  Button,
-  InfoCard,
-  LinkButton,
-  ZeroListingsItem,
-  t,
-} from "@bloom-housing/doorway-ui-components"
+import { InfoCard, LinkButton, ZeroListingsItem, t } from "@bloom-housing/doorway-ui-components"
 import { Pagination } from "./Pagination"
 import { LoadingOverlay } from "@bloom-housing/ui-components"
 
@@ -21,14 +15,17 @@ type ListingsListProps = {
 }
 
 const ListingsList = (props: ListingsListProps) => {
-  const listingsDiv =
-    props.listings.length > 0 || props.loading ? (
-      <div className="listingsList">{getListings(props.listings)}</div>
-    ) : (
-      <ZeroListingsItem title={t("t.noMatchingListings")} description={t("t.tryRemovingFilters")}>
-        {/* <Button>{t("t.clearAllFilters")}</Button> */}
-      </ZeroListingsItem>
-    )
+  const listingsDiv = (
+    <div id="listingsList">
+      {props.listings.length > 0 || props.loading ? (
+        <div className="listingsList">{getListings(props.listings)}</div>
+      ) : (
+        <ZeroListingsItem title={t("t.noMatchingListings")} description={t("t.tryRemovingFilters")}>
+          {/* <Button>{t("t.clearAllFilters")}</Button> */}
+        </ZeroListingsItem>
+      )}
+    </div>
+  )
 
   const infoCards =
     props.currentPage == props.lastPage || props.lastPage == 0 ? (

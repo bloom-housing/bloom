@@ -4,6 +4,7 @@ import { getListingUrl, getListingCard } from "../../lib/helpers"
 import { Listing } from "@bloom-housing/backend-core"
 import styles from "./ListingsCombined.module.scss"
 import { MapControl } from "../shared/MapControl"
+import { t } from "@bloom-housing/ui-components"
 
 type ListingsMapProps = {
   listings?: Listing[]
@@ -75,6 +76,9 @@ const ListingsMap = (props: ListingsMapProps) => {
   const mapRef = React.useRef(null)
   return isLoaded ? (
     <div className={styles["listings-map"]}>
+      <a className={styles["listings-map-skip-link"]} href={`#listingsList`}>
+        {t("t.skipMapOfListings")}
+      </a>
       <MapControl mapRef={mapRef} />
       <GoogleMap
         mapContainerStyle={containerStyle}
