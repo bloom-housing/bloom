@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { AppService } from '../services/app.service';
+import { PrismaService } from '../services/prisma.service';
 import { AmiChartModule } from './ami-chart.module';
 import { ListingModule } from './listing.module';
 import { ReservedCommunityTypeModule } from './reserved-community-type.module';
@@ -22,7 +23,7 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
     MultiselectQuestionModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
   exports: [
     ListingModule,
     AmiChartModule,

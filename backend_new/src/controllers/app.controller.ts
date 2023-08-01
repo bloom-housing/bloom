@@ -17,7 +17,7 @@ export class AppController {
   @Get()
   @ApiOperation({ summary: 'Heartbeat endpoint', operationId: 'heartbeat' })
   @ApiOkResponse({ type: SuccessDTO })
-  heartbeat(): SuccessDTO {
-    return this.appService.heartbeat();
+  async heartbeat(): Promise<SuccessDTO> {
+    return await this.appService.heartbeat();
   }
 }
