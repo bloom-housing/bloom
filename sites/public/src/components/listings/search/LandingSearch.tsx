@@ -153,7 +153,7 @@ export function LandingSearch(props: LandingSearchProps) {
           fields={countyFields}
           onChange={updateValueMulti}
           register={register}
-          fieldGroupClassName="county-checkbox-group grid grid-cols-2 md:pl-16 "
+          fieldGroupClassName="county-checkbox-group doorway-field-group grid grid-cols-2 md:pl-16 "
           fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
         />
       </div>

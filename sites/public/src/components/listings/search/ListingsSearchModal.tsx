@@ -285,7 +285,7 @@ export function ListingsSearchModal(props: ListingsSearchModalProps) {
           fields={countyFields}
           onChange={updateValueMulti}
           register={register}
-          fieldGroupClassName="grid grid-cols-2"
+          fieldGroupClassName="doorway-field-group grid grid-cols-2"
           fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
         />
       </div>
