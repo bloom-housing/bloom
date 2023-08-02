@@ -7,11 +7,11 @@ export interface FooterNavProps {
 }
 
 const FooterNav = (props: FooterNavProps) => (
-  <section className="footer-sock">
-    <div className="footer-sock__inner">
-      {props.copyright && <p className="footer-copyright">{props.copyright}</p>}
+  <section className="doorway-footer-sock">
+    <div className="doorway-footer-sock__inner">
+      {props.copyright && <p className="doorway-footer-copyright">{props.copyright}</p>}
       {props.children && (
-        <nav className="footer-nav" aria-label={"Footer"}>
+        <nav className="doorway-footer-nav" aria-label={"Footer"}>
           {props.children}
         </nav>
       )}

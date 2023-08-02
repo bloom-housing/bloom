@@ -1,4 +1,4 @@
-.footer-sock {
+.doorway-footer-sock {
   --background-color: var(--bloom-color-gray-800);
   --copyright-text-color: var(--bloom-color-gray-500);
   --copyright-width: auto;
@@ -27,7 +27,7 @@
     }
   }
 
-  .footer-sock__inner {
+  .doorway-footer-sock__inner {
     @apply max-w-5xl;
     @apply m-auto;
     justify-content: space-between;
@@ -36,7 +36,7 @@
     }
   }
 
-  .footer-nav {
+  .doorway-footer-nav {
     @apply mt-5;
     @apply mb-6;
     width: auto;

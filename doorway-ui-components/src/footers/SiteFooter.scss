@@ -1,4 +1,4 @@
-footer.site-footer {
+footer.doorway-site-footer {
   @apply text-gray-500;
   @apply w-full;
   @apply bg-gray-800;
@@ -19,7 +19,15 @@ footer.site-footer {
     @apply mb-5;
   }
 
-  .footer-row {
+  & > .doorway-footer-row:first-of-type {
+    @apply pt-12;
+  }
+
+  & > .doorway-footer-row:last-of-type {
+    @apply pt-0;
+  }
+
+  .doorway-footer-row {
     @apply py-8;
 
     @media (max-width: $screen-lg) {

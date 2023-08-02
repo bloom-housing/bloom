@@ -9,9 +9,9 @@ export interface FooterSectionProps {
 }
 
 const FooterSection = (props: FooterSectionProps) => (
-  <div className={`footer-row ${props.className || ""}`}>
+  <div className={`doorway-footer-row ${props.className || ""}`}>
     <div
-      className={`footer-row__section ${props.small ? "py-0" : "pb-8"} ${
+      className={`doorway-footer-row__section ${props.small ? "py-0" : "pb-8"} ${
         props.sectionClassName || ""
       }`}
     >
