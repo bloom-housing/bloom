@@ -5,3 +5,9 @@
     box-shadow: 0 0 0 1px var(--bloom-color-primary-lighter);
   }
 }
+
+.doorway-field-group {
+  input[type="checkbox"] + label::before {
+    line-height: 1rem;
+  }
+}
