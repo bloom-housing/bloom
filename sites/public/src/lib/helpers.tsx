@@ -334,7 +334,11 @@ export const getSiteHeader = (router: NextRouter) => {
       menuLinks={menuLinks.map((menuLink) => {
         return {
           ...menuLink,
-          className: router.pathname === menuLink.href ? "secondary" : "",
+          className:
+            router.pathname === menuLink.href ||
+            menuLink.subMenuLinks?.map((link) => link.href).indexOf(router.pathname) >= 0
+              ? "secondary"
+              : "",
         }
       })}
       strings={{ skipToMainContent: t("t.skipToMainContent") }}

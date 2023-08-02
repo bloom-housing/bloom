@@ -8,7 +8,7 @@ import { t } from "../helpers/translator"
 import "./SiteHeader.scss"
 import { NavigationContext } from "../config/NavigationContext"
 
-type LogoWidth = "slim" | "base" | "base_expanded" | "medium" |"wide"
+type LogoWidth = "slim" | "base" | "base_expanded" | "medium" | "wide"
 type SiteHeaderWidth = "base" | "wide"
 
 export interface MenuLink {
@@ -383,7 +383,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
           } else {
             return (
               <span
-                className={`site-header__link site-header__dropdown-title`}
+                className={`site-header__link site-header__dropdown-title ${
+                  props.menuItemClassName ?? ""
+                } ${menuLink.className ?? ""}`}
                 tabIndex={0}
                 key={`${menuLink.title}-${index}`}
                 onKeyDown={(event) => {
