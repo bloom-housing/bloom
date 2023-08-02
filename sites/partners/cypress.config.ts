@@ -2,7 +2,7 @@ import { defineConfig } from "cypress"
 
 export default defineConfig({
   defaultCommandTimeout: 50000,
-  projectId: "bloom-partners-reference",
+  projectId: "xetbmt",
   numTestsKeptInMemory: 0,
   trashAssetsBeforeRuns: true,
   env: {
