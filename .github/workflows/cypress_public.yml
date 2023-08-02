@@ -68,6 +68,14 @@ jobs:
           PGHOST: 127.0.0.1
           PGPASSWORD: bloom
           PGUSER: bloom-dev
+      
+      - name: Import listings
+        working-directory: ./tasks/import-listings
+        run: yarn db:reseed:with-external:dev
+        env:
+          PGHOST: 127.0.0.1
+          PGPASSWORD: bloom
+          PGUSER: bloom-dev
 
       - name: Cypress run
         uses: cypress-io/github-action@v5
