@@ -4,14 +4,14 @@ import { CreatePresignedUploadMetadata } from '../dtos/assets/create-presigned-u
 import { CreatePresignedUploadMetadataResponse } from '../dtos/assets/create-presign-upload-meta-response.dto';
 
 /*
-  this is the service for unit types
-  it handles all the backend's business logic for reading/writing/deleting unit type data
+  this is the service for assets
+  it handles all the backend's business logic for signing meta data for asset upload
 */
 
 @Injectable()
 export class AssetService {
   /*
-    this will get a set of unit types given the params passed in
+    this will create a signed signature for upload to cloudinary
   */
   async createPresignedUploadMetadata(
     createPresignedUploadMetadata: CreatePresignedUploadMetadata,
