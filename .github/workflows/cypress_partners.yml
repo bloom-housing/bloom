@@ -68,6 +68,10 @@ jobs:
           PGPASSWORD: bloom
           PGUSER: bloom-dev
 
+      - name: yarn in tasks/import-listings dir
+        working-directory: ./tasks/import-listings
+        run: yarn
+
       - name: Build import
         working-directory: ./tasks/import-listings
         run: yarn build
