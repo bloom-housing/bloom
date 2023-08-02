@@ -60,9 +60,8 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Users")
     expect(header).toBeInTheDocument()
-    expect(getByText("Users")).toBeInTheDocument()
     expect(getByText("Filter")).toBeInTheDocument()
     expect(getByText("Add User")).toBeInTheDocument()
     expect(queryAllByText("Export to CSV")).toHaveLength(0)
@@ -105,7 +104,7 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Users")
     expect(header).toBeInTheDocument()
     expect(getByText("Add User")).toBeInTheDocument()
     const exportButton = await findByText("Export to CSV")
@@ -145,7 +144,7 @@ describe("users", () => {
       </ConfigProvider>
     )
 
-    const header = await findByText("Partners Portal")
+    const header = await findByText("Users")
     expect(header).toBeInTheDocument()
     const exportButton = await findByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()

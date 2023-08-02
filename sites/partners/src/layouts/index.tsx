@@ -68,7 +68,6 @@ const Layout = (props) => {
         <SiteFooter>
           <FooterNav copyright={`© ${currentYear} • All Rights Reserved`} />
           <FooterSection className="bg-black" small>
-            {t("nav.siteTitlePartners")}
             <ExygyFooter />
           </FooterSection>
         </SiteFooter>
