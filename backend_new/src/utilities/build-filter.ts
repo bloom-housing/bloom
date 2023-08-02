@@ -7,6 +7,7 @@ type filter = {
   $include_nulls: boolean;
   value: any;
   key: string;
+  caseSensitive?: boolean;
 };
 
 /*
@@ -19,6 +20,9 @@ export function buildFilter(filter: filter): any {
   const comparison = filter['$comparison'];
   const includeNulls = filter['$include_nulls'];
   const filterValue = filter.value;
+  const caseSensitive = filter.caseSensitive
+    ? Prisma.QueryMode.default
+    : Prisma.QueryMode.insensitive;
 
   if (comparison === Compare.IN) {
     toReturn.push({
@@ -26,29 +30,29 @@ export function buildFilter(filter: filter): any {
         .split(',')
         .map((s) => s.trim().toLowerCase())
         .filter((s) => s.length !== 0),
-      mode: Prisma.QueryMode.insensitive,
+      mode: caseSensitive,
     });
   } else if (comparison === Compare['<>']) {
     toReturn.push({
       not: {
         equals: filterValue,
       },
-      mode: Prisma.QueryMode.insensitive,
+      mode: caseSensitive,
     });
   } else if (comparison === Compare['=']) {
     toReturn.push({
       equals: filterValue,
-      mode: Prisma.QueryMode.insensitive,
+      mode: caseSensitive,
     });
   } else if (comparison === Compare['>=']) {
     toReturn.push({
       gte: filterValue,
-      mode: Prisma.QueryMode.insensitive,
+      mode: caseSensitive,
     });
   } else if (comparison === Compare['<=']) {
     toReturn.push({
       lte: filterValue,
-      mode: Prisma.QueryMode.insensitive,
+      mode: caseSensitive,
     });
   } else if (Compare.NA) {
     throw new HttpException(

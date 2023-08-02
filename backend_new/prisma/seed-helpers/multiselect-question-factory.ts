@@ -14,7 +14,7 @@ export const multiselectQuestionFactory = (
   optionalParams?: {
     optOut?: boolean;
     numberOfOptions?: number;
-    multiselectQuestion?: Prisma.MultiselectQuestionsCreateInput;
+    multiselectQuestion?: Partial<Prisma.MultiselectQuestionsCreateInput>;
   },
 ): Prisma.MultiselectQuestionsCreateInput => {
   const previousMultiselectQuestion = optionalParams?.multiselectQuestion || {};

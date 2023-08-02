@@ -25,6 +25,7 @@ import { PaginationAllowsAllQueryParams } from '../dtos/shared/pagination.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { PaginatedListingDto } from '../dtos/listings/paginated-listing.dto';
 import ListingGet from '../dtos/listings/listing-get.dto';
+import { IdDTO } from '../dtos/shared/id.dto';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -33,6 +34,7 @@ import ListingGet from '../dtos/listings/listing-get.dto';
   ListingFilterParams,
   ListingsRetrieveParams,
   PaginationAllowsAllQueryParams,
+  IdDTO,
 )
 export class ListingController {
   constructor(private readonly listingService: ListingService) {}
@@ -63,6 +65,20 @@ export class ListingController {
       listingId,
       language,
       queryParams.view,
+    );
+  }
+
+  @Get(`byMultiselectQuestion/:multiselectQuestionId`)
+  @ApiOperation({
+    summary: 'Get listings by multiselect question id',
+    operationId: 'retrieveListings',
+  })
+  @ApiOkResponse({ type: IdDTO, isArray: true })
+  async retrieveListings(
+    @Param('multiselectQuestionId') multiselectQuestionId: string,
+  ) {
+    return await this.listingService.findListingsWithMultiSelectQuestion(
+      multiselectQuestionId,
     );
   }
 }

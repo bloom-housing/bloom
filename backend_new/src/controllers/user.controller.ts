@@ -23,6 +23,7 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { mapTo } from '../utilities/mapTo';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { UserQueryParams } from '../dtos/users/user-query-param.dto';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('user')
 @ApiTags('user')
@@ -32,7 +33,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  profile(@Request() req): User {
+  profile(@Request() req: ExpressRequest): User {
     return mapTo(User, req.user);
   }
 
@@ -45,7 +46,7 @@ export class UserController {
     operationId: 'list',
   })
   async list(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Query() queryParams: UserQueryParams,
   ): Promise<PaginatedUserDto> {
     return await this.userService.list(queryParams, mapTo(User, req.user));

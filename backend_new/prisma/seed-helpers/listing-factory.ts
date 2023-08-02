@@ -9,6 +9,7 @@ import { randomName } from './word-generator';
 import { addressFactory } from './address-factory';
 import { unitFactoryMany } from './unit-factory';
 import { reservedCommunityTypeFactory } from './reserved-community-type-factory';
+import { multiselectQuestionFactory } from './multiselect-question-factory';
 
 export const listingFactory = async (
   jurisdictionId: string,
@@ -21,7 +22,7 @@ export const listingFactory = async (
     listing?: Prisma.ListingsCreateInput;
     includeBuildingFeatures?: boolean;
     includeEligibilityRules?: boolean;
-    multiselectQuestions?: MultiselectQuestions[];
+    multiselectQuestions?: Partial<MultiselectQuestions>[];
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -58,12 +59,13 @@ export const listingFactory = async (
     },
     listingMultiselectQuestions: optionalParams?.multiselectQuestions
       ? {
-          create: optionalParams.multiselectQuestions.map(
-            (question, index) => ({
-              ordinal: index,
-              multiselectQuestionId: question.id,
-            }),
-          ),
+          create: optionalParams.multiselectQuestions.map((question) => ({
+            multiselectQuestions: {
+              create: multiselectQuestionFactory(jurisdictionId, {
+                multiselectQuestion: { text: question.text },
+              }),
+            },
+          })),
         }
       : undefined,
     ...featuresAndUtilites(),

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
@@ -33,7 +33,7 @@ describe('Listing Controller Tests', () => {
     jurisdictionAId = jurisdiction.id;
   });
 
-  it('list test no params no data', async () => {
+  it('should not get listings from list endpoint when no params are sent', async () => {
     const res = await request(app.getHttpServer()).get('/listings').expect(200);
 
     expect(res.body).toEqual({
@@ -48,7 +48,7 @@ describe('Listing Controller Tests', () => {
     });
   });
 
-  it('list test no params some data', async () => {
+  it('should get listings from list endpoint when no params are sent', async () => {
     const listing1 = await listingFactory(jurisdictionAId, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -76,7 +76,7 @@ describe('Listing Controller Tests', () => {
     expect(items).toContain(listing2Created.name);
   });
 
-  it('list test params no data', async () => {
+  it('should not get listings from list endpoint when params are sent', async () => {
     const queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
@@ -106,7 +106,7 @@ describe('Listing Controller Tests', () => {
     });
   });
 
-  it('list test params some data', async () => {
+  it('should get listings from list endpoint when params are sent', async () => {
     const listing1 = await listingFactory(jurisdictionAId, prisma);
     const listing1Created = await prisma.listings.create({
       data: listing1,
@@ -179,5 +179,36 @@ describe('Listing Controller Tests', () => {
     });
     expect(res.body.items.length).toEqual(1);
     expect(res.body.items[0].name).toEqual(orderedNames[1]);
+  });
+
+  it('should get listings from retrieveListings endpoint', async () => {
+    const listingA = await listingFactory(jurisdictionAId, prisma, {
+      multiselectQuestions: [{ text: 'example a' }],
+    });
+    const listingACreated = await prisma.listings.create({
+      data: listingA,
+      include: {
+        listingMultiselectQuestions: true,
+      },
+    });
+
+    const listingB = await listingFactory(jurisdictionAId, prisma, {
+      multiselectQuestions: [{ text: 'example b' }],
+    });
+    await prisma.listings.create({
+      data: listingB,
+      include: {
+        listingMultiselectQuestions: true,
+      },
+    });
+
+    const res = await request(app.getHttpServer())
+      .get(
+        `/listings/byMultiselectQuestion/${listingACreated.listingMultiselectQuestions[0].multiselectQuestionId}`,
+      )
+      .expect(200);
+
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].name).toEqual(listingA.name);
   });
 });
