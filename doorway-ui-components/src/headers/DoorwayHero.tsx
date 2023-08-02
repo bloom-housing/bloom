@@ -10,7 +10,7 @@ export interface DoorwayHeroProps {
 
 const DoorwayHero = (props: DoorwayHeroProps) => {
   return (
-    <div className="doorway-hero">
+    <div className="doorway-hero" data-testid="hero-component">
       <div className="doorway-hero_outer">
         <div className={"doorway-hero_title"}>{props.title}</div>
         <div className="doorway-hero_inner">

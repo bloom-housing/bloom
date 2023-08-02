@@ -16,7 +16,7 @@ env:
   BLOOM_API_BASE: https://fake_website.fake
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
-  MAPBOX_TOKEN: MAPBOX_TOKEN
+  MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
 
 jobs:
   public-cypress:
