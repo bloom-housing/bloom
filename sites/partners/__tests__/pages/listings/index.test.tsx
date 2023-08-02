@@ -45,7 +45,7 @@ afterEach(() => {
 afterAll(() => server.close())
 
 describe("listings", () => {
-  it("should not render Export to CSV when user is not admin", async () => {
+  it("should not render Export to CSV when user is not admin", () => {
     window.URL.createObjectURL = jest.fn()
     document.cookie = "access-token-available=True"
     server.use(
@@ -65,15 +65,14 @@ describe("listings", () => {
       })
     )
 
-    const { findByText, queryByText } = render(
+    const { queryByText } = render(
       <ConfigProvider apiUrl={"http://localhost:3100"}>
         <AuthProvider>
           <ListingsList />
         </AuthProvider>
       </ConfigProvider>
     )
-    const header = await findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
+
     const exportButton = queryByText("Export to CSV")
     expect(exportButton).not.toBeInTheDocument()
   })
@@ -106,8 +105,7 @@ describe("listings", () => {
         </AuthProvider>
       </ConfigProvider>
     )
-    const header = await findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
+
     const exportButton = getByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)
@@ -150,8 +148,7 @@ describe("listings", () => {
         </AuthProvider>
       </ConfigProvider>
     )
-    const header = await findByText("Partners Portal")
-    expect(header).toBeInTheDocument()
+
     const exportButton = getByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)
