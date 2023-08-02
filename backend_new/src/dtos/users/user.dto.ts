@@ -33,7 +33,7 @@ export class User extends AbstractDTO {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiProperty({ required: false })
-  confirmedAt?: Date | null;
+  confirmedAt?: Date;
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
@@ -62,7 +62,7 @@ export class User extends AbstractDTO {
   @ApiProperty({ required: false })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  dob?: Date | null;
+  dob?: Date;
 
   @Expose()
   @ApiProperty({ required: false })
@@ -86,7 +86,7 @@ export class User extends AbstractDTO {
     enumName: 'LanguagesEnum',
     required: false,
   })
-  language?: LanguagesEnum | null;
+  language?: LanguagesEnum;
 
   @Expose()
   @Type(() => IdDTO)
@@ -122,17 +122,17 @@ export class User extends AbstractDTO {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiProperty({ required: false })
-  hitConfirmationURL?: Date | null;
+  hitConfirmationURL?: Date;
 
   // storing the active access token for a user
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
-  activeAccessToken?: string | null;
+  activeAccessToken?: string;
 
   // storing the active refresh token for a user
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
-  activeRefreshToken?: string | null;
+  activeRefreshToken?: string;
 }

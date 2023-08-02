@@ -22,6 +22,11 @@ describe('User Controller Tests', () => {
     await app.init();
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('should get no users from list() when no params and no data', async () => {
     const res = await request(app.getHttpServer())
       .get(`/user/list?`)

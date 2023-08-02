@@ -23,6 +23,11 @@ describe('UnitAccessibilityPriorityType Controller Tests', () => {
     await app.init();
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('testing list endpoint', async () => {
     const unitTypeA = await prisma.unitAccessibilityPriorityTypes.create({
       data: unitAccessibilityPriorityTypeFactorySingle(),

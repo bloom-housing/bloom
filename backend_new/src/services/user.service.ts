@@ -34,11 +34,11 @@ export class UserService {
   */
   async list(params: UserQueryParams, user: User): Promise<PaginatedUserDto> {
     const whereClause = this.buildWhereClause(params, user);
-    const count = await this.prisma.userAccounts.count({
+    const countQuery = this.prisma.userAccounts.count({
       where: whereClause,
     });
 
-    const rawUsers = await this.prisma.userAccounts.findMany({
+    const rawUsersQuery = this.prisma.userAccounts.findMany({
       skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
       orderBy: buildOrderBy(
@@ -48,6 +48,8 @@ export class UserService {
       include: view,
       where: whereClause,
     });
+
+    const [count, rawUsers] = await Promise.all([countQuery, rawUsersQuery]);
 
     const users = mapTo(User, rawUsers);
 
@@ -116,93 +118,94 @@ export class UserService {
             isPartner: filter[UserFilterKeys.isPartner],
           },
         });
-      } else if (UserFilterKeys.isPortalUser in filter) {
-        if (filter[UserFilterKeys.isPortalUser]) {
-          if (user?.userRoles?.isAdmin) {
-            filters.push({
-              OR: [
-                {
-                  userRoles: {
-                    isPartner: true,
-                  },
-                },
-                {
-                  userRoles: {
-                    isAdmin: true,
-                  },
-                },
-                {
-                  userRoles: {
-                    isJurisdictionalAdmin: true,
-                  },
-                },
-              ],
-            });
-          } else if (user?.userRoles?.isJurisdictionalAdmin) {
-            filters.push({
-              OR: [
-                {
-                  userRoles: {
-                    isPartner: true,
-                  },
-                },
-                {
-                  userRoles: {
-                    isJurisdictionalAdmin: true,
-                  },
-                },
-              ],
-            });
-            filters.push({
-              jurisdictions: {
-                some: {
-                  id: {
-                    in: user?.jurisdictions?.map((juris) => juris.id),
-                  },
-                },
-              },
-            });
-          } else {
-            filters.push({
-              userRoles: {
-                isPartner: true,
-              },
-            });
-          }
-        } else {
+      } else if (
+        UserFilterKeys.isPortalUser in filter &&
+        filter[UserFilterKeys.isPortalUser]
+      ) {
+        if (user?.userRoles?.isAdmin) {
           filters.push({
-            AND: [
+            OR: [
               {
-                OR: [
-                  {
-                    userRoles: {
-                      isPartner: null,
-                    },
-                  },
-                  {
-                    userRoles: {
-                      isPartner: false,
-                    },
-                  },
-                ],
+                userRoles: {
+                  isPartner: true,
+                },
               },
               {
-                OR: [
-                  {
-                    userRoles: {
-                      isAdmin: null,
-                    },
-                  },
-                  {
-                    userRoles: {
-                      isAdmin: false,
-                    },
-                  },
-                ],
+                userRoles: {
+                  isAdmin: true,
+                },
+              },
+              {
+                userRoles: {
+                  isJurisdictionalAdmin: true,
+                },
               },
             ],
           });
+        } else if (user?.userRoles?.isJurisdictionalAdmin) {
+          filters.push({
+            OR: [
+              {
+                userRoles: {
+                  isPartner: true,
+                },
+              },
+              {
+                userRoles: {
+                  isJurisdictionalAdmin: true,
+                },
+              },
+            ],
+          });
+          filters.push({
+            jurisdictions: {
+              some: {
+                id: {
+                  in: user?.jurisdictions?.map((juris) => juris.id),
+                },
+              },
+            },
+          });
+        } else {
+          filters.push({
+            userRoles: {
+              isPartner: true,
+            },
+          });
         }
+      } else if (UserFilterKeys.isPortalUser in filter) {
+        filters.push({
+          AND: [
+            {
+              OR: [
+                {
+                  userRoles: {
+                    isPartner: null,
+                  },
+                },
+                {
+                  userRoles: {
+                    isPartner: false,
+                  },
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  userRoles: {
+                    isAdmin: null,
+                  },
+                },
+                {
+                  userRoles: {
+                    isAdmin: false,
+                  },
+                },
+              ],
+            },
+          ],
+        });
       }
     });
     return {
