@@ -16,6 +16,10 @@ env:
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
+  BACKEND_API_BASE: http://localhost:3100
+  LISTINGS_QUERY: /listings
+  NEXTJS_PORT: 3001
+
 
 jobs:
   partners-cypress:

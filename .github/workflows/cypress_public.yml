@@ -17,6 +17,10 @@ env:
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+  BACKEND_API_BASE: http://localhost:3100
+  LISTINGS_QUERY: /listings
+  NEXTJS_PORT: 3000
+  LANGUAGES: en,es,zh,vi,tl
 
 jobs:
   public-cypress:
