@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { stringify } from 'qs';
@@ -29,6 +29,11 @@ describe('AmiChart Controller Tests', () => {
       data: jurisdictionFactory(),
     });
     jurisdictionAId = jurisdictionA.id;
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
   });
 
   it('testing list endpoint', async () => {

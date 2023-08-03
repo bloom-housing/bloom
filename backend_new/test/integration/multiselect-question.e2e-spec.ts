@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
@@ -32,6 +32,11 @@ describe('MultiselectQuestion Controller Tests', () => {
       data: jurisdictionFactory(),
     });
     jurisdictionId = jurisdiction.id;
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
   });
 
   it('should get multiselect questions from list endpoint when no params are sent', async () => {

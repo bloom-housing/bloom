@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
@@ -21,6 +21,11 @@ describe('UnitRentType Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
   });
 
   it('testing list endpoint', async () => {

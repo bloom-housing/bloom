@@ -102,6 +102,28 @@ export class PagedResult<T = any> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class RootService {
+  /**
+   * Health check endpoint
+   */
+  healthCheck(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class ListingsService {
   /**
    * Get a paginated set of listings
@@ -1261,6 +1283,11 @@ export class ApplicationsService {
   }
 }
 
+export interface SuccessDTO {
+  /**  */
+  success: boolean;
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -1990,11 +2017,6 @@ export interface AmiChart {
 
   /**  */
   jurisdictions: IdDTO;
-}
-
-export interface SuccessDTO {
-  /**  */
-  success: boolean;
 }
 
 export interface ReservedCommunityTypeCreate {

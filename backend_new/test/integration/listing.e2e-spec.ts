@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { listingFactory } from '../../prisma/seed-helpers/listing-factory';
@@ -31,6 +31,11 @@ describe('Listing Controller Tests', () => {
     });
 
     jurisdictionAId = jurisdiction.id;
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
   });
 
   it('should not get listings from list endpoint when no params are sent', async () => {

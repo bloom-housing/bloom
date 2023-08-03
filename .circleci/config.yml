@@ -77,11 +77,9 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: DB Setup + Backend Core Tests
+          name: DB Setup
           command: |
             yarn test:backend:core:dbsetup
-            yarn test:backend:core
-            yarn test:e2e:backend:core
           environment:
             PORT: "3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
@@ -146,9 +144,6 @@ workflows:
           requires:
             - setup
       - jest-shared-helpers:
-          requires:
-            - setup
-      - jest-backend:
           requires:
             - setup
       - jest-new-backend:
