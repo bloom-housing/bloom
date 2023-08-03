@@ -100,7 +100,9 @@ export default function ListingsList() {
       {
         headerName: t("listings.listingStatusText"),
         field: "status",
-        sortable: false,
+        sortable: true,
+        // disable frontend sorting
+        comparator: () => 0,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),

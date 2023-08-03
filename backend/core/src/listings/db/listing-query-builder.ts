@@ -50,7 +50,15 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     }
 
     for (const orderByCondition of orderByConditionDataArray) {
-      this.addOrderBy(orderByCondition.orderBy, orderByCondition.orderDir, orderByCondition.nulls)
+      if (orderByCondition.orderBy === "listings.status") {
+        const orderStr =
+          orderByCondition.orderDir === "ASC"
+            ? `CASE WHEN ${orderByCondition.orderBy} = 'pending' THEN 1 WHEN ${orderByCondition.orderBy} = 'active' THEN 2 WHEN ${orderByCondition.orderBy} = 'closed' THEN 3 END`
+            : `CASE WHEN ${orderByCondition.orderBy} = 'closed' THEN 1 WHEN ${orderByCondition.orderBy} = 'active' THEN 2 WHEN ${orderByCondition.orderBy} = 'pending' THEN 3 END`
+        this.addOrderBy(orderStr)
+      } else {
+        this.addOrderBy(orderByCondition.orderBy, orderByCondition.orderDir, orderByCondition.nulls)
+      }
     }
 
     return this
