@@ -173,9 +173,8 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
         return { orderBy: "listings.marketingType", orderDir }
       case OrderByFieldsEnum.applicationDates:
       case undefined:
-        // Default to ordering by applicationDates (i.e. applicationDueDate
-        // and applicationOpenDate) if no orderBy param is specified.
-        return { orderBy: "listings.applicationDueDate", orderDir }
+        // Default to ordering by application status if no orderBy param is specified.
+        return { orderBy: "listings.status", orderDir }
       default:
         throw new HttpException(
           `OrderBy parameter not recognized or not yet implemented.`,
