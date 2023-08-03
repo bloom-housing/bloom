@@ -7,6 +7,7 @@ import {
   IsString,
   IsUrl,
   MaxLength,
+  ValidateIf,
   ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -37,6 +38,9 @@ export class ApplicationMethod extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateIf((o) => o.type === ApplicationMethodType.ExternalLink, {
+    groups: [ValidationsGroupsEnum.default],
+  })
   @IsUrl({ require_protocol: true }, { groups: [ValidationsGroupsEnum.default] })
   externalReference?: string | null
 
