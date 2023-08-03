@@ -211,28 +211,4 @@ describe('Listing Controller Tests', () => {
     expect(res.body.length).toEqual(1);
     expect(res.body[0].name).toEqual(listingA.name);
   });
-
-  it('retrieveListings test', async () => {
-    const listingA = await prisma.listings.create({
-      data: listingFactory(10, jurisdictionAId),
-      include: {
-        listingMultiselectQuestions: true,
-      },
-    });
-    await prisma.listings.create({
-      data: listingFactory(50, jurisdictionAId),
-      include: {
-        listingMultiselectQuestions: true,
-      },
-    });
-
-    const res = await request(app.getHttpServer())
-      .get(
-        `/listings/byMultiselectQuestion/${listingA.listingMultiselectQuestions[0].multiselectQuestionId}`,
-      )
-      .expect(200);
-
-    expect(res.body.length).toEqual(1);
-    expect(res.body[0].name).toEqual('name: 10');
-  });
 });

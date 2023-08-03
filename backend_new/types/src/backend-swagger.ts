@@ -1183,6 +1183,84 @@ export class MultiselectQuestionsService {
   }
 }
 
+export class ApplicationsService {
+  /**
+   * Get a paginated set of listings
+   */
+  list(
+    params: {
+      /**  */
+      page?: number;
+      /**  */
+      limit?: number | 'all';
+      /**  */
+      listingId?: string;
+      /**  */
+      search?: string;
+      /**  */
+      userId?: string;
+      /**  */
+      orderBy?: ApplicationOrderByKeys;
+      /**  */
+      order?: OrderByEnum;
+      /**  */
+      markedAsDuplicate?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<PaginatedApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+      configs.params = {
+        page: params['page'],
+        limit: params['limit'],
+        listingId: params['listingId'],
+        search: params['search'],
+        userId: params['userId'],
+        orderBy: params['orderBy'],
+        order: params['order'],
+        markedAsDuplicate: params['markedAsDuplicate'],
+      };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get application by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      applicationId: string;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/{applicationId}';
+      url = url.replace('{applicationId}', params['applicationId'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface ListingsQueryParams {
   /**  */
   page?: number;
@@ -2008,84 +2086,6 @@ export interface UnitRentType {
 export interface JurisdictionCreate {
   /**  */
   name: string;
-}
-
-export interface JurisdictionCreate {
-  /**  */
-  name: string;
-
-  /**  */
-  notificationsSignUpUrl: string;
-
-  /**  */
-  languages: string[];
-
-  /**  */
-  partnerTerms: string;
-
-  /**  */
-  publicUrl: string;
-
-  /**  */
-  emailFromAddress: string;
-
-  /**  */
-  rentalAssistanceDefault: string;
-
-  /**  */
-  enablePartnerSettings: boolean;
-
-  /**  */
-  enableAccessibilityFeatures: boolean;
-
-  /**  */
-  enableUtilitiesIncluded: boolean;
-}
-
-export interface JurisdictionUpdate {
-  /**  */
-  id: string;
-
-  /**  */
-  name: string;
-
-  /**  */
-  notificationsSignUpUrl: string;
-
-  /**  */
-  languages: string[];
-
-  /**  */
-  partnerTerms: string;
-
-  /**  */
-  publicUrl: string;
-
-  /**  */
-  emailFromAddress: string;
-
-  /**  */
-  rentalAssistanceDefault: string;
-
-  /**  */
-  enablePartnerSettings: boolean;
-
-  /**  */
-  enableAccessibilityFeatures: boolean;
-
-  /**  */
-  enableUtilitiesIncluded: boolean;
-}
-
-export interface MultiselectQuestionCreate {
-  /**  */
-  text: string;
-
-  /**  */
-  untranslatedOptOutText: string;
-
-  /**  */
-  subText: string;
 
   /**  */
   notificationsSignUpUrl: string;
@@ -2233,6 +2233,255 @@ export interface MultiselectQuestionQueryParams {
   filter?: MultiselectQuestionFilterParams[];
 }
 
+export interface Accessibility {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  mobility: boolean;
+
+  /**  */
+  vision: boolean;
+
+  /**  */
+  hearing: boolean;
+}
+
+export interface Demographic {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  ethnicity: string;
+
+  /**  */
+  gender: string;
+
+  /**  */
+  sexualOrientation: string;
+
+  /**  */
+  howDidYouHear: string[];
+
+  /**  */
+  race: string[];
+}
+
+export interface Applicant {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  birthMonth: string;
+
+  /**  */
+  birthDay: string;
+
+  /**  */
+  birthYear: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  noEmail: boolean;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  phoneNumberType: string;
+
+  /**  */
+  noPhone: boolean;
+
+  /**  */
+  workInRegion: YesNoEnum;
+
+  /**  */
+  applicantWorkAddress: Address;
+
+  /**  */
+  applicantAddress: Address;
+}
+
+export interface AlternateContact {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  type: string;
+
+  /**  */
+  otherType: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  agency: string;
+
+  /**  */
+  phoneNumber: string;
+
+  /**  */
+  emailAddress: string;
+
+  /**  */
+  address: Address;
+}
+
+export interface Application {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  deletedAt: Date;
+
+  /**  */
+  appUrl: string;
+
+  /**  */
+  additionalPhone: boolean;
+
+  /**  */
+  additionalPhoneNumber: string;
+
+  /**  */
+  additionalPhoneNumberType: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  housingStatus: string;
+
+  /**  */
+  sendMailToMailingAddress: boolean;
+
+  /**  */
+  householdExpectingChanges: boolean;
+
+  /**  */
+  householdStudent: boolean;
+
+  /**  */
+  incomeVouchers: boolean;
+
+  /**  */
+  income: string;
+
+  /**  */
+  incomePeriod: IncomePeriodEnum;
+
+  /**  */
+  status: ApplicationStatusEnum;
+
+  /**  */
+  language: LanguagesEnum;
+
+  /**  */
+  acceptedTerms: boolean;
+
+  /**  */
+  submissionType: ApplicationSubmissionTypeEnum;
+
+  /**  */
+  submissionDate: Date;
+
+  /**  */
+  markedAsDuplicate: boolean;
+
+  /**  */
+  flagged: boolean;
+
+  /**  */
+  confirmationCode: string;
+
+  /**  */
+  reviewStatus: ApplicationReviewStatusEnum;
+
+  /**  */
+  applicationsMailingAddress: Address;
+
+  /**  */
+  applicationsAlternateAddress: Address;
+
+  /**  */
+  accessibility: Accessibility;
+
+  /**  */
+  demographics: Demographic;
+
+  /**  */
+  preferredUnitTypes: string[];
+
+  /**  */
+  applicant: Applicant;
+
+  /**  */
+  alternateContact: AlternateContact;
+
+  /**  */
+  householdMember: string[];
+
+  /**  */
+  preferences: string[];
+
+  /**  */
+  programs: string[];
+}
+
+export interface PaginatedApplication {
+  /**  */
+  items: Application[];
+}
+
 export enum ListingViews {
   'fundamentals' = 'fundamentals',
   'base' = 'base',
@@ -2318,4 +2567,51 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   '>=' = '>=',
   '<=' = '<=',
   'NA' = 'NA',
+}
+export enum ApplicationOrderByKeys {
+  'firstName' = 'firstName',
+  'lastName' = 'lastName',
+  'submissionDate' = 'submissionDate',
+  'createdAt' = 'createdAt',
+}
+
+export enum OrderByEnum {
+  'asc' = 'asc',
+  'desc' = 'desc',
+}
+
+export enum IncomePeriodEnum {
+  'perMonth' = 'perMonth',
+  'perYear' = 'perYear',
+}
+
+export enum ApplicationStatusEnum {
+  'draft' = 'draft',
+  'submitted' = 'submitted',
+  'removed' = 'removed',
+}
+
+export enum LanguagesEnum {
+  'en' = 'en',
+  'es' = 'es',
+  'vi' = 'vi',
+  'zh' = 'zh',
+  'tl' = 'tl',
+}
+
+export enum ApplicationSubmissionTypeEnum {
+  'paper' = 'paper',
+  'electronical' = 'electronical',
+}
+
+export enum ApplicationReviewStatusEnum {
+  'pending' = 'pending',
+  'pendingAndValid' = 'pendingAndValid',
+  'valid' = 'valid',
+  'duplicate' = 'duplicate',
+}
+
+export enum YesNoEnum {
+  'yes' = 'yes',
+  'no' = 'no',
 }

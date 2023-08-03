@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Application } from '../dtos/applications/application-get.dto';
+import { Application } from '../dtos/applications/application.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
@@ -226,7 +226,9 @@ export class ApplicationService {
     });
 
     if (!rawApplication) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `applicationId ${applicationId} was requested but not found`,
+      );
     }
 
     return mapTo(Application, rawApplication);

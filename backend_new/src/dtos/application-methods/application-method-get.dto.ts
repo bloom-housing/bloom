@@ -11,7 +11,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { AbstractDTO } from '../shared/abstract.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationMethodsTypeEnum } from '@prisma/client';
-import { PaperApplication } from '../paper-applications/paper-application-get.dto';
+import { PaperApplication } from '../paper-applications/paper-application.dto';
 
 export class ApplicationMethod extends AbstractDTO {
   @Expose()

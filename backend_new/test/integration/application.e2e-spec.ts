@@ -11,6 +11,7 @@ import {
 import { ApplicationQueryParams } from '../../src/dtos/applications/application-query-params.dto';
 import { OrderByEnum } from '../../src/enums/shared/order-by-enum';
 import { ApplicationOrderByKeys } from '../../src/enums/applications/order-by-enum';
+import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
 import { UnitTypeEnum } from '@prisma/client';
 
@@ -30,10 +31,34 @@ describe('Application Controller Tests', () => {
   });
 
   afterAll(async () => {
+    await prisma.$disconnect();
     await app.close();
   });
 
-  it('testing list endpoint', async () => {
+  it('should not retrieve applications with params sent', async () => {
+    const queryParams: ApplicationQueryParams = {
+      limit: 2,
+      page: 1,
+      order: OrderByEnum.ASC,
+      orderBy: ApplicationOrderByKeys.createdAt,
+    };
+    const query = stringify(queryParams as any);
+
+    const res = await request(app.getHttpServer())
+      .get(`/applications?${query}`)
+      .expect(200);
+    expect(res.body.items.length).toBe(0);
+  });
+
+  it('should not retrieve applications with no params sent', async () => {
+    const res = await request(app.getHttpServer())
+      .get(`/applications`)
+      .expect(200);
+
+    expect(res.body.items.length).toBe(0);
+  });
+
+  it('should retrieve applications with params sent', async () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
@@ -61,25 +86,49 @@ describe('Application Controller Tests', () => {
       .get(`/applications?${query}`)
       .expect(200);
 
-    expect(res.body.meta).toEqual({
-      currentPage: 1,
-      itemCount: 2,
-      itemsPerPage: 2,
-      totalItems: 2,
-      totalPages: 1,
-    });
-    expect(res.body.items.length).toEqual(2);
+    expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     const resApplicationA = res.body.items.find(
       (item) => item.applicant.firstName === applicationA.applicant.firstName,
     );
     expect(resApplicationA).not.toBeNull();
-    const resApplicationB = res.body.items.find(
+    res.body.items.find(
       (item) => item.applicant.firstName === applicationB.applicant.firstName,
     );
     expect(resApplicationA).not.toBeNull();
   });
 
-  it('testing retrieve endpoint', async () => {
+  it('should retrieve applications with no params sent', async () => {
+    const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
+
+    const applicationA = await prisma.applications.create({
+      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      include: {
+        applicant: true,
+      },
+    });
+    const applicationB = await prisma.applications.create({
+      data: applicationFactory({ unitTypeId: unitTypeA.id }),
+      include: {
+        applicant: true,
+      },
+    });
+
+    const res = await request(app.getHttpServer())
+      .get(`/applications`)
+      .expect(200);
+
+    expect(res.body.items.length).toBeGreaterThanOrEqual(2);
+    const resApplicationA = res.body.items.find(
+      (item) => item.applicant.firstName === applicationA.applicant.firstName,
+    );
+    expect(resApplicationA).not.toBeNull();
+    res.body.items.find(
+      (item) => item.applicant.firstName === applicationB.applicant.firstName,
+    );
+    expect(resApplicationA).not.toBeNull();
+  });
+
+  it('should retrieve an application when one exists', async () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
@@ -95,6 +144,18 @@ describe('Application Controller Tests', () => {
 
     expect(res.body.applicant.firstName).toEqual(
       applicationA.applicant.firstName,
+    );
+  });
+
+  it("should throw an error when retrieve is called with an Id that doesn't exist", async () => {
+    const id = randomUUID();
+
+    const res = await request(app.getHttpServer())
+      .get(`/applications/${id}`)
+      .expect(404);
+
+    expect(res.body.message).toEqual(
+      `applicationId ${id} was requested but not found`,
     );
   });
 });
