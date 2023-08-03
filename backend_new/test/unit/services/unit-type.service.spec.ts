@@ -4,6 +4,7 @@ import { UnitTypeService } from '../../../src/services/unit-type.service';
 import { UnitTypeCreate } from '../../../src/dtos/unit-types/unit-type-create.dto';
 import { UnitTypeUpdate } from '../../../src/dtos/unit-types/unit-type-update.dto';
 import { randomUUID } from 'crypto';
+import { UnitTypeEnum } from '@prisma/client';
 
 describe('Testing unit type service', () => {
   let service: UnitTypeService;
@@ -12,7 +13,7 @@ describe('Testing unit type service', () => {
   const mockUnitType = (position: number, date: Date) => {
     return {
       id: randomUUID(),
-      name: `unit type ${position}`,
+      name: Object.values(UnitTypeEnum)[position],
       createdAt: date,
       updatedAt: date,
       numBedrooms: position,
@@ -44,21 +45,21 @@ describe('Testing unit type service', () => {
     expect(await service.list()).toEqual([
       {
         id: mockedValue[0].id,
-        name: 'unit type 0',
+        name: Object.values(UnitTypeEnum)[0],
         createdAt: date,
         updatedAt: date,
         numBedrooms: 0,
       },
       {
         id: mockedValue[1].id,
-        name: 'unit type 1',
+        name: Object.values(UnitTypeEnum)[1],
         createdAt: date,
         updatedAt: date,
         numBedrooms: 1,
       },
       {
         id: mockedValue[2].id,
-        name: 'unit type 2',
+        name: Object.values(UnitTypeEnum)[2],
         createdAt: date,
         updatedAt: date,
         numBedrooms: 2,
@@ -75,7 +76,7 @@ describe('Testing unit type service', () => {
 
     expect(await service.findOne('example Id')).toEqual({
       id: mockedValue.id,
-      name: 'unit type 3',
+      name: Object.values(UnitTypeEnum)[3],
       createdAt: date,
       updatedAt: date,
       numBedrooms: 3,
@@ -113,12 +114,12 @@ describe('Testing unit type service', () => {
 
     const params: UnitTypeCreate = {
       numBedrooms: 3,
-      name: 'unit type 3',
+      name: Object.values(UnitTypeEnum)[3],
     };
 
     expect(await service.create(params)).toEqual({
       id: mockedValue.id,
-      name: 'unit type 3',
+      name: Object.values(UnitTypeEnum)[3],
       createdAt: date,
       updatedAt: date,
       numBedrooms: 3,
@@ -126,7 +127,7 @@ describe('Testing unit type service', () => {
 
     expect(prisma.unitTypes.create).toHaveBeenCalledWith({
       data: {
-        name: 'unit type 3',
+        name: Object.values(UnitTypeEnum)[3],
         numBedrooms: 3,
       },
     });
@@ -140,19 +141,19 @@ describe('Testing unit type service', () => {
     prisma.unitTypes.findFirst = jest.fn().mockResolvedValue(mockedUnitType);
     prisma.unitTypes.update = jest.fn().mockResolvedValue({
       ...mockedUnitType,
-      name: 'updated unit type 3',
+      name: Object.values(UnitTypeEnum)[4],
       numBedrooms: 4,
     });
 
     const params: UnitTypeUpdate = {
       numBedrooms: 4,
-      name: 'updated unit type 3',
+      name: Object.values(UnitTypeEnum)[4],
       id: mockedUnitType.id,
     };
 
     expect(await service.update(params)).toEqual({
       id: mockedUnitType.id,
-      name: 'updated unit type 3',
+      name: Object.values(UnitTypeEnum)[4],
       createdAt: date,
       updatedAt: date,
       numBedrooms: 4,
@@ -166,7 +167,7 @@ describe('Testing unit type service', () => {
 
     expect(prisma.unitTypes.update).toHaveBeenCalledWith({
       data: {
-        name: 'updated unit type 3',
+        name: Object.values(UnitTypeEnum)[4],
         numBedrooms: 4,
       },
       where: {
@@ -181,7 +182,7 @@ describe('Testing unit type service', () => {
 
     const params: UnitTypeUpdate = {
       numBedrooms: 4,
-      name: 'updated unit type 4',
+      name: Object.values(UnitTypeEnum)[4],
       id: 'example id',
     };
 

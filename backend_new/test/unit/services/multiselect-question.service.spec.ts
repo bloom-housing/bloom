@@ -47,7 +47,7 @@ describe('Testing multiselect question service', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  it('testing list() no params', async () => {
+  it('should get records with empty param call to list()', async () => {
     const date = new Date();
     const mockedValue = mockMultiselectQuestionSet(3, date);
     prisma.multiselectQuestions.findMany = jest
@@ -106,7 +106,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing list() params', async () => {
+  it('should get records with paramaterized call to list()', async () => {
     const date = new Date();
     const mockedValue = mockMultiselectQuestionSet(3, date);
     prisma.multiselectQuestions.findMany = jest
@@ -186,7 +186,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing findOne() with id present', async () => {
+  it('should get record with call to findOne()', async () => {
     const date = new Date();
     const mockedValue = mockMultiselectQuestion(3, date);
     prisma.multiselectQuestions.findFirst = jest
@@ -219,7 +219,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing findOne() with id not present', async () => {
+  it('should error when nonexistent id is passed to findOne()', async () => {
     prisma.multiselectQuestions.findFirst = jest.fn().mockResolvedValue(null);
 
     await expect(
@@ -238,7 +238,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing create()', async () => {
+  it('should create with call to create()', async () => {
     const date = new Date();
     const mockedValue = mockMultiselectQuestion(3, date);
     prisma.multiselectQuestions.create = jest
@@ -289,7 +289,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing update() existing record found', async () => {
+  it('should update with call to update()', async () => {
     const date = new Date();
 
     const mockedMultiselectQuestions = mockMultiselectQuestion(3, date);
@@ -351,7 +351,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing update() existing record not found', async () => {
+  it('should error when nonexistent id is passed to findOne()', async () => {
     prisma.multiselectQuestions.findFirst = jest.fn().mockResolvedValue(null);
     prisma.multiselectQuestions.update = jest.fn().mockResolvedValue(null);
 
@@ -373,7 +373,7 @@ describe('Testing multiselect question service', () => {
     });
   });
 
-  it('testing delete()', async () => {
+  it('should delete with call to delete()', async () => {
     const date = new Date();
     const mockedValue = mockMultiselectQuestion(3, date);
     prisma.multiselectQuestions.findFirst = jest

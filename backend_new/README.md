@@ -8,6 +8,7 @@ $ yarn db:setup
 $ yarn prisma generate
 ```
 
+If you would prefer to have it setup with more realistic data you can run `yarn db:setup:staging` instead of `yarn db:setup`.
 
 # Modifying the Schema
 

@@ -1,12 +1,17 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
+import {
+  Expose,
+  Transform,
+  TransformFnParams,
+  Type,
+  ClassConstructor,
+} from 'class-transformer';
 import {
   IsNumber,
   registerDecorator,
   ValidationOptions,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ClassType } from 'class-transformer/ClassTransformer';
 
 export class PaginationMeta {
   @Expose()
@@ -27,8 +32,8 @@ export interface Pagination<T> {
 }
 
 export function PaginationFactory<T>(
-  classType: ClassType<T>,
-): ClassType<Pagination<T>> {
+  classType: ClassConstructor<T>,
+): ClassConstructor<Pagination<T>> {
   class PaginationHost implements Pagination<T> {
     @ApiProperty({ type: () => classType, isArray: true })
     @Expose()

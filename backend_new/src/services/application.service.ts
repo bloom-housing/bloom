@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Application } from '../dtos/applications/application.dto';
+import { Application } from '../dtos/applications/application-get.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';

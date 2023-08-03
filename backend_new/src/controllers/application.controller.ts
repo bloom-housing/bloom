@@ -13,7 +13,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ApplicationService } from '../services/application.service';
-import { Application } from '../dtos/applications/application.dto';
+import { Application } from '../dtos/applications/application-get.dto';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';

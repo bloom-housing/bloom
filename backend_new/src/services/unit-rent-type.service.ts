@@ -5,6 +5,7 @@ import { UnitRentTypeCreate } from '../dtos/unit-rent-types/unit-rent-type-creat
 import { UnitRentTypeUpdate } from '../dtos/unit-rent-types/unit-rent-type-update.dto';
 import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { UnitRentTypes } from '@prisma/client';
 
 /*
   this is the service for unit rent types
@@ -27,13 +28,7 @@ export class UnitRentTypeService {
     this will return 1 unit rent type or error
   */
   async findOne(unitRentTypeId: string): Promise<UnitRentType> {
-    const rawUnitRentType = await this.prisma.unitRentTypes.findFirst({
-      where: {
-        id: {
-          equals: unitRentTypeId,
-        },
-      },
-    });
+    const rawUnitRentType = await this.findOrThrow(unitRentTypeId);
 
     if (!rawUnitRentType) {
       throw new NotFoundException(
@@ -94,8 +89,8 @@ export class UnitRentTypeService {
   /*
     this will either find a record or throw a customized error
   */
-  async findOrThrow(unitRentTypeId: string): Promise<boolean> {
-    const unitRentType = await this.prisma.unitRentTypes.findFirst({
+  async findOrThrow(unitRentTypeId: string): Promise<UnitRentTypes> {
+    const unitRentType = await this.prisma.unitRentTypes.findUnique({
       where: {
         id: unitRentTypeId,
       },
@@ -107,6 +102,6 @@ export class UnitRentTypeService {
       );
     }
 
-    return true;
+    return unitRentType;
   }
 }

@@ -1,17 +1,29 @@
-import { Prisma } from '@prisma/client';
+import {
+  Prisma,
+  PrismaClient,
+  UnitAccessibilityPriorityTypeEnum,
+} from '@prisma/client';
+import { randomInt } from 'crypto';
 
-export const unitAccessibilityPriorityTypeFactory = (
-  i: number,
-): Prisma.UnitAccessibilityPriorityTypesCreateInput => ({
-  ...unitPriorityTypeArray[i % unitPriorityTypeArray.length],
-});
+export const unitAccessibilityPriorityTypeFactorySingle = (
+  type?: UnitAccessibilityPriorityTypeEnum,
+): Prisma.UnitAccessibilityPriorityTypesCreateInput => {
+  const chosenType =
+    type ||
+    unitAccesibilityPriorityTypeAsArray[
+      randomInt(unitAccesibilityPriorityTypeAsArray.length)
+    ];
+  return { name: chosenType };
+};
 
-const unitPriorityTypeArray = [
-  { name: 'Mobility' },
-  { name: 'Mobility and Hearing' },
-  { name: 'Hearing' },
-  { name: 'Visual' },
-  { name: 'Hearing and Visual' },
-  { name: 'Mobility and Visual' },
-  { name: 'Mobility, Hearing and Visual' },
-];
+export const unitAccessibilityPriorityTypeFactoryAll = async (
+  prismaClient: PrismaClient,
+) => {
+  await prismaClient.unitAccessibilityPriorityTypes.createMany({
+    data: unitAccesibilityPriorityTypeAsArray.map((value) => ({ name: value })),
+  });
+};
+
+export const unitAccesibilityPriorityTypeAsArray = Object.values(
+  UnitAccessibilityPriorityTypeEnum,
+);

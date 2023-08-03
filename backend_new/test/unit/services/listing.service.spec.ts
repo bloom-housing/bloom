@@ -7,11 +7,13 @@ import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
-import { LanguagesEnum } from '@prisma/client';
+import { LanguagesEnum, UnitTypeEnum } from '@prisma/client';
 import { Unit } from '../../../src/dtos/units/unit-get.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
 import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
+import { TranslationService } from '../../../src/services/translation.service';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -47,7 +49,7 @@ const mockListing = (
           id: `unitType ${i}`,
           createdAt: date,
           updatedAt: date,
-          name: UnitTypeSort[i % UnitTypeSort.length],
+          name: UnitTypeSort[i % UnitTypeSort.length] as UnitTypeEnum,
           numBedrooms: i,
         },
         unitAmiChartOverrides: {
@@ -95,9 +97,21 @@ describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
 
+  const googleTranslateServiceMock = {
+    isConfigured: () => true,
+    fetch: jest.fn(),
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ListingService, PrismaService],
+      providers: [
+        ListingService,
+        PrismaService,
+        TranslationService,
+        {
+          provide: GoogleTranslateService,
+          useValue: googleTranslateServiceMock,
+        },
+      ],
     }).compile();
 
     service = module.get<ListingService>(ListingService);
