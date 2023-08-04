@@ -102,7 +102,7 @@ describe('Testing user service', () => {
           limit: 5,
           filter: [
             {
-              isPartner: true,
+              isPortalUser: true,
             },
           ],
         },
@@ -161,11 +161,6 @@ describe('Testing user service', () => {
                 },
               },
             ],
-          },
-          {
-            userRoles: {
-              isPartner: true,
-            },
           },
         ],
       },

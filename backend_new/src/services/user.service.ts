@@ -12,7 +12,6 @@ import { Prisma } from '@prisma/client';
 import { UserQueryParams } from '../dtos/users/user-query-param.dto';
 import { PaginatedUserDto } from '../dtos/users/paginated-user.dto';
 import { OrderByEnum } from '../enums/shared/order-by-enum';
-import { UserFilterKeys } from '../enums/user_accounts/filter-key-enum';
 
 /*
   this is the service for users
@@ -112,16 +111,7 @@ export class UserService {
     }
 
     params.filter.forEach((filter) => {
-      if (UserFilterKeys.isPartner in filter) {
-        filters.push({
-          userRoles: {
-            isPartner: filter[UserFilterKeys.isPartner],
-          },
-        });
-      } else if (
-        UserFilterKeys.isPortalUser in filter &&
-        filter[UserFilterKeys.isPortalUser]
-      ) {
+      if ('isPortalUser' in filter && filter['isPortalUser']) {
         if (user?.userRoles?.isAdmin) {
           filters.push({
             OR: [
@@ -166,14 +156,8 @@ export class UserService {
               },
             },
           });
-        } else {
-          filters.push({
-            userRoles: {
-              isPartner: true,
-            },
-          });
         }
-      } else if (UserFilterKeys.isPortalUser in filter) {
+      } else if ('isPortalUser' in filter) {
         filters.push({
           AND: [
             {
@@ -186,6 +170,20 @@ export class UserService {
                 {
                   userRoles: {
                     isPartner: false,
+                  },
+                },
+              ],
+            },
+            {
+              OR: [
+                {
+                  userRoles: {
+                    isJurisdictionalAdmin: null,
+                  },
+                },
+                {
+                  userRoles: {
+                    isJurisdictionalAdmin: false,
                   },
                 },
               ],

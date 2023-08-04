@@ -1235,8 +1235,6 @@ export class UserService {
       /**  */
       limit?: number | 'all';
       /**  */
-      isPartner?: boolean;
-      /**  */
       isPortalUser?: boolean;
       /**  */
       search?: string;
@@ -1255,7 +1253,6 @@ export class UserService {
       configs.params = {
         page: params['page'],
         limit: params['limit'],
-        isPartner: params['isPartner'],
         isPortalUser: params['isPortalUser'],
         search: params['search'],
       };
