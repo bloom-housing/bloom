@@ -53,6 +53,7 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
             ? `CASE WHEN ${orderByCondition.orderBy} = 'pending' THEN 1 WHEN ${orderByCondition.orderBy} = 'active' THEN 2 WHEN ${orderByCondition.orderBy} = 'closed' THEN 3 END`
             : `CASE WHEN ${orderByCondition.orderBy} = 'closed' THEN 1 WHEN ${orderByCondition.orderBy} = 'active' THEN 2 WHEN ${orderByCondition.orderBy} = 'pending' THEN 3 END`
         this.addOrderBy(orderStr)
+        this.addOrderBy("listings.applicationDueDate", orderByCondition.orderDir)
       } else {
         this.addOrderBy(orderByCondition.orderBy, orderByCondition.orderDir, orderByCondition.nulls)
       }
