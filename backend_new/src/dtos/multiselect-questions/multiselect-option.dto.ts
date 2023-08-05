@@ -31,21 +31,21 @@ export class MultiselectOption {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  description?: string | null;
+  description?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectLink)
   @ApiProperty({ type: MultiselectLink, isArray: true })
-  links?: MultiselectLink[] | null;
+  links?: MultiselectLink[];
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  collectAddress?: boolean | null;
+  collectAddress?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  exclusive?: boolean | null;
+  exclusive?: boolean;
 }

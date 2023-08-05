@@ -9,19 +9,19 @@ export class Demographic extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  ethnicity?: string | null;
+  ethnicity?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  gender?: string | null;
+  gender?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  sexualOrientation?: string | null;
+  sexualOrientation?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -34,5 +34,5 @@ export class Demographic extends AbstractDTO {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   @ApiProperty()
-  race?: string[] | null;
+  race?: string[];
 }

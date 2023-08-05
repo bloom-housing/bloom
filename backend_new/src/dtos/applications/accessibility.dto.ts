@@ -8,15 +8,15 @@ export class Accessibility extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  mobility?: boolean | null;
+  mobility?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  vision?: boolean | null;
+  vision?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  hearing?: boolean | null;
+  hearing?: boolean;
 }

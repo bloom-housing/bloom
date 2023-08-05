@@ -35,7 +35,7 @@ describe('Application Controller Tests', () => {
     await app.close();
   });
 
-  it('should not retrieve applications with params sent', async () => {
+  it('should get no applications when params are sent, and no applications are stored', async () => {
     const queryParams: ApplicationQueryParams = {
       limit: 2,
       page: 1,
@@ -50,7 +50,7 @@ describe('Application Controller Tests', () => {
     expect(res.body.items.length).toBe(0);
   });
 
-  it('should not retrieve applications with no params sent', async () => {
+  it('should get no applications when no params are sent, and no applications are stored', async () => {
     const res = await request(app.getHttpServer())
       .get(`/applications`)
       .expect(200);
@@ -58,7 +58,7 @@ describe('Application Controller Tests', () => {
     expect(res.body.items.length).toBe(0);
   });
 
-  it('should retrieve applications with params sent', async () => {
+  it('should get stored applications when params are sent', async () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({
@@ -97,7 +97,7 @@ describe('Application Controller Tests', () => {
     expect(resApplicationA).not.toBeNull();
   });
 
-  it('should retrieve applications with no params sent', async () => {
+  it('should get stored applications when no params sent', async () => {
     const unitTypeA = await unitTypeFactorySingle(prisma, UnitTypeEnum.oneBdrm);
 
     const applicationA = await prisma.applications.create({

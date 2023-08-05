@@ -34,30 +34,30 @@ export class Application extends AbstractDTO {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiProperty()
-  deletedAt?: Date | null;
+  deletedAt?: Date;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  appUrl?: string | null;
+  appUrl?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  additionalPhone?: boolean | null;
+  additionalPhone?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  additionalPhoneNumber?: string | null;
+  additionalPhoneNumber?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  additionalPhoneNumberType?: string | null;
+  additionalPhoneNumberType?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -69,44 +69,44 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  householdSize?: number | null;
+  householdSize?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  housingStatus?: string | null;
+  housingStatus?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  sendMailToMailingAddress?: boolean | null;
+  sendMailToMailingAddress?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  householdExpectingChanges?: boolean | null;
+  householdExpectingChanges?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  householdStudent?: boolean | null;
+  householdStudent?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  incomeVouchers?: boolean | null;
+  incomeVouchers?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  income?: string | null;
+  income?: string;
 
   @Expose()
   @IsEnum(IncomePeriodEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: IncomePeriodEnum, enumName: 'IncomePeriodEnum' })
-  incomePeriod?: IncomePeriodEnum | null;
+  incomePeriod?: IncomePeriodEnum;
 
   @Expose()
   @IsEnum(ApplicationStatusEnum, { groups: [ValidationsGroupsEnum.default] })
@@ -119,12 +119,12 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: LanguagesEnum, enumName: 'LanguagesEnum' })
-  language?: LanguagesEnum | null;
+  language?: LanguagesEnum;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  acceptedTerms?: boolean | null;
+  acceptedTerms?: boolean;
 
   @Expose()
   @IsEnum(ApplicationSubmissionTypeEnum, {
@@ -140,7 +140,7 @@ export class Application extends AbstractDTO {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   @ApiProperty()
-  submissionDate?: Date | null;
+  submissionDate?: Date;
 
   // if this field is true then the application is a confirmed duplicate
   // meaning that the record in the applicaiton flagged set table has a status of duplicate
@@ -171,7 +171,7 @@ export class Application extends AbstractDTO {
     enumName: 'ApplicationReviewStatusEnum',
   })
   @ApiProperty()
-  reviewStatus?: ApplicationReviewStatusEnum | null;
+  reviewStatus?: ApplicationReviewStatusEnum;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

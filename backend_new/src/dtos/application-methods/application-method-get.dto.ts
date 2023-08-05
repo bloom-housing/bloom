@@ -29,24 +29,24 @@ export class ApplicationMethod extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  label?: string | null;
+  label?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  externalReference?: string | null;
+  externalReference?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  acceptsPostmarkedApplications?: boolean | null;
+  acceptsPostmarkedApplications?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  phoneNumber?: string | null;
+  phoneNumber?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PaperApplication)
-  paperApplications?: PaperApplication[] | null;
+  paperApplications?: PaperApplication[];
 }

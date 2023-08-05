@@ -111,49 +111,53 @@ export class ApplicationService {
       });
     }
     if (params.search) {
+      const searchFilter: Prisma.StringFilter = {
+        contains: params.search,
+        mode: 'insensitive',
+      };
       toReturn.push({
         OR: [
           {
-            confirmationCode: { contains: params.search, mode: 'insensitive' },
+            confirmationCode: searchFilter,
           },
           {
             applicant: {
-              firstName: { contains: params.search, mode: 'insensitive' },
-            },
-          },
-          {
-            applicant: {
-              lastName: { contains: params.search, mode: 'insensitive' },
+              firstName: searchFilter,
             },
           },
           {
             applicant: {
-              emailAddress: { contains: params.search, mode: 'insensitive' },
+              lastName: searchFilter,
             },
           },
           {
             applicant: {
-              phoneNumber: { contains: params.search, mode: 'insensitive' },
+              emailAddress: searchFilter,
+            },
+          },
+          {
+            applicant: {
+              phoneNumber: searchFilter,
             },
           },
           {
             alternateContact: {
-              firstName: { contains: params.search, mode: 'insensitive' },
+              firstName: searchFilter,
             },
           },
           {
             alternateContact: {
-              lastName: { contains: params.search, mode: 'insensitive' },
+              lastName: searchFilter,
             },
           },
           {
             alternateContact: {
-              emailAddress: { contains: params.search, mode: 'insensitive' },
+              emailAddress: searchFilter,
             },
           },
           {
             alternateContact: {
-              phoneNumber: { contains: params.search, mode: 'insensitive' },
+              phoneNumber: searchFilter,
             },
           },
         ],

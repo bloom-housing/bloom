@@ -16,7 +16,7 @@ export const applicationFactory = (optionalParams?: {
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   overrides?: Prisma.ApplicationsCreateInput;
 }): Prisma.ApplicationsCreateInput => {
-  let preferredUnitTypes;
+  let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
     preferredUnitTypes = {
       connect: [
@@ -29,7 +29,7 @@ export const applicationFactory = (optionalParams?: {
   return {
     confirmationCode: generateConfirmationCode(),
     applicant: { create: applicantFactory(optionalParams?.applicant) },
-    appUrl: 'http://localhost:3000/', // can this be dynamic?
+    appUrl: '',
     status: ApplicationStatusEnum.submitted,
     submissionType: ApplicationSubmissionTypeEnum.electronical,
     householdSize: optionalParams?.househouldSize ?? 1,

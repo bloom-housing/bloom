@@ -5,7 +5,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-export function IsLength(
+export function SearchStringLengthCheck(
   property: string,
   validationOptions?: ValidationOptions,
 ) {
@@ -20,7 +20,7 @@ export function IsLength(
   };
 }
 
-@ValidatorConstraint({ name: 'IsLength' })
+@ValidatorConstraint({ name: 'SearchStringLengthCheck' })
 export class LengthConstraint implements ValidatorConstraintInterface {
   validate(value: string) {
     return value.length >= 3 || value.length === 0;

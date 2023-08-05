@@ -17,64 +17,64 @@ export class HouseholdMember extends AbstractDTO {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  orderId?: number | null;
+  orderId?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  firstName?: string | null;
+  firstName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  middleName?: string | null;
+  middleName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  lastName?: string | null;
+  lastName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
-  birthMonth?: string | null;
-
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
-  birthDay?: string | null;
+  birthMonth?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  birthYear?: string | null;
+  birthDay?: string;
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  birthYear?: string;
 
   @Expose()
   @IsEnum(YesNoEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: YesNoEnum, enumName: 'YesNoEnum' })
-  sameAddress?: YesNoEnum | null;
+  sameAddress?: YesNoEnum;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  relationship?: string | null;
+  relationship?: string;
 
   @Expose()
   @IsEnum(YesNoEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: YesNoEnum, enumName: 'YesNoEnum' })
-  workInRegion?: YesNoEnum | null;
+  workInRegion?: YesNoEnum;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
   @ApiProperty()
-  householdMemberWorkAddress?: Address | null;
+  householdMemberWorkAddress?: Address;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

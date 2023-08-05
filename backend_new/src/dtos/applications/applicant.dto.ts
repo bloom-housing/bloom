@@ -22,66 +22,66 @@ export class Applicant extends AbstractDTO {
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  firstName?: string | null;
+  firstName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  middleName?: string | null;
+  middleName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  lastName?: string | null;
+  lastName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  birthMonth?: string | null;
+  birthMonth?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  birthDay?: string | null;
+  birthDay?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(8, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  birthYear?: string | null;
+  birthYear?: string;
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   @ApiProperty()
-  emailAddress?: string | null;
+  emailAddress?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  noEmail?: boolean | null;
+  noEmail?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  phoneNumber?: string | null;
+  phoneNumber?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  phoneNumberType?: string | null;
+  phoneNumberType?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  noPhone?: boolean | null;
+  noPhone?: boolean;
 
   @Expose()
   @IsEnum(YesNoEnum, { groups: [ValidationsGroupsEnum.default] })

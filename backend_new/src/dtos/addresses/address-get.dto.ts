@@ -18,7 +18,7 @@ export class Address extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  county?: string | null;
+  county?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -35,7 +35,7 @@ export class Address extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  street2?: string | null;
+  street2?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -46,10 +46,10 @@ export class Address extends AbstractDTO {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
-  latitude?: number | null;
+  latitude?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => Number)
-  longitude?: number | null;
+  longitude?: number;
 }

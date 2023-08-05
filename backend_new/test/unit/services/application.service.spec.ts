@@ -11,6 +11,7 @@ import {
 import { ApplicationQueryParams } from '../../../src/dtos/applications/application-query-params.dto';
 import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ApplicationOrderByKeys } from '../../../src/enums/applications/order-by-enum';
+import { randomUUID } from 'crypto';
 
 describe('Testing application service', () => {
   let service: ApplicationService;
@@ -18,7 +19,7 @@ describe('Testing application service', () => {
 
   const mockApplication = (position: number, date: Date) => {
     return {
-      id: `application id ${position}`,
+      id: randomUUID(),
       appUrl: `appUrl ${position}`,
       additionalPhone: true,
       additionalPhoneNumber: `additionalPhoneNumber ${position}`,
@@ -31,7 +32,11 @@ describe('Testing application service', () => {
       incomeVouchers: true,
       income: `income ${position}`,
       incomePeriod: IncomePeriodEnum.perMonth,
-      preferences: {},
+      preferences: {
+        claimed: true,
+        key: 'example key',
+        options: null,
+      },
       status: ApplicationStatusEnum.submitted,
       submissionType: ApplicationSubmissionTypeEnum.electronical,
       acceptedTerms: true,
@@ -46,33 +51,33 @@ describe('Testing application service', () => {
         birthMonth: `application ${position} birthMonth`,
         birthDay: `application ${position} birthDay`,
         birthYear: `application ${position} birthYear`,
-        emailAddress: `application ${position} emailAddress`,
+        emailAddress: `application ${position} emailaddress`,
         noEmail: false,
         phoneNumber: `application ${position} phoneNumber`,
         phoneNumberType: `application ${position} phoneNumberType`,
         noPhone: false,
         workInRegion: YesNoEnum.yes,
         applicantWorkAddress: {
-          placeName: `application {i} applicantWorkAddress placeName`,
-          city: `application {i} applicantWorkAddress city`,
-          county: `application {i} applicantWorkAddress county`,
-          state: `application {i} applicantWorkAddress state`,
-          street: `application {i} applicantWorkAddress street`,
-          street2: `application {i} applicantWorkAddress street2`,
-          zipCode: `application {i} applicantWorkAddress zipCode`,
-          latitude: `${position}`,
-          longitude: `${position}`,
+          placeName: `application ${position} applicantWorkAddress placeName`,
+          city: `application ${position} applicantWorkAddress city`,
+          county: `application ${position} applicantWorkAddress county`,
+          state: `application ${position} applicantWorkAddress state`,
+          street: `application ${position} applicantWorkAddress street`,
+          street2: `application ${position} applicantWorkAddress street2`,
+          zipCode: `application ${position} applicantWorkAddress zipCode`,
+          latitude: position,
+          longitude: position,
         },
         applicantAddress: {
-          placeName: `application {i} applicantAddress placeName`,
-          city: `application {i} applicantAddress city`,
-          county: `application {i} applicantAddress county`,
-          state: `application {i} applicantAddress state`,
-          street: `application {i} applicantAddress street`,
-          street2: `application {i} applicantAddress street2`,
-          zipCode: `application {i} applicantAddress zipCode`,
-          latitude: `${position}`,
-          longitude: `${position}`,
+          placeName: `application ${position} applicantAddress placeName`,
+          city: `application ${position} applicantAddress city`,
+          county: `application ${position} applicantAddress county`,
+          state: `application ${position} applicantAddress state`,
+          street: `application ${position} applicantAddress street`,
+          street2: `application ${position} applicantAddress street2`,
+          zipCode: `application ${position} applicantAddress zipCode`,
+          latitude: position,
+          longitude: position,
         },
       },
       createdAt: date,
@@ -88,7 +93,7 @@ describe('Testing application service', () => {
     return toReturn;
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ApplicationService, PrismaService],
     }).compile();
@@ -97,11 +102,10 @@ describe('Testing application service', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  it('testing list()', async () => {
+  it('should get applications from list() when applications are available', async () => {
     const date = new Date();
-    prisma.applications.findMany = jest
-      .fn()
-      .mockResolvedValue(mockApplicationSet(3, date));
+    const mockedValue = mockApplicationSet(3, date);
+    prisma.applications.findMany = jest.fn().mockResolvedValue(mockedValue);
     prisma.applications.count = jest.fn().mockResolvedValue(3);
     prisma.applications.findFirst = jest.fn().mockResolvedValue({
       id: 'example id',
@@ -116,206 +120,7 @@ describe('Testing application service', () => {
     };
 
     expect(await service.list(params)).toEqual({
-      items: [
-        {
-          id: `application id 0`,
-          appUrl: `appUrl 0`,
-          additionalPhone: true,
-          additionalPhoneNumber: `additionalPhoneNumber 0`,
-          additionalPhoneNumberType: `additionalPhoneNumberType 0`,
-          householdSize: 0,
-          housingStatus: `housingStatus 0`,
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: true,
-          householdStudent: true,
-          incomeVouchers: true,
-          income: `income 0`,
-          incomePeriod: IncomePeriodEnum.perMonth,
-          preferences: {
-            claimed: undefined,
-            key: undefined,
-            options: undefined,
-          },
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          acceptedTerms: true,
-          submissionDate: date,
-          markedAsDuplicate: false,
-          confirmationCode: `confirmationCode 0`,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            firstName: `application 0 firstName`,
-            middleName: `application 0 middleName`,
-            lastName: `application 0 lastName`,
-            birthMonth: `application 0 birthMonth`,
-            birthDay: `application 0 birthDay`,
-            birthYear: `application 0 birthYear`,
-            emailAddress: `application 0 emailaddress`,
-            noEmail: false,
-            phoneNumber: `application 0 phoneNumber`,
-            phoneNumberType: `application 0 phoneNumberType`,
-            noPhone: false,
-            workInRegion: YesNoEnum.yes,
-            applicantWorkAddress: {
-              placeName: `application {i} applicantWorkAddress placeName`,
-              city: `application {i} applicantWorkAddress city`,
-              county: `application {i} applicantWorkAddress county`,
-              state: `application {i} applicantWorkAddress state`,
-              street: `application {i} applicantWorkAddress street`,
-              street2: `application {i} applicantWorkAddress street2`,
-              zipCode: `application {i} applicantWorkAddress zipCode`,
-              latitude: 0,
-              longitude: 0,
-            },
-            applicantAddress: {
-              placeName: `application {i} applicantAddress placeName`,
-              city: `application {i} applicantAddress city`,
-              county: `application {i} applicantAddress county`,
-              state: `application {i} applicantAddress state`,
-              street: `application {i} applicantAddress street`,
-              street2: `application {i} applicantAddress street2`,
-              zipCode: `application {i} applicantAddress zipCode`,
-              latitude: 0,
-              longitude: 0,
-            },
-          },
-          createdAt: date,
-          updatedAt: date,
-          flagged: true,
-        },
-        {
-          id: `application id 1`,
-          appUrl: `appUrl 1`,
-          additionalPhone: true,
-          additionalPhoneNumber: `additionalPhoneNumber 1`,
-          additionalPhoneNumberType: `additionalPhoneNumberType 1`,
-          householdSize: 1,
-          housingStatus: `housingStatus 1`,
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: true,
-          householdStudent: true,
-          incomeVouchers: true,
-          income: `income 1`,
-          incomePeriod: IncomePeriodEnum.perMonth,
-          preferences: {
-            claimed: undefined,
-            key: undefined,
-            options: undefined,
-          },
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          acceptedTerms: true,
-          submissionDate: date,
-          markedAsDuplicate: false,
-          confirmationCode: `confirmationCode 1`,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            firstName: `application 1 firstName`,
-            middleName: `application 1 middleName`,
-            lastName: `application 1 lastName`,
-            birthMonth: `application 1 birthMonth`,
-            birthDay: `application 1 birthDay`,
-            birthYear: `application 1 birthYear`,
-            emailAddress: `application 1 emailaddress`,
-            noEmail: false,
-            phoneNumber: `application 1 phoneNumber`,
-            phoneNumberType: `application 1 phoneNumberType`,
-            noPhone: false,
-            workInRegion: YesNoEnum.yes,
-            applicantWorkAddress: {
-              placeName: `application {i} applicantWorkAddress placeName`,
-              city: `application {i} applicantWorkAddress city`,
-              county: `application {i} applicantWorkAddress county`,
-              state: `application {i} applicantWorkAddress state`,
-              street: `application {i} applicantWorkAddress street`,
-              street2: `application {i} applicantWorkAddress street2`,
-              zipCode: `application {i} applicantWorkAddress zipCode`,
-              latitude: 1,
-              longitude: 1,
-            },
-            applicantAddress: {
-              placeName: `application {i} applicantAddress placeName`,
-              city: `application {i} applicantAddress city`,
-              county: `application {i} applicantAddress county`,
-              state: `application {i} applicantAddress state`,
-              street: `application {i} applicantAddress street`,
-              street2: `application {i} applicantAddress street2`,
-              zipCode: `application {i} applicantAddress zipCode`,
-              latitude: 1,
-              longitude: 1,
-            },
-          },
-          createdAt: date,
-          updatedAt: date,
-          flagged: true,
-        },
-        {
-          id: `application id 2`,
-          appUrl: `appUrl 2`,
-          additionalPhone: true,
-          additionalPhoneNumber: `additionalPhoneNumber 2`,
-          additionalPhoneNumberType: `additionalPhoneNumberType 2`,
-          householdSize: 2,
-          housingStatus: `housingStatus 2`,
-          sendMailToMailingAddress: true,
-          householdExpectingChanges: true,
-          householdStudent: true,
-          incomeVouchers: true,
-          income: `income 2`,
-          incomePeriod: IncomePeriodEnum.perMonth,
-          preferences: {
-            claimed: undefined,
-            key: undefined,
-            options: undefined,
-          },
-          status: ApplicationStatusEnum.submitted,
-          submissionType: ApplicationSubmissionTypeEnum.electronical,
-          acceptedTerms: true,
-          submissionDate: date,
-          markedAsDuplicate: false,
-          confirmationCode: `confirmationCode 2`,
-          reviewStatus: ApplicationReviewStatusEnum.valid,
-          applicant: {
-            firstName: `application 2 firstName`,
-            middleName: `application 2 middleName`,
-            lastName: `application 2 lastName`,
-            birthMonth: `application 2 birthMonth`,
-            birthDay: `application 2 birthDay`,
-            birthYear: `application 2 birthYear`,
-            emailAddress: `application 2 emailaddress`,
-            noEmail: false,
-            phoneNumber: `application 2 phoneNumber`,
-            phoneNumberType: `application 2 phoneNumberType`,
-            noPhone: false,
-            workInRegion: YesNoEnum.yes,
-            applicantWorkAddress: {
-              placeName: `application {i} applicantWorkAddress placeName`,
-              city: `application {i} applicantWorkAddress city`,
-              county: `application {i} applicantWorkAddress county`,
-              state: `application {i} applicantWorkAddress state`,
-              street: `application {i} applicantWorkAddress street`,
-              street2: `application {i} applicantWorkAddress street2`,
-              zipCode: `application {i} applicantWorkAddress zipCode`,
-              latitude: 2,
-              longitude: 2,
-            },
-            applicantAddress: {
-              placeName: `application {i} applicantAddress placeName`,
-              city: `application {i} applicantAddress city`,
-              county: `application {i} applicantAddress county`,
-              state: `application {i} applicantAddress state`,
-              street: `application {i} applicantAddress street`,
-              street2: `application {i} applicantAddress street2`,
-              zipCode: `application {i} applicantAddress zipCode`,
-              latitude: 2,
-              longitude: 2,
-            },
-          },
-          createdAt: date,
-          updatedAt: date,
-          flagged: true,
-        },
-      ],
+      items: mockedValue.map((mock) => ({ ...mock, flagged: true })),
       meta: {
         currentPage: 1,
         itemCount: 3,
@@ -340,7 +145,7 @@ describe('Testing application service', () => {
         id: true,
       },
       where: {
-        id: `application id 0`,
+        id: mockedValue[0].id,
         applicationFlaggedSet: {
           some: {},
         },
@@ -351,7 +156,7 @@ describe('Testing application service', () => {
         id: true,
       },
       where: {
-        id: `application id 1`,
+        id: mockedValue[1].id,
         applicationFlaggedSet: {
           some: {},
         },
@@ -362,7 +167,7 @@ describe('Testing application service', () => {
         id: true,
       },
       where: {
-        id: `application id 2`,
+        id: mockedValue[2].id,
         applicationFlaggedSet: {
           some: {},
         },
@@ -370,74 +175,12 @@ describe('Testing application service', () => {
     });
   });
 
-  it('testing findOne() with id present', async () => {
+  it('should get an application when findOne() is called and Id exists', async () => {
     const date = new Date();
+    const mockedValue = mockApplication(3, date);
+    prisma.applications.findFirst = jest.fn().mockResolvedValue(mockedValue);
 
-    prisma.applications.findFirst = jest
-      .fn()
-      .mockResolvedValue(mockApplication(3, date));
-
-    expect(await service.findOne('example Id')).toEqual({
-      id: `application id 3`,
-      appUrl: `appUrl 3`,
-      additionalPhone: true,
-      additionalPhoneNumber: `additionalPhoneNumber 3`,
-      additionalPhoneNumberType: `additionalPhoneNumberType 3`,
-      householdSize: 3,
-      housingStatus: `housingStatus 3`,
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: true,
-      householdStudent: true,
-      incomeVouchers: true,
-      income: `income 3`,
-      incomePeriod: IncomePeriodEnum.perMonth,
-      preferences: {},
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      acceptedTerms: true,
-      submissionDate: date,
-      markedAsDuplicate: false,
-      confirmationCode: `confirmationCode 3`,
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      applicant: {
-        firstName: `application 3 firstName`,
-        middleName: `application 3 middleName`,
-        lastName: `application 3 lastName`,
-        birthMonth: `application 3 birthMonth`,
-        birthDay: `application 3 birthDay`,
-        birthYear: `application 3 birthYear`,
-        emailAddress: `application 3 emailaddress`,
-        noEmail: false,
-        phoneNumber: `application 3 phoneNumber`,
-        phoneNumberType: `application 3 phoneNumberType`,
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: {
-          placeName: `application {i} applicantWorkAddress placeName`,
-          city: `application {i} applicantWorkAddress city`,
-          county: `application {i} applicantWorkAddress county`,
-          state: `application {i} applicantWorkAddress state`,
-          street: `application {i} applicantWorkAddress street`,
-          street2: `application {i} applicantWorkAddress street2`,
-          zipCode: `application {i} applicantWorkAddress zipCode`,
-          latitude: 3,
-          longitude: 3,
-        },
-        applicantAddress: {
-          placeName: `application {i} applicantAddress placeName`,
-          city: `application {i} applicantAddress city`,
-          county: `application {i} applicantAddress county`,
-          state: `application {i} applicantAddress state`,
-          street: `application {i} applicantAddress street`,
-          street2: `application {i} applicantAddress street2`,
-          zipCode: `application {i} applicantAddress zipCode`,
-          latitude: 3,
-          longitude: 3,
-        },
-      },
-      createdAt: date,
-      updatedAt: date,
-    });
+    expect(await service.findOne('example Id')).toEqual(mockedValue);
 
     expect(prisma.applications.findFirst).toHaveBeenCalledWith({
       where: {
@@ -473,12 +216,14 @@ describe('Testing application service', () => {
     });
   });
 
-  it('testing findOne() with id not present', async () => {
+  it("should throw error when findOne() is called and Id doens't exists", async () => {
     prisma.applications.findFirst = jest.fn().mockResolvedValue(null);
 
     await expect(
       async () => await service.findOne('example Id'),
-    ).rejects.toThrowError();
+    ).rejects.toThrowError(
+      'applicationId example Id was requested but not found',
+    );
 
     expect(prisma.applications.findFirst).toHaveBeenCalledWith({
       where: {
@@ -511,6 +256,155 @@ describe('Testing application service', () => {
         },
         preferredUnitTypes: true,
       },
+    });
+  });
+
+  it('should get record from getDuplicateFlagsForApplication()', async () => {
+    prisma.applications.findFirst = jest
+      .fn()
+      .mockResolvedValue({ id: 'example id' });
+
+    const res = await service.getDuplicateFlagsForApplication('example id');
+
+    expect(prisma.applications.findFirst).toHaveBeenCalledWith({
+      select: {
+        id: true,
+      },
+      where: {
+        id: 'example id',
+        applicationFlaggedSet: {
+          some: {},
+        },
+      },
+    });
+
+    expect(res).toEqual({ id: 'example id' });
+  });
+
+  it('should return no filters when no params passed to buildWhereClause()', () => {
+    const res = service.buildWhereClause({});
+    expect(res).toEqual({ AND: [] });
+  });
+
+  it('should return userId filter when userId param passed to buildWhereClause()', () => {
+    const res = service.buildWhereClause({
+      userId: 'example user id',
+    });
+    expect(res).toEqual({
+      AND: [
+        {
+          userAccounts: {
+            id: 'example user id',
+          },
+        },
+      ],
+    });
+  });
+
+  it('should return listingId filter when listingId param passed to buildWhereClause()', () => {
+    const res = service.buildWhereClause({
+      listingId: 'example listing id',
+    });
+    expect(res).toEqual({
+      AND: [
+        {
+          listingId: 'example listing id',
+        },
+      ],
+    });
+  });
+
+  it('should return markedAsDuplicate filter when markedAsDuplicate param passed to buildWhereClause()', () => {
+    const res = service.buildWhereClause({
+      markedAsDuplicate: false,
+    });
+    expect(res).toEqual({
+      AND: [
+        {
+          markedAsDuplicate: false,
+        },
+      ],
+    });
+  });
+
+  it('should return mixed filters when several params passed to buildWhereClause()', () => {
+    const res = service.buildWhereClause({
+      userId: 'example user id',
+      listingId: 'example listing id',
+      markedAsDuplicate: false,
+    });
+    expect(res).toEqual({
+      AND: [
+        {
+          userAccounts: {
+            id: 'example user id',
+          },
+        },
+        {
+          listingId: 'example listing id',
+        },
+        {
+          markedAsDuplicate: false,
+        },
+      ],
+    });
+  });
+
+  it('should return search filter when search param passed to buildWhereClause()', () => {
+    const res = service.buildWhereClause({
+      search: 'test',
+    });
+    const searchFilter = { contains: 'test', mode: 'insensitive' };
+    expect(res).toEqual({
+      AND: [
+        {
+          OR: [
+            {
+              confirmationCode: searchFilter,
+            },
+            {
+              applicant: {
+                firstName: searchFilter,
+              },
+            },
+            {
+              applicant: {
+                lastName: searchFilter,
+              },
+            },
+            {
+              applicant: {
+                emailAddress: searchFilter,
+              },
+            },
+            {
+              applicant: {
+                phoneNumber: searchFilter,
+              },
+            },
+            {
+              alternateContact: {
+                firstName: searchFilter,
+              },
+            },
+            {
+              alternateContact: {
+                lastName: searchFilter,
+              },
+            },
+            {
+              alternateContact: {
+                emailAddress: searchFilter,
+              },
+            },
+            {
+              alternateContact: {
+                phoneNumber: searchFilter,
+              },
+            },
+          ],
+        },
+      ],
     });
   });
 });

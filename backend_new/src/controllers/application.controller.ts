@@ -28,7 +28,7 @@ export class ApplicationController {
 
   @Get()
   @ApiOperation({
-    summary: 'Get a paginated set of listings',
+    summary: 'Get a paginated set of applications',
     operationId: 'list',
   })
   @ApiOkResponse({ type: PaginatedApplicationDto })

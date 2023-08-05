@@ -17,44 +17,44 @@ export class AlternateContact extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  type?: string | null;
+  type?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  otherType?: string | null;
+  otherType?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  firstName?: string | null;
+  firstName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  lastName?: string | null;
+  lastName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  agency?: string | null;
+  agency?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  phoneNumber?: string | null;
+  phoneNumber?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   @ApiProperty()
-  emailAddress?: string | null;
+  emailAddress?: string;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

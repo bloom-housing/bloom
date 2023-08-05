@@ -5,7 +5,7 @@ import { IsBoolean, IsEnum, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApplicationOrderByKeys } from '../../enums/applications/order-by-enum';
 import { OrderByEnum } from '../../enums/shared/order-by-enum';
-import { IsLength } from '../../decorators/is-length.decorator';
+import { SearchStringLengthCheck } from '../../decorators/search-string-length-check.decorator';
 
 export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
@@ -24,7 +24,7 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
     required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsLength('search', {
+  @SearchStringLengthCheck('search', {
     message: 'Search must be at least 3 characters',
     groups: [ValidationsGroupsEnum.default],
   })
