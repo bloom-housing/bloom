@@ -1207,7 +1207,7 @@ export class MultiselectQuestionsService {
 
 export class ApplicationsService {
   /**
-   * Get a paginated set of listings
+   * Get a paginated set of applications
    */
   list(
     params: {
