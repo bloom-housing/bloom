@@ -39,7 +39,7 @@ describe('Testing asset service', () => {
       {
         eager: 'eager',
         publicId: publicId,
-        timestamp: '15',
+        timestamp: 15,
       },
       process.env.CLOUDINARY_SECRET,
     );

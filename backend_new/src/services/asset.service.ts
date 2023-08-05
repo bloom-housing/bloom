@@ -19,10 +19,10 @@ export class AssetService {
     // Based on https://cloudinary.com/documentation/upload_images#signed_upload_video_tutorial
 
     const parametersToSignWithTimestamp = {
+      ...createPresignedUploadMetadata.parametersToSign,
       timestamp: parseInt(
         createPresignedUploadMetadata.parametersToSign.timestamp,
       ),
-      ...createPresignedUploadMetadata.parametersToSign,
     };
 
     const signature = await cloudinary.utils.api_sign_request(
