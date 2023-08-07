@@ -52,5 +52,7 @@ module.exports = {
     "migration/",
     "**/*.stories.tsx",
     "**/.eslintrc.js",
+    "sentry-example-page.js",
+    "sentry-example-api.js",
   ],
 }
