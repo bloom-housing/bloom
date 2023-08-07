@@ -65,11 +65,8 @@ jobs:
         run: pg_isready -h 127.0.0.1 -p 5432
 
       - name: Create DB
-        run: psql -c 'CREATE DATABASE bloom;'
-        env:
-          PGHOST: 127.0.0.1
-          PGPASSWORD: bloom
-          PGUSER: bloom-dev
+        working-directory: ./backend/core
+        run: yarn db:create
 
       - name: Setup backend
         run: yarn test:backend:core:dbsetup
