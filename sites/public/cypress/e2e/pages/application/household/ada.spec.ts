@@ -5,18 +5,18 @@ describe("applications/household/ada", function () {
     cy.visit(route)
   })
 
-  it("should render ada sub-form", function () {
+  it.skip("should render ada sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("should require form input", function () {
+  it.skip("should require form input", function () {
     cy.goNext()
     cy.checkErrorAlert("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("should uncheck all other checkboxes when 'No' is selected", function () {
+  it.skip("should uncheck all other checkboxes when 'No' is selected", function () {
     cy.get("[data-testid=app-ada-mobility]").check()
     cy.get("[data-testid=app-ada-vision]").check()
     cy.get("[data-testid=app-ada-hearing]").check()

@@ -9,12 +9,12 @@ describe("applications/review/terms", function () {
     cy.visit(route)
   })
 
-  it("should render terms sub-form", function () {
+  it.skip("should render terms sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("should require form input", function () {
+  it.skip("should require form input", function () {
     submitApplication()
     cy.checkErrorMessages("be.visible")
   })

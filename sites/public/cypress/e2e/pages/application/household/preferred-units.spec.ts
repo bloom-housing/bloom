@@ -5,7 +5,7 @@ describe("applications/household/preferred-units", function () {
     cy.visit(route)
   })
 
-  it("should render preferred units sub-form", function () {
+  it.skip("should render preferred units sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })

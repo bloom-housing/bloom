@@ -17,7 +17,6 @@ env:
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
-  MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
   BACKEND_API_BASE: http://localhost:3100
   LISTINGS_QUERY: /listings
   NEXTJS_PORT: 3000
@@ -27,6 +26,7 @@ env:
   JURISDICTION_ENDPOINT_PATH: /jurisdictions
   LISTINGS_ENDPOINT_PATH: /listings
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
+  MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
 
 jobs:
   public-cypress:
@@ -36,6 +36,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom
           POSTGRES_USER: bloom-dev
           POSTGRES_PASSWORD: bloom
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5

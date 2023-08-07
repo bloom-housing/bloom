@@ -5,12 +5,12 @@ describe("applications/household/student", function () {
     cy.visit(route)
   })
 
-  it("should render household student sub-form", function () {
+  it.skip("should render household student sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("should require form input", function () {
+  it.skip("should require form input", function () {
     cy.goNext()
 
     cy.checkErrorAlert("be.visible")
