@@ -61,9 +61,6 @@ jobs:
         working-directory: ./backend/core
         run: yarn
 
-      - name: Check postgres
-        run: pg_isready -h 127.0.0.1 -p 5432
-
       - name: Setup backend
         working-directory: ./backend/core
         run: yarn db:reseed
