@@ -22,6 +22,11 @@ env:
   LISTINGS_QUERY: /listings
   NEXTJS_PORT: 3000
   LANGUAGES: en,es,zh,vi,tl
+  JURISDICTION_INCLUDE_LIST: San Jose,San Mateo,Alameda
+  LISTING_VIEW: base
+  JURISDICTION_ENDPOINT_PATH: /jurisdictions
+  LISTINGS_ENDPOINT_PATH: /listings
+  EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
 
 jobs:
   public-cypress:
