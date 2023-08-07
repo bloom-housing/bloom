@@ -12,8 +12,8 @@ env:
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
   CORS_ORIGIN: "http://localhost:3000,http://localhost:3001"
-  DATABASE_URL: postgres://127.0.0.1:5432/bloom
-  TEST_DATABASE_URL: postgres://127.0.0.1:5432/bloom_test
+  DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
+  TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
@@ -36,7 +36,6 @@ jobs:
         image: postgres
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_DB: bloom
           POSTGRES_USER: bloom-dev
           POSTGRES_PASSWORD: bloom
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -62,9 +61,21 @@ jobs:
         working-directory: ./backend/core
         run: yarn
 
+      - name: Check postgres
+        run: pg_isready -h 127.0.0.1 -p 5432
+
+      - name: Create DB
+        run: psql -U bloom-dev -c 'CREATE DATABASE bloom;'
+        env:
+          PGHOST: 127.0.0.1
+          PGPASSWORD: bloom
+
       - name: Setup backend
-        working-directory: ./backend/core
-        run: yarn db:reseed
+        run: yarn test:backend:core:dbsetup
+        env:
+          PGHOST: 127.0.0.1
+          PGPASSWORD: bloom
+          PGUSER: bloom-dev
 
       - name: yarn in tasks/import-listings dir
         working-directory: ./tasks/import-listings
