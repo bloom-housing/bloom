@@ -12,8 +12,8 @@ env:
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
   CORS_ORIGIN: "http://localhost:3000,http://localhost:3001"
-  DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
-  TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
+  DATABASE_URL: postgres://127.0.0.1:5432/bloom
+  TEST_DATABASE_URL: postgres://127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
@@ -65,10 +65,6 @@ jobs:
       - name: Setup backend
         working-directory: ./backend/core
         run: yarn db:reseed
-        env:
-          PGHOST: 127.0.0.1
-          PGPASSWORD: bloom
-          PGUSER: bloom-dev
 
       - name: yarn in tasks/import-listings dir
         working-directory: ./tasks/import-listings
@@ -81,10 +77,6 @@ jobs:
       - name: Import listings
         working-directory: ./tasks/import-listings
         run: yarn import:run:local:dev
-        env:
-          PGHOST: 127.0.0.1
-          PGPASSWORD: bloom
-          PGUSER: bloom-dev
 
       - name: Cypress run
         uses: cypress-io/github-action@v5
