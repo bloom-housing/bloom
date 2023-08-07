@@ -64,13 +64,6 @@ jobs:
       - name: Check postgres
         run: pg_isready -h 127.0.0.1 -p 5432
 
-      - name: Create DB
-        working-directory: ./backend/core
-        run: yarn db:create
-        env:
-          PGHOST: 127.0.0.1
-          PGPASSWORD: bloom
-          PGUSER: bloom-dev
 
       - name: Setup backend
         run: yarn test:backend:core:dbsetup
