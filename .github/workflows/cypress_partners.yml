@@ -12,8 +12,8 @@ env:
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
   CORS_ORIGIN: "http://localhost:3000,http://localhost:3001"
-  DATABASE_URL: postgres://localhost/bloom
-  TEST_DATABASE_URL: postgres://localhost/bloom_test
+  DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
+  TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   BLOOM_LISTINGS_QUERY: "/fake"
   JURISDICTION_NAME: 'Bay Area'
@@ -30,7 +30,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_DB: bloom-dev
+          POSTGRES_DB: bloom
           POSTGRES_USER: bloom-dev
           POSTGRES_PASSWORD: bloom
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
