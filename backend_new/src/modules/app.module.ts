@@ -10,6 +10,7 @@ import { UnitTypeModule } from './unit-type.module';
 import { UnitRentTypeModule } from './unit-rent-type.module';
 import { JurisdictionModule } from './jurisdiction.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
+import { ApplicationModule } from './application.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
@@ -33,6 +35,7 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
+    ApplicationModule,
   ],
 })
 export class AppModule {}

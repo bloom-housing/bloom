@@ -34,6 +34,11 @@ describe('MultiselectQuestion Controller Tests', () => {
     jurisdictionId = jurisdiction.id;
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('should get multiselect questions from list endpoint when no params are sent', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),

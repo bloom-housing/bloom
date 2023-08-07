@@ -14,6 +14,10 @@ describe('App Controller Tests', () => {
     await app.init();
   });
 
+  afterAll(async () => {
+    await app.close();
+  });
+
   it('should return a successDTO', async () => {
     const res = await request(app.getHttpServer()).get('/').expect(200);
 

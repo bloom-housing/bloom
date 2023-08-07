@@ -4,10 +4,7 @@ import { UnitRentTypeService } from '../../../src/services/unit-rent-type.servic
 import { UnitRentTypeCreate } from '../../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
 import { randomUUID } from 'crypto';
-import {
-  unitRentTypeArray,
-  unitRentTypeFactory,
-} from '../../../prisma/seed-helpers/unit-rent-type-factory';
+import { unitRentTypeArray } from '../../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeEnum } from '@prisma/client';
 
 describe('Testing unit rent type service', () => {

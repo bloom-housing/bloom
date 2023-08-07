@@ -23,6 +23,11 @@ describe('UnitRentType Controller Tests', () => {
     await app.init();
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('testing list endpoint', async () => {
     const unitRentTypeA = await prisma.unitRentTypes.create({
       data: unitRentTypeFactory(),

@@ -32,6 +32,11 @@ describe('ReservedCommunityType Controller Tests', () => {
     jurisdictionAId = jurisdictionA.id;
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('testing list endpoint without params', async () => {
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),

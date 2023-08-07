@@ -22,7 +22,7 @@ export class ReservedCommunityType extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(2048, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  description?: string | null;
+  description?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

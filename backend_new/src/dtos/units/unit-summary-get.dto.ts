@@ -10,7 +10,7 @@ export class UnitSummary {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  unitTypes?: UnitType | null;
+  unitTypes?: UnitType;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -6,61 +6,61 @@ import { AbstractDTO } from '../shared/abstract.dto';
 export class ListingFeatures extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  elevator?: boolean | null;
+  elevator?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  wheelchairRamp?: boolean | null;
+  wheelchairRamp?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  serviceAnimalsAllowed?: boolean | null;
+  serviceAnimalsAllowed?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  accessibleParking?: boolean | null;
+  accessibleParking?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  parkingOnSite?: boolean | null;
+  parkingOnSite?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  inUnitWasherDryer?: boolean | null;
+  inUnitWasherDryer?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  laundryInBuilding?: boolean | null;
+  laundryInBuilding?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  barrierFreeEntrance?: boolean | null;
+  barrierFreeEntrance?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  rollInShower?: boolean | null;
+  rollInShower?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  grabBars?: boolean | null;
+  grabBars?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  heatingInUnit?: boolean | null;
+  heatingInUnit?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  acInUnit?: boolean | null;
+  acInUnit?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  hearing?: boolean | null;
+  hearing?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  visual?: boolean | null;
+  visual?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  mobility?: boolean | null;
+  mobility?: boolean;
 }

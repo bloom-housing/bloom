@@ -31,6 +31,11 @@ describe('AmiChart Controller Tests', () => {
     jurisdictionAId = jurisdictionA.id;
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('testing list endpoint', async () => {
     const jurisdictionB = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),

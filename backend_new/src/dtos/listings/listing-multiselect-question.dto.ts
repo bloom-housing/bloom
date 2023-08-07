@@ -14,5 +14,5 @@ export class ListingMultiselectQuestion {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  ordinal?: number | null;
+  ordinal?: number;
 }

@@ -26,64 +26,64 @@ class UnitsSummary {
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRentMin?: number | null;
+  monthlyRentMin?: number;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRentMax?: number | null;
+  monthlyRentMax?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  monthlyRentAsPercentOfIncome?: string | null;
+  monthlyRentAsPercentOfIncome?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  amiPercentage?: number | null;
+  amiPercentage?: number;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  minimumIncomeMin?: string | null;
+  minimumIncomeMin?: string;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  minimumIncomeMax?: string | null;
+  minimumIncomeMax?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  maxOccupancy?: number | null;
+  maxOccupancy?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  minOccupancy?: number | null;
+  minOccupancy?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  floorMin?: number | null;
+  floorMin?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  floorMax?: number | null;
+  floorMax?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  sqFeetMin?: string | null;
+  sqFeetMin?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  sqFeetMax?: string | null;
+  sqFeetMax?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityType)
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType | null;
+  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  totalCount?: number | null;
+  totalCount?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  totalAvailable?: number | null;
+  totalAvailable?: number;
 }
 
 export { UnitsSummary as default, UnitsSummary };

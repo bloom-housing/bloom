@@ -35,18 +35,18 @@ class MultiselectQuestion extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  subText?: string | null;
+  subText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  description?: string | null;
+  description?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectLink)
   @ApiProperty({ type: MultiselectLink, isArray: true })
-  links?: MultiselectLink[] | null;
+  links?: MultiselectLink[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -60,12 +60,12 @@ class MultiselectQuestion extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectOption)
   @ApiProperty({ type: MultiselectOption, isArray: true })
-  options?: MultiselectOption[] | null;
+  options?: MultiselectOption[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  optOutText?: string | null;
+  optOutText?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
