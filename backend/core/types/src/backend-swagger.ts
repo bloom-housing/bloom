@@ -5110,6 +5110,12 @@ export interface Listing {
 
   /**  */
   lastApplicationUpdateAt?: Date
+
+  /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
 }
 
 export interface PaginatedListing {
@@ -5524,6 +5530,12 @@ export interface ListingCreate {
   lastApplicationUpdateAt?: Date
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   countyCode?: string
 
   /**  */
@@ -5925,6 +5937,12 @@ export interface ListingUpdate {
 
   /**  */
   lastApplicationUpdateAt?: Date
+
+  /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
 
   /**  */
   countyCode?: string
