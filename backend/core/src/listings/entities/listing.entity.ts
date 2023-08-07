@@ -677,6 +677,14 @@ class Listing extends BaseEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   requestedChangesDate?: Date | null
+
+  @ManyToOne(() => User, { eager: true, cascade: true })
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => User)
+  requestedChangesUser?: User | null
 }
 
 export { Listing as default, Listing }
