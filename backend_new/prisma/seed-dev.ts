@@ -11,6 +11,7 @@ import { listingFactory } from './seed-helpers/listing-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
+import { applicationFactory } from './seed-helpers/application-factory';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -60,6 +61,10 @@ export const devSeeding = async (prismaClient: PrismaClient) => {
       status: listingStatusEnumArray[randomInt(listingStatusEnumArray.length)],
       multiselectQuestions:
         index > 0 ? multiselectQuestions.slice(0, index - 1) : [],
+      applications:
+        index > 1
+          ? [...new Array(index)].map(() => applicationFactory())
+          : undefined,
     });
     await prismaClient.listings.create({
       data: listing,

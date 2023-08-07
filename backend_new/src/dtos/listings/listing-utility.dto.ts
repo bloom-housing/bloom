@@ -6,33 +6,33 @@ import { AbstractDTO } from '../shared/abstract.dto';
 export class ListingUtilities extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  water?: boolean | null;
+  water?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  gas?: boolean | null;
+  gas?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  trash?: boolean | null;
+  trash?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  sewer?: boolean | null;
+  sewer?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  electricity?: boolean | null;
+  electricity?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  cable?: boolean | null;
+  cable?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  phone?: boolean | null;
+  phone?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  internet?: boolean | null;
+  internet?: boolean;
 }

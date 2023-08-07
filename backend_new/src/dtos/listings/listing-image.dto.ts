@@ -11,5 +11,5 @@ export class ListingImage {
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  ordinal?: number | null;
+  ordinal?: number;
 }

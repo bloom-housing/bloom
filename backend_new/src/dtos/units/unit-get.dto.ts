@@ -16,78 +16,78 @@ import { UnitAmiChartOverride } from './ami-chart-override-get.dto';
 
 class Unit extends AbstractDTO {
   @Expose()
-  amiChart?: AmiChart | null;
+  amiChart?: AmiChart;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amiPercentage?: string | null;
+  amiPercentage?: string;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  annualIncomeMin?: string | null;
+  annualIncomeMin?: string;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyIncomeMin?: string | null;
+  monthlyIncomeMin?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  floor?: number | null;
+  floor?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  annualIncomeMax?: string | null;
+  annualIncomeMax?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  maxOccupancy?: number | null;
+  maxOccupancy?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  minOccupancy?: number | null;
+  minOccupancy?: number;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRent?: string | null;
+  monthlyRent?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  numBathrooms?: number | null;
+  numBathrooms?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  numBedrooms?: number | null;
+  numBedrooms?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  number?: string | null;
+  number?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  sqFeet?: string | null;
+  sqFeet?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  monthlyRentAsPercentOfIncome?: string | null;
+  monthlyRentAsPercentOfIncome?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  bmrProgramChart?: boolean | null;
+  bmrProgramChart?: boolean;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitType)
-  unitTypes?: UnitType | null;
+  unitTypes?: UnitType;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitRentType)
-  unitRentTypes?: UnitRentType | null;
+  unitRentTypes?: UnitRentType;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityType)
-  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType | null;
+  unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

@@ -1,7 +1,9 @@
 import {
   ApplicationAddressTypeEnum,
   ListingsStatusEnum,
+  MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
+  Prisma,
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
@@ -18,6 +20,7 @@ import {
   washingtonMonument,
   whiteHouse,
 } from './seed-helpers/address-factory';
+import { applicationFactory } from './seed-helpers/application-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -183,6 +186,7 @@ export const stagingSeed = async (
         },
       ],
       multiselectQuestions: [multiselectQuestion1, multiselectQuestion2],
+      applications: [applicationFactory(), applicationFactory()],
     },
     {
       listing: {
@@ -296,6 +300,17 @@ export const stagingSeed = async (
         },
       ],
       multiselectQuestions: [multiselectQuestion1],
+      // has applications that are the same email
+      applications: [
+        applicationFactory({
+          applicant: { emailAddress: 'user1@example.com' },
+        }),
+        applicationFactory({
+          applicant: { emailAddress: 'user1@example.com' },
+        }),
+        applicationFactory(),
+        applicationFactory(),
+      ],
     },
     {
       listing: {
@@ -678,16 +693,27 @@ export const stagingSeed = async (
         },
       },
     },
-  ].map(async (value, index) => {
-    const listing = await listingFactory(jurisdiction.id, prismaClient, {
-      amiChart: amiChart,
-      numberOfUnits: index,
-      listing: value.listing,
-      units: value.units,
-      multiselectQuestions: value.multiselectQuestions,
-    });
-    await prismaClient.listings.create({
-      data: listing,
-    });
-  });
+  ].map(
+    async (
+      value: {
+        listing: Prisma.ListingsCreateInput;
+        units?: Prisma.UnitsCreateWithoutListingsInput[];
+        multiselectQuestions?: Partial<MultiselectQuestions>[];
+        applications?: Prisma.ApplicationsCreateInput[];
+      },
+      index,
+    ) => {
+      const listing = await listingFactory(jurisdiction.id, prismaClient, {
+        amiChart: amiChart,
+        numberOfUnits: index,
+        listing: value.listing,
+        units: value.units,
+        multiselectQuestions: value.multiselectQuestions,
+        applications: value.applications,
+      });
+      await prismaClient.listings.create({
+        data: listing,
+      });
+    },
+  );
 };

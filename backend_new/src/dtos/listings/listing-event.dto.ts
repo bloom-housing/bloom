@@ -39,15 +39,15 @@ export class ListingEvent extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  url?: string | null;
+  url?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  note?: string | null;
+  note?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  label?: string | null;
+  label?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

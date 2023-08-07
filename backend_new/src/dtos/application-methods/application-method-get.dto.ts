@@ -11,7 +11,7 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 import { AbstractDTO } from '../shared/abstract.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationMethodsTypeEnum } from '@prisma/client';
-import { PaperApplication } from '../paper-applications/paper-application-get.dto';
+import { PaperApplication } from '../paper-applications/paper-application.dto';
 
 export class ApplicationMethod extends AbstractDTO {
   @Expose()
@@ -29,24 +29,24 @@ export class ApplicationMethod extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  label?: string | null;
+  label?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  externalReference?: string | null;
+  externalReference?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  acceptsPostmarkedApplications?: boolean | null;
+  acceptsPostmarkedApplications?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  phoneNumber?: string | null;
+  phoneNumber?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PaperApplication)
-  paperApplications?: PaperApplication[] | null;
+  paperApplications?: PaperApplication[];
 }
