@@ -23,6 +23,7 @@ export const listingFactory = async (
     includeBuildingFeatures?: boolean;
     includeEligibilityRules?: boolean;
     multiselectQuestions?: Partial<MultiselectQuestions>[];
+    applications?: Prisma.ApplicationsCreateInput[];
   },
 ): Promise<Prisma.ListingsCreateInput> => {
   const previousListing = optionalParams?.listing || {};
@@ -66,6 +67,11 @@ export const listingFactory = async (
               }),
             },
           })),
+        }
+      : undefined,
+    applications: optionalParams?.applications
+      ? {
+          create: optionalParams.applications,
         }
       : undefined,
     ...featuresAndUtilites(),

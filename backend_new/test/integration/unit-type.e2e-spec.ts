@@ -27,6 +27,11 @@ describe('UnitType Controller Tests', () => {
     await unitTypeFactoryAll(prisma);
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('testing list endpoint', async () => {
     const res = await request(app.getHttpServer())
       .get(`/unitTypes?`)

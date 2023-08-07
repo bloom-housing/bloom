@@ -33,6 +33,11 @@ describe('Listing Controller Tests', () => {
     jurisdictionAId = jurisdiction.id;
   });
 
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
+  });
+
   it('should not get listings from list endpoint when no params are sent', async () => {
     const res = await request(app.getHttpServer()).get('/listings').expect(200);
 

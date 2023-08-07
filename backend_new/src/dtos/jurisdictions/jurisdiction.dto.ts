@@ -26,7 +26,7 @@ export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  notificationsSignUpUrl?: string | null;
+  notificationsSignUpUrl?: string;
 
   @Expose()
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
@@ -49,7 +49,7 @@ export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  partnerTerms?: string | null;
+  partnerTerms?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -72,17 +72,17 @@ export class Jurisdiction extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  enablePartnerSettings?: boolean | null;
+  enablePartnerSettings?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  enableAccessibilityFeatures: boolean | null;
+  enableAccessibilityFeatures: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  enableUtilitiesIncluded: boolean | null;
+  enableUtilitiesIncluded: boolean;
 }

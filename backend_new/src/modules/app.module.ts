@@ -10,6 +10,7 @@ import { UnitTypeModule } from './unit-type.module';
 import { UnitRentTypeModule } from './unit-rent-type.module';
 import { JurisdictionModule } from './jurisdiction.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
+import { ApplicationModule } from './application.module';
 import { AssetModule } from './asset.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { AssetModule } from './asset.module';
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
+    ApplicationModule,
     AssetModule,
   ],
   controllers: [AppController],
@@ -35,6 +37,7 @@ import { AssetModule } from './asset.module';
     UnitRentTypeModule,
     JurisdictionModule,
     MultiselectQuestionModule,
+    ApplicationModule,
     AssetModule,
   ],
 })

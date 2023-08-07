@@ -17,17 +17,22 @@ export const unitTypeFactorySingle = async (
   return unitType;
 };
 
-export const unitTypeFactoryAll = async (prismaClient: PrismaClient) => {
-  return Promise.all(
-    Object.values(UnitTypeEnum).map(async (value) => {
-      return await prismaClient.unitTypes.create({
-        data: {
-          name: value,
-          numBedrooms: unitTypeMapping[value],
-        },
-      });
-    }),
-  );
+// All unit types should only be created once. This function checks if they have been created
+// before putting all types in the database
+export const unitTypeFactoryAll = async (
+  prismaClient: PrismaClient,
+): Promise<UnitTypes[]> => {
+  const all = await prismaClient.unitTypes.findMany({});
+  const unitTypes = Object.values(UnitTypeEnum);
+  if (all.length !== unitTypes.length) {
+    await prismaClient.unitTypes.createMany({
+      data: Object.values(UnitTypeEnum).map((value) => ({
+        name: value,
+        numBedrooms: unitTypeMapping[value],
+      })),
+    });
+  }
+  return await prismaClient.unitTypes.findMany({});
 };
 
 export const unitTypeMapping = {
