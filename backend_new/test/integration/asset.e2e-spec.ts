@@ -3,16 +3,25 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../src//modules/app.module';
 import { randomUUID } from 'crypto';
+import { PrismaService } from '../../src/services/prisma.service';
 
 describe('Asset Controller Tests', () => {
   let app: INestApplication;
+  let prisma: PrismaService;
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+    await app.close();
   });
 
   it('should create a presigned url for upload', async () => {

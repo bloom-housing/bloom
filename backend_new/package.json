@@ -24,7 +24,7 @@
     "db:seed:staging": "npx prisma db seed -- --environment staging",
     "db:seed:development": "npx prisma db seed -- --environment development --jurisdictionName Bloomington",
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w types/src/backend-swagger.ts",
-    "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js",
+    "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js --runInBand",
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed:development",
     "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging"
   },
