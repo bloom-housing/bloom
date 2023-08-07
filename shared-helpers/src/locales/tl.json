@@ -320,6 +320,7 @@
   "authentication.createAccount.resendTheEmail": "Ipadalang muli ang email",
   "authentication.forgotPassword.changePassword": "Palitan ang Password",
   "authentication.forgotPassword.errors.emailNotFound": "Hindi nahanap ang email. Pakitiyak na ang iyong email ay may account sa amin at nakumpirma.",
+  "authentication.forgotPassword.errors.passwordTooWeak": "Masyadong mahina ang password. Dapat ay hindi bababa sa 8 mga character at may kasamang hindi bababa sa 1 titik at hindi bababa sa isang numero.",
   "authentication.forgotPassword.errors.tokenExpired": "Nag-expire na ang token ng pag-reset ng password. Humiling ng bago.",
   "authentication.forgotPassword.errors.tokenMissing": "Hindi nahanap ang token. Humiling ng bago.",
   "authentication.forgotPassword.sendEmail": "Magpadala ng email",

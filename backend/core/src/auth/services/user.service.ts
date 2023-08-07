@@ -230,7 +230,9 @@ export class UserService {
     }
 
     if (user.confirmationToken !== dto.token) {
-      console.error(`Confirmation token mismatch for user ${token.id}.`)
+      console.error(
+        `Confirmation token mismatch for user ${token.id}. Stored confirmation token: ${user.confirmationToken} incoming token: ${dto.token}`
+      )
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
 

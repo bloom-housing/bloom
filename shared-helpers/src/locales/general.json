@@ -498,6 +498,7 @@
   "authentication.forgotPassword.enterNewLoginPassword": "Please enter new login password",
   "authentication.forgotPassword.changePassword": "Change Password",
   "authentication.forgotPassword.errors.emailNotFound": "Email not found. Please make sure your email has an account with us and is confirmed.",
+  "authentication.forgotPassword.errors.passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
   "authentication.forgotPassword.errors.tokenExpired": "Reset password token expired. Please request for a new one.",
   "authentication.forgotPassword.errors.tokenMissing": "Token not found. Please request for a new one.",
   "authentication.forgotPassword.sendEmail": "Send email",
