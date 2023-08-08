@@ -36,7 +36,10 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     let orderByConditionDataArray = []
     if (!orderDir || !orderBy) {
       orderByConditionDataArray = [
-        ListingsQueryBuilder.getOrderByCondition(OrderByFieldsEnum.status, OrderParam.ASC),
+        ListingsQueryBuilder.getOrderByCondition(
+          OrderByFieldsEnum.applicationDates,
+          OrderParam.ASC
+        ),
       ]
     } else {
       for (let i = 0; i < orderDir.length; i++) {

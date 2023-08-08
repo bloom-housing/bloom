@@ -101,6 +101,7 @@ export default function ListingsList() {
         headerName: t("listings.listingStatusText"),
         field: "status",
         sortable: true,
+        sort: "asc",
         // disable frontend sorting
         comparator: () => 0,
         filter: false,
