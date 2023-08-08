@@ -91,6 +91,7 @@ export default function ListingsList() {
         headerName: t("listings.listingName"),
         field: "name",
         sortable: true,
+        unSortIcon: true,
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
@@ -101,6 +102,7 @@ export default function ListingsList() {
         headerName: t("listings.listingStatusText"),
         field: "status",
         sortable: true,
+        unSortIcon: true,
         sort: "asc",
         // disable frontend sorting
         comparator: () => 0,
