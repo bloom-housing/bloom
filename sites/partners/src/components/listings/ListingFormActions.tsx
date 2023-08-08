@@ -210,8 +210,6 @@ const ListingFormActions = ({
         )
         elements.push(viewPostedResultsButton(eventUrl))
       }
-
-      elements.push(cancelButton)
     }
 
     // new unsaved listing
@@ -243,6 +241,8 @@ const ListingFormActions = ({
       } else if (listing.status === ListingStatus.closed) {
         elements.push(postResultsButton)
       }
+
+      elements.push(cancelButton)
     }
 
     return elements
