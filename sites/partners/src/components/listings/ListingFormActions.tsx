@@ -283,7 +283,7 @@ const ListingFormActions = ({
       // read-only form
       if (type === "details") {
         if (isListingApprover) {
-          // admin can approve and publish if pending approva'
+          // admin can approve and publish if pending approval
           if (listing.status === ListingStatus.pendingReview) elements.push(approveAndPublishButton)
           // admin can publish if changes requested
           if (listing.status === ListingStatus.changesRequested) elements.push(publishButton)
