@@ -138,7 +138,7 @@ export const getListings = (listings) => {
       <ListingCard
         key={index}
         imageCardProps={{
-          imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || "",
+          imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0],
           tags: listing.reservedCommunityType
             ? [
                 {
