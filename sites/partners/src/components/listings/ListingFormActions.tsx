@@ -206,6 +206,7 @@ const ListingFormActions = ({
           type="button"
           fullWidth
           onClick={() => {
+            // TODO throw a modal
             submitFormWithStatus(false, ListingStatus.pendingReview)
           }}
         >
@@ -251,6 +252,7 @@ const ListingFormActions = ({
           type="button"
           fullWidth
           onClick={() => {
+            // TODO throw a modal
             submitFormWithStatus(false, ListingStatus.changesRequested)
           }}
         >
@@ -267,6 +269,7 @@ const ListingFormActions = ({
           type="button"
           fullWidth
           onClick={() => {
+            // TODO throw a modal
             submitFormWithStatus(true, ListingStatus.active)
           }}
         >
@@ -279,15 +282,16 @@ const ListingFormActions = ({
       const elements = []
       // read-only form
       if (type === "details") {
-        // admin can approve and publish if pending approval
-        if (isListingApprover && listing.status === ListingStatus.pendingReview)
-          elements.push(approveAndPublishButton)
-        // admin can publish if changes requested
-        if (isListingApprover && listing.status === ListingStatus.changesRequested)
-          elements.push(publishButton)
-        // partner cannot edit if pending approval
-        if (isListingApprover || listing.status !== ListingStatus.pendingReview)
+        if (isListingApprover) {
+          // admin can approve and publish if pending approva'
+          if (listing.status === ListingStatus.pendingReview) elements.push(approveAndPublishButton)
+          // admin can publish if changes requested
+          if (listing.status === ListingStatus.changesRequested) elements.push(publishButton)
           elements.push(editFromDetailButton)
+        } else {
+          // partner cannot edit if pending approval
+          if (listing.status !== ListingStatus.pendingReview) elements.push(editFromDetailButton)
+        }
 
         // all users can preview
         elements.push(previewButton)
@@ -314,16 +318,18 @@ const ListingFormActions = ({
 
       // listing saved at least once
       if (type === "edit") {
-        // admins can publish a pending listing and a closed listing
         if (isListingApprover) {
+          // admins can publish a draft, pending approval, or closed listing
           if (
             listing.status === ListingStatus.pending ||
             listing.status === ListingStatus.pendingReview ||
             listing.status === ListingStatus.changesRequested
           )
             elements.push(publishButton)
+          // admins can reopen a closed listing
           if (listing.status === ListingStatus.closed) elements.push(reopenButton)
         } else {
+          // partners can submit a draft or changes requested listing
           if (
             listing.status === ListingStatus.pending ||
             listing.status === ListingStatus.changesRequested
