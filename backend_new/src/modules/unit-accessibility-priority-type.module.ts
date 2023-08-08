@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { UnitAccessibilityPriorityTypeController } from '../controllers/unit-accessibility-priority-type.controller';
 import { UnitAccessibilityPriorityTypeService } from '../services/unit-accessibility-priority-type.service';
-import { PrismaService } from '../services/prisma.service';
+import { PrismaModule } from './prisma.module';
 
 @Module({
-  imports: [],
+  imports: [PrismaModule],
   controllers: [UnitAccessibilityPriorityTypeController],
-  providers: [UnitAccessibilityPriorityTypeService, PrismaService],
-  exports: [UnitAccessibilityPriorityTypeService, PrismaService],
+  providers: [UnitAccessibilityPriorityTypeService],
+  exports: [UnitAccessibilityPriorityTypeService],
 })
 export class UnitAccessibilityPriorityTypeServiceModule {}

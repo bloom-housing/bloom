@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ReservedCommunityTypeController } from '../controllers/reserved-community-type.controller';
 import { ReservedCommunityTypeService } from '../services/reserved-community-type.service';
-import { PrismaService } from '../services/prisma.service';
+import { PrismaModule } from './prisma.module';
 
 @Module({
-  imports: [],
+  imports: [PrismaModule],
   controllers: [ReservedCommunityTypeController],
-  providers: [ReservedCommunityTypeService, PrismaService],
-  exports: [ReservedCommunityTypeService, PrismaService],
+  providers: [ReservedCommunityTypeService],
+  exports: [ReservedCommunityTypeService],
 })
 export class ReservedCommunityTypeModule {}

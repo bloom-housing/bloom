@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { AppService } from '../services/app.service';
-import { PrismaService } from '../services/prisma.service';
+import { PrismaModule } from './prisma.module';
 import { AmiChartModule } from './ami-chart.module';
 import { ListingModule } from './listing.module';
 import { ReservedCommunityTypeModule } from './reserved-community-type.module';
@@ -27,9 +27,10 @@ import { UserModule } from './user.module';
     ApplicationModule,
     AssetModule,
     UserModule,
+    PrismaModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
   exports: [
     ListingModule,
     AmiChartModule,
@@ -42,6 +43,7 @@ import { UserModule } from './user.module';
     ApplicationModule,
     AssetModule,
     UserModule,
+    PrismaModule,
   ],
 })
 export class AppModule {}
