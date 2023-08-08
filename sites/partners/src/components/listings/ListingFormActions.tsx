@@ -210,6 +210,8 @@ const ListingFormActions = ({
         )
         elements.push(viewPostedResultsButton(eventUrl))
       }
+
+      elements.push(cancelButton)
     }
 
     // new unsaved listing
