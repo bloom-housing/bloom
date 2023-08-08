@@ -39,7 +39,7 @@ const createMultiselect = async (
 
 export const devSeeding = async (prismaClient: PrismaClient) => {
   await prismaClient.userAccounts.create({
-    data: userFactory({ isAdmin: true }),
+    data: userFactory({ roles: { isAdmin: true }, email: 'admin@example.com' }),
   });
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(),

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/app.controller';
 import { AppService } from '../services/app.service';
-import { PrismaService } from '../services/prisma.service';
+import { PrismaModule } from './prisma.module';
 import { AmiChartModule } from './ami-chart.module';
 import { ListingModule } from './listing.module';
 import { ReservedCommunityTypeModule } from './reserved-community-type.module';
@@ -12,6 +12,7 @@ import { JurisdictionModule } from './jurisdiction.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { ApplicationModule } from './application.module';
 import { AssetModule } from './asset.module';
+import { UserModule } from './user.module';
 
 @Module({
   imports: [
@@ -25,9 +26,11 @@ import { AssetModule } from './asset.module';
     MultiselectQuestionModule,
     ApplicationModule,
     AssetModule,
+    UserModule,
+    PrismaModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
   exports: [
     ListingModule,
     AmiChartModule,
@@ -39,6 +42,8 @@ import { AssetModule } from './asset.module';
     MultiselectQuestionModule,
     ApplicationModule,
     AssetModule,
+    UserModule,
+    PrismaModule,
   ],
 })
 export class AppModule {}

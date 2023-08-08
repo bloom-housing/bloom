@@ -3,9 +3,9 @@ import { PrismaService } from './prisma.service';
 import { LanguagesEnum, Prisma } from '@prisma/client';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import {
+  buildPaginationMetaInfo,
   calculateSkip,
   calculateTake,
-  shouldPaginate,
 } from '../utilities/pagination-helpers';
 import { buildOrderBy } from '../utilities/build-order-by';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
@@ -133,7 +133,6 @@ export class ListingService {
     };
   }> {
     const whereClause = this.buildWhereClause(params.filter, params.search);
-    const isPaginated = shouldPaginate(params.limit, params.page);
 
     const count = await this.prisma.listings.count({
       where: whereClause,
@@ -160,19 +159,11 @@ export class ListingService {
       }
     });
 
-    const itemsPerPage =
-      isPaginated && params.limit !== 'all' ? params.limit : listings.length;
-    const totalItems = isPaginated ? count : listings.length;
-
-    const paginationInfo = {
-      currentPage: isPaginated ? params.page : 1,
-      itemCount: listings.length,
-      itemsPerPage: itemsPerPage,
-      totalItems: totalItems,
-      totalPages: Math.ceil(
-        totalItems / (itemsPerPage ? itemsPerPage : totalItems),
-      ),
-    };
+    const paginationInfo = buildPaginationMetaInfo(
+      params,
+      count,
+      listings.length,
+    );
 
     return {
       items: listings,

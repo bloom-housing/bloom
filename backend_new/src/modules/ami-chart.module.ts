@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AmiChartController } from '../controllers/ami-chart.controller';
 import { AmiChartService } from '../services/ami-chart.service';
-import { PrismaService } from '../services/prisma.service';
+import { PrismaModule } from './prisma.module';
 
 @Module({
-  imports: [],
+  imports: [PrismaModule],
   controllers: [AmiChartController],
-  providers: [AmiChartService, PrismaService],
-  exports: [AmiChartService, PrismaService],
+  providers: [AmiChartService],
+  exports: [AmiChartService],
 })
 export class AmiChartModule {}
