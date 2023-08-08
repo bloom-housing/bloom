@@ -11,7 +11,7 @@ import {
   LinkButton,
   Icon,
 } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
@@ -32,6 +32,8 @@ const ListingFormActions = ({
   submitFormWithStatus,
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
+  const { profile } = useContext(AuthContext)
+  const isListingApprover = profile?.roles?.isAdmin
 
   const listingId = listing?.id
 
@@ -59,7 +61,7 @@ const ListingFormActions = ({
     )
 
     const editFromDetailButton = (
-      <GridCell key="btn-submitNew">
+      <GridCell key="btn-edit">
         <LocalizedLink href={`/listings/${listingId}/edit`}>
           <Button
             styleType={AppearanceStyleType.primary}
@@ -93,6 +95,7 @@ const ListingFormActions = ({
     const saveDraftButton = (
       <GridCell key="btn-draft">
         <Button
+          styleType={AppearanceStyleType.primary}
           type="button"
           fullWidth
           onClick={() => submitFormWithStatus(false, ListingStatus.pending)}
@@ -195,53 +198,156 @@ const ListingFormActions = ({
       </GridCell>
     )
 
+    const submitButton = (
+      <GridCell key="btn-submit">
+        <Button
+          id="submitButton"
+          styleType={AppearanceStyleType.success}
+          type="button"
+          fullWidth
+          onClick={() => {
+            // TODO: Change status to `pendingApproval`
+          }}
+        >
+          {t("t.submit")}
+        </Button>
+      </GridCell>
+    )
+
+    const approveAndPublishButton = (
+      <GridCell key="btn-submit">
+        <Button
+          id="submitButton"
+          styleType={AppearanceStyleType.success}
+          type="button"
+          fullWidth
+          onClick={() => {
+            // TODO: Change status to `active`
+          }}
+        >
+          {t("listings.approval.approveAndPublish")}
+        </Button>
+      </GridCell>
+    )
+
+    const requestChangesButton = (
+      <GridCell key="btn-submit">
+        <Button
+          id="submitButton"
+          styleType={AppearanceStyleType.alert}
+          border={AppearanceBorderType.outlined}
+          type="button"
+          fullWidth
+          onClick={() => {
+            // TODO: Change status to `active`
+          }}
+        >
+          {t("listings.approval.requestChanges")}
+        </Button>
+      </GridCell>
+    )
+
     const elements = []
 
-    // read-only form
-    if (type === "details") {
-      elements.push(editFromDetailButton)
-      elements.push(previewButton)
+    if (process.env.featureListingsApproval === "TRUE") {
+      if (type === "details") {
+        // read-only form
+        // if (isListingApprover && listing.status === ListingStatus.pendingReview) elements.push(approveAndPublishButton)
+        // if (isListingApprover || listing.status !== ListingStatus.pendingReview) elements.push(editFromDetailButton)
+        elements.push(editFromDetailButton)
+        elements.push(previewButton)
 
-      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
-        const eventUrl = pdfUrlFromListingEvents(
-          listing?.events,
-          ListingEventType.lotteryResults,
-          process.env.cloudinaryCloudName
+        if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
+          const eventUrl = pdfUrlFromListingEvents(
+            listing?.events,
+            ListingEventType.lotteryResults,
+            process.env.cloudinaryCloudName
+          )
+          elements.push(viewPostedResultsButton(eventUrl))
+        }
+      }
+
+      // new unsaved listing
+      if (type === "add") {
+        elements.push(saveDraftButton)
+        if (isListingApprover) elements.push(publishButton)
+        else elements.push(submitButton)
+        elements.push(cancelButton)
+      }
+
+      // listing saved at least once
+      if (type === "edit") {
+        if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+          if (isListingApprover) elements.push(publishButton)
+          else elements.push(submitButton)
+        }
+        elements.push(saveExitButton)
+
+        // if (isListingApprover && listing.status === ListingStatus.pendingReview) elements.push(requestChangesButton)
+
+        if (listing.status === ListingStatus.active) {
+          elements.push(closeButton)
+          elements.push(unpublishButton)
+        }
+
+        const lotteryResults = listing?.events?.find(
+          (event) => event.type === ListingEventType.lotteryResults
         )
-        elements.push(viewPostedResultsButton(eventUrl))
+
+        if (lotteryResults) {
+          elements.push(editPostedResultsButton(lotteryResults))
+        } else if (listing.status === ListingStatus.closed) {
+          elements.push(postResultsButton)
+        }
+
+        elements.push(cancelButton)
+      }
+    } else {
+      // read-only form
+      if (type === "details") {
+        elements.push(editFromDetailButton)
+        elements.push(previewButton)
+
+        if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
+          const eventUrl = pdfUrlFromListingEvents(
+            listing?.events,
+            ListingEventType.lotteryResults,
+            process.env.cloudinaryCloudName
+          )
+          elements.push(viewPostedResultsButton(eventUrl))
+        }
       }
 
-      elements.push(cancelButton)
-    }
-
-    // new unsaved listing
-    if (type === "add") {
-      elements.push(publishButton)
-      elements.push(saveDraftButton)
-      elements.push(cancelButton)
-    }
-
-    // listing saved at least once
-    if (type === "edit") {
-      elements.push(saveExitButton)
-
-      if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+      // new unsaved listing
+      if (type === "add") {
+        elements.push(saveDraftButton)
         elements.push(publishButton)
+        elements.push(cancelButton)
       }
 
-      if (listing.status === ListingStatus.active) {
-        elements.push(closeButton)
-        elements.push(unpublishButton)
-      }
+      // listing saved at least once
+      if (type === "edit") {
+        if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+          elements.push(publishButton)
+        }
+        elements.push(saveExitButton)
 
-      const lotteryResults = listing?.events?.find(
-        (event) => event.type === ListingEventType.lotteryResults
-      )
+        if (listing.status === ListingStatus.active) {
+          elements.push(closeButton)
+          elements.push(unpublishButton)
+        }
 
-      if (lotteryResults) {
-        elements.push(editPostedResultsButton(lotteryResults))
-      } else if (listing.status === ListingStatus.closed) {
-        elements.push(postResultsButton)
+        const lotteryResults = listing?.events?.find(
+          (event) => event.type === ListingEventType.lotteryResults
+        )
+
+        if (lotteryResults) {
+          elements.push(editPostedResultsButton(lotteryResults))
+        } else if (listing.status === ListingStatus.closed) {
+          elements.push(postResultsButton)
+        }
+
+        elements.push(cancelButton)
       }
 
       elements.push(cancelButton)

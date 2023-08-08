@@ -156,6 +156,8 @@
   "listings.applicationDropOffQuestion": "Can applications be dropped off?",
   "listings.applicationDueTime": "Application Due Time",
   "listings.applicationPickupQuestion": "Can applications be picked up?",
+  "listings.approval.approveAndPublish": "Approve & Publish",
+  "listings.approval.requestChanges": "Request Changes",
   "listings.atAnotherAddress": "At another address",
   "listings.atLeasingAgentAddress": "At the leasing agent address",
   "listings.closeThisListing": "Do you really want to close this listing?",
