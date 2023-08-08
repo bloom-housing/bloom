@@ -6262,8 +6262,10 @@ export enum EnumListingFilterParamsComparison {
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
-  "pending" = "pending",
+  "changesRequested" = "changesRequested",
   "closed" = "closed",
+  "pending" = "pending",
+  "pendingReview" = "pendingReview",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
@@ -6288,8 +6290,10 @@ export enum ListingApplicationAddressType {
 
 export enum ListingStatus {
   "active" = "active",
-  "pending" = "pending",
+  "changesRequested" = "changesRequested",
   "closed" = "closed",
+  "pending" = "pending",
+  "pendingReview" = "pendingReview",
 }
 
 export enum ListingReviewOrder {
