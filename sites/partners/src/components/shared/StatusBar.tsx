@@ -17,7 +17,7 @@ const StatusBar = (props: StatusBarProps) => {
         {props.backButton}
 
         <div className={styles["status-bar__tag"]}>
-          <Tag styleType={props.tagStyle} pillStyle>
+          <Tag styleType={props.tagStyle} pillStyle fillContainer>
             {props.tagLabel}
           </Tag>
         </div>

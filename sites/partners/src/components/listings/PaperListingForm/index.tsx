@@ -34,7 +34,7 @@ import {
 } from "../../../lib/listings/formTypes"
 import ListingDataPipeline from "../../../lib/listings/ListingDataPipeline"
 
-import Aside from "../Aside"
+import ListingFormActions from "../ListingFormActions"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
@@ -405,7 +405,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     </div>
 
                     <aside className="md:w-3/12 md:pl-6">
-                      <Aside
+                      <ListingFormActions
                         type={editMode ? "edit" : "add"}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
