@@ -287,6 +287,7 @@ const ListingFormActions = ({
           if (listing.status === ListingStatus.pendingReview) elements.push(approveAndPublishButton)
           // admin can publish if changes requested
           if (listing.status === ListingStatus.changesRequested) elements.push(publishButton)
+          // admin can always edit
           elements.push(editFromDetailButton)
         } else {
           // partner cannot edit if pending approval
@@ -319,7 +320,7 @@ const ListingFormActions = ({
       // listing saved at least once
       if (type === "edit") {
         if (isListingApprover) {
-          // admins can publish a draft, pending approval, or closed listing
+          // admins can publish a draft, pending approval, or changes requested listing
           if (
             listing.status === ListingStatus.pending ||
             listing.status === ListingStatus.pendingReview ||
@@ -329,7 +330,7 @@ const ListingFormActions = ({
           // admins can reopen a closed listing
           if (listing.status === ListingStatus.closed) elements.push(reopenButton)
         } else {
-          // partners can submit a draft or changes requested listing
+          // partners can submit for approval a draft or changes requested listing
           if (
             listing.status === ListingStatus.pending ||
             listing.status === ListingStatus.changesRequested
@@ -345,14 +346,14 @@ const ListingFormActions = ({
           )
         )
 
+        // admins can request changes on pending review listings
+        if (isListingApprover && listing.status === ListingStatus.pendingReview)
+          elements.push(requestChangesButton)
+
         // all users can unpublish a closed listing
         if (listing.status === ListingStatus.closed) {
           elements.push(unpublishButton)
         }
-
-        // admins can request changes on pending review listings
-        if (isListingApprover && listing.status === ListingStatus.pendingReview)
-          elements.push(requestChangesButton)
 
         // all users can close or unpublish open listings
         if (listing.status === ListingStatus.active) {

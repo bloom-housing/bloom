@@ -31,7 +31,7 @@ const ListingStatusBar = ({ className, status }: ListingStatusBarProps) => {
       case ListingStatus.changesRequested:
         return (
           <Tag pillStyle styleType={AppearanceStyleType.warning}>
-            {t(`listings.listingStatus.changedRequested`)}
+            {t(`listings.listingStatus.changesRequested`)}
           </Tag>
         )
       default:
