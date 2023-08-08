@@ -46,7 +46,7 @@ const ListingStatusBar = ({ className, status }: ListingStatusBarProps) => {
   return (
     <section className={`border-t bg-white flex-none ${className ?? ""}`}>
       <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
-        <div className="status-bar__status md:pl-4 md:w-3/12">{listingStatus}</div>
+        <div className="status-bar__status md:pl-6 md:w-3/12">{listingStatus}</div>
       </div>
     </section>
   )
