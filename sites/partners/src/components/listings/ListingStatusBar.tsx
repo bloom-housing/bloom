@@ -22,6 +22,18 @@ const ListingStatusBar = ({ className, status }: ListingStatusBarProps) => {
             {t(`listings.listingStatus.closed`)}
           </Tag>
         )
+      case ListingStatus.pendingReview:
+        return (
+          <Tag pillStyle styleType={AppearanceStyleType.info}>
+            {t(`applications.pendingReview`)}
+          </Tag>
+        )
+      case ListingStatus.changesRequested:
+        return (
+          <Tag pillStyle styleType={AppearanceStyleType.warning}>
+            {t(`listings.listingStatus.changedRequested`)}
+          </Tag>
+        )
       default:
         return (
           <Tag styleType={AppearanceStyleType.primary} pillStyle>

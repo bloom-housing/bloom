@@ -272,6 +272,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   return AppearanceStyleType.success
                 case ListingStatus.closed:
                   return AppearanceStyleType.closed
+                case ListingStatus.pendingReview:
+                  return AppearanceStyleType.info
+                case ListingStatus.changesRequested:
+                  return AppearanceStyleType.warning
                 default:
                   return AppearanceStyleType.primary
               }
