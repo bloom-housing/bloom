@@ -47,6 +47,7 @@ module.exports = withBundleAnalyzer(
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
       mapBoxToken: MAPBOX_TOKEN,
+      featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
