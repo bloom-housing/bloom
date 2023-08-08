@@ -11,6 +11,7 @@ import { UnitRentTypeModule } from './unit-rent-type.module';
 import { JurisdictionModule } from './jurisdiction.module';
 import { MultiselectQuestionModule } from './multiselect-question.module';
 import { ApplicationModule } from './application.module';
+import { AssetModule } from './asset.module';
 import { UserModule } from './user.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { UserModule } from './user.module';
     JurisdictionModule,
     MultiselectQuestionModule,
     ApplicationModule,
+    AssetModule,
     UserModule,
   ],
   controllers: [AppController],
@@ -38,6 +40,7 @@ import { UserModule } from './user.module';
     JurisdictionModule,
     MultiselectQuestionModule,
     ApplicationModule,
+    AssetModule,
     UserModule,
   ],
 })
