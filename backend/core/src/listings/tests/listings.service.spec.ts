@@ -409,7 +409,7 @@ describe("ListingsService", () => {
         orderDir: [OrderParam.DESC],
       })
 
-      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledTimes(3)
+      expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledTimes(2)
       expect(mockInnerQueryBuilder.addOrderBy).toHaveBeenCalledWith(
         "listings.updated_at",
         "DESC",
