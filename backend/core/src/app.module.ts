@@ -35,7 +35,7 @@ import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priori
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
 import { ActivityLogModule } from "./activity-log/activity-log.module"
-import { logger } from "./shared/middlewares/logger.middleware"
+// import { logger } from "./shared/middlewares/logger.middleware"
 import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
@@ -73,7 +73,7 @@ export function applicationSetup(app: INestApplication) {
     }
     cb(null, options)
   })
-  app.use(logger)
+  // app.use(logger)
   app.useGlobalFilters(new CatchAllFilter(httpAdapter))
   app.use(bodyParser.json({ limit: "50mb" }))
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))

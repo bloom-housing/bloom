@@ -6,6 +6,7 @@ import { DataSource } from "typeorm"
 import { ConfigService } from "@nestjs/config"
 import cookieParser from "cookie-parser"
 import dbOptions from "../ormconfig"
+import { useRequestLogging } from "./shared/middlewares/logger.middleware"
 
 let app
 async function bootstrap() {
@@ -14,6 +15,8 @@ async function bootstrap() {
   })
 
   app.use(cookieParser())
+
+  useRequestLogging(app)
 
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
