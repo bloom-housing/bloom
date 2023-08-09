@@ -121,6 +121,14 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
+  @Put(`requestApproval`)
+  @ApiOperation({ summary: "Request approval on listing by id", operationId: "requestApproval" })
+  @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
+  async requestApproval(@Param("id") listingId: string): Promise<ListingDto> {
+    const listing = await this.listingsService.requestApproval(listingId)
+    return mapTo(ListingDto, listing)
+  }
+
   @Delete()
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
