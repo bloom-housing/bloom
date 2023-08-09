@@ -20,6 +20,8 @@ import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
 import { CachePurgeService } from "./cache-purge.service"
+import { EmailService } from "../email/email.service"
+import { EmailDto } from "../auth/dto/email.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -210,6 +212,26 @@ export class ListingsService {
       .getOne()
 
     return listing.jurisdiction.id
+  }
+
+  public async requestApproval(
+    listingName: string | null,
+    listingId: string | null,
+    appURL: string | null
+  ) {
+    const adminUsers = await this.userRepository
+      .createQueryBuilder("user")
+      .select(["user.id", "user.email"])
+      .leftJoin("user.roles", "userRoles")
+      //verify this permissioning approach
+      .where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
+        is_jurisdctional_admin: true,
+      })
+      .orWhere("userRoles.is_partner = :is_admin", { is_admin: true })
+      .getMany()
+    // const adminEmails: EmailDto[] = adminUser
+    // EmailService.requestApproval(listingName, listingId, appURL)
+    console.log(adminUsers)
   }
 
   async rawListWithFlagged() {

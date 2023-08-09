@@ -344,19 +344,7 @@ export class EmailService {
     )
   }
 
-  async requestApproval(listingName: string, listingId: string, appUrl: string) {
+  public async requestApproval(listingName: string, listingId: string, appUrl: string) {
     void (await this.loadTranslations(null, Language.en))
-    const adminUsers = await this.userRepository
-      .createQueryBuilder("user")
-      .select(["user.id", "user.email"])
-      .leftJoin("user.roles", "userRoles")
-      //verify this permissioning approach
-      .where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
-        is_jurisdctional_admin: true,
-      })
-      .orWhere("userRoles.is_partner = :is_admin", { is_admin: true })
-      .getMany()
-
-    adminUsers.forEach((user) => {})
   }
 }
