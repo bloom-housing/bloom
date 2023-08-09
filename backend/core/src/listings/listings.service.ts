@@ -209,11 +209,7 @@ export class ListingsService {
     return listing.jurisdiction.id
   }
 
-  public async requestApproval(
-    listingName: string | null,
-    listingId: string | null,
-    appURL: string | null
-  ) {
+  public async requestApproval(updatelistingId: string | null, appURL: string | null) {
     const adminUsers = await this.userRepository
       .createQueryBuilder("user")
       .select(["user.id", "user.email"])

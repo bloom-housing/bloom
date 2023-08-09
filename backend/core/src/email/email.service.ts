@@ -19,7 +19,6 @@ import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.se
 import { Translation } from "../translations/entities/translation.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
   polyglot: Polyglot
@@ -290,22 +289,61 @@ export class EmailService {
     return partials
   }
 
-  private async send(to: string, from: string, subject: string, body: string, retry = 3) {
-    await this.sendGrid.send(
+  private async send(
+    to: string | string[],
+    from: string,
+    subject: string,
+    body: string,
+    retry = 3
+  ) {
+    const multipleRecipients = Array.isArray(to)
+    const emailParams = {
+      to: to,
+      from: from,
+      subject: subject,
+      html: body,
+    }
+    const handleError = (error) => {
+      if (error instanceof ResponseError) {
+        const { response } = error
+        const { body: errBody } = response
+        console.error(
+          `Error sending email to: ${
+            multipleRecipients ? to.toString() : to
+          }! Error body: ${errBody}`
+        )
+        if (retry > 0) {
+          void this.send(to, from, subject, body, retry - 1)
+        }
+      }
+    }
+
+    Array.isArray(to)
+      ? await this.sendGrid.sendMultiple(emailParams, handleError)
+      : await this.sendGrid.send(emailParams, false, handleError)
+  }
+
+  private async sendMultiple(
+    recipients: string[],
+    from: string,
+    subject: string,
+    body: string,
+    retry = 3
+  ) {
+    await this.sendGrid.sendMultiple(
       {
-        to: to,
+        to: recipients,
         from,
-        subject: subject,
+        subject,
         html: body,
       },
-      false,
       (error) => {
         if (error instanceof ResponseError) {
           const { response } = error
           const { body: errBody } = response
-          console.error(`Error sending email to: ${to}! Error body: ${errBody}`)
+          console.error(`Error sending emails to: ${recipients.toString()}! Error body: ${errBody}`)
           if (retry > 0) {
-            void this.send(to, from, subject, body, retry - 1)
+            void this.sendMultiple(recipients, from, subject, body, retry - 1)
           }
         }
       }
@@ -344,7 +382,23 @@ export class EmailService {
     )
   }
 
-  public async requestApproval(listingName: string, listingId: string, appUrl: string) {
-    void (await this.loadTranslations(null, Language.en))
+  public async requestApproval(
+    user: User,
+    listingName: string,
+    listingId: string,
+    emails: string[],
+    appUrl: string
+  ) {
+    const jurisdiction = await this.getUserJurisdiction(user)
+    void (await this.loadTranslations(jurisdiction, Language.en))
+    await this.send(
+      emails,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t("requestApproval.reviewListing"),
+      this.template("request-approval")({
+        user,
+        appOptions: { appUrl: appUrl },
+      })
+    )
   }
 }
