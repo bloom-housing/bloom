@@ -315,36 +315,9 @@ export class EmailService {
       }
     }
 
-    Array.isArray(to)
+    multipleRecipients
       ? await this.sendGrid.sendMultiple(emailParams, handleError)
       : await this.sendGrid.send(emailParams, false, handleError)
-  }
-
-  private async sendMultiple(
-    recipients: string[],
-    from: string,
-    subject: string,
-    body: string,
-    retry = 3
-  ) {
-    await this.sendGrid.sendMultiple(
-      {
-        to: recipients,
-        from,
-        subject,
-        html: body,
-      },
-      (error) => {
-        if (error instanceof ResponseError) {
-          const { response } = error
-          const { body: errBody } = response
-          console.error(`Error sending emails to: ${recipients.toString()}! Error body: ${errBody}`)
-          if (retry > 0) {
-            void this.sendMultiple(recipients, from, subject, body, retry - 1)
-          }
-        }
-      }
-    )
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
@@ -393,7 +366,7 @@ export class EmailService {
       this.polyglot.t("requestApproval.reviewListing"),
       this.template("request-approval")({
         user,
-        appOptions: { appUrl: process.env.PARTNER_BASE_URL },
+        appOptions: { appUrl: process.env.PARTNERS_PORTAL_URL },
         listingId,
         listingName,
       })
