@@ -7,7 +7,9 @@ export const userFactory = (optionalParams?: {
   lastName?: string;
   email?: string;
 }): Prisma.UserAccountsCreateInput => ({
-  email: optionalParams?.email || `${randomNoun()}@${randomAdjective()}.com`,
+  email:
+    optionalParams?.email?.toLocaleLowerCase() ||
+    `${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,
   firstName: optionalParams?.firstName || 'First',
   lastName: optionalParams?.lastName || 'Last',
   // TODO: update with passwordService hashing when that is completed

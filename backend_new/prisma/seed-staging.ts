@@ -7,7 +7,7 @@ import {
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
