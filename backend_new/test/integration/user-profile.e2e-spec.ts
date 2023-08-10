@@ -28,7 +28,7 @@ describe('User Controller Tests', () => {
 
   it('should update user profile when user exists', async () => {
     const userA = await prisma.userAccounts.create({
-      data: userFactory(),
+      data: await userFactory(),
     });
 
     const res = await request(app.getHttpServer())
@@ -47,7 +47,7 @@ describe('User Controller Tests', () => {
 
   it("should error when updating user profile that doesn't exist", async () => {
     await prisma.userAccounts.create({
-      data: userFactory(),
+      data: await userFactory(),
     });
     const randomId = randomUUID();
     const res = await request(app.getHttpServer())
