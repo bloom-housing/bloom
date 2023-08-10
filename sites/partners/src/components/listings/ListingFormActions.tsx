@@ -1,4 +1,5 @@
 import React, { useContext, useMemo } from "react"
+import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import {
   t,
@@ -34,6 +35,7 @@ const ListingFormActions = ({
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
   const { profile, listingsService } = useContext(AuthContext)
+  const router = useRouter()
 
   const isListingApprover = profile?.roles?.isAdmin
 
@@ -106,10 +108,10 @@ const ListingFormActions = ({
       </GridCell>
     )
 
-    const saveExitButton = (primaryAction?: boolean) => (
+    const saveExitButton = (
       <GridCell key="btn-save">
         <Button
-          styleType={primaryAction ? AppearanceStyleType.primary : null}
+          styleType={AppearanceStyleType.primary}
           type="button"
           fullWidth
           onClick={() => submitFormWithStatus(true, listing.status)}
@@ -231,10 +233,11 @@ const ListingFormActions = ({
               })
 
               if (result) {
-                setSiteAlertMessage(t("listings.listingUpdated"), "success")
+                setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
+                await router.push(`/listings/${result.id}`)
               }
             } catch (err) {
-              setSiteAlertMessage("uh oh", "warn")
+              setSiteAlertMessage("errors.somethingWentWrong", "warn")
             }
           }}
         >
@@ -283,14 +286,16 @@ const ListingFormActions = ({
       // read-only form
       if (type === "details") {
         if (isListingApprover) {
-          // admin can approve and publish if pending approval
-          if (listing.status === ListingStatus.pendingReview) elements.push(approveAndPublishButton)
-          // admin can publish if changes requested
-          if (listing.status === ListingStatus.changesRequested) elements.push(publishButton)
-          // admin can always edit
+          // admins can approve and publish if pending approval or changes requested
+          if (
+            listing.status === ListingStatus.pendingReview ||
+            listing.status === ListingStatus.changesRequested
+          )
+            elements.push(approveAndPublishButton)
+          // admins can always edit
           elements.push(editFromDetailButton)
         } else {
-          // partner cannot edit if pending approval
+          // partners cannot edit if pending approval
           if (listing.status !== ListingStatus.pendingReview) elements.push(editFromDetailButton)
         }
 
@@ -320,13 +325,14 @@ const ListingFormActions = ({
       // listing saved at least once
       if (type === "edit") {
         if (isListingApprover) {
-          // admins can publish a draft, pending approval, or changes requested listing
+          // admins can publish a draft
+          if (listing.status === ListingStatus.pending) elements.push(publishButton)
+          // admins can approve and publish a pending approval or changes requested listing
           if (
-            listing.status === ListingStatus.pending ||
             listing.status === ListingStatus.pendingReview ||
             listing.status === ListingStatus.changesRequested
           )
-            elements.push(publishButton)
+            elements.push(approveAndPublishButton)
           // admins can reopen a closed listing
           if (listing.status === ListingStatus.closed) elements.push(reopenButton)
         } else {
@@ -339,12 +345,7 @@ const ListingFormActions = ({
         }
 
         // all users can make updates to an open listing
-        elements.push(
-          saveExitButton(
-            listing.status === ListingStatus.active ||
-              (!isListingApprover && listing.status === ListingStatus.closed)
-          )
-        )
+        elements.push(saveExitButton)
 
         // admins can request changes on pending review listings
         if (isListingApprover && listing.status === ListingStatus.pendingReview)
@@ -410,6 +411,9 @@ const ListingFormActions = ({
 
         if (listing.status === ListingStatus.active) {
           elements.push(closeButton)
+        }
+
+        if (listing.status === ListingStatus.closed || listing.status === ListingStatus.active) {
           elements.push(unpublishButton)
         }
 
@@ -436,6 +440,7 @@ const ListingFormActions = ({
     listing,
     listingId,
     listingsService,
+    router,
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,

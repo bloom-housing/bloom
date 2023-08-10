@@ -157,6 +157,7 @@
   "listings.applicationDueTime": "Application Due Time",
   "listings.applicationPickupQuestion": "Can applications be picked up?",
   "listings.approval.approveAndPublish": "Approve & Publish",
+  "listings.approval.listingPublished": "Listing Published",
   "listings.approval.reopen": "Reopen",
   "listings.approval.requestChanges": "Request Changes",
   "listings.atAnotherAddress": "At another address",
