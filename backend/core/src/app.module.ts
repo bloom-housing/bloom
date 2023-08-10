@@ -68,9 +68,9 @@ export function applicationSetup(app: INestApplication) {
       credentials: true,
       origin: false,
     }
-    if (allowList.indexOf(req.header("Origin")) !== -1) {
-      options.origin = true
-    }
+    // if (allowList.indexOf(req.header("Origin")) !== -1) {
+    options.origin = true
+    // }
     cb(null, options)
   })
   // app.use(logger)
