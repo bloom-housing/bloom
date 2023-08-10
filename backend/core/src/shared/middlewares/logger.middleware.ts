@@ -1,14 +1,8 @@
-// middleware/request-logging.ts
 import { Logger } from "@nestjs/common"
-import morgan, { format } from "morgan"
+import { Request, Response, NextFunction } from "express"
 
-export function useRequestLogging(app) {
-  const logger = new Logger("Request")
-  app.use(
-    morgan(":method :url [:status] content-length :res[content-length] - :response-time ms", {
-      stream: {
-        write: (message) => logger.log(message.replace("\n", "")),
-      },
-    })
-  )
+export function logger(req: Request, res: Response, next: NextFunction) {
+  const dateStr = new Date().toISOString()
+  Logger.log(`[${req.method}] ${dateStr}: ${req.path}`)
+  next()
 }

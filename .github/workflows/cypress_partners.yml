@@ -11,7 +11,6 @@ env:
   CLOUDINARY_SECRET: CLOUDINARY_SECRET
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
-  CORS_ORIGIN: "http://localhost:3000,http://localhost:3001"
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
@@ -25,6 +24,7 @@ env:
   JURISDICTION_ENDPOINT_PATH: /jurisdictions
   LISTINGS_ENDPOINT_PATH: /listings
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
+  DISABLE_CORS: TRUE
 
 
 jobs:

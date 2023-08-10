@@ -11,7 +11,6 @@ env:
   CLOUDINARY_SECRET: CLOUDINARY_SECRET
   CLOUDINARY_KEY: CLOUDINARY_KEY
   PARTNERS_PORTAL_URL: http://localhost:3001
-  CORS_ORIGIN: "http://localhost:3000,http://localhost:3001"
   DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom
   TEST_DATABASE_URL: postgres://bloom-dev:bloom@127.0.0.1:5432/bloom_test
   BLOOM_API_BASE: https://api.housingbayarea.bloom.exygy.dev
@@ -20,13 +19,15 @@ env:
   BACKEND_API_BASE: http://localhost:3100
   LISTINGS_QUERY: /listings
   NEXTJS_PORT: 3000
-  LANGUAGES: en,es,zh,vi,tl
   JURISDICTION_INCLUDE_LIST: San Jose,San Mateo,Alameda
   LISTING_VIEW: base
   JURISDICTION_ENDPOINT_PATH: /jurisdictions
   LISTINGS_ENDPOINT_PATH: /listings
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+  DISABLE_CORS: TRUE
+  LANGUAGES: en,es,zh,vi,tl
+
 
 jobs:
   public-cypress:
@@ -96,7 +97,7 @@ jobs:
           build: yarn build
           start: yarn dev:listings, yarn start
           wait-on: 'http://localhost:3100/jurisdictions'
-          record: true
+          record: true # set this value to true to record videos in cypress cloud for debugging purposes
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.PUBLIC_CYPRESS_RECORD_KEY }}
 
