@@ -17,14 +17,11 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
-import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
   polyglot: Polyglot
 
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly sendGrid: SendGridService,
     private readonly configService: ConfigService,
     private readonly translationService: TranslationsService,
@@ -386,8 +383,7 @@ export class EmailService {
     user: User,
     listingName: string,
     listingId: string,
-    emails: string[],
-    appUrl: string
+    emails: string[]
   ) {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, Language.en))
@@ -397,7 +393,9 @@ export class EmailService {
       this.polyglot.t("requestApproval.reviewListing"),
       this.template("request-approval")({
         user,
-        appOptions: { appUrl: appUrl },
+        appOptions: { appUrl: process.env.PARTNER_BASE_URL },
+        listingId,
+        listingName,
       })
     )
   }
