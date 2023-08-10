@@ -39,7 +39,7 @@ interface Methods {
 
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors } = useFormContext()
+  const { register, setValue, watch, errors, getValues } = useFormContext()
   // watch fields
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
@@ -150,7 +150,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       paper: null,
       referral: null,
     }
-    listing?.applicationMethods?.forEach((method) => {
+    const applicationMethods =
+      getValues()?.applicationMethods?.length > 0
+        ? getValues().applicationMethods
+        : listing?.applicationMethods
+
+    applicationMethods?.forEach((method) => {
       switch (method.type) {
         case ApplicationMethodType.Internal:
         case ApplicationMethodType.ExternalLink:
