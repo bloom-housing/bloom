@@ -25,7 +25,7 @@ env:
   LISTINGS_ENDPOINT_PATH: /listings
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
   MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
-  DISABLE_CORS: TRUE
+  DISABLE_CORS: "TRUE"
   LANGUAGES: en,es,zh,vi,tl
 
 
