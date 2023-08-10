@@ -404,8 +404,11 @@ const ListingFormActions = ({
 
       // listing saved at least once
       if (type === "edit") {
-        if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+        if (listing.status === ListingStatus.pending) {
           elements.push(publishButton)
+        }
+        if (listing.status === ListingStatus.closed) {
+          elements.push(reopenButton)
         }
         elements.push(saveExitButton)
 
@@ -430,7 +433,6 @@ const ListingFormActions = ({
         elements.push(cancelButton)
       }
 
-      elements.push(cancelButton)
       return elements
     }
 
