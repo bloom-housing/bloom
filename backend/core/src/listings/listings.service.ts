@@ -21,7 +21,6 @@ import { ApplicationFlaggedSetsService } from "../application-flagged-sets/appli
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
 import { CachePurgeService } from "./cache-purge.service"
 import { EmailService } from "../email/email.service"
-import { EmailDto } from "../auth/dto/email.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -33,7 +32,8 @@ export class ListingsService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(REQUEST) private req: ExpressRequest,
     private readonly afsService: ApplicationFlaggedSetsService,
-    private readonly cachePurgeService: CachePurgeService
+    private readonly cachePurgeService: CachePurgeService,
+    private readonly emailService: EmailService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -209,7 +209,9 @@ export class ListingsService {
     return listing.jurisdiction.id
   }
 
-  public async requestApproval(updatelistingId: string | null, appURL: string | null) {
+  public async requestApproval(listingId: string, listingName: string) {
+    await this.listingRepository.update(listingId, { status: ListingStatus.pendingReview })
+
     const adminUsers = await this.userRepository
       .createQueryBuilder("user")
       .select(["user.id", "user.email"])
@@ -220,9 +222,10 @@ export class ListingsService {
       })
       .orWhere("userRoles.is_partner = :is_admin", { is_admin: true })
       .getMany()
-    // const adminEmails: EmailDto[] = adminUser
-    // EmailService.requestApproval(listingName, listingId, appURL)
-    console.log(adminUsers)
+
+    const adminEmails: string[] = []
+    adminUsers?.forEach((users) => users?.email && adminEmails.push(users.email))
+    await this.emailService.requestApproval(this.req.user, listingName, listingId, adminEmails)
   }
 
   async rawListWithFlagged() {
