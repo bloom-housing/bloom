@@ -295,7 +295,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </GridCell>
           )}
         </GridSection>
-        {((commonDigitalApplicationChoice && commonDigitalApplicationChoice === YesNoAnswer.No) ||
+        {((commonDigitalApplicationChoice &&
+          commonDigitalApplicationChoice === YesNoAnswer.No &&
+          digitalApplicationChoice === YesNoAnswer.Yes) ||
           (digitalApplicationChoice === YesNoAnswer.Yes &&
             !commonDigitalApplicationChoice &&
             listing?.commonDigitalApplication === false)) && (
