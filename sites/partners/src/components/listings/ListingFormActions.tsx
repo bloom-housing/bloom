@@ -218,7 +218,7 @@ const ListingFormActions = ({
     )
 
     const approveAndPublishButton = (
-      <GridCell key="btn-submit">
+      <GridCell key="btn-approve-and-publish">
         <Button
           id="submitButton"
           styleType={AppearanceStyleType.success}
@@ -247,7 +247,7 @@ const ListingFormActions = ({
     )
 
     const requestChangesButton = (
-      <GridCell key="btn-submit">
+      <GridCell key="btn-request-changes">
         <Button
           id="submitButton"
           styleType={AppearanceStyleType.alert}
