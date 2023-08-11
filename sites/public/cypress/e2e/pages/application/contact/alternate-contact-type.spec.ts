@@ -5,18 +5,18 @@ describe("applications/contact/alternate-contact-type", function () {
     cy.visit(route)
   })
 
-  it.skip("should render the alternate contact type sub-form", function () {
+  it("should render the alternate contact type sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it.skip("should require form input", function () {
+  it("should require form input", function () {
     cy.goNext()
     cy.checkErrorAlert("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it.skip("should require text input when the Other type is selected", function () {
+  it("should require text input when the Other type is selected", function () {
     cy.getByTestId("app-alternate-type").eq(3).check()
     cy.goNext()
     cy.checkErrorAlert("be.visible")

@@ -5,7 +5,7 @@ describe("applications/programs/programs", function () {
     cy.visit(route)
   })
 
-  it.skip("Should render form", function () {
+  it("Should render form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
@@ -33,12 +33,12 @@ describe("applications/programs/programs", function () {
     cy.visit(route)
   })
 
-  it.skip("Should render form", function () {
+  it("Should render form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it.skip("Should display initial form errors", function () {
+  it("Should display initial form errors", function () {
     // not sure why this needs to be here twice to work -JW
     cy.goNext()
     cy.goNext()
@@ -46,7 +46,7 @@ describe("applications/programs/programs", function () {
     cy.checkErrorAlert("be.visible")
   })
 
-  it.skip("Should save values", function () {
+  it("Should save values", function () {
     cy.getByID(servedInMilitaryYesId).check()
     cy.goNext()
     cy.getByID(tayNoId).check()

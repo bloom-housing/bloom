@@ -1,5 +1,5 @@
 describe("Log in and accept terms", () => {
-  it.skip("should log in", () => {
+  it("should log in", () => {
     cy.loginAndAcceptTerms()
     cy.signOut()
   })

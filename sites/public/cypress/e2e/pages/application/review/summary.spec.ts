@@ -5,7 +5,7 @@ describe("applications/review/summary", function () {
     cy.visit(route)
   })
 
-  it.skip("should render summary page", function () {
+  it("should render summary page", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })

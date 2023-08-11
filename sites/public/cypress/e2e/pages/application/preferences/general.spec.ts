@@ -5,7 +5,7 @@ describe("applications/preferences/general", function () {
     cy.visit(route)
   })
 
-  it.skip("Should render form", function () {
+  it("Should render form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
