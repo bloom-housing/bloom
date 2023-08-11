@@ -172,6 +172,7 @@ export const formDefaults: FormListing = {
     },
   },
   isExternal: false,
+  referralOpportunity: false,
 }
 
 export type TempUnit = Unit & {
