@@ -161,6 +161,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
     cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
     cy.get("#digitalApplicationChoiceYes").check()
+    cy.get("#customOnlineApplicationUrl").type(listing["url"])
     cy.get("#paperApplicationNo").check()
 
     cy.getByID("leasingAgentAddress.street").type(listing["leasingAgentAddress.street"])
@@ -284,7 +285,6 @@ describe("Listing Management Tests", () => {
     cy.getByID("digitalMethod.type").contains("No")
     cy.get("#customOnlineApplicationUrl").contains(listing["url"])
     cy.get("#paperApplication").contains("No")
-    cy.get("#referralOpportunity").contains("No")
     cy.getByID("leasingAgentAddress.street").contains(listing["leasingAgentAddress.street"])
     cy.getByID("leasingAgentAddress.street2").contains(listing["leasingAgentAddress.street2"])
     cy.getByID("leasingAgentAddress.city").contains(listing["leasingAgentAddress.city"])
