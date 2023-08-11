@@ -65,7 +65,7 @@ describe("Preference Management Tests", () => {
 
     cy.getByTestId("preference-opt-out-label").should("have.value", "Preference Opt Out Label")
     cy.getByTestId("show-on-listing-question-yes").should("have.value", "yes")
-    cy.getByTestId("preference-jurisdiction").contains("Alameda")
+    cy.getByTestId("preference-jurisdiction").contains("Bay Area")
     cy.getByTestId("preference-save-button").click()
   })
 })
