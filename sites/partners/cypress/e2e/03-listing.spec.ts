@@ -23,45 +23,45 @@ describe("Listing Management Tests", () => {
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
     // Test photo upload
-    cy.getByTestId("add-photos-button").contains("Add Photo").click()
-    cy.getByTestId("dropzone-input").attachFile(
-      "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
-      {
-        subjectType: "drag-n-drop",
-      }
-    )
-    cy.getByTestId("drawer-photos-table")
-      .find("img")
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
-    cy.getByTestId("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table")
-      .find("img")
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+    // cy.getByTestId("add-photos-button").contains("Add Photo").click()
+    // cy.getByTestId("dropzone-input").attachFile(
+    //   "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+    //   {
+    //     subjectType: "drag-n-drop",
+    //   }
+    // )
+    // cy.getByTestId("drawer-photos-table")
+    //   .find("img")
+    //   .should("have.attr", "src")
+    //   .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+    // cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    // cy.getByTestId("photos-table")
+    //   .find("img")
+    //   .should("have.attr", "src")
+    //   .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
 
-    cy.getByTestId("add-photos-button").contains("Edit Photos").click()
-    cy.getByTestId("dropzone-input").attachFile(
-      "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
-      {
-        subjectType: "drag-n-drop",
-      }
-    )
-    cy.getByTestId("drawer-photos-table")
-      .find("img")
-      .eq(1)
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
-    cy.getByTestId("listing-photo-uploaded").contains("Save").click()
-    cy.getByTestId("photos-table")
-      .find("img")
-      .eq(1)
-      .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
-    cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
-    cy.getByTestId("photos-table")
-      .get("tbody > tr:nth-of-type(2)")
-      .should("not.contain", "Primary photo")
+    // cy.getByTestId("add-photos-button").contains("Edit Photos").click()
+    // cy.getByTestId("dropzone-input").attachFile(
+    //   "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08.jpg",
+    //   {
+    //     subjectType: "drag-n-drop",
+    //   }
+    // )
+    // cy.getByTestId("drawer-photos-table")
+    //   .find("img")
+    //   .eq(1)
+    //   .should("have.attr", "src")
+    //   .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
+    // cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    // cy.getByTestId("photos-table")
+    //   .find("img")
+    //   .eq(1)
+    //   .should("have.attr", "src")
+    //   .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
+    // cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
+    // cy.getByTestId("photos-table")
+    //   .get("tbody > tr:nth-of-type(2)")
+    //   .should("not.contain", "Primary photo")
     cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
     cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])

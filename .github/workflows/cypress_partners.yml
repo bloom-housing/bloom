@@ -24,7 +24,8 @@ env:
   JURISDICTION_ENDPOINT_PATH: /jurisdictions
   LISTINGS_ENDPOINT_PATH: /listings
   EXTERNAL_API_BASE: https://api.housingbayarea.bloom.exygy.dev
-  DISABLE_CORS: TRUE
+  MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
+  DISABLE_CORS: "TRUE"
 
 
 jobs:
