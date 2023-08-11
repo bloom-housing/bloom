@@ -18,6 +18,7 @@ import { ListingFeaturesDto } from "./listing-features.dto"
 import { ListingMultiselectQuestionDto } from "../../multiselect-question/dto/listing-multiselect-question.dto"
 import { ListingImageDto } from "./listing-image.dto"
 import { ListingUtilitiesDto } from "./listing-utilities.dto"
+import { UserDto } from "../../auth/dto/user.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -25,6 +26,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationMailingAddress",
   "applications",
   "applicationMethods",
+  "requestedChangesUser",
   "buildingSelectionCriteriaFile",
   "events",
   "images",
@@ -237,4 +239,10 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => ListingUtilitiesDto)
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   utilities?: ListingUtilitiesDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UserDto)
+  requestedChangesUser?: UserDto | null
 }

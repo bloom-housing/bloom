@@ -4962,6 +4962,9 @@ export interface Listing {
   utilities?: ListingUtilities
 
   /**  */
+  requestedChangesUser?: CombinedRequestedChangesUserTypes
+
+  /**  */
   id: string
 
   /**  */
@@ -5543,6 +5546,9 @@ export interface ListingCreate {
 
   /**  */
   utilities?: ListingUtilities
+
+  /**  */
+  requestedChangesUser?: CombinedRequestedChangesUserTypes
 }
 
 export interface ListingEventUpdate {
@@ -5952,6 +5958,9 @@ export interface ListingUpdate {
 
   /**  */
   utilities?: ListingUtilities
+
+  /**  */
+  requestedChangesUser?: CombinedRequestedChangesUserTypes
 }
 
 export interface MultiselectQuestionsFilterParams {
@@ -6333,6 +6342,7 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedRequestedChangesUserTypes = User
 export type CombinedBuildingAddressTypes = AddressUpdate
 export enum EnumMultiselectQuestionsFilterParamsComparison {
   "=" = "=",
