@@ -242,7 +242,7 @@ export class ListingDto extends OmitType(Listing, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UserDto)
   requestedChangesUser?: UserDto | null
 }
