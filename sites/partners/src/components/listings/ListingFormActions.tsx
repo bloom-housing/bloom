@@ -1,4 +1,5 @@
 import React, { useContext, useMemo } from "react"
+import { useRouter } from "next/router"
 import dayjs from "dayjs"
 import {
   t,
@@ -10,11 +11,18 @@ import {
   LocalizedLink,
   LinkButton,
   Icon,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
+import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
+
+export enum ListingFormActionsType {
+  add = "add",
+  edit = "edit",
+  details = "details",
+}
 
 type ListingFormActionsProps = {
   type: ListingFormActionsType
@@ -23,8 +31,6 @@ type ListingFormActionsProps = {
   submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
 
-type ListingFormActionsType = "add" | "edit" | "details"
-
 const ListingFormActions = ({
   type,
   showCloseListingModal,
@@ -32,6 +38,10 @@ const ListingFormActions = ({
   submitFormWithStatus,
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
+  const { profile, listingsService } = useContext(AuthContext)
+  const router = useRouter()
+
+  const isListingApprover = profile?.roles?.isAdmin
 
   const listingId = listing?.id
 
@@ -59,7 +69,7 @@ const ListingFormActions = ({
     )
 
     const editFromDetailButton = (
-      <GridCell key="btn-submitNew">
+      <GridCell key="btn-edit">
         <LocalizedLink href={`/listings/${listingId}/edit`}>
           <Button
             styleType={AppearanceStyleType.primary}
@@ -162,7 +172,6 @@ const ListingFormActions = ({
       <GridCell key="btn-post-results">
         <Button
           type="button"
-          styleType={AppearanceStyleType.success}
           fullWidth
           onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
         >
@@ -195,13 +204,88 @@ const ListingFormActions = ({
       </GridCell>
     )
 
-    const elements = []
+    const submitButton = (
+      <GridCell key="btn-submit">
+        <Button
+          id="submitButton"
+          styleType={AppearanceStyleType.success}
+          type="button"
+          fullWidth
+          onClick={() => {
+            // TODO throw a modal
+            submitFormWithStatus(false, ListingStatus.pendingReview)
+          }}
+        >
+          {t("t.submit")}
+        </Button>
+      </GridCell>
+    )
 
-    // read-only form
-    if (type === "details") {
-      elements.push(editFromDetailButton)
-      elements.push(previewButton)
+    const approveAndPublishButton = (
+      <GridCell key="btn-approve-and-publish">
+        <Button
+          id="submitButton"
+          styleType={AppearanceStyleType.success}
+          type="button"
+          fullWidth
+          onClick={async () => {
+            // TODO throw a modal
+            try {
+              const result = await listingsService.update({
+                id: listing.id,
+                body: { ...listing, status: ListingStatus.active },
+              })
 
+              if (result) {
+                setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
+                await router.push(`/listings/${result.id}`)
+              }
+            } catch (err) {
+              setSiteAlertMessage("errors.somethingWentWrong", "warn")
+            }
+          }}
+        >
+          {t("listings.approval.approveAndPublish")}
+        </Button>
+      </GridCell>
+    )
+
+    const requestChangesButton = (
+      <GridCell key="btn-request-changes">
+        <Button
+          id="submitButton"
+          styleType={AppearanceStyleType.alert}
+          border={AppearanceBorderType.outlined}
+          type="button"
+          fullWidth
+          onClick={() => {
+            // TODO throw a modal
+            submitFormWithStatus(false, ListingStatus.changesRequested)
+          }}
+        >
+          {t("listings.approval.requestChanges")}
+        </Button>
+      </GridCell>
+    )
+
+    const reopenButton = (
+      <GridCell key="btn-reopen">
+        <Button
+          id="publishButton"
+          styleType={AppearanceStyleType.success}
+          type="button"
+          fullWidth
+          onClick={() => {
+            // TODO throw a modal
+            submitFormWithStatus(true, ListingStatus.active)
+          }}
+        >
+          {t("listings.approval.reopen")}
+        </Button>
+      </GridCell>
+    )
+
+    const lotteryResultsButton = (elements) => {
       if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
         const eventUrl = pdfUrlFromListingEvents(
           listing?.events,
@@ -212,43 +296,156 @@ const ListingFormActions = ({
       }
     }
 
-    // new unsaved listing
-    if (type === "add") {
-      elements.push(publishButton)
-      elements.push(saveDraftButton)
-      elements.push(cancelButton)
+    const getApprovalActions = () => {
+      const elements = []
+      // read-only form
+      if (type === ListingFormActionsType.details) {
+        if (isListingApprover) {
+          // admins can approve and publish if pending approval or changes requested
+          if (
+            listing.status === ListingStatus.pendingReview ||
+            listing.status === ListingStatus.changesRequested
+          )
+            elements.push(approveAndPublishButton)
+          // admins can always edit
+          elements.push(editFromDetailButton)
+        } else {
+          // partners cannot edit if pending approval
+          if (listing.status !== ListingStatus.pendingReview) elements.push(editFromDetailButton)
+        }
+
+        // all users can preview
+        elements.push(previewButton)
+
+        // all users can view lottery results if posted
+        lotteryResultsButton(elements)
+      }
+
+      // new unsaved listing
+      if (type === ListingFormActionsType.add) {
+        // admins can publish, partners can only submit for approval
+        elements.push(isListingApprover ? publishButton : submitButton)
+        // all users can save a draft
+        elements.push(saveDraftButton)
+        elements.push(cancelButton)
+      }
+
+      // listing saved at least once
+      if (type === ListingFormActionsType.edit) {
+        if (isListingApprover) {
+          // admins can publish a draft
+          if (listing.status === ListingStatus.pending) elements.push(publishButton)
+          // admins can approve and publish a pending approval or changes requested listing
+          if (
+            listing.status === ListingStatus.pendingReview ||
+            listing.status === ListingStatus.changesRequested
+          )
+            elements.push(approveAndPublishButton)
+          // admins can reopen a closed listing
+          if (listing.status === ListingStatus.closed) elements.push(reopenButton)
+        } else {
+          // partners can submit for approval a draft or changes requested listing
+          if (
+            listing.status === ListingStatus.pending ||
+            listing.status === ListingStatus.changesRequested
+          )
+            elements.push(submitButton)
+        }
+
+        // all users can make updates to an open listing
+        elements.push(saveExitButton)
+
+        // admins can request changes on pending review listings
+        if (isListingApprover && listing.status === ListingStatus.pendingReview)
+          elements.push(requestChangesButton)
+
+        // all users can unpublish a closed listing
+        if (listing.status === ListingStatus.closed) {
+          elements.push(unpublishButton)
+        }
+
+        // all users can close or unpublish open listings
+        if (listing.status === ListingStatus.active) {
+          elements.push(closeButton)
+          elements.push(unpublishButton)
+        }
+
+        const lotteryResults = listing?.events?.find(
+          (event) => event.type === ListingEventType.lotteryResults
+        )
+
+        // all users can manage lottery results on closed listings
+        if (lotteryResults) {
+          elements.push(editPostedResultsButton(lotteryResults))
+        } else if (listing.status === ListingStatus.closed) {
+          elements.push(postResultsButton)
+        }
+
+        elements.push(cancelButton)
+      }
+      return elements
     }
 
-    // listing saved at least once
-    if (type === "edit") {
-      elements.push(saveExitButton)
+    const getDefaultActions = () => {
+      const elements = []
+      // read-only form
+      if (type === ListingFormActionsType.details) {
+        elements.push(editFromDetailButton)
+        elements.push(previewButton)
 
-      if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+        lotteryResultsButton(elements)
+      }
+
+      // new unsaved listing
+      if (type === ListingFormActionsType.add) {
+        elements.push(saveDraftButton)
         elements.push(publishButton)
+        elements.push(cancelButton)
       }
 
-      if (listing.status === ListingStatus.active) {
-        elements.push(closeButton)
-        elements.push(unpublishButton)
+      // listing saved at least once
+      if (type === ListingFormActionsType.edit) {
+        if (listing.status === ListingStatus.pending) {
+          elements.push(publishButton)
+        }
+        if (listing.status === ListingStatus.closed) {
+          elements.push(reopenButton)
+        }
+        elements.push(saveExitButton)
+
+        if (listing.status === ListingStatus.active) {
+          elements.push(closeButton)
+        }
+
+        if (listing.status === ListingStatus.closed || listing.status === ListingStatus.active) {
+          elements.push(unpublishButton)
+        }
+
+        const lotteryResults = listing?.events?.find(
+          (event) => event.type === ListingEventType.lotteryResults
+        )
+
+        if (lotteryResults) {
+          elements.push(editPostedResultsButton(lotteryResults))
+        } else if (listing.status === ListingStatus.closed) {
+          elements.push(postResultsButton)
+        }
+
+        elements.push(cancelButton)
       }
 
-      const lotteryResults = listing?.events?.find(
-        (event) => event.type === ListingEventType.lotteryResults
-      )
-
-      if (lotteryResults) {
-        elements.push(editPostedResultsButton(lotteryResults))
-      } else if (listing.status === ListingStatus.closed) {
-        elements.push(postResultsButton)
-      }
-
-      elements.push(cancelButton)
+      return elements
     }
 
-    return elements
+    return process.env.featureListingsApproval === "TRUE"
+      ? getApprovalActions()
+      : getDefaultActions()
   }, [
+    isListingApprover,
     listing,
     listingId,
+    listingsService,
+    router,
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,

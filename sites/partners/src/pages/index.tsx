@@ -10,6 +10,7 @@ import {
   AlertBox,
   SiteAlert,
   AppearanceStyleType,
+  UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -213,7 +214,7 @@ export default function ListingsList() {
                       className="mx-1"
                       dataTestId="export-listings"
                       onClick={() => onExport()}
-                      icon={!zipExportLoading ? faFileExport : null}
+                      icon={!zipExportLoading ? (faFileExport as UniversalIconType) : null}
                       size={AppearanceSizeType.small}
                       loading={zipExportLoading}
                     >

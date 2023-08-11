@@ -7,7 +7,9 @@ import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts/index"
-import ListingFormActions from "../../../components/listings/ListingFormActions"
+import ListingFormActions, {
+  ListingFormActionsType,
+} from "../../../components/listings/ListingFormActions"
 import { ListingContext } from "../../../components/listings/ListingContext"
 import DetailListingData from "../../../components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../components/listings/PaperListingDetails/sections/DetailListingIntro"
@@ -105,7 +107,7 @@ export default function ListingDetail(props: ListingProps) {
                   </div>
 
                   <div className="w-full md:w-3/12 md:pl-6">
-                    <ListingFormActions type="details" />
+                    <ListingFormActions type={ListingFormActionsType.details} />
                   </div>
                 </div>
               </div>
