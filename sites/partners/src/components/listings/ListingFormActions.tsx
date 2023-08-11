@@ -18,14 +18,18 @@ import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
 
+export enum ListingFormActionsType {
+  add = "add",
+  edit = "edit",
+  details = "details",
+}
+
 type ListingFormActionsProps = {
   type: ListingFormActionsType
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
   submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
-
-type ListingFormActionsType = "add" | "edit" | "details"
 
 const ListingFormActions = ({
   type,
@@ -281,10 +285,21 @@ const ListingFormActions = ({
       </GridCell>
     )
 
+    const lotteryResultsButton = (elements) => {
+      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
+        const eventUrl = pdfUrlFromListingEvents(
+          listing?.events,
+          ListingEventType.lotteryResults,
+          process.env.cloudinaryCloudName
+        )
+        elements.push(viewPostedResultsButton(eventUrl))
+      }
+    }
+
     const getApprovalActions = () => {
       const elements = []
       // read-only form
-      if (type === "details") {
+      if (type === ListingFormActionsType.details) {
         if (isListingApprover) {
           // admins can approve and publish if pending approval or changes requested
           if (
@@ -303,18 +318,11 @@ const ListingFormActions = ({
         elements.push(previewButton)
 
         // all users can view lottery results if posted
-        if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
-          const eventUrl = pdfUrlFromListingEvents(
-            listing?.events,
-            ListingEventType.lotteryResults,
-            process.env.cloudinaryCloudName
-          )
-          elements.push(viewPostedResultsButton(eventUrl))
-        }
+        lotteryResultsButton(elements)
       }
 
       // new unsaved listing
-      if (type === "add") {
+      if (type === ListingFormActionsType.add) {
         // admins can publish, partners can only submit for approval
         elements.push(isListingApprover ? publishButton : submitButton)
         // all users can save a draft
@@ -323,7 +331,7 @@ const ListingFormActions = ({
       }
 
       // listing saved at least once
-      if (type === "edit") {
+      if (type === ListingFormActionsType.edit) {
         if (isListingApprover) {
           // admins can publish a draft
           if (listing.status === ListingStatus.pending) elements.push(publishButton)
@@ -378,32 +386,25 @@ const ListingFormActions = ({
       return elements
     }
 
-    const getCoreActions = () => {
+    const getDefaultActions = () => {
       const elements = []
       // read-only form
-      if (type === "details") {
+      if (type === ListingFormActionsType.details) {
         elements.push(editFromDetailButton)
         elements.push(previewButton)
 
-        if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
-          const eventUrl = pdfUrlFromListingEvents(
-            listing?.events,
-            ListingEventType.lotteryResults,
-            process.env.cloudinaryCloudName
-          )
-          elements.push(viewPostedResultsButton(eventUrl))
-        }
+        lotteryResultsButton(elements)
       }
 
       // new unsaved listing
-      if (type === "add") {
+      if (type === ListingFormActionsType.add) {
         elements.push(saveDraftButton)
         elements.push(publishButton)
         elements.push(cancelButton)
       }
 
       // listing saved at least once
-      if (type === "edit") {
+      if (type === ListingFormActionsType.edit) {
         if (listing.status === ListingStatus.pending) {
           elements.push(publishButton)
         }
@@ -436,7 +437,9 @@ const ListingFormActions = ({
       return elements
     }
 
-    return process.env.featureListingsApproval === "TRUE" ? getApprovalActions() : getCoreActions()
+    return process.env.featureListingsApproval === "TRUE"
+      ? getApprovalActions()
+      : getDefaultActions()
   }, [
     isListingApprover,
     listing,

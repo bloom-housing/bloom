@@ -4,7 +4,9 @@ import { ListingStatus, User } from "@bloom-housing/backend-core"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { listing } from "@bloom-housing/shared-helpers/__tests__/testHelpers"
 import { ListingContext } from "../../../src/components/listings/ListingContext"
-import ListingFormActions from "../../../src/components/listings/ListingFormActions"
+import ListingFormActions, {
+  ListingFormActionsType,
+} from "../../../src/components/listings/ListingFormActions"
 import { mockNextRouter, render } from "../../testUtils"
 
 afterEach(cleanup)
@@ -43,7 +45,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in a new listing edit state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-          <ListingFormActions type={"add"} />
+          <ListingFormActions type={ListingFormActionsType.add} />
         </ListingContext.Provider>
       )
       expect(getByText("Save as Draft")).toBeTruthy()
@@ -54,7 +56,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in a draft detail state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-          <ListingFormActions type={"details"} />
+          <ListingFormActions type={ListingFormActionsType.details} />
         </ListingContext.Provider>
       )
       expect(getByText("Edit")).toBeTruthy()
@@ -64,7 +66,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in a draft edit state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-          <ListingFormActions type={"edit"} />
+          <ListingFormActions type={ListingFormActionsType.edit} />
         </ListingContext.Provider>
       )
       expect(getByText("Save & Exit")).toBeTruthy()
@@ -75,7 +77,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in an open detail state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.active }}>
-          <ListingFormActions type={"details"} />
+          <ListingFormActions type={ListingFormActionsType.details} />
         </ListingContext.Provider>
       )
       expect(getByText("Edit")).toBeTruthy()
@@ -85,7 +87,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in an open edit state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.active }}>
-          <ListingFormActions type={"edit"} />
+          <ListingFormActions type={ListingFormActionsType.edit} />
         </ListingContext.Provider>
       )
       expect(getByText("Save & Exit")).toBeTruthy()
@@ -97,7 +99,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in a closed detail state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.closed }}>
-          <ListingFormActions type={"details"} />
+          <ListingFormActions type={ListingFormActionsType.details} />
         </ListingContext.Provider>
       )
       expect(getByText("Edit")).toBeTruthy()
@@ -107,7 +109,7 @@ describe("<ListingFormActions>", () => {
     it("renders correct buttons in a closed edit state", () => {
       const { getByText } = render(
         <ListingContext.Provider value={{ ...listing, status: ListingStatus.closed }}>
-          <ListingFormActions type={"edit"} />
+          <ListingFormActions type={ListingFormActionsType.edit} />
         </ListingContext.Provider>
       )
       expect(getByText("Reopen")).toBeTruthy()
@@ -134,7 +136,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-              <ListingFormActions type={"add"} />
+              <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -147,7 +149,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -159,7 +161,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -172,7 +174,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pendingReview }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -185,7 +187,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pendingReview }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -199,7 +201,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.changesRequested }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -212,7 +214,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.changesRequested }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -224,7 +226,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.active }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -236,7 +238,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.active }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -250,7 +252,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.closed }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -262,7 +264,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: adminUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.closed }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -279,7 +281,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-              <ListingFormActions type={"add"} />
+              <ListingFormActions type={ListingFormActionsType.add} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -292,7 +294,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -304,7 +306,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pending }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -317,7 +319,7 @@ describe("<ListingFormActions>", () => {
         const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.pendingReview }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -329,7 +331,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.changesRequested }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -341,7 +343,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.changesRequested }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -354,7 +356,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.active }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -366,7 +368,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.active }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -380,7 +382,7 @@ describe("<ListingFormActions>", () => {
         const { getByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.closed }}>
-              <ListingFormActions type={"details"} />
+              <ListingFormActions type={ListingFormActionsType.details} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
@@ -392,7 +394,7 @@ describe("<ListingFormActions>", () => {
         const { getByText, queryByText } = render(
           <AuthContext.Provider value={{ profile: partnerUser }}>
             <ListingContext.Provider value={{ ...listing, status: ListingStatus.closed }}>
-              <ListingFormActions type={"edit"} />
+              <ListingFormActions type={ListingFormActionsType.edit} />
             </ListingContext.Provider>
           </AuthContext.Provider>
         )
