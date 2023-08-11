@@ -41,8 +41,7 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
   const allowList = process.env.CORS_ORIGINS || []
-  const allowListRegex =
-    process.env.CORS_REGEX !== "undefined" ? JSON.parse(process.env.CORS_REGEX) : []
+  const allowListRegex = process.env.CORS_REGEX !== "" ? JSON.parse(process.env.CORS_REGEX) : []
   const regexAllowList = allowListRegex.map((regex) => {
     return new RegExp(regex)
   })
