@@ -1,4 +1,4 @@
-name: Integration tests
+name: Backend Integration
 
 on:
   pull_request:
@@ -17,8 +17,7 @@ env:
   BLOOM_LISTINGS_QUERY: "/fake"
 
 jobs:
-  integration-tests:
-    name: Run integration tests
+  backend-integration:
     runs-on: ubuntu-latest
     services:
       postgres:

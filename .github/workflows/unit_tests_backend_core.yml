@@ -1,4 +1,4 @@
-name: Unit tests for backend/core
+name: Backend Unit
 
 on:
   pull_request:
@@ -6,8 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-backend-core:
-    name: Run unit tests for backend/core
+  backend-unit:
     runs-on: ubuntu-latest
 
     steps:

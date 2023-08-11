@@ -68,7 +68,7 @@ export function applicationSetup(app: INestApplication) {
       credentials: true,
       origin: false,
     }
-    if (allowList.indexOf(req.header("Origin")) !== -1) {
+    if (process.env.DISABLE_CORS === "TRUE" || allowList.indexOf(req.header("Origin")) !== -1) {
       options.origin = true
     }
     cb(null, options)

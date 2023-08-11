@@ -20,8 +20,8 @@
     "start": "next start -p ${NEXTJS_PORT:-3000}",
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\"  --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn dev",
-    "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build && yarn start",
-    "dev:all-cypress": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait-cypress\"",
+    "dev:server-wait-cypress": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn build",
+    "dev:all-cypress": "concurrently \"yarn dev:listings\" \"yarn build\"",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {

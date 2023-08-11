@@ -2,6 +2,7 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
+import React, { useContext, useEffect } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -25,7 +26,6 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferredUnits = () => {

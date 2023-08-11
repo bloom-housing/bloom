@@ -20,9 +20,9 @@ describe("Listing Management Tests", () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function fillOutListing(cy: Cypress.cy, listing: any): void {
-    cy.getByID("jurisdiction.id").select(listing["jurisdiction.id"])
     cy.get("#name").type(listing["name"])
     cy.get("#developer").type(listing["developer"])
+
     // Test photo upload
     cy.getByTestId("add-photos-button").contains("Add Photo").click()
     cy.getByTestId("dropzone-input").attachFile(
@@ -31,15 +31,30 @@ describe("Listing Management Tests", () => {
         subjectType: "drag-n-drop",
       }
     )
+
+    cy.intercept("/api/adapter/upload", {
+      body: {
+        id: "123",
+        url:
+          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+      },
+    })
+
     cy.getByTestId("drawer-photos-table")
       .find("img")
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
+      )
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
     cy.getByTestId("photos-table")
       .find("img")
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
+      )
 
     cy.getByTestId("add-photos-button").contains("Edit Photos").click()
     cy.getByTestId("dropzone-input").attachFile(
@@ -48,21 +63,35 @@ describe("Listing Management Tests", () => {
         subjectType: "drag-n-drop",
       }
     )
+    cy.intercept("/api/adapter/upload", {
+      body: {
+        id: "123",
+        url:
+          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fd24fe68d7d2422b6297ed4_Frame%2085.svg",
+      },
+    })
     cy.getByTestId("drawer-photos-table")
       .find("img")
       .eq(1)
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fd24fe68d7d2422b6297ed4_Frame%2085.svg"
+      )
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
     cy.getByTestId("photos-table")
       .find("img")
       .eq(1)
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-46806882-b98d-49d7-ac83-8016ab4b2f08")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fd24fe68d7d2422b6297ed4_Frame%2085.svg"
+      )
     cy.getByTestId("photos-table").get("tbody > tr").should("have.length", 2)
     cy.getByTestId("photos-table")
       .get("tbody > tr:nth-of-type(2)")
       .should("not.contain", "Primary photo")
+
     cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
     cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
@@ -132,10 +161,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
     cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
     cy.get("#digitalApplicationChoiceYes").check()
-    cy.get("#commonDigitalApplicationChoiceNo").check()
     cy.get("#customOnlineApplicationUrl").type(listing["url"])
     cy.get("#paperApplicationNo").check()
-    cy.get("#referralOpportunityNo").check()
 
     cy.getByID("leasingAgentAddress.street").type(listing["leasingAgentAddress.street"])
     cy.getByID("leasingAgentAddress.street2").type(listing["leasingAgentAddress.street2"])
@@ -197,7 +224,10 @@ describe("Listing Management Tests", () => {
     cy.get('[data-label="Preview"]')
       .find("img")
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
+      )
     cy.getByID("buildingAddress.street").contains(listing["buildingAddress.street"])
     cy.get("#neighborhood").contains(listing.neighborhood)
     cy.get("#neighborhood").contains(listing.neighborhood)
@@ -206,8 +236,8 @@ describe("Listing Management Tests", () => {
     cy.getByID("buildingAddress.state").contains("CA")
     cy.getByID("buildingAddress.zipCode").contains(listing["buildingAddress.zipCode"])
     cy.get("#yearBuilt").contains(listing["yearBuilt"])
-    cy.get("#longitude").contains("-122.40078")
-    cy.get("#latitude").contains("37.79006")
+    cy.get("#longitude").contains("-121.950481")
+    cy.get("#latitude").contains("37.762983")
     cy.get("#reservedCommunityType").contains(listing["reservedCommunityType.id"])
     cy.get("#reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
     cy.getByTestId("unit-types-or-individual").contains("Unit Types")
@@ -255,7 +285,6 @@ describe("Listing Management Tests", () => {
     cy.getByID("digitalMethod.type").contains("No")
     cy.get("#customOnlineApplicationUrl").contains(listing["url"])
     cy.get("#paperApplication").contains("No")
-    cy.get("#referralOpportunity").contains("No")
     cy.getByID("leasingAgentAddress.street").contains(listing["leasingAgentAddress.street"])
     cy.getByID("leasingAgentAddress.street2").contains(listing["leasingAgentAddress.street2"])
     cy.getByID("leasingAgentAddress.city").contains(listing["leasingAgentAddress.city"])

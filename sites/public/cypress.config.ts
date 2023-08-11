@@ -2,7 +2,7 @@ import { defineConfig } from "cypress"
 
 export default defineConfig({
   defaultCommandTimeout: 100000,
-  projectId: "bloom-public-reference",
+  projectId: "f32m8f",
   pageLoadTimeout: 100000,
   video: true,
   videoUploadOnPasses: false,

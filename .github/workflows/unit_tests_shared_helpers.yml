@@ -1,4 +1,4 @@
-name: Unit tests for shared/helpers
+name: Shared Helpers Unit
 
 on:
   pull_request:
@@ -6,8 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-shared-helpers:
-    name: Run unit tests for shared/helpers
+  shared-helpers-unit:
     runs-on: ubuntu-latest
 
     steps:

@@ -2,6 +2,7 @@
 3.1 Vouchers Subsidies
 Question asks if anyone on the application receives a housing voucher or subsidy.
 */
+import React, { useContext, useEffect } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -24,7 +25,6 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 

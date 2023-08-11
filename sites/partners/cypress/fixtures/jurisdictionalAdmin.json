@@ -1,7 +1,7 @@
 {
-  "email": "alameda-admin@example.com",
-  "emailConfirmation": "alameda-admin@example.com",
-  "firstName": "Alameda",
+  "email": "bayarea-admin@example.com",
+  "emailConfirmation": "bayarea-admin@example.com",
+  "firstName": "Bay Area",
   "middleName": "Admin",
   "lastName": "MFA",
   "dob": "1980-01-01",

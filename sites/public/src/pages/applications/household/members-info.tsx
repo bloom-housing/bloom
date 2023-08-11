@@ -2,6 +2,7 @@
 2.1a - Member Info
 A notice regarding adding household members
 */
+import React, { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
@@ -18,7 +19,6 @@ import { useForm } from "react-hook-form"
 import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 
 const ApplicationMembersInfo = () => {

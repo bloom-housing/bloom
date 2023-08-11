@@ -1,4 +1,4 @@
-name: Unit tests for sites/public
+name: Public Unit
 
 on:
   pull_request:
@@ -6,8 +6,7 @@ on:
       - main
 
 jobs:
-  unit-tests-for-sites-public:
-    name: Run unit tests for sites/public
+  public-unit:
     runs-on: ubuntu-latest
 
     steps:

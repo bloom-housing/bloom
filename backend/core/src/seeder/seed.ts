@@ -346,9 +346,9 @@ async function seed() {
   const bayAreaJurisdiction = jurisdictions.filter((j) => j.name == CountyCode.bay_area)[0]
   const bayAreaAdmin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
-      email: "alameda-admin@example.com",
-      emailConfirmation: "alameda-admin@example.com",
-      firstName: "Alameda",
+      email: "bayarea-admin@example.com",
+      emailConfirmation: "bayarea-admin@example.com",
+      firstName: "Bay Area",
       middleName: "Admin",
       lastName: "MFA",
       dob: new Date(),
