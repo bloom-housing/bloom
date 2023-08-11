@@ -233,7 +233,7 @@ describe('Testing user service', () => {
     expect(res).toEqual(true);
   });
 
-  it('should verify that there is no a jurisdiciton mismatch', () => {
+  it('should verify that there is not a jurisdiciton mismatch', () => {
     const res = service.jurisdictionMismatch(
       [{ id: 'id a' }, { id: 'id b' }],
       [{ id: 'id b' }, { id: 'id a' }],
