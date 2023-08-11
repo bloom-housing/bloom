@@ -336,7 +336,7 @@ describe("Listing Management Tests", () => {
     cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
     cy.getByTestId("page-header").should("have.text", listing["editedName"])
   }
-  it.skip("as admin user, should be able to download listings export zip", () => {
+  it("as admin user, should be able to download listings export zip", () => {
     const convertToString = (value: number) => {
       return value < 10 ? `0${value}` : `${value}`
     }
