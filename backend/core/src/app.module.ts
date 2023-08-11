@@ -41,6 +41,10 @@ import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
   const allowList = process.env.CORS_ORIGINS || []
+  const allowListRegex = JSON.parse(process.env.CORS_REGEX) || []
+  const regexAllowList = allowListRegex.map((regex) => {
+    return new RegExp(regex)
+  })
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
@@ -49,7 +53,7 @@ export function applicationSetup(app: INestApplication) {
 
     if (
       allowList.indexOf(req.header("Origin")) !== -1 ||
-      (process.env.CORS_REGEX && new RegExp(process.env.CORS_REGEX).test(req.header("Origin")))
+      regexAllowList.some((regex) => regex.test(req.header("Origin")))
     ) {
       options.origin = true
     }
