@@ -261,7 +261,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: listing?.commonDigitalApplication === true ?? null,
+                    defaultChecked:
+                      methods?.digital?.type === ApplicationMethodType.Internal ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -277,7 +278,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
-                    defaultChecked: listing?.commonDigitalApplication === false ?? null,
+                    defaultChecked:
+                      methods?.digital?.type === ApplicationMethodType.ExternalLink ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
