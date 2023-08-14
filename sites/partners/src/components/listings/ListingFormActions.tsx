@@ -28,6 +28,7 @@ type ListingFormActionsProps = {
   type: ListingFormActionsType
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
+  showSubmitForApprovalModal?: () => void
   submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
 
@@ -35,6 +36,7 @@ const ListingFormActions = ({
   type,
   showCloseListingModal,
   showLotteryResultsDrawer,
+  showSubmitForApprovalModal,
   submitFormWithStatus,
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
@@ -211,10 +213,7 @@ const ListingFormActions = ({
           styleType={AppearanceStyleType.success}
           type="button"
           fullWidth
-          onClick={() => {
-            // TODO throw a modal
-            submitFormWithStatus(false, ListingStatus.pendingReview)
-          }}
+          onClick={() => showSubmitForApprovalModal && showSubmitForApprovalModal()}
         >
           {t("t.submit")}
         </Button>
@@ -448,6 +447,7 @@ const ListingFormActions = ({
     router,
     showCloseListingModal,
     showLotteryResultsDrawer,
+    showSubmitForApprovalModal,
     submitFormWithStatus,
     type,
   ])

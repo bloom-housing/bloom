@@ -2,4 +2,14 @@
   .field-value-error {
     --field-value-label-color: var(--seeds-color-red-500);
   }
+
+  .seeds-tag {
+    text-transform: uppercase;
+    letter-spacing: var(--seeds-letter-spacing-wider);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 }

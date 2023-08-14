@@ -55,6 +55,7 @@ import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { getListingStatusTag } from "../helpers"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -122,6 +123,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    * Save already-live modal
    */
   const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
+
+  /**
+   * Submit for approval modal
+   */
+  const [submitForApprovalModal, setSubmitForApprovalModal] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -265,27 +271,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     <>
       <LoadingOverlay isLoading={loading}>
         <>
-          <StatusBar
-            tagStyle={(() => {
-              switch (listing?.status) {
-                case ListingStatus.active:
-                  return AppearanceStyleType.success
-                case ListingStatus.closed:
-                  return AppearanceStyleType.closed
-                case ListingStatus.pendingReview:
-                  return AppearanceStyleType.info
-                case ListingStatus.changesRequested:
-                  return AppearanceStyleType.warning
-                default:
-                  return AppearanceStyleType.primary
-              }
-            })()}
-            tagLabel={
-              listing?.status
-                ? t(`listings.listingStatus.${listing.status}`)
-                : t(`listings.listingStatus.pending`)
-            }
-          />
+          <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
             <section className="bg-primary-lighter py-5">
@@ -413,6 +399,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? ListingFormActionsType.edit : ListingFormActionsType.add}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
+                        showSubmitForApprovalModal={() => setSubmitForApprovalModal(true)}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
@@ -518,6 +505,39 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ]}
       >
         {t("listings.listingIsAlreadyLive")}
+      </Modal>
+
+      <Modal
+        open={submitForApprovalModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.approval.submitForApprovalDescription")}
+        onClose={() => setSubmitForApprovalModal(false)}
+        actions={[
+          <Button
+            id="submitListingForApprovalButtonConfirm"
+            type="button"
+            styleType={AppearanceStyleType.success}
+            onClick={() => {
+              setSubmitForApprovalModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.pendingReview)
+            }}
+            size={AppearanceSizeType.small}
+            dataTestId={"submitForApprovalButton"}
+          >
+            {t("t.save")}
+          </Button>,
+          <Button
+            type="button"
+            onClick={() => {
+              setSubmitForApprovalModal(false)
+            }}
+            size={AppearanceSizeType.small}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.approval.submitForApprovalDescription")}
       </Modal>
     </>
   )
