@@ -11,11 +11,10 @@ import {
   useMutate,
   AppearanceStyleType,
   emailRegex,
-  Tag,
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
@@ -316,15 +315,8 @@ const FormUserManage = ({
                 <span>{t("users.userDetails")}</span>
 
                 {mode === "edit" && (
-                  <div className="ml-2 mt-2">
-                    <Tag
-                      className="block"
-                      size={AppearanceSizeType.small}
-                      styleType={
-                        user.confirmedAt ? AppearanceStyleType.success : AppearanceStyleType.primary
-                      }
-                      pillStyle
-                    >
+                  <div className="ml-2 mt-1 flex items-center justify-center">
+                    <Tag variant={user.confirmedAt ? "success-inverse" : "primary"}>
                       {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
                     </Tag>
                   </div>
