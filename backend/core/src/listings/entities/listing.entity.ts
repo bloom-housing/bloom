@@ -678,7 +678,7 @@ class Listing extends BaseEntity {
   @Type(() => Date)
   requestedChangesDate?: Date | null
 
-  @ManyToOne(() => User, { eager: true, cascade: true })
+  @ManyToOne(() => User)
   @JoinColumn()
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
