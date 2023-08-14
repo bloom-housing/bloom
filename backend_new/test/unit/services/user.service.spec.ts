@@ -3,8 +3,9 @@ import { PrismaService } from '../../../src/services/prisma.service';
 import { UserService } from '../../../src/services/user.service';
 import { randomUUID } from 'crypto';
 import { LanguagesEnum } from '@prisma/client';
-import { decode } from 'jwt-simple';
+import { verify } from 'jsonwebtoken';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
+import { IdDTO } from '../../../src/dtos/shared/id.dto';
 
 describe('Testing user service', () => {
   let service: UserService;
@@ -211,7 +212,7 @@ describe('Testing user service', () => {
     const id = randomUUID();
     const res = service.createConfirmationToken(id, 'example@email.com');
     expect(res).not.toBeNull();
-    const decoded = decode(res, process.env.APP_SECRET);
+    const decoded = verify(res, process.env.APP_SECRET) as IdDTO;
     expect(decoded.id).toEqual(id);
   });
 

@@ -8,7 +8,7 @@ import { Prisma } from '@prisma/client';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import crypto from 'crypto';
-import { decode, encode } from 'jwt-simple';
+import { verify, sign } from 'jsonwebtoken';
 import { PrismaService } from './prisma.service';
 import { User } from '../dtos/users/user.dto';
 import { mapTo } from '../utilities/mapTo';
@@ -287,7 +287,7 @@ export class UserService {
         dto.appUrl,
         confirmationToken,
       );
-      // TODO: email service work
+      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
     }
 
     const res = this.prisma.userAccounts.update({
@@ -383,7 +383,7 @@ export class UserService {
       const confirmationUrl = forPublic
         ? this.getPublicConfirmationUrl(dto.appUrl, confirmationToken)
         : this.getPartnersConfirmationUrl(dto.appUrl, confirmationToken);
-      // TODO: email service
+      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
     }
 
     return {
@@ -403,13 +403,13 @@ export class UserService {
     };
     await this.prisma.userAccounts.update({
       data: {
-        resetToken: encode(payload, process.env.APP_SECRET),
+        resetToken: sign(payload, process.env.APP_SECRET),
       },
       where: {
         id: storedUser.id,
       },
     });
-    // TODO: email service
+    // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
 
     return {
       success: true,
@@ -424,7 +424,7 @@ export class UserService {
     dto: ConfirmationRequest,
   ): Promise<SuccessDTO> {
     try {
-      const token = decode(dto.token, process.env.APP_SECRET);
+      const token = verify(dto.token, process.env.APP_SECRET) as IdDTO;
 
       const storedUser = await this.prisma.userAccounts.findUnique({
         where: {
@@ -635,7 +635,7 @@ export class UserService {
         dto.appUrl,
         confirmationToken,
       );
-      // TODO: email service
+      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
     } else if (
       forPartners &&
       existingUser &&
@@ -644,9 +644,9 @@ export class UserService {
       dto?.userRoles?.isPartner &&
       this.jurisdictionMismatch(dto.jurisdictions, existingUser.jurisdictions)
     ) {
-      // TODO: email service
+      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
     } else if (forPartners) {
-      // TODO: email service
+      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
     }
 
     if (!forPartners) {
@@ -725,7 +725,7 @@ export class UserService {
       email,
       exp: Number.parseInt(dayjs().add(24, 'hours').format('X')),
     };
-    return encode(payload, process.env.APP_SECRET);
+    return sign(payload, process.env.APP_SECRET);
   }
 
   /*

@@ -1617,36 +1617,6 @@ export class UserService {
   }
 }
 
-export class UserProfileService {
-  /**
-   * Update profile user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate;
-    } = {} as any,
-    options: IRequestOptions = {},
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/userProfile/{id}';
-
-      const configs: IRequestConfig = getConfigs(
-        'put',
-        'application/json',
-        url,
-        options,
-      );
-
-      let data = params.body;
-
-      configs.data = data;
-
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export interface SuccessDTO {
   /**  */
   success: boolean;

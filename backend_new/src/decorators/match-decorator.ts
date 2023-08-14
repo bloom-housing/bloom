@@ -6,6 +6,11 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
+/*
+  This creates a validation decorator.
+  It requires that the current field's value matches related property supplied to it as an argument
+  e.g. password's and passwordConfirmation's  values should match
+*/
 export function Match(property: string, validationOptions?: ValidationOptions) {
   return (object: unknown, propertyName: string) => {
     registerDecorator({
