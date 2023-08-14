@@ -214,23 +214,36 @@ export class ListingsService {
     return listing.jurisdiction.id
   }
 
-  public async requestApproval(listingId: string, listingName: string) {
-    await this.listingRepository.update(listingId, { status: ListingStatus.pendingReview })
+  async requestApproval(listingData: ListingUpdateDto) {
+    //authroization handled within update
+    console.log("before update")
+    await this.update(listingData)
+    console.log("after update")
+    // if (!results) throw new NotFoundException()
 
+    //email process
     const adminUsers = await this.userRepository
       .createQueryBuilder("user")
-      .select(["user.id", "user.email"])
+      .select(["user.email"])
       .leftJoin("user.roles", "userRoles")
       //verify this permissioning approach
-      .where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
-        is_jurisdctional_admin: true,
+      .where("userRoles.is_admin = :is_admin", {
+        is_admin: true,
       })
-      .orWhere("userRoles.is_partner = :is_admin", { is_admin: true })
+      .orWhere("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
+        is_jurisdictional_admin: true,
+      })
       .getMany()
-
     const adminEmails: string[] = []
     adminUsers?.forEach((users) => users?.email && adminEmails.push(users.email))
-    await this.emailService.requestApproval(this.req.user, listingName, listingId, adminEmails)
+    console.log("pre-email")
+    await this.emailService.requestApproval(
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      this.req.user as User,
+      { id: listingData.id, name: listingData.name },
+      adminEmails
+    )
+    return listingData
   }
 
   async rawListWithFlagged() {

@@ -17,6 +17,8 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
+import { IdName } from "../../types"
+
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
   polyglot: Polyglot
@@ -318,6 +320,7 @@ export class EmailService {
     multipleRecipients
       ? await this.sendGrid.sendMultiple(emailParams, handleError)
       : await this.sendGrid.send(emailParams, false, handleError)
+    console.log("test")
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
@@ -352,12 +355,7 @@ export class EmailService {
     )
   }
 
-  public async requestApproval(
-    user: User,
-    listingName: string,
-    listingId: string,
-    emails: string[]
-  ) {
+  public async requestApproval(user: User, listingInfo: IdName, emails: string[]) {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, Language.en))
     await this.send(
@@ -366,9 +364,9 @@ export class EmailService {
       this.polyglot.t("requestApproval.reviewListing"),
       this.template("request-approval")({
         user,
-        appOptions: { appUrl: process.env.PARTNERS_PORTAL_URL },
-        listingId,
-        listingName,
+        appUrl: process.env.PARTNERS_PORTAL_URL,
+        listingId: listingInfo.id,
+        listingName: listingInfo.name,
       })
     )
   }

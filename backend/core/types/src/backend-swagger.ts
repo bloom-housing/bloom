@@ -1466,6 +1466,30 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Request approval on listing by id
+   */
+  requestApproval(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ListingUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Listing> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/requestApproval/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class PaperApplicationsService {

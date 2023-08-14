@@ -177,13 +177,23 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
           })
           const formattedData = await dataPipeline.run()
+          let result
+          console.log(editMode, formattedData.status === ListingStatus.pendingReview)
+          if (editMode) {
+            result =
+              formattedData.status === ListingStatus.pendingReview
+                ? await listingsService.requestApproval({
+                    id: listing.id,
+                    body: { ...formattedData },
+                  })
+                : await listingsService.update({
+                    id: listing.id,
+                    body: { id: listing.id, ...formattedData },
+                  })
+          } else {
+            result = await listingsService.create({ body: formattedData })
+          }
 
-          const result = editMode
-            ? await listingsService.update({
-                id: listing.id,
-                body: { id: listing.id, ...formattedData },
-              })
-            : await listingsService.create({ body: formattedData })
           reset(formData)
 
           if (result) {
