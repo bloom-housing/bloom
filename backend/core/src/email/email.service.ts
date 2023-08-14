@@ -358,15 +358,16 @@ export class EmailService {
   public async requestApproval(user: User, listingInfo: IdName, emails: string[]) {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, Language.en))
+    const appUrl = process.env.PARTNERS_PORTAL_URL
     await this.send(
       emails,
       jurisdiction.emailFromAddress,
-      this.polyglot.t("requestApproval.reviewListing"),
+      this.polyglot.t("requestApproval.subject"),
       this.template("request-approval")({
         user,
-        appUrl: process.env.PARTNERS_PORTAL_URL,
-        listingId: listingInfo.id,
-        listingName: listingInfo.name,
+        appOptions: { listingName: listingInfo.name },
+        appUrl: appUrl,
+        listingUrl: `${appUrl}/listings/${listingInfo.id}`,
       })
     )
   }

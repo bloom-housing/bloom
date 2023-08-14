@@ -216,9 +216,7 @@ export class ListingsService {
 
   async requestApproval(listingData: ListingUpdateDto) {
     //authroization handled within update
-    console.log("before update")
     await this.update(listingData)
-    console.log("after update")
     // if (!results) throw new NotFoundException()
 
     //email process
