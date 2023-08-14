@@ -1,6 +1,6 @@
 {{#> layout_default }}
     <h1>
-        {{ t "requestApprovalSubject"}}
+        {{ t "requestApproval.header"}}
     </h1>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
         <tbody>
@@ -9,11 +9,11 @@
             <p>
                 {{t "t.hello"}},
                 <br/><br/>
-                {{t "partnerRequest" appOptions}}
+                {{t "requestApproval.partnerRequest" appOptions}}
                 <br/><br/>
-                {{t "loginToReview"}}
+                {{t "requestApproval.loginToReviewStart"}} <a href="{{ appUrl }}">{{t "t.partnersPortal"}}</a> {{t "requestApproval.loginToReviewEnd"}}
                 <br/><br/>
-                <strong>{{t "accessListing"}}</strong>
+                <strong>{{t "requestApproval.accessListing"}}</strong>
                 <br/><br/>
             </p>
             </td>
@@ -26,7 +26,7 @@
             <td align="center">
             <a
                 class="btn btn-primary"
-                href="{{appUrl}}"
+                href="{{ listingUrl }}"
                 target="_blank"
                 style="color:white"
                 >
@@ -44,7 +44,7 @@
             <p>
                 {{t "footer.thankYou"}},
                 <br/><br/>
-                {{t "t.doorwayName"}}
+                {{t "header.logoTitle"}}
             </p>
             </td>
         </tr>

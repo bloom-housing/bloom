@@ -15,15 +15,22 @@ export class requestApprovalEmail1691486291378 implements MigrationInterface {
       let data = translation.translations
       data.t = {
         ...data.t,
-        doorwayTitle: "Doorway Housing Portal",
+        hello: "Hello",
+        partnersPortal: "Partners Portal",
+      }
+
+      data.footer = {
+        ...data.footer,
+        thankYou: "Thank you",
       }
 
       data.requestApproval = {
-        subject: "Listing approval requested",
+        subject: "Listing Approval Requested",
+        header: "Listing approval requested",
         partnerRequest:
           "A Partner has submitted an approval request to publish the %{listingName} listing.",
-        loginToReview:
-          "Please log in to the <a href=%{partnersUrl}>Partner Portal</a> and navigate to the listing detail page to review and publish.",
+        loginToReviewStart: "Please log in to the",
+        loginToReviewEnd: "and navigate to the listing detail page to review and publish.",
         accessListing: "To access the listing after logging in, please click the link below",
         reviewListing: "Review Listing",
       }
