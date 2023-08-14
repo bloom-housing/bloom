@@ -7,13 +7,13 @@ export const getListingStatusTag = (listingStatus: ListingStatus) => {
   switch (listingStatus) {
     case ListingStatus.active:
       return (
-        <Tag variant={"success"} size={"lg"}>
+        <Tag variant={"success-inverse"} size={"lg"}>
           {t(`listings.listingStatus.active`)}
         </Tag>
       )
     case ListingStatus.closed:
       return (
-        <Tag variant={"secondary"} size={"lg"}>
+        <Tag variant={"secondary-inverse"} size={"lg"}>
           {t(`listings.listingStatus.closed`)}
         </Tag>
       )
