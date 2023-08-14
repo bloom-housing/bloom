@@ -320,7 +320,6 @@ export class EmailService {
     multipleRecipients
       ? await this.sendGrid.sendMultiple(emailParams, handleError)
       : await this.sendGrid.send(emailParams, false, handleError)
-    console.log("test")
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
