@@ -112,7 +112,6 @@ export class ListingsService {
   }
 
   async update(listingDto: ListingUpdateDto) {
-    console.log("boink")
     const qb = this.getFullyJoinedQueryBuilder()
     const listing = await this.getListingAndUnits(qb, listingDto.id)
 
@@ -212,7 +211,7 @@ export class ListingsService {
 
   async requestApproval(listingData: ListingUpdateDto) {
     //authroization handled within update
-    await this.update(listingData)
+    const result = await this.update(listingData)
     // if (!results) throw new NotFoundException()
 
     //email process
@@ -230,14 +229,13 @@ export class ListingsService {
       .getMany()
     const adminEmails: string[] = []
     adminUsers?.forEach((users) => users?.email && adminEmails.push(users.email))
-    console.log("pre-email")
     await this.emailService.requestApproval(
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       this.req.user as User,
       { id: listingData.id, name: listingData.name },
       adminEmails
     )
-    return listingData
+    return result
   }
 
   async rawListWithFlagged() {

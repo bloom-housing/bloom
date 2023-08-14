@@ -191,16 +191,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           let result
           if (editMode) {
             result =
-              // formattedData.status === ListingStatus.pendingReview
-              // ?
-              await listingsService.requestApproval({
-                id: listing.id,
-                body: { ...formattedData },
-              })
-            // : await listingsService.update({
-            //     id: listing.id,
-            //     body: { id: listing.id, ...formattedData },
-            //   })
+              formattedData.status === ListingStatus.pendingReview
+                ? await listingsService.requestApproval({
+                    id: listing.id,
+                    body: { ...formattedData },
+                  })
+                : await listingsService.update({
+                    id: listing.id,
+                    body: { id: listing.id, ...formattedData },
+                  })
           } else {
             result = await listingsService.create({ body: formattedData })
           }
