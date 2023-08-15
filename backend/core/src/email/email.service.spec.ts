@@ -320,6 +320,7 @@ describe("EmailService", () => {
         emailArr,
         "http://localhost:3001"
       )
+
       expect(sendMock).toHaveBeenCalled()
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.to).toEqual(emailArr)
