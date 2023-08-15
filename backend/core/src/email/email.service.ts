@@ -354,10 +354,9 @@ export class EmailService {
     )
   }
 
-  public async requestApproval(user: User, listingInfo: IdName, emails: string[]) {
+  public async requestApproval(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, Language.en))
-    const appUrl = process.env.PARTNERS_PORTAL_URL
     await this.send(
       emails,
       jurisdiction.emailFromAddress,

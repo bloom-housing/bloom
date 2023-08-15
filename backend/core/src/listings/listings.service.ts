@@ -21,6 +21,7 @@ import { ApplicationFlaggedSetsService } from "../application-flagged-sets/appli
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
 import { CachePurgeService } from "./cache-purge.service"
 import { EmailService } from "../email/email.service"
+import { ConfigService } from "@nestjs/config"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -33,7 +34,8 @@ export class ListingsService {
     @Inject(REQUEST) private req: ExpressRequest,
     private readonly afsService: ApplicationFlaggedSetsService,
     private readonly cachePurgeService: CachePurgeService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -215,16 +217,12 @@ export class ListingsService {
   }
 
   async requestApproval(listingData: ListingUpdateDto) {
-    //authroization handled within update
     const result = await this.update(listingData)
-    // if (!results) throw new NotFoundException()
 
-    //email process
     const adminUsers = await this.userRepository
       .createQueryBuilder("user")
       .select(["user.email"])
       .leftJoin("user.roles", "userRoles")
-      //verify this permissioning approach
       .where("userRoles.is_admin = :is_admin", {
         is_admin: true,
       })
@@ -238,7 +236,8 @@ export class ListingsService {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       this.req.user as User,
       { id: listingData.id, name: listingData.name },
-      adminEmails
+      adminEmails,
+      this.configService.get("PARTNERS_PORTAL_URL")
     )
     return result
   }
