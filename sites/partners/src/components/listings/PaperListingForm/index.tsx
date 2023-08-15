@@ -179,16 +179,20 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           const formattedData = await dataPipeline.run()
           let result
           if (editMode) {
-            result =
+            if (
+              process.env.featureListingsApproval &&
               formattedData.status === ListingStatus.pendingReview
-                ? await listingsService.requestApproval({
-                    id: listing.id,
-                    body: { ...formattedData },
-                  })
-                : await listingsService.update({
-                    id: listing.id,
-                    body: { id: listing.id, ...formattedData },
-                  })
+            ) {
+              result = await listingsService.requestApproval({
+                id: listing.id,
+                body: { ...formattedData },
+              })
+            } else {
+              result = await listingsService.update({
+                id: listing.id,
+                body: { id: listing.id, ...formattedData },
+              })
+            }
           } else {
             result = await listingsService.create({ body: formattedData })
           }

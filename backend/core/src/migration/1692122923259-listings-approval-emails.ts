@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class requestApprovalEmail1691486291378 implements MigrationInterface {
-  name = "requestApprovalEmail1691486291378"
+export class listingsApprovalEmails1692122923259 implements MigrationInterface {
+  name = "listingsApprovalEmails1692122923259"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const translations: { id: string; translations: any }[] = await queryRunner.query(`
