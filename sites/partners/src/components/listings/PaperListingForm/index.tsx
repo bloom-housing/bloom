@@ -55,6 +55,7 @@ import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { getListingStatusTag } from "../helpers"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -265,27 +266,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     <>
       <LoadingOverlay isLoading={loading}>
         <>
-          <StatusBar
-            tagStyle={(() => {
-              switch (listing?.status) {
-                case ListingStatus.active:
-                  return AppearanceStyleType.success
-                case ListingStatus.closed:
-                  return AppearanceStyleType.closed
-                case ListingStatus.pendingReview:
-                  return AppearanceStyleType.info
-                case ListingStatus.changesRequested:
-                  return AppearanceStyleType.warning
-                default:
-                  return AppearanceStyleType.primary
-              }
-            })()}
-            tagLabel={
-              listing?.status
-                ? t(`listings.listingStatus.${listing.status}`)
-                : t(`listings.listingStatus.pending`)
-            }
-          />
+          <StatusBar>{getListingStatusTag(listing?.status)}</StatusBar>
 
           <FormProvider {...formMethods}>
             <section className="bg-primary-lighter py-5">

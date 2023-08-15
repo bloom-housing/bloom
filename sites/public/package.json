@@ -28,7 +28,7 @@
     "@bloom-housing/backend-core": "^7.13.0",
     "@bloom-housing/shared-helpers": "^7.7.1",
     "@bloom-housing/ui-components": "12.0.18",
-    "@bloom-housing/ui-seeds": "^1.7.4",
+    "@bloom-housing/ui-seeds": "^1.9.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
