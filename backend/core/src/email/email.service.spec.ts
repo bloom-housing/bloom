@@ -342,11 +342,6 @@ describe("EmailService", () => {
       )
       expect(emailMock.html).toMatch("Review Listing")
       expect(emailMock.html).toMatch(/http:\/\/localhost:3001\/listings\/Uvbk5qurpB2WI9V6WnNdH/)
-
-      // expect(emailMock.html).toMatch(
-      //   /Eligible applicants will be contacted on a first come first serve basis until vacancies are filled./
-      // )
-      expect(emailMock.html).toMatch(/http:\/\/localhost:3001\/listings\/Uvbk5qurpB2WI9V6WnNdH/)
       expect(emailMock.html).toMatch("Thank you,")
       expect(emailMock.html).toMatch("Alameda County Housing Portal")
       expect(emailMock.html).toMatch("Alameda County Housing Portal is a project of the")
