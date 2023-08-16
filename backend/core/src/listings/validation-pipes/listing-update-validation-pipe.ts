@@ -8,6 +8,8 @@ export class ListingUpdateValidationPipe extends ValidationPipe {
     [ListingStatus.closed]: ListingUpdateDto,
     [ListingStatus.pending]: ListingUpdateDto,
     [ListingStatus.active]: ListingPublishedUpdateDto,
+    [ListingStatus.changesRequested]: ListingPublishedUpdateDto,
+    [ListingStatus.pendingReview]: ListingPublishedUpdateDto,
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

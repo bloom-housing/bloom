@@ -54,6 +54,7 @@ import {
   UnitTables,
   getSummariesTable,
   getPdfUrlFromAsset,
+  IMAGE_FALLBACK_URL,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
@@ -542,6 +543,7 @@ export const ListingView = (props: ListingProps) => {
           })}
           modalCloseLabel={t("t.backToListing")}
           modalCloseInContent
+          fallbackImageUrl={IMAGE_FALLBACK_URL}
         />
         <div className="py-3 mx-3 mt-4 flex flex-col items-center md:items-start text-center md:text-left">
           <Heading priority={1} styleType={"largePrimary"} className={"text-black"}>

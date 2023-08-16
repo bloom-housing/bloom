@@ -116,7 +116,7 @@ export default function ApplicationsList() {
         />
         <section className="border-t bg-white">
           <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-end px-5 items-center my-3">
-            <div className="status-bar__status md:pl-4 md:w-3/12">{applicationStatus}</div>
+            <div className="status-bar__status md:pl-6 md:w-3/12">{applicationStatus}</div>
           </div>
         </section>
 
