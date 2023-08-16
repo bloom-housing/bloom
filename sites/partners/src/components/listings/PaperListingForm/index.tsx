@@ -205,7 +205,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
           if (result) {
             setSiteAlertMessage(
-              editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
+              editMode
+                ? t("listings.listingUpdated")
+                : formattedData.status === ListingStatus.pendingReview
+                ? t("listings.approval.submittedForReview")
+                : t("listings.listingSubmitted"),
               "success"
             )
 
