@@ -221,9 +221,6 @@ export class ListingsService {
       .where("userRoles.is_admin = :is_admin", {
         is_admin: true,
       })
-      .orWhere("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
-        is_jurisdictional_admin: true,
-      })
       .getMany()
     const adminEmails: string[] = []
     adminUsers?.forEach((users) => users?.email && adminEmails.push(users.email))
