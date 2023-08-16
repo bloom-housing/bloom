@@ -17,6 +17,7 @@ export class listingsApprovalEmails1692122923259 implements MigrationInterface {
         ...data.t,
         hello: "Hello",
         partnersPortal: "Partners Portal",
+        viewListing: "View Listing",
       }
 
       data.footer = {
@@ -33,6 +34,13 @@ export class listingsApprovalEmails1692122923259 implements MigrationInterface {
         loginToReviewEnd: "and navigate to the listing detail page to review and publish.",
         accessListing: "To access the listing after logging in, please click the link below",
         reviewListing: "Review Listing",
+      }
+
+      data.listingApproved = {
+        header: "New published listing",
+        adminApproved:
+          "The %{listingName} listing has been approved and published by an administrator.",
+        viewListing: "To view the published listing, please click on the link below",
       }
       data = JSON.stringify(data)
       await queryRunner.query(`
