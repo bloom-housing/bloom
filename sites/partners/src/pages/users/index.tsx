@@ -12,6 +12,7 @@ import {
   AlertTypes,
   AppearanceStyleType,
   AlertBox,
+  UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { User } from "@bloom-housing/backend-core/types"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -183,7 +184,7 @@ const Users = () => {
                 {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
-                    icon={!csvExportLoading ? faFileExport : null}
+                    icon={!csvExportLoading ? (faFileExport as UniversalIconType) : null}
                     onClick={() => onExport()}
                     loading={csvExportLoading}
                     dataTestId={"export-users"}

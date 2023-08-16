@@ -218,7 +218,7 @@ export class EmailService {
       genericTranslations: Translation | null,
       jurisdictionalDefaultTranslations: Translation | null
 
-    if (language != Language.en) {
+    if (language && language !== Language.en) {
       if (jurisdiction) {
         jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
           language,

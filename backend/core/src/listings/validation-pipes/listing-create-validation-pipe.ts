@@ -8,6 +8,8 @@ export class ListingCreateValidationPipe extends ValidationPipe {
     [ListingStatus.closed]: ListingCreateDto,
     [ListingStatus.pending]: ListingCreateDto,
     [ListingStatus.active]: ListingPublishedCreateDto,
+    [ListingStatus.changesRequested]: ListingPublishedCreateDto,
+    [ListingStatus.pendingReview]: ListingPublishedCreateDto,
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
