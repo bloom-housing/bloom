@@ -16,6 +16,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { Listing } from "../../listings/entities/listing.entity"
 import { ApplicationMethodType } from "../types/application-method-type-enum"
 import { PaperApplication } from "../../paper-applications/entities/paper-application.entity"
+import { hasHttps } from "../../shared/decorators/hasHttps.decorator"
 
 @Entity({ name: "application_methods" })
 export class ApplicationMethod extends AbstractEntity {
@@ -41,6 +42,7 @@ export class ApplicationMethod extends AbstractEntity {
   @ValidateIf((o) => o.type === ApplicationMethodType.ExternalLink, {
     groups: [ValidationsGroupsEnum.default],
   })
+  @hasHttps({ groups: [ValidationsGroupsEnum.default] })
   @IsUrl({ require_protocol: true }, { groups: [ValidationsGroupsEnum.default] })
   externalReference?: string | null
 
