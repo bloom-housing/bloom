@@ -12,6 +12,7 @@ import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
 import { randomName } from './seed-helpers/word-generator';
 import { randomInt } from 'node:crypto';
 import { applicationFactory } from './seed-helpers/application-factory';
+import { translationFactory } from './seed-helpers/translation-factory';
 
 const listingStatusEnumArray = Object.values(ListingsStatusEnum);
 
@@ -47,6 +48,13 @@ export const devSeeding = async (prismaClient: PrismaClient) => {
   });
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(),
+  });
+  // add jurisdiction specific translations and default ones
+  await prismaClient.translations.create({
+    data: translationFactory(jurisdiction.id, jurisdiction.name),
+  });
+  await prismaClient.translations.create({
+    data: translationFactory(),
   });
   await unitTypeFactoryAll(prismaClient);
   const amiChart = await prismaClient.amiChart.create({

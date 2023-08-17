@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { LanguagesEnum, Translations } from '@prisma/client';
 import { PrismaService } from './prisma.service';
-import { LanguagesEnum } from '@prisma/client';
 import { Listing } from '../dtos/listings/listing.dto';
 import { GoogleTranslateService } from './google-translate.service';
 import * as lodash from 'lodash';
+import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 
 @Injectable()
 export class TranslationService {
@@ -12,27 +13,72 @@ export class TranslationService {
     private readonly googleTranslateService: GoogleTranslateService,
   ) {}
 
+  public async getMergedTranslations(
+    jurisdictionId: string | null,
+    language?: LanguagesEnum,
+  ) {
+    let jurisdictionalTranslations: Promise<Translations | null>,
+      genericTranslations: Promise<Translations | null>,
+      jurisdictionalDefaultTranslations: Promise<Translations | null>;
+
+    if (language && language !== LanguagesEnum.en) {
+      if (jurisdictionId) {
+        jurisdictionalTranslations =
+          this.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+            language,
+            jurisdictionId,
+          );
+      }
+      genericTranslations =
+        this.getTranslationByLanguageAndJurisdictionOrDefaultEn(language, null);
+    }
+
+    if (jurisdictionId) {
+      jurisdictionalDefaultTranslations =
+        this.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          LanguagesEnum.en,
+          jurisdictionId,
+        );
+    }
+
+    const genericDefaultTranslations =
+      this.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        LanguagesEnum.en,
+        null,
+      );
+
+    const [genericDefault, generic, jurisdictionalDefault, jurisdictional] =
+      await Promise.all([
+        genericDefaultTranslations,
+        genericTranslations,
+        jurisdictionalDefaultTranslations,
+        jurisdictionalTranslations,
+      ]);
+    // Deep merge
+    const translations = lodash.merge(
+      genericDefault?.translations,
+      generic?.translations,
+      jurisdictionalDefault?.translations,
+      jurisdictional?.translations,
+    );
+
+    return translations;
+  }
+
   public async getTranslationByLanguageAndJurisdictionOrDefaultEn(
     language: LanguagesEnum,
     jurisdictionId: string | null,
   ) {
-    let translations = await this.prisma.translations.findUnique({
-      where: {
-        jurisdictionId_language: { language, jurisdictionId },
-      },
+    let translations = await this.prisma.translations.findFirst({
+      where: { AND: [{ language: language }, { jurisdictionId }] },
     });
 
-    if (translations === null) {
+    if (translations === null && language !== LanguagesEnum.en) {
       console.warn(
         `Fetching translations for ${language} failed on jurisdiction ${jurisdictionId}, defaulting to english.`,
       );
-      translations = await this.prisma.translations.findUnique({
-        where: {
-          jurisdictionId_language: {
-            language: LanguagesEnum.en,
-            jurisdictionId,
-          },
-        },
+      translations = await this.prisma.translations.findFirst({
+        where: { AND: [{ language: LanguagesEnum.en }, { jurisdictionId }] },
       });
     }
     return translations;

@@ -151,7 +151,7 @@ describe('Testing translations service', () => {
       },
     };
     // first call fails to find value so moves to the fallback
-    prisma.translations.findUnique = jest
+    prisma.translations.findFirst = jest
       .fn()
       .mockResolvedValueOnce(null)
       .mockResolvedValueOnce(translations);
@@ -162,8 +162,8 @@ describe('Testing translations service', () => {
         jurisdictionId,
       );
 
+    expect(prisma.translations.findFirst).toHaveBeenCalledTimes(2);
     expect(result).toEqual(translations);
-    expect(prisma.translations.findUnique).toHaveBeenCalledTimes(2);
   });
 
   it('Should get unique translations by language and jurisdiction', async () => {
@@ -179,7 +179,7 @@ describe('Testing translations service', () => {
         translation2: 'translation 2',
       },
     };
-    prisma.translations.findUnique = jest
+    prisma.translations.findFirst = jest
       .fn()
       .mockResolvedValueOnce(translations);
 
@@ -190,7 +190,7 @@ describe('Testing translations service', () => {
       );
 
     expect(result).toEqual(translations);
-    expect(prisma.translations.findUnique).toHaveBeenCalledTimes(1);
+    expect(prisma.translations.findFirst).toHaveBeenCalledTimes(1);
   });
 
   it('Should fetch translations and translate listing if not in db', async () => {
@@ -224,6 +224,69 @@ describe('Testing translations service', () => {
       1,
     );
     validateTranslatedFields(result);
+  });
+
+  it('Should get merged translations for just english and null jurisdiction', async () => {
+    const nullJurisdiction = {
+      value: 'null jurisdiction',
+      extraValue: 'extra value',
+    };
+    prisma.translations.findFirst = jest
+      .fn()
+      .mockResolvedValueOnce({ translations: nullJurisdiction });
+    const result = await service.getMergedTranslations(null);
+    expect(prisma.translations.findFirst).toBeCalledTimes(1);
+    expect(result).toEqual(nullJurisdiction);
+  });
+  it('Should get merged translations for jurisdiction in english', async () => {
+    const nullJurisdiction = {
+      value: 'null jurisdiction',
+      extraValue: 'extra value',
+    };
+    const englishJurisdictionValue = {
+      value: 'jurisdiction english',
+    };
+    prisma.translations.findFirst = jest
+      .fn()
+      .mockResolvedValueOnce({ translations: englishJurisdictionValue })
+      .mockResolvedValueOnce({ translations: nullJurisdiction });
+    const result = await service.getMergedTranslations(randomUUID());
+    expect(prisma.translations.findFirst).toBeCalledTimes(2);
+    expect(result).toEqual({
+      value: 'jurisdiction english',
+      extraValue: 'extra value',
+    });
+  });
+  it('Should get merged translations for just non-english and active jurisdiction', async () => {
+    const nullJurisdiction = {
+      value: 'null jurisdiction',
+      extraValue: 'extra value',
+    };
+    const englishJurisdictionValue = {
+      value: 'jurisdiction english',
+    };
+    const spanishJurisdictionValue = {
+      value: 'jurisdiction spanish',
+    };
+    const spanishNullValue = {
+      value: 'null jurisdiction',
+      extraValue: 'extra spanish',
+    };
+    prisma.translations.findFirst = jest
+      .fn()
+      .mockResolvedValueOnce({ translations: spanishJurisdictionValue })
+      .mockResolvedValueOnce({ translations: spanishNullValue })
+      .mockResolvedValueOnce({ translations: englishJurisdictionValue })
+      .mockResolvedValueOnce({ translations: nullJurisdiction });
+    const result = await service.getMergedTranslations(
+      randomUUID(),
+      LanguagesEnum.es,
+    );
+    expect(prisma.translations.findFirst).toBeCalledTimes(4);
+    expect(result).toEqual({
+      value: 'jurisdiction spanish',
+      extraValue: 'extra spanish',
+    });
   });
 });
 
