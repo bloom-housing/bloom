@@ -13,7 +13,6 @@ export const userFactory = async (optionalParams?: {
     `${randomNoun().toLowerCase()}@${randomAdjective().toLowerCase()}.com`,
   firstName: optionalParams?.firstName || 'First',
   lastName: optionalParams?.lastName || 'Last',
-  // TODO: update with passwordService hashing when that is completed
   passwordHash: await passwordToHash('abcdef'),
   userRoles: {
     create: {
