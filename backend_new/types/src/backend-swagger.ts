@@ -2353,7 +2353,7 @@ export interface Listing {
   assets: Asset[];
 
   /**  */
-  events: Asset[];
+  listingEvents: Asset[];
 
   /**  */
   listingsBuildingAddress: Address;
@@ -2622,6 +2622,79 @@ export interface ListingEventCreate {
   assets?: AssetCreate;
 }
 
+export interface ListingFeaturesCreate {
+  /**  */
+  elevator?: boolean;
+
+  /**  */
+  wheelchairRamp?: boolean;
+
+  /**  */
+  serviceAnimalsAllowed?: boolean;
+
+  /**  */
+  accessibleParking?: boolean;
+
+  /**  */
+  parkingOnSite?: boolean;
+
+  /**  */
+  inUnitWasherDryer?: boolean;
+
+  /**  */
+  laundryInBuilding?: boolean;
+
+  /**  */
+  barrierFreeEntrance?: boolean;
+
+  /**  */
+  rollInShower?: boolean;
+
+  /**  */
+  grabBars?: boolean;
+
+  /**  */
+  heatingInUnit?: boolean;
+
+  /**  */
+  acInUnit?: boolean;
+
+  /**  */
+  hearing?: boolean;
+
+  /**  */
+  visual?: boolean;
+
+  /**  */
+  mobility?: boolean;
+}
+
+export interface ListingUtilitiesCreate {
+  /**  */
+  water?: boolean;
+
+  /**  */
+  gas?: boolean;
+
+  /**  */
+  trash?: boolean;
+
+  /**  */
+  sewer?: boolean;
+
+  /**  */
+  electricity?: boolean;
+
+  /**  */
+  cable?: boolean;
+
+  /**  */
+  phone?: boolean;
+
+  /**  */
+  internet?: boolean;
+}
+
 export interface ListingCreate {
   /**  */
   additionalApplicationSubmissionNotes?: string;
@@ -2780,9 +2853,6 @@ export interface ListingCreate {
   reviewOrderType?: ReviewOrderTypeEnum;
 
   /**  */
-  applicationConfig?: object;
-
-  /**  */
   displayWaitlistSize: boolean;
 
   /**  */
@@ -2811,12 +2881,6 @@ export interface ListingCreate {
 
   /**  */
   reservedCommunityTypes?: IdDTO;
-
-  /**  */
-  listingFeatures?: ListingFeatures;
-
-  /**  */
-  listingUtilities?: ListingUtilities;
 
   /**  */
   listingMultiselectQuestions?: IdDTO[];
@@ -2858,7 +2922,13 @@ export interface ListingCreate {
   listingsResult?: AssetCreate;
 
   /**  */
-  events: ListingEventCreate[];
+  listingEvents: ListingEventCreate[];
+
+  /**  */
+  listingFeatures?: ListingFeaturesCreate;
+
+  /**  */
+  listingUtilities?: ListingUtilitiesCreate;
 }
 
 export interface ListingUpdate {
@@ -3022,9 +3092,6 @@ export interface ListingUpdate {
   reviewOrderType?: ReviewOrderTypeEnum;
 
   /**  */
-  applicationConfig?: object;
-
-  /**  */
   displayWaitlistSize: boolean;
 
   /**  */
@@ -3053,12 +3120,6 @@ export interface ListingUpdate {
 
   /**  */
   reservedCommunityTypes?: IdDTO;
-
-  /**  */
-  listingFeatures?: ListingFeatures;
-
-  /**  */
-  listingUtilities?: ListingUtilities;
 
   /**  */
   listingMultiselectQuestions?: IdDTO[];
@@ -3100,7 +3161,13 @@ export interface ListingUpdate {
   listingsResult?: AssetCreate;
 
   /**  */
-  events: ListingEventCreate[];
+  listingEvents: ListingEventCreate[];
+
+  /**  */
+  listingFeatures?: ListingFeaturesCreate;
+
+  /**  */
+  listingUtilities?: ListingUtilitiesCreate;
 }
 
 export interface AmiChartCreate {
