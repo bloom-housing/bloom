@@ -7,12 +7,12 @@ export class MinMax {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ required: true })
   min: number;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ required: true })
   max: number;
 }

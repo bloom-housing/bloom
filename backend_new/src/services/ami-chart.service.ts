@@ -7,7 +7,7 @@ import { AmiChartUpdate } from '../dtos/ami-charts/ami-chart-update.dto';
 import { AmiChartQueryParams } from '../dtos/ami-charts/ami-chart-query-params.dto';
 import { mapTo } from '../utilities/mapTo';
 import { SuccessDTO } from '../dtos/shared/success.dto';
-import { AmiChartItem } from '../dtos/units/ami-chart-item-get.dto';
+import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
 
 /*
   this is the service for ami charts

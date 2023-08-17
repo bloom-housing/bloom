@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { LanguagesEnum } from '@prisma/client';
-import { ListingGet } from '../dtos/listings/listing-get.dto';
+import { Listing } from '../dtos/listings/listing.dto';
 import { GoogleTranslateService } from './google-translate.service';
 import * as lodash from 'lodash';
 
@@ -38,7 +38,7 @@ export class TranslationService {
     return translations;
   }
 
-  public async translateListing(listing: ListingGet, language: LanguagesEnum) {
+  public async translateListing(listing: Listing, language: LanguagesEnum) {
     if (!this.googleTranslateService.isConfigured()) {
       console.warn(
         'listing translation requested, but google translate service is not configured',
@@ -67,9 +67,11 @@ export class TranslationService {
       unitAmenities: listing.unitAmenities,
     };
 
-    listing.events?.forEach((_, index) => {
-      pathsToFilter[`events[${index}].note`] = listing.events[index].note;
-      pathsToFilter[`events[${index}].label`] = listing.events[index].label;
+    listing.listingEvents?.forEach((_, index) => {
+      pathsToFilter[`listingEvents[${index}].note`] =
+        listing.listingEvents[index].note;
+      pathsToFilter[`listingEvents[${index}].label`] =
+        listing.listingEvents[index].label;
     });
 
     if (listing.listingMultiselectQuestions) {
@@ -135,7 +137,7 @@ export class TranslationService {
   }
 
   private async getPersistedTranslatedValues(
-    listing: ListingGet,
+    listing: Listing,
     language: LanguagesEnum,
   ) {
     return this.prisma.generatedListingTranslations.findFirst({
@@ -144,7 +146,7 @@ export class TranslationService {
   }
 
   private async persistNewTranslatedValues(
-    listing: ListingGet,
+    listing: Listing,
     language: LanguagesEnum,
     translatedValues: any,
   ) {

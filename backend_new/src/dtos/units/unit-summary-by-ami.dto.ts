@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { IsDefined, IsString, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { UnitSummary } from './unit-summary-get.dto';
+import { UnitSummary } from './unit-summary.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UnitSummaryByAMI {

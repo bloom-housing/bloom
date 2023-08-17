@@ -14,12 +14,13 @@ export class UnitType extends AbstractDTO {
   @ApiProperty({
     enum: UnitTypeEnum,
     enumName: 'UnitTypeEnum',
+    required: true,
   })
   name: UnitTypeEnum;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ required: true })
   numBedrooms: number;
 }

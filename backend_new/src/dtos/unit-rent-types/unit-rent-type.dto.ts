@@ -14,6 +14,7 @@ export class UnitRentType extends AbstractDTO {
   @ApiProperty({
     enum: UnitRentTypeEnum,
     enumName: 'UnitRentTypeEnum',
+    required: true,
   })
   name: UnitRentTypeEnum;
 }

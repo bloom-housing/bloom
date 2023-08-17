@@ -2,7 +2,7 @@ import { IsDefined, IsString, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { AmiChartItem } from '../units/ami-chart-item-get.dto';
+import { AmiChartItem } from '../units/ami-chart-item.dto';
 import { IdDTO } from '../shared/id.dto';
 import { ApiProperty } from '@nestjs/swagger';
 

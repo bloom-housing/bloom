@@ -1,11 +1,11 @@
 import { AmiChart } from '../../../src/dtos/ami-charts/ami-chart.dto';
-import { UnitAmiChartOverride } from '../../../src/dtos/units/ami-chart-override-get.dto';
+import { UnitAmiChartOverride } from '../../../src/dtos/units/ami-chart-override.dto';
 import {
   generateHmiData,
   mergeAmiChartWithOverrides,
 } from '../../../src/utilities/unit-utilities';
-import { Unit } from '../../../src/dtos/units/unit-get.dto';
-import { AmiChartItem } from '../../../src/dtos/units/ami-chart-item-get.dto';
+import { Unit } from '../../../src/dtos/units/unit.dto';
+import { AmiChartItem } from '../../../src/dtos/units/ami-chart-item.dto';
 
 const defaultValues = {
   createdAt: new Date(),

@@ -20,7 +20,6 @@ import { OrderQueryParamValidator } from '../../utilities/order-by-validator';
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
   @ApiProperty({
-    name: 'filter',
     required: false,
     type: [String],
     items: {
@@ -48,8 +47,8 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiProperty({
-    name: 'orderBy',
     required: false,
+    enum: ListingOrderByKeys,
     enumName: 'ListingOrderByKeys',
     example: '["updatedAt"]',
     isArray: true,
@@ -69,6 +68,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
   @ApiProperty({
     enum: OrderByEnum,
+    enumName: 'OrderByEnum',
     example: '["desc"]',
     default: '["desc"]',
     required: false,
@@ -84,7 +84,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiProperty({
-    type: String,
     example: 'search',
     required: false,
   })

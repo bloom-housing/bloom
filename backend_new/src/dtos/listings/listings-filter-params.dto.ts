@@ -9,7 +9,6 @@ import { ListingsStatusEnum } from '@prisma/client';
 export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
-    type: String,
     example: 'Coliseum',
     required: false,
   })
@@ -18,7 +17,8 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    enum: Object.keys(ListingsStatusEnum),
+    enum: ListingsStatusEnum,
+    enumName: 'ListingStatusEnum',
     example: 'active',
     required: false,
   })
@@ -27,7 +27,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: String,
     example: 'Fox Creek',
     required: false,
   })
@@ -36,7 +35,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: Number,
     example: '3',
     required: false,
   })
@@ -45,7 +43,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: String,
     example: '48211',
     required: false,
   })
@@ -53,7 +50,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: String,
     example: 'FAB1A3C6-965E-4054-9A48-A282E92E9426',
     required: false,
   })
@@ -62,7 +58,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: String,
     example: 'bab6cb4f-7a5a-4ee5-b327-0c2508807780',
     required: false,
   })

@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { InputType } from '../../enums/shared/input-type-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address-get.dto';
+import { Address } from '../addresses/address.dto';
 
 class FormMetadataExtraData {
   @Expose()

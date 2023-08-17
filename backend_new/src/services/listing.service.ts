@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { PrismaService } from './prisma.service';
-import { LanguagesEnum, Prisma } from '@prisma/client';
+import {
+  LanguagesEnum,
+  ListingsStatusEnum,
+  Prisma,
+  ReviewOrderTypeEnum,
+} from '@prisma/client';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import {
   buildPaginationMetaInfo,
@@ -11,7 +17,7 @@ import { buildOrderBy } from '../utilities/build-order-by';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { buildFilter } from '../utilities/build-filter';
-import { ListingGet } from '../dtos/listings/listing-get.dto';
+import { Listing } from '../dtos/listings/listing.dto';
 import { mapTo } from '../utilities/mapTo';
 import {
   summarizeUnitsByTypeAndRent,
@@ -20,6 +26,10 @@ import {
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
 import { ListingViews } from '../enums/listings/view-enum';
 import { TranslationService } from './translation.service';
+import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { ListingUpdate } from '../dtos/listings/listing-update.dto';
+import { firstValueFrom } from 'rxjs';
 
 export type getListingsArgs = {
   skip: number;
@@ -115,6 +125,7 @@ export class ListingService {
   constructor(
     private prisma: PrismaService,
     private translationService: TranslationService,
+    private httpService: HttpService,
   ) {}
 
   /*
@@ -123,7 +134,7 @@ export class ListingService {
     it will return both the set of listings, and some meta information to help with pagination
   */
   async list(params: ListingsQueryParams): Promise<{
-    items: ListingGet[];
+    items: Listing[];
     meta: {
       currentPage: number;
       itemCount: number;
@@ -146,7 +157,7 @@ export class ListingService {
       where: whereClause,
     });
 
-    const listings = mapTo(ListingGet, listingsRaw);
+    const listings = mapTo(Listing, listingsRaw);
 
     listings.forEach((listing) => {
       if (Array.isArray(listing.units) && listing.units.length > 0) {
@@ -300,21 +311,10 @@ export class ListingService {
     listingId: string,
     lang: LanguagesEnum = LanguagesEnum.en,
     view: ListingViews = ListingViews.full,
-  ): Promise<ListingGet> {
-    const listingRaw = await this.prisma.listings.findFirst({
-      include: views[view],
-      where: {
-        id: {
-          equals: listingId,
-        },
-      },
-    });
+  ): Promise<Listing> {
+    const listingRaw = await this.findOrThrow(listingId, view);
 
-    let result = mapTo(ListingGet, listingRaw);
-
-    if (!result) {
-      throw new NotFoundException();
-    }
+    let result = mapTo(Listing, listingRaw);
 
     if (lang !== LanguagesEnum.en) {
       result = await this.translationService.translateListing(result, lang);
@@ -325,9 +325,598 @@ export class ListingService {
   }
 
   /*
+    creates a listing
+  */
+  async create(dto: ListingCreate): Promise<Listing> {
+    // TODO: perms
+    const rawListing = await this.prisma.listings.create({
+      include: views.details,
+      data: {
+        ...dto,
+        assets: dto.assets
+          ? {
+              create: dto.assets.map((asset) => ({
+                fileId: asset.fileId,
+                label: asset.label,
+              })),
+            }
+          : undefined,
+        applicationMethods: dto.applicationMethods
+          ? {
+              create: dto.applicationMethods.map((applicationMethod) => ({
+                ...applicationMethod,
+                paperApplications: applicationMethod.paperApplications
+                  ? {
+                      create: applicationMethod.paperApplications.map(
+                        (paperApplication) => ({
+                          ...paperApplication,
+                          assets: {
+                            create: {
+                              ...paperApplication.assets,
+                            },
+                          },
+                        }),
+                      ),
+                    }
+                  : undefined,
+              })),
+            }
+          : undefined,
+        listingEvents: dto.listingEvents
+          ? {
+              create: dto.listingEvents.map((event) => ({
+                type: event.type,
+                startDate: event.startDate,
+                startTime: event.startTime,
+                endTime: event.endTime,
+                url: event.url,
+                note: event.note,
+                label: event.label,
+                assets: {
+                  create: {
+                    ...event.assets,
+                  },
+                },
+              })),
+            }
+          : undefined,
+        listingImages: dto.listingImages
+          ? {
+              create: dto.listingImages.map((image) => ({
+                assets: {
+                  create: {
+                    ...image.assets,
+                  },
+                },
+                ordinal: image.ordinal,
+              })),
+            }
+          : undefined,
+        listingMultiselectQuestions: dto.listingMultiselectQuestions
+          ? {
+              create: dto.listingMultiselectQuestions.map(
+                (multiselectQuestion) => ({
+                  ordinal: multiselectQuestion.ordinal,
+                  multiselectQuestions: {
+                    connect: {
+                      id: multiselectQuestion.id,
+                    },
+                  },
+                }),
+              ),
+            }
+          : undefined,
+        listingsApplicationDropOffAddress: dto.listingsApplicationDropOffAddress
+          ? {
+              create: {
+                ...dto.listingsApplicationDropOffAddress,
+              },
+            }
+          : undefined,
+        reservedCommunityTypes: dto.reservedCommunityTypes
+          ? {
+              connect: {
+                id: dto.reservedCommunityTypes.id,
+              },
+            }
+          : undefined,
+        listingsBuildingSelectionCriteriaFile:
+          dto.listingsBuildingSelectionCriteriaFile
+            ? {
+                create: {
+                  ...dto.listingsBuildingSelectionCriteriaFile,
+                },
+              }
+            : undefined,
+        listingUtilities: dto.listingUtilities
+          ? {
+              create: {
+                ...dto.listingUtilities,
+              },
+            }
+          : undefined,
+        listingsApplicationMailingAddress: dto.listingsApplicationMailingAddress
+          ? {
+              create: {
+                ...dto.listingsApplicationMailingAddress,
+              },
+            }
+          : undefined,
+        listingsLeasingAgentAddress: dto.listingsLeasingAgentAddress
+          ? {
+              create: {
+                ...dto.listingsLeasingAgentAddress,
+              },
+            }
+          : undefined,
+        listingFeatures: dto.listingFeatures
+          ? {
+              create: {
+                ...dto.listingFeatures,
+              },
+            }
+          : undefined,
+        jurisdictions: dto.jurisdictions
+          ? {
+              connect: {
+                id: dto.jurisdictions.id,
+              },
+            }
+          : undefined,
+        listingsApplicationPickUpAddress: dto.listingsApplicationPickUpAddress
+          ? {
+              create: {
+                ...dto.listingsApplicationPickUpAddress,
+              },
+            }
+          : undefined,
+        listingsBuildingAddress: dto.listingsBuildingAddress
+          ? {
+              create: {
+                ...dto.listingsBuildingAddress,
+              },
+            }
+          : undefined,
+        units: dto.units
+          ? {
+              create: dto.units.map((unit) => ({
+                amiPercentage: unit.amiPercentage,
+                annualIncomeMin: unit.annualIncomeMin,
+                monthlyIncomeMin: unit.monthlyIncomeMin,
+                floor: unit.floor,
+                annualIncomeMax: unit.annualIncomeMax,
+                maxOccupancy: unit.maxOccupancy,
+                minOccupancy: unit.minOccupancy,
+                monthlyRent: unit.monthlyRent,
+                numBathrooms: unit.numBathrooms,
+                numBedrooms: unit.numBedrooms,
+                number: unit.number,
+                sqFeet: unit.sqFeet,
+                monthlyRentAsPercentOfIncome: unit.monthlyRentAsPercentOfIncome,
+                bmrProgramChart: unit.bmrProgramChart,
+                unitTypes: unit.unitTypes
+                  ? {
+                      connect: {
+                        id: unit.unitTypes.id,
+                      },
+                    }
+                  : undefined,
+                amiChart: unit.amiChart
+                  ? {
+                      connect: {
+                        id: unit.amiChart.id,
+                      },
+                    }
+                  : undefined,
+                unitAmiChartOverrides: unit.unitAmiChartOverrides
+                  ? {
+                      create: {
+                        items: unit.unitAmiChartOverrides,
+                      },
+                    }
+                  : undefined,
+                unitAccessibilityPriorityTypes:
+                  unit.unitAccessibilityPriorityTypes
+                    ? {
+                        connect: {
+                          id: unit.unitAccessibilityPriorityTypes.id,
+                        },
+                      }
+                    : undefined,
+                unitRentTypes: unit.unitRentTypes
+                  ? {
+                      connect: {
+                        id: unit.unitRentTypes.id,
+                      },
+                    }
+                  : undefined,
+              })),
+            }
+          : undefined,
+        unitsSummary: dto.unitsSummary
+          ? {
+              create: dto.unitsSummary.map((unitSummary) => ({
+                ...unitSummary,
+                unitTypes: unitSummary.unitTypes
+                  ? {
+                      connect: {
+                        id: unitSummary.unitTypes.id,
+                      },
+                    }
+                  : undefined,
+                unitAccessibilityPriorityTypes:
+                  unitSummary.unitAccessibilityPriorityTypes
+                    ? {
+                        connect: {
+                          id: unitSummary.unitAccessibilityPriorityTypes.id,
+                        },
+                      }
+                    : undefined,
+              })),
+            }
+          : undefined,
+        listingsResult: dto.listingsResult
+          ? {
+              create: {
+                ...dto.listingsResult,
+              },
+            }
+          : undefined,
+      },
+    });
+
+    return mapTo(Listing, rawListing);
+  }
+
+  /*
+    deletes a listing
+  */
+  async delete(id: string): Promise<SuccessDTO> {
+    const storedListing = await this.findOrThrow(id);
+
+    // TODO: auth
+
+    await this.prisma.listings.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      success: true,
+    } as SuccessDTO;
+  }
+
+  /*
+    This will either find a listing or throw an error
+    a listing view can be provided which will add the joins to produce that view correctly
+  */
+  async findOrThrow(id: string, view?: ListingViews) {
+    const listing = await this.prisma.listings.findUnique({
+      include: view ? views[view] : undefined,
+      where: {
+        id,
+      },
+    });
+
+    if (!listing) {
+      throw new NotFoundException(
+        `listingId ${id} was requested but not found`,
+      );
+    }
+    return listing;
+  }
+
+  /*
+    update a listing
+  */
+  async update(dto: ListingUpdate): Promise<Listing> {
+    const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
+
+    // TODO: auth work
+
+    dto.unitsAvailable =
+      dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
+        ? dto.units.length
+        : 0;
+
+    if (
+      storedListing.status === ListingsStatusEnum.active &&
+      dto.status === ListingsStatusEnum.closed
+    ) {
+      // TODO: afs process
+    }
+
+    const rawListing = await this.prisma.listings.update({
+      data: {
+        ...dto,
+        id: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+        assets: dto.assets
+          ? {
+              create: dto.assets.map((asset) => ({
+                ...asset,
+              })),
+            }
+          : undefined,
+        applicationMethods: dto.applicationMethods
+          ? {
+              create: dto.applicationMethods.map((applicationMethod) => ({
+                ...applicationMethod,
+                paperApplications: applicationMethod.paperApplications
+                  ? {
+                      create: applicationMethod.paperApplications.map(
+                        (paperApplication) => ({
+                          ...paperApplication,
+                          assets: {
+                            create: {
+                              ...paperApplication.assets,
+                            },
+                          },
+                        }),
+                      ),
+                    }
+                  : undefined,
+              })),
+            }
+          : undefined,
+        listingEvents: dto.listingEvents
+          ? {
+              create: dto.listingEvents.map((event) => ({
+                type: event.type,
+                startDate: event.startDate,
+                startTime: event.startTime,
+                endTime: event.endTime,
+                url: event.url,
+                note: event.note,
+                label: event.label,
+                assets: {
+                  create: {
+                    ...event.assets,
+                  },
+                },
+              })),
+            }
+          : undefined,
+        listingImages: dto.listingImages
+          ? {
+              create: dto.listingImages.map((image) => ({
+                assets: {
+                  create: {
+                    ...image.assets,
+                  },
+                },
+                ordinal: image.ordinal,
+              })),
+            }
+          : undefined,
+        listingMultiselectQuestions: dto.listingMultiselectQuestions
+          ? {
+              create: dto.listingMultiselectQuestions.map(
+                (multiselectQuestion) => ({
+                  ordinal: multiselectQuestion.ordinal,
+                  multiselectQuestions: {
+                    connect: {
+                      id: multiselectQuestion.id,
+                    },
+                  },
+                }),
+              ),
+            }
+          : undefined,
+        listingsApplicationDropOffAddress: dto.listingsApplicationDropOffAddress
+          ? {
+              create: {
+                ...dto.listingsApplicationDropOffAddress,
+              },
+            }
+          : undefined,
+        reservedCommunityTypes: dto.reservedCommunityTypes
+          ? {
+              connect: {
+                id: dto.reservedCommunityTypes.id,
+              },
+            }
+          : undefined,
+        listingsBuildingSelectionCriteriaFile:
+          dto.listingsBuildingSelectionCriteriaFile
+            ? {
+                create: {
+                  ...dto.listingsBuildingSelectionCriteriaFile,
+                },
+              }
+            : undefined,
+        listingUtilities: dto.listingUtilities
+          ? {
+              create: {
+                ...dto.listingUtilities,
+              },
+            }
+          : undefined,
+        listingsApplicationMailingAddress: dto.listingsApplicationMailingAddress
+          ? {
+              create: {
+                ...dto.listingsApplicationMailingAddress,
+              },
+            }
+          : undefined,
+        listingsLeasingAgentAddress: dto.listingsLeasingAgentAddress
+          ? {
+              create: {
+                ...dto.listingsLeasingAgentAddress,
+              },
+            }
+          : undefined,
+        listingFeatures: dto.listingFeatures
+          ? {
+              create: {
+                ...dto.listingFeatures,
+              },
+            }
+          : undefined,
+        jurisdictions: dto.jurisdictions
+          ? {
+              connect: {
+                id: dto.jurisdictions.id,
+              },
+            }
+          : undefined,
+        listingsApplicationPickUpAddress: dto.listingsApplicationPickUpAddress
+          ? {
+              create: {
+                ...dto.listingsApplicationPickUpAddress,
+              },
+            }
+          : undefined,
+        listingsBuildingAddress: dto.listingsBuildingAddress
+          ? {
+              create: {
+                ...dto.listingsBuildingAddress,
+              },
+            }
+          : undefined,
+        units: dto.units
+          ? {
+              create: dto.units.map((unit) => ({
+                amiPercentage: unit.amiPercentage,
+                annualIncomeMin: unit.annualIncomeMin,
+                monthlyIncomeMin: unit.monthlyIncomeMin,
+                floor: unit.floor,
+                annualIncomeMax: unit.annualIncomeMax,
+                maxOccupancy: unit.maxOccupancy,
+                minOccupancy: unit.minOccupancy,
+                monthlyRent: unit.monthlyRent,
+                numBathrooms: unit.numBathrooms,
+                numBedrooms: unit.numBedrooms,
+                number: unit.number,
+                sqFeet: unit.sqFeet,
+                monthlyRentAsPercentOfIncome: unit.monthlyRentAsPercentOfIncome,
+                bmrProgramChart: unit.bmrProgramChart,
+                unitTypes: unit.unitTypes
+                  ? {
+                      connect: {
+                        id: unit.unitTypes.id,
+                      },
+                    }
+                  : undefined,
+                amiChart: unit.amiChart
+                  ? {
+                      connect: {
+                        id: unit.amiChart.id,
+                      },
+                    }
+                  : undefined,
+                unitAmiChartOverrides: unit.unitAmiChartOverrides
+                  ? {
+                      create: {
+                        items: unit.unitAmiChartOverrides,
+                      },
+                    }
+                  : undefined,
+                unitAccessibilityPriorityTypes:
+                  unit.unitAccessibilityPriorityTypes
+                    ? {
+                        connect: {
+                          id: unit.unitAccessibilityPriorityTypes.id,
+                        },
+                      }
+                    : undefined,
+                unitRentTypes: unit.unitRentTypes
+                  ? {
+                      connect: {
+                        id: unit.unitRentTypes.id,
+                      },
+                    }
+                  : undefined,
+              })),
+            }
+          : undefined,
+        unitsSummary: dto.unitsSummary
+          ? {
+              create: dto.unitsSummary.map((unitSummary) => ({
+                ...unitSummary,
+                unitTypes: unitSummary.unitTypes
+                  ? {
+                      connect: {
+                        id: unitSummary.unitTypes.id,
+                      },
+                    }
+                  : undefined,
+                unitAccessibilityPriorityTypes:
+                  unitSummary.unitAccessibilityPriorityTypes
+                    ? {
+                        connect: {
+                          id: unitSummary.unitAccessibilityPriorityTypes.id,
+                        },
+                      }
+                    : undefined,
+              })),
+            }
+          : undefined,
+        publishedAt:
+          storedListing.status !== ListingsStatusEnum.active &&
+          dto.status === ListingsStatusEnum.active
+            ? new Date()
+            : storedListing.publishedAt,
+        closedAt:
+          storedListing.status !== ListingsStatusEnum.closed &&
+          dto.status === ListingsStatusEnum.closed
+            ? new Date()
+            : storedListing.closedAt,
+        listingsResult: dto.listingsResult
+          ? {
+              create: {
+                ...dto.listingsResult,
+              },
+            }
+          : undefined,
+      },
+      include: views.details,
+      where: {
+        id: dto.id,
+      },
+    });
+
+    await this.cachePurge(storedListing.status, dto.status, rawListing.id);
+
+    return mapTo(Listing, rawListing);
+  }
+
+  async cachePurge(
+    storedListingStatus: ListingsStatusEnum,
+    incomingListingStatus: ListingsStatusEnum,
+    savedResponseId: string,
+  ): Promise<void> {
+    if (!process.env.PROXY_URL) {
+      return;
+    }
+    const shouldPurgeAllListings =
+      incomingListingStatus !== ListingsStatusEnum.pending ||
+      storedListingStatus === ListingsStatusEnum.active;
+    await firstValueFrom(
+      this.httpService.request({
+        baseURL: process.env.PROXY_URL,
+        method: 'PURGE',
+        url: shouldPurgeAllListings
+          ? '/listings?*'
+          : `/listings/${savedResponseId}*`,
+      }),
+      undefined,
+    ).catch((e) =>
+      console.error(
+        shouldPurgeAllListings
+          ? 'purge all listings error = '
+          : `purge listing ${savedResponseId} error = `,
+        e,
+      ),
+    );
+  }
+
+  /*
     this builds the units summarized for the list()
   */
-  addUnitsSummarized = async (listing: ListingGet) => {
+  addUnitsSummarized = async (listing: Listing) => {
     if (Array.isArray(listing.units) && listing.units.length > 0) {
       const amiChartsRaw = await this.prisma.amiChart.findMany({
         where: {
@@ -361,6 +950,6 @@ export class ListingService {
         },
       },
     });
-    return mapTo(ListingGet, listingsRaw);
+    return mapTo(Listing, listingsRaw);
   };
 }

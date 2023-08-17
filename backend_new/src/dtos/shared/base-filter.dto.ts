@@ -19,6 +19,7 @@ export class BaseFilter {
     enum: Object.keys(Compare),
     example: '=',
     default: Compare['='],
+    required: true,
   })
   @IsEnum(Compare, { groups: [ValidationsGroupsEnum.default] })
   $comparison: Compare;

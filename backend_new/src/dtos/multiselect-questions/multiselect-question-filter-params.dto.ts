@@ -9,7 +9,6 @@ import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 export class MultiselectQuestionFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
-    type: String,
     example: 'uuid',
     required: false,
   })
@@ -19,7 +18,8 @@ export class MultiselectQuestionFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: String,
+    enum: MultiselectQuestionsApplicationSectionEnum,
+    enumName: 'MultiselectQuestionsApplicationSectionEnum',
     example: 'preferences',
     required: false,
   })
