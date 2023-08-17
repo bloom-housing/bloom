@@ -127,7 +127,7 @@ export class UserController {
   })
   @ApiOkResponse({ type: SuccessDTO })
   async confirmation(@Body() dto: EmailAndAppUrl): Promise<SuccessDTO> {
-    return await this.userService.resendConfirmation(dto, false);
+    return await this.userService.resendConfirmation(dto, true);
   }
 
   @Post('resend-partner-confirmation')
@@ -139,7 +139,7 @@ export class UserController {
   async requestConfirmationResend(
     @Body() dto: EmailAndAppUrl,
   ): Promise<SuccessDTO> {
-    return await this.userService.resendConfirmation(dto, true);
+    return await this.userService.resendConfirmation(dto, false);
   }
 
   @Post('is-confirmation-token-valid')
