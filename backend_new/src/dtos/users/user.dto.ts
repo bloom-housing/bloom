@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
+  ArrayMinSize,
+  IsArray,
   IsBoolean,
   IsDate,
   IsEmail,
@@ -9,6 +11,7 @@ import {
   IsPhoneNumber,
   IsString,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -71,8 +74,8 @@ export class User extends AbstractDTO {
 
   @Expose()
   @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, isArray: true })
-  listings: IdDTO[];
+  @ApiProperty({ type: IdDTO, isArray: true, nullable: true })
+  listings?: IdDTO[];
 
   @Expose()
   @Type(() => UserRole)
@@ -90,6 +93,9 @@ export class User extends AbstractDTO {
 
   @Expose()
   @Type(() => IdDTO)
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ApiProperty({ type: IdDTO, isArray: true })
   jurisdictions: IdDTO[];
 

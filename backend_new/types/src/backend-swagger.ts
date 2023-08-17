@@ -1418,6 +1418,63 @@ export class UserService {
     });
   }
   /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Creates a public only user
+   */
+  create(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean;
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+      configs.params = { noWelcomeEmail: params['noWelcomeEmail'] };
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Get a paginated set of users
    */
   list(
@@ -1476,6 +1533,168 @@ export class UserService {
       );
 
       /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/{id}';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: EmailAndAppUrl;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/forgot-password';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Invite partner user
+   */
+  invite(
+    params: {
+      /** requestBody */
+      body?: UserInvite;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/invite';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Resend public confirmation
+   */
+  resendConfirmation(
+    params: {
+      /** requestBody */
+      body?: EmailAndAppUrl;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/resend-confirmation';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Resend partner confirmation
+   */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: EmailAndAppUrl;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/resend-partner-confirmation';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Verifies token is valid
+   */
+  isUserConfirmationTokenValid(
+    params: {
+      /** requestBody */
+      body?: ConfirmationRequest;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/is-confirmation-token-valid';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
 
       axios(configs, resolve, reject);
     });
@@ -3753,16 +3972,15 @@ export interface CreatePresignedUploadMetadataResponse {
   signature: string;
 }
 
+export interface EmailAndAppUrl {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
 export interface UserRole {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
   /**  */
   isAdmin?: boolean;
 
@@ -3847,6 +4065,131 @@ export interface User {
 export interface PaginatedUser {
   /**  */
   items: User[];
+}
+
+export interface UserUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob?: Date;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  listings: IdDTO[];
+
+  /**  */
+  userRoles?: UserRole;
+
+  /**  */
+  language?: LanguagesEnum;
+
+  /**  */
+  jurisdictions: IdDTO[];
+
+  /**  */
+  email?: string;
+
+  /**  */
+  newEmail?: string;
+
+  /**  */
+  password?: string;
+
+  /**  */
+  currentPassword?: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface UserCreate {
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob?: Date;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  listings: IdDTO[];
+
+  /**  */
+  language?: LanguagesEnum;
+
+  /**  */
+  newEmail?: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  emailConfirmation: string;
+
+  /**  */
+  jurisdictions?: IdDTO[];
+}
+
+export interface UserInvite {
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob?: Date;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  listings: IdDTO[];
+
+  /**  */
+  userRoles?: UserRole;
+
+  /**  */
+  language?: LanguagesEnum;
+
+  /**  */
+  jurisdictions: IdDTO[];
+
+  /**  */
+  newEmail?: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  email: string;
+}
+
+export interface ConfirmationRequest {
+  /**  */
+  token: string;
 }
 
 export enum ListingViews {
