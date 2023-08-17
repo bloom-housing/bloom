@@ -30,11 +30,10 @@ import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto
 import { PaginatedListingDto } from '../dtos/listings/paginated-listing.dto';
 import Listing from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
-import { ListingCreateValidationPipe } from '../validation-pipes/listing-create-pipes';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
-import { ListingUpdateValidationPipe } from '../validation-pipes/listing-update-pipe';
+import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -80,7 +79,7 @@ export class ListingController {
   @Post()
   @ApiOperation({ summary: 'Create listing', operationId: 'create' })
   @UseInterceptors(ClassSerializerInterceptor)
-  @UsePipes(new ListingCreateValidationPipe(defaultValidationPipeOptions))
+  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Listing })
   async create(@Body() listingDto: ListingCreate): Promise<Listing> {
     return await this.listingService.create(listingDto);
@@ -95,7 +94,7 @@ export class ListingController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
-  @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
+  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   async update(
     @Param('id') listingId: string,
     @Body() dto: ListingUpdate,

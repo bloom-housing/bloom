@@ -2,9 +2,11 @@ import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
 import { ListingsStatusEnum } from '@prisma/client';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ListingPublishedUpdate } from '../dtos/listings/listing-published-update.dto';
+import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { ListingPublishedCreate } from '../dtos/listings/listing-published-create.dto';
 
-export class ListingUpdateValidationPipe extends ValidationPipe {
-  statusToListingValidationModelMap: Record<
+export class ListingCreateUpdateValidationPipe extends ValidationPipe {
+  statusToListingValidationModelMapForUpdate: Record<
     ListingsStatusEnum,
     typeof ListingUpdate
   > = {
@@ -13,12 +15,23 @@ export class ListingUpdateValidationPipe extends ValidationPipe {
     [ListingsStatusEnum.active]: ListingPublishedUpdate,
   };
 
+  statusToListingValidationModelMapForCreate: Record<
+    ListingsStatusEnum,
+    typeof ListingCreate
+  > = {
+    [ListingsStatusEnum.closed]: ListingCreate,
+    [ListingsStatusEnum.pending]: ListingCreate,
+    [ListingsStatusEnum.active]: ListingPublishedCreate,
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async transform(value: any, metadata: ArgumentMetadata): Promise<any> {
     if (metadata.type === 'body') {
       return await super.transform(value, {
         ...metadata,
-        metatype: this.statusToListingValidationModelMap[value.status],
+        metatype: value.id
+          ? this.statusToListingValidationModelMapForUpdate[value.status]
+          : this.statusToListingValidationModelMapForCreate[value.status],
       });
     }
     return await super.transform(value, metadata);
