@@ -7,7 +7,7 @@ import {
   PrismaClient,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
 import { listingFactory } from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
@@ -28,7 +28,10 @@ export const stagingSeed = async (
 ) => {
   // create admin user
   await prismaClient.userAccounts.create({
-    data: userFactory({ roles: { isAdmin: true }, email: 'admin@example.com' }),
+    data: await userFactory({
+      roles: { isAdmin: true },
+      email: 'admin@example.com',
+    }),
   });
   // create single jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
