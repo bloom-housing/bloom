@@ -181,9 +181,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           if (editMode) {
             if (
               process.env.featureListingsApproval &&
-              formattedData.status === ListingStatus.pendingReview
+              formattedData.status !== ListingStatus.pendingReview
             ) {
-              result = await listingsService.requestApproval({
+              result = await listingsService.updateAndNotify({
                 id: listing.id,
                 body: { ...formattedData },
               })

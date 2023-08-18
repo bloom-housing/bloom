@@ -216,10 +216,8 @@ export class ListingsService {
     return listing.jurisdiction.id
   }
 
-  async requestApproval(listingData: ListingUpdateDto) {
-    const result = await this.update(listingData)
-
-    const adminUsers = await this.userRepository
+  public async getApprovingUserEmails(): Promise<string[]> {
+    const approvingUsers = await this.userRepository
       .createQueryBuilder("user")
       .select(["user.email"])
       .leftJoin("user.roles", "userRoles")
@@ -227,15 +225,77 @@ export class ListingsService {
         is_admin: true,
       })
       .getMany()
-    const adminEmails: string[] = []
-    adminUsers?.forEach((users) => users?.email && adminEmails.push(users.email))
-    await this.emailService.requestApproval(
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      this.req.user as User,
-      { id: listingData.id, name: listingData.name },
-      adminEmails,
-      this.configService.get("PARTNERS_PORTAL_URL")
-    )
+    const approvingUserEmails: string[] = []
+    approvingUsers?.forEach((user) => user?.email && approvingUserEmails.push(user.email))
+    return approvingUserEmails
+  }
+
+  public async getNonApprovingUserInfo(
+    listingId: string,
+    jurisId: string,
+    getPublicUrl = false
+  ): Promise<{ emails: string[]; publicUrl?: string }> {
+    const selectFields = ["user.id", "user.email", "leasingAgentInListings.id", "jurisdictions.id"]
+    getPublicUrl && selectFields.push("jurisdictions.publicUrl")
+    const nonApprovingUsers = await this.userRepository
+      .createQueryBuilder("user")
+      .select(selectFields)
+      .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.roles", "userRoles")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      .where(
+        new Brackets((qb) => {
+          qb.where("userRoles.is_partner = :is_partner", {
+            is_partner: true,
+          }).andWhere("leasingAgentInListings.id = :listingId", {
+            listingId: listingId,
+          })
+        })
+      )
+      .orWhere(
+        new Brackets((qb) => {
+          qb.where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
+            is_jurisdictional_admin: true,
+          }).andWhere("jurisdictions.id = :jurisId", {
+            jurisId: jurisId,
+          })
+        })
+      )
+      .getMany()
+    const publicUrl = nonApprovingUsers[0]?.jurisdictions[0]?.publicUrl
+    const nonApprovingUserEmails: string[] = []
+    nonApprovingUsers?.forEach((user) => user?.email && nonApprovingUserEmails.push(user.email))
+    return { emails: nonApprovingUserEmails, publicUrl }
+  }
+
+  async updateAndNotify(listingData: ListingUpdateDto) {
+    const result = await this.update(listingData)
+    if (listingData.status === ListingStatus.pendingReview) {
+      const approvingUserEmails = await this.getApprovingUserEmails()
+      await this.emailService.requestApproval(
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        this.req.user as User,
+        { id: listingData.id, name: listingData.name },
+        approvingUserEmails,
+        this.configService.get("PARTNERS_PORTAL_URL")
+      )
+    } else if (listingData.status === ListingStatus.active) {
+      const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
+        listingData.id,
+        listingData.jurisdiction.id,
+        true
+      )
+      await this.emailService.listingApproved(
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        this.req.user as User,
+        {
+          id: listingData.id,
+          name: listingData.name,
+        },
+        nonApprovingUserInfo.emails,
+        nonApprovingUserInfo.publicUrl
+      )
+    }
     return result
   }
 

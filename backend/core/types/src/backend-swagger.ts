@@ -1467,9 +1467,9 @@ export class ListingsService {
     })
   }
   /**
-   * Request approval on listing by id
+   * Update listing by id and notify relevant users
    */
-  requestApproval(
+  updateAndNotify(
     params: {
       /**  */
       id: string
@@ -1479,7 +1479,7 @@ export class ListingsService {
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/requestApproval/{id}"
+      let url = basePath + "/listings/updateAndNotfiy/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)

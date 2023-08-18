@@ -26,7 +26,6 @@ export class listingsApprovalEmails1692122923259 implements MigrationInterface {
       }
 
       data.requestApproval = {
-        subject: "Listing Approval Requested",
         header: "Listing approval requested",
         partnerRequest:
           "A Partner has submitted an approval request to publish the %{listingName} listing.",

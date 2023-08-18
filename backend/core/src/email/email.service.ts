@@ -360,7 +360,7 @@ export class EmailService {
     await this.send(
       emails,
       jurisdiction.emailFromAddress,
-      this.polyglot.t("requestApproval.subject"),
+      this.polyglot.t("requestApproval.header"),
       this.template("request-approval")({
         user,
         appOptions: { listingName: listingInfo.name },
@@ -370,18 +370,22 @@ export class EmailService {
     )
   }
 
-  public async listingApproved(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+  public async listingApproved(
+    user: User,
+    listingInfo: IdName,
+    emails: string[],
+    publicUrl: string
+  ) {
     const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, Language.en))
     await this.send(
       emails,
       jurisdiction.emailFromAddress,
-      this.polyglot.t("requestApproval.subject"),
-      this.template("request-approval")({
+      this.polyglot.t("listingApproved.header"),
+      this.template("listing-approved")({
         user,
         appOptions: { listingName: listingInfo.name },
-        appUrl: appUrl,
-        listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        listingUrl: `${publicUrl}/listings/${listingInfo.id}`,
       })
     )
   }
