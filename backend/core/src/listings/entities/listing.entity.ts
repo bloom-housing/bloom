@@ -664,6 +664,27 @@ class Listing extends BaseEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   lastApplicationUpdateAt?: Date | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  requestedChanges?: string | null
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  requestedChangesDate?: Date | null
+
+  @ManyToOne(() => User)
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => User)
+  requestedChangesUser?: User | null
 }
 
 export { Listing as default, Listing }
