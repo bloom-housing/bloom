@@ -376,8 +376,8 @@ export class EmailService {
     await this.send(
       emails,
       jurisdiction.emailFromAddress,
-      this.polyglot.t("requestApproval.header"),
-      this.template("request-changes")({
+      this.polyglot.t("changesRequested.header"),
+      this.template("changes-requested")({
         user,
         appOptions: { listingName: listingInfo.name },
         appUrl: appUrl,

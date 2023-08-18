@@ -235,13 +235,7 @@ export class ListingsService {
     jurisId: string,
     getPublicUrl = false
   ): Promise<{ emails: string[]; publicUrl?: string | null }> {
-    const selectFields = [
-      "user.id",
-      "user.email",
-      "userRoles.id",
-      "leasingAgentInListings.id",
-      "jurisdictions.id",
-    ]
+    const selectFields = ["user.email", "jurisdictions.id"]
     getPublicUrl && selectFields.push("jurisdictions.publicUrl")
     const nonApprovingUsers = await this.userRepository
       .createQueryBuilder("user")
@@ -268,8 +262,8 @@ export class ListingsService {
         })
       )
       .getMany()
-    console.log(nonApprovingUsers)
-    const publicUrl = nonApprovingUsers[0]?.jurisdictions[0]?.publicUrl
+
+    const publicUrl = getPublicUrl ? nonApprovingUsers[0]?.jurisdictions[0]?.publicUrl : null
     const nonApprovingUserEmails: string[] = []
     nonApprovingUsers?.forEach((user) => user?.email && nonApprovingUserEmails.push(user.email))
     return { emails: nonApprovingUserEmails, publicUrl }
@@ -336,6 +330,7 @@ export class ListingsService {
         listingData.jurisdiction.id,
         true
       )
+      console.log(nonApprovingUserInfo)
       await this.emailService.listingApproved(
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         this.req.user as User,
