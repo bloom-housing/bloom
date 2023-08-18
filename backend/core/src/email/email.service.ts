@@ -370,6 +370,22 @@ export class EmailService {
     )
   }
 
+  public async changesRequested(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+    const jurisdiction = await this.getUserJurisdiction(user)
+    void (await this.loadTranslations(jurisdiction, Language.en))
+    await this.send(
+      emails,
+      jurisdiction.emailFromAddress,
+      this.polyglot.t("requestApproval.header"),
+      this.template("request-changes")({
+        user,
+        appOptions: { listingName: listingInfo.name },
+        appUrl: appUrl,
+        listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+      })
+    )
+  }
+
   public async listingApproved(
     user: User,
     listingInfo: IdName,

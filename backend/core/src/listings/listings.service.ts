@@ -234,8 +234,14 @@ export class ListingsService {
     listingId: string,
     jurisId: string,
     getPublicUrl = false
-  ): Promise<{ emails: string[]; publicUrl?: string }> {
-    const selectFields = ["user.id", "user.email", "leasingAgentInListings.id", "jurisdictions.id"]
+  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+    const selectFields = [
+      "user.id",
+      "user.email",
+      "userRoles.id",
+      "leasingAgentInListings.id",
+      "jurisdictions.id",
+    ]
     getPublicUrl && selectFields.push("jurisdictions.publicUrl")
     const nonApprovingUsers = await this.userRepository
       .createQueryBuilder("user")
@@ -262,6 +268,7 @@ export class ListingsService {
         })
       )
       .getMany()
+    console.log(nonApprovingUsers)
     const publicUrl = nonApprovingUsers[0]?.jurisdictions[0]?.publicUrl
     const nonApprovingUserEmails: string[] = []
     nonApprovingUsers?.forEach((user) => user?.email && nonApprovingUserEmails.push(user.email))
@@ -269,7 +276,39 @@ export class ListingsService {
   }
 
   async updateAndNotify(listingData: ListingUpdateDto) {
+    console.log("here")
     const result = await this.update(listingData)
+
+    // const getEmailParams = async (
+    //   emailType: "requestApproval" | "changesRequested" | "listingPublished"
+    // ) => {
+    //   const params = {
+    //     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    //     user: this.req.user as User,
+    //     listingInfo: { id: listingData.id, name: listingData.name },
+    //   }
+    //   if (emailType === "requestApproval") {
+    //     params["emails"] = await this.getApprovingUserEmails()
+    //     params["appUrl"] = this.configService.get("PARTNERS_PORTAL_URL")
+    //   } else if (emailType === "changesRequested") {
+    //     const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
+    //       listingData.id,
+    //       listingData.jurisdiction.id
+    //     )
+    //     params["emails"] = nonApprovingUserInfo.emails
+    //     params["appUrl"] = this.configService.get("PARTNERS_PORTAL_URL")
+    //   } else {
+    //     const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
+    //       listingData.id,
+    //       listingData.jurisdiction.id,
+    //       true
+    //     )
+    //     params["emails"] = nonApprovingUserInfo.emails
+    //     params["appUrl"] = nonApprovingUserInfo.publicUrl
+    //   }
+    //   return params
+    // }
+
     if (listingData.status === ListingStatus.pendingReview) {
       const approvingUserEmails = await this.getApprovingUserEmails()
       await this.emailService.requestApproval(
@@ -277,6 +316,18 @@ export class ListingsService {
         this.req.user as User,
         { id: listingData.id, name: listingData.name },
         approvingUserEmails,
+        this.configService.get("PARTNERS_PORTAL_URL")
+      )
+    } else if (listingData.status === ListingStatus.changesRequested) {
+      const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
+        listingData.id,
+        listingData.jurisdiction.id
+      )
+      await this.emailService.changesRequested(
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        this.req.user as User,
+        { id: listingData.id, name: listingData.name },
+        nonApprovingUserInfo.emails,
         this.configService.get("PARTNERS_PORTAL_URL")
       )
     } else if (listingData.status === ListingStatus.active) {
@@ -288,10 +339,7 @@ export class ListingsService {
       await this.emailService.listingApproved(
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         this.req.user as User,
-        {
-          id: listingData.id,
-          name: listingData.name,
-        },
+        { id: listingData.id, name: listingData.name },
         nonApprovingUserInfo.emails,
         nonApprovingUserInfo.publicUrl
       )
