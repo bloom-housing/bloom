@@ -1,5 +1,5 @@
-import { ArgumentsHost, Catch } from '@nestjs/common';
-import { BaseExceptionFilter } from '@nestjs/core';
+import { ArgumentsHost, Catch, Logger } from '@nestjs/common';
+import { AbstractHttpAdapter, BaseExceptionFilter } from '@nestjs/core';
 
 /*
     This creates a simple custom catch all exception filter for us
@@ -8,8 +8,13 @@ import { BaseExceptionFilter } from '@nestjs/core';
 */
 @Catch()
 export class CustomExceptionFilter extends BaseExceptionFilter {
+  logger: Logger;
+  constructor(httpAdapter: AbstractHttpAdapter) {
+    super(httpAdapter);
+    this.logger = new Logger('Exception Filter');
+  }
   catch(exception: any, host: ArgumentsHost) {
-    console.error({
+    this.logger.error({
       message: exception?.response?.message,
       stack: exception.stack,
       exception,
