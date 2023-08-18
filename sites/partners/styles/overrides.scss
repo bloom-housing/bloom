@@ -6,6 +6,7 @@
   .seeds-tag {
     text-transform: uppercase;
     letter-spacing: var(--seeds-letter-spacing-wider);
+    // Allows for status tags to take up the full width of their container
     width: 100%;
     display: flex;
     align-items: center;
