@@ -56,6 +56,7 @@ import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
+import RequestChangesModal from "./RequestChangesModal"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -104,30 +105,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
-  /**
-   * Close modal
-   */
   const [closeModal, setCloseModal] = useState(false)
-
-  /**
-   * Publish modal
-   */
   const [publishModal, setPublishModal] = useState(false)
-
-  /**
-   * Lottery results drawer
-   */
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
-
-  /**
-   * Save already-live modal
-   */
   const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
-
-  /**
-   * Submit for approval modal
-   */
   const [submitForApprovalModal, setSubmitForApprovalModal] = useState(false)
+  const [requestChangesModal, setRequestChangesModal] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -403,6 +386,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? ListingFormActionsType.edit : ListingFormActionsType.add}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
+                        showRequestChangesModal={() => setRequestChangesModal(true)}
                         showSubmitForApprovalModal={() => setSubmitForApprovalModal(true)}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
@@ -543,6 +527,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       >
         {t("listings.approval.submitForApprovalDescription")}
       </Modal>
+
+      <RequestChangesModal
+        defaultValue={listing.requestedChanges}
+        modalIsOpen={requestChangesModal}
+        setModalIsOpen={setRequestChangesModal}
+        submitFormWithStatus={triggerSubmitWithStatus}
+      />
     </>
   )
 }

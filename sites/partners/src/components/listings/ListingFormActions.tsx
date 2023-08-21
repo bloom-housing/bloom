@@ -28,6 +28,7 @@ type ListingFormActionsProps = {
   type: ListingFormActionsType
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
+  showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
   submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
@@ -36,6 +37,7 @@ const ListingFormActions = ({
   type,
   showCloseListingModal,
   showLotteryResultsDrawer,
+  showRequestChangesModal,
   showSubmitForApprovalModal,
   submitFormWithStatus,
 }: ListingFormActionsProps) => {
@@ -257,10 +259,7 @@ const ListingFormActions = ({
           border={AppearanceBorderType.outlined}
           type="button"
           fullWidth
-          onClick={() => {
-            // TODO throw a modal
-            submitFormWithStatus(false, ListingStatus.changesRequested)
-          }}
+          onClick={() => showRequestChangesModal && showRequestChangesModal()}
         >
           {t("listings.approval.requestChanges")}
         </Button>
@@ -447,6 +446,7 @@ const ListingFormActions = ({
     router,
     showCloseListingModal,
     showLotteryResultsDrawer,
+    showRequestChangesModal,
     showSubmitForApprovalModal,
     submitFormWithStatus,
     type,

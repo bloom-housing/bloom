@@ -31,6 +31,7 @@ import DetailApplicationDates from "../../../components/listings/PaperListingDet
 import DetailPreferences from "../../../components/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../components/listings/PaperListingDetails/sections/DetailPrograms"
+import DetailListingNotes from "../../../components/listings/PaperListingDetails/sections/DetailNotes"
 
 interface ListingProps {
   listing: Listing
@@ -88,6 +89,7 @@ export default function ListingDetail(props: ListingProps) {
                 <div className="flex flex-row flex-wrap ">
                   <div className="info-card md:w-9/12 overflow-hidden">
                     <DetailListingData />
+                    <DetailListingNotes />
                     <DetailListingIntro />
                     <DetailListingPhotos />
                     <DetailBuildingDetails />
