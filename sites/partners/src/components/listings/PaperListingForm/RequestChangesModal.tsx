@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import { ListingStatus } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
@@ -9,7 +9,6 @@ import {
   t,
   Textarea,
 } from "@bloom-housing/ui-components"
-import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { FormListing } from "../../../lib/listings/formTypes"
 
@@ -37,15 +36,11 @@ const RequestChangesModal = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues } = useForm<FormFields>()
 
-  const { profile } = useContext(AuthContext)
-
   const onSubmit = () => {
     const formData = getValues()
-    console.log(profile)
     submitFormWithStatus(false, ListingStatus.changesRequested, {
       requestedChanges: formData.requestedChanges,
       requestedChangesDate: new Date(),
-      requestedChangesUser: profile,
     })
   }
 

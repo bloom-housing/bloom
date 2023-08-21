@@ -109,7 +109,7 @@ export class ListingsService {
     return await listing.save()
   }
 
-  async update(listingDto: ListingUpdateDto) {
+  async update(listingDto: ListingUpdateDto, user: User) {
     const qb = this.getFullyJoinedQueryBuilder()
     const listing = await this.getListingAndUnits(qb, listingDto.id)
 
@@ -156,6 +156,11 @@ export class ListingsService {
         listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
           ? new Date()
           : listing.closedAt,
+      requestedChangesUser:
+        newStatus === ListingStatus.changesRequested &&
+        previousStatus !== ListingStatus.changesRequested
+          ? user
+          : listing.requestedChangesUser,
     })
 
     const saveResponse = await this.listingRepository.save(listing)
