@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ApplicationReviewStatusEnum,
   ApplicationStatusEnum,
@@ -232,21 +232,19 @@ export class Application extends AbstractDTO {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMultiselectQuestion)
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: ApplicationMultiselectQuestion,
     isArray: true,
-    required: false,
   })
-  preferences: ApplicationMultiselectQuestion[];
+  preferences?: ApplicationMultiselectQuestion[];
 
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMultiselectQuestion)
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: ApplicationMultiselectQuestion,
     isArray: true,
-    required: false,
   })
   programs?: ApplicationMultiselectQuestion[];
 }

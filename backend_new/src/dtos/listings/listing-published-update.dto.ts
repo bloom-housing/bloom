@@ -44,83 +44,83 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetCreate)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: AssetCreate, isArray: true, required: true })
+  @ApiProperty({ type: AssetCreate, isArray: true })
   assets: AssetCreate[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate, required: true })
+  @ApiProperty({ type: AddressCreate })
   listingsBuildingAddress: AddressCreate;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   depositMin: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   depositMax: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   developer: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   digitalApplication: boolean;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageCreate)
-  @ApiProperty({ type: ListingImageCreate, isArray: true, required: true })
+  @ApiProperty({ type: ListingImageCreate, isArray: true })
   listingImages: ListingImageCreate[];
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   leasingAgentEmail: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   leasingAgentName: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   leasingAgentPhone: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   name: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   paperApplication: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   referralOpportunity: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   rentalAssistance: string;
 
   @Expose()
@@ -128,12 +128,11 @@ export class ListingPublishedUpdate extends OmitType(ListingUpdate, [
   @ApiProperty({
     enum: ReviewOrderTypeEnum,
     enumName: 'ReviewOrderTypeEnum',
-    required: true,
   })
   reviewOrderType: ReviewOrderTypeEnum;
 
   @Expose()
-  @ApiProperty({ required: true, isArray: true, type: UnitCreate })
+  @ApiProperty({ isArray: true, type: UnitCreate })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })

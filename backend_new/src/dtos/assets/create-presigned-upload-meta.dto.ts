@@ -6,6 +6,6 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 export class CreatePresignedUploadMetadata {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   parametersToSign: Record<string, string>;
 }

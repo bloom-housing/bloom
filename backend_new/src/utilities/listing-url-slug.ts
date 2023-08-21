@@ -19,6 +19,11 @@ export function listingUrlSlug(listing: Listing): string {
   );
 }
 
+/*
+  This creates a string "_" separated at every upper case letter then lower cased
+  This also removes special characters
+  e.g. "ExampLe namE @ 17 11th Street Phoenix Az" -> "examp_le_nam_e_17_11_th_street_phoenix_az"
+*/
 export function listingUrlSlugHelper(input: string): string {
   return (
     (input || '').match(

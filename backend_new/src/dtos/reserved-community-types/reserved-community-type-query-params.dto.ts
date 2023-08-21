@@ -1,14 +1,12 @@
 import { Expose } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsUUID } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class ReservedCommunityTypeQueryParams {
   @Expose()
-  @ApiProperty({
-    required: false,
-    type: String,
-  })
+  @ApiPropertyOptional()
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   jurisdictionId?: string;
 }

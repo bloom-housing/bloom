@@ -1,6 +1,6 @@
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UserFilterParams } from './user-filter-params.dto';
 import {
   ArrayMaxSize,
@@ -13,9 +13,8 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class UserQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     name: 'filter',
-    required: false,
     type: [UserFilterParams],
     example: { isPartner: true },
   })
@@ -26,10 +25,9 @@ export class UserQueryParams extends PaginationAllowsAllQueryParams {
   filter?: UserFilterParams[];
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     example: 'search',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MinLength(3, {

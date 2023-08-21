@@ -8,7 +8,7 @@ import {
   IsDefined,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { MultiselectLink } from './multiselect-link.dto';
@@ -19,57 +19,57 @@ class MultiselectQuestion extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   text: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   untranslatedText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   untranslatedOptOutText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   subText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   description?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectLink)
-  @ApiProperty({ type: MultiselectLink, isArray: true, required: false })
+  @ApiPropertyOptional({ type: MultiselectLink, isArray: true })
   links?: MultiselectLink[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, isArray: true, required: true })
+  @ApiProperty({ type: IdDTO, isArray: true })
   jurisdictions: IdDTO[];
 
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectOption)
-  @ApiProperty({ type: MultiselectOption, isArray: true, required: false })
+  @ApiPropertyOptional({ type: MultiselectOption, isArray: true })
   options?: MultiselectOption[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   optOutText?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   hideFromListing?: boolean;
 
   @Expose()
@@ -79,7 +79,6 @@ class MultiselectQuestion extends AbstractDTO {
   @ApiProperty({
     enum: MultiselectQuestionsApplicationSectionEnum,
     enumName: 'MultiselectQuestionsApplicationSectionEnum',
-    required: true,
   })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   applicationSection: MultiselectQuestionsApplicationSectionEnum;

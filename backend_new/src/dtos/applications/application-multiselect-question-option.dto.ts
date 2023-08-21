@@ -1,4 +1,8 @@
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
@@ -62,9 +66,8 @@ export class ApplicationMultiselectQuestionOption {
   checked: boolean;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: 'array',
-    required: false,
     items: {
       oneOf: [
         { $ref: getSchemaPath(BooleanInput) },

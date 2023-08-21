@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsBoolean } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -7,41 +7,41 @@ import { AbstractDTO } from '../shared/abstract.dto';
 export class ListingUtilities extends AbstractDTO {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   water?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   gas?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   trash?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   sewer?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   electricity?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   cable?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   phone?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   internet?: boolean;
 }

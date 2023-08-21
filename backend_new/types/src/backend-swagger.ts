@@ -3513,7 +3513,7 @@ export interface JurisdictionCreate {
   name: string;
 
   /**  */
-  notificationsSignUpUrl: string;
+  notificationsSignUpUrl?: string;
 
   /**  */
   languages: LanguagesEnum[];
@@ -3548,7 +3548,7 @@ export interface JurisdictionUpdate {
   name: string;
 
   /**  */
-  notificationsSignUpUrl: string;
+  notificationsSignUpUrl?: string;
 
   /**  */
   languages: LanguagesEnum[];
@@ -3589,7 +3589,7 @@ export interface Jurisdiction {
   name: string;
 
   /**  */
-  notificationsSignUpUrl: string;
+  notificationsSignUpUrl?: string;
 
   /**  */
   languages: LanguagesEnum[];

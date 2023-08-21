@@ -1,7 +1,6 @@
-import { OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { IdDTO } from '../shared/id.dto';
 import { Unit } from './unit.dto';
@@ -19,31 +18,31 @@ export class UnitCreate extends OmitType(Unit, [
 ]) {
   @Expose()
   @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, required: false })
+  @ApiPropertyOptional({ type: IdDTO })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   unitTypes?: IdDTO;
 
   @Expose()
   @Type(() => IdDTO)
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: IdDTO, required: false })
+  @ApiPropertyOptional({ type: IdDTO })
   amiChart?: IdDTO;
 
   @Expose()
   @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, required: false })
+  @ApiPropertyOptional({ type: IdDTO })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   unitAccessibilityPriorityTypes?: IdDTO;
 
   @Expose()
   @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, required: false })
+  @ApiPropertyOptional({ type: IdDTO })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   unitRentTypes?: IdDTO;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAmiChartOverrideCreate)
-  @ApiProperty({ type: UnitAmiChartOverrideCreate, required: false })
+  @ApiPropertyOptional({ type: UnitAmiChartOverrideCreate })
   unitAmiChartOverrides?: UnitAmiChartOverrideCreate;
 }

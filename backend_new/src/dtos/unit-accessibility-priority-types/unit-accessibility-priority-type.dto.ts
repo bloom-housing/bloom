@@ -14,7 +14,6 @@ export class UnitAccessibilityPriorityType extends AbstractDTO {
   @ApiProperty({
     enum: UnitAccessibilityPriorityTypeEnum,
     enumName: 'UnitAccessibilityPriorityTypeEnum',
-    required: true,
   })
   name: UnitAccessibilityPriorityTypeEnum;
 }

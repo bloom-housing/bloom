@@ -7,6 +7,7 @@ import {
   Prisma,
   ReviewOrderTypeEnum,
 } from '@prisma/client';
+import { firstValueFrom } from 'rxjs';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import {
   buildPaginationMetaInfo,
@@ -29,7 +30,6 @@ import { TranslationService } from './translation.service';
 import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
-import { firstValueFrom } from 'rxjs';
 
 export type getListingsArgs = {
   skip: number;
@@ -328,7 +328,7 @@ export class ListingService {
     creates a listing
   */
   async create(dto: ListingCreate): Promise<Listing> {
-    // TODO: perms
+    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
     const rawListing = await this.prisma.listings.create({
       include: views.details,
       data: {
@@ -574,7 +574,7 @@ export class ListingService {
   async delete(id: string): Promise<SuccessDTO> {
     const storedListing = await this.findOrThrow(id);
 
-    // TODO: auth
+    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
 
     await this.prisma.listings.delete({
       where: {
@@ -613,7 +613,7 @@ export class ListingService {
   async update(dto: ListingUpdate): Promise<Listing> {
     const storedListing = await this.findOrThrow(dto.id, ListingViews.details);
 
-    // TODO: auth work
+    // TODO: perms (https://github.com/bloom-housing/bloom/issues/3445)
 
     dto.unitsAvailable =
       dto.reviewOrderType !== ReviewOrderTypeEnum.waitlist && dto.units
@@ -624,7 +624,7 @@ export class ListingService {
       storedListing.status === ListingsStatusEnum.active &&
       dto.status === ListingsStatusEnum.closed
     ) {
-      // TODO: afs process
+      // TODO: afs process (https://github.com/bloom-housing/bloom/issues/3540)
     }
 
     const rawListing = await this.prisma.listings.update({

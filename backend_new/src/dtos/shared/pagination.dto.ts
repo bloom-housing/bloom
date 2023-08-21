@@ -50,7 +50,6 @@ export class PaginationQueryParams {
   @ApiPropertyOptional({
     type: Number,
     example: 1,
-    required: false,
     default: 1,
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
@@ -66,7 +65,6 @@ export class PaginationQueryParams {
   @ApiPropertyOptional({
     type: Number,
     example: 10,
-    required: false,
     default: 10,
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
@@ -84,7 +82,6 @@ export class PaginationAllowsAllQueryParams {
   @ApiPropertyOptional({
     type: Number,
     example: 1,
-    required: false,
     default: 1,
   })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
@@ -100,7 +97,6 @@ export class PaginationAllowsAllQueryParams {
   @ApiPropertyOptional({
     type: "number | 'all'",
     example: 10,
-    required: false,
     default: 10,
   })
   @IsNumberOrAll({

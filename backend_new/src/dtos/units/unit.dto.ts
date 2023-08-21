@@ -13,105 +13,105 @@ import { UnitType } from '../unit-types/unit-type.dto';
 import { UnitRentType } from '../unit-rent-types/unit-rent-type.dto';
 import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
 import { UnitAmiChartOverride } from './ami-chart-override.dto';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 class Unit extends AbstractDTO {
   @Expose()
-  @ApiProperty({ required: false, type: AmiChart })
+  @ApiPropertyOptional({ type: AmiChart })
   amiChart?: AmiChart;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   amiPercentage?: string;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   annualIncomeMin?: string;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   monthlyIncomeMin?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   floor?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   annualIncomeMax?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   maxOccupancy?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   minOccupancy?: number;
 
   @Expose()
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   monthlyRent?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   numBathrooms?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   numBedrooms?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   number?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   sqFeet?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   monthlyRentAsPercentOfIncome?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   bmrProgramChart?: boolean;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitType)
-  @ApiProperty({ required: false, type: UnitType })
+  @ApiPropertyOptional({ type: UnitType })
   unitTypes?: UnitType;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitRentType)
-  @ApiProperty({ required: false, type: UnitRentType })
+  @ApiPropertyOptional({ type: UnitRentType })
   unitRentTypes?: UnitRentType;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityType)
-  @ApiProperty({ required: false, type: UnitAccessibilityPriorityType })
+  @ApiPropertyOptional({ type: UnitAccessibilityPriorityType })
   unitAccessibilityPriorityTypes?: UnitAccessibilityPriorityType;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAmiChartOverride)
-  @ApiProperty({ required: false, type: UnitAmiChartOverride })
+  @ApiPropertyOptional({ type: UnitAmiChartOverride })
   unitAmiChartOverrides?: UnitAmiChartOverride;
 }
 

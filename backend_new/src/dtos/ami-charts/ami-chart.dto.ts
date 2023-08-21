@@ -14,20 +14,19 @@ export class AmiChart extends AbstractDTO {
   @ApiProperty({
     type: AmiChartItem,
     isArray: true,
-    required: true,
   })
   items: AmiChartItem[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   name: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   jurisdictions: IdDTO;
 }

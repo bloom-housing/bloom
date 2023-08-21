@@ -1,4 +1,4 @@
-import { OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -49,22 +49,21 @@ export class ListingUpdate extends OmitType(Listing, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDTO)
-  @ApiProperty({ type: IdDTO, isArray: true, required: false })
+  @ApiPropertyOptional({ type: IdDTO, isArray: true })
   listingMultiselectQuestions?: IdDTO[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitCreate)
-  @ApiProperty({ type: UnitCreate, isArray: true, required: false })
+  @ApiPropertyOptional({ type: UnitCreate, isArray: true })
   units?: UnitCreate[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodCreate)
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: ApplicationMethodCreate,
     isArray: true,
-    required: false,
   })
   applicationMethods?: ApplicationMethodCreate[];
 
@@ -72,61 +71,61 @@ export class ListingUpdate extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetCreate)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: AssetCreate, isArray: true, required: true })
+  @ApiProperty({ type: AssetCreate, isArray: true })
   assets: AssetCreate[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty({ type: UnitsSummaryCreate, isArray: true, required: true })
+  @ApiProperty({ type: UnitsSummaryCreate, isArray: true })
   @Type(() => UnitsSummaryCreate)
   unitsSummary: UnitsSummaryCreate[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImageCreate)
-  @ApiProperty({ type: ListingImageCreate, isArray: true, required: false })
+  @ApiPropertyOptional({ type: ListingImageCreate, isArray: true })
   listingImages?: ListingImageCreate[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate, required: false })
+  @ApiPropertyOptional({ type: AddressCreate })
   listingsApplicationPickUpAddress?: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate, required: false })
+  @ApiPropertyOptional({ type: AddressCreate })
   listingsApplicationMailingAddress?: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate, required: false })
+  @ApiPropertyOptional({ type: AddressCreate })
   listingsApplicationDropOffAddress?: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate, required: false })
+  @ApiPropertyOptional({ type: AddressCreate })
   listingsLeasingAgentAddress?: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreate)
-  @ApiProperty({ type: AddressCreate, required: false })
+  @ApiPropertyOptional({ type: AddressCreate })
   listingsBuildingAddress?: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreate)
-  @ApiProperty({ type: AssetCreate, required: false })
+  @ApiPropertyOptional({ type: AssetCreate })
   listingsBuildingSelectionCriteriaFile?: AssetCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreate)
-  @ApiProperty({ type: AssetCreate, required: false })
+  @ApiPropertyOptional({ type: AssetCreate })
   listingsResult?: AssetCreate;
 
   @Expose()
@@ -139,12 +138,12 @@ export class ListingUpdate extends OmitType(Listing, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeaturesCreate)
-  @ApiProperty({ type: ListingFeaturesCreate, required: false })
+  @ApiPropertyOptional({ type: ListingFeaturesCreate })
   listingFeatures?: ListingFeaturesCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingUtilitiesCreate)
-  @ApiProperty({ type: ListingUtilitiesCreate, required: false })
+  @ApiPropertyOptional({ type: ListingUtilitiesCreate })
   listingUtilities?: ListingUtilitiesCreate;
 }

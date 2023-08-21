@@ -12,7 +12,7 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { LanguagesEnum } from '@prisma/client';
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
 
 export class Jurisdiction extends AbstractDTO {
@@ -20,12 +20,12 @@ export class Jurisdiction extends AbstractDTO {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   name: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiPropertyOptional()
   notificationsSignUpUrl?: string;
 
   @Expose()
@@ -37,7 +37,6 @@ export class Jurisdiction extends AbstractDTO {
   })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({
-    required: true,
     enum: LanguagesEnum,
     enumName: 'LanguagesEnum',
     isArray: true,
@@ -48,46 +47,46 @@ export class Jurisdiction extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true, type: IdDTO, isArray: true })
+  @ApiProperty({ type: IdDTO, isArray: true })
   multiselectQuestions: IdDTO[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   partnerTerms?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   publicUrl: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   emailFromAddress: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   rentalAssistanceDefault: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   enablePartnerSettings?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   enableAccessibilityFeatures: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   enableUtilitiesIncluded: boolean;
 }

@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -14,6 +14,6 @@ export class ListingEventCreate extends OmitType(ListingEvent, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreate)
-  @ApiProperty({ type: AssetCreate, required: false })
+  @ApiPropertyOptional({ type: AssetCreate })
   assets?: AssetCreate;
 }

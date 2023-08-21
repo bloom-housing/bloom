@@ -10,6 +10,6 @@ export class ListingImageCreate extends OmitType(ListingImage, ['assets']) {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetCreate)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: AssetCreate, required: true })
+  @ApiProperty({ type: AssetCreate })
   assets: AssetCreate;
 }

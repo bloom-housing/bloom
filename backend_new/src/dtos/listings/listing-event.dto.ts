@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ListingEventsTypeEnum } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { Asset } from '../assets/asset.dto';
 
@@ -19,46 +19,45 @@ export class ListingEvent extends AbstractDTO {
   @ApiProperty({
     enum: ListingEventsTypeEnum,
     enumName: 'ListingEventsTypeEnum',
-    required: true,
   })
   type: ListingEventsTypeEnum;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   startDate?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   startTime?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   endTime?: Date;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   url?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   note?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   label?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
-  @ApiProperty({ required: false, type: Asset })
+  @ApiPropertyOptional({ type: Asset })
   assets?: Asset;
 }

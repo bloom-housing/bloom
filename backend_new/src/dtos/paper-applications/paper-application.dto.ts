@@ -13,7 +13,6 @@ export class PaperApplication extends AbstractDTO {
   @ApiProperty({
     enum: LanguagesEnum,
     enumName: 'LanguagesEnum',
-    required: true,
   })
   language: LanguagesEnum;
 
@@ -21,6 +20,6 @@ export class PaperApplication extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
-  @ApiProperty({ required: true, type: Asset })
+  @ApiProperty({ type: Asset })
   assets: Asset;
 }

@@ -1,14 +1,13 @@
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { MultiselectQuestionFilterParams } from './multiselect-question-filter-params.dto';
 import { ArrayMaxSize, IsArray, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 
 export class MultiselectQuestionQueryParams {
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     name: 'filter',
-    required: false,
     type: MultiselectQuestionFilterParams,
     isArray: true,
     example: { $comparison: '=', applicationSection: 'programs' },

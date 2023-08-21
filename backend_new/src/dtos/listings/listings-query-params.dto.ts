@@ -1,6 +1,6 @@
 import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger';
 import { ListingFilterParams } from './listings-filter-params.dto';
 import {
   ArrayMaxSize,
@@ -19,8 +19,7 @@ import { OrderQueryParamValidator } from '../../utilities/order-by-validator';
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
-  @ApiProperty({
-    required: false,
+  @ApiPropertyOptional({
     type: [String],
     items: {
       $ref: getSchemaPath(ListingFilterParams),
@@ -34,9 +33,8 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   filter?: ListingFilterParams[];
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: ListingViews,
-    required: false,
     enumName: 'ListingViews',
     example: 'full',
   })
@@ -46,8 +44,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   view?: ListingViews;
 
   @Expose()
-  @ApiProperty({
-    required: false,
+  @ApiPropertyOptional({
     enum: ListingOrderByKeys,
     enumName: 'ListingOrderByKeys',
     example: '["updatedAt"]',
@@ -66,12 +63,11 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   orderBy?: ListingOrderByKeys[];
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: OrderByEnum,
     enumName: 'OrderByEnum',
     example: '["desc"]',
     default: '["desc"]',
-    required: false,
     isArray: true,
   })
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
@@ -83,9 +79,8 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   orderDir?: OrderByEnum[];
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'search',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MinLength(3, {

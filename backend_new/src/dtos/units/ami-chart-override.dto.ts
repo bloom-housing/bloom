@@ -10,6 +10,6 @@ export class UnitAmiChartOverride extends AbstractDTO {
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AmiChartItem)
-  @ApiProperty({ required: true, isArray: true, type: AmiChartItem })
+  @ApiProperty({ isArray: true, type: AmiChartItem })
   items: AmiChartItem[];
 }
