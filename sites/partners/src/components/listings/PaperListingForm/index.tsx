@@ -529,7 +529,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       </Modal>
 
       <RequestChangesModal
-        defaultValue={listing.requestedChanges}
+        defaultValue={listing?.requestedChanges}
         modalIsOpen={requestChangesModal}
         setModalIsOpen={setRequestChangesModal}
         submitFormWithStatus={triggerSubmitWithStatus}
