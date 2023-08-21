@@ -8,14 +8,7 @@ import { ListingStatus } from "@bloom-housing/backend-core"
 const DetailListingNotes = () => {
   const listing = useContext(ListingContext)
 
-  if (
-    !listing.requestedChanges ||
-    !(
-      listing.status === ListingStatus.changesRequested ||
-      listing.status === ListingStatus.pendingReview
-    )
-  )
-    return
+  if (!listing.requestedChanges || !(listing.status === ListingStatus.changesRequested)) return
 
   return (
     <GridSection

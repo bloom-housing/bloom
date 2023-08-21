@@ -92,6 +92,7 @@ const RequestChangesModal = ({
           fullWidth={true}
           register={register}
           defaultValue={defaultValue}
+          maxLength={2000}
         />
       </Form>
     </Modal>
