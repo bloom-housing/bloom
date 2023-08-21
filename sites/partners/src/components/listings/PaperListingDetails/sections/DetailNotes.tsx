@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, ExpandableText } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailFieldDate } from "./helpers"
@@ -19,7 +19,15 @@ const DetailListingNotes = () => {
     >
       <GridCell span={2}>
         <FieldValue id="requestedChanges" label={t("listings.approval.changeRequestSummary")}>
-          {getDetailFieldString(listing.requestedChanges)}
+          <ExpandableText
+            buttonClassName="ml-4"
+            strings={{
+              readMore: t("t.more"),
+              readLess: t("t.less"),
+            }}
+          >
+            {getDetailFieldString(listing.requestedChanges)}
+          </ExpandableText>
         </FieldValue>
       </GridCell>
 
