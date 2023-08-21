@@ -124,6 +124,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    */
   const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
 
+  /**
+   * Submit for approval modal
+   */
+  const [submitForApprovalModal, setSubmitForApprovalModal] = useState(false)
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -200,7 +205,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
           if (result) {
             setSiteAlertMessage(
-              editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
+              editMode
+                ? t("listings.listingUpdated")
+                : formattedData.status === ListingStatus.pendingReview
+                ? t("listings.approval.submittedForReview")
+                : t("listings.listingSubmitted"),
               "success"
             )
 
@@ -394,6 +403,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? ListingFormActionsType.edit : ListingFormActionsType.add}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
+                        showSubmitForApprovalModal={() => setSubmitForApprovalModal(true)}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
@@ -499,6 +509,39 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ]}
       >
         {t("listings.listingIsAlreadyLive")}
+      </Modal>
+
+      <Modal
+        open={submitForApprovalModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.approval.submitForApprovalDescription")}
+        onClose={() => setSubmitForApprovalModal(false)}
+        actions={[
+          <Button
+            id="submitListingForApprovalButtonConfirm"
+            type="button"
+            styleType={AppearanceStyleType.success}
+            onClick={() => {
+              setSubmitForApprovalModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.pendingReview)
+            }}
+            size={AppearanceSizeType.small}
+            dataTestId={"submitForApprovalButton"}
+          >
+            {t("t.save")}
+          </Button>,
+          <Button
+            type="button"
+            onClick={() => {
+              setSubmitForApprovalModal(false)
+            }}
+            size={AppearanceSizeType.small}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.approval.submitForApprovalDescription")}
       </Modal>
     </>
   )

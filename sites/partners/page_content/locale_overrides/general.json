@@ -160,6 +160,8 @@
   "listings.approval.listingPublished": "Listing Published",
   "listings.approval.reopen": "Reopen",
   "listings.approval.requestChanges": "Request Changes",
+  "listings.approval.submitForApprovalDescription": "This will notify an administrator to review and approve the publication of this listing.",
+  "listings.approval.submittedForReview": "Submitted for Review",
   "listings.atAnotherAddress": "At another address",
   "listings.atLeasingAgentAddress": "At the leasing agent address",
   "listings.closeThisListing": "Do you really want to close this listing?",
