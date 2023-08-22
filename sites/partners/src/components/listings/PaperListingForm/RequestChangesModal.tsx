@@ -34,15 +34,7 @@ const RequestChangesModal = ({
   submitFormWithStatus,
 }: RequestChangesModalProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues } = useForm<FormFields>()
-
-  const onSubmit = () => {
-    const formData = getValues()
-    submitFormWithStatus(false, ListingStatus.changesRequested, {
-      requestedChanges: formData.requestedChanges,
-      requestedChangesDate: new Date(),
-    })
-  }
+  const { register, getValues, errors, trigger, clearErrors } = useForm<FormFields>()
 
   return (
     <Modal
@@ -55,9 +47,15 @@ const RequestChangesModal = ({
           id="requestChangesButtonConfirm"
           type="button"
           styleType={AppearanceStyleType.success}
-          onClick={() => {
-            setModalIsOpen(false)
-            onSubmit()
+          onClick={async () => {
+            const validation = await trigger()
+            if (validation) {
+              const formData = getValues()
+              submitFormWithStatus(false, ListingStatus.changesRequested, {
+                requestedChanges: formData.requestedChanges,
+                requestedChangesDate: new Date(),
+              })
+            }
           }}
           size={AppearanceSizeType.small}
           dataTestId={"requestChangesButton"}
@@ -88,6 +86,11 @@ const RequestChangesModal = ({
           register={register}
           defaultValue={defaultValue}
           maxLength={2000}
+          validation={{ required: true }}
+          errorMessage={!!errors?.requestedChanges && t("errors.requiredFieldError")}
+          inputProps={{
+            onChange: () => clearErrors("requestedChanges"),
+          }}
         />
       </Form>
     </Modal>
