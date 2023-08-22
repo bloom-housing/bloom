@@ -188,7 +188,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
           if (result) {
             const getToast = (oldStatus: ListingStatus, newStatus: ListingStatus) => {
-              if (!listing) return t("listings.listingUpdated")
               const toasts = {
                 [ListingStatus.pendingReview]: t("listings.approval.submittedForReview"),
                 [ListingStatus.changesRequested]: t("listings.listingStatus.changesRequested"),
@@ -197,6 +196,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 [ListingStatus.closed]: t("listings.approval.listingClosed"),
               }
               if (oldStatus !== newStatus) {
+                if (!listing && newStatus === ListingStatus.pending)
+                  return t("listings.listingUpdated")
                 return toasts[newStatus]
               }
 
