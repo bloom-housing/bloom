@@ -58,7 +58,7 @@ const RequestChangesModal = ({
             }
           }}
           size={AppearanceSizeType.small}
-          dataTestId={"requestChangesButton"}
+          dataTestId={"requestChangesButtonConfirm"}
         >
           {t("listings.approval.requestChanges")}
         </Button>,

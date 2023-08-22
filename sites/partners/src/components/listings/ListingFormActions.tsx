@@ -225,7 +225,7 @@ const ListingFormActions = ({
     const approveAndPublishButton = (
       <GridCell key="btn-approve-and-publish">
         <Button
-          id="submitButton"
+          id="approveAndPublishButton"
           styleType={AppearanceStyleType.success}
           type="button"
           fullWidth
@@ -239,7 +239,11 @@ const ListingFormActions = ({
 
               if (result) {
                 setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
-                await router.push(`/`)
+                if (router.pathname.includes("edit")) {
+                  await router.push(`/listings/${result.id}`)
+                } else {
+                  await router.push(`/`)
+                }
               }
             } catch (err) {
               setSiteAlertMessage("errors.somethingWentWrong", "warn")
@@ -254,7 +258,7 @@ const ListingFormActions = ({
     const requestChangesButton = (
       <GridCell key="btn-request-changes">
         <Button
-          id="submitButton"
+          id="requestChangesButton"
           styleType={AppearanceStyleType.alert}
           border={AppearanceBorderType.outlined}
           type="button"

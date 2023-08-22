@@ -521,7 +521,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size={AppearanceSizeType.small}
             dataTestId={"submitForApprovalButton"}
           >
-            {t("t.save")}
+            {t("t.submit")}
           </Button>,
           <Button
             type="button"
