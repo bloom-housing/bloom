@@ -156,6 +156,7 @@ workflows:
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
+           command: npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx} 
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
       - cypress/run:
@@ -168,6 +169,6 @@ workflows:
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
-          command: npx cypress run --spec cypress/e2e/listings-approval/listings-approval.spec.ts --env FEATURE_LISTINGS_APPROVAL=TRUE
+          command: npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx} --env FEATURE_LISTINGS_APPROVAL=TRUE
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
