@@ -156,7 +156,7 @@ workflows:
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
-           command: npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx} 
+          command: npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
       - cypress/run:
