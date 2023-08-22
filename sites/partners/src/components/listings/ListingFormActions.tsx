@@ -239,7 +239,7 @@ const ListingFormActions = ({
 
               if (result) {
                 setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
-                await router.push(`/listings/${result.id}`)
+                await router.push(`/`)
               }
             } catch (err) {
               setSiteAlertMessage("errors.somethingWentWrong", "warn")
@@ -396,8 +396,8 @@ const ListingFormActions = ({
 
       // new unsaved listing
       if (type === ListingFormActionsType.add) {
-        elements.push(saveDraftButton)
         elements.push(publishButton)
+        elements.push(saveDraftButton)
         elements.push(cancelButton)
       }
 

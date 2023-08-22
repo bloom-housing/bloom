@@ -160,6 +160,8 @@
   "listings.approval.changeRequestSummary": "Change Request Summary",
   "listings.approval.listingNotes": "Listing Notes",
   "listings.approval.listingPublished": "Listing Published",
+  "listings.approval.listingClosed": "Listing Closed",
+  "listings.approval.listingUnpublished": "Listing Unpublished",
   "listings.approval.reopen": "Reopen",
   "listings.approval.requestChanges": "Request Changes",
   "listings.approval.requestChangesDescription": "This will update the listing status and notify partners of your request.",

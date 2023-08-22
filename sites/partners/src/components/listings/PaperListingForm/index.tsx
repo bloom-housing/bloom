@@ -187,14 +187,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           reset(formData)
 
           if (result) {
-            setSiteAlertMessage(
-              editMode
-                ? t("listings.listingUpdated")
-                : formattedData.status === ListingStatus.pendingReview
-                ? t("listings.approval.submittedForReview")
-                : t("listings.listingSubmitted"),
-              "success"
-            )
+            const getToast = (oldStatus: ListingStatus, newStatus: ListingStatus) => {
+              if (!listing) return t("listings.listingUpdated")
+              const toasts = {
+                [ListingStatus.pendingReview]: t("listings.approval.submittedForReview"),
+                [ListingStatus.changesRequested]: t("listings.listingStatus.changesRequested"),
+                [ListingStatus.active]: t("listings.approval.listingPublished"),
+                [ListingStatus.pending]: t("listings.approval.listingUnpublished"),
+                [ListingStatus.closed]: t("listings.approval.listingClosed"),
+              }
+              if (oldStatus !== newStatus) {
+                return toasts[newStatus]
+              }
+
+              return t("listings.listingUpdated")
+            }
+            setSiteAlertMessage(getToast(listing?.status, formattedData?.status), "success")
 
             await router.push(`/listings/${result.id}`)
           }
