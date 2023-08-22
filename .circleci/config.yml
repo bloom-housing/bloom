@@ -161,6 +161,8 @@ workflows:
           store_artifacts: true
       - cypress/run:
           name: "cypress-partners-listings-approval"
+          environment:
+            FEATURE_LISTINGS_APPROVAL: TRUE
           requires:
             - setup
           executor: cypress-node
