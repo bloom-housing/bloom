@@ -30,14 +30,10 @@ describe("Listings approval feature", () => {
     cy.getByID("listing-status-changes-requested").should("be.visible")
     cy.getByID("requestedChanges").contains("Requested changes test summary")
     cy.getByTestId("listingEditButton").click()
-    cy.getByTestId("nameField")
-      .should("be.visible")
-      .click()
-      .clear()
-      .type(`${uniqueListingName} edited`)
+    cy.getByTestId("nameField").should("be.visible").click().clear().type(uniqueListingNameEdited)
     cy.getByID("submitButton").contains("Submit").click()
     cy.getByTestId("submitForApprovalButton").contains("Submit").click()
-    cy.getByTestId("page-header").should("have.text", `${uniqueListingName} edited`)
+    cy.getByTestId("page-header").should("have.text", uniqueListingNameEdited)
     cy.signOut()
 
     // Admin: Approve and publish
