@@ -169,7 +169,7 @@ workflows:
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
-          build: |
+          command: |
             echo 'export FEATURE_LISTINGS_APPROVAL=TRUE' >> "$BASH_ENV"
             source "$BASH_ENV"
             npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
