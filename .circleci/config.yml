@@ -158,3 +158,18 @@ workflows:
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
+      - cypress/run:
+          name: "cypress-partners-listings-approval"
+          environment:
+            FEATURE_LISTINGS_APPROVAL: TRUE
+          requires:
+            - setup
+          executor: cypress-node
+          working_directory: sites/partners
+          yarn: true
+          build: |
+            yarn test:backend:core:dbsetup
+          start: yarn dev:all-cypress
+          command: npx cypress run --spec cypress/e2e/listings-approval/listings-approval.spec.ts
+          wait-on: "http://0.0.0.0:3001"
+          store_artifacts: true
