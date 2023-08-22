@@ -5,7 +5,7 @@ describe("Listings approval feature", () => {
     // Partner: Submit a listing for approval
     cy.login("jurisdictionalAdminUser")
     cy.visit("/")
-    cy.get("a > .button").contains("Add Listing").click()
+    cy.getByTestId("addListingButton").contains("Add Listing").click()
     cy.contains("New Listing")
     cy.fixture("minimalListing").then((listing) => {
       fillOutMinimalListing(cy, listing)
@@ -83,7 +83,7 @@ describe("Listings approval feature", () => {
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitType.id").select(listing["unitType.id"])
-    cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
+    cy.getByTestId("unitFormSaveAndExitButton").contains("Save & Exit").click()
     cy.get(".text-right > .button").contains("Application Process").click()
 
     cy.getByID("leasingAgentName").type(listing["leasingAgentName"])

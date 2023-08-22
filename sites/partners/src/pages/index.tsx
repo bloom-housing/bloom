@@ -211,6 +211,7 @@ export default function ListingsList() {
                         className="mx-1"
                         styleType={AppearanceStyleType.primary}
                         onClick={() => false}
+                        dataTestId={"addListingButton"}
                       >
                         {t("listings.addListing")}
                       </Button>

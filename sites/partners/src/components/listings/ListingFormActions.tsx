@@ -242,7 +242,7 @@ const ListingFormActions = ({
                 if (router.pathname.includes("edit")) {
                   await router.push(`/listings/${result.id}`)
                 } else {
-                  await router.push(`/`)
+                  router.reload()
                 }
               }
             } catch (err) {
