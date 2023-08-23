@@ -665,6 +665,27 @@ class Listing extends BaseEntity {
   @Type(() => Date)
   lastApplicationUpdateAt?: Date | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  requestedChanges?: string | null
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  requestedChangesDate?: Date | null
+
+  @ManyToOne(() => User)
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => User)
+  requestedChangesUser?: User | null
+
   /**
    * This is only added to enable passing directly from external listings since
    * the generation code may be different between local and external listings.

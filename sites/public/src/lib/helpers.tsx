@@ -17,7 +17,11 @@ import {
   SiteFooter,
   SiteHeader,
 } from "@bloom-housing/doorway-ui-components"
-import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
+import {
+  imageUrlFromListing,
+  getSummariesTable,
+  IMAGE_FALLBACK_URL,
+} from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -142,7 +146,7 @@ export const getListingCard = (listing: Listing, index: number) => {
       key={index}
       preheader={getCountyName(listing?.buildingAddress?.county)}
       imageCardProps={{
-        imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || "",
+        imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0],
         tags: listing.reservedCommunityType
           ? [
               {
@@ -152,6 +156,7 @@ export const getListingCard = (listing: Listing, index: number) => {
           : undefined,
         statuses: [],
         description: listing.name,
+        fallbackImageUrl: IMAGE_FALLBACK_URL,
       }}
       tableProps={{
         headers: unitSummariesHeaders,

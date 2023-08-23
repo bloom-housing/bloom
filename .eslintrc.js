@@ -53,6 +53,8 @@ module.exports = {
     "**/*.stories.tsx",
     "**/.eslintrc.js",
     "doorway-ui-components",
-    "tasks/import-listings"
+    "tasks/import-listings",
+    "sentry-example-page.js",
+    "sentry-example-api.js",
   ],
 }

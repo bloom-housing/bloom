@@ -1,6 +1,7 @@
 import { Asset, AssetCreate, Listing } from "@bloom-housing/backend-core/types"
 
 export const CLOUDINARY_BUILDING_LABEL = "cloudinaryBuilding"
+export const IMAGE_FALLBACK_URL = "/images/listing-fallback.png"
 
 export const cloudinaryUrlFromId = (publicId: string, cloudName: string, size = 400) => {
   return `https://res.cloudinary.com/${cloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
@@ -89,7 +90,7 @@ export const imageUrlFromListing = (listing: Listing, size = 400): (string | nul
       return asset ? getImageUrlFromAsset(asset, size) : null
     })
 
-  return imageUrls
+  return imageUrls?.length > 0 ? imageUrls : ["/images/fallback-listing.png"]
   // we can omit this by searching for both "cloudinaryBuilding" and "building" above
   //return imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId
 }
