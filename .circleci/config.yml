@@ -156,7 +156,9 @@ workflows:
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
-          command: npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
+          command: |
+            FEATURE_LISTINGS_APPROVAL=FALSE
+            npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
       - cypress/run:
@@ -170,8 +172,7 @@ workflows:
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           command: |
-            echo 'export FEATURE_LISTINGS_APPROVAL=TRUE' >> "$BASH_ENV"
-            source "$BASH_ENV"
+            FEATURE_LISTINGS_APPROVAL=TRUE
             npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
