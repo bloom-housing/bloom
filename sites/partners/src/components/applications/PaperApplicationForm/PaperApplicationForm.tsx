@@ -6,8 +6,8 @@ import {
   AlertBox,
   setSiteAlertMessage,
   LoadingOverlay,
-  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
+import { Tag } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -163,18 +163,18 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   return (
     <LoadingOverlay isLoading={loading}>
       <>
-        <StatusBar
-          tagStyle={
-            application?.status == ApplicationStatus.submitted
-              ? AppearanceStyleType.success
-              : AppearanceStyleType.primary
-          }
-          tagLabel={
-            application?.status
+        <StatusBar>
+          <Tag
+            variant={
+              application?.status == ApplicationStatus.submitted ? "success-inverse" : "primary"
+            }
+            size={"lg"}
+          >
+            {application?.status
               ? t(`application.details.applicationStatus.${application.status}`)
-              : t(`application.details.applicationStatus.draft`)
-          }
-        />
+              : t(`application.details.applicationStatus.draft`)}
+          </Tag>
+        </StatusBar>
 
         <FormProvider {...formMethods}>
           <section className="bg-primary-lighter py-5">
