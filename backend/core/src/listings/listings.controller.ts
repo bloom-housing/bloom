@@ -15,6 +15,7 @@ import {
   Headers,
   ParseUUIDPipe,
   Header,
+  Request,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -112,10 +113,11 @@ export class ListingsController {
   @ApiOperation({ summary: "Update listing by id", operationId: "update" })
   @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
   async update(
+    @Request() req,
     @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
-    const listing = await this.listingsService.update(listingUpdateDto)
+    const listing = await this.listingsService.update(listingUpdateDto, req.user)
     return mapTo(ListingDto, listing)
   }
 

@@ -28,6 +28,7 @@ type ListingFormActionsProps = {
   type: ListingFormActionsType
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
+  showRequestChangesModal?: () => void
   showSubmitForApprovalModal?: () => void
   submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
@@ -36,6 +37,7 @@ const ListingFormActions = ({
   type,
   showCloseListingModal,
   showLotteryResultsDrawer,
+  showRequestChangesModal,
   showSubmitForApprovalModal,
   submitFormWithStatus,
 }: ListingFormActionsProps) => {
@@ -237,7 +239,7 @@ const ListingFormActions = ({
 
               if (result) {
                 setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
-                await router.push(`/listings/${result.id}`)
+                await router.push(`/`)
               }
             } catch (err) {
               setSiteAlertMessage("errors.somethingWentWrong", "warn")
@@ -257,10 +259,7 @@ const ListingFormActions = ({
           border={AppearanceBorderType.outlined}
           type="button"
           fullWidth
-          onClick={() => {
-            // TODO throw a modal
-            submitFormWithStatus(false, ListingStatus.changesRequested)
-          }}
+          onClick={() => showRequestChangesModal && showRequestChangesModal()}
         >
           {t("listings.approval.requestChanges")}
         </Button>
@@ -397,8 +396,8 @@ const ListingFormActions = ({
 
       // new unsaved listing
       if (type === ListingFormActionsType.add) {
-        elements.push(saveDraftButton)
         elements.push(publishButton)
+        elements.push(saveDraftButton)
         elements.push(cancelButton)
       }
 
@@ -447,6 +446,7 @@ const ListingFormActions = ({
     router,
     showCloseListingModal,
     showLotteryResultsDrawer,
+    showRequestChangesModal,
     showSubmitForApprovalModal,
     submitFormWithStatus,
     type,

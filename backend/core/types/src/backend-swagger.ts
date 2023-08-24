@@ -5546,9 +5546,6 @@ export interface ListingCreate {
 
   /**  */
   utilities?: ListingUtilities
-
-  /**  */
-  requestedChangesUser?: CombinedRequestedChangesUserTypes
 }
 
 export interface ListingEventUpdate {
@@ -5958,9 +5955,6 @@ export interface ListingUpdate {
 
   /**  */
   utilities?: ListingUtilities
-
-  /**  */
-  requestedChangesUser?: CombinedRequestedChangesUserTypes
 }
 
 export interface MultiselectQuestionsFilterParams {
