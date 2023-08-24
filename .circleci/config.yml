@@ -154,10 +154,10 @@ workflows:
           working_directory: sites/partners
           yarn: true
           build: |
+            FEATURE_LISTINGS_APPROVAL=FALSE
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           command: |
-            FEATURE_LISTINGS_APPROVAL=FALSE
             npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
@@ -169,10 +169,10 @@ workflows:
           working_directory: sites/partners
           yarn: true
           build: |
+            FEATURE_LISTINGS_APPROVAL=TRUE
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           command: |
-            FEATURE_LISTINGS_APPROVAL=TRUE
             npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
           wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
