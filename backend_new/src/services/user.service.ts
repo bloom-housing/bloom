@@ -44,6 +44,7 @@ const view: Prisma.UserAccountsInclude = {
 type findByOptions = {
   userId?: string;
   email?: string;
+  resetToken?: string;
 };
 
 @Injectable()
@@ -708,9 +709,13 @@ export class UserService {
     });
 
     if (!rawUser) {
-      throw new NotFoundException(
-        `user ${findBy.userId || findBy.email} was requested but not found`,
-      );
+      let str = '';
+      if (findBy.userId) {
+        str = `id: ${findBy.userId}`;
+      } else if (findBy.email) {
+        str = `email: ${findBy.email}`;
+      }
+      throw new NotFoundException(`user ${str} was requested but not found`);
     }
 
     return rawUser;

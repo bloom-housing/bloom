@@ -32,12 +32,15 @@
     "@google-cloud/translate": "^7.2.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/jwt": "^10.1.0",
+    "@nestjs/passport": "^10.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^6.3.0",
     "@prisma/client": "^5.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cloudinary": "^1.37.3",
+    "cookie-parser": "^1.4.6",
     "dayjs": "^1.11.9",
     "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
@@ -46,7 +49,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "swagger-axios-codegen": "^0.15.11"
+    "swagger-axios-codegen": "^0.15.11",
+    "twilio": "^4.15.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
