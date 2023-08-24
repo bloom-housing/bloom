@@ -270,39 +270,7 @@ export class ListingsService {
   }
 
   async updateAndNotify(listingData: ListingUpdateDto) {
-    console.log("here")
     const result = await this.update(listingData)
-
-    // const getEmailParams = async (
-    //   emailType: "requestApproval" | "changesRequested" | "listingPublished"
-    // ) => {
-    //   const params = {
-    //     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    //     user: this.req.user as User,
-    //     listingInfo: { id: listingData.id, name: listingData.name },
-    //   }
-    //   if (emailType === "requestApproval") {
-    //     params["emails"] = await this.getApprovingUserEmails()
-    //     params["appUrl"] = this.configService.get("PARTNERS_PORTAL_URL")
-    //   } else if (emailType === "changesRequested") {
-    //     const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
-    //       listingData.id,
-    //       listingData.jurisdiction.id
-    //     )
-    //     params["emails"] = nonApprovingUserInfo.emails
-    //     params["appUrl"] = this.configService.get("PARTNERS_PORTAL_URL")
-    //   } else {
-    //     const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
-    //       listingData.id,
-    //       listingData.jurisdiction.id,
-    //       true
-    //     )
-    //     params["emails"] = nonApprovingUserInfo.emails
-    //     params["appUrl"] = nonApprovingUserInfo.publicUrl
-    //   }
-    //   return params
-    // }
-
     if (listingData.status === ListingStatus.pendingReview) {
       const approvingUserEmails = await this.getApprovingUserEmails()
       await this.emailService.requestApproval(
@@ -330,7 +298,6 @@ export class ListingsService {
         listingData.jurisdiction.id,
         true
       )
-      console.log(nonApprovingUserInfo)
       await this.emailService.listingApproved(
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         this.req.user as User,

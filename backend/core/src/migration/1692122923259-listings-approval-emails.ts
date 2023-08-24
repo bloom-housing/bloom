@@ -41,7 +41,7 @@ export class listingsApprovalEmails1692122923259 implements MigrationInterface {
         adminRequestStart:
           "An administrator is requesting changes to the %{listingName} listing. Please log into the",
         adminRequestEnd:
-          "and navigate to the listing detail page to view the request and edit the listing. To access the listing after logging in, please click the link below",
+          "and navigate to the listing detail page to view the request and edit the listing.",
       }
 
       data.listingApproved = {

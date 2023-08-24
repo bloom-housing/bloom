@@ -232,11 +232,14 @@ const ListingFormActions = ({
           onClick={async () => {
             // TODO throw a modal
             try {
-              const result = await listingsService.update({
+              const result = await listingsService.updateAndNotify({
                 id: listing.id,
                 body: { ...listing, status: ListingStatus.active },
               })
-
+              // const result = await listingsService.update({
+              //   id: listing.id,
+              //   body: { ...listing, status: ListingStatus.active },
+              // })
               if (result) {
                 setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
                 if (router.pathname.includes("edit")) {
