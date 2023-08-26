@@ -392,9 +392,7 @@ export class EmailService {
     emails: string[],
     publicUrl: string
   ) {
-    console.log(emails)
     const jurisdiction = await this.getUserJurisdiction(user)
-    console.log(jurisdiction)
     void (await this.loadTranslations(jurisdiction, Language.en))
     await this.send(
       emails,

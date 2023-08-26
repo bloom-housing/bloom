@@ -29,8 +29,6 @@ export class TranslationsService extends AbstractServiceFactory<
     jurisdictionId: string | null
   ) {
     try {
-      console.log(language, jurisdictionId)
-
       return await this.findOne({
         where: {
           language,

@@ -177,19 +177,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
           })
           const formattedData = await dataPipeline.run()
-          // why is this flipped
-          console.log(formattedData.status, listing.status)
           let result
           if (editMode) {
-            if (
-              process.env.featureListingsApproval &&
-              (formattedData.status === ListingStatus.pendingReview ||
-                formattedData.status === ListingStatus.changesRequested)
-              // new published listing
-              // (formattedData.status === ListingStatus.active &&
-              //   (listing.status === ListingStatus.pendingReview ||
-              //     listing.status === ListingStatus.changesRequested)))
-            ) {
+            if (process.env.featureListingsApproval) {
               result = await listingsService.updateAndNotify({
                 id: listing.id,
                 body: { ...formattedData },

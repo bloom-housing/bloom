@@ -230,26 +230,21 @@ const ListingFormActions = ({
           type="button"
           fullWidth
           onClick={async () => {
-            // TODO throw a modal
-            try {
-              const result = await listingsService.updateAndNotify({
-                id: listing.id,
-                body: { ...listing, status: ListingStatus.active },
-              })
-              // const result = await listingsService.update({
-              //   id: listing.id,
-              //   body: { ...listing, status: ListingStatus.active },
-              // })
-              if (result) {
-                setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
-                if (router.pathname.includes("edit")) {
+            if (type === ListingFormActionsType.edit) {
+              submitFormWithStatus(false, ListingStatus.active)
+            } else {
+              try {
+                const result = await listingsService.updateAndNotify({
+                  id: listing.id,
+                  body: { ...listing, status: ListingStatus.active },
+                })
+                if (result) {
+                  setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
                   await router.push(`/listings/${result.id}`)
-                } else {
-                  router.reload()
                 }
+              } catch (err) {
+                setSiteAlertMessage("errors.somethingWentWrong", "warn")
               }
-            } catch (err) {
-              setSiteAlertMessage("errors.somethingWentWrong", "warn")
             }
           }}
         >

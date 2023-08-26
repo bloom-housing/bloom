@@ -271,6 +271,7 @@ export class ListingsService {
 
   async updateAndNotify(listingData: ListingUpdateDto) {
     const result = await this.update(listingData)
+
     if (listingData.status === ListingStatus.pendingReview) {
       const approvingUserEmails = await this.getApprovingUserEmails()
       await this.emailService.requestApproval(
@@ -293,6 +294,18 @@ export class ListingsService {
         this.configService.get("PARTNERS_PORTAL_URL")
       )
     } else if (listingData.status === ListingStatus.active) {
+      const previousStatus = await this.listingRepository
+        .createQueryBuilder("listings")
+        .select("listings.status")
+        .where("id = :id", { id: listingData.id })
+        .getOne()
+
+      if (
+        previousStatus.status !== ListingStatus.pendingReview &&
+        previousStatus.status !== ListingStatus.changesRequested
+      )
+        return result
+
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
         listingData.jurisdiction.id,

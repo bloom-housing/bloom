@@ -442,7 +442,7 @@ describe("EmailService", () => {
         "To view the published listing, please click on the link below"
       )
       expect(emailMock.html).toMatch("View Listing")
-      expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listings\/Uvbk5qurpB2WI9V6WnNdH/)
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
       expect(emailMock.html).toMatch("Thank you,")
       expect(emailMock.html).toMatch("Alameda County Housing Portal")
       expect(emailMock.html).toMatch("Alameda County Housing Portal is a project of the")
