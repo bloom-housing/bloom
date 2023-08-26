@@ -270,9 +270,9 @@ export class ListingsService {
   }
 
   async updateAndNotify(listingData: ListingUpdateDto) {
-    const result = await this.update(listingData)
-
+    let result
     if (listingData.status === ListingStatus.pendingReview) {
+      result = await this.update(listingData)
       const approvingUserEmails = await this.getApprovingUserEmails()
       await this.emailService.requestApproval(
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -282,6 +282,7 @@ export class ListingsService {
         this.configService.get("PARTNERS_PORTAL_URL")
       )
     } else if (listingData.status === ListingStatus.changesRequested) {
+      result = await this.update(listingData)
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
         listingData.jurisdiction.id
@@ -299,13 +300,14 @@ export class ListingsService {
         .select("listings.status")
         .where("id = :id", { id: listingData.id })
         .getOne()
-
+      result = await this.update(listingData)
+      console.log(previousStatus)
       if (
         previousStatus.status !== ListingStatus.pendingReview &&
         previousStatus.status !== ListingStatus.changesRequested
-      )
+      ) {
         return result
-
+      }
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
         listingData.jurisdiction.id,
@@ -318,6 +320,8 @@ export class ListingsService {
         nonApprovingUserInfo.emails,
         nonApprovingUserInfo.publicUrl
       )
+    } else {
+      result = await this.update(listingData)
     }
     return result
   }
