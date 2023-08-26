@@ -271,25 +271,25 @@ export class ListingsService {
 
   async updateAndNotify(listingData: ListingUpdateDto) {
     let result
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    const reqUser = this.req.user
     if (listingData.status === ListingStatus.pendingReview) {
-      result = await this.update(listingData)
+      result = await this.update(listingData, reqUser)
       const approvingUserEmails = await this.getApprovingUserEmails()
       await this.emailService.requestApproval(
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        this.req.user as User,
+        reqUser,
         { id: listingData.id, name: listingData.name },
         approvingUserEmails,
         this.configService.get("PARTNERS_PORTAL_URL")
       )
     } else if (listingData.status === ListingStatus.changesRequested) {
-      result = await this.update(listingData)
+      result = await this.update(listingData, reqUser)
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
         listingData.jurisdiction.id
       )
       await this.emailService.changesRequested(
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        this.req.user as User,
+        reqUser,
         { id: listingData.id, name: listingData.name },
         nonApprovingUserInfo.emails,
         this.configService.get("PARTNERS_PORTAL_URL")
@@ -300,7 +300,7 @@ export class ListingsService {
         .select("listings.status")
         .where("id = :id", { id: listingData.id })
         .getOne()
-      result = await this.update(listingData)
+      result = await this.update(listingData, reqUser)
       console.log(previousStatus)
       if (
         previousStatus.status !== ListingStatus.pendingReview &&
@@ -314,14 +314,13 @@ export class ListingsService {
         true
       )
       await this.emailService.listingApproved(
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        this.req.user as User,
+        reqUser,
         { id: listingData.id, name: listingData.name },
         nonApprovingUserInfo.emails,
         nonApprovingUserInfo.publicUrl
       )
     } else {
-      result = await this.update(listingData)
+      result = await this.update(listingData, reqUser)
     }
     return result
   }
