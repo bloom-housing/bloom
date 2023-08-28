@@ -11,8 +11,10 @@
   @apply text-gray-800;
   @apply font-semibold;
   @apply text-sm;
+  min-width: auto;
 
   @media (min-width: $screen-md) {
     @apply text-xl;
+    min-width: var(--bloom-s40);
   }
 }

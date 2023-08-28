@@ -137,7 +137,7 @@ export function LandingSearch(props: LandingSearchProps) {
           options={bedroomOptions}
           onChange={updateValue}
           value={formValues.bedrooms}
-          className="bg-accent-cool-light py-0 px-0 md:pl-12 landing-search-button-group"
+          className="bg-accent-cool-light pt-2 md:py-0 md:px-0 landing-search-button-group"
           spacing={ButtonGroupSpacing.left}
         />
       </div>
@@ -153,7 +153,7 @@ export function LandingSearch(props: LandingSearchProps) {
           getValues={getValues}
           defaultValue={formValues.monthlyRent}
           placeholder="$"
-          className="doorway-field p-0 md:pl-6"
+          className="doorway-field p-0 md:-mt-1"
           inputClassName="rent-input"
           labelClassName="input-label"
         />
@@ -166,7 +166,7 @@ export function LandingSearch(props: LandingSearchProps) {
           fields={countyFields}
           onChange={updateValueMulti}
           register={register}
-          fieldGroupClassName="county-checkbox-group doorway-field-group grid grid-cols-2 md:pl-16 "
+          fieldGroupClassName="county-checkbox-group doorway-field-group grid grid-cols-2 pt-2 md:py-0"
           fieldLabelClassName="text-primary-dark font-medium tracking-wider text-2xs uppercase"
         />
       </div>

@@ -1,12 +1,12 @@
 .doorway-hero {
   --doorway-hero-background-color: var(--bloom-color-white);
   --doorway-hero-between-margin: var(--bloom-s6);
-  --doorway-hero-max-width: var(--bloom-width-5xl);
+  --doorway-hero-max-width: 68rem;
   --doorway-hero-inner-background-color: var(--doorway-color-secondary);
   --doorway-hero-inner-max-width: var(--bloom-width-3xl);
-  --doorway-hero-inner-offset: calc(-1 * var(--bloom-s20));
+  --doorway-hero-inner-offset: calc(-1 * var(--bloom-s16));
   --doorway-hero-image-width-desktop: var(--bloom-width-1-3rd);
-  --doorway-hero-image-offset-right: calc(-1 * var(--bloom-s40));
+  --doorway-hero-image-offset-right: calc(-1 * 19rem);
   --doorway-hero-image-width: 50%;
 
   margin: auto;
@@ -58,11 +58,11 @@
   @media (min-width: $screen-lg) {
     max-width: var(--doorway-hero-inner-max-width);
 
-    @apply pr-72;
+    padding-right: var(--bloom-s36);
   }
 
   @media (min-width: $screen-md) AND (max-width: $screen-lg) {
-    @apply pr-0;
+    padding-right: 0;
   }
 
   h1 {
