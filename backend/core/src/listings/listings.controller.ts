@@ -128,10 +128,11 @@ export class ListingsController {
   })
   @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
   async requestApproval(
+    @Request() req,
     @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
-    const listing = await this.listingsService.updateAndNotify(listingUpdateDto)
+    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req.user)
     return mapTo(ListingDto, listing)
   }
 
