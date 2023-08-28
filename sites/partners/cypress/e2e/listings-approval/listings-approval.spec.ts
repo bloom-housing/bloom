@@ -14,7 +14,7 @@ describe("Listings approval feature", () => {
     cy.signOut()
 
     // Admin: Request changes
-    cy.login("user")
+    cy.loginAndAcceptTerms("user")
     searchAndOpenListing(cy, uniqueListingName)
     cy.getByID("listing-status-pending-review").should("be.visible")
     cy.getByTestId("listingEditButton").click()
