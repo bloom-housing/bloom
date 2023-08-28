@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
 
@@ -8,19 +9,21 @@ const DetailListingData = () => {
   const listing = useContext(ListingContext)
 
   return (
-    <GridSection className="bg-primary-lighter" title={t("listings.details.listingData")} inset>
-      <GridCell span={2}>
-        <FieldValue label={t("listings.details.id")}>{listing.id}</FieldValue>
-      </GridCell>
-
-      <GridCell>
-        <FieldValue label={t("listings.details.createdDate")}>
+    <SectionWithGrid heading={t("listings.details.listingData")} inset>
+      <Grid.Row>
+        <FieldValue
+          id="jurisdiction.name"
+          label={t("listings.details.id")}
+        >
+          {listing.id}
+        </FieldValue>
+        <FieldValue id="name" label={t("listings.details.createdDate")}>
           {getDetailFieldDate(listing.createdAt)}
-          <br />
+          {" at "}
           {getDetailFieldTime(listing.createdAt)}
         </FieldValue>
-      </GridCell>
-    </GridSection>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

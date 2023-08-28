@@ -16,6 +16,7 @@ import {
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
+import { Card } from "@bloom-housing/ui-seeds"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
@@ -162,19 +163,21 @@ const LotteryResults = (props: LotteryResultsProps) => {
         </Button>,
       ]}
     >
-      <section className="border rounded-md p-8 bg-white">
-        <Dropzone
-          id="lottery-results-upload"
-          label={t("listings.sections.lotteryResultsHelperText")}
-          helptext={t("listings.pdfHelperText")}
-          uploader={pdfUploader}
-          accept="application/pdf"
-          progress={progressValue}
-        />
-        {cloudinaryData.url !== "" && (
-          <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
-        )}
-      </section>
+      <Card>
+        <Card.Section>
+          <Dropzone
+            id="lottery-results-upload"
+            label={t("listings.sections.lotteryResultsHelperText")}
+            helptext={t("listings.pdfHelperText")}
+            uploader={pdfUploader}
+            accept="application/pdf"
+            progress={progressValue}
+          />
+          {cloudinaryData.url !== "" && (
+            <MinimalTable headers={resultsTableHeaders} data={previewTableRows}></MinimalTable>
+          )}
+        </Card.Section>
+      </Card>
     </Drawer>
   )
 }

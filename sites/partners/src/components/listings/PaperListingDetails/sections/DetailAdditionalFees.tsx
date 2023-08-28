@@ -1,9 +1,10 @@
 import React, { useContext } from "react"
 import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailAdditionalFees = () => {
   const listing = useContext(ListingContext)
@@ -29,51 +30,34 @@ const DetailAdditionalFees = () => {
   }
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.additionalFees")}
-      grid={false}
-      inset
-    >
-      <GridSection columns={3}>
-        <GridCell>
-          <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
-            {getDetailFieldString(listing.applicationFee)}
+    <SectionWithGrid heading={t("listings.sections.additionalFees")} inset>
+      <Grid.Row>
+        <FieldValue id="applicationFee" label={t("listings.applicationFee")}>
+          {getDetailFieldString(listing.applicationFee)}
+        </FieldValue>
+        <FieldValue id="depositMin" label={t("listings.depositMin")}>
+          {getDetailFieldString(listing.depositMin)}
+        </FieldValue>
+        <FieldValue id="depositMax" label={t("listings.depositMax")}>
+          {getDetailFieldString(listing.depositMax)}
+        </FieldValue>
+      </Grid.Row>
+      <Grid.Row>
+        <FieldValue label={t("listings.sections.depositHelperText")}>
+          {getDetailFieldString(listing.depositHelperText)}
+        </FieldValue>
+        <FieldValue id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
+          {getDetailFieldString(listing.costsNotIncluded)}
+        </FieldValue>
+      </Grid.Row>
+      {enableUtilitiesIncluded && (
+        <Grid.Row>
+          <FieldValue label={t("listings.sections.utilities")}>
+            <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
           </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue id="depositMin" label={t("listings.depositMin")}>
-            {getDetailFieldString(listing.depositMin)}
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue id="depositMax" label={t("listings.depositMax")}>
-            {getDetailFieldString(listing.depositMax)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={2}>
-        <GridCell>
-          <FieldValue label={t("listings.sections.depositHelperText")}>
-            {getDetailFieldString(listing.depositHelperText)}
-          </FieldValue>
-        </GridCell>
-        <GridCell>
-          <FieldValue id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
-            {getDetailFieldString(listing.costsNotIncluded)}
-          </FieldValue>
-        </GridCell>
-        {enableUtilitiesIncluded && (
-          <GridSection columns={1}>
-            <GridCell className={"m-h-1"}>
-              <FieldValue label={t("listings.sections.utilities")}>
-                <ul className={"flex flex-wrap"}>{getUtilitiesIncluded()}</ul>
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-        )}
-      </GridSection>
-    </GridSection>
+        </Grid.Row>
+      )}
+    </SectionWithGrid>
   )
 }
 

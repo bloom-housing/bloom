@@ -1605,10 +1605,10 @@
     tailwindcss-rtl "^0.9.0"
     typesafe-actions "^5.1.0"
 
-"@bloom-housing/ui-seeds@^1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.7.4.tgz#33526b2335b2d46e056315f74591e6b767b08f2c"
-  integrity sha512-AhnDOs8u/4uhOLQCn/abtJA2n+OJdNj7Gy1NW/z9Ax37uV6AQ0T3phJt1iciVkGGsR1MsWnE9TTItyJ5xdEUsg==
+"@bloom-housing/ui-seeds@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-seeds/-/ui-seeds-1.9.1.tgz#ff581dbab27d0a8bdee92e72ef575959c1fc28f8"
+  integrity sha512-7TLEWscoJRniUjsDx0eWdUwE9nhSFLICzxa4bRhpqJnsmKT3rmA87gclHgqFgEvNdbsvStWISltztNe9ZTND2g==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.3.0"
     "@fortawesome/free-regular-svg-icons" "^6.3.0"
@@ -1782,6 +1782,31 @@
   integrity sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
+
+"@csstools/cascade-layer-name-parser@^1.0.3":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@csstools/cascade-layer-name-parser/-/cascade-layer-name-parser-1.0.4.tgz#3ff490b84660dc0592b4315029f22908f3de0577"
+  integrity sha512-zXMGsJetbLoXe+gjEES07MEGjL0Uy3hMxmnGtVBrRpVKr5KV9OgCB09zr/vLrsEtoVQTgJFewxaU8IYSAE4tjg==
+
+"@csstools/css-parser-algorithms@^2.3.0":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@csstools/css-parser-algorithms/-/css-parser-algorithms-2.3.1.tgz#ec4fc764ba45d2bb7ee2774667e056aa95003f3a"
+  integrity sha512-xrvsmVUtefWMWQsGgFffqWSK03pZ1vfDki4IVIIUxxDKnGBzqNgv0A7SB1oXtVNEkcVO8xi1ZrTL29HhSu5kGA==
+
+"@csstools/css-tokenizer@^2.1.1":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@csstools/css-tokenizer/-/css-tokenizer-2.2.0.tgz#9d70e6dcbe94e44c7400a2929928db35c4de32b5"
+  integrity sha512-wErmsWCbsmig8sQKkM6pFhr/oPha1bHfvxsUY5CYSQxwyhA9Ulrs8EqCgClhg4Tgg2XapVstGqSVcz0xOYizZA==
+
+"@csstools/media-query-list-parser@^2.1.2":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@csstools/media-query-list-parser/-/media-query-list-parser-2.1.4.tgz#0017f99945f6c16dd81a7aacf6821770933c3a5c"
+  integrity sha512-V/OUXYX91tAC1CDsiY+HotIcJR+vPtzrX8pCplCpT++i8ThZZsq5F5dzZh/bDM3WUOjrvC1ljed1oSJxMfjqhw==
+
+"@csstools/postcss-global-data@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@csstools/postcss-global-data/-/postcss-global-data-2.0.1.tgz#3e465cdd66894737b9a8f66d4ecced99c44d6aec"
+  integrity sha512-MTaupJCsDS9BDgo+Lvb5G1/MkqnKN65I14nr2Hu0QqHoqJEIOpn6CBGrs7jXAjksGG0OUDQY0zlhjM3q7AI54A==
 
 "@cypress/code-coverage@^3.10.1":
   version "3.10.1"
@@ -15016,6 +15041,16 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.npmjs.org/posix-character-classes/-/posix-character-classes-0.1.1.tgz"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
+
+postcss-custom-media@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-custom-media/-/postcss-custom-media-10.0.0.tgz#299781f67d043de7d3eaa13923c26c586d9cd57a"
+  integrity sha512-NxDn7C6GJ7X8TsWOa8MbCdq9rLERRLcPfQSp856k1jzMreL8X9M6iWk35JjPRIb9IfRnVohmxAylDRx7n4Rv4g==
+  dependencies:
+    "@csstools/cascade-layer-name-parser" "^1.0.3"
+    "@csstools/css-parser-algorithms" "^2.3.0"
+    "@csstools/css-tokenizer" "^2.1.1"
+    "@csstools/media-query-list-parser" "^2.1.2"
 
 postcss-js@^3.0.3:
   version "3.0.3"

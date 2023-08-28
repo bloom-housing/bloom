@@ -1,23 +1,22 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react"
 import {
   t,
-  GridSection,
   MinimalTable,
   Button,
   AppearanceSizeType,
   Drawer,
   Modal,
   AppearanceStyleType,
-  GridCell,
   FieldGroup,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import UnitForm from "../UnitForm"
 import { useFormContext, useWatch } from "react-hook-form"
 import { TempUnit } from "../../../../lib/listings/formTypes"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type UnitProps = {
   units: TempUnit[]
@@ -156,56 +155,48 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   return (
     <>
-      <GridSection
-        title={t("listings.units")}
-        description={t("listings.unitsDescription")}
-        grid={false}
-        separator
-      >
-        <GridSection columns={2}>
-          <GridCell>
-            <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
-              <FieldGroup
-                name="disableUnitsAccordion"
-                type="radio"
-                register={register}
-                fields={disableUnitsAccordionOptions}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-              />
-            </FieldValue>
-          </GridCell>
-          <GridCell>
-            <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
-              <FieldGroup
-                name="listingAvailabilityQuestion"
-                type="radio"
-                register={register}
-                groupSubNote={t("listings.requiredToPublish")}
-                error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
-                errorMessage={fieldMessage(errors?.listingAvailability)}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                fields={[
-                  {
-                    label: t("listings.availableUnits"),
-                    value: "availableUnits",
-                    id: "availableUnits",
-                    dataTestId: "listingAvailability.availableUnits",
-                    defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
-                  },
-                  {
-                    label: t("listings.waitlist.open"),
-                    value: "openWaitlist",
-                    id: "openWaitlist",
-                    dataTestId: "listingAvailability.openWaitlist",
-                    defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
-                  },
-                ]}
-              />
-            </FieldValue>
-          </GridCell>
-        </GridSection>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("listings.units")} subheading={t("listings.unitsDescription")}>
+        <Grid.Row columns={2}>
+          <FieldValue label={t("listings.unitTypesOrIndividual")} className="mb-1">
+            <FieldGroup
+              name="disableUnitsAccordion"
+              type="radio"
+              register={register}
+              fields={disableUnitsAccordionOptions}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex h-12 items-center"
+            />
+          </FieldValue>
+          <FieldValue label={t("listings.listingAvailabilityQuestion")} className={"mb-1"}>
+            <FieldGroup
+              name="listingAvailabilityQuestion"
+              type="radio"
+              register={register}
+              groupSubNote={t("listings.requiredToPublish")}
+              error={fieldHasError(errors?.listingAvailability) && listingAvailability === null}
+              errorMessage={fieldMessage(errors?.listingAvailability)}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex h-12 items-center"
+              fields={[
+                {
+                  label: t("listings.availableUnits"),
+                  value: "availableUnits",
+                  id: "availableUnits",
+                  dataTestId: "listingAvailability.availableUnits",
+                  defaultChecked: listing?.reviewOrderType !== ListingReviewOrder.waitlist,
+                },
+                {
+                  label: t("listings.waitlist.open"),
+                  value: "openWaitlist",
+                  id: "openWaitlist",
+                  dataTestId: "listingAvailability.openWaitlist",
+                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.waitlist,
+                },
+              ]}
+            />
+          </FieldValue>
+        </Grid.Row>
         <span className={"text-sm text-gray-800 block mb-2"}>{t("listings.units")}</span>
         <div className="bg-gray-300 px-4 py-5">
           {!!units.length && (
@@ -226,7 +217,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             {t("listings.unit.add")}
           </Button>
         </div>
-      </GridSection>
+      </SectionWithGrid>
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.units) && (

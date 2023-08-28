@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  Textarea,
-  Field,
-  PhoneField,
-  GridCell,
-  Select,
-} from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Textarea, Field, PhoneField, Select } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
@@ -37,71 +30,80 @@ const LeasingAgent = () => {
   }, [leasingAgentPhoneField, clearErrors, phoneField])
 
   return (
-    <div>
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.leasingAgentTitle")}
-        description={t("listings.sections.leasingAgentSubtitle")}
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.leasingAgentTitle")}
+        subheading={t("listings.sections.leasingAgentSubtitle")}
       >
-        <GridSection columns={3}>
-          <Field
-            label={t("leasingAgent.name")}
-            name={"leasingAgentName"}
-            id={"leasingAgentName"}
-            subNote={t("listings.requiredToPublish")}
-            error={fieldHasError(errors?.leasingAgentName)}
-            errorMessage={fieldMessage(errors?.leasingAgentName)}
-            placeholder={t("leasingAgent.namePlaceholder")}
-            register={register}
-            inputProps={{
-              onChange: () => clearErrors("leasingAgentName"),
-            }}
-          />
-          <Field
-            label={t("t.email")}
-            name={"leasingAgentEmail"}
-            id={"leasingAgentEmail"}
-            subNote={t("listings.requiredToPublish")}
-            error={fieldHasError(errors?.leasingAgentEmail)}
-            errorMessage={fieldMessage(errors?.leasingAgentEmail)}
-            placeholder={t("t.emailAddressPlaceholder")}
-            register={register}
-            inputProps={{
-              onChange: () => clearErrors("leasingAgentEmail"),
-            }}
-          />
-          <PhoneField
-            label={t("t.phone")}
-            name={"leasingAgentPhone"}
-            id={"leasingAgentPhone"}
-            subNote={t("listings.requiredToPublish")}
-            error={fieldHasError(errors?.leasingAgentPhone)}
-            errorMessage={fieldMessage(errors?.leasingAgentPhone)}
-            placeholder={t("t.phoneNumberPlaceholder")}
-            control={control}
-            controlClassName={"control"}
-          />
-        </GridSection>
-        <GridSection columns={2}>
-          <Field
-            label={t("leasingAgent.title")}
-            name={"leasingAgentTitle"}
-            id={"leasingAgentTitle"}
-            placeholder={t("leasingAgent.title")}
-            register={register}
-          />
-          <Textarea
-            label={t("leasingAgent.officeHours")}
-            name={"leasingAgentOfficeHours"}
-            id={"leasingAgentOfficeHours"}
-            fullWidth={true}
-            placeholder={t("leasingAgent.officeHoursPlaceholder")}
-            register={register}
-          />
-        </GridSection>
-        <GridSection columns={3} subtitle={"Leasing Agent Address"}>
-          <GridCell span={2}>
+        <Grid.Row columns={3}>
+          <Grid.Cell>
+            <Field
+              label={t("leasingAgent.name")}
+              name={"leasingAgentName"}
+              id={"leasingAgentName"}
+              subNote={t("listings.requiredToPublish")}
+              error={fieldHasError(errors?.leasingAgentName)}
+              errorMessage={fieldMessage(errors?.leasingAgentName)}
+              placeholder={t("leasingAgent.namePlaceholder")}
+              register={register}
+              inputProps={{
+                onChange: () => clearErrors("leasingAgentName"),
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              label={t("t.email")}
+              name={"leasingAgentEmail"}
+              id={"leasingAgentEmail"}
+              subNote={t("listings.requiredToPublish")}
+              error={fieldHasError(errors?.leasingAgentEmail)}
+              errorMessage={fieldMessage(errors?.leasingAgentEmail)}
+              placeholder={t("t.emailAddressPlaceholder")}
+              register={register}
+              inputProps={{
+                onChange: () => clearErrors("leasingAgentEmail"),
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <PhoneField
+              label={t("t.phone")}
+              name={"leasingAgentPhone"}
+              id={"leasingAgentPhone"}
+              subNote={t("listings.requiredToPublish")}
+              error={fieldHasError(errors?.leasingAgentPhone)}
+              errorMessage={fieldMessage(errors?.leasingAgentPhone)}
+              placeholder={t("t.phoneNumberPlaceholder")}
+              control={control}
+              controlClassName={"control"}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <Field
+              label={t("leasingAgent.title")}
+              name={"leasingAgentTitle"}
+              id={"leasingAgentTitle"}
+              placeholder={t("leasingAgent.title")}
+              register={register}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <Textarea
+              label={t("leasingAgent.officeHours")}
+              name={"leasingAgentOfficeHours"}
+              id={"leasingAgentOfficeHours"}
+              fullWidth={true}
+              placeholder={t("leasingAgent.officeHoursPlaceholder")}
+              register={register}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={3} subtitle={"Leasing Agent Address"}>
+          <Grid.Cell span={2}>
             <Field
               label={t("listings.streetAddressOrPOBox")}
               name={"leasingAgentAddress.street"}
@@ -114,17 +116,19 @@ const LeasingAgent = () => {
                 onChange: () => clearErrors("leasingAgentAddress"),
               }}
             />
-          </GridCell>
-          <Field
-            label={t("application.contact.apt")}
-            name={"leasingAgentAddress.street2"}
-            id={"leasingAgentAddress.street2"}
-            register={register}
-            placeholder={t("application.contact.apt")}
-          />
-        </GridSection>
-        <GridSection columns={7}>
-          <GridCell span={3}>
+          </Grid.Cell>
+          <Grid.Cell>
+            <Field
+              label={t("application.contact.apt")}
+              name={"leasingAgentAddress.street2"}
+              id={"leasingAgentAddress.street2"}
+              register={register}
+              placeholder={t("application.contact.apt")}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={7}>
+          <Grid.Cell className="grid-triple-span">
             <Field
               label={t("application.contact.city")}
               name={"leasingAgentAddress.city"}
@@ -137,27 +141,27 @@ const LeasingAgent = () => {
                 onChange: () => clearErrors("leasingAgentAddress"),
               }}
             />
-          </GridCell>
-          <GridCell span={2}>
-            <FieldValue label={t("application.contact.state")} className="mb-0">
-              <Select
-                id={`leasingAgentAddress.state`}
-                name={`leasingAgentAddress.state`}
-                label={t("application.contact.state")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={stateKeys}
-                keyPrefix="states"
-                errorMessage={getErrorMessage("leasingAgentAddress.state")}
-                error={!!getErrorMessage("leasingAgentAddress.state")}
-                inputProps={{
-                  onChange: () => clearErrors("leasingAgentAddress"),
-                }}
-              />
-            </FieldValue>
-          </GridCell>
-          <GridCell span={2}>
+          </Grid.Cell>
+
+          <FieldValue label={t("application.contact.state")} className="grid-double-span">
+            <Select
+              id={`leasingAgentAddress.state`}
+              name={`leasingAgentAddress.state`}
+              label={t("application.contact.state")}
+              labelClassName="sr-only"
+              register={register}
+              controlClassName="control"
+              options={stateKeys}
+              keyPrefix="states"
+              errorMessage={getErrorMessage("leasingAgentAddress.state")}
+              error={!!getErrorMessage("leasingAgentAddress.state")}
+              inputProps={{
+                onChange: () => clearErrors("leasingAgentAddress"),
+              }}
+            />
+          </FieldValue>
+
+          <Grid.Cell className="grid-double-span">
             <Field
               label={t("application.contact.zip")}
               name={"leasingAgentAddress.zipCode"}
@@ -170,10 +174,10 @@ const LeasingAgent = () => {
                 onChange: () => clearErrors("leasingAgentAddress"),
               }}
             />
-          </GridCell>
-        </GridSection>
-      </GridSection>
-    </div>
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

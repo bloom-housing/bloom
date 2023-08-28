@@ -13,6 +13,7 @@ import {
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import LinkComponent from "../../../../components/core/LinkComponent"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -229,25 +230,24 @@ const SelectAndOrder = ({
 
   return (
     <>
-      <GridSection title={title} description={subtitle} grid={false} separator>
-        <div className="bg-gray-300 px-4 py-5">
-          {!!listingData.length && (
-            <div className="mb-5">
-              <MinimalTable headers={formTableHeaders} data={formTableData} />
-            </div>
-          )}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={title} subheading={subtitle} inset>
+        {!!listingData.length && (
+          <div className="mb-5">
+            <MinimalTable headers={formTableHeaders} data={formTableData} />
+          </div>
+        )}
 
-          <Button
-            id={`add-${applicationSection}-button`}
-            type="button"
-            size={AppearanceSizeType.normal}
-            onClick={() => setTableDrawer(true)}
-          >
-            {listingData.length ? editText : addText}
-          </Button>
-        </div>
+        <Button
+          id={`add-${applicationSection}-button`}
+          type="button"
+          size={AppearanceSizeType.normal}
+          onClick={() => setTableDrawer(true)}
+        >
+          {listingData.length ? editText : addText}
+        </Button>
         {subNote && <p className="field-sub-note">{subNote}</p>}
-      </GridSection>
+      </SectionWithGrid>
 
       <Drawer
         open={!!tableDrawer}

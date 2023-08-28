@@ -9,6 +9,8 @@ import {
 import { getUrlForListingImage } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { Asset } from "@bloom-housing/backend-core/types"
+import { FieldValue } from "@bloom-housing/ui-seeds"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const photoTableHeaders = {
   preview: "t.preview",
@@ -38,26 +40,13 @@ const DetailListingPhotos = () => {
   })
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.photoTitle")}
-      grid={false}
-      inset
-    >
-      <GridSection columns={1}>
-        <GridCell>
-          {listing.images.length > 0 ? (
-            <MinimalTable
-              id="listingPhotoTable"
-              headers={photoTableHeaders}
-              data={photoTableData}
-            />
-          ) : (
-            <span className={"view-item__value"}>{t("t.none")}</span>
-          )}
-        </GridCell>
-      </GridSection>
-    </GridSection>
+    <SectionWithGrid heading={t("listings.sections.photoTitle")} inset bypassGrid>
+      {listing.images.length > 0 ? (
+        <MinimalTable id="listingPhotoTable" headers={photoTableHeaders} data={photoTableData} />
+      ) : (
+        <FieldValue>{t("t.none")}</FieldValue>
+      )}
+    </SectionWithGrid>
   )
 }
 

@@ -2,18 +2,17 @@ import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
 import {
   t,
-  GridSection,
-  GridCell,
   MinimalTable,
   Button,
   Drawer,
   AppearanceStyleType,
   LinkButton,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
 import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
@@ -70,39 +69,31 @@ const DetailApplicationDates = () => {
 
   return (
     <>
-      <GridSection
-        className="bg-primary-lighter"
-        title={t("listings.sections.applicationDatesTitle")}
-        grid={false}
-        inset
-      >
-        <GridSection columns={3}>
-          <GridCell>
-            <FieldValue id="applicationDeadline" label={t("listings.applicationDeadline")}>
-              {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
-            </FieldValue>
-          </GridCell>
-          <GridCell>
-            <FieldValue id="applicationDueTime" label={t("listings.applicationDueTime")}>
-              {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
-            </FieldValue>
-          </GridCell>
-        </GridSection>
+      <SectionWithGrid heading={t("listings.sections.applicationDatesTitle")} inset>
+        <Grid.Row columns={3}>
+          <FieldValue id="applicationDeadline" label={t("listings.applicationDeadline")}>
+            {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
+          </FieldValue>
+          <FieldValue
+            id="applicationDueTime"
+            className="grid-double-span"
+            label={t("listings.applicationDueTime")}
+          >
+            {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
+          </FieldValue>
+        </Grid.Row>
 
         {!!openHouseEvents.length && (
-          <GridSection columns={1}>
+          <Grid.Row columns={1}>
             <FieldValue id="openHouseEvent.header" label={t("listings.openHouseEvent.header")}>
-              <div className="mt-5">
-                <div className="mb-5">
-                  <MinimalTable
-                    id="openhouseHeader"
-                    headers={openHouseHeaders}
-                    data={openHouseEvents}
-                  />
-                </div>
-              </div>
+              <MinimalTable
+                id="openhouseHeader"
+                className="spacer-heading-above"
+                headers={openHouseHeaders}
+                data={openHouseEvents}
+              />
             </FieldValue>
-          </GridSection>
+          </Grid.Row>
         )}
 
         <Drawer
@@ -111,39 +102,44 @@ const DetailApplicationDates = () => {
           ariaDescription={t("listings.unit.title")}
           onClose={() => setDrawer(null)}
         >
-          <section className="border rounded-md p-8 bg-white mb-8">
-            <GridSection tinted={true} inset={true} grid={false}>
-              <GridSection grid columns={3}>
-                <FieldValue id="drawer.startTime.date" label={t("t.date")}>
-                  {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
-                </FieldValue>
-                <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
-                  {getDetailFieldTime(drawer?.startTime)}
-                </FieldValue>
-                <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
-                  {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
-                </FieldValue>
-                <FieldValue id="drawer.url" label={t("t.url")}>
-                  {drawer?.url ? (
-                    <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
-                      {drawer?.label ?? t("t.url")}
-                    </LinkButton>
-                  ) : (
-                    t("t.n/a")
-                  )}
-                </FieldValue>
-                <FieldValue id="events.openHouseNotes" label={t("listings.events.openHouseNotes")}>
-                  {drawer?.note || t("t.n/a")}
-                </FieldValue>
-              </GridSection>
-            </GridSection>
-          </section>
+          <Card spacing="lg" className="spacer-section">
+            <Card.Section>
+              <Grid className="grid-inset-section">
+                <Grid.Row columns={3}>
+                  <FieldValue id="drawer.startTime.date" label={t("t.date")}>
+                    {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
+                  </FieldValue>
+                  <FieldValue id="drawer.startTime.time" label={t("t.startTime")}>
+                    {getDetailFieldTime(drawer?.startTime)}
+                  </FieldValue>
+                  <FieldValue id="drawer.endTime.time" label={t("t.endTime")}>
+                    {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
+                  </FieldValue>
+                  <FieldValue id="drawer.url" label={t("t.url")}>
+                    {drawer?.url ? (
+                      <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
+                        {drawer?.label ?? t("t.url")}
+                      </LinkButton>
+                    ) : (
+                      t("t.n/a")
+                    )}
+                  </FieldValue>
+                  <FieldValue
+                    id="events.openHouseNotes"
+                    label={t("listings.events.openHouseNotes")}
+                  >
+                    {drawer?.note || t("t.n/a")}
+                  </FieldValue>
+                </Grid.Row>
+              </Grid>
+            </Card.Section>
+          </Card>
 
           <Button styleType={AppearanceStyleType.primary} onClick={() => setDrawer(null)}>
             {t("t.done")}
           </Button>
         </Drawer>
-      </GridSection>
+      </SectionWithGrid>
     </>
   )
 }

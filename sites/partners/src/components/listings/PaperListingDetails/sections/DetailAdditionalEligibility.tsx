@@ -6,49 +6,41 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailAdditionalEligibility = () => {
   const listing = useContext(ListingContext)
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.additionalEligibilityTitle")}
-      grid={false}
-      inset
-    >
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="creditHistory" label={t("listings.creditHistory")}>
-            {getDetailFieldString(listing.creditHistory)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="rentalHistory" label={t("listings.rentalHistory")}>
-            {getDetailFieldString(listing.rentalHistory)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="criminalBackground" label={t("listings.criminalBackground")}>
-            {getDetailFieldString(listing.criminalBackground)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
-            {getDetailFieldString(listing.rentalAssistance)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
+    <SectionWithGrid heading={t("listings.sections.additionalEligibilityTitle")} inset>
+      <Grid.Row>
+        <FieldValue id="creditHistory" label={t("listings.creditHistory")}>
+          {getDetailFieldString(listing.creditHistory)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="rentalHistory" label={t("listings.rentalHistory")}>
+          {getDetailFieldString(listing.rentalHistory)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="criminalBackground" label={t("listings.criminalBackground")}>
+          {getDetailFieldString(listing.criminalBackground)}
+        </FieldValue>
+      </Grid.Row>
+
+      <Grid.Row>
+        <FieldValue id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
+          {getDetailFieldString(listing.rentalAssistance)}
+        </FieldValue>
+      </Grid.Row>
+
       {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
         <GridSection columns={1}>
           <GridCell>
@@ -95,7 +87,7 @@ const DetailAdditionalEligibility = () => {
           </GridCell>
         </GridSection>
       )}
-    </GridSection>
+    </SectionWithGrid>
   )
 }
 
