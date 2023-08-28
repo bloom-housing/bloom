@@ -154,9 +154,10 @@ workflows:
           working_directory: sites/partners
           yarn: true
           build: |
+            echo 'export FEATURE_LISTINGS_APPROVAL=FALSE' >> "$BASH_ENV"
+            source "$BASH_ENV"
             yarn test:backend:core:dbsetup
           start: |
-            FEATURE_LISTINGS_APPROVAL=FALSE
             yarn dev:all-cypress
           command: |
             npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
@@ -170,9 +171,10 @@ workflows:
           working_directory: sites/partners
           yarn: true
           build: |
+            echo 'export FEATURE_LISTINGS_APPROVAL=TRUE' >> "$BASH_ENV"
+            source "$BASH_ENV"
             yarn test:backend:core:dbsetup
           start: |
-            FEATURE_LISTINGS_APPROVAL=TRUE
             yarn dev:all-cypress
           command: |
             npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
