@@ -271,7 +271,7 @@ export class ListingsService {
 
   async updateAndNotify(listingData: ListingUpdateDto, user: User) {
     let result
-
+    // partners updates status to pending review when requesting admin approval
     if (listingData.status === ListingStatus.pendingReview) {
       result = await this.update(listingData, user)
       const approvingUserEmails = await this.getApprovingUserEmails()
@@ -281,7 +281,9 @@ export class ListingsService {
         approvingUserEmails,
         this.configService.get("PARTNERS_PORTAL_URL")
       )
-    } else if (listingData.status === ListingStatus.changesRequested) {
+    }
+    // admin updates status to changes requested when approval requires partner changes
+    else if (listingData.status === ListingStatus.changesRequested) {
       result = await this.update(listingData, user)
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
@@ -293,19 +295,23 @@ export class ListingsService {
         nonApprovingUserInfo.emails,
         this.configService.get("PARTNERS_PORTAL_URL")
       )
-    } else if (listingData.status === ListingStatus.active) {
+    }
+    // check if status of active requires notification
+    else if (listingData.status === ListingStatus.active) {
       const previousStatus = await this.listingRepository
         .createQueryBuilder("listings")
         .select("listings.status")
         .where("id = :id", { id: listingData.id })
         .getOne()
       result = await this.update(listingData, user)
+      // if not new published listing, skip notification and return update response
       if (
         previousStatus.status !== ListingStatus.pendingReview &&
         previousStatus.status !== ListingStatus.changesRequested
       ) {
         return result
       }
+
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
         listingData.jurisdiction.id,
