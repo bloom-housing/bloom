@@ -28,6 +28,7 @@ import {
   IsUUID,
   MaxLength,
   ValidateNested,
+  IsUrl,
 } from "class-validator"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -334,6 +335,7 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUrl({ require_protocol: true }, { groups: [ValidationsGroupsEnum.default] })
   buildingSelectionCriteria?: string | null
 
   @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
