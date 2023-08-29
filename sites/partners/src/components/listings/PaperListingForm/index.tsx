@@ -248,9 +248,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               }
             })
             setAlert("form")
-          } else {
-            setAlert("api")
-          }
+          } else if (data.message === "email failed") {
+            setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "alert")
+            await router.push(`/listings/${formData.id}/`)
+          } else setAlert("api")
         }
       }
     },

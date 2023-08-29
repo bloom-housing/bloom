@@ -548,6 +548,7 @@
   "eligibility.accessibility.wheelchairRamp": "Wheelchair Ramp",
   "errors.agreeError": "You must agree to the terms in order to continue",
   "errors.alert.badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
+  "errors.alert.listingsApprovalEmailError": "Listing updated but the associated emails failed to send.",
   "errors.alert.timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again.",
   "errors.alert.applicationSubmissionVerificationError": "Your application is missing required fields. Please go back and correct this before submitting.",
   "errors.cityError": "Please enter a city",

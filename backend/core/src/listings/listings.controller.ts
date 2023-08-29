@@ -121,7 +121,7 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Put(`updateAndNotfiy/:id`)
+  @Put(`updateAndNotify/:id`)
   @ApiOperation({
     summary: "Update listing by id and notify relevant users",
     operationId: "updateAndNotify",
@@ -132,7 +132,7 @@ export class ListingsController {
     @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
-    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req.user)
+    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req)
     return mapTo(ListingDto, listing)
   }
 

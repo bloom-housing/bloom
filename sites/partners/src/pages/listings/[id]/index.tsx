@@ -53,6 +53,7 @@ export default function ListingDetail(props: ListingProps) {
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
             <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+            <SiteAlert type="alert" dismissable sticky={true} />
             <NavigationHeader
               title={listing.name}
               listingId={listing.id}

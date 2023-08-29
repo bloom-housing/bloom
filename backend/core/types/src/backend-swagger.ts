@@ -1477,9 +1477,9 @@ export class ListingsService {
       body?: ListingUpdate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing> {
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/updateAndNotfiy/{id}"
+      let url = basePath + "/listings/updateAndNotify/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
