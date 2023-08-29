@@ -311,7 +311,7 @@ export class ListingsService {
       ) {
         return result
       }
-
+      // otherwise get user info and send listing approved email
       const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
         listingData.id,
         listingData.jurisdiction.id,
