@@ -249,7 +249,7 @@ const ListingFormActions = ({
                   err.response?.data?.message === "email failed"
                     ? "errors.alert.listingsApprovalEmailError"
                     : "errors.somethingWentWrong",
-                  "alert"
+                  "warn"
                 )
               }
             }

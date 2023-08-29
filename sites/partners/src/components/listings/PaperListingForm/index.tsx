@@ -249,7 +249,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             })
             setAlert("form")
           } else if (data.message === "email failed") {
-            setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "alert")
+            setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "warn")
             await router.push(`/listings/${formData.id}/`)
           } else setAlert("api")
         }

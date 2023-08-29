@@ -132,7 +132,7 @@ export class ListingsController {
     @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
-    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req)
+    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req.user)
     return mapTo(ListingDto, listing)
   }
 
