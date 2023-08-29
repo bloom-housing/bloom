@@ -297,9 +297,9 @@ export class EmailService {
   ) {
     const multipleRecipients = Array.isArray(to)
     const emailParams = {
-      to: to,
-      from: from,
-      subject: subject,
+      to,
+      from,
+      subject,
       html: body,
     }
     const handleError = (error) => {
@@ -317,9 +317,7 @@ export class EmailService {
       }
     }
 
-    multipleRecipients
-      ? await this.sendGrid.sendMultiple(emailParams, handleError)
-      : await this.sendGrid.send(emailParams, false, handleError)
+    await this.sendGrid.send(emailParams, multipleRecipients, handleError)
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {

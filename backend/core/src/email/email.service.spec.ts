@@ -146,8 +146,8 @@ const translationServiceMock = {
               header: "Listing approval requested",
               partnerRequest:
                 "A Partner has submitted an approval request to publish the %{listingName} listing.",
-              loginToReviewStart: "Please log in to the",
-              loginToReviewEnd: "and navigate to the listing detail page to review and publish.",
+              logInToReviewStart: "Please log into the",
+              logInToReviewEnd: "and navigate to the listing detail page to review and publish.",
               accessListing: "To access the listing after logging in, please click the link below",
             },
             changesRequested: {
@@ -348,7 +348,7 @@ describe("EmailService", () => {
       expect(emailMock.html).toMatch(
         `A Partner has submitted an approval request to publish the ${listing.name} listing.`
       )
-      expect(emailMock.html).toMatch("Please log in to the")
+      expect(emailMock.html).toMatch("Please log into the")
       expect(emailMock.html).toMatch("Partners Portal")
       expect(emailMock.html).toMatch(/http:\/\/localhost:3001/)
       expect(emailMock.html).toMatch(

@@ -31,8 +31,8 @@ export class listingsApprovalEmails1692122923259 implements MigrationInterface {
         header: "Listing approval requested",
         partnerRequest:
           "A Partner has submitted an approval request to publish the %{listingName} listing.",
-        loginToReviewStart: "Please log in to the",
-        loginToReviewEnd: "and navigate to the listing detail page to review and publish.",
+        logInToReviewStart: "Please log into the",
+        logInToReviewEnd: "and navigate to the listing detail page to review and publish.",
         accessListing: "To access the listing after logging in, please click the link below",
       }
 

@@ -263,7 +263,10 @@ export class ListingsService {
       )
       .getMany()
 
-    const publicUrl = getPublicUrl ? nonApprovingUsers[0]?.jurisdictions[0]?.publicUrl : null
+    // account for users having access to multiple jurisdictions
+    const publicUrl = getPublicUrl
+      ? nonApprovingUsers[0]?.jurisdictions?.find((juris) => juris.id === jurisId)?.publicUrl
+      : null
     const nonApprovingUserEmails: string[] = []
     nonApprovingUsers?.forEach((user) => user?.email && nonApprovingUserEmails.push(user.email))
     return { emails: nonApprovingUserEmails, publicUrl }

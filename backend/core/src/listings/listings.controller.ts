@@ -127,7 +127,7 @@ export class ListingsController {
     operationId: "updateAndNotify",
   })
   @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
-  async requestApproval(
+  async updateAndNotify(
     @Request() req,
     @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
