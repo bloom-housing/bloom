@@ -94,12 +94,14 @@ export class ami120Updates1692890494691 implements MigrationInterface {
         FROM ami_chart
         WHERE name='${amiUpdate.name}'`
       )
-      const combinedItems = [...currentItems, ...amiUpdate.items]
-      await queryRunner.query(
-        `UPDATE ami_chart 
+      if (currentItems[0]) {
+        const combinedItems = [...currentItems[0].items, ...amiUpdate.items]
+        await queryRunner.query(
+          `UPDATE ami_chart 
         SET items='${JSON.stringify(combinedItems)}'
         WHERE name='${amiUpdate.name}'`
-      )
+        )
+      }
     })
   }
   public async down(queryRunner: QueryRunner): Promise<void> {}
