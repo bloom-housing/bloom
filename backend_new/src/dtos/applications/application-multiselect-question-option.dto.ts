@@ -26,23 +26,23 @@ class FormMetadataExtraData {
   key: string;
 }
 
-class AddressInput extends FormMetadataExtraData {
+export class AddressInput extends FormMetadataExtraData {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty()
+  @ApiProperty({ type: Address })
   value: Address;
 }
 
-class BooleanInput extends FormMetadataExtraData {
+export class BooleanInput extends FormMetadataExtraData {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   value: boolean;
 }
 
-class TextInput extends FormMetadataExtraData {
+export class TextInput extends FormMetadataExtraData {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })

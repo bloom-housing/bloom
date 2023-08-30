@@ -1256,6 +1256,60 @@ export class ApplicationsService {
     });
   }
   /**
+   * Create application
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete application by id
+   */
+  delete(
+    params: {
+      /** requestBody */
+      body?: IdDTO;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications';
+
+      const configs: IRequestConfig = getConfigs(
+        'delete',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Get application by id
    */
   retrieve(
@@ -1277,6 +1331,90 @@ export class ApplicationsService {
       );
 
       /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Submit application
+   */
+  submit(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/submit';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Verify application can be saved
+   */
+  submissionValidation(
+    params: {
+      /** requestBody */
+      body?: ApplicationCreate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/verify';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update application by id
+   */
+  update(
+    params: {
+      /**  */
+      id: string;
+      /** requestBody */
+      body?: ApplicationUpdate;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<Application> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applications/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
 
       axios(configs, resolve, reject);
     });
@@ -1809,6 +1947,33 @@ export interface Address {
 
   /**  */
   updatedAt: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
 }
 
 export interface Jurisdiction {
@@ -2589,6 +2754,39 @@ export interface MultiselectQuestionQueryParams {
   filter?: MultiselectQuestionFilterParams[];
 }
 
+export interface AddressInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: Address;
+}
+
+export interface BooleanInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: boolean;
+}
+
+export interface TextInput {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+
+  /**  */
+  value: string;
+}
+
 export interface Accessibility {
   /**  */
   id: string;
@@ -2600,13 +2798,13 @@ export interface Accessibility {
   updatedAt: Date;
 
   /**  */
-  mobility: boolean;
+  mobility?: boolean;
 
   /**  */
-  vision: boolean;
+  vision?: boolean;
 
   /**  */
-  hearing: boolean;
+  hearing?: boolean;
 }
 
 export interface Demographic {
@@ -2620,13 +2818,13 @@ export interface Demographic {
   updatedAt: Date;
 
   /**  */
-  ethnicity: string;
+  ethnicity?: string;
 
   /**  */
-  gender: string;
+  gender?: string;
 
   /**  */
-  sexualOrientation: string;
+  sexualOrientation?: string;
 
   /**  */
   howDidYouHear: string[];
@@ -2646,40 +2844,40 @@ export interface Applicant {
   updatedAt: Date;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  middleName: string;
+  middleName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  birthMonth: string;
+  birthMonth?: string;
 
   /**  */
-  birthDay: string;
+  birthDay?: string;
 
   /**  */
-  birthYear: string;
+  birthYear?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
-  noEmail: boolean;
+  noEmail?: boolean;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  phoneNumberType: string;
+  phoneNumberType?: string;
 
   /**  */
-  noPhone: boolean;
+  noPhone?: boolean;
 
   /**  */
-  workInRegion: YesNoEnum;
+  workInRegion?: YesNoEnum;
 
   /**  */
   applicantWorkAddress: Address;
@@ -2699,28 +2897,97 @@ export interface AlternateContact {
   updatedAt: Date;
 
   /**  */
-  type: string;
+  type?: string;
 
   /**  */
-  otherType: string;
+  otherType?: string;
 
   /**  */
-  firstName: string;
+  firstName?: string;
 
   /**  */
-  lastName: string;
+  lastName?: string;
 
   /**  */
-  agency: string;
+  agency?: string;
 
   /**  */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**  */
-  emailAddress: string;
+  emailAddress?: string;
 
   /**  */
   address: Address;
+}
+
+export interface HouseholdMember {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  orderId?: number;
+
+  /**  */
+  firstName?: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName?: string;
+
+  /**  */
+  birthMonth?: string;
+
+  /**  */
+  birthDay?: string;
+
+  /**  */
+  birthYear?: string;
+
+  /**  */
+  sameAddress?: YesNoEnum;
+
+  /**  */
+  relationship?: string;
+
+  /**  */
+  workInRegion?: YesNoEnum;
+
+  /**  */
+  householdMemberWorkAddress?: Address;
+
+  /**  */
+  householdMemberAddress: Address;
+}
+
+export interface ApplicationMultiselectQuestionOption {
+  /**  */
+  key: string;
+
+  /**  */
+  checked: boolean;
+
+  /**  */
+  extraData?: AllExtraDataTypes[];
+}
+
+export interface ApplicationMultiselectQuestion {
+  /**  */
+  key: string;
+
+  /**  */
+  claimed: boolean;
+
+  /**  */
+  options: ApplicationMultiselectQuestionOption[];
 }
 
 export interface Application {
@@ -2734,19 +3001,19 @@ export interface Application {
   updatedAt: Date;
 
   /**  */
-  deletedAt: Date;
+  deletedAt?: Date;
 
   /**  */
-  appUrl: string;
+  appUrl?: string;
 
   /**  */
-  additionalPhone: boolean;
+  additionalPhone?: boolean;
 
   /**  */
-  additionalPhoneNumber: string;
+  additionalPhoneNumber?: string;
 
   /**  */
-  additionalPhoneNumberType: string;
+  additionalPhoneNumberType?: string;
 
   /**  */
   contactPreferences: string[];
@@ -2755,52 +3022,52 @@ export interface Application {
   householdSize: number;
 
   /**  */
-  housingStatus: string;
+  housingStatus?: string;
 
   /**  */
-  sendMailToMailingAddress: boolean;
+  sendMailToMailingAddress?: boolean;
 
   /**  */
-  householdExpectingChanges: boolean;
+  householdExpectingChanges?: boolean;
 
   /**  */
-  householdStudent: boolean;
+  householdStudent?: boolean;
 
   /**  */
-  incomeVouchers: boolean;
+  incomeVouchers?: boolean;
 
   /**  */
-  income: string;
+  income?: string;
 
   /**  */
-  incomePeriod: IncomePeriodEnum;
+  incomePeriod?: IncomePeriodEnum;
 
   /**  */
   status: ApplicationStatusEnum;
 
   /**  */
-  language: LanguagesEnum;
+  language?: LanguagesEnum;
 
   /**  */
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
 
   /**  */
   submissionType: ApplicationSubmissionTypeEnum;
 
   /**  */
-  submissionDate: Date;
+  submissionDate?: Date;
 
   /**  */
   markedAsDuplicate: boolean;
 
   /**  */
-  flagged: boolean;
+  flagged?: boolean;
 
   /**  */
   confirmationCode: string;
 
   /**  */
-  reviewStatus: ApplicationReviewStatusEnum;
+  reviewStatus?: ApplicationReviewStatusEnum;
 
   /**  */
   applicationsMailingAddress: Address;
@@ -2815,7 +3082,7 @@ export interface Application {
   demographics: Demographic;
 
   /**  */
-  preferredUnitTypes: string[];
+  preferredUnitTypes: IdDTO[];
 
   /**  */
   applicant: Applicant;
@@ -2824,18 +3091,373 @@ export interface Application {
   alternateContact: AlternateContact;
 
   /**  */
-  householdMember: string[];
+  householdMember: HouseholdMember[];
 
   /**  */
-  preferences: string[];
+  preferences: ApplicationMultiselectQuestion[];
 
   /**  */
-  programs: string[];
+  programs?: ApplicationMultiselectQuestion[];
+
+  /**  */
+  listings: IdDTO;
 }
 
 export interface PaginatedApplication {
   /**  */
   items: Application[];
+}
+
+export interface AddressUpdate {
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state: string;
+
+  /**  */
+  street: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
+export interface ApplicantUpdate {
+  /**  */
+  firstName?: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName?: string;
+
+  /**  */
+  birthMonth?: string;
+
+  /**  */
+  birthDay?: string;
+
+  /**  */
+  birthYear?: string;
+
+  /**  */
+  emailAddress?: string;
+
+  /**  */
+  noEmail?: boolean;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneNumberType?: string;
+
+  /**  */
+  noPhone?: boolean;
+
+  /**  */
+  workInRegion?: YesNoEnum;
+
+  /**  */
+  applicantAddress: AddressUpdate;
+
+  /**  */
+  applicantWorkAddress: AddressUpdate;
+}
+
+export interface AlternateContactUpdate {
+  /**  */
+  type?: string;
+
+  /**  */
+  otherType?: string;
+
+  /**  */
+  firstName?: string;
+
+  /**  */
+  lastName?: string;
+
+  /**  */
+  agency?: string;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  emailAddress?: string;
+
+  /**  */
+  address: AddressUpdate;
+}
+
+export interface AccessibilityUpdate {
+  /**  */
+  mobility?: boolean;
+
+  /**  */
+  vision?: boolean;
+
+  /**  */
+  hearing?: boolean;
+}
+
+export interface DemographicUpdate {
+  /**  */
+  ethnicity?: string;
+
+  /**  */
+  gender?: string;
+
+  /**  */
+  sexualOrientation?: string;
+
+  /**  */
+  howDidYouHear: string[];
+
+  /**  */
+  race: string[];
+}
+
+export interface HouseholdMemberUpdate {
+  /**  */
+  orderId?: number;
+
+  /**  */
+  firstName?: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName?: string;
+
+  /**  */
+  birthMonth?: string;
+
+  /**  */
+  birthDay?: string;
+
+  /**  */
+  birthYear?: string;
+
+  /**  */
+  sameAddress?: YesNoEnum;
+
+  /**  */
+  relationship?: string;
+
+  /**  */
+  workInRegion?: YesNoEnum;
+
+  /**  */
+  householdMemberAddress: AddressUpdate;
+
+  /**  */
+  householdMemberWorkAddress: AddressUpdate;
+}
+
+export interface ApplicationCreate {
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  additionalPhone?: boolean;
+
+  /**  */
+  additionalPhoneNumber?: string;
+
+  /**  */
+  additionalPhoneNumberType?: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  housingStatus?: string;
+
+  /**  */
+  sendMailToMailingAddress?: boolean;
+
+  /**  */
+  householdExpectingChanges?: boolean;
+
+  /**  */
+  householdStudent?: boolean;
+
+  /**  */
+  incomeVouchers?: boolean;
+
+  /**  */
+  income?: string;
+
+  /**  */
+  incomePeriod?: IncomePeriodEnum;
+
+  /**  */
+  status: ApplicationStatusEnum;
+
+  /**  */
+  language?: LanguagesEnum;
+
+  /**  */
+  acceptedTerms?: boolean;
+
+  /**  */
+  submissionType: ApplicationSubmissionTypeEnum;
+
+  /**  */
+  submissionDate?: Date;
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatusEnum;
+
+  /**  */
+  preferredUnitTypes: IdDTO[];
+
+  /**  */
+  preferences: ApplicationMultiselectQuestion[];
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[];
+
+  /**  */
+  listings: IdDTO;
+
+  /**  */
+  applicant: ApplicantUpdate;
+
+  /**  */
+  applicationsMailingAddress: AddressUpdate;
+
+  /**  */
+  applicationsAlternateAddress: AddressUpdate;
+
+  /**  */
+  alternateContact: AlternateContactUpdate;
+
+  /**  */
+  accessibility: AccessibilityUpdate;
+
+  /**  */
+  demographics: DemographicUpdate;
+
+  /**  */
+  householdMember: HouseholdMemberUpdate[];
+}
+
+export interface ApplicationUpdate {
+  /**  */
+  id: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  additionalPhone?: boolean;
+
+  /**  */
+  additionalPhoneNumber?: string;
+
+  /**  */
+  additionalPhoneNumberType?: string;
+
+  /**  */
+  contactPreferences: string[];
+
+  /**  */
+  householdSize: number;
+
+  /**  */
+  housingStatus?: string;
+
+  /**  */
+  sendMailToMailingAddress?: boolean;
+
+  /**  */
+  householdExpectingChanges?: boolean;
+
+  /**  */
+  householdStudent?: boolean;
+
+  /**  */
+  incomeVouchers?: boolean;
+
+  /**  */
+  income?: string;
+
+  /**  */
+  incomePeriod?: IncomePeriodEnum;
+
+  /**  */
+  status: ApplicationStatusEnum;
+
+  /**  */
+  language?: LanguagesEnum;
+
+  /**  */
+  acceptedTerms?: boolean;
+
+  /**  */
+  submissionType: ApplicationSubmissionTypeEnum;
+
+  /**  */
+  submissionDate?: Date;
+
+  /**  */
+  reviewStatus?: ApplicationReviewStatusEnum;
+
+  /**  */
+  preferredUnitTypes: IdDTO[];
+
+  /**  */
+  preferences: ApplicationMultiselectQuestion[];
+
+  /**  */
+  programs?: ApplicationMultiselectQuestion[];
+
+  /**  */
+  listings: IdDTO;
+
+  /**  */
+  applicant: ApplicantUpdate;
+
+  /**  */
+  applicationsMailingAddress: AddressUpdate;
+
+  /**  */
+  applicationsAlternateAddress: AddressUpdate;
+
+  /**  */
+  alternateContact: AlternateContactUpdate;
+
+  /**  */
+  accessibility: AccessibilityUpdate;
+
+  /**  */
+  demographics: DemographicUpdate;
+
+  /**  */
+  householdMember: HouseholdMemberUpdate[];
 }
 
 export interface CreatePresignedUploadMetadata {
@@ -3154,6 +3776,13 @@ export enum EnumMultiselectQuestionFilterParamsComparison {
   '<=' = '<=',
   'NA' = 'NA',
 }
+export enum InputType {
+  'boolean' = 'boolean',
+  'text' = 'text',
+  'address' = 'address',
+  'hhMemberSelect' = 'hhMemberSelect',
+}
+
 export enum ApplicationOrderByKeys {
   'firstName' = 'firstName',
   'lastName' = 'lastName',
@@ -3201,3 +3830,4 @@ export enum YesNoEnum {
   'yes' = 'yes',
   'no' = 'no',
 }
+export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;

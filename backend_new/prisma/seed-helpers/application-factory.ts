@@ -15,6 +15,7 @@ export const applicationFactory = (optionalParams?: {
   unitTypeId?: string;
   applicant?: Prisma.ApplicantCreateWithoutApplicationsInput;
   overrides?: Prisma.ApplicationsCreateInput;
+  listingId?: string;
 }): Prisma.ApplicationsCreateInput => {
   let preferredUnitTypes: Prisma.UnitTypesCreateNestedManyWithoutApplicationsInput;
   if (optionalParams?.unitTypeId) {
@@ -38,6 +39,13 @@ export const applicationFactory = (optionalParams?: {
     preferences: {},
     preferredUnitTypes,
     ...optionalParams?.overrides,
+    listings: optionalParams?.listingId
+      ? {
+          connect: {
+            id: optionalParams?.listingId,
+          },
+        }
+      : undefined,
   };
 };
 
