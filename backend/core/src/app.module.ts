@@ -63,12 +63,21 @@ export function applicationSetup(app: INestApplication) {
     }
   }
 
+  const allowListRegex = process.env.CORS_REGEX ? JSON.parse(process.env.CORS_REGEX) : []
+  const regexAllowList = allowListRegex.map((regex) => {
+    return new RegExp(regex)
+  })
   app.enableCors((req, cb) => {
     const options = {
       credentials: true,
       origin: false,
     }
-    if (process.env.DISABLE_CORS === "TRUE" || allowList.indexOf(req.header("Origin")) !== -1) {
+
+    if (
+      process.env.DISABLE_CORS === "TRUE" ||
+      allowList.indexOf(req.header("Origin")) !== -1 ||
+      regexAllowList.some((regex) => regex.test(req.header("Origin")))
+    ) {
       options.origin = true
     }
     cb(null, options)
