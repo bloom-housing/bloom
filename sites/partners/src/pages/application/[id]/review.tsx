@@ -124,9 +124,7 @@ const Flag = () => {
         >
           <Tag
             variant={
-              data?.status === EnumApplicationFlaggedSetStatus.resolved
-                ? "success-inverse"
-                : "primary"
+              data?.status === EnumApplicationFlaggedSetStatus.resolved ? "success" : "primary"
             }
             size={"lg"}
           >
