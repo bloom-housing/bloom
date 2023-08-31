@@ -33,6 +33,8 @@ import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-fa
 import { multiselectQuestionFactory } from '../../prisma/seed-helpers/multiselect-question-factory';
 import { reservedCommunityTypeFactory } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
+import { addressFactory } from '../../prisma/seed-helpers/address-factory';
+import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 
 describe('Listing Controller Tests', () => {
   let app: INestApplication;
@@ -93,12 +95,7 @@ describe('Listing Controller Tests', () => {
       data: reservedCommunityTypeFactory(jurisdictionA.id),
     });
 
-    const exampleAddress = {
-      city: 'Exygy',
-      state: 'CA',
-      zipCode: '94104',
-      street: '548 Market St',
-    };
+    const exampleAddress = addressFactory() as AddressCreate;
 
     const exampleAsset = {
       fileId: randomUUID(),
