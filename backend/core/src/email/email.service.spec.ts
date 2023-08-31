@@ -238,7 +238,6 @@ describe("EmailService", () => {
     sendGridService = module.get<SendGridService>(SendGridService)
     sendMock = jest.fn()
     sendGridService.send = sendMock
-    sendGridService.sendMultiple = sendMock
     service = await module.resolve(EmailService)
   })
 
