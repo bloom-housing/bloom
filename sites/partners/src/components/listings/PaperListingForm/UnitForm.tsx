@@ -125,7 +125,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
         })
       }
-      setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
       setValue("rentType", getRentType(defaultUnit))
     }
     setLoading(false)
@@ -135,6 +134,19 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     void resetDefaultValues()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const foundPercentageOption = amiChartPercentageOptions.find(
+      (percentage) => percentage.label === defaultUnit?.amiPercentage
+    )
+    setValue(
+      "amiPercentage",
+      defaultUnit && amiChartID === defaultUnit.amiChart?.id
+        ? foundPercentageOption?.value
+        : undefined
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amiChartPercentageOptions, amiChartID])
 
   const fetchAmiChart = async (defaultChartID?: string) => {
     try {
@@ -505,6 +517,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 inputProps={{
                   onChange: () => {
                     if (amiChartID && !loading && options) {
+                      for (let i = 1; i < 9; i++) {
+                        setValue(`maxIncomeHouseholdSize${i}`, "")
+                      }
                       void fetchAmiChart()
                     }
                   },
