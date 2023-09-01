@@ -510,6 +510,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   onChange: () => {
                     if (amiChartID && !loading && amiChartsOptions) {
                       void fetchAmiChart()
+                      setIsAmiPercentageDirty(true)
                     }
                   },
                 }}
