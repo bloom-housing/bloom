@@ -46,9 +46,11 @@ const FormSignInMFAType = ({
         <h2 className="form-card__title is-borderless">
           {t("nav.signInMFA.verificationChoiceMainTitle")}
         </h2>
-        <p className="form-card__sub-title">
-          {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
-        </p>
+        {process.env.showSmsMfa && (
+          <p className="form-card__sub-title">
+            {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
+          </p>
+        )}
       </div>
       <FormSignInErrorBox
         errors={errors}
@@ -80,15 +82,17 @@ const FormSignInMFAType = ({
               {t("nav.signInMFA.verifyByEmail")}
             </Button>
           </div>
-          <div className="text-center mt-6">
-            <Button
-              styleType={AppearanceStyleType.accentCool}
-              data-testid="verify-by-phone"
-              onClick={smsOnClick}
-            >
-              {t("nav.signInMFA.verifyByPhone")}
-            </Button>
-          </div>
+          {process.env.showSmsMfa && (
+            <div className="text-center mt-6">
+              <Button
+                styleType={AppearanceStyleType.accentCool}
+                data-testid="verify-by-phone"
+                onClick={smsOnClick}
+              >
+                {t("nav.signInMFA.verifyByPhone")}
+              </Button>
+            </div>
+          )}
         </Form>
       </div>
     </FormCard>
