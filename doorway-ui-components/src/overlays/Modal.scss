@@ -59,7 +59,6 @@
 
 .modal__header {
   min-height: var(--modal-header-min-height);
-  border-bottom: 2px solid var(--bloom-color-gray-450);
 }
 
 .modal__title {
@@ -110,10 +109,6 @@
   gap: var(--bloom-s5);
   justify-content: var(--footer-justify);
   align-items: center;
-
-  @media (max-width: $screen-md) {
-    margin-bottom: var(--bloom-s28);
-  };
 }
 
 .modal__close {

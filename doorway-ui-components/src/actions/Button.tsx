@@ -37,7 +37,7 @@ export interface ButtonProps extends AppearanceProps {
 }
 
 export const buttonClassesForProps = (props: Omit<ButtonProps, "onClick">) => {
-  const classNames = ["button"].concat(classNamesForAppearanceTypes(props))
+  const classNames = ["doorway-button"].concat(classNamesForAppearanceTypes(props))
   const inline = props.inline || props.inlineIcon
   const iconPlacement = props.iconPlacement || props.inlineIcon || "right"
 

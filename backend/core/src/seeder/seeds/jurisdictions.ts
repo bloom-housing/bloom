@@ -8,7 +8,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     name: "Bay Area",
     multiselectQuestions: [],
     languages: [Language.en],
-    publicUrl: "",
+    publicUrl: "http://localhost:3000",
     notificationsSignUpURL: "https://public.govdelivery.com/accounts/CAMTC/signup/36832",
     emailFromAddress: "Bay Area: Housing Bay Area <bloom-no-reply@exygy.dev>",
     rentalAssistanceDefault:

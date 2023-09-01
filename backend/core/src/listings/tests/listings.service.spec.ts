@@ -19,6 +19,7 @@ import { Listing } from "../entities/listing.entity"
 import { User } from "../../auth/entities/user.entity"
 import { UserService } from "../../auth/services/user.service"
 import { CachePurgeService } from "../cache-purge.service"
+import { EmailService } from "../../../src/email/email.service"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -184,6 +185,17 @@ describe("ListingsService", () => {
           },
         },
         ConfigService,
+        {
+          provide: EmailService,
+          useValue: {
+            requestApproval: jest.fn(),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn() },
+        },
+        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile()
 

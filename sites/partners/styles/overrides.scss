@@ -13,4 +13,9 @@
     justify-content: center;
     text-align: center;
   }
+
+  .button {
+    --normal-rounded: var(--bloom-rounded-full);
+    --small-rounded: var(--bloom-rounded-full);
+  }
 }

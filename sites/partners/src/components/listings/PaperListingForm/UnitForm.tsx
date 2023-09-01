@@ -656,6 +656,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           onClick={() => onFormSubmit("saveExit")}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.small}
+          dataTestId={"unitFormSaveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>
