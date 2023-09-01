@@ -51,7 +51,7 @@ export default function ApplicationsList() {
     switch (application?.status) {
       case ApplicationStatus.submitted:
         return (
-          <Tag variant={"success-inverse"} size={"lg"}>
+          <Tag variant={"success"} size={"lg"}>
             {t(`application.details.applicationStatus.submitted`)}
           </Tag>
         )
