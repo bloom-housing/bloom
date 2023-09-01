@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { MultiselectQuestionService } from '../services/multiselect-question.service';
-import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question-get.dto';
+import { MultiselectQuestion } from '../dtos/multiselect-questions/multiselect-question.dto';
 import { MultiselectQuestionCreate } from '../dtos/multiselect-questions/multiselect-question-create.dto';
 import { MultiselectQuestionUpdate } from '../dtos/multiselect-questions/multiselect-question-update.dto';
 import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/multiselect-question-query-params.dto';

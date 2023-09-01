@@ -1,27 +1,24 @@
-import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 import { Expose, Transform, TransformFnParams } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsString } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { ApplicationOrderByKeys } from '../../enums/applications/order-by-enum';
 import { OrderByEnum } from '../../enums/shared/order-by-enum';
 import { SearchStringLengthCheck } from '../../decorators/search-string-length-check.decorator';
-
+import { PaginationAllowsAllQueryParams } from '../shared/pagination.dto';
 export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     example: 'listingId',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   listingId?: string;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     example: 'search',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @SearchStringLengthCheck('search', {
@@ -31,21 +28,19 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   search?: string;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
     example: 'userId',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   userId?: string;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: ApplicationOrderByKeys,
     enumName: 'ApplicationOrderByKeys',
     example: 'createdAt',
     default: 'createdAt',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(ApplicationOrderByKeys, {
@@ -61,12 +56,11 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   orderBy?: ApplicationOrderByKeys;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: OrderByEnum,
     enumName: 'OrderByEnum',
     example: 'DESC',
     default: 'DESC',
-    required: false,
   })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderByEnum, {
@@ -78,10 +72,9 @@ export class ApplicationQueryParams extends PaginationAllowsAllQueryParams {
   order?: OrderByEnum;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: Boolean,
     example: true,
-    required: false,
   })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform(

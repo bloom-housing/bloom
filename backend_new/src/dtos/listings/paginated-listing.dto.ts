@@ -1,6 +1,4 @@
 import { PaginationFactory } from '../shared/pagination.dto';
-import { ListingGet } from './listing-get.dto';
+import { Listing } from './listing.dto';
 
-export class PaginatedListingDto extends PaginationFactory<ListingGet>(
-  ListingGet,
-) {}
+export class PaginatedListingDto extends PaginationFactory<Listing>(Listing) {}

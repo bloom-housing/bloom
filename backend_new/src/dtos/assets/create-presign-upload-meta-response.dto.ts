@@ -3,6 +3,6 @@ import { Expose } from 'class-transformer';
 
 export class CreatePresignedUploadMetadataResponse {
   @Expose()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   signature: string;
 }

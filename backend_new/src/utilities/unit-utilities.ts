@@ -1,15 +1,15 @@
 import { ReviewOrderTypeEnum, UnitTypeEnum } from '@prisma/client';
-import { UnitSummary } from '../dtos/units/unit-summary-get.dto';
-import Unit from '../dtos/units/unit-get.dto';
+import { UnitSummary } from '../dtos/units/unit-summary.dto';
+import Unit from '../dtos/units/unit.dto';
 import { AmiChart } from '../dtos/ami-charts/ami-chart.dto';
-import listingGetDto, { ListingGet } from '../dtos/listings/listing-get.dto';
+import { Listing } from '../dtos/listings/listing.dto';
 import { MinMaxCurrency } from '../dtos/shared/min-max-currency.dto';
 import { MinMax } from '../dtos/shared/min-max.dto';
 import { UnitsSummarized } from '../dtos/units/unit-summarized.dto';
 import { UnitType } from '../dtos/unit-types/unit-type.dto';
 import { UnitAccessibilityPriorityType } from '../dtos/unit-accessibility-priority-types/unit-accessibility-priority-type.dto';
-import { AmiChartItem } from '../dtos/units/ami-chart-item-get.dto';
-import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override-get.dto';
+import { AmiChartItem } from '../dtos/units/ami-chart-item.dto';
+import { UnitAmiChartOverride } from '../dtos/units/ami-chart-override.dto';
 
 type AnyDict = { [key: string]: unknown };
 type UnitMap = {
@@ -402,7 +402,7 @@ export const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
 // Allows for multiples rows under one unit type if the rent methods differ
 export const summarizeUnitsByTypeAndRent = (
   units: Unit[],
-  listing: ListingGet,
+  listing: Listing,
 ): UnitSummary[] => {
   const summaries: UnitSummary[] = [];
   const unitMap: UnitMap = {};
@@ -463,10 +463,7 @@ export const summarizeUnitsByType = (
   });
 };
 
-export const summarizeByAmi = (
-  listing: listingGetDto,
-  amiPercentages: string[],
-) => {
+export const summarizeByAmi = (listing: Listing, amiPercentages: string[]) => {
   return amiPercentages.map((percent: string) => {
     const unitsByAmiPercentage = listing.units.filter(
       (unit: Unit) => unit.amiPercentage == percent,
@@ -490,7 +487,7 @@ export const getUnitTypes = (units: Unit[]): UnitType[] => {
 };
 
 export const summarizeUnits = (
-  listing: ListingGet,
+  listing: Listing,
   amiCharts: AmiChart[],
 ): UnitsSummarized => {
   const data = {} as UnitsSummarized;
