@@ -143,6 +143,7 @@ COPY --from=source --chown=node:node /app/backend/core/index.ts ./
 COPY --from=source --chown=node:node /app/backend/core/src ./src
 COPY --from=source --chown=node:node /app/backend/core/types ./types
 COPY --from=source --chown=node:node /app/backend/core/ormDataSource.ts ./ormDataSource.ts
+COPY --from=source --chown=node:node /app/backend/core/scripts ./scripts
 
 ## This CMD should be run as the node user
 USER node
