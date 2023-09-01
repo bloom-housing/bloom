@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
   ArrayMinSize,
@@ -35,7 +35,7 @@ export class User extends AbstractDTO {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   confirmedAt?: Date;
 
   @Expose()
@@ -50,7 +50,7 @@ export class User extends AbstractDTO {
   firstName: string;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   middleName?: string;
@@ -62,13 +62,13 @@ export class User extends AbstractDTO {
   lastName: string;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   dob?: Date;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
   phoneNumber?: string;
 
@@ -79,15 +79,14 @@ export class User extends AbstractDTO {
 
   @Expose()
   @Type(() => UserRole)
-  @ApiProperty({ type: UserRole, required: false })
+  @ApiPropertyOptional({ type: UserRole })
   userRoles?: UserRole;
 
   @Expose()
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: LanguagesEnum,
     enumName: 'LanguagesEnum',
-    required: false,
   })
   language?: LanguagesEnum;
 
@@ -101,21 +100,21 @@ export class User extends AbstractDTO {
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   mfaEnabled?: boolean;
 
   @Expose()
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   lastLoginAt?: Date;
 
   @Expose()
   @Type(() => Number)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   failedLoginAttemptsCount?: number;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   phoneNumberVerified?: boolean;
 
@@ -127,18 +126,18 @@ export class User extends AbstractDTO {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   hitConfirmationURL?: Date;
 
   // storing the active access token for a user
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   activeAccessToken?: string;
 
   // storing the active refresh token for a user
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   activeRefreshToken?: string;
 }

@@ -3,7 +3,7 @@ import { IsDefined, IsString, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { MinMaxCurrency } from '../shared/min-max-currency.dto';
 import { MinMax } from '../shared/min-max.dto';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UnitType } from '../unit-types/unit-type.dto';
 
 export class UnitSummary {
@@ -56,6 +56,6 @@ export class UnitSummary {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => MinMax)
-  @ApiProperty({ type: MinMax, required: false })
+  @ApiPropertyOptional({ type: MinMax })
   floorRange?: MinMax;
 }

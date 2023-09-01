@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ArrayMaxSize, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AddressUpdate } from '../addresses/address-update.dto';
+import { AddressCreate } from '../addresses/address-create.dto';
 import { AccessibilityUpdate } from './accessibility-update.dto';
 import { AlternateContactUpdate } from './alternate-contact-update.dto';
 import { ApplicantUpdate } from './applicant-update.dto';
@@ -33,15 +33,15 @@ export class ApplicationUpdate extends OmitType(Application, [
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressUpdate)
-  @ApiProperty({ type: AddressUpdate })
-  applicationsMailingAddress: AddressUpdate;
+  @Type(() => AddressCreate)
+  @ApiProperty({ type: AddressCreate })
+  applicationsMailingAddress: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressUpdate)
-  @ApiProperty({ type: AddressUpdate })
-  applicationsAlternateAddress: AddressUpdate;
+  @Type(() => AddressCreate)
+  @ApiProperty({ type: AddressCreate })
+  applicationsAlternateAddress: AddressCreate;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

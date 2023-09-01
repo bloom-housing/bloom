@@ -11,7 +11,7 @@ import { YesNoEnum } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { Address } from '../addresses/address-get.dto';
+import { Address } from '../addresses/address.dto';
 
 export class HouseholdMember extends AbstractDTO {
   @Expose()

@@ -19,7 +19,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address-get.dto';
+import { Address } from '../addresses/address.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { IdDTO } from '../shared/id.dto';
 import { Accessibility } from './accessibility.dto';
@@ -244,14 +244,20 @@ export class Application extends AbstractDTO {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMultiselectQuestion)
-  @ApiProperty({ type: ApplicationMultiselectQuestion, isArray: true })
-  preferences: ApplicationMultiselectQuestion[];
+  @ApiPropertyOptional({
+    type: ApplicationMultiselectQuestion,
+    isArray: true,
+  })
+  preferences?: ApplicationMultiselectQuestion[];
 
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMultiselectQuestion)
-  @ApiPropertyOptional({ type: ApplicationMultiselectQuestion, isArray: true })
+  @ApiPropertyOptional({
+    type: ApplicationMultiselectQuestion,
+    isArray: true,
+  })
   programs?: ApplicationMultiselectQuestion[];
 
   @Expose()

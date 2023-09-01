@@ -1,4 +1,8 @@
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
   ArrayMaxSize,
@@ -11,7 +15,7 @@ import {
 } from 'class-validator';
 import { InputType } from '../../enums/shared/input-type-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { Address } from '../addresses/address-get.dto';
+import { Address } from '../addresses/address.dto';
 
 class FormMetadataExtraData {
   @Expose()
@@ -62,9 +66,8 @@ export class ApplicationMultiselectQuestionOption {
   checked: boolean;
 
   @Expose()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: 'array',
-    required: false,
     items: {
       oneOf: [
         { $ref: getSchemaPath(BooleanInput) },

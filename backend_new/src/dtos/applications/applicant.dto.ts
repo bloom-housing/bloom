@@ -13,7 +13,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { YesNoEnum } from '@prisma/client';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { Address } from '../addresses/address-get.dto';
+import { Address } from '../addresses/address.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 
 export class Applicant extends AbstractDTO {

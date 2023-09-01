@@ -8,7 +8,7 @@ import {
   IsDefined,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AbstractDTO } from '../shared/abstract.dto';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { MultiselectLink } from './multiselect-link.dto';
@@ -24,28 +24,28 @@ class MultiselectQuestion extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   untranslatedText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   untranslatedOptOutText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   subText?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   description?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectLink)
-  @ApiProperty({ type: MultiselectLink, isArray: true })
+  @ApiPropertyOptional({ type: MultiselectLink, isArray: true })
   links?: MultiselectLink[];
 
   @Expose()
@@ -59,17 +59,17 @@ class MultiselectQuestion extends AbstractDTO {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectOption)
-  @ApiProperty({ type: MultiselectOption, isArray: true })
+  @ApiPropertyOptional({ type: MultiselectOption, isArray: true })
   options?: MultiselectOption[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   optOutText?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   hideFromListing?: boolean;
 
   @Expose()

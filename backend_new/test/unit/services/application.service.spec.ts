@@ -16,7 +16,7 @@ import { ApplicationOrderByKeys } from '../../../src/enums/applications/order-by
 import { ApplicationViews } from '../../../src/enums/applications/view-enum';
 import { ApplicationCreate } from '../../../src/dtos/applications/application-create.dto';
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
-import { AddressUpdate } from '../../../src/dtos/addresses/address-update.dto';
+import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
 import { ApplicationUpdate } from 'src/dtos/applications/application-update.dto';
 
@@ -557,7 +557,7 @@ describe('Testing application service', () => {
       id: randomUUID(),
     });
 
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
@@ -895,7 +895,7 @@ describe('Testing application service', () => {
       id: randomUUID(),
     });
 
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
@@ -1042,7 +1042,7 @@ describe('Testing application service', () => {
       id: randomUUID(),
     });
 
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
@@ -1384,7 +1384,7 @@ describe('Testing application service', () => {
       listingId: randomUUID(),
     });
 
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const submissionDate = new Date();
     const dto: ApplicationUpdate = {
       id: randomUUID(),
@@ -1737,7 +1737,7 @@ describe('Testing application service', () => {
       listingId: randomUUID(),
     });
 
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const submissionDate = new Date();
     const dto: ApplicationUpdate = {
       id: randomUUID(),

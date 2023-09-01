@@ -27,7 +27,7 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { ApplicationCreate } from '../../src/dtos/applications/application-create.dto';
 import { InputType } from '../../src/enums/shared/input-type-enum';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
-import { AddressUpdate } from '../../src/dtos/addresses/address-update.dto';
+import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { ApplicationUpdate } from '../../src/dtos/applications/application-update.dto';
 
 describe('Application Controller Tests', () => {
@@ -239,7 +239,7 @@ describe('Application Controller Tests', () => {
     });
 
     const submissionDate = new Date();
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
@@ -382,7 +382,7 @@ describe('Application Controller Tests', () => {
     });
 
     const submissionDate = new Date();
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [
@@ -532,7 +532,7 @@ describe('Application Controller Tests', () => {
     });
 
     const submissionDate = new Date();
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationUpdate = {
       id: applicationA.id,
       contactPreferences: ['example contact preference'],
@@ -679,7 +679,7 @@ describe('Application Controller Tests', () => {
     });
 
     const submissionDate = new Date();
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationUpdate = {
       id,
       contactPreferences: ['example contact preference'],
@@ -826,7 +826,7 @@ describe('Application Controller Tests', () => {
     });
 
     const submissionDate = new Date();
-    const exampleAddress = addressFactory() as AddressUpdate;
+    const exampleAddress = addressFactory() as AddressCreate;
     const dto: ApplicationCreate = {
       contactPreferences: ['example contact preference'],
       preferences: [

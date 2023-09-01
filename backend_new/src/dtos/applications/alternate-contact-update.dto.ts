@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AddressUpdate } from '../addresses/address-update.dto';
+import { AddressCreate } from '../addresses/address-create.dto';
 import { AlternateContact } from './alternate-contact.dto';
 
 export class AlternateContactUpdate extends OmitType(AlternateContact, [
@@ -13,7 +13,7 @@ export class AlternateContactUpdate extends OmitType(AlternateContact, [
 ]) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressUpdate)
-  @ApiProperty({ type: AddressUpdate })
-  address: AddressUpdate;
+  @Type(() => AddressCreate)
+  @ApiProperty({ type: AddressCreate })
+  address: AddressCreate;
 }

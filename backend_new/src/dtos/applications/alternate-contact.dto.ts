@@ -9,7 +9,7 @@ import {
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { Address } from '../addresses/address-get.dto';
+import { Address } from '../addresses/address.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 
 export class AlternateContact extends AbstractDTO {
