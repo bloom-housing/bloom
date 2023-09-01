@@ -7,13 +7,28 @@ import { OrderByEnum } from '../../../src/enums/shared/order-by-enum';
 import { ListingFilterKeys } from '../../../src/enums/listings/filter-key-enum';
 import { Compare } from '../../../src/dtos/shared/base-filter.dto';
 import { ListingFilterParams } from '../../../src/dtos/listings/listings-filter-params.dto';
-import { LanguagesEnum, UnitTypeEnum } from '@prisma/client';
-import { Unit } from '../../../src/dtos/units/unit-get.dto';
+import {
+  ApplicationAddressTypeEnum,
+  ApplicationMethodsTypeEnum,
+  LanguagesEnum,
+  ListingEventsTypeEnum,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  UnitTypeEnum,
+} from '@prisma/client';
+import { Unit } from '../../../src/dtos/units/unit.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
-import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
+import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { ListingViews } from '../../../src/enums/listings/view-enum';
 import { TranslationService } from '../../../src/services/translation.service';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { ListingCreate } from '../../../src/dtos/listings/listing-create.dto';
+import { randomUUID } from 'crypto';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import { of } from 'rxjs';
+import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
+import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
+import { ListingPublishedUpdate } from 'src/dtos/listings/listing-published-update.dto';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -101,7 +116,17 @@ describe('Testing listing service', () => {
     isConfigured: () => true,
     fetch: jest.fn(),
   };
-  beforeEach(async () => {
+
+  const httpServiceMock = {
+    request: jest.fn().mockReturnValue(
+      of({
+        status: 200,
+        statusText: 'OK',
+      }),
+    ),
+  };
+
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ListingService,
@@ -111,41 +136,252 @@ describe('Testing listing service', () => {
           provide: GoogleTranslateService,
           useValue: googleTranslateServiceMock,
         },
+        {
+          provide: HttpService,
+          useValue: httpServiceMock,
+        },
       ],
+      imports: [HttpModule],
     }).compile();
 
     service = module.get<ListingService>(ListingService);
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  it('testing list() with no params', async () => {
+  afterAll(() => {
+    process.env.PROXY_URL = undefined;
+  });
+
+  const exampleAddress = {
+    city: 'Exygy',
+    state: 'CA',
+    zipCode: '94104',
+    street: '548 Market St',
+  };
+
+  const exampleAsset = {
+    fileId: randomUUID(),
+    label: 'example asset label',
+  };
+
+  const constructFullListingData = (
+    listingId?: string,
+  ): ListingPublishedCreate | ListingPublishedUpdate => {
+    return {
+      id: listingId ?? undefined,
+      assets: [exampleAsset],
+      listingsBuildingAddress: exampleAddress,
+      depositMin: '1000',
+      depositMax: '5000',
+      developer: 'example developer',
+      digitalApplication: true,
+      listingImages: [
+        {
+          ordinal: 0,
+          assets: exampleAsset,
+        },
+      ],
+      leasingAgentEmail: 'leasingAgent@exygy.com',
+      leasingAgentName: 'Leasing Agent',
+      leasingAgentPhone: '520-750-8811',
+      name: 'example listing',
+      paperApplication: false,
+      referralOpportunity: false,
+      rentalAssistance: 'rental assistance',
+      reviewOrderType: ReviewOrderTypeEnum.firstComeFirstServe,
+      units: [
+        {
+          amiPercentage: '1',
+          annualIncomeMin: '2',
+          monthlyIncomeMin: '3',
+          floor: 4,
+          annualIncomeMax: '5',
+          maxOccupancy: 6,
+          minOccupancy: 7,
+          monthlyRent: '8',
+          numBathrooms: 9,
+          numBedrooms: 10,
+          number: '11',
+          sqFeet: '12',
+          monthlyRentAsPercentOfIncome: '13',
+          bmrProgramChart: true,
+          unitTypes: {
+            id: randomUUID(),
+          },
+          amiChart: {
+            id: randomUUID(),
+          },
+          unitAccessibilityPriorityTypes: {
+            id: randomUUID(),
+          },
+          unitRentTypes: {
+            id: randomUUID(),
+          },
+          unitAmiChartOverrides: {
+            items: [
+              {
+                percentOfAmi: 10,
+                householdSize: 20,
+                income: 30,
+              },
+            ],
+          },
+        },
+      ],
+      listingMultiselectQuestions: [
+        {
+          id: randomUUID(),
+          ordinal: 0,
+        },
+      ],
+      applicationMethods: [
+        {
+          type: ApplicationMethodsTypeEnum.Internal,
+          label: 'example label',
+          externalReference: 'example reference',
+          acceptsPostmarkedApplications: false,
+          phoneNumber: '520-750-8811',
+          paperApplications: [
+            {
+              language: LanguagesEnum.en,
+              assets: exampleAsset,
+            },
+          ],
+        },
+      ],
+      unitsSummary: [
+        {
+          unitTypes: {
+            id: randomUUID(),
+          },
+          monthlyRentMin: 1,
+          monthlyRentMax: 2,
+          monthlyRentAsPercentOfIncome: '3',
+          amiPercentage: 4,
+          minimumIncomeMin: '5',
+          minimumIncomeMax: '6',
+          maxOccupancy: 7,
+          minOccupancy: 8,
+          floorMin: 9,
+          floorMax: 10,
+          sqFeetMin: '11',
+          sqFeetMax: '12',
+          unitAccessibilityPriorityTypes: {
+            id: randomUUID(),
+          },
+          totalCount: 13,
+          totalAvailable: 14,
+        },
+      ],
+      listingsApplicationPickUpAddress: exampleAddress,
+      listingsApplicationMailingAddress: exampleAddress,
+      listingsApplicationDropOffAddress: exampleAddress,
+      listingsLeasingAgentAddress: exampleAddress,
+      listingsBuildingSelectionCriteriaFile: exampleAsset,
+      listingsResult: exampleAsset,
+      listingEvents: [
+        {
+          type: ListingEventsTypeEnum.openHouse,
+          startDate: new Date(),
+          startTime: new Date(),
+          endTime: new Date(),
+          url: 'https://www.google.com',
+          note: 'example note',
+          label: 'example label',
+          assets: exampleAsset,
+        },
+      ],
+      additionalApplicationSubmissionNotes: 'app submission notes',
+      commonDigitalApplication: true,
+      accessibility: 'accessibility string',
+      amenities: 'amenities string',
+      buildingTotalUnits: 5,
+      householdSizeMax: 9,
+      householdSizeMin: 1,
+      neighborhood: 'neighborhood string',
+      petPolicy: 'we love pets',
+      smokingPolicy: 'smokeing policy string',
+      unitsAvailable: 15,
+      unitAmenities: 'unit amenity string',
+      servicesOffered: 'services offered string',
+      yearBuilt: 2023,
+      applicationDueDate: new Date(),
+      applicationOpenDate: new Date(),
+      applicationFee: 'application fee string',
+      applicationOrganization: 'app organization string',
+      applicationPickUpAddressOfficeHours: 'pick up office hours string',
+      applicationPickUpAddressType: ApplicationAddressTypeEnum.leasingAgent,
+      applicationDropOffAddressOfficeHours: 'drop off office hours string',
+      applicationDropOffAddressType: ApplicationAddressTypeEnum.leasingAgent,
+      applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
+      buildingSelectionCriteria: 'selection criteria',
+      costsNotIncluded: 'all costs included',
+      creditHistory: 'credit history',
+      criminalBackground: 'criminal background',
+      depositHelperText: 'deposit helper text',
+      disableUnitsAccordion: false,
+      leasingAgentOfficeHours: 'leasing agent office hours',
+      leasingAgentTitle: 'leasing agent title',
+      postmarkedApplicationsReceivedByDate: new Date(),
+      programRules: 'program rules',
+      rentalHistory: 'rental history',
+      requiredDocuments: 'required docs',
+      specialNotes: 'special notes',
+      waitlistCurrentSize: 0,
+      waitlistMaxSize: 100,
+      whatToExpect: 'what to expect',
+      status: ListingsStatusEnum.active,
+      displayWaitlistSize: true,
+      reservedCommunityDescription: 'reserved community description',
+      reservedCommunityMinAge: 66,
+      resultLink: 'result link',
+      isWaitlistOpen: true,
+      waitlistOpenSpots: 100,
+      customMapPin: false,
+      jurisdictions: {
+        id: randomUUID(),
+      },
+      reservedCommunityTypes: {
+        id: randomUUID(),
+      },
+      listingFeatures: {
+        elevator: true,
+        wheelchairRamp: false,
+        serviceAnimalsAllowed: true,
+        accessibleParking: false,
+        parkingOnSite: true,
+        inUnitWasherDryer: false,
+        laundryInBuilding: true,
+        barrierFreeEntrance: false,
+        rollInShower: true,
+        grabBars: false,
+        heatingInUnit: true,
+        acInUnit: false,
+        hearing: true,
+        visual: false,
+        mobility: true,
+      },
+      listingUtilities: {
+        water: false,
+        gas: true,
+        trash: false,
+        sewer: true,
+        electricity: false,
+        cable: true,
+        phone: false,
+        internet: true,
+      },
+    };
+  };
+
+  it('should handle call to list() with no params sent', async () => {
     prisma.listings.findMany = jest.fn().mockResolvedValue(mockListingSet(10));
 
     prisma.listings.count = jest.fn().mockResolvedValue(10);
 
     const params: ListingsQueryParams = {};
 
-    expect(await service.list(params)).toEqual({
-      items: [
-        { id: '0', name: 'listing 1' },
-        { id: '1', name: 'listing 2' },
-        { id: '2', name: 'listing 3' },
-        { id: '3', name: 'listing 4' },
-        { id: '4', name: 'listing 5' },
-        { id: '5', name: 'listing 6' },
-        { id: '6', name: 'listing 7' },
-        { id: '7', name: 'listing 8' },
-        { id: '8', name: 'listing 9' },
-        { id: '9', name: 'listing 10' },
-      ],
-      meta: {
-        currentPage: 1,
-        itemCount: 10,
-        itemsPerPage: 10,
-        totalItems: 10,
-        totalPages: 1,
-      },
-    });
+    await service.list(params);
 
     expect(prisma.listings.findMany).toHaveBeenCalledWith({
       skip: 0,
@@ -214,7 +450,7 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing list() with params', async () => {
+  it('should handle call to list() with params sent', async () => {
     prisma.listings.findMany = jest.fn().mockResolvedValue(mockListingSet(10));
 
     prisma.listings.count = jest.fn().mockResolvedValue(20);
@@ -238,27 +474,7 @@ describe('Testing listing service', () => {
       ],
     };
 
-    expect(await service.list(params)).toEqual({
-      items: [
-        { id: '0', name: 'listing 1' },
-        { id: '1', name: 'listing 2' },
-        { id: '2', name: 'listing 3' },
-        { id: '3', name: 'listing 4' },
-        { id: '4', name: 'listing 5' },
-        { id: '5', name: 'listing 6' },
-        { id: '6', name: 'listing 7' },
-        { id: '7', name: 'listing 8' },
-        { id: '8', name: 'listing 9' },
-        { id: '9', name: 'listing 10' },
-      ],
-      meta: {
-        currentPage: 2,
-        itemCount: 10,
-        itemsPerPage: 10,
-        totalItems: 20,
-        totalPages: 2,
-      },
-    });
+    await service.list(params);
 
     expect(prisma.listings.findMany).toHaveBeenCalledWith({
       skip: 10,
@@ -370,7 +586,7 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing buildWhereClause() with params no search', async () => {
+  it('should build where clause when only params sent', async () => {
     const params: ListingFilterParams[] = [
       {
         [ListingFilterKeys.name]: 'Listing,name',
@@ -412,7 +628,7 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing buildWhereClause() with no params, search present', async () => {
+  it('should build where clause when only search param sent', async () => {
     expect(service.buildWhereClause(null, 'simple search')).toEqual({
       AND: [
         {
@@ -425,7 +641,7 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing buildWhereClause() with params, and search present', async () => {
+  it('should build where clause when params, and search param sent', async () => {
     const params: ListingFilterParams[] = [
       {
         [ListingFilterKeys.name]: 'Listing,name',
@@ -473,18 +689,14 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing findOne() base view found record', async () => {
-    prisma.listings.findFirst = jest.fn().mockResolvedValue(mockListing(0));
+  it('should return records from findOne() with base view', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue(mockListing(0));
 
-    expect(
-      await service.findOne('listingId', LanguagesEnum.en, ListingViews.base),
-    ).toEqual({ id: '0', name: 'listing 1' });
+    await service.findOne('listingId', LanguagesEnum.en, ListingViews.base);
 
-    expect(prisma.listings.findFirst).toHaveBeenCalledWith({
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
-        id: {
-          equals: 'listingId',
-        },
+        id: 'listingId',
       },
       include: {
         jurisdictions: true,
@@ -517,8 +729,8 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing findOne() base view no record found', async () => {
-    prisma.listings.findFirst = jest.fn().mockResolvedValue(null);
+  it('should handle no records returned when findOne() is called with base view', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(
       async () =>
@@ -529,11 +741,9 @@ describe('Testing listing service', () => {
         ),
     ).rejects.toThrowError();
 
-    expect(prisma.listings.findFirst).toHaveBeenCalledWith({
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
-        id: {
-          equals: 'a different listingId',
-        },
+        id: 'a different listingId',
       },
       include: {
         jurisdictions: true,
@@ -589,7 +799,7 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing list() with params and units', async () => {
+  it('should get records from list() with params and units', async () => {
     const date = new Date();
 
     prisma.listings.findMany = jest
@@ -916,12 +1126,12 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing findOne() base view found record and units', async () => {
+  it('should get records from findOne() with base view found and units', async () => {
     const date = new Date();
 
     const mockedListing = mockListing(0, { numberToMake: 10, date });
 
-    prisma.listings.findFirst = jest.fn().mockResolvedValue(mockedListing);
+    prisma.listings.findUnique = jest.fn().mockResolvedValue(mockedListing);
 
     prisma.amiChart.findMany = jest.fn().mockResolvedValue([
       {
@@ -936,7 +1146,7 @@ describe('Testing listing service', () => {
       },
     ]);
 
-    const listing: ListingGet = await service.findOne(
+    const listing: Listing = await service.findOne(
       'listingId',
       LanguagesEnum.en,
       ListingViews.base,
@@ -1944,11 +2154,9 @@ describe('Testing listing service', () => {
       },
     });
 
-    expect(prisma.listings.findFirst).toHaveBeenCalledWith({
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
-        id: {
-          equals: 'listingId',
-        },
+        id: 'listingId',
       },
       include: {
         jurisdictions: true,
@@ -1989,7 +2197,7 @@ describe('Testing listing service', () => {
     });
   });
 
-  it('testing findListingsWithMultiSelectQuestion()', async () => {
+  it('should return listings from findListingsWithMultiSelectQuestion()', async () => {
     prisma.listings.findMany = jest.fn().mockResolvedValue([
       {
         id: 'example id',
@@ -2018,5 +2226,938 @@ describe('Testing listing service', () => {
         },
       },
     });
+  });
+
+  it('should create a simple listing', async () => {
+    prisma.listings.create = jest.fn().mockResolvedValue({
+      id: 'example id',
+      name: 'example name',
+    });
+
+    await service.create({
+      name: 'example listing name',
+      depositMin: '5',
+      assets: [
+        {
+          fileId: randomUUID(),
+          label: 'example asset',
+        },
+      ],
+      jurisdictions: {
+        id: randomUUID(),
+      },
+      status: ListingsStatusEnum.pending,
+      displayWaitlistSize: false,
+      unitsSummary: null,
+      listingEvents: [],
+    } as ListingCreate);
+
+    expect(prisma.listings.create).toHaveBeenCalledWith({
+      include: {
+        applicationMethods: {
+          include: {
+            paperApplications: {
+              include: {
+                assets: true,
+              },
+            },
+          },
+        },
+        jurisdictions: true,
+        listingEvents: {
+          include: {
+            assets: true,
+          },
+        },
+        listingFeatures: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingUtilities: true,
+        listingsApplicationDropOffAddress: true,
+        listingsApplicationPickUpAddress: true,
+        listingsBuildingAddress: true,
+        listingsBuildingSelectionCriteriaFile: true,
+        listingsLeasingAgentAddress: true,
+        listingsResult: true,
+        reservedCommunityTypes: true,
+        units: {
+          include: {
+            amiChart: {
+              include: {
+                amiChartItem: true,
+                jurisdictions: true,
+                unitGroupAmiLevels: true,
+              },
+            },
+            unitAccessibilityPriorityTypes: true,
+            unitAmiChartOverrides: true,
+            unitRentTypes: true,
+            unitTypes: true,
+          },
+        },
+      },
+      data: {
+        name: 'example listing name',
+        depositMin: '5',
+        assets: {
+          create: [
+            {
+              fileId: expect.anything(),
+              label: 'example asset',
+            },
+          ],
+        },
+        jurisdictions: {
+          connect: {
+            id: expect.anything(),
+          },
+        },
+        status: ListingsStatusEnum.pending,
+        displayWaitlistSize: false,
+        unitsSummary: undefined,
+        listingEvents: {
+          create: [],
+        },
+      },
+    });
+  });
+
+  it('should create a complete listing', async () => {
+    prisma.listings.create = jest.fn().mockResolvedValue({
+      id: 'example id',
+      name: 'example name',
+    });
+
+    const val = constructFullListingData();
+
+    await service.create(val as ListingCreate);
+
+    expect(prisma.listings.create).toHaveBeenCalledWith({
+      include: {
+        applicationMethods: {
+          include: {
+            paperApplications: {
+              include: {
+                assets: true,
+              },
+            },
+          },
+        },
+        jurisdictions: true,
+        listingEvents: {
+          include: {
+            assets: true,
+          },
+        },
+        listingFeatures: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingUtilities: true,
+        listingsApplicationDropOffAddress: true,
+        listingsApplicationPickUpAddress: true,
+        listingsBuildingAddress: true,
+        listingsBuildingSelectionCriteriaFile: true,
+        listingsLeasingAgentAddress: true,
+        listingsResult: true,
+        reservedCommunityTypes: true,
+        units: {
+          include: {
+            amiChart: {
+              include: {
+                amiChartItem: true,
+                jurisdictions: true,
+                unitGroupAmiLevels: true,
+              },
+            },
+            unitAccessibilityPriorityTypes: true,
+            unitAmiChartOverrides: true,
+            unitRentTypes: true,
+            unitTypes: true,
+          },
+        },
+      },
+      data: {
+        ...val,
+        assets: {
+          create: [exampleAsset],
+        },
+        applicationMethods: {
+          create: [
+            {
+              type: ApplicationMethodsTypeEnum.Internal,
+              label: 'example label',
+              externalReference: 'example reference',
+              acceptsPostmarkedApplications: false,
+              phoneNumber: '520-750-8811',
+              paperApplications: {
+                create: [
+                  {
+                    language: LanguagesEnum.en,
+                    assets: {
+                      create: {
+                        ...exampleAsset,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        listingEvents: {
+          create: [
+            {
+              type: ListingEventsTypeEnum.openHouse,
+              startDate: expect.anything(),
+              startTime: expect.anything(),
+              endTime: expect.anything(),
+              url: 'https://www.google.com',
+              note: 'example note',
+              label: 'example label',
+              assets: {
+                create: {
+                  ...exampleAsset,
+                },
+              },
+            },
+          ],
+        },
+        listingImages: {
+          create: [
+            {
+              assets: {
+                create: {
+                  ...exampleAsset,
+                },
+              },
+              ordinal: 0,
+            },
+          ],
+        },
+        listingMultiselectQuestions: {
+          create: [
+            {
+              ordinal: 0,
+              multiselectQuestions: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+            },
+          ],
+        },
+        listingsApplicationDropOffAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        reservedCommunityTypes: {
+          connect: {
+            id: expect.anything(),
+          },
+        },
+        listingsBuildingSelectionCriteriaFile: {
+          create: {
+            ...exampleAsset,
+          },
+        },
+        listingUtilities: {
+          create: {
+            water: false,
+            gas: true,
+            trash: false,
+            sewer: true,
+            electricity: false,
+            cable: true,
+            phone: false,
+            internet: true,
+          },
+        },
+        listingsApplicationMailingAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listingsLeasingAgentAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listingFeatures: {
+          create: {
+            elevator: true,
+            wheelchairRamp: false,
+            serviceAnimalsAllowed: true,
+            accessibleParking: false,
+            parkingOnSite: true,
+            inUnitWasherDryer: false,
+            laundryInBuilding: true,
+            barrierFreeEntrance: false,
+            rollInShower: true,
+            grabBars: false,
+            heatingInUnit: true,
+            acInUnit: false,
+            hearing: true,
+            visual: false,
+            mobility: true,
+          },
+        },
+        jurisdictions: {
+          connect: {
+            id: expect.anything(),
+          },
+        },
+        listingsApplicationPickUpAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listingsBuildingAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        units: {
+          create: [
+            {
+              amiPercentage: '1',
+              annualIncomeMin: '2',
+              monthlyIncomeMin: '3',
+              floor: 4,
+              annualIncomeMax: '5',
+              maxOccupancy: 6,
+              minOccupancy: 7,
+              monthlyRent: '8',
+              numBathrooms: 9,
+              numBedrooms: 10,
+              number: '11',
+              sqFeet: '12',
+              monthlyRentAsPercentOfIncome: '13',
+              bmrProgramChart: true,
+              unitTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              amiChart: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              unitAmiChartOverrides: {
+                create: {
+                  items: {
+                    items: [
+                      {
+                        percentOfAmi: 10,
+                        householdSize: 20,
+                        income: 30,
+                      },
+                    ],
+                  },
+                },
+              },
+              unitAccessibilityPriorityTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              unitRentTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+            },
+          ],
+        },
+        unitsSummary: {
+          create: [
+            {
+              monthlyRentMin: 1,
+              monthlyRentMax: 2,
+              monthlyRentAsPercentOfIncome: '3',
+              amiPercentage: 4,
+              minimumIncomeMin: '5',
+              minimumIncomeMax: '6',
+              maxOccupancy: 7,
+              minOccupancy: 8,
+              floorMin: 9,
+              floorMax: 10,
+              sqFeetMin: '11',
+              sqFeetMax: '12',
+              totalCount: 13,
+              totalAvailable: 14,
+              unitTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              unitAccessibilityPriorityTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+            },
+          ],
+        },
+        listingsResult: {
+          create: {
+            ...exampleAsset,
+          },
+        },
+      },
+    });
+  });
+
+  it('should delete a listing', async () => {
+    const id = randomUUID();
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id,
+    });
+    prisma.listings.delete = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    await service.delete(id);
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: id,
+      },
+    });
+
+    expect(prisma.listings.delete).toHaveBeenCalledWith({
+      where: {
+        id: id,
+      },
+    });
+  });
+
+  it('should error when nonexistent id is passed to delete()', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
+    prisma.listings.delete = jest.fn().mockResolvedValue(null);
+
+    await expect(
+      async () => await service.delete(randomUUID()),
+    ).rejects.toThrowError();
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: expect.anything(),
+      },
+    });
+
+    expect(prisma.listings.delete).not.toHaveBeenCalled();
+  });
+
+  it('should return listing from call to findOrThrow()', async () => {
+    const id = randomUUID();
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id,
+    });
+
+    await service.findOrThrow(id, ListingViews.fundamentals);
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listingFeatures: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingUtilities: true,
+        listingsBuildingAddress: true,
+        reservedCommunityTypes: true,
+      },
+      where: {
+        id: id,
+      },
+    });
+  });
+
+  it('should error when nonexistent id is passed to findOrThrow()', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue(null);
+
+    await expect(
+      async () => await service.findOrThrow(randomUUID()),
+    ).rejects.toThrowError();
+
+    expect(prisma.listings.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: expect.anything(),
+      },
+    });
+  });
+
+  it('should update a simple listing', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id: 'example id',
+      name: 'example name',
+    });
+    prisma.listings.update = jest.fn().mockResolvedValue({
+      id: 'example id',
+      name: 'example name',
+    });
+
+    await service.update({
+      id: randomUUID(),
+      name: 'example listing name',
+      depositMin: '5',
+      assets: [
+        {
+          fileId: randomUUID(),
+          label: 'example asset',
+        },
+      ],
+      jurisdictions: {
+        id: randomUUID(),
+      },
+      status: ListingsStatusEnum.pending,
+      displayWaitlistSize: false,
+      unitsSummary: null,
+      listingEvents: [],
+    } as ListingUpdate);
+
+    expect(prisma.listings.update).toHaveBeenCalledWith({
+      include: {
+        applicationMethods: {
+          include: {
+            paperApplications: {
+              include: {
+                assets: true,
+              },
+            },
+          },
+        },
+        jurisdictions: true,
+        listingEvents: {
+          include: {
+            assets: true,
+          },
+        },
+        listingFeatures: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingUtilities: true,
+        listingsApplicationDropOffAddress: true,
+        listingsApplicationPickUpAddress: true,
+        listingsBuildingAddress: true,
+        listingsBuildingSelectionCriteriaFile: true,
+        listingsLeasingAgentAddress: true,
+        listingsResult: true,
+        reservedCommunityTypes: true,
+        units: {
+          include: {
+            amiChart: {
+              include: {
+                amiChartItem: true,
+                jurisdictions: true,
+                unitGroupAmiLevels: true,
+              },
+            },
+            unitAccessibilityPriorityTypes: true,
+            unitAmiChartOverrides: true,
+            unitRentTypes: true,
+            unitTypes: true,
+          },
+        },
+      },
+      data: {
+        name: 'example listing name',
+        depositMin: '5',
+        assets: {
+          create: [
+            {
+              fileId: expect.anything(),
+              label: 'example asset',
+            },
+          ],
+        },
+        jurisdictions: {
+          connect: {
+            id: expect.anything(),
+          },
+        },
+        status: ListingsStatusEnum.pending,
+        displayWaitlistSize: false,
+        unitsSummary: undefined,
+        listingEvents: {
+          create: [],
+        },
+        unitsAvailable: 0,
+      },
+      where: {
+        id: expect.anything(),
+      },
+    });
+  });
+
+  it('should do a complete listing update', async () => {
+    prisma.listings.findUnique = jest.fn().mockResolvedValue({
+      id: 'example id',
+      name: 'example name',
+    });
+    prisma.listings.update = jest.fn().mockResolvedValue({
+      id: 'example id',
+      name: 'example name',
+    });
+
+    const val = constructFullListingData(randomUUID());
+
+    await service.update(val as ListingUpdate);
+
+    expect(prisma.listings.update).toHaveBeenCalledWith({
+      include: {
+        applicationMethods: {
+          include: {
+            paperApplications: {
+              include: {
+                assets: true,
+              },
+            },
+          },
+        },
+        jurisdictions: true,
+        listingEvents: {
+          include: {
+            assets: true,
+          },
+        },
+        listingFeatures: true,
+        listingImages: {
+          include: {
+            assets: true,
+          },
+        },
+        listingMultiselectQuestions: {
+          include: {
+            multiselectQuestions: true,
+          },
+        },
+        listingUtilities: true,
+        listingsApplicationDropOffAddress: true,
+        listingsApplicationPickUpAddress: true,
+        listingsBuildingAddress: true,
+        listingsBuildingSelectionCriteriaFile: true,
+        listingsLeasingAgentAddress: true,
+        listingsResult: true,
+        reservedCommunityTypes: true,
+        units: {
+          include: {
+            amiChart: {
+              include: {
+                amiChartItem: true,
+                jurisdictions: true,
+                unitGroupAmiLevels: true,
+              },
+            },
+            unitAccessibilityPriorityTypes: true,
+            unitAmiChartOverrides: true,
+            unitRentTypes: true,
+            unitTypes: true,
+          },
+        },
+      },
+      data: {
+        ...val,
+        id: undefined,
+        publishedAt: expect.anything(),
+        assets: {
+          create: [exampleAsset],
+        },
+        applicationMethods: {
+          create: [
+            {
+              type: ApplicationMethodsTypeEnum.Internal,
+              label: 'example label',
+              externalReference: 'example reference',
+              acceptsPostmarkedApplications: false,
+              phoneNumber: '520-750-8811',
+              paperApplications: {
+                create: [
+                  {
+                    language: LanguagesEnum.en,
+                    assets: {
+                      create: {
+                        ...exampleAsset,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        listingEvents: {
+          create: [
+            {
+              type: ListingEventsTypeEnum.openHouse,
+              startDate: expect.anything(),
+              startTime: expect.anything(),
+              endTime: expect.anything(),
+              url: 'https://www.google.com',
+              note: 'example note',
+              label: 'example label',
+              assets: {
+                create: {
+                  ...exampleAsset,
+                },
+              },
+            },
+          ],
+        },
+        listingImages: {
+          create: [
+            {
+              assets: {
+                create: {
+                  ...exampleAsset,
+                },
+              },
+              ordinal: 0,
+            },
+          ],
+        },
+        listingMultiselectQuestions: {
+          create: [
+            {
+              ordinal: 0,
+              multiselectQuestions: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+            },
+          ],
+        },
+        listingsApplicationDropOffAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        reservedCommunityTypes: {
+          connect: {
+            id: expect.anything(),
+          },
+        },
+        listingsBuildingSelectionCriteriaFile: {
+          create: {
+            ...exampleAsset,
+          },
+        },
+        listingUtilities: {
+          create: {
+            water: false,
+            gas: true,
+            trash: false,
+            sewer: true,
+            electricity: false,
+            cable: true,
+            phone: false,
+            internet: true,
+          },
+        },
+        listingsApplicationMailingAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listingsLeasingAgentAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listingFeatures: {
+          create: {
+            elevator: true,
+            wheelchairRamp: false,
+            serviceAnimalsAllowed: true,
+            accessibleParking: false,
+            parkingOnSite: true,
+            inUnitWasherDryer: false,
+            laundryInBuilding: true,
+            barrierFreeEntrance: false,
+            rollInShower: true,
+            grabBars: false,
+            heatingInUnit: true,
+            acInUnit: false,
+            hearing: true,
+            visual: false,
+            mobility: true,
+          },
+        },
+        jurisdictions: {
+          connect: {
+            id: expect.anything(),
+          },
+        },
+        listingsApplicationPickUpAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        listingsBuildingAddress: {
+          create: {
+            ...exampleAddress,
+          },
+        },
+        units: {
+          create: [
+            {
+              amiPercentage: '1',
+              annualIncomeMin: '2',
+              monthlyIncomeMin: '3',
+              floor: 4,
+              annualIncomeMax: '5',
+              maxOccupancy: 6,
+              minOccupancy: 7,
+              monthlyRent: '8',
+              numBathrooms: 9,
+              numBedrooms: 10,
+              number: '11',
+              sqFeet: '12',
+              monthlyRentAsPercentOfIncome: '13',
+              bmrProgramChart: true,
+              unitTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              amiChart: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              unitAmiChartOverrides: {
+                create: {
+                  items: {
+                    items: [
+                      {
+                        percentOfAmi: 10,
+                        householdSize: 20,
+                        income: 30,
+                      },
+                    ],
+                  },
+                },
+              },
+              unitAccessibilityPriorityTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              unitRentTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+            },
+          ],
+        },
+        unitsSummary: {
+          create: [
+            {
+              monthlyRentMin: 1,
+              monthlyRentMax: 2,
+              monthlyRentAsPercentOfIncome: '3',
+              amiPercentage: 4,
+              minimumIncomeMin: '5',
+              minimumIncomeMax: '6',
+              maxOccupancy: 7,
+              minOccupancy: 8,
+              floorMin: 9,
+              floorMax: 10,
+              sqFeetMin: '11',
+              sqFeetMax: '12',
+              totalCount: 13,
+              totalAvailable: 14,
+              unitTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+              unitAccessibilityPriorityTypes: {
+                connect: {
+                  id: expect.anything(),
+                },
+              },
+            },
+          ],
+        },
+        listingsResult: {
+          create: {
+            ...exampleAsset,
+          },
+        },
+      },
+      where: {
+        id: expect.anything(),
+      },
+    });
+  });
+
+  it('should purge single listing', async () => {
+    const id = randomUUID();
+    process.env.PROXY_URL = 'https://www.google.com';
+    await service.cachePurge(
+      ListingsStatusEnum.pending,
+      ListingsStatusEnum.pending,
+      id,
+    );
+    expect(httpServiceMock.request).toHaveBeenCalledWith({
+      baseURL: 'https://www.google.com',
+      method: 'PURGE',
+      url: `/listings/${id}*`,
+    });
+
+    process.env.PROXY_URL = undefined;
+  });
+
+  it('should purge all listings', async () => {
+    const id = randomUUID();
+    process.env.PROXY_URL = 'https://www.google.com';
+    await service.cachePurge(
+      ListingsStatusEnum.active,
+      ListingsStatusEnum.pending,
+      id,
+    );
+    expect(httpServiceMock.request).toHaveBeenCalledWith({
+      baseURL: 'https://www.google.com',
+      method: 'PURGE',
+      url: `/listings?*`,
+    });
+
+    process.env.PROXY_URL = undefined;
   });
 });

@@ -13,7 +13,7 @@ export class UserInvite extends OmitType(UserUpdate, [
   'email',
 ]) {
   @Expose()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   email: string;

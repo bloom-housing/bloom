@@ -12,7 +12,7 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { LanguagesEnum } from '@prisma/client';
 import { Expose, Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IdDTO } from '../shared/id.dto';
 
 export class Jurisdiction extends AbstractDTO {
@@ -25,7 +25,7 @@ export class Jurisdiction extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   notificationsSignUpUrl?: string;
 
   @Expose()
@@ -36,19 +36,23 @@ export class Jurisdiction extends AbstractDTO {
     each: true,
   })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({
+    enum: LanguagesEnum,
+    enumName: 'LanguagesEnum',
+    isArray: true,
+  })
   languages: LanguagesEnum[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDTO)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ type: IdDTO, isArray: true })
   multiselectQuestions: IdDTO[];
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   partnerTerms?: string;
 
   @Expose()
@@ -71,7 +75,7 @@ export class Jurisdiction extends AbstractDTO {
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   enablePartnerSettings?: boolean;
 
   @Expose()

@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   IsEmail,
@@ -32,19 +32,19 @@ export class UserUpdate extends OmitType(User, [
   'activeRefreshToken',
 ]) {
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   email?: string;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   newEmail?: string;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Matches(passwordRegex, {
     message: 'passwordTooWeak',
@@ -55,12 +55,12 @@ export class UserUpdate extends OmitType(User, [
   @Expose()
   @ValidateIf((o) => o.password, { groups: [ValidationsGroupsEnum.default] })
   @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   currentPassword?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   appUrl?: string;
 }

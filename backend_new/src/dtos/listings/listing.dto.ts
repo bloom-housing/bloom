@@ -1,4 +1,4 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, TransformFnParams, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -21,142 +21,142 @@ import {
 } from '@prisma/client';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ListingMultiselectQuestion } from './listing-multiselect-question.dto';
-import { ApplicationMethod } from '../application-methods/application-method-get.dto';
-import { Asset } from '../assets/asset-get.dto';
+import { ApplicationMethod } from '../application-methods/application-method.dto';
+import { Asset } from '../assets/asset.dto';
 import { ListingEvent } from './listing-event.dto';
-import { Address } from '../addresses/address-get.dto';
-import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
-import { ReservedCommunityType } from '../reserved-community-types/reserved-community-type.dto';
+import { Address } from '../addresses/address.dto';
 import { ListingImage } from './listing-image.dto';
 import { ListingFeatures } from './listing-feature.dto';
 import { ListingUtilities } from './listing-utility.dto';
-import { Unit } from '../units/unit-get.dto';
+import { Unit } from '../units/unit.dto';
 import { UnitsSummarized } from '../units/unit-summarized.dto';
-import { UnitsSummary } from '../units/units-summery-get.dto';
+import { UnitsSummary } from '../units/units-summary.dto';
+import { IdDTO } from '../shared/id.dto';
+import { listingUrlSlug } from '../../utilities/listing-url-slug';
 
-class ListingGet extends AbstractDTO {
+class Listing extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   additionalApplicationSubmissionNotes?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   digitalApplication?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   commonDigitalApplication?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   paperApplication?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   referralOpportunity?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   accessibility?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   amenities?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   buildingTotalUnits?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   developer?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   householdSizeMax?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   householdSizeMin?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   neighborhood?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   petPolicy?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   smokingPolicy?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   unitsAvailable?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   unitAmenities?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   servicesOffered?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   yearBuilt?: number;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationDueDate?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationOpenDate?: Date;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationFee?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationOrganization?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationPickUpAddressOfficeHours?: string;
 
   @Expose()
   @IsEnum(ApplicationAddressTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: ApplicationAddressTypeEnum,
     enumName: 'ApplicationAddressTypeEnum',
   })
@@ -164,14 +164,14 @@ class ListingGet extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationDropOffAddressOfficeHours?: string;
 
   @Expose()
   @IsEnum(ApplicationAddressTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: ApplicationAddressTypeEnum,
     enumName: 'ApplicationAddressTypeEnum',
   })
@@ -181,7 +181,7 @@ class ListingGet extends AbstractDTO {
   @IsEnum(ApplicationAddressTypeEnum, {
     groups: [ValidationsGroupsEnum.default],
   })
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: ApplicationAddressTypeEnum,
     enumName: 'ApplicationAddressTypeEnum',
   })
@@ -189,68 +189,68 @@ class ListingGet extends AbstractDTO {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   buildingSelectionCriteria?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   costsNotIncluded?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   creditHistory?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   criminalBackground?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   depositMin?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   depositMax?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   depositHelperText?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   disableUnitsAccordion?: boolean;
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
-  @ApiProperty()
+  @ApiPropertyOptional()
   leasingAgentEmail?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   leasingAgentName?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   leasingAgentOfficeHours?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   leasingAgentPhone?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   leasingAgentTitle?: string;
 
   @Expose()
@@ -262,64 +262,67 @@ class ListingGet extends AbstractDTO {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   postmarkedApplicationsReceivedByDate?: Date;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   programRules?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   rentalAssistance?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   rentalHistory?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   requiredDocuments?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   specialNotes?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   waitlistCurrentSize?: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   waitlistMaxSize?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   whatToExpect?: string;
 
   @Expose()
   @IsEnum(ListingsStatusEnum, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: ListingsStatusEnum, enumName: 'ListingsStatusEnum' })
+  @ApiProperty({
+    enum: ListingsStatusEnum,
+    enumName: 'ListingsStatusEnum',
+  })
   status: ListingsStatusEnum;
 
   @Expose()
   @IsEnum(ReviewOrderTypeEnum, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: ReviewOrderTypeEnum,
     enumName: 'ReviewOrderTypeEnum',
   })
   reviewOrderType?: ReviewOrderTypeEnum;
 
   @Expose()
-  @ApiProperty()
+  @ApiPropertyOptional()
   applicationConfig?: Record<string, unknown>;
 
   @Expose()
@@ -329,7 +332,7 @@ class ListingGet extends AbstractDTO {
   displayWaitlistSize: boolean;
 
   @Expose()
-  @ApiProperty()
+  @ApiPropertyOptional()
   get showWaitlist(): boolean {
     return (
       this.waitlistMaxSize !== null &&
@@ -341,63 +344,66 @@ class ListingGet extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   reservedCommunityDescription?: string;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   reservedCommunityMinAge?: number;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   resultLink?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   isWaitlistOpen?: boolean;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   waitlistOpenSpots?: number;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   customMapPin?: boolean;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   publishedAt?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   closedAt?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   afsLastRunAt?: Date;
 
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   lastApplicationUpdateAt?: Date;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingMultiselectQuestion)
-  @ApiProperty({ type: ListingMultiselectQuestion, isArray: true })
+  @ApiPropertyOptional({
+    type: ListingMultiselectQuestion,
+    isArray: true,
+  })
   listingMultiselectQuestions?: ListingMultiselectQuestion[];
 
   @Expose()
@@ -427,7 +433,7 @@ class ListingGet extends AbstractDTO {
   @Type(() => ListingEvent)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ type: Asset, isArray: true })
-  events: ListingEvent[];
+  listingEvents: ListingEvent[];
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -439,68 +445,68 @@ class ListingGet extends AbstractDTO {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty({ type: Address })
+  @ApiPropertyOptional({ type: Address })
   listingsApplicationPickUpAddress?: Address;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty({ type: Address })
+  @ApiPropertyOptional({ type: Address })
   listingsApplicationDropOffAddress?: Address;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty({ type: Address })
+  @ApiPropertyOptional({ type: Address })
   listingsApplicationMailingAddress?: Address;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty({ type: Address })
+  @ApiPropertyOptional({ type: Address })
   listingsLeasingAgentAddress?: Address;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
-  @ApiProperty({ type: Asset })
+  @ApiPropertyOptional({ type: Asset })
   listingsBuildingSelectionCriteriaFile?: Asset;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Jurisdiction)
-  @ApiProperty({ type: Jurisdiction })
-  jurisdictions: Jurisdiction;
+  @Type(() => IdDTO)
+  @ApiProperty({ type: IdDTO })
+  jurisdictions: IdDTO;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
-  @ApiProperty({ type: Asset })
+  @ApiPropertyOptional({ type: Asset })
   listingsResult?: Asset;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ReservedCommunityType)
-  @ApiProperty({ type: ReservedCommunityType })
-  reservedCommunityTypes?: ReservedCommunityType;
+  @Type(() => IdDTO)
+  @ApiPropertyOptional({ type: IdDTO })
+  reservedCommunityTypes?: IdDTO;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingImage)
-  @ApiProperty({ type: ListingImage, isArray: true })
+  @ApiPropertyOptional({ type: ListingImage, isArray: true })
   listingImages?: ListingImage[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
-  @ApiProperty({ type: ListingFeatures })
+  @ApiPropertyOptional({ type: ListingFeatures })
   listingFeatures?: ListingFeatures;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingUtilities)
-  @ApiProperty({ type: ListingUtilities })
+  @ApiPropertyOptional({ type: ListingUtilities })
   listingUtilities?: ListingUtilities;
 
   @Expose()
@@ -510,14 +516,20 @@ class ListingGet extends AbstractDTO {
   units: Unit[];
 
   @Expose()
-  @ApiProperty({ type: UnitsSummarized })
-  unitsSummarized: UnitsSummarized | undefined;
+  @ApiPropertyOptional({ type: UnitsSummarized })
+  unitsSummarized?: UnitsSummarized;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty({ type: UnitsSummary, isArray: true })
+  @ApiPropertyOptional({ type: UnitsSummary, isArray: true })
   @Type(() => UnitsSummary)
-  unitsSummary: UnitsSummary[];
+  unitsSummary?: UnitsSummary[];
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional()
+  @Transform((value: TransformFnParams) => listingUrlSlug(value.obj as Listing))
+  urlSlug?: string;
 }
 
-export { ListingGet as default, ListingGet };
+export { Listing as default, Listing };

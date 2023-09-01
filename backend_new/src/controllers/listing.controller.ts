@@ -1,10 +1,14 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   Headers,
   Param,
   ParseUUIDPipe,
+  Post,
+  Put,
   Query,
   UseInterceptors,
   UsePipes,
@@ -24,8 +28,12 @@ import { ListingsRetrieveParams } from '../dtos/listings/listings-retrieve-param
 import { PaginationAllowsAllQueryParams } from '../dtos/shared/pagination.dto';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { PaginatedListingDto } from '../dtos/listings/paginated-listing.dto';
-import ListingGet from '../dtos/listings/listing-get.dto';
+import Listing from '../dtos/listings/listing.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
+import { ListingCreate } from '../dtos/listings/listing-create.dto';
+import { SuccessDTO } from '../dtos/shared/success.dto';
+import { ListingUpdate } from '../dtos/listings/listing-update.dto';
+import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -55,7 +63,7 @@ export class ListingController {
   @ApiOperation({ summary: 'Get listing by id', operationId: 'retrieve' })
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  @ApiOkResponse({ type: ListingGet })
+  @ApiOkResponse({ type: Listing })
   async retrieve(
     @Headers('language') language: LanguagesEnum,
     @Param('id', new ParseUUIDPipe({ version: '4' })) listingId: string,
@@ -66,6 +74,32 @@ export class ListingController {
       language,
       queryParams.view,
     );
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Create listing', operationId: 'create' })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  @ApiOkResponse({ type: Listing })
+  async create(@Body() listingDto: ListingCreate): Promise<Listing> {
+    return await this.listingService.create(listingDto);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'Delete listing by id', operationId: 'delete' })
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  async delete(@Body() dto: IdDTO): Promise<SuccessDTO> {
+    return await this.listingService.delete(dto.id);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
+  @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
+  async update(
+    @Param('id') listingId: string,
+    @Body() dto: ListingUpdate,
+  ): Promise<Listing> {
+    return await this.listingService.update(dto);
   }
 
   @Get(`byMultiselectQuestion/:multiselectQuestionId`)

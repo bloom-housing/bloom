@@ -4,13 +4,13 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
 } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { ListingGet } from '../../../src/dtos/listings/listing-get.dto';
+import { Listing } from '../../../src/dtos/listings/listing.dto';
 import { TranslationService } from '../../../src/services/translation.service';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { GoogleTranslateService } from '../../../src/services/google-translate.service';
 
-const mockListing = (): ListingGet => {
+const mockListing = (): Listing => {
   const basicListing = {
     id: 'id 1',
     createdAt: new Date(),
@@ -200,7 +200,7 @@ describe('Testing translations service', () => {
       .mockResolvedValue(null);
 
     const result = await service.translateListing(
-      mockListing() as ListingGet,
+      mockListing() as Listing,
       LanguagesEnum.es,
     );
     expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1);
@@ -216,7 +216,7 @@ describe('Testing translations service', () => {
       .mockResolvedValue({ translations: [translatedStrings] });
 
     const result = await service.translateListing(
-      mockListing() as ListingGet,
+      mockListing() as Listing,
       LanguagesEnum.es,
     );
     expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(0);
@@ -227,7 +227,7 @@ describe('Testing translations service', () => {
   });
 });
 
-const validateTranslatedFields = (listing: ListingGet) => {
+const validateTranslatedFields = (listing: Listing) => {
   expect(listing.applicationPickUpAddressOfficeHours).toEqual(
     'translated application pick up address office hours',
   );

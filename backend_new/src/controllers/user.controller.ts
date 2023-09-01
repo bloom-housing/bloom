@@ -45,7 +45,7 @@ export class UserController {
 
   @Get()
   profile(@Request() req: ExpressRequest): User {
-    return mapTo(User, req.user);
+    return mapTo(User, req['user']);
   }
 
   @Get('/list')
@@ -60,7 +60,7 @@ export class UserController {
     @Request() req: ExpressRequest,
     @Query() queryParams: UserQueryParams,
   ): Promise<PaginatedUserDto> {
-    return await this.userService.list(queryParams, mapTo(User, req.user));
+    return await this.userService.list(queryParams, mapTo(User, req['user']));
   }
 
   @Get(`:id`)
