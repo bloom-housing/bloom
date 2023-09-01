@@ -82,10 +82,10 @@ function ListingsSearchCombined(props: ListingsSearchCombinedProps) {
 
     searchParams.current = params
 
-    // Keeping this until pagination is implemented
-    console.log(
-      `Showing ${meta.itemCount} listings of ${meta.totalItems} total (page ${meta.currentPage} of ${meta.totalPages})`
-    )
+    document.getElementById("listings-outer-container")?.scrollTo(0, 0)
+    document.getElementById("listings-list")?.scrollTo(0, 0)
+    document.getElementById("listings-list-expanded")?.scrollTo(0, 0)
+    window.scrollTo(0, 0)
   }
 
   const onFormSubmit = async (params: ListingSearchParams) => {
