@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { MultiselectLink } from './multiselect-link.dto';
 
 export class MultiselectOption {
@@ -19,7 +19,7 @@ export class MultiselectOption {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   untranslatedText?: string;
 
   @Expose()
@@ -30,22 +30,22 @@ export class MultiselectOption {
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   description?: string;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => MultiselectLink)
-  @ApiProperty({ type: MultiselectLink, isArray: true })
+  @ApiPropertyOptional({ type: MultiselectLink, isArray: true })
   links?: MultiselectLink[];
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   collectAddress?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   exclusive?: boolean;
 }

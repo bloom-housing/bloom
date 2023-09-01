@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
   IsArray,
@@ -25,7 +25,7 @@ export class UserCreate extends OmitType(UserUpdate, [
   'jurisdictions',
 ]) {
   @Expose()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Matches(passwordRegex, {
     message: 'passwordTooWeak',
@@ -37,17 +37,17 @@ export class UserCreate extends OmitType(UserUpdate, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   @Match('password', { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   passwordConfirmation: string;
 
   @Expose()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   email: string;
 
   @Expose()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @Match('email', { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
@@ -57,6 +57,6 @@ export class UserCreate extends OmitType(UserUpdate, [
   @Type(() => IdDTO)
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty({ type: IdDTO, isArray: true, required: false })
+  @ApiPropertyOptional({ type: IdDTO, isArray: true })
   jurisdictions?: IdDTO[];
 }

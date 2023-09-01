@@ -1,9 +1,9 @@
 import { Expose, Type } from 'class-transformer';
 import { IsString, ValidateNested } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { UnitSummary } from './unit-summary-get.dto';
-import { UnitSummaryByAMI } from './unit-summary-by-ami-get.dto';
-import { HMI } from './hmi-get.dto';
+import { UnitSummary } from './unit-summary.dto';
+import { UnitSummaryByAMI } from './unit-summary-by-ami.dto';
+import { HMI } from './hmi.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { UnitType } from '../unit-types/unit-type.dto';
 import { UnitAccessibilityPriorityType } from '../unit-accessibility-priority-types/unit-accessibility-priority-type.dto';

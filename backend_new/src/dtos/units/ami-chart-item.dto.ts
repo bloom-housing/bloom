@@ -7,18 +7,18 @@ export class AmiChartItem {
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   percentOfAmi: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   householdSize: number;
 
   @Expose()
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   income: number;
 }

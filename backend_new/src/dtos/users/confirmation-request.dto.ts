@@ -7,6 +7,6 @@ export class ConfirmationRequest {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty()
   token: string;
 }
