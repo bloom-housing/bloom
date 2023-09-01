@@ -174,7 +174,7 @@ describe('Auth Controller Tests', () => {
         roles: { isAdmin: true },
         mfaEnabled: true,
         confirmedAt: new Date(),
-        phoneNumber: '520-250-8750',
+        phoneNumber: '111-111-1111',
         phoneNumberVerified: true,
       }),
     });
@@ -192,14 +192,14 @@ describe('Auth Controller Tests', () => {
       .expect(201);
 
     expect(res.body).toEqual({
-      phoneNumber: '520-250-8750',
+      phoneNumber: '111-111-1111',
       phoneNumberVerified: true,
     });
 
     expect(smsService.client.messages.create).toHaveBeenCalledWith({
       body: expect.anything(),
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: '520-250-8750',
+      to: '111-111-1111',
     });
 
     const user = await prisma.userAccounts.findUnique({
@@ -217,7 +217,7 @@ describe('Auth Controller Tests', () => {
       data: await userFactory({
         roles: { isAdmin: true },
         mfaEnabled: true,
-        phoneNumber: '520-250-8750',
+        phoneNumber: '111-111-1111',
         phoneNumberVerified: true,
       }),
     });
@@ -267,7 +267,7 @@ describe('Auth Controller Tests', () => {
       data: await userFactory({
         roles: { isAdmin: true },
         mfaEnabled: true,
-        phoneNumber: '520-250-8750',
+        phoneNumber: '111-111-1111',
         phoneNumberVerified: true,
       }),
     });

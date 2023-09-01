@@ -7,6 +7,8 @@ import {
 import { Response } from 'express';
 import { CookieOptions } from 'express';
 import { sign, verify } from 'jsonwebtoken';
+import { randomInt } from 'crypto';
+import { Prisma } from '@prisma/client';
 import { UpdatePassword } from '../dtos/auth/update-password.dto';
 import { MfaType } from '../enums/mfa/mfa-type-enum';
 import { isPasswordValid, passwordToHash } from '../utilities/password-helpers';
@@ -18,7 +20,6 @@ import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { mapTo } from '../utilities/mapTo';
-import { Prisma } from '@prisma/client';
 import { Confirm } from '../dtos/auth/confirm.dto';
 import { SmsService } from './sms.service';
 
@@ -328,7 +329,7 @@ export class AuthService {
     let out = '';
     const characters = '0123456789';
     for (let i = 0; i < Number(process.env.MFA_CODE_LENGTH); i++) {
-      out += characters.charAt(Math.floor(Math.random() * characters.length));
+      out += characters.charAt(randomInt(characters.length));
     }
     return out;
   }

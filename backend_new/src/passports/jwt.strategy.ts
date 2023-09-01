@@ -42,8 +42,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       },
     });
 
-    //
-
     if (!rawUser) {
       // if there is no user matching the incoming id
       throw new UnauthorizedException(`user ${userId} does not exist`);

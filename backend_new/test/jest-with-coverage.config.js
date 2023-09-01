@@ -17,6 +17,7 @@ module.exports = {
     './src/utilities/**',
     './src/controllers/**',
     './src/modules/**',
+    './src/passports/**',
   ],
   coverageThreshold: {
     global: {
