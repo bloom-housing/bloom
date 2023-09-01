@@ -121,6 +121,21 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
+  @Put(`updateAndNotify/:id`)
+  @ApiOperation({
+    summary: "Update listing by id and notify relevant users",
+    operationId: "updateAndNotify",
+  })
+  @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
+  async updateAndNotify(
+    @Request() req,
+    @Param("id") listingId: string,
+    @Body() listingUpdateDto: ListingUpdateDto
+  ): Promise<ListingDto> {
+    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req.user)
+    return mapTo(ListingDto, listing)
+  }
+
   @Delete()
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))

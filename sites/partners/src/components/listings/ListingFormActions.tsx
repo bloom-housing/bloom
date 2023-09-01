@@ -230,23 +230,28 @@ const ListingFormActions = ({
           type="button"
           fullWidth
           onClick={async () => {
-            // TODO throw a modal
-            try {
-              const result = await listingsService.update({
-                id: listing.id,
-                body: { ...listing, status: ListingStatus.active },
-              })
-
-              if (result) {
-                setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
-                if (router.pathname.includes("edit")) {
-                  await router.push(`/listings/${result.id}`)
-                } else {
-                  router.reload()
+            // utilize same submit logic if updating status from edit view
+            if (type === ListingFormActionsType.edit) {
+              submitFormWithStatus(false, ListingStatus.active)
+            } else {
+              // button only exists for listings approval so can call updateAndNotify directly
+              try {
+                const result = await listingsService.updateAndNotify({
+                  id: listing.id,
+                  body: { ...listing, status: ListingStatus.active },
+                })
+                if (result) {
+                  setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
+                  await router.push(`/`)
                 }
+              } catch (err) {
+                setSiteAlertMessage(
+                  err.response?.data?.message === "email failed"
+                    ? "errors.alert.listingsApprovalEmailError"
+                    : "errors.somethingWentWrong",
+                  "warn"
+                )
               }
-            } catch (err) {
-              setSiteAlertMessage("errors.somethingWentWrong", "warn")
             }
           }}
         >

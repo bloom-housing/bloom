@@ -177,13 +177,23 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
           })
           const formattedData = await dataPipeline.run()
-
-          const result = editMode
-            ? await listingsService.update({
+          let result
+          if (editMode) {
+            if (process.env.featureListingsApproval) {
+              result = await listingsService.updateAndNotify({
+                id: listing.id,
+                body: { ...formattedData },
+              })
+            } else {
+              result = await listingsService.update({
                 id: listing.id,
                 body: { id: listing.id, ...formattedData },
               })
-            : await listingsService.create({ body: formattedData })
+            }
+          } else {
+            result = await listingsService.create({ body: formattedData })
+          }
+
           reset(formData)
 
           if (result) {
@@ -238,9 +248,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               }
             })
             setAlert("form")
-          } else {
-            setAlert("api")
-          }
+          } else if (data.message === "email failed") {
+            setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "warn")
+            await router.push(`/listings/${formData.id}/`)
+          } else setAlert("api")
         }
       }
     },
