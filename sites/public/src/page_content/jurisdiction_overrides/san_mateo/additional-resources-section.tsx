@@ -4,7 +4,6 @@ import { t, InfoCardGrid, MarkdownSection } from "@bloom-housing/ui-components"
 import RenderIf from "../../../RenderIf"
 import Resource from "../../../Resource"
 import HowItWorks from "./resources/HowItWorks.md"
-import SMCHousingSearch from "./resources/SMCHousingSearch.md"
 import HavenConnect from "./resources/HavenConnect.md"
 import HIPHousing from "./resources/HIPHousing.md"
 import HAotCoSM from "./resources/HAotCoSM.md"
@@ -25,7 +24,6 @@ export const AdditionalResourcesSection = () => {
               subtitle={t("additionalResources.rentalsDescription")}
             >
               <Resource>{HowItWorks}</Resource>
-              <Resource>{SMCHousingSearch}</Resource>
               <Resource>{HavenConnect}</Resource>
             </InfoCardGrid>
             <InfoCardGrid
