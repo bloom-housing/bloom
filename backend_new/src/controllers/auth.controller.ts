@@ -12,7 +12,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Response as ExpressResponse } from 'express';
+import {
+  Response as ExpressResponse,
+  Request as ExpressRequest,
+} from 'express';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { AuthService, REFRESH_COOKIE_NAME } from '../services/auth.service';
@@ -39,7 +42,7 @@ export class AuthController {
   @ApiBody({ type: Login })
   @UseGuards(MfaAuthGuard)
   async login(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Response({ passthrough: true }) res: ExpressResponse,
   ): Promise<SuccessDTO> {
     return await this.authService.setCredentials(res, mapTo(User, req['user']));
@@ -50,8 +53,8 @@ export class AuthController {
   @ApiOkResponse({ type: SuccessDTO })
   @UseGuards(JwtAuthGuard)
   async logout(
-    @Request() req,
-    @Response({ passthrough: true }) res,
+    @Request() req: ExpressRequest,
+    @Response({ passthrough: true }) res: ExpressResponse,
   ): Promise<SuccessDTO> {
     return await this.authService.clearCredentials(
       res,
@@ -76,7 +79,7 @@ export class AuthController {
   @ApiOkResponse({ type: SuccessDTO })
   @UseGuards(OptionalAuthGuard)
   async requestNewToken(
-    @Request() req,
+    @Request() req: ExpressRequest,
     @Response({ passthrough: true }) res: ExpressResponse,
   ): Promise<SuccessDTO> {
     if (!req?.cookies[REFRESH_COOKIE_NAME]) {

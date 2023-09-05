@@ -94,10 +94,8 @@ Passport guards are paired with a passport strategy (jwt.strategy.ts, and mfa.st
 
 Hopefully that makes sense, if not think of guards as customs agents, and the passport strategy is what the guards look for in a request to allow entry to a requester. Allowing them access the endpoint that the guard protects. 
 
-## Conventions
-Services are housed under `src/services` and are given the extension `.services.ts`. The model name (listing, application, etc) is singular. So for example `listing.service.ts`.
-
-The exported class should be in capitalized camelcase (e.g. `ListingService`).
+[NestJS passport docs](https://docs.nestjs.com/recipes/passport)
+[NestJS guards docs](https://docs.nestjs.com/guards)
 
 
 # Testing

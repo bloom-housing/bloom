@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsString, IsEmail, IsPhoneNumber, IsEnum } from 'class-validator';
 import { MfaType } from '../../enums/mfa/mfa-type-enum';
@@ -19,11 +19,11 @@ export class RequestMfaCode {
 
   @Expose()
   @IsEnum(MfaType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true, enum: MfaType, enumName: 'MfaType' })
+  @ApiProperty({ enum: MfaType, enumName: 'MfaType' })
   mfaType: MfaType;
 
   @Expose()
   @IsPhoneNumber('US', { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   phoneNumber?: string;
 }

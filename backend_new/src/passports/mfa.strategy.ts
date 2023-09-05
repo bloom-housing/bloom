@@ -109,7 +109,7 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
 
     if (!rawUser.mfaEnabled) {
       // if user is not an mfaEnabled user
-      await this.updateStoredUser(null, null, null, new Date(), 0, rawUser.id);
+      await this.updateStoredUser(null, null, null, 0, rawUser.id);
       return mapTo(User, rawUser);
     }
 
@@ -142,7 +142,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
         rawUser.mfaCode,
         rawUser.mfaCodeUpdatedAt,
         rawUser.phoneNumberVerified,
-        new Date(),
         rawUser.failedLoginAttemptsCount,
         rawUser.id,
       );
@@ -166,7 +165,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
       rawUser.mfaCode,
       rawUser.mfaCodeUpdatedAt,
       rawUser.phoneNumberVerified,
-      new Date(),
       rawUser.failedLoginAttemptsCount,
       rawUser.id,
     );
@@ -188,7 +186,6 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
     mfaCode: string,
     mfaCodeUpdatedAt: Date,
     phoneNumberVerified: boolean,
-    lastLoginAt: Date,
     failedLoginAttemptsCount: number,
     userId: string,
   ): Promise<void> {
@@ -197,8 +194,8 @@ export class MfaStrategy extends PassportStrategy(Strategy, 'mfa') {
         mfaCode,
         mfaCodeUpdatedAt,
         phoneNumberVerified,
-        lastLoginAt,
         failedLoginAttemptsCount,
+        lastLoginAt: new Date(),
       },
       where: {
         id: userId,

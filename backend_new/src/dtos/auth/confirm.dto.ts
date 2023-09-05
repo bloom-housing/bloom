@@ -2,7 +2,7 @@ import { IsString, Matches, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { passwordRegex } from '../../utilities/password-regex';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Confirm {
   @Expose()
@@ -12,7 +12,7 @@ export class Confirm {
   token: string;
 
   @Expose()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Matches(passwordRegex, {
     message: 'passwordTooWeak',

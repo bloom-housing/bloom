@@ -62,6 +62,7 @@ export class AuthService {
   /*
     generates a signed token for a user
     willBeRefreshToken changes the TTL of the token with true being longer and false being shorter 
+    willBeRefreshToken is true when trying to sign a refresh token instead of the standard auth token
   */
   generateAccessToken(user: User, willBeRefreshToken?: boolean): string {
     const payload = {
