@@ -38,7 +38,6 @@ export const applicationFactory = (optionalParams?: {
     incomePeriod: IncomePeriodEnum.perYear,
     preferences: {},
     preferredUnitTypes,
-    ...optionalParams?.overrides,
     listings: optionalParams?.listingId
       ? {
           connect: {
@@ -46,6 +45,7 @@ export const applicationFactory = (optionalParams?: {
           },
         }
       : undefined,
+    ...optionalParams?.overrides,
   };
 };
 

@@ -962,9 +962,14 @@ describe('Application Controller Tests', () => {
   it('should throw an error when trying to verify an incomplete application', async () => {
     const dto: ApplicationCreate = {} as unknown as ApplicationCreate;
 
-    await request(app.getHttpServer())
+    const res = await request(app.getHttpServer())
       .post(`/applications/verify`)
       .send(dto)
       .expect(400);
+
+    expect(res.body.error).toEqual('Bad Request');
+    expect(res.body.message).toEqual([
+      'preferences should not be null or undefined',
+    ]);
   });
 });

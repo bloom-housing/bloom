@@ -100,6 +100,135 @@ describe('Testing application service', () => {
     return toReturn;
   };
 
+  const mockCreateApplicationData = (
+    exampleAddress: AddressCreate,
+    submissionDate: Date,
+  ): ApplicationCreate => {
+    return {
+      contactPreferences: ['example contact preference'],
+      preferences: [
+        {
+          key: 'example key',
+          claimed: true,
+          options: [
+            {
+              key: 'example key',
+              checked: true,
+              extraData: [
+                {
+                  type: InputType.boolean,
+                  key: 'example key',
+                  value: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      status: ApplicationStatusEnum.submitted,
+      submissionType: ApplicationSubmissionTypeEnum.electronical,
+      applicant: {
+        firstName: 'applicant first name',
+        middleName: 'applicant middle name',
+        lastName: 'applicant last name',
+        birthMonth: '12',
+        birthDay: '17',
+        birthYear: '1993',
+        emailAddress: 'example@email.com',
+        noEmail: false,
+        phoneNumber: '111-111-1111',
+        phoneNumberType: 'Cell',
+        noPhone: false,
+        workInRegion: YesNoEnum.yes,
+        applicantWorkAddress: exampleAddress,
+        applicantAddress: exampleAddress,
+      },
+      accessibility: {
+        mobility: false,
+        vision: false,
+        hearing: false,
+      },
+      alternateContact: {
+        type: 'example type',
+        otherType: 'example other type',
+        firstName: 'example first name',
+        lastName: 'example last name',
+        agency: 'example agency',
+        phoneNumber: '111-111-1111',
+        emailAddress: 'example@email.com',
+        address: exampleAddress,
+      },
+      applicationsAlternateAddress: exampleAddress,
+      applicationsMailingAddress: exampleAddress,
+      listings: {
+        id: randomUUID(),
+      },
+      demographics: {
+        ethnicity: 'example ethnicity',
+        gender: 'example gender',
+        sexualOrientation: 'example sexual orientation',
+        howDidYouHear: ['example how did you hear'],
+        race: ['example race'],
+      },
+      preferredUnitTypes: [
+        {
+          id: randomUUID(),
+        },
+      ],
+      householdMember: [
+        {
+          orderId: 0,
+          firstName: 'example first name',
+          middleName: 'example middle name',
+          lastName: 'example last name',
+          birthMonth: '12',
+          birthDay: '17',
+          birthYear: '1993',
+          sameAddress: YesNoEnum.yes,
+          relationship: 'example relationship',
+          workInRegion: YesNoEnum.yes,
+          householdMemberWorkAddress: exampleAddress,
+          householdMemberAddress: exampleAddress,
+        },
+      ],
+      appUrl: 'http://www.example.com',
+      additionalPhone: true,
+      additionalPhoneNumber: '111-111-1111',
+      additionalPhoneNumberType: 'example additional phone number type',
+      householdSize: 2,
+      housingStatus: 'example housing status',
+      sendMailToMailingAddress: true,
+      householdExpectingChanges: false,
+      householdStudent: false,
+      incomeVouchers: false,
+      income: '36000',
+      incomePeriod: IncomePeriodEnum.perYear,
+      language: LanguagesEnum.en,
+      acceptedTerms: true,
+      submissionDate: submissionDate,
+      reviewStatus: ApplicationReviewStatusEnum.valid,
+      programs: [
+        {
+          key: 'example key',
+          claimed: true,
+          options: [
+            {
+              key: 'example key',
+              checked: true,
+              extraData: [
+                {
+                  type: InputType.boolean,
+                  key: 'example key',
+                  value: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    } as ApplicationCreate;
+  };
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ApplicationService, PrismaService],
@@ -558,129 +687,7 @@ describe('Testing application service', () => {
     });
 
     const exampleAddress = addressFactory() as AddressCreate;
-    const dto: ApplicationCreate = {
-      contactPreferences: ['example contact preference'],
-      preferences: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      applicant: {
-        firstName: 'applicant first name',
-        middleName: 'applicant middle name',
-        lastName: 'applicant last name',
-        birthMonth: '12',
-        birthDay: '17',
-        birthYear: '1993',
-        emailAddress: 'example@email.com',
-        noEmail: false,
-        phoneNumber: '111-111-1111',
-        phoneNumberType: 'Cell',
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: exampleAddress,
-        applicantAddress: exampleAddress,
-      },
-      accessibility: {
-        mobility: false,
-        vision: false,
-        hearing: false,
-      },
-      alternateContact: {
-        type: 'example type',
-        otherType: 'example other type',
-        firstName: 'example first name',
-        lastName: 'example last name',
-        agency: 'example agency',
-        phoneNumber: '111-111-1111',
-        emailAddress: 'example@email.com',
-        address: exampleAddress,
-      },
-      applicationsAlternateAddress: exampleAddress,
-      applicationsMailingAddress: exampleAddress,
-      listings: {
-        id: randomUUID(),
-      },
-      demographics: {
-        ethnicity: 'example ethnicity',
-        gender: 'example gender',
-        sexualOrientation: 'example sexual orientation',
-        howDidYouHear: ['example how did you hear'],
-        race: ['example race'],
-      },
-      preferredUnitTypes: [
-        {
-          id: randomUUID(),
-        },
-      ],
-      householdMember: [
-        {
-          orderId: 0,
-          firstName: 'example first name',
-          middleName: 'example middle name',
-          lastName: 'example last name',
-          birthMonth: '12',
-          birthDay: '17',
-          birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
-          relationship: 'example relationship',
-          workInRegion: YesNoEnum.yes,
-          householdMemberWorkAddress: exampleAddress,
-          householdMemberAddress: exampleAddress,
-        },
-      ],
-      appUrl: 'http://www.example.com',
-      additionalPhone: true,
-      additionalPhoneNumber: '111-111-1111',
-      additionalPhoneNumberType: 'example additional phone number type',
-      householdSize: 2,
-      housingStatus: 'example housing status',
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: false,
-      householdStudent: false,
-      incomeVouchers: false,
-      income: '36000',
-      incomePeriod: IncomePeriodEnum.perYear,
-      language: LanguagesEnum.en,
-      acceptedTerms: true,
-      submissionDate: submissionDate,
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      programs: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    const dto = mockCreateApplicationData(exampleAddress, submissionDate);
 
     await service.create(dto, true);
 
@@ -896,129 +903,7 @@ describe('Testing application service', () => {
     });
 
     const exampleAddress = addressFactory() as AddressCreate;
-    const dto: ApplicationCreate = {
-      contactPreferences: ['example contact preference'],
-      preferences: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      applicant: {
-        firstName: 'applicant first name',
-        middleName: 'applicant middle name',
-        lastName: 'applicant last name',
-        birthMonth: '12',
-        birthDay: '17',
-        birthYear: '1993',
-        emailAddress: 'example@email.com',
-        noEmail: false,
-        phoneNumber: '111-111-1111',
-        phoneNumberType: 'Cell',
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: exampleAddress,
-        applicantAddress: exampleAddress,
-      },
-      accessibility: {
-        mobility: false,
-        vision: false,
-        hearing: false,
-      },
-      alternateContact: {
-        type: 'example type',
-        otherType: 'example other type',
-        firstName: 'example first name',
-        lastName: 'example last name',
-        agency: 'example agency',
-        phoneNumber: '111-111-1111',
-        emailAddress: 'example@email.com',
-        address: exampleAddress,
-      },
-      applicationsAlternateAddress: exampleAddress,
-      applicationsMailingAddress: exampleAddress,
-      listings: {
-        id: randomUUID(),
-      },
-      demographics: {
-        ethnicity: 'example ethnicity',
-        gender: 'example gender',
-        sexualOrientation: 'example sexual orientation',
-        howDidYouHear: ['example how did you hear'],
-        race: ['example race'],
-      },
-      preferredUnitTypes: [
-        {
-          id: randomUUID(),
-        },
-      ],
-      householdMember: [
-        {
-          orderId: 0,
-          firstName: 'example first name',
-          middleName: 'example middle name',
-          lastName: 'example last name',
-          birthMonth: '12',
-          birthDay: '17',
-          birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
-          relationship: 'example relationship',
-          workInRegion: YesNoEnum.yes,
-          householdMemberWorkAddress: exampleAddress,
-          householdMemberAddress: exampleAddress,
-        },
-      ],
-      appUrl: 'http://www.example.com',
-      additionalPhone: true,
-      additionalPhoneNumber: '111-111-1111',
-      additionalPhoneNumberType: 'example additional phone number type',
-      householdSize: 2,
-      housingStatus: 'example housing status',
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: false,
-      householdStudent: false,
-      incomeVouchers: false,
-      income: '36000',
-      incomePeriod: IncomePeriodEnum.perYear,
-      language: LanguagesEnum.en,
-      acceptedTerms: true,
-      submissionDate: new Date(),
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      programs: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    const dto = mockCreateApplicationData(exampleAddress, new Date());
 
     await expect(
       async () => await service.create(dto, true),
@@ -1043,129 +928,7 @@ describe('Testing application service', () => {
     });
 
     const exampleAddress = addressFactory() as AddressCreate;
-    const dto: ApplicationCreate = {
-      contactPreferences: ['example contact preference'],
-      preferences: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      applicant: {
-        firstName: 'applicant first name',
-        middleName: 'applicant middle name',
-        lastName: 'applicant last name',
-        birthMonth: '12',
-        birthDay: '17',
-        birthYear: '1993',
-        emailAddress: 'example@email.com',
-        noEmail: false,
-        phoneNumber: '111-111-1111',
-        phoneNumberType: 'Cell',
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: exampleAddress,
-        applicantAddress: exampleAddress,
-      },
-      accessibility: {
-        mobility: false,
-        vision: false,
-        hearing: false,
-      },
-      alternateContact: {
-        type: 'example type',
-        otherType: 'example other type',
-        firstName: 'example first name',
-        lastName: 'example last name',
-        agency: 'example agency',
-        phoneNumber: '111-111-1111',
-        emailAddress: 'example@email.com',
-        address: exampleAddress,
-      },
-      applicationsAlternateAddress: exampleAddress,
-      applicationsMailingAddress: exampleAddress,
-      listings: {
-        id: randomUUID(),
-      },
-      demographics: {
-        ethnicity: 'example ethnicity',
-        gender: 'example gender',
-        sexualOrientation: 'example sexual orientation',
-        howDidYouHear: ['example how did you hear'],
-        race: ['example race'],
-      },
-      preferredUnitTypes: [
-        {
-          id: randomUUID(),
-        },
-      ],
-      householdMember: [
-        {
-          orderId: 0,
-          firstName: 'example first name',
-          middleName: 'example middle name',
-          lastName: 'example last name',
-          birthMonth: '12',
-          birthDay: '17',
-          birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
-          relationship: 'example relationship',
-          workInRegion: YesNoEnum.yes,
-          householdMemberWorkAddress: exampleAddress,
-          householdMemberAddress: exampleAddress,
-        },
-      ],
-      appUrl: 'http://www.example.com',
-      additionalPhone: true,
-      additionalPhoneNumber: '111-111-1111',
-      additionalPhoneNumberType: 'example additional phone number type',
-      householdSize: 2,
-      housingStatus: 'example housing status',
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: false,
-      householdStudent: false,
-      incomeVouchers: false,
-      income: '36000',
-      incomePeriod: IncomePeriodEnum.perYear,
-      language: LanguagesEnum.en,
-      acceptedTerms: true,
-      submissionDate: new Date(),
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      programs: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    const dto = mockCreateApplicationData(exampleAddress, new Date());
 
     await service.create(dto, false);
 
@@ -1386,129 +1149,10 @@ describe('Testing application service', () => {
 
     const exampleAddress = addressFactory() as AddressCreate;
     const submissionDate = new Date();
+
     const dto: ApplicationUpdate = {
+      ...mockCreateApplicationData(exampleAddress, submissionDate),
       id: randomUUID(),
-      contactPreferences: ['example contact preference'],
-      preferences: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      applicant: {
-        firstName: 'applicant first name',
-        middleName: 'applicant middle name',
-        lastName: 'applicant last name',
-        birthMonth: '12',
-        birthDay: '17',
-        birthYear: '1993',
-        emailAddress: 'example@email.com',
-        noEmail: false,
-        phoneNumber: '111-111-1111',
-        phoneNumberType: 'Cell',
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: exampleAddress,
-        applicantAddress: exampleAddress,
-      },
-      accessibility: {
-        mobility: false,
-        vision: false,
-        hearing: false,
-      },
-      alternateContact: {
-        type: 'example type',
-        otherType: 'example other type',
-        firstName: 'example first name',
-        lastName: 'example last name',
-        agency: 'example agency',
-        phoneNumber: '111-111-1111',
-        emailAddress: 'example@email.com',
-        address: exampleAddress,
-      },
-      applicationsAlternateAddress: exampleAddress,
-      applicationsMailingAddress: exampleAddress,
-      listings: {
-        id: randomUUID(),
-      },
-      demographics: {
-        ethnicity: 'example ethnicity',
-        gender: 'example gender',
-        sexualOrientation: 'example sexual orientation',
-        howDidYouHear: ['example how did you hear'],
-        race: ['example race'],
-      },
-      preferredUnitTypes: [
-        {
-          id: randomUUID(),
-        },
-      ],
-      householdMember: [
-        {
-          orderId: 0,
-          firstName: 'example first name',
-          middleName: 'example middle name',
-          lastName: 'example last name',
-          birthMonth: '12',
-          birthDay: '17',
-          birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
-          relationship: 'example relationship',
-          workInRegion: YesNoEnum.yes,
-          householdMemberWorkAddress: exampleAddress,
-          householdMemberAddress: exampleAddress,
-        },
-      ],
-      appUrl: 'http://www.example.com',
-      additionalPhone: true,
-      additionalPhoneNumber: '111-111-1111',
-      additionalPhoneNumberType: 'example additional phone number type',
-      householdSize: 2,
-      housingStatus: 'example housing status',
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: false,
-      householdStudent: false,
-      incomeVouchers: false,
-      income: '36000',
-      incomePeriod: IncomePeriodEnum.perYear,
-      language: LanguagesEnum.en,
-      acceptedTerms: true,
-      submissionDate: submissionDate,
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      programs: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
     };
 
     await service.update(dto);
@@ -1739,129 +1383,10 @@ describe('Testing application service', () => {
 
     const exampleAddress = addressFactory() as AddressCreate;
     const submissionDate = new Date();
+
     const dto: ApplicationUpdate = {
+      ...mockCreateApplicationData(exampleAddress, submissionDate),
       id: randomUUID(),
-      contactPreferences: ['example contact preference'],
-      preferences: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      status: ApplicationStatusEnum.submitted,
-      submissionType: ApplicationSubmissionTypeEnum.electronical,
-      applicant: {
-        firstName: 'applicant first name',
-        middleName: 'applicant middle name',
-        lastName: 'applicant last name',
-        birthMonth: '12',
-        birthDay: '17',
-        birthYear: '1993',
-        emailAddress: 'example@email.com',
-        noEmail: false,
-        phoneNumber: '111-111-1111',
-        phoneNumberType: 'Cell',
-        noPhone: false,
-        workInRegion: YesNoEnum.yes,
-        applicantWorkAddress: exampleAddress,
-        applicantAddress: exampleAddress,
-      },
-      accessibility: {
-        mobility: false,
-        vision: false,
-        hearing: false,
-      },
-      alternateContact: {
-        type: 'example type',
-        otherType: 'example other type',
-        firstName: 'example first name',
-        lastName: 'example last name',
-        agency: 'example agency',
-        phoneNumber: '111-111-1111',
-        emailAddress: 'example@email.com',
-        address: exampleAddress,
-      },
-      applicationsAlternateAddress: exampleAddress,
-      applicationsMailingAddress: exampleAddress,
-      listings: {
-        id: randomUUID(),
-      },
-      demographics: {
-        ethnicity: 'example ethnicity',
-        gender: 'example gender',
-        sexualOrientation: 'example sexual orientation',
-        howDidYouHear: ['example how did you hear'],
-        race: ['example race'],
-      },
-      preferredUnitTypes: [
-        {
-          id: randomUUID(),
-        },
-      ],
-      householdMember: [
-        {
-          orderId: 0,
-          firstName: 'example first name',
-          middleName: 'example middle name',
-          lastName: 'example last name',
-          birthMonth: '12',
-          birthDay: '17',
-          birthYear: '1993',
-          sameAddress: YesNoEnum.yes,
-          relationship: 'example relationship',
-          workInRegion: YesNoEnum.yes,
-          householdMemberWorkAddress: exampleAddress,
-          householdMemberAddress: exampleAddress,
-        },
-      ],
-      appUrl: 'http://www.example.com',
-      additionalPhone: true,
-      additionalPhoneNumber: '111-111-1111',
-      additionalPhoneNumberType: 'example additional phone number type',
-      householdSize: 2,
-      housingStatus: 'example housing status',
-      sendMailToMailingAddress: true,
-      householdExpectingChanges: false,
-      householdStudent: false,
-      incomeVouchers: false,
-      income: '36000',
-      incomePeriod: IncomePeriodEnum.perYear,
-      language: LanguagesEnum.en,
-      acceptedTerms: true,
-      submissionDate: submissionDate,
-      reviewStatus: ApplicationReviewStatusEnum.valid,
-      programs: [
-        {
-          key: 'example key',
-          claimed: true,
-          options: [
-            {
-              key: 'example key',
-              checked: true,
-              extraData: [
-                {
-                  type: InputType.boolean,
-                  key: 'example key',
-                  value: true,
-                },
-              ],
-            },
-          ],
-        },
-      ],
     };
 
     await expect(async () => await service.update(dto)).rejects.toThrowError(

@@ -9,7 +9,7 @@ import { Application } from '../dtos/applications/application.dto';
 import { mapTo } from '../utilities/mapTo';
 import { ApplicationQueryParams } from '../dtos/applications/application-query-params.dto';
 import { calculateSkip, calculateTake } from '../utilities/pagination-helpers';
-import { Prisma } from '@prisma/client';
+import { Prisma, YesNoEnum } from '@prisma/client';
 import { buildOrderBy } from '../utilities/build-order-by';
 import { buildPaginationInfo } from '../utilities/build-pagination-meta';
 import { IdDTO } from '../dtos/shared/id.dto';
@@ -237,8 +237,7 @@ export class ApplicationService {
     if (forPublic) {
       // if its a public submission
       if (
-        listing &&
-        listing.applicationDueDate &&
+        listing?.applicationDueDate &&
         dto.submissionDate > listing.applicationDueDate
       ) {
         // if the submission is after the application due date
@@ -326,16 +325,9 @@ export class ApplicationService {
         householdMember: dto.householdMember
           ? {
               create: dto.householdMember.map((member) => ({
-                orderId: member.orderId,
-                firstName: member.firstName,
-                middleName: member.middleName,
-                lastName: member.lastName,
-                birthMonth: member.birthMonth,
-                birthDay: member.birthDay,
-                birthYear: member.birthYear,
-                sameAddress: member.sameAddress,
-                relationship: member.relationship,
-                workInRegion: member.workInRegion,
+                ...member,
+                sameAddress: member.sameAddress || YesNoEnum.no,
+                workInRegion: member.workInRegion || YesNoEnum.no,
                 householdMemberAddress: {
                   create: {
                     ...member.householdMemberAddress,
@@ -453,16 +445,9 @@ export class ApplicationService {
         householdMember: dto.householdMember
           ? {
               create: dto.householdMember.map((member) => ({
-                orderId: member.orderId,
-                firstName: member.firstName,
-                middleName: member.middleName,
-                lastName: member.lastName,
-                birthMonth: member.birthMonth,
-                birthDay: member.birthDay,
-                birthYear: member.birthYear,
-                sameAddress: member.sameAddress,
-                relationship: member.relationship,
-                workInRegion: member.workInRegion,
+                ...member,
+                sameAddress: member.sameAddress || YesNoEnum.no,
+                workInRegion: member.workInRegion || YesNoEnum.no,
                 householdMemberAddress: {
                   create: {
                     ...member.householdMemberAddress,
@@ -486,7 +471,7 @@ export class ApplicationService {
   }
 
   /*
-    this will delete an application
+    this will mark an application as deleted by setting the deletedAt column for the application
   */
   async delete(applicationId: string): Promise<SuccessDTO> {
     const application = await this.findOrThrow(applicationId);

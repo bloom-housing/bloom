@@ -1340,7 +1340,7 @@ export class ApplicationsService {
     });
   }
   /**
-   * Create application
+   * Create application (used by partners to hand create an application)
    */
   create(
     params: {
@@ -1420,7 +1420,7 @@ export class ApplicationsService {
     });
   }
   /**
-   * Submit application
+   * Submit application (used by applicants applying to a listing)
    */
   submit(
     params: {

@@ -65,14 +65,21 @@ export class ApplicationController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Create application', operationId: 'create' })
+  @ApiOperation({
+    summary:
+      'Create application (used by partners to hand create an application)',
+    operationId: 'create',
+  })
   @ApiOkResponse({ type: Application })
   async create(@Body() dto: ApplicationCreate): Promise<Application> {
     return await this.applicationService.create(dto, false);
   }
 
   @Post(`submit`)
-  @ApiOperation({ summary: 'Submit application', operationId: 'submit' })
+  @ApiOperation({
+    summary: 'Submit application (used by applicants applying to a listing)',
+    operationId: 'submit',
+  })
   @ApiOkResponse({ type: Application })
   @UsePipes(
     new ValidationPipe({
