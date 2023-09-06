@@ -1,15 +1,8 @@
 import React, { useMemo, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
-import {
-  AppearanceStyleType,
-  t,
-  Tag,
-  AlertBox,
-  SiteAlert,
-  Breadcrumbs,
-  BreadcrumbLink,
-} from "@bloom-housing/ui-components"
+import { t, AlertBox, SiteAlert, Breadcrumbs, BreadcrumbLink } from "@bloom-housing/ui-components"
+import { Tag } from "@bloom-housing/ui-seeds"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts"
@@ -58,19 +51,19 @@ export default function ApplicationsList() {
     switch (application?.status) {
       case ApplicationStatus.submitted:
         return (
-          <Tag styleType={AppearanceStyleType.success} pillStyle>
+          <Tag variant={"success"} size={"lg"}>
             {t(`application.details.applicationStatus.submitted`)}
           </Tag>
         )
       case ApplicationStatus.removed:
         return (
-          <Tag styleType={AppearanceStyleType.warning} pillStyle>
+          <Tag variant={"highlight-warm"} size={"lg"}>
             {t(`application.details.applicationStatus.removed`)}
           </Tag>
         )
       default:
         return (
-          <Tag styleType={AppearanceStyleType.primary} pillStyle>
+          <Tag variant={"primary"} size={"lg"}>
             {t(`application.details.applicationStatus.draft`)}
           </Tag>
         )

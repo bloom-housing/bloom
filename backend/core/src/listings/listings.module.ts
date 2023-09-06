@@ -18,7 +18,9 @@ import { ListingsCronService } from "./listings-cron.service"
 import { ListingsCsvExporterService } from "./listings-csv-exporter.service"
 import { CsvBuilder } from "../applications/services/csv-builder.service"
 import { CachePurgeService } from "./cache-purge.service"
-import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
+import { ConfigService } from "@nestjs/config"
+import { EmailModule } from "../../src/email/email.module"
+import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
     ActivityLogModule,
     ApplicationFlaggedSetsModule,
     HttpModule,
+    EmailModule,
     JurisdictionsModule,
   ],
   providers: [
@@ -45,6 +48,7 @@ import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
     CsvBuilder,
     ListingsCsvExporterService,
     CachePurgeService,
+    ConfigService,
   ],
   exports: [ListingsService],
   controllers: [ListingsController],

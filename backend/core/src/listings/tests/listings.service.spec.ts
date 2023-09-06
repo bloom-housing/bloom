@@ -18,6 +18,8 @@ import { UserService } from "../../auth/services/user.service"
 import { HttpService } from "@nestjs/axios"
 import { CachePurgeService } from "../cache-purge.service"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+import { EmailService } from "../../../src/email/email.service"
+import { ConfigService } from "@nestjs/config"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -177,7 +179,16 @@ describe("ListingsService", () => {
             findOne: jest.fn(),
           },
         },
-        { provide: getRepositoryToken(User), useValue: jest.fn() },
+        {
+          provide: EmailService,
+          useValue: {
+            requestApproval: jest.fn(),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn() },
+        },
       ],
     }).compile()
 

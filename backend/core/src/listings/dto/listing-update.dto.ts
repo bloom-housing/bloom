@@ -40,6 +40,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "publishedAt",
   "closedAt",
   "afsLastRunAt",
+  "requestedChangesUser",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

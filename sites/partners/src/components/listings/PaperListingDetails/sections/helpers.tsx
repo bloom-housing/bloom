@@ -1,6 +1,7 @@
 import React from "react"
 import { AddressUpdate } from "@bloom-housing/backend-core/types"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
 
 export const getDetailFieldNumber = (listingNumber: number) => {
@@ -24,9 +25,15 @@ export const getDetailBoolean = (listingBool: boolean) => {
 }
 
 export const getReadableErrorMessage = (errorMessage: string | undefined) => {
-  const errorDetails = errorMessage.substr(errorMessage.indexOf(" ") + 1)
+  const errorDetails = errorMessage.substring(errorMessage.indexOf(" ") + 1)
   let readableMessage = null
   switch (errorDetails) {
+    case "must have https://":
+      readableMessage = t("errors.urlHttpsError")
+      break
+    case "must be a URL address":
+      readableMessage = t("errors.urlError")
+      break
     case "must be an email":
       readableMessage = t("errors.emailAddressError")
       break
@@ -52,57 +59,57 @@ export const getDetailAddress = (
 ) => {
   if (!address) {
     return (
-      <ViewItem>
+      <FieldValue>
         <GridSection subtitle={subtitle}>{getDetailFieldString(null)}</GridSection>
-      </ViewItem>
+      </FieldValue>
     )
   }
   return (
     <>
       <GridSection subtitle={subtitle} columns={6}>
         <GridCell span={3}>
-          <ViewItem
+          <FieldValue
             id={`${addressName}.street`}
             label={t("listings.streetAddressOrPOBox")}
-            dataTestId={`${addressName}.street`}
+            testId={`${addressName}.street`}
           >
             {getDetailFieldString(address?.street)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell span={3}>
-          <ViewItem
+          <FieldValue
             id={`${addressName}.street2`}
             label={t("application.contact.apt")}
-            dataTestId={`${addressName}.street2`}
+            testId={`${addressName}.street2`}
           >
             {getDetailFieldString(address?.street2)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={6}>
         <GridCell span={2}>
-          <ViewItem
+          <FieldValue
             id={`${addressName}.city`}
             label={t("application.contact.city")}
-            dataTestId={`${addressName}.city`}
+            testId={`${addressName}.city`}
           >
             {getDetailFieldString(address?.city)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
-        <ViewItem
+        <FieldValue
           id={`${addressName}.state`}
           label={t("application.contact.state")}
-          dataTestId={`${addressName}.state`}
+          testId={`${addressName}.state`}
         >
           {getDetailFieldString(address?.state)}
-        </ViewItem>
-        <ViewItem
+        </FieldValue>
+        <FieldValue
           id={`${addressName}.zipCode`}
           label={t("application.contact.zip")}
-          dataTestId={`${addressName}.zipCode`}
+          testId={`${addressName}.zipCode`}
         >
           {getDetailFieldString(address?.zipCode)}
-        </ViewItem>
+        </FieldValue>
       </GridSection>
     </>
   )

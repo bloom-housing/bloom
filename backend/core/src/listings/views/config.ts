@@ -181,6 +181,9 @@ views.detail = {
     "listingMultiselectQuestionsMultiselectQuestion.links",
     "listingMultiselectQuestionsMultiselectQuestion.options",
     "listings.utilities",
+    "requestedChangesUser.id",
+    "requestedChangesUser.firstName",
+    "requestedChangesUser.lastName",
   ],
   leftJoins: [
     ...views.base.leftJoins,
@@ -196,6 +199,7 @@ views.detail = {
     { join: "listings.applicationMailingAddress", alias: "applicationMailingAddress" },
     { join: "listings.applicationDropOffAddress", alias: "applicationDropOffAddress" },
     { join: "listings.leasingAgents", alias: "leasingAgents" },
+    { join: "listings.requestedChangesUser", alias: "requestedChangesUser" },
   ],
 }
 
@@ -225,6 +229,7 @@ views.full = {
     ["listings.images", "listingImages"],
     ["listingImages.image", "listingImagesImage"],
     ["listings.utilities", "listing_utilities"],
+    ["listings.requestedChangesUser", "requestedChangesUser"],
   ],
 }
 views.listingsExport = {

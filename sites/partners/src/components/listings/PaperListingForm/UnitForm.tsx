@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react"
 import {
   t,
   GridSection,
-  ViewItem,
   GridCell,
   Field,
   Select,
@@ -14,6 +13,7 @@ import {
   numberOptions,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "../../../lib/listings/formTypes"
@@ -37,11 +37,10 @@ type UnitFormProps = {
 const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
-  const [options, setOptions] = useState({
-    amiCharts: [],
-    unitPriorities: [],
-    unitTypes: [],
-  })
+  const [amiChartsOptions, setAmiChartsOptions] = useState([])
+  const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
+  const [unitTypesOptions, setUnitTypesOptions] = useState([])
+  const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
@@ -181,11 +180,25 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   }
 
   useEffect(() => {
-    if (amiPercentage && !loading && options) {
+    if (
+      amiPercentage &&
+      !loading &&
+      amiChartsOptions &&
+      unitPrioritiesOptions &&
+      unitTypesOptions &&
+      isAmiPercentageDirty
+    ) {
       resetAmiTableValues()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amiPercentage])
+  }, [amiPercentage, amiChartPercentageOptions, isAmiPercentageDirty])
+
+  useEffect(() => {
+    if (defaultUnit && !amiPercentage) {
+      setValue("amiPercentage", defaultUnit.amiPercentage)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amiChartPercentageOptions])
 
   type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
@@ -312,47 +325,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     },
   ]
 
+  // sets the unit type to be the value from default
+  // after the unitType options are set
   useEffect(() => {
-    if (amiCharts.length === 0 || options.amiCharts.length) return
-    setOptions({
-      ...options,
-      amiCharts: arrayToFormOptions<AmiChart>(amiCharts, "name", "id"),
-    })
-  }, [amiCharts, options])
-
-  useEffect(() => {
-    if (unitPriorities.length === 0 || options.unitPriorities.length) return
-    setOptions({
-      ...options,
-      unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
-        unitPriorities,
-        "name",
-        "id"
-      ),
-    })
-  }, [options, unitPriorities])
-
-  useEffect(() => {
-    if (unitTypes.length === 0 || options.unitTypes.length) return
-    setOptions({
-      ...options,
-      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions"),
-    })
-  }, [options, unitTypes])
-
-  useEffect(() => {
-    if (defaultUnit) {
-      setValue("amiChart.id", defaultUnit.amiChart?.id)
-      setValue("priorityType.id", defaultUnit.priorityType?.id)
-    }
-  }, [defaultUnit, setValue])
-
-  useEffect(() => {
-    if (defaultUnit && options.unitTypes) {
+    if (defaultUnit && unitTypesOptions) {
       setValue("unitType.id", defaultUnit.unitType?.id)
     }
-  }, [defaultUnit, options, setValue])
+  }, [defaultUnit, unitTypesOptions, setValue])
 
+  // when rent type is updated we set the rent/income data to defaultUnit data for that value
+  // e.g. rent is fixed and swithced to percentage, then switched back we readd the old fixed data
   useEffect(() => {
     if (defaultUnit) {
       if (rentType === "fixed") {
@@ -365,12 +347,34 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentType])
 
+  // sets the options for the ami charts
+  useEffect(() => {
+    if (amiCharts.length === 0 || amiChartsOptions.length) return
+    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
+  }, [amiCharts, amiChartsOptions])
+
+  // sets the options for the unit priorities
+  useEffect(() => {
+    if (unitPriorities.length === 0 || unitPrioritiesOptions.length) return
+    setUnitPrioritiesOptions(
+      arrayToFormOptions<UnitAccessibilityPriorityType>(unitPriorities, "name", "id")
+    )
+  }, [unitPrioritiesOptions, unitPriorities, defaultUnit, setValue])
+
+  // sets the options for the unit types
+  useEffect(() => {
+    if (unitTypes.length === 0 || unitTypesOptions.length) return
+    setUnitTypesOptions(
+      arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
+    )
+  }, [unitTypesOptions, unitTypes])
+
   return (
     <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
         <GridSection title={t("listings.unit.details")} columns={4}>
           <GridCell>
-            <ViewItem label={t("listings.unit.unitNumber")}>
+            <FieldValue label={t("listings.unit.unitNumber")}>
               <Field
                 id="number"
                 name="number"
@@ -380,10 +384,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 type="text"
                 readerOnly
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.type")}>
+            <FieldValue label={t("listings.unit.type")}>
               <Select
                 id="unitType.id"
                 name="unitType.id"
@@ -392,15 +396,15 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={options.unitTypes}
+                options={unitTypesOptions}
                 error={fieldHasError(errors?.unitType)}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.numBathrooms")}>
+            <FieldValue label={t("listings.unit.numBathrooms")}>
               <Select
                 id="numBathrooms"
                 name="numBathrooms"
@@ -414,10 +418,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   ...numberOptions(5),
                 ]}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.floor")}>
+            <FieldValue label={t("listings.unit.floor")}>
               <Select
                 id="floor"
                 name="floor"
@@ -428,10 +432,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 controlClassName="control"
                 options={numberOptions(10)}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.squareFootage")}>
+            <FieldValue label={t("listings.unit.squareFootage")}>
               <Field
                 id="sqFeet"
                 name="sqFeet"
@@ -441,10 +445,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 readerOnly
                 type="number"
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.minOccupancy")}>
+            <FieldValue label={t("listings.unit.minOccupancy")}>
               <Select
                 id="minOccupancy"
                 name="minOccupancy"
@@ -464,10 +468,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   },
                 }}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.maxOccupancy")}>
+            <FieldValue label={t("listings.unit.maxOccupancy")}>
               <Select
                 id="maxOccupancy"
                 name="maxOccupancy"
@@ -487,12 +491,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   },
                 }}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
         <GridSection title={t("listings.unit.eligibility")} columns={4} separator>
           <GridCell>
-            <ViewItem label={t("listings.unit.amiChart")}>
+            <FieldValue label={t("listings.unit.amiChart")}>
               <Select
                 id="amiChart.id"
                 name="amiChart.id"
@@ -501,19 +505,20 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={options.amiCharts}
+                options={amiChartsOptions}
                 inputProps={{
                   onChange: () => {
-                    if (amiChartID && !loading && options) {
+                    if (amiChartID && !loading && amiChartsOptions) {
                       void fetchAmiChart()
+                      setIsAmiPercentageDirty(true)
                     }
                   },
                 }}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.unit.amiPercentage")}>
+            <FieldValue label={t("listings.unit.amiPercentage")}>
               <Select
                 name="amiPercentage"
                 label={t("listings.unit.amiPercentage")}
@@ -522,8 +527,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 register={register}
                 controlClassName="control"
                 options={amiChartPercentageOptions}
+                inputProps={{
+                  onChange: () => {
+                    setIsAmiPercentageDirty(true)
+                  },
+                }}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
         <GridSection columns={2} className="pt-6">
@@ -541,7 +551,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         </GridSection>
         <GridSection columns={4} className="pt-6">
           <GridCell>
-            <ViewItem label={t("listings.unit.rentType")}>
+            <FieldValue label={t("listings.unit.rentType")}>
               <FieldGroup
                 name="rentType"
                 type="radio"
@@ -550,26 +560,26 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
           {rentType === "fixed" && (
             <>
               <GridCell>
-                <ViewItem label={t("t.minimumIncome")}>
+                <FieldValue label={t("t.monthlyMinimumIncome")}>
                   <Field
                     id="monthlyIncomeMin"
                     name="monthlyIncomeMin"
-                    label={t("t.minimumIncome")}
+                    label={t("t.monthlyMinimumIncome")}
                     placeholder="0.00"
                     register={register}
                     type="number"
                     prepend="$"
                     readerOnly
                   />
-                </ViewItem>
+                </FieldValue>
               </GridCell>
               <GridCell>
-                <ViewItem label={t("listings.unit.monthlyRent")}>
+                <FieldValue label={t("listings.unit.monthlyRent")}>
                   <Field
                     id="monthlyRent"
                     name="monthlyRent"
@@ -580,14 +590,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                     prepend="$"
                     readerOnly
                   />
-                </ViewItem>
+                </FieldValue>
               </GridCell>
             </>
           )}
           {rentType === "percentage" && (
             <>
               <GridCell>
-                <ViewItem label={t("listings.unit.percentage")}>
+                <FieldValue label={t("listings.unit.percentage")}>
                   <Field
                     id="monthlyRentAsPercentOfIncome"
                     name="monthlyRentAsPercentOfIncome"
@@ -597,14 +607,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                     type="number"
                     readerOnly
                   />
-                </ViewItem>
+                </FieldValue>
               </GridCell>
             </>
           )}
         </GridSection>
         <GridSection title={t("t.accessibility")} columns={4} separator>
           <GridCell>
-            <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
+            <FieldValue label={t("listings.unit.accessibilityPriorityType")}>
               <Select
                 id="priorityType.id"
                 name="priorityType.id"
@@ -613,9 +623,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={options.unitPriorities}
+                options={unitPrioritiesOptions}
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
       </div>
@@ -656,6 +666,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           onClick={() => onFormSubmit("saveExit")}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.small}
+          dataTestId={"unitFormSaveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>

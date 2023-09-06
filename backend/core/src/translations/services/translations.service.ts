@@ -58,6 +58,9 @@ export class TranslationsService extends AbstractServiceFactory<
             }),
           },
         })
+      } else if (e instanceof NotFoundException && jurisdictionId && language === Language.en) {
+        console.warn(`English translations don't exist for jurisdiction ${jurisdictionId}`)
+        return null
       } else {
         throw e
       }

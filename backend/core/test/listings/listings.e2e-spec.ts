@@ -289,7 +289,7 @@ describe("Listings", () => {
       type: ListingEventType.openHouse,
       startTime: new Date(),
       endTime: new Date(),
-      url: "testurl",
+      url: "https://www.testurl.com",
       note: "testnote",
       label: "testlabel",
       file: {

@@ -1,14 +1,7 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  GridCell,
-  Field,
-  SelectOption,
-  Select,
-  ViewItem,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, Field, SelectOption, Select } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
 
@@ -37,9 +30,13 @@ const ListingIntro = (props: ListingIntroProps) => {
       description={t("listings.sections.introSubtitle")}
     >
       <GridCell span={2} className={`${defaultJurisdiction ? "hidden" : ""}`}>
-        <ViewItem
+        <FieldValue
           label={t("t.jurisdiction")}
-          error={fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])}
+          className={`mb-0 ${
+            fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
+              ? "field-value-error"
+              : ""
+          }`}
         >
           <Select
             id={"jurisdiction.id"}
@@ -68,7 +65,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               },
             }}
           />
-        </ViewItem>
+        </FieldValue>
       </GridCell>
       <GridCell span={2}>
         <Field

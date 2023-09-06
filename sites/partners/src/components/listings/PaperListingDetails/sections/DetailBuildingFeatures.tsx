@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -36,52 +37,52 @@ const DetailBuildingFeatures = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="amenities" label={t("t.propertyAmenities")}>
+          <FieldValue id="amenities" label={t("t.propertyAmenities")}>
             {getDetailFieldString(listing.amenities)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="unitAmenities" label={t("t.unitAmenities")}>
+          <FieldValue id="unitAmenities" label={t("t.unitAmenities")}>
             {getDetailFieldString(listing.unitAmenities)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="accessibility" label={t("t.additionalAccessibility")}>
+          <FieldValue id="accessibility" label={t("t.additionalAccessibility")}>
             {getDetailFieldString(listing.accessibility)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="smokingPolicy" label={t("t.smokingPolicy")}>
+          <FieldValue id="smokingPolicy" label={t("t.smokingPolicy")}>
             {getDetailFieldString(listing.smokingPolicy)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="petPolicy" label={t("t.petsPolicy")}>
+          <FieldValue id="petPolicy" label={t("t.petsPolicy")}>
             {getDetailFieldString(listing.petPolicy)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="servicesOffered" label={t("t.servicesOffered")}>
+          <FieldValue id="servicesOffered" label={t("t.servicesOffered")}>
             {getDetailFieldString(listing.servicesOffered)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       {!enableAccessibilityFeatures ? null : (
         <GridSection columns={1}>
           <GridCell className={"m-h-1"}>
-            <ViewItem label={"Accessibility Features"}>
+            <FieldValue label={"Accessibility Features"}>
               <ul className={"flex flex-wrap"}>{getAccessibilityFeatures()}</ul>
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         </GridSection>
       )}

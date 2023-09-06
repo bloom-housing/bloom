@@ -28,6 +28,8 @@ type ListingFormActionsProps = {
   type: ListingFormActionsType
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
+  showRequestChangesModal?: () => void
+  showSubmitForApprovalModal?: () => void
   submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
 
@@ -35,6 +37,8 @@ const ListingFormActions = ({
   type,
   showCloseListingModal,
   showLotteryResultsDrawer,
+  showRequestChangesModal,
+  showSubmitForApprovalModal,
   submitFormWithStatus,
 }: ListingFormActionsProps) => {
   const listing = useContext(ListingContext)
@@ -211,10 +215,7 @@ const ListingFormActions = ({
           styleType={AppearanceStyleType.success}
           type="button"
           fullWidth
-          onClick={() => {
-            // TODO throw a modal
-            submitFormWithStatus(false, ListingStatus.pendingReview)
-          }}
+          onClick={() => showSubmitForApprovalModal && showSubmitForApprovalModal()}
         >
           {t("t.submit")}
         </Button>
@@ -224,24 +225,33 @@ const ListingFormActions = ({
     const approveAndPublishButton = (
       <GridCell key="btn-approve-and-publish">
         <Button
-          id="submitButton"
+          id="approveAndPublishButton"
           styleType={AppearanceStyleType.success}
           type="button"
           fullWidth
           onClick={async () => {
-            // TODO throw a modal
-            try {
-              const result = await listingsService.update({
-                id: listing.id,
-                body: { ...listing, status: ListingStatus.active },
-              })
-
-              if (result) {
-                setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
-                await router.push(`/listings/${result.id}`)
+            // utilize same submit logic if updating status from edit view
+            if (type === ListingFormActionsType.edit) {
+              submitFormWithStatus(false, ListingStatus.active)
+            } else {
+              // button only exists for listings approval so can call updateAndNotify directly
+              try {
+                const result = await listingsService.updateAndNotify({
+                  id: listing.id,
+                  body: { ...listing, status: ListingStatus.active },
+                })
+                if (result) {
+                  setSiteAlertMessage(t("listings.approval.listingPublished"), "success")
+                  await router.push(`/`)
+                }
+              } catch (err) {
+                setSiteAlertMessage(
+                  err.response?.data?.message === "email failed"
+                    ? "errors.alert.listingsApprovalEmailError"
+                    : "errors.somethingWentWrong",
+                  "warn"
+                )
               }
-            } catch (err) {
-              setSiteAlertMessage("errors.somethingWentWrong", "warn")
             }
           }}
         >
@@ -253,15 +263,12 @@ const ListingFormActions = ({
     const requestChangesButton = (
       <GridCell key="btn-request-changes">
         <Button
-          id="submitButton"
+          id="requestChangesButton"
           styleType={AppearanceStyleType.alert}
           border={AppearanceBorderType.outlined}
           type="button"
           fullWidth
-          onClick={() => {
-            // TODO throw a modal
-            submitFormWithStatus(false, ListingStatus.changesRequested)
-          }}
+          onClick={() => showRequestChangesModal && showRequestChangesModal()}
         >
           {t("listings.approval.requestChanges")}
         </Button>
@@ -398,8 +405,8 @@ const ListingFormActions = ({
 
       // new unsaved listing
       if (type === ListingFormActionsType.add) {
-        elements.push(saveDraftButton)
         elements.push(publishButton)
+        elements.push(saveDraftButton)
         elements.push(cancelButton)
       }
 
@@ -448,6 +455,8 @@ const ListingFormActions = ({
     router,
     showCloseListingModal,
     showLotteryResultsDrawer,
+    showRequestChangesModal,
+    showSubmitForApprovalModal,
     submitFormWithStatus,
     type,
   ])

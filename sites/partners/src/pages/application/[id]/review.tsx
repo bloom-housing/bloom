@@ -18,6 +18,7 @@ import {
   Field,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
+import { Tag } from "@bloom-housing/ui-seeds"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
@@ -120,17 +121,18 @@ const Flag = () => {
               {t("t.back")}
             </Button>
           }
-          tagStyle={
-            data?.status === EnumApplicationFlaggedSetStatus.resolved
-              ? AppearanceStyleType.success
-              : AppearanceStyleType.primary
-          }
-          tagLabel={
-            data?.status === EnumApplicationFlaggedSetStatus.resolved
+        >
+          <Tag
+            variant={
+              data?.status === EnumApplicationFlaggedSetStatus.resolved ? "success" : "primary"
+            }
+            size={"lg"}
+          >
+            {data?.status === EnumApplicationFlaggedSetStatus.resolved
               ? t("t.resolved")
-              : t("applications.pendingReview")
-          }
-        />
+              : t("applications.pendingReview")}
+          </Tag>
+        </StatusBar>
       </div>
 
       <section className="bg-gray-300 py-5">
