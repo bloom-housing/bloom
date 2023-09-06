@@ -9,6 +9,8 @@ import {
   t,
   OrDivider,
   ContactAddress,
+  Modal,
+  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 
 export interface PaperApplication {
@@ -51,8 +53,16 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
-  const [showDownload, setShowDownload] = useState(false)
-  const toggleDownload = () => setShowDownload(!showDownload)
+  const [showDownloadModal, setShowDownloadModal] = useState(false)
+  const toggleDownload = () => {
+    if (props.paperApplications.length === 1) {
+      // immediately open it
+      alert("open now")
+    } else {
+      // show modal
+      setShowDownloadModal(true)
+    }
+  }
 
   if (!showSection) return null
 
@@ -107,7 +117,7 @@ const GetApplication = (props: ApplicationsProps) => {
           </Button>
         </>
       )}
-      {showDownload &&
+      {/* {showDownload &&
         props.paperApplications?.map((paperApplication: PaperApplication, index: number) => (
           <p key={index} className="text-center mt-2 mb-4 text-xs">
             <a
@@ -118,7 +128,7 @@ const GetApplication = (props: ApplicationsProps) => {
               {paperApplication.languageString}
             </a>
           </p>
-        ))}
+        ))} */}
       {props.applicationPickUpAddress && (
         <>
           {props.applicationsOpen && (props.onlineApplicationURL || props.paperMethod) && (
@@ -146,6 +156,34 @@ const GetApplication = (props: ApplicationsProps) => {
           )}
         </>
       )}
+      <Modal
+        open={!!showDownloadModal}
+        title={t("application.deleteThisApplication")}
+        ariaDescription={t("application.deleteApplicationDescription")}
+        onClose={() => setShowDownloadModal(false)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.primary}
+            onClick={() => {
+              // open the selected radio button in a new tab
+              setShowDownloadModal(false)
+            }}
+            size={AppearanceSizeType.small}
+          >
+            {t("t.download")}
+          </Button>,
+          <Button
+            onClick={() => {
+              setShowDownloadModal(false)
+            }}
+            size={AppearanceSizeType.small}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        Radio buttons go here
+      </Modal>
     </section>
   )
 }
