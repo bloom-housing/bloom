@@ -63,6 +63,8 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     classNames.push(className)
   }
 
+  if (!content && !subContent) return null
+
   return (
     <div className={classNames.join(" ")}>
       {icon}
