@@ -25,9 +25,15 @@ export const getDetailBoolean = (listingBool: boolean) => {
 }
 
 export const getReadableErrorMessage = (errorMessage: string | undefined) => {
-  const errorDetails = errorMessage.substr(errorMessage.indexOf(" ") + 1)
+  const errorDetails = errorMessage.substring(errorMessage.indexOf(" ") + 1)
   let readableMessage = null
   switch (errorDetails) {
+    case "must have https://":
+      readableMessage = t("errors.urlHttpsError")
+      break
+    case "must be a URL address":
+      readableMessage = t("errors.urlError")
+      break
     case "must be an email":
       readableMessage = t("errors.emailAddressError")
       break

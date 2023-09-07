@@ -316,7 +316,7 @@ const FormUserManage = ({
 
                 {mode === "edit" && (
                   <div className="ml-2 mt-1 flex items-center justify-center">
-                    <Tag variant={user.confirmedAt ? "success-inverse" : "primary"}>
+                    <Tag variant={user.confirmedAt ? "success" : "primary"}>
                       {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
                     </Tag>
                   </div>

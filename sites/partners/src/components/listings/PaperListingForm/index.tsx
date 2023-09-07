@@ -56,6 +56,7 @@ import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
+import RequestChangesModal from "./RequestChangesModal"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -104,30 +105,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
-  /**
-   * Close modal
-   */
   const [closeModal, setCloseModal] = useState(false)
-
-  /**
-   * Publish modal
-   */
   const [publishModal, setPublishModal] = useState(false)
-
-  /**
-   * Lottery results drawer
-   */
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
-
-  /**
-   * Save already-live modal
-   */
   const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
-
-  /**
-   * Submit for approval modal
-   */
   const [submitForApprovalModal, setSubmitForApprovalModal] = useState(false)
+  const [requestChangesModal, setRequestChangesModal] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -194,24 +177,43 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
           })
           const formattedData = await dataPipeline.run()
-
-          const result = editMode
-            ? await listingsService.update({
+          let result
+          if (editMode) {
+            if (process.env.featureListingsApproval) {
+              result = await listingsService.updateAndNotify({
+                id: listing.id,
+                body: { ...formattedData },
+              })
+            } else {
+              result = await listingsService.update({
                 id: listing.id,
                 body: { id: listing.id, ...formattedData },
               })
-            : await listingsService.create({ body: formattedData })
+            }
+          } else {
+            result = await listingsService.create({ body: formattedData })
+          }
+
           reset(formData)
 
           if (result) {
-            setSiteAlertMessage(
-              editMode
-                ? t("listings.listingUpdated")
-                : formattedData.status === ListingStatus.pendingReview
-                ? t("listings.approval.submittedForReview")
-                : t("listings.listingSubmitted"),
-              "success"
-            )
+            const getToast = (oldStatus: ListingStatus, newStatus: ListingStatus) => {
+              const toasts = {
+                [ListingStatus.pendingReview]: t("listings.approval.submittedForReview"),
+                [ListingStatus.changesRequested]: t("listings.listingStatus.changesRequested"),
+                [ListingStatus.active]: t("listings.approval.listingPublished"),
+                [ListingStatus.pending]: t("listings.approval.listingUnpublished"),
+                [ListingStatus.closed]: t("listings.approval.listingClosed"),
+              }
+              if (oldStatus !== newStatus) {
+                if (!listing && newStatus === ListingStatus.pending)
+                  return t("listings.listingUpdated")
+                return toasts[newStatus]
+              }
+
+              return t("listings.listingUpdated")
+            }
+            setSiteAlertMessage(getToast(listing?.status, formattedData?.status), "success")
 
             await router.push(`/listings/${result.id}`)
           }
@@ -247,9 +249,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               }
             })
             setAlert("form")
-          } else {
-            setAlert("api")
-          }
+          } else if (data.message === "email failed") {
+            setSiteAlertMessage(t("errors.alert.listingsApprovalEmailError"), "warn")
+            await router.push(`/listings/${formData.id}/`)
+          } else setAlert("api")
         }
       }
     },
@@ -404,6 +407,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? ListingFormActionsType.edit : ListingFormActionsType.add}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
+                        showRequestChangesModal={() => setRequestChangesModal(true)}
                         showSubmitForApprovalModal={() => setSubmitForApprovalModal(true)}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
@@ -529,7 +533,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             size={AppearanceSizeType.small}
             dataTestId={"submitForApprovalButton"}
           >
-            {t("t.save")}
+            {t("t.submit")}
           </Button>,
           <Button
             type="button"
@@ -544,6 +548,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       >
         {t("listings.approval.submitForApprovalDescription")}
       </Modal>
+
+      <RequestChangesModal
+        defaultValue={listing?.requestedChanges}
+        modalIsOpen={requestChangesModal}
+        setModalIsOpen={setRequestChangesModal}
+        submitFormWithStatus={triggerSubmitWithStatus}
+      />
     </>
   )
 }

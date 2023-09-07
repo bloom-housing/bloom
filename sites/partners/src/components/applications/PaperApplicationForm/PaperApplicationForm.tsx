@@ -165,9 +165,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       <>
         <StatusBar>
           <Tag
-            variant={
-              application?.status == ApplicationStatus.submitted ? "success-inverse" : "primary"
-            }
+            variant={application?.status == ApplicationStatus.submitted ? "success" : "primary"}
             size={"lg"}
           >
             {application?.status

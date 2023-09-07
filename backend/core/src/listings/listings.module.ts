@@ -1,6 +1,6 @@
 import { forwardRef, Logger, Module } from "@nestjs/common"
 import { HttpModule } from "@nestjs/axios"
-import { ConfigModule } from "@nestjs/config"
+import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
@@ -19,6 +19,8 @@ import { ListingsCronService } from "./listings-cron.service"
 import { ListingsCsvExporterService } from "./listings-csv-exporter.service"
 import { CsvBuilder } from "../../src/applications/services/csv-builder.service"
 import { CachePurgeService } from "./cache-purge.service"
+import { EmailModule } from "../../src/email/email.module"
+import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { CachePurgeService } from "./cache-purge.service"
     ApplicationFlaggedSetsModule,
     HttpModule,
     ConfigModule,
+    EmailModule,
+    JurisdictionsModule,
   ],
   providers: [
     ListingsService,
@@ -45,6 +49,7 @@ import { CachePurgeService } from "./cache-purge.service"
     CsvBuilder,
     ListingsCsvExporterService,
     CachePurgeService,
+    ConfigService,
   ],
   exports: [ListingsService],
   controllers: [ListingsController],
