@@ -108,14 +108,9 @@ const GetApplication = (props: ApplicationsProps) => {
           </div>
           {props.paperApplications.length === 1 ? (
             <LinkButton
-              styleType={
-                !props.preview && props.onlineApplicationURL
-                  ? AppearanceStyleType.primary
-                  : undefined
-              }
+              styleType={AppearanceStyleType.primary}
               className="w-full mb-2"
               href={props.paperApplications[0].fileURL}
-              disabled={props.preview}
             >
               {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
             </LinkButton>
@@ -168,7 +163,11 @@ const GetApplication = (props: ApplicationsProps) => {
         ariaDescription={t("listings.chooseALanguage")}
         onClose={() => setShowDownloadModal(false)}
         actions={[
-          <LinkButton size={AppearanceSizeType.small} href={paperApplicationURL ?? ""}>
+          <LinkButton
+            size={AppearanceSizeType.small}
+            href={paperApplicationURL ?? ""}
+            styleType={AppearanceStyleType.primary}
+          >
             {t("t.download")}
           </LinkButton>,
           <Button
