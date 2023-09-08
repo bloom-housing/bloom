@@ -59,7 +59,11 @@ const GetApplication = (props: ApplicationsProps) => {
   const [showDownloadModal, setShowDownloadModal] = useState(false)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues } = useForm()
+  const { register, watch } = useForm()
+  const paperApplicationURL: string = watch(
+    "paperApplicationLanguage",
+    props.paperApplications?.length ? props.paperApplications[0].fileURL : undefined
+  )
 
   if (!showSection) return null
 
@@ -164,13 +168,7 @@ const GetApplication = (props: ApplicationsProps) => {
         ariaDescription={t("listings.chooseALanguage")}
         onClose={() => setShowDownloadModal(false)}
         actions={[
-          <LinkButton
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
-            href={
-              getValues()["paperApplicationLanguage"] ? getValues()["paperApplicationLanguage"] : ""
-            }
-          >
+          <LinkButton size={AppearanceSizeType.small} href={paperApplicationURL ?? ""}>
             {t("t.download")}
           </LinkButton>,
           <Button
