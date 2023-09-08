@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
+import { useForm } from "react-hook-form"
 import {
   Button,
   LinkButton,
@@ -11,6 +12,8 @@ import {
   ContactAddress,
   Modal,
   AppearanceSizeType,
+  Form,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 
 export interface PaperApplication {
@@ -54,15 +57,9 @@ const GetApplication = (props: ApplicationsProps) => {
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
   const [showDownloadModal, setShowDownloadModal] = useState(false)
-  const toggleDownload = () => {
-    if (props.paperApplications.length === 1) {
-      // immediately open it
-      alert("open now")
-    } else {
-      // show modal
-      setShowDownloadModal(true)
-    }
-  }
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, getValues } = useForm()
 
   if (!showSection) return null
 
@@ -105,30 +102,35 @@ const GetApplication = (props: ApplicationsProps) => {
           <div className="text-serif-xl mb-6">
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
-          <Button
-            styleType={
-              !props.preview && props.onlineApplicationURL ? AppearanceStyleType.primary : undefined
-            }
-            className="w-full mb-2"
-            onClick={toggleDownload}
-            disabled={props.preview}
-          >
-            {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-          </Button>
+          {props.paperApplications.length === 1 ? (
+            <LinkButton
+              styleType={
+                !props.preview && props.onlineApplicationURL
+                  ? AppearanceStyleType.primary
+                  : undefined
+              }
+              className="w-full mb-2"
+              href={props.paperApplications[0].fileURL}
+              disabled={props.preview}
+            >
+              {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
+            </LinkButton>
+          ) : (
+            <Button
+              styleType={
+                !props.preview && props.onlineApplicationURL
+                  ? AppearanceStyleType.primary
+                  : undefined
+              }
+              className="w-full mb-2"
+              onClick={() => setShowDownloadModal(true)}
+              disabled={props.preview}
+            >
+              {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
+            </Button>
+          )}
         </>
       )}
-      {/* {showDownload &&
-        props.paperApplications?.map((paperApplication: PaperApplication, index: number) => (
-          <p key={index} className="text-center mt-2 mb-4 text-xs">
-            <a
-              href={paperApplication.fileURL}
-              title={props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-              target="_blank"
-            >
-              {paperApplication.languageString}
-            </a>
-          </p>
-        ))} */}
       {props.applicationPickUpAddress && (
         <>
           {props.applicationsOpen && (props.onlineApplicationURL || props.paperMethod) && (
@@ -158,20 +160,19 @@ const GetApplication = (props: ApplicationsProps) => {
       )}
       <Modal
         open={!!showDownloadModal}
-        title={t("application.deleteThisApplication")}
-        ariaDescription={t("application.deleteApplicationDescription")}
+        title={t("listings.chooseALanguage")}
+        ariaDescription={t("listings.chooseALanguage")}
         onClose={() => setShowDownloadModal(false)}
         actions={[
-          <Button
+          <LinkButton
             styleType={AppearanceStyleType.primary}
-            onClick={() => {
-              // open the selected radio button in a new tab
-              setShowDownloadModal(false)
-            }}
             size={AppearanceSizeType.small}
+            href={
+              getValues()["paperApplicationLanguage"] ? getValues()["paperApplicationLanguage"] : ""
+            }
           >
             {t("t.download")}
-          </Button>,
+          </LinkButton>,
           <Button
             onClick={() => {
               setShowDownloadModal(false)
@@ -182,7 +183,26 @@ const GetApplication = (props: ApplicationsProps) => {
           </Button>,
         ]}
       >
-        Radio buttons go here
+        <Form>
+          <fieldset>
+            <legend className="sr-only">{t("listings.chooseALanguage")}</legend>
+            <FieldGroup
+              name="paperApplicationLanguage"
+              fieldGroupClassName="grid grid-cols-1"
+              fieldClassName="ml-0"
+              type="radio"
+              register={register}
+              validation={{ required: true }}
+              fields={props.paperApplications?.map((app, index) => ({
+                id: app.languageString,
+                label: app.languageString,
+                value: app.fileURL,
+                defaultChecked: index === 0,
+              }))}
+              dataTestId={"paper-application-language"}
+            />
+          </fieldset>
+        </Form>
       </Modal>
     </section>
   )
