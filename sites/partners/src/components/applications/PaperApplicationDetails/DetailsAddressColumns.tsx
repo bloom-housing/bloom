@@ -90,38 +90,32 @@ const DetailsAddressColumns = ({
 
   return (
     <>
-      <GridCell>
-        <FieldValue
-          label={t("application.contact.streetAddress")}
-          testId={`${dataTestId}.streetAddress`}
-        >
-          {address.street}
-        </FieldValue>
-      </GridCell>
+      <FieldValue
+        label={t("application.contact.streetAddress")}
+        testId={`${dataTestId}.streetAddress`}
+      >
+        {address.street}
+      </FieldValue>
 
-      <GridCell span={2}>
-        <FieldValue label={t("application.contact.apt")} testId={`${dataTestId}.street2`}>
-          {address.street2}
-        </FieldValue>
-      </GridCell>
+      <FieldValue
+        className="grid-double-span"
+        label={t("application.contact.apt")}
+        testId={`${dataTestId}.street2`}
+      >
+        {address.street2}
+      </FieldValue>
 
-      <GridCell>
-        <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
-          {address.city}
-        </FieldValue>
-      </GridCell>
+      <FieldValue label={t("application.contact.city")} testId={`${dataTestId}.city`}>
+        {address.city}
+      </FieldValue>
 
-      <GridCell>
-        <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
-          {address.state}
-        </FieldValue>
-      </GridCell>
+      <FieldValue label={t("application.contact.state")} testId={`${dataTestId}.state`}>
+        {address.state}
+      </FieldValue>
 
-      <GridCell>
-        <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
-          {address.zipCode}
-        </FieldValue>
-      </GridCell>
+      <FieldValue label={t("application.contact.zip")} testId={`${dataTestId}.zipCode`}>
+        {address.zipCode}
+      </FieldValue>
     </>
   )
 }

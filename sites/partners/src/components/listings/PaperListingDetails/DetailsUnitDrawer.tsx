@@ -1,5 +1,5 @@
 import React from "react"
-import { AppearanceStyleType, t, GridSection, Button, Drawer } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { Unit } from "@bloom-housing/backend-core/types"
 import { getRentType } from "../../../lib/helpers"

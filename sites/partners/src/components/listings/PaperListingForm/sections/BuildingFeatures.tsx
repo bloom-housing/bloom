@@ -1,6 +1,6 @@
 import React, { useMemo, useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, FieldGroup } from "@bloom-housing/ui-components"
+import { t, Textarea, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingFeatures } from "@bloom-housing/backend-core/types"

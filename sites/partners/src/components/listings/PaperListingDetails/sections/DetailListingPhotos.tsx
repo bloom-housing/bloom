@@ -1,11 +1,5 @@
 import React, { useContext } from "react"
-import {
-  t,
-  GridSection,
-  GridCell,
-  MinimalTable,
-  TableThumbnail,
-} from "@bloom-housing/ui-components"
+import { t, MinimalTable, TableThumbnail } from "@bloom-housing/ui-components"
 import { getUrlForListingImage } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { Asset } from "@bloom-housing/backend-core/types"

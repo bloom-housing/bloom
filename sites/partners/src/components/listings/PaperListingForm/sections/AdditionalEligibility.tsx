@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { Grid } from "@bloom-housing/ui-seeds"
-import { t, GridSection, Textarea, GridCell } from "@bloom-housing/ui-components"
+import { t, Textarea } from "@bloom-housing/ui-components"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { useJurisdiction } from "../../../../lib/hooks"
 import SectionWithGrid from "../../../shared/SectionWithGrid"

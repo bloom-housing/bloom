@@ -13,10 +13,9 @@ import {
   StandardTableData,
   AppearanceSizeType,
 } from "@bloom-housing/ui-components"
-import { Card, Grid, Heading } from "@bloom-housing/ui-seeds"
+import { Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
-import CellLabel from "../../../shared/CellLabel"
 
 const BuildingSelectionCriteria = () => {
   const formMethods = useFormContext()
@@ -267,10 +266,12 @@ const BuildingSelectionCriteria = () => {
           </Button>,
         ]}
       >
-        <Card>
+        <Card spacing="lg" className="spacer-section">
           <Card.Section>
-            <div className={!criteriaAttachType ? "" : "hidden"}>
-              <CellLabel>{t("listings.addBuildingSelectionCriteriaSubtitle")}</CellLabel>
+            <FieldValue
+              label={t("listings.addBuildingSelectionCriteriaSubtitle")}
+              className={!criteriaAttachType ? "" : "hidden"}
+            >
               <FieldGroup
                 name="criteriaAttachType"
                 type="radio"
@@ -290,7 +291,7 @@ const BuildingSelectionCriteria = () => {
                   },
                 ]}
               />
-            </div>
+            </FieldValue>
 
             {criteriaAttachType === "upload" && (
               <>

@@ -1,19 +1,15 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailsTerms = () => {
   const application = useContext(ApplicationContext)
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("application.review.terms.title")}
-      inset
-      grid={false}
-    >
-      <GridCell>
+    <SectionWithGrid heading={t("application.review.terms.title")} inset>
+      <Grid.Row>
         <FieldValue label={t("application.details.signatureOnTerms")} testId="signatureOnTerms">
           {(() => {
             if (application.acceptedTerms === null) {
@@ -25,8 +21,8 @@ const DetailsTerms = () => {
             }
           })()}
         </FieldValue>
-      </GridCell>
-    </GridSection>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

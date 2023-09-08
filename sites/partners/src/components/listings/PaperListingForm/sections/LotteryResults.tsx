@@ -163,7 +163,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
         </Button>,
       ]}
     >
-      <Card>
+      <Card spacing="lg" className="spacer-section">
         <Card.Section>
           <Dropzone
             id="lottery-results-upload"

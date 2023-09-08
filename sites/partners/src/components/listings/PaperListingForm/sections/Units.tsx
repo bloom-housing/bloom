@@ -197,26 +197,28 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             />
           </FieldValue>
         </Grid.Row>
-        <span className={"text-sm text-gray-800 block mb-2"}>{t("listings.units")}</span>
-        <div className="bg-gray-300 px-4 py-5">
-          {!!units.length && (
-            <div className="mb-5">
-              <MinimalTable headers={unitTableHeaders} data={unitTableData} />
-            </div>
-          )}
-          <Button
-            id="addUnitsButton"
-            type="button"
-            size={AppearanceSizeType.normal}
-            styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
-            onClick={() => {
-              editUnit(units.length + 1)
-              clearErrors("units")
-            }}
-          >
-            {t("listings.unit.add")}
-          </Button>
-        </div>
+        <SectionWithGrid.HeadingRow>{t("listings.units")}</SectionWithGrid.HeadingRow>
+        <Grid.Row>
+          <Grid.Cell className="grid-inset-section">
+            {!!units.length && (
+              <div className="mb-5">
+                <MinimalTable headers={unitTableHeaders} data={unitTableData} />
+              </div>
+            )}
+            <Button
+              id="addUnitsButton"
+              type="button"
+              size={AppearanceSizeType.normal}
+              styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
+              onClick={() => {
+                editUnit(units.length + 1)
+                clearErrors("units")
+              }}
+            >
+              {t("listings.unit.add")}
+            </Button>
+          </Grid.Cell>
+        </Grid.Row>
       </SectionWithGrid>
 
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>

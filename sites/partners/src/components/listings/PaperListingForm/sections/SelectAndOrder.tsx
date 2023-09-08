@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
   t,
-  GridSection,
   MinimalTable,
   Button,
   AppearanceSizeType,
@@ -10,6 +9,7 @@ import {
   Field,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { Card, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import LinkComponent from "../../../../components/core/LinkComponent"
@@ -232,21 +232,25 @@ const SelectAndOrder = ({
     <>
       <hr className="spacer-section-above spacer-section" />
       <SectionWithGrid heading={title} subheading={subtitle} inset>
-        {!!listingData.length && (
-          <div className="mb-5">
-            <MinimalTable headers={formTableHeaders} data={formTableData} />
-          </div>
-        )}
+        <Grid.Row>
+          <Grid.Cell>
+            {!!listingData.length && (
+              <div className="mb-5">
+                <MinimalTable headers={formTableHeaders} data={formTableData} />
+              </div>
+            )}
 
-        <Button
-          id={`add-${applicationSection}-button`}
-          type="button"
-          size={AppearanceSizeType.normal}
-          onClick={() => setTableDrawer(true)}
-        >
-          {listingData.length ? editText : addText}
-        </Button>
-        {subNote && <p className="field-sub-note">{subNote}</p>}
+            <Button
+              id={`add-${applicationSection}-button`}
+              type="button"
+              size={AppearanceSizeType.normal}
+              onClick={() => setTableDrawer(true)}
+            >
+              {listingData.length ? editText : addText}
+            </Button>
+            {subNote && <p className="field-sub-note">{subNote}</p>}
+          </Grid.Cell>
+        </Grid.Row>
       </SectionWithGrid>
 
       <Drawer
@@ -304,31 +308,35 @@ const SelectAndOrder = ({
         }}
         className={"drawer__small"}
       >
-        <div className="border rounded-md p-8 bg-white">
-          {jurisdiction
-            ? fetchedData.map((item, index) => {
-                const previewShown = openPreviews.some((preview) => preview === index)
-                return (
-                  <GridSection columns={1} key={index} className={"md:-mb-6"}>
-                    <Field
-                      className={"font-semibold"}
-                      id={`${formKey}.${item.id}`}
-                      name={`${formKey}.${item.id}`}
-                      type="checkbox"
-                      label={item.text}
-                      register={register}
-                      inputProps={{
-                        defaultChecked: draftListingData.some(
-                          (existingItem) => existingItem.text === item.text
-                        ),
-                      }}
-                    />
-                    {getPreviewSection(previewShown, index, item)}
-                  </GridSection>
-                )
-              })
-            : t("listings.selectJurisdiction")}
-        </div>
+        <Card>
+          <Card.Section>
+            {jurisdiction
+              ? fetchedData.map((item, index) => {
+                  const previewShown = openPreviews.some((preview) => preview === index)
+                  return (
+                    <Grid key={index} className={"md:-mb-6"}>
+                      <Grid.Row columns={1}>
+                        <Field
+                          className={"font-semibold"}
+                          id={`${formKey}.${item.id}`}
+                          name={`${formKey}.${item.id}`}
+                          type="checkbox"
+                          label={item.text}
+                          register={register}
+                          inputProps={{
+                            defaultChecked: draftListingData.some(
+                              (existingItem) => existingItem.text === item.text
+                            ),
+                          }}
+                        />
+                        {getPreviewSection(previewShown, index, item)}
+                      </Grid.Row>
+                    </Grid>
+                  )
+                })
+              : t("listings.selectJurisdiction")}
+          </Card.Section>
+        </Card>
         {jurisdiction && (
           <Button
             id="addPreferenceSaveButton"

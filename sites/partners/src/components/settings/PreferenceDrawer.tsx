@@ -6,15 +6,13 @@ import {
   Drawer,
   Field,
   FieldGroup,
-  GridCell,
-  GridSection,
   Select,
   Textarea,
   t,
   MinimalTable,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { FormErrorMessage, FieldValue } from "@bloom-housing/ui-seeds"
+import { FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../lib/helpers"
@@ -27,6 +25,7 @@ import {
 } from "@bloom-housing/backend-core"
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings/index"
+import SectionWithGrid from "../shared/SectionWithGrid"
 
 type PreferenceDrawerProps = {
   drawerOpen: boolean
@@ -162,97 +161,95 @@ const PreferenceDrawer = ({
           onDrawerClose()
         }}
       >
-        <div className="border rounded-md p-8 bg-white">
-          <GridSection title={t("settings.preference")} columns={3}>
-            <GridCell span={2}>
-              <FieldValue label={t("t.title")}>
-                <Field
-                  id="text"
-                  name="text"
-                  label={t("t.title")}
-                  placeholder={t("t.title")}
-                  register={register}
-                  type="text"
-                  readerOnly
-                  dataTestId={"preference-title"}
-                  defaultValue={questionData?.text}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  error={errors.text}
-                  inputProps={{
-                    onChange: () => clearErrors("text"),
+        <Card>
+          <Card.Section>
+            <SectionWithGrid heading={t("settings.preference")}>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Field
+                    id="text"
+                    name="text"
+                    label={t("t.title")}
+                    placeholder={t("t.title")}
+                    register={register}
+                    type="text"
+                    dataTestId={"preference-title"}
+                    defaultValue={questionData?.text}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    error={errors.text}
+                    inputProps={{
+                      onChange: () => clearErrors("text"),
+                    }}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Textarea
+                    label={t("t.descriptionTitle")}
+                    name={"description"}
+                    id={"description"}
+                    fullWidth={true}
+                    placeholder={t("settings.preferenceDescription")}
+                    register={register}
+                    dataTestId={"preference-description"}
+                    defaultValue={questionData?.description}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Field
+                    id="preferenceUrl"
+                    name="preferenceUrl"
+                    label={t("t.url")}
+                    placeholder={"https://"}
+                    register={register}
+                    type="url"
+                    dataTestId={"preference-link"}
+                    error={!!errors?.preferenceUrl}
+                    errorMessage={
+                      errors?.preferenceUrl?.type === "https"
+                        ? t("errors.urlHttpsError")
+                        : t("errors.urlError")
+                    }
+                    defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Field
+                    id="preferenceLinkTitle"
+                    name="preferenceLinkTitle"
+                    label={t("settings.preferenceLinkTitle")}
+                    placeholder={t("settings.preferenceLinkTitle")}
+                    register={register}
+                    type="text"
+                    dataTestId={"preference-link-title"}
+                    defaultValue={
+                      questionData?.links?.length > 0 ? questionData?.links[0].title : ""
+                    }
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            </SectionWithGrid>
+            {questionData?.options?.length > 0 && (
+              <div className="mb-5">
+                <MinimalTable
+                  headers={{
+                    name: "t.name",
+                    description: "t.descriptionTitle",
+                    action: "",
                   }}
+                  data={draggableTableData}
+                  draggable={true}
+                  setData={setDragOrder}
                 />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3} className={"mb-4"}>
-            <GridCell span={2}>
-              <Textarea
-                label={t("t.descriptionTitle")}
-                name={"description"}
-                id={"description"}
-                fullWidth={true}
-                placeholder={t("settings.preferenceDescription")}
-                register={register}
-                dataTestId={"preference-description"}
-                defaultValue={questionData?.description}
-              />
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3} className={"mt-4 mb-6"}>
-            <GridCell>
-              <FieldValue label={t("t.url")}>
-                <Field
-                  id="preferenceUrl"
-                  name="preferenceUrl"
-                  label={t("t.url")}
-                  placeholder={"https://"}
-                  register={register}
-                  type="url"
-                  readerOnly
-                  dataTestId={"preference-link"}
-                  error={!!errors?.preferenceUrl}
-                  errorMessage={
-                    errors?.preferenceUrl?.type === "https"
-                      ? t("errors.urlHttpsError")
-                      : t("errors.urlError")
-                  }
-                  defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
-                />
-              </FieldValue>
-            </GridCell>
-            <GridCell>
-              <FieldValue label={t("settings.preferenceLinkTitle")}>
-                <Field
-                  id="preferenceLinkTitle"
-                  name="preferenceLinkTitle"
-                  label={t("settings.preferenceLinkTitle")}
-                  placeholder={t("settings.preferenceLinkTitle")}
-                  register={register}
-                  type="text"
-                  readerOnly
-                  dataTestId={"preference-link-title"}
-                  defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].title : ""}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-          {questionData?.options?.length > 0 && (
-            <div className="mb-5">
-              <MinimalTable
-                headers={{
-                  name: "t.name",
-                  description: "t.descriptionTitle",
-                  action: "",
-                }}
-                data={draggableTableData}
-                draggable={true}
-                setData={setDragOrder}
-              />
-            </div>
-          )}
-          <GridSection columns={3} className={"mt-4"}>
+              </div>
+            )}
+
             <div className={"flex flex-col"}>
               <Button
                 type="button"
@@ -275,125 +272,124 @@ const PreferenceDrawer = ({
                 </FormErrorMessage>
               )}
             </div>
-          </GridSection>
-          <GridSection columns={3} className={"mt-4"}>
-            <GridCell>
-              <FieldValue label={t("settings.preferenceOptOut")} className="mb-1">
-                <FieldGroup
-                  name="canYouOptOutQuestion"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      id: "optOutYes",
-                      label: t("t.yes"),
-                      value: YesNoAnswer.Yes,
-                      defaultChecked: questionData === null || questionData?.optOutText !== null,
-                      dataTestId: "opt-out-question-yes",
-                    },
-                    {
-                      id: "optOutNo",
-                      label: t("t.no"),
-                      value: YesNoAnswer.No,
-                      defaultChecked: questionData && questionData?.optOutText === null,
-                      dataTestId: "opt-out-question-no",
-                    },
-                  ]}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                  dataTestId={"preference-can-you-opt-out"}
-                />
-              </FieldValue>
-            </GridCell>
-            {optOutQuestion === YesNoAnswer.Yes && (
-              <GridCell>
-                <FieldValue label={t("settings.preferenceOptOutLabel")}>
-                  <Field
-                    id="optOutText"
-                    name="optOutText"
-                    label={t("settings.preferenceOptOutLabel")}
-                    placeholder={t("settings.preferenceOptOutLabel")}
+
+            <Grid>
+              <Grid.Row>
+                <Grid.Cell>
+                  <FieldGroup
+                    name="canYouOptOutQuestion"
+                    type="radio"
                     register={register}
-                    type="text"
-                    readerOnly
-                    dataTestId={"preference-opt-out-label"}
-                    defaultValue={
-                      questionData?.optOutText ?? t("application.preferences.dontWantSingular")
-                    }
+                    groupLabel={t("settings.preferenceOptOut")}
+                    fields={[
+                      {
+                        id: "optOutYes",
+                        label: t("t.yes"),
+                        value: YesNoAnswer.Yes,
+                        defaultChecked: questionData === null || questionData?.optOutText !== null,
+                        dataTestId: "opt-out-question-yes",
+                      },
+                      {
+                        id: "optOutNo",
+                        label: t("t.no"),
+                        value: YesNoAnswer.No,
+                        defaultChecked: questionData && questionData?.optOutText === null,
+                        dataTestId: "opt-out-question-no",
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex h-12 items-center"
+                    dataTestId={"preference-can-you-opt-out"}
                   />
-                </FieldValue>
-              </GridCell>
-            )}
-          </GridSection>
-          <GridSection columns={3} className={"mt-4"}>
-            <GridCell>
-              <FieldValue label={t("settings.preferenceShowOnListing")} className="mb-1">
-                <FieldGroup
-                  name="showOnListingQuestion"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      id: "showOnListingYes",
-                      label: t("t.yes"),
-                      value: YesNoAnswer.Yes,
-                      defaultChecked: questionData === null || !questionData?.hideFromListing,
-                      dataTestId: "show-on-listing-question-yes",
-                    },
-                    {
-                      id: "showOnListingNo",
-                      label: t("t.no"),
-                      value: YesNoAnswer.No,
-                      defaultChecked: questionData?.hideFromListing,
-                      dataTestId: "show-on-listing-question-no",
-                    },
-                  ]}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                  dataTestId={"preference-show-on-listing"}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3}>
-            <GridCell span={1}>
-              <FieldValue label={t("t.jurisdiction")}>
-                <Select
-                  id={"jurisdictionId"}
-                  name={"jurisdictionId"}
-                  label={t("t.jurisdiction")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName={"control"}
-                  keyPrefix={"jurisdictions"}
-                  options={
-                    profile
-                      ? [
-                          { label: "", value: "" },
-                          ...profile?.jurisdictions.map((jurisdiction) => ({
-                            label: jurisdiction.name,
-                            value: jurisdiction.id,
-                          })),
-                        ]
-                      : [{ label: "", value: "" }]
-                  }
-                  dataTestId={"preference-jurisdiction"}
-                  defaultValue={
-                    questionData?.jurisdictions?.length > 0
-                      ? questionData.jurisdictions[0].id
-                      : null
-                  }
-                  errorMessage={t("errors.requiredFieldError")}
-                  error={errors.jurisdictionId}
-                  validation={{ required: true }}
-                  inputProps={{
-                    onChange: () => clearErrors("jurisdictionId"),
-                  }}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-        </div>
+                </Grid.Cell>
+                {optOutQuestion === YesNoAnswer.Yes && (
+                  <Grid.Cell>
+                    <Field
+                      id="optOutText"
+                      name="optOutText"
+                      label={t("settings.preferenceOptOutLabel")}
+                      placeholder={t("settings.preferenceOptOutLabel")}
+                      register={register}
+                      type="text"
+                      dataTestId={"preference-opt-out-label"}
+                      defaultValue={
+                        questionData?.optOutText ?? t("application.preferences.dontWantSingular")
+                      }
+                    />
+                  </Grid.Cell>
+                )}
+              </Grid.Row>
+            </Grid>
+            <Grid>
+              <Grid.Row>
+                <Grid.Cell>
+                  <FieldGroup
+                    name="showOnListingQuestion"
+                    type="radio"
+                    register={register}
+                    groupLabel={t("settings.preferenceShowOnListing")}
+                    fields={[
+                      {
+                        id: "showOnListingYes",
+                        label: t("t.yes"),
+                        value: YesNoAnswer.Yes,
+                        defaultChecked: questionData === null || !questionData?.hideFromListing,
+                        dataTestId: "show-on-listing-question-yes",
+                      },
+                      {
+                        id: "showOnListingNo",
+                        label: t("t.no"),
+                        value: YesNoAnswer.No,
+                        defaultChecked: questionData?.hideFromListing,
+                        dataTestId: "show-on-listing-question-no",
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex h-12 items-center"
+                    dataTestId={"preference-show-on-listing"}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            </Grid>
+            <Grid>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Select
+                    id={"jurisdictionId"}
+                    name={"jurisdictionId"}
+                    label={t("t.jurisdiction")}
+                    register={register}
+                    controlClassName={"control"}
+                    keyPrefix={"jurisdictions"}
+                    options={
+                      profile
+                        ? [
+                            { label: "", value: "" },
+                            ...profile?.jurisdictions.map((jurisdiction) => ({
+                              label: jurisdiction.name,
+                              value: jurisdiction.id,
+                            })),
+                          ]
+                        : [{ label: "", value: "" }]
+                    }
+                    dataTestId={"preference-jurisdiction"}
+                    defaultValue={
+                      questionData?.jurisdictions?.length > 0
+                        ? questionData.jurisdictions[0].id
+                        : null
+                    }
+                    errorMessage={t("errors.requiredFieldError")}
+                    error={errors.jurisdictionId}
+                    validation={{ required: true }}
+                    inputProps={{
+                      onChange: () => clearErrors("jurisdictionId"),
+                    }}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            </Grid>
+          </Card.Section>
+        </Card>
         <Button
           type="button"
           className={"mt-4"}
@@ -447,130 +443,129 @@ const PreferenceDrawer = ({
         }}
         className={"w-auto"}
       >
-        <div className="border rounded-md p-8 bg-white">
-          <GridSection title={t("t.option")} columns={3}>
-            <GridCell span={2}>
-              <FieldValue label={t("t.title")}>
-                <Field
-                  id="optionTitle"
-                  name="optionTitle"
-                  label={t("t.title")}
-                  placeholder={t("t.title")}
-                  register={register}
-                  type="text"
-                  readerOnly
-                  dataTestId={"preference-option-title"}
-                  defaultValue={optionData?.text}
-                  errorMessage={t("errors.requiredFieldError")}
-                  error={!!errors["optionTitle"]}
-                  inputProps={{
-                    onChange: () => {
-                      clearErrors("optionTitle")
-                    },
-                  }}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3} className={"mb-4"}>
-            <GridCell span={2}>
-              <Textarea
-                label={t("t.descriptionTitle")}
-                name={"optionDescription"}
-                id={"optionDescription"}
-                placeholder={t("settings.preferenceOptionDescription")}
-                fullWidth={true}
-                register={register}
-                dataTestId={"preference-option-description"}
-                defaultValue={optionData?.description}
-              />
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3} className={"mt-4"}>
-            <GridCell>
-              <FieldValue label={t("t.url")}>
-                <Field
-                  id="optionUrl"
-                  name="optionUrl"
-                  label={t("t.url")}
-                  placeholder={"https://"}
-                  register={register}
-                  type="url"
-                  error={!!errors?.optionUrl}
-                  errorMessage={
-                    errors?.optionUrl?.type === "https"
-                      ? t("errors.urlHttpsError")
-                      : t("errors.urlError")
-                  }
-                  readerOnly
-                  dataTestId={"preference-option-link"}
-                  defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
-                />
-              </FieldValue>
-            </GridCell>
-            <GridCell>
-              <FieldValue label={t("settings.preferenceLinkTitle")}>
-                <Field
-                  id="optionLinkTitle"
-                  name="optionLinkTitle"
-                  label={t("settings.preferenceLinkTitle")}
-                  placeholder={t("settings.preferenceLinkTitle")}
-                  register={register}
-                  type="text"
-                  readerOnly
-                  dataTestId={"preference-option-link-title"}
-                  defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-          <GridSection columns={3} className={"mt-8"}>
-            <GridCell>
-              <Field
-                type="checkbox"
-                id="collectAddress"
-                name="collectAddress"
-                label={t("settings.preferenceCollectAddress")}
-                register={register}
-                dataTestId={"preference-option-collect-address"}
-                controlClassName={"font-normal"}
-                inputProps={{
-                  defaultChecked: optionData?.collectAddress,
-                }}
-              />
-            </GridCell>
-          </GridSection>
-          <GridSection>
-            <GridCell>
-              <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
-                <FieldGroup
-                  name="exclusiveQuestion"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      id: "multiselect",
-                      label: t("settings.preferenceMultiSelect"),
-                      value: "multiselect",
-                      defaultChecked: optionData === null || !optionData?.exclusive,
-                      dataTestId: "exclusive-question-multiselect",
-                    },
-                    {
-                      id: "exclusive",
-                      label: t("settings.preferenceExclusive"),
-                      value: "exclusive",
-                      defaultChecked: optionData?.exclusive,
-                      dataTestId: "exclusive-question-exclusive",
-                    },
-                  ]}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                  dataTestId={"preference-exclusive-question"}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-        </div>
+        <Card>
+          <Card.Section>
+            <SectionWithGrid heading={t("t.option")}>
+              <Grid.Row>
+                <FieldValue label={t("t.title")}>
+                  <Field
+                    id="optionTitle"
+                    name="optionTitle"
+                    label={t("t.title")}
+                    placeholder={t("t.title")}
+                    register={register}
+                    type="text"
+                    readerOnly
+                    dataTestId={"preference-option-title"}
+                    defaultValue={optionData?.text}
+                    errorMessage={t("errors.requiredFieldError")}
+                    error={!!errors["optionTitle"]}
+                    inputProps={{
+                      onChange: () => {
+                        clearErrors("optionTitle")
+                      },
+                    }}
+                  />
+                </FieldValue>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Textarea
+                    label={t("t.descriptionTitle")}
+                    name={"optionDescription"}
+                    id={"optionDescription"}
+                    placeholder={t("settings.preferenceOptionDescription")}
+                    fullWidth={true}
+                    register={register}
+                    dataTestId={"preference-option-description"}
+                    defaultValue={optionData?.description}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+              <Grid.Row>
+                <FieldValue label={t("t.url")}>
+                  <Field
+                    id="optionUrl"
+                    name="optionUrl"
+                    label={t("t.url")}
+                    placeholder={"https://"}
+                    register={register}
+                    type="url"
+                    error={!!errors?.optionUrl}
+                    errorMessage={
+                      errors?.optionUrl?.type === "https"
+                        ? t("errors.urlHttpsError")
+                        : t("errors.urlError")
+                    }
+                    readerOnly
+                    dataTestId={"preference-option-link"}
+                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
+                  />
+                </FieldValue>
+              </Grid.Row>
+              <Grid.Row>
+                <FieldValue label={t("settings.preferenceLinkTitle")}>
+                  <Field
+                    id="optionLinkTitle"
+                    name="optionLinkTitle"
+                    label={t("settings.preferenceLinkTitle")}
+                    placeholder={t("settings.preferenceLinkTitle")}
+                    register={register}
+                    type="text"
+                    readerOnly
+                    dataTestId={"preference-option-link-title"}
+                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
+                  />
+                </FieldValue>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Cell>
+                  <Field
+                    type="checkbox"
+                    id="collectAddress"
+                    name="collectAddress"
+                    label={t("settings.preferenceCollectAddress")}
+                    register={register}
+                    dataTestId={"preference-option-collect-address"}
+                    controlClassName={"font-normal"}
+                    inputProps={{
+                      defaultChecked: optionData?.collectAddress,
+                    }}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+
+              <Grid.Row>
+                <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
+                  <FieldGroup
+                    name="exclusiveQuestion"
+                    type="radio"
+                    register={register}
+                    fields={[
+                      {
+                        id: "multiselect",
+                        label: t("settings.preferenceMultiSelect"),
+                        value: "multiselect",
+                        defaultChecked: optionData === null || !optionData?.exclusive,
+                        dataTestId: "exclusive-question-multiselect",
+                      },
+                      {
+                        id: "exclusive",
+                        label: t("settings.preferenceExclusive"),
+                        value: "exclusive",
+                        defaultChecked: optionData?.exclusive,
+                        dataTestId: "exclusive-question-exclusive",
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex h-12 items-center"
+                    dataTestId={"preference-exclusive-question"}
+                  />
+                </FieldValue>
+              </Grid.Row>
+            </SectionWithGrid>
+          </Card.Section>
+        </Card>
         <Button
           type="button"
           className={"mt-4"}

@@ -1,8 +1,6 @@
 import React, { useContext } from "react"
 import {
   t,
-  GridSection,
-  GridCell,
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
@@ -42,50 +40,46 @@ const DetailAdditionalEligibility = () => {
       </Grid.Row>
 
       {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
-        <GridSection columns={1}>
-          <GridCell>
-            <FieldValue label={t("listings.buildingSelectionCriteria")}>
-              {listing.buildingSelectionCriteriaFile?.fileId ? (
-                <MinimalTable
-                  id="buildingSelectionCriteriaTable"
-                  headers={{ preview: "t.preview", fileName: "t.fileName" }}
-                  data={[
-                    {
-                      preview: {
-                        content: (
-                          <TableThumbnail>
-                            <img
-                              alt="PDF preview"
-                              src={cloudinaryUrlFromId(
-                                listing.buildingSelectionCriteriaFile.fileId
-                              )}
-                            />
-                          </TableThumbnail>
-                        ),
-                      },
-                      fileName: {
-                        content: `${listing.buildingSelectionCriteriaFile.fileId
-                          .split("/")
-                          .slice(-1)
-                          .join()}.pdf`,
-                      },
+        <Grid.Row columns={1}>
+          <FieldValue label={t("listings.buildingSelectionCriteria")}>
+            {listing.buildingSelectionCriteriaFile?.fileId ? (
+              <MinimalTable
+                id="buildingSelectionCriteriaTable"
+                headers={{ preview: "t.preview", fileName: "t.fileName" }}
+                data={[
+                  {
+                    preview: {
+                      content: (
+                        <TableThumbnail>
+                          <img
+                            alt="PDF preview"
+                            src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
+                          />
+                        </TableThumbnail>
+                      ),
                     },
-                  ]}
-                />
-              ) : (
-                <MinimalTable
-                  id="buildingSelectionCriteriaTable"
-                  headers={{ url: "t.url" }}
-                  data={[
-                    {
-                      url: { content: listing.buildingSelectionCriteria },
+                    fileName: {
+                      content: `${listing.buildingSelectionCriteriaFile.fileId
+                        .split("/")
+                        .slice(-1)
+                        .join()}.pdf`,
                     },
-                  ]}
-                />
-              )}
-            </FieldValue>
-          </GridCell>
-        </GridSection>
+                  },
+                ]}
+              />
+            ) : (
+              <MinimalTable
+                id="buildingSelectionCriteriaTable"
+                headers={{ url: "t.url" }}
+                data={[
+                  {
+                    url: { content: listing.buildingSelectionCriteria },
+                  },
+                ]}
+              />
+            )}
+          </FieldValue>
+        </Grid.Row>
       )}
     </SectionWithGrid>
   )
