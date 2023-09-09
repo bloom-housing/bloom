@@ -108,7 +108,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
                 <>
                   <FieldValue
                     id="unit.monthlyIncomeMin"
-                    label={t("t.minimumIncome")}
+                    label={t("t.monthlyMinimumIncome")}
                     children={unit?.monthlyIncomeMin || t("t.n/a")}
                   />
 

@@ -39,7 +39,7 @@ interface Methods {
 
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch, errors } = useFormContext()
+  const { register, setValue, watch, errors, getValues } = useFormContext()
   // watch fields
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
@@ -150,7 +150,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       paper: null,
       referral: null,
     }
-    listing?.applicationMethods?.forEach((method) => {
+    const applicationMethods =
+      getValues()?.applicationMethods?.length > 0
+        ? getValues().applicationMethods
+        : listing?.applicationMethods
+
+    applicationMethods?.forEach((method) => {
       switch (method.type) {
         case ApplicationMethodType.Internal:
         case ApplicationMethodType.ExternalLink:
@@ -255,7 +260,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: listing?.commonDigitalApplication === true ?? null,
+                    defaultChecked:
+                      methods?.digital?.type === ApplicationMethodType.Internal ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -271,7 +277,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
-                    defaultChecked: listing?.commonDigitalApplication === false ?? null,
+                    defaultChecked:
+                      methods?.digital?.type === ApplicationMethodType.ExternalLink ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -289,7 +296,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </Grid.Cell>
           )}
         </Grid.Row>
-        {((commonDigitalApplicationChoice && commonDigitalApplicationChoice === YesNoAnswer.No) ||
+        {((commonDigitalApplicationChoice &&
+          commonDigitalApplicationChoice === YesNoAnswer.No &&
+          digitalApplicationChoice === YesNoAnswer.Yes) ||
           (digitalApplicationChoice === YesNoAnswer.Yes &&
             !commonDigitalApplicationChoice &&
             listing?.commonDigitalApplication === false)) && (
@@ -314,6 +323,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     })
                   },
                 }}
+                error={fieldHasError(errors?.applicationMethods?.[0]?.externalReference)}
+                errorMessage={fieldMessage(errors?.applicationMethods?.[0]?.externalReference)}
               />
             </Grid.Cell>
           </Grid.Row>

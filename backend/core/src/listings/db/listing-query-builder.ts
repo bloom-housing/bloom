@@ -7,6 +7,7 @@ import { filterTypeToFieldMap } from "../dto/filter-type-to-field-map"
 import { OrderParam } from "../../applications/types/order-param"
 import { SelectQueryBuilder } from "typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
+import { ListingStatus } from "../types/listing-status-enum"
 
 type OrderByConditionData = {
   orderBy: string
@@ -50,7 +51,16 @@ export class ListingsQueryBuilder extends SelectQueryBuilder<Listing> {
     }
 
     for (const orderByCondition of orderByConditionDataArray) {
-      this.addOrderBy(orderByCondition.orderBy, orderByCondition.orderDir, orderByCondition.nulls)
+      if (orderByCondition.orderBy === "listings.status") {
+        const orderStr =
+          orderByCondition.orderDir === "ASC"
+            ? `CASE WHEN ${orderByCondition.orderBy} = '${ListingStatus.pendingReview}' THEN 1 WHEN ${orderByCondition.orderBy} = '${ListingStatus.changesRequested}' THEN 2 WHEN ${orderByCondition.orderBy} = '${ListingStatus.pending}' THEN 3 WHEN ${orderByCondition.orderBy} = '${ListingStatus.active}' THEN 4 WHEN ${orderByCondition.orderBy} = '${ListingStatus.closed}' THEN 5 END`
+            : `CASE WHEN ${orderByCondition.orderBy} = '${ListingStatus.closed}' THEN 1 WHEN ${orderByCondition.orderBy} = '${ListingStatus.active}' THEN 2 WHEN ${orderByCondition.orderBy} = '${ListingStatus.pending}' THEN 3 WHEN ${orderByCondition.orderBy} = '${ListingStatus.changesRequested}' THEN 4 WHEN ${orderByCondition.orderBy} = '${ListingStatus.pendingReview}' THEN 5 END`
+        this.addOrderBy(orderStr)
+        this.addOrderBy("listings.applicationDueDate", orderByCondition.orderDir)
+      } else {
+        this.addOrderBy(orderByCondition.orderBy, orderByCondition.orderDir, orderByCondition.nulls)
+      }
     }
 
     return this

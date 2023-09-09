@@ -1466,6 +1466,30 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Update listing by id and notify relevant users
+   */
+  updateAndNotify(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ListingUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/updateAndNotify/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class PaperApplicationsService {
@@ -5546,9 +5570,6 @@ export interface ListingCreate {
 
   /**  */
   utilities?: ListingUtilities
-
-  /**  */
-  requestedChangesUser?: CombinedRequestedChangesUserTypes
 }
 
 export interface ListingEventUpdate {
@@ -5958,9 +5979,6 @@ export interface ListingUpdate {
 
   /**  */
   utilities?: ListingUtilities
-
-  /**  */
-  requestedChangesUser?: CombinedRequestedChangesUserTypes
 }
 
 export interface MultiselectQuestionsFilterParams {

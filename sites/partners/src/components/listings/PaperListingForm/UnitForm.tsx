@@ -36,11 +36,10 @@ type UnitFormProps = {
 const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
-  const [options, setOptions] = useState({
-    amiCharts: [],
-    unitPriorities: [],
-    unitTypes: [],
-  })
+  const [amiChartsOptions, setAmiChartsOptions] = useState([])
+  const [unitPrioritiesOptions, setUnitPrioritiesOptions] = useState([])
+  const [unitTypesOptions, setUnitTypesOptions] = useState([])
+  const [isAmiPercentageDirty, setIsAmiPercentageDirty] = useState(false)
   const [loading, setLoading] = useState(true)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
   const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
@@ -180,11 +179,25 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   }
 
   useEffect(() => {
-    if (amiPercentage && !loading && options) {
+    if (
+      amiPercentage &&
+      !loading &&
+      amiChartsOptions &&
+      unitPrioritiesOptions &&
+      unitTypesOptions &&
+      isAmiPercentageDirty
+    ) {
       resetAmiTableValues()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amiPercentage])
+  }, [amiPercentage, amiChartPercentageOptions, isAmiPercentageDirty])
+
+  useEffect(() => {
+    if (defaultUnit && !amiPercentage) {
+      setValue("amiPercentage", defaultUnit.amiPercentage)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amiChartPercentageOptions])
 
   type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
@@ -311,47 +324,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     },
   ]
 
+  // sets the unit type to be the value from default
+  // after the unitType options are set
   useEffect(() => {
-    if (amiCharts.length === 0 || options.amiCharts.length) return
-    setOptions({
-      ...options,
-      amiCharts: arrayToFormOptions<AmiChart>(amiCharts, "name", "id"),
-    })
-  }, [amiCharts, options])
-
-  useEffect(() => {
-    if (unitPriorities.length === 0 || options.unitPriorities.length) return
-    setOptions({
-      ...options,
-      unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
-        unitPriorities,
-        "name",
-        "id"
-      ),
-    })
-  }, [options, unitPriorities])
-
-  useEffect(() => {
-    if (unitTypes.length === 0 || options.unitTypes.length) return
-    setOptions({
-      ...options,
-      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions"),
-    })
-  }, [options, unitTypes])
-
-  useEffect(() => {
-    if (defaultUnit) {
-      setValue("amiChart.id", defaultUnit.amiChart?.id)
-      setValue("priorityType.id", defaultUnit.priorityType?.id)
-    }
-  }, [defaultUnit, setValue])
-
-  useEffect(() => {
-    if (defaultUnit && options.unitTypes) {
+    if (defaultUnit && unitTypesOptions) {
       setValue("unitType.id", defaultUnit.unitType?.id)
     }
-  }, [defaultUnit, options, setValue])
+  }, [defaultUnit, unitTypesOptions, setValue])
 
+  // when rent type is updated we set the rent/income data to defaultUnit data for that value
+  // e.g. rent is fixed and swithced to percentage, then switched back we readd the old fixed data
   useEffect(() => {
     if (defaultUnit) {
       if (rentType === "fixed") {
@@ -363,6 +345,28 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentType])
+
+  // sets the options for the ami charts
+  useEffect(() => {
+    if (amiCharts.length === 0 || amiChartsOptions.length) return
+    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
+  }, [amiCharts, amiChartsOptions])
+
+  // sets the options for the unit priorities
+  useEffect(() => {
+    if (unitPriorities.length === 0 || unitPrioritiesOptions.length) return
+    setUnitPrioritiesOptions(
+      arrayToFormOptions<UnitAccessibilityPriorityType>(unitPriorities, "name", "id")
+    )
+  }, [unitPrioritiesOptions, unitPriorities, defaultUnit, setValue])
+
+  // sets the options for the unit types
+  useEffect(() => {
+    if (unitTypes.length === 0 || unitTypesOptions.length) return
+    setUnitTypesOptions(
+      arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions")
+    )
+  }, [unitTypesOptions, unitTypes])
 
   return (
     <Form onSubmit={() => false}>
@@ -391,7 +395,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
-                  options={options.unitTypes}
+                  options={unitTypesOptions}
                   error={fieldHasError(errors?.unitType)}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
@@ -497,12 +501,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
-                  options={options.amiCharts}
+                  options={amiChartsOptions}
                   inputProps={{
                     onChange: () => {
-                      if (amiChartID && !loading && options) {
+                      if (amiChartID && !loading && amiChartsOptions) {
                         void fetchAmiChart()
-                      }
+                        setIsAmiPercentageDirty(true)
+                    }
                     },
                   }}
                 />
@@ -517,7 +522,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   register={register}
                   controlClassName="control"
                   options={amiChartPercentageOptions}
-                />
+                  inputProps={{
+                  onChange: () => {
+                    setIsAmiPercentageDirty(true)
+                  },
+                }}
+              />
               </FieldValue>
             </Grid.Row>
           </SectionWithGrid>
@@ -601,7 +611,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   placeholder={t("listings.unit.accessibilityPriorityType")}
                   register={register}
                   controlClassName="control"
-                  options={options.unitPriorities}
+                  options={unitPrioritiesOptions}
                 />
               </Grid.Cell>
             </Grid.Row>
@@ -646,6 +656,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           onClick={() => onFormSubmit("saveExit")}
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.small}
+          dataTestId={"unitFormSaveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>
