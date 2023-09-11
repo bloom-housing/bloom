@@ -26,8 +26,12 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
 import { useRouter } from "next/router"
+import {
+  ApplicationCreate,
+  ApplicationReviewStatus,
+  ApplicationSection,
+} from "@bloom-housing/backend-core"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -72,7 +76,7 @@ const ApplicationSummary = () => {
               id: profile.id,
             },
           }),
-        },
+        } as unknown as ApplicationCreate,
       })
       .then(() => {
         conductor.routeToNextOrReturnUrl()

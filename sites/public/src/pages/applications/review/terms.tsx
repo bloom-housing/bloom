@@ -19,6 +19,7 @@ import {
   ApplicationSection,
   ApplicationReviewStatus,
   ListingReviewOrder,
+  ApplicationCreate,
 } from "@bloom-housing/backend-core"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
@@ -33,6 +34,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { untranslateMultiselectQuestion } from "../../../lib/helpers"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
@@ -77,7 +79,8 @@ const ApplicationTerms = () => {
               id: profile.id,
             },
           }),
-        },
+          // TODO remove this once this call is changed to the new backend
+        } as unknown as ApplicationCreate,
       })
       .then((result) => {
         conductor.currentStep.save({ confirmationCode: result.confirmationCode })
@@ -101,15 +104,15 @@ const ApplicationTerms = () => {
 
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
-      case ListingReviewOrder.firstComeFirstServe:
+      case ReviewOrderTypeEnum.firstComeFirstServe:
         return {
           text: t("application.review.terms.fcfs.text"),
         }
-      case ListingReviewOrder.lottery:
+      case ReviewOrderTypeEnum.lottery:
         return {
           text: t("application.review.terms.lottery.text"),
         }
-      case ListingReviewOrder.waitlist:
+      case ReviewOrderTypeEnum.waitlist:
         return {
           text: t("application.review.terms.waitlist.text"),
         }

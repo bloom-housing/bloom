@@ -21,6 +21,10 @@ import {
   ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
+import {
+  ListingEvent,
+  ListingEventsTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum ListingFormActionsType {
   add = "add",
@@ -204,7 +208,7 @@ const ListingFormActions = ({
       <GridCell key="btn-preview">
         <a
           target="_blank"
-          href={`${listing?.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          href={`${listing?.jurisdiction?.publicUrl}/preview/listings/${listingId}`}
         >
           <Button fullWidth onClick={() => false} type="button">
             {t("listings.actions.preview")}
@@ -308,10 +312,10 @@ const ListingFormActions = ({
     )
 
     const lotteryResultsButton = (elements) => {
-      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
+      if (listing.events?.find((event) => event.type === ListingEventType.lotteryResults)) {
         const eventUrl = pdfUrlFromListingEvents(
-          listing?.events,
-          ListingEventType.lotteryResults,
+          listing?.events as unknown as ListingEvent[],
+          ListingEventsTypeEnum.lotteryResults,
           process.env.cloudinaryCloudName
         )
         elements.push(viewPostedResultsButton(eventUrl))

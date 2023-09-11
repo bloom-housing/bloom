@@ -139,7 +139,7 @@ export class TranslationService {
           `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
         ] = multiselectQuestion.multiselectQuestions.optOutText;
         // TODO: should we translate links?
-        multiselectQuestion.multiselectQuestions.options?.map(
+        multiselectQuestion.multiselectQuestions?.options?.map(
           (multiselectOption, optionIndex) => {
             multiselectOption.untranslatedText = multiselectOption.text;
             pathsToFilter[

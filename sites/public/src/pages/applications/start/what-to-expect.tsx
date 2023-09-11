@@ -19,7 +19,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
 import Markdown from "markdown-to-jsx"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -35,17 +35,17 @@ const ApplicationWhatToExpect = () => {
 
   const content = useMemo(() => {
     switch (listing?.reviewOrderType) {
-      case ListingReviewOrder.firstComeFirstServe:
+      case ReviewOrderTypeEnum.firstComeFirstServe:
         return {
           steps: t("application.start.whatToExpect.fcfs.steps"),
           finePrint: t("application.start.whatToExpect.fcfs.finePrint"),
         }
-      case ListingReviewOrder.lottery:
+      case ReviewOrderTypeEnum.lottery:
         return {
           steps: t("application.start.whatToExpect.lottery.steps"),
           finePrint: t("application.start.whatToExpect.lottery.finePrint"),
         }
-      case ListingReviewOrder.waitlist:
+      case ReviewOrderTypeEnum.waitlist:
         return {
           steps: t("application.start.whatToExpect.waitlist.steps"),
           finePrint: t("application.start.whatToExpect.waitlist.finePrint"),

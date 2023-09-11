@@ -12,8 +12,8 @@ import { UnitsSummaryCreate } from '../units/units-summary-create.dto';
 import { ListingImageCreate } from './listing-image-create.dto';
 import { AddressCreate } from '../addresses/address-create.dto';
 import { ListingEventCreate } from './listing-event-create.dto';
-import { ListingFeaturesCreate } from './listing-feature-create.dto';
-import { ListingUtilitiesCreate } from './listing-utility-create.dto';
+import { ListingFeatures } from './listing-feature.dto';
+import { ListingUtilities } from './listing-utility.dto';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -137,13 +137,13 @@ export class ListingUpdate extends OmitType(Listing, [
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingFeaturesCreate)
-  @ApiPropertyOptional({ type: ListingFeaturesCreate })
-  listingFeatures?: ListingFeaturesCreate;
+  @Type(() => ListingFeatures)
+  @ApiPropertyOptional({ type: ListingFeatures })
+  listingFeatures?: ListingFeatures;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingUtilitiesCreate)
-  @ApiPropertyOptional({ type: ListingUtilitiesCreate })
-  listingUtilities?: ListingUtilitiesCreate;
+  @Type(() => ListingUtilities)
+  @ApiPropertyOptional({ type: ListingUtilities })
+  listingUtilities?: ListingUtilities;
 }

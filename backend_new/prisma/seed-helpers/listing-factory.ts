@@ -116,43 +116,44 @@ const additionalEligibilityRules = (includeEligibilityRules: boolean) => {
   };
 };
 
-// Tables that aren't currently used by bloom but are getting set.
-// Setting all fields to false for now
-const featuresAndUtilites = () => ({
+export const featuresAndUtilites = (): {
+  listingFeatures: Prisma.ListingFeaturesCreateNestedOneWithoutListingsInput;
+  listingUtilities: Prisma.ListingUtilitiesCreateNestedOneWithoutListingsInput;
+} => ({
   listingFeatures: {
     create: {
-      elevator: false,
-      wheelchairRamp: false,
-      serviceAnimalsAllowed: false,
-      accessibleParking: false,
-      parkingOnSite: false,
-      inUnitWasherDryer: false,
-      laundryInBuilding: false,
-      barrierFreeEntrance: false,
-      rollInShower: false,
-      grabBars: false,
-      heatingInUnit: false,
-      acInUnit: false,
-      hearing: false,
-      visual: false,
-      mobility: false,
-      barrierFreeUnitEntrance: false,
-      loweredLightSwitch: false,
-      barrierFreeBathroom: false,
-      wideDoorways: false,
-      loweredCabinets: false,
+      elevator: true,
+      wheelchairRamp: true,
+      serviceAnimalsAllowed: true,
+      accessibleParking: true,
+      parkingOnSite: true,
+      inUnitWasherDryer: true,
+      laundryInBuilding: true,
+      barrierFreeEntrance: true,
+      rollInShower: true,
+      grabBars: true,
+      heatingInUnit: true,
+      acInUnit: true,
+      hearing: true,
+      visual: true,
+      mobility: true,
+      barrierFreeUnitEntrance: true,
+      loweredLightSwitch: true,
+      barrierFreeBathroom: true,
+      wideDoorways: true,
+      loweredCabinets: true,
     },
   },
   listingUtilities: {
     create: {
-      water: false,
-      gas: false,
-      trash: false,
-      sewer: false,
-      electricity: false,
-      cable: false,
-      phone: false,
-      internet: false,
+      water: true,
+      gas: true,
+      trash: true,
+      sewer: true,
+      electricity: true,
+      cable: true,
+      phone: true,
+      internet: true,
     },
   },
 });

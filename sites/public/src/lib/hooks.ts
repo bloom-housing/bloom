@@ -7,11 +7,13 @@ import {
   EnumListingFilterParamsComparison,
   EnumListingFilterParamsStatus,
   Jurisdiction,
-  Listing,
   ListingFilterParams,
-  OrderByFieldsEnum,
-  OrderParam,
 } from "@bloom-housing/backend-core/types"
+import {
+  Listing,
+  ListingOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./applications/AppSubmissionContext"
 import { getListingApplicationStatus } from "./helpers"
@@ -63,8 +65,8 @@ export async function fetchBaseListingData({
   orderDir,
 }: {
   additionalFilters?: ListingFilterParams[]
-  orderBy?: OrderByFieldsEnum[]
-  orderDir?: OrderParam[]
+  orderBy?: ListingOrderByKeys[]
+  orderDir?: OrderByEnum[]
 }) {
   let listings = []
   try {
@@ -87,8 +89,8 @@ export async function fetchBaseListingData({
       view: string
       limit: string
       filter: ListingFilterParams[]
-      orderBy?: OrderByFieldsEnum[]
-      orderDir?: OrderParam[]
+      orderBy?: ListingOrderByKeys[]
+      orderDir?: OrderByEnum[]
     } = {
       view: "base",
       limit: "all",
@@ -123,8 +125,8 @@ export async function fetchOpenListings() {
         status: EnumListingFilterParamsStatus.active,
       },
     ],
-    orderBy: [OrderByFieldsEnum.mostRecentlyPublished],
-    orderDir: [OrderParam.DESC],
+    orderBy: [ListingOrderByKeys.mostRecentlyPublished],
+    orderDir: [OrderByEnum.desc],
   })
 }
 
@@ -136,8 +138,8 @@ export async function fetchClosedListings() {
         status: EnumListingFilterParamsStatus.closed,
       },
     ],
-    orderBy: [OrderByFieldsEnum.mostRecentlyClosed],
-    orderDir: [OrderParam.DESC],
+    orderBy: [ListingOrderByKeys.mostRecentlyClosed],
+    orderDir: [OrderByEnum.desc],
   })
 }
 
@@ -151,7 +153,7 @@ export async function fetchJurisdictionByName() {
 
     const jurisdictionName = process.env.jurisdictionName
     const jurisdictionRes = await axios.get(
-      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
+      `${process.env.backendApiBaseNew}/jurisdictions/byName/${jurisdictionName}`
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {

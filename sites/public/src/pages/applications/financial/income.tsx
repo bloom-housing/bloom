@@ -4,7 +4,7 @@ Total pre-tax household income from all sources
 */
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
-import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
+import { ApplicationSection } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -30,6 +30,7 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"

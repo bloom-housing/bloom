@@ -514,7 +514,10 @@ const ApplicationAddress = () => {
                     errors?.applicant?.workInRegion ? "text-alert" : ""
                   }`}
                 >
-                  {t("application.contact.doYouWorkIn", { county: listing?.countyCode })}
+                  {t("application.contact.doYouWorkIn", {
+                    county:
+                      listing?.listingsBuildingAddress?.county || listing?.jurisdictions?.name,
+                  })}
                 </legend>
 
                 <p className="field-note mb-4">{t("application.contact.doYouWorkInDescription")}</p>

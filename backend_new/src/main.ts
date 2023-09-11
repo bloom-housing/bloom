@@ -9,10 +9,11 @@ async function bootstrap() {
     logger:
       process.env.NODE_ENV === 'development'
         ? ['error', 'warn', 'log']
-        : ['error', 'warn'],
+        : ['error', 'warn', 'log'],
   });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new CustomExceptionFilter(httpAdapter));
+  app.enableCors();
   app.use(cookieParser());
   const config = new DocumentBuilder()
     .setTitle('Bloom API')
@@ -22,6 +23,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(process.env.PORT);
+  await app.listen('3101'); // TODO: remove the hard coded port
 }
 bootstrap();
