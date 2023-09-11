@@ -102,8 +102,9 @@ const LeasingAgent = () => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns={3} subtitle={"Leasing Agent Address"}>
-          <Grid.Cell span={2}>
+        <SectionWithGrid.HeadingRow>"Leasing Agent Address"</SectionWithGrid.HeadingRow>
+        <Grid.Row columns={3}>
+          <Grid.Cell className="grid-double-span">
             <Field
               label={t("listings.streetAddressOrPOBox")}
               name={"leasingAgentAddress.street"}
