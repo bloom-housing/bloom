@@ -507,7 +507,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                       if (amiChartID && !loading && amiChartsOptions) {
                         void fetchAmiChart()
                         setIsAmiPercentageDirty(true)
-                    }
+                      }
                     },
                   }}
                 />
@@ -523,11 +523,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                   controlClassName="control"
                   options={amiChartPercentageOptions}
                   inputProps={{
-                  onChange: () => {
-                    setIsAmiPercentageDirty(true)
-                  },
-                }}
-              />
+                    onChange: () => {
+                      setIsAmiPercentageDirty(true)
+                    },
+                  }}
+                />
               </FieldValue>
             </Grid.Row>
           </SectionWithGrid>

@@ -11,10 +11,7 @@ const DetailListingData = () => {
   return (
     <SectionWithGrid heading={t("listings.details.listingData")} inset>
       <Grid.Row>
-        <FieldValue
-          id="jurisdiction.name"
-          label={t("listings.details.id")}
-        >
+        <FieldValue id="jurisdiction.name" label={t("listings.details.id")}>
           {listing.id}
         </FieldValue>
         <FieldValue id="name" label={t("listings.details.createdDate")}>

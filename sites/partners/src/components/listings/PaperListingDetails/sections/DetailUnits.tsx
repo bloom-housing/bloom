@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import { t, MinimalTable, Button, GridCell } from "@bloom-housing/ui-components"
+import { t, MinimalTable, Button } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"

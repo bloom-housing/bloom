@@ -1,4 +1,4 @@
-import { t, GridCell } from "@bloom-housing/ui-components"
+import { t } from "@bloom-housing/ui-components"
 import {
   Application,
   HouseholdMemberUpdate,

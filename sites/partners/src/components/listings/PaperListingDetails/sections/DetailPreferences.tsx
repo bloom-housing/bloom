@@ -28,11 +28,7 @@ const DetailPreferences = () => {
   )
 
   return (
-    <SectionWithGrid
-      heading={t("listings.sections.housingPreferencesTitle")}
-      inset
-      bypassGrid
-    >
+    <SectionWithGrid heading={t("listings.sections.housingPreferencesTitle")} inset bypassGrid>
       <SectionWithGrid.HeadingRow>{t("listings.activePreferences")}</SectionWithGrid.HeadingRow>
       {preferenceTableData.length ? (
         <MinimalTable

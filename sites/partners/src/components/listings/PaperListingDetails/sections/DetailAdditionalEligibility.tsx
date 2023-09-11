@@ -1,9 +1,5 @@
 import React, { useContext } from "react"
-import {
-  t,
-  MinimalTable,
-  TableThumbnail,
-} from "@bloom-housing/ui-components"
+import { t, MinimalTable, TableThumbnail } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
