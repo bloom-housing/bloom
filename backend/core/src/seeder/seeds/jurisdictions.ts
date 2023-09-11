@@ -2,6 +2,7 @@ import { INestApplicationContext } from "@nestjs/common"
 import { JurisdictionCreateDto } from "../../jurisdictions/dto/jurisdiction-create.dto"
 import { Language } from "../../shared/types/language-enum"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+import { UserRoleEnum } from "../../../src/auth/enum/user-role-enum"
 
 export const activeJurisdictions: JurisdictionCreateDto[] = [
   {
@@ -15,6 +16,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enablePartnerSettings: true,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
+    listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
   },
   {
     name: "San Jose",
@@ -27,6 +29,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enablePartnerSettings: false,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
+    listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
   },
   {
     name: "San Mateo",
@@ -39,6 +42,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enablePartnerSettings: true,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: false,
+    listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
   },
   {
     name: "Detroit",
@@ -51,6 +55,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enablePartnerSettings: false,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: false,
+    listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
   },
 ]
 
