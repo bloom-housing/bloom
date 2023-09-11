@@ -181,7 +181,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               </Grid.Cell>
             </Grid.Row>
             <Grid.Row columns={3}>
-              <Grid.Cell span={2}>
+              <Grid.Cell className="grid-double-span">
                 <Textarea
                   label={t("listings.lotteryDateNotes")}
                   name={"lotteryDateNotes"}
