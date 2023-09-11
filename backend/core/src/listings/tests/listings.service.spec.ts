@@ -19,6 +19,7 @@ import { HttpService } from "@nestjs/axios"
 import { CachePurgeService } from "../cache-purge.service"
 import { EmailService } from "../../../src/email/email.service"
 import { ConfigService } from "@nestjs/config"
+import { JurisdictionsService } from "../../../src/jurisdictions/services/jurisdictions.service"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -176,6 +177,12 @@ describe("ListingsService", () => {
           provide: EmailService,
           useValue: {
             requestApproval: jest.fn(),
+          },
+        },
+        {
+          provide: JurisdictionsService,
+          useValue: {
+            findOne: jest.fn(),
           },
         },
         {

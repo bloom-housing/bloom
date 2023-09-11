@@ -112,7 +112,7 @@ export class ListingsService {
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
     })
-
+    // only listings approval state possible from creation
     if (listing.status === ListingStatus.pendingReview) {
       const listingApprovalPermissions = (
         await this.jurisdictionsService.findOne({
