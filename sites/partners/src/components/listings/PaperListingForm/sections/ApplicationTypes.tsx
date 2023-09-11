@@ -384,7 +384,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           </Grid.Cell>
         </Grid.Row>
         {paperApplicationChoice === YesNoAnswer.Yes && (
-          <Grid.Row columns={1} tinted inset>
+          <Grid.Row columns={1}>
             <Grid.Cell>
               {methods.paper?.paperApplications?.length > 0 && (
                 <MinimalTable
