@@ -102,7 +102,7 @@ const LeasingAgent = () => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <SectionWithGrid.HeadingRow>"Leasing Agent Address"</SectionWithGrid.HeadingRow>
+        <SectionWithGrid.HeadingRow>Leasing Agent Address</SectionWithGrid.HeadingRow>
         <Grid.Row columns={3}>
           <Grid.Cell className="grid-double-span">
             <Field
