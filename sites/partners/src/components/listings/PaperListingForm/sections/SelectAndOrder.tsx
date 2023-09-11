@@ -201,7 +201,7 @@ const SelectAndOrder = ({
       )
     }
     return (
-      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-sm">
+      <div className="ml-8 -mt-6 mb-4 text-sm">
         <div>
           <button
             onClick={() => {
@@ -314,22 +314,24 @@ const SelectAndOrder = ({
               ? fetchedData.map((item, index) => {
                   const previewShown = openPreviews.some((preview) => preview === index)
                   return (
-                    <Grid key={index} className={"md:-mb-6"}>
-                      <Grid.Row columns={1}>
-                        <Field
-                          className={"font-semibold"}
-                          id={`${formKey}.${item.id}`}
-                          name={`${formKey}.${item.id}`}
-                          type="checkbox"
-                          label={item.text}
-                          register={register}
-                          inputProps={{
-                            defaultChecked: draftListingData.some(
-                              (existingItem) => existingItem.text === item.text
-                            ),
-                          }}
-                        />
-                        {getPreviewSection(previewShown, index, item)}
+                    <Grid key={index}>
+                      <Grid.Row>
+                        <Grid.Cell>
+                          <Field
+                            className={"font-semibold"}
+                            id={`${formKey}.${item.id}`}
+                            name={`${formKey}.${item.id}`}
+                            type="checkbox"
+                            label={item.text}
+                            register={register}
+                            inputProps={{
+                              defaultChecked: draftListingData.some(
+                                (existingItem) => existingItem.text === item.text
+                              ),
+                            }}
+                          />
+                          {getPreviewSection(previewShown, index, item)}
+                        </Grid.Cell>
                       </Grid.Row>
                     </Grid>
                   )
