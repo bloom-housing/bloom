@@ -21,8 +21,8 @@ export interface IRequestConfig {
 export interface ServiceOptions {
   axios?: AxiosInstance
   /** only in axios interceptor config*/
-  loading: boolean
-  showError: boolean
+  loading?: boolean
+  showError?: boolean
 }
 
 // Add default options
@@ -3397,6 +3397,38 @@ export interface MultiselectQuestionQueryParams {
   filter?: MultiselectQuestionFilterParams[]
 }
 
+export interface AddressInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: Address
+}
+
+export interface BooleanInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: boolean
+}
+
+export interface TextInput {
+  /**  */
+  type: InputType
+
+  /**  */
+  key: string
+
+  /**  */
+  value: string
+}
 export interface Accessibility {
   /**  */
   id: string
@@ -4046,4 +4078,12 @@ export enum YesNoEnum {
   "yes" = "yes",
   "no" = "no",
 }
+
+export enum InputType {
+  "boolean" = "boolean",
+  "text" = "text",
+  "address" = "address",
+  "hhMemberSelect" = "hhMemberSelect",
+}
+
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
