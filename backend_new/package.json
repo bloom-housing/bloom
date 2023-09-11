@@ -26,7 +26,7 @@
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w ../shared-helpers/src/types/backend-swagger.ts",
     "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js",
     "db:setup": "yarn db:resetup && yarn db:migration:run && yarn db:seed:development",
-    "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging"
+    "db:setup:staging": "yarn db:resetup && yarn db:migration:run && yarn db:seed:staging --jurisdictionName Bloomington"
   },
   "dependencies": {
     "@google-cloud/translate": "^7.2.1",
