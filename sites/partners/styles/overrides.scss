@@ -89,3 +89,12 @@
 :is(.spacer-container, .spacer-section, .spacer-content, .spacer-header, .spacer-label, .spacer-text):last-child {
   margin-block-end: 0;
 }
+
+/* Override out-of-date ui-components labeling */
+:is(label, legend).text__caps-spaced {
+/*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
+  --text-caps-spaced-letter-spacing: normal;
+  --text-caps-spaced-font-weight: normal;
+  --text-caps-spaced-margin-bottom: var(--seeds-s2);
+  text-transform: none;
+}

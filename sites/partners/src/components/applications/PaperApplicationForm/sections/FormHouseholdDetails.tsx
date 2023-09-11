@@ -71,7 +71,6 @@ const FormHouseholdDetails = ({
 
           <Grid.Cell>
             <fieldset>
-              <legend className="sr-only-NOT">{t("application.details.adaPriorities")}</legend>
               <FieldGroup
                 type="checkbox"
                 name="application.accessibility"
