@@ -14,7 +14,9 @@ import {
   AppearanceSizeType,
   Form,
   FieldGroup,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { downloadExternalPDF } from "../../lib/helpers"
 
 export interface PaperApplication {
   fileURL: string
@@ -107,13 +109,15 @@ const GetApplication = (props: ApplicationsProps) => {
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
           {props.paperApplications.length === 1 ? (
-            <LinkButton
+            <Button
+              size={AppearanceSizeType.small}
+              onClick={async () => {
+                await downloadExternalPDF(props.paperApplications[0].fileURL, "Housing Application")
+              }}
               styleType={AppearanceStyleType.primary}
-              className="w-full mb-2"
-              href={props.paperApplications[0].fileURL}
             >
               {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-            </LinkButton>
+            </Button>
           ) : (
             <Button
               styleType={
@@ -163,13 +167,17 @@ const GetApplication = (props: ApplicationsProps) => {
         ariaDescription={t("listings.chooseALanguage")}
         onClose={() => setShowDownloadModal(false)}
         actions={[
-          <LinkButton
+          <Button
             size={AppearanceSizeType.small}
-            href={paperApplicationURL ?? ""}
+            onClick={async () => {
+              await downloadExternalPDF(paperApplicationURL, "name")
+              setSiteAlertMessage(t("listings.apply.downloadApplicationSuccess"), "success")
+              setShowDownloadModal(false)
+            }}
             styleType={AppearanceStyleType.primary}
           >
             {t("t.download")}
-          </LinkButton>,
+          </Button>,
           <Button
             onClick={() => {
               setShowDownloadModal(false)
