@@ -1,14 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
 import {
-  Address,
-  Listing,
-  ListingReviewOrder,
-  UnitsSummarized,
-  ListingStatus,
-  ApplicationMultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
-import {
   t,
   ListingCard,
   ApplicationStatusType,
@@ -16,6 +8,14 @@ import {
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 import { imageUrlFromListing, getSummariesTable } from "@bloom-housing/shared-helpers"
+import {
+  Address,
+  ApplicationMultiselectQuestion,
+  Listing,
+  ListingsStatusEnum,
+  ReviewOrderTypeEnum,
+  UnitsSummarized,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const emailRegex =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -54,7 +54,7 @@ const getListingCardSubtitle = (address: Address) => {
 
 const getListingTableData = (
   unitsSummarized: UnitsSummarized,
-  listingReviewOrder: ListingReviewOrder
+  listingReviewOrder: ReviewOrderTypeEnum
 ) => {
   return unitsSummarized !== undefined
     ? getSummariesTable(unitsSummarized.byUnitTypeAndRent, listingReviewOrder)
@@ -73,7 +73,7 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     formattedDate = openDate.format("MMM D, YYYY")
     content = t("listings.applicationOpenPeriod")
   } else {
-    if (listing.status === ListingStatus.closed) {
+    if (listing.status === ListingsStatusEnum.closed) {
       status = ApplicationStatusType.Closed
       content = t("listings.applicationsClosed")
     } else if (listing.applicationDueDate) {
@@ -95,7 +95,7 @@ export const getListingApplicationStatus = (listing: Listing): StatusBarType => 
     content = content + `: ${formattedDate}`
   }
 
-  if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
+  if (listing.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe) {
     subContent = content
     content = t("listings.applicationFCFS")
   }
@@ -115,13 +115,13 @@ export const getListings = (listings) => {
   }
 
   const generateTableSubHeader = (listing) => {
-    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
+    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
       return {
         content: t("listings.availableUnits"),
         styleType: AppearanceStyleType.success,
         isPillType: true,
       }
-    } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
+    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
       return {
         content: t("listings.waitlist.open"),
         styleType: AppearanceStyleType.primary,
@@ -131,15 +131,16 @@ export const getListings = (listings) => {
     return null
   }
   return listings.map((listing: Listing, index) => {
+    console.log("IMAGES!", listing)
     return (
       <ListingCard
         key={index}
         imageCardProps={{
           imageUrl: imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0] || "",
-          tags: listing.reservedCommunityType
+          tags: listing.reservedCommunityTypes
             ? [
                 {
-                  text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+                  text: t(`listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`),
                 },
               ]
             : undefined,
@@ -164,7 +165,7 @@ export const getListings = (listings) => {
             content: listing.name,
             href: `/listing/${listing.id}/${listing.urlSlug}`,
           },
-          contentSubheader: { content: getListingCardSubtitle(listing.buildingAddress) },
+          contentSubheader: { content: getListingCardSubtitle(listing.listingsBuildingAddress) },
           tableHeader: generateTableSubHeader(listing),
         }}
       />
@@ -180,8 +181,8 @@ export const untranslateMultiselectQuestion = (
 
   data.forEach((datum) => {
     const question = multiselectQuestions.find(
-      (elem) => elem.multiselectQuestion.text === datum.key
-    )?.multiselectQuestion
+      (elem) => elem.multiselectQuestions.text === datum.key
+    )?.multiselectQuestions
 
     if (question) {
       datum.key = question.untranslatedText ?? question.text

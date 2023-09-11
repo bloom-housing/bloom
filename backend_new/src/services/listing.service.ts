@@ -14,7 +14,10 @@ import {
   calculateSkip,
   calculateTake,
 } from '../utilities/pagination-helpers';
-import { buildOrderBy } from '../utilities/build-order-by';
+import {
+  buildOrderBy,
+  buildOrderByForListings,
+} from '../utilities/build-order-by';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { buildFilter } from '../utilities/build-filter';
@@ -152,7 +155,7 @@ export class ListingService {
     const listingsRaw = await this.prisma.listings.findMany({
       skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
-      orderBy: buildOrderBy(params.orderBy, params.orderDir),
+      orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
       include: views[params.view ?? 'full'],
       where: whereClause,
     });

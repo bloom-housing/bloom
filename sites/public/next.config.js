@@ -16,6 +16,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 // Set up app-wide constants
 let BACKEND_API_BASE = "http://localhost:3100"
+let BACKEND_API_BASE_NEW = process.env.BACKEND_API_BASE_NEW
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
   BACKEND_API_BASE = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
@@ -40,7 +41,8 @@ module.exports = withBundleAnalyzer(
   withTM({
     env: {
       backendApiBase: BACKEND_API_BASE,
-      listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+      backendApiBaseNew: process.env.BACKEND_API_BASE_NEW,
+      listingServiceUrl: BACKEND_API_BASE_NEW + LISTINGS_QUERY,
       listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
       mapBoxToken: MAPBOX_TOKEN,
       housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,

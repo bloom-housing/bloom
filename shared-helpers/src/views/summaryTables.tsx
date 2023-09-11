@@ -7,7 +7,7 @@ import {
   ContentAccordion,
   getTranslationWithArguments,
 } from "@bloom-housing/ui-components"
-import { MinMax, UnitSummary, Unit, ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { MinMax, ReviewOrderTypeEnum, Unit, UnitSummary } from "../types/backend-swagger"
 
 const getTranslationFromCurrencyString = (value: string) => {
   if (value.startsWith("t.")) return getTranslationWithArguments(value)
@@ -16,7 +16,7 @@ const getTranslationFromCurrencyString = (value: string) => {
 
 export const unitSummariesTable = (
   summaries: UnitSummary[],
-  listingReviewOrder: ListingReviewOrder
+  listingReviewOrder: ReviewOrderTypeEnum
 ): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
     const unitPluralization =
@@ -63,7 +63,7 @@ export const unitSummariesTable = (
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     let availability = null
-    if (listingReviewOrder !== ListingReviewOrder.waitlist) {
+    if (listingReviewOrder !== ReviewOrderTypeEnum.waitlist) {
       availability = (
         <span>
           {unitSummary.totalAvailable > 0 ? (
@@ -77,7 +77,7 @@ export const unitSummariesTable = (
           )}
         </span>
       )
-    } else if (listingReviewOrder === ListingReviewOrder.waitlist) {
+    } else if (listingReviewOrder === ReviewOrderTypeEnum.waitlist) {
       availability = (
         <span>
           <strong>{t("listings.waitlist.open")}</strong>
@@ -87,7 +87,7 @@ export const unitSummariesTable = (
 
     return {
       unitType: {
-        content: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
+        content: <strong>{t(`listings.unitTypes.${unitSummary.unitTypes?.name}`)}</strong>,
       },
       minimumIncome: {
         content: <span>{minIncome}</span>,
@@ -104,7 +104,7 @@ export const unitSummariesTable = (
 
 export const getSummariesTable = (
   summaries: UnitSummary[],
-  listingReviewOrder: ListingReviewOrder
+  listingReviewOrder: ReviewOrderTypeEnum
 ): StandardTableData => {
   let unitSummaries: StandardTableData = []
 
@@ -155,7 +155,7 @@ export const UnitTables = (props: UnitTablesProps) => {
     <>
       {unitSummaries.map((unitSummary: UnitSummary, index) => {
         const units = props.units.filter(
-          (unit: Unit) => unit.unitType?.name == unitSummary.unitType.name
+          (unit: Unit) => unit.unitTypes?.name == unitSummary.unitTypes.name
         )
         const unitsFormatted = [] as StandardTableData
         let floorSection: React.ReactNode
@@ -203,7 +203,7 @@ export const UnitTables = (props: UnitTablesProps) => {
         const getBarContent = () => {
           return (
             <h3 className={"toggle-header-content"}>
-              <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
+              <strong>{t("listings.unitTypes." + unitSummary.unitTypes.name)}</strong>:&nbsp;
               {unitsLabel(units)}
               {areaRangeSection}
               {floorSection}

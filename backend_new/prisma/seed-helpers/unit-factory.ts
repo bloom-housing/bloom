@@ -20,6 +20,7 @@ export const unitFactorySingle = (
     otherFields?: Prisma.UnitsCreateWithoutListingsInput;
   },
 ): Prisma.UnitsCreateWithoutListingsInput => {
+  const bedrooms = unitType.numBedrooms || randomInt(6);
   return {
     amiChart: optionalParams?.amiChart
       ? { connect: { id: optionalParams.amiChart.id } }
@@ -33,7 +34,9 @@ export const unitFactorySingle = (
       ? (Math.ceil((Math.random() * 100) / 10) * 10).toString() // get an integer divisible by 10
       : undefined,
     numBathrooms: randomInt(4),
-    numBedrooms: unitType.numBedrooms || randomInt(6),
+    numBedrooms: bedrooms,
+    monthlyIncomeMin: randomInt(3500).toString(),
+    monthlyRent: (randomInt(2500) * (bedrooms || 1)).toString(),
     unitRentTypes: optionalParams?.unitRentTypeId
       ? { connect: { id: optionalParams?.unitRentTypeId } }
       : {

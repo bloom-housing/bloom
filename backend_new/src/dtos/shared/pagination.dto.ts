@@ -100,13 +100,13 @@ export class PaginationAllowsAllQueryParams {
     default: 10,
   })
   @IsNumberOrAll({
-    message: 'Limit must be a number or "All"',
+    message: 'Limit must be a number or "all"',
     groups: [ValidationsGroupsEnum.default],
   })
   @Transform(
     (value: TransformFnParams) => {
       if (value?.value === 'all') {
-        return value;
+        return value.value;
       }
       return value?.value ? parseInt(value.value) : 10;
     },

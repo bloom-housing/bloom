@@ -187,6 +187,23 @@ export const stagingSeed = async (
             },
           },
         },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          numBathrooms: 1,
+          numBedrooms: 1,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[1].id,
+            },
+          },
+        },
       ],
       multiselectQuestions: [multiselectQuestion1, multiselectQuestion2],
       applications: [applicationFactory(), applicationFactory()],
@@ -275,11 +292,16 @@ export const stagingSeed = async (
           numBedrooms: 2,
           number: '',
           amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
         },
         {
           amiPercentage: '30',
           annualIncomeMin: null,
-          monthlyIncomeMin: '1985',
+          monthlyIncomeMin: '2020',
           floor: 2,
           maxOccupancy: 5,
           minOccupancy: 2,
@@ -288,6 +310,11 @@ export const stagingSeed = async (
           numBedrooms: 2,
           number: '',
           amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
         },
         {
           amiPercentage: '30',
@@ -300,6 +327,11 @@ export const stagingSeed = async (
           numBathrooms: 2,
           numBedrooms: 2,
           amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
         },
       ],
       multiselectQuestions: [multiselectQuestion1],
