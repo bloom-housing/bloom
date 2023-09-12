@@ -49,14 +49,16 @@ const ListingFormActions = ({
   const { profile, listingsService } = useContext(AuthContext)
   const router = useRouter()
 
-  const listingApprovalPermissions = profile?.jurisdictions?.find(
-    (juris) => juris.id === listing?.jurisdiction?.id
+  // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
+  const listingApprovalPermissions = (profile?.jurisdictions?.length === 1
+    ? profile?.jurisdictions[0]
+    : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdiction?.id)
   )?.listingApprovalPermissions
 
   const isListingApprover =
     profile?.roles.isAdmin ||
     (profile?.roles.isJurisdictionalAdmin &&
-      listingApprovalPermissions.includes(
+      listingApprovalPermissions?.includes(
         EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin
       ))
 
