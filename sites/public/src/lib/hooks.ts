@@ -7,11 +7,10 @@ import {
   EnumListingFilterParamsComparison,
   EnumListingFilterParamsStatus,
   Jurisdiction,
-  Listing,
   ListingFilterParams,
-  OrderByFieldsEnum,
 } from "@bloom-housing/backend-core/types"
 import {
+  Listing,
   ListingOrderByKeys,
   OrderByEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
