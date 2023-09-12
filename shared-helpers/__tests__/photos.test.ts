@@ -1,6 +1,6 @@
-import { Listing } from "@bloom-housing/backend-core/types"
 import { cleanup } from "@testing-library/react"
 import { cloudinaryUrlFromId, imageUrlFromListing } from "../src/utilities/photos"
+import { Listing, ListingsStatusEnum } from "../src/types/backend-swagger"
 
 afterEach(cleanup)
 
@@ -27,16 +27,21 @@ describe("photos helper", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 
     const testListing = {
-      images: [
+      id: "id123",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: "listing with images",
+      status: ListingsStatusEnum.active,
+      listingImages: [
         {
           ordinal: 0,
-          image: {
+          assets: {
             fileId: "1234",
             label: "cloudinaryBuilding",
           },
         },
       ],
-    } as Listing
+    } as unknown as Listing
 
     expect(imageUrlFromListing(testListing)[0]).toBe(
       `https://res.cloudinary.com/exygy/image/upload/w_400,c_limit,q_65/1234.jpg`

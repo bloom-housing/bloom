@@ -2,10 +2,10 @@ import React from "react"
 import { cleanup } from "@testing-library/react"
 import { occupancyTable, getOccupancyDescription } from "../src/views/occupancyFormatting"
 import { t } from "@bloom-housing/ui-components"
-import { Listing, UnitsSummarized, UnitType } from "@bloom-housing/backend-core/types"
+import { Listing, UnitType, UnitsSummarized } from "../src/types/backend-swagger"
 
 const testListing: Listing = {} as Listing
-testListing.unitsSummarized = {
+const unitsSummarized = {
   unitTypes: [
     {
       name: "threeBdrm",
@@ -22,7 +22,7 @@ testListing.unitsSummarized = {
   ],
   byUnitType: [
     {
-      unitType: {
+      unitTypes: {
         name: "threeBdrm",
         numBedrooms: 3,
       },
@@ -49,7 +49,7 @@ testListing.unitsSummarized = {
       },
     },
     {
-      unitType: {
+      unitTypes: {
         name: "twoBdrm",
         numBedrooms: 2,
       },
@@ -76,7 +76,7 @@ testListing.unitsSummarized = {
       },
     },
     {
-      unitType: {
+      unitTypes: {
         name: "SRO",
         numBedrooms: 1,
       },
@@ -103,7 +103,8 @@ testListing.unitsSummarized = {
       },
     },
   ],
-} as UnitsSummarized
+} as unknown as UnitsSummarized
+testListing.unitsSummarized = unitsSummarized
 
 afterEach(cleanup)
 
@@ -129,26 +130,32 @@ describe("occupancy formatting helper", () => {
   })
   it("properly creates occupany description for no SRO", () => {
     const testListing2 = testListing
-    testListing2.unitsSummarized.unitTypes = [
-      {
-        name: "threeBdrm",
-        numBedrooms: 3,
-      },
-      {
-        name: "twoBdrm",
-        numBedrooms: 2,
-      },
-    ] as UnitType[]
+    testListing2.unitsSummarized = {
+      ...unitsSummarized,
+      unitTypes: [
+        {
+          name: "threeBdrm",
+          numBedrooms: 3,
+        },
+        {
+          name: "twoBdrm",
+          numBedrooms: 2,
+        },
+      ] as UnitType[],
+    }
     expect(getOccupancyDescription(testListing2)).toBe(t("listings.occupancyDescriptionNoSro"))
   })
   it("properly creates occupany description for all SRO", () => {
     const testListing3 = testListing
-    testListing3.unitsSummarized.unitTypes = [
-      {
-        name: "SRO",
-        numBedrooms: 1,
-      },
-    ] as UnitType[]
+    testListing3.unitsSummarized = {
+      ...unitsSummarized,
+      unitTypes: [
+        {
+          name: "SRO",
+          numBedrooms: 1,
+        },
+      ] as UnitType[],
+    }
     expect(getOccupancyDescription(testListing3)).toBe(t("listings.occupancyDescriptionAllSro"))
   })
 })
