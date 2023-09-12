@@ -8,8 +8,8 @@ import {
   ApplicationMultiselectQuestionOption,
   ApplicationSection,
   InputType,
-  Listing,
 } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -396,7 +396,8 @@ const FormSummaryDetails = ({
             t("t.programs"),
             application.programs.filter((item) => item.claimed == true).length == 0
               ? `${t("application.preferences.general.title", {
-                  county: listing?.countyCode,
+                  // TODO: figure out county code
+                  // county: listing?.countyCode,
                 })} ${t("application.preferences.general.preamble")}`
               : null
           )}
@@ -429,7 +430,8 @@ const FormSummaryDetails = ({
             t("t.preferences"),
             application.preferences.filter((item) => item.claimed == true).length == 0
               ? `${t("application.preferences.general.title", {
-                  county: listing?.countyCode,
+                  // TODO: figure out county code
+                  // county: listing?.countyCode,
                 })} ${t("application.preferences.general.preamble")}`
               : null,
             "border-b"

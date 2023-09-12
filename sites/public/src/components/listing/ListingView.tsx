@@ -33,7 +33,6 @@ import {
   getOccupancyDescription,
   imageUrlFromListing,
   occupancyTable,
-  pdfUrlFromListingEvents,
   getTimeRangeString,
   getCurrencyRange,
   getPostmarkString,
@@ -45,7 +44,6 @@ import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"
 import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
-import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
 import {
   ApplicationAddressTypeEnum,
@@ -214,9 +212,9 @@ export const ListingView = (props: ListingProps) => {
     }
   }
 
-  let openHouseEvents: EventType[] | null = null
-  let publicLottery: ListingEventCreate | null = null
-  let lotteryResults: ListingEventCreate | null = null
+  const openHouseEvents: EventType[] | null = null
+  const publicLottery: ListingEventCreate | null = null
+  const lotteryResults: ListingEventCreate | null = null
   if (Array.isArray(listing.listingEvents)) {
     // TODO: find out what is going on with events
     // listing.listingEvents.forEach((event) => {

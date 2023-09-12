@@ -331,9 +331,10 @@ const ApplicationMember = () => {
               <div className="form-card__group border-b">
                 <fieldset>
                   <legend className="text__caps-spaced">
-                    {t("application.household.member.workInRegion", {
+                    {/* TODO: what to do with county code? */}
+                    {/* {t("application.household.member.workInRegion", {
                       county: listing?.countyCode,
-                    })}
+                    })} */}
                   </legend>
                   <FieldGroup
                     name="workInRegion"
