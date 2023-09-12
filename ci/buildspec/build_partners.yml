@@ -33,8 +33,9 @@ phases:
         --build-arg "IDLE_TIMEOUT=${IDLE_TIMEOUT}"
         --build-arg "LANGUAGES=${LANGUAGES}"
         --build-arg "MAPBOX_TOKEN=${MAPBOX_TOKEN}"
+        --build-arg "FEATURE_LISTINGS_APPROVAL=${FEATURE_LISTINGS_APPROVAL}"
         -t sites/partners:test
-      
+
       # Run tests
       - docker run sites/partners:test
 
@@ -50,8 +51,9 @@ phases:
         --build-arg "IDLE_TIMEOUT=${IDLE_TIMEOUT}"
         --build-arg "LANGUAGES=${LANGUAGES}"
         --build-arg "MAPBOX_TOKEN=${MAPBOX_TOKEN}"
+        --build-arg "FEATURE_LISTINGS_APPROVAL=${FEATURE_LISTINGS_APPROVAL}"
         -t sites/partners:run-candidate
-      
+
       # Tag the run image
       - docker tag sites/partners:run-candidate "${ECR_REPO}/partners:run-${CODEBUILD_RESOLVED_SOURCE_VERSION:0:8}"
 
