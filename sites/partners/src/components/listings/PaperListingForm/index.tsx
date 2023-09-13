@@ -55,6 +55,7 @@ import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -79,14 +80,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing, ApplicationSection.preferences)?.map((listingPref) => {
-      return { ...listingPref?.multiselectQuestion }
-    }) ?? []
+    listingSectionQuestions(listing as unknown as Listing, ApplicationSection.preferences)?.map(
+      (listingPref) => {
+        return { ...listingPref?.multiselectQuestions } as unknown as MultiselectQuestion
+      }
+    ) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing, ApplicationSection.programs)?.map((listingProg) => {
-      return { ...listingProg?.multiselectQuestion }
-    }) ?? []
+    listingSectionQuestions(listing as unknown as Listing, ApplicationSection.programs)?.map(
+      (listingProg) => {
+        return { ...listingProg?.multiselectQuestions } as unknown as MultiselectQuestion
+      }
+    ) ?? []
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({

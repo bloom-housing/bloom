@@ -3,6 +3,7 @@ import { t, GridSection, MinimalTable, ViewItem } from "@bloom-housing/ui-compon
 import { ListingContext } from "../../ListingContext"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailPrograms = () => {
   const listing = useContext(ListingContext)
@@ -15,12 +16,12 @@ const DetailPrograms = () => {
 
   const programsTableData = useMemo(
     () =>
-      listingSectionQuestions(listing, ApplicationSection.programs)
+      listingSectionQuestions(listing as unknown as Listing, ApplicationSection.programs)
         ?.sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
         .map((program, index) => ({
           order: { content: index + 1 },
-          name: { content: program?.multiselectQuestion?.text },
-          description: { content: program?.multiselectQuestion?.description },
+          name: { content: program?.multiselectQuestions?.text },
+          description: { content: program?.multiselectQuestions?.description },
         })),
     [listing]
   )

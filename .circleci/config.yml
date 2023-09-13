@@ -164,6 +164,7 @@ workflows:
           name: "cypress-public"
           requires:
             - setup
+            - setup-with-new-db
           executor: cypress-node
           working_directory: sites/public
           yarn: true

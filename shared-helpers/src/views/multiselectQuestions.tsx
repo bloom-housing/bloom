@@ -2,6 +2,7 @@ import * as React from "react"
 import {
   InputType,
   MultiselectOption,
+  MultiselectQuestion as BackendCoreMultiSelectQuestion,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
   ApplicationSection,
@@ -281,7 +282,7 @@ export const getCheckboxOption = (
 
 export const mapRadiosToApi = (
   data: { [name: string]: string },
-  question: MultiselectQuestion
+  question: MultiselectQuestion | BackendCoreMultiSelectQuestion
 ): ApplicationMultiselectQuestion => {
   const [key, value] = Object.entries(data)[0]
   const options: ApplicationMultiselectQuestionOption[] = []
@@ -314,7 +315,7 @@ export const mapRadiosToApi = (
 export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
-  question: MultiselectQuestion,
+  question: MultiselectQuestion | BackendCoreMultiSelectQuestion,
   applicationSection: ApplicationSection
 ): ApplicationMultiselectQuestion => {
   const data = formData["application"][applicationSection][question.text.replace(/'/g, "")]
