@@ -286,7 +286,7 @@ export class ListingsService {
       .leftJoin("user.roles", "userRoles")
       .leftJoin("user.jurisdictions", "jurisdictions")
       .orWhere(admin)
-    console.log(userRoles)
+
     if (userRoles.includes(UserRoleEnum.admin)) userQueryBuilder = userQueryBuilder.where(admin)
     if (userRoles.includes(UserRoleEnum.jurisdictionAdmin)) {
       console.log("oink")
@@ -325,7 +325,6 @@ export class ListingsService {
         params.listingInfo.id,
         params.jurisId
       )
-      console.log(userInfo)
       await this.emailService.requestApproval(
         params.user,
         { id: params.listingInfo.id, name: params.listingInfo.name },
