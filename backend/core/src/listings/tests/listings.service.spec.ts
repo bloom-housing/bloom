@@ -109,6 +109,7 @@ const mockQueryBuilder = {
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
+  orWhere: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
@@ -132,10 +133,14 @@ const mockListingsRepo = {
 const mockUserRepo = {
   findOne: jest.fn(),
   save: jest.fn(),
-  createQueryBuilder: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   findByEmail: jest.fn(),
   findByResetToken: jest.fn(),
 }
+
+const requestApprovalMock = jest.fn()
+const changesRequestedMock = jest.fn()
+const listingApprovedMock = jest.fn()
 
 const user = new User()
 user.firstName = "Test"
@@ -184,9 +189,9 @@ describe("ListingsService", () => {
         {
           provide: EmailService,
           useValue: {
-            requestApproval: jest.fn(),
-            changesRequested: jest.fn(),
-            listingApproved: jest.fn(),
+            requestApproval: requestApprovalMock,
+            changesRequested: changesRequestedMock,
+            listingApproved: listingApprovedMock,
           },
         },
         {
@@ -199,7 +204,6 @@ describe("ListingsService", () => {
           provide: ConfigService,
           useValue: { get: jest.fn() },
         },
-        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile()
 
@@ -464,13 +468,7 @@ describe("ListingsService", () => {
   })
   describe("ListingsService.listingApprovalNotify", () => {
     it("request approval email", async () => {
-      // jest
-      //   .spyOn(service, "createQueryBuilder")
-      //   .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
-      // jest
-      //   .spyOn(service, "createQueryBuilder")
-      //   .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
-
+      jest.spyOn(service, "getUserEmailInfo").mockResolvedValueOnce({ emails: ["admin@email.com"] })
       await service.listingApprovalNotify({
         user,
         listingInfo: { id: "id", name: "name" },
@@ -478,62 +476,61 @@ describe("ListingsService", () => {
         approvingRoles: [UserRoleEnum.admin],
       })
 
-      expect(mockInnerQueryBuilder.where).toHaveBeenCalledTimes(1)
-      expect(mockInnerQueryBuilder.orWhere).toHaveBeenCalledTimes(0)
+      expect(requestApprovalMock).toBeCalledWith(
+        user,
+        { id: "id", name: "name" },
+        ["admin@email.com"],
+        undefined
+      )
     })
-    // it("request changes email", async () => {
-    //   // jest
-    //   //   .spyOn(service, "createQueryBuilder")
-    //   //   .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
-    //   // jest
-    //   //   .spyOn(service, "createQueryBuilder")
-    //   //   .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
+    it("changes requested email", async () => {
+      jest
+        .spyOn(service, "getUserEmailInfo")
+        .mockResolvedValueOnce({ emails: ["jurisAdmin@email.com", "partner@email.com"] })
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.changesRequested,
+        approvingRoles: [UserRoleEnum.admin],
+      })
 
-    //   await service.listingApprovalNotify({
-    //     user,
-    //     listingInfo: { id: "id", name: "name" },
-    //     status: ListingStatus.changesRequested,
-    //     approvingRoles: [UserRoleEnum.admin],
-    //   })
+      expect(changesRequestedMock).toBeCalledWith(
+        user,
+        { id: "id", name: "name" },
+        ["jurisAdmin@email.com", "partner@email.com"],
+        undefined
+      )
+    })
+    it("listing approved email", async () => {
+      jest.spyOn(service, "getUserEmailInfo").mockResolvedValueOnce({
+        emails: ["jurisAdmin@email.com", "partner@email.com"],
+        publicUrl: "public.housing.gov",
+      })
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.active,
+        previousStatus: ListingStatus.pendingReview,
+        approvingRoles: [UserRoleEnum.admin],
+      })
 
-    //   expect(mockInnerQueryBuilder.where).toHaveBeenCalledTimes(1)
-    //   expect(mockInnerQueryBuilder.orWhere).toHaveBeenCalledTimes(1)
-    // })
-    // it("new listing published email", async () => {
-    //   // jest
-    //   //   .spyOn(service, "createQueryBuilder")
-    //   //   .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
-    //   // jest
-    //   //   .spyOn(service, "createQueryBuilder")
-    //   //   .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
+      expect(listingApprovedMock).toBeCalledWith(
+        user,
+        { id: "id", name: "name" },
+        ["jurisAdmin@email.com", "partner@email.com"],
+        "public.housing.gov"
+      )
+    })
+    it("active listing not requiring email", async () => {
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.active,
+        previousStatus: ListingStatus.active,
+        approvingRoles: [UserRoleEnum.admin],
+      })
 
-    //   await service.listingApprovalNotify({
-    //     user,
-    //     listingInfo: { id: "id", name: "name" },
-    //     status: ListingStatus.changesRequested,
-    //     approvingRoles: [UserRoleEnum.admin],
-    //   })
-
-    //   expect(mockInnerQueryBuilder.where).toHaveBeenCalledTimes(1)
-    //   expect(mockInnerQueryBuilder.orWhere).toHaveBeenCalledTimes(1)
-    // })
-    // it("active listing no email", async () => {
-    //   // jest
-    //   //   .spyOn(service, "createQueryBuilder")
-    //   //   .mockReturnValueOnce((mockInnerQueryBuilder as unknown) as ListingsQueryBuilder)
-    //   // jest
-    //   //   .spyOn(service, "createQueryBuilder")
-    //   //   .mockReturnValueOnce((mockQueryBuilder as unknown) as ListingsQueryBuilder)
-
-    //   await service.listingApprovalNotify({
-    //     user,
-    //     listingInfo: { id: "id", name: "name" },
-    //     status: ListingStatus.changesRequested,
-    //     approvingRoles: [UserRoleEnum.admin],
-    //   })
-
-    //   expect(mockInnerQueryBuilder.where).toHaveBeenCalledTimes(1)
-    //   expect(mockInnerQueryBuilder.orWhere).toHaveBeenCalledTimes(1)
-    // })
+      expect(listingApprovedMock).toBeCalledTimes(0)
+    })
   })
 })

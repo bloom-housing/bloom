@@ -285,14 +285,10 @@ export class ListingsService {
       .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
       .leftJoin("user.roles", "userRoles")
       .leftJoin("user.jurisdictions", "jurisdictions")
-      .orWhere(admin)
 
     if (userRoles.includes(UserRoleEnum.admin)) userQueryBuilder = userQueryBuilder.where(admin)
     if (userRoles.includes(UserRoleEnum.jurisdictionAdmin)) {
-      console.log("oink")
-      console.log(userQueryBuilder.getQueryAndParameters())
       userQueryBuilder = userQueryBuilder.orWhere(jurisdictionAdmin)
-      console.log(userQueryBuilder.getQueryAndParameters())
     }
     if (userRoles.includes(UserRoleEnum.partner)) userQueryBuilder = userQueryBuilder.where(partner)
 
