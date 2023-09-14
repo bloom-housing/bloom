@@ -31,6 +31,8 @@ export interface ApplicationsProps {
   applicationsOpen: boolean
   /** The date applications open */
   applicationsOpenDate?: string
+  /** The name of the listing */
+  listingName: string
   /** The URL for an online applications */
   onlineApplicationURL?: string
   /** Any number of paper application objects, including their URL and language */
@@ -107,30 +109,17 @@ const GetApplication = (props: ApplicationsProps) => {
           <div className="text-serif-xl mb-6">
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
-          {props.paperApplications.length === 1 ? (
-            <Button
-              size={AppearanceSizeType.small}
-              onClick={async () => {
-                await downloadExternalPDF(props.paperApplications[0].fileURL, "Housing Application")
-              }}
-              styleType={AppearanceStyleType.primary}
-            >
-              {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-            </Button>
-          ) : (
-            <Button
-              styleType={
-                !props.preview && props.onlineApplicationURL
-                  ? AppearanceStyleType.primary
-                  : undefined
-              }
-              className="w-full mb-2"
-              onClick={() => setShowDownloadModal(true)}
-              disabled={props.preview}
-            >
-              {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-            </Button>
-          )}
+          <Button
+            onClick={async () => {
+              props.paperApplications.length === 1
+                ? await downloadExternalPDF(props.paperApplications[0].fileURL, props.listingName)
+                : setShowDownloadModal(true)
+            }}
+            className={"w-full mb-2"}
+            styleType={AppearanceStyleType.primary}
+          >
+            {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
+          </Button>
         </>
       )}
       {props.applicationPickUpAddress && (
@@ -169,7 +158,7 @@ const GetApplication = (props: ApplicationsProps) => {
           <Button
             size={AppearanceSizeType.small}
             onClick={async () => {
-              await downloadExternalPDF(paperApplicationURL, "name")
+              await downloadExternalPDF(paperApplicationURL, props.listingName)
               setShowDownloadModal(false)
             }}
             styleType={AppearanceStyleType.primary}
