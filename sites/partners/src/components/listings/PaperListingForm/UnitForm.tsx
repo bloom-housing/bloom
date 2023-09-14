@@ -57,7 +57,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, setValue, control, reset } = useForm()
+  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors } = useForm()
 
   const numberOccupancyOptions = 11
 
@@ -271,7 +271,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     setLoading(true)
     const data = getValues()
     const validation = await trigger()
-    if (!validation) return
+    if (!validation) {
+      setLoading(false)
+      return
+    }
 
     const formData = formatFormData(data)
 
@@ -400,6 +403,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 error={fieldHasError(errors?.unitType)}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
+                inputProps={{
+                  onChange: () => {
+                    clearErrors("unitType.id")
+                  },
+                }}
               />
             </FieldValue>
           </GridCell>
@@ -530,6 +538,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 inputProps={{
                   onChange: () => {
                     setIsAmiPercentageDirty(true)
+                    clearErrors("amiPercentage")
                   },
                 }}
                 error={fieldHasError(errors?.amiPercentage)}
