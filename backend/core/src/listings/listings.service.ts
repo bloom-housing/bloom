@@ -120,15 +120,14 @@ export class ListingsService {
           where: { id: listing.jurisdiction.id },
         })
       )?.listingApprovalPermissions
-      console.log(listingApprovalPermissions)
-
-      await this.listingApprovalNotify({
-        user,
-        listingInfo: { id: listing.id, name: listing.name },
-        status: listing.status,
-        approvingRoles: listingApprovalPermissions,
-        jurisId: listing.jurisdiction.id,
-      })
+      listingApprovalPermissions &&
+        (await this.listingApprovalNotify({
+          user,
+          listingInfo: { id: listing.id, name: listing.name },
+          status: listing.status,
+          approvingRoles: listingApprovalPermissions,
+          jurisId: listing.jurisdiction.id,
+        }))
     }
     return await listing.save()
   }
