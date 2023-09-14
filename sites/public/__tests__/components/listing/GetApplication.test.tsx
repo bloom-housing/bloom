@@ -56,6 +56,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingName={"Listing name"}
       />
     )
     expect(queryByTestId("get-application-section")).toBeNull()
