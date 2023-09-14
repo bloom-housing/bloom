@@ -18,6 +18,7 @@
     "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "test:unit": "jest -w 1",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
+    "test:backend:core:dbsetup": "cd ../../ && yarn test:backend:core:dbsetup",
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:new-backend": "cd ../../backend_new && yarn start:dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\"  --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn dev",
