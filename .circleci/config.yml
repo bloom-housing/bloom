@@ -170,7 +170,7 @@ workflows:
           yarn: true
           install-command: yarn install && cd ../../backend_new && yarn install && cd ..
           build: |
-            yarn test:backend:core:dbsetup
+            pwd && yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
           store_artifacts: true
