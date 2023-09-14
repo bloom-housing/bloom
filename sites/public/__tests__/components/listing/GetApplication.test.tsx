@@ -26,6 +26,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingName={"Listing name"}
       />
     )
     expect(getByText("How to Apply")).toBeTruthy()
@@ -80,6 +81,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={true}
+        listingName={"Listing name"}
       />
     )
     expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
@@ -106,6 +108,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingName={"Listing name"}
       />
     )
     expect(queryByText("Apply Online")).toBe(null)
