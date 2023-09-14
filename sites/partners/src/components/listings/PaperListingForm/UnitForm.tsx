@@ -532,6 +532,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                     setIsAmiPercentageDirty(true)
                   },
                 }}
+                error={fieldHasError(errors?.amiPercentage)}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: !!amiChartID }}
+                disabled={!amiChartID}
               />
             </FieldValue>
           </GridCell>
