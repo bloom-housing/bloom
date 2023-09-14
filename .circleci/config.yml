@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.26.0
+  cypress: cypress-io/cypress@1.29.0
 
 executors:
   standard-node:
@@ -168,6 +168,7 @@ workflows:
           executor: cypress-node
           working_directory: sites/public
           yarn: true
+          install-command: yarn install && cd backend_new && yarn install
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
