@@ -64,17 +64,37 @@ describe("Listings approval feature", () => {
         subjectType: "drag-n-drop",
       }
     )
+
+    cy.intercept("/api/adapter/upload", {
+      body: {
+        id: "123",
+        url:
+          "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg",
+      },
+    })
+
     cy.getByTestId("drawer-photos-table")
       .find("img")
       .should("have.attr", "src")
-      .should("include", "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
+      )
     cy.getByTestId("listing-photo-uploaded").contains("Save").click()
+    cy.getByTestId("photos-table")
+      .find("img")
+      .should("have.attr", "src")
+      .should(
+        "include",
+        "https://assets.website-files.com/5fbfdd121e108ea418ede824/5fbfdea9a7287d45a63d821b_Exygy%20Logo.svg"
+      )
 
     cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
     cy.getByID("neighborhood").type(listing["neighborhood"])
     cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
     cy.getByID("buildingAddress.state").select(listing["buildingAddress.state"])
     cy.getByID("buildingAddress.zipCode").type(listing["buildingAddress.zipCode"])
+    cy.getByID("buildingAddress.county").select(listing["buildingAddress.county"])
 
     cy.getByID("addUnitsButton").contains("Add Unit").click()
     cy.getByID("number").type(listing["number"])
@@ -86,9 +106,7 @@ describe("Listings approval feature", () => {
     cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
     cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
     cy.getByID("digitalApplicationChoiceYes").check()
-    cy.getByID("commonDigitalApplicationChoiceYes").check()
     cy.getByID("paperApplicationNo").check()
-    cy.getByID("referralOpportunityNo").check()
 
     cy.getByID("submitButton").contains("Submit").click()
 

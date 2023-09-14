@@ -4,6 +4,7 @@
   "buildingAddress.street": "548 Market St. #59930",
   "neighborhood": "Basic Test Neighborhood",
   "buildingAddress.city": "San Francisco",
+  "buildingAddress.county": "Contra Costa",
   "buildingAddress.state": "California",
   "buildingAddress.zipCode": "94104",
   "number": "2",
