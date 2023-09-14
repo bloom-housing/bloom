@@ -16,6 +16,7 @@ import { PaperApplicationsModule } from "../../src/paper-applications/paper-appl
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 import { Listing } from "../../src/listings/entities/listing.entity"
+import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { MultiselectQuestion } from "../../src//multiselect-question/entities/multiselect-question.entity"
@@ -449,6 +450,63 @@ describe("Listings", () => {
 
     expect(listingsSearchResponse.body.items.length).toBe(1)
     expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
+  })
+  it("should update listing status and notify appropriate users", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
+    // ensures change in status that requires notifying to partners
+    const newStatus =
+      listing.status === ListingStatus.changesRequested
+        ? ListingStatus.active
+        : ListingStatus.changesRequested
+    listing.status = newStatus
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+    expect(listingResponse.body.status).toBe(newStatus)
+  })
+
+  it("should create pending review listing and notify appropriate users", async () => {
+    const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+    const newListingCreateDto = makeTestListing(anyJurisdiction.id)
+    const newListingName = "Brand New Name"
+    const newStatus = ListingStatus.pendingReview
+    newListingCreateDto.name = newListingName
+    newListingCreateDto.status = newStatus
+    newListingCreateDto.units = [
+      {
+        listing: newListingName,
+        amiChart: null,
+        amiPercentage: "30",
+        annualIncomeMax: "45600",
+        annualIncomeMin: "36168",
+        bmrProgramChart: false,
+        floor: 1,
+        maxOccupancy: 3,
+        minOccupancy: 1,
+        monthlyIncomeMin: "3014",
+        monthlyRent: "1219",
+        monthlyRentAsPercentOfIncome: null,
+        numBathrooms: 0,
+        numBedrooms: 1,
+        number: null,
+        sqFeet: "635",
+      },
+    ]
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .post(`/listings`)
+      .send(newListingCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+
+    expect(listingResponse.body.name).toBe(newListingName)
+    expect(listingResponse.body.status).toBe(newStatus)
   })
 
   afterEach(() => {
