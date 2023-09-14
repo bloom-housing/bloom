@@ -114,11 +114,14 @@ export class ListingsService {
     })
     // only listings approval state possible from creation
     if (listing.status === ListingStatus.pendingReview) {
+      console.log(listing.jurisdiction.id)
       const listingApprovalPermissions = (
         await this.jurisdictionsService.findOne({
           where: { id: listing.jurisdiction.id },
         })
       )?.listingApprovalPermissions
+      console.log(listingApprovalPermissions)
+
       await this.listingApprovalNotify({
         user,
         listingInfo: { id: listing.id, name: listing.name },

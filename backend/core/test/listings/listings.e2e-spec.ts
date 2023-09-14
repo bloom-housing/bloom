@@ -474,7 +474,9 @@ describe("Listings", () => {
 
   it("should create pending review listing and notify appropriate users", async () => {
     const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+    console.log(anyJurisdiction)
     const newListingCreateDto = makeTestListing(anyJurisdiction.id)
+    console.log("binky", newListingCreateDto)
     const newListingName = "Brand New Name"
     const newStatus = ListingStatus.pendingReview
     newListingCreateDto.name = newListingName
