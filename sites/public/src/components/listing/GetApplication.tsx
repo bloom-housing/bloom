@@ -14,7 +14,6 @@ import {
   AppearanceSizeType,
   Form,
   FieldGroup,
-  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { downloadExternalPDF } from "../../lib/helpers"
 
@@ -171,7 +170,6 @@ const GetApplication = (props: ApplicationsProps) => {
             size={AppearanceSizeType.small}
             onClick={async () => {
               await downloadExternalPDF(paperApplicationURL, "name")
-              setSiteAlertMessage(t("listings.apply.downloadApplicationSuccess"), "success")
               setShowDownloadModal(false)
             }}
             styleType={AppearanceStyleType.primary}
