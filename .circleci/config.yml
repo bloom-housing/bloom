@@ -168,7 +168,7 @@ workflows:
           executor: cypress-node
           working_directory: sites/public
           yarn: true
-          install-command: yarn install && cd backend_new && yarn install
+          install-command: yarn install && cd ../../backend_new && yarn install
           build: |
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
