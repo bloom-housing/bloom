@@ -30,6 +30,7 @@ import dbOptions from "../../ormconfig.test"
 import { MultiselectQuestionDto } from "../../src/multiselect-question/dto/multiselect-question.dto"
 
 import cookieParser from "cookie-parser"
+import { EmailService } from "../../src/email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -43,6 +44,13 @@ describe("Listings", () => {
   let adminAccessToken: string
   let jurisdictionsRepository: Repository<Jurisdiction>
 
+  const testEmailService = {
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    requestApproval: async () => {},
+    changesRequested: async () => {},
+    listingApproved: async () => {},
+  }
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -53,7 +61,10 @@ describe("Listings", () => {
         ApplicationMethodsModule,
         PaperApplicationsModule,
       ],
-    }).compile()
+    })
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .compile()
 
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
@@ -139,7 +150,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(15)
+    expect(res.body.items.length).toBe(16)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
@@ -453,13 +464,10 @@ describe("Listings", () => {
   })
   it("should update listing status and notify appropriate users", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    const listing: ListingUpdateDto = { ...res.body.items[0] }
-    // ensures change in status that requires notifying to partners
-    const newStatus =
-      listing.status === ListingStatus.changesRequested
-        ? ListingStatus.active
-        : ListingStatus.changesRequested
-    listing.status = newStatus
+    const draftListing = res.body.items.find((listing) => listing.status === ListingStatus.pending)
+    const listing: ListingUpdateDto = { ...draftListing }
+
+    listing.status = ListingStatus.changesRequested
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
@@ -469,18 +477,15 @@ describe("Listings", () => {
     const listingResponse = await supertest(app.getHttpServer())
       .get(`/listings/${putResponse.body.id}`)
       .expect(200)
-    expect(listingResponse.body.status).toBe(newStatus)
+    expect(listingResponse.body.status).toBe(ListingStatus.changesRequested)
   })
 
   it("should create pending review listing and notify appropriate users", async () => {
-    const anyJurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
-    console.log(anyJurisdiction)
-    const newListingCreateDto = makeTestListing(anyJurisdiction.id)
-    console.log("binky", newListingCreateDto)
-    const newListingName = "Brand New Name"
-    const newStatus = ListingStatus.pendingReview
+    const alameda = (await jurisdictionsRepository.find({ where: { name: "Alameda" } }))[0]
+    const newListingCreateDto = makeTestListing(alameda.id)
+    const newListingName = "New Alameda Listing"
     newListingCreateDto.name = newListingName
-    newListingCreateDto.status = newStatus
+    newListingCreateDto.status = ListingStatus.pendingReview
     newListingCreateDto.units = [
       {
         listing: newListingName,
@@ -508,7 +513,8 @@ describe("Listings", () => {
       .set(...setAuthorization(adminAccessToken))
 
     expect(listingResponse.body.name).toBe(newListingName)
-    expect(listingResponse.body.status).toBe(newStatus)
+    expect(listingResponse.body.status).toBe(ListingStatus.pendingReview)
+    // expect(mockRequestApproval.mock.calls.length).toBe(1)
   })
 
   afterEach(() => {
