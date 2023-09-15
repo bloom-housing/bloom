@@ -99,6 +99,15 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           type="number"
           prepend="$"
           readerOnly
+          className={errors[fieldName] ? "error" : ""}
+          error={errors[fieldName]}
+          errorMessage={t("errors.requiredFieldError")}
+          validation={{ required: !!amiChartID }}
+          inputProps={{
+            onChange: () => {
+              clearErrors(fieldName)
+            },
+          }}
         />
       )
       return (
@@ -180,6 +189,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   }
 
   useEffect(() => {
+    ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+      clearErrors(`maxIncomeHouseholdSize${index + 1}`)
+    })
     if (
       amiPercentage &&
       !loading &&
@@ -516,6 +528,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 options={amiChartsOptions}
                 inputProps={{
                   onChange: () => {
+                    setValue("amiPercentage", undefined)
+                    clearErrors("amiPercentage")
+                    ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+                      setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
+                    })
                     if (amiChartID && !loading && amiChartsOptions) {
                       void fetchAmiChart()
                       setIsAmiPercentageDirty(true)
