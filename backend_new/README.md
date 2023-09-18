@@ -97,6 +97,8 @@ Hopefully that makes sense, if not think of guards as customs agents, and the pa
 [NestJS passport docs](https://docs.nestjs.com/recipes/passport)
 [NestJS guards docs](https://docs.nestjs.com/guards)
 
+TODO: add to this document for permissioning guards and strategies [github issue](https://github.com/bloom-housing/bloom/issues/3445)
+
 
 # Testing
 There are 2 different kinds of tests that the backend supports: Integration tests and Unit tests.

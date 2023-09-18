@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class OptionalAuthGuard extends JwtAuthGuard {
-  handleRequest(err, user) {
+  handleRequest<User>(err, user: User) {
     // user is boolean false when not logged in
     // return undefined instead
     return user || undefined;
