@@ -103,7 +103,9 @@ describe('User Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .get(`/user/${id}`)
       .expect(404);
-    expect(res.body.message).toEqual(`user ${id} was requested but not found`);
+    expect(res.body.message).toEqual(
+      `user id: ${id} was requested but not found`,
+    );
   });
 
   it('should get user from retrieve()', async () => {
@@ -152,7 +154,7 @@ describe('User Controller Tests', () => {
       .expect(404);
 
     expect(res.body.message).toEqual(
-      `user ${randomId} was requested but not found`,
+      `user id: ${randomId} was requested but not found`,
     );
   });
 
@@ -181,7 +183,7 @@ describe('User Controller Tests', () => {
       .expect(404);
 
     expect(res.body.message).toEqual(
-      `user ${randomId} was requested but not found`,
+      `user id: ${randomId} was requested but not found`,
     );
   });
 
@@ -249,7 +251,7 @@ describe('User Controller Tests', () => {
       .expect(404);
 
     expect(res.body.message).toEqual(
-      `user ${email} was requested but not found`,
+      `user email: ${email} was requested but not found`,
     );
   });
 
@@ -317,7 +319,7 @@ describe('User Controller Tests', () => {
       .expect(404);
 
     expect(res.body.message).toEqual(
-      `user ${email} was requested but not found`,
+      `user email: ${email} was requested but not found`,
     );
   });
 

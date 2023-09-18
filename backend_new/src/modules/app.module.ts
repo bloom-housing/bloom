@@ -13,6 +13,7 @@ import { MultiselectQuestionModule } from './multiselect-question.module';
 import { ApplicationModule } from './application.module';
 import { AssetModule } from './asset.module';
 import { UserModule } from './user.module';
+import { AuthModule } from './auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './user.module';
     AssetModule,
     UserModule,
     PrismaModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -44,6 +46,7 @@ import { UserModule } from './user.module';
     AssetModule,
     UserModule,
     PrismaModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

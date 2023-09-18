@@ -1839,6 +1839,155 @@ export class UserService {
   }
 }
 
+export class AuthService {
+  /**
+   * Login
+   */
+  login(
+    params: {
+      /** requestBody */
+      body?: Login;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/login';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Logout
+   */
+  logout(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/logout';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Request mfa code
+   */
+  requestMfaCode(
+    params: {
+      /** requestBody */
+      body?: RequestMfaCode;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<RequestMfaCodeResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/request-mfa-code';
+
+      const configs: IRequestConfig = getConfigs(
+        'post',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Requests a new token given a refresh token
+   */
+  requestNewToken(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/requestNewToken';
+
+      const configs: IRequestConfig = getConfigs(
+        'get',
+        'application/json',
+        url,
+        options,
+      );
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/update-password';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Confirm email
+   */
+  confirm(
+    params: {
+      /** requestBody */
+      body?: Confirm;
+    } = {} as any,
+    options: IRequestOptions = {},
+  ): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/auth/confirm';
+
+      const configs: IRequestConfig = getConfigs(
+        'put',
+        'application/json',
+        url,
+        options,
+      );
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean;
@@ -4747,6 +4896,64 @@ export interface ConfirmationRequest {
   token: string;
 }
 
+export interface Login {
+  /**  */
+  email: string;
+
+  /**  */
+  password: string;
+
+  /**  */
+  mfaCode?: string;
+
+  /**  */
+  mfaType?: MfaType;
+}
+
+export interface RequestMfaCode {
+  /**  */
+  email: string;
+
+  /**  */
+  password: string;
+
+  /**  */
+  mfaType: MfaType;
+
+  /**  */
+  phoneNumber?: string;
+}
+
+export interface RequestMfaCodeResponse {
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  email?: string;
+
+  /**  */
+  phoneNumberVerified?: boolean;
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  token: string;
+}
+
+export interface Confirm {
+  /**  */
+  token: string;
+
+  /**  */
+  password?: string;
+}
+
 export enum ListingViews {
   'fundamentals' = 'fundamentals',
   'base' = 'base',
@@ -4903,3 +5110,8 @@ export enum YesNoEnum {
   'no' = 'no',
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
+
+export enum MfaType {
+  'sms' = 'sms',
+  'email' = 'email',
+}

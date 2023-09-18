@@ -7,6 +7,11 @@ export const userFactory = async (optionalParams?: {
   firstName?: string;
   lastName?: string;
   email?: string;
+  mfaCode?: string;
+  mfaEnabled?: boolean;
+  confirmedAt?: Date;
+  phoneNumber?: string;
+  phoneNumberVerified?: boolean;
 }): Promise<Prisma.UserAccountsCreateInput> => ({
   email:
     optionalParams?.email?.toLocaleLowerCase() ||
@@ -22,4 +27,10 @@ export const userFactory = async (optionalParams?: {
       isPartner: optionalParams?.roles?.isAdmin || false,
     },
   },
+  mfaCode: optionalParams?.mfaCode || null,
+  mfaEnabled: optionalParams?.mfaEnabled || false,
+  confirmedAt: optionalParams?.confirmedAt || null,
+  mfaCodeUpdatedAt: optionalParams?.mfaEnabled ? new Date() : undefined,
+  phoneNumber: optionalParams?.phoneNumber || null,
+  phoneNumberVerified: optionalParams?.phoneNumberVerified || null,
 });

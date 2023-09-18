@@ -42,6 +42,7 @@ export const devSeeding = async (prismaClient: PrismaClient) => {
     data: await userFactory({
       roles: { isAdmin: true },
       email: 'admin@example.com',
+      confirmedAt: new Date(),
     }),
   });
   const jurisdiction = await prismaClient.jurisdictions.create({

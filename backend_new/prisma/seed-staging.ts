@@ -31,6 +31,7 @@ export const stagingSeed = async (
     data: await userFactory({
       roles: { isAdmin: true },
       email: 'admin@example.com',
+      confirmedAt: new Date(),
     }),
   });
   // create single jurisdiction
