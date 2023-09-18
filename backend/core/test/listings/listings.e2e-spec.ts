@@ -501,7 +501,7 @@ describe("Listings", () => {
           id: adminId,
         }),
         { id: listing.id, name: listing.name },
-        expect.objectContaining(["admin@example.com", "mfauser@bloom.com"]),
+        expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
         "http://localhost:3001"
       )
 
@@ -522,7 +522,7 @@ describe("Listings", () => {
           id: adminId,
         }),
         { id: listing.id, name: listing.name },
-        expect.objectContaining(["leasing-agent-2@example.com"]),
+        expect.arrayContaining(["leasing-agent-2@example.com"]),
         "http://localhost:3001"
       )
 
@@ -543,7 +543,7 @@ describe("Listings", () => {
           id: adminId,
         }),
         { id: listing.id, name: listing.name },
-        expect.objectContaining(["leasing-agent-2@example.com"]),
+        expect.arrayContaining(["leasing-agent-2@example.com"]),
         "http://localhost:3000"
       )
     })
