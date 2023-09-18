@@ -112,24 +112,23 @@ export class ListingsService {
       publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
       closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
     })
+    const saveResponse = await listing.save()
     // only listings approval state possible from creation
     if (listing.status === ListingStatus.pendingReview) {
-      console.log(listing.jurisdiction.id)
       const listingApprovalPermissions = (
         await this.jurisdictionsService.findOne({
-          where: { id: listing.jurisdiction.id },
+          where: { id: saveResponse.jurisdiction.id },
         })
       )?.listingApprovalPermissions
-
       await this.listingApprovalNotify({
         user,
-        listingInfo: { id: listing.id, name: listing.name },
+        listingInfo: { id: saveResponse.id, name: saveResponse.name },
         status: listing.status,
         approvingRoles: listingApprovalPermissions,
         jurisId: listing.jurisdiction.id,
       })
     }
-    return await listing.save()
+    return saveResponse
   }
 
   async update(listingDto: ListingUpdateDto, user: User) {
