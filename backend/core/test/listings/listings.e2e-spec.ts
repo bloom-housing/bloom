@@ -475,11 +475,13 @@ describe("Listings", () => {
       const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
       let draftListing = res.body.items.find((listing) => listing.status === ListingStatus.pending)
       if (!draftListing) {
-        const activeListing = { ...res.body.items[0] }
-        activeListing.status = ListingStatus.pending
+        const baseListing = {
+          ...res.body.items.find((listing) => listing.name === "Test: Coliseum"),
+        }
+        baseListing.status = ListingStatus.pending
         const putDraftResponse = await supertest(app.getHttpServer())
-          .put(`/listings/${activeListing.id}`)
-          .send(activeListing)
+          .put(`/listings/${baseListing.id}`)
+          .send(baseListing)
           .set(...setAuthorization(adminAccessToken))
           .expect(200)
 
