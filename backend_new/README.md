@@ -85,6 +85,20 @@ Services are housed under `src/services` and are given the extension `.services.
 
 The exported class should be in capitalized camelcase (e.g. `ListingService`).
 
+# Guards & Passport Strategies
+We currently use guards for 2 purposes. Passport guards and permissioning guards.
+
+Passport guards (jwt.guard.ts, mfa.guard.ts, and optional.guard.ts) verify that the request is from a legitimate user. JwtAuthGuard does this by verifying the incoming jwt token (off the request's cookies) matches a user. MfaAuthGuard does this by verifying the incoming log in information (email, password, mfaCode) matches a user's information. OptionalAuthGuard is used to allow requests from users not logged in through. It will still verify the user through the JwtAuthGuard if a user was logged in.
+
+Passport guards are paired with a passport strategy (jwt.strategy.ts, and mfa.strategy.ts), this is where the code to actually verify the requester lives. 
+
+Hopefully that makes sense, if not think of guards as customs agents, and the passport strategy is what the guards look for in a request to allow entry to a requester. Allowing them access the endpoint that the guard protects. 
+
+[NestJS passport docs](https://docs.nestjs.com/recipes/passport)
+[NestJS guards docs](https://docs.nestjs.com/guards)
+
+TODO: add to this document for permissioning guards and strategies [github issue](https://github.com/bloom-housing/bloom/issues/3445)
+
 
 # Testing
 There are 2 different kinds of tests that the backend supports: Integration tests and Unit tests.

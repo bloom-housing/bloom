@@ -194,7 +194,7 @@ describe('Testing user service', () => {
 
     await expect(
       async () => await service.findOne('example Id'),
-    ).rejects.toThrowError('user example Id was requested but not found');
+    ).rejects.toThrowError('user id: example Id was requested but not found');
 
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       include: {
@@ -314,7 +314,7 @@ describe('Testing user service', () => {
     await expect(
       async () => await service.findUserOrError({ email: email }, false),
     ).rejects.toThrowError(
-      'user example@email.com was requested but not found',
+      'user email: example@email.com was requested but not found',
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -548,7 +548,7 @@ describe('Testing user service', () => {
     await expect(
       async () => await service.forgotPassword({ email }),
     ).rejects.toThrowError(
-      'user email@example.com was requested but not found',
+      'user email: email@example.com was requested but not found',
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -652,7 +652,7 @@ describe('Testing user service', () => {
     await expect(
       async () => await service.resendConfirmation({ email }, true),
     ).rejects.toThrowError(
-      'user email@example.com was requested but not found',
+      'user email: email@example.com was requested but not found',
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -702,7 +702,7 @@ describe('Testing user service', () => {
     prisma.userRoles.delete = jest.fn().mockResolvedValue(null);
 
     await expect(async () => await service.delete(id)).rejects.toThrowError(
-      `user ${id} was requested but not found`,
+      `user id: ${id} was requested but not found`,
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
@@ -925,7 +925,7 @@ describe('Testing user service', () => {
           lastName: 'last name',
           jurisdictions: [{ id: randomUUID() }],
         }),
-    ).rejects.toThrowError(`user ${id} was requested but not found`);
+    ).rejects.toThrowError(`user id: ${id} was requested but not found`);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
       where: {
         id,
