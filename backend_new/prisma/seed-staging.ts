@@ -9,7 +9,10 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
-import { listingFactory } from './seed-helpers/listing-factory';
+import {
+  featuresAndUtilites,
+  listingFactory,
+} from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
@@ -704,6 +707,7 @@ export const stagingSeed = async (
         listingsApplicationPickUpAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
         reservedCommunityTypes: undefined,
+        ...featuresAndUtilites(),
         listingImages: {
           create: [
             {

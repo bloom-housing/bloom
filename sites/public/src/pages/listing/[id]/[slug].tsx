@@ -123,7 +123,7 @@ export async function getServerSideProps(context: {
   let response
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+    response = await axios.get(`${process.env.backendApiBaseNew}/listings/${context.params.id}`, {
       headers: { language: context.locale },
     })
   } catch (e) {

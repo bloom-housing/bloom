@@ -35,6 +35,8 @@ export const unitFactorySingle = (
       : undefined,
     numBathrooms: randomInt(4),
     numBedrooms: bedrooms,
+    minOccupancy: bedrooms,
+    maxOccupancy: bedrooms + 2,
     monthlyIncomeMin: randomInt(3500).toString(),
     monthlyRent: (randomInt(2500) * (bedrooms || 1)).toString(),
     unitRentTypes: optionalParams?.unitRentTypeId
