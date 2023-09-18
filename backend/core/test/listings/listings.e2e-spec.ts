@@ -472,25 +472,18 @@ describe("Listings", () => {
     it("should update listing status and notify appropriate users", async () => {
       const adminId = (await userRepository.find({ where: { email: "admin@example.com" } }))?.[0]
         ?.id
-      const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-      let draftListing = res.body.items.find((listing) => listing.status === ListingStatus.pending)
-      if (!draftListing) {
-        const baseListing = {
-          ...res.body.items.find((listing) => listing.name === "Test: Coliseum"),
-        }
-        baseListing.status = ListingStatus.pending
-        const putDraftResponse = await supertest(app.getHttpServer())
-          .put(`/listings/${baseListing.id}`)
-          .send(baseListing)
-          .set(...setAuthorization(adminAccessToken))
-          .expect(200)
-
-        const draftListingReponse = await supertest(app.getHttpServer())
-          .get(`/listings/${putDraftResponse.body.id}`)
-          .expect(200)
-        draftListing = draftListingReponse
+      const queryParams = {
+        limit: "all",
+        filter: [
+          {
+            $comparison: "=",
+            name: "Test: Draft",
+          },
+        ],
       }
-      const listing: ListingUpdateDto = { ...draftListing }
+      const query = qs.stringify(queryParams)
+      const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+      const listing: ListingUpdateDto = { ...res.body.items[0] }
       listing.status = ListingStatus.pendingReview
       const putPendingApprovalResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listing.id}`)
