@@ -5110,7 +5110,6 @@ export enum YesNoEnum {
   'no' = 'no',
 }
 export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
-
 export enum MfaType {
   'sms' = 'sms',
   'email' = 'email',
