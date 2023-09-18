@@ -113,6 +113,8 @@ export class EmailService {
     );
   }
 
+  // TODO: update this to be memoized based on jurisdiction and language
+  // https://github.com/bloom-housing/bloom/issues/3648
   private async loadTranslations(
     jurisdiction: Jurisdiction | null,
     language?: LanguagesEnum,
