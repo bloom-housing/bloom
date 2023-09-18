@@ -12,7 +12,7 @@ const DoorwayHero = (props: DoorwayHeroProps) => {
   return (
     <div className="doorway-hero" data-testid="hero-component">
       <div className="doorway-hero_outer">
-        <div className={"doorway-hero_title"}>{props.title}</div>
+        <h1 className={"doorway-hero_title"}>{props.title}</h1>
         <div className="doorway-hero_inner">
           {props?.offsetImage && props?.offsetImageAlt && (
             <img
