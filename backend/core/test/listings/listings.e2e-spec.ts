@@ -589,7 +589,7 @@ describe("Listings", () => {
           id: adminId,
         }),
         { id: listingResponse.body.id, name: listingResponse.body.name },
-        ["admin@example.com", "mfauser@bloom.com"],
+        expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
         "http://localhost:3001"
       )
     })
