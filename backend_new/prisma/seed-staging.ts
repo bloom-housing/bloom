@@ -21,6 +21,7 @@ import {
   whiteHouse,
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
+import { translationFactory } from './seed-helpers/translation-factory';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -37,6 +38,13 @@ export const stagingSeed = async (
   // create single jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
     data: jurisdictionFactory(jurisdictionName),
+  });
+  // add jurisdiction specific translations and default ones
+  await prismaClient.translations.create({
+    data: translationFactory(jurisdiction.id, jurisdiction.name),
+  });
+  await prismaClient.translations.create({
+    data: translationFactory(),
   });
   // build ami charts
   const amiChart = await prismaClient.amiChart.create({

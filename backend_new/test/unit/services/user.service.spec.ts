@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../../src/services/prisma.service';
 import { UserService } from '../../../src/services/user.service';
 import { randomUUID } from 'crypto';
@@ -6,10 +7,16 @@ import { LanguagesEnum } from '@prisma/client';
 import { verify } from 'jsonwebtoken';
 import { passwordToHash } from '../../../src/utilities/password-helpers';
 import { IdDTO } from '../../../src/dtos/shared/id.dto';
+import { EmailService } from '../../../src/services/email.service';
+import { TranslationService } from '../../../src/services/translation.service';
+import { JurisdictionService } from '../../../src/services/jurisdiction.service';
+import { GoogleTranslateService } from '../../../src/services/google-translate.service';
+import { SendGridService } from '../../../src/services/sendgrid.service';
 
 describe('Testing user service', () => {
   let service: UserService;
   let prisma: PrismaService;
+  let emailService: EmailService;
 
   const mockUser = (position: number, date: Date) => {
     return {
@@ -51,13 +58,38 @@ describe('Testing user service', () => {
     return toReturn;
   };
 
+  const SendGridServiceMock = {
+    send: jest.fn(),
+  };
+  const googleTranslateServiceMock = {
+    isConfigured: () => true,
+    fetch: jest.fn(),
+  };
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService, PrismaService],
+      providers: [
+        UserService,
+        PrismaService,
+        EmailService,
+        ConfigService,
+        SendGridService,
+        TranslationService,
+        JurisdictionService,
+        {
+          provide: SendGridService,
+          useValue: SendGridServiceMock,
+        },
+        {
+          provide: GoogleTranslateService,
+          useValue: googleTranslateServiceMock,
+        },
+      ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     prisma = module.get<PrismaService>(PrismaService);
+    emailService = module.get<EmailService>(EmailService);
   });
 
   it('should return users from list() when no params are present', async () => {
@@ -522,11 +554,18 @@ describe('Testing user service', () => {
       id,
       resetToken: 'example reset token',
     });
+    emailService.forgotPassword = jest.fn();
 
-    await service.forgotPassword({ email });
+    await service.forgotPassword({ email, appUrl: 'http://localhost:3000' });
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
       where: {
         email,
+        id: undefined,
       },
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
@@ -551,8 +590,14 @@ describe('Testing user service', () => {
       'user email: email@example.com was requested but not found',
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
       where: {
         email,
+        id: undefined,
       },
     });
 
@@ -572,11 +617,18 @@ describe('Testing user service', () => {
       email,
       confirmationToken: 'example confirmation token',
     });
+    emailService.welcome = jest.fn();
 
     await service.resendConfirmation({ email }, true);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
       where: {
         email,
+        id: undefined,
       },
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
@@ -603,10 +655,18 @@ describe('Testing user service', () => {
       confirmationToken: 'example confirmation token',
     });
 
+    emailService.invitePartnerUser = jest.fn();
+
     await service.resendConfirmation({ email }, false);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
       where: {
         email,
+        id: undefined,
       },
     });
     expect(prisma.userAccounts.update).toHaveBeenCalledWith({
@@ -636,8 +696,14 @@ describe('Testing user service', () => {
 
     await service.resendConfirmation({ email }, false);
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
       where: {
         email,
+        id: undefined,
       },
     });
     expect(prisma.userAccounts.update).not.toHaveBeenCalled();
@@ -655,8 +721,14 @@ describe('Testing user service', () => {
       'user email: email@example.com was requested but not found',
     );
     expect(prisma.userAccounts.findUnique).toHaveBeenCalledWith({
+      include: {
+        jurisdictions: true,
+        listings: true,
+        userRoles: true,
+      },
       where: {
         email,
+        id: undefined,
       },
     });
 
@@ -877,6 +949,7 @@ describe('Testing user service', () => {
     prisma.userAccounts.update = jest.fn().mockResolvedValue({
       id,
     });
+    emailService.changeEmail = jest.fn();
 
     await service.update({
       id,
@@ -909,6 +982,7 @@ describe('Testing user service', () => {
         id,
       },
     });
+    expect(emailService.changeEmail).toHaveBeenCalled();
   });
 
   it('should error when trying to update nonexistent user', async () => {
@@ -943,6 +1017,10 @@ describe('Testing user service', () => {
     prisma.userAccounts.create = jest.fn().mockResolvedValue({
       id,
     });
+    prisma.userAccounts.update = jest.fn().mockResolvedValue({
+      id,
+    });
+    emailService.invitePartnerUser = jest.fn();
     await service.create(
       {
         firstName: 'Partner User firstName',
@@ -983,6 +1061,7 @@ describe('Testing user service', () => {
         },
       },
     });
+    expect(emailService.invitePartnerUser).toHaveBeenCalledTimes(1);
   });
 
   it('should create a partner user with existing public user present', async () => {

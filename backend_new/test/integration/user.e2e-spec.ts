@@ -16,16 +16,34 @@ import { UserCreate } from '../../src/dtos/users/user-create.dto';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
+import { EmailService } from '../../src/services/email.service';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let userService: UserService;
 
+  const invitePartnerUserMock = jest.fn();
+  const testEmailService = {
+    confirmation: jest.fn(),
+    welcome: jest.fn(),
+    invitePartnerUser: invitePartnerUserMock,
+    changeEmail: jest.fn(),
+    forgotPassword: jest.fn(),
+    sendMfaCode: jest.fn(),
+  };
+
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
@@ -187,7 +205,7 @@ describe('User Controller Tests', () => {
     );
   });
 
-  it('should resend confirmation when user exists', async () => {
+  it('should resend confirmation for public when user exists', async () => {
     const userA = await prisma.userAccounts.create({
       data: await userFactory(),
     });
@@ -201,7 +219,7 @@ describe('User Controller Tests', () => {
       .expect(201);
 
     expect(res.body.success).toEqual(true);
-
+    const mockWelcome = jest.spyOn(testEmailService, 'welcome');
     const userPostResend = await prisma.userAccounts.findUnique({
       where: {
         id: userA.id,
@@ -210,6 +228,7 @@ describe('User Controller Tests', () => {
 
     expect(userPostResend.email).toBe(userA.email);
     expect(userPostResend.confirmationToken).not.toBeNull();
+    expect(mockWelcome.mock.calls.length).toBe(1);
   });
 
   it('should succeed when trying to resend confirmation but not update record when user is already confirmed', async () => {
@@ -220,6 +239,7 @@ describe('User Controller Tests', () => {
       },
     });
 
+    const mockWelcome = jest.spyOn(testEmailService, 'welcome');
     const res = await request(app.getHttpServer())
       .post(`/user/resend-confirmation/`)
       .send({
@@ -238,10 +258,12 @@ describe('User Controller Tests', () => {
 
     expect(userPostResend.email).toBe(userA.email);
     expect(userPostResend.confirmationToken).toBeNull();
+    expect(mockWelcome.mock.calls.length).toBe(0);
   });
 
   it('should error trying to resend confirmation but no user exists', async () => {
     const email = 'test@nonexistent.com';
+    const mockWelcome = jest.spyOn(testEmailService, 'welcome');
     const res = await request(app.getHttpServer())
       .post(`/user/resend-confirmation/`)
       .send({
@@ -253,13 +275,17 @@ describe('User Controller Tests', () => {
     expect(res.body.message).toEqual(
       `user email: ${email} was requested but not found`,
     );
+    expect(mockWelcome.mock.calls.length).toBe(0);
   });
 
   it('should resend partner confirmation when user exists', async () => {
     const userA = await prisma.userAccounts.create({
       data: await userFactory(),
     });
-
+    const mockinvitePartnerUser = jest.spyOn(
+      testEmailService,
+      'invitePartnerUser',
+    );
     const res = await request(app.getHttpServer())
       .post(`/user/resend-partner-confirmation/`)
       .send({
@@ -278,9 +304,14 @@ describe('User Controller Tests', () => {
 
     expect(userPostResend.email).toBe(userA.email);
     expect(userPostResend.confirmationToken).not.toBeNull();
+    expect(mockinvitePartnerUser.mock.calls.length).toBe(1);
   });
 
   it('should succeed when trying to resend partner confirmation but not update record when user is already confirmed', async () => {
+    const mockinvitePartnerUser = jest.spyOn(
+      testEmailService,
+      'invitePartnerUser',
+    );
     const userA = await prisma.userAccounts.create({
       data: {
         ...(await userFactory()),
@@ -306,6 +337,7 @@ describe('User Controller Tests', () => {
 
     expect(userPostResend.email).toBe(userA.email);
     expect(userPostResend.confirmationToken).toBeNull();
+    expect(mockinvitePartnerUser.mock.calls.length).toBe(0);
   });
 
   it('should error trying to resend partner confirmation but no user exists', async () => {
@@ -447,6 +479,7 @@ describe('User Controller Tests', () => {
       data: await userFactory(),
     });
 
+    const mockforgotPassword = jest.spyOn(testEmailService, 'forgotPassword');
     const res = await request(app.getHttpServer())
       .put(`/user/forgot-password/`)
       .send({
@@ -463,6 +496,7 @@ describe('User Controller Tests', () => {
     });
 
     expect(userPostResend.resetToken).not.toBeNull();
+    expect(mockforgotPassword.mock.calls.length).toBe(1);
   });
 
   it('should create public user', async () => {

@@ -4,6 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
@@ -29,6 +30,7 @@ import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { UserInvite } from '../dtos/users/user-invite.dto';
 import { UserCreate } from '../dtos/users/user-create.dto';
+import { EmailService } from './email.service';
 
 /*
   this is the service for users
@@ -49,7 +51,11 @@ type findByOptions = {
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private emailService: EmailService,
+    private readonly configService: ConfigService,
+  ) {
     dayjs.extend(advancedFormat);
   }
 
@@ -288,7 +294,14 @@ export class UserService {
         dto.appUrl,
         confirmationToken,
       );
-      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
+
+      this.emailService.changeEmail(
+        dto.jurisdictions,
+        storedUser,
+        dto.appUrl,
+        confirmationUrl,
+        dto.newEmail,
+      );
     }
 
     const res = this.prisma.userAccounts.update({
@@ -365,7 +378,7 @@ export class UserService {
     dto: EmailAndAppUrl,
     forPublic: boolean,
   ): Promise<SuccessDTO> {
-    const storedUser = await this.findUserOrError({ email: dto.email }, false);
+    const storedUser = await this.findUserOrError({ email: dto.email }, true);
 
     if (!storedUser.confirmedAt) {
       const confirmationToken = this.createConfirmationToken(
@@ -381,10 +394,29 @@ export class UserService {
         },
       });
 
-      const confirmationUrl = forPublic
-        ? this.getPublicConfirmationUrl(dto.appUrl, confirmationToken)
-        : this.getPartnersConfirmationUrl(dto.appUrl, confirmationToken);
-      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
+      if (forPublic) {
+        const confirmationUrl = this.getPublicConfirmationUrl(
+          dto.appUrl,
+          confirmationToken,
+        );
+        this.emailService.welcome(
+          storedUser.jurisdictions,
+          storedUser,
+          dto.appUrl,
+          confirmationUrl,
+        );
+      } else {
+        const confirmationUrl = this.getPartnersConfirmationUrl(
+          dto.appUrl,
+          confirmationToken,
+        );
+        this.emailService.invitePartnerUser(
+          storedUser.jurisdictions,
+          storedUser,
+          dto.appUrl,
+          confirmationUrl,
+        );
+      }
     }
 
     return {
@@ -396,22 +428,27 @@ export class UserService {
     sets a reset token so a user can recover their account if they forgot the password
   */
   async forgotPassword(dto: EmailAndAppUrl): Promise<SuccessDTO> {
-    const storedUser = await this.findUserOrError({ email: dto.email }, false);
+    const storedUser = await this.findUserOrError({ email: dto.email }, true);
 
     const payload = {
       id: storedUser.id,
       exp: Number.parseInt(dayjs().add(1, 'hour').format('X')),
     };
+    const resetToken = sign(payload, process.env.APP_SECRET);
     await this.prisma.userAccounts.update({
       data: {
-        resetToken: sign(payload, process.env.APP_SECRET),
+        resetToken: resetToken,
       },
       where: {
         id: storedUser.id,
       },
     });
-    // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
-
+    this.emailService.forgotPassword(
+      storedUser.jurisdictions,
+      storedUser,
+      dto.appUrl,
+      resetToken,
+    );
     return {
       success: true,
     } as SuccessDTO;
@@ -631,12 +668,19 @@ export class UserService {
       },
     });
 
+    // Public user that needs email
     if (!forPartners && sendWelcomeEmail) {
       const confirmationUrl = this.getPublicConfirmationUrl(
         dto.appUrl,
         confirmationToken,
       );
-      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
+      this.emailService.welcome(
+        dto.jurisdictions,
+        newUser,
+        dto.appUrl,
+        confirmationUrl,
+      );
+      // Partner user that is given access to an additional jurisdiction
     } else if (
       forPartners &&
       existingUser &&
@@ -645,9 +689,26 @@ export class UserService {
       dto?.userRoles?.isPartner &&
       this.jurisdictionMismatch(dto.jurisdictions, existingUser.jurisdictions)
     ) {
-      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
+      const newJurisdictions = this.getMismatchedJurisdictions(
+        dto.jurisdictions,
+        existingUser.jurisdictions,
+      );
+      this.emailService.portalAccountUpdate(
+        newJurisdictions,
+        newUser,
+        dto.appUrl,
+      );
     } else if (forPartners) {
-      // TODO: email service (https://github.com/bloom-housing/bloom/issues/3503)
+      const confirmationUrl = this.getPublicConfirmationUrl(
+        this.configService.get('PARTNERS_PORTAL_URL'),
+        confirmationToken,
+      );
+      this.emailService.invitePartnerUser(
+        dto.jurisdictions,
+        newUser,
+        this.configService.get('PARTNERS_PORTAL_URL'),
+        confirmationUrl,
+      );
     }
 
     if (!forPartners) {
@@ -754,11 +815,27 @@ export class UserService {
     incomingJurisdictions: IdDTO[],
     existingJurisdictions: IdDTO[],
   ): boolean {
-    return incomingJurisdictions?.some(
-      (incomingJuris) =>
-        !existingJurisdictions?.some(
-          (existingJuris) => existingJuris.id === incomingJuris.id,
-        ),
+    return (
+      this.getMismatchedJurisdictions(
+        incomingJurisdictions,
+        existingJurisdictions,
+      ).length > 0
     );
+  }
+
+  getMismatchedJurisdictions(
+    incomingJurisdictions: IdDTO[],
+    existingJurisdictions: IdDTO[],
+  ) {
+    return incomingJurisdictions.reduce((misMatched, jurisdiction) => {
+      if (
+        !existingJurisdictions?.some(
+          (existingJuris) => existingJuris.id === jurisdiction.id,
+        )
+      ) {
+        misMatched.push(jurisdiction.id);
+      }
+      return misMatched;
+    }, []);
   }
 }
