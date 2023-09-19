@@ -288,10 +288,10 @@ export class ListingsService {
       .leftJoin("user.jurisdictions", "jurisdictions")
 
     if (userRoles.includes(UserRoleEnum.admin)) userQueryBuilder = userQueryBuilder.where(admin)
+    if (userRoles.includes(UserRoleEnum.partner)) userQueryBuilder = userQueryBuilder.where(partner)
     if (userRoles.includes(UserRoleEnum.jurisdictionAdmin)) {
       userQueryBuilder = userQueryBuilder.orWhere(jurisdictionAdmin)
     }
-    if (userRoles.includes(UserRoleEnum.partner)) userQueryBuilder = userQueryBuilder.where(partner)
 
     const userResults = await userQueryBuilder.getMany()
 
@@ -315,7 +315,6 @@ export class ListingsService {
     const nonApprovingRoles = [UserRoleEnum.partner]
     if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
       nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin)
-
     if (params.status === ListingStatus.pendingReview) {
       const userInfo = await this.getUserEmailInfo(
         params.approvingRoles,

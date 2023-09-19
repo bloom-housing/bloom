@@ -46,6 +46,7 @@ export class JurisdictionsController {
   @Put(`:jurisdictionId`)
   @ApiOperation({ summary: "Update jurisdiction", operationId: "update" })
   async update(@Body() jurisdiction: JurisdictionUpdateDto): Promise<JurisdictionDto> {
+    console.log("please")
     return mapTo(JurisdictionDto, await this.jurisdictionsService.update(jurisdiction))
   }
 

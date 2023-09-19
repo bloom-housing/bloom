@@ -9,7 +9,11 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
-import { ApplicationSection, Language } from "../../types"
+import {
+  ApplicationSection,
+  EnumJurisdictionListingApprovalPermissions,
+  Language,
+} from "../../types"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
@@ -52,6 +56,9 @@ describe("Listings", () => {
     changesRequested: async () => {},
     listingApproved: async () => {},
   }
+  const mockChangesRequested = jest.spyOn(testEmailService, "changesRequested")
+  const mockRequestApproval = jest.spyOn(testEmailService, "requestApproval")
+  const mockListingApproved = jest.spyOn(testEmailService, "listingApproved")
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -466,12 +473,10 @@ describe("Listings", () => {
     expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
   })
   describe("listings approval notification", () => {
-    const mockChangesRequested = jest.spyOn(testEmailService, "changesRequested")
-    const mockRequestApproval = jest.spyOn(testEmailService, "requestApproval")
-    const mockListingApproved = jest.spyOn(testEmailService, "listingApproved")
-    it("should update listing status and notify appropriate users", async () => {
-      const adminId = (await userRepository.find({ where: { email: "admin@example.com" } }))?.[0]
-        ?.id
+    let listing: ListingUpdateDto, adminId, alameda
+    beforeAll(async () => {
+      adminId = (await userRepository.find({ where: { email: "admin@example.com" } }))?.[0]?.id
+      alameda = (await jurisdictionsRepository.find({ where: { name: "Alameda" } }))[0]
       const queryParams = {
         limit: "all",
         filter: [
@@ -483,7 +488,9 @@ describe("Listings", () => {
       }
       const query = qs.stringify(queryParams)
       const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-      const listing: ListingUpdateDto = { ...res.body.items[0] }
+      listing = { ...res.body.items[0] }
+    })
+    it("update status to pending approval and notify appropriate users", async () => {
       listing.status = ListingStatus.pendingReview
       const putPendingApprovalResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -504,7 +511,12 @@ describe("Listings", () => {
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
         "http://localhost:3001"
       )
-
+      //ensure juris admin is not included since don't have approver permissions
+      expect(mockRequestApproval.mock.calls[0]["emails"]).toEqual(
+        expect.not.arrayContaining(["alameda-admin@example.com"])
+      )
+    })
+    it("update status to changes requested and notify appropriate users", async () => {
       listing.status = ListingStatus.changesRequested
       const putChangesRequestedResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -522,10 +534,11 @@ describe("Listings", () => {
           id: adminId,
         }),
         { id: listing.id, name: listing.name },
-        expect.arrayContaining(["leasing-agent-2@example.com"]),
+        expect.arrayContaining(["leasing-agent-2@example.com", "alameda-admin@example.com"]),
         "http://localhost:3001"
       )
-
+    })
+    it("update status to listing approved and notify appropriate users", async () => {
       listing.status = ListingStatus.active
       const putApprovedResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -543,15 +556,12 @@ describe("Listings", () => {
           id: adminId,
         }),
         { id: listing.id, name: listing.name },
-        expect.arrayContaining(["leasing-agent-2@example.com"]),
+        expect.arrayContaining(["leasing-agent-2@example.com", "alameda-admin@example.com"]),
         "http://localhost:3000"
       )
     })
 
     it("should create pending review listing and notify appropriate users", async () => {
-      const alameda = (await jurisdictionsRepository.find({ where: { name: "Alameda" } }))[0]
-      const adminId = (await userRepository.find({ where: { email: "admin@example.com" } }))?.[0]
-        ?.id
       const newListingCreateDto = makeTestListing(alameda.id)
       const newListingName = "New Alameda Listing"
       newListingCreateDto.name = newListingName
@@ -590,6 +600,43 @@ describe("Listings", () => {
         }),
         { id: listingResponse.body.id, name: listingResponse.body.name },
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
+        "http://localhost:3001"
+      )
+    })
+    it("should email different users based on jurisdiction permissions", async () => {
+      alameda.listingApprovalPermissions = [
+        EnumJurisdictionListingApprovalPermissions.admin,
+        EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin,
+      ]
+      alameda.multiselectQuestions = []
+      await supertest(app.getHttpServer())
+        .put(`/jurisdictions/${alameda.id}`)
+        .send(alameda)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      listing.status = ListingStatus.pendingReview
+      const putPendingApprovalResponse = await supertest(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(listing)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      const listingPendingApprovalResponse = await supertest(app.getHttpServer())
+        .get(`/listings/${putPendingApprovalResponse.body.id}`)
+        .expect(200)
+
+      expect(listingPendingApprovalResponse.body.status).toBe(ListingStatus.pendingReview)
+      expect(mockRequestApproval).toBeCalledWith(
+        expect.objectContaining({
+          id: adminId,
+        }),
+        { id: listing.id, name: listing.name },
+        expect.arrayContaining([
+          "admin@example.com",
+          "mfauser@bloom.com",
+          "alameda-admin@example.com",
+        ]),
         "http://localhost:3001"
       )
     })

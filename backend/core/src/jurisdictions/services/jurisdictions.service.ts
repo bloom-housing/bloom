@@ -41,6 +41,7 @@ export class JurisdictionsService {
   }
 
   async update(dto: JurisdictionUpdateDto) {
+    console.log(dto)
     const obj = await this.repository.findOne({
       where: {
         id: dto.id,
