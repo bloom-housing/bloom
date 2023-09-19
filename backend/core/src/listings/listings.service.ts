@@ -259,7 +259,7 @@ export class ListingsService {
     const selectFields = ["user.email", "jurisdictions.id"]
     getPublicUrl && selectFields.push("jurisdictions.publicUrl")
 
-    //determine where statement
+    //build potential where statements
     const admin = new Brackets((qb) => {
       qb.where("userRoles.is_admin = :is_admin", {
         is_admin: true,
@@ -287,6 +287,7 @@ export class ListingsService {
       .leftJoin("user.roles", "userRoles")
       .leftJoin("user.jurisdictions", "jurisdictions")
 
+    // determine where clause(s)
     if (userRoles.includes(UserRoleEnum.admin)) userQueryBuilder = userQueryBuilder.where(admin)
     if (userRoles.includes(UserRoleEnum.partner)) userQueryBuilder = userQueryBuilder.where(partner)
     if (userRoles.includes(UserRoleEnum.jurisdictionAdmin)) {

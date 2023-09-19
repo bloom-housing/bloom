@@ -511,7 +511,7 @@ describe("Listings", () => {
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
         "http://localhost:3001"
       )
-      //ensure juris admin is not included since don't have approver permissions
+      //ensure juris admin is not included since don't have approver permissions in alameda seed
       expect(mockRequestApproval.mock.calls[0]["emails"]).toEqual(
         expect.not.arrayContaining(["alameda-admin@example.com"])
       )
