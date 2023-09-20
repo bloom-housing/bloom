@@ -509,7 +509,7 @@ describe("Listings", () => {
         }),
         { id: listing.id, name: listing.name },
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
-        "http://localhost:3001"
+        process.env.PARTNERS_PORTAL_URL
       )
       //ensure juris admin is not included since don't have approver permissions in alameda seed
       expect(mockRequestApproval.mock.calls[0]["emails"]).toEqual(
@@ -535,7 +535,7 @@ describe("Listings", () => {
         }),
         { id: listing.id, name: listing.name },
         expect.arrayContaining(["leasing-agent-2@example.com", "alameda-admin@example.com"]),
-        "http://localhost:3001"
+        process.env.PARTNERS_PORTAL_URL
       )
     })
     it("update status to listing approved and notify appropriate users", async () => {
@@ -557,7 +557,7 @@ describe("Listings", () => {
         }),
         { id: listing.id, name: listing.name },
         expect.arrayContaining(["leasing-agent-2@example.com", "alameda-admin@example.com"]),
-        "http://localhost:3000"
+        alameda.publicUrl
       )
     })
 
@@ -600,7 +600,7 @@ describe("Listings", () => {
         }),
         { id: listingResponse.body.id, name: listingResponse.body.name },
         expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
-        "http://localhost:3001"
+        process.env.PARTNERS_PORTAL_URL
       )
     })
     it("should email different users based on jurisdiction permissions", async () => {
@@ -637,7 +637,7 @@ describe("Listings", () => {
           "mfauser@bloom.com",
           "alameda-admin@example.com",
         ]),
-        "http://localhost:3001"
+        process.env.PARTNERS_PORTAL_URL
       )
     })
   })

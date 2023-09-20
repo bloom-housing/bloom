@@ -476,6 +476,7 @@ describe("ListingsService", () => {
         approvingRoles: [UserRoleEnum.admin],
       })
 
+      expect(service.getUserEmailInfo).toBeCalledWith(["admin"], "id", undefined)
       expect(requestApprovalMock).toBeCalledWith(
         user,
         { id: "id", name: "name" },
@@ -494,6 +495,11 @@ describe("ListingsService", () => {
         approvingRoles: [UserRoleEnum.admin],
       })
 
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        ["partner", "jurisdictionAdmin"],
+        "id",
+        undefined
+      )
       expect(changesRequestedMock).toBeCalledWith(
         user,
         { id: "id", name: "name" },
@@ -514,6 +520,12 @@ describe("ListingsService", () => {
         approvingRoles: [UserRoleEnum.admin],
       })
 
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        ["partner", "jurisdictionAdmin"],
+        "id",
+        undefined,
+        true
+      )
       expect(listingApprovedMock).toBeCalledWith(
         user,
         { id: "id", name: "name" },
