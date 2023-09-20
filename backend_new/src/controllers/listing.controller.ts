@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -20,6 +21,7 @@ import {
   ApiTags,
   ApiOkResponse,
 } from '@nestjs/swagger';
+import { Request as ExpressRequest } from 'express';
 import { ListingService } from '../services/listing.service';
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
@@ -34,6 +36,8 @@ import { ListingCreate } from '../dtos/listings/listing-create.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
+import { mapTo } from '../utilities/mapTo';
+import { User } from '../dtos/users/user.dto';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -81,8 +85,14 @@ export class ListingController {
   @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   @ApiOkResponse({ type: Listing })
-  async create(@Body() listingDto: ListingCreate): Promise<Listing> {
-    return await this.listingService.create(listingDto);
+  async create(
+    @Request() req: ExpressRequest,
+    @Body() listingDto: ListingCreate,
+  ): Promise<Listing> {
+    return await this.listingService.create(
+      listingDto,
+      mapTo(User, req['user']),
+    );
   }
 
   @Delete()
@@ -96,10 +106,11 @@ export class ListingController {
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   async update(
+    @Request() req: ExpressRequest,
     @Param('id') listingId: string,
     @Body() dto: ListingUpdate,
   ): Promise<Listing> {
-    return await this.listingService.update(dto);
+    return await this.listingService.update(dto, mapTo(User, req['user']));
   }
 
   @Get(`byMultiselectQuestion/:multiselectQuestionId`)

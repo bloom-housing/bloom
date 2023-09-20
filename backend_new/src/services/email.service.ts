@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ResponseError } from '@sendgrid/helpers/classes';
 import fs from 'fs';
@@ -84,33 +84,34 @@ export class EmailService {
   }
 
   private async send(
-    to: string,
+    to: string | string[],
     from: string,
     subject: string,
     body: string,
     retry = 3,
   ) {
-    await this.sendGrid.send(
-      {
-        to: to,
-        from,
-        subject: subject,
-        html: body,
-      },
-      false,
-      (error) => {
-        if (error instanceof ResponseError) {
-          const { response } = error;
-          const { body: errBody } = response;
-          console.error(
-            `Error sending email to: ${to}! Error body: ${errBody}`,
-          );
-          if (retry > 0) {
-            void this.send(to, from, subject, body, retry - 1);
-          }
+    const isMultipleRecipients = Array.isArray(to);
+    const emailParams = {
+      to,
+      from,
+      subject,
+      html: body,
+    };
+    const handleError = (error) => {
+      if (error instanceof ResponseError) {
+        const { response } = error;
+        const { body: errBody } = response;
+        console.error(
+          `Error sending email to: ${
+            isMultipleRecipients ? to.toString() : to
+          }! Error body: ${errBody}`,
+        );
+        if (retry > 0) {
+          void this.send(to, from, subject, body, retry - 1);
         }
-      },
-    );
+      }
+    };
+    await this.sendGrid.send(emailParams, isMultipleRecipients, handleError);
   }
 
   // TODO: update this to be memoized based on jurisdiction and language
@@ -339,5 +340,76 @@ export class EmailService {
         user,
       }),
     );
+  }
+
+  public async requestApproval(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    appUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('requestApproval.header'),
+        this.template('request-approval')({
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async changesRequested(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    appUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('changesRequested.header'),
+        this.template('changes-requested')({
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      throw new HttpException('email failed', 500);
+    }
+  }
+
+  public async listingApproved(
+    jurisdictionId: IdDTO,
+    listingInfo: IdDTO,
+    emails: string[],
+    publicUrl: string,
+  ) {
+    try {
+      const jurisdiction = await this.getJurisdiction([jurisdictionId]);
+      void (await this.loadTranslations(jurisdiction));
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t('listingApproved.header'),
+        this.template('listing-approved')({
+          appOptions: { listingName: listingInfo.name },
+          listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
+        }),
+      );
+    } catch (err) {
+      throw new HttpException('email failed', 500);
+    }
   }
 }
