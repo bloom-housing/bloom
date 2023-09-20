@@ -49,6 +49,7 @@ module.exports = withBundleAnalyzer(
       jurisdictionName: process.env.JURISDICTION_NAME,
       cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      showProfessionalPartners: process.env.SHOW_PROFESSIONAL_PARTNERS === "TRUE",
 
       // start Doorway env variables
       //googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY, // moved to runtime config

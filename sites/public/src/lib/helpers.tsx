@@ -287,6 +287,22 @@ export const getSiteHeader = (router: NextRouter) => {
       href: process.env.housingCounselorServiceUrl,
     })
   }
+  if (process.env.showProfessionalPartners) {
+    menuLinks.push({
+      title: t("nav.professionalPartners"),
+      href: "#",
+      subMenuLinks: [
+        {
+          title: t("pageTitle.developersAndPropertyManagers"),
+          href: "/professional-partners/developers-and-property-managers",
+        },
+        {
+          title: t("pageTitle.jurisdictions"),
+          href: "/professional-partners/jurisdictions",
+        },
+      ],
+    })
+  }
   // TODO: Uncomment when applications are re-enabled
   // if (profile) {
   //   menuLinks.push({

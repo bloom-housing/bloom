@@ -1,0 +1,17 @@
+.doorway-expanded-section {
+  /* Component Variables */
+  --doorway-collapsible-section-border-bottom: var(--doorway-standard-border);
+  --doorway-collapsible-section-heading-container-padding: var(--bloom-s4) 0;
+  --doorway-collapsible-section-section-padding: var(--bloom-s2) 0;
+}
+.doorway-expanded_heading-container {
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+  border-bottom: var(--doorway-collapsible-section-border-bottom);
+  padding: var(--doorway-collapsible-section-heading-container-padding);
+}
+
+.doorway-expanded_section {
+  padding: var(--doorway-collapsible-section-section-padding);
+}

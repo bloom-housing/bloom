@@ -2,6 +2,7 @@
 export * from "./src/actions/Button"
 export * from "./src/actions/ButtonGroup"
 export * from "./src/actions/DoorwayCollapsibleSection"
+export * from "./src/actions/DoorwaySection"
 export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
