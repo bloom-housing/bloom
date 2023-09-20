@@ -1,13 +1,7 @@
 import React, { useMemo, useContext } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  Textarea,
-  ViewItem,
-  FieldGroup,
-  GridCell,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, Textarea, FieldGroup, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { listingFeatures, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingFeatures } from "@bloom-housing/backend-core/types"
 
@@ -106,7 +100,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
         </GridCell>
         {!enableAccessibilityFeatures ? null : (
           <GridCell span={2}>
-            <ViewItem label={t("listings.sections.accessibilityFeatures")}>
+            <FieldValue label={t("listings.sections.accessibilityFeatures")}>
               <FieldGroup
                 type="checkbox"
                 name="listingFeatures"
@@ -114,7 +108,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
                 register={register}
                 fieldGroupClassName="grid grid-cols-3 mt-4"
               />
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         )}
       </GridSection>

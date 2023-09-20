@@ -28,6 +28,7 @@ import {
   IsUUID,
   MaxLength,
   ValidateNested,
+  IsUrl,
 } from "class-validator"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -334,6 +335,7 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUrl({ require_protocol: true }, { groups: [ValidationsGroupsEnum.default] })
   buildingSelectionCriteria?: string | null
 
   @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
@@ -664,6 +666,27 @@ class Listing extends BaseEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   lastApplicationUpdateAt?: Date | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  requestedChanges?: string | null
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  requestedChangesDate?: Date | null
+
+  @ManyToOne(() => User)
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => User)
+  requestedChangesUser?: User | null
 }
 
 export { Listing as default, Listing }

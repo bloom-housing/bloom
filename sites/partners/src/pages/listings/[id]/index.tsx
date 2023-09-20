@@ -7,7 +7,9 @@ import { ListingStatusBar } from "../../../components/listings/ListingStatusBar"
 import ListingGuard from "../../../components/shared/ListingGuard"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
 import Layout from "../../../layouts/index"
-import Aside from "../../../components/listings/Aside"
+import ListingFormActions, {
+  ListingFormActionsType,
+} from "../../../components/listings/ListingFormActions"
 import { ListingContext } from "../../../components/listings/ListingContext"
 import DetailListingData from "../../../components/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../components/listings/PaperListingDetails/sections/DetailListingIntro"
@@ -29,6 +31,7 @@ import DetailApplicationDates from "../../../components/listings/PaperListingDet
 import DetailPreferences from "../../../components/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../components/listings/PaperListingDetails/sections/DetailCommunityType"
 import DetailPrograms from "../../../components/listings/PaperListingDetails/sections/DetailPrograms"
+import DetailListingNotes from "../../../components/listings/PaperListingDetails/sections/DetailNotes"
 
 interface ListingProps {
   listing: Listing
@@ -50,6 +53,7 @@ export default function ListingDetail(props: ListingProps) {
               <title>{t("nav.siteTitlePartners")}</title>
             </Head>
             <SiteAlert type="success" timeout={5000} dismissable sticky={true} />
+            <SiteAlert type="warn" dismissable sticky={true} />
             <NavigationHeader
               title={listing.name}
               listingId={listing.id}
@@ -86,6 +90,7 @@ export default function ListingDetail(props: ListingProps) {
                 <div className="flex flex-row flex-wrap ">
                   <div className="info-card md:w-9/12 overflow-hidden">
                     <DetailListingData />
+                    <DetailListingNotes />
                     <DetailListingIntro />
                     <DetailListingPhotos />
                     <DetailBuildingDetails />
@@ -105,7 +110,7 @@ export default function ListingDetail(props: ListingProps) {
                   </div>
 
                   <div className="w-full md:w-3/12 md:pl-6">
-                    <Aside type="details" />
+                    <ListingFormActions type={ListingFormActionsType.details} />
                   </div>
                 </div>
               </div>

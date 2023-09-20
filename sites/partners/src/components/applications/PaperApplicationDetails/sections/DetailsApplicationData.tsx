@@ -1,7 +1,8 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
-import { convertDataToPst } from "../../../../lib/helpers"
+import { convertDataToLocal } from "../../../../lib/helpers"
 import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 
 const DetailsApplicationData = () => {
@@ -10,7 +11,7 @@ const DetailsApplicationData = () => {
   const applicationDate = useMemo(() => {
     if (!application) return null
 
-    return convertDataToPst(
+    return convertDataToLocal(
       application?.submissionDate,
       application?.submissionType || ApplicationSubmissionType.electronical
     )
@@ -23,49 +24,49 @@ const DetailsApplicationData = () => {
       inset
     >
       <GridCell>
-        <ViewItem label={t("application.details.number")} dataTestId="number">
+        <FieldValue label={t("application.details.number")} testId="number">
           {application.confirmationCode || application.id}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       {application.submissionType && (
         <GridCell>
-          <ViewItem label={t("application.details.type")} dataTestId="type">
+          <FieldValue label={t("application.details.type")} testId="type">
             {t(`application.details.submissionType.${application.submissionType}`)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       )}
 
       <GridCell>
-        <ViewItem label={t("application.details.submittedDate")} dataTestId="submittedDate">
+        <FieldValue label={t("application.details.submittedDate")} testId="submittedDate">
           {applicationDate.date}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.timeDate")} dataTestId="timeDate">
+        <FieldValue label={t("application.details.timeDate")} testId="timeDate">
           {applicationDate.time}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.language")} dataTestId="language">
+        <FieldValue label={t("application.details.language")} testId="language">
           {application.language ? t(`languages.${application.language}`) : t("t.n/a")}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.totalSize")} dataTestId="totalSize">
+        <FieldValue label={t("application.details.totalSize")} testId="totalSize">
           {!application.householdSize ? 1 : application.householdSize}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.submittedBy")} dataTestId="submittedBy">
+        <FieldValue label={t("application.details.submittedBy")} testId="submittedBy">
           {application.applicant.firstName && application.applicant.lastName
             ? `${application.applicant.firstName} ${application.applicant.lastName}`
             : t("t.n/a")}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

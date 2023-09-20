@@ -1,5 +1,13 @@
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
+import {
+  IsDate,
+  IsDefined,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUrl,
+  ValidateNested,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingEventType } from "../types/listing-event-type-enum"
 import { ApiProperty } from "@nestjs/swagger"
@@ -42,6 +50,7 @@ export class ListingEvent extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsUrl({ require_protocol: true }, { groups: [ValidationsGroupsEnum.default] })
   url?: string | null
 
   @Column({ type: "text", nullable: true })

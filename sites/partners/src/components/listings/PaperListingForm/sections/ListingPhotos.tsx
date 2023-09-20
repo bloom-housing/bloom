@@ -80,7 +80,6 @@ const ListingPhotos = () => {
    */
   const photoTableHeaders = {
     preview: "t.preview",
-    fileName: "t.fileName",
     primary: "t.primary",
     actions: "",
   }

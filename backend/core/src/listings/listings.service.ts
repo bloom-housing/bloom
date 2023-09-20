@@ -1,5 +1,4 @@
 import { Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common"
-import { HttpService } from "@nestjs/axios"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { Brackets, In, Repository } from "typeorm"
@@ -20,7 +19,9 @@ import { REQUEST } from "@nestjs/core"
 import { User } from "../auth/entities/user.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { ListingsQueryBuilder } from "./db/listing-query-builder"
-import { firstValueFrom } from "rxjs"
+import { CachePurgeService } from "./cache-purge.service"
+import { EmailService } from "../email/email.service"
+import { ConfigService } from "@nestjs/config"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -32,7 +33,9 @@ export class ListingsService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(REQUEST) private req: ExpressRequest,
     private readonly afsService: ApplicationFlaggedSetsService,
-    private readonly httpService: HttpService
+    private readonly cachePurgeService: CachePurgeService,
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService
   ) {}
 
   private getFullyJoinedQueryBuilder() {
@@ -110,7 +113,7 @@ export class ListingsService {
     return await listing.save()
   }
 
-  async update(listingDto: ListingUpdateDto) {
+  async update(listingDto: ListingUpdateDto, user: User) {
     const qb = this.getFullyJoinedQueryBuilder()
     const listing = await this.getListingAndUnits(qb, listingDto.id)
 
@@ -145,6 +148,8 @@ export class ListingsService {
       listing.buildingSelectionCriteria = null
     }
 
+    const previousStatus = listing.status
+    const newStatus = listingDto.status
     Object.assign(listing, {
       ...listingDto,
       publishedAt:
@@ -155,10 +160,15 @@ export class ListingsService {
         listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
           ? new Date()
           : listing.closedAt,
+      requestedChangesUser:
+        newStatus === ListingStatus.changesRequested &&
+        previousStatus !== ListingStatus.changesRequested
+          ? user
+          : listing.requestedChangesUser,
     })
 
     const saveResponse = await this.listingRepository.save(listing)
-    await this.cachePurge(listing, listingDto, saveResponse)
+    await this.cachePurgeService.cachePurgeForSingleListing(previousStatus, newStatus, saveResponse)
     return saveResponse
   }
 
@@ -204,6 +214,122 @@ export class ListingsService {
       .getOne()
 
     return listing.jurisdiction.id
+  }
+
+  public async getApprovingUserEmails(): Promise<string[]> {
+    const approvingUsers = await this.userRepository
+      .createQueryBuilder("user")
+      .select(["user.email"])
+      .leftJoin("user.roles", "userRoles")
+      .where("userRoles.is_admin = :is_admin", {
+        is_admin: true,
+      })
+      .getMany()
+    const approvingUserEmails: string[] = []
+    approvingUsers?.forEach((user) => user?.email && approvingUserEmails.push(user.email))
+    return approvingUserEmails
+  }
+
+  public async getNonApprovingUserInfo(
+    listingId: string,
+    jurisId: string,
+    getPublicUrl = false
+  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+    const selectFields = ["user.email", "jurisdictions.id"]
+    getPublicUrl && selectFields.push("jurisdictions.publicUrl")
+    const nonApprovingUsers = await this.userRepository
+      .createQueryBuilder("user")
+      .select(selectFields)
+      .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
+      .leftJoin("user.roles", "userRoles")
+      .leftJoin("user.jurisdictions", "jurisdictions")
+      .where(
+        new Brackets((qb) => {
+          qb.where("userRoles.is_partner = :is_partner", {
+            is_partner: true,
+          }).andWhere("leasingAgentInListings.id = :listingId", {
+            listingId: listingId,
+          })
+        })
+      )
+      .orWhere(
+        new Brackets((qb) => {
+          qb.where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
+            is_jurisdictional_admin: true,
+          }).andWhere("jurisdictions.id = :jurisId", {
+            jurisId: jurisId,
+          })
+        })
+      )
+      .getMany()
+
+    // account for users having access to multiple jurisdictions
+    const publicUrl = getPublicUrl
+      ? nonApprovingUsers[0]?.jurisdictions?.find((juris) => juris.id === jurisId)?.publicUrl
+      : null
+    const nonApprovingUserEmails: string[] = []
+    nonApprovingUsers?.forEach((user) => user?.email && nonApprovingUserEmails.push(user.email))
+    return { emails: nonApprovingUserEmails, publicUrl }
+  }
+
+  async updateAndNotify(listingData: ListingUpdateDto, user: User) {
+    let result
+    // partners updates status to pending review when requesting admin approval
+    if (listingData.status === ListingStatus.pendingReview) {
+      result = await this.update(listingData, user)
+      const approvingUserEmails = await this.getApprovingUserEmails()
+      await this.emailService.requestApproval(
+        user,
+        { id: listingData.id, name: listingData.name },
+        approvingUserEmails,
+        this.configService.get("PARTNERS_PORTAL_URL")
+      )
+    }
+    // admin updates status to changes requested when approval requires partner changes
+    else if (listingData.status === ListingStatus.changesRequested) {
+      result = await this.update(listingData, user)
+      const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
+        listingData.id,
+        listingData.jurisdiction.id
+      )
+      await this.emailService.changesRequested(
+        user,
+        { id: listingData.id, name: listingData.name },
+        nonApprovingUserInfo.emails,
+        this.configService.get("PARTNERS_PORTAL_URL")
+      )
+    }
+    // check if status of active requires notification
+    else if (listingData.status === ListingStatus.active) {
+      const previousStatus = await this.listingRepository
+        .createQueryBuilder("listings")
+        .select("listings.status")
+        .where("id = :id", { id: listingData.id })
+        .getOne()
+      result = await this.update(listingData, user)
+      // if not new published listing, skip notification and return update response
+      if (
+        previousStatus.status !== ListingStatus.pendingReview &&
+        previousStatus.status !== ListingStatus.changesRequested
+      ) {
+        return result
+      }
+      // otherwise get user info and send listing approved email
+      const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
+        listingData.id,
+        listingData.jurisdiction.id,
+        true
+      )
+      await this.emailService.listingApproved(
+        user,
+        { id: listingData.id, name: listingData.name },
+        nonApprovingUserInfo.emails,
+        nonApprovingUserInfo.publicUrl
+      )
+    } else {
+      result = await this.update(listingData, user)
+    }
+    return result
   }
 
   async rawListWithFlagged() {
@@ -329,40 +455,5 @@ export class ListingsService {
     result.units = unitData.units
 
     return result
-  }
-
-  /**
-   * Send purge request to Nginx.
-   * Wrapped in try catch, because it's possible that content may not be cached in between edits,
-   * and will return a 404, which is expected.
-   * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
-   * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
-   */
-  private async cachePurge(
-    currentListing: Listing,
-    incomingChanges: ListingCreateDto | ListingUpdateDto,
-    saveReponse: Listing
-  ) {
-    if (process.env.PROXY_URL) {
-      await firstValueFrom(
-        this.httpService.request({
-          baseURL: process.env.PROXY_URL,
-          method: "PURGE",
-          url: `/listings/${saveReponse.id}*`,
-        })
-      ).catch((e) => console.log(`purge listing ${saveReponse.id} error = `, e))
-      if (
-        incomingChanges.status !== ListingStatus.pending ||
-        currentListing.status === ListingStatus.active
-      ) {
-        await firstValueFrom(
-          this.httpService.request({
-            baseURL: process.env.PROXY_URL,
-            method: "PURGE",
-            url: "/listings?*",
-          })
-        ).catch((e) => console.log("purge all listings error = ", e))
-      }
-    }
   }
 }

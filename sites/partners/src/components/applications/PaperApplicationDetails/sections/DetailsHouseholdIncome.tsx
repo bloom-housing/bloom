@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 import { formatIncome } from "../../../../lib/helpers"
@@ -14,7 +15,7 @@ const DetailsHouseholdIncome = () => {
       inset
     >
       <GridCell>
-        <ViewItem label={t("application.details.annualIncome")} dataTestId="annualIncome">
+        <FieldValue label={t("application.details.annualIncome")} testId="annualIncome">
           {application.incomePeriod === IncomePeriod.perYear
             ? formatIncome(
                 parseFloat(application.income),
@@ -22,11 +23,11 @@ const DetailsHouseholdIncome = () => {
                 IncomePeriod.perYear
               )
             : t("t.n/a")}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.monthlyIncome")} dataTestId="monthlyIncome">
+        <FieldValue label={t("application.details.monthlyIncome")} testId="monthlyIncome">
           {application.incomePeriod === IncomePeriod.perMonth
             ? formatIncome(
                 parseFloat(application.income),
@@ -34,11 +35,11 @@ const DetailsHouseholdIncome = () => {
                 IncomePeriod.perMonth
               )
             : t("t.n/a")}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.vouchers")} dataTestId="vouchers">
+        <FieldValue label={t("application.details.vouchers")} testId="vouchers">
           {(() => {
             if (application.incomeVouchers === null) return t("t.n/a")
 
@@ -48,7 +49,7 @@ const DetailsHouseholdIncome = () => {
 
             return t("t.no")
           })()}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

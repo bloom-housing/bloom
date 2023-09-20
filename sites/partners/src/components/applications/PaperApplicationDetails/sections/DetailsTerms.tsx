@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 
 const DetailsTerms = () => {
@@ -13,7 +14,7 @@ const DetailsTerms = () => {
       grid={false}
     >
       <GridCell>
-        <ViewItem label={t("application.details.signatureOnTerms")} dataTestId="signatureOnTerms">
+        <FieldValue label={t("application.details.signatureOnTerms")} testId="signatureOnTerms">
           {(() => {
             if (application.acceptedTerms === null) {
               return t("t.n/a")
@@ -23,7 +24,7 @@ const DetailsTerms = () => {
               return t("t.no")
             }
           })()}
-        </ViewItem>
+        </FieldValue>
       </GridCell>
     </GridSection>
   )

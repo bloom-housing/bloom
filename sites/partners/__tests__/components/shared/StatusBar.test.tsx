@@ -1,6 +1,7 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
-import { Button, AppearanceStyleType } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-components"
+import { Tag } from "@bloom-housing/ui-seeds"
 import { StatusBar } from "../../../src/components/shared/StatusBar"
 
 afterEach(cleanup)
@@ -8,7 +9,9 @@ afterEach(cleanup)
 describe("<StatusBar>", () => {
   it("can render without a back button", () => {
     const { getByText, queryByText } = render(
-      <StatusBar tagStyle={AppearanceStyleType.primary} tagLabel={"Draft"} />
+      <StatusBar>
+        <Tag variant={"primary"}>Draft</Tag>
+      </StatusBar>
     )
     expect(getByText("Draft")).not.toBeNull()
     expect(queryByText("Back")).toBeNull()
@@ -23,9 +26,9 @@ describe("<StatusBar>", () => {
             Back
           </Button>
         }
-        tagLabel="Submitted"
-        tagStyle={AppearanceStyleType.success}
-      />
+      >
+        <Tag variant={"success"}>Submitted</Tag>
+      </StatusBar>
     )
     expect(getByText("Submitted")).not.toBeNull()
     expect(getByText("Back")).not.toBeNull()

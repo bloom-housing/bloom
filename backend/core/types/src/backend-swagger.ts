@@ -561,6 +561,8 @@ export class ApplicationsService {
       /**  */
       listingId: string
       /**  */
+      timeZone?: string
+      /**  */
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
@@ -578,6 +580,7 @@ export class ApplicationsService {
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
         listingId: params["listingId"],
+        timeZone: params["timeZone"],
         includeDemographics: params["includeDemographics"],
       }
       let data = null
@@ -1453,6 +1456,30 @@ export class ListingsService {
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update listing by id and notify relevant users
+   */
+  updateAndNotify(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: ListingUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/listings/updateAndNotify/{id}"
       url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
@@ -4959,6 +4986,9 @@ export interface Listing {
   utilities?: ListingUtilities
 
   /**  */
+  requestedChangesUser?: CombinedRequestedChangesUserTypes
+
+  /**  */
   id: string
 
   /**  */
@@ -5107,6 +5137,12 @@ export interface Listing {
 
   /**  */
   lastApplicationUpdateAt?: Date
+
+  /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
 }
 
 export interface PaginatedListing {
@@ -5521,6 +5557,12 @@ export interface ListingCreate {
   lastApplicationUpdateAt?: Date
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   countyCode?: string
 
   /**  */
@@ -5924,6 +5966,12 @@ export interface ListingUpdate {
   lastApplicationUpdateAt?: Date
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   countyCode?: string
 
   /**  */
@@ -6259,8 +6307,10 @@ export enum EnumListingFilterParamsComparison {
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
-  "pending" = "pending",
+  "changesRequested" = "changesRequested",
   "closed" = "closed",
+  "pending" = "pending",
+  "pendingReview" = "pendingReview",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
@@ -6285,8 +6335,10 @@ export enum ListingApplicationAddressType {
 
 export enum ListingStatus {
   "active" = "active",
-  "pending" = "pending",
+  "changesRequested" = "changesRequested",
   "closed" = "closed",
+  "pending" = "pending",
+  "pendingReview" = "pendingReview",
 }
 
 export enum ListingReviewOrder {
@@ -6312,6 +6364,7 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedRequestedChangesUserTypes = User
 export type CombinedBuildingAddressTypes = AddressUpdate
 export enum EnumMultiselectQuestionsFilterParamsComparison {
   "=" = "=",

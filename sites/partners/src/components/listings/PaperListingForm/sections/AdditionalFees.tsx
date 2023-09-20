@@ -1,14 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  Field,
-  Textarea,
-  FieldGroup,
-  ViewItem,
-  GridCell,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, Field, Textarea, FieldGroup, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { AuthContext, listingUtilities } from "@bloom-housing/shared-helpers"
 import { ListingUtilities } from "@bloom-housing/backend-core/types"
@@ -109,7 +102,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
         </GridSection>
         {enableUtilitiesIncluded && (
           <GridSection columns={1}>
-            <ViewItem label={t("listings.sections.utilities")}>
+            <FieldValue label={t("listings.sections.utilities")}>
               <FieldGroup
                 type="checkbox"
                 name="listingUtilities"
@@ -117,7 +110,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
                 register={register}
                 fieldGroupClassName="grid grid-cols-2 mt-4"
               />
-            </ViewItem>
+            </FieldValue>
           </GridSection>
         )}
       </GridSection>

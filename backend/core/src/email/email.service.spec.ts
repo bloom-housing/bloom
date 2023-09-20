@@ -139,9 +139,35 @@ const translationServiceMock = {
               welcomeMessage:
                 "Thank you for setting up your account on %{appUrl}. It will now be easier for you to start, save, and submit online applications for listings that appear on the site.",
             },
+            requestApproval: {
+              subject: "Listing Approval Requested",
+              header: "Listing approval requested",
+              partnerRequest:
+                "A Partner has submitted an approval request to publish the %{listingName} listing.",
+              logInToReviewStart: "Please log into the",
+              logInToReviewEnd: "and navigate to the listing detail page to review and publish.",
+              accessListing: "To access the listing after logging in, please click the link below",
+            },
+            changesRequested: {
+              header: "Listing changes requested",
+              adminRequestStart:
+                "An administrator is requesting changes to the %{listingName} listing. Please log into the",
+              adminRequestEnd:
+                "and navigate to the listing detail page to view the request and edit the listing. To access the listing after logging in, please click the link below",
+            },
+            listingApproved: {
+              header: "New published listing",
+              adminApproved:
+                "The %{listingName} listing has been approved and published by an administrator.",
+              viewPublished: "To view the published listing, please click on the link below",
+            },
             t: {
               hello: "Hello",
               seeListing: "See Listing",
+              partnersPortal: "Partners Portal",
+              viewListing: "View Listing",
+              editListing: "Edit Listing",
+              reviewListing: "Review Listing",
             },
           },
         }
@@ -294,6 +320,132 @@ describe("EmailService", () => {
       const emailMock = sendMock.mock.calls[0][0]
       expect(emailMock.html).toMatch("SPANISH NUMBER")
       expect(emailMock.html).toMatch("SPANISH Alameda County Housing Portal is a project of the")
+    })
+  })
+  describe("request approval", () => {
+    it("should generate html body", async () => {
+      const emailArr = ["testOne@xample.com", "testTwo@example.com"]
+      const service = await module.resolve(EmailService)
+      await service.requestApproval(
+        user,
+        { id: listing.id, name: listing.name },
+        emailArr,
+        "http://localhost:3001"
+      )
+
+      expect(sendMock).toHaveBeenCalled()
+      const emailMock = sendMock.mock.calls[0][0]
+      expect(emailMock.to).toEqual(emailArr)
+      expect(emailMock.subject).toEqual("Listing approval requested")
+      expect(emailMock.html).toMatch(
+        `<img src="https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png" alt="Alameda County Housing Portal" width="254" height="137" />`
+      )
+      expect(emailMock.html).toMatch("Hello,")
+      expect(emailMock.html).toMatch("Listing approval requested")
+      expect(emailMock.html).toMatch(
+        `A Partner has submitted an approval request to publish the ${listing.name} listing.`
+      )
+      expect(emailMock.html).toMatch("Please log into the")
+      expect(emailMock.html).toMatch("Partners Portal")
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3001/)
+      expect(emailMock.html).toMatch(
+        "and navigate to the listing detail page to review and publish."
+      )
+      expect(emailMock.html).toMatch(
+        "To access the listing after logging in, please click the link below"
+      )
+      expect(emailMock.html).toMatch("Review Listing")
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3001\/listings\/Uvbk5qurpB2WI9V6WnNdH/)
+      expect(emailMock.html).toMatch("Thank you,")
+      expect(emailMock.html).toMatch("Alameda County Housing Portal")
+      expect(emailMock.html).toMatch("Alameda County Housing Portal is a project of the")
+      expect(emailMock.html).toMatch(
+        "Alameda County - Housing and Community Development (HCD) Department"
+      )
+    })
+  })
+
+  describe("changes requested", () => {
+    it("should generate html body", async () => {
+      const emailArr = ["testOne@xample.com", "testTwo@example.com"]
+      const service = await module.resolve(EmailService)
+      await service.changesRequested(
+        user,
+        { id: listing.id, name: listing.name },
+        emailArr,
+        "http://localhost:3001"
+      )
+
+      expect(sendMock).toHaveBeenCalled()
+      const emailMock = sendMock.mock.calls[0][0]
+      expect(emailMock.to).toEqual(emailArr)
+      expect(emailMock.subject).toEqual("Listing changes requested")
+      expect(emailMock.html).toMatch(
+        `<img src="https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png" alt="Alameda County Housing Portal" width="254" height="137" />`
+      )
+      expect(emailMock.html).toMatch("Listing changes requested")
+      expect(emailMock.html).toMatch("Hello,")
+      expect(emailMock.html).toMatch(
+        `An administrator is requesting changes to the ${listing.name} listing. Please log into the `
+      )
+      expect(emailMock.html).toMatch("Partners Portal")
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3001/)
+
+      expect(emailMock.html).toMatch(
+        " and navigate to the listing detail page to view the request and edit the listing."
+      )
+      expect(emailMock.html).toMatch(
+        "and navigate to the listing detail page to view the request and edit the listing."
+      )
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3001/)
+      expect(emailMock.html).toMatch(
+        "To access the listing after logging in, please click the link below"
+      )
+      expect(emailMock.html).toMatch("Edit Listing")
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3001\/listings\/Uvbk5qurpB2WI9V6WnNdH/)
+      expect(emailMock.html).toMatch("Thank you,")
+      expect(emailMock.html).toMatch("Alameda County Housing Portal")
+      expect(emailMock.html).toMatch("Alameda County Housing Portal is a project of the")
+      expect(emailMock.html).toMatch(
+        "Alameda County - Housing and Community Development (HCD) Department"
+      )
+    })
+  })
+
+  describe("published listing", () => {
+    it("should generate html body", async () => {
+      const emailArr = ["testOne@xample.com", "testTwo@example.com"]
+      const service = await module.resolve(EmailService)
+      await service.listingApproved(
+        user,
+        { id: listing.id, name: listing.name },
+        emailArr,
+        "http://localhost:3000"
+      )
+
+      expect(sendMock).toHaveBeenCalled()
+      const emailMock = sendMock.mock.calls[0][0]
+      expect(emailMock.to).toEqual(emailArr)
+      expect(emailMock.subject).toEqual("New published listing")
+      expect(emailMock.html).toMatch(
+        `<img src="https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png" alt="Alameda County Housing Portal" width="254" height="137" />`
+      )
+      expect(emailMock.html).toMatch("New published listing")
+      expect(emailMock.html).toMatch("Hello,")
+      expect(emailMock.html).toMatch(
+        `The ${listing.name} listing has been approved and published by an administrator.`
+      )
+      expect(emailMock.html).toMatch(
+        "To view the published listing, please click on the link below"
+      )
+      expect(emailMock.html).toMatch("View Listing")
+      expect(emailMock.html).toMatch(/http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/)
+      expect(emailMock.html).toMatch("Thank you,")
+      expect(emailMock.html).toMatch("Alameda County Housing Portal")
+      expect(emailMock.html).toMatch("Alameda County Housing Portal is a project of the")
+      expect(emailMock.html).toMatch(
+        "Alameda County - Housing and Community Development (HCD) Department"
+      )
     })
   })
 

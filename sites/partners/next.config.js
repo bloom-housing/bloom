@@ -43,10 +43,12 @@ module.exports = withBundleAnalyzer(
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
       idleTimeout: process.env.IDLE_TIMEOUT,
       showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
+      showSmsMfa: (process.env.SHOW_SMS_MFA || "TRUE") === "TRUE", // SMS on by default
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
       mapBoxToken: MAPBOX_TOKEN,
+      featureListingsApproval: process.env.FEATURE_LISTINGS_APPROVAL,
     },
     i18n: {
       locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

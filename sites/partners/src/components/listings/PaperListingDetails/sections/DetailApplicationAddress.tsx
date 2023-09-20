@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailFieldTime, getDetailAddress } from "./helpers"
 import dayjs from "dayjs"
@@ -20,18 +21,18 @@ const DetailApplicationAddress = () => {
     >
       <GridSection grid={false}>
         <GridSection columns={3}>
-          <ViewItem id="applicationMailingSection" label={"Can applications be mailed in?"}>
+          <FieldValue id="applicationMailingSection" label={"Can applications be mailed in?"}>
             {listing.applicationMailingAddress || listing.applicationMailingAddressType
               ? t("t.yes")
               : t("t.no")}
-          </ViewItem>
+          </FieldValue>
           {listing.applicationMailingAddressType && (
-            <ViewItem
+            <FieldValue
               id="applicationMailingAddressType"
               label={"Where can applications be mailed in?"}
             >
               {t("listings.leasingAgentAddress")}
-            </ViewItem>
+            </FieldValue>
           )}
         </GridSection>
 
@@ -45,15 +46,18 @@ const DetailApplicationAddress = () => {
         <hr className={"mt-4 mb-4"} />
 
         <GridSection columns={3}>
-          <ViewItem id="applicationPickupQuestion" label={t("listings.applicationPickupQuestion")}>
+          <FieldValue
+            id="applicationPickupQuestion"
+            label={t("listings.applicationPickupQuestion")}
+          >
             {listing.applicationPickUpAddress || listing.applicationPickUpAddressType
               ? t("t.yes")
               : t("t.no")}
-          </ViewItem>
+          </FieldValue>
           {listing.applicationPickUpAddressType && (
-            <ViewItem id="applicationPickUpAddressType" label={t("listings.wherePickupQuestion")}>
+            <FieldValue id="applicationPickUpAddressType" label={t("listings.wherePickupQuestion")}>
               {t("listings.leasingAgentAddress")}
-            </ViewItem>
+            </FieldValue>
           )}
         </GridSection>
 
@@ -66,12 +70,12 @@ const DetailApplicationAddress = () => {
             )}
             <GridSection columns={3}>
               <GridCell span={2}>
-                <ViewItem
+                <FieldValue
                   id="applicationPickUpAddressOfficeHours"
                   label={t("leasingAgent.officeHours")}
                 >
                   {getDetailFieldString(listing.applicationPickUpAddressOfficeHours)}
-                </ViewItem>
+                </FieldValue>
               </GridCell>
             </GridSection>
           </>
@@ -80,18 +84,21 @@ const DetailApplicationAddress = () => {
         <hr className={"mt-4 mb-4"} />
 
         <GridSection columns={3}>
-          <ViewItem
+          <FieldValue
             id="applicationDropOffQuestion"
             label={t("listings.applicationDropOffQuestion")}
           >
             {listing.applicationDropOffAddress || listing.applicationDropOffAddressType
               ? t("t.yes")
               : t("t.no")}
-          </ViewItem>
+          </FieldValue>
           {listing.applicationDropOffAddressType && (
-            <ViewItem id="applicationDropOffAddressType" label={t("listings.whereDropOffQuestion")}>
+            <FieldValue
+              id="applicationDropOffAddressType"
+              label={t("listings.whereDropOffQuestion")}
+            >
               {t("listings.leasingAgentAddress")}
-            </ViewItem>
+            </FieldValue>
           )}
         </GridSection>
 
@@ -104,12 +111,12 @@ const DetailApplicationAddress = () => {
             )}
             <GridSection columns={3}>
               <GridCell span={2}>
-                <ViewItem
+                <FieldValue
                   id="applicationDropOffAddressOfficeHours"
                   label={t("leasingAgent.officeHours")}
                 >
                   {getDetailFieldString(listing.applicationDropOffAddressOfficeHours)}
-                </ViewItem>
+                </FieldValue>
               </GridCell>
             </GridSection>
           </>
@@ -118,44 +125,44 @@ const DetailApplicationAddress = () => {
         <hr className={"mt-4 mb-4"} />
 
         <GridSection columns={3}>
-          <ViewItem
+          <FieldValue
             id="postmarksConsideredQuestion"
             label={t("listings.postmarksConsideredQuestion")}
           >
             {listing.postmarkedApplicationsReceivedByDate ? t("t.yes") : t("t.no")}
-          </ViewItem>
+          </FieldValue>
         </GridSection>
 
         {listing.postmarkedApplicationsReceivedByDate && (
           <GridSection columns={4}>
             <GridCell span={2}>
-              <ViewItem
+              <FieldValue
                 id="postmarkedApplicationsReceivedByDate"
                 label={t("listings.receivedByDate")}
-                dataTestId={"postmark-date"}
+                testId={"postmark-date"}
               >
                 {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
-              </ViewItem>
+              </FieldValue>
             </GridCell>
             <GridCell span={2}>
-              <ViewItem
+              <FieldValue
                 id="postmarkedApplicationsReceivedByDateTime"
                 label={t("listings.receivedByTime")}
-                dataTestId={"postmark-time"}
+                testId={"postmark-time"}
               >
                 {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
         )}
 
         <GridSection columns={2}>
-          <ViewItem
+          <FieldValue
             id="additionalApplicationSubmissionNotes"
             label={t("listings.additionalApplicationSubmissionNotes")}
           >
             {getDetailFieldString(listing.additionalApplicationSubmissionNotes)}
-          </ViewItem>
+          </FieldValue>
         </GridSection>
       </GridSection>
     </GridSection>

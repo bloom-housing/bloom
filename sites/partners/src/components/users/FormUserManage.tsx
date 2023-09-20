@@ -6,16 +6,15 @@ import {
   Form,
   GridSection,
   GridCell,
-  ViewItem,
   Field,
   Select,
   useMutate,
   AppearanceStyleType,
   emailRegex,
-  Tag,
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
+import { FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
@@ -316,15 +315,8 @@ const FormUserManage = ({
                 <span>{t("users.userDetails")}</span>
 
                 {mode === "edit" && (
-                  <div className="ml-2 mt-2">
-                    <Tag
-                      className="block"
-                      size={AppearanceSizeType.small}
-                      styleType={
-                        user.confirmedAt ? AppearanceStyleType.success : AppearanceStyleType.primary
-                      }
-                      pillStyle
-                    >
+                  <div className="ml-2 mt-1 flex items-center justify-center">
+                    <Tag variant={user.confirmedAt ? "success" : "primary"}>
                       {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
                     </Tag>
                   </div>
@@ -334,7 +326,7 @@ const FormUserManage = ({
             columns={4}
           >
             <GridCell>
-              <ViewItem label={t("authentication.createAccount.firstName")}>
+              <FieldValue label={t("authentication.createAccount.firstName")}>
                 <Field
                   id="firstName"
                   name="firstName"
@@ -347,11 +339,11 @@ const FormUserManage = ({
                   type="text"
                   readerOnly
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
 
             <GridCell>
-              <ViewItem label={t("authentication.createAccount.lastName")}>
+              <FieldValue label={t("authentication.createAccount.lastName")}>
                 <Field
                   id="lastName"
                   name="lastName"
@@ -364,11 +356,11 @@ const FormUserManage = ({
                   type="text"
                   readerOnly
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
 
             <GridCell>
-              <ViewItem label={t("t.email")}>
+              <FieldValue label={t("t.email")}>
                 <Field
                   id="email"
                   name="email"
@@ -381,11 +373,11 @@ const FormUserManage = ({
                   type="email"
                   readerOnly
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
 
             <GridCell>
-              <ViewItem label={t("t.role")}>
+              <FieldValue label={t("t.role")}>
                 <Select
                   id="role"
                   name="role"
@@ -407,7 +399,7 @@ const FormUserManage = ({
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
                 />
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           </GridSection>
           <JurisdictionAndListingSelection

@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 
@@ -15,19 +16,19 @@ const DetailsAlternateContact = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.name.firstName")} dataTestId="alternateContact.firstName">
+          <FieldValue label={t("application.name.firstName")} testId="alternateContact.firstName">
             {application.alternateContact.firstName || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.lastName")} dataTestId="alternateContact.lastName">
+          <FieldValue label={t("application.name.lastName")} testId="alternateContact.lastName">
             {application.alternateContact.lastName || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.relationship")} dataTestId="relationship">
+          <FieldValue label={t("t.relationship")} testId="relationship">
             {(() => {
               if (!application.alternateContact.type) return t("t.n/a")
 
@@ -38,27 +39,27 @@ const DetailsAlternateContact = () => {
                 `application.alternateContact.type.options.${application.alternateContact.type}`
               )
             })()}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         {
           <GridCell>
-            <ViewItem label={t("application.details.agency")} dataTestId="alternateContact.agency">
+            <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
               {application.alternateContact.agency || t("t.n/a")}
-            </ViewItem>
+            </FieldValue>
           </GridCell>
         }
 
         <GridCell>
-          <ViewItem label={t("t.email")} dataTestId="alternateContact.emailAddress">
+          <FieldValue label={t("t.email")} testId="alternateContact.emailAddress">
             {application.alternateContact.emailAddress || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.phone")} dataTestId="alternateContact.phoneNumber">
+          <FieldValue label={t("t.phone")} testId="alternateContact.phoneNumber">
             {application.alternateContact.phoneNumber || t("t.n/a")}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
 

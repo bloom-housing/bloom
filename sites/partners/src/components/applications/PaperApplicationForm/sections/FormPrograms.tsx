@@ -1,5 +1,6 @@
 import React from "react"
-import { t, GridSection, ViewItem, GridCell, FieldGroup } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { getInputType } from "@bloom-housing/shared-helpers"
 import { ListingMultiselectQuestion } from "@bloom-housing/backend-core"
@@ -20,7 +21,7 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
         {programs?.map((listingProgram) => {
           return (
             <GridCell key={listingProgram?.multiselectQuestion?.text}>
-              <ViewItem label={listingProgram?.multiselectQuestion?.text}>
+              <FieldValue label={listingProgram?.multiselectQuestion?.text}>
                 <fieldset>
                   <FieldGroup
                     fieldGroupClassName="grid grid-cols-1"
@@ -37,7 +38,7 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
                     })}
                   />
                 </fieldset>
-              </ViewItem>
+              </FieldValue>
             </GridCell>
           )
         })}

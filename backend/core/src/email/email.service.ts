@@ -1,4 +1,4 @@
-import { Injectable, Logger, Scope } from "@nestjs/common"
+import { HttpException, Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
 import merge from "lodash/merge"
@@ -17,6 +17,7 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
+import { IdName } from "../../types"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -218,7 +219,7 @@ export class EmailService {
       genericTranslations: Translation | null,
       jurisdictionalDefaultTranslations: Translation | null
 
-    if (language != Language.en) {
+    if (language && language !== Language.en) {
       if (jurisdiction) {
         jurisdictionalTranslations =
           await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
@@ -291,26 +292,36 @@ export class EmailService {
     return partials
   }
 
-  private async send(to: string, from: string, subject: string, body: string, retry = 3) {
-    await this.sendGrid.send(
-      {
-        to: to,
-        from,
-        subject: subject,
-        html: body,
-      },
-      false,
-      (error) => {
-        if (error instanceof ResponseError) {
-          const { response } = error
-          const { body: errBody } = response
-          console.error(`Error sending email to: ${to}! Error body: ${errBody}`)
-          if (retry > 0) {
-            void this.send(to, from, subject, body, retry - 1)
-          }
+  private async send(
+    to: string | string[],
+    from: string,
+    subject: string,
+    body: string,
+    retry = 3
+  ) {
+    const multipleRecipients = Array.isArray(to)
+    const emailParams = {
+      to,
+      from,
+      subject,
+      html: body,
+    }
+    const handleError = (error) => {
+      if (error instanceof ResponseError) {
+        const { response } = error
+        const { body: errBody } = response
+        console.error(
+          `Error sending email to: ${
+            multipleRecipients ? to.toString() : to
+          }! Error body: ${errBody}`
+        )
+        if (retry > 0) {
+          void this.send(to, from, subject, body, retry - 1)
         }
       }
-    )
+    }
+
+    await this.sendGrid.send(emailParams, multipleRecipients, handleError)
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
@@ -343,5 +354,69 @@ export class EmailService {
         appUrl,
       })
     )
+  }
+
+  public async requestApproval(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+    try {
+      const jurisdiction = await this.getUserJurisdiction(user)
+      void (await this.loadTranslations(jurisdiction, Language.en))
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t("requestApproval.header"),
+        this.template("request-approval")({
+          user,
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        })
+      )
+    } catch (err) {
+      throw new HttpException("email failed", 500)
+    }
+  }
+
+  public async changesRequested(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+    try {
+      const jurisdiction = await this.getUserJurisdiction(user)
+      void (await this.loadTranslations(jurisdiction, Language.en))
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t("changesRequested.header"),
+        this.template("changes-requested")({
+          user,
+          appOptions: { listingName: listingInfo.name },
+          appUrl: appUrl,
+          listingUrl: `${appUrl}/listings/${listingInfo.id}`,
+        })
+      )
+    } catch (err) {
+      throw new HttpException("email failed", 500)
+    }
+  }
+
+  public async listingApproved(
+    user: User,
+    listingInfo: IdName,
+    emails: string[],
+    publicUrl: string
+  ) {
+    try {
+      const jurisdiction = await this.getUserJurisdiction(user)
+      void (await this.loadTranslations(jurisdiction, Language.en))
+      await this.send(
+        emails,
+        jurisdiction.emailFromAddress,
+        this.polyglot.t("listingApproved.header"),
+        this.template("listing-approved")({
+          user,
+          appOptions: { listingName: listingInfo.name },
+          listingUrl: `${publicUrl}/listing/${listingInfo.id}`,
+        })
+      )
+    } catch (err) {
+      throw new HttpException("email failed", 500)
+    }
   }
 }

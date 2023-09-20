@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
-  ViewItem,
   DOBField,
   Select,
   GridCell,
@@ -13,6 +12,7 @@ import {
   FieldGroup,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../../lib/helpers"
 
@@ -54,7 +54,7 @@ const FormPrimaryApplicant = () => {
     <GridSection title={t("application.household.primaryApplicant")} grid={false} separator>
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.name.firstName")}>
+          <FieldValue label={t("application.name.firstName")}>
             <Field
               id="application.applicant.firstName"
               name="application.applicant.firstName"
@@ -63,10 +63,10 @@ const FormPrimaryApplicant = () => {
               register={register}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("application.name.middleName")}>
+          <FieldValue label={t("application.name.middleName")}>
             <Field
               id="application.applicant.middleName"
               name="application.applicant.middleName"
@@ -75,10 +75,10 @@ const FormPrimaryApplicant = () => {
               register={register}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("application.name.lastName")}>
+          <FieldValue label={t("application.name.lastName")}>
             <Field
               id="application.applicant.lastName"
               name="application.applicant.lastName"
@@ -87,10 +87,10 @@ const FormPrimaryApplicant = () => {
               register={register}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("application.household.member.dateOfBirth")}>
+          <FieldValue label={t("application.household.member.dateOfBirth")}>
             <DOBField
               id="dateOfBirth"
               name="dateOfBirth"
@@ -102,10 +102,10 @@ const FormPrimaryApplicant = () => {
               label={t("application.name.yourDateOfBirth")}
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("t.email")}>
+          <FieldValue label={t("t.email")}>
             <Field
               id="application.applicant.emailAddress"
               name="application.applicant.emailAddress"
@@ -118,10 +118,10 @@ const FormPrimaryApplicant = () => {
               errorMessage={t("errors.emailAddressError")}
               register={register}
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("t.phone")}>
+          <FieldValue label={t("t.phone")}>
             <PhoneField
               id="phoneNumber"
               name="phoneNumber"
@@ -133,10 +133,10 @@ const FormPrimaryApplicant = () => {
               controlClassName="control"
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("applications.table.phoneType")}>
+          <FieldValue label={t("applications.table.phoneType")}>
             <Select
               id="application.applicant.phoneNumberType"
               name="application.applicant.phoneNumberType"
@@ -152,10 +152,10 @@ const FormPrimaryApplicant = () => {
               validation={{ required: !!phoneValue?.length }}
               disabled={!phoneValue?.length}
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("t.additionalPhone")}>
+          <FieldValue label={t("t.additionalPhone")}>
             <PhoneField
               id="application.additionalPhoneNumber"
               name="application.additionalPhoneNumber"
@@ -167,10 +167,10 @@ const FormPrimaryApplicant = () => {
               controlClassName="control"
               readerOnly
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("applications.table.additionalPhoneType")}>
+          <FieldValue label={t("applications.table.additionalPhoneType")}>
             <Select
               id="application.additionalPhoneNumberType"
               name="application.additionalPhoneNumberType"
@@ -186,22 +186,22 @@ const FormPrimaryApplicant = () => {
               validation={{ required: !!additionalPhoneValue?.length }}
               disabled={!additionalPhoneValue?.length}
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.contact.preferredContactType")}>
+          <FieldValue label={t("application.contact.preferredContactType")}>
             <FieldGroup
               name="application.contactPreferences"
               fields={contactPreferencesOptions}
               type="checkbox"
               register={register}
             />
-          </ViewItem>
+          </FieldValue>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.add.workInRegion")}>
+          <FieldValue label={t("application.add.workInRegion")}>
             <div className="flex items-center">
               <Field
                 id="application.applicant.workInRegionYes"
@@ -227,7 +227,7 @@ const FormPrimaryApplicant = () => {
                 }}
               />
             </div>
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
 

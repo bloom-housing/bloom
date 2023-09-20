@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
+import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -15,23 +16,23 @@ const DetailCommunityType = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem id="reservedCommunityType" label={t("listings.reservedCommunityType")}>
+          <FieldValue id="reservedCommunityType" label={t("listings.reservedCommunityType")}>
             {getDetailFieldString(
               listing.reservedCommunityType
                 ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
                 : null
             )}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem
+          <FieldValue
             id="reservedCommunityDescription"
             label={t("listings.reservedCommunityDescription")}
           >
             {getDetailFieldString(listing.reservedCommunityDescription)}
-          </ViewItem>
+          </FieldValue>
         </GridCell>
       </GridSection>
     </GridSection>

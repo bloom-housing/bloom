@@ -10,6 +10,7 @@ import {
   AlertBox,
   SiteAlert,
   AppearanceStyleType,
+  UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -91,6 +92,7 @@ export default function ListingsList() {
         headerName: t("listings.listingName"),
         field: "name",
         sortable: true,
+        unSortIcon: true,
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
@@ -100,7 +102,11 @@ export default function ListingsList() {
       {
         headerName: t("listings.listingStatusText"),
         field: "status",
-        sortable: false,
+        sortable: true,
+        unSortIcon: true,
+        sort: "asc",
+        // disable frontend sorting
+        comparator: () => 0,
         filter: false,
         resizable: true,
         valueFormatter: ({ value }) => t(`listings.listingStatus.${value}`),
@@ -205,6 +211,7 @@ export default function ListingsList() {
                         className="mx-1"
                         styleType={AppearanceStyleType.primary}
                         onClick={() => false}
+                        dataTestId={"addListingButton"}
                       >
                         {t("listings.addListing")}
                       </Button>
@@ -213,7 +220,7 @@ export default function ListingsList() {
                       className="mx-1"
                       dataTestId="export-listings"
                       onClick={() => onExport()}
-                      icon={!zipExportLoading ? faFileExport : null}
+                      icon={!zipExportLoading ? (faFileExport as UniversalIconType) : null}
                       size={AppearanceSizeType.small}
                       loading={zipExportLoading}
                     >
