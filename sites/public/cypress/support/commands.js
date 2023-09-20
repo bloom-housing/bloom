@@ -43,12 +43,12 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
   cy.get(".is-card-link").contains(listingName).click()
-  cy.getByTestId("listing-view-apply-button").eq(1).click()
-  cy.getByTestId("app-choose-language-sign-in-button").click()
+  cy.get("#listing-view-apply-button").eq(1).click()
+  cy.get("#app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
   cy.get("[data-testid=sign-in-password-field]").type("abcdef")
   cy.get("[data-testid=sign-in-button").click()
-  cy.getByTestId("app-choose-language-button").eq(0).click()
+  cy.get(".language-select").eq(0).click()
   cy.getByTestId("app-next-step-button").click()
   cy.getByTestId("application-initial-page").then(() => {
     cy.get(".form-card__title").then(($header) => {
@@ -66,8 +66,8 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 Cypress.Commands.add("beginApplicationSignedIn", (listingName) => {
   cy.visit("/listings")
   cy.get(".is-card-link").contains(listingName).click()
-  cy.getByTestId("listing-view-apply-button").eq(1).click()
-  cy.getByTestId("app-choose-language-button").eq(0).click()
+  cy.get("#listing-view-apply-button").eq(1).click()
+  cy.get(".language-select").eq(0).click()
   cy.getByTestId("app-next-step-button").click()
   cy.getByTestId("autofill-decline").click()
 })

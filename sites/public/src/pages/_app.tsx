@@ -3,7 +3,12 @@ import "@bloom-housing/ui-components/src/global/app-css.scss"
 import "@bloom-housing/ui-seeds/src/global/app-css.scss"
 import React, { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
-import { addTranslation, GenericRouter, NavigationContext } from "@bloom-housing/ui-components"
+import {
+  addTranslation,
+  GenericRouter,
+  NavigationContext as UICNavigationContext,
+} from "@bloom-housing/ui-components"
+import { NavigationContext } from "@bloom-housing/ui-seeds/src/global/NavigationContext"
 import {
   blankApplication,
   LoggedInUserIdleTimeout,
@@ -73,29 +78,33 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   //   }
   // }, [])
 
+  // NOTE: Seeds and UI-Components both use a NavigationContext to help internal links use Next's
+  // routing system, so we'll include both here until UIC is no longer in use.
   return (
-    <NavigationContext.Provider
-      value={{
-        LinkComponent,
-        router: router as GenericRouter,
-      }}
-    >
-      <AppSubmissionContext.Provider
+    <NavigationContext.Provider value={{ LinkComponent }}>
+      <UICNavigationContext.Provider
         value={{
-          conductor: conductor,
-          application: application,
-          listing: savedListing,
-          syncApplication: setApplication,
-          syncListing: setSavedListing,
+          LinkComponent,
+          router: router as GenericRouter,
         }}
       >
-        <ConfigProvider apiUrl={process.env.backendApiBase}>
-          <AuthProvider>
-            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-            <Component {...pageProps} />
-          </AuthProvider>
-        </ConfigProvider>
-      </AppSubmissionContext.Provider>
+        <AppSubmissionContext.Provider
+          value={{
+            conductor: conductor,
+            application: application,
+            listing: savedListing,
+            syncApplication: setApplication,
+            syncListing: setSavedListing,
+          }}
+        >
+          <ConfigProvider apiUrl={process.env.backendApiBase}>
+            <AuthProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+              <Component {...pageProps} />
+            </AuthProvider>
+          </ConfigProvider>
+        </AppSubmissionContext.Provider>
+      </UICNavigationContext.Provider>
     </NavigationContext.Provider>
   )
 }

@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
   AlertBox,
-  LinkButton,
   Hero,
   Heading,
   t,
   SiteAlert,
   ActionBlock,
   Icon,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -76,13 +75,14 @@ export default function Home(props: IndexProps) {
               header={<Heading priority={2}>{t("welcome.signUp")}</Heading>}
               icon={<Icon size="3xl" symbol="mailThin" />}
               actions={[
-                <LinkButton
+                <Button
                   key={"sign-up"}
                   href={props.jurisdiction.notificationsSignUpURL}
-                  size={AppearanceSizeType.small}
+                  variant="primary-outlined"
+                  size="sm"
                 >
                   {t("welcome.signUpToday")}
-                </LinkButton>,
+                </Button>,
               ]}
             />
           )}
@@ -91,13 +91,14 @@ export default function Home(props: IndexProps) {
             header={<Heading priority={2}>{t("welcome.seeMoreOpportunitiesTruncated")}</Heading>}
             icon={<Icon size="3xl" symbol="building" />}
             actions={[
-              <LinkButton
-                href="/additional-resources"
+              <Button
                 key={"additional-resources"}
-                size={AppearanceSizeType.small}
+                href="/additional-resources"
+                variant="primary-outlined"
+                size="sm"
               >
                 {t("welcome.viewAdditionalHousingTruncated")}
-              </LinkButton>,
+              </Button>,
             ]}
           />
         </div>

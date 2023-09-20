@@ -1,15 +1,7 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-import {
-  Button,
-  LinkButton,
-  AppearanceStyleType,
-  Address,
-  Heading,
-  t,
-  OrDivider,
-  ContactAddress,
-} from "@bloom-housing/ui-components"
+import { Address, Heading, t, OrDivider, ContactAddress } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 
 export interface PaperApplication {
   fileURL: string
@@ -71,22 +63,27 @@ const GetApplication = (props: ApplicationsProps) => {
         </p>
       )}
       {props.applicationsOpen && props.onlineApplicationURL && (
-        <>
+        <div style={{ boxSizing: "border-box" }}>
           {props.preview ? (
-            <Button disabled className="w-full mb-2" data-testid={"listing-view-apply-button"}>
+            <Button
+              variant="primary-outlined"
+              disabled
+              className="w-full mb-2"
+              id={"listing-view-apply-button"}
+            >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
             </Button>
           ) : (
-            <LinkButton
-              styleType={AppearanceStyleType.primary}
+            <Button
+              variant="primary"
               className="w-full mb-2"
               href={props.onlineApplicationURL}
-              dataTestId={"listing-view-apply-button"}
+              id={"listing-view-apply-button"}
             >
               {props.strings?.applyOnline ?? t("listings.apply.applyOnline")}
-            </LinkButton>
+            </Button>
           )}
-        </>
+        </div>
       )}
 
       {props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length && (
@@ -95,16 +92,18 @@ const GetApplication = (props: ApplicationsProps) => {
           <div className="text-serif-xl mb-6">
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
-          <Button
-            styleType={
-              !props.preview && props.onlineApplicationURL ? AppearanceStyleType.primary : undefined
-            }
-            className="w-full mb-2"
-            onClick={toggleDownload}
-            disabled={props.preview}
-          >
-            {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-          </Button>
+          <div style={{ boxSizing: "border-box" }}>
+            <Button
+              variant={
+                !props.preview && props.onlineApplicationURL ? "primary" : "primary-outlined"
+              }
+              className="w-full mb-2"
+              onClick={toggleDownload}
+              disabled={props.preview}
+            >
+              {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
+            </Button>
+          </div>
         </>
       )}
       {showDownload &&

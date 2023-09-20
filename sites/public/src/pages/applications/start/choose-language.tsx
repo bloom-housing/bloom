@@ -6,9 +6,7 @@
 import axios from "axios"
 import { useRouter } from "next/router"
 import {
-  Button,
   ImageCard,
-  LinkButton,
   ActionBlock,
   FormCard,
   ProgressNav,
@@ -24,6 +22,7 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import { Button } from "@bloom-housing/ui-seeds"
 
 import FormsLayout from "../../../layouts/forms"
 import {
@@ -144,12 +143,12 @@ const ApplicationChooseLanguage = () => {
                 </div>
                 {listing.applicationConfig.languages.map((lang, index) => (
                   <Button
+                    variant="primary-outlined"
                     className="language-select mx-1 mb-2"
                     onClick={() => {
                       onLanguageSelect(lang)
                     }}
                     key={index}
-                    data-testid={"app-choose-language-button"}
                   >
                     {t(`applications.begin.${lang}`)}
                   </Button>
@@ -166,13 +165,14 @@ const ApplicationChooseLanguage = () => {
                 subheader={t("application.chooseLanguage.signInSaveTime")}
                 background="primary-lighter"
                 actions={[
-                  <LinkButton
+                  <Button
+                    variant="primary-outlined"
                     href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                    dataTestId={"app-choose-language-sign-in-button"}
-                    size={AppearanceSizeType.small}
+                    id={"app-choose-language-sign-in-button"}
+                    size="sm"
                   >
                     {t("nav.signIn")}
-                  </LinkButton>,
+                  </Button>,
                 ]}
               />
               <ActionBlock
@@ -182,13 +182,14 @@ const ApplicationChooseLanguage = () => {
                 }
                 background="primary-lighter"
                 actions={[
-                  <LinkButton
+                  <Button
+                    variant="primary-outlined"
                     href={"/create-account"}
-                    dataTestId={"app-choose-language-create-account-button"}
-                    size={AppearanceSizeType.small}
+                    id={"app-choose-language-create-account-button"}
+                    size="sm"
                   >
                     {t("account.createAccount")}
-                  </LinkButton>,
+                  </Button>,
                 ]}
               />
             </>
