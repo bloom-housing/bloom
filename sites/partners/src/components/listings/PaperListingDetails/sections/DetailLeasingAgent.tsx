@@ -23,12 +23,16 @@ const DetailLeasingAgent = () => {
           {getDetailFieldString(listing.leasingAgentPhone)}
         </FieldValue>
       </Grid.Row>
-      <Grid.Row>
+      <Grid.Row columns={3}>
         <FieldValue id="leasingAgentTitle" label={t("leasingAgent.title")}>
           {getDetailFieldString(listing.leasingAgentTitle)}
         </FieldValue>
 
-        <FieldValue id="leasingAgentOfficeHours" label={t("leasingAgent.officeHours")}>
+        <FieldValue
+          id="leasingAgentOfficeHours"
+          className="grid-double-span"
+          label={t("leasingAgent.officeHours")}
+        >
           {getDetailFieldString(listing.leasingAgentOfficeHours)}
         </FieldValue>
       </Grid.Row>

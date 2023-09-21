@@ -81,7 +81,7 @@ const LeasingAgent = () => {
             />
           </Grid.Cell>
         </Grid.Row>
-        <Grid.Row columns={2}>
+        <Grid.Row columns={3}>
           <Grid.Cell>
             <Field
               label={t("leasingAgent.title")}
@@ -91,7 +91,7 @@ const LeasingAgent = () => {
               register={register}
             />
           </Grid.Cell>
-          <Grid.Cell>
+          <Grid.Cell className="grid-double-span">
             <Textarea
               label={t("leasingAgent.officeHours")}
               name={"leasingAgentOfficeHours"}
