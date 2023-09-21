@@ -68,8 +68,8 @@ export class ListingsController {
   @Post()
   @ApiOperation({ summary: "Create listing", operationId: "create" })
   @UsePipes(new ListingCreateValidationPipe(defaultValidationPipeOptions))
-  async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
-    const listing = await this.listingsService.create(listingDto)
+  async create(@Request() req, @Body() listingDto: ListingCreateDto): Promise<ListingDto> {
+    const listing = await this.listingsService.create(listingDto, req.user)
     return mapTo(ListingDto, listing)
   }
 
@@ -118,21 +118,6 @@ export class ListingsController {
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto, req.user)
-    return mapTo(ListingDto, listing)
-  }
-
-  @Put(`updateAndNotify/:id`)
-  @ApiOperation({
-    summary: "Update listing by id and notify relevant users",
-    operationId: "updateAndNotify",
-  })
-  @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
-  async updateAndNotify(
-    @Request() req,
-    @Param("id") listingId: string,
-    @Body() listingUpdateDto: ListingUpdateDto
-  ): Promise<ListingDto> {
-    const listing = await this.listingsService.updateAndNotify(listingUpdateDto, req.user)
     return mapTo(ListingDto, listing)
   }
 
