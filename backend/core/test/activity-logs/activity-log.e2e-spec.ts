@@ -75,6 +75,7 @@ describe("Activity", () => {
       .send(appBody)
       .set("jurisdictionName", "Bay Area")
       .set(...setAuthorization(adminAccessToken))
+      .expect(201)
   })
 
   beforeEach(async () => {

@@ -24,6 +24,7 @@ import { Listing } from "../../src/listings/entities/listing.entity"
 import { EmailService } from "../../src/email/email.service"
 import { UserService } from "../../src/auth/services/user.service"
 import cookieParser from "cookie-parser"
+import { EmailModule } from "../../src/email/email.module"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -47,13 +48,14 @@ describe("Applications", () => {
 
   beforeEach(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = { confirmation: async () => {} }
+    const testEmailService = { confirmation: async () => {}, requestApproval: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
         AuthModule,
         ListingsModule,
+        EmailModule,
         ApplicationsModule,
         TypeOrmModule.forFeature([Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
@@ -614,6 +616,7 @@ describe("Applications", () => {
 
     const oldApplicationDueDate = listing.applicationDueDate
     listing.applicationDueDate = new Date()
+
     await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
