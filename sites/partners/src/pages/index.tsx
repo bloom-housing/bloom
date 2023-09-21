@@ -173,7 +173,7 @@ export default function ListingsList() {
               type="alert"
               inverted
             >
-              {t("errors.alert.exportFailed")}
+              {t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
           <AgTable

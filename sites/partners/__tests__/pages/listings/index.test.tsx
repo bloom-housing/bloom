@@ -112,7 +112,7 @@ describe("listings", () => {
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)
     const error = await findByText(
-      "Export failed. Please try again later. If the problem persists, please email supportbloom@exygy.com",
+      "There was an error. Please try again, or contact support for help.",
       {
         exact: false,
       }
