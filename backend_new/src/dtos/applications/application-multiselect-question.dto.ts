@@ -24,6 +24,6 @@ export class ApplicationMultiselectQuestion {
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMultiselectQuestionOption)
-  @ApiProperty()
+  @ApiProperty({ type: ApplicationMultiselectQuestionOption, isArray: true })
   options: ApplicationMultiselectQuestionOption[];
 }

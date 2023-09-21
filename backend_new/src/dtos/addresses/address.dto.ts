@@ -55,6 +55,7 @@ export class Address extends AbstractDTO {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   @Type(() => Number)
+  @ApiPropertyOptional()
   latitude?: number;
 
   @Expose()

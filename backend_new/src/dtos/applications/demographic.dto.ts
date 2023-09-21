@@ -1,26 +1,29 @@
 import { Expose } from 'class-transformer';
-import { ArrayMaxSize, IsString, MaxLength } from 'class-validator';
+import { ArrayMaxSize, IsDefined, IsString, MaxLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class Demographic extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   ethnicity?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   gender?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   sexualOrientation?: string;
 
   @Expose()
@@ -33,6 +36,7 @@ export class Demographic extends AbstractDTO {
   @Expose()
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
   @ApiProperty()
   race?: string[];
 }

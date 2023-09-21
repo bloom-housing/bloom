@@ -21,7 +21,7 @@ import {
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { Address } from '../addresses/address.dto';
 import { AbstractDTO } from '../shared/abstract.dto';
-import { UnitType } from '../unit-types/unit-type.dto';
+import { IdDTO } from '../shared/id.dto';
 import { Accessibility } from './accessibility.dto';
 import { AlternateContact } from './alternate-contact.dto';
 import { Applicant } from './applicant.dto';
@@ -33,30 +33,34 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   deletedAt?: Date;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   appUrl?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   additionalPhone?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   additionalPhoneNumber?: string;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   additionalPhoneNumberType?: string;
 
   @Expose()
@@ -74,38 +78,45 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   housingStatus?: string;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   sendMailToMailingAddress?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   householdExpectingChanges?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   householdStudent?: boolean;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   incomeVouchers?: boolean;
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional()
   income?: string;
 
   @Expose()
   @IsEnum(IncomePeriodEnum, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: IncomePeriodEnum, enumName: 'IncomePeriodEnum' })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional({ enum: IncomePeriodEnum, enumName: 'IncomePeriodEnum' })
   incomePeriod?: IncomePeriodEnum;
 
   @Expose()
@@ -118,12 +129,13 @@ export class Application extends AbstractDTO {
 
   @Expose()
   @IsEnum(LanguagesEnum, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: LanguagesEnum, enumName: 'LanguagesEnum' })
+  @IsDefined({ groups: [ValidationsGroupsEnum.applicants] })
+  @ApiPropertyOptional({ enum: LanguagesEnum, enumName: 'LanguagesEnum' })
   language?: LanguagesEnum;
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   acceptedTerms?: boolean;
 
   @Expose()
@@ -139,7 +151,7 @@ export class Application extends AbstractDTO {
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  @ApiProperty()
+  @ApiPropertyOptional()
   submissionDate?: Date;
 
   // if this field is true then the application is a confirmed duplicate
@@ -154,7 +166,7 @@ export class Application extends AbstractDTO {
   // meaning there exists a record in the application_flagged_set table for this application
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiPropertyOptional()
   flagged?: boolean;
 
   @Expose()
@@ -170,61 +182,61 @@ export class Application extends AbstractDTO {
     enum: ApplicationReviewStatusEnum,
     enumName: 'ApplicationReviewStatusEnum',
   })
-  @ApiProperty()
+  @ApiPropertyOptional()
   reviewStatus?: ApplicationReviewStatusEnum;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty()
+  @ApiProperty({ type: Address })
   applicationsMailingAddress: Address;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  @ApiProperty()
+  @ApiProperty({ type: Address })
   applicationsAlternateAddress: Address;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Accessibility)
-  @ApiProperty()
+  @ApiProperty({ type: Accessibility })
   accessibility: Accessibility;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Demographic)
-  @ApiProperty()
+  @ApiProperty({ type: Demographic })
   demographics: Demographic;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
-  @Type(() => UnitType)
-  preferredUnitTypes: UnitType[];
+  @Type(() => IdDTO)
+  @ApiProperty({ type: IdDTO, isArray: true })
+  preferredUnitTypes: IdDTO[];
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Applicant)
-  @ApiProperty()
+  @ApiProperty({ type: Applicant })
   applicant: Applicant;
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AlternateContact)
-  @ApiProperty()
+  @ApiProperty({ type: AlternateContact })
   alternateContact: AlternateContact;
 
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMember)
-  @ApiProperty()
+  @ApiProperty({ type: HouseholdMember, isArray: true })
   householdMember: HouseholdMember[];
 
   @Expose()
@@ -247,4 +259,10 @@ export class Application extends AbstractDTO {
     isArray: true,
   })
   programs?: ApplicationMultiselectQuestion[];
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDTO)
+  @ApiProperty({ type: IdDTO })
+  listings: IdDTO;
 }
