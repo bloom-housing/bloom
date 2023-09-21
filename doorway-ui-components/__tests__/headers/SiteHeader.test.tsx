@@ -54,7 +54,7 @@ describe("<SiteHeader>", () => {
     expect(getByText("We're just getting started. We'd love to get your feedback.")).toBeTruthy()
     expect(getByText("Listings")).toBeTruthy()
     expect(getByText("Get Assistance")).toBeTruthy()
-    expect(getByText("My Account")).toBeTruthy()
+    expect(getByText("Account")).toBeTruthy()
     expect(queryByText("My Dashboard")).toBeNull()
     expect(queryByText("My Applications")).toBeNull()
     expect(queryByText("Account Settings")).toBeNull()
