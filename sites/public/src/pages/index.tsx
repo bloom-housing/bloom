@@ -1,22 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  Hero,
-  Heading,
-  t,
-  SiteAlert,
-  ActionBlock,
-  Icon,
-} from "@bloom-housing/ui-components"
+import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { AlertBox, t, SiteAlert, ActionBlock, Icon } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import PageHero from "../components/page/Hero"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -66,13 +59,26 @@ export default function Home(props: IndexProps) {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
+      <PageHero>
+        <PageHero.Header>
+          <Heading>{heroTitle}</Heading>
+        </PageHero.Header>
+        <PageHero.Actions>
+          <Button href="/listings" variant="primary-outlined">
+            {t("welcome.seeRentalListings")}
+          </Button>
+        </PageHero.Actions>
+      </PageHero>
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
             <ActionBlock
               className="flex-1"
-              header={<Heading priority={2}>{t("welcome.signUp")}</Heading>}
+              header={
+                <Heading priority={2} size="2xl">
+                  {t("welcome.signUp")}
+                </Heading>
+              }
               icon={<Icon size="3xl" symbol="mailThin" />}
               actions={[
                 <Button
@@ -80,6 +86,7 @@ export default function Home(props: IndexProps) {
                   href={props.jurisdiction.notificationsSignUpURL}
                   variant="primary-outlined"
                   size="sm"
+                  className="m-2"
                 >
                   {t("welcome.signUpToday")}
                 </Button>,
@@ -88,7 +95,11 @@ export default function Home(props: IndexProps) {
           )}
           <ActionBlock
             className="flex-1"
-            header={<Heading priority={2}>{t("welcome.seeMoreOpportunitiesTruncated")}</Heading>}
+            header={
+              <Heading priority={2} size="2xl">
+                {t("welcome.seeMoreOpportunitiesTruncated")}
+              </Heading>
+            }
             icon={<Icon size="3xl" symbol="building" />}
             actions={[
               <Button
@@ -96,6 +107,7 @@ export default function Home(props: IndexProps) {
                 href="/additional-resources"
                 variant="primary-outlined"
                 size="sm"
+                className="m-2"
               >
                 {t("welcome.viewAdditionalHousingTruncated")}
               </Button>,
