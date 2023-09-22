@@ -14,6 +14,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { Language } from "../../shared/types/language-enum"
 import { Expose, Type } from "class-transformer"
 import { MultiselectQuestion } from "../../multiselect-question/entities/multiselect-question.entity"
+import { UserRoleEnum } from "../../../src/auth/enum/user-role-enum"
 
 @Entity({ name: "jurisdictions" })
 export class Jurisdiction extends AbstractEntity {
@@ -35,6 +36,14 @@ export class Jurisdiction extends AbstractEntity {
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default], each: true })
   languages: Language[]
+
+  @Column({ type: "enum", enum: UserRoleEnum, array: true, nullable: true })
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(UserRoleEnum, { groups: [ValidationsGroupsEnum.default], each: true })
+  listingApprovalPermissions?: UserRoleEnum[]
 
   @ManyToMany(
     () => MultiselectQuestion,

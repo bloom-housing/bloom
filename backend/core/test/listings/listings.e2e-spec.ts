@@ -9,13 +9,18 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
-import { ApplicationSection, Language } from "../../types"
+import {
+  ApplicationSection,
+  EnumJurisdictionListingApprovalPermissions,
+  Language,
+} from "../../types"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 import { Listing } from "../../src/listings/entities/listing.entity"
+import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { MultiselectQuestion } from "../../src//multiselect-question/entities/multiselect-question.entity"
@@ -29,6 +34,8 @@ import dbOptions from "../../ormconfig.test"
 import { MultiselectQuestionDto } from "../../src/multiselect-question/dto/multiselect-question.dto"
 
 import cookieParser from "cookie-parser"
+import { EmailService } from "../../src/email/email.service"
+import { User } from "../../src/auth/entities/user.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -41,6 +48,17 @@ describe("Listings", () => {
   let questionRepository: Repository<MultiselectQuestion>
   let adminAccessToken: string
   let jurisdictionsRepository: Repository<Jurisdiction>
+  let userRepository: Repository<User>
+
+  const testEmailService = {
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    requestApproval: async () => {},
+    changesRequested: async () => {},
+    listingApproved: async () => {},
+  }
+  const mockChangesRequested = jest.spyOn(testEmailService, "changesRequested")
+  const mockRequestApproval = jest.spyOn(testEmailService, "requestApproval")
+  const mockListingApproved = jest.spyOn(testEmailService, "listingApproved")
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -52,7 +70,10 @@ describe("Listings", () => {
         ApplicationMethodsModule,
         PaperApplicationsModule,
       ],
-    }).compile()
+    })
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .compile()
 
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
@@ -65,6 +86,7 @@ describe("Listings", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    userRepository = moduleRef.get<Repository<User>>(getRepositoryToken(User))
   })
 
   it("should return all listings", async () => {
@@ -138,7 +160,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(15)
+    expect(res.body.items.length).toBe(16)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
@@ -449,6 +471,175 @@ describe("Listings", () => {
 
     expect(listingsSearchResponse.body.items.length).toBe(1)
     expect(listingsSearchResponse.body.items[0].name).toBe(newListingName)
+  })
+  describe("listings approval notification", () => {
+    let listing: ListingUpdateDto, adminId, alameda
+    beforeAll(async () => {
+      adminId = (await userRepository.find({ where: { email: "admin@example.com" } }))?.[0]?.id
+      alameda = (await jurisdictionsRepository.find({ where: { name: "Alameda" } }))[0]
+      const queryParams = {
+        limit: "all",
+        filter: [
+          {
+            $comparison: "=",
+            name: "Test: Draft",
+          },
+        ],
+      }
+      const query = qs.stringify(queryParams)
+      const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+      listing = { ...res.body.items[0] }
+    })
+    it("update status to pending approval and notify appropriate users", async () => {
+      listing.status = ListingStatus.pendingReview
+      const putPendingApprovalResponse = await supertest(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(listing)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      const listingPendingApprovalResponse = await supertest(app.getHttpServer())
+        .get(`/listings/${putPendingApprovalResponse.body.id}`)
+        .expect(200)
+
+      expect(listingPendingApprovalResponse.body.status).toBe(ListingStatus.pendingReview)
+      expect(mockRequestApproval).toBeCalledWith(
+        expect.objectContaining({
+          id: adminId,
+        }),
+        { id: listing.id, name: listing.name },
+        expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
+        process.env.PARTNERS_PORTAL_URL
+      )
+      //ensure juris admin is not included since don't have approver permissions in alameda seed
+      expect(mockRequestApproval.mock.calls[0]["emails"]).toEqual(
+        expect.not.arrayContaining(["alameda-admin@example.com"])
+      )
+    })
+    it("update status to changes requested and notify appropriate users", async () => {
+      listing.status = ListingStatus.changesRequested
+      const putChangesRequestedResponse = await supertest(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(listing)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      const listingChangesRequestedResponse = await supertest(app.getHttpServer())
+        .get(`/listings/${putChangesRequestedResponse.body.id}`)
+        .expect(200)
+
+      expect(listingChangesRequestedResponse.body.status).toBe(ListingStatus.changesRequested)
+      expect(mockChangesRequested).toBeCalledWith(
+        expect.objectContaining({
+          id: adminId,
+        }),
+        { id: listing.id, name: listing.name },
+        expect.arrayContaining(["leasing-agent-2@example.com", "alameda-admin@example.com"]),
+        process.env.PARTNERS_PORTAL_URL
+      )
+    })
+    it("update status to listing approved and notify appropriate users", async () => {
+      listing.status = ListingStatus.active
+      const putApprovedResponse = await supertest(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(listing)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      const listingApprovedResponse = await supertest(app.getHttpServer())
+        .get(`/listings/${putApprovedResponse.body.id}`)
+        .expect(200)
+
+      expect(listingApprovedResponse.body.status).toBe(ListingStatus.active)
+      expect(mockListingApproved).toBeCalledWith(
+        expect.objectContaining({
+          id: adminId,
+        }),
+        { id: listing.id, name: listing.name },
+        expect.arrayContaining(["leasing-agent-2@example.com", "alameda-admin@example.com"]),
+        alameda.publicUrl
+      )
+    })
+
+    it("should create pending review listing and notify appropriate users", async () => {
+      const newListingCreateDto = makeTestListing(alameda.id)
+      const newListingName = "New Alameda Listing"
+      newListingCreateDto.name = newListingName
+      newListingCreateDto.status = ListingStatus.pendingReview
+      newListingCreateDto.units = [
+        {
+          listing: newListingName,
+          amiChart: null,
+          amiPercentage: "30",
+          annualIncomeMax: "45600",
+          annualIncomeMin: "36168",
+          bmrProgramChart: false,
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          monthlyIncomeMin: "3014",
+          monthlyRent: "1219",
+          monthlyRentAsPercentOfIncome: null,
+          numBathrooms: 0,
+          numBedrooms: 1,
+          number: null,
+          sqFeet: "635",
+        },
+      ]
+
+      const listingResponse = await supertest(app.getHttpServer())
+        .post(`/listings`)
+        .send(newListingCreateDto)
+        .set(...setAuthorization(adminAccessToken))
+
+      expect(listingResponse.body.name).toBe(newListingName)
+      expect(listingResponse.body.status).toBe(ListingStatus.pendingReview)
+      expect(mockRequestApproval).toBeCalledWith(
+        expect.objectContaining({
+          id: adminId,
+        }),
+        { id: listingResponse.body.id, name: listingResponse.body.name },
+        expect.arrayContaining(["admin@example.com", "mfauser@bloom.com"]),
+        process.env.PARTNERS_PORTAL_URL
+      )
+    })
+    it("should email different users based on jurisdiction permissions", async () => {
+      alameda.listingApprovalPermissions = [
+        EnumJurisdictionListingApprovalPermissions.admin,
+        EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin,
+      ]
+      alameda.multiselectQuestions = []
+      await supertest(app.getHttpServer())
+        .put(`/jurisdictions/${alameda.id}`)
+        .send(alameda)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      listing.status = ListingStatus.pendingReview
+      const putPendingApprovalResponse = await supertest(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(listing)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
+      const listingPendingApprovalResponse = await supertest(app.getHttpServer())
+        .get(`/listings/${putPendingApprovalResponse.body.id}`)
+        .expect(200)
+
+      expect(listingPendingApprovalResponse.body.status).toBe(ListingStatus.pendingReview)
+      expect(mockRequestApproval).toBeCalledWith(
+        expect.objectContaining({
+          id: adminId,
+        }),
+        { id: listing.id, name: listing.name },
+        expect.arrayContaining([
+          "admin@example.com",
+          "mfauser@bloom.com",
+          "alameda-admin@example.com",
+        ]),
+        process.env.PARTNERS_PORTAL_URL
+      )
+    })
   })
 
   afterEach(() => {

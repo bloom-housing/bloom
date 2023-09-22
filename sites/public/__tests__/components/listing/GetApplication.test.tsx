@@ -26,6 +26,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingName={"Listing name"}
       />
     )
     expect(getByText("How to Apply")).toBeTruthy()
@@ -55,11 +56,12 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingName={"Listing name"}
       />
     )
     expect(queryByTestId("get-application-section")).toBeNull()
   })
-  it("disables buttons in preview state", () => {
+  it("disables apply online button in preview state", () => {
     const { getByText } = render(
       <GetApplication
         onlineApplicationURL={"online-app-url"}
@@ -80,10 +82,10 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={true}
+        listingName={"Listing name"}
       />
     )
     expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
-    expect(getByText("Download Application").closest("button")?.disabled).toBe(true)
   })
   it("hides buttons if application is not open", () => {
     const { getByText, queryByText } = render(
@@ -106,6 +108,7 @@ describe("<Applications>", () => {
           zipCode: "90210",
         }}
         preview={false}
+        listingName={"Listing name"}
       />
     )
     expect(queryByText("Apply Online")).toBe(null)

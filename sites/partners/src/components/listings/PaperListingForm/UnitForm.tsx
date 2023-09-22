@@ -57,7 +57,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, setValue, control, reset } = useForm()
+  const { register, errors, trigger, getValues, setValue, control, reset, clearErrors } = useForm()
 
   const numberOccupancyOptions = 11
 
@@ -99,6 +99,15 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           type="number"
           prepend="$"
           readerOnly
+          className={errors[fieldName] ? "error" : ""}
+          error={errors[fieldName]}
+          errorMessage={t("errors.requiredFieldError")}
+          validation={{ required: !!amiChartID }}
+          inputProps={{
+            onChange: () => {
+              clearErrors(fieldName)
+            },
+          }}
         />
       )
       return (
@@ -180,6 +189,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   }
 
   useEffect(() => {
+    ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+      clearErrors(`maxIncomeHouseholdSize${index + 1}`)
+    })
     if (
       amiPercentage &&
       !loading &&
@@ -271,7 +283,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     setLoading(true)
     const data = getValues()
     const validation = await trigger()
-    if (!validation) return
+    if (!validation) {
+      setLoading(false)
+      return
+    }
 
     const formData = formatFormData(data)
 
@@ -400,6 +415,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 error={fieldHasError(errors?.unitType)}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
+                inputProps={{
+                  onChange: () => {
+                    clearErrors("unitType.id")
+                  },
+                }}
               />
             </FieldValue>
           </GridCell>
@@ -508,6 +528,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 options={amiChartsOptions}
                 inputProps={{
                   onChange: () => {
+                    setValue("amiPercentage", undefined)
+                    clearErrors("amiPercentage")
+                    ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+                      setValue(`maxIncomeHouseholdSize${index + 1}`, undefined)
+                    })
                     if (amiChartID && !loading && amiChartsOptions) {
                       void fetchAmiChart()
                       setIsAmiPercentageDirty(true)
@@ -530,8 +555,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 inputProps={{
                   onChange: () => {
                     setIsAmiPercentageDirty(true)
+                    clearErrors("amiPercentage")
                   },
                 }}
+                error={fieldHasError(errors?.amiPercentage)}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: !!amiChartID }}
+                disabled={!amiChartID}
               />
             </FieldValue>
           </GridCell>
