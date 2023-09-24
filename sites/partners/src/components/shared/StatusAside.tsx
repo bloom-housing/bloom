@@ -12,7 +12,7 @@ export interface StatusAsideProps {
 export const StatusAside = (props: StatusAsideProps) => (
   <div>
     <div className={styles["status-aside__buttons"]}>
-      <Grid>
+      <Grid spacing="sm">
         <Grid.Row columns={props.columns || 2}>{props.actions}</Grid.Row>
       </Grid>
     </div>
