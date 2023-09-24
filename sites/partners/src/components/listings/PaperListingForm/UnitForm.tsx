@@ -102,8 +102,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       )
       return (
         <tr key={index}>
-          <td className={"pl-4"}>{index + 1}</td>
-          <td>{incomeCell}</td>
+          <td className="pl-4 py-2">{index + 1}</td>
+          <td className="py-2">{incomeCell}</td>
         </tr>
       )
     })
@@ -532,7 +532,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             </Grid.Row>
           </SectionWithGrid>
 
-          <section>
+          <section className="mb-6 sm:w-1/2 sm:pr-3">
             <table className={"w-full text-xs td-plain th-plain"}>
               <thead>
                 <tr>
@@ -546,17 +546,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
           <Grid>
             <Grid.Row columns={4}>
-              <Grid.Cell>
+              <FieldValue label={t("listings.unit.rentType")}>
                 <FieldGroup
                   name="rentType"
                   type="radio"
                   register={register}
-                  groupLabel={t("listings.unit.rentType")}
                   fields={rentTypeOptions}
                   fieldClassName="m-0"
                   fieldGroupClassName="flex h-12 items-center"
                 />
-              </Grid.Cell>
+              </FieldValue>
 
               {rentType === "fixed" && (
                 <>
