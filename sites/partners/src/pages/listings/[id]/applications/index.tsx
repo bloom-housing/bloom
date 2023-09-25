@@ -115,7 +115,7 @@ const ApplicationsList = () => {
           timeout={5000}
           dismissable
           sticky={true}
-          alertMessage={{ message: t("errors.alert.exportFailed"), type: "alert" }}
+          alertMessage={{ message: t("account.settings.alerts.genericError"), type: "alert" }}
         />
       )}
       <NavigationHeader
