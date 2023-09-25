@@ -117,6 +117,7 @@ ARG LANGUAGES
 ARG MAPBOX_TOKEN
 ARG GTM_KEY
 ARG FEATURE_LISTINGS_APPROVAL
+ARG SHOW_PROFESSIONAL_PARTNERS
 
 # We need to have this nested 2 layers deep due to hardcoded paths in package.json
 WORKDIR /app/sites/${SITE}
