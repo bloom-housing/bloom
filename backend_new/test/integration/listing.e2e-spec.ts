@@ -351,15 +351,23 @@ describe('Listing Controller Tests', () => {
     expect(items).toContain(listing2Created.name);
   });
 
-  it('should not get listings from list endpoint when params are sent', async () => {
+  it('should not get listings from list endpoint when params are sent but do not match anything', async () => {
     const queryParams: ListingsQueryParams = {
       limit: 1,
       page: 1,
       view: ListingViews.base,
       filter: [
         {
+          $comparison: Compare['='],
+          jurisdiction: randomUUID(),
+        },
+        {
           $comparison: Compare.IN,
           name: 'random name',
+        },
+        {
+          $comparison: Compare['='],
+          status: 'active',
         },
       ],
     };

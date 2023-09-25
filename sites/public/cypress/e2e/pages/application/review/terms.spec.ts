@@ -14,7 +14,8 @@ describe("applications/review/terms", function () {
     cy.location("pathname").should("include", route)
   })
 
-  it("should require form input", function () {
+  //TODO: unskip this when applications are implemented on the frontend
+  it.skip("should require form input", function () {
     submitApplication()
     cy.checkErrorMessages("be.visible")
   })

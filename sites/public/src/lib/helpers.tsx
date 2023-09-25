@@ -135,7 +135,6 @@ export const getListings = (listings) => {
     return null
   }
   return listings.map((listing: Listing, index) => {
-    console.log("IMAGES!", listing)
     return (
       <ListingCard
         key={index}

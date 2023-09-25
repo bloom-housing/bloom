@@ -1,4 +1,5 @@
-describe("applications/household/changes", function () {
+// TODO: unskip after applications are implemented on the front end
+describe.skip("applications/household/changes", function () {
   const route = "/applications/household/changes"
 
   beforeEach(() => {

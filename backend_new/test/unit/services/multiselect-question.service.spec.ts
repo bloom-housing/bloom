@@ -176,7 +176,6 @@ describe('Testing multiselect question service', () => {
               {
                 applicationSection: {
                   equals: MultiselectQuestionsApplicationSectionEnum.programs,
-                  mode: 'default',
                 },
               },
             ],
