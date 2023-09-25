@@ -41,7 +41,11 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
 
               <FieldValue
                 label={t("listings.unit.type")}
-                children={unit?.unitType?.name || t("t.n/a")}
+                children={
+                  unit?.unitType?.name
+                    ? t(`listings.unit.typeOptions.${unit?.unitType?.name}`)
+                    : t("t.n/a")
+                }
               />
 
               <FieldValue
@@ -111,7 +115,6 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
                     label={t("t.monthlyMinimumIncome")}
                     children={unit?.monthlyIncomeMin || t("t.n/a")}
                   />
-
                   <FieldValue
                     id="unit.monthlyRent"
                     label={t("listings.unit.monthlyRent")}

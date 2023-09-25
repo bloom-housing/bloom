@@ -146,7 +146,7 @@ const Users = () => {
               type="alert"
               inverted
             >
-              {t("errors.alert.exportFailed")}
+              {t("account.settings.alerts.genericError")}
             </AlertBox>
           )}
           <AgTable

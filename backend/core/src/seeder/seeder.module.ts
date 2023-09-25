@@ -24,6 +24,7 @@ import { ListingColiseumSeed } from "../seeder/seeds/listings/listing-coliseum-s
 import { ListingDefaultOnePreferenceSeed } from "../seeder/seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "../seeder/seeds/listings/listing-default-no-preference-seed"
 import { MultiselectQuestion } from "../multiselect-question/entities/multiselect-question.entity"
+import { ListingDefaultDraftSeed } from "./seeds/listings/listing-default-draft"
 import { ListingDefaultFCFSSeed } from "../seeder/seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultOpenSoonSeed } from "../seeder/seeds/listings/listing-default-open-soon"
 import {
@@ -98,6 +99,7 @@ export class SeederModule {
         ListingColiseumSeed,
         ListingDefaultOnePreferenceSeed,
         ListingDefaultNoPreferenceSeed,
+        ListingDefaultDraftSeed,
         ListingDefaultFCFSSeed,
         ListingDefaultOpenSoonSeed,
         ListingDefaultBmrChartSeed,

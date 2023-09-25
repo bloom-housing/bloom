@@ -1,7 +1,19 @@
 import React, { useState } from "react"
 import Markdown from "markdown-to-jsx"
-import { Address, Heading, t, OrDivider, ContactAddress } from "@bloom-housing/ui-components"
+
+import {
+  Address,
+  Heading,
+  t,
+  OrDivider,
+  ContactAddress,
+  Modal,
+  Form,
+  FieldGroup,
+} from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
+import { downloadExternalPDF } from "../../lib/helpers"
 
 export interface PaperApplication {
   fileURL: string
@@ -17,6 +29,8 @@ export interface ApplicationsProps {
   applicationsOpen: boolean
   /** The date applications open */
   applicationsOpenDate?: string
+  /** The name of the listing */
+  listingName: string
   /** The URL for an online applications */
   onlineApplicationURL?: string
   /** Any number of paper application objects, including their URL and language */
@@ -43,8 +57,14 @@ const GetApplication = (props: ApplicationsProps) => {
   const showSection =
     props.onlineApplicationURL ||
     (props.applicationsOpen && props.paperMethod && !!props.paperApplications?.length)
-  const [showDownload, setShowDownload] = useState(false)
-  const toggleDownload = () => setShowDownload(!showDownload)
+  const [showDownloadModal, setShowDownloadModal] = useState(false)
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch } = useForm()
+  const paperApplicationURL: string = watch(
+    "paperApplicationLanguage",
+    props.paperApplications?.length ? props.paperApplications[0].fileURL : undefined
+  )
 
   if (!showSection) return null
 
@@ -92,32 +112,19 @@ const GetApplication = (props: ApplicationsProps) => {
           <div className="text-serif-xl mb-6">
             {props.strings?.getAPaperApplication ?? t("listings.apply.getAPaperApplication")}
           </div>
-          <div style={{ boxSizing: "border-box" }}>
-            <Button
-              variant={
-                !props.preview && props.onlineApplicationURL ? "primary" : "primary-outlined"
-              }
-              className="w-full mb-2"
-              onClick={toggleDownload}
-              disabled={props.preview}
-            >
-              {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-            </Button>
-          </div>
+          <Button
+            variant="primary"
+            className="w-full mb-2"
+            onClick={async () => {
+              props.paperApplications.length === 1
+                ? await downloadExternalPDF(props.paperApplications[0].fileURL, props.listingName)
+                : setShowDownloadModal(true)
+            }}
+          >
+            {props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
+          </Button>
         </>
       )}
-      {showDownload &&
-        props.paperApplications?.map((paperApplication: PaperApplication, index: number) => (
-          <p key={index} className="text-center mt-2 mb-4 text-xs">
-            <a
-              href={paperApplication.fileURL}
-              title={props.strings?.downloadApplication ?? t("listings.apply.downloadApplication")}
-              target="_blank"
-            >
-              {paperApplication.languageString}
-            </a>
-          </p>
-        ))}
       {props.applicationPickUpAddress && (
         <>
           {props.applicationsOpen && (props.onlineApplicationURL || props.paperMethod) && (
@@ -145,6 +152,54 @@ const GetApplication = (props: ApplicationsProps) => {
           )}
         </>
       )}
+      <Modal
+        open={!!showDownloadModal}
+        title={t("listings.chooseALanguage")}
+        ariaDescription={t("listings.chooseALanguage")}
+        onClose={() => setShowDownloadModal(false)}
+        actions={[
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={async () => {
+              await downloadExternalPDF(paperApplicationURL, props.listingName)
+              setShowDownloadModal(false)
+            }}
+          >
+            {t("t.download")}
+          </Button>,
+          <Button
+            variant="primary-outlined"
+            size="sm"
+            onClick={() => {
+              setShowDownloadModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        <Form>
+          <fieldset>
+            <legend className="sr-only">{t("listings.chooseALanguage")}</legend>
+            <FieldGroup
+              name="paperApplicationLanguage"
+              fieldGroupClassName="grid grid-cols-1"
+              fieldClassName="ml-0"
+              type="radio"
+              register={register}
+              validation={{ required: true }}
+              fields={props.paperApplications?.map((app, index) => ({
+                id: app.languageString,
+                label: app.languageString,
+                value: app.fileURL,
+                defaultChecked: index === 0,
+              }))}
+              dataTestId={"paper-application-language"}
+            />
+          </fieldset>
+        </Form>
+      </Modal>
     </section>
   )
 }
