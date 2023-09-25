@@ -24,6 +24,8 @@ import ApplicationConductor, {
 import { translations, overrideTranslations } from "../lib/translations"
 import LinkComponent from "../components/core/LinkComponent"
 
+import "../../styles/overrides.scss"
+
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   //  const initialized = useState(true)

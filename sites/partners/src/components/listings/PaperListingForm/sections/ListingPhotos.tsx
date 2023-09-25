@@ -8,15 +8,14 @@ import {
   TableThumbnail,
   StandardTableData,
   StandardTableCell,
-  Button,
   Drawer,
 } from "@bloom-housing/ui-components"
+import { Button, Grid } from "@bloom-housing/ui-seeds"
 import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing/shared-helpers"
 
 import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
 import { ListingImage, Asset } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
-import { Grid } from "@bloom-housing/ui-seeds"
 
 const ListingPhotos = () => {
   const formMethods = useFormContext()
@@ -102,11 +101,11 @@ const ListingPhotos = () => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-red-700"
+            className="text-alert"
             onClick={() => {
               saveImageFields(fields.filter((item, i2) => i2 != index) as ListingImage[])
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -140,7 +139,7 @@ const ListingPhotos = () => {
               t("listings.sections.photo.primaryPhoto")
             ) : (
               <Button
-                unstyled
+                variant="text"
                 className="ml-0"
                 onClick={() => {
                   const resortedImages = [
@@ -161,7 +160,7 @@ const ListingPhotos = () => {
           content: (
             <Button
               type="button"
-              className="font-semibold uppercase text-red-700"
+              className="text-alert"
               onClick={() => {
                 const filteredImages = drawerImages.filter((item, i2) => i2 != index)
                 filteredImages.forEach((item, i2) => {
@@ -169,7 +168,7 @@ const ListingPhotos = () => {
                 })
                 setDrawerImages(filteredImages)
               }}
-              unstyled
+              variant="text"
             >
               {t("t.delete")}
             </Button>
@@ -224,7 +223,7 @@ const ListingPhotos = () => {
 
             <Button
               type="button"
-              styleType={fieldHasError(errors?.images) ? AppearanceStyleType.alert : null}
+              variant={fieldHasError(errors?.images) ? "alert" : "primary-outlined"}
               onClick={() => {
                 setDrawerState(true)
                 setDrawerImages([...listingFormPhotos])
@@ -292,7 +291,6 @@ const ListingPhotos = () => {
             saveImageFields(drawerImages)
             resetDrawerState()
           }}
-          styleType={AppearanceStyleType.primary}
           dataTestId={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
         >
           {t("t.save")}

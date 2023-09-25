@@ -13,6 +13,10 @@
     justify-content: center;
     text-align: center;
   }
+
+  .seeds-button {
+    -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
+  }
 }
 
 .section-with-grid hgroup p {
