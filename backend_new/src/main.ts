@@ -1,5 +1,6 @@
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './modules/app.module';
 import { CustomExceptionFilter } from './utilities/custom-exception-filter';
@@ -23,6 +24,9 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen('3101'); // TODO: remove the hard coded port
+  const configService: ConfigService = app.get(ConfigService);
+  await app.listen(
+    configService.get<number>('PORT_NEW') || configService.get<number>('PORT'),
+  );
 }
 bootstrap();

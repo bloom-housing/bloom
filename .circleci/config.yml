@@ -35,6 +35,7 @@ executors:
           JURISDICTION_NAME: Bloomington
     environment:
       PORT: "3100"
+      PORT_NEW: "3101"
       EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
       APP_SECRET: "CI-LONG-SECRET-KEY"
       # DB URL for migration and seeds:
