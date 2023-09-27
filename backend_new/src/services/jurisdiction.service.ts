@@ -14,7 +14,7 @@ import { JurisdictionUpdate } from '../dtos/jurisdictions/jurisdiction-update.dt
 const view: Prisma.JurisdictionsInclude = {
   multiselectQuestions: true,
 };
-/*
+/**
   this is the service for jurisdictions
   it handles all the backend's business logic for reading/writing/deleting jurisdiction data
 */
@@ -22,7 +22,7 @@ const view: Prisma.JurisdictionsInclude = {
 export class JurisdictionService {
   constructor(private prisma: PrismaService) {}
 
-  /*
+  /**
     this will get a set of jurisdictions given the params passed in
   */
   async list(): Promise<Jurisdiction[]> {
