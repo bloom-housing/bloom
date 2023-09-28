@@ -150,9 +150,12 @@ describe("users", () => {
     const exportButton = await findByText("Export to CSV")
     expect(exportButton).toBeInTheDocument()
     fireEvent.click(exportButton)
-    const errorMessage = await findByText("Export failed. Please try again later.", {
-      exact: false,
-    })
+    const errorMessage = await findByText(
+      "There was an error. Please try again, or contact support for help.",
+      {
+        exact: false,
+      }
+    )
     expect(errorMessage).toBeInTheDocument()
     expect(console.log).toHaveBeenCalled()
   })

@@ -110,7 +110,6 @@
   "authentication.createAccount.firstName": "First Name",
   "authentication.createAccount.lastName": "Last Name",
   "errors.alert.emailConflict": "That email is already in use",
-  "errors.alert.exportFailed": "Export failed. Please try again later. If the problem persists, please email supportbloom@exygy.com",
   "errors.maxLessThanMinOccupancyError": "Max Occupancy must be greater than or equal to Minimum Occupancy",
   "errors.minGreaterThanMaxOccupancyError": "Minimum Occupancy must be less than or equal to Max Occupancy",
   "errors.partialAddress": "Cannot enter a partial address",
