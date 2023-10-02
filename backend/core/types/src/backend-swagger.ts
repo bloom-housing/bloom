@@ -1522,30 +1522,6 @@ export class ListingsService {
       axios(configs, resolve, reject)
     })
   }
-  /**
-   * Update listing by id and notify relevant users
-   */
-  updateAndNotify(
-    params: {
-      /**  */
-      id: string
-      /** requestBody */
-      body?: ListingUpdate
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/updateAndNotify/{id}"
-      url = url.replace("{id}", params["id"] + "")
-
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
-
-      let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
 }
 
 export class PaperApplicationsService {
@@ -3873,6 +3849,9 @@ export interface Jurisdiction {
   languages: EnumJurisdictionLanguages[]
 
   /**  */
+  listingApprovalPermissions?: EnumJurisdictionListingApprovalPermissions[]
+
+  /**  */
   partnerTerms?: string
 
   /**  */
@@ -4304,6 +4283,9 @@ export interface JurisdictionCreate {
   languages: EnumJurisdictionCreateLanguages[]
 
   /**  */
+  listingApprovalPermissions?: EnumJurisdictionCreateListingApprovalPermissions[]
+
+  /**  */
   partnerTerms?: string
 
   /**  */
@@ -4340,6 +4322,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: EnumJurisdictionUpdateLanguages[]
+
+  /**  */
+  listingApprovalPermissions?: EnumJurisdictionUpdateListingApprovalPermissions[]
 
   /**  */
   partnerTerms?: string
@@ -6425,6 +6410,12 @@ export enum EnumJurisdictionLanguages {
   "zh" = "zh",
   "tl" = "tl",
 }
+export enum EnumJurisdictionListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
 export type CombinedRolesTypes = UserRoles
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
@@ -6441,12 +6432,24 @@ export enum EnumJurisdictionCreateLanguages {
   "zh" = "zh",
   "tl" = "tl",
 }
+export enum EnumJurisdictionCreateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
 export enum EnumJurisdictionUpdateLanguages {
   "en" = "en",
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
   "tl" = "tl",
+}
+export enum EnumJurisdictionUpdateListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",

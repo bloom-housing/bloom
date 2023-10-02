@@ -2,6 +2,7 @@ import { INestApplicationContext } from "@nestjs/common"
 import { JurisdictionCreateDto } from "../../jurisdictions/dto/jurisdiction-create.dto"
 import { Language } from "../../shared/types/language-enum"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+import { UserRoleEnum } from "../../../src/auth/enum/user-role-enum"
 
 export const activeJurisdictions: JurisdictionCreateDto[] = [
   {
@@ -16,6 +17,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enablePartnerSettings: true,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
+    listingApprovalPermissions: [UserRoleEnum.admin],
   },
 ]
 

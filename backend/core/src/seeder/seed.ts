@@ -6,6 +6,7 @@ import { getRepositoryToken } from "@nestjs/typeorm"
 import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
+import { ListingDefaultDraftSeed } from "./seeds/listings/listing-default-draft"
 import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
 import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
@@ -64,6 +65,7 @@ const argv = yargs.scriptName("seed").options({
 const listingSeeds: any[] = [
   ListingDefaultSeed,
   ListingColiseumSeed,
+  ListingDefaultDraftSeed,
   ListingDefaultOpenSoonSeed,
   ListingDefaultOnePreferenceSeed,
   ListingDefaultNoPreferenceSeed,

@@ -179,17 +179,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           const formattedData = await dataPipeline.run()
           let result
           if (editMode) {
-            if (process.env.featureListingsApproval) {
-              result = await listingsService.updateAndNotify({
-                id: listing.id,
-                body: { ...formattedData },
-              })
-            } else {
-              result = await listingsService.update({
-                id: listing.id,
-                body: { id: listing.id, ...formattedData },
-              })
-            }
+            result = await listingsService.update({
+              id: listing.id,
+              body: { id: listing.id, ...formattedData },
+            })
           } else {
             result = await listingsService.create({ body: formattedData })
           }

@@ -20,6 +20,9 @@ import { User } from "../../auth/entities/user.entity"
 import { UserService } from "../../auth/services/user.service"
 import { CachePurgeService } from "../cache-purge.service"
 import { EmailService } from "../../../src/email/email.service"
+import { JurisdictionsService } from "../../../src/jurisdictions/services/jurisdictions.service"
+import { ListingStatus } from "../types/listing-status-enum"
+import { UserRoleEnum } from "../../../src/auth/enum/user-role-enum"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -90,6 +93,7 @@ const mockInnerQueryBuilder = {
   addGroupBy: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
+  orWhere: jest.fn().mockReturnThis(),
   offset: jest.fn().mockReturnThis(),
   limit: jest.fn().mockReturnThis(),
   getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
@@ -117,6 +121,7 @@ const mockQueryBuilder = {
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   where: jest.fn().mockReturnThis(),
+  orWhere: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
@@ -140,10 +145,19 @@ const mockListingsRepo = {
 const mockUserRepo = {
   findOne: jest.fn(),
   save: jest.fn(),
-  createQueryBuilder: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   findByEmail: jest.fn(),
   findByResetToken: jest.fn(),
 }
+
+const requestApprovalMock = jest.fn()
+const changesRequestedMock = jest.fn()
+const listingApprovedMock = jest.fn()
+
+const user = new User()
+user.firstName = "Test"
+user.lastName = "User"
+user.email = "test@xample.com"
 
 describe("ListingsService", () => {
   beforeEach(async () => {
@@ -188,14 +202,21 @@ describe("ListingsService", () => {
         {
           provide: EmailService,
           useValue: {
-            requestApproval: jest.fn(),
+            requestApproval: requestApprovalMock,
+            changesRequested: changesRequestedMock,
+            listingApproved: listingApprovedMock,
+          },
+        },
+        {
+          provide: JurisdictionsService,
+          useValue: {
+            findOne: jest.fn(),
           },
         },
         {
           provide: ConfigService,
           useValue: { get: jest.fn() },
         },
-        { provide: getRepositoryToken(User), useValue: jest.fn() },
       ],
     }).compile()
 
@@ -456,6 +477,85 @@ describe("ListingsService", () => {
         "DESC",
         undefined
       )
+    })
+  })
+  describe("ListingsService.listingApprovalNotify", () => {
+    it("request approval email", async () => {
+      jest.spyOn(service, "getUserEmailInfo").mockResolvedValueOnce({ emails: ["admin@email.com"] })
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.pendingReview,
+        approvingRoles: [UserRoleEnum.admin],
+      })
+
+      expect(service.getUserEmailInfo).toBeCalledWith(["admin"], "id", undefined)
+      expect(requestApprovalMock).toBeCalledWith(
+        user,
+        { id: "id", name: "name" },
+        ["admin@email.com"],
+        undefined
+      )
+    })
+    it("changes requested email", async () => {
+      jest
+        .spyOn(service, "getUserEmailInfo")
+        .mockResolvedValueOnce({ emails: ["jurisAdmin@email.com", "partner@email.com"] })
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.changesRequested,
+        approvingRoles: [UserRoleEnum.admin],
+      })
+
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        ["partner", "jurisdictionAdmin"],
+        "id",
+        undefined
+      )
+      expect(changesRequestedMock).toBeCalledWith(
+        user,
+        { id: "id", name: "name" },
+        ["jurisAdmin@email.com", "partner@email.com"],
+        undefined
+      )
+    })
+    it("listing approved email", async () => {
+      jest.spyOn(service, "getUserEmailInfo").mockResolvedValueOnce({
+        emails: ["jurisAdmin@email.com", "partner@email.com"],
+        publicUrl: "public.housing.gov",
+      })
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.active,
+        previousStatus: ListingStatus.pendingReview,
+        approvingRoles: [UserRoleEnum.admin],
+      })
+
+      expect(service.getUserEmailInfo).toBeCalledWith(
+        ["partner", "jurisdictionAdmin"],
+        "id",
+        undefined,
+        true
+      )
+      expect(listingApprovedMock).toBeCalledWith(
+        user,
+        { id: "id", name: "name" },
+        ["jurisAdmin@email.com", "partner@email.com"],
+        "public.housing.gov"
+      )
+    })
+    it("active listing not requiring email", async () => {
+      await service.listingApprovalNotify({
+        user,
+        listingInfo: { id: "id", name: "name" },
+        status: ListingStatus.active,
+        previousStatus: ListingStatus.active,
+        approvingRoles: [UserRoleEnum.admin],
+      })
+
+      expect(listingApprovedMock).toBeCalledTimes(0)
     })
   })
 })

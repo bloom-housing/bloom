@@ -12,7 +12,7 @@ import { Brackets, In, Repository } from "typeorm"
 import { Listing } from "./entities/listing.entity"
 import { getView } from "./views/view"
 import { summarizeUnits, summarizeUnitsByTypeAndRent } from "../shared/units-transformations"
-import { Language, ListingReviewOrder } from "../../types"
+import { IdName, Language, ListingReviewOrder } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -38,7 +38,9 @@ export type ListingIncludeExternalResponse = {
   external?: JurisdictionIdToExternalResponse
 }
 import { EmailService } from "../email/email.service"
+import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { ConfigService } from "@nestjs/config"
+import { UserRoleEnum } from "../../src/auth/enum/user-role-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
@@ -52,6 +54,7 @@ export class ListingsService {
     private readonly afsService: ApplicationFlaggedSetsService,
     private readonly cachePurgeService: CachePurgeService,
     private readonly emailService: EmailService,
+    private readonly jurisdictionsService: JurisdictionsService,
     private readonly configService: ConfigService
   ) {}
 
@@ -138,7 +141,7 @@ export class ListingsService {
     return await qb.getManyPaginated()
   }
 
-  async create(listingDto: ListingCreateDto) {
+  async create(listingDto: ListingCreateDto, user: User) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     await this.authzService.canOrThrow(this.req.user as User, "listing", authzActions.create, {
       jurisdictionId: listingDto.jurisdiction.id,
@@ -156,7 +159,23 @@ export class ListingsService {
       )
     }
 
-    return await listing.save()
+    const saveResponse = await listing.save()
+    // only listings approval state possible from creation
+    if (listing.status === ListingStatus.pendingReview) {
+      const listingApprovalPermissions = (
+        await this.jurisdictionsService.findOne({
+          where: { id: saveResponse.jurisdiction.id },
+        })
+      )?.listingApprovalPermissions
+      await this.listingApprovalNotify({
+        user,
+        listingInfo: { id: saveResponse.id, name: saveResponse.name },
+        status: listing.status,
+        approvingRoles: listingApprovalPermissions,
+        jurisId: listing.jurisdiction.id,
+      })
+    }
+    return saveResponse
   }
 
   async update(listingDto: ListingUpdateDto, user: User) {
@@ -214,6 +233,21 @@ export class ListingsService {
     })
 
     const saveResponse = await this.listingRepository.save(listing)
+    const listingApprovalPermissions = (
+      await this.jurisdictionsService.findOne({
+        where: { id: listing.jurisdiction.id },
+      })
+    )?.listingApprovalPermissions
+
+    if (listingApprovalPermissions?.length > 0)
+      await this.listingApprovalNotify({
+        user,
+        listingInfo: { id: listing.id, name: listing.name },
+        approvingRoles: listingApprovalPermissions,
+        status: listing.status,
+        previousStatus,
+        jurisId: listing.jurisdiction.id,
+      })
     await this.cachePurgeService.cachePurgeForSingleListing(previousStatus, newStatus, saveResponse)
     return saveResponse
   }
@@ -270,120 +304,122 @@ export class ListingsService {
     return listing.jurisdiction.id
   }
 
-  public async getApprovingUserEmails(): Promise<string[]> {
-    const approvingUsers = await this.userRepository
-      .createQueryBuilder("user")
-      .select(["user.email"])
-      .leftJoin("user.roles", "userRoles")
-      .where("userRoles.is_admin = :is_admin", {
-        is_admin: true,
-      })
-      .getMany()
-    const approvingUserEmails: string[] = []
-    approvingUsers?.forEach((user) => user?.email && approvingUserEmails.push(user.email))
-    return approvingUserEmails
-  }
-
-  public async getNonApprovingUserInfo(
-    listingId: string,
-    jurisId: string,
+  public async getUserEmailInfo(
+    userRoles: UserRoleEnum | UserRoleEnum[],
+    listingId?: string,
+    jurisId?: string,
     getPublicUrl = false
   ): Promise<{ emails: string[]; publicUrl?: string | null }> {
+    //determine select statement
     const selectFields = ["user.email", "jurisdictions.id"]
     getPublicUrl && selectFields.push("jurisdictions.publicUrl")
-    const nonApprovingUsers = await this.userRepository
+
+    //build potential where statements
+    const admin = new Brackets((qb) => {
+      qb.where("userRoles.is_admin = :is_admin", {
+        is_admin: true,
+      })
+    })
+    const jurisdictionAdmin = new Brackets((qb) => {
+      qb.where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
+        is_jurisdictional_admin: true,
+      }).andWhere("jurisdictions.id = :jurisId", {
+        jurisId: jurisId,
+      })
+    })
+    const partner = new Brackets((qb) => {
+      qb.where("userRoles.is_partner = :is_partner", {
+        is_partner: true,
+      }).andWhere("leasingAgentInListings.id = :listingId", {
+        listingId: listingId,
+      })
+    })
+
+    let userQueryBuilder = this.userRepository
       .createQueryBuilder("user")
       .select(selectFields)
       .leftJoin("user.leasingAgentInListings", "leasingAgentInListings")
       .leftJoin("user.roles", "userRoles")
       .leftJoin("user.jurisdictions", "jurisdictions")
-      .where(
-        new Brackets((qb) => {
-          qb.where("userRoles.is_partner = :is_partner", {
-            is_partner: true,
-          }).andWhere("leasingAgentInListings.id = :listingId", {
-            listingId: listingId,
-          })
-        })
-      )
-      .orWhere(
-        new Brackets((qb) => {
-          qb.where("userRoles.is_jurisdictional_admin = :is_jurisdictional_admin", {
-            is_jurisdictional_admin: true,
-          }).andWhere("jurisdictions.id = :jurisId", {
-            jurisId: jurisId,
-          })
-        })
-      )
-      .getMany()
+
+    // determine where clause(s)
+    if (userRoles.includes(UserRoleEnum.admin)) userQueryBuilder = userQueryBuilder.where(admin)
+    if (userRoles.includes(UserRoleEnum.partner)) userQueryBuilder = userQueryBuilder.where(partner)
+    if (userRoles.includes(UserRoleEnum.jurisdictionAdmin)) {
+      userQueryBuilder = userQueryBuilder.orWhere(jurisdictionAdmin)
+    }
+
+    const userResults = await userQueryBuilder.getMany()
 
     // account for users having access to multiple jurisdictions
     const publicUrl = getPublicUrl
-      ? nonApprovingUsers[0]?.jurisdictions?.find((juris) => juris.id === jurisId)?.publicUrl
+      ? userResults[0]?.jurisdictions?.find((juris) => juris.id === jurisId)?.publicUrl
       : null
-    const nonApprovingUserEmails: string[] = []
-    nonApprovingUsers?.forEach((user) => user?.email && nonApprovingUserEmails.push(user.email))
-    return { emails: nonApprovingUserEmails, publicUrl }
+    const userEmails: string[] = []
+    userResults?.forEach((user) => user?.email && userEmails.push(user.email))
+    return { emails: userEmails, publicUrl }
   }
 
-  async updateAndNotify(listingData: ListingUpdateDto, user: User) {
-    let result
-    // partners updates status to pending review when requesting admin approval
-    if (listingData.status === ListingStatus.pendingReview) {
-      result = await this.update(listingData, user)
-      const approvingUserEmails = await this.getApprovingUserEmails()
+  public async listingApprovalNotify(params: {
+    user: User
+    listingInfo: IdName
+    status: ListingStatus
+    approvingRoles: UserRoleEnum[]
+    previousStatus?: ListingStatus
+    jurisId?: string
+  }) {
+    const nonApprovingRoles = [UserRoleEnum.partner]
+    if (!params.approvingRoles.includes(UserRoleEnum.jurisdictionAdmin))
+      nonApprovingRoles.push(UserRoleEnum.jurisdictionAdmin)
+    if (params.status === ListingStatus.pendingReview) {
+      const userInfo = await this.getUserEmailInfo(
+        params.approvingRoles,
+        params.listingInfo.id,
+        params.jurisId
+      )
       await this.emailService.requestApproval(
-        user,
-        { id: listingData.id, name: listingData.name },
-        approvingUserEmails,
+        params.user,
+        { id: params.listingInfo.id, name: params.listingInfo.name },
+        userInfo.emails,
         this.configService.get("PARTNERS_PORTAL_URL")
       )
     }
     // admin updates status to changes requested when approval requires partner changes
-    else if (listingData.status === ListingStatus.changesRequested) {
-      result = await this.update(listingData, user)
-      const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
-        listingData.id,
-        listingData.jurisdiction.id
+    else if (params.status === ListingStatus.changesRequested) {
+      const userInfo = await this.getUserEmailInfo(
+        nonApprovingRoles,
+        params.listingInfo.id,
+        params.jurisId
       )
       await this.emailService.changesRequested(
-        user,
-        { id: listingData.id, name: listingData.name },
-        nonApprovingUserInfo.emails,
+        params.user,
+        { id: params.listingInfo.id, name: params.listingInfo.name },
+        userInfo.emails,
         this.configService.get("PARTNERS_PORTAL_URL")
       )
     }
     // check if status of active requires notification
-    else if (listingData.status === ListingStatus.active) {
-      const previousStatus = await this.listingRepository
-        .createQueryBuilder("listings")
-        .select("listings.status")
-        .where("id = :id", { id: listingData.id })
-        .getOne()
-      result = await this.update(listingData, user)
-      // if not new published listing, skip notification and return update response
+    else if (params.status === ListingStatus.active) {
+      // if newly published listing, notify non-approving users with access
       if (
-        previousStatus.status !== ListingStatus.pendingReview &&
-        previousStatus.status !== ListingStatus.changesRequested
+        params.previousStatus === ListingStatus.pendingReview ||
+        params.previousStatus === ListingStatus.changesRequested ||
+        params.previousStatus === ListingStatus.pending
       ) {
-        return result
+        const userInfo = await this.getUserEmailInfo(
+          nonApprovingRoles,
+          params.listingInfo.id,
+          params.jurisId,
+          true
+        )
+        await this.emailService.listingApproved(
+          params.user,
+          { id: params.listingInfo.id, name: params.listingInfo.name },
+          userInfo.emails,
+          userInfo.publicUrl
+        )
       }
-      // otherwise get user info and send listing approved email
-      const nonApprovingUserInfo = await this.getNonApprovingUserInfo(
-        listingData.id,
-        listingData.jurisdiction.id,
-        true
-      )
-      await this.emailService.listingApproved(
-        user,
-        { id: listingData.id, name: listingData.name },
-        nonApprovingUserInfo.emails,
-        nonApprovingUserInfo.publicUrl
-      )
-    } else {
-      result = await this.update(listingData, user)
     }
-    return result
   }
 
   async rawListWithFlagged() {
