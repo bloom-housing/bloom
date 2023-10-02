@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -21,6 +22,7 @@ import { JurisdictionDto } from "./dto/jurisdiction.dto"
 import { JurisdictionCreateDto } from "./dto/jurisdiction-create.dto"
 import { JurisdictionUpdateDto } from "./dto/jurisdiction-update.dto"
 import { IdDto } from "../shared/dto/id.dto"
+import { JurisdictionsListParams } from "./dto/jurisdictions-list-query-params"
 
 @Controller("jurisdictions")
 @ApiTags("jurisdictions")
@@ -33,8 +35,11 @@ export class JurisdictionsController {
 
   @Get()
   @ApiOperation({ summary: "List jurisdictions", operationId: "list" })
-  async list(): Promise<JurisdictionDto[]> {
-    return mapTo(JurisdictionDto, await this.jurisdictionsService.list())
+  async list(
+    @Query()
+    queryParams: JurisdictionsListParams
+  ): Promise<JurisdictionDto[]> {
+    return mapTo(JurisdictionDto, await this.jurisdictionsService.list(queryParams))
   }
 
   @Post()
