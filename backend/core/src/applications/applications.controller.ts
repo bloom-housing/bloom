@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Header,
   Param,
   ParseUUIDPipe,
   Post,
@@ -59,7 +58,6 @@ export class ApplicationsController {
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
-  @Header("Content-Type", "text/csv")
   async listAsCsv(
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationsCsvListQueryParams

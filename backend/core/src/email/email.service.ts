@@ -42,12 +42,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper(
-      "t",
-      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
-        return polyglot.t(phrase, options)
-      }
-    )
+    Handlebars.registerHelper("t", function (
+      phrase: string,
+      options?: number | Polyglot.InterpolationOptions
+    ) {
+      return polyglot.t(phrase, options)
+    })
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
@@ -229,32 +229,28 @@ export class EmailService {
 
     if (language && language !== Language.en) {
       if (jurisdiction) {
-        jurisdictionalTranslations =
-          await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-            language,
-            jurisdiction.id
-          )
-      }
-      genericTranslations =
-        await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
           language,
-          null
+          jurisdiction.id
         )
+      }
+      genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        language,
+        null
+      )
     }
 
     if (jurisdiction) {
-      jurisdictionalDefaultTranslations =
-        await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-          Language.en,
-          jurisdiction.id
-        )
+      jurisdictionalDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        Language.en,
+        jurisdiction.id
+      )
     }
 
-    const genericDefaultTranslations =
-      await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        Language.en,
-        null
-      )
+    const genericDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+      Language.en,
+      null
+    )
 
     // Deep merge
     const translations = merge(
