@@ -22,7 +22,6 @@ import { ApplicationDto } from "./dto/application.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { applicationMultiselectQuestionApiExtraModels } from "./types/application-multiselect-question-api-extra-models"
-import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { PaginatedApplicationListQueryParams } from "./dto/paginated-application-list-query-params"
@@ -32,6 +31,7 @@ import { PaginatedApplicationDto } from "./dto/paginated-application.dto"
 import { ApplicationCreateDto } from "./dto/application-create.dto"
 import { ApplicationUpdateDto } from "./dto/application-update.dto"
 import { IdDto } from "../shared/dto/id.dto"
+import { StatusDto } from "../shared/dto/status.dto"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -47,10 +47,7 @@ import { IdDto } from "../shared/dto/id.dto"
 )
 @ApiExtraModels(...applicationMultiselectQuestionApiExtraModels, ApplicationsApiExtraModel)
 export class ApplicationsController {
-  constructor(
-    private readonly applicationsService: ApplicationsService,
-    private readonly applicationCsvExporter: ApplicationCsvExporterService
-  ) {}
+  constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
@@ -66,13 +63,8 @@ export class ApplicationsController {
   async listAsCsv(
     @Query(new ValidationPipe(defaultValidationPipeOptions))
     queryParams: ApplicationsCsvListQueryParams
-  ): Promise<string> {
-    const applications = await this.applicationsService.rawListWithFlagged(queryParams)
-    return this.applicationCsvExporter.exportFromObject(
-      applications,
-      queryParams.timeZone,
-      queryParams.includeDemographics
-    )
+  ): Promise<StatusDto> {
+    return await this.applicationsService.sendExport(queryParams)
   }
 
   @Post()

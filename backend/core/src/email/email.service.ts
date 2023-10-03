@@ -1,11 +1,13 @@
 import { HttpException, Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
+import { MailDataRequired } from "@sendgrid/helpers/classes/mail"
 import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
+import dayjs from "dayjs"
 import { ConfigService } from "@nestjs/config"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
@@ -18,6 +20,12 @@ import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
 import { IdName } from "../../types"
+
+type EmailAttachmentData = {
+  data: string
+  name: string
+  type: string
+}
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -34,12 +42,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper("t", function (
-      phrase: string,
-      options?: number | Polyglot.InterpolationOptions
-    ) {
-      return polyglot.t(phrase, options)
-    })
+    Handlebars.registerHelper(
+      "t",
+      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
+        return polyglot.t(phrase, options)
+      }
+    )
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
@@ -221,28 +229,32 @@ export class EmailService {
 
     if (language && language !== Language.en) {
       if (jurisdiction) {
-        jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-          language,
-          jurisdiction.id
-        )
+        jurisdictionalTranslations =
+          await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+            language,
+            jurisdiction.id
+          )
       }
-      genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        language,
-        null
-      )
+      genericTranslations =
+        await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          language,
+          null
+        )
     }
 
     if (jurisdiction) {
-      jurisdictionalDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-        Language.en,
-        jurisdiction.id
-      )
+      jurisdictionalDefaultTranslations =
+        await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+          Language.en,
+          jurisdiction.id
+        )
     }
 
-    const genericDefaultTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
-      Language.en,
-      null
-    )
+    const genericDefaultTranslations =
+      await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+        Language.en,
+        null
+      )
 
     // Deep merge
     const translations = merge(
@@ -293,14 +305,25 @@ export class EmailService {
     from: string,
     subject: string,
     body: string,
-    retry = 3
+    retry = 3,
+    attachment?: EmailAttachmentData
   ) {
     const multipleRecipients = Array.isArray(to)
-    const emailParams = {
+    const emailParams: Partial<MailDataRequired> = {
       to,
       from,
       subject,
       html: body,
+    }
+    if (attachment) {
+      emailParams.attachments = [
+        {
+          content: Buffer.from(attachment.data).toString("base64"),
+          filename: attachment.name,
+          type: attachment.type,
+          disposition: "attachment",
+        },
+      ]
     }
     const handleError = (error) => {
       if (error instanceof ResponseError) {
@@ -414,5 +437,33 @@ export class EmailService {
     } catch (err) {
       throw new HttpException("email failed", 500)
     }
+  }
+
+  async sendCSV(user: User, listingName: string, listingId: string, applicationData: string) {
+    void (await this.loadTranslations(
+      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
+      user.language || Language.en
+    ))
+    const jurisdiction = await this.getUserJurisdiction(user)
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      `${listingName} applications export`,
+      this.template("csv-export")({
+        user: user,
+        appOptions: { listingName, appUrl: this.configService.get("PARTNERS_PORTAL_URL") },
+      }),
+      undefined,
+      {
+        data: applicationData,
+        name: `applications-${listingId}-${this.createDateStringFromNow()}.csv`,
+        type: "text/csv",
+      }
+    )
+  }
+
+  createDateStringFromNow(format = "YYYY-MM-DD_HH:mm:ss"): string {
+    const now = new Date()
+    return dayjs(now).format(format)
   }
 }

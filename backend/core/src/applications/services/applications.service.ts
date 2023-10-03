@@ -26,6 +26,9 @@ import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
 import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 import { Listing } from "../../listings/entities/listing.entity"
+import { ApplicationCsvExporterService } from "./application-csv-exporter.service"
+import { User } from "../../auth/entities/user.entity"
+import { StatusDto } from "../../shared/dto/status.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -34,6 +37,7 @@ export class ApplicationsService {
     private readonly authzService: AuthzService,
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
+    private readonly applicationCsvExporter: ApplicationCsvExporterService,
     @InjectRepository(Application) private readonly repository: Repository<Application>,
     @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
   ) {}
@@ -249,6 +253,25 @@ export class ApplicationsService {
     await this.updateListingApplicationEditTimestamp(application.listingId)
 
     return await this.repository.softRemove({ id: applicationId })
+  }
+
+  async sendExport(queryParams: ApplicationsCsvListQueryParams): Promise<StatusDto> {
+    const applications = await this.rawListWithFlagged(queryParams)
+    const csvString = this.applicationCsvExporter.exportFromObject(
+      applications,
+      queryParams.timeZone,
+      queryParams.includeDemographics
+    )
+    const listing = await this.listingsRepository.findOne({ where: { id: queryParams.listingId } })
+    await this.emailService.sendCSV(
+      this.req.user as unknown as User,
+      listing.name,
+      listing.id,
+      csvString
+    )
+    return {
+      status: "Success",
+    }
   }
 
   private _getQb(params: PaginatedApplicationListQueryParams, view = "base", withSelect = true) {
