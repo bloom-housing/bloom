@@ -1,6 +1,5 @@
 import * as React from "react"
-import { Heading } from "../../../text/Heading"
-import { t } from "../../../helpers/translator"
+import { Heading, t } from "@bloom-housing/ui-components"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 
 interface ReferralApplicationProps {

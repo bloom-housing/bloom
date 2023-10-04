@@ -1,4 +1,4 @@
-import { t } from "../..";
+import { t } from "@bloom-housing/ui-components";
 import dayjs from "dayjs";
 
 function formatDateTime(date: Date, showTime?: boolean) {

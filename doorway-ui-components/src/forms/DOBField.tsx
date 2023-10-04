@@ -1,5 +1,5 @@
 import React from "react"
-import { t } from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 import { Field } from "./Field"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"

@@ -4,7 +4,7 @@ import "../src/global/app-css.scss";
 import { BADGES } from "./constants";
 
 // Set up translation file
-import { addTranslation } from "../src/helpers/translator";
+import { addTranslation } from "@bloom-housing/ui-components";
 import general from "../src/locales/general.json";
 addTranslation(general);
 

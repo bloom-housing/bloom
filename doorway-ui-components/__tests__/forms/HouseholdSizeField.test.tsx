@@ -1,8 +1,8 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
+import { t } from "@bloom-housing/ui-components"
 import { HouseholdSizeField } from "../../src/forms/HouseholdSizeField"
 import { useForm } from "react-hook-form"
-import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
 

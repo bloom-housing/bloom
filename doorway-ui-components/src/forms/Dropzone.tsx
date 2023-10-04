@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
-import { t } from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 import "./Dropzone.scss"
 
 interface DropzoneProps {

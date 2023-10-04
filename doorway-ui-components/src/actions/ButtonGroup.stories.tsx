@@ -1,10 +1,11 @@
 import * as React from "react"
 import { BADGES } from "../../.storybook/constants"
-import { AppearanceSizeType, AppearanceStyleType, Icon } from "../.."
+import {  Icon } from "../.."
 import Button from "./Button"
 import ButtonGroupDocumentation from "./ButtonGroup.docs.mdx"
 
 import { ButtonGroup, ButtonGroupSpacing } from "./ButtonGroup"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Actions/Button Group 🚩",

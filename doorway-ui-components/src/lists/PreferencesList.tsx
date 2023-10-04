@@ -1,6 +1,6 @@
 import * as React from "react"
 import "./PreferencesList.scss"
-import { locale } from "../helpers/translator"
+import { locale } from "@bloom-housing/ui-components"
 
 export interface ListPreferenceLink {
   title: string

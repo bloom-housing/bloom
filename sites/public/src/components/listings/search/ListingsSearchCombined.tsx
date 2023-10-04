@@ -6,13 +6,9 @@ import { ListingService } from "../../../lib/listings/listing-service"
 import { ListingsCombined } from "../ListingsCombined"
 import { Jurisdiction } from "@bloom-housing/backend-core"
 
-import {
-  AppearanceBorderType,
-  AppearanceSizeType,
-  Button,
-  t,
-} from "@bloom-housing/doorway-ui-components"
+import { AppearanceSizeType, Button } from "@bloom-housing/doorway-ui-components"
 import { FormOption, ListingsSearchModal } from "./ListingsSearchModal"
+import { AppearanceBorderType, t } from "@bloom-housing/ui-components"
 
 type ListingsSearchCombinedProps = {
   jurisdiction: Jurisdiction

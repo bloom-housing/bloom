@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
+import { Heading } from "@bloom-housing/ui-components"
 
 import "./ListingMap.scss"
 import { MultiLineAddress, Address } from "../../helpers/MultiLineAddress"
 import { useIntersect } from "../../.."
-import { Heading } from "../../text/Heading"
 
 export interface ListingMapProps {
   address?: Address

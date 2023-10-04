@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import dayjs from "dayjs"
-import { t } from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { Field } from "./Field"
 import { Select } from "./Select"

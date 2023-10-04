@@ -2,7 +2,7 @@ import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
 import { StatusBar } from "../../src/blocks/StatusBar"
 import { Button } from "../../src/actions/Button"
-import { AppearanceStyleType } from "../../src/global/AppearanceTypes"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 

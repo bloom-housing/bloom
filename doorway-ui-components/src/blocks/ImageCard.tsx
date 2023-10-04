@@ -1,15 +1,15 @@
 import React, { useMemo, useState } from "react"
+import { t, AppearanceStyleType } from "@bloom-housing/ui-components"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { TooltipProps, Tooltip } from "./Tooltip"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
-import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 import { Icon, IconFillColors, UniversalIconType } from "../icons/Icon"
 import { Modal } from "../overlays/Modal"
 import { Button } from "../actions/Button"
-import { t } from "../helpers/translator"
 import { useFallbackImage } from "../helpers/useFallbackImage"
 
 export interface StatusBarType {

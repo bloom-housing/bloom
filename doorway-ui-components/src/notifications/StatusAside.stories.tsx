@@ -2,8 +2,9 @@ import React from "react"
 import { StatusAside } from "./StatusAside"
 import { GridCell } from "../sections/GridSection"
 import { Button } from "../actions/Button"
-import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 import { StatusMessages, StatusMessage } from "./StatusMessage"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Notifications/Status Aside",

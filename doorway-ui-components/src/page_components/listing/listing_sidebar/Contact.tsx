@@ -1,8 +1,8 @@
 import * as React from "react"
+import { Heading } from "@bloom-housing/ui-components"
 import { ContactAddress } from "./ContactAddress"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Address } from "../../../helpers/MultiLineAddress"
-import { Heading } from "../../../text/Heading"
 
 export interface ContactProps {
   /** Any number of text sections rendered after the contact information */

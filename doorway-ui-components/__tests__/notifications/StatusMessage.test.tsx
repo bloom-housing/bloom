@@ -1,7 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { StatusMessage, StatusMessages } from "../../src/notifications/StatusMessage"
-import { AppearanceStyleType } from "../../src/global/AppearanceTypes"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 

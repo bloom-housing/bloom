@@ -1,7 +1,7 @@
 import React from "react"
 import Markdown from "markdown-to-jsx"
+import { t } from "@bloom-housing/ui-components"
 import { Icon } from "../icons/Icon"
-import { t } from "../helpers/translator"
 import "./ApplicationTimeline.scss"
 
 export interface ApplicationTimelineProps {

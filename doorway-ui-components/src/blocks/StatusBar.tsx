@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./StatusBar.scss"
-import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { Tag } from "../text/Tag"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export interface StatusBarProps {
   backButton?: React.ReactNode

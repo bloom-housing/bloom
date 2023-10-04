@@ -2,7 +2,7 @@ import React from "react"
 
 import { GroupedTable } from "./GroupedTable"
 import { mockData } from "./StandardTable.stories"
-import t from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 
 export default {
   title: "Tables/GroupedTable",

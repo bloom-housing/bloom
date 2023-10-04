@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Heading } from "../../../text/Heading"
+import { Heading } from "@bloom-housing/ui-components"
 
 export interface QuantityRow {
   amount: number | null

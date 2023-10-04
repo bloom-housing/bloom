@@ -1,6 +1,6 @@
 import React from "react"
 import FormCard from "./FormCard"
-import Heading from "../text/Heading"
+import { Heading } from "@bloom-housing/ui-components"
 export default {
   title: "Blocks/Form Card",
 }

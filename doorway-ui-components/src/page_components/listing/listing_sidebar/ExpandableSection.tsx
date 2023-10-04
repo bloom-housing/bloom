@@ -1,7 +1,7 @@
 import * as React from "react"
 import Markdown from "markdown-to-jsx"
+import { Heading } from "@bloom-housing/ui-components"
 import { ExpandableContent } from "../../../actions/ExpandableContent"
-import { Heading } from "../../../text/Heading"
 
 export interface ExpandableSectionProps {
   content: string | React.ReactNode

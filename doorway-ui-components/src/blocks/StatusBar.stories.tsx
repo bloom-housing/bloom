@@ -1,7 +1,7 @@
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 import React from "react"
 import { Button } from "../actions/Button"
 import { StatusBar } from "./StatusBar"
-import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 export default {
   title: "Blocks/Status Bar",

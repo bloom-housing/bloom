@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
+import { t } from "@bloom-housing/ui-components"
 import "./StatusItem.scss"
-import { t } from "../helpers/translator"
 import { NavigationContext } from "../config/NavigationContext"
 
 interface StatusItemProps {

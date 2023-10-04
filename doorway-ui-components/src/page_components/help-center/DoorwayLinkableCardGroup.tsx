@@ -1,8 +1,7 @@
 import React, { useState } from "react"
-import { Card, CardProps, Heading, generateJumplinkId } from "../../.."
+import { Card, CardProps, generateJumplinkId } from "../../.."
 import "./DoorwayLinkableCardGroup.scss"
 import Link from "next/link"
-import { RowPositionUtils } from "ag-grid-community"
 
 type DoorwayLinkableCardGroupProps = {
   cards: React.ReactElement<CardProps>[]

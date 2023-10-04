@@ -1,4 +1,4 @@
-import { t } from "./translator"
+import { t } from "@bloom-housing/ui-components"
 
 export const formatYesNoLabel = (
   value: boolean | null,

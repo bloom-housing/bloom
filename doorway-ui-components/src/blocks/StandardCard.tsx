@@ -1,5 +1,5 @@
 import React from "react"
-import { Heading } from "../text/Heading"
+import { Heading } from "@bloom-housing/ui-components"
 import "./StandardCard.scss"
 
 export interface StandardCardProps {

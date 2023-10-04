@@ -1,6 +1,6 @@
 import React from "react"
-import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { StatusMessages, StatusMessage } from "./StatusMessage"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Notifications/Status Messages",

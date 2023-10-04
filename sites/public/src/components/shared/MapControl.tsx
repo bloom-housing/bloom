@@ -2,7 +2,8 @@ import React, { RefObject } from "react"
 import { GoogleMap } from "@react-google-maps/api"
 import styles from "./MapControl.module.scss"
 
-import { Icon, t } from "@bloom-housing/doorway-ui-components"
+import { Icon } from "@bloom-housing/doorway-ui-components"
+import { t } from "@bloom-housing/ui-components"
 
 export interface MapControlProps {
   mapRef: RefObject<GoogleMap>

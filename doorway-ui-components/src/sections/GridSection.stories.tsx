@@ -5,8 +5,8 @@ import { ViewItem } from "../blocks/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
-import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { mockData, mockHeaders } from "../tables/StandardTable.stories"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Sections/Grid Section",

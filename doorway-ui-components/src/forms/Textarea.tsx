@@ -1,6 +1,6 @@
 import * as React from "react"
+import { t } from "@bloom-housing/ui-components"
 import "./Textarea.scss"
-import { t } from "../helpers/translator"
 import { UseFormMethods } from "react-hook-form"
 
 type WrapOptions = "soft" | "hard"

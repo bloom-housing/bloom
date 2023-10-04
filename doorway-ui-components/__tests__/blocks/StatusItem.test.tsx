@@ -1,7 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
+import { t } from "@bloom-housing/ui-components"
 import { StatusItem } from "../../src/blocks/StatusItem"
-import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
 

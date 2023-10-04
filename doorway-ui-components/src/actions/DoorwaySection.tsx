@@ -1,5 +1,5 @@
 import React from "react"
-import { Heading } from "../.."
+import { Heading } from "@bloom-housing/ui-components"
 import "./DoorwaySection.scss"
 
 type DoorwaySectionProps = {

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Heading } from "../../.."
+import { Heading } from "@bloom-housing/ui-components"
 import "./ZeroListingsItem.scss"
 import Markdown from "markdown-to-jsx"
 

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { t } from "../../../../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 
 type DownloadLotteryResultsProps = {
   resultsDate?: string

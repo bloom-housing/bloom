@@ -1,12 +1,12 @@
 import * as React from "react"
 import {
   AppearanceSizeType,
-  AppearanceStyleType,
   AppearanceShadeType,
 } from "../global/AppearanceTypes"
 import { BADGES } from "../../.storybook/constants"
 import { Tag } from "./Tag"
 import TagDocumentation from "./Tag.docs.mdx"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Text/Tag 🚩",

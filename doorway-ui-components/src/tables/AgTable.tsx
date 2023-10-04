@@ -14,7 +14,7 @@ import { LoadingOverlay } from "../overlays/LoadingOverlay"
 import { Field } from "../forms/Field"
 import { AlertBox } from "../notifications/AlertBox"
 import { debounce } from "../helpers/debounce"
-import { t } from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 
 export interface ColumnOrder {
   orderBy: string

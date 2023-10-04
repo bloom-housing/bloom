@@ -1,7 +1,8 @@
 import React from "react"
-import { t, AlertBox, SiteAlert, AlertNotice, ErrorMessage } from "../../.."
+import { AlertBox, SiteAlert, AlertNotice, ErrorMessage } from "../../.."
 import type { UseFormMethods } from "react-hook-form"
 import { NetworkStatus } from "./FormSignIn"
+import { t } from "@bloom-housing/ui-components";
 
 export type FormSignInErrorBoxProps = {
   errors: FormSignInErrorBoxControl["errors"]

@@ -3,10 +3,11 @@ import "./Drawer.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
 import { Tag } from "../text/Tag"
-import { AppearanceStyleType, AppearanceSizeType } from "../global/AppearanceTypes"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 import { AlertTypes } from "../notifications/alertTypes"
 import { AlertBox } from "../notifications/AlertBox"
 import { nanoid } from "nanoid"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export enum DrawerSide {
   left = "left",

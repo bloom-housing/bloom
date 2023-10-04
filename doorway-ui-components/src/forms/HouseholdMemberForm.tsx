@@ -1,5 +1,5 @@
 import React from "react"
-import { t } from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 import { Icon, IconFillColors } from "../icons/Icon"
 import { ViewItem } from "../blocks/ViewItem"
 

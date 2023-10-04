@@ -3,12 +3,11 @@ import { withKnobs, text, select } from "@storybook/addon-knobs"
 import { BADGES } from "../../.storybook/constants"
 import { Button } from "./Button"
 import {
-  AppearanceBorderType,
   AppearanceSizeType,
-  AppearanceStyleType,
 } from "../global/AppearanceTypes"
 import ButtonDocumentation from "./Button.docs.mdx"
 import { faArrowsRotate, faCoffee, faTable } from "@fortawesome/free-solid-svg-icons"
+import { AppearanceBorderType, AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Actions/Button 🚩",

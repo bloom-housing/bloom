@@ -1,7 +1,7 @@
 import React from "react"
 import { UseFormMethods } from "react-hook-form"
+import { t } from "@bloom-housing/ui-components";
 import {
-  t,
   GridSection,
   ViewItem,
   GridCell,
@@ -9,6 +9,7 @@ import {
   Select,
   resolveObject,
 } from "../.."
+
 
 type FormAddressProps = {
   subtitle: string

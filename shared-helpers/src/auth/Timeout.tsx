@@ -8,8 +8,8 @@ import {
   setSiteAlertMessage,
   AlertTypes,
   t,
-  AppearanceStyleType,
   AppearanceSizeType,
+  AppearanceStyleType,
 } from "@bloom-housing/ui-components"
 
 const PROMPT_TIMEOUT = 60000

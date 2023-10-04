@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect"
-import { addTranslation } from "../src/helpers/translator"
+import { addTranslation } from "@bloom-housing/ui-components"
 import general from "../src/locales/general.json"
 
 // see: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom

@@ -11,6 +11,6 @@ module.exports = {
     "\\.(scss|css|less)$": "identity-obj-proxy",
     "\\.mdx$": "<rootDir>/.jest/mock.js",
   },
-  transformIgnorePatterns: ["node_modules", "node_modules/?!(nanoid)/"],
+  transformIgnorePatterns: ["node_modules/?!(nanoid|@bloom-housing/ui-components)/"],
   setupFilesAfterEnv: ["<rootDir>/.jest/setup-tests.js"],
 }

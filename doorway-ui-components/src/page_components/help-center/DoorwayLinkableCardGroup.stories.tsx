@@ -1,7 +1,9 @@
 import * as React from "react"
 
 import { DoorwayLinkableCardGroup } from "./DoorwayLinkableCardGroup"
-import { Card, DoorwayCollapsibleSection, Heading, t } from "../../.."
+import { Card, DoorwayCollapsibleSection } from "../../.."
+import { t, Heading } from "@bloom-housing/ui-components";
+
 
 export default {
   title: "Help center/Doorway Linkable Card Group",

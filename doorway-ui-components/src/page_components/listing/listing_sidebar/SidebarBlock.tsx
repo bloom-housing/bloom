@@ -1,5 +1,6 @@
 import * as React from "react"
-import { Heading, HeadingProps } from "../../../text/Heading"
+import { Heading, HeadingProps } from "@bloom-housing/ui-components"
+
 
 export interface SidebarBlockProps extends Omit<HeadingProps, "children" | "className"> {
   children: React.ReactNode

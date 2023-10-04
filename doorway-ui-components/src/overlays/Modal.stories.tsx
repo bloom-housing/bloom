@@ -5,11 +5,10 @@ import "./Modal.scss"
 import { Modal } from "./Modal"
 import { Button } from "../actions/Button"
 import {
-  AppearanceBorderType,
   AppearanceSizeType,
-  AppearanceStyleType,
 } from "../global/AppearanceTypes"
 import ModalDocumentation from "./Modal.docs.mdx"
+import { AppearanceBorderType, AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Overlays/Modal 🚩",

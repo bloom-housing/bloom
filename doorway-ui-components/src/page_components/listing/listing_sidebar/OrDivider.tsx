@@ -1,5 +1,5 @@
 import * as React from "react"
-import { t } from "../../../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 
 const OrDivider = (props: { bgColor: string; strings?: { orString?: string } }) => (
   <div className="aside-block__divider">

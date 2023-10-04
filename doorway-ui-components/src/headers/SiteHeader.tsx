@@ -1,10 +1,10 @@
 import React, { useState, useContext, useLayoutEffect } from "react"
 import { CSSTransition } from "react-transition-group"
+import { t } from "@bloom-housing/ui-components"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 import { Icon } from "../icons/Icon"
 import { Button } from "../actions/Button"
 import { AppearanceSizeType } from "../global/AppearanceTypes"
-import { t } from "../helpers/translator"
 import "./SiteHeader.scss"
 import { NavigationContext } from "../config/NavigationContext"
 

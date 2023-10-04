@@ -2,7 +2,7 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { ActionBlock, ActionBlockLayout } from "../../src/blocks/ActionBlock"
 import { Button } from "../.."
-import { AppearanceStyleType } from "../../src/global/AppearanceTypes"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 

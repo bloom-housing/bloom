@@ -1,8 +1,9 @@
-import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 import React from "react"
 import { Button } from "../actions/Button"
 
 import "./ButtonGroup.scss"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Prototypes/ButtonGroup",

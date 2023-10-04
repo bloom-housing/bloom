@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { faGripLines } from "@fortawesome/free-solid-svg-icons"
+import { t } from "@bloom-housing/ui-components"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
 import { Icon, IconFillColors } from "../icons/Icon"
-import { t } from "../helpers/translator"
 
 export interface TableHeadersOptions {
   name: string

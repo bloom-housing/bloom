@@ -1,5 +1,6 @@
 import React from "react"
-import { Button, t } from "../.."
+import { Button} from "../.."
+import { t } from "@bloom-housing/ui-components";
 
 type AgPaginationProps = {
   totalItems: number

@@ -7,10 +7,9 @@ import { ViewItem } from "../blocks/ViewItem"
 import { Field } from "../forms/Field"
 import { Button } from "../actions/Button"
 import {
-  AppearanceBorderType,
   AppearanceSizeType,
-  AppearanceStyleType,
 } from "../global/AppearanceTypes"
+import { AppearanceBorderType, AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Overlays/Drawer",

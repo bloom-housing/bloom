@@ -1,6 +1,6 @@
 import React from "react"
+import { FormOptions } from "@bloom-housing/ui-components"
 import { ErrorMessage } from "../notifications/ErrorMessage"
-import { FormOptions } from "../helpers/formOptions"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
 
 export interface SelectOption {

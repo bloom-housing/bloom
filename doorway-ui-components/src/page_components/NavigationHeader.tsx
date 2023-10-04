@@ -1,5 +1,6 @@
 import React, { useMemo, useContext } from "react"
-import { PageHeader, TabNav, TabNavItem, AppearanceSizeType } from "../.."
+import { PageHeader } from "@bloom-housing/ui-components"
+import { TabNav, TabNavItem, AppearanceSizeType } from "../.."
 import { NavigationContext } from "../config/NavigationContext"
 import "./NavigationHeader.scss"
 

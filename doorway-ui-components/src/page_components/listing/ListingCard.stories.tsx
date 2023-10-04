@@ -1,10 +1,10 @@
 import * as React from "react"
-import { AppearanceStyleType } from "../../.."
 import { BADGES } from "../../../.storybook/constants"
 import LinkButton from "../../actions/LinkButton"
 import Icon from "../../icons/Icon"
 import { ListingCard } from "./ListingCard"
 import ListingCardDocumentation from "./ListingCard.docs.mdx"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Listing/ListingCard 🚩",

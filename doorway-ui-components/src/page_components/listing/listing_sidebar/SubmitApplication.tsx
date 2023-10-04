@@ -1,9 +1,9 @@
 import * as React from "react"
 import Markdown from "markdown-to-jsx"
+import { Heading } from "@bloom-housing/ui-components"
 import { Address } from "../../../helpers/MultiLineAddress"
 import { ContactAddress } from "./ContactAddress"
 import { OrDivider } from "./OrDivider"
-import { Heading } from "../../../text/Heading"
 
 export interface ApplicationAddressesProps {
   /** The dropoff address for paper applications */

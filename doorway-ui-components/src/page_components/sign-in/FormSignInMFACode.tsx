@@ -1,16 +1,15 @@
 import React from "react"
 import {
-  AppearanceStyleType,
   Button,
   Field,
   Form,
   FormCard,
   Icon,
-  t,
   SiteAlert,
   FormSignInErrorBox,
 } from "../../.."
 import { NetworkStatus, FormSignInControl } from "./FormSignIn"
+import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
 
 export enum RequestType {
   email = "email",

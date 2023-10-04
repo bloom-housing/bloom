@@ -1,12 +1,10 @@
 import React, { useContext } from "react"
 import {
-  AppearanceStyleType,
   Button,
   Field,
   Form,
   FormCard,
   Icon,
-  t,
   AlertBox,
   SiteAlert,
   AlertNotice,
@@ -16,6 +14,7 @@ import {
 import { NetworkErrorReset, NetworkStatusContent } from "../sign-in/FormSignIn"
 import { NavigationContext } from "../../config/NavigationContext"
 import type { UseFormMethods } from "react-hook-form"
+import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl

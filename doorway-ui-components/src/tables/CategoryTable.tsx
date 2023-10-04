@@ -1,6 +1,6 @@
 import * as React from "react"
+import { Heading } from "@bloom-housing/ui-components"
 import { StackedTable, StackedTableProps } from "./StackedTable"
-import { Heading } from "../text/Heading"
 
 export interface CategoryTableSection {
   /** The header text for a category */

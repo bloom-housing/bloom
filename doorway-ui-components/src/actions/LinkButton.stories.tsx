@@ -1,7 +1,8 @@
 import * as React from "react"
-import { AppearanceSizeType, AppearanceStyleType } from "../global/AppearanceTypes"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 
 import { LinkButton } from "./LinkButton"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Actions/Link Button",

@@ -1,9 +1,10 @@
 import React from "react"
 import { BADGES } from "../../.storybook/constants"
-import { AppearanceStyleType, Button, ButtonGroup, ButtonGroupSpacing, LinkButton } from "../.."
+import { Button, ButtonGroup, ButtonGroupSpacing, LinkButton } from "../.."
 import { HeadingGroup } from "../headers/HeadingGroup"
 import Card from "./Card"
 import CardDocumentation from "./Card.docs.mdx"
+import { AppearanceStyleType } from "@bloom-housing/ui-components"
 
 export default {
   title: "Blocks/Card 🚩",

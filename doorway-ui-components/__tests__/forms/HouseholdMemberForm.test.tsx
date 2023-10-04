@@ -1,7 +1,7 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
 import { HouseholdMemberForm } from "../../src/forms/HouseholdMemberForm"
-import { t } from "../../src/helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 

@@ -1,6 +1,6 @@
 import React from "react"
 import "./ProgressNav.scss"
-import { t } from "../helpers/translator"
+import { t } from "@bloom-housing/ui-components"
 
 type ProgressNavStyle = "bar" | "dot"
 

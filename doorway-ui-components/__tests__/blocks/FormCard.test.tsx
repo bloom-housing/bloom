@@ -1,7 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { FormCard } from "../../src/blocks/FormCard"
-import Heading from "../../src/text/Heading"
+import { Heading } from "@bloom-housing/ui-components"
 
 afterEach(cleanup)
 

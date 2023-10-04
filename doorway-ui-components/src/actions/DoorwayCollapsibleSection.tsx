@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Heading } from "../.."
+import { Heading } from "@bloom-housing/ui-components"
 import "./DoorwayCollapsibleSection.scss"
 
 type DoorwayCollapsibleSectionProps = {

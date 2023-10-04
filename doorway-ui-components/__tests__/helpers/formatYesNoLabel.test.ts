@@ -1,6 +1,6 @@
 import { cleanup } from "@testing-library/react"
+import { t } from "@bloom-housing/ui-components"
 import { formatYesNoLabel } from "../../src/helpers/formatYesNoLabel"
-import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
 
