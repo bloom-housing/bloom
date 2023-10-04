@@ -43,6 +43,7 @@ export default function Home(props: IndexProps) {
     })
   }, [profile])
 
+  const notificationsSignUpURL = process.env.notificationsSignUpUrl
   const metaDescription = t("pageDescription.welcome")
   const metaImage = t("welcome.personWithChildAlt")
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
@@ -160,7 +161,7 @@ export default function Home(props: IndexProps) {
           </InfoCard>
         </div>
       </div>
-      {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+      {notificationsSignUpURL && (
         <ActionBlock
           className="p-12"
           header={
@@ -174,7 +175,7 @@ export default function Home(props: IndexProps) {
             <LinkButton
               key={"sign-up"}
               className="is-primary"
-              href={props.jurisdiction.notificationsSignUpURL}
+              href={notificationsSignUpURL}
               newTab={true}
               size={AppearanceSizeType.small}
             >

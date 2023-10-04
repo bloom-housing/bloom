@@ -1,12 +1,11 @@
 import * as React from "react"
 import { getListings } from "../../lib/helpers"
-import { Listing, Jurisdiction } from "@bloom-housing/backend-core"
+import { Listing } from "@bloom-housing/backend-core"
 import { InfoCard, LinkButton, ZeroListingsItem, t } from "@bloom-housing/doorway-ui-components"
 import { Pagination } from "./Pagination"
 import { LoadingOverlay } from "@bloom-housing/ui-components"
 
 type ListingsListProps = {
-  jurisdiction: Jurisdiction
   listings: Listing[]
   currentPage: number
   lastPage: number
@@ -36,7 +35,7 @@ const ListingsList = (props: ListingsListProps) => {
           className="is-normal-primary-lighter"
         >
           <LinkButton
-            href={props.jurisdiction.notificationsSignUpURL}
+            href={process.env.notificationsSignUpUrl}
             newTab={true}
             className="is-primary"
           >

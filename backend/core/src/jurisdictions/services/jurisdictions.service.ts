@@ -19,8 +19,8 @@ export class JurisdictionsService {
     },
   }
 
-  async list(queryParams: JurisdictionsListParams): Promise<Jurisdiction[]> {
-    const obj = queryParams.names
+  async list(queryParams?: JurisdictionsListParams): Promise<Jurisdiction[]> {
+    const obj = queryParams?.names
       ? await this.repository.find({
           where: { name: In([...queryParams.names]) },
           join: this.joinOptions,
