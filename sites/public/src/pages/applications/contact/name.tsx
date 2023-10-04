@@ -23,6 +23,8 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
@@ -73,88 +75,85 @@ const ApplicationName = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
-        </div>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.name.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+        >
+          <CardSection divider={"inset"}>
+            {Object.entries(errors).length > 0 && (
+              <AlertBox type="alert" inverted closeable>
+                {t("errors.errorsToResolve")}
+              </AlertBox>
+            )}
+            <div data-testid={"application-initial-page"}>
+              <fieldset>
+                <legend
+                  className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
+                >
+                  {t("application.name.yourName")}
+                  <LockIcon />
+                </legend>
 
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
+                <Field
+                  name="applicant.firstName"
+                  label={t("application.name.firstName")}
+                  placeholder={t("application.name.firstName")}
+                  readerOnly={true}
+                  disabled={autofilled}
+                  defaultValue={application.applicant.firstName}
+                  validation={{ required: true, maxLength: 64 }}
+                  error={errors.applicant?.firstName}
+                  errorMessage={
+                    errors.applicant?.firstName?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.firstNameError")
+                  }
+                  register={register}
+                  dataTestId={"app-primary-first-name"}
+                />
 
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group border-b" data-testid={"application-initial-page"}>
-            <fieldset>
-              <legend
-                className={`text__caps-spaced ${errors.applicant?.firstName ? "text-alert" : ""}`}
-              >
-                {t("application.name.yourName")}
-                <LockIcon />
-              </legend>
+                <Field
+                  name="applicant.middleName"
+                  label={t("application.name.middleNameOptional")}
+                  placeholder={t("application.name.middleNameOptional")}
+                  disabled={autofilled}
+                  readerOnly={true}
+                  defaultValue={application.applicant.middleName}
+                  register={register}
+                  dataTestId={"app-primary-middle-name"}
+                  validation={{ maxLength: 64 }}
+                  error={errors.applicant?.middleName}
+                  errorMessage={t("errors.maxLength")}
+                />
 
-              <Field
-                name="applicant.firstName"
-                label={t("application.name.firstName")}
-                placeholder={t("application.name.firstName")}
-                readerOnly={true}
-                disabled={autofilled}
-                defaultValue={application.applicant.firstName}
-                validation={{ required: true, maxLength: 64 }}
-                error={errors.applicant?.firstName}
-                errorMessage={
-                  errors.applicant?.firstName?.type === "maxLength"
-                    ? t("errors.maxLength")
-                    : t("errors.firstNameError")
-                }
-                register={register}
-                dataTestId={"app-primary-first-name"}
-              />
-
-              <Field
-                name="applicant.middleName"
-                label={t("application.name.middleNameOptional")}
-                placeholder={t("application.name.middleNameOptional")}
-                disabled={autofilled}
-                readerOnly={true}
-                defaultValue={application.applicant.middleName}
-                register={register}
-                dataTestId={"app-primary-middle-name"}
-                validation={{ maxLength: 64 }}
-                error={errors.applicant?.middleName}
-                errorMessage={t("errors.maxLength")}
-              />
-
-              <Field
-                name="applicant.lastName"
-                label={t("application.name.lastName")}
-                placeholder={t("application.name.lastName")}
-                disabled={autofilled}
-                readerOnly={true}
-                defaultValue={application.applicant.lastName}
-                validation={{ required: true, maxLength: 64 }}
-                error={errors.applicant?.lastName}
-                errorMessage={
-                  errors.applicant?.lastName?.type === "maxLength"
-                    ? t("errors.maxLength")
-                    : t("errors.lastNameError")
-                }
-                register={register}
-                dataTestId={"app-primary-last-name"}
-              />
-            </fieldset>
-          </div>
-
-          <div className="form-card__group border-b">
+                <Field
+                  name="applicant.lastName"
+                  label={t("application.name.lastName")}
+                  placeholder={t("application.name.lastName")}
+                  disabled={autofilled}
+                  readerOnly={true}
+                  defaultValue={application.applicant.lastName}
+                  validation={{ required: true, maxLength: 64 }}
+                  error={errors.applicant?.lastName}
+                  errorMessage={
+                    errors.applicant?.lastName?.type === "maxLength"
+                      ? t("errors.maxLength")
+                      : t("errors.lastNameError")
+                  }
+                  register={register}
+                  dataTestId={"app-primary-last-name"}
+                />
+              </fieldset>
+            </div>
+          </CardSection>
+          <CardSection divider={"inset"}>
             <DOBField
               defaultDOB={{
                 birthDay: application.applicant.birthDay,
@@ -177,9 +176,8 @@ const ApplicationName = () => {
                 </>
               }
             />
-          </div>
-
-          <div className="form-card__group">
+          </CardSection>
+          <CardSection divider={"flush"} className={"border-none"}>
             <legend
               className={`text__caps-spaced ${errors.applicant?.emailAddress ? "text-alert" : ""}`}
             >
@@ -217,40 +215,33 @@ const ApplicationName = () => {
               }}
               dataTestId={"app-primary-no-email"}
             />
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
+          </CardSection>
+          <CardSection className={"bg-primary-lighter"}>
+            <Button
+              styleType={AppearanceStyleType.primary}
+              onClick={() => {
+                conductor.returnToReview = false
+                conductor.setNavigatedBack(false)
+              }}
+              data-testid={"app-next-step-button"}
+            >
+              {t("t.next")}
+            </Button>
 
             {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  type="submit"
-                  variant="text"
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
+              <Button
+                unstyled={true}
+                className="mb-4"
+                onClick={() => {
+                  conductor.returnToReview = true
+                }}
+              >
+                {t("application.form.general.saveAndReturn")}
+              </Button>
             )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

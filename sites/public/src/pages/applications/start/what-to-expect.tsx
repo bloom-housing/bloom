@@ -3,8 +3,12 @@
 A notice regarding application process and rules
 */
 import React, { useEffect, useContext, useMemo } from "react"
+<<<<<<< HEAD
 import { Button } from "@bloom-housing/ui-seeds"
 import { FormCard, t, ProgressNav, Form, Heading } from "@bloom-housing/ui-components"
+=======
+import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
+>>>>>>> ade952c77 (feat: uptake seeds card)
 import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
@@ -13,6 +17,8 @@ import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housin
 import { UserStatus } from "../../../lib/constants"
 import Markdown from "markdown-to-jsx"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardFooter, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -59,22 +65,18 @@ const ApplicationWhatToExpect = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.start.whatToExpect.title")}
-          </h2>
-        </div>
-        <div className="form-card__pager-row px-16">
-          <div className="markdown mt-4">
+      <ApplicationFormLayout
+        listingName={listing?.name}
+        heading={t("application.start.whatToExpect.title")}
+        progressNavProps={{
+          currentPageSection: currentPageSection,
+          completedSections: application.completedSections,
+          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+          mounted: OnClientSide(),
+        }}
+      >
+        <CardSection>
+          <div className="markdown">
             <Markdown
               options={{
                 disableParsingRawHTML: true,
@@ -109,6 +111,7 @@ const ApplicationWhatToExpect = () => {
               {content.finePrint}
             </Markdown>
           </div>
+<<<<<<< HEAD
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
@@ -125,6 +128,21 @@ const ApplicationWhatToExpect = () => {
           </div>
         </Form>
       </FormCard>
+=======
+        </CardSection>
+        <CardSection className={"bg-primary-lighter"}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Button
+              styleType={AppearanceStyleType.primary}
+              onClick={() => conductor.setNavigatedBack(false)}
+              data-testid={"app-next-step-button"}
+            >
+              {t("t.next")}
+            </Button>
+          </Form>
+        </CardSection>
+      </ApplicationFormLayout>
+>>>>>>> ade952c77 (feat: uptake seeds card)
     </FormsLayout>
   )
 }

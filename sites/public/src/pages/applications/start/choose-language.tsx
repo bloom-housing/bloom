@@ -9,8 +9,6 @@ import { Button } from "@bloom-housing/ui-seeds"
 import {
   ImageCard,
   ActionBlock,
-  FormCard,
-  ProgressNav,
   t,
   Heading,
   setSiteAlertMessage,
@@ -32,6 +30,8 @@ import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const loadListing = async (listingId, stateFunction, conductor, context, language) => {
   const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
@@ -106,31 +106,27 @@ const ApplicationChooseLanguage = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard className="overflow-hidden">
-        <div className="form-card__lead">
-          <h1 className="form-card__title is-borderless">
-            {t("application.chooseLanguage.letsGetStarted")}
-          </h1>
-        </div>
-
+      <ApplicationFormLayout
+        listingName={listing?.name}
+        heading={t("application.chooseLanguage.letsGetStarted")}
+        progressNavProps={{
+          currentPageSection: currentPageSection,
+          completedSections: application.completedSections,
+          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+          mounted: OnClientSide(),
+        }}
+      >
         {listing && (
-          <div className="form-card__group p-0 m-0">
+          <CardSection className={"p-0"}>
             <ImageCard
               imageUrl={imageUrl}
               statuses={[{ content: appStatusContent }]}
               description={listing.name}
             />
-          </div>
+          </CardSection>
         )}
 
+<<<<<<< HEAD
         <div className="form-card__pager">
           <div className="form-card__pager-row px-4">
             {listing?.applicationConfig.languages.length > 1 && (
@@ -157,12 +153,39 @@ const ApplicationChooseLanguage = () => {
           </div>
 
           {initialStateLoaded && !profile && (
+=======
+        {listing?.applicationConfig.languages.length > 1 && (
+          <CardSection divider={"flush"}>
+>>>>>>> ade952c77 (feat: uptake seeds card)
             <>
+              <div>
+                <Heading styleType="underlineWeighted">
+                  {t("application.chooseLanguage.chooseYourLanguage")}
+                </Heading>
+              </div>
+              {listing.applicationConfig.languages.map((lang, index) => (
+                <Button
+                  className="mx-1 mb-2"
+                  onClick={() => {
+                    onLanguageSelect(lang)
+                  }}
+                  key={index}
+                  data-testid={"app-choose-language-button"}
+                >
+                  {t(`applications.begin.${lang}`)}
+                </Button>
+              ))}
+            </>
+          </CardSection>
+        )}
+
+        {initialStateLoaded && !profile && (
+          <>
+            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
               <ActionBlock
-                className="border-t border-gray-450"
                 header={<Heading priority={2}>{t("account.haveAnAccount")}</Heading>}
                 subheader={t("application.chooseLanguage.signInSaveTime")}
-                background="primary-lighter"
+                className={"p-0"}
                 actions={[
                   <Button
                     variant="primary-outlined"
@@ -174,12 +197,13 @@ const ApplicationChooseLanguage = () => {
                   </Button>,
                 ]}
               />
+            </CardSection>
+            <CardSection divider={"flush"} className={"bg-primary-lighter"}>
               <ActionBlock
-                className="border-t border-gray-450"
                 header={
                   <Heading priority={2}>{t("authentication.createAccount.noAccount")}</Heading>
                 }
-                background="primary-lighter"
+                className={"p-0"}
                 actions={[
                   <Button
                     variant="primary-outlined"
@@ -191,10 +215,10 @@ const ApplicationChooseLanguage = () => {
                   </Button>,
                 ]}
               />
-            </>
-          )}
-        </div>
-      </FormCard>
+            </CardSection>
+          </>
+        )}
+      </ApplicationFormLayout>
     </FormsLayout>
   )
 }
