@@ -1,4 +1,5 @@
 import {
+  ApiExtraModels,
   ApiProperty,
   ApiPropertyOptional,
   getSchemaPath,
@@ -17,7 +18,7 @@ import { InputType } from '../../enums/shared/input-type-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { Address } from '../addresses/address.dto';
 
-class FormMetadataExtraData {
+export class FormMetadataExtraData {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(InputType, { groups: [ValidationsGroupsEnum.default] })
@@ -29,7 +30,6 @@ class FormMetadataExtraData {
   @ApiProperty()
   key: string;
 }
-
 export class AddressInput extends FormMetadataExtraData {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

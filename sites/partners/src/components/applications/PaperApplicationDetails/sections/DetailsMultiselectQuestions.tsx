@@ -6,6 +6,7 @@ import { ApplicationContext } from "../../ApplicationContext"
 import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
+import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
@@ -22,7 +23,10 @@ const DetailsMultiselectQuestions = ({
 
   const application = useContext(ApplicationContext)
 
-  const listingQuestions = listingSectionQuestions(listingDto, applicationSection)
+  const listingQuestions = listingSectionQuestions(
+    listingDto as unknown as Listing,
+    applicationSection
+  )
 
   if (listingQuestions?.length === 0) {
     return <></>
@@ -34,11 +38,11 @@ const DetailsMultiselectQuestions = ({
     <GridSection className="bg-primary-lighter" title={title} inset columns={2}>
       {listingQuestions?.map((listingQuestion) => {
         return (
-          <GridCell key={listingQuestion?.multiselectQuestion.text}>
-            <FieldValue label={listingQuestion?.multiselectQuestion.text}>
+          <GridCell key={listingQuestion?.multiselectQuestions.text}>
+            <FieldValue label={listingQuestion?.multiselectQuestions.text}>
               {(() => {
                 const appQuestion = questions?.find(
-                  (question) => question.key === listingQuestion?.multiselectQuestion.text
+                  (question) => question.key === listingQuestion?.multiselectQuestions.text
                 )
                 if (!appQuestion?.claimed) return t("t.none")
 

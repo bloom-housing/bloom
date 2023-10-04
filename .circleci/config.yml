@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.26.0
+  cypress: cypress-io/cypress@1.29.0
 
 executors:
   standard-node:
@@ -12,6 +12,7 @@ executors:
           # Never do this in production or with any sensitive / non-test data:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom
+          JURISDICTION_NAME: Bloomington
   standard-node-new:
     docker:
       - image: "cimg/node:18.14.2"
@@ -21,6 +22,7 @@ executors:
           # Never do this in production or with any sensitive / non-test data:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom_prisma
+          JURISDICTION_NAME: Bloomington
   cypress-node:
     docker:
       - image: "cypress/base:18.14.1"
@@ -30,8 +32,10 @@ executors:
           # Never do this in production or with any sensitive / non-test data:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: bloom
+          JURISDICTION_NAME: Bloomington
     environment:
       PORT: "3100"
+      PORT_NEW: "3101"
       EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
       APP_SECRET: "CI-LONG-SECRET-KEY"
       # DB URL for migration and seeds:
@@ -39,6 +43,7 @@ executors:
       # DB URL for the jest tests per ormconfig.test.ts
       TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
+      JURISDICTION_NAME: Bloomington
 
 jobs:
   setup:
@@ -163,46 +168,48 @@ workflows:
       - cypress/run:
           name: "cypress-public"
           requires:
-            - setup
+            - setup-with-new-db
           executor: cypress-node
           working_directory: sites/public
           yarn: true
+          install-command: yarn install && cd ../../backend_new && yarn install
           build: |
-            yarn test:backend:core:dbsetup
+            pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
           store_artifacts: true
-      - cypress/run:
-          name: "cypress-partners"
-          requires:
-            - setup
-          executor: cypress-node
-          working_directory: sites/partners
-          yarn: true
-          build: |
-            echo 'export FEATURE_LISTINGS_APPROVAL=FALSE' >> "$BASH_ENV"
-            source "$BASH_ENV"
-            yarn test:backend:core:dbsetup
-          start: |
-            yarn dev:all-cypress
-          command: |
-            npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
-          wait-on: "http://0.0.0.0:3001"
-          store_artifacts: true
-      - cypress/run:
-          name: "cypress-partners-listings-approval"
-          requires:
-            - setup
-          executor: cypress-node
-          working_directory: sites/partners
-          yarn: true
-          build: |
-            echo 'export FEATURE_LISTINGS_APPROVAL=TRUE' >> "$BASH_ENV"
-            source "$BASH_ENV"
-            yarn test:backend:core:dbsetup
-          start: |
-            yarn dev:all-cypress
-          command: |
-            npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
-          wait-on: "http://0.0.0.0:3001"
-          store_artifacts: true
+      # Turning off partner tests until we connect the partner site to new backend
+      # - cypress/run:
+      #     name: "cypress-partners"
+      #     requires:
+      #       - setup
+      #     executor: cypress-node
+      #     working_directory: sites/partners
+      #     yarn: true
+      #     build: |
+      #       echo 'export FEATURE_LISTINGS_APPROVAL=FALSE' >> "$BASH_ENV"
+      #       source "$BASH_ENV"
+      #       yarn test:backend:core:dbsetup
+      #     start: |
+      #       yarn dev:all-cypress
+      #     command: |
+      #       npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
+      #     wait-on: "http://0.0.0.0:3001"
+      #     store_artifacts: true
+      # - cypress/run:
+      #     name: "cypress-partners-listings-approval"
+      #     requires:
+      #       - setup
+      #     executor: cypress-node
+      #     working_directory: sites/partners
+      #     yarn: true
+      #     build: |
+      #       echo 'export FEATURE_LISTINGS_APPROVAL=TRUE' >> "$BASH_ENV"
+      #       source "$BASH_ENV"
+      #       yarn test:backend:core:dbsetup
+      #     start: |
+      #       yarn dev:all-cypress
+      #     command: |
+      #       npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
+      #     wait-on: "http://0.0.0.0:3001"
+      #     store_artifacts: true

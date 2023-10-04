@@ -316,4 +316,32 @@ describe('Auth Controller Tests', () => {
     expect(cookies).toContain(REFRESH_COOKIE_NAME);
     expect(cookies).toContain(ACCESS_TOKEN_AVAILABLE_NAME);
   });
+
+  it('should fail request new token when cookie not sent', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/auth/requestNewToken')
+      .expect(400);
+    expect(res.body.message).toBe('No refresh token sent with request');
+  });
+
+  it('should successfully request new token', async () => {
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+    await request(app.getHttpServer())
+      .get('/auth/requestNewToken')
+      .set('Cookie', resLogIn.headers['set-cookie'])
+      .expect(200);
+  });
 });

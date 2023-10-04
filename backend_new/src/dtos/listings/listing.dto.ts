@@ -432,7 +432,7 @@ class Listing extends AbstractDTO {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEvent)
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ type: Asset, isArray: true })
+  @ApiProperty({ type: ListingEvent, isArray: true })
   listingEvents: ListingEvent[];
 
   @Expose()

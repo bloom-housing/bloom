@@ -14,7 +14,7 @@ import {
   calculateSkip,
   calculateTake,
 } from '../utilities/pagination-helpers';
-import { buildOrderBy } from '../utilities/build-order-by';
+import { buildOrderByForListings } from '../utilities/build-order-by';
 import { ListingFilterParams } from '../dtos/listings/listings-filter-params.dto';
 import { ListingFilterKeys } from '../enums/listings/filter-key-enum';
 import { buildFilter } from '../utilities/build-filter';
@@ -152,7 +152,7 @@ export class ListingService {
     const listingsRaw = await this.prisma.listings.findMany({
       skip: calculateSkip(params.limit, params.page),
       take: calculateTake(params.limit),
-      orderBy: buildOrderBy(params.orderBy, params.orderDir),
+      orderBy: buildOrderByForListings(params.orderBy, params.orderDir),
       include: views[params.view ?? 'full'],
       where: whereClause,
     });
@@ -193,7 +193,7 @@ export class ListingService {
 
     if (params?.length) {
       params.forEach((filter) => {
-        if (ListingFilterKeys.name in filter) {
+        if (filter[ListingFilterKeys.name]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -203,19 +203,20 @@ export class ListingService {
           filters.push({
             OR: builtFilter.map((filt) => ({ [ListingFilterKeys.name]: filt })),
           });
-        } else if (ListingFilterKeys.status in filter) {
+        } else if (filter[ListingFilterKeys.status]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
             value: filter[ListingFilterKeys.status],
             key: ListingFilterKeys.status,
+            caseSensitive: true,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({
               [ListingFilterKeys.status]: filt,
             })),
           });
-        } else if (ListingFilterKeys.neighborhood in filter) {
+        } else if (filter[ListingFilterKeys.neighborhood]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -227,7 +228,7 @@ export class ListingService {
               [ListingFilterKeys.neighborhood]: filt,
             })),
           });
-        } else if (ListingFilterKeys.bedrooms in filter) {
+        } else if (filter[ListingFilterKeys.bedrooms]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -243,7 +244,7 @@ export class ListingService {
               },
             })),
           });
-        } else if (ListingFilterKeys.zipcode in filter) {
+        } else if (filter[ListingFilterKeys.zipcode]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -257,7 +258,7 @@ export class ListingService {
               },
             })),
           });
-        } else if (ListingFilterKeys.leasingAgents in filter) {
+        } else if (filter[ListingFilterKeys.leasingAgents]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
@@ -273,12 +274,13 @@ export class ListingService {
               },
             })),
           });
-        } else if (ListingFilterKeys.jurisdiction in filter) {
+        } else if (filter[ListingFilterKeys.jurisdiction]) {
           const builtFilter = buildFilter({
             $comparison: filter.$comparison,
             $include_nulls: false,
             value: filter[ListingFilterKeys.jurisdiction],
             key: ListingFilterKeys.jurisdiction,
+            caseSensitive: true,
           });
           filters.push({
             OR: builtFilter.map((filt) => ({

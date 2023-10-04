@@ -9,7 +9,10 @@ import {
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
-import { listingFactory } from './seed-helpers/listing-factory';
+import {
+  featuresAndUtilites,
+  listingFactory,
+} from './seed-helpers/listing-factory';
 import { amiChartFactory } from './seed-helpers/ami-chart-factory';
 import { userFactory } from './seed-helpers/user-factory';
 import { unitTypeFactoryAll } from './seed-helpers/unit-type-factory';
@@ -139,7 +142,7 @@ export const stagingSeed = async (
         postmarkedApplicationsReceivedByDate: null,
         programRules: null,
         rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a',
+          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
         rentalHistory: null,
         requiredDocuments: null,
         specialNotes: null,
@@ -196,6 +199,23 @@ export const stagingSeed = async (
             },
           },
         },
+        {
+          amiPercentage: '30',
+          monthlyIncomeMin: '2000',
+          floor: 1,
+          maxOccupancy: 3,
+          minOccupancy: 1,
+          numBathrooms: 1,
+          numBedrooms: 1,
+          number: '101',
+          sqFeet: '750.00',
+          amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[1].id,
+            },
+          },
+        },
       ],
       multiselectQuestions: [multiselectQuestion1, multiselectQuestion2],
       applications: [applicationFactory(), applicationFactory()],
@@ -248,7 +268,7 @@ export const stagingSeed = async (
         postmarkedApplicationsReceivedByDate: null,
         programRules: null,
         rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a',
+          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
         rentalHistory: null,
         requiredDocuments: null,
         specialNotes: null,
@@ -284,11 +304,16 @@ export const stagingSeed = async (
           numBedrooms: 2,
           number: '',
           amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
         },
         {
           amiPercentage: '30',
           annualIncomeMin: null,
-          monthlyIncomeMin: '1985',
+          monthlyIncomeMin: '2020',
           floor: 2,
           maxOccupancy: 5,
           minOccupancy: 2,
@@ -297,6 +322,11 @@ export const stagingSeed = async (
           numBedrooms: 2,
           number: '',
           amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
         },
         {
           amiPercentage: '30',
@@ -309,6 +339,11 @@ export const stagingSeed = async (
           numBathrooms: 2,
           numBedrooms: 2,
           amiChart: { connect: { id: amiChart.id } },
+          unitTypes: {
+            connect: {
+              id: unitTypes[2].id,
+            },
+          },
         },
       ],
       multiselectQuestions: [multiselectQuestion1],
@@ -470,7 +505,7 @@ export const stagingSeed = async (
         postmarkedApplicationsReceivedByDate: null,
         programRules: null,
         rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a',
+          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
         rentalHistory: null,
         requiredDocuments: null,
         specialNotes: null,
@@ -575,7 +610,7 @@ export const stagingSeed = async (
         postmarkedApplicationsReceivedByDate: null,
         programRules: null,
         rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a',
+          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
         rentalHistory: null,
         requiredDocuments: null,
         specialNotes: null,
@@ -660,7 +695,7 @@ export const stagingSeed = async (
         postmarkedApplicationsReceivedByDate: null,
         programRules: null,
         rentalAssistance:
-          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a',
+          'Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.',
         rentalHistory: null,
         requiredDocuments: 'Please bring proof of income and a recent paystub.',
         specialNotes: null,
@@ -681,6 +716,7 @@ export const stagingSeed = async (
         listingsApplicationPickUpAddress: undefined,
         listingsApplicationDropOffAddress: undefined,
         reservedCommunityTypes: undefined,
+        ...featuresAndUtilites(),
         listingImages: {
           create: [
             {

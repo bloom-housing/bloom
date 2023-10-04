@@ -15,11 +15,13 @@ export const amiChartFactory = (
 });
 
 const amiChartItemsFactory = (numberToCreate: number): Prisma.JsonArray =>
-  [...Array(numberToCreate)].map((_, index) => {
+  [...Array(numberToCreate)].flatMap((_, index) => {
     const baseValue = index + 1;
-    return {
-      percentOfAmi: baseValue * 10,
-      householdSize: baseValue,
-      income: baseValue * 12_000,
-    };
+    return [...Array(8)].map((_, index2) => {
+      return {
+        percentOfAmi: baseValue * 10,
+        householdSize: index2 + 1,
+        income: (baseValue + index2) * 12_000,
+      };
+    });
   });

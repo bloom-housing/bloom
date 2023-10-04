@@ -1,18 +1,18 @@
 import {
-  ApplicationStatus,
-  ApplicationSubmissionType,
-  Language,
   ApplicationMultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
+  LanguagesEnum,
+} from "../types/backend-swagger"
 
 export const blankApplication = {
   loaded: false,
   autofilled: false,
   completedSections: 0,
-  submissionType: ApplicationSubmissionType.electronical,
-  language: Language.en,
+  submissionType: ApplicationSubmissionTypeEnum.electronical,
+  language: LanguagesEnum.en,
   acceptedTerms: false,
-  status: ApplicationStatus.submitted,
+  status: ApplicationStatusEnum.submitted,
   applicant: {
     orderId: undefined,
     firstName: "",

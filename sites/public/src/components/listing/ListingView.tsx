@@ -2,18 +2,6 @@ import React from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
 import {
-  Listing,
-  ListingEvent,
-  ListingEventType,
-  ListingApplicationAddressType,
-  ApplicationMethod,
-  ApplicationMethodType,
-  ListingStatus,
-  Jurisdiction,
-  ApplicationSection,
-  ListingReviewOrder,
-} from "@bloom-housing/backend-core/types"
-import {
   AdditionalFees,
   ApplicationStatus,
   Description,
@@ -46,21 +34,34 @@ import {
   getOccupancyDescription,
   imageUrlFromListing,
   occupancyTable,
-  pdfUrlFromListingEvents,
   getTimeRangeString,
   getCurrencyRange,
   getPostmarkString,
   UnitTables,
   getSummariesTable,
   IMAGE_FALLBACK_URL,
+  pdfUrlFromListingEvents,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../../pages/_error"
 import { useGetApplicationStatusProps } from "../../lib/hooks"
 import { getGenericAddress, openInFuture } from "../../lib/helpers"
 import { GetApplication } from "./GetApplication"
-import { DownloadLotteryResults } from "./DownloadLotteryResults"
 import { SubmitApplication } from "./SubmitApplication"
+import {
+  ApplicationAddressTypeEnum,
+  ApplicationMethod,
+  ApplicationMethodsTypeEnum,
+  Jurisdiction,
+  Listing,
+  ListingEvent,
+  ListingEventCreate,
+  ListingEventsTypeEnum,
+  ListingsStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { DownloadLotteryResults } from "./DownloadLotteryResults"
 
 interface ListingProps {
   listing: Listing
@@ -76,14 +77,18 @@ export const ListingView = (props: ListingProps) => {
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
-    ? listing.applicationMethods.some((method) => method.type !== ApplicationMethodType.Referral)
+    ? listing.applicationMethods.some(
+        (method) => method.type !== ApplicationMethodsTypeEnum.Referral
+      )
     : false
 
   if (!listing) {
     return <ErrorPage />
   }
 
-  const oneLineAddress = <OneLineAddress address={getGenericAddress(listing.buildingAddress)} />
+  const oneLineAddress = (
+    <OneLineAddress address={getGenericAddress(listing.listingsBuildingAddress)} />
+  )
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -145,12 +150,12 @@ export const ListingView = (props: ListingProps) => {
     ? t("listings.forIncomeCalculationsBMR")
     : t("listings.forIncomeCalculations")
 
-  if (listing.buildingSelectionCriteriaFile) {
+  if (listing.listingsBuildingSelectionCriteriaFile) {
     buildingSelectionCriteria = (
       <p>
         <a
           href={cloudinaryPdfFromId(
-            listing.buildingSelectionCriteriaFile.fileId,
+            listing.listingsBuildingSelectionCriteriaFile.fileId,
             process.env.cloudinaryCloudName
           )}
           className={"text-blue-700"}
@@ -171,17 +176,18 @@ export const ListingView = (props: ListingProps) => {
 
   const listingPreferences = listing?.listingMultiselectQuestions.filter(
     (listingPref) =>
-      listingPref.multiselectQuestion.applicationSection === ApplicationSection.preferences &&
-      !listingPref.multiselectQuestion.hideFromListing
+      listingPref.multiselectQuestions.applicationSection ===
+        MultiselectQuestionsApplicationSectionEnum.preferences &&
+      !listingPref.multiselectQuestions.hideFromListing
   )
 
   const getPreferenceData = () => {
     return listingPreferences.map((listingPref, index) => {
       return {
         ordinal: index + 1,
-        links: listingPref?.multiselectQuestion?.links,
-        title: listingPref?.multiselectQuestion?.text,
-        description: listingPref?.multiselectQuestion?.description,
+        links: listingPref?.multiselectQuestions?.links,
+        title: listingPref?.multiselectQuestions?.text,
+        description: listingPref?.multiselectQuestions?.description,
       }
     })
   }
@@ -202,7 +208,7 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  const getEvent = (event: ListingEvent, note?: string | React.ReactNode): EventType => {
+  const getEvent = (event: ListingEventCreate, note?: string | React.ReactNode): EventType => {
     return {
       timeString: getTimeRangeString(event.startTime, event.endTime),
       dateString: dayjs(event.startDate).format("MMMM D, YYYY"),
@@ -215,19 +221,19 @@ export const ListingView = (props: ListingProps) => {
   let openHouseEvents: EventType[] | null = null
   let publicLottery: ListingEvent | null = null
   let lotteryResults: ListingEvent | null = null
-  if (Array.isArray(listing.events)) {
-    listing.events.forEach((event) => {
+  if (Array.isArray(listing.listingEvents)) {
+    listing.listingEvents.forEach((event) => {
       switch (event.type) {
-        case ListingEventType.openHouse:
+        case ListingEventsTypeEnum.openHouse:
           if (!openHouseEvents) {
             openHouseEvents = []
           }
           openHouseEvents.push(getEvent(event))
           break
-        case ListingEventType.publicLottery:
+        case ListingEventsTypeEnum.publicLottery:
           publicLottery = event
           break
-        case ListingEventType.lotteryResults:
+        case ListingEventsTypeEnum.lotteryResults:
           lotteryResults = event
           break
       }
@@ -261,48 +267,48 @@ export const ListingView = (props: ListingProps) => {
 
   const getReservedTitle = () => {
     if (
-      listing.reservedCommunityType.name === "senior55" ||
-      listing.reservedCommunityType.name === "senior62" ||
-      listing.reservedCommunityType.name === "senior"
+      listing.reservedCommunityTypes.name === "senior55" ||
+      listing.reservedCommunityTypes.name === "senior62" ||
+      listing.reservedCommunityTypes.name === "senior"
     ) {
       return t("listings.reservedCommunitySeniorTitle")
     } else return t("listings.reservedCommunityTitleDefault")
   }
 
   // TODO: Move the below methods into our shared helper library when setup
-  const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+  const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodsTypeEnum) => {
     return applicationMethods.some((method) => method.type == type)
   }
 
-  const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+  const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodsTypeEnum) => {
     return applicationMethods.find((method) => method.type == type)
   }
 
   type AddressLocation = "dropOff" | "pickUp" | "mailIn"
 
   const addressMap = {
-    dropOff: listing.applicationDropOffAddress,
-    pickUp: listing.applicationPickUpAddress,
-    mailIn: listing.applicationMailingAddress,
+    dropOff: listing.listingsApplicationDropOffAddress,
+    pickUp: listing.listingsApplicationPickUpAddress,
+    mailIn: listing.listingsApplicationMailingAddress,
   }
 
   const getAddress = (
-    addressType: ListingApplicationAddressType | undefined,
+    addressType: ApplicationAddressTypeEnum | undefined,
     location: AddressLocation
   ) => {
-    if (addressType === ListingApplicationAddressType.leasingAgent) {
-      return listing.leasingAgentAddress
+    if (addressType === ApplicationAddressTypeEnum.leasingAgent) {
+      return listing.listingsLeasingAgentAddress
     }
     return addressMap[location]
   }
 
   const getOnlineApplicationURL = () => {
     let onlineApplicationURL
-    if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
+    if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.Internal)) {
       onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
-    } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
+    } else if (hasMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)) {
       onlineApplicationURL =
-        getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
+        getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.ExternalLink)
           ?.externalReference || ""
     }
     return onlineApplicationURL
@@ -310,7 +316,7 @@ export const ListingView = (props: ListingProps) => {
 
   const getPaperApplications = () => {
     return (
-      getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)
+      getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.FileDownload)
         ?.paperApplications.sort((a, b) => {
           // Ensure English is always first
           if (a.language == "en") return -1
@@ -325,10 +331,10 @@ export const ListingView = (props: ListingProps) => {
         })
         .map((paperApp) => {
           return {
-            fileURL: paperApp?.file?.fileId.includes("https")
-              ? paperApp?.file?.fileId
+            fileURL: paperApp?.assets?.fileId?.includes("https")
+              ? paperApp?.assets?.fileId
               : cloudinaryPdfFromId(
-                  paperApp?.file?.fileId || "",
+                  paperApp?.assets?.fileId || "",
                   process.env.cloudinaryCloudName || ""
                 ),
             languageString: t(`languages.${paperApp.language}`),
@@ -350,7 +356,9 @@ export const ListingView = (props: ListingProps) => {
         applicationsOpen={!appOpenInFuture}
         applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
-        paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
+        paperMethod={
+          !!getMethod(listing.applicationMethods, ApplicationMethodsTypeEnum.FileDownload)
+        }
         postmarkedApplicationsReceivedByDate={getDateString(
           listing.postmarkedApplicationsReceivedByDate,
           `MMM DD, YYYY [${t("t.at")}] hh:mm A`
@@ -361,8 +369,8 @@ export const ListingView = (props: ListingProps) => {
         listingName={listing.name}
       />
       {!(
-        listing.status === ListingStatus.closed ||
-        !(listing.applicationMailingAddress || listing.applicationDropOffAddress)
+        listing.status === ListingsStatusEnum.closed ||
+        !(listing.listingsApplicationMailingAddress || listing.listingsApplicationDropOffAddress)
       ) && (
         <SubmitApplication
           applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
@@ -410,9 +418,9 @@ export const ListingView = (props: ListingProps) => {
     ]
     const description = () => {
       switch (listing.reviewOrderType) {
-        case ListingReviewOrder.waitlist:
+        case ReviewOrderTypeEnum.waitlist:
           return t("listings.waitlist.submitForWaitlist")
-        case ListingReviewOrder.firstComeFirstServe:
+        case ReviewOrderTypeEnum.firstComeFirstServe:
           return t("listings.eligibleApplicants.FCFS")
         default:
           return t("listings.availableUnitsDescription")
@@ -422,11 +430,11 @@ export const ListingView = (props: ListingProps) => {
     return (
       <QuantityRowSection
         quantityRows={
-          listing.reviewOrderType === ListingReviewOrder.waitlist ? waitlistRow : unitRow
+          listing.reviewOrderType === ReviewOrderTypeEnum.waitlist ? waitlistRow : unitRow
         }
         strings={{
           sectionTitle:
-            listing.reviewOrderType === ListingReviewOrder.waitlist
+            listing.reviewOrderType === ReviewOrderTypeEnum.waitlist
               ? t("listings.waitlist.isOpen")
               : t("listings.vacantUnitsAvailable"),
           description: description(),
@@ -450,8 +458,8 @@ export const ListingView = (props: ListingProps) => {
 
   const getAccessibilityFeatures = () => {
     let featuresExist = false
-    const features = Object.keys(listing?.features ?? {}).map((feature, index) => {
-      if (listing?.features[feature]) {
+    const features = Object.keys(listing?.listingFeatures ?? {}).map((feature, index) => {
+      if (listing?.listingFeatures[feature]) {
         featuresExist = true
         return <li key={index}>{t(`eligibility.accessibility.${feature}`)}</li>
       }
@@ -463,9 +471,9 @@ export const ListingView = (props: ListingProps) => {
 
   const getUtilitiesIncluded = () => {
     let utilitiesExist = false
-    const utilitiesIncluded = Object.keys(listing?.utilities ?? {}).reduce(
+    const utilitiesIncluded = Object.keys(listing?.listingUtilities ?? {}).reduce(
       (acc, current, index) => {
-        if (listing?.utilities[current]) {
+        if (listing?.listingUtilities[current]) {
           utilitiesExist = true
           acc.push(
             <li key={index} className={"list-disc list-inside"}>
@@ -515,11 +523,11 @@ export const ListingView = (props: ListingProps) => {
             }
           )}
           tags={
-            listing.reservedCommunityType
+            listing.reservedCommunityTypes
               ? [
                   {
                     text: t(
-                      `listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`
+                      `listings.reservedCommunityTypes.${props.listing.reservedCommunityTypes.name}`
                     ),
                   },
                 ]
@@ -551,11 +559,11 @@ export const ListingView = (props: ListingProps) => {
       </header>
 
       <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
-        {listing.reservedCommunityType && (
+        {listing.reservedCommunityTypes && (
           <Message warning={true}>
             {t("listings.reservedFor", {
               type: t(
-                `listings.reservedCommunityTypeDescriptions.${listing.reservedCommunityType.name}`
+                `listings.reservedCommunityTypeDescriptions.${listing.reservedCommunityTypes.name}`
               ),
             })}
           </Message>
@@ -600,7 +608,7 @@ export const ListingView = (props: ListingProps) => {
             resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
             pdfURL={pdfUrlFromListingEvents(
               [lotteryResults],
-              ListingEventType.lotteryResults,
+              ListingEventsTypeEnum.lotteryResults,
               process.env.cloudinaryCloudName
             )}
             buttonText={t("listings.lotteryResults.downloadResults")}
@@ -608,7 +616,7 @@ export const ListingView = (props: ListingProps) => {
           {!applicationsClosed && getWaitlist()}
           {hasNonReferralMethods &&
           !applicationsClosed &&
-          listing.status !== ListingStatus.closed ? (
+          listing.status !== ListingsStatusEnum.closed ? (
             <>{applySidebar()}</>
           ) : (
             <></>
@@ -624,10 +632,12 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <ul>
-            {listing.reservedCommunityType && (
+            {listing.reservedCommunityTypes && (
               <ListSection title={getReservedTitle()} subtitle={null}>
                 <InfoCard
-                  title={t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)}
+                  title={t(
+                    `listings.reservedCommunityTypes.${listing.reservedCommunityTypes.name}`
+                  )}
                   subtitle={t("listings.allUnits")}
                 >
                   <ExpandableText
@@ -750,7 +760,7 @@ export const ListingView = (props: ListingProps) => {
                 resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
                 pdfURL={pdfUrlFromListingEvents(
                   [lotteryResults],
-                  ListingEventType.lotteryResults,
+                  ListingEventsTypeEnum.lotteryResults,
                   process.env.cloudinaryCloudName
                 )}
                 buttonText={t("listings.lotteryResults.downloadResults")}
@@ -764,7 +774,7 @@ export const ListingView = (props: ListingProps) => {
               {!applicationsClosed && getWaitlist()}
               {hasNonReferralMethods &&
                 !applicationsClosed &&
-                listing.status !== ListingStatus.closed &&
+                listing.status !== ListingsStatusEnum.closed &&
                 applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication
@@ -813,7 +823,7 @@ export const ListingView = (props: ListingProps) => {
                       ]
                     : undefined
                 }
-                contactAddress={listing.leasingAgentAddress}
+                contactAddress={listing.listingsLeasingAgentAddress}
                 contactEmail={listing.leasingAgentEmail}
                 contactName={listing.leasingAgentName}
                 contactPhoneNumber={`${t("t.call")} ${listing.leasingAgentPhone}`}
@@ -905,7 +915,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <div className="listing-detail-panel">
             <ListingMap
-              address={getGenericAddress(listing.buildingAddress)}
+              address={getGenericAddress(listing.listingsBuildingAddress)}
               listingName={listing.name}
             />
           </div>

@@ -123,23 +123,23 @@ export class TranslationService {
     if (listing.listingMultiselectQuestions) {
       listing.listingMultiselectQuestions.map((multiselectQuestion, index) => {
         multiselectQuestion.multiselectQuestions.untranslatedText =
-          multiselectQuestion.multiselectQuestions.text;
+          multiselectQuestion.multiselectQuestions?.text;
         multiselectQuestion.multiselectQuestions.untranslatedOptOutText =
-          multiselectQuestion.multiselectQuestions.optOutText;
+          multiselectQuestion.multiselectQuestions?.optOutText;
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.text`
-        ] = multiselectQuestion.multiselectQuestions.text;
+        ] = multiselectQuestion.multiselectQuestions?.text;
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.description`
-        ] = multiselectQuestion.multiselectQuestions.description;
+        ] = multiselectQuestion.multiselectQuestions?.description;
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.subText`
-        ] = multiselectQuestion.multiselectQuestions.subText;
+        ] = multiselectQuestion.multiselectQuestions?.subText;
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
-        ] = multiselectQuestion.multiselectQuestions.optOutText;
+        ] = multiselectQuestion.multiselectQuestions?.optOutText;
         // TODO: should we translate links?
-        multiselectQuestion.multiselectQuestions.options?.map(
+        multiselectQuestion.multiselectQuestions?.options?.map(
           (multiselectOption, optionIndex) => {
             multiselectOption.untranslatedText = multiselectOption.text;
             pathsToFilter[

@@ -5,18 +5,21 @@ describe("applications/contact/name", function () {
     cy.visit(route)
   })
 
-  it("should render the primary contact name sub-form", function () {
+  // TODO: unskip after applications are implemented on the front end
+  it.skip("should render the primary contact name sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("should require form input", function () {
+  // TODO: unskip after applications are implemented on the front end
+  it.skip("should require form input", function () {
     cy.goNext()
     cy.location("pathname").should("include", route)
     cy.checkErrorAlert("be.visible")
   })
 
-  it("should validate email fields", function () {
+  // TODO: unskip after applications are implemented on the front end
+  it.skip("should validate email fields", function () {
     cy.getByTestId("app-primary-email").type("not email format")
     cy.goNext()
     cy.location("pathname").should("include", route)
@@ -24,7 +27,8 @@ describe("applications/contact/name", function () {
     cy.reload()
   })
 
-  it("should disable email field when user indicates they have no email", function () {
+  // TODO: unskip after applications are implemented on the front end
+  it.skip("should disable email field when user indicates they have no email", function () {
     cy.getByTestId("app-primary-no-email").check()
     cy.getByTestId("app-primary-email").should("be.disabled")
     cy.reload()

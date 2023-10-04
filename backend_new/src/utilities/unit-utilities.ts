@@ -22,6 +22,8 @@ export const UnitTypeSort = [
   UnitTypeEnum.oneBdrm,
   UnitTypeEnum.twoBdrm,
   UnitTypeEnum.threeBdrm,
+  UnitTypeEnum.fourBdrm,
+  UnitTypeEnum.fiveBdrm,
 ];
 
 const usd = new Intl.NumberFormat('en-US', {

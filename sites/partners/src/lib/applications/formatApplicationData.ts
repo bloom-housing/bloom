@@ -29,6 +29,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 import customParseFormat from "dayjs/plugin/customParseFormat"
+import { ListingMultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
 /*
@@ -320,14 +321,14 @@ export const mapApiToForm = (applicationData: ApplicationUpdate, listing: Listin
   const preferences =
     mapApiToMultiselectForm(
       applicationData.preferences,
-      listing?.listingMultiselectQuestions,
+      listing?.listingMultiselectQuestions as unknown as ListingMultiselectQuestion[],
       ApplicationSection.preferences
     ).application.preferences ?? []
 
   const programs =
     mapApiToMultiselectForm(
       applicationData.programs,
-      listing?.listingMultiselectQuestions,
+      listing?.listingMultiselectQuestions as unknown as ListingMultiselectQuestion[],
       ApplicationSection.programs
     ).application.programs ?? []
 

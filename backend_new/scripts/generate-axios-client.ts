@@ -6,14 +6,17 @@ async function codeGen() {
   await codegen({
     methodNameMode: 'operationId',
     remoteUrl: `http://localhost:${process.env.PORT}/api-json`,
-    outputDir: 'types/src',
+    outputDir: '../shared-helpers/src/types',
     useStaticMethod: false,
     fileName: 'backend-swagger.ts',
     useHeaderParameters: false,
     strictNullChecks: true,
   });
-  let content = fs.readFileSync('./types/src/backend-swagger.ts', 'utf-8');
+  let content = fs.readFileSync(
+    '../shared-helpers/src/types/backend-swagger.ts',
+    'utf-8',
+  );
   content = content.replace(/(\w+)Dto/g, '$1');
-  fs.writeFileSync('./types/src/backend-swagger.ts', content);
+  fs.writeFileSync('../shared-helpers/src/types/backend-swagger.ts', content);
 }
 void codeGen();

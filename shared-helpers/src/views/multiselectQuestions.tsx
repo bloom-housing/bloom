@@ -1,13 +1,11 @@
 import * as React from "react"
 import {
   InputType,
-  MultiselectQuestion,
   MultiselectOption,
+  MultiselectQuestion as BackendCoreMultiSelectQuestion,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
   ApplicationSection,
-  ListingMultiselectQuestion,
-  Listing,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -19,6 +17,12 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
+import {
+  Listing,
+  ListingMultiselectQuestion,
+  MultiselectQuestion,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "../types/backend-swagger"
 
 export const listingSectionQuestions = (
   listing: Listing,
@@ -26,7 +30,8 @@ export const listingSectionQuestions = (
 ) => {
   return listing?.listingMultiselectQuestions?.filter(
     (question) =>
-      question?.multiselectQuestion?.applicationSection === ApplicationSection[applicationSection]
+      question?.multiselectQuestions?.applicationSection ===
+      MultiselectQuestionsApplicationSectionEnum[applicationSection]
   )
 }
 
@@ -95,7 +100,7 @@ export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: n
     return item.ordinal === page
   })
 
-  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestion : null
+  return ordinalQuestions?.length ? ordinalQuestions[0]?.multiselectQuestions : null
 }
 
 // Get all option field names for a question, including the potential opt out option
@@ -277,7 +282,7 @@ export const getCheckboxOption = (
 
 export const mapRadiosToApi = (
   data: { [name: string]: string },
-  question: MultiselectQuestion
+  question: MultiselectQuestion | BackendCoreMultiSelectQuestion
 ): ApplicationMultiselectQuestion => {
   const [key, value] = Object.entries(data)[0]
   const options: ApplicationMultiselectQuestionOption[] = []
@@ -310,7 +315,7 @@ export const mapRadiosToApi = (
 export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
-  question: MultiselectQuestion,
+  question: MultiselectQuestion | BackendCoreMultiSelectQuestion,
   applicationSection: ApplicationSection
 ): ApplicationMultiselectQuestion => {
   const data = formData["application"][applicationSection][question.text.replace(/'/g, "")]
@@ -354,8 +359,8 @@ export const mapApiToMultiselectForm = (
       question,
       inputType: getInputType(
         listingQuestions?.filter(
-          (listingQuestion) => listingQuestion?.multiselectQuestion?.text === question.key
-        )[0]?.multiselectQuestion?.options ?? []
+          (listingQuestion) => listingQuestion?.multiselectQuestions?.text === question.key
+        )[0]?.multiselectQuestions?.options ?? []
       ),
     }
   })

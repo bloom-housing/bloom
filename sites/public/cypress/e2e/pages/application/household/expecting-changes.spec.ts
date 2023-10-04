@@ -5,12 +5,14 @@ describe("applications/household/changes", function () {
     cy.visit(route)
   })
 
-  it("should render expecting household changes sub-form", function () {
+  // TODO: unskip after applications are implemented on the front end
+  it.skip("should render expecting household changes sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("should require form input", function () {
+  // TODO: unskip after applications are implemented on the front end
+  it.skip("should require form input", function () {
     cy.goNext()
 
     cy.checkErrorAlert("be.visible")
