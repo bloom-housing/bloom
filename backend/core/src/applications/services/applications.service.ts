@@ -438,7 +438,9 @@ export class ApplicationsService {
 
   private async authorizeCSVExport(user, listingId) {
     /**
-     * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
+     * Checking authorization for each application is very expensive.
+     * By making listingId required, we can check if the user has update permissions for the listing, since right now if a user has that
+     * they also can run the export for that listing
      */
     const jurisdictionId = await this.listingsService.getJurisdictionIdByListingId(listingId)
 

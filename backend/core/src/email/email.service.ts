@@ -7,7 +7,6 @@ import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
-import dayjs from "dayjs"
 import { ConfigService } from "@nestjs/config"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
@@ -20,6 +19,7 @@ import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
 import { IdName } from "../../types"
+import { formatLocalDate } from "../shared/utils/format-local-date"
 
 type EmailAttachmentData = {
   data: string
@@ -452,14 +452,9 @@ export class EmailService {
       undefined,
       {
         data: applicationData,
-        name: `applications-${listingId}-${this.createDateStringFromNow()}.csv`,
+        name: `applications-${listingId}-${formatLocalDate(new Date(), "YYYY-MM-DD_HH:mm:ss")}.csv`,
         type: "text/csv",
       }
     )
-  }
-
-  createDateStringFromNow(format = "YYYY-MM-DD_HH:mm:ss"): string {
-    const now = new Date()
-    return dayjs(now).format(format)
   }
 }
