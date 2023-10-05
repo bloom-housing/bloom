@@ -3,9 +3,8 @@
 A notice regarding application process and rules
 */
 import React, { useEffect, useContext, useMemo } from "react"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   FormCard,
   t,
   ProgressNav,
@@ -121,9 +120,9 @@ const ApplicationWhatToExpect = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

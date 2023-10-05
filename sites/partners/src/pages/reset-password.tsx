@@ -1,9 +1,8 @@
 import React, { useState, useContext, useRef } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   Field,
   Form,
   FormCard,
@@ -90,9 +89,7 @@ const ResetPassword = () => {
             />
 
             <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary}>
-                {t("authentication.forgotPassword.changePassword")}
-              </Button>
+              <Button variant="primary">{t("authentication.forgotPassword.changePassword")}</Button>
             </div>
           </Form>
         </div>

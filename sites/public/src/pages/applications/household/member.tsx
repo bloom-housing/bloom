@@ -3,11 +3,9 @@
 Add household members
 */
 import { useRouter } from "next/router"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
   AlertBox,
-  Button,
   DOBField,
   Field,
   FieldGroup,
@@ -483,8 +481,7 @@ const ApplicationMember = () => {
                 <div className="form-card__pager-row primary">
                   <Button
                     id="save-member"
-                    styleType={AppearanceStyleType.primary}
-                    data-testid={"app-household-member-save"}
+                    variant="primary"
                   >
                     {saveText}
                   </Button>
@@ -495,8 +492,7 @@ const ApplicationMember = () => {
                     className="lined text-sm mt-0"
                     type="button"
                     onClick={deleteMember}
-                    unstyled={true}
-                    data-testid={"app-household-member-cancel"}
+                    variant="text"
                   >
                     {cancelText}
                   </Button>

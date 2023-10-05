@@ -1,8 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from "react"
 import {
-  AppearanceSizeType,
-  AppearanceStyleType,
-  Button,
   Drawer,
   Field,
   FieldGroup,
@@ -12,7 +9,7 @@ import {
   MinimalTable,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../lib/helpers"
@@ -253,16 +250,14 @@ const PreferenceDrawer = ({
             <div className={"flex flex-col"}>
               <Button
                 type="button"
-                size={AppearanceSizeType.small}
-                styleType={
-                  errors["questions"] ? AppearanceStyleType.alert : AppearanceStyleType.primary
-                }
+                size="sm"
+                variant={errors["questions"] ? "alert" : "primary"}
                 onClick={() => {
                   clearErrors("questions")
                   setOptionData(null)
                   setOptionDrawerOpen("add")
                 }}
-                dataTestId={"preference-add-option-button"}
+                id={"preference-add-option-button"}
               >
                 {t("settings.preferenceAddOption")}
               </Button>
@@ -393,8 +388,7 @@ const PreferenceDrawer = ({
         <Button
           type="button"
           className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
+          variant="primary"
           loading={isLoading}
           onClick={async () => {
             const validation = await trigger()
@@ -428,7 +422,7 @@ const PreferenceDrawer = ({
             clearErrors("questions")
             saveQuestion(formattedQuestionData, drawerType)
           }}
-          dataTestId={"preference-save-button"}
+          id={"preference-save-button"}
         >
           {t("t.save")}
         </Button>
@@ -569,8 +563,7 @@ const PreferenceDrawer = ({
         <Button
           type="button"
           className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.normal}
+          variant="primary"
           onClick={async () => {
             const formData = getValues() as OptionForm
             await trigger()
@@ -612,7 +605,7 @@ const PreferenceDrawer = ({
             setQuestionData({ ...questionData, options: newOptions })
             setOptionDrawerOpen(null)
           }}
-          dataTestId={"preference-option-save"}
+          id={"preference-option-save"}
         >
           {t("t.save")}
         </Button>

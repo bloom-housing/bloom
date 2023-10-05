@@ -80,7 +80,7 @@ const ListingFormActions = ({
           className="w-full"
           href={`/listings/${listingId}/edit`}
           type="button"
-          dataTestId="listingEditButton"
+          id="listingEditButton"
         >
           {t("t.edit")}
         </Button>
@@ -92,6 +92,7 @@ const ListingFormActions = ({
         <Button
           id="publishButton"
           type="button"
+          variant="success"
           className="w-full"
           onClick={() => {
             submitFormWithStatus(true, ListingStatus.active)
@@ -121,7 +122,7 @@ const ListingFormActions = ({
           type="button"
           className="w-full"
           onClick={() => submitFormWithStatus(true, listing.status)}
-          dataTestId={"saveAndExitButton"}
+          id={"saveAndExitButton"}
         >
           {t("t.saveExit")}
         </Button>
@@ -224,6 +225,7 @@ const ListingFormActions = ({
         <Button
           id="approveAndPublishButton"
           type="button"
+          variant="success"
           className="w-full"
           onClick={async () => {
             // utilize same submit logic if updating status from edit view

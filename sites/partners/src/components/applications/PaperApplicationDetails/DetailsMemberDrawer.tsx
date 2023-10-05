@@ -1,6 +1,6 @@
 import React from "react"
-import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
-import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
+import { t, Drawer } from "@bloom-housing/ui-components"
+import { Button, Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { AddressColsType, DetailsAddressColumns } from "./DetailsAddressColumns"
 import { Application, HouseholdMemberUpdate } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../lib/helpers"
@@ -119,7 +119,7 @@ const DetailsMemberDrawer = ({
         </Card.Section>
       </Card>
 
-      <Button styleType={AppearanceStyleType.primary} onClick={() => setMembersDrawer(null)}>
+      <Button variant="primary" onClick={() => setMembersDrawer(null)}>
         {t("t.done")}
       </Button>
     </Drawer>

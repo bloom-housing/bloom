@@ -4,19 +4,8 @@ import { YesNoAnswer } from "../../../../lib/helpers"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
 
-import {
-  t,
-  DateField,
-  TimeField,
-  Drawer,
-  Button,
-  LinkButton,
-  AppearanceSizeType,
-  MinimalTable,
-  Modal,
-  AppearanceStyleType,
-} from "@bloom-housing/ui-components"
-import { Grid } from "@bloom-housing/ui-seeds"
+import { t, DateField, TimeField, Drawer, MinimalTable, Modal } from "@bloom-housing/ui-components"
+import { Button, Link, Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
@@ -50,9 +39,9 @@ const ApplicationDates = ({
         endTime: { content: endTime && getDetailFieldTime(endTime) },
         url: {
           content: url?.length ? (
-            <LinkButton className="mx-0 my-0" href={url} unstyled>
+            <Link href={url}>
               {t("t.url")}
-            </LinkButton>
+            </Link>
           ) : (
             t("t.n/a")
           ),
@@ -62,17 +51,17 @@ const ApplicationDates = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase my-0"
+                className="font-semibold"
                 onClick={() => setDrawerOpenHouse(event)}
-                unstyled
+                variant="text"
               >
                 {t("t.edit")}
               </Button>
               <Button
                 type="button"
-                className="font-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => setModalDeleteOpenHouse(event)}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -190,7 +179,8 @@ const ApplicationDates = ({
             <Button
               id="addOpenHouseButton"
               type="button"
-              size={AppearanceSizeType.normal}
+              variant="primary-outlined"
+              size="sm"
               onClick={() => setDrawerOpenHouse(true)}
             >
               {t("listings.sections.addOpenHouse")}
@@ -218,9 +208,9 @@ const ApplicationDates = ({
         onClose={() => setModalDeleteOpenHouse(null)}
         actions={[
           <Button
-            styleType={AppearanceStyleType.alert}
+            variant="alert"
             onClick={() => onOpenHouseEventDelete(modalDeleteOpenHouse)}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.delete")}
           </Button>,
@@ -228,7 +218,8 @@ const ApplicationDates = ({
             onClick={() => {
               setModalDeleteOpenHouse(null)
             }}
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
           >
             {t("t.cancel")}
           </Button>,

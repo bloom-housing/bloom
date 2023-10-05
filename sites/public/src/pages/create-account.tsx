@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
-  AppearanceStyleType,
   Field,
   FormCard,
   Icon,
@@ -13,7 +12,6 @@ import {
   SiteAlert,
   Modal,
   passwordRegex,
-  AppearanceSizeType,
 } from "@bloom-housing/ui-components"
 import { Button } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
@@ -262,22 +260,23 @@ export default () => {
         }}
         actions={[
           <Button
-            styleType={AppearanceStyleType.primary}
+            variant="primary"
             onClick={() => {
               void router.push("/")
               window.scrollTo(0, 0)
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("t.ok")}
           </Button>,
           <Button
+            variant="primary-outlined"
             disabled={confirmationResent}
             onClick={() => {
               setConfirmationResent(true)
               void resendConfirmation(email.current.toString())
             }}
-            size={AppearanceSizeType.small}
+            size="sm"
           >
             {t("authentication.createAccount.resendTheEmail")}
           </Button>,

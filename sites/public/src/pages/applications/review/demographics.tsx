@@ -3,9 +3,8 @@
 Optional demographic questions
 */
 import React, { useContext, useEffect } from "react"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   FieldGroup,
   Form,
   FormCard,
@@ -162,7 +161,7 @@ const ApplicationDemographics = () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary} data-testid={"app-next-step-button"}>
+              <Button variant="primary" id={"app-next-step-button"}>
                 {t("t.next")}
               </Button>
             </div>

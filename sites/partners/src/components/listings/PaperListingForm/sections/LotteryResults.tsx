@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  AppearanceStyleType,
-  Button,
-  Drawer,
-  Dropzone,
-  MinimalTable,
-  TableThumbnail,
-  StandardTableData,
-  AppearanceSizeType,
-} from "@bloom-housing/ui-components"
+import { t, Drawer, Dropzone, MinimalTable, TableThumbnail } from "@bloom-housing/ui-components"
 import {
   ListingEvent,
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
-import { Card } from "@bloom-housing/ui-seeds"
+import { Button, Card } from "@bloom-housing/ui-seeds"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
@@ -110,7 +100,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
         content: (
           <Button
             type="button"
-            className="font-semibold uppercase text-alert my-0"
+            className="font-semibold text-alert"
             onClick={() => {
               setCloudinaryData({
                 id: "",
@@ -118,7 +108,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
               })
               setProgressValue(0)
             }}
-            unstyled
+            variant="text"
           >
             {t("t.delete")}
           </Button>
@@ -147,8 +137,8 @@ const LotteryResults = (props: LotteryResultsProps) => {
             savePDF()
             resetDrawerState()
           }}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.small}
+          variant="primary"
+          size="sm"
         >
           {progressValue === 100 ? t("t.post") : t("t.save")}
         </Button>,
@@ -157,7 +147,8 @@ const LotteryResults = (props: LotteryResultsProps) => {
           onClick={() => {
             resetDrawerState()
           }}
-          size={AppearanceSizeType.small}
+          variant="primary-outlined"
+          size="sm"
         >
           {t("t.cancel")}
         </Button>,

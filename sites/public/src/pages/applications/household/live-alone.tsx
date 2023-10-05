@@ -4,9 +4,8 @@ Asks whether the applicant will be adding any additional household members
 */
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceSizeType,
-  Button,
   Form,
   FormCard,
   Heading,
@@ -82,14 +81,14 @@ const ApplicationLiveAlone = () => {
             <div className="form-card__pager-row">
               <Button
                 id="btn-live-alone"
-                size={AppearanceSizeType.big}
+                variant="primary-outlined"
+                size="lg"
                 className="w-full md:w-3/4"
                 onClick={() => {
                   application.householdSize = 1
                   application.householdMembers = []
                   setValidateHousehold(true)
                 }}
-                data-testid={"app-household-live-alone"}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
               </Button>
@@ -97,13 +96,13 @@ const ApplicationLiveAlone = () => {
             <div className="form-card__pager-row">
               <Button
                 id="btn-with-people"
-                size={AppearanceSizeType.big}
+                variant="primary-outlined"
+                size="lg"
                 className="w-full md:w-3/4"
                 onClick={() => {
                   if (application.householdSize === 1) application.householdSize = 0
                   setValidateHousehold(false)
                 }}
-                data-testid={"app-household-live-with-others"}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}
               </Button>

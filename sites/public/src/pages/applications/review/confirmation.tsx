@@ -6,9 +6,8 @@ import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   FormCard,
   t,
   ApplicationTimeline,
@@ -114,11 +113,11 @@ const ApplicationConfirmation = () => {
           {initialStateLoaded && !profile && (
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 onClick={() => {
                   void router.push("/create-account")
                 }}
-                data-testid={"app-confirmation-create-account"}
+                id={"app-confirmation-create-account"}
               >
                 {t("account.createAccount")}
               </Button>

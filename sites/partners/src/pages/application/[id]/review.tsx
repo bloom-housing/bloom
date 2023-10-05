@@ -7,17 +7,15 @@ import { GridApi } from "ag-grid-community"
 import { useForm } from "react-hook-form"
 import {
   t,
-  Button,
   AlertBox,
-  AppearanceStyleType,
   useMutate,
   AgTable,
   useAgTable,
   Modal,
   Field,
-  AppearanceSizeType,
+  Icon,
 } from "@bloom-housing/ui-components"
-import { Tag } from "@bloom-housing/ui-seeds"
+import { Button, Tag } from "@bloom-housing/ui-seeds"
 import { useSingleFlaggedApplication } from "../../../lib/hooks"
 import Layout from "../../../layouts"
 import { getCols } from "./applicationsCols"
@@ -116,7 +114,13 @@ const Flag = () => {
       <div>
         <StatusBar
           backButton={
-            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
+            <Button
+              leadIcon={<Icon symbol="arrowBack" size="small" />}
+              variant="text"
+              size="sm"
+              className="font-semibold no-underline"
+              onClick={() => router.back()}
+            >
               {t("t.back")}
             </Button>
           }

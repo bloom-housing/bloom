@@ -1,15 +1,13 @@
 import React, { useMemo, useContext, useState, useEffect } from "react"
 import Head from "next/head"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
   t,
-  Button,
   LocalizedLink,
   AgTable,
   useAgTable,
-  AppearanceSizeType,
   AlertBox,
   SiteAlert,
-  AppearanceStyleType,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
@@ -207,9 +205,9 @@ export default function ListingsList() {
                   <div className="flex-row">
                     <LocalizedLink href={`/listings/add`}>
                       <Button
-                        size={AppearanceSizeType.small}
+                        size="sm"
                         className="mx-1"
-                        styleType={AppearanceStyleType.primary}
+                        variant="primary"
                         onClick={() => false}
                         dataTestId={"addListingButton"}
                       >
@@ -218,10 +216,11 @@ export default function ListingsList() {
                     </LocalizedLink>
                     <Button
                       className="mx-1"
-                      dataTestId="export-listings"
+                      id="export-listings"
+                      variant="primary-outlined"
                       onClick={() => onExport()}
                       icon={!zipExportLoading ? (faFileExport as UniversalIconType) : null}
-                      size={AppearanceSizeType.small}
+                      size="sm"
                       loading={zipExportLoading}
                     >
                       {t("t.exportToCSV")}

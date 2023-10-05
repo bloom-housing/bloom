@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import {
   t,
-  AppearanceStyleType,
   Dropzone,
   MinimalTable,
   TableThumbnail,
@@ -229,7 +228,7 @@ const ListingPhotos = () => {
                 setDrawerImages([...listingFormPhotos])
                 clearErrors("images")
               }}
-              dataTestId="add-photos-button"
+              id="add-photos-button"
             >
               {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
             </Button>
@@ -285,13 +284,14 @@ const ListingPhotos = () => {
           )}
         </section>
         <Button
+          variant="primary"
           type="button"
           className={"mt-4"}
           onClick={() => {
             saveImageFields(drawerImages)
             resetDrawerState()
           }}
-          dataTestId={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
+          id={drawerImages.length > 0 ? "listing-photo-uploaded" : "listing-photo-empty"}
         >
           {t("t.save")}
         </Button>

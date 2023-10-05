@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
-import { Button, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Heading, Link } from "@bloom-housing/ui-seeds"
 import { AlertBox, t, SiteAlert, ActionBlock, Icon } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"

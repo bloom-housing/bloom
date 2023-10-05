@@ -5,11 +5,10 @@ import {
   Form,
   FormCard,
   t,
-  Button,
-  AppearanceStyleType,
   ProgressNav,
   Heading,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../layouts/forms"
 import FormBackLink from "./FormBackLink"
 import { useFormConductor } from "../../lib/hooks"
@@ -200,12 +199,12 @@ const ApplicationMultiselectQuestionStep = ({
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 onClick={() => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
@@ -214,7 +213,7 @@ const ApplicationMultiselectQuestionStep = ({
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  unstyled={true}
+                  variant="text"
                   className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true

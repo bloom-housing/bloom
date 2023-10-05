@@ -4,9 +4,8 @@ If all preferences are opted out the applicant is shown a screen confirming thei
 */
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
-  Button,
   FormCard,
   Heading,
   t,
@@ -80,12 +79,12 @@ const ApplicationPreferencesGeneral = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 onClick={() => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
@@ -94,7 +93,7 @@ const ApplicationPreferencesGeneral = () => {
             {!hideReviewButton && conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  unstyled={true}
+                  variant="text"
                   className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true

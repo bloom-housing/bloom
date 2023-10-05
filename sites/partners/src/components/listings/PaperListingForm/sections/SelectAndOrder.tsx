@@ -2,14 +2,11 @@ import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
   t,
   MinimalTable,
-  Button,
-  AppearanceSizeType,
   Drawer,
-  AppearanceStyleType,
   Field,
   StandardTableData,
 } from "@bloom-housing/ui-components"
-import { Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import LinkComponent from "../../../../components/core/LinkComponent"
@@ -93,11 +90,11 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => {
                   deleteItem(item, false)
                 }}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -118,11 +115,11 @@ const SelectAndOrder = ({
             <div className="flex">
               <Button
                 type="button"
-                className="front-semibold uppercase text-alert my-0"
+                className="font-semibold text-alert"
                 onClick={() => {
                   deleteItem(item, true)
                 }}
-                unstyled
+                variant="text"
               >
                 {t("t.delete")}
               </Button>
@@ -243,7 +240,7 @@ const SelectAndOrder = ({
             <Button
               id={`add-${applicationSection}-button`}
               type="button"
-              size={AppearanceSizeType.normal}
+              variant="primary-outlined"
               onClick={() => setTableDrawer(true)}
             >
               {listingData.length ? editText : addText}
@@ -276,7 +273,7 @@ const SelectAndOrder = ({
           )}
           <Button
             type="button"
-            size={AppearanceSizeType.normal}
+            variant="primary-outlined"
             onClick={() => {
               setSelectDrawer(true)
             }}
@@ -287,8 +284,8 @@ const SelectAndOrder = ({
         <Button
           type="button"
           className={"mt-4"}
-          styleType={AppearanceStyleType.primary}
-          size={AppearanceSizeType.small}
+          variant="primary"
+          size="sm"
           onClick={() => {
             setListingData(draftListingData)
             setTableDrawer(null)
@@ -344,8 +341,7 @@ const SelectAndOrder = ({
             id="addPreferenceSaveButton"
             type="button"
             className={"mt-4"}
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.normal}
+            variant="primary"
             onClick={() => {
               const formData = getValues()
               const formItems = []

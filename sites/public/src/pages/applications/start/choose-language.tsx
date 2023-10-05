@@ -5,6 +5,7 @@
  */
 import axios from "axios"
 import { useRouter } from "next/router"
+import { Button } from "@bloom-housing/ui-seeds"
 import {
   ImageCard,
   ActionBlock,
@@ -12,7 +13,6 @@ import {
   ProgressNav,
   t,
   Heading,
-  AppearanceSizeType,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import {
@@ -22,7 +22,6 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { Button } from "@bloom-housing/ui-seeds"
 
 import FormsLayout from "../../../layouts/forms"
 import {

@@ -78,7 +78,7 @@ const FormSignIn = ({
           />
 
           <div className="text-center mt-6">
-            <Button type="submit" variant="primary" data-testid="sign-in-button">
+            <Button type="submit" variant="primary" id="sign-in-button">
               {t("nav.signIn")}
             </Button>
           </div>

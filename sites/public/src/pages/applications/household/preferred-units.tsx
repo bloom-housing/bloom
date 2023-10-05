@@ -2,10 +2,9 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
   AlertBox,
-  Button,
   FieldGroup,
   Form,
   FormCard,
@@ -122,7 +121,7 @@ const ApplicationPreferredUnits = () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary} data-testid={"app-next-step-button"}>
+              <Button variant="primary" id={"app-next-step-button"}>
                 {t("t.next")}
               </Button>
             </div>

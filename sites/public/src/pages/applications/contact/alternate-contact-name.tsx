@@ -2,10 +2,9 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+import { Button } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
   AlertBox,
-  Button,
   Form,
   Field,
   FormCard,
@@ -144,12 +143,12 @@ export default () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 onClick={() => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
@@ -158,7 +157,7 @@ export default () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
-                  unstyled={true}
+                  variant="text"
                   className="mb-4"
                   onClick={() => {
                     conductor.returnToReview = true

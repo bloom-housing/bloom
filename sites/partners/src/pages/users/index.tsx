@@ -5,15 +5,14 @@ import { useSWRConfig } from "swr"
 import {
   AgTable,
   useAgTable,
-  Button,
   t,
   Drawer,
   SiteAlert,
   AlertTypes,
-  AppearanceStyleType,
   AlertBox,
-  UniversalIconType,
+  Icon,
 } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import { User } from "@bloom-housing/backend-core/types"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
@@ -174,20 +173,21 @@ const Users = () => {
               <div className="flex-row">
                 <Button
                   className="mx-1"
-                  styleType={AppearanceStyleType.primary}
+                  variant="primary"
                   onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
-                  dataTestId={"add-user"}
+                  id={"add-user"}
                 >
                   {t("users.addUser")}
                 </Button>
                 {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
-                    icon={!csvExportLoading ? (faFileExport as UniversalIconType) : null}
+                    variant="primary-outlined"
+                    leadIcon={!csvExportLoading ? <Icon symbol={faFileExport} size="base" /> : null}
                     onClick={() => onExport()}
                     loading={csvExportLoading}
-                    dataTestId={"export-users"}
+                    id={"export-users"}
                   >
                     {t("t.exportToCSV")}
                   </Button>

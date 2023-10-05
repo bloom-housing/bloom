@@ -3,11 +3,9 @@
 Type of alternate contact
 */
 import React, { Fragment, useContext, useEffect } from "react"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
-  AppearanceStyleType,
   AlertBox,
-  Button,
   Field,
   Form,
   FormCard,
@@ -155,9 +153,9 @@ const ApplicationAlternateContactType = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                styleType={AppearanceStyleType.primary}
+                variant="primary"
                 onClick={() => conductor.setNavigatedBack(false)}
-                data-testid={"app-next-step-button"}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

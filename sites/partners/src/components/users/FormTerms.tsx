@@ -1,14 +1,6 @@
 import React from "react"
-import {
-  AppearanceStyleType,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  Icon,
-  MarkdownSection,
-  t,
-} from "@bloom-housing/ui-components"
+import { Field, Form, FormCard, Icon, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
 import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
 
@@ -63,7 +55,7 @@ const FormTerms = (props: FormTermsProps) => {
 
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <Button styleType={AppearanceStyleType.primary} data-testid="form-submit">
+            <Button variant="primary" id="form-submit">
               {t("t.submit")}
             </Button>
           </div>

@@ -2,8 +2,6 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { nanoid } from "nanoid"
 import {
-  Button,
-  AppearanceStyleType,
   t,
   Field,
   Textarea,
@@ -14,7 +12,7 @@ import {
   TimeFieldValues,
   formatDateToTimeField,
 } from "@bloom-housing/ui-components"
-import { Card, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { TempEvent } from "../../../lib/listings/formTypes"
 import { createDate, createTime } from "../../../lib/helpers"
 import dayjs from "dayjs"
@@ -183,12 +181,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
         </Card.Section>
       </Card>
 
-      <Button
-        type="button"
-        onClick={() => handleSubmit()}
-        styleType={AppearanceStyleType.primary}
-        className="mr-4 mt-5"
-      >
+      <Button type="button" onClick={() => handleSubmit()} variant="primary" className="mr-4 mt-5">
         {t("t.save")}
       </Button>
     </Form>
