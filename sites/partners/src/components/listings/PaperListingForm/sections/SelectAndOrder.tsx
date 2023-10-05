@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import {
-  t,
-  MinimalTable,
-  Drawer,
-  Field,
-  StandardTableData,
-} from "@bloom-housing/ui-components"
+import { t, MinimalTable, Drawer, Field, StandardTableData } from "@bloom-housing/ui-components"
 import { Button, Card, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"

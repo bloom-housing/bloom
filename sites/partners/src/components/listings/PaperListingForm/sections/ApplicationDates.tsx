@@ -38,13 +38,7 @@ const ApplicationDates = ({
         startTime: { content: startTime && getDetailFieldTime(startTime) },
         endTime: { content: endTime && getDetailFieldTime(endTime) },
         url: {
-          content: url?.length ? (
-            <Link href={url}>
-              {t("t.url")}
-            </Link>
-          ) : (
-            t("t.n/a")
-          ),
+          content: url?.length ? <Link href={url}>{t("t.url")}</Link> : t("t.n/a"),
         },
         action: {
           content: (
