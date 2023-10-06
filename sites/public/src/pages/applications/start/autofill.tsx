@@ -1,7 +1,11 @@
 import { useContext, useState, useEffect, useCallback } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
+<<<<<<< HEAD
 import { Button } from "@bloom-housing/ui-seeds"
 import { Form, FormCard, Heading, ProgressNav, t } from "@bloom-housing/ui-components"
+=======
+import { AppearanceStyleType, Button, Form, t } from "@bloom-housing/ui-components"
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
 import {
   blankApplication,
   OnClientSide,
@@ -16,6 +20,8 @@ import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { useRouter } from "next/router"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 export default () => {
   const router = useRouter()
@@ -90,23 +96,19 @@ export default () => {
 
   return previousApplication ? (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={mounted}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">
-            {t("application.autofill.saveTime")}
-          </h2>
-        </div>
-        <div className="form-card__pager-row px-16">
-          <p className="field-note py-2">{t("application.autofill.prefillYourApplication")}</p>
-        </div>
+      <ApplicationFormLayout
+        listingName={listing?.name}
+        heading={"Save time by using the details from your last application."}
+        progressNavProps={{
+          currentPageSection: currentPageSection,
+          completedSections: application.completedSections,
+          labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+          mounted: mounted,
+        }}
+      >
+        <CardSection divider={"flush"}>
+          {t("application.autofill.prefillYourApplication")}
+        </CardSection>
         <FormSummaryDetails
           application={previousApplication}
           listing={listing}
@@ -143,7 +145,7 @@ export default () => {
             </div>
           </div>
         </Form>
-      </FormCard>
+      </ApplicationFormLayout>
     </FormsLayout>
   ) : (
     <FormsLayout></FormsLayout>

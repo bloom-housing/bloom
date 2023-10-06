@@ -49,7 +49,7 @@ const ApplicationChooseLanguage = () => {
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
-  const { conductor, application } = context
+  const { conductor } = context
 
   const listingId = router.query.listingId
 
@@ -84,8 +84,6 @@ const ApplicationChooseLanguage = () => {
     }
   }, [listing, router])
 
-  const currentPageSection = 1
-
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))[0]
     : ""
@@ -110,8 +108,8 @@ const ApplicationChooseLanguage = () => {
         listingName={listing?.name}
         heading={t("application.chooseLanguage.letsGetStarted")}
         progressNavProps={{
-          currentPageSection: currentPageSection,
-          completedSections: application.completedSections,
+          currentPageSection: 1,
+          completedSections: 0,
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),
         }}

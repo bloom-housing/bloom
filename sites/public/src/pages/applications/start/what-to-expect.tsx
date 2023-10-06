@@ -18,13 +18,12 @@ import { UserStatus } from "../../../lib/constants"
 import Markdown from "markdown-to-jsx"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardFooter, CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
-  const { conductor, application, listing } = useFormConductor("whatToExpect")
+  const { conductor, listing } = useFormConductor("whatToExpect")
   const router = useRouter()
-  const currentPageSection = 1
 
   /* Form Handler */
   const { handleSubmit } = useForm()
@@ -69,8 +68,8 @@ const ApplicationWhatToExpect = () => {
         listingName={listing?.name}
         heading={t("application.start.whatToExpect.title")}
         progressNavProps={{
-          currentPageSection: currentPageSection,
-          completedSections: application.completedSections,
+          currentPageSection: 1,
+          completedSections: 0,
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),
         }}

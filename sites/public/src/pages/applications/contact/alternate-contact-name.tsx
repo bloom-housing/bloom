@@ -2,6 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+<<<<<<< HEAD
 import { Button } from "@bloom-housing/ui-seeds"
 import {
   AlertBox,
@@ -12,13 +13,17 @@ import {
   t,
   Heading,
 } from "@bloom-housing/ui-components"
+=======
+import { AlertBox, Form, Field, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 export default () => {
   const { profile } = useContext(AuthContext)
@@ -51,34 +56,27 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.alternateContact.name.title")}
-          </h2>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group">
+      <Form id="applications-contact-alternate-name" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.alternateContact.name.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.alternateContact.name.alternateContactFormLabel")}
@@ -139,6 +137,7 @@ export default () => {
                 </div>
               )}
             </fieldset>
+<<<<<<< HEAD
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
@@ -173,6 +172,11 @@ export default () => {
           </div>
         </Form>
       </FormCard>
+=======
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }

@@ -3,6 +3,7 @@
 Type of alternate contact
 */
 import React, { Fragment, useContext, useEffect } from "react"
+<<<<<<< HEAD
 import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AlertBox,
@@ -13,6 +14,10 @@ import {
   t,
   Heading,
 } from "@bloom-housing/ui-components"
+=======
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { AlertBox, Field, Form, t } from "@bloom-housing/ui-components"
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
 import {
   altContactRelationshipKeys,
   OnClientSide,
@@ -22,9 +27,10 @@ import {
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)
@@ -60,35 +66,28 @@ const ApplicationAlternateContactType = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.alternateContact.type.title")}
-          </h2>
-          <p className="field-note mt-4">{t("application.alternateContact.type.description")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group">
+      <Form id="applications-contact-alternate-type" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.alternateContact.type.title")}
+          subheading={t("application.alternateContact.type.description")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
                 {t("application.alternateContact.type.label")}
@@ -149,6 +148,7 @@ const ApplicationAlternateContactType = () => {
                 )
               })}
             </fieldset>
+<<<<<<< HEAD
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
@@ -164,6 +164,11 @@ const ApplicationAlternateContactType = () => {
           </div>
         </Form>
       </FormCard>
+=======
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }

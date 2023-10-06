@@ -10,13 +10,10 @@ import {
   DOBField,
   Field,
   Form,
-  FormCard,
   Icon,
   IconFillColors,
   t,
-  ProgressNav,
   emailRegex,
-  Heading,
 } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
@@ -85,13 +82,14 @@ const ApplicationName = () => {
             labels: conductor.config.sections.map((label) => t(`t.${label}`)),
             mounted: OnClientSide(),
           }}
+          conductor={conductor}
         >
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
           <CardSection divider={"inset"}>
-            {Object.entries(errors).length > 0 && (
-              <AlertBox type="alert" inverted closeable>
-                {t("errors.errorsToResolve")}
-              </AlertBox>
-            )}
             <div data-testid={"application-initial-page"}>
               <fieldset>
                 <legend
@@ -215,30 +213,6 @@ const ApplicationName = () => {
               }}
               dataTestId={"app-primary-no-email"}
             />
-          </CardSection>
-          <CardSection className={"bg-primary-lighter"}>
-            <Button
-              styleType={AppearanceStyleType.primary}
-              onClick={() => {
-                conductor.returnToReview = false
-                conductor.setNavigatedBack(false)
-              }}
-              data-testid={"app-next-step-button"}
-            >
-              {t("t.next")}
-            </Button>
-
-            {conductor.canJumpForwardToReview() && (
-              <Button
-                unstyled={true}
-                className="mb-4"
-                onClick={() => {
-                  conductor.returnToReview = true
-                }}
-              >
-                {t("application.form.general.saveAndReturn")}
-              </Button>
-            )}
           </CardSection>
         </ApplicationFormLayout>
       </Form>

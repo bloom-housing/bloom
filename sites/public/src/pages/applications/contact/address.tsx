@@ -3,6 +3,7 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
+<<<<<<< HEAD
 import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
   AlertBox,
@@ -15,8 +16,13 @@ import {
   t,
   Heading,
 } from "@bloom-housing/ui-components"
+=======
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { AlertBox, Field, Form, mergeDeep, FieldGroup, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
 import FormsLayout from "../../../layouts/forms"
-import { useContext, useEffect, useState, useMemo, useCallback } from "react"
+import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
@@ -31,7 +37,6 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
@@ -39,6 +44,7 @@ import {
   AddressValidationSelection,
 } from "../../../components/applications/ValidateAddress"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationAddress = () => {
   const { profile } = useContext(AuthContext)
@@ -133,43 +139,42 @@ const ApplicationAddress = () => {
 
   const backUrl = useMemo(() => {
     return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
-  }, [verifyAddress])
+  }, [verifyAddress, conductor])
 
-  const backFunction = useCallback(() => {
-    return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
-  }, [verifyAddress])
+  // const backFunction = useCallback(() => {
+  //   return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
+  // }, [verifyAddress])
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink url={backUrl} onClick={backFunction} />
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {verifyAddress
+      <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={
+            verifyAddress
               ? foundAddress.invalid
                 ? t("application.contact.couldntLocateAddress")
                 : t("application.contact.verifyAddressTitle")
-              : t("application.contact.title", { firstName: application.applicant.firstName })}
-          </h2>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
+              : t("application.contact.title", { firstName: application.applicant.firstName })
+          }
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: backUrl,
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
           <div style={{ display: verifyAddress ? "none" : "block" }}>
-            <div className="form-card__group border-b">
+            <CardSection divider={"inset"}>
               <PhoneField
                 label={t("application.contact.yourPhoneNumber")}
                 caps={true}
@@ -279,9 +284,8 @@ const ApplicationAddress = () => {
                   />
                 </>
               )}
-            </div>
-
-            <div className="form-card__group border-b">
+            </CardSection>
+            <CardSection divider={"inset"}>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${errors.applicant?.address ? "text-alert" : ""}`}
@@ -388,10 +392,10 @@ const ApplicationAddress = () => {
                   dataTestId={"app-primary-send-to-mailing"}
                 />
               </fieldset>
-            </div>
+            </CardSection>
 
             {clientLoaded && (sendMailToMailingAddress || application.sendMailToMailingAddress) && (
-              <div className="form-card__group border-b">
+              <CardSection divider={"inset"}>
                 <fieldset>
                   <legend className="text__caps-spaced">
                     {t("application.contact.mailingAddress")}
@@ -485,9 +489,10 @@ const ApplicationAddress = () => {
                     dataTestId={"app-primary-mailing-address-zip"}
                   />
                 </fieldset>
-              </div>
+              </CardSection>
             )}
-            <div className="form-card__group border-b">
+
+            <CardSection divider={"inset"}>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${errors?.contactPreferences ? "text-alert" : ""}`}
@@ -505,9 +510,9 @@ const ApplicationAddress = () => {
                   dataTestId={"app-primary-contact-preference"}
                 />
               </fieldset>
-            </div>
+            </CardSection>
 
-            <div className="form-card__group">
+            <CardSection>
               <fieldset>
                 <legend
                   className={`text__caps-spaced ${
@@ -652,7 +657,7 @@ const ApplicationAddress = () => {
                   </fieldset>
                 </div>
               )}
-            </div>
+            </CardSection>
           </div>
 
           {verifyAddress && (
@@ -660,6 +665,7 @@ const ApplicationAddress = () => {
               {...{ foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress }}
             />
           )}
+<<<<<<< HEAD
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
@@ -694,6 +700,10 @@ const ApplicationAddress = () => {
           </div>
         </Form>
       </FormCard>
+=======
+        </ApplicationFormLayout>
+      </Form>
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }

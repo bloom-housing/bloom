@@ -2,6 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
+<<<<<<< HEAD
 import { Button } from "@bloom-housing/ui-seeds"
 import {
   AlertBox,
@@ -13,6 +14,9 @@ import {
   emailRegex,
   Heading,
 } from "@bloom-housing/ui-components"
+=======
+import { AlertBox, Form, Field, t, emailRegex } from "@bloom-housing/ui-components"
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
@@ -24,10 +28,11 @@ import {
   stateKeys,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 export default () => {
   const { profile } = useContext(AuthContext)
@@ -65,38 +70,29 @@ export default () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.alternateContact.contact.title")}
-          </h2>
-          <p className="field-note my-4">{t("application.alternateContact.contact.description")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form
-          id="applications-contact-alternate-contact"
-          onSubmit={handleSubmit(onSubmit, onError)}
+      <Form id="applications-contact-alternate-contact" onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.alternateContact.contact.title")}
+          subheading={t("application.alternateContact.contact.description")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
         >
-          <div className="form-card__group border-b">
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
+
+          <CardSection divider={"inset"}>
             <label className="text__caps-spaced" htmlFor="phoneNumber">
               {t("application.alternateContact.contact.phoneNumberFormLabel")}
             </label>
@@ -113,8 +109,8 @@ export default () => {
               defaultValue={application.alternateContact.phoneNumber}
               dataTestId={"app-alternate-phone-number"}
             />
-          </div>
-          <div className="form-card__group border-b">
+          </CardSection>
+          <CardSection divider={"inset"}>
             <h3 className="text__caps-spaced">
               {t("application.alternateContact.contact.emailAddressFormLabel")}
             </h3>
@@ -132,8 +128,8 @@ export default () => {
               errorMessage={t("errors.emailAddressError")}
               dataTestId={"app-alternate-email"}
             />
-          </div>
-          <div className="form-card__group">
+          </CardSection>
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.alternateContact.contact.contactMailingAddressLabel")}
@@ -207,6 +203,7 @@ export default () => {
                 errorMessage={t("errors.maxLength")}
               />
             </fieldset>
+<<<<<<< HEAD
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
@@ -241,6 +238,11 @@ export default () => {
           </div>
         </Form>
       </FormCard>
+=======
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
+>>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }
