@@ -383,8 +383,8 @@ export const getSiteFooter = () => {
             <br /> San Francisco, CA 94105-2066
             <br /> {t("footer.mondayToFriday")}
             <br />
-            <a href="mailto: bahfa@bayareametro.gov" className="underline">
-              bahfa@bayareametro.gov
+            <a href="mailto: doorway@bayareametro.gov" className="underline">
+              doorway@bayareametro.gov
             </a>
           </p>
         </div>
