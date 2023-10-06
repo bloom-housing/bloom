@@ -87,7 +87,8 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
               keyPrefix="application.review.demographics.ethnicityOptions"
             />
           </Grid.Cell>
-
+        </Grid.Row>
+        <Grid.Row columns={2}>
           <Grid.Cell>
             <FieldGroup
               type="checkbox"

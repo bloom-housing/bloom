@@ -149,8 +149,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                   register={register}
                 />
               </Grid.Cell>
-            </Grid.Row>
-            <Grid.Row>
+
               <Grid.Cell>
                 <Field
                   type="url"
@@ -165,9 +164,8 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                   }
                 />
               </Grid.Cell>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Cell>
+
+              <Grid.Cell className="flex">
                 <Textarea
                   id="note"
                   name="note"
