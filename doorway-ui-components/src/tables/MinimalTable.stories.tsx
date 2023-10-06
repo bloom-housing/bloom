@@ -2,7 +2,7 @@ import React from "react"
 
 import { MinimalTable } from "./MinimalTable"
 import { preferenceData, preferenceHeaders, mockData, mockHeaders } from "./StandardTable.stories"
-import { TableHeaders, StandardTableData, TableThumbnail } from "./StandardTable"
+import { TableHeaders, StandardTableData, TableThumbnail } from "@bloom-housing/ui-components"
 import Icon, { IconFillColors } from "../icons/Icon"
 import { faClone, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 

@@ -35,13 +35,13 @@ import {
   StandardTableData,
   ExpandableSection,
   SiteAlert,
+  StandardTable,
 } from "@bloom-housing/ui-components"
 import {
   ApplicationStatus,
   GroupedTable,
   ImageCard,
   Icon,
-  StandardTable,
 } from "@bloom-housing/doorway-ui-components"
 import {
   getOccupancyDescription,
@@ -666,6 +666,7 @@ export const ListingView = (props: ListingProps) => {
               subtitle={householdMaximumIncomeSubheader}
             >
               <StandardTable
+                className="table-container"
                 headers={hmiHeaders}
                 data={hmiData}
                 responsiveCollapse={true}
@@ -675,6 +676,7 @@ export const ListingView = (props: ListingProps) => {
 
             <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
               <StandardTable
+                className="table-container"
                 headers={occupancyHeaders}
                 data={occupancyData}
                 responsiveCollapse={false}

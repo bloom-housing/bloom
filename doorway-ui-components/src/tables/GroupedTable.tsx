@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { Cell, StandardTableData, StandardTableProps } from "./StandardTable"
+import { Cell, StandardTableData, StandardTableProps } from "@bloom-housing/ui-components"
 
 export interface GroupedTableGroup {
   header?: string | React.ReactNode
@@ -79,7 +79,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
   }
 
   return (
-    <div className="table-container">
+    <div style={{ overflowX: "auto" }} className="table-container">
       <table className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>

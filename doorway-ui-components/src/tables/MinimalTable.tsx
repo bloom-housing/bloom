@@ -1,5 +1,6 @@
 import * as React from "react"
-import { TableHeaders, StandardTable, StandardTableData } from "./StandardTable"
+import { StandardTable } from "@bloom-housing/ui-components"
+import { TableHeaders, StandardTableData } from "@bloom-housing/ui-components"
 
 export interface MinimalTableProps {
   /** If the table should be sortable through dragging */
@@ -30,6 +31,7 @@ const MinimalTable = (props: MinimalTableProps) => {
   if (props.flushRight) tableClasses.push("is-flush-right")
   return (
     <StandardTable
+      className="table-container"
       draggable={props.draggable}
       setData={props.setData}
       headers={props.headers}

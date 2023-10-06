@@ -26,8 +26,8 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "link:uic": "cd node_modules/react && yarn link && cd ../../../ui-components && yarn link 'react' && yarn link && cd ../bloom && yarn link '@bloom-housing/ui-components'",
-    "unlink:uic": "yarn unlink @bloom-housing/ui-components && cd ../ui-components && yarn unlink react && yarn unlink && yarn install --force && cd ../bloom/node_modules/react && yarn unlink && cd ../.. && yarn install --force",
+    "link:uic": "cd node_modules/react && yarn link && cd ../../../ui-components && yarn link 'react' && yarn link && cd ../doorway && yarn link '@bloom-housing/ui-components'",
+    "unlink:uic": "yarn unlink @bloom-housing/ui-components && cd ../ui-components && yarn unlink react && yarn unlink && yarn install --force && cd ../doorway/node_modules/react && yarn unlink && cd ../.. && yarn install --force",
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
     "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test",
     "test:app:public:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test:headless",

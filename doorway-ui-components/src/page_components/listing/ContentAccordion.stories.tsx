@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import ContentAccordion from "./ContentAccordion"
-import { StandardTable } from "../../tables/StandardTable"
+import { StandardTable } from "@bloom-housing/ui-components"
 import { mockData, mockHeaders } from "../../tables/StandardTable.stories"
 
 export default {
@@ -59,7 +59,7 @@ export const blueThemeFilled = () => {
   const customExpandedContent = () => {
     return (
       <div>
-        <StandardTable headers={mockHeaders} data={mockData} />
+        <StandardTable className="table-container" headers={mockHeaders} data={mockData} />
       </div>
     )
   }

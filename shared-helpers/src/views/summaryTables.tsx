@@ -210,7 +210,11 @@ export const UnitTables = (props: UnitTablesProps) => {
         const getExpandableContent = () => {
           return (
             <div className="unit-table">
-              <StandardTable headers={unitsHeaders} data={unitsFormatted} />
+              <StandardTable
+                className="table-container"
+                headers={unitsHeaders}
+                data={unitsFormatted}
+              />
             </div>
           )
         }

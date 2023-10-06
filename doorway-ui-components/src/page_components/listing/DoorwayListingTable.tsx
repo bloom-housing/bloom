@@ -1,5 +1,5 @@
 import React from "react"
-import { StandardTableCell, StandardTableData, TableHeaders } from "../../tables/StandardTable"
+import { StandardTableCell, StandardTableData, TableHeaders } from "@bloom-housing/ui-components"
 import "./DoorwayListingTable.scss"
 
 type DoorwayListingTableProps = {

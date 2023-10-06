@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "../actions/Button"
-import { StandardTable, StandardTableData, TableHeaders, TableThumbnail } from "./StandardTable"
+import { StandardTable, StandardTableData, TableHeaders, TableThumbnail } from "@bloom-housing/ui-components"
 
 export default {
   title: "Tables/StandardTable",

@@ -1,7 +1,7 @@
 import React from "react"
 
 import { CategoryTable } from "./CategoryTable"
-import { TableHeaders } from "./StandardTable"
+import { TableHeaders } from "@bloom-housing/ui-components"
 
 export default {
   title: "Tables/CategoryTable",

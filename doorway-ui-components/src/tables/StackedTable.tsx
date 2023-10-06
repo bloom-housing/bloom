@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StandardTableData, TableHeaders } from "./StandardTable"
+import { StandardTableData, TableHeaders } from "@bloom-housing/ui-components"
 import { MinimalTable } from "./MinimalTable"
 
 export interface StackedTableRow {

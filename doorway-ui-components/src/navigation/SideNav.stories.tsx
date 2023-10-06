@@ -1,6 +1,6 @@
 import React from "react"
 import { BADGES } from "../../.storybook/constants"
-import { StandardTable } from "../tables/StandardTable"
+import { StandardTable } from "@bloom-housing/ui-components"
 import { SideNav } from "./SideNav"
 import { mockHeaders, mockData } from "../tables/StandardTable.stories"
 import SideNavDocumentation from "./SideNav.docs.mdx"
@@ -71,7 +71,7 @@ export const WithinLayout = () => (
       <MultiLevelNav />
     </aside>
     <div className="rounded-lg border border-gray-500 overflow-hidden">
-      <StandardTable headers={mockHeaders} data={mockData} />
+      <StandardTable className="table-container" headers={mockHeaders} data={mockData} />
     </div>
   </div>
 )
