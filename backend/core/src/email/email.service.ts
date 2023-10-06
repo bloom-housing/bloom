@@ -214,6 +214,39 @@ export class EmailService {
     )
   }
 
+  public async listingOpportunity(user: User, appUrl: string) {
+    const jurisdiction = await this.getUserJurisdiction(user)
+    void (await this.loadTranslations(jurisdiction, user.language))
+    const compiledTemplate = this.template("listing-opportunity")
+
+    if (this.configService.get<string>("NODE_ENV") == "production") {
+      Logger.log(
+        `Preparing to send a listing opportunity email to ${user.email} from ${jurisdiction.emailFromAddress}...`
+      )
+    }
+
+    // TODO: This is mock data just for the template that will need to be updated
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      "New rental opportunity",
+      compiledTemplate({
+        appUrl,
+        tableRows: [
+          { label: "Community", value: "Senior 55+" },
+          { label: "Applications Due", value: "August 11, 2021" },
+          { label: "Address", value: "2330 Webster Street, Oakland CA 94612" },
+          { label: "1 Bedrooms", value: "1 unit, 1 bath, 668 sqft" },
+          { label: "2 Bedrooms", value: "2 units, 1-2 baths, 900 - 968 sqft" },
+          { label: "Rent", value: "$1,251 - $1,609 per month" },
+          { label: "Minimum Income", value: "$2,502 - $3,218 per month" },
+          { label: "Maximum Income", value: "$6,092 - $10,096 per month" },
+          { label: "Lottery Date", value: "August 31, 2021" },
+        ],
+      })
+    )
+  }
+
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
     let jurisdictionalTranslations: Translation | null,
       genericTranslations: Translation | null,
