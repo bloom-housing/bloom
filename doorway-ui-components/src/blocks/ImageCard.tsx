@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react"
 import { t, AppearanceStyleType } from "@bloom-housing/ui-components"
 import { LocalizedLink } from "../actions/LocalizedLink"
-import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { TooltipProps, Tooltip } from "./Tooltip"
@@ -76,23 +75,6 @@ const ImageCard = (props: ImageCardProps) => {
   const [showModal, setShowModal] = useState(false)
   const { imgParentRef, imgRefs, onError } = useFallbackImage(props?.fallbackImageUrl)
 
-  const getStatuses = () => {
-    const statuses = props.statuses?.map((status, index) => {
-      return (
-        <ApplicationStatus
-          status={status.status}
-          content={status.content}
-          subContent={status.subContent}
-          withIcon={!status.hideIcon}
-          iconType={status.iconType}
-          vivid
-          key={index}
-        />
-      )
-    })
-    return <aside aria-label={`${props.description || ""} Statuses`}>{statuses}</aside>
-  }
-
   const innerClasses = ["image-card__inner"]
   if (props.images && props.images.length > 1) {
     innerClasses.push("has-grid-layout")
@@ -165,7 +147,6 @@ const ImageCard = (props: ImageCardProps) => {
             </>
           )}
         </figure>
-        {getStatuses()}
         <div className="image-card-tag__wrapper">
           {props.tags?.map((tag, index) => {
             const tagContent = (

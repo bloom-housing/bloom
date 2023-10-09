@@ -48,7 +48,6 @@ describe("<ListingCard>", () => {
     expect(getByText("see details")).toBeTruthy()
     expect(getByText("child content")).toBeTruthy()
     expect(getAllByText("reserved community tag")).toBeTruthy()
-    expect(getAllByText("status content")).toBeTruthy()
     expect(getAllByText("cellA")).toBeTruthy()
     expect(getAllByText("cellB")).toBeTruthy()
     expect(getAllByText("cellC")).toBeTruthy()

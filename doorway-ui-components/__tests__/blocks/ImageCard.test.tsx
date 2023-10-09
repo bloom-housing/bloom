@@ -22,44 +22,6 @@ describe("<ImageCard>", () => {
     )
   })
 
-  it("renders with an application status bar", () => {
-    const { getByText } = render(
-      <ImageCard
-        imageUrl={"/images/listing.jpg"}
-        statuses={[
-          { status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") },
-        ]}
-      />
-    )
-    expect(getByText("Applications Closed", { exact: false })).not.toBeNull()
-  })
-
-  it("renders with multiple applications status bars", () => {
-    const { getByText } = render(
-      <ImageCard
-        imageUrl={"/images/listing.jpg"}
-        statuses={[
-          { status: ApplicationStatusType.Closed, content: "Applications Closed" },
-          { status: ApplicationStatusType.PreLottery, content: "Lottery Results Posted Tomorrow" },
-        ]}
-      />
-    )
-    expect(getByText("Applications Closed", { exact: false })).not.toBeNull()
-    expect(getByText("Lottery Results Posted Tomorrow", { exact: false })).not.toBeNull()
-  })
-
-  it("renders with custom icon", () => {
-    const { getByText } = render(
-      <ImageCard
-        imageUrl={"/images/listing.jpg"}
-        statuses={[
-          { status: ApplicationStatusType.Matched, content: "Matched", iconType: "check" },
-        ]}
-      />
-    )
-    expect(getByText("Matched", { exact: false })).not.toBeNull()
-  })
-
   it("renders with image tags", () => {
     const { getByText } = render(
       <ImageCard

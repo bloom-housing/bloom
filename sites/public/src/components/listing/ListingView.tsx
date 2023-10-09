@@ -23,7 +23,6 @@ import {
   ListSection,
   ListingDetailItem,
   ListingDetails,
-  Message,
   OneLineAddress,
   EventSection,
   PreferencesList,
@@ -37,12 +36,8 @@ import {
   SiteAlert,
   StandardTable,
 } from "@bloom-housing/ui-components"
-import {
-  ApplicationStatus,
-  GroupedTable,
-  ImageCard,
-  Icon,
-} from "@bloom-housing/doorway-ui-components"
+import { GroupedTable, ImageCard, Icon } from "@bloom-housing/doorway-ui-components"
+import { Message } from "@bloom-housing/ui-seeds"
 import {
   getOccupancyDescription,
   imageUrlFromListing,
@@ -514,6 +509,27 @@ export const ListingView = (props: ListingProps) => {
     return footerContent
   }
 
+  const getApplicationStatus = () => {
+    if (appStatusContent || appStatusSubContent) {
+      return (
+        <Message
+          className="doorway-message application-status"
+          fullwidth
+          customIcon={<Icon size="medium" symbol="clock" />}
+        >
+          {appStatusContent}
+          {appStatusSubContent && (
+            <>
+              <br />
+              {appStatusSubContent}
+            </>
+          )}
+        </Message>
+      )
+    }
+    return null
+  }
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto md:mt-8">
       <header className="image-card--leader">
@@ -572,7 +588,7 @@ export const ListingView = (props: ListingProps) => {
 
       <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
         {listing.reservedCommunityType && (
-          <Message warning={true}>
+          <Message variant="warn" className="doorway-message warning-message" fullwidth>
             {t("listings.reservedFor", {
               type: t(
                 `listings.reservedCommunityTypeDescriptions.${listing.reservedCommunityType.name}`
@@ -614,7 +630,7 @@ export const ListingView = (props: ListingProps) => {
         </div>
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
-        <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
+        {getApplicationStatus()}
         <div className="mx-4">
           <DownloadLotteryResults
             resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
@@ -763,7 +779,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
-              <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
+              {getApplicationStatus()}
               <DownloadLotteryResults
                 resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
                 pdfURL={pdfUrlFromListingEvents([lotteryResults], ListingEventType.lotteryResults)}

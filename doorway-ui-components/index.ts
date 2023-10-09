@@ -95,7 +95,6 @@ export * from "./src/navigation/SideNav"
 /* Notifications */
 export * from "./src/notifications/AlertBox"
 export * from "./src/notifications/AlertNotice"
-export * from "./src/notifications/ApplicationStatus"
 export * from "./src/notifications/ErrorMessage"
 export * from "./src/notifications/SiteAlert"
 export * from "./src/notifications/StatusAside"

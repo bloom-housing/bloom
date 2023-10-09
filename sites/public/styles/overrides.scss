@@ -20,4 +20,19 @@
     --navbar-menu-min-width: 110px;
     --dropdown-container-top-offset: 36px;
   }
+
+  .doorway-message {
+    --message-font: var(--bloom-font-sans);
+  }
+
+  .application-status {
+    --seeds-color-primary-light: var(--doorway-color-secondary-background);
+    --message-max-width: initial;
+    --message-flex-gap: 0.45rem;
+    align-items: start;
+  }
+
+  .warning-message {
+    --message-max-width: initial;
+  }
 }
