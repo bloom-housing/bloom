@@ -14,6 +14,7 @@ import { ApplicationModule } from './application.module';
 import { AssetModule } from './asset.module';
 import { UserModule } from './user.module';
 import { AuthModule } from './auth.module';
+import { ApplicationFlaggedSetModule } from './application-flagged-set.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AuthModule } from './auth.module';
     UserModule,
     PrismaModule,
     AuthModule,
+    ApplicationFlaggedSetModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -47,6 +49,7 @@ import { AuthModule } from './auth.module';
     UserModule,
     PrismaModule,
     AuthModule,
+    ApplicationFlaggedSetModule,
   ],
 })
 export class AppModule {}

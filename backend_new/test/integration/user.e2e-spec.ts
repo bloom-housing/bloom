@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
+import { stringify } from 'qs';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
-import { randomUUID } from 'crypto';
-import { stringify } from 'qs';
 import { UserQueryParams } from '../../src/dtos/users/user-query-param.dto';
 import { UserUpdate } from '../../src/dtos/users/user-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
@@ -49,6 +50,10 @@ describe('User Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
     await app.init();
+    const schedulerRegistry =
+      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
+    // we stop the cron job since we don't want the cron job to run during tests
+    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
   });
 
   afterAll(async () => {

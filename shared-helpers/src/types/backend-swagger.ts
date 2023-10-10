@@ -1632,6 +1632,154 @@ export class AuthService {
   }
 }
 
+export class ApplicationFlaggedSetsService {
+  /**
+   * List application flagged sets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      listingId: string
+      /**  */
+      view?: AfsView
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAfs> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        view: params["view"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Meta information for application flagged sets
+   */
+  meta(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+      /**  */
+      listingId: string
+      /**  */
+      view?: AfsView
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AfsMeta> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/meta"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        view: params["view"],
+      }
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Retrieve application flagged set by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      afsId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationFlaggedSet> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{afsId}"
+      url = url.replace("{afsId}", params["afsId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resolve application flagged set
+   */
+  resolve(
+    params: {
+      /** requestBody */
+      body?: AfsResolve
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/resolve"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Trigger the duplicate check process
+   */
+  process(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/process"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Reset flagged set confirmation alert
+   */
+  resetConfirmationAlert(
+    params: {
+      /** requestBody */
+      body?: IdDTO
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationFlaggedSets/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export interface SuccessDTO {
   /**  */
   success: boolean
@@ -2571,9 +2719,29 @@ export interface Listing {
   urlSlug?: string
 }
 
+export interface PaginationMeta {
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+}
+
 export interface PaginatedListing {
   /**  */
   items: Listing[]
+
+  /**  */
+  meta: PaginationMeta
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -3929,6 +4097,9 @@ export interface Application {
 export interface PaginatedApplication {
   /**  */
   items: Application[]
+
+  /**  */
+  meta: PaginationMeta
 }
 
 export interface ApplicantUpdate {
@@ -4357,6 +4528,9 @@ export interface User {
 export interface PaginatedUser {
   /**  */
   items: User[]
+
+  /**  */
+  meta: PaginationMeta
 }
 
 export interface UserUpdate {
@@ -4542,6 +4716,100 @@ export interface Confirm {
   password?: string
 }
 
+export interface ApplicationFlaggedSet {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  resolvingUser: IdDTO
+
+  /**  */
+  listing: IdDTO
+
+  /**  */
+  rule: RuleEnum
+
+  /**  */
+  ruleKey: string
+
+  /**  */
+  resolvedTime?: Date
+
+  /**  */
+  listingId: string
+
+  /**  */
+  showConfirmationAlert: boolean
+
+  /**  */
+  status: FlaggedSetStatusEnum
+
+  /**  */
+  applications: Application[]
+}
+
+export interface ApplicationFlaggedSetPaginationMeta {
+  /**  */
+  currentPage: number
+
+  /**  */
+  itemCount: number
+
+  /**  */
+  itemsPerPage: number
+
+  /**  */
+  totalItems: number
+
+  /**  */
+  totalPages: number
+
+  /**  */
+  totalFlagged: number
+}
+
+export interface PaginatedAfs {
+  /**  */
+  items: ApplicationFlaggedSet[]
+
+  /**  */
+  meta: ApplicationFlaggedSetPaginationMeta
+}
+
+export interface AfsMeta {
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalResolvedCount?: number
+
+  /**  */
+  totalPendingCount?: number
+
+  /**  */
+  totalNamePendingCount?: number
+
+  /**  */
+  totalEmailPendingCount?: number
+}
+
+export interface AfsResolve {
+  /**  */
+  afsId: string
+
+  /**  */
+  status: FlaggedSetStatusEnum
+
+  /**  */
+  applications: IdDTO[]
+}
+
 export enum ListingViews {
   "fundamentals" = "fundamentals",
   "base" = "base",
@@ -4701,4 +4969,22 @@ export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum MfaType {
   "sms" = "sms",
   "email" = "email",
+}
+
+export enum AfsView {
+  "pending" = "pending",
+  "pendingNameAndDoB" = "pendingNameAndDoB",
+  "pendingEmail" = "pendingEmail",
+  "resolved" = "resolved",
+}
+
+export enum RuleEnum {
+  "nameAndDOB" = "nameAndDOB",
+  "email" = "email",
+}
+
+export enum FlaggedSetStatusEnum {
+  "flagged" = "flagged",
+  "pending" = "pending",
+  "resolved" = "resolved",
 }

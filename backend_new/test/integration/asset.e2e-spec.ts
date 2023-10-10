@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
 import request from 'supertest';
 import { AppModule } from '../../src//modules/app.module';
-import { randomUUID } from 'crypto';
 import { PrismaService } from '../../src/services/prisma.service';
 
 describe('Asset Controller Tests', () => {
@@ -17,6 +18,10 @@ describe('Asset Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+    const schedulerRegistry =
+      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
+    // we stop the cron job since we don't want the cron job to run during tests
+    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
   });
 
   afterAll(async () => {

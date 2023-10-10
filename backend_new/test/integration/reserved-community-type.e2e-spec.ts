@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
+import { stringify } from 'qs';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
-import { stringify } from 'qs';
 import { ReservedCommunityTypeQueryParams } from '../../src/dtos/reserved-community-types/reserved-community-type-query-params.dto';
 import { reservedCommunityTypeFactory } from '../../prisma/seed-helpers/reserved-community-type-factory';
 import { ReservedCommunityTypeCreate } from '../../src/dtos/reserved-community-types/reserved-community-type-create.dto';
 import { ReservedCommunityTypeUpdate } from '../../src/dtos/reserved-community-types/reserved-community-type-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { randomUUID } from 'crypto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('ReservedCommunityType Controller Tests', () => {
   let app: INestApplication;
@@ -25,7 +26,10 @@ describe('ReservedCommunityType Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-
+    const schedulerRegistry =
+      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
+    // we stop the cron job since we don't want the cron job to run during tests
+    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
     const jurisdictionA = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });

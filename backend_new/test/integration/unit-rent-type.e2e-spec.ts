@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
 import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { unitRentTypeFactory } from '../../prisma/seed-helpers/unit-rent-type-factory';
 import { UnitRentTypeCreate } from '../../src/dtos/unit-rent-types/unit-rent-type-create.dto';
 import { UnitRentTypeUpdate } from '../../src/dtos/unit-rent-types/unit-rent-type-update.dto';
-import { IdDTO } from 'src/dtos/shared/id.dto';
-import { randomUUID } from 'crypto';
+import { IdDTO } from '../../src/dtos/shared/id.dto';
 
 describe('UnitRentType Controller Tests', () => {
   let app: INestApplication;
@@ -21,6 +22,10 @@ describe('UnitRentType Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
+    const schedulerRegistry =
+      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
+    // we stop the cron job since we don't want the cron job to run during tests
+    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
   });
 
   afterAll(async () => {

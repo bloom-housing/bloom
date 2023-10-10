@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import cookieParser from 'cookie-parser';
 import { sign } from 'jsonwebtoken';
+import request from 'supertest';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
@@ -33,6 +34,10 @@ describe('Auth Controller Tests', () => {
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     smsService = moduleFixture.get<SmsService>(SmsService);
     await app.init();
+    const schedulerRegistry =
+      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
+    // we stop the cron job since we don't want the cron job to run during tests
+    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
   });
 
   afterAll(async () => {
