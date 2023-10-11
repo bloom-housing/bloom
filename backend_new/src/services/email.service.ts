@@ -1,4 +1,4 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ResponseError } from '@sendgrid/helpers/classes';
 import fs from 'fs';
@@ -27,7 +27,6 @@ export class EmailService {
 
   constructor(
     private readonly sendGrid: SendGridService,
-    private readonly configService: ConfigService,
     private readonly translationService: TranslationService,
     private readonly jurisdictionService: JurisdictionService,
   ) {
@@ -149,11 +148,6 @@ export class EmailService {
   ) {
     const jurisdiction = await this.getJurisdiction(jurisdictionIds);
     await this.loadTranslations(jurisdiction, user.language);
-    if (this.configService.get<string>('NODE_ENV') === 'production') {
-      Logger.log(
-        `Preparing to send a welcome email to ${user.email} from ${jurisdiction.emailFromAddress}...`,
-      );
-    }
     await this.send(
       user.email,
       jurisdiction.emailFromAddress,
@@ -282,12 +276,6 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, application.language));
     const listingUrl = `${appUrl}/listing/${listing.id}`;
     const compiledTemplate = this.template('confirmation');
-
-    if (this.configService.get<string>('NODE_ENV') == 'production') {
-      Logger.log(
-        `Preparing to send a confirmation email to ${application.applicant.emailAddress} from ${jurisdiction.emailFromAddress}...`,
-      );
-    }
 
     let eligibleText: string;
     let preferenceText: string;
