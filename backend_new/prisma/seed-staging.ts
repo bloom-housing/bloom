@@ -25,6 +25,7 @@ import {
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
+import { UserRoleEnum } from 'src/enums/users/user-role-enum';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -40,7 +41,7 @@ export const stagingSeed = async (
   });
   // create single jurisdiction
   const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(jurisdictionName),
+    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
   });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({
