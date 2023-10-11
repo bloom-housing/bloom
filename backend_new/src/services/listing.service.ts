@@ -189,67 +189,6 @@ export class ListingService {
     };
   }
 
-  async getApprovingUserEmails(): Promise<string[]> {
-    const approvingUsers = await this.prisma.userAccounts.findMany({
-      select: {
-        email: true,
-      },
-      where: {
-        userRoles: {
-          isAdmin: true,
-        },
-      },
-    });
-    const approvingUserEmails: string[] = [];
-    approvingUsers?.forEach(
-      (user) => user?.email && approvingUserEmails.push(user.email),
-    );
-    return approvingUserEmails;
-  }
-
-  public async getNonApprovingUserInfo(
-    listingId: string,
-    jurisId: string,
-    getPublicUrl = false,
-  ): Promise<{ emails: string[]; publicUrl?: string | null }> {
-    const nonApprovingUsers = await this.prisma.userAccounts.findMany({
-      select: {
-        email: true,
-        jurisdictions: {
-          select: {
-            id: true,
-            publicUrl: getPublicUrl,
-          },
-        },
-      },
-      where: {
-        OR: [
-          {
-            AND: [
-              {
-                userRoles: { isPartner: true },
-              },
-              { listings: { some: { id: listingId } } },
-            ],
-          },
-          { AND: [{ userRoles: { isJurisdictionalAdmin: true } }, {}] },
-        ],
-      },
-    });
-
-    // account for users having access to multiple jurisdictions
-    const publicUrl = getPublicUrl
-      ? nonApprovingUsers[0]?.jurisdictions?.find(
-          (juris) => juris.id === jurisId,
-        )?.publicUrl
-      : null;
-    const nonApprovingUserEmails: string[] = [];
-    nonApprovingUsers?.forEach(
-      (user) => user?.email && nonApprovingUserEmails.push(user.email),
-    );
-    return { emails: nonApprovingUserEmails, publicUrl };
-  }
-
   public async getUserEmailInfo(
     userRoles: UserRoleEnum | UserRoleEnum[],
     listingId?: string,
