@@ -154,7 +154,6 @@ export * from "./src/sections/ResponsiveContentList"
 export * from "./src/sections/GridSection"
 
 /* Tables */
-export * from "./src/tables/GroupedTable"
 export * from "./src/tables/MinimalTable"
 export * from "./src/tables/StackedTable"
 export * from "./src/tables/CategoryTable"
