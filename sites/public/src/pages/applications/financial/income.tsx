@@ -34,6 +34,7 @@ import { UserStatus } from "../../../lib/constants"
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function verifyIncome(listing: Listing, income: number, period: IncomePeriod): IncomeError {
   // Look through all the units on this listing to see what the absolute max/min income requirements are.
   const [annualMin, annualMax, monthlyMin] = listing.units.reduce(
@@ -80,19 +81,20 @@ const ApplicationIncome = () => {
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
     const incomeValue = income.replaceAll(",", "")
-    // Skip validation of total income if the applicant has income vouchers.
-    const validationError = application.incomeVouchers
-      ? null
-      : verifyIncome(listing, incomeValue, incomePeriod)
-    setIncomeError(validationError)
+    // Commenting out validation to not have income be a blocker https://github.com/bloom-housing/bloom/issues/3675
+    // // Skip validation of total income if the applicant has income vouchers.
+    // const validationError = application.incomeVouchers
+    //   ? null
+    //   : verifyIncome(listing, incomeValue, incomePeriod)
+    // setIncomeError(validationError)
 
-    if (!validationError) {
-      const toSave = { income: incomeValue, incomePeriod }
+    // if (!validationError) {
+    const toSave = { income: incomeValue, incomePeriod }
 
-      conductor.completeSection(currentPageSection)
-      conductor.currentStep.save(toSave)
-      conductor.routeToNextOrReturnUrl()
-    }
+    conductor.completeSection(currentPageSection)
+    conductor.currentStep.save(toSave)
+    conductor.routeToNextOrReturnUrl()
+    // }
   }
   const onError = () => {
     window.scrollTo(0, 0)
@@ -179,7 +181,8 @@ const ApplicationIncome = () => {
             <Field
               id="income"
               name="income"
-              type="currency"
+              // TODO: Commenting out temporarily due to application issues
+              // type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
               placeholder={t("application.financial.income.placeholder")}
@@ -201,7 +204,8 @@ const ApplicationIncome = () => {
                 error={errors.incomePeriod}
                 errorMessage={t("errors.selectOption")}
                 register={register}
-                validation={{ required: true }}
+                // TODO: Commenting out temporarily due to application issues
+                // validation={{ required: true, min: 0.01 }}
                 fields={incomePeriodValues}
                 dataTestId={"app-income-period"}
                 fieldGroupClassName="grid grid-cols-1"
