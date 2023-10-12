@@ -4570,6 +4570,8 @@ export enum ListingStatusEnum {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
+  "pendingReview" = "pendingReview",
+  "changesRequested" = "changesRequested",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
@@ -4587,6 +4589,8 @@ export enum ListingsStatusEnum {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
+  "pendingReview" = "pendingReview",
+  "changesRequested" = "changesRequested",
 }
 
 export enum ReviewOrderTypeEnum {

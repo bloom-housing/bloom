@@ -339,7 +339,7 @@ model Jurisdictions {
   reservedCommunityTypes      ReservedCommunityTypes[]
   translations                Translations[]
   user_accounts               UserAccounts[]
-  listingApprovalPermissions  UserRoleEnum[]
+  listingApprovalPermissions  UserRoleEnum[]           @map("listing_approval_permission")
 
   @@map("jurisdictions")
 }
