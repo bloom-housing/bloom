@@ -15,7 +15,11 @@ import {
 } from "@bloom-housing/ui-components"
 import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
-import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
+import {
+  EnumJurisdictionListingApprovalPermissions,
+  ListingEventType,
+  ListingStatus,
+} from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
 
 export enum ListingFormActionsType {
@@ -45,7 +49,18 @@ const ListingFormActions = ({
   const { profile, listingsService } = useContext(AuthContext)
   const router = useRouter()
 
-  const isListingApprover = profile?.roles?.isAdmin
+  // single jurisdiction check covers jurisAdmin adding a listing (listing is undefined then)
+  const listingApprovalPermissions = (profile?.jurisdictions?.length === 1
+    ? profile?.jurisdictions[0]
+    : profile?.jurisdictions?.find((juris) => juris.id === listing?.jurisdiction?.id)
+  )?.listingApprovalPermissions
+
+  const isListingApprover =
+    profile?.roles.isAdmin ||
+    (profile?.roles.isJurisdictionalAdmin &&
+      listingApprovalPermissions?.includes(
+        EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin
+      ))
 
   const listingId = listing?.id
 
@@ -234,9 +249,8 @@ const ListingFormActions = ({
             if (type === ListingFormActionsType.edit) {
               submitFormWithStatus(false, ListingStatus.active)
             } else {
-              // button only exists for listings approval so can call updateAndNotify directly
               try {
-                const result = await listingsService.updateAndNotify({
+                const result = await listingsService.update({
                   id: listing.id,
                   body: { ...listing, status: ListingStatus.active },
                 })
@@ -444,12 +458,11 @@ const ListingFormActions = ({
       return elements
     }
 
-    return process.env.featureListingsApproval === "TRUE"
-      ? getApprovalActions()
-      : getDefaultActions()
+    return listingApprovalPermissions?.length > 0 ? getApprovalActions() : getDefaultActions()
   }, [
     isListingApprover,
     listing,
+    listingApprovalPermissions?.length,
     listingId,
     listingsService,
     router,
