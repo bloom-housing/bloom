@@ -8,7 +8,7 @@ import {
   useAgTable,
   AlertBox,
   SiteAlert,
-  UniversalIconType,
+  Icon,
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
@@ -209,7 +209,7 @@ export default function ListingsList() {
                         className="mx-1"
                         variant="primary"
                         onClick={() => false}
-                        dataTestId={"addListingButton"}
+                        id={"addListingButton"}
                       >
                         {t("listings.addListing")}
                       </Button>
@@ -219,7 +219,9 @@ export default function ListingsList() {
                       id="export-listings"
                       variant="primary-outlined"
                       onClick={() => onExport()}
-                      icon={!zipExportLoading ? (faFileExport as UniversalIconType) : null}
+                      leadIcon={
+                        !zipExportLoading ? <Icon symbol={faFileExport} size="base" /> : null
+                      }
                       size="sm"
                       loading={zipExportLoading}
                     >

@@ -11,12 +11,12 @@ describe("applications/household/add-members", function () {
   })
 
   it("should move backward in form to /contact/name after editing primary household member", function () {
-    cy.getByTestId("app-household-member-edit-button").click()
+    cy.get(".app-household-member-edit-button").click()
     cy.location("pathname").should("include", "applications/contact/name")
   })
 
   it("should move to correct route on Add Member click", function () {
-    cy.getByTestId("app-add-household-member-button").click()
+    cy.getByID("save-member").click()
     cy.location("pathname").should("include", "applications/household/member")
   })
 })

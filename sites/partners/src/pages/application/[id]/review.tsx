@@ -199,9 +199,9 @@ const Flag = () => {
             <aside className="md:w-3/12 md:pl-6">
               <section className={"w-full"}>
                 <Button
-                  styleType={AppearanceStyleType.primary}
+                  variant="primary"
                   onClick={() => setSaveModalOpen(true)}
-                  dataTestId={"save-set-button"}
+                  id={"save-set-button"}
                 >
                   {t("t.save")}
                 </Button>
@@ -223,8 +223,8 @@ const Flag = () => {
         actions={[
           <Button
             type="button"
-            styleType={AppearanceStyleType.primary}
-            size={AppearanceSizeType.small}
+            variant="primary"
+            size="sm"
             loading={isSaveLoading}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
@@ -246,7 +246,8 @@ const Flag = () => {
           </Button>,
           <Button
             type="button"
-            size={AppearanceSizeType.small}
+            variant="primary-outlined"
+            size="sm"
             onClick={() => {
               setSaveModalOpen(false)
             }}

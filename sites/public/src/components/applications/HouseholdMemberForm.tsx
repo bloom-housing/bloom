@@ -1,6 +1,6 @@
 import React from "react"
 import { Icon, IconFillColors, t } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { Button, FieldValue } from "@bloom-housing/ui-seeds"
 
 export interface HouseholdMemberFormProps {
   editMember?: (memberId: number | undefined) => void
@@ -24,15 +24,15 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
       </FieldValue>
       <div>
         {editMode ? (
-          <button
+          <Button
             id={`edit-member-${props.memberFirstName}-${props.memberLastName}`}
-            className="edit-link pt-4"
+            type="button"
+            variant="text"
+            className="pt-4 app-household-member-edit-button"
             onClick={() => props.editMember && props.editMember(props.memberId)}
-            type={"button"}
-            data-testid={"app-household-member-edit-button"}
           >
             {props.strings?.edit ?? t("t.edit")}
-          </button>
+          </Button>
         ) : (
           <Icon
             className="ml-2 pt-4 block"
