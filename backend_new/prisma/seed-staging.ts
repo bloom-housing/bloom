@@ -25,7 +25,7 @@ import {
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
-import { UserRoleEnum } from 'src/enums/users/user-role-enum';
+import { UserRoleEnum } from '../src/enums/users/user-role-enum';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
