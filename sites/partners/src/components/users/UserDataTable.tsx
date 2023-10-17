@@ -33,7 +33,7 @@ const UserDataTable = ({ setUserDrawer, drawerOpen }) => {
 
   useEffect(() => {
     void mutate(cacheKey)
-  }, [drawerOpen])
+  }, [drawerOpen, cacheKey])
 
   const columns = useMemo(() => {
     return [
@@ -105,7 +105,7 @@ const UserDataTable = ({ setUserDrawer, drawerOpen }) => {
         valueFormatter: ({ value }) => (value ? t("users.confirmed") : t("users.unconfirmed")),
       },
     ]
-  }, [])
+  }, [setUserDrawer])
 
   const { listingDtos } = useListingsData({
     limit: "all",
@@ -176,4 +176,4 @@ const UserDataTable = ({ setUserDrawer, drawerOpen }) => {
   )
 }
 
-export default UserDataTable
+export { UserDataTable as default, UserDataTable }

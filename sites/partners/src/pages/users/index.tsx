@@ -6,7 +6,7 @@ import Layout from "../../layouts"
 import { useListingsData } from "../../lib/hooks"
 import { FormUserManage } from "../../components/users/FormUserManage"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
-import UserDataTable from "./UserDataTable"
+import { UserDataTable } from "../../components/users/UserDataTable"
 
 type UserDrawerValue = {
   type: "add" | "edit"
