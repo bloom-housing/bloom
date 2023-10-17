@@ -500,6 +500,7 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
   const { applicationsService, profile } = useContext(AuthContext)
+  const { setToast } = useContext(MessageContext)
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
   const [csvExportLoading, setCsvExportLoading] = useState(false)
@@ -514,11 +515,11 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     try {
       await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
       setCsvExportSuccess(true)
-      setSiteAlertMessage(
+      setToast(
         t("t.emailingExportSuccess", {
           email: profile?.email,
         }),
-        "success"
+        { variant: alertTypes.success }
       )
     } catch (err) {
       console.log(err)
@@ -526,7 +527,7 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
     }
 
     setCsvExportLoading(false)
-  }, [applicationsService, includeDemographics, listingId, profile?.email, timeZone])
+  }, [applicationsService, includeDemographics, listingId, profile?.email, setToast, timeZone])
 
   return {
     onExport,
