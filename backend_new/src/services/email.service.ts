@@ -350,6 +350,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
+      console.log('Request approval email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -374,6 +375,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
+      console.log('changes requested email failed', err);
       throw new HttpException('email failed', 500);
     }
   }
@@ -397,6 +399,7 @@ export class EmailService {
         }),
       );
     } catch (err) {
+      console.log('listing approval email failed', err);
       throw new HttpException('email failed', 500);
     }
   }

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { PrismaService } from './prisma.service';
+import { ConfigService } from '@nestjs/config';
 import {
   LanguagesEnum,
   ListingsStatusEnum,
@@ -9,6 +9,7 @@ import {
   UserRoleEnum,
 } from '@prisma/client';
 import { firstValueFrom } from 'rxjs';
+import { PrismaService } from './prisma.service';
 import { ListingsQueryParams } from '../dtos/listings/listings-query-params.dto';
 import {
   buildPaginationMetaInfo,
@@ -33,7 +34,6 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
 import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { User } from '../dtos/users/user.dto';
 import { EmailService } from './email.service';
-import { ConfigService } from '@nestjs/config';
 import { IdDTO } from '../dtos/shared/id.dto';
 
 export type getListingsArgs = {

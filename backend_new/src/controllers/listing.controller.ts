@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   Request,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -38,6 +39,7 @@ import { ListingUpdate } from '../dtos/listings/listing-update.dto';
 import { ListingCreateUpdateValidationPipe } from '../validation-pipes/listing-create-update-pipe';
 import { mapTo } from '../utilities/mapTo';
 import { User } from '../dtos/users/user.dto';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @Controller('listings')
 @ApiTags('listings')
@@ -103,6 +105,7 @@ export class ListingController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update listing by id', operationId: 'update' })
   @UsePipes(new ListingCreateUpdateValidationPipe(defaultValidationPipeOptions))
   async update(

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
@@ -43,6 +44,7 @@ describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionAId: string;
+  let adminAccessToken: string;
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -63,14 +65,30 @@ describe('Listing Controller Tests', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
 
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
-
     jurisdictionAId = jurisdiction.id;
+    const adminUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: {
+          isAdmin: true,
+        },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: adminUser.email, password: 'abcdef' })
+      .expect(201);
+    adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
+      cookie.startsWith('access-token='),
+    );
   });
 
   afterAll(async () => {
@@ -545,6 +563,7 @@ describe('Listing Controller Tests', () => {
       .send({
         id: id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(404);
     expect(res.body.message).toEqual(
       `listingId ${id} was requested but not found`,
@@ -565,6 +584,7 @@ describe('Listing Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(val)
+      .set('Cookie', adminAccessToken)
       .expect(200);
     expect(res.body.id).toEqual(listing.id);
     expect(res.body.name).toEqual(val.name);
@@ -624,7 +644,9 @@ describe('Listing Controller Tests', () => {
         }),
       });
 
-      const listingData = await listingFactory(jurisdictionA.id, prisma);
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.pending,
+      });
       listing = await prisma.listings.create({
         data: listingData,
       });
@@ -637,6 +659,7 @@ describe('Listing Controller Tests', () => {
           },
           listings: [listing.id],
           jurisdictionId: jurisdictionA.id,
+          confirmedAt: new Date(),
         }),
       });
       const res = await request(app.getHttpServer())
@@ -650,11 +673,20 @@ describe('Listing Controller Tests', () => {
     });
 
     it('update status to pending approval and notify appropriate users', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: partnerUser.email, password: 'abcdef' })
+        .expect(201);
+
+      const partnerAccessToken = res.header?.['set-cookie'].find((cookie) =>
+        cookie.startsWith('access-token='),
+      );
       const val = await constructFullListingData(listing.id, jurisdictionA.id);
       val.status = ListingsStatusEnum.pendingReview;
       const putPendingApprovalResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
         .send(val)
+        .set('Cookie', partnerAccessToken)
         .expect(200);
 
       const listingPendingApprovalResponse = await request(app.getHttpServer())
@@ -665,7 +697,9 @@ describe('Listing Controller Tests', () => {
         ListingsStatusEnum.pendingReview,
       );
       expect(mockRequestApproval).toBeCalledWith(
-        undefined,
+        expect.objectContaining({
+          id: partnerUser.id,
+        }),
         { id: listing.id, name: val.name },
         expect.arrayContaining([adminUser.email, jurisAdmin.email]),
         process.env.PARTNERS_PORTAL_URL,
@@ -682,6 +716,7 @@ describe('Listing Controller Tests', () => {
       const putApprovedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
         .send(val)
+        .set('Cookie', adminAccessToken)
         .expect(200);
 
       const listingApprovedResponse = await request(app.getHttpServer())
@@ -692,21 +727,22 @@ describe('Listing Controller Tests', () => {
         ListingsStatusEnum.active,
       );
       expect(mockListingApproved).toBeCalledWith(
-        undefined,
+        expect.objectContaining({
+          id: adminUser.id,
+        }),
         { id: listing.id, name: val.name },
         expect.arrayContaining([partnerUser.email]),
         jurisdictionA.publicUrl,
       );
     });
 
-    // Skipping while trying to figure out req.user
-    it.skip('update status to changes requested and notify appropriate users', async () => {
+    it('update status to changes requested and notify appropriate users', async () => {
       const val = await constructFullListingData(listing.id, jurisdictionA.id);
       val.status = ListingsStatusEnum.changesRequested;
       const putChangesRequestedResponse = await request(app.getHttpServer())
         .put(`/listings/${listing.id}`)
         .send(val)
-        .set(['Cookie', adminAccessToken])
+        .set('Cookie', adminAccessToken)
         .expect(200);
 
       const listingChangesRequestedResponse = await request(app.getHttpServer())
@@ -717,12 +753,11 @@ describe('Listing Controller Tests', () => {
         ListingsStatusEnum.changesRequested,
       );
       expect(mockChangesRequested).toBeCalledWith(
-        undefined,
-        { id: listing.id, name: listing.name },
-        expect.arrayContaining([
-          'leasing-agent-2@example.com',
-          'alameda-admin@example.com',
-        ]),
+        expect.objectContaining({
+          id: adminUser.id,
+        }),
+        { id: listing.id, name: val.name },
+        expect.arrayContaining([partnerUser.email]),
         process.env.PARTNERS_PORTAL_URL,
       );
     });
