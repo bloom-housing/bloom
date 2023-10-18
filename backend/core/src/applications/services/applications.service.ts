@@ -255,7 +255,15 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  async sendExport(queryParams: ApplicationsCsvListQueryParams): Promise<StatusDto> {
+  sendExport(queryParams: ApplicationsCsvListQueryParams): StatusDto {
+    void this.sendExportHelper(queryParams)
+
+    return {
+      status: "Success",
+    }
+  }
+
+  async sendExportHelper(queryParams: ApplicationsCsvListQueryParams): Promise<void> {
     const applications = await this.rawListWithFlagged(queryParams)
     const csvString = this.applicationCsvExporter.exportFromObject(
       applications,
@@ -269,9 +277,6 @@ export class ApplicationsService {
       listing.id,
       csvString
     )
-    return {
-      status: "Success",
-    }
   }
 
   private _getQb(params: PaginatedApplicationListQueryParams, view = "base", withSelect = true) {
