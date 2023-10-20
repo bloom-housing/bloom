@@ -318,7 +318,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 {t("application.contact.mailingAddress")}
               </SectionWithGrid.HeadingRow>
               <Grid.Row columns={3}>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("listings.streetAddressOrPOBox")}
                     name={"applicationMailingAddress.street"}
@@ -353,7 +353,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={7}>
-                <Grid.Cell className="grid-triple-span">
+                <Grid.Cell className="seeds-grid-span-3">
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationMailingAddress.city"}
@@ -376,7 +376,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     }}
                   />
                 </Grid.Cell>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationMailingAddress.state`}
@@ -404,7 +404,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     />
                   </FieldValue>
                 </Grid.Cell>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("application.contact.zip")}
                     name={"applicationMailingAddress.zipCode"}
@@ -435,7 +435,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <>
               <SectionWithGrid.HeadingRow>{t("listings.pickupAddress")}</SectionWithGrid.HeadingRow>
               <Grid.Row columns={3}>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("listings.streetAddressOrPOBox")}
                     name={"applicationPickUpAddress.street"}
@@ -466,7 +466,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 />
               </Grid.Row>
               <Grid.Row columns={7}>
-                <Grid.Cell className="grid-triple-span">
+                <Grid.Cell className="seeds-grid-span-3">
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationPickUpAddress.city"}
@@ -485,7 +485,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     }}
                   />
                 </Grid.Cell>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationPickUpAddress.state`}
@@ -512,7 +512,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     />
                   </FieldValue>
                 </Grid.Cell>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("application.contact.zip")}
                     name={"applicationPickUpAddress.zipCode"}
@@ -536,7 +536,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("leasingAgent.officeHours")}
                     name={"applicationPickUpAddressOfficeHours"}
@@ -556,7 +556,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 {t("listings.dropOffAddress")}
               </SectionWithGrid.HeadingRow>
               <Grid.Row columns={3}>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("listings.streetAddressOrPOBox")}
                     name={"applicationDropOffAddress.street"}
@@ -587,7 +587,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 />
               </Grid.Row>
               <Grid.Row columns={7}>
-                <Grid.Cell className="grid-triple-span">
+                <Grid.Cell className="seeds-grid-span-3">
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationDropOffAddress.city"}
@@ -609,7 +609,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     }}
                   />
                 </Grid.Cell>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <FieldValue label={t("application.contact.state")} className="mb-0">
                     <Select
                       id={`applicationDropOffAddress.state`}
@@ -636,7 +636,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     />
                   </FieldValue>
                 </Grid.Cell>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     label={t("application.contact.zip")}
                     name={"applicationDropOffAddress.zipCode"}
@@ -660,7 +660,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 </Grid.Cell>
               </Grid.Row>
               <Grid.Row columns={3}>
-                <Grid.Cell className="grid-double-span">
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("leasingAgent.officeHours")}
                     name={"applicationDropOffAddressOfficeHours"}
@@ -746,7 +746,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={3}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Textarea
               label={t("listings.additionalApplicationSubmissionNotes")}
               name={"additionalApplicationSubmissionNotes"}

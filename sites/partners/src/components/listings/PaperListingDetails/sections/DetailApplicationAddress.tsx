@@ -24,7 +24,7 @@ const DetailApplicationAddress = () => {
         {listing.applicationMailingAddressType && (
           <FieldValue
             id="applicationMailingAddressType"
-            className="grid-double-span"
+            className="seeds-grid-span-2"
             label={"Where can applications be mailed in?"}
           >
             {t("listings.leasingAgentAddress")}
@@ -50,7 +50,7 @@ const DetailApplicationAddress = () => {
         {listing.applicationPickUpAddressType && (
           <FieldValue
             id="applicationPickUpAddressType"
-            className="grid-double-span"
+            className="seeds-grid-span-2"
             label={t("listings.wherePickupQuestion")}
           >
             {t("listings.leasingAgentAddress")}
@@ -68,7 +68,7 @@ const DetailApplicationAddress = () => {
           <Grid.Row columns={3}>
             <FieldValue
               id="applicationPickUpAddressOfficeHours"
-              className="grid-double-span"
+              className="seeds-grid-span-2"
               label={t("leasingAgent.officeHours")}
             >
               {getDetailFieldString(listing.applicationPickUpAddressOfficeHours)}
@@ -91,7 +91,7 @@ const DetailApplicationAddress = () => {
         {listing.applicationDropOffAddressType && (
           <FieldValue
             id="applicationDropOffAddressType"
-            className="grid-double-span"
+            className="seeds-grid-span-2"
             label={t("listings.whereDropOffQuestion")}
           >
             {t("listings.leasingAgentAddress")}
@@ -109,7 +109,7 @@ const DetailApplicationAddress = () => {
           <Grid.Row columns={3}>
             <FieldValue
               id="applicationDropOffAddressOfficeHours"
-              className="grid-double-span"
+              className="seeds-grid-span-2"
               label={t("leasingAgent.officeHours")}
             >
               {getDetailFieldString(listing.applicationDropOffAddressOfficeHours)}

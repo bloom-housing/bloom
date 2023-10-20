@@ -15,7 +15,7 @@ const DetailBuildingDetails = () => {
           <Grid.Row columns={3}>
             <FieldValue
               id="buildingAddress.street"
-              className="grid-double-span"
+              className="seeds-grid-span-2"
               label={t("application.contact.streetAddress")}
             >
               {listing.buildingAddress?.street}
@@ -27,7 +27,7 @@ const DetailBuildingDetails = () => {
           <Grid.Row columns={6}>
             <FieldValue
               id="buildingAddress.city"
-              className="grid-double-span"
+              className="seeds-grid-span-2"
               label={t("application.contact.city")}
             >
               {listing.buildingAddress?.city}
@@ -38,7 +38,11 @@ const DetailBuildingDetails = () => {
             <FieldValue id="buildingAddress.zipCode" label={t("application.contact.zip")}>
               {listing.buildingAddress?.zipCode}
             </FieldValue>
-            <FieldValue id="yearBuilt" className="grid-double-span" label={t("listings.yearBuilt")}>
+            <FieldValue
+              id="yearBuilt"
+              className="seeds-grid-span-2"
+              label={t("listings.yearBuilt")}
+            >
               {listing.yearBuilt}
             </FieldValue>
           </Grid.Row>

@@ -518,7 +518,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 controlClassName={"control"}
               />
             </Grid.Cell>
-            <Grid.Cell className="grid-double-span">
+            <Grid.Cell className="seeds-grid-span-2">
               <Textarea
                 label={t("listings.referralSummary")}
                 rows={3}

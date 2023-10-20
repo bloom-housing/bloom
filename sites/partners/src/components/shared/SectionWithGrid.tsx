@@ -13,7 +13,7 @@ const HeadingRow = ({ children }) => {
   return (
     <Grid.Row>
       <Grid.Cell>
-        <Heading size="lg" priority={3}>
+        <Heading size="lg" priority={3} className="grid-section-row-heading">
           {children}
         </Heading>
       </Grid.Cell>

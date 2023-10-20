@@ -181,7 +181,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               </Grid.Cell>
             </Grid.Row>
             <Grid.Row columns={3}>
-              <Grid.Cell className="grid-double-span">
+              <Grid.Cell className="seeds-grid-span-2">
                 <Textarea
                   label={t("listings.lotteryDateNotes")}
                   name={"lotteryDateNotes"}
@@ -234,7 +234,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
           </Grid.Row>
         )}
         <Grid.Row columns={3}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Textarea
               label={t("listings.whatToExpectLabel")}
               name={"whatToExpect"}

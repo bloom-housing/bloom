@@ -30,7 +30,7 @@ const DetailLeasingAgent = () => {
 
         <FieldValue
           id="leasingAgentOfficeHours"
-          className="grid-double-span"
+          className="seeds-grid-span-2"
           label={t("leasingAgent.officeHours")}
         >
           {getDetailFieldString(listing.leasingAgentOfficeHours)}

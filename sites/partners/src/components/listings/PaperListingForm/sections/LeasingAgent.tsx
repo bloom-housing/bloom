@@ -91,7 +91,7 @@ const LeasingAgent = () => {
               register={register}
             />
           </Grid.Cell>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Textarea
               label={t("leasingAgent.officeHours")}
               name={"leasingAgentOfficeHours"}
@@ -104,7 +104,7 @@ const LeasingAgent = () => {
         </Grid.Row>
         <SectionWithGrid.HeadingRow>Leasing Agent Address</SectionWithGrid.HeadingRow>
         <Grid.Row columns={3}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("listings.streetAddressOrPOBox")}
               name={"leasingAgentAddress.street"}
@@ -129,7 +129,7 @@ const LeasingAgent = () => {
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={7}>
-          <Grid.Cell className="grid-triple-span">
+          <Grid.Cell className="seeds-grid-span-3">
             <Field
               label={t("application.contact.city")}
               name={"leasingAgentAddress.city"}
@@ -144,7 +144,7 @@ const LeasingAgent = () => {
             />
           </Grid.Cell>
 
-          <FieldValue label={t("application.contact.state")} className="grid-double-span">
+          <FieldValue label={t("application.contact.state")} className="seeds-grid-span-2">
             <Select
               id={`leasingAgentAddress.state`}
               name={`leasingAgentAddress.state`}
@@ -162,7 +162,7 @@ const LeasingAgent = () => {
             />
           </FieldValue>
 
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("application.contact.zip")}
               name={"leasingAgentAddress.zipCode"}
