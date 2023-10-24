@@ -194,7 +194,7 @@ const ApplicationTerms = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
-                loading={submitting}
+                loadingMessage={submitting && t("t.formSubmitted")}
                 variant="primary"
                 type="submit"
                 id={"app-terms-submit-button"}

@@ -174,7 +174,7 @@ const FormUserConfirm = () => {
                 type="submit"
                 variant="primary"
                 className={"items-center"}
-                loading={isConfirmLoading || loading}
+                loadingMessage={(isConfirmLoading || loading) && t("t.formSubmitted")}
               >
                 {t("users.confirmAccount")}
               </Button>

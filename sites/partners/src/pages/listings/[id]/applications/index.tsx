@@ -191,7 +191,7 @@ const ApplicationsList = () => {
                       size="sm"
                       className="mx-1"
                       onClick={() => onExport()}
-                      loading={csvExportLoading}
+                      loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     >
                       {t("t.export")}
                     </Button>

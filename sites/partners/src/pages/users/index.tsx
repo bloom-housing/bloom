@@ -186,7 +186,7 @@ const Users = () => {
                     variant="primary-outlined"
                     leadIcon={!csvExportLoading ? <Icon symbol={faFileExport} size="base" /> : null}
                     onClick={() => onExport()}
-                    loading={csvExportLoading}
+                    loadingMessage={csvExportLoading && t("t.formSubmitted")}
                     id={"export-users"}
                   >
                     {t("t.exportToCSV")}

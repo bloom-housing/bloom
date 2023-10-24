@@ -223,7 +223,7 @@ export default function ListingsList() {
                         !zipExportLoading ? <Icon symbol={faFileExport} size="base" /> : null
                       }
                       size="sm"
-                      loading={zipExportLoading}
+                      loadingMessage={zipExportLoading && t("t.formSubmitted")}
                     >
                       {t("t.exportToCSV")}
                     </Button>

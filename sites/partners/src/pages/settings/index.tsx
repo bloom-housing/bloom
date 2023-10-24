@@ -241,7 +241,7 @@ const Settings = () => {
               saveQuestion({ ...copyModalOpen, text: `${copyModalOpen.text} (Copy)` }, "add")
             }}
             id={"copy-button-confirm"}
-            loading={isCreateLoading}
+            loadingMessage={isCreateLoading && t("t.formSubmitted")}
             size="sm"
           >
             {t("settings.copy")}

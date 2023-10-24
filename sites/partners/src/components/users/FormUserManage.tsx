@@ -402,7 +402,7 @@ const FormUserManage = ({
               className="mx-1"
               onClick={() => onSave()}
               variant="primary"
-              loading={isUpdateUserLoading}
+              loadingMessage={isUpdateUserLoading && t("t.formSubmitted")}
             >
               {t("t.save")}
             </Button>
@@ -414,7 +414,7 @@ const FormUserManage = ({
               className="mx-1"
               onClick={() => onInvite()}
               variant="primary"
-              loading={isSendInviteLoading}
+              loadingMessage={isSendInviteLoading && t("t.formSubmitted")}
               id={"invite-user"}
             >
               {t("t.invite")}
@@ -427,7 +427,7 @@ const FormUserManage = ({
               className="mx-1"
               onClick={() => onInviteResend()}
               variant="primary-outlined"
-              loading={isResendConfirmationLoading}
+              loadingMessage={isResendConfirmationLoading && t("t.formSubmitted")}
             >
               {t("users.resendInvite")}
             </Button>
@@ -455,7 +455,7 @@ const FormUserManage = ({
           <Button
             type="button"
             variant="alert"
-            loading={isDeleteUserLoading}
+            loadingMessage={isDeleteUserLoading}
             onClick={() => {
               onDelete()
             }}

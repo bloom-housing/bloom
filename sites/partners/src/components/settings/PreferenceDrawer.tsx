@@ -389,7 +389,7 @@ const PreferenceDrawer = ({
           type="button"
           className={"mt-4"}
           variant="primary"
-          loading={isLoading}
+          loadingMessage={isLoading && t("t.formSubmitted")}
           onClick={async () => {
             const validation = await trigger()
             if (!questionData || !questionData?.options?.length) {

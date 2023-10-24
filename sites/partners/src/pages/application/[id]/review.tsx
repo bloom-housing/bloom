@@ -225,7 +225,7 @@ const Flag = () => {
             type="button"
             variant="primary"
             size="sm"
-            loading={isSaveLoading}
+            loadingMessage={isSaveLoading && t("t.formSubmitted")}
             onClick={() => {
               const selectedData = gridApi.getSelectedRows()
               const status = getValues()["setStatus"]
