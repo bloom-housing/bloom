@@ -37,7 +37,7 @@ export class PermissionGuard implements CanActivate {
     } else if (req.body.id) {
       resource = { id: req.body.id };
     }
-    console.log({ type, action, resource });
+
     return this.permissionService.can(user, type, action, resource);
   }
 }
