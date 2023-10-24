@@ -1,7 +1,13 @@
 import { BaseFileService } from "../base-file-service"
 import { ConfigInvalidEnumError, ConfigItemMissingError } from "../errors"
 import { FileUpload, FileServiceConfig, FileService } from "../types"
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  StorageClass,
+  PutObjectCommandInput,
+} from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
 enum UrlFormats {
@@ -70,7 +76,7 @@ export class AmazonS3FileService extends BaseFileService implements FileService 
     const rand = Math.round(Math.random() * 1000000)
     const path = `${prefix}/${rand}/${key}/${file.name}`
 
-    const request = {
+    const request: PutObjectCommandInput = {
       Bucket: this.bucket,
       Key: path,
       Body: file.contents,
@@ -79,7 +85,7 @@ export class AmazonS3FileService extends BaseFileService implements FileService 
 
       // The storage class to use
       // Could be an option later, but hardcode as STANDARD for now
-      StorageClass: "STANDARD",
+      StorageClass: StorageClass.STANDARD,
     }
 
     // We don't need the response
