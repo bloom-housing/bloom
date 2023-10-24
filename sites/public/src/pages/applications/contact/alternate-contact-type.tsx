@@ -3,21 +3,8 @@
 Type of alternate contact
 */
 import React, { Fragment, useContext, useEffect } from "react"
-<<<<<<< HEAD
-import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  Field,
-  Form,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
-=======
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { AlertBox, Field, Form, t } from "@bloom-housing/ui-components"
->>>>>>> 4db8b8e45 (refactor: more card uptake)
 import {
   altContactRelationshipKeys,
   OnClientSide,
@@ -148,27 +135,9 @@ const ApplicationAlternateContactType = () => {
                 )
               })}
             </fieldset>
-<<<<<<< HEAD
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => conductor.setNavigatedBack(false)}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
-=======
           </CardSection>
         </ApplicationFormLayout>
       </Form>
->>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }

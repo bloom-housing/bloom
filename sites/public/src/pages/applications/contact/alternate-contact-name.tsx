@@ -2,21 +2,8 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-<<<<<<< HEAD
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  Form,
-  Field,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
-=======
 import { AlertBox, Form, Field, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
->>>>>>> 4db8b8e45 (refactor: more card uptake)
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
@@ -137,46 +124,9 @@ export default () => {
                 </div>
               )}
             </fieldset>
-<<<<<<< HEAD
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  type="submit"
-                  variant="text"
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                    conductor.setNavigatedBack(false)
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
-=======
           </CardSection>
         </ApplicationFormLayout>
       </Form>
->>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }

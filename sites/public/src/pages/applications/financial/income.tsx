@@ -29,6 +29,8 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -120,61 +122,57 @@ const ApplicationIncome = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.financial.income.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          <CardSection>
+            {/* TODO */}
+            <p className="field-note mb-4">{t("application.financial.income.instruction1")}</p>
+            <p className="field-note">{t("application.financial.income.instruction2")}</p>
+          </CardSection>
 
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.financial.income.title")}
-          </h2>
-
-          <p className="field-note mt-5 mb-4">{t("application.financial.income.instruction1")}</p>
-
-          <p className="field-note">{t("application.financial.income.instruction2")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        {incomeError && (
-          <>
-            <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
-              {t("application.household.dontQualifyHeader")}
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
             </AlertBox>
-            <AlertNotice
-              title={t(`application.financial.income.validationError.reason.${incomeError}`)}
-              type="alert"
-              inverted
-            >
-              <p className="mb-2">
-                {t(`application.financial.income.validationError.instruction1`)}
-              </p>
-              <p className="mb-2">
-                {t(`application.financial.income.validationError.instruction2`)}
-              </p>
-              <p>
-                <Link href={`/get-assistance`}>{t("pageTitle.getAssistance")}</Link>
-              </p>
-            </AlertNotice>
-          </>
-        )}
+          )}
 
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group">
+          {incomeError && (
+            <CardSection>
+              <AlertBox type="alert" inverted onClose={() => setIncomeError(null)}>
+                {t("application.household.dontQualifyHeader")}
+              </AlertBox>
+              <AlertNotice
+                title={t(`application.financial.income.validationError.reason.${incomeError}`)}
+                type="alert"
+                inverted
+              >
+                <p className="mb-2">
+                  {t(`application.financial.income.validationError.instruction1`)}
+                </p>
+                <p className="mb-2">
+                  {t(`application.financial.income.validationError.instruction2`)}
+                </p>
+                <p>
+                  <Link href={`/get-assistance`}>{t("pageTitle.getAssistance")}</Link>
+                </p>
+              </AlertNotice>
+            </CardSection>
+          )}
+
+          <CardSection divider={"flush"} className={"border-none"}>
             <Field
               id="income"
               name="income"
@@ -207,40 +205,9 @@ const ApplicationIncome = () => {
                 fieldClassName="ml-0"
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  conductor.returnToReview = false
-                  conductor.setNavigatedBack(false)
-                }}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-
-            {conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
-                <Button
-                  type="submit"
-                  variant="text"
-                  className="mb-4"
-                  onClick={() => {
-                    conductor.returnToReview = true
-                  }}
-                >
-                  {t("application.form.general.saveAndReturn")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

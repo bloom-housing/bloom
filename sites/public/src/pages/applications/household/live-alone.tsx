@@ -4,13 +4,8 @@ Asks whether the applicant will be adding any additional household members
 */
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-<<<<<<< HEAD
-import { Button } from "@bloom-housing/ui-seeds"
-import { Form, FormCard, Heading, ProgressNav, t } from "@bloom-housing/ui-components"
-=======
 import { AppearanceSizeType, Button, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
->>>>>>> 4db8b8e45 (refactor: more card uptake)
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
@@ -70,43 +65,6 @@ const ApplicationLiveAlone = () => {
             />
           </div>
 
-<<<<<<< HEAD
-          <div className="form-card__pager">
-            <div className="form-card__pager-row">
-              <Button
-                type="submit"
-                id="btn-live-alone"
-                variant="primary-outlined"
-                size="lg"
-                className="w-full md:w-3/4"
-                onClick={() => {
-                  application.householdSize = 1
-                  application.householdMembers = []
-                  setValidateHousehold(true)
-                }}
-              >
-                {t("application.household.liveAlone.willLiveAlone")}
-              </Button>
-            </div>
-            <div className="form-card__pager-row">
-              <Button
-                type="submit"
-                id="btn-with-people"
-                variant="primary-outlined"
-                size="lg"
-                className="w-full md:w-3/4"
-                onClick={() => {
-                  if (application.householdSize === 1) application.householdSize = 0
-                  setValidateHousehold(false)
-                }}
-              >
-                {t("application.household.liveAlone.liveWithOtherPeople")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
-=======
           <CardSection divider={"flush"} className={"border-none"}>
             <Button
               id="btn-live-alone"
@@ -136,7 +94,6 @@ const ApplicationLiveAlone = () => {
           </CardSection>
         </ApplicationFormLayout>
       </Form>
->>>>>>> 4db8b8e45 (refactor: more card uptake)
     </FormsLayout>
   )
 }

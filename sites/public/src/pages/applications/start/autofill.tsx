@@ -1,11 +1,6 @@
 import { useContext, useState, useEffect, useCallback } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
-<<<<<<< HEAD
-import { Button } from "@bloom-housing/ui-seeds"
-import { Form, FormCard, Heading, ProgressNav, t } from "@bloom-housing/ui-components"
-=======
 import { AppearanceStyleType, Button, Form, t } from "@bloom-housing/ui-components"
->>>>>>> 4db8b8e45 (refactor: more card uptake)
 import {
   blankApplication,
   OnClientSide,

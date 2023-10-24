@@ -1,23 +1,16 @@
 /*
 2.5 Expecting Household Changes
 */
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  FieldGroup,
-  Form,
-  FormCard,
-  Heading,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
+import { AlertBox, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationHouseholdChanges = () => {
   const { profile } = useContext(AuthContext)
@@ -66,40 +59,29 @@ const ApplicationHouseholdChanges = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.household.expectingChanges.question")}
+          subheading={t("application.household.genericSubtitle")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
 
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.household.expectingChanges.question")}
-          </h2>
-
-          <p className="field-note mt-5">{t("application.household.genericSubtitle")}</p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div
-            className={`form-card__group field text-xl ${
-              errors.householdExpectingChanges ? "error" : ""
-            }`}
-          >
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <FieldGroup
                 fieldGroupClassName="grid grid-cols-1"
@@ -118,22 +100,9 @@ const ApplicationHouseholdChanges = () => {
                 }}
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => conductor.setNavigatedBack(false)}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

@@ -23,9 +23,11 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { useContext, useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
+import ApplicationFormLayout from "../../../layouts/application-form"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
@@ -74,49 +76,46 @@ const ApplicationVouchers = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.financial.vouchers.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          <CardSection>
+            {/* TODO does this content need to be in the subheader, prolly does */}
+            <p className="field-note mb-4">
+              <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
+              {` ${t("application.financial.vouchers.housingVouchers.text")}`}
+            </p>
 
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.financial.vouchers.title")}
-          </h2>
+            <p className="field-note mb-4">
+              <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
+              {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
+            </p>
 
-          <p className="field-note mb-4 mt-5">
-            <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
-            {` ${t("application.financial.vouchers.housingVouchers.text")}`}
-          </p>
+            <p className="field-note">
+              <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
+              {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
+            </p>
+          </CardSection>
 
-          <p className="field-note mb-4">
-            <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
-            {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
-          </p>
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
 
-          <p className="field-note">
-            <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
-            {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
-          </p>
-        </div>
-
-        {Object.entries(errors).length > 0 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
-
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className={`form-card__group field text-xl ${errors.incomeVouchers ? "error" : ""}`}>
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
               <FieldGroup
@@ -136,22 +135,9 @@ const ApplicationVouchers = () => {
                 }}
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => conductor.setNavigatedBack(false)}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }
