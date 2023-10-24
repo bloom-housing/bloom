@@ -2,11 +2,11 @@ export function deepFind(obj: Record<string, any>, path: string) {
   const paths = path.split('.');
   let current = obj;
 
-  paths.forEach((path) => {
-    if (current[path] == undefined) {
+  paths.forEach((currPath) => {
+    if (current[currPath] == undefined) {
       return undefined;
     }
-    current = current[path];
+    current = current[currPath];
   });
   return current;
 }
