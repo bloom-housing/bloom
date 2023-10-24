@@ -131,8 +131,8 @@ export class ListingService {
     private prisma: PrismaService,
     private translationService: TranslationService,
     private httpService: HttpService,
-    private readonly emailService: EmailService,
-    private readonly configService: ConfigService,
+    private emailService: EmailService,
+    private configService: ConfigService,
   ) {}
 
   /*
