@@ -4,11 +4,29 @@ Make sure the .env file's db placement is what works for your set up, Then run t
 
 ```bash
 $ yarn install
-$ yarn db:setup
 $ yarn prisma generate
+$ yarn build
+$ yarn db:setup:staging
 ```
 
+These commands are also encapsulated in:
+```bash
+$ yarn setup
+```
+
+
 If you would prefer to have it setup with more realistic data you can run `yarn db:setup:staging` instead of `yarn db:setup`.
+
+## Starting the application
+In order to run the application you can run :
+```bash
+$ yarn start
+```
+
+or to run in watch mode run:
+```bash
+$ yarn dev
+```
 
 # Modifying the Schema
 
@@ -86,9 +104,9 @@ Services are housed under `src/services` and are given the extension `.services.
 The exported class should be in capitalized camelcase (e.g. `ListingService`).
 
 # Guards & Passport Strategies
-We currently use guards for 2 purposes. Passport guards and permissioning guards.
+We currently use guards for 2 purposes. Passport guards and Permissioning guards.
 
-Passport guards (jwt.guard.ts, mfa.guard.ts, and optional.guard.ts) verify that the request is from a legitimate user. JwtAuthGuard does this by verifying the incoming jwt token (off the request's cookies) matches a user. MfaAuthGuard does this by verifying the incoming log in information (email, password, mfaCode) matches a user's information. OptionalAuthGuard is used to allow requests from users not logged in through. It will still verify the user through the JwtAuthGuard if a user was logged in.
+Passport guards (jwt.guard.ts, mfa.guard.ts, and optional.guard.ts) verify that the request is from a legitimate user. JwtAuthGuard does this by verifying the incoming jwt token (off the request's cookies) matches a user. MfaAuthGuard does this by verifying the incoming login information (email, password, mfaCode) matches a user's information. OptionalAuthGuard is used to allow requests from users not logged in through. It will still verify the user through the JwtAuthGuard if a user was logged in.
 
 Passport guards are paired with a passport strategy (jwt.strategy.ts, and mfa.strategy.ts), this is where the code to actually verify the requester lives. 
 
@@ -97,7 +115,7 @@ Hopefully that makes sense, if not think of guards as customs agents, and the pa
 [NestJS passport docs](https://docs.nestjs.com/recipes/passport)
 [NestJS guards docs](https://docs.nestjs.com/guards)
 
-TODO: add to this document for permissioning guards and strategies [github issue](https://github.com/bloom-housing/bloom/issues/3445)
+Permissioning guards (permission.guard.ts, and user-profile-permission-guard.ts) verify that the requester has access to the resource and action they are trying to perform. For example a user that is not logged in (anonymous user) can submit applications, but cannot create listings. We leverage [Casbin](https://www.npmjs.com/package/casbin) to do user verification. 
 
 
 # Testing
@@ -130,6 +148,14 @@ Running the following will run all unit tests:
 ```bash
 $ yarn test
 ```
+
+
+## Testing with code coverage
+We have set up both code coverage and code coverage benchmarks. These benchmarks must be met for your PR to pass CI checks. Test coverage is calculated against both the integration and unit test runs. You can run test coverage with the followig:
+```bash
+$ yarn test:cov
+```
+
 
 # Considerations For Detroit
 As it stands right now `core` uses the AmiChart items column and `detroit` uses the AmiChartItem table.
