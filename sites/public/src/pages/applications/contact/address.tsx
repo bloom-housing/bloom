@@ -1,17 +1,17 @@
-/*
-1.3 - Contact
-Primary applicant contact information
-https://github.com/bloom-housing/bloom/issues/256
-*/
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { AlertBox, Field, Form, mergeDeep, FieldGroup, t } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import FormsLayout from "../../../layouts/forms"
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { disableContactFormOption } from "../../../lib/helpers"
+import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import {
+  AlertBox,
+  Field,
+  FieldGroup,
+  Form,
+  mergeDeep,
+  PhoneField,
+  Select,
+  t,
+} from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   contactPreferencesKeys,
   phoneNumberKeys,
@@ -22,6 +22,8 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import { disableContactFormOption } from "../../../lib/helpers"
 import { useFormConductor } from "../../../lib/hooks"
 import {
   FoundAddress,
@@ -40,7 +42,6 @@ const ApplicationAddress = () => {
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, setValue, watch, errors } = useForm<Record<string, any>>(
     {
@@ -126,6 +127,7 @@ const ApplicationAddress = () => {
     return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
   }, [verifyAddress, conductor])
 
+  // TODO
   // const backFunction = useCallback(() => {
   //   return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
   // }, [verifyAddress])

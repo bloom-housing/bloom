@@ -1,21 +1,15 @@
-/*
-2.2 - Add Members
-Add household members
-*/
 import React, { useContext, useEffect } from "react"
-import { useRouter } from "next/router"
-import { Button } from "@bloom-housing/ui-seeds"
-import { FormCard, t, Form, ProgressNav, Heading } from "@bloom-housing/ui-components"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
+import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { HouseholdSizeField } from "../../../components/applications/HouseholdSizeField"
 import { HouseholdMemberForm } from "../../../components/applications/HouseholdMemberForm"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationAddMembers = () => {
   const { profile } = useContext(AuthContext)
@@ -24,7 +18,6 @@ const ApplicationAddMembers = () => {
   const currentPageSection = 2
   const householdSize = application.householdMembers.length + 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, handleSubmit, register, clearErrors } = useForm()
   const onSubmit = () => {

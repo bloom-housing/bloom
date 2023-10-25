@@ -1,21 +1,8 @@
-/*
-3.1 Vouchers Subsidies
-Question asks if anyone on the application receives a housing voucher or subsidy.
-*/
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  Form,
-  FormCard,
-  t,
-  ProgressNav,
-  FieldGroup,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
+import { ApplicationSection } from "@bloom-housing/backend-core"
+import { AlertBox, Form, t, FieldGroup } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
   PageView,
@@ -23,11 +10,10 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import React, { useContext, useEffect } from "react"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationSection } from "@bloom-housing/backend-core"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
@@ -35,7 +21,7 @@ const ApplicationVouchers = () => {
   const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
     ? 4
     : 3
-  /* Form Handler */
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues } = useForm({
     defaultValues: { incomeVouchers: application.incomeVouchers?.toString() },

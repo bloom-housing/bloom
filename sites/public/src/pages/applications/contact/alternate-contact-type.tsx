@@ -1,30 +1,25 @@
-/*
-1.4 - Alternate Contact
-Type of alternate contact
-*/
 import React, { Fragment, useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
 import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { AlertBox, Field, Form, t } from "@bloom-housing/ui-components"
 import {
   altContactRelationshipKeys,
+  AuthContext,
   OnClientSide,
   PageView,
   pushGtmEvent,
-  AuthContext,
 } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationAlternateContactType = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm<Record<string, any>>({
     shouldFocusError: false,

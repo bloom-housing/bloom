@@ -1,26 +1,21 @@
-/*
-0.2 - What To Expect
-A notice regarding application process and rules
-*/
 import React, { useEffect, useContext, useMemo } from "react"
-import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../lib/constants"
 import Markdown from "markdown-to-jsx"
+import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import ApplicationFormLayout from "../../../layouts/application-form"
+import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, listing } = useFormConductor("whatToExpect")
   const router = useRouter()
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
     conductor.routeToNextOrReturnUrl()

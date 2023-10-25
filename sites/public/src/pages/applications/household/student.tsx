@@ -1,13 +1,10 @@
-/*
-2.5 Household Student
-*/
+import React, { useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
 import { AlertBox, FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
-import React, { useContext, useEffect } from "react"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
@@ -16,7 +13,6 @@ const ApplicationHouseholdStudent = () => {
   const { conductor, application, listing } = useFormConductor("householdStudent")
   const currentPageSection = 2
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues } = useForm<Record<string, any>>({
     defaultValues: { householdStudent: application.householdStudent?.toString() },

@@ -1,12 +1,15 @@
-/*
-1.4 - Alternate Contact
-Type of alternate contact
-*/
-import { AlertBox, Form, Field, t, emailRegex } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
+import {
+  AlertBox,
+  emailRegex,
+  Field,
+  Form,
+  PhoneField,
+  Select,
+  t,
+} from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
   PageView,
@@ -15,17 +18,15 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import FormsLayout from "../../../layouts/forms"
 
 export default () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactInfo")
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { control, register, handleSubmit, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,

@@ -1,8 +1,4 @@
-/*
- 0.1 - Choose Language
- Applicants are given the option to start the Application in one of a number of languages via button group. Once inside the application the applicant can use the language selection at the top of the page.
- https://github.com/bloom-housing/bloom/issues/277
- */
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
@@ -20,17 +16,15 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-
+import { Language } from "@bloom-housing/backend-core/types"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
-import React, { useCallback, useContext, useEffect, useState } from "react"
-import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
 const loadListing = async (listingId, stateFunction, conductor, context, language) => {

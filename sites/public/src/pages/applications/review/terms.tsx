@@ -1,10 +1,7 @@
-/*
-5.3 Terms
-View of application terms with checkbox
-*/
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
-import { Button } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
+import Markdown from "markdown-to-jsx"
 import {
   AppearanceStyleType,
   Button,
@@ -19,8 +16,6 @@ import {
   ApplicationReviewStatus,
   ListingReviewOrder,
 } from "@bloom-housing/backend-core"
-import { useForm } from "react-hook-form"
-import Markdown from "markdown-to-jsx"
 import {
   OnClientSide,
   PageView,
@@ -47,7 +42,6 @@ const ApplicationTerms = () => {
     currentPageSection += 1
   const applicationDueDate = new Date(listing?.applicationDueDate).toDateString()
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const onSubmit = (data) => {

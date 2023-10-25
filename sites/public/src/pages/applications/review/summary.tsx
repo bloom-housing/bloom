@@ -1,22 +1,15 @@
-/*
-5.2 Summary
-Display a summary of application fields with edit links per section
-*/
 import React, { useContext, useEffect, useState } from "react"
-import { Button } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
 import {
+  AlertBox,
   AppearanceStyleType,
   Button,
-  t,
   Form,
-  AlertBox,
   setSiteAlertMessage,
+  t,
 } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
-import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
-import { useFormConductor } from "../../../lib/hooks"
 import {
   OnClientSide,
   PageView,
@@ -24,9 +17,11 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import { UserStatus } from "../../../lib/constants"
 import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
-import { useRouter } from "next/router"
+import FormsLayout from "../../../layouts/forms"
+import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
+import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationSummary = () => {
@@ -39,7 +34,6 @@ const ApplicationSummary = () => {
   if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
     currentPageSection += 1
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
 
   useEffect(() => {

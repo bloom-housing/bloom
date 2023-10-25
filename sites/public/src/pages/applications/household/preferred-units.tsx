@@ -1,10 +1,7 @@
-/*
-2.3.2 - Preferred Unit Size
-Applicant can designate which unit sizes they prefer
-*/
-import { AlertBox, FieldGroup, Form, t } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { AlertBox, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   createUnitTypeId,
   getUniqueUnitTypes,
@@ -14,17 +11,15 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { useFormConductor } from "../../../lib/hooks"
-import { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import FormsLayout from "../../../layouts/forms"
 
 const ApplicationPreferredUnits = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("preferredUnitSize")
   const currentPageSection = 2
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
 

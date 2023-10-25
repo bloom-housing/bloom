@@ -1,24 +1,12 @@
-/*
-2.1a - Member Info
-A notice regarding adding household members
-*/
 import React, { useContext, useEffect } from "react"
-import { useRouter } from "next/router"
-import {
-  AppearanceStyleType,
-  AlertBox,
-  Button,
-  Form,
-  FormCard,
-  t,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../../lib/hooks"
+import { useRouter } from "next/router"
+import { AlertBox, Form, t } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationMembersInfo = () => {
   const { profile } = useContext(AuthContext)
@@ -26,7 +14,6 @@ const ApplicationMembersInfo = () => {
   const router = useRouter()
   const currentPageSection = 2
 
-  /* Form Handler */
   const { handleSubmit, errors } = useForm({
     shouldFocusError: false,
   })

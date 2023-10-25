@@ -1,6 +1,9 @@
-import { useContext, useState, useEffect, useCallback } from "react"
+import React, { useContext, useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/router"
+import { useForm } from "react-hook-form"
 import { Application } from "@bloom-housing/backend-core/types"
 import { AppearanceStyleType, Button, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   blankApplication,
   OnClientSide,
@@ -8,15 +11,12 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
-import { useRouter } from "next/router"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 export default () => {
   const router = useRouter()
@@ -31,7 +31,6 @@ export default () => {
 
   const mounted = OnClientSide()
 
-  /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = useCallback(() => {
     if (!submitted) {

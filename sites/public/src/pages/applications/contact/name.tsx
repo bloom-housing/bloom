@@ -1,10 +1,5 @@
-/*
-1.2 - Name
-Primary applicant details. Name, DOB and Email Address
-https://github.com/bloom-housing/bloom/issues/255
-*/
 import React, { useContext, useEffect, useState } from "react"
-import { Button } from "@bloom-housing/ui-seeds"
+import { useForm } from "react-hook-form"
 import {
   AlertBox,
   DOBField,
@@ -15,13 +10,12 @@ import {
   t,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationName = () => {
   const { profile } = useContext(AuthContext)
@@ -30,7 +24,6 @@ const ApplicationName = () => {
 
   const currentPageSection = 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, watch, errors } = useForm<Record<string, any>>({
     shouldFocusError: false,

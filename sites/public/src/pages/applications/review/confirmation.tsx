@@ -1,7 +1,3 @@
-/*
-5.4 Confirmation
-Application confirmation with lottery number (confirmation number)
-*/
 import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -15,10 +11,10 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
-import { Card, Heading } from "@bloom-housing/ui-seeds"
 
 const ApplicationConfirmation = () => {
   const { application, listing } = useContext(AppSubmissionContext)

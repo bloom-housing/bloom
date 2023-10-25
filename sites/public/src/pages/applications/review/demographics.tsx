@@ -1,13 +1,9 @@
-/*
-5.1 Demographics
-Optional demographic questions
-*/
 import React, { useContext, useEffect } from "react"
+import { useForm } from "react-hook-form"
+
 import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-
-import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
+import { ApplicationSection } from "@bloom-housing/backend-core"
 import {
   ethnicityKeys,
   raceKeys,
@@ -19,9 +15,9 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
-import { ApplicationSection } from "@bloom-housing/backend-core"
 import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationDemographics = () => {
@@ -32,7 +28,6 @@ const ApplicationDemographics = () => {
   if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length)
     currentPageSection += 1
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit } = useForm({
     defaultValues: {

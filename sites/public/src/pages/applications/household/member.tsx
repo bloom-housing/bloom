@@ -1,7 +1,3 @@
-/*
-2.2 - Add Members
-Add household members
-*/
 import React, { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
@@ -12,13 +8,11 @@ import {
   FieldGroup,
   Form,
   FormOptions,
+  Select,
   t,
 } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
-import FormsLayout from "../../../layouts/forms"
-import { useForm } from "react-hook-form"
-import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
-import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import {
   OnClientSide,
   PageView,
@@ -27,9 +21,11 @@ import {
   stateKeys,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import { useForm } from "react-hook-form"
+import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationMember = () => {
   const { profile } = useContext(AuthContext)
@@ -50,7 +46,6 @@ const ApplicationMember = () => {
     cancelText = t("application.household.member.cancelAddingThisPerson")
   }
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm({
     shouldFocusError: false,

@@ -1,7 +1,3 @@
-/*
-2.1 - Live Alone
-Asks whether the applicant will be adding any additional household members
-*/
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { AppearanceSizeType, Button, Form, t } from "@bloom-housing/ui-components"
@@ -19,7 +15,6 @@ const ApplicationLiveAlone = () => {
   const [validateHousehold, setValidateHousehold] = useState(true)
   const currentPageSection = 2
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, clearErrors } = useForm()
   const onSubmit = () => {

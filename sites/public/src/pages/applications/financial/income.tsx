@@ -1,26 +1,9 @@
-/*
-3.2 Income
-Total pre-tax household income from all sources
-*/
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
-import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  AlertNotice,
-  Field,
-  FieldGroup,
-  Form,
-  FormCard,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
-import { useFormConductor } from "../../../lib/hooks"
+import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
+import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
   PageView,
@@ -28,9 +11,10 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
+import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -68,7 +52,6 @@ const ApplicationIncome = () => {
     ? 4
     : 3
 
-  /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     defaultValues: {
