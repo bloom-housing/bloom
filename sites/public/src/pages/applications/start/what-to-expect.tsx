@@ -3,12 +3,7 @@
 A notice regarding application process and rules
 */
 import React, { useEffect, useContext, useMemo } from "react"
-<<<<<<< HEAD
-import { Button } from "@bloom-housing/ui-seeds"
-import { FormCard, t, ProgressNav, Form, Heading } from "@bloom-housing/ui-components"
-=======
 import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
->>>>>>> ade952c77 (feat: uptake seeds card)
 import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
@@ -110,24 +105,6 @@ const ApplicationWhatToExpect = () => {
               {content.finePrint}
             </Markdown>
           </div>
-<<<<<<< HEAD
-        </div>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => conductor.setNavigatedBack(false)}
-                id={"app-next-step-button"}
-              >
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
-=======
         </CardSection>
         <CardSection className={"bg-primary-lighter"}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -141,7 +118,6 @@ const ApplicationWhatToExpect = () => {
           </Form>
         </CardSection>
       </ApplicationFormLayout>
->>>>>>> ade952c77 (feat: uptake seeds card)
     </FormsLayout>
   )
 }

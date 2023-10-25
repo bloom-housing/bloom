@@ -124,37 +124,8 @@ const ApplicationChooseLanguage = () => {
           </CardSection>
         )}
 
-<<<<<<< HEAD
-        <div className="form-card__pager">
-          <div className="form-card__pager-row px-4">
-            {listing?.applicationConfig.languages.length > 1 && (
-              <>
-                <div className="w-full">
-                  <Heading styleType="underlineWeighted">
-                    {t("application.chooseLanguage.chooseYourLanguage")}
-                  </Heading>
-                </div>
-                {listing.applicationConfig.languages.map((lang, index) => (
-                  <Button
-                    variant="primary-outlined"
-                    className="language-select mx-1 mb-2"
-                    onClick={() => {
-                      onLanguageSelect(lang)
-                    }}
-                    key={index}
-                  >
-                    {t(`applications.begin.${lang}`)}
-                  </Button>
-                ))}
-              </>
-            )}
-          </div>
-
-          {initialStateLoaded && !profile && (
-=======
         {listing?.applicationConfig.languages.length > 1 && (
           <CardSection divider={"flush"}>
->>>>>>> ade952c77 (feat: uptake seeds card)
             <>
               <div>
                 <Heading styleType="underlineWeighted">

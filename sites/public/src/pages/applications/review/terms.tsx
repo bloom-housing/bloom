@@ -6,14 +6,14 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
 import {
-  FormCard,
+  AppearanceStyleType,
+  Button,
   t,
   FieldGroup,
   Form,
   AlertBox,
-  ProgressNav,
-  Heading,
 } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   ApplicationSection,
   ApplicationReviewStatus,
@@ -32,6 +32,8 @@ import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { untranslateMultiselectQuestion } from "../../../lib/helpers"
+import ApplicationFormLayout from "../../../layouts/application-form"
+
 const ApplicationTerms = () => {
   const router = useRouter()
   const { conductor, application, listing } = useFormConductor("terms")
@@ -127,84 +129,84 @@ const ApplicationTerms = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">{t("application.review.terms.title")}</h2>
-        </div>
+      <Form id="review-terms" onSubmit={handleSubmit(onSubmit)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.review.terms.title")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+        >
+          {apiError && (
+            <AlertBox type="alert" inverted onClose={() => setApiError(false)}>
+              {t("errors.alert.badRequest")}
+            </AlertBox>
+          )}
 
-        {apiError && (
-          <AlertBox type="alert" inverted onClose={() => setApiError(false)}>
-            {t("errors.alert.badRequest")}
-          </AlertBox>
-        )}
+          <CardSection divider={"flush"} className={"border-none"}>
+            <div className="markdown">
+              {listing?.applicationDueDate && (
+                <>
+                  <Markdown options={{ disableParsingRawHTML: true }}>
+                    {t("application.review.terms.textSubmissionDate", {
+                      applicationDueDate: applicationDueDate,
+                    })}
+                  </Markdown>
+                  <br />
+                  <br />
+                </>
+              )}
 
-        <Form id="review-terms" className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager-row markdown">
-            {listing?.applicationDueDate && (
-              <>
-                <Markdown options={{ disableParsingRawHTML: true }}>
-                  {t("application.review.terms.textSubmissionDate", {
-                    applicationDueDate: applicationDueDate,
-                  })}
-                </Markdown>
-                <br />
-                <br />
-              </>
-            )}
-
-            <Markdown
-              options={{
-                disableParsingRawHTML: true,
-                overrides: {
-                  li: {
-                    component: ({ children, ...props }) => (
-                      <li {...props} className="mb-5">
-                        {children}
-                      </li>
-                    ),
+              <Markdown
+                options={{
+                  disableParsingRawHTML: true,
+                  overrides: {
+                    li: {
+                      component: ({ children, ...props }) => (
+                        <li {...props} className="mb-5">
+                          {children}
+                        </li>
+                      ),
+                    },
                   },
-                },
-              }}
-            >
-              {content.text}
-            </Markdown>
-
-            <div className="mt-6">
-              <FieldGroup
-                name="agree"
-                type="checkbox"
-                fields={agreeField}
-                register={register}
-                validation={{ required: true }}
-                error={errors.agree}
-                errorMessage={t("errors.agreeError")}
-                fieldLabelClassName={"text-primary"}
-                dataTestId={"app-terms-agree"}
-              />
-            </div>
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                loadingMessage={submitting && t("t.formSubmitted")}
-                variant="primary"
-                id={"app-terms-submit-button"}
+                }}
               >
-                {t("t.submit")}
-              </Button>
+                {content.text}
+              </Markdown>
+
+              <div className="mt-6">
+                <FieldGroup
+                  name="agree"
+                  type="checkbox"
+                  fields={agreeField}
+                  register={register}
+                  validation={{ required: true }}
+                  error={errors.agree}
+                  errorMessage={t("errors.agreeError")}
+                  fieldLabelClassName={"text-primary"}
+                  dataTestId={"app-terms-agree"}
+                />
+              </div>
             </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+          <CardSection className={"bg-primary-lighter"}>
+            <Button
+              loading={submitting}
+              styleType={AppearanceStyleType.primary}
+              type="submit"
+              data-testid={"app-terms-submit-button"}
+            >
+              {t("t.submit")}
+            </Button>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

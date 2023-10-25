@@ -5,14 +5,14 @@ Display a summary of application fields with edit links per section
 import React, { useContext, useEffect, useState } from "react"
 import { Button } from "@bloom-housing/ui-seeds"
 import {
-  FormCard,
+  AppearanceStyleType,
+  Button,
   t,
   Form,
-  ProgressNav,
-  Heading,
   AlertBox,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
@@ -27,6 +27,7 @@ import {
 import { UserStatus } from "../../../lib/constants"
 import { ApplicationReviewStatus, ApplicationSection } from "@bloom-housing/backend-core"
 import { useRouter } from "next/router"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -84,58 +85,54 @@ const ApplicationSummary = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <div className="form-card__lead">
-          <h2 className="form-card__title is-borderless">
-            {t("application.review.takeAMomentToReview")}
-          </h2>
-        </div>
-        {validationError && (
-          <AlertBox type="alert" inverted>
-            {t("errors.alert.applicationSubmissionVerificationError")}
-          </AlertBox>
-        )}
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.review.takeAMomentToReview")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+        >
+          {validationError && (
+            <AlertBox type="alert" inverted>
+              {t("errors.alert.applicationSubmissionVerificationError")}
+            </AlertBox>
+          )}
 
-        <FormSummaryDetails
-          application={application}
-          listing={listing}
-          hidePreferences={
-            listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
-          }
-          hidePrograms={listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0}
-          editMode
-          validationError={validationError}
-        />
+          <FormSummaryDetails
+            application={application}
+            listing={listing}
+            hidePreferences={
+              listingSectionQuestions(listing, ApplicationSection.preferences)?.length === 0
+            }
+            hidePrograms={
+              listingSectionQuestions(listing, ApplicationSection.programs)?.length === 0
+            }
+            editMode
+            validationError={validationError}
+          />
 
-        <div className="form-card__group">
-          <p className="field-note text-gray-800 text-center">
-            {t("application.review.lastChanceToEdit")}
-          </p>
-        </div>
+          <CardSection divider={"flush"} className={"border-none"}>
+            <p className="field-note text-gray-800">{t("application.review.lastChanceToEdit")}</p>
+          </CardSection>
 
-        <div className="form-card__pager">
-          <div className="form-card__pager-row primary">
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button
-                type="submit"
-                variant="primary"
-                id={"app-summary-confirm"}
-                disabled={validationError}
-              >
-                {t("t.confirm")}
-              </Button>
-            </Form>
-          </div>
-        </div>
-      </FormCard>
+          <CardSection className={"bg-primary-lighter"}>
+            <Button
+              styleType={validationError ? AppearanceStyleType.closed : AppearanceStyleType.primary}
+              data-testid={"app-summary-confirm"}
+              disabled={validationError}
+            >
+              {t("t.confirm")}
+            </Button>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

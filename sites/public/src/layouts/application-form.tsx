@@ -79,10 +79,9 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
             </Button>
 
             {props.conductor.canJumpForwardToReview() && (
-              <div className="form-card__pager-row">
+              <div>
                 <Button
-                  unstyled={true}
-                  className="mb-4"
+                  className="mt-4"
                   onClick={() => {
                     props.conductor.returnToReview = true
                     props.conductor.setNavigatedBack(false)

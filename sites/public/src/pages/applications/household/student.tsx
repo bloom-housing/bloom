@@ -1,25 +1,15 @@
 /*
 2.5 Household Student
 */
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  AlertBox,
-  FieldGroup,
-  Form,
-  FormCard,
-  Heading,
-  ProgressNav,
-  t,
-} from "@bloom-housing/ui-components"
+import { AlertBox, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import React, { useContext, useEffect } from "react"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 const ApplicationHouseholdStudent = () => {
   const { profile } = useContext(AuthContext)

@@ -3,16 +3,9 @@
 Optional demographic questions
 */
 import React, { useContext, useEffect } from "react"
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  FieldGroup,
-  Form,
-  FormCard,
-  Select,
-  ProgressNav,
-  t,
-  Heading,
-} from "@bloom-housing/ui-components"
+import { FieldGroup, Form, Select, t } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import {
@@ -26,10 +19,10 @@ import {
   AuthContext,
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
-import FormBackLink from "../../../components/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { ApplicationSection } from "@bloom-housing/backend-core"
+import ApplicationFormLayout from "../../../layouts/application-form"
 
 const ApplicationDemographics = () => {
   const { profile } = useContext(AuthContext)
@@ -80,29 +73,23 @@ const ApplicationDemographics = () => {
 
   return (
     <FormsLayout>
-      <FormCard header={<Heading priority={1}>{listing?.name}</Heading>}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
-        />
-      </FormCard>
-      <FormCard>
-        <FormBackLink
-          url={conductor.determinePreviousUrl()}
-          onClick={() => conductor.setNavigatedBack(true)}
-        />
-
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">
-            {t("application.review.demographics.title")}
-          </h2>
-          <p className="mt-4 field-note">{t("application.review.demographics.subTitle")}</p>
-        </div>
-
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group border-b">
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <ApplicationFormLayout
+          listingName={listing?.name}
+          heading={t("application.review.demographics.title")}
+          subheading={t("application.review.demographics.subTitle")}
+          progressNavProps={{
+            currentPageSection: currentPageSection,
+            completedSections: application.completedSections,
+            labels: conductor.config.sections.map((label) => t(`t.${label}`)),
+            mounted: OnClientSide(),
+          }}
+          backLink={{
+            url: conductor.determinePreviousUrl(),
+          }}
+          conductor={conductor}
+        >
+          <CardSection divider={"inset"}>
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.review.demographics.raceLabel")}
@@ -142,9 +129,9 @@ const ApplicationDemographics = () => {
                 dataTestId={"app-demographics-ethnicity"}
               />
             </div>
-          </div>
+          </CardSection>
 
-          <div className="form-card__group is-borderless">
+          <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="text__caps-spaced">
                 {t("application.review.demographics.howDidYouHearLabel")}
@@ -157,17 +144,9 @@ const ApplicationDemographics = () => {
                 dataTestId={"app-demographics-how-did-you-hear"}
               />
             </fieldset>
-          </div>
-
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button type="submit" variant="primary" id={"app-next-step-button"}>
-                {t("t.next")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+          </CardSection>
+        </ApplicationFormLayout>
+      </Form>
     </FormsLayout>
   )
 }

@@ -6,8 +6,8 @@ import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
-import { Button } from "@bloom-housing/ui-seeds"
-import { FormCard, t, ApplicationTimeline } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Button, t, ApplicationTimeline } from "@bloom-housing/ui-components"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
   imageUrlFromListing,
@@ -18,6 +18,7 @@ import {
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
+import { Card, Heading } from "@bloom-housing/ui-seeds"
 
 const ApplicationConfirmation = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -55,17 +56,17 @@ const ApplicationConfirmation = () => {
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead">
-          <h1 className="form-card__title is-borderless">
+      <Card spacing={"lg"}>
+        <CardSection divider={"flush"}>
+          <Heading priority={1} size={"2xl"}>
             {t("application.review.confirmation.title")}
             {listing?.name}
-          </h1>
-        </div>
+          </Heading>
+        </CardSection>
 
         {imageUrl && <img src={imageUrl} alt={listing?.name} />}
 
-        <div className="form-card__group border-b text-center">
+        <CardSection divider={"flush"}>
           <h2 className="form-card__paragraph-title">
             {t("application.review.confirmation.lotteryNumber")}
           </h2>
@@ -78,36 +79,42 @@ const ApplicationConfirmation = () => {
             {application.confirmationCode || application.id}
           </p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
-        </div>
+        </CardSection>
 
-        <div className="form-card__group border-b markdown markdown-informational">
-          <ApplicationTimeline />
+        <CardSection divider={"inset"}>
+          <div className="markdown markdown-informational">
+            <ApplicationTimeline />
 
-          <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
-        </div>
+            <Markdown options={{ disableParsingRawHTML: true }}>{content.text}</Markdown>
+          </div>
+        </CardSection>
 
-        <div className="form-card__group border-b markdown markdown-informational">
-          <Markdown options={{ disableParsingRawHTML: true }}>
-            {t("application.review.confirmation.needToMakeUpdates", {
-              agentName: listing?.leasingAgentName || "",
-              agentPhone: listing?.leasingAgentPhone || "",
-              agentEmail: listing?.leasingAgentEmail || "",
-              agentOfficeHours: listing?.leasingAgentOfficeHours || "",
-            })}
-          </Markdown>
-        </div>
-
-        {initialStateLoaded && !profile && (
-          <div className="form-card__group markdown markdown-informational">
+        <CardSection divider={"inset"}>
+          <div className="markdown markdown-informational">
             <Markdown options={{ disableParsingRawHTML: true }}>
-              {t("application.review.confirmation.createAccount")}
+              {t("application.review.confirmation.needToMakeUpdates", {
+                agentName: listing?.leasingAgentName || "",
+                agentPhone: listing?.leasingAgentPhone || "",
+                agentEmail: listing?.leasingAgentEmail || "",
+                agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+              })}
             </Markdown>
           </div>
+        </CardSection>
+
+        {initialStateLoaded && !profile && (
+          <CardSection divider={"flush"} className={"border-none"}>
+            <div className="markdown markdown-informational">
+              <Markdown options={{ disableParsingRawHTML: true }}>
+                {t("application.review.confirmation.createAccount")}
+              </Markdown>
+            </div>
+          </CardSection>
         )}
 
         <div className="form-card__pager">
           {initialStateLoaded && !profile && (
-            <div className="form-card__pager-row primary">
+            <CardSection className={"bg-primary-lighter border-none"} divider={"flush"}>
               <Button
                 variant="primary"
                 onClick={() => {
@@ -117,22 +124,22 @@ const ApplicationConfirmation = () => {
               >
                 {t("account.createAccount")}
               </Button>
-            </div>
+            </CardSection>
           )}
 
-          <div className="form-card__pager-row py-6">
-            <span className="lined text-sm" data-testid={"app-confirmation-browse"}>
+          <CardSection divider={"flush"}>
+            <span className="underline text-sm" data-testid={"app-confirmation-browse"}>
               <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
             </span>
-          </div>
+          </CardSection>
 
-          <div className="form-card__pager-row py-6 border-t">
-            <span className="lined text-sm" data-testid={"app-confirmation-print"}>
+          <CardSection>
+            <span className="underline text-sm" data-testid={"app-confirmation-print"}>
               <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
             </span>
-          </div>
+          </CardSection>
         </div>
-      </FormCard>
+      </Card>
     </FormsLayout>
   )
 }
