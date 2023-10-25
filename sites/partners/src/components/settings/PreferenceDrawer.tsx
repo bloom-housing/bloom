@@ -44,10 +44,10 @@ type PreferenceDrawerProps = {
 
 type OptionForm = {
   collectAddress: YesNoAnswer
-  collectRelationship?: YesNoAnswer
-  collectName?: YesNoAnswer
   validationMethod?: ValidationMethod
   radiusSize?: string
+  collectRelationship?: YesNoAnswer
+  collectName?: YesNoAnswer
   exclusiveQuestion: "exclusive" | "multiselect"
   optionDescription: string
   optionLinkTitle: string
@@ -623,7 +623,7 @@ const PreferenceDrawer = ({
                     ]}
                     fieldClassName="m-0"
                     fieldGroupClassName="flex flex-col"
-                    dataTestId={"preference-option-collect-address"}
+                    dataTestId={"preference-option-validation-method"}
                   />
                 </FieldValue>
               )}
@@ -641,7 +641,7 @@ const PreferenceDrawer = ({
                     type="number"
                     readerOnly
                     defaultValue={optionData?.radiusSize ?? null}
-                    dataTestId={"radius-size"}
+                    dataTestId={"preference-option-radius-size"}
                   />
                 </FieldValue>
               )}
@@ -686,7 +686,7 @@ const PreferenceDrawer = ({
                     ]}
                     fieldClassName="m-0"
                     fieldGroupClassName="flex column items-center"
-                    dataTestId={"preference-option-collect-address-holder-name"}
+                    dataTestId={"preference-option-collect-name"}
                   />
                 </FieldValue>
               </GridCell>
@@ -728,7 +728,7 @@ const PreferenceDrawer = ({
                     ]}
                     fieldClassName="m-0"
                     fieldGroupClassName="flex"
-                    dataTestId={"preference-option-collect-address-holder-relationship"}
+                    dataTestId={"preference-option-collect-relationship"}
                   />
                 </FieldValue>
               </GridCell>
