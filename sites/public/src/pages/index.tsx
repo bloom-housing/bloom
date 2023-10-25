@@ -8,8 +8,9 @@ import {
   t,
   SiteAlert,
   AppearanceSizeType,
+  InfoCard,
 } from "@bloom-housing/ui-components"
-import { ActionBlock, DoorwayHero, InfoCard } from "@bloom-housing/doorway-ui-components"
+import { ActionBlock, DoorwayHero } from "@bloom-housing/doorway-ui-components"
 import { PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"

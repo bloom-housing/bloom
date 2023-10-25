@@ -1,6 +1,6 @@
 import React from "react"
 
-import { InfoCard } from "../blocks/InfoCard"
+import { InfoCard } from "@bloom-housing/ui-components"
 import { InfoCardGrid } from "./InfoCardGrid"
 import { ExpandableText } from "../actions/ExpandableText"
 

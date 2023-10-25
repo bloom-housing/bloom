@@ -1,6 +1,6 @@
 import * as React from "react"
 import { GridSection, GridCell } from "../../sections/GridSection"
-import { InfoCard } from "../../blocks/InfoCard"
+import { InfoCard } from "@bloom-housing/ui-components"
 
 export interface AdditionalFeesProps {
   /** The application fee for the property, rendered in the first block */
