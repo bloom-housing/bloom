@@ -636,7 +636,7 @@ const PreferenceDrawer = ({
                     name="radiusSize"
                     label={t("settings.preferenceValidatingAddress.howManyMiles")}
                     register={register}
-                    validation={{ required: true }}
+                    validation={{ required: true, min: 0 }}
                     error={errors.radiusSize}
                     type="number"
                     readerOnly
