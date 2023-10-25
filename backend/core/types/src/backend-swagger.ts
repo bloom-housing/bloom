@@ -4515,7 +4515,19 @@ export interface MultiselectOption {
   links?: MultiselectLink[]
 
   /**  */
-  collectAddress?: boolean
+  collectAddress: boolean
+
+  /**  */
+  validationMethod?: ValidationMethod
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
 
   /**  */
   exclusive?: boolean
@@ -6354,6 +6366,12 @@ export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
+}
+
+export enum ValidationMethod {
+  "radius" = "radius",
+  "map" = "map",
+  "none" = "none",
 }
 
 export enum ApplicationSection {

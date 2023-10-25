@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
   AppearanceSizeType,
   AppearanceStyleType,
@@ -8,13 +8,13 @@ import {
   FieldGroup,
   GridCell,
   GridSection,
-  Select,
-  Textarea,
-  t,
   MinimalTable,
+  Select,
   StandardTableData,
+  t,
+  Textarea,
 } from "@bloom-housing/ui-components"
-import { FormErrorMessage, FieldValue } from "@bloom-housing/ui-seeds"
+import { FieldValue, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "../../lib/helpers"
@@ -24,6 +24,7 @@ import {
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
+  ValidationMethod,
 } from "@bloom-housing/backend-core"
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings/index"
@@ -42,7 +43,11 @@ type PreferenceDrawerProps = {
 }
 
 type OptionForm = {
-  collectAddress: boolean
+  collectAddress: YesNoAnswer
+  collectRelationship?: YesNoAnswer
+  collectName?: YesNoAnswer
+  validationMethod?: ValidationMethod
+  radiusSize?: string
   exclusiveQuestion: "exclusive" | "multiselect"
   optionDescription: string
   optionLinkTitle: string
@@ -89,6 +94,14 @@ const PreferenceDrawer = ({
   }, [questionData])
 
   const optOutQuestion = watch("canYouOptOutQuestion")
+
+  const collectAddressExpand =
+    (optionData?.collectAddress && watch("collectAddress") === undefined) ||
+    watch("collectAddress") === YesNoAnswer.Yes
+  const readiusExpand =
+    (optionData?.validationMethod === ValidationMethod.radius &&
+      watch("validationMethod") === undefined) ||
+    watch("validationMethod") === ValidationMethod.radius
 
   // Update local state with dragged state
   useEffect(() => {
@@ -524,22 +537,203 @@ const PreferenceDrawer = ({
               </FieldValue>
             </GridCell>
           </GridSection>
-          <GridSection columns={3} className={"mt-8"}>
+          <GridSection
+            title={t("settings.preferenceAdditionalFields")}
+            columns={4}
+            wrapperClassName={"border-t pt-8 mt-8"}
+          >
+            <GridCell span={1}>
+              <FieldValue label={t("settings.preferenceCollectAddress")}>
+                <>
+                  <FieldGroup
+                    name="collectAddress"
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.collectAddress}
+                    fields={[
+                      {
+                        label: t("t.yes"),
+                        value: YesNoAnswer.Yes,
+                        defaultChecked: optionData?.collectAddress,
+                        id: "collectAddressYes",
+                        dataTestId: "collect-address-yes",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("collectAddress")
+                          },
+                        },
+                      },
+                      {
+                        label: t("t.no"),
+                        value: YesNoAnswer.No,
+                        defaultChecked:
+                          optionData?.collectAddress !== undefined &&
+                          optionData?.collectAddress === false,
+                        id: "collectAddressNo",
+                        dataTestId: "collect-address-no",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("collectAddress")
+                          },
+                        },
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex column items-center"
+                    dataTestId={"preference-option-collect-address"}
+                  />
+                </>
+              </FieldValue>
+            </GridCell>
+            <GridCell span={1}>
+              {collectAddressExpand && (
+                <FieldValue label={t("settings.preferenceValidatingAddress")}>
+                  <FieldGroup
+                    name="validationMethod"
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.validationMethod}
+                    fields={[
+                      {
+                        label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
+                        value: ValidationMethod.radius,
+                        defaultChecked: optionData?.validationMethod === ValidationMethod.radius,
+                        id: "validationMethodRadius",
+                        dataTestId: "validation-method-radius",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("validationMethod")
+                          },
+                        },
+                      },
+                      {
+                        label: t("settings.preferenceValidatingAddress.checkManually"),
+                        value: ValidationMethod.none,
+                        defaultChecked: optionData?.validationMethod === ValidationMethod.none,
+                        id: "validationMethodNone",
+                        dataTestId: "validation-method-none",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("validationMethod")
+                          },
+                        },
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex flex-col"
+                    dataTestId={"preference-option-collect-address"}
+                  />
+                </FieldValue>
+              )}
+            </GridCell>
             <GridCell>
-              <Field
-                type="checkbox"
-                id="collectAddress"
-                name="collectAddress"
-                label={t("settings.preferenceCollectAddress")}
-                register={register}
-                dataTestId={"preference-option-collect-address"}
-                controlClassName={"font-normal"}
-                inputProps={{
-                  defaultChecked: optionData?.collectAddress,
-                }}
-              />
+              {collectAddressExpand && readiusExpand && (
+                <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
+                  <Field
+                    id="radiusSize"
+                    name="radiusSize"
+                    label={t("settings.preferenceValidatingAddress.howManyMiles")}
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.radiusSize}
+                    type="number"
+                    readerOnly
+                    defaultValue={optionData?.radiusSize ?? null}
+                    dataTestId={"radius-size"}
+                  />
+                </FieldValue>
+              )}
             </GridCell>
           </GridSection>
+          {collectAddressExpand && (
+            <GridSection columns={4} className={"mt-8"}>
+              <GridCell span={1}>
+                <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                  <FieldGroup
+                    name="collectName"
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.collectName}
+                    fields={[
+                      {
+                        label: t("t.yes"),
+                        value: YesNoAnswer.Yes,
+                        defaultChecked: optionData?.collectName,
+                        id: "collectNameYes",
+                        dataTestId: "collect-name-yes",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("collectName")
+                          },
+                        },
+                      },
+                      {
+                        label: t("t.no"),
+                        value: YesNoAnswer.No,
+                        defaultChecked:
+                          optionData?.collectName !== undefined && !optionData?.collectName,
+                        id: "collectNameNo",
+                        dataTestId: "collect-name-no",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("collectName")
+                          },
+                        },
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex column items-center"
+                    dataTestId={"preference-option-collect-address-holder-name"}
+                  />
+                </FieldValue>
+              </GridCell>
+              <GridCell span={1}>
+                <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
+                  <FieldGroup
+                    name="collectRelationship"
+                    type="radio"
+                    register={register}
+                    validation={{ required: true }}
+                    error={errors.collectRelationship}
+                    fields={[
+                      {
+                        label: t("t.yes"),
+                        value: YesNoAnswer.Yes,
+                        defaultChecked: optionData?.collectRelationship,
+                        id: "collectRelationshipYes",
+                        dataTestId: "collect-relationship-yes",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("collectRelationship")
+                          },
+                        },
+                      },
+                      {
+                        label: t("t.no"),
+                        value: YesNoAnswer.No,
+                        defaultChecked:
+                          optionData?.collectRelationship !== undefined &&
+                          !optionData?.collectRelationship,
+                        id: "collectRelationshipNo",
+                        dataTestId: "collect-relationship-no",
+                        inputProps: {
+                          onChange: () => {
+                            clearErrors("collectRelationship")
+                          },
+                        },
+                      },
+                    ]}
+                    fieldClassName="m-0"
+                    fieldGroupClassName="flex"
+                    dataTestId={"preference-option-collect-address-holder-relationship"}
+                  />
+                </FieldValue>
+              </GridCell>
+            </GridSection>
+          )}
           <GridSection>
             <GridCell>
               <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
@@ -587,6 +781,19 @@ const PreferenceDrawer = ({
             const existingOptionData = questionData?.options?.find(
               (option) => optionData?.ordinal === option.ordinal
             )
+            if (
+              Object.keys(formState.errors).some((field) =>
+                [
+                  "collectAddress",
+                  "collectName",
+                  "collectRelationship",
+                  "validationMethod",
+                  "radiusSize",
+                ].includes(field)
+              )
+            ) {
+              return
+            }
 
             const getNewOrdinal = () => {
               if (existingOptionData) return existingOptionData.ordinal
@@ -600,8 +807,16 @@ const PreferenceDrawer = ({
                 ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
                 : [],
               ordinal: getNewOrdinal(),
-              collectAddress: formData.collectAddress,
               exclusive: formData.exclusiveQuestion === "exclusive",
+              collectAddress: formData.collectAddress === YesNoAnswer.Yes,
+            }
+            if (formData.collectAddress === YesNoAnswer.Yes) {
+              newOptionData.validationMethod = formData.validationMethod
+              newOptionData.collectRelationship = formData.collectRelationship === YesNoAnswer.Yes
+              newOptionData.collectName = formData.collectName === YesNoAnswer.Yes
+            }
+            if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
+              newOptionData.radiusSize = parseFloat(formData.radiusSize)
             }
             let newOptions = []
 
