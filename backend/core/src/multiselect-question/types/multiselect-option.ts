@@ -38,7 +38,7 @@ export class MultiselectOption {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   collectAddress?: boolean
 
   @Expose()

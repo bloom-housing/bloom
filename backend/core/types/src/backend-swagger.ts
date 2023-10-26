@@ -4515,7 +4515,7 @@ export interface MultiselectOption {
   links?: MultiselectLink[]
 
   /**  */
-  collectAddress: boolean
+  collectAddress?: boolean
 
   /**  */
   validationMethod?: ValidationMethod
