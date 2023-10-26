@@ -539,51 +539,49 @@ const PreferenceDrawer = ({
           </GridSection>
           <GridSection
             title={t("settings.preferenceAdditionalFields")}
-            columns={4}
+            columns={3}
             wrapperClassName={"border-t pt-8 mt-8"}
           >
             <GridCell span={1}>
               <FieldValue label={t("settings.preferenceCollectAddress")}>
-                <>
-                  <FieldGroup
-                    name="collectAddress"
-                    type="radio"
-                    register={register}
-                    validation={{ required: true }}
-                    error={errors.collectAddress}
-                    fields={[
-                      {
-                        label: t("t.yes"),
-                        value: YesNoAnswer.Yes,
-                        defaultChecked: optionData?.collectAddress,
-                        id: "collectAddressYes",
-                        dataTestId: "collect-address-yes",
-                        inputProps: {
-                          onChange: () => {
-                            clearErrors("collectAddress")
-                          },
+                <FieldGroup
+                  name="collectAddress"
+                  type="radio"
+                  register={register}
+                  validation={{ required: true }}
+                  error={errors.collectAddress}
+                  fields={[
+                    {
+                      label: t("t.yes"),
+                      value: YesNoAnswer.Yes,
+                      defaultChecked: optionData?.collectAddress,
+                      id: "collectAddressYes",
+                      dataTestId: "collect-address-yes",
+                      inputProps: {
+                        onChange: () => {
+                          clearErrors("collectAddress")
                         },
                       },
-                      {
-                        label: t("t.no"),
-                        value: YesNoAnswer.No,
-                        defaultChecked:
-                          optionData?.collectAddress !== undefined &&
-                          optionData?.collectAddress === false,
-                        id: "collectAddressNo",
-                        dataTestId: "collect-address-no",
-                        inputProps: {
-                          onChange: () => {
-                            clearErrors("collectAddress")
-                          },
+                    },
+                    {
+                      label: t("t.no"),
+                      value: YesNoAnswer.No,
+                      defaultChecked:
+                        optionData?.collectAddress !== undefined &&
+                        optionData?.collectAddress === false,
+                      id: "collectAddressNo",
+                      dataTestId: "collect-address-no",
+                      inputProps: {
+                        onChange: () => {
+                          clearErrors("collectAddress")
                         },
                       },
-                    ]}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex column items-center"
-                    dataTestId={"preference-option-collect-address"}
-                  />
-                </>
+                    },
+                  ]}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex column items-center"
+                  dataTestId={"preference-option-collect-address"}
+                />
               </FieldValue>
             </GridCell>
             <GridCell span={1}>
@@ -648,7 +646,7 @@ const PreferenceDrawer = ({
             </GridCell>
           </GridSection>
           {collectAddressExpand && (
-            <GridSection columns={4} className={"mt-8"}>
+            <GridSection columns={3} className={"mt-8"}>
               <GridCell span={1}>
                 <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
                   <FieldGroup
