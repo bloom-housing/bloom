@@ -104,9 +104,9 @@ const DetailApplicationDates = () => {
                   </FieldValue>
                   <FieldValue id="drawer.url" label={t("t.url")}>
                     {drawer?.url ? (
-                      <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
+                      <Link className="mx-0 my-0" href={drawer.url}>
                         {drawer?.label ?? t("t.url")}
-                      </LinkButton>
+                      </Link>
                     ) : (
                       t("t.n/a")
                     )}

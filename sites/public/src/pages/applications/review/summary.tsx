@@ -124,11 +124,7 @@ const ApplicationSummary = () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button
-                variant="primary"
-                id={"app-summary-confirm"}
-                disabled={validationError}
-              >
+              <Button variant="primary" id={"app-summary-confirm"} disabled={validationError}>
                 {t("t.confirm")}
               </Button>
             </Form>

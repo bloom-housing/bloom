@@ -1,14 +1,6 @@
 import React, { useMemo, useContext, useState, useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import {
-  t,
-  Form,
-  Field,
-  Select,
-  useMutate,
-  emailRegex,
-  Modal,
-} from "@bloom-housing/ui-components"
+import { t, Form, Field, Select, useMutate, emailRegex, Modal } from "@bloom-housing/ui-components"
 import { Button, Card, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
@@ -455,7 +447,7 @@ const FormUserManage = ({
           <Button
             type="button"
             variant="alert"
-            loadingMessage={isDeleteUserLoading}
+            loadingMessage={isDeleteUserLoading && t("t.formSubmitted")}
             onClick={() => {
               onDelete()
             }}

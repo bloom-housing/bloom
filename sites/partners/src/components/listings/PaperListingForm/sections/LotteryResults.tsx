@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, Drawer, Dropzone, MinimalTable, TableThumbnail } from "@bloom-housing/ui-components"
+import {
+  t,
+  Drawer,
+  Dropzone,
+  MinimalTable,
+  TableThumbnail,
+  StandardTableData,
+} from "@bloom-housing/ui-components"
 import {
   ListingEvent,
   ListingEventCreate,

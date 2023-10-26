@@ -8,7 +8,7 @@ export type ResendConfirmationModalProps = {
   initialEmailValue: string
   onClose: () => void
   onSubmit: (email: string) => void
-  loading: boolean
+  loadingMessage?: string
 }
 
 export type ResendConfirmationModalForm = {
@@ -18,7 +18,7 @@ export type ResendConfirmationModalForm = {
 const ResendConfirmationModal = ({
   isOpen,
   initialEmailValue,
-  loading,
+  loadingMessage,
   onClose,
   onSubmit,
 }: ResendConfirmationModalProps) => {
@@ -59,14 +59,10 @@ const ResendConfirmationModal = ({
           type="button"
           variant="primary"
           onClick={() => onFormSubmit()}
-          disabled={loading}
+          loadingMessage={loadingMessage}
           size="sm"
         >
-          {loading ? (
-            <Icon symbol="spinner" size="base" />
-          ) : (
-            t("authentication.createAccount.resendTheEmail")
-          )}
+          {t("authentication.createAccount.resendTheEmail")}
         </Button>,
         <Button
           type="button"

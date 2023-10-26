@@ -5,13 +5,7 @@ If all preferences are opted out the applicant is shown a screen confirming thei
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  FormCard,
-  Heading,
-  t,
-  Form,
-  ProgressNav,
-} from "@bloom-housing/ui-components"
+import { FormCard, Heading, t, Form, ProgressNav } from "@bloom-housing/ui-components"
 import { ApplicationSection } from "@bloom-housing/backend-core"
 import {
   OnClientSide,

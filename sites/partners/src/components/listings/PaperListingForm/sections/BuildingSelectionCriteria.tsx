@@ -8,6 +8,7 @@ import {
   MinimalTable,
   TableThumbnail,
   FieldGroup,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import { Button, Card, FieldValue, Grid, Heading } from "@bloom-housing/ui-seeds"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"

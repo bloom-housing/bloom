@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from "react"
 import dayjs from "dayjs"
 import { t, StatusMessages, Modal } from "@bloom-housing/ui-components"
-import { Button, Grid } from "@bloom-housing/ui-seeds"
+import { Button, Grid, Link } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "./ApplicationContext"
 import { StatusAside } from "../shared/StatusAside"
 
@@ -33,10 +33,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
 
     const cancel = (
       <Grid.Cell className="flex" key="btn-cancel">
-        <Link
-          className="w-100"
-          href={`/listings/${listingId}/applications`}
-        >
+        <Link className="w-100" href={`/listings/${listingId}/applications`}>
           {t("t.cancel")}
         </Link>
       </Grid.Cell>

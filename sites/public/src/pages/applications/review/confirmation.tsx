@@ -7,11 +7,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  FormCard,
-  t,
-  ApplicationTimeline,
-} from "@bloom-housing/ui-components"
+import { FormCard, t, ApplicationTimeline } from "@bloom-housing/ui-components"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
   imageUrlFromListing,

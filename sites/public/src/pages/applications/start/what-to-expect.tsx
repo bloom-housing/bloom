@@ -4,13 +4,7 @@ A notice regarding application process and rules
 */
 import React, { useEffect, useContext, useMemo } from "react"
 import { Button } from "@bloom-housing/ui-seeds"
-import {
-  FormCard,
-  t,
-  ProgressNav,
-  Form,
-  Heading,
-} from "@bloom-housing/ui-components"
+import { FormCard, t, ProgressNav, Form, Heading } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
