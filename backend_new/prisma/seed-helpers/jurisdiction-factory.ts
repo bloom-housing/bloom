@@ -1,8 +1,9 @@
-import { LanguagesEnum, Prisma } from '@prisma/client';
+import { LanguagesEnum, Prisma, UserRoleEnum } from '@prisma/client';
 import { randomName } from './word-generator';
 
 export const jurisdictionFactory = (
   jurisdictionName = randomName(),
+  listingApprovalPermissions?: UserRoleEnum[],
 ): Prisma.JurisdictionsCreateInput => ({
   name: jurisdictionName,
   notificationsSignUpUrl: null,
@@ -15,4 +16,5 @@ export const jurisdictionFactory = (
   enablePartnerSettings: true,
   enableAccessibilityFeatures: true,
   enableUtilitiesIncluded: true,
+  listingApprovalPermissions: listingApprovalPermissions || [],
 });

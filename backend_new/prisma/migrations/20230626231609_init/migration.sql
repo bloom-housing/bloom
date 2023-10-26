@@ -2,6 +2,9 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- CreateEnum
+CREATE TYPE "user_role_enum" AS ENUM ('user', 'partner', 'admin', 'jurisdictionAdmin');
+
+-- CreateEnum
 CREATE TYPE "application_methods_type_enum" AS ENUM ('Internal', 'FileDownload', 'ExternalLink', 'PaperPickup', 'POBox', 'LeasingAgent', 'Referral');
 
 -- CreateEnum
@@ -17,7 +20,7 @@ CREATE TYPE "listings_application_address_type_enum" AS ENUM ('leasingAgent');
 CREATE TYPE "listings_review_order_type_enum" AS ENUM ('lottery', 'firstComeFirstServe', 'waitlist');
 
 -- CreateEnum
-CREATE TYPE "listings_status_enum" AS ENUM ('active', 'pending', 'closed');
+CREATE TYPE "listings_status_enum" AS ENUM ('active', 'pending', 'closed', 'pendingReview', 'changesRequested');
 
 -- CreateEnum
 CREATE TYPE "multiselect_questions_application_section_enum" AS ENUM ('programs', 'preferences');
@@ -329,6 +332,7 @@ CREATE TABLE "jurisdictions" (
     "enable_partner_settings" BOOLEAN NOT NULL DEFAULT false,
     "enable_accessibility_features" BOOLEAN NOT NULL DEFAULT false,
     "enable_utilities_included" BOOLEAN NOT NULL DEFAULT false,
+    "listing_approval_permission" "user_role_enum"[],
 
     CONSTRAINT "jurisdictions_pkey" PRIMARY KEY ("id")
 );
@@ -513,6 +517,9 @@ CREATE TABLE "listings" (
     "verified_at" TIMESTAMPTZ(6),
     "home_type" "listings_home_type_enum",
     "region" "property_region_enum",
+    "requested_changes" TEXT,
+    "requested_changes_date" TIMESTAMPTZ(6) DEFAULT '1970-01-01 00:00:00-07'::timestamp with time zone,
+    "requested_changes_user_id" UUID,
 
     CONSTRAINT "listings_pkey" PRIMARY KEY ("id")
 );

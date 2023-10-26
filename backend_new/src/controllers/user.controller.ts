@@ -10,6 +10,7 @@ import {
   Put,
   Query,
   Request,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -35,6 +36,7 @@ import { UserCreateParams } from '../dtos/users/user-create-params.dto';
 import { EmailAndAppUrl } from '../dtos/users/email-and-app-url.dto';
 import { ConfirmationRequest } from '../dtos/users/confirmation-request.dto';
 import { UserInvite } from '../dtos/users/user-invite.dto';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @Controller('user')
 @ApiTags('user')
@@ -44,6 +46,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   profile(@Request() req: ExpressRequest): User {
     return mapTo(User, req['user']);
   }

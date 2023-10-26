@@ -15,6 +15,7 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
+  UserRoleEnum,
 } from '@prisma/client';
 import { Unit } from '../../../src/dtos/units/unit.dto';
 import { UnitTypeSort } from '../../../src/utilities/unit-utilities';
@@ -28,7 +29,10 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from 'src/dtos/listings/listing-published-update.dto';
+import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { User } from '../../../src/dtos/users/user.dto';
+import { EmailService } from '../../../src/services/email.service';
+import { ConfigService } from '@nestjs/config';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -108,9 +112,19 @@ const mockListingSet = (
   return toReturn;
 };
 
+const requestApprovalMock = jest.fn();
+const changesRequestedMock = jest.fn();
+const listingApprovedMock = jest.fn();
+
+const user = new User();
+user.firstName = 'Test';
+user.lastName = 'User';
+user.email = 'test@example.com';
+
 describe('Testing listing service', () => {
   let service: ListingService;
   let prisma: PrismaService;
+  let config: ConfigService;
 
   const googleTranslateServiceMock = {
     isConfigured: () => true,
@@ -140,16 +154,30 @@ describe('Testing listing service', () => {
           provide: HttpService,
           useValue: httpServiceMock,
         },
+        {
+          provide: EmailService,
+          useValue: {
+            requestApproval: requestApprovalMock,
+            changesRequested: changesRequestedMock,
+            listingApproved: listingApprovedMock,
+          },
+        },
+        ConfigService,
       ],
       imports: [HttpModule],
     }).compile();
 
     service = module.get<ListingService>(ListingService);
     prisma = module.get<PrismaService>(PrismaService);
+    config = module.get<ConfigService>(ConfigService);
   });
 
   afterAll(() => {
     process.env.PROXY_URL = undefined;
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   const exampleAddress = {
@@ -1474,23 +1502,26 @@ describe('Testing listing service', () => {
       name: 'example name',
     });
 
-    await service.create({
-      name: 'example listing name',
-      depositMin: '5',
-      assets: [
-        {
-          fileId: randomUUID(),
-          label: 'example asset',
+    await service.create(
+      {
+        name: 'example listing name',
+        depositMin: '5',
+        assets: [
+          {
+            fileId: randomUUID(),
+            label: 'example asset',
+          },
+        ],
+        jurisdictions: {
+          id: randomUUID(),
         },
-      ],
-      jurisdictions: {
-        id: randomUUID(),
-      },
-      status: ListingsStatusEnum.pending,
-      displayWaitlistSize: false,
-      unitsSummary: null,
-      listingEvents: [],
-    } as ListingCreate);
+        status: ListingsStatusEnum.pending,
+        displayWaitlistSize: false,
+        unitsSummary: null,
+        listingEvents: [],
+      } as ListingCreate,
+      user,
+    );
 
     expect(prisma.listings.create).toHaveBeenCalledWith({
       include: {
@@ -1578,7 +1609,7 @@ describe('Testing listing service', () => {
 
     const val = constructFullListingData();
 
-    await service.create(val as ListingCreate);
+    await service.create(val as ListingCreate, user);
 
     expect(prisma.listings.create).toHaveBeenCalledWith({
       include: {
@@ -1962,24 +1993,27 @@ describe('Testing listing service', () => {
       name: 'example name',
     });
 
-    await service.update({
-      id: randomUUID(),
-      name: 'example listing name',
-      depositMin: '5',
-      assets: [
-        {
-          fileId: randomUUID(),
-          label: 'example asset',
-        },
-      ],
-      jurisdictions: {
+    await service.update(
+      {
         id: randomUUID(),
-      },
-      status: ListingsStatusEnum.pending,
-      displayWaitlistSize: false,
-      unitsSummary: null,
-      listingEvents: [],
-    } as ListingUpdate);
+        name: 'example listing name',
+        depositMin: '5',
+        assets: [
+          {
+            fileId: randomUUID(),
+            label: 'example asset',
+          },
+        ],
+        jurisdictions: {
+          id: randomUUID(),
+        },
+        status: ListingsStatusEnum.pending,
+        displayWaitlistSize: false,
+        unitsSummary: null,
+        listingEvents: [],
+      } as ListingUpdate,
+      user,
+    );
 
     expect(prisma.listings.update).toHaveBeenCalledWith({
       include: {
@@ -2075,7 +2109,7 @@ describe('Testing listing service', () => {
 
     const val = constructFullListingData(randomUUID());
 
-    await service.update(val as ListingUpdate);
+    await service.update(val as ListingUpdate, user);
 
     expect(prisma.listings.update).toHaveBeenCalledWith({
       include: {
@@ -2365,6 +2399,89 @@ describe('Testing listing service', () => {
         id: expect.anything(),
       },
     });
+  });
+
+  it('listingApprovalNotify request approval email', async () => {
+    jest
+      .spyOn(service, 'getUserEmailInfo')
+      .mockResolvedValueOnce({ emails: ['admin@email.com'] });
+    await service.listingApprovalNotify({
+      user,
+      listingInfo: { id: 'id', name: 'name' },
+      status: ListingsStatusEnum.pendingReview,
+      approvingRoles: [UserRoleEnum.admin],
+    });
+
+    expect(service.getUserEmailInfo).toBeCalledWith(['admin'], 'id', undefined);
+    expect(requestApprovalMock).toBeCalledWith(
+      user,
+      { id: 'id', name: 'name' },
+      ['admin@email.com'],
+      config.get('PARTNERS_PORTAL_URL'),
+    );
+  });
+
+  it('listingApprovalNotify changes requested email', async () => {
+    jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+      emails: ['jurisAdmin@email.com', 'partner@email.com'],
+    });
+    await service.listingApprovalNotify({
+      user,
+      listingInfo: { id: 'id', name: 'name' },
+      status: ListingsStatusEnum.changesRequested,
+      approvingRoles: [UserRoleEnum.admin],
+    });
+
+    expect(service.getUserEmailInfo).toBeCalledWith(
+      ['partner', 'jurisdictionAdmin'],
+      'id',
+      undefined,
+    );
+    expect(changesRequestedMock).toBeCalledWith(
+      user,
+      { id: 'id', name: 'name' },
+      ['jurisAdmin@email.com', 'partner@email.com'],
+      config.get('PARTNERS_PORTAL_URL'),
+    );
+  });
+
+  it('listingApprovalNotify listing approved email', async () => {
+    jest.spyOn(service, 'getUserEmailInfo').mockResolvedValueOnce({
+      emails: ['jurisAdmin@email.com', 'partner@email.com'],
+      publicUrl: 'public.housing.gov',
+    });
+    await service.listingApprovalNotify({
+      user,
+      listingInfo: { id: 'id', name: 'name' },
+      status: ListingsStatusEnum.active,
+      previousStatus: ListingsStatusEnum.pendingReview,
+      approvingRoles: [UserRoleEnum.admin],
+    });
+
+    expect(service.getUserEmailInfo).toBeCalledWith(
+      ['partner', 'jurisdictionAdmin'],
+      'id',
+      undefined,
+      true,
+    );
+    expect(listingApprovedMock).toBeCalledWith(
+      user,
+      { id: 'id', name: 'name' },
+      ['jurisAdmin@email.com', 'partner@email.com'],
+      'public.housing.gov',
+    );
+  });
+
+  it('listingApprovalNotify active listing not requiring email', async () => {
+    await service.listingApprovalNotify({
+      user,
+      listingInfo: { id: 'id', name: 'name' },
+      status: ListingsStatusEnum.active,
+      previousStatus: ListingsStatusEnum.active,
+      approvingRoles: [UserRoleEnum.admin],
+    });
+
+    expect(listingApprovedMock).toBeCalledTimes(0);
   });
 
   it('should purge single listing', async () => {

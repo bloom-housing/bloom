@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
@@ -22,6 +23,7 @@ import {
   ListingsStatusEnum,
   ReviewOrderTypeEnum,
   UnitTypeEnum,
+  UserRoleEnum,
 } from '@prisma/client';
 import {
   unitTypeFactoryAll,
@@ -35,26 +37,58 @@ import { reservedCommunityTypeFactory } from '../../prisma/seed-helpers/reserved
 import { ListingPublishedCreate } from '../../src/dtos/listings/listing-published-create.dto';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
+import { EmailService } from '../../src/services/email.service';
+import { userFactory } from '../../prisma/seed-helpers/user-factory';
 
 describe('Listing Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let jurisdictionAId: string;
+  let adminAccessToken: string;
+
+  const testEmailService = {
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    requestApproval: async () => {},
+    changesRequested: async () => {},
+    listingApproved: async () => {},
+  };
+  const mockChangesRequested = jest.spyOn(testEmailService, 'changesRequested');
+  const mockRequestApproval = jest.spyOn(testEmailService, 'requestApproval');
+  const mockListingApproved = jest.spyOn(testEmailService, 'listingApproved');
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
 
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });
-
     jurisdictionAId = jurisdiction.id;
+    const adminUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: {
+          isAdmin: true,
+        },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: adminUser.email, password: 'abcdef' })
+      .expect(201);
+    adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
+      cookie.startsWith('access-token='),
+    );
   });
 
   afterAll(async () => {
@@ -79,7 +113,7 @@ describe('Listing Controller Tests', () => {
     await unitTypeFactoryAll(prisma);
     const unitType = await unitTypeFactorySingle(prisma, UnitTypeEnum.SRO);
     const amiChart = await prisma.amiChart.create({
-      data: amiChartFactory(1, jurisdictionA.id),
+      data: amiChartFactory(10, jurisdictionA.id),
     });
     const unitAccessibilityPriorityType =
       await prisma.unitAccessibilityPriorityTypes.create({
@@ -151,15 +185,6 @@ describe('Listing Controller Tests', () => {
           },
           unitRentTypes: {
             id: rentType.id,
-          },
-          unitAmiChartOverrides: {
-            items: [
-              {
-                percentOfAmi: 10,
-                householdSize: 20,
-                income: 30,
-              },
-            ],
           },
         },
       ],
@@ -538,6 +563,7 @@ describe('Listing Controller Tests', () => {
       .send({
         id: id,
       } as IdDTO)
+      .set('Cookie', adminAccessToken)
       .expect(404);
     expect(res.body.message).toEqual(
       `listingId ${id} was requested but not found`,
@@ -558,6 +584,7 @@ describe('Listing Controller Tests', () => {
     const res = await request(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(val)
+      .set('Cookie', adminAccessToken)
       .expect(200);
     expect(res.body.id).toEqual(listing.id);
     expect(res.body.name).toEqual(val.name);
@@ -571,5 +598,168 @@ describe('Listing Controller Tests', () => {
       .send(val)
       .expect(201);
     expect(res.body.name).toEqual(val.name);
+  });
+
+  describe('listings approval notification', () => {
+    let listing,
+      adminUser,
+      jurisAdmin,
+      wrongJurisAdmin,
+      jurisdictionA,
+      partnerUser,
+      adminAccessToken;
+    beforeAll(async () => {
+      jurisdictionA = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('jurisdictionA', [
+          UserRoleEnum.admin,
+          UserRoleEnum.jurisdictionAdmin,
+        ]),
+      });
+      const jurisdictionB = await prisma.jurisdictions.create({
+        data: jurisdictionFactory('jurisdictionB'),
+      });
+      adminUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isAdmin: true,
+          },
+          mfaEnabled: false,
+          confirmedAt: new Date(),
+        }),
+      });
+      wrongJurisAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isJurisdictionalAdmin: true,
+          },
+          jurisdictionId: jurisdictionB.id,
+        }),
+      });
+      jurisAdmin = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isJurisdictionalAdmin: true,
+          },
+          jurisdictionId: jurisdictionA.id,
+        }),
+      });
+
+      const listingData = await listingFactory(jurisdictionA.id, prisma, {
+        status: ListingsStatusEnum.pending,
+      });
+      listing = await prisma.listings.create({
+        data: listingData,
+      });
+      partnerUser = await prisma.userAccounts.create({
+        data: await userFactory({
+          roles: {
+            isPartner: true,
+            isAdmin: false,
+            isJurisdictionalAdmin: false,
+          },
+          listings: [listing.id],
+          jurisdictionId: jurisdictionA.id,
+          confirmedAt: new Date(),
+        }),
+      });
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: adminUser.email, password: 'abcdef' })
+        .expect(201);
+
+      adminAccessToken = res.header?.['set-cookie'].find((cookie) =>
+        cookie.startsWith('access-token='),
+      );
+    });
+
+    it('update status to pending approval and notify appropriate users', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ email: partnerUser.email, password: 'abcdef' })
+        .expect(201);
+
+      const partnerAccessToken = res.header?.['set-cookie'].find((cookie) =>
+        cookie.startsWith('access-token='),
+      );
+      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      val.status = ListingsStatusEnum.pendingReview;
+      const putPendingApprovalResponse = await request(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(val)
+        .set('Cookie', partnerAccessToken)
+        .expect(200);
+
+      const listingPendingApprovalResponse = await request(app.getHttpServer())
+        .get(`/listings/${putPendingApprovalResponse.body.id}`)
+        .expect(200);
+
+      expect(listingPendingApprovalResponse.body.status).toBe(
+        ListingsStatusEnum.pendingReview,
+      );
+      expect(mockRequestApproval).toBeCalledWith(
+        expect.objectContaining({
+          id: partnerUser.id,
+        }),
+        { id: listing.id, name: val.name },
+        expect.arrayContaining([adminUser.email, jurisAdmin.email]),
+        process.env.PARTNERS_PORTAL_URL,
+      );
+      //ensure juris admin is not included since don't have approver permissions in alameda seed
+      expect(mockRequestApproval.mock.calls[0]['emails']).toEqual(
+        expect.not.arrayContaining([wrongJurisAdmin.email, partnerUser.email]),
+      );
+    });
+
+    it('update status to listing approved and notify appropriate users', async () => {
+      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      val.status = ListingsStatusEnum.active;
+      const putApprovedResponse = await request(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      const listingApprovedResponse = await request(app.getHttpServer())
+        .get(`/listings/${putApprovedResponse.body.id}`)
+        .expect(200);
+
+      expect(listingApprovedResponse.body.status).toBe(
+        ListingsStatusEnum.active,
+      );
+      expect(mockListingApproved).toBeCalledWith(
+        expect.objectContaining({
+          id: adminUser.id,
+        }),
+        { id: listing.id, name: val.name },
+        expect.arrayContaining([partnerUser.email]),
+        jurisdictionA.publicUrl,
+      );
+    });
+
+    it('update status to changes requested and notify appropriate users', async () => {
+      const val = await constructFullListingData(listing.id, jurisdictionA.id);
+      val.status = ListingsStatusEnum.changesRequested;
+      const putChangesRequestedResponse = await request(app.getHttpServer())
+        .put(`/listings/${listing.id}`)
+        .send(val)
+        .set('Cookie', adminAccessToken)
+        .expect(200);
+
+      const listingChangesRequestedResponse = await request(app.getHttpServer())
+        .get(`/listings/${putChangesRequestedResponse.body.id}`)
+        .expect(200);
+
+      expect(listingChangesRequestedResponse.body.status).toBe(
+        ListingsStatusEnum.changesRequested,
+      );
+      expect(mockChangesRequested).toBeCalledWith(
+        expect.objectContaining({
+          id: adminUser.id,
+        }),
+        { id: listing.id, name: val.name },
+        expect.arrayContaining([partnerUser.email]),
+        process.env.PARTNERS_PORTAL_URL,
+      );
+    });
   });
 });

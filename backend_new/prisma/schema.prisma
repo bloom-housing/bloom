@@ -339,8 +339,18 @@ model Jurisdictions {
   reservedCommunityTypes      ReservedCommunityTypes[]
   translations                Translations[]
   user_accounts               UserAccounts[]
+  listingApprovalPermissions  UserRoleEnum[]           @map("listing_approval_permission")
 
   @@map("jurisdictions")
+}
+
+enum UserRoleEnum {
+  user
+  partner
+  admin
+  jurisdictionAdmin
+
+  @@map("user_role_enum")
 }
 
 model ListingEvents {
@@ -556,6 +566,9 @@ model Listings {
   unitGroup                             UnitGroup[]
   userPreferences                       UserPreferences[]
   unitsSummary                          UnitsSummary[]
+  requestedChanges                      String?                       @map("requested_changes")
+  requestedChangesDate                  DateTime?                     @default(dbgenerated("'1970-01-01 00:00:00-07'::timestamp with time zone")) @map("requested_changes_date") @db.Timestamptz(6)
+  requestedChangesUserId                String?                       @map("requested_changes_user_id") @db.Uuid
 
   @@index([jurisdictionId])
   @@map("listings")
@@ -918,6 +931,8 @@ enum ListingsStatusEnum {
   active
   pending
   closed
+  pendingReview
+  changesRequested
 
   @@map("listings_status_enum")
 }
