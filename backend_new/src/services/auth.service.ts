@@ -138,7 +138,7 @@ export class AuthService {
     res.cookie(REFRESH_COOKIE_NAME, newRefreshToken, REFRESH_COOKIE_OPTIONS);
     res.cookie(
       ACCESS_TOKEN_AVAILABLE_NAME,
-      true,
+      'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
 

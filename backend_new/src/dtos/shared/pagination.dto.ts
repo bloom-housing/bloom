@@ -15,14 +15,19 @@ import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum
 
 export class PaginationMeta {
   @Expose()
+  @ApiProperty()
   currentPage: number;
   @Expose()
+  @ApiProperty()
   itemCount: number;
   @Expose()
+  @ApiProperty()
   itemsPerPage: number;
   @Expose()
+  @ApiProperty()
   totalItems: number;
   @Expose()
+  @ApiProperty()
   totalPages: number;
 }
 
@@ -40,6 +45,7 @@ export function PaginationFactory<T>(
     @Type(() => classType)
     items: T[];
     @Expose()
+    @ApiProperty()
     meta: PaginationMeta;
   }
   return PaginationHost;

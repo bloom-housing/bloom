@@ -18,7 +18,10 @@ import { ApplicationCreate } from '../../../src/dtos/applications/application-cr
 import { addressFactory } from '../../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../../src/dtos/addresses/address-create.dto';
 import { InputType } from '../../../src/enums/shared/input-type-enum';
-import { ApplicationUpdate } from 'src/dtos/applications/application-update.dto';
+import { ApplicationUpdate } from '../../../src/dtos/applications/application-update.dto';
+import { EmailModule } from '../../../src/modules/email.module';
+import { PrismaModule } from '../../../src/modules/prisma.module';
+import { EmailService } from '../../../src/services/email.service';
 
 describe('Testing application service', () => {
   let service: ApplicationService;
@@ -39,11 +42,7 @@ describe('Testing application service', () => {
       incomeVouchers: true,
       income: `income ${position}`,
       incomePeriod: IncomePeriodEnum.perMonth,
-      preferences: {
-        claimed: true,
-        key: 'example key',
-        options: null,
-      },
+      preferences: '{ "claimed": true, "key": "example key", "options": null}',
       status: ApplicationStatusEnum.submitted,
       submissionType: ApplicationSubmissionTypeEnum.electronical,
       acceptedTerms: true,
@@ -231,7 +230,16 @@ describe('Testing application service', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ApplicationService, PrismaService],
+      providers: [
+        ApplicationService,
+        PrismaService,
+        {
+          provide: EmailService,
+          useValue: {
+            applicationConfirmation: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<ApplicationService>(ApplicationService);
@@ -695,6 +703,9 @@ describe('Testing application service', () => {
       where: {
         id: expect.anything(),
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     expect(prisma.applications.create).toHaveBeenCalledWith({
@@ -913,6 +924,9 @@ describe('Testing application service', () => {
       where: {
         id: expect.anything(),
       },
+      include: {
+        jurisdictions: true,
+      },
     });
 
     expect(prisma.applications.create).not.toHaveBeenCalled();
@@ -935,6 +949,9 @@ describe('Testing application service', () => {
     expect(prisma.listings.findUnique).toHaveBeenCalledWith({
       where: {
         id: expect.anything(),
+      },
+      include: {
+        jurisdictions: true,
       },
     });
 

@@ -9,8 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger:
       process.env.NODE_ENV === 'development'
-        ? ['error', 'warn', 'log']
-        : ['error', 'warn', 'log'],
+        ? ['error', 'warn', 'log', 'debug']
+        : ['error', 'warn', 'log', 'debug'],
   });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new CustomExceptionFilter(httpAdapter));
@@ -25,6 +25,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   const configService: ConfigService = app.get(ConfigService);
+
   await app.listen(configService.get<number>('PORT'));
 }
 bootstrap();

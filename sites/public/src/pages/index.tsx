@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
-import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
   AlertBox,
   LinkButton,
@@ -18,6 +17,7 @@ import Layout from "../layouts/application"
 import { ConfirmationModal } from "../components/account/ConfirmationModal"
 import { MetaTags } from "../components/shared/MetaTags"
 import { fetchJurisdictionByName } from "../lib/hooks"
+import { Jurisdiction } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -70,7 +70,7 @@ export default function Home(props: IndexProps) {
       <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
-          {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+          {props.jurisdiction && props.jurisdiction.notificationsSignUpUrl && (
             <ActionBlock
               className="flex-1"
               header={<Heading priority={2}>{t("welcome.signUp")}</Heading>}
@@ -78,7 +78,7 @@ export default function Home(props: IndexProps) {
               actions={[
                 <LinkButton
                   key={"sign-up"}
-                  href={props.jurisdiction.notificationsSignUpURL}
+                  href={props.jurisdiction.notificationsSignUpUrl}
                   size={AppearanceSizeType.small}
                 >
                   {t("welcome.signUpToday")}

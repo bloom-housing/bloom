@@ -19,6 +19,7 @@ import { AbstractDTO } from '../shared/abstract.dto';
 import { LanguagesEnum } from '@prisma/client';
 import { IdDTO } from '../shared/id.dto';
 import { UserRole } from './user-role.dto';
+import { Jurisdiction } from '../jurisdictions/jurisdiction.dto';
 
 export class User extends AbstractDTO {
   @Expose()
@@ -47,6 +48,7 @@ export class User extends AbstractDTO {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
   firstName: string;
 
   @Expose()
@@ -91,12 +93,12 @@ export class User extends AbstractDTO {
   language?: LanguagesEnum;
 
   @Expose()
-  @Type(() => IdDTO)
+  @Type(() => Jurisdiction)
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty({ type: IdDTO, isArray: true })
-  jurisdictions: IdDTO[];
+  @ApiProperty({ type: Jurisdiction, isArray: true })
+  jurisdictions: Jurisdiction[];
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

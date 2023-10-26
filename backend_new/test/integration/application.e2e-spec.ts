@@ -29,20 +29,38 @@ import { InputType } from '../../src/enums/shared/input-type-enum';
 import { addressFactory } from '../../prisma/seed-helpers/address-factory';
 import { AddressCreate } from '../../src/dtos/addresses/address-create.dto';
 import { ApplicationUpdate } from '../../src/dtos/applications/application-update.dto';
+import { translationFactory } from '../../prisma/seed-helpers/translation-factory';
+import { EmailService } from '../../src/services/email.service';
 
 describe('Application Controller Tests', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
+  const testEmailService = {
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    applicationConfirmation: async () => {},
+  };
+
+  const mockApplicationConfirmation = jest.spyOn(
+    testEmailService,
+    'applicationConfirmation',
+  );
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(EmailService)
+      .useValue(testEmailService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
     await unitTypeFactoryAll(prisma);
+    await await prisma.translations.create({
+      data: translationFactory(),
+    });
   });
 
   afterAll(async () => {
@@ -369,6 +387,7 @@ describe('Application Controller Tests', () => {
       .expect(201);
 
     expect(res.body.id).not.toBeNull();
+    expect(mockApplicationConfirmation).toBeCalledTimes(1);
   });
 
   it('should create application from partner site', async () => {

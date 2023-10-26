@@ -36,7 +36,7 @@ export const applicationFactory = (optionalParams?: {
     householdSize: optionalParams?.househouldSize ?? 1,
     income: '40000',
     incomePeriod: IncomePeriodEnum.perYear,
-    preferences: {},
+    preferences: '{}',
     preferredUnitTypes,
     listings: optionalParams?.listingId
       ? {

@@ -24,6 +24,8 @@ import {
   ListingEventType,
   ApplicationSection,
   MultiselectQuestion,
+  User,
+  Jurisdiction,
 } from "@bloom-housing/backend-core/types"
 import {
   AlertErrorType,
@@ -57,7 +59,12 @@ import { useJurisdictionalMultiselectQuestionList } from "../../../lib/hooks"
 import { StatusBar } from "../../../components/shared/StatusBar"
 import { getListingStatusTag } from "../helpers"
 import RequestChangesModal from "./RequestChangesModal"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  ListingCreate,
+  ListingUpdate,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -82,18 +89,20 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing as unknown as Listing, ApplicationSection.preferences)?.map(
-      (listingPref) => {
-        return { ...listingPref?.multiselectQuestions } as unknown as MultiselectQuestion
-      }
-    ) ?? []
+    listingSectionQuestions(
+      listing as unknown as Listing,
+      MultiselectQuestionsApplicationSectionEnum.preferences
+    )?.map((listingPref) => {
+      return { ...listingPref?.multiselectQuestions } as unknown as MultiselectQuestion
+    }) ?? []
   )
   const [programs, setPrograms] = useState<MultiselectQuestion[]>(
-    listingSectionQuestions(listing as unknown as Listing, ApplicationSection.programs)?.map(
-      (listingProg) => {
-        return { ...listingProg?.multiselectQuestions } as unknown as MultiselectQuestion
-      }
-    ) ?? []
+    listingSectionQuestions(
+      listing as unknown as Listing,
+      MultiselectQuestionsApplicationSectionEnum.programs
+    )?.map((listingProg) => {
+      return { ...listingProg?.multiselectQuestions } as unknown as MultiselectQuestion
+    }) ?? []
   )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
@@ -177,7 +186,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             programs,
             units,
             openHouseEvents,
-            profile,
+            //TODO: remove casting when partner site is connected to new backend
+            profile: profile as unknown as User,
             latLong,
             customMapPositionChosen,
           })
@@ -186,10 +196,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           if (editMode) {
             result = await listingsService.update({
               id: listing.id,
-              body: { id: listing.id, ...formattedData },
+              body: { id: listing.id, ...(formattedData as unknown as ListingUpdate) },
             })
           } else {
-            result = await listingsService.create({ body: formattedData })
+            result = await listingsService.create({
+              body: formattedData as unknown as ListingCreate,
+            })
           }
 
           reset(formData)
@@ -300,7 +312,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <Tab>Application Process</Tab>
                         </TabList>
                         <TabPanel>
-                          <ListingIntro jurisdictions={profile.jurisdictions} />
+                          <ListingIntro
+                            // TODO: remove casting when partner site is connected to new backend
+                            jurisdictions={profile.jurisdictions as unknown as Jurisdiction[]}
+                          />
                           <ListingPhotos />
                           <BuildingDetails
                             listing={listing}

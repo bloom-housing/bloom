@@ -60,7 +60,7 @@ export const raceCheckboxesOrder = [
   "declineToRespond",
 ]
 
-export const coliseumApplication: Application = {
+export const ElmVillageApplication: Application = {
   markedAsDuplicate: false,
   ...idDefaults,
   listing: {
@@ -206,6 +206,82 @@ export const coliseumApplication: Application = {
     sexualOrientation: "",
     howDidYouHear: ["jurisdictionWebsite", "developerWebsite"],
   },
+  // preferences: [
+  //   {
+  //     key: "liveWork",
+  //     claimed: true,
+  //     options: [
+  //       {
+  //         key: "live",
+  //         checked: true,
+  //         extraData: [],
+  //       },
+  //       {
+  //         key: "work",
+  //         checked: true,
+  //         extraData: [],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "PBV",
+  //     claimed: true,
+  //     options: [
+  //       {
+  //         key: "residency",
+  //         checked: true,
+  //       },
+  //       {
+  //         key: "family",
+  //         checked: true,
+  //       },
+  //       {
+  //         key: "veteran",
+  //         checked: false,
+  //       },
+  //       {
+  //         key: "homeless",
+  //         checked: true,
+  //       },
+  //       {
+  //         key: "noneApplyButConsider",
+  //         checked: false,
+  //       },
+  //       {
+  //         key: "doNotConsider",
+  //         checked: false,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "HOPWA",
+  //     claimed: true,
+  //     options: [
+  //       {
+  //         key: "hopwa",
+  //         checked: true,
+  //       },
+  //       {
+  //         key: "doNotConsider",
+  //         checked: false,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "displaceeHousing",
+  //     claimed: false,
+  //     options: [
+  //       {
+  //         key: "mission",
+  //         checked: false,
+  //       },
+  //       {
+  //         key: "general",
+  //         checked: false,
+  //       },
+  //     ],
+  //   },
+  // ],
   preferences: [
     {
       key: "liveWork",
@@ -224,60 +300,13 @@ export const coliseumApplication: Application = {
       ],
     },
     {
-      key: "PBV",
+      key: "cityEmployee",
       claimed: true,
       options: [
         {
-          key: "residency",
-          checked: true,
-        },
-        {
-          key: "family",
-          checked: true,
-        },
-        {
-          key: "veteran",
+          key: "cityEmployee",
           checked: false,
-        },
-        {
-          key: "homeless",
-          checked: true,
-        },
-        {
-          key: "noneApplyButConsider",
-          checked: false,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-      ],
-    },
-    {
-      key: "HOPWA",
-      claimed: true,
-      options: [
-        {
-          key: "hopwa",
-          checked: true,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-      ],
-    },
-    {
-      key: "displaceeHousing",
-      claimed: false,
-      options: [
-        {
-          key: "mission",
-          checked: false,
-        },
-        {
-          key: "general",
-          checked: false,
+          extraData: [],
         },
       ],
     },

@@ -527,7 +527,7 @@ describe('User Controller Tests', () => {
 
     expect(res.body.firstName).toEqual('Public User firstName');
     expect(res.body.jurisdictions).toEqual([
-      { id: juris.id, name: juris.name },
+      expect.objectContaining({ id: juris.id, name: juris.name }),
     ]);
     expect(res.body.email).toEqual('publicuser@email.com');
 
@@ -557,6 +557,7 @@ describe('User Controller Tests', () => {
         password: 'example password 1',
         email: 'partnerUser@email.com',
         jurisdictions: [{ id: juris.id }],
+        agreedToTermsOfService: true,
         userRoles: {
           isAdmin: true,
         },
@@ -565,7 +566,7 @@ describe('User Controller Tests', () => {
 
     expect(res.body.firstName).toEqual('Partner User firstName');
     expect(res.body.jurisdictions).toEqual([
-      { id: juris.id, name: juris.name },
+      expect.objectContaining({ id: juris.id, name: juris.name }),
     ]);
     expect(res.body.email).toEqual('partneruser@email.com');
   });

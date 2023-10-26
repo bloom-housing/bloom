@@ -490,8 +490,15 @@ describe('Listing Controller Tests', () => {
   });
 
   it('should get listings from retrieveListings endpoint', async () => {
+    const multiselectQuestion1 = await prisma.multiselectQuestions.create({
+      data: multiselectQuestionFactory(jurisdictionAId, {
+        multiselectQuestion: {
+          text: 'example a',
+        },
+      }),
+    });
     const listingA = await listingFactory(jurisdictionAId, prisma, {
-      multiselectQuestions: [{ text: 'example a' }],
+      multiselectQuestions: [multiselectQuestion1],
     });
     const listingACreated = await prisma.listings.create({
       data: listingA,
@@ -499,9 +506,15 @@ describe('Listing Controller Tests', () => {
         listingMultiselectQuestions: true,
       },
     });
-
+    const multiselectQuestion2 = await prisma.multiselectQuestions.create({
+      data: multiselectQuestionFactory(jurisdictionAId, {
+        multiselectQuestion: {
+          text: 'example b',
+        },
+      }),
+    });
     const listingB = await listingFactory(jurisdictionAId, prisma, {
-      multiselectQuestions: [{ text: 'example b' }],
+      multiselectQuestions: [multiselectQuestion2],
     });
     await prisma.listings.create({
       data: listingB,

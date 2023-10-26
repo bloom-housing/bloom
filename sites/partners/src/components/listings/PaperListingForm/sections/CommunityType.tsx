@@ -30,7 +30,15 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
     const optionsTranslated = reservedCommunityTypes.map((communityType) => {
       return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
     })
-    setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
+    setOptions([
+      "",
+      ...arrayToFormOptions<ReservedCommunityType>(
+        // TODO: remove the casting when partner site is connected to the new backend
+        optionsTranslated as unknown as ReservedCommunityType[],
+        "name",
+        "id"
+      ),
+    ])
   }, [reservedCommunityTypes])
 
   useEffect(() => {

@@ -86,7 +86,7 @@ const ApplicationLiveAlone = () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   application.householdSize = 1
-                  application.householdMembers = []
+                  application.householdMember = []
                   setValidateHousehold(true)
                 }}
                 data-testid={"app-household-live-alone"}

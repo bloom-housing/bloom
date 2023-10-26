@@ -18,6 +18,7 @@ import { FieldValue, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
+import { UserInvite, UserUpdate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormUserManageProps = {
   mode: "add" | "edit"
@@ -74,7 +75,7 @@ const FormUserManage = ({
       jurisdiction_all: jurisdictionList.length === user.jurisdictions.length,
       jurisdictions: user.jurisdictions.map((elem) => elem.id),
     }
-  } else if (profile?.roles?.isJurisdictionalAdmin) {
+  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
     defaultValues = {
       jurisdictions: [jurisdictionList[0].id],
     }
@@ -220,7 +221,8 @@ const FormUserManage = ({
     void sendInvite(() =>
       userService
         .invite({
-          body,
+          // TODO: remove cast when partner site is connected to new backend
+          body: body as unknown as UserInvite,
         })
         .then(() => {
           setAlertMessage({ message: t(`users.inviteSent`), type: "success" })
@@ -270,7 +272,8 @@ const FormUserManage = ({
     void updateUser(() =>
       userService
         .update({
-          body,
+          // TODO: remove cast when partner site is connected to new backend
+          body: body as unknown as UserUpdate,
         })
         .then(() => {
           setAlertMessage({ message: t(`users.userUpdated`), type: "success" })
@@ -389,7 +392,7 @@ const FormUserManage = ({
                   keyPrefix="users"
                   options={roleKeys
                     .filter((elem) => {
-                      if (profile?.roles?.isJurisdictionalAdmin) {
+                      if (profile?.userRoles?.isJurisdictionalAdmin) {
                         return elem !== RoleOption.Administrator
                       }
                       return true

@@ -256,7 +256,7 @@ export class UserService {
   /*
     this will update a user or error if no user is found with the Id
   */
-  async update(dto: UserUpdate): Promise<User> {
+  async update(dto: UserUpdate, jurisdictionName?: string): Promise<User> {
     const storedUser = await this.findUserOrError({ userId: dto.id }, false);
 
     /*
@@ -297,8 +297,10 @@ export class UserService {
       );
 
       this.emailService.changeEmail(
-        dto.jurisdictions,
-        storedUser as User,
+        dto.jurisdictions && dto.jurisdictions[0]
+          ? dto.jurisdictions[0].name
+          : jurisdictionName,
+        mapTo(User, storedUser),
         dto.appUrl,
         confirmationUrl,
         dto.newEmail,
@@ -401,8 +403,10 @@ export class UserService {
           confirmationToken,
         );
         this.emailService.welcome(
-          storedUser.jurisdictions,
-          storedUser as User,
+          storedUser.jurisdictions && storedUser.jurisdictions.length
+            ? storedUser.jurisdictions[0].name
+            : null,
+          storedUser as unknown as User,
           dto.appUrl,
           confirmationUrl,
         );
@@ -413,7 +417,7 @@ export class UserService {
         );
         this.emailService.invitePartnerUser(
           storedUser.jurisdictions,
-          storedUser as User,
+          storedUser as unknown as User,
           dto.appUrl,
           confirmationUrl,
         );
@@ -446,7 +450,7 @@ export class UserService {
     });
     this.emailService.forgotPassword(
       storedUser.jurisdictions,
-      storedUser as User,
+      mapTo(User, storedUser),
       dto.appUrl,
       resetToken,
     );
@@ -535,6 +539,7 @@ export class UserService {
     dto: UserCreate | UserInvite,
     forPartners: boolean,
     sendWelcomeEmail = false,
+    jurisdictionName?: string,
   ): Promise<User> {
     // TODO: perms
 
@@ -617,8 +622,32 @@ export class UserService {
       passwordHash = await passwordToHash(
         crypto.randomBytes(8).toString('hex'),
       );
-    } else if (dto instanceof UserCreate) {
-      passwordHash = await passwordToHash(dto.password);
+    } else {
+      passwordHash = await passwordToHash((dto as UserCreate).password);
+    }
+
+    let jurisdictions:
+      | {
+          jurisdictions: Prisma.JurisdictionsCreateNestedManyWithoutUser_accountsInput;
+        }
+      | Record<string, never> = dto.jurisdictions
+      ? {
+          jurisdictions: {
+            connect: dto.jurisdictions.map((juris) => ({
+              id: juris.id,
+            })),
+          },
+        }
+      : {};
+
+    if (!forPartners && jurisdictionName) {
+      jurisdictions = {
+        jurisdictions: {
+          connect: {
+            name: jurisdictionName,
+          },
+        },
+      };
     }
 
     let newUser = await this.prisma.userAccounts.create({
@@ -632,11 +661,7 @@ export class UserService {
         phoneNumber: dto.phoneNumber,
         language: dto.language,
         mfaEnabled: forPartners,
-        jurisdictions: {
-          connect: dto.jurisdictions.map((juris) => ({
-            id: juris.id,
-          })),
-        },
+        ...jurisdictions,
         userRoles:
           'userRoles' in dto
             ? {
@@ -676,7 +701,7 @@ export class UserService {
         confirmationToken,
       );
       this.emailService.welcome(
-        dto.jurisdictions,
+        jurisdictionName,
         mapTo(User, newUser),
         dto.appUrl,
         confirmationUrl,

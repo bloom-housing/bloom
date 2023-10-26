@@ -18,6 +18,9 @@ import { ApplicationViews } from '../enums/applications/view-enum';
 import { ApplicationUpdate } from '../dtos/applications/application-update.dto';
 import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { PaginatedApplicationDto } from '../dtos/applications/paginated-application.dto';
+import { EmailService } from './email.service';
+import Listing from '../dtos/listings/listing.dto';
+import { User } from '../dtos/users/user.dto';
 
 const view: Partial<Record<ApplicationViews, Prisma.ApplicationsInclude>> = {
   partnerList: {
@@ -62,7 +65,10 @@ view.details = {
 */
 @Injectable()
 export class ApplicationService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private emailService: EmailService,
+  ) {}
 
   /*
     this will get a set of applications given the params passed in
@@ -226,12 +232,16 @@ export class ApplicationService {
   async create(
     dto: ApplicationCreate,
     forPublic: boolean,
+    user?: User,
   ): Promise<Application> {
     // TODO: perms https://github.com/bloom-housing/bloom/issues/3445
 
     const listing = await this.prisma.listings.findUnique({
       where: {
         id: dto.listings.id,
+      },
+      include: {
+        jurisdictions: true,
       },
     });
     if (forPublic) {
@@ -343,12 +353,23 @@ export class ApplicationService {
           : undefined,
         programs: JSON.stringify(dto.programs),
         preferences: JSON.stringify(dto.preferences),
+        userAccounts: user
+          ? {
+              connect: {
+                id: user.id,
+              },
+            }
+          : undefined,
       },
       include: view.details,
     });
 
     if (dto.applicant.emailAddress && forPublic) {
-      // TODO: email service https://github.com/bloom-housing/bloom/pull/3607
+      this.emailService.applicationConfirmation(
+        mapTo(Listing, listing),
+        dto,
+        listing.jurisdictions?.publicUrl,
+      );
     }
 
     return mapTo(Application, rawApplication);
@@ -508,6 +529,14 @@ export class ApplicationService {
       throw new NotFoundException(
         `applicationId ${applicationId} was requested but not found`,
       );
+    }
+
+    // convert the programs and preferences back to json
+    if (res.programs) {
+      res.programs = JSON.parse(res.programs as string);
+    }
+    if (res.preferences) {
+      res.preferences = JSON.parse(res.preferences as string);
     }
 
     return res;

@@ -5,21 +5,18 @@ describe("applications/contact/address", function () {
     cy.visit(route)
   })
 
-  // TODO: unskip after applications are implemented on the front end
-  it.skip("should render the primary applicant address sub-form", function () {
+  it("should render the primary applicant address sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  // TODO: unskip after applications are implemented on the front end
-  it.skip("should require form input", function () {
+  it("should require form input", function () {
     cy.goNext()
     cy.checkErrorAlert("be.visible")
     cy.checkErrorMessages("be.visible")
   })
 
-  // TODO: unskip after applications are implemented on the front end
-  it.skip("should disable phone number & phone number type fields when user indicates they have no phone number", function () {
+  it("should disable phone number & phone number type fields when user indicates they have no phone number", function () {
     cy.getByTestId("app-primary-no-phone").check()
     cy.getPhoneFieldByTestId("app-primary-phone-number").should("be.disabled")
     cy.getByTestId("app-primary-phone-number-type").should("be.disabled")
@@ -27,8 +24,7 @@ describe("applications/contact/address", function () {
     cy.reload()
   })
 
-  // TODO: unskip after applications are implemented on the front end
-  it.skip("should provide a way to validate address via API", function () {
+  it("should provide a way to validate address via API", function () {
     // fake the address call to the mocked data
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address" })
     cy.getByTestId("app-primary-no-phone").check()
@@ -48,8 +44,7 @@ describe("applications/contact/address", function () {
     cy.reload()
   })
 
-  // TODO: unskip after applications are implemented on the front end
-  it.skip("should handle garbage input", function () {
+  it("should handle garbage input", function () {
     // fake the address call to the mocked data
     cy.intercept("GET", "/geocoding/v5/**", { fixture: "address-bad" })
     cy.getByTestId("app-primary-no-phone").check()

@@ -16,6 +16,7 @@ import { ApplicationsSideNav } from "../../../../../components/applications/Appl
 import { formatDateTime } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { NavigationHeader } from "../../../../../components/shared/NavigationHeader"
+import { ListingStatus } from "@bloom-housing/backend-core"
 
 const ApplicationsList = () => {
   const router = useRouter()
@@ -149,7 +150,7 @@ const ApplicationsList = () => {
         }
       />
 
-      <ListingStatusBar status={listingDto?.status} />
+      <ListingStatusBar status={listingDto?.status as unknown as ListingStatus} />
 
       <section className={"bg-gray-200 pt-4"}>
         <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-6 px-4">

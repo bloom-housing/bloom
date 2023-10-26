@@ -1,12 +1,4 @@
 import * as React from "react"
-import {
-  InputType,
-  MultiselectOption,
-  MultiselectQuestion as BackendCoreMultiSelectQuestion,
-  ApplicationMultiselectQuestion,
-  ApplicationMultiselectQuestionOption,
-  ApplicationSection,
-} from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
   t,
@@ -18,15 +10,19 @@ import {
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
 import {
+  ApplicationMultiselectQuestion,
+  ApplicationMultiselectQuestionOption,
+  InputType,
   Listing,
   ListingMultiselectQuestion,
+  MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionsApplicationSectionEnum,
 } from "../types/backend-swagger"
 
 export const listingSectionQuestions = (
   listing: Listing,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   return listing?.listingMultiselectQuestions?.filter(
     (question) =>
@@ -38,7 +34,7 @@ export const listingSectionQuestions = (
 // Get a field name for an application multiselect question
 export const fieldName = (
   questionName: string,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   optionName?: string
 ) => {
   return `application.${applicationSection}.${questionName?.replace(/'/g, "")}${
@@ -49,7 +45,7 @@ export const fieldName = (
 // Get an array of option field name strings for all options within a single question that are exclusive
 export const getExclusiveKeys = (
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): string[] => {
   const exclusive: string[] = []
   question?.options?.forEach((option: MultiselectOption) => {
@@ -106,7 +102,7 @@ export const getPageQuestion = (questions: ListingMultiselectQuestion[], page: n
 // Get all option field names for a question, including the potential opt out option
 export const getAllOptions = (
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const optionPaths =
     question?.options?.map((option) => fieldName(question.text, applicationSection, option.text)) ??
@@ -121,12 +117,12 @@ export const getRadioFields = (
   options: MultiselectOption[],
   register: UseFormMethods["register"],
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   errors?: UseFormMethods["errors"]
 ) => {
   return (
     <fieldset>
-      {applicationSection === ApplicationSection.preferences && (
+      {applicationSection === MultiselectQuestionsApplicationSectionEnum.preferences && (
         <legend className="text__caps-spaced mb-4">{question?.text}</legend>
       )}
       <p className="field-note mb-8">{question?.description}</p>
@@ -156,7 +152,7 @@ export const getRadioFields = (
 const getCheckboxField = (
   option: MultiselectOption,
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
@@ -210,7 +206,7 @@ const getCheckboxField = (
 export const getCheckboxOption = (
   option: MultiselectOption,
   question: MultiselectQuestion,
-  applicationSection: ApplicationSection,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum,
   register: UseFormMethods["register"],
   setValue: UseFormMethods["setValue"],
   getValues: UseFormMethods["getValues"],
@@ -282,7 +278,7 @@ export const getCheckboxOption = (
 
 export const mapRadiosToApi = (
   data: { [name: string]: string },
-  question: MultiselectQuestion | BackendCoreMultiSelectQuestion
+  question: MultiselectQuestion
 ): ApplicationMultiselectQuestion => {
   const [key, value] = Object.entries(data)[0]
   const options: ApplicationMultiselectQuestionOption[] = []
@@ -315,8 +311,8 @@ export const mapRadiosToApi = (
 export const mapCheckboxesToApi = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData: { [name: string]: any },
-  question: MultiselectQuestion | BackendCoreMultiSelectQuestion,
-  applicationSection: ApplicationSection
+  question: MultiselectQuestion,
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ): ApplicationMultiselectQuestion => {
   const data = formData["application"][applicationSection][question.text.replace(/'/g, "")]
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
@@ -347,7 +343,7 @@ export const mapCheckboxesToApi = (
 export const mapApiToMultiselectForm = (
   applicationQuestions: ApplicationMultiselectQuestion[],
   listingQuestions: ListingMultiselectQuestion[],
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
 ) => {
   const questionsFormData = { application: { [applicationSection]: Object.create(null) } }
 

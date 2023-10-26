@@ -7,6 +7,7 @@ import PaperApplicationForm from "../../../components/applications/PaperApplicat
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { ApplicationContext } from "../../../components/applications/ApplicationContext"
 import { NavigationHeader } from "../../../components/shared/NavigationHeader"
+import { Application } from "@bloom-housing/backend-core"
 
 const NewApplication = () => {
   const router = useRouter()
@@ -17,12 +18,12 @@ const NewApplication = () => {
   {
     /* TODO: add listing name in a listing response */
   }
-  const { listingDto } = useSingleListingData(application?.listing.id)
+  const { listingDto } = useSingleListingData(application?.listings.id)
 
   if (!application) return false
 
   return (
-    <ApplicationContext.Provider value={application}>
+    <ApplicationContext.Provider value={application as unknown as Application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
@@ -43,10 +44,10 @@ const NewApplication = () => {
           breadcrumbs={
             <Breadcrumbs>
               <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}`}>
+              <BreadcrumbLink href={`/listings/${application?.listings?.id}`}>
                 {listingDto?.name}
               </BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications`}>
+              <BreadcrumbLink href={`/listings/${application?.listings?.id}/applications`}>
                 {t("nav.applications")}
               </BreadcrumbLink>
               <BreadcrumbLink href={`/application/${application.id}`}>
@@ -60,8 +61,8 @@ const NewApplication = () => {
         />
 
         <PaperApplicationForm
-          listingId={application.listing.id}
-          application={application}
+          listingId={application.listings.id}
+          application={application as unknown as Application}
           editMode
         />
       </Layout>

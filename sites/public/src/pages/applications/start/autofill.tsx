@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect, useCallback } from "react"
-import { Application } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   Button,
@@ -23,6 +22,11 @@ import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { useRouter } from "next/router"
 import { UserStatus } from "../../../lib/constants"
+import {
+  Application,
+  ApplicationOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default () => {
   const router = useRouter()
@@ -78,8 +82,8 @@ export default () => {
         void applicationsService
           .list({
             userId: profile.id,
-            orderBy: "createdAt",
-            order: "DESC",
+            orderBy: ApplicationOrderByKeys.createdAt,
+            order: OrderByEnum.desc,
             limit: 1,
           })
           .then((res) => {

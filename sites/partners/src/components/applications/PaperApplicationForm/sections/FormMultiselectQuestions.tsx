@@ -11,15 +11,15 @@ import { FieldValue } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
 import {
-  ApplicationSection,
   ListingMultiselectQuestion,
   MultiselectOption,
   MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormMultiselectQuestionsProps = {
   questions: ListingMultiselectQuestion[]
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   sectionTitle: string
 }
 

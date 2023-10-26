@@ -15,8 +15,8 @@ import { Jurisdiction } from '../dtos/jurisdictions/jurisdiction.dto';
 import { LanguagesEnum, ReviewOrderTypeEnum } from '@prisma/client';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { Listing } from '../dtos/listings/listing.dto';
-import { Application } from '../dtos/applications/application.dto';
 import { SendGridService } from './sendgrid.service';
+import { ApplicationCreate } from '../dtos/applications/application-create.dto';
 import { User } from '../dtos/users/user.dto';
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -146,6 +146,7 @@ export class EmailService {
 
   private async getJurisdiction(
     jurisdictionIds: IdDTO[] | null,
+    jurisdictionName?: string,
   ): Promise<Jurisdiction | null> {
     // Only return the jurisdiction if there is one jurisdiction passed in.
     // For example if the user is tied to more than one jurisdiction the user should received the generic translations
@@ -153,18 +154,22 @@ export class EmailService {
       return await this.jurisdictionService.findOne({
         jurisdictionId: jurisdictionIds[0]?.id,
       });
+    } else if (jurisdictionName) {
+      return await this.jurisdictionService.findOne({
+        jurisdictionName: jurisdictionName,
+      });
     }
     return null;
   }
 
   /* Send welcome email to new public users */
   public async welcome(
-    jurisdictionIds: IdDTO[],
+    jurisdictionName: string,
     user: User,
     appUrl: string,
     confirmationUrl: string,
   ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+    const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
     await this.loadTranslations(jurisdiction, user.language);
     await this.send(
       user.email,
@@ -220,13 +225,13 @@ export class EmailService {
 
   /* send change of email email */
   public async changeEmail(
-    jurisdictionIds: IdDTO[],
+    jurisdictionName: string,
     user: User,
     appUrl: string,
     confirmationUrl: string,
     newEmail: string,
   ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+    const jurisdiction = await this.getJurisdiction(null, jurisdictionName);
     await this.loadTranslations(jurisdiction, user.language);
     await this.send(
       newEmail,
@@ -284,10 +289,9 @@ export class EmailService {
     );
   }
 
-  // TODO: connect to application controller when it is implemented
   public async applicationConfirmation(
     listing: Listing,
-    application: Application,
+    application: ApplicationCreate,
     appUrl: string,
   ) {
     const jurisdiction = await this.getJurisdiction([listing.jurisdictions]);

@@ -3,10 +3,9 @@ import Head from "next/head"
 import { useSWRConfig } from "swr"
 
 import {
-  ApplicationSection,
   MultiselectQuestion,
-  MultiselectQuestionCreate,
-  MultiselectQuestionUpdate,
+  MultiselectQuestionCreate as MultiselectQuestionCreateOld,
+  MultiselectQuestionUpdate as MultiselectQuestionUpdateOld,
 } from "@bloom-housing/backend-core"
 import {
   AppearanceSizeType,
@@ -29,6 +28,11 @@ import { useJurisdictionalMultiselectQuestionList } from "../../lib/hooks"
 import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
+import {
+  MultiselectQuestionCreate,
+  MultiselectQuestionUpdate,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export type DrawerType = "add" | "edit"
 
@@ -57,7 +61,7 @@ const Settings = () => {
     profile?.jurisdictions?.reduce((acc, curr) => {
       return `${acc}${","}${curr.id}`
     }, ""),
-    ApplicationSection.preferences
+    MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
   const tableData = useMemo(() => {
@@ -110,14 +114,17 @@ const Settings = () => {
   }, [isCreateLoading])
 
   const saveQuestion = (
-    formattedData: MultiselectQuestionCreate | MultiselectQuestionUpdate,
+    formattedData: MultiselectQuestionCreateOld | MultiselectQuestionUpdateOld,
     requestType: DrawerType
   ) => {
     if (requestType === "edit") {
       void updateQuestion(() =>
         multiselectQuestionsService
           .update({
-            body: { ...formattedData, id: questionData.id },
+            body: {
+              ...(formattedData as unknown as MultiselectQuestionUpdate),
+              id: questionData.id,
+            },
           })
           .then((result) => {
             setUpdatedIds(
@@ -140,7 +147,7 @@ const Settings = () => {
       void createQuestion(() =>
         multiselectQuestionsService
           .create({
-            body: formattedData,
+            body: formattedData as unknown as MultiselectQuestionCreate,
           })
           .then((result) => {
             setUpdatedIds(

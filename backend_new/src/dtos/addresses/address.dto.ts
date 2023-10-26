@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsNumber, IsDefined, IsString, MaxLength } from 'class-validator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
@@ -64,3 +64,9 @@ export class Address extends AbstractDTO {
   @ApiPropertyOptional()
   longitude?: number;
 }
+
+export class AddressCreateDto extends OmitType(Address, [
+  'id',
+  'createdAt',
+  'updatedAt',
+]) {}

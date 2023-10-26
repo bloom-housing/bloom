@@ -1,9 +1,9 @@
 import axiosStatic from "axios"
 import type { NextApiRequest, NextApiResponse } from "next"
 import qs from "qs"
-import { getConfigs } from "@bloom-housing/backend-core/types"
 import { wrapper } from "axios-cookiejar-support"
 import { CookieJar } from "tough-cookie"
+import { getConfigs } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 /*
   This file exists as per https://nextjs.org/docs/api-routes/dynamic-api-routes  
@@ -41,15 +41,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
     configs.headers.cookie = cookieString
     configs.params = rest
-    configs.data = req.body
+    configs.data = req.body || {}
 
+    console.log("configs", configs)
     // send request to backend
     const response = await axios.request(configs)
+
     // set up response from next api based on response from backend
     const cookies = await jar.getSetCookieStrings(process.env.BACKEND_API_BASE || "")
     res.setHeader("Set-Cookie", cookies)
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
+
+    console.log("response headers", response.headers)
   } catch (e) {
     console.error("public's backend url adapter error:", { e })
     if (e.response) {

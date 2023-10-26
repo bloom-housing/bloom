@@ -3,14 +3,17 @@ import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
-import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
+import { InputType, AddressCreate } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
-  applicationSection: ApplicationSection
+  applicationSection: MultiselectQuestionsApplicationSectionEnum
   title: string
 }
 
@@ -62,7 +65,7 @@ const DetailsMultiselectQuestions = ({
                         <FieldValue
                           key={extra.key}
                           label={t(`application.preferences.options.${extra.key}`, {
-                            county: listingDto?.countyCode,
+                            county: listingDto?.listingsBuildingAddress.county,
                           })}
                         >
                           {extra.value ? t("t.yes") : t("t.no")}
@@ -74,7 +77,7 @@ const DetailsMultiselectQuestions = ({
                         <GridSection
                           key={extra.key}
                           subtitle={t(`application.preferences.options.address`, {
-                            county: listingDto?.countyCode,
+                            county: listingDto?.listingsBuildingAddress.county,
                           })}
                           columns={3}
                         >

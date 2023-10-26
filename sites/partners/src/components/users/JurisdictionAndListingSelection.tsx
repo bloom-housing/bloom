@@ -102,7 +102,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
     })
   }
 
-  if (profile?.roles?.isAdmin) {
+  if (profile?.userRoles?.isAdmin) {
     if (selectedRoles === RoleOption.JurisdictionalAdmin) {
       return (
         <GridSection title={t("t.jurisdiction")} columns={4}>
@@ -157,7 +157,7 @@ const JurisdictionAndListingSelection = ({ jurisdictionOptions, listingsOptions 
         </>
       )
     }
-  } else if (profile?.roles?.isJurisdictionalAdmin) {
+  } else if (profile?.userRoles?.isJurisdictionalAdmin) {
     if (selectedRoles === RoleOption.Partner && selectedJurisdictions) {
       return (
         <GridSection title={t("nav.listings")} columns={1}>

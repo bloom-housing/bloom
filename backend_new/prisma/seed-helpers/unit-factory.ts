@@ -34,6 +34,7 @@ export const unitFactorySingle = (
       ? (Math.ceil((Math.random() * 100) / 10) * 10).toString() // get an integer divisible by 10
       : undefined,
     numBathrooms: randomInt(4),
+    floor: randomInt(3),
     numBedrooms: bedrooms,
     minOccupancy: bedrooms,
     maxOccupancy: bedrooms + 2,

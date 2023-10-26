@@ -45,7 +45,7 @@ const Applications = () => {
     if (!applications || (applications && !listLoading)) return
     void Promise.all(
       applications?.map(async (app) => {
-        const retrievedListing = await listingsService.retrieve({ id: app?.listing.id })
+        const retrievedListing = await listingsService.retrieve({ id: app?.listings.id })
         app.fullListing = retrievedListing
         return app
       })

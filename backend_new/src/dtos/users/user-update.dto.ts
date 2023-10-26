@@ -1,6 +1,7 @@
 import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsString,
@@ -13,6 +14,7 @@ import { User } from './user.dto';
 import { EnforceLowerCase } from '../../decorators/enforce-lower-case.decorator';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
 import { passwordRegex } from '../../utilities/password-regex';
+import { IdDTO } from '../shared/id.dto';
 
 export class UserUpdate extends OmitType(User, [
   'createdAt',
@@ -26,10 +28,10 @@ export class UserUpdate extends OmitType(User, [
   'confirmedAt',
   'lastLoginAt',
   'phoneNumberVerified',
-  'agreedToTermsOfService',
   'hitConfirmationURL',
   'activeAccessToken',
   'activeRefreshToken',
+  'jurisdictions',
 ]) {
   @Expose()
   @ApiPropertyOptional()
@@ -63,4 +65,10 @@ export class UserUpdate extends OmitType(User, [
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   @ApiPropertyOptional()
   appUrl?: string;
+
+  @Expose()
+  @Type(() => IdDTO)
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ApiPropertyOptional({ type: IdDTO, isArray: true })
+  jurisdictions: IdDTO[];
 }
