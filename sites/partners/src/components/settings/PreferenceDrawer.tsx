@@ -537,6 +537,36 @@ const PreferenceDrawer = ({
               </FieldValue>
             </GridCell>
           </GridSection>
+          <GridSection wrapperClassName="mt-8">
+            <GridCell>
+              <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
+                <FieldGroup
+                  name="exclusiveQuestion"
+                  type="radio"
+                  register={register}
+                  fields={[
+                    {
+                      id: "multiselect",
+                      label: t("settings.preferenceMultiSelect"),
+                      value: "multiselect",
+                      defaultChecked: optionData === null || !optionData?.exclusive,
+                      dataTestId: "exclusive-question-multiselect",
+                    },
+                    {
+                      id: "exclusive",
+                      label: t("settings.preferenceExclusive"),
+                      value: "exclusive",
+                      defaultChecked: optionData?.exclusive,
+                      dataTestId: "exclusive-question-exclusive",
+                    },
+                  ]}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex items-center"
+                  dataTestId={"preference-exclusive-question"}
+                />
+              </FieldValue>
+            </GridCell>
+          </GridSection>
           <GridSection
             title={t("settings.preferenceAdditionalFields")}
             columns={3}
@@ -732,36 +762,6 @@ const PreferenceDrawer = ({
               </GridCell>
             </GridSection>
           )}
-          <GridSection>
-            <GridCell>
-              <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
-                <FieldGroup
-                  name="exclusiveQuestion"
-                  type="radio"
-                  register={register}
-                  fields={[
-                    {
-                      id: "multiselect",
-                      label: t("settings.preferenceMultiSelect"),
-                      value: "multiselect",
-                      defaultChecked: optionData === null || !optionData?.exclusive,
-                      dataTestId: "exclusive-question-multiselect",
-                    },
-                    {
-                      id: "exclusive",
-                      label: t("settings.preferenceExclusive"),
-                      value: "exclusive",
-                      defaultChecked: optionData?.exclusive,
-                      dataTestId: "exclusive-question-exclusive",
-                    },
-                  ]}
-                  fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
-                  dataTestId={"preference-exclusive-question"}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
         </div>
         <Button
           type="button"
