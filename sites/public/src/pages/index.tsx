@@ -84,6 +84,7 @@ export default function Home(props: IndexProps) {
             {t("welcome.useDoorwayBAHFAtext")}
             <br />
             <a
+              className="lined"
               href="https://mtc.ca.gov/about-mtc/authorities/bay-area-housing-finance-authority-bahfa"
               target="_blank"
             >

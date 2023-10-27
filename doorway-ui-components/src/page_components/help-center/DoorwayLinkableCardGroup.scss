@@ -5,6 +5,14 @@
   @media (max-width: $screen-lg) {
     flex-direction: column;
   }
+  a {
+    text-decoration: underline;
+    color: var(--bloom-color-primary-lighter);
+
+    &:hover {
+      color: var(--bloom-color-primary-light);
+    }
+  }
 }
 
 .doorway-linkable-card-group_nav {
@@ -14,8 +22,4 @@
     // TODO: add responsive styling here instead of hiding.
     padding: var(--doorway-standard-spacing);
   }
-}
-
-.doorway-linkable-card-group-main {
-  flex: 1;
 }

@@ -91,7 +91,7 @@ export function LandingSearch(props: LandingSearchProps) {
     let check = false
     const dahliaNote = `(${t(
       "filter.goToDahlia"
-    )} <a href="https://housing.sfgov.org/" target="_blank">DAHLIA</a>)`
+    )} <a class="lined" href="https://housing.sfgov.org/" target="_blank">DAHLIA</a>)`
 
     counties.forEach((county, idx) => {
       // FieldGroup uses the label attribute to check for selected inputs.
