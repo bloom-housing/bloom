@@ -1,7 +1,6 @@
 import { HttpException, Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
-import { MailDataRequired } from "@sendgrid/helpers/classes/mail"
 import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
@@ -19,13 +18,6 @@ import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
 import { IdName } from "../../types"
-import { formatLocalDate } from "../shared/utils/format-local-date"
-
-type EmailAttachmentData = {
-  data: string
-  name: string
-  type: string
-}
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -334,25 +326,14 @@ export class EmailService {
     from: string,
     subject: string,
     body: string,
-    retry = 3,
-    attachment?: EmailAttachmentData
+    retry = 3
   ) {
     const multipleRecipients = Array.isArray(to)
-    const emailParams: Partial<MailDataRequired> = {
+    const emailParams = {
       to,
       from,
       subject,
       html: body,
-    }
-    if (attachment) {
-      emailParams.attachments = [
-        {
-          content: Buffer.from(attachment.data).toString("base64"),
-          filename: attachment.name,
-          type: attachment.type,
-          disposition: "attachment",
-        },
-      ]
     }
     const handleError = (error) => {
       if (error instanceof ResponseError) {
@@ -466,28 +447,5 @@ export class EmailService {
     } catch (err) {
       throw new HttpException("email failed", 500)
     }
-  }
-
-  async sendCSV(user: User, listingName: string, listingId: string, applicationData: string) {
-    void (await this.loadTranslations(
-      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
-      user.language || Language.en
-    ))
-    const jurisdiction = await this.getUserJurisdiction(user)
-    await this.send(
-      user.email,
-      jurisdiction.emailFromAddress,
-      `${listingName} applications export`,
-      this.template("csv-export")({
-        user: user,
-        appOptions: { listingName, appUrl: this.configService.get("PARTNERS_PORTAL_URL") },
-      }),
-      undefined,
-      {
-        data: applicationData,
-        name: `applications-${listingId}-${formatLocalDate(new Date(), "YYYY-MM-DD_HH:mm:ss")}.csv`,
-        type: "text/csv",
-      }
-    )
   }
 }

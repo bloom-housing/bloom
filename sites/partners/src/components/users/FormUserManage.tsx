@@ -110,7 +110,6 @@ const FormUserManage = ({
     jurisdictionList.forEach((juris) => {
       jurisdictionalizedListings[juris.id] = []
     })
-    listings.sort((a, b) => a.name.localeCompare(b.name))
     listings.forEach((listing) => {
       if (jurisdictionalizedListings[listing.jurisdiction.id]) {
         // if the user has access to the jurisdiction

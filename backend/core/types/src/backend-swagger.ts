@@ -566,7 +566,7 @@ export class ApplicationsService {
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Status> {
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/csv"
 

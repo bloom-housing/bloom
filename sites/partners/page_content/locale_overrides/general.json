@@ -373,7 +373,6 @@
   "t.descriptionTitle": "Description",
   "t.done": "Done",
   "t.draft": "Draft",
-  "t.emailingExportSuccess": "An email containing the exported file has been sent to %{email}",
   "t.end": "End",
   "t.endTime": "End Time",
   "t.enterAmount": "Enter amount",

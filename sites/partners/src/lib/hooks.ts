@@ -498,41 +498,13 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 }
 
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
-  const { applicationsService, profile } = useContext(AuthContext)
+  const { applicationsService } = useContext(AuthContext)
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
-  const [csvExportSuccess, setCsvExportSuccess] = useState(false)
-
-  const onExport = useCallback(async () => {
-    setCsvExportError(false)
-    setCsvExportSuccess(false)
-    setCsvExportLoading(true)
-
-    try {
-      await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
-      setCsvExportSuccess(true)
-      setSiteAlertMessage(
-        t("t.emailingExportSuccess", {
-          email: profile?.email,
-        }),
-        "success"
-      )
-    } catch (err) {
-      console.log(err)
-      setCsvExportError(true)
-    }
-
-    setCsvExportLoading(false)
-  }, [applicationsService, includeDemographics, listingId, profile?.email, timeZone])
-
-  return {
-    onExport,
-    csvExportLoading,
-    csvExportError,
-    csvExportSuccess,
-  }
+  return useCsvExport(
+    () => applicationsService.listAsCsv({ listingId, timeZone, includeDemographics }),
+    `applications-${listingId}-${createDateStringFromNow()}.csv`
+  )
 }
 
 export const useUsersExport = () => {
