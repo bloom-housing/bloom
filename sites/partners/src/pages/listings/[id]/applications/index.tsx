@@ -109,10 +109,9 @@ const ApplicationsList = () => {
       <Head>
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
-      {csvExportSuccess && <SiteAlert type="success" timeout={5000} dismissable sticky={true} />}
+      {csvExportSuccess && <SiteAlert type="success" dismissable sticky={true} />}
       {csvExportError && (
         <SiteAlert
-          timeout={5000}
           dismissable
           sticky={true}
           alertMessage={{ message: t("account.settings.alerts.genericError"), type: "alert" }}

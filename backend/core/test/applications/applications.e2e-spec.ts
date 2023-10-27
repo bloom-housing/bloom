@@ -48,7 +48,12 @@ describe("Applications", () => {
 
   beforeEach(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = { confirmation: async () => {}, requestApproval: async () => {} }
+
+    const testEmailService = {
+      confirmation: async () => {},
+      requestApproval: async () => {},
+      sendCSV: async () => {},
+    }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -443,8 +448,7 @@ describe("Applications", () => {
       .get(`/applications/csv/?listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
-    expect(typeof res.text === "string")
-    expect(new RegExp(/Flagged/).test(res.text)).toEqual(true)
+    expect(res.body.status).toEqual("Success")
   })
 
   it(`should allow an admin to delete user's applications`, async () => {
