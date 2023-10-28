@@ -66,9 +66,7 @@ export default () => {
               <Field
                 id="firstName"
                 name="firstName"
-                label={t("application.name.firstName")}
-                readerOnly={true}
-                placeholder={t("application.name.firstName")}
+                label={"Given Name"}
                 defaultValue={application.alternateContact.firstName}
                 validation={{ required: true, maxLength: 64 }}
                 errorMessage={
@@ -83,9 +81,7 @@ export default () => {
               <Field
                 id="lastName"
                 name="lastName"
-                label={t("application.name.lastName")}
-                readerOnly={true}
-                placeholder={t("application.name.lastName")}
+                label={"Family Name"}
                 defaultValue={application.alternateContact.lastName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.lastName}
@@ -104,9 +100,6 @@ export default () => {
                     name="agency"
                     label={t("application.alternateContact.name.caseManagerAgencyFormLabel")}
                     caps={true}
-                    placeholder={t(
-                      "application.alternateContact.name.caseManagerAgencyFormPlaceHolder"
-                    )}
                     defaultValue={application.alternateContact.agency}
                     validation={{ required: true }}
                     error={errors.agency}

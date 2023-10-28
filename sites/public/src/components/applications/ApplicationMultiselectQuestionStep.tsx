@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { AlertBox, Form, t } from "@bloom-housing/ui-components"
-import FormsLayout from "../../layouts/forms"
-import { useFormConductor } from "../../lib/hooks"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { ApplicationSection, MultiselectOption } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
@@ -20,10 +19,12 @@ import {
   PageView,
   pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../layouts/forms"
+import { useFormConductor } from "../../lib/hooks"
+
 import { UserStatus } from "../../lib/constants"
 import { AddressValidationSelection, findValidatedAddress, FoundAddress } from "./ValidateAddress"
 import ApplicationFormLayout from "../../layouts/application-form"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 export interface ApplicationMultiselectQuestionStepProps {
   applicationSection: ApplicationSection

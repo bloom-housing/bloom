@@ -168,7 +168,6 @@ const ApplicationAddress = () => {
                 required={true}
                 id="applicant.phoneNumber"
                 name="applicant.phoneNumber"
-                placeholder={clientLoaded && noPhone ? t("t.none") : null}
                 error={!noPhone ? errors.applicant?.phoneNumber : false}
                 errorMessage={t("errors.phoneNumberError")}
                 controlClassName="control"
@@ -176,8 +175,8 @@ const ApplicationAddress = () => {
                 defaultValue={application.applicant.phoneNumber}
                 disabled={clientLoaded && noPhone}
                 dataTestId={"app-primary-phone-number"}
+                subNote={"10-digit, for example 999-999-9999"}
               />
-
               <Select
                 id="applicant.phoneNumberType"
                 name="applicant.phoneNumberType"
@@ -252,6 +251,7 @@ const ApplicationAddress = () => {
                     defaultValue={application.additionalPhoneNumber}
                     controlClassName="control"
                     dataTestId={"app-primary-additional-phone-number"}
+                    subNote={"10-digit, for example 999-999-9999"}
                   />
                   <Select
                     id="additionalPhoneNumberType"
@@ -288,7 +288,6 @@ const ApplicationAddress = () => {
                   id="addressStreet"
                   name="applicant.address.street"
                   label={t("application.contact.streetAddress")}
-                  placeholder={t("application.contact.streetAddress")}
                   defaultValue={application.applicant.address.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
@@ -305,7 +304,6 @@ const ApplicationAddress = () => {
                   id="addressStreet2"
                   name="applicant.address.street2"
                   label={t("application.contact.apt")}
-                  placeholder={t("application.contact.apt")}
                   defaultValue={application.applicant.address.street2}
                   register={register}
                   dataTestId={"app-primary-address-street2"}
@@ -319,7 +317,6 @@ const ApplicationAddress = () => {
                     id="addressCity"
                     name="applicant.address.city"
                     label={t("application.contact.cityName")}
-                    placeholder={t("application.contact.cityName")}
                     defaultValue={application.applicant.address.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
@@ -354,7 +351,6 @@ const ApplicationAddress = () => {
                   id="addressZipCode"
                   name="applicant.address.zipCode"
                   label={t("application.contact.zip")}
-                  placeholder={t("application.contact.zipCode")}
                   defaultValue={application.applicant.address.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
@@ -551,6 +547,7 @@ const ApplicationAddress = () => {
 
               {(workInRegion == "yes" ||
                 (!workInRegion && application.applicant.workInRegion == "yes")) && (
+                //TODO
                 <div className="form-card__group mx-0 px-0 mt-2">
                   <fieldset>
                     <legend className="text__caps-spaced">
@@ -560,7 +557,6 @@ const ApplicationAddress = () => {
                     <Field
                       id="workAddressStreet"
                       name="applicant.workAddress.street"
-                      placeholder={t("application.contact.streetAddress")}
                       defaultValue={application.applicant.workAddress.street}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.street}
@@ -572,14 +568,12 @@ const ApplicationAddress = () => {
                       register={register}
                       dataTestId={"app-primary-work-address-street"}
                       label={t("application.contact.streetAddress")}
-                      readerOnly={true}
                     />
 
                     <Field
                       id="workAddressStreet2"
                       name="applicant.workAddress.street2"
                       label={t("application.contact.apt")}
-                      placeholder={t("application.contact.apt")}
                       defaultValue={application.applicant.workAddress.street2}
                       register={register}
                       error={errors.applicant?.workAddress?.street2}
@@ -593,7 +587,6 @@ const ApplicationAddress = () => {
                         id="workAddressCity"
                         name="applicant.workAddress.city"
                         label={t("application.contact.cityName")}
-                        placeholder={t("application.contact.cityName")}
                         defaultValue={application.applicant.workAddress.city}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.workAddress?.city}
@@ -629,7 +622,6 @@ const ApplicationAddress = () => {
                       id="workAddressZipCode"
                       name="applicant.workAddress.zipCode"
                       label={t("application.contact.zip")}
-                      placeholder={t("application.contact.zipCode")}
                       defaultValue={application.applicant.workAddress.zipCode}
                       validation={{ required: true, maxLength: 64 }}
                       error={errors.applicant?.workAddress?.zipCode}

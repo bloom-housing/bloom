@@ -94,9 +94,7 @@ const ApplicationName = () => {
 
                 <Field
                   name="applicant.firstName"
-                  label={t("application.name.firstName")}
-                  placeholder={t("application.name.firstName")}
-                  readerOnly={true}
+                  label={"Given Name"}
                   disabled={autofilled}
                   defaultValue={application.applicant.firstName}
                   validation={{ required: true, maxLength: 64 }}
@@ -113,9 +111,7 @@ const ApplicationName = () => {
                 <Field
                   name="applicant.middleName"
                   label={t("application.name.middleNameOptional")}
-                  placeholder={t("application.name.middleNameOptional")}
                   disabled={autofilled}
-                  readerOnly={true}
                   defaultValue={application.applicant.middleName}
                   register={register}
                   dataTestId={"app-primary-middle-name"}
@@ -126,10 +122,8 @@ const ApplicationName = () => {
 
                 <Field
                   name="applicant.lastName"
-                  label={t("application.name.lastName")}
-                  placeholder={t("application.name.lastName")}
+                  label={"Family Name"}
                   disabled={autofilled}
-                  readerOnly={true}
                   defaultValue={application.applicant.lastName}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.applicant?.lastName}
@@ -181,7 +175,6 @@ const ApplicationName = () => {
             <Field
               type="email"
               name="applicant.emailAddress"
-              placeholder={clientLoaded && noEmail ? t("t.none") : "example@web.com"}
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
@@ -191,6 +184,7 @@ const ApplicationName = () => {
               register={register}
               disabled={clientLoaded && (noEmail || autofilled)}
               dataTestId={"app-primary-email"}
+              subNote={"example@mail.com"}
             />
 
             <Field

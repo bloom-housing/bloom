@@ -144,9 +144,7 @@ const ApplicationMember = () => {
               <Field
                 id="firstName"
                 name="firstName"
-                label={t("application.name.firstName")}
-                placeholder={t("application.name.firstName")}
-                readerOnly={true}
+                label={"Given Name"}
                 defaultValue={member.firstName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.firstName}
@@ -163,8 +161,6 @@ const ApplicationMember = () => {
                 id="middleName"
                 name="middleName"
                 label={t("application.name.middleNameOptional")}
-                readerOnly={true}
-                placeholder={t("application.name.middleNameOptional")}
                 defaultValue={member.middleName}
                 validation={{ maxLength: 64 }}
                 error={errors.middleName}
@@ -176,9 +172,7 @@ const ApplicationMember = () => {
               <Field
                 id="lastName"
                 name="lastName"
-                placeholder={t("application.name.lastName")}
-                label={t("application.name.lastName")}
-                readerOnly={true}
+                label={"Family Name"}
                 defaultValue={member.lastName}
                 validation={{ required: true, maxLength: 64 }}
                 error={errors.lastName}
@@ -235,7 +229,6 @@ const ApplicationMember = () => {
                 <Field
                   id="addressStreet"
                   name="address.street"
-                  placeholder={t("application.contact.streetAddress")}
                   defaultValue={member.address.street}
                   validation={{ required: true, maxLength: 64 }}
                   errorMessage={
@@ -243,17 +236,16 @@ const ApplicationMember = () => {
                       ? t("errors.maxLength")
                       : t("errors.streetError")
                   }
+                  error={errors.address?.street}
                   register={register}
                   dataTestId={"app-household-member-address-street"}
                   label={t("application.contact.streetAddress")}
-                  readerOnly={true}
                 />
 
                 <Field
                   id="addressStreet2"
                   name="address.street2"
                   label={t("application.contact.apt")}
-                  placeholder={t("application.contact.apt")}
                   defaultValue={member.address.street2}
                   error={errors.address?.street2}
                   validation={{ maxLength: 64 }}
@@ -267,7 +259,6 @@ const ApplicationMember = () => {
                     id="addressCity"
                     name="address.city"
                     label={t("application.contact.cityName")}
-                    placeholder={t("application.contact.cityName")}
                     defaultValue={member.address.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
@@ -275,6 +266,7 @@ const ApplicationMember = () => {
                         ? t("errors.maxLength")
                         : t("errors.cityError")
                     }
+                    error={errors.address?.city}
                     register={register}
                     dataTestId={"app-household-member-address-city"}
                   />
@@ -303,7 +295,6 @@ const ApplicationMember = () => {
                   id="addressZipCode"
                   name="address.zipCode"
                   label={t("application.contact.zip")}
-                  placeholder={t("application.contact.zipCode")}
                   defaultValue={member.address.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.address?.zipCode}
@@ -348,7 +339,7 @@ const ApplicationMember = () => {
                 <Field
                   id="workAddress.street"
                   name="workAddress.street"
-                  placeholder={t("application.contact.streetAddress")}
+                  label={t("application.contact.streetAddress")}
                   defaultValue={member.workAddress.street}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.workAddress?.street}
@@ -365,7 +356,6 @@ const ApplicationMember = () => {
                   id="workAddress.street2"
                   name="workAddress.street2"
                   label={t("application.contact.apt")}
-                  placeholder={t("application.contact.apt")}
                   defaultValue={member.workAddress.street2}
                   error={errors.workAddress?.street2}
                   errorMessage={t("errors.maxLength")}
@@ -379,7 +369,6 @@ const ApplicationMember = () => {
                     id="workAddress.city"
                     name="workAddress.city"
                     label={t("application.contact.cityName")}
-                    placeholder={t("application.contact.cityName")}
                     defaultValue={member.workAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.workAddress?.city}
@@ -416,7 +405,6 @@ const ApplicationMember = () => {
                   id="workAddress.zipCode"
                   name="workAddress.zipCode"
                   label={t("application.contact.zip")}
-                  placeholder={t("application.contact.zipCode")}
                   defaultValue={member.workAddress.zipCode}
                   validation={{ required: true, maxLength: 64 }}
                   error={errors.workAddress?.zipCode}

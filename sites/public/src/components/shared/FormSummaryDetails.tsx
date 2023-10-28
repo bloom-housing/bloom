@@ -352,7 +352,11 @@ const FormSummaryDetails = ({
                 className="info-group__item"
                 key={`${member.firstName} - ${member.lastName} - ${index}`}
               >
-                <FieldValue testId={"app-summary-household-member-name"} className={"pb-4"}>
+                <FieldValue
+                  label={t("t.name")}
+                  testId={"app-summary-household-member-name"}
+                  className={"pb-4"}
+                >
                   {member.firstName} {member.lastName}
                 </FieldValue>
                 <div>

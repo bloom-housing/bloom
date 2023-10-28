@@ -95,6 +95,7 @@ export default () => {
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
               dataTestId={"app-alternate-phone-number"}
+              subNote={"10-digit, for example 999-999-9999"}
             />
           </CardSection>
           <CardSection divider={"inset"}>
@@ -106,7 +107,6 @@ export default () => {
               name="emailAddress"
               label={t("application.alternateContact.contact.emailAddressFormLabel")}
               readerOnly={true}
-              placeholder={t("t.emailAddressPlaceholder")}
               defaultValue={application.alternateContact.emailAddress || null}
               register={register}
               type="email"
@@ -114,6 +114,7 @@ export default () => {
               error={errors.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               dataTestId={"app-alternate-email"}
+              subNote={"example@mail.com"}
             />
           </CardSection>
           <CardSection divider={"flush"} className={"border-none"}>
@@ -128,7 +129,6 @@ export default () => {
                 id="mailingAddress.street"
                 name="mailingAddress.street"
                 label={t("application.contact.streetAddress")}
-                placeholder={t("application.contact.streetAddress")}
                 defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-street"}
@@ -141,7 +141,6 @@ export default () => {
                 name="mailingAddress.street2"
                 label={t("application.contact.apt")}
                 register={register}
-                placeholder={t("application.contact.apt")}
                 dataTestId={"app-alternate-mailing-address-street2"}
                 defaultValue={application.alternateContact.mailingAddress.street2}
                 error={errors.mailingAddress?.street2}
@@ -153,7 +152,6 @@ export default () => {
                   id="mailingAddress.city"
                   name="mailingAddress.city"
                   label={t("application.contact.cityName")}
-                  placeholder={t("application.contact.cityName")}
                   defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}
@@ -181,7 +179,6 @@ export default () => {
                 id="mailingAddress.zipCode"
                 name="mailingAddress.zipCode"
                 label={t("application.contact.zip")}
-                placeholder={t("application.contact.zipCode")}
                 defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
                 dataTestId={"app-alternate-mailing-address-zip"}

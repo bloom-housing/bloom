@@ -162,7 +162,6 @@ const ApplicationIncome = () => {
               type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
-              placeholder={t("application.financial.income.placeholder")}
               validation={{ required: true, min: 0.01 }}
               error={errors.income}
               register={register}
@@ -171,6 +170,7 @@ const ApplicationIncome = () => {
               getValues={getValues}
               prepend={"$"}
               dataTestId={"app-income"}
+              subNote={t("application.financial.income.placeholder")}
             />
 
             <fieldset>

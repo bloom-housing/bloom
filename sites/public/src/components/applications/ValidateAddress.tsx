@@ -135,8 +135,8 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               </label>
             </div>
             <Button
-              variant="text"
-              className="mt-0 mr-0"
+              variant={"text"}
+              className="font-alt-sans font-semibold mt-0 mr-0"
               onClick={() => {
                 setVerifyAddress(false)
                 setVerifyAddressStep?.(0)

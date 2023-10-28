@@ -77,6 +77,12 @@ const ApplicationVouchers = () => {
           }}
           conductor={conductor}
         >
+          {Object.entries(errors).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
+
           <CardSection>
             {/* TODO does this content need to be in the subheader, prolly does */}
             <p className="field-note mb-4">
@@ -94,12 +100,6 @@ const ApplicationVouchers = () => {
               {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
             </p>
           </CardSection>
-
-          {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
-              {t("errors.errorsToResolve")}
-            </AlertBox>
-          )}
 
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>

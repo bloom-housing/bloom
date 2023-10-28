@@ -4,9 +4,9 @@ import { useRouter } from "next/router"
 import { Button } from "@bloom-housing/ui-seeds"
 import {
   ImageCard,
-  ActionBlock,
+  LinkButton,
   t,
-  Heading,
+  AppearanceSizeType,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import {
@@ -17,6 +17,7 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { Language } from "@bloom-housing/backend-core/types"
+import { Heading } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import {
@@ -121,14 +122,12 @@ const ApplicationChooseLanguage = () => {
         {listing?.applicationConfig.languages.length > 1 && (
           <CardSection divider={"flush"}>
             <>
-              <div>
-                <Heading styleType="underlineWeighted">
-                  {t("application.chooseLanguage.chooseYourLanguage")}
-                </Heading>
-              </div>
+              <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                {t("application.chooseLanguage.chooseYourLanguage")}
+              </Heading>
               {listing.applicationConfig.languages.map((lang, index) => (
                 <Button
-                  className="mx-1 mb-2"
+                  className="mr-2 mb-2"
                   onClick={() => {
                     onLanguageSelect(lang)
                   }}
@@ -145,39 +144,29 @@ const ApplicationChooseLanguage = () => {
         {initialStateLoaded && !profile && (
           <>
             <CardSection divider={"flush"} className={"bg-primary-lighter"}>
-              <ActionBlock
-                header={<Heading priority={2}>{t("account.haveAnAccount")}</Heading>}
-                subheader={t("application.chooseLanguage.signInSaveTime")}
-                className={"p-0"}
-                actions={[
-                  <Button
-                    variant="primary-outlined"
-                    href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                    id={"app-choose-language-sign-in-button"}
-                    size="sm"
-                  >
-                    {t("nav.signIn")}
-                  </Button>,
-                ]}
-              />
+              <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                {t("account.haveAnAccount")}
+              </Heading>
+              <p className={"pb-4"}>{t("application.chooseLanguage.signInSaveTime")}</p>
+              <LinkButton
+                href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                dataTestId={"app-choose-language-sign-in-button"}
+                size={AppearanceSizeType.small}
+              >
+                {t("nav.signIn")}
+              </LinkButton>
             </CardSection>
             <CardSection divider={"flush"} className={"bg-primary-lighter"}>
-              <ActionBlock
-                header={
-                  <Heading priority={2}>{t("authentication.createAccount.noAccount")}</Heading>
-                }
-                className={"p-0"}
-                actions={[
-                  <Button
-                    variant="primary-outlined"
-                    href={"/create-account"}
-                    id={"app-choose-language-create-account-button"}
-                    size="sm"
-                  >
-                    {t("account.createAccount")}
-                  </Button>,
-                ]}
-              />
+              <Heading priority={2} size={"2xl"} className={"pb-4"}>
+                {t("authentication.createAccount.noAccount")}
+              </Heading>
+              <LinkButton
+                href={"/create-account"}
+                dataTestId={"app-choose-language-create-account-button"}
+                size={AppearanceSizeType.small}
+              >
+                {t("account.createAccount")}
+              </LinkButton>
             </CardSection>
           </>
         )}

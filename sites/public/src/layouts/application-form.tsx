@@ -78,7 +78,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
               {t("t.next")}
             </Button>
 
-            {props.conductor.canJumpForwardToReview() && (
+            {props.progressNavProps.mounted && props.conductor.canJumpForwardToReview() && (
               <div>
                 <Button
                   className="mt-4"
