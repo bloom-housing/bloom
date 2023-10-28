@@ -12,7 +12,7 @@ const PageHeroActions = (props) => {
 
 const PageHero = (props) => {
   return (
-    <div className={styles["page-hero"]}>
+    <div id="hero-component" className={styles["page-hero"]}>
       <section>{props.children}</section>
     </div>
   )

@@ -12,7 +12,7 @@ import {
 Cypress.Commands.add("signIn", () => {
   cy.get(`[data-testid="sign-in-email-field"]`).type("admin@example.com")
   cy.get(`[data-testid="sign-in-password-field"]`).type("abcdef")
-  cy.get(`[data-testid="sign-in-button"]`).click()
+  cy.getByID("sign-in-button").click()
 })
 
 Cypress.Commands.add("signOut", () => {
@@ -51,7 +51,7 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.getByID("app-choose-language-sign-in-button").click()
   cy.get("[data-testid=sign-in-email-field]").type("admin@example.com")
   cy.get("[data-testid=sign-in-password-field]").type("abcdef")
-  cy.get("[data-testid=sign-in-button").click()
+  cy.getByID("sign-in-button").click()
   cy.get(".language-select").eq(0).click()
   cy.getByID("app-next-step-button").click()
   cy.getByTestId("application-initial-page").then(() => {
