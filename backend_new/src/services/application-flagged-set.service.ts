@@ -33,8 +33,8 @@ import { Application } from '../dtos/applications/application.dto';
 import { IdDTO } from 'src/dtos/shared/id.dto';
 
 /*
-  this is the service for unit types
-  it handles all the backend's business logic for reading/writing/deleting unit type data
+  this is the service for application flaged sets
+  it handles all the backend's business logic for managing flagged set data
 */
 
 const CRON_JOB_NAME = 'AFS_CRON_JOB';
@@ -51,8 +51,8 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     // Take the cron job frequency from .env and add a random seconds to it.
     // That way when there are multiple instances running they won't run at the exact same time.
     const repeatCron = process.env.AFS_PROCESSING_CRON_STRING;
-    const randomSecond = Math.floor(Math.random() * 60);
-    const newCron = `${randomSecond} ${repeatCron}`;
+    const randomSecond = Math.floor(Math.random() * 30);
+    const newCron = `${randomSecond * 2} ${repeatCron}`;
     const job = new CronJob(newCron, () => {
       void (async () => {
         const currentCronJob = await this.prisma.cronJob.findFirst({
@@ -75,7 +75,9 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       })();
     });
     this.schedulerRegistry.addCronJob(CRON_JOB_NAME, job);
-    job.start();
+    if (process.env.NODE_ENV !== 'test') {
+      job.start();
+    }
   }
 
   /**
@@ -136,24 +138,29 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     }
 
     if (params.view) {
-      if (params.view === View.pending) {
-        filters.push({
-          status: FlaggedSetStatusEnum.pending,
-        });
-      } else if (params.view === View.pendingNameAndDoB) {
-        filters.push({
-          status: FlaggedSetStatusEnum.pending,
-          rule: RuleEnum.nameAndDOB,
-        });
-      } else if (params.view === View.pendingEmail) {
-        filters.push({
-          status: FlaggedSetStatusEnum.pending,
-          rule: RuleEnum.email,
-        });
-      } else if (params.view === View.resolved) {
-        filters.push({
-          status: FlaggedSetStatusEnum.resolved,
-        });
+      switch (params.view) {
+        case View.pending:
+          filters.push({
+            status: FlaggedSetStatusEnum.pending,
+          });
+          break;
+        case View.pendingNameAndDoB:
+          filters.push({
+            status: FlaggedSetStatusEnum.pending,
+            rule: RuleEnum.nameAndDOB,
+          });
+          break;
+        case View.pendingEmail:
+          filters.push({
+            status: FlaggedSetStatusEnum.pending,
+            rule: RuleEnum.email,
+          });
+          break;
+        case View.resolved:
+          filters.push({
+            status: FlaggedSetStatusEnum.resolved,
+          });
+          break;
       }
     }
 
@@ -212,21 +219,24 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   */
   async meta(params: AfsQueryParams): Promise<AfsMeta> {
     const [
-      totalCount,
+      // totalCount,
       totalResolvedCount,
-      totalPendingCount,
+      // totalPendingCount,
       totalNamePendingCount,
       totalEmailPendingCount,
     ] = await Promise.all([
-      this.metaHelper(params.listingId),
-      this.metaHelper(params.listingId, FlaggedSetStatusEnum.resolved),
-      this.metaHelper(params.listingId, FlaggedSetStatusEnum.pending),
-      this.metaHelper(
+      // this.metaDataQueryBuilder(params.listingId),
+      this.metaDataQueryBuilder(
+        params.listingId,
+        FlaggedSetStatusEnum.resolved,
+      ),
+      // this.metaDataQueryBuilder(params.listingId, FlaggedSetStatusEnum.pending),
+      this.metaDataQueryBuilder(
         params.listingId,
         FlaggedSetStatusEnum.pending,
         RuleEnum.nameAndDOB,
       ),
-      this.metaHelper(
+      this.metaDataQueryBuilder(
         params.listingId,
         FlaggedSetStatusEnum.pending,
         RuleEnum.email,
@@ -234,9 +244,10 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     ]);
 
     return {
-      totalCount,
+      totalCount:
+        totalResolvedCount + totalNamePendingCount + totalEmailPendingCount,
       totalResolvedCount,
-      totalPendingCount,
+      totalPendingCount: totalNamePendingCount + totalEmailPendingCount,
       totalNamePendingCount,
       totalEmailPendingCount,
     };
@@ -245,7 +256,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
   /**
     helper that builds the meta functions queries
   */
-  metaHelper(
+  metaDataQueryBuilder(
     listingId: string,
     status?: FlaggedSetStatusEnum,
     rule?: RuleEnum,
@@ -268,12 +279,15 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         id: dto.afsId,
       },
     ];
+
+    let applicationIds: string[] = [];
     if (dto.applications?.length) {
+      applicationIds = dto.applications.map((app) => app.id);
       filter.push({
         applications: {
           some: {
             id: {
-              in: dto.applications.map((application) => application.id),
+              in: applicationIds,
             },
           },
         },
@@ -288,7 +302,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         applications: {
           where: {
             id: {
-              in: dto.applications.map((application) => application.id),
+              in: applicationIds,
             },
           },
         },
@@ -301,7 +315,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
       );
     }
 
-    const selectedApps = dto.applications?.length
+    const selectedApps = afs.applications
       ? afs.applications.map((app) => app.id)
       : [];
 
@@ -440,7 +454,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     this goes through listings that have had an application added since the last cronjob run
     it calls a series of helpers to add to or build a flagged set if duplicates are found
   */
-  async process(): Promise<SuccessDTO> {
+  async process(listingId?: string): Promise<SuccessDTO> {
     this.logger.warn('running the Application flagged sets cron job');
     await this.markCronJobAsStarted();
     const outOfDateListings = await this.prisma.listings.findMany({
@@ -452,6 +466,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         lastApplicationUpdateAt: {
           not: null,
         },
+        id: listingId,
         AND: [
           {
             OR: [
@@ -548,7 +563,9 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     application: Application,
     listingId: string,
   ): Promise<void> {
+    // if we already found a match then we know that the application can't go into another flagged set
     let alreadyFoundMatch = false;
+
     for (const rule of [RuleEnum.email, RuleEnum.nameAndDOB]) {
       // get list of applications that the application matches on. Compared via the RuleEnum
       const applicationsThatMatched = await this.checkForMatchesAgainstRule(
@@ -579,11 +596,10 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
         // if there were duplicates (application could be a part of a flagged set)
         if (flagSetsThisAppBelongsTo.length) {
           // if application is part of a flagged set already
-          let wasInTheCorrectFlaggedSet = false;
           for (const flaggedSet of flagSetsThisAppBelongsTo) {
             if (flaggedSet.ruleKey === builtRuleKey) {
               // if application belongs in this flagged set
-              wasInTheCorrectFlaggedSet = true;
+              alreadyFoundMatch = true;
             } else {
               // application doesn't belong in this flagged set
               await this.disconnectApplicationFromFlaggedSet(
@@ -593,7 +609,7 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
               );
             }
           }
-          if (!wasInTheCorrectFlaggedSet) {
+          if (!alreadyFoundMatch) {
             // if application didn't belong to any of its previous flagged sets
             await this.createOrConnectToFlaggedSet(
               rule,
@@ -696,36 +712,26 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     application: Application,
     listingId: string,
   ): Promise<Application[]> {
-    const firstNames = [
-      application.applicant.firstName,
-      ...(application.householdMember
-        ? application.householdMember.map((member) => member.firstName)
-        : []),
-    ];
-    const lastNames = [
-      application.applicant.lastName,
-      ...(application.householdMember
-        ? application.householdMember.map((member) => member.lastName)
-        : []),
-    ];
-    const birthMonths = [
-      application.applicant.birthMonth,
-      ...(application.householdMember
-        ? application.householdMember.map((member) => member.birthMonth)
-        : []),
-    ];
-    const birthDays = [
-      application.applicant.birthDay,
-      ...(application.householdMember
-        ? application.householdMember.map((member) => member.birthDay)
-        : []),
-    ];
-    const birthYears = [
-      application.applicant.birthYear,
-      ...(application.householdMember
-        ? application.householdMember.map((member) => member.birthYear)
-        : []),
-    ];
+    const firstNames = this.criteriaBuilderForCheckAgainstNameAndDOB(
+      'firstName',
+      application,
+    );
+    const lastNames = this.criteriaBuilderForCheckAgainstNameAndDOB(
+      'lastName',
+      application,
+    );
+    const birthMonths = this.criteriaBuilderForCheckAgainstNameAndDOB(
+      'birthMonth',
+      application,
+    );
+    const birthDays = this.criteriaBuilderForCheckAgainstNameAndDOB(
+      'birthDay',
+      application,
+    );
+    const birthYears = this.criteriaBuilderForCheckAgainstNameAndDOB(
+      'birthYear',
+      application,
+    );
 
     const apps = await this.prisma.applications.findMany({
       select: {
@@ -843,6 +849,18 @@ export class ApplicationFlaggedSetService implements OnModuleInit {
     });
 
     return mapTo(Application, apps);
+  }
+
+  criteriaBuilderForCheckAgainstNameAndDOB(
+    key: string,
+    application: Application,
+  ): string[] {
+    return [
+      application.applicant[key],
+      ...(application.householdMember
+        ? application.householdMember.map((member) => member[key])
+        : []),
+    ];
   }
 
   /**

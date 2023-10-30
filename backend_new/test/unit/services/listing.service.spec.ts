@@ -28,7 +28,8 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { ListingUpdate } from '../../../src/dtos/listings/listing-update.dto';
 import { ListingPublishedCreate } from '../../../src/dtos/listings/listing-published-create.dto';
-import { ListingPublishedUpdate } from 'src/dtos/listings/listing-published-update.dto';
+import { ListingPublishedUpdate } from '../../../src/dtos/listings/listing-published-update.dto';
+import { ApplicationFlaggedSetService } from '../../../src/services/application-flagged-set.service';
 
 /*
   generates a super simple mock listing for us to test logic with
@@ -126,6 +127,10 @@ describe('Testing listing service', () => {
     ),
   };
 
+  const afsMock = {
+    process: jest.fn().mockResolvedValue(true),
+  };
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -139,6 +144,10 @@ describe('Testing listing service', () => {
         {
           provide: HttpService,
           useValue: httpServiceMock,
+        },
+        {
+          provide: ApplicationFlaggedSetService,
+          useValue: afsMock,
         },
       ],
       imports: [HttpModule],

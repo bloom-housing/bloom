@@ -869,6 +869,9 @@ CREATE INDEX "applications_listing_id_idx" ON "applications"("listing_id");
 CREATE UNIQUE INDEX "applications_listing_id_confirmation_code_key" ON "applications"("listing_id", "confirmation_code");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "cron_job_name_key" ON "cron_job"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "household_member_address_id_key" ON "household_member"("address_id");
 
 -- CreateIndex

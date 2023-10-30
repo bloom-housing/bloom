@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { MultiselectQuestionsApplicationSectionEnum } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
@@ -28,10 +27,6 @@ describe('MultiselectQuestion Controller Tests', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     await app.init();
-    const schedulerRegistry =
-      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
-    // we stop the cron job since we don't want the cron job to run during tests
-    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
     const jurisdiction = await prisma.jurisdictions.create({
       data: jurisdictionFactory(),
     });

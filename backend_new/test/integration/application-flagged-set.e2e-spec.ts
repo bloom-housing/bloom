@@ -11,7 +11,6 @@ import {
   RuleEnum,
   YesNoEnum,
 } from '@prisma/client';
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppModule } from '../../src/modules/app.module';
 import { PrismaService } from '../../src/services/prisma.service';
 import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-factory';
@@ -53,7 +52,7 @@ describe('Application flagged set Controller Tests', () => {
     emailIndicator: string,
     nameAndDOBIndicator: string,
     listing: string,
-    householdMemeber?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
+    householdMember?: Prisma.HouseholdMemberCreateWithoutApplicationsInput,
   ) => {
     return await prisma.applications.create({
       data: applicationFactory({
@@ -66,7 +65,7 @@ describe('Application flagged set Controller Tests', () => {
           birthYear: nameAndDOBIndicator,
         },
         listingId: listing,
-        householdMemeber,
+        householdMember,
       }),
       include: {
         applicant: true,
@@ -81,13 +80,8 @@ describe('Application flagged set Controller Tests', () => {
 
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
-    const schedulerRegistry =
-      moduleFixture.get<SchedulerRegistry>(SchedulerRegistry);
 
     await app.init();
-
-    // we stop the cron job since we don't want the cron job to run during tests
-    schedulerRegistry.getCronJob('AFS_CRON_JOB').stop();
   });
 
   afterAll(async () => {
@@ -1152,7 +1146,6 @@ describe('Application flagged set Controller Tests', () => {
       if (flaggedSet.ruleKey.indexOf(`${listing}-email1@email.com`) >= 0) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appA.id);
-        allApplicationCount++;
         expect(applications).toContain(appB.id);
         allApplicationCount++;
       } else if (
@@ -1160,12 +1153,11 @@ describe('Application flagged set Controller Tests', () => {
       ) {
         const applications = flaggedSet.applications.map((app) => app.id);
         expect(applications).toContain(appC.id);
-        allApplicationCount++;
         expect(applications).toContain(appD.id);
         allApplicationCount++;
       }
     }
-    expect(allApplicationCount).toEqual(4);
+    expect(allApplicationCount).toEqual(2);
 
     await prisma.applications.update({
       data: {
@@ -1517,5 +1509,159 @@ describe('Application flagged set Controller Tests', () => {
 
     expect(afs.length).toEqual(1);
     expect(afs[0].rule).toEqual(RuleEnum.email);
+  });
+
+  it('should not reset resolved status when new application not in flagged set', async () => {
+    const listing = await createListing();
+
+    const appA = await createComplexApplication('1', '1', listing);
+    await createComplexApplication('2', '1', listing);
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .expect(200);
+
+    let afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+      include: {
+        applications: true,
+      },
+    });
+    expect(afs.length).toEqual(1);
+    expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+
+    await request(app.getHttpServer())
+      .post(`/applicationFlaggedSets/resolve`)
+      .send({
+        afsId: afs[0].id,
+        status: FlaggedSetStatusEnum.resolved,
+        applications: [
+          {
+            id: appA.id,
+          },
+        ],
+      } as AfsResolve)
+      .expect(201);
+
+    await createComplexApplication('3', '3', listing);
+    await prisma.listings.update({
+      where: {
+        id: listing,
+      },
+      data: {
+        lastApplicationUpdateAt: new Date(),
+      },
+    });
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .expect(200);
+
+    afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+      include: {
+        applications: true,
+      },
+    });
+    expect(afs.length).toEqual(1);
+    expect(afs[0].rule).toEqual(RuleEnum.nameAndDOB);
+    expect(afs[0].status).toEqual(FlaggedSetStatusEnum.resolved);
+  });
+
+  it('should reset resolved status when new application in flagged set', async () => {
+    const listing = await createListing();
+
+    const appA = await createComplexApplication('1', '1', listing);
+    await createComplexApplication('2', '1', listing);
+
+    const appC = await createComplexApplication('3', '3', listing);
+    await createComplexApplication('4', '3', listing);
+
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .expect(200);
+
+    let afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+      include: {
+        applications: true,
+      },
+    });
+
+    const containsAppA = afs.find((flaggedSet) =>
+      flaggedSet.applications.some((app) => app.id === appA.id),
+    );
+    const containsAppC = afs.find((flaggedSet) =>
+      flaggedSet.applications.some((app) => app.id === appC.id),
+    );
+    expect(afs.length).toEqual(2);
+    await request(app.getHttpServer())
+      .post(`/applicationFlaggedSets/resolve`)
+      .send({
+        afsId: containsAppA.id,
+        status: FlaggedSetStatusEnum.resolved,
+        applications: [
+          {
+            id: appA.id,
+          },
+        ],
+      } as AfsResolve)
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .post(`/applicationFlaggedSets/resolve`)
+      .send({
+        afsId: containsAppC.id,
+        status: FlaggedSetStatusEnum.resolved,
+        applications: [
+          {
+            id: appC.id,
+          },
+        ],
+      } as AfsResolve)
+      .expect(201);
+
+    await createComplexApplication('5', '3', listing);
+    await prisma.listings.update({
+      where: {
+        id: listing,
+      },
+      data: {
+        lastApplicationUpdateAt: new Date(),
+      },
+    });
+    await request(app.getHttpServer())
+      .put(`/applicationFlaggedSets/process`)
+      .expect(200);
+
+    afs = await prisma.applicationFlaggedSet.findMany({
+      where: {
+        listingId: listing,
+      },
+      include: {
+        applications: true,
+      },
+    });
+
+    expect(afs.length).toEqual(2);
+
+    const unchangedFlaggedSet = afs.find(
+      (flaggedSet) => flaggedSet.applications.length === 2,
+    );
+    const changedFlaggedSet = afs.find(
+      (flaggedSet) => flaggedSet.applications.length === 3,
+    );
+
+    expect(unchangedFlaggedSet.rule).toEqual(RuleEnum.nameAndDOB);
+    expect(unchangedFlaggedSet.status).toEqual(FlaggedSetStatusEnum.resolved);
+
+    expect(changedFlaggedSet.applications.length).toEqual(3);
+    expect(changedFlaggedSet.status).toEqual(FlaggedSetStatusEnum.pending);
   });
 });

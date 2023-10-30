@@ -248,7 +248,7 @@ model Assets {
 // Note: [name] formerly max length 64
 model CronJob {
   id          String    @id() @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name        String?
+  name        String?   @unique()
   lastRunDate DateTime? @map("last_run_date") @db.Timestamptz(6)
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)

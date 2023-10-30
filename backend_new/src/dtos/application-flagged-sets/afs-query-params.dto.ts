@@ -15,7 +15,7 @@ export class AfsQueryParams extends PaginationAllowsAllQueryParams {
   @ApiPropertyOptional({
     enum: View,
     enumName: 'AfsView',
-    example: 'active',
+    example: 'pending',
   })
   @IsEnum(View, { groups: [ValidationsGroupsEnum.default] })
   view?: View;

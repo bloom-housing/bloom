@@ -300,7 +300,7 @@ describe('Testing application flagged set service', () => {
   it('should build meta data helper query with status and rule arguments present', async () => {
     prisma.applicationFlaggedSet.count = jest.fn().mockResolvedValue(1);
     expect(
-      await service.metaHelper(
+      await service.metaDataQueryBuilder(
         'example id',
         FlaggedSetStatusEnum.pending,
         RuleEnum.email,
@@ -317,7 +317,7 @@ describe('Testing application flagged set service', () => {
 
   it('should build meta data helper query without status or rule arguments', async () => {
     prisma.applicationFlaggedSet.count = jest.fn().mockResolvedValue(1);
-    expect(await service.metaHelper('example id')).toEqual(1);
+    expect(await service.metaDataQueryBuilder('example id')).toEqual(1);
     expect(prisma.applicationFlaggedSet.count).toHaveBeenCalledWith({
       where: {
         listingId: 'example id',
@@ -358,9 +358,10 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should get a list of flagged sets when view is pendingEmail', async () => {
-    const mockCount = jest.fn();
-    mockCount.mockResolvedValueOnce(1);
-    mockCount.mockResolvedValueOnce(2);
+    const mockCount = jest
+      .fn()
+      .mockResolvedValueOnce(1)
+      .mockResolvedValueOnce(2);
     prisma.applicationFlaggedSet.count = mockCount;
     prisma.applicationFlaggedSet.findMany = jest.fn().mockResolvedValue([
       {
@@ -521,44 +522,30 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should grab meta data', async () => {
-    const mockCount = jest.fn();
-    mockCount.mockResolvedValueOnce(1);
-    mockCount.mockResolvedValueOnce(2);
-    mockCount.mockResolvedValueOnce(3);
-    mockCount.mockResolvedValueOnce(4);
-    mockCount.mockResolvedValueOnce(5);
+    const mockCount = jest
+      .fn()
+      .mockResolvedValueOnce(1)
+      .mockResolvedValueOnce(2)
+      .mockResolvedValueOnce(3);
 
     prisma.applicationFlaggedSet.count = mockCount;
 
     expect(await service.meta({ listingId: 'example id' })).toEqual({
-      totalCount: 1,
-      totalResolvedCount: 2,
-      totalPendingCount: 3,
-      totalNamePendingCount: 4,
-      totalEmailPendingCount: 5,
+      totalCount: 6,
+      totalResolvedCount: 1,
+      totalPendingCount: 5,
+      totalNamePendingCount: 2,
+      totalEmailPendingCount: 3,
     });
 
     expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(1, {
-      where: {
-        listingId: 'example id',
-      },
-    });
-
-    expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(2, {
       where: {
         listingId: 'example id',
         status: FlaggedSetStatusEnum.resolved,
       },
     });
 
-    expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(3, {
-      where: {
-        listingId: 'example id',
-        status: FlaggedSetStatusEnum.pending,
-      },
-    });
-
-    expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(4, {
+    expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(2, {
       where: {
         listingId: 'example id',
         status: FlaggedSetStatusEnum.pending,
@@ -566,7 +553,7 @@ describe('Testing application flagged set service', () => {
       },
     });
 
-    expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(5, {
+    expect(prisma.applicationFlaggedSet.count).toHaveBeenNthCalledWith(3, {
       where: {
         listingId: 'example id',
         status: FlaggedSetStatusEnum.pending,
@@ -1376,21 +1363,22 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with no duplicates present and existing flagged set for nameAndDOB', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([]);
-    mockCall.mockResolvedValueOnce([
-      {
-        id: 'found afs id',
-        applications: [
-          {
-            id: 'id 1',
-          },
-          {
-            id: 'id 2',
-          },
-        ],
-      },
-    ]);
+    const mockCall = jest
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 'found afs id',
+          applications: [
+            {
+              id: 'id 1',
+            },
+            {
+              id: 'id 2',
+            },
+          ],
+        },
+      ]);
     prisma.applications.findMany = jest.fn().mockResolvedValue([]);
     prisma.applicationFlaggedSet.findMany = mockCall;
     prisma.applicationFlaggedSet.delete = jest.fn().mockResolvedValue(null);
@@ -1477,21 +1465,22 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with no duplicates present and existing flagged set for email', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([
-      {
-        id: 'found afs id',
-        applications: [
-          {
-            id: 'id 1',
-          },
-          {
-            id: 'id 2',
-          },
-        ],
-      },
-    ]);
-    mockCall.mockResolvedValueOnce([]);
+    const mockCall = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'found afs id',
+          applications: [
+            {
+              id: 'id 1',
+            },
+            {
+              id: 'id 2',
+            },
+          ],
+        },
+      ])
+      .mockResolvedValueOnce([]);
     prisma.applications.findMany = jest.fn().mockResolvedValue([]);
     prisma.applicationFlaggedSet.findMany = mockCall;
     prisma.applicationFlaggedSet.delete = jest.fn().mockResolvedValue(null);
@@ -1581,8 +1570,7 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with duplicates present for email and no existing flagged set', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([
+    const mockCall = jest.fn().mockResolvedValueOnce([
       {
         id: 'dup id 1',
       },
@@ -1700,8 +1688,7 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with duplicates present for email and existing flagged set is correct', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([
+    const mockCall = jest.fn().mockResolvedValueOnce([
       {
         id: 'dup id 1',
       },
@@ -1710,14 +1697,15 @@ describe('Testing application flagged set service', () => {
       },
     ]);
     prisma.applications.findMany = mockCall;
-    const mockFindManyCall = jest.fn();
-    mockFindManyCall.mockResolvedValueOnce([
-      {
-        id: 'found afs id',
-        ruleKey: 'listing id-email-example email',
-      },
-    ]);
-    mockFindManyCall.mockResolvedValueOnce([]);
+    const mockFindManyCall = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'found afs id',
+          ruleKey: 'listing id-email-example email',
+        },
+      ])
+      .mockResolvedValueOnce([]);
     prisma.applicationFlaggedSet.findMany = mockFindManyCall;
     prisma.applicationFlaggedSet.delete = jest.fn().mockResolvedValue(null);
     prisma.applicationFlaggedSet.update = jest.fn().mockResolvedValue(null);
@@ -1793,8 +1781,7 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with duplicates present for email and existing flagged set is incorrect', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([
+    const mockCall = jest.fn().mockResolvedValueOnce([
       {
         id: 'dup id 1',
       },
@@ -1803,23 +1790,24 @@ describe('Testing application flagged set service', () => {
       },
     ]);
 
-    const mockFindMany = jest.fn();
-    mockFindMany.mockResolvedValueOnce([
-      {
-        id: 'found afs id',
-        ruleKey: 'a different rule key',
-        applications: [
-          {
-            id: 'id 1',
-          },
-          {
-            id: 'id 2',
-          },
-        ],
-      },
-    ]);
-    mockFindMany.mockResolvedValueOnce([]);
-    mockFindMany.mockResolvedValueOnce([]);
+    const mockFindMany = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          id: 'found afs id',
+          ruleKey: 'a different rule key',
+          applications: [
+            {
+              id: 'id 1',
+            },
+            {
+              id: 'id 2',
+            },
+          ],
+        },
+      ])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
     prisma.applications.findMany = mockCall;
     prisma.applicationFlaggedSet.findMany = mockFindMany;
     prisma.applicationFlaggedSet.delete = jest.fn().mockResolvedValue(null);
@@ -1930,16 +1918,17 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with duplicates present for nameAndDOB and no existing flagged set', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([]);
-    mockCall.mockResolvedValueOnce([
-      {
-        id: 'dup id 1',
-      },
-      {
-        id: 'dup id 2',
-      },
-    ]);
+    const mockCall = jest
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 'dup id 1',
+        },
+        {
+          id: 'dup id 2',
+        },
+      ]);
 
     prisma.applications.findMany = mockCall;
     prisma.applicationFlaggedSet.findMany = jest.fn().mockResolvedValue([]);
@@ -2041,26 +2030,28 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with duplicates present for nameAndDOB and existing flagged set is correct', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([]);
-    mockCall.mockResolvedValueOnce([
-      {
-        id: 'dup id 1',
-      },
-      {
-        id: 'dup id 2',
-      },
-    ]);
+    const mockCall = jest
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 'dup id 1',
+        },
+        {
+          id: 'dup id 2',
+        },
+      ]);
 
-    const mockFlaggedSetCall = jest.fn();
-    mockFlaggedSetCall.mockResolvedValueOnce([]);
-    mockFlaggedSetCall.mockResolvedValueOnce([
-      {
-        id: 'found afs id',
-        ruleKey:
-          'listing id-nameAndDOB-example first name-example last name-example birth month-example birth day-example birth year',
-      },
-    ]);
+    const mockFlaggedSetCall = jest
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 'found afs id',
+          ruleKey:
+            'listing id-nameAndDOB-example first name-example last name-example birth month-example birth day-example birth year',
+        },
+      ]);
 
     prisma.applications.findMany = mockCall;
     prisma.applicationFlaggedSet.findMany = mockFlaggedSetCall;
@@ -2136,34 +2127,36 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should testApplication with duplicates present for nameAndDOB and existing flagged set is incorrect', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([]);
-    mockCall.mockResolvedValueOnce([
-      {
-        id: 'dup id 1',
-      },
-      {
-        id: 'dup id 2',
-      },
-    ]);
+    const mockCall = jest
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 'dup id 1',
+        },
+        {
+          id: 'dup id 2',
+        },
+      ]);
 
-    const mockFlaggedSetCall = jest.fn();
-    mockFlaggedSetCall.mockResolvedValueOnce([]);
-    mockFlaggedSetCall.mockResolvedValueOnce([
-      {
-        id: 'found afs id',
-        ruleKey: 'a different ruleKey',
-        applications: [
-          {
-            id: '1',
-          },
-          {
-            id: '2',
-          },
-        ],
-      },
-    ]);
-    mockFlaggedSetCall.mockResolvedValueOnce([]);
+    const mockFlaggedSetCall = jest
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          id: 'found afs id',
+          ruleKey: 'a different ruleKey',
+          applications: [
+            {
+              id: '1',
+            },
+            {
+              id: '2',
+            },
+          ],
+        },
+      ])
+      .mockResolvedValueOnce([]);
 
     prisma.applications.findMany = mockCall;
     prisma.applicationFlaggedSet.findMany = mockFlaggedSetCall;
@@ -2288,15 +2281,16 @@ describe('Testing application flagged set service', () => {
   });
 
   it('should process listing', async () => {
-    const mockCall = jest.fn();
-    mockCall.mockResolvedValueOnce([
-      {
-        ...testApplicationInfo('application id'),
-        listingId: 'listing id',
-      },
-    ]);
-    mockCall.mockResolvedValueOnce([]);
-    mockCall.mockResolvedValueOnce([]);
+    const mockCall = jest
+      .fn()
+      .mockResolvedValueOnce([
+        {
+          ...testApplicationInfo('application id'),
+          listingId: 'listing id',
+        },
+      ])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
 
     prisma.applications.findMany = mockCall;
     prisma.applicationFlaggedSet.findMany = jest.fn().mockResolvedValue([]);
