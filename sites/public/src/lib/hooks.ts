@@ -153,7 +153,7 @@ export async function fetchJurisdictionByName() {
 
     const jurisdictionName = process.env.jurisdictionName
     const jurisdictionRes = await axios.get(
-      `${process.env.backendApiBaseNew}/jurisdictions/byName/${jurisdictionName}`
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
     )
     jurisdiction = jurisdictionRes?.data
   } catch (error) {
