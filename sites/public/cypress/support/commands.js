@@ -25,7 +25,7 @@ Cypress.Commands.add("goNext", () => {
 })
 
 Cypress.Commands.add("getByID", (id, ...args) => {
-  return cy.get(`#${CSS.escape(id)}`, ...args)
+  return cy.get(`[id="${CSS.escape(id)}"]`, ...args)
 })
 
 Cypress.Commands.add("getByTestId", (testId) => {

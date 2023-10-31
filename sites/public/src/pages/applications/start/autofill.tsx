@@ -118,6 +118,7 @@ export default () => {
           <div className="form-card__pager" data-testid={"application-initial-page"}>
             <div className="form-card__pager-row primary">
               <Button
+                type="submit"
                 variant="primary"
                 onClick={() => {
                   useDetails = true
@@ -129,6 +130,7 @@ export default () => {
             </div>
             <div className="form-card__pager-row">
               <Button
+                type="submit"
                 variant="text"
                 className="mb-4"
                 onClick={() => {

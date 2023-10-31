@@ -153,6 +153,7 @@ const ApplicationAlternateContactType = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
+                type="submit"
                 variant="primary"
                 onClick={() => conductor.setNavigatedBack(false)}
                 id={"app-next-step-button"}

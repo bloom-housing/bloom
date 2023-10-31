@@ -479,7 +479,7 @@ const ApplicationMember = () => {
 
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
-                  <Button id="save-member" variant="primary">
+                  <Button type="submit" id="save-member" variant="primary">
                     {saveText}
                   </Button>
                 </div>

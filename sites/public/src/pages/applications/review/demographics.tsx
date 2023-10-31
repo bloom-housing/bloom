@@ -161,7 +161,7 @@ const ApplicationDemographics = () => {
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button variant="primary" id={"app-next-step-button"}>
+              <Button type="submit" variant="primary" id={"app-next-step-button"}>
                 {t("t.next")}
               </Button>
             </div>

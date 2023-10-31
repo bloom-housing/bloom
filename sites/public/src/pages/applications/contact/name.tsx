@@ -222,11 +222,13 @@ const ApplicationName = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
+                type="submit"
                 variant="primary"
                 onClick={() => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
@@ -235,6 +237,7 @@ const ApplicationName = () => {
             {conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
+                  type="submit"
                   variant="text"
                   className="mb-4"
                   onClick={() => {

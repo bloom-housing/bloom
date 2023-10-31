@@ -73,6 +73,7 @@ const ApplicationPreferencesGeneral = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
               <Button
+                type="submit"
                 variant="primary"
                 onClick={() => {
                   conductor.returnToReview = false
@@ -87,6 +88,7 @@ const ApplicationPreferencesGeneral = () => {
             {!hideReviewButton && conductor.canJumpForwardToReview() && (
               <div className="form-card__pager-row">
                 <Button
+                  type="submit"
                   variant="text"
                   className="mb-4"
                   onClick={() => {

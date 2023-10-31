@@ -74,6 +74,7 @@ const ApplicationLiveAlone = () => {
           <div className="form-card__pager">
             <div className="form-card__pager-row">
               <Button
+                type="submit"
                 id="btn-live-alone"
                 variant="primary-outlined"
                 size="lg"
@@ -89,6 +90,7 @@ const ApplicationLiveAlone = () => {
             </div>
             <div className="form-card__pager-row">
               <Button
+                type="submit"
                 id="btn-with-people"
                 variant="primary-outlined"
                 size="lg"

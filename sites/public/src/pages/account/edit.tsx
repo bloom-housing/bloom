@@ -209,7 +209,7 @@ const Edit = () => {
                 readerOnly
               />
               <div className="text-center">
-                <Button variant="primary-outlined" className="items-center">
+                <Button type="submit" variant="primary-outlined" className="items-center">
                   {t("account.settings.update")}
                 </Button>
               </div>
@@ -238,7 +238,7 @@ const Edit = () => {
                 label={t("application.name.yourDateOfBirth")}
               />
               <div className="text-center mt-5">
-                <Button variant="primary-outlined" className="items-center">
+                <Button type="submit" variant="primary-outlined" className="items-center">
                   {t("account.settings.update")}
                 </Button>
               </div>
@@ -269,7 +269,7 @@ const Edit = () => {
                 defaultValue={profile ? profile.email : null}
               />
               <div className="text-center">
-                <Button variant="primary-outlined" className={"items-center"}>
+                <Button type="submit" variant="primary-outlined" className={"items-center"}>
                   {t("account.settings.update")}
                 </Button>
               </div>
@@ -346,7 +346,7 @@ const Edit = () => {
                 </div>
 
                 <div className="text-center mt-5">
-                  <Button variant="primary-outlined" className={"items-center"}>
+                  <Button type="submit" variant="primary-outlined" className={"items-center"}>
                     {t("account.settings.update")}
                   </Button>
                 </div>
