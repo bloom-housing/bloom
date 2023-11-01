@@ -225,7 +225,7 @@ Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
   cy.location("pathname").should("include", "applications/household/add-members")
 
   application.householdMembers.forEach((householdMember) => {
-    cy.getByID("save-member").click()
+    cy.getByID("btn-add-member").click()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/member")
