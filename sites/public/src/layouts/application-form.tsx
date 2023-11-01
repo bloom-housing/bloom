@@ -1,7 +1,7 @@
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { LinkButton, t, ProgressNav } from "@bloom-housing/ui-components"
+import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
 
 interface ApplicationFormLayoutProps {
@@ -48,7 +48,17 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
           </Heading>
         </CardSection>
         <CardSection className={"px-8"}>
-          <ProgressNav {...props.progressNavProps} />
+          <div className={"hidden md:block"}>
+            <ProgressNav {...props.progressNavProps} />
+          </div>
+          <div className={"block md:hidden"}>
+            <StepHeader
+              currentStep={props.progressNavProps.currentPageSection}
+              totalSteps={props.progressNavProps.labels.length}
+              stepPreposition={"of"}
+              stepLabeling={props.progressNavProps.labels}
+            />
+          </div>
         </CardSection>
       </Card>
       <Card spacing={"lg"} className={"mb-6"}>

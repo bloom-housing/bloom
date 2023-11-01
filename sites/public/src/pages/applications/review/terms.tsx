@@ -185,7 +185,7 @@ const ApplicationTerms = () => {
           </CardSection>
           <CardSection className={"bg-primary-lighter"}>
             <Button
-              loadingMessage={"Submitting form"} // TODO
+              loadingMessage={t("application.review.terms.submittingApplication")}
               variant={"primary"}
               type="submit"
               data-testid={"app-terms-submit-button"}
