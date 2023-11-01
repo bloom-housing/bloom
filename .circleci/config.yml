@@ -87,8 +87,6 @@ jobs:
             yarn test:backend:core:dbsetup
           environment:
             PORT: "3100"
-            BACKEND_API_BASE_NEW: "http://localhost:3100"
-            BACKEND_API_BASE: "http://localhost:3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
@@ -169,6 +167,7 @@ workflows:
             - setup
       - cypress/run:
           name: "cypress-public"
+          resource_class: large
           requires:
             - setup-with-new-db
           executor: cypress-node
