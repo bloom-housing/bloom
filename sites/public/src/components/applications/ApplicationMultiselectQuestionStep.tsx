@@ -148,7 +148,7 @@ const ApplicationMultiselectQuestionStep = ({
       return
     }
     // Otherwise complete the section and move to the next URL
-    conductor.completeSection(applicationSectionNumber)
+    conductor.completeSection(applicationSectionNumber) // todo maybe a bug?
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
@@ -193,7 +193,7 @@ const ApplicationMultiselectQuestionStep = ({
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={strings?.title ?? question?.text}
-          subheading={strings?.subTitle}
+          subheading={strings?.subTitle ?? question?.description}
           progressNavProps={{
             currentPageSection: applicationSectionNumber,
             completedSections: application.completedSections,
@@ -223,11 +223,18 @@ const ApplicationMultiselectQuestionStep = ({
             <CardSection>
               {questionSetInputType === "checkbox" ? (
                 <fieldset>
-                  <legend className="text__caps-spaced mb-4">{question?.text}</legend>
-                  <p className="field-note mb-8">{question?.description}</p>
-                  {allOptions.map((option) => {
-                    return checkboxOption(option)
-                  })}
+                  <legend className="text__caps-spaced mb-4 sr-only">{question?.text}</legend>
+                  {applicationSection === ApplicationSection.preferences && (
+                    <p className="field-note mb-8">{question?.description}</p>
+                  )}
+                  <p className="field-note mb-8">
+                    {t("application.household.preferredUnit.optionsLabel")}
+                  </p>
+                  {allOptions
+                    ?.sort((a, b) => (a.ordinal > b.ordinal ? 1 : -1))
+                    .map((option) => {
+                      return checkboxOption(option)
+                    })}
                 </fieldset>
               ) : (
                 getRadioFields(allOptions, register, question, applicationSection, errors)

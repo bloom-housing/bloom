@@ -163,7 +163,7 @@ const ApplicationAddress = () => {
           <div style={{ display: verifyAddress ? "none" : "block" }}>
             <CardSection divider={"inset"}>
               <PhoneField
-                label={t("application.contact.yourPhoneNumber")}
+                label={t("application.contact.yourPhoneNumber")} // TODO
                 caps={true}
                 required={true}
                 id="applicant.phoneNumber"
@@ -180,9 +180,8 @@ const ApplicationAddress = () => {
               <Select
                 id="applicant.phoneNumberType"
                 name="applicant.phoneNumberType"
-                placeholder={t("application.contact.phoneNumberTypes.prompt")}
+                placeholder={t("t.selectOne")}
                 label={t("application.contact.phoneNumberTypes.prompt")}
-                labelClassName="sr-only"
                 disabled={clientLoaded && noPhone}
                 validation={{ required: !noPhone }}
                 defaultValue={application.applicant.phoneNumberType}
@@ -215,6 +214,7 @@ const ApplicationAddress = () => {
                   },
                 }}
                 dataTestId={"app-primary-no-phone"}
+                className={"mb-2"}
               />
 
               <Field
@@ -316,7 +316,7 @@ const ApplicationAddress = () => {
                   <Field
                     id="addressCity"
                     name="applicant.address.city"
-                    label={t("application.contact.cityName")}
+                    label={t("application.contact.city")}
                     defaultValue={application.applicant.address.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
@@ -586,7 +586,7 @@ const ApplicationAddress = () => {
                       <Field
                         id="workAddressCity"
                         name="applicant.workAddress.city"
-                        label={t("application.contact.cityName")}
+                        label={t("application.contact.city")}
                         defaultValue={application.applicant.workAddress.city}
                         validation={{ required: true, maxLength: 64 }}
                         error={errors.applicant?.workAddress?.city}

@@ -109,6 +109,12 @@ const ApplicationIncome = () => {
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.income.title")}
+          subheading={
+            <div>
+              <p className="field-note mb-4">{t("application.financial.income.instruction1")}</p>
+              <p className="field-note">{t("application.financial.income.instruction2")}</p>
+            </div>
+          }
           progressNavProps={{
             currentPageSection: currentPageSection,
             completedSections: application.completedSections,
@@ -120,12 +126,6 @@ const ApplicationIncome = () => {
           }}
           conductor={conductor}
         >
-          <CardSection>
-            {/* TODO */}
-            <p className="field-note mb-4">{t("application.financial.income.instruction1")}</p>
-            <p className="field-note">{t("application.financial.income.instruction2")}</p>
-          </CardSection>
-
           {Object.entries(errors).length > 0 && (
             <AlertBox type="alert" inverted closeable>
               {t("errors.errorsToResolve")}

@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { t, Form } from "@bloom-housing/ui-components"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
@@ -117,6 +118,7 @@ const ApplicationAddMembers = () => {
               variant="primary-outlined"
               id="btn-add-member"
               onClick={onAddMember}
+              data-testid={"app-add-household-member-button"}
               type={"button"}
             >
               {t("application.household.addMembers.addHouseholdMember")}
@@ -125,7 +127,6 @@ const ApplicationAddMembers = () => {
           <CardSection className={"bg-primary-lighter"}>
             <Button
               id="btn-add-done"
-              variant="primary"
               onClick={() => {
                 conductor.returnToReview = false
                 void handleSubmit(onSubmit)()

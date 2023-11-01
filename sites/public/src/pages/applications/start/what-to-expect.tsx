@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useMemo } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import { AppearanceStyleType, Button, t, Form } from "@bloom-housing/ui-components"
+import { t, Form } from "@bloom-housing/ui-components"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
@@ -10,6 +10,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { Button } from "@bloom-housing/ui-seeds"
 
 const ApplicationWhatToExpect = () => {
   const { profile } = useContext(AuthContext)
@@ -104,9 +105,10 @@ const ApplicationWhatToExpect = () => {
         <CardSection className={"bg-primary-lighter"}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Button
-              styleType={AppearanceStyleType.primary}
+              type="submit"
+              variant="primary"
               onClick={() => conductor.setNavigatedBack(false)}
-              data-testid={"app-next-step-button"}
+              id={"app-next-step-button"}
             >
               {t("t.next")}
             </Button>

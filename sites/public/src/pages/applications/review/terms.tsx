@@ -2,14 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import Markdown from "markdown-to-jsx"
-import {
-  AppearanceStyleType,
-  Button,
-  t,
-  FieldGroup,
-  Form,
-  AlertBox,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, FieldGroup, Form, AlertBox } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   ApplicationSection,
@@ -28,6 +21,7 @@ import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import { untranslateMultiselectQuestion } from "../../../lib/helpers"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { Button } from "@bloom-housing/ui-seeds"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -191,8 +185,8 @@ const ApplicationTerms = () => {
           </CardSection>
           <CardSection className={"bg-primary-lighter"}>
             <Button
-              loading={submitting}
-              styleType={AppearanceStyleType.primary}
+              loadingMessage={"Submitting form"} // TODO
+              variant={"primary"}
               type="submit"
               data-testid={"app-terms-submit-button"}
             >

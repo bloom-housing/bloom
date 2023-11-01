@@ -83,6 +83,7 @@ const ApplicationHouseholdChanges = () => {
                 fieldClassName="ml-0"
                 type="radio"
                 name="householdExpectingChanges"
+                groupNote={t("t.pleaseSelectOne")}
                 error={errors.householdExpectingChanges}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}

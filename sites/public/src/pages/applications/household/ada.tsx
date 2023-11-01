@@ -134,6 +134,7 @@ const ApplicationAda = () => {
                 fields={adaFeaturesOptions}
                 register={register}
                 fieldGroupClassName="grid grid-cols-1 mt-4"
+                groupNote={t("application.household.preferredUnit.optionsLabel")}
                 fieldClassName="ml-0"
                 validation={{
                   validate: () => {

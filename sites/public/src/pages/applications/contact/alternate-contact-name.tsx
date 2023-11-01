@@ -95,11 +95,14 @@ export default () => {
               />
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
+                  {/* TODO a11y */}
+                  <p className="text__caps-spaced">
+                    {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
+                  </p>
                   <Field
                     id="agency"
                     name="agency"
-                    label={t("application.alternateContact.name.caseManagerAgencyFormLabel")}
-                    caps={true}
+                    label={t("application.alternateContact.name.caseManagerAgencyFormPlaceHolder")}
                     defaultValue={application.alternateContact.agency}
                     validation={{ required: true }}
                     error={errors.agency}

@@ -82,6 +82,7 @@ const ApplicationHouseholdStudent = () => {
                 fieldClassName="ml-0"
                 type="radio"
                 name="householdStudent"
+                groupNote={t("t.pleaseSelectOne")}
                 error={errors.householdStudent}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}

@@ -1,14 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { Button } from "@bloom-housing/ui-seeds"
-import {
-  ImageCard,
-  LinkButton,
-  t,
-  AppearanceSizeType,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
+import { ImageCard, t, setSiteAlertMessage } from "@bloom-housing/ui-components"
 import {
   imageUrlFromListing,
   OnClientSide,
@@ -17,7 +10,7 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { Language } from "@bloom-housing/backend-core/types"
-import { Heading } from "@bloom-housing/ui-seeds"
+import { Heading, Button } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import FormsLayout from "../../../layouts/forms"
 import {
@@ -122,11 +115,12 @@ const ApplicationChooseLanguage = () => {
         {listing?.applicationConfig.languages.length > 1 && (
           <CardSection divider={"flush"}>
             <>
-              <Heading priority={2} size={"2xl"} className={"pb-4"}>
+              <Heading priority={2} size={"lg"} className={"pb-4"}>
                 {t("application.chooseLanguage.chooseYourLanguage")}
               </Heading>
               {listing.applicationConfig.languages.map((lang, index) => (
                 <Button
+                  variant="primary-outlined"
                   className="mr-2 mb-2"
                   onClick={() => {
                     onLanguageSelect(lang)
@@ -148,25 +142,27 @@ const ApplicationChooseLanguage = () => {
                 {t("account.haveAnAccount")}
               </Heading>
               <p className={"pb-4"}>{t("application.chooseLanguage.signInSaveTime")}</p>
-              <LinkButton
+              <Button
+                variant="primary-outlined"
                 href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                dataTestId={"app-choose-language-sign-in-button"}
-                size={AppearanceSizeType.small}
+                id={"app-choose-language-sign-in-button"}
+                size="sm"
               >
                 {t("nav.signIn")}
-              </LinkButton>
+              </Button>
             </CardSection>
             <CardSection divider={"flush"} className={"bg-primary-lighter"}>
               <Heading priority={2} size={"2xl"} className={"pb-4"}>
                 {t("authentication.createAccount.noAccount")}
               </Heading>
-              <LinkButton
+              <Button
+                variant="primary-outlined"
                 href={"/create-account"}
-                dataTestId={"app-choose-language-create-account-button"}
-                size={AppearanceSizeType.small}
+                id={"app-choose-language-create-account-button"}
+                size="sm"
               >
                 {t("account.createAccount")}
-              </LinkButton>
+              </Button>
             </CardSection>
           </>
         )}

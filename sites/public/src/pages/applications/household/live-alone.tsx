@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { AppearanceSizeType, Button, Form, t } from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
@@ -61,31 +62,36 @@ const ApplicationLiveAlone = () => {
           </div>
 
           <CardSection divider={"flush"} className={"border-none"}>
-            <Button
-              id="btn-live-alone"
-              size={AppearanceSizeType.big}
-              className="w-full md:w-3/4 mb-4"
-              onClick={() => {
-                application.householdSize = 1
-                application.householdMembers = []
-                setValidateHousehold(true)
-              }}
-              data-testid={"app-household-live-alone"}
-            >
-              {t("application.household.liveAlone.willLiveAlone")}
-            </Button>
-            <Button
-              id="btn-with-people"
-              size={AppearanceSizeType.big}
-              className="w-full md:w-3/4"
-              onClick={() => {
-                if (application.householdSize === 1) application.householdSize = 0
-                setValidateHousehold(false)
-              }}
-              data-testid={"app-household-live-with-others"}
-            >
-              {t("application.household.liveAlone.liveWithOtherPeople")}
-            </Button>
+            <div>
+              <Button
+                id="btn-live-alone"
+                className="mb-4"
+                onClick={() => {
+                  application.householdSize = 1
+                  application.householdMembers = []
+                  setValidateHousehold(true)
+                }}
+                data-testid={"app-household-live-alone"}
+                variant={"primary-outlined"}
+                type={"submit"}
+              >
+                {t("application.household.liveAlone.willLiveAlone")}
+              </Button>
+            </div>
+            <div>
+              <Button
+                id="btn-with-people"
+                onClick={() => {
+                  if (application.householdSize === 1) application.householdSize = 0
+                  setValidateHousehold(false)
+                }}
+                data-testid={"app-household-live-with-others"}
+                variant={"primary-outlined"}
+                type={"submit"}
+              >
+                {t("application.household.liveAlone.liveWithOtherPeople")}
+              </Button>
+            </div>
           </CardSection>
         </ApplicationFormLayout>
       </Form>

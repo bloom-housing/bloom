@@ -151,7 +151,7 @@ export default () => {
                 <Field
                   id="mailingAddress.city"
                   name="mailingAddress.city"
-                  label={t("application.contact.cityName")}
+                  label={t("application.contact.city")}
                   defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
                   dataTestId={"app-alternate-mailing-address-city"}

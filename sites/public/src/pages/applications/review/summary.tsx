@@ -1,14 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import {
-  AlertBox,
-  AppearanceStyleType,
-  Button,
-  Form,
-  setSiteAlertMessage,
-  t,
-} from "@bloom-housing/ui-components"
+import { Button } from "@bloom-housing/ui-seeds"
+import { AlertBox, Form, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
@@ -118,7 +112,7 @@ const ApplicationSummary = () => {
 
           <CardSection className={"bg-primary-lighter"}>
             <Button
-              styleType={validationError ? AppearanceStyleType.closed : AppearanceStyleType.primary}
+              variant={"primary"}
               data-testid={"app-summary-confirm"}
               disabled={validationError}
             >

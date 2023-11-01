@@ -66,6 +66,22 @@ const ApplicationVouchers = () => {
         <ApplicationFormLayout
           listingName={listing?.name}
           heading={t("application.financial.vouchers.title")}
+          subheading={
+            <div>
+              <p className="field-note mb-4">
+                <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
+                {` ${t("application.financial.vouchers.housingVouchers.text")}`}
+              </p>
+              <p className="field-note mb-4">
+                <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
+                {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
+              </p>
+              <p className="field-note">
+                <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
+                {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
+              </p>
+            </div>
+          }
           progressNavProps={{
             currentPageSection: currentPageSection,
             completedSections: application.completedSections,
@@ -83,24 +99,6 @@ const ApplicationVouchers = () => {
             </AlertBox>
           )}
 
-          <CardSection>
-            {/* TODO does this content need to be in the subheader, prolly does */}
-            <p className="field-note mb-4">
-              <strong>{t("application.financial.vouchers.housingVouchers.strong")}</strong>
-              {` ${t("application.financial.vouchers.housingVouchers.text")}`}
-            </p>
-
-            <p className="field-note mb-4">
-              <strong>{t("application.financial.vouchers.nonTaxableIncome.strong")}</strong>
-              {` ${t("application.financial.vouchers.nonTaxableIncome.text")}`}
-            </p>
-
-            <p className="field-note">
-              <strong>{t("application.financial.vouchers.rentalSubsidies.strong")}</strong>
-              {` ${t("application.financial.vouchers.rentalSubsidies.text")}`}
-            </p>
-          </CardSection>
-
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
@@ -109,6 +107,7 @@ const ApplicationVouchers = () => {
                 fieldClassName="ml-0"
                 type="radio"
                 name="incomeVouchers"
+                groupNote={t("t.pleaseSelectOne")}
                 error={errors.incomeVouchers}
                 errorMessage={t("errors.selectAnOption")}
                 register={register}

@@ -258,7 +258,7 @@ const ApplicationMember = () => {
                   <Field
                     id="addressCity"
                     name="address.city"
-                    label={t("application.contact.cityName")}
+                    label={t("application.contact.city")}
                     defaultValue={member.address.city}
                     validation={{ required: true, maxLength: 64 }}
                     errorMessage={
@@ -368,7 +368,7 @@ const ApplicationMember = () => {
                   <Field
                     id="workAddress.city"
                     name="workAddress.city"
-                    label={t("application.contact.cityName")}
+                    label={t("application.contact.city")}
                     defaultValue={member.workAddress.city}
                     validation={{ required: true, maxLength: 64 }}
                     error={errors.workAddress?.city}
@@ -451,8 +451,9 @@ const ApplicationMember = () => {
           <CardSection divider={"flush"} className={"bg-primary-lighter border-none"}>
             <Button
               id="save-member"
-              styleType={AppearanceStyleType.primary}
               data-testid={"app-household-member-save"}
+              type={"submit"}
+              variant={"primary"}
             >
               {saveText}
             </Button>
@@ -463,7 +464,7 @@ const ApplicationMember = () => {
               className="lined text-sm mt-0"
               type="button"
               onClick={deleteMember}
-              unstyled={true}
+              variant={"text"}
               data-testid={"app-household-member-cancel"}
             >
               {cancelText}
