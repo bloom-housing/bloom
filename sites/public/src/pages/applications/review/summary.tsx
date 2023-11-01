@@ -115,6 +115,7 @@ const ApplicationSummary = () => {
               variant={"primary"}
               data-testid={"app-summary-confirm"}
               disabled={validationError}
+              type={"submit"}
             >
               {t("t.confirm")}
             </Button>

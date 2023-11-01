@@ -43,7 +43,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
     <>
       <Card spacing={"sm"} className={"my-6"}>
         <CardSection className={"bg-primary px-8 py-4 text-white"}>
-          <Heading priority={1} className={"text-xl font-bold font-alt-sans"}>
+          <Heading priority={1} className={"text-xl text-white font-bold font-alt-sans"}>
             {props.listingName}
           </Heading>
         </CardSection>
