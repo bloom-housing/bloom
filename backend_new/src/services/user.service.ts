@@ -31,6 +31,7 @@ import { IdDTO } from '../dtos/shared/id.dto';
 import { UserInvite } from '../dtos/users/user-invite.dto';
 import { UserCreate } from '../dtos/users/user-create.dto';
 import { EmailService } from './email.service';
+import { buildFromIdIndex } from '../utilities/csv-builder';
 
 /*
   this is the service for users
@@ -297,7 +298,7 @@ export class UserService {
 
       this.emailService.changeEmail(
         dto.jurisdictions,
-        storedUser,
+        storedUser as User,
         dto.appUrl,
         confirmationUrl,
         dto.newEmail,
@@ -401,7 +402,7 @@ export class UserService {
         );
         this.emailService.welcome(
           storedUser.jurisdictions,
-          storedUser,
+          storedUser as User,
           dto.appUrl,
           confirmationUrl,
         );
@@ -412,7 +413,7 @@ export class UserService {
         );
         this.emailService.invitePartnerUser(
           storedUser.jurisdictions,
-          storedUser,
+          storedUser as User,
           dto.appUrl,
           confirmationUrl,
         );
@@ -445,7 +446,7 @@ export class UserService {
     });
     this.emailService.forgotPassword(
       storedUser.jurisdictions,
-      storedUser,
+      storedUser as User,
       dto.appUrl,
       resetToken,
     );
@@ -676,7 +677,7 @@ export class UserService {
       );
       this.emailService.welcome(
         dto.jurisdictions,
-        newUser,
+        mapTo(User, newUser),
         dto.appUrl,
         confirmationUrl,
       );
@@ -695,7 +696,7 @@ export class UserService {
       );
       this.emailService.portalAccountUpdate(
         newJurisdictions,
-        newUser,
+        mapTo(User, newUser),
         dto.appUrl,
       );
     } else if (forPartners) {
@@ -705,7 +706,7 @@ export class UserService {
       );
       this.emailService.invitePartnerUser(
         dto.jurisdictions,
-        newUser,
+        mapTo(User, newUser),
         this.configService.get('PARTNERS_PORTAL_URL'),
         confirmationUrl,
       );
@@ -780,6 +781,73 @@ export class UserService {
     }
 
     return rawUser;
+  }
+
+  /*
+    gets and formats user data to be handed to the csv builder helper
+    this data will be emailed to the requesting user
+  */
+  async export(requestingUser: User): Promise<SuccessDTO> {
+    const users = await this.list(
+      {
+        page: 1,
+        limit: 'all',
+        filter: [
+          {
+            isPortalUser: true,
+          },
+        ],
+      },
+      requestingUser,
+    );
+
+    const parsedUsers = users.items.reduce((accum, user) => {
+      const roles: string[] = [];
+      if (user.userRoles?.isAdmin) {
+        roles.push('Administrator');
+      }
+      if (user.userRoles?.isPartner) {
+        roles.push('Partner');
+      }
+      if (user.userRoles?.isJurisdictionalAdmin) {
+        roles.push('Jurisdictional Admin');
+      }
+
+      const listingNames: string[] = [];
+      const listingIds: string[] = [];
+
+      user.listings?.forEach((listing) => {
+        listingNames.push(listing.name);
+        listingIds.push(listing.id);
+      });
+
+      accum[user.id] = {
+        'First Name': user.firstName,
+        'Last Name': user.lastName,
+        Email: user.email,
+        Role: roles.join(', '),
+        'Date Created': dayjs(user.createdAt).format('MM-DD-YYYY HH:mmZ[Z]'),
+        Status: user.confirmedAt ? 'Confirmed' : 'Unconfirmed',
+        'Listing Names': listingNames.join(', '),
+        'Listing Ids': listingIds.join(', '),
+        'Last Logged In': dayjs(user.lastLoginAt).format(
+          'MM-DD-YYYY HH:mmZ[Z]',
+        ),
+      };
+      return accum;
+    }, {});
+
+    const csvData = buildFromIdIndex(parsedUsers);
+    await this.emailService.sendCSV(
+      requestingUser.jurisdictions,
+      requestingUser,
+      csvData,
+      'User Export',
+      'a user export',
+    );
+    return {
+      success: true,
+    };
   }
 
   /*

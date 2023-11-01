@@ -6,6 +6,7 @@ import { PrismaService } from '../../src/services/prisma.service';
 import { userFactory } from '../../prisma/seed-helpers/user-factory';
 import { randomUUID } from 'crypto';
 import { stringify } from 'qs';
+import cookieParser from 'cookie-parser';
 import { UserQueryParams } from '../../src/dtos/users/user-query-param.dto';
 import { UserUpdate } from '../../src/dtos/users/user-update.dto';
 import { IdDTO } from '../../src/dtos/shared/id.dto';
@@ -17,6 +18,7 @@ import { jurisdictionFactory } from '../../prisma/seed-helpers/jurisdiction-fact
 import { applicationFactory } from '../../prisma/seed-helpers/application-factory';
 import { UserInvite } from '../../src/dtos/users/user-invite.dto';
 import { EmailService } from '../../src/services/email.service';
+import { Login } from '../../src/dtos/auth/login.dto';
 
 describe('User Controller Tests', () => {
   let app: INestApplication;
@@ -31,6 +33,7 @@ describe('User Controller Tests', () => {
     changeEmail: jest.fn(),
     forgotPassword: jest.fn(),
     sendMfaCode: jest.fn(),
+    sendCSV: jest.fn(),
   };
 
   beforeEach(() => {
@@ -46,6 +49,7 @@ describe('User Controller Tests', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     prisma = moduleFixture.get<PrismaService>(PrismaService);
     userService = moduleFixture.get<UserService>(UserService);
     await app.init();
@@ -564,5 +568,43 @@ describe('User Controller Tests', () => {
       { id: juris.id, name: juris.name },
     ]);
     expect(res.body.email).toEqual('partneruser@email.com');
+  });
+
+  it('should send a csv export', async () => {
+    const storedUser = await prisma.userAccounts.create({
+      data: await userFactory({
+        roles: { isAdmin: true },
+        mfaEnabled: false,
+        confirmedAt: new Date(),
+      }),
+    });
+
+    const resLogIn = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: storedUser.email,
+        password: 'abcdef',
+      } as Login)
+      .expect(201);
+
+    const res = await request(app.getHttpServer())
+      .get('/user/csv')
+      .set('Cookie', resLogIn.headers['set-cookie'])
+      .expect(200);
+
+    expect(res.body.success).toEqual(true);
+    expect(testEmailService.sendCSV).toHaveBeenCalledWith(
+      [],
+      expect.anything(),
+      expect.anything(),
+      'User Export',
+      'a user export',
+    );
+    expect(testEmailService.sendCSV.mock.calls[0][2]).toContain(
+      `\"First Name\",\"Last Name\",\"Email\",\"Role\",\"Date Created\",\"Status\",\"Listing Names\",\"Listing Ids\",\"Last Logged In\"`,
+    );
+    expect(testEmailService.sendCSV.mock.calls[0][2]).toContain(
+      `\"${storedUser.firstName}\",\"${storedUser.lastName}\",\"${storedUser.email}\",\"Administrator\"`,
+    );
   });
 });

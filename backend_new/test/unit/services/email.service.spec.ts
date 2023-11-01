@@ -14,6 +14,7 @@ import { GoogleTranslateService } from '../../../src/services/google-translate.s
 import { translationFactory } from '../../../prisma/seed-helpers/translation-factory';
 import { whiteHouse } from '../../../prisma/seed-helpers/address-factory';
 import { Application } from '../../../src/dtos/applications/application.dto';
+import { User } from '../../../src/dtos/users/user.dto';
 
 let sendMock;
 const translationServiceMock = {
@@ -66,12 +67,12 @@ describe('Testing email service', () => {
     lastName: 'Bloomington',
     email: 'bloom.bloomington@example.com',
     language: LanguagesEnum.en,
-  };
+  } as unknown as User;
 
   it('testing welcome email', async () => {
     await service.welcome(
       [{ name: 'test', id: '1234' }],
-      user,
+      user as unknown as User,
       'http://localhost:3000',
       'http://localhost:3000/?token=',
     );
@@ -149,6 +150,32 @@ describe('Testing email service', () => {
     expect(sendMock.mock.calls[0][0].html).toContain(
       'Your password won&#x27;t change until you access the link above and create a new one.',
     );
+  });
+
+  it('should send csv data email', async () => {
+    await service.sendCSV(
+      [{ name: 'test', id: '1234' }],
+      user,
+      'csv data goes here',
+      'User Export',
+      'a user export',
+    );
+    expect(sendMock).toHaveBeenCalled();
+    expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
+    expect(sendMock.mock.calls[0][0].subject).toEqual('User Export');
+    expect(sendMock.mock.calls[0][0].html).toContain(
+      'The attached file is a user export. If you have any questions, please reach out to your administrator.',
+    );
+    expect(sendMock.mock.calls[0][0].html).toContain('Hello,');
+    expect(sendMock.mock.calls[0][0].html).toContain('User Export');
+    expect(sendMock.mock.calls[0][0].attachments).toEqual([
+      {
+        type: 'text/csv',
+        content: expect.anything(),
+        disposition: 'attachment',
+        filename: expect.anything(),
+      },
+    ]);
   });
 
   describe('application confirmation', () => {
