@@ -56,6 +56,7 @@ jobs:
           paths:
             - ~/
   setup-with-new-db:
+    resource_class: large
     executor: standard-node
     steps:
       - checkout
@@ -167,7 +168,6 @@ workflows:
             - setup
       - cypress/run:
           name: "cypress-public"
-          resource_class: large
           requires:
             - setup-with-new-db
           executor: cypress-node
