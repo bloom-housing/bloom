@@ -79,7 +79,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
                 props.conductor.returnToReview = false
                 props.conductor.setNavigatedBack(false)
               }}
-              id={"app-next-step-button"}
+              data-testid={"app-next-step-button"}
             >
               {t("t.next")}
             </Button>

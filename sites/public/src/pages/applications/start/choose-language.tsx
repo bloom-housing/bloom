@@ -145,7 +145,7 @@ const ApplicationChooseLanguage = () => {
               <Button
                 variant="primary-outlined"
                 href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
-                id={"app-choose-language-sign-in-button"}
+                data-testid={"app-choose-language-sign-in-button"}
                 size="sm"
               >
                 {t("nav.signIn")}
@@ -158,7 +158,7 @@ const ApplicationChooseLanguage = () => {
               <Button
                 variant="primary-outlined"
                 href={"/create-account"}
-                id={"app-choose-language-create-account-button"}
+                data-testid={"app-choose-language-create-account-button"}
                 size="sm"
               >
                 {t("account.createAccount")}
