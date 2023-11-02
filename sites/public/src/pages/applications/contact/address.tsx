@@ -147,9 +147,11 @@ const ApplicationAddress = () => {
           }}
           backLink={{
             url: backUrl,
-            onClickFxn: () => {
-              return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
-            },
+            onClickFxn: verifyAddress
+              ? () => {
+                  setVerifyAddress(false)
+                }
+              : undefined,
           }}
           conductor={conductor}
         >
