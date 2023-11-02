@@ -148,7 +148,7 @@ const ApplicationMultiselectQuestionStep = ({
       return
     }
     // Otherwise complete the section and move to the next URL
-    conductor.completeSection(applicationSectionNumber) // todo maybe a bug?
+    conductor.completeSection(applicationSectionNumber)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
@@ -202,15 +202,14 @@ const ApplicationMultiselectQuestionStep = ({
           }}
           backLink={{
             url: conductor.determinePreviousUrl(),
+            onClickFxn:
+              page !== 1
+                ? () => {
+                    conductor.setNavigatedBack(true)
+                    setPage(page - 1)
+                  }
+                : undefined,
           }}
-          //   <FormBackLink TODO
-          //   url={conductor.determinePreviousUrl()}
-          //   onClick={() => {
-          //     conductor.setNavigatedBack(true)
-          //     setPage(page - 1)
-          //   }}
-          //   custom={page !== 1}
-          // />
           conductor={conductor}
         >
           {!!Object.keys(errors).length && (

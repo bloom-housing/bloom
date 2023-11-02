@@ -185,7 +185,9 @@ const ApplicationTerms = () => {
           </CardSection>
           <CardSection className={"bg-primary-lighter"}>
             <Button
-              loadingMessage={t("application.review.terms.submittingApplication")}
+              loadingMessage={
+                submitting ? t("application.review.terms.submittingApplication") : null
+              }
               variant={"primary"}
               type="submit"
               data-testid={"app-terms-submit-button"}

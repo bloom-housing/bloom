@@ -2,8 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { Application } from "@bloom-housing/backend-core/types"
-import { AppearanceStyleType, Button, Form, t } from "@bloom-housing/ui-components"
-import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { AppearanceStyleType, Form, t } from "@bloom-housing/ui-components"
 import {
   blankApplication,
   OnClientSide,
@@ -17,6 +16,8 @@ import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/applications/appAutofill"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import { Button } from "@bloom-housing/ui-seeds"
+import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 
 export default () => {
   const router = useRouter()
@@ -92,7 +93,8 @@ export default () => {
     <FormsLayout>
       <ApplicationFormLayout
         listingName={listing?.name}
-        heading={"Save time by using the details from your last application."}
+        heading={t("application.autofill.saveTime")}
+        subheading={t("application.autofill.prefillYourApplication")}
         progressNavProps={{
           currentPageSection: currentPageSection,
           completedSections: application.completedSections,
@@ -100,9 +102,6 @@ export default () => {
           mounted: mounted,
         }}
       >
-        <CardSection divider={"flush"}>
-          {t("application.autofill.prefillYourApplication")}
-        </CardSection>
         <FormSummaryDetails
           application={previousApplication}
           listing={listing}
@@ -111,33 +110,34 @@ export default () => {
           hidePrograms={true}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager" data-testid={"application-initial-page"}>
-            <div className="form-card__pager-row primary">
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => {
-                  useDetails = true
-                }}
-                id={"autofill-accept"}
-              >
-                {t("application.autofill.start")}
-              </Button>
-            </div>
-            <div className="form-card__pager-row">
-              <Button
-                type="submit"
-                variant="text"
-                className="mb-4"
-                onClick={() => {
-                  useDetails = false
-                }}
-                id={"autofill-decline"}
-              >
-                {t("application.autofill.reset")}
-              </Button>
-            </div>
-          </div>
+          <CardSection
+            data-testid={"application-initial-page"}
+            className={"bg-primary-lighter border-none"}
+            divider={"flush"}
+          >
+            <Button
+              variant={"primary"}
+              onClick={() => {
+                useDetails = true
+              }}
+              data-testid={"autofill-accept"}
+              type={"submit"}
+            >
+              {t("application.autofill.start")}
+            </Button>
+          </CardSection>
+          <CardSection>
+            <Button
+              variant={"text"}
+              onClick={() => {
+                useDetails = false
+              }}
+              type={"submit"}
+              data-testid={"autofill-decline"}
+            >
+              {t("application.autofill.reset")}
+            </Button>
+          </CardSection>
         </Form>
       </ApplicationFormLayout>
     </FormsLayout>

@@ -95,7 +95,6 @@ export default () => {
               />
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
-                  {/* TODO a11y */}
                   <p className="text__caps-spaced">
                     {t("application.alternateContact.name.caseManagerAgencyFormLabel")}
                   </p>

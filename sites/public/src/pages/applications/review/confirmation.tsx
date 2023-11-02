@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Markdown from "markdown-to-jsx"
-import { AppearanceStyleType, Button, t, ApplicationTimeline } from "@bloom-housing/ui-components"
+import { t, ApplicationTimeline } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import {
@@ -11,7 +11,7 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-import { Card, Heading } from "@bloom-housing/ui-seeds"
+import { Button, Card, Heading } from "@bloom-housing/ui-seeds"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/applications/AppSubmissionContext"
 import { UserStatus } from "../../../lib/constants"
@@ -63,13 +63,13 @@ const ApplicationConfirmation = () => {
         {imageUrl && <img src={imageUrl} alt={listing?.name} />}
 
         <CardSection divider={"flush"}>
-          <h2 className="form-card__paragraph-title">
+          <h2 className="text__caps-spaced">
             {t("application.review.confirmation.lotteryNumber")}
           </h2>
 
           <p
             id="confirmationCode"
-            className="font-serif text-2xl my-1"
+            className="font-serif text-2xl mb-1"
             data-testid={"app-confirmation-id"}
           >
             {application.confirmationCode || application.id}
@@ -108,33 +108,31 @@ const ApplicationConfirmation = () => {
           </CardSection>
         )}
 
-        <div className="form-card__pager">
-          {initialStateLoaded && !profile && (
-            <CardSection className={"bg-primary-lighter border-none"} divider={"flush"}>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  void router.push("/create-account")
-                }}
-                id={"app-confirmation-create-account"}
-              >
-                {t("account.createAccount")}
-              </Button>
-            </CardSection>
-          )}
-
-          <CardSection divider={"flush"}>
-            <span className="underline text-sm" data-testid={"app-confirmation-browse"}>
-              <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
-            </span>
+        {initialStateLoaded && !profile && (
+          <CardSection className={"bg-primary-lighter border-none"} divider={"flush"}>
+            <Button
+              variant={"primary"}
+              onClick={() => {
+                void router.push("/create-account")
+              }}
+              data-testid={"app-confirmation-create-account"}
+            >
+              {t("account.createAccount")}
+            </Button>
           </CardSection>
+        )}
 
-          <CardSection>
-            <span className="underline text-sm" data-testid={"app-confirmation-print"}>
-              <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
-            </span>
-          </CardSection>
-        </div>
+        <CardSection divider={"flush"}>
+          <span className="underline text-sm" data-testid={"app-confirmation-browse"}>
+            <Link href="/listings">{t("application.review.confirmation.browseMore")}</Link>
+          </span>
+        </CardSection>
+
+        <CardSection>
+          <span className="underline text-sm" data-testid={"app-confirmation-print"}>
+            <Link href="/applications/view">{t("application.review.confirmation.print")}</Link>
+          </span>
+        </CardSection>
       </Card>
     </FormsLayout>
   )

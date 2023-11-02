@@ -127,11 +127,6 @@ const ApplicationAddress = () => {
     return verifyAddress ? window.location.pathname : conductor.determinePreviousUrl()
   }, [verifyAddress, conductor])
 
-  // TODO
-  // const backFunction = useCallback(() => {
-  //   return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
-  // }, [verifyAddress])
-
   return (
     <FormsLayout>
       <Form id="applications-address" onSubmit={handleSubmit(onSubmit, onError)}>
@@ -152,6 +147,9 @@ const ApplicationAddress = () => {
           }}
           backLink={{
             url: backUrl,
+            onClickFxn: () => {
+              return verifyAddress ? setVerifyAddress(false) : conductor.setNavigatedBack(true)
+            },
           }}
           conductor={conductor}
         >
@@ -162,115 +160,116 @@ const ApplicationAddress = () => {
           )}
           <div style={{ display: verifyAddress ? "none" : "block" }}>
             <CardSection divider={"inset"}>
-              <PhoneField
-                label={t("application.contact.yourPhoneNumber")} // TODO
-                caps={true}
-                required={true}
-                id="applicant.phoneNumber"
-                name="applicant.phoneNumber"
-                error={!noPhone ? errors.applicant?.phoneNumber : false}
-                errorMessage={t("errors.phoneNumberError")}
-                controlClassName="control"
-                control={control}
-                defaultValue={application.applicant.phoneNumber}
-                disabled={clientLoaded && noPhone}
-                dataTestId={"app-primary-phone-number"}
-                subNote={"10-digit, for example 999-999-9999"}
-              />
-              <Select
-                id="applicant.phoneNumberType"
-                name="applicant.phoneNumberType"
-                placeholder={t("t.selectOne")}
-                label={t("application.contact.phoneNumberTypes.prompt")}
-                disabled={clientLoaded && noPhone}
-                validation={{ required: !noPhone }}
-                defaultValue={application.applicant.phoneNumberType}
-                error={!noPhone && errors.applicant?.phoneNumberType}
-                errorMessage={t("errors.phoneNumberTypeError")}
-                register={register}
-                controlClassName="control"
-                options={phoneNumberKeys}
-                keyPrefix="application.contact.phoneNumberTypes"
-                dataTestId={"app-primary-phone-number-type"}
-              />
+              <fieldset>
+                <legend className={"text__caps-spaced"}>
+                  {t("application.contact.yourPhoneNumber")}
+                </legend>
+                <PhoneField
+                  label={t("application.contact.number")}
+                  required={true}
+                  id="applicant.phoneNumber"
+                  name="applicant.phoneNumber"
+                  error={!noPhone ? errors.applicant?.phoneNumber : false}
+                  errorMessage={t("errors.phoneNumberError")}
+                  controlClassName="control"
+                  control={control}
+                  defaultValue={application.applicant.phoneNumber}
+                  disabled={clientLoaded && noPhone}
+                  dataTestId={"app-primary-phone-number"}
+                  subNote={"10-digit, for example 999-999-9999"}
+                />
+                <Select
+                  id="applicant.phoneNumberType"
+                  name="applicant.phoneNumberType"
+                  placeholder={t("t.selectOne")}
+                  label={t("application.contact.phoneNumberTypes.prompt")}
+                  disabled={clientLoaded && noPhone}
+                  validation={{ required: !noPhone }}
+                  defaultValue={application.applicant.phoneNumberType}
+                  error={!noPhone && errors.applicant?.phoneNumberType}
+                  errorMessage={t("errors.phoneNumberTypeError")}
+                  register={register}
+                  controlClassName="control"
+                  options={phoneNumberKeys}
+                  keyPrefix="application.contact.phoneNumberTypes"
+                  dataTestId={"app-primary-phone-number-type"}
+                />
 
-              <Field
-                type="checkbox"
-                id="noPhone"
-                name="applicant.noPhone"
-                label={t("application.contact.noPhoneNumber")}
-                primary={true}
-                register={register}
-                disabled={clientLoaded && phonePresent()}
-                inputProps={{
-                  defaultChecked: application.applicant.noPhone,
-                  onChange: (e) => {
-                    if (e.target.checked) {
-                      setValue("applicant.phoneNumberType", "")
-                      setValue("additionalPhone", "")
-                      setValue("additionalPhoneNumber", "")
-                      setValue("additionalPhoneNumberType", "")
-                    }
-                  },
-                }}
-                dataTestId={"app-primary-no-phone"}
-                className={"mb-2"}
-              />
+                <Field
+                  type="checkbox"
+                  id="noPhone"
+                  name="applicant.noPhone"
+                  label={t("application.contact.noPhoneNumber")}
+                  primary={true}
+                  register={register}
+                  disabled={clientLoaded && phonePresent()}
+                  inputProps={{
+                    defaultChecked: application.applicant.noPhone,
+                    onChange: (e) => {
+                      if (e.target.checked) {
+                        setValue("applicant.phoneNumberType", "")
+                        setValue("additionalPhone", "")
+                        setValue("additionalPhoneNumber", "")
+                        setValue("additionalPhoneNumberType", "")
+                      }
+                    },
+                  }}
+                  dataTestId={"app-primary-no-phone"}
+                  className={"mb-2"}
+                />
 
-              <Field
-                type="checkbox"
-                id="additionalPhone"
-                name="additionalPhone"
-                label={t("application.contact.additionalPhoneNumber")}
-                disabled={clientLoaded && noPhone}
-                primary={true}
-                register={register}
-                inputProps={{
-                  defaultChecked: application.additionalPhone,
-                  onChange: (e) => {
-                    if (e.target.checked) {
-                      setValue("additionalPhoneNumber", "")
-                      setValue("additionalPhoneNumberType", "")
-                    }
-                  },
-                }}
-                dataTestId={"app-primary-additional-phone"}
-              />
+                <Field
+                  type="checkbox"
+                  id="additionalPhone"
+                  name="additionalPhone"
+                  label={t("application.contact.additionalPhoneNumber")}
+                  disabled={clientLoaded && noPhone}
+                  primary={true}
+                  register={register}
+                  inputProps={{
+                    defaultChecked: application.additionalPhone,
+                    onChange: (e) => {
+                      if (e.target.checked) {
+                        setValue("additionalPhoneNumber", "")
+                        setValue("additionalPhoneNumberType", "")
+                      }
+                    },
+                  }}
+                  dataTestId={"app-primary-additional-phone"}
+                />
 
-              {additionalPhone && (
-                <>
-                  <PhoneField
-                    id="additionalPhoneNumber"
-                    name="additionalPhoneNumber"
-                    label={t("application.contact.yourAdditionalPhoneNumber")}
-                    required={true}
-                    caps={true}
-                    error={errors.additionalPhoneNumber}
-                    errorMessage={t("errors.phoneNumberError")}
-                    control={control}
-                    defaultValue={application.additionalPhoneNumber}
-                    controlClassName="control"
-                    dataTestId={"app-primary-additional-phone-number"}
-                    subNote={"10-digit, for example 999-999-9999"}
-                  />
-                  <Select
-                    id="additionalPhoneNumberType"
-                    name="additionalPhoneNumberType"
-                    defaultValue={application.additionalPhoneNumberType}
-                    validation={{ required: true }}
-                    error={errors?.additionalPhoneNumberType}
-                    errorMessage={t("errors.phoneNumberTypeError")}
-                    register={register}
-                    controlClassName="control"
-                    placeholder={t("application.contact.phoneNumberTypes.prompt")}
-                    label={t("application.contact.phoneNumberTypes.prompt")}
-                    labelClassName={"sr-only"}
-                    options={phoneNumberKeys}
-                    keyPrefix="application.contact.phoneNumberTypes"
-                    dataTestId={"app-primary-additional-phone-number-type"}
-                  />
-                </>
-              )}
+                {additionalPhone && (
+                  <>
+                    <PhoneField
+                      id="additionalPhoneNumber"
+                      name="additionalPhoneNumber"
+                      label={t("application.contact.secondNumber")}
+                      required={true}
+                      error={errors.additionalPhoneNumber}
+                      errorMessage={t("errors.phoneNumberError")}
+                      control={control}
+                      defaultValue={application.additionalPhoneNumber}
+                      controlClassName="control"
+                      dataTestId={"app-primary-additional-phone-number"}
+                      subNote={"10-digit, for example 999-999-9999"}
+                    />
+                    <Select
+                      id="additionalPhoneNumberType"
+                      name="additionalPhoneNumberType"
+                      defaultValue={application.additionalPhoneNumberType}
+                      validation={{ required: true }}
+                      error={errors?.additionalPhoneNumberType}
+                      errorMessage={t("errors.phoneNumberTypeError")}
+                      register={register}
+                      controlClassName="control"
+                      label={t("application.contact.phoneNumberTypes.prompt")}
+                      options={phoneNumberKeys}
+                      keyPrefix="application.contact.phoneNumberTypes"
+                      dataTestId={"app-primary-additional-phone-number-type"}
+                    />
+                  </>
+                )}
+              </fieldset>
             </CardSection>
             <CardSection divider={"inset"}>
               <fieldset>
@@ -547,7 +546,6 @@ const ApplicationAddress = () => {
 
               {(workInRegion == "yes" ||
                 (!workInRegion && application.applicant.workInRegion == "yes")) && (
-                //TODO
                 <div className="form-card__group mx-0 px-0 mt-2">
                   <fieldset>
                     <legend className="text__caps-spaced">
