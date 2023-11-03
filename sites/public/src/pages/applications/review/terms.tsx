@@ -190,7 +190,7 @@ const ApplicationTerms = () => {
               }
               variant={"primary"}
               type="submit"
-              data-testid={"app-terms-submit-button"}
+              id={"app-terms-submit-button"}
             >
               {t("t.submit")}
             </Button>
