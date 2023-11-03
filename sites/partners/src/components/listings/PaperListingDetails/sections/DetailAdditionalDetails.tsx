@@ -1,41 +1,31 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailAdditionalDetails = () => {
   const listing = useContext(ListingContext)
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.additionalDetails")}
-      grid={false}
-      inset
-    >
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="requiredDocuments" label={t("listings.requiredDocuments")}>
-            {getDetailFieldString(listing.requiredDocuments)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="programRules" label={t("listings.importantProgramRules")}>
-            {getDetailFieldString(listing.programRules)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <FieldValue id="specialNotes" label={t("listings.specialNotes")}>
-            {getDetailFieldString(listing.specialNotes)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-    </GridSection>
+    <SectionWithGrid heading={t("listings.sections.additionalDetails")} inset>
+      <Grid.Row>
+        <FieldValue id="requiredDocuments" label={t("listings.requiredDocuments")}>
+          {getDetailFieldString(listing.requiredDocuments)}
+        </FieldValue>
+      </Grid.Row>
+      <Grid.Row>
+        <FieldValue id="programRules" label={t("listings.importantProgramRules")}>
+          {getDetailFieldString(listing.programRules)}
+        </FieldValue>
+      </Grid.Row>
+      <Grid.Row>
+        <FieldValue id="specialNotes" label={t("listings.specialNotes")}>
+          {getDetailFieldString(listing.specialNotes)}
+        </FieldValue>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

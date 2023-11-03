@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
   t,
-  GridSection,
   MinimalTable,
   Button,
   AppearanceSizeType,
@@ -10,9 +9,11 @@ import {
   Field,
   StandardTableData,
 } from "@bloom-housing/ui-components"
+import { Card, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import LinkComponent from "../../../../components/core/LinkComponent"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -200,7 +201,7 @@ const SelectAndOrder = ({
       )
     }
     return (
-      <div className="ml-8 -mt-4 md:-mt-12 mb-4 text-sm">
+      <div className="ml-8 -mt-6 mb-4 text-sm">
         <div>
           <button
             onClick={() => {
@@ -229,25 +230,28 @@ const SelectAndOrder = ({
 
   return (
     <>
-      <GridSection title={title} description={subtitle} grid={false} separator>
-        <div className="bg-gray-300 px-4 py-5">
-          {!!listingData.length && (
-            <div className="mb-5">
-              <MinimalTable headers={formTableHeaders} data={formTableData} />
-            </div>
-          )}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={title} subheading={subtitle} inset>
+        <Grid.Row>
+          <Grid.Cell>
+            {!!listingData.length && (
+              <div className="mb-5">
+                <MinimalTable headers={formTableHeaders} data={formTableData} />
+              </div>
+            )}
 
-          <Button
-            id={`add-${applicationSection}-button`}
-            type="button"
-            size={AppearanceSizeType.normal}
-            onClick={() => setTableDrawer(true)}
-          >
-            {listingData.length ? editText : addText}
-          </Button>
-        </div>
-        {subNote && <p className="field-sub-note">{subNote}</p>}
-      </GridSection>
+            <Button
+              id={`add-${applicationSection}-button`}
+              type="button"
+              size={AppearanceSizeType.normal}
+              onClick={() => setTableDrawer(true)}
+            >
+              {listingData.length ? editText : addText}
+            </Button>
+            {subNote && <p className="field-sub-note">{subNote}</p>}
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
 
       <Drawer
         open={!!tableDrawer}
@@ -304,31 +308,37 @@ const SelectAndOrder = ({
         }}
         className={"drawer__small"}
       >
-        <div className="border rounded-md p-8 bg-white">
-          {jurisdiction
-            ? fetchedData.map((item, index) => {
-                const previewShown = openPreviews.some((preview) => preview === index)
-                return (
-                  <GridSection columns={1} key={index} className={"md:-mb-6"}>
-                    <Field
-                      className={"font-semibold"}
-                      id={`${formKey}.${item.id}`}
-                      name={`${formKey}.${item.id}`}
-                      type="checkbox"
-                      label={item.text}
-                      register={register}
-                      inputProps={{
-                        defaultChecked: draftListingData.some(
-                          (existingItem) => existingItem.text === item.text
-                        ),
-                      }}
-                    />
-                    {getPreviewSection(previewShown, index, item)}
-                  </GridSection>
-                )
-              })
-            : t("listings.selectJurisdiction")}
-        </div>
+        <Card>
+          <Card.Section>
+            {jurisdiction
+              ? fetchedData.map((item, index) => {
+                  const previewShown = openPreviews.some((preview) => preview === index)
+                  return (
+                    <Grid key={index}>
+                      <Grid.Row>
+                        <Grid.Cell>
+                          <Field
+                            className={"font-semibold"}
+                            id={`${formKey}.${item.id}`}
+                            name={`${formKey}.${item.id}`}
+                            type="checkbox"
+                            label={item.text}
+                            register={register}
+                            inputProps={{
+                              defaultChecked: draftListingData.some(
+                                (existingItem) => existingItem.text === item.text
+                              ),
+                            }}
+                          />
+                          {getPreviewSection(previewShown, index, item)}
+                        </Grid.Cell>
+                      </Grid.Row>
+                    </Grid>
+                  )
+                })
+              : t("listings.selectJurisdiction")}
+          </Card.Section>
+        </Card>
         {jurisdiction && (
           <Button
             id="addPreferenceSaveButton"

@@ -4,8 +4,6 @@ import {
   t,
   AppearanceStyleType,
   Dropzone,
-  GridSection,
-  GridCell,
   MinimalTable,
   TableThumbnail,
   StandardTableData,
@@ -17,6 +15,8 @@ import { getUrlForListingImage, CLOUDINARY_BUILDING_LABEL } from "@bloom-housing
 
 import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
 import { ListingImage, Asset } from "@bloom-housing/backend-core"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { Grid } from "@bloom-housing/ui-seeds"
 
 const ListingPhotos = () => {
   const formMethods = useFormContext()
@@ -195,6 +195,7 @@ const ListingPhotos = () => {
    */
   return (
     <>
+      <hr className="spacer-section-above spacer-section" />
       {fields.map((item, index) => (
         <span key={item.id}>
           <input
@@ -205,17 +206,13 @@ const ListingPhotos = () => {
           />
         </span>
       ))}
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.photoTitle")}
-        description={t("listings.sections.photoSubtitle")}
+      <SectionWithGrid
+        heading={t("listings.sections.photoTitle")}
+        subheading={t("listings.sections.photoSubtitle")}
       >
-        <span className={"text-tiny text-gray-800 block mb-2"}>
-          {t("listings.sections.photoTitle")}
-        </span>
-        <GridSection columns={1} tinted inset>
-          <GridCell>
+        <SectionWithGrid.HeadingRow>{t("listings.sections.photoTitle")}</SectionWithGrid.HeadingRow>
+        <Grid.Row columns={1} className="grid-inset-section">
+          <Grid.Cell>
             {listingFormPhotos.length > 0 && (
               <div className="mb-5" data-testid="photos-table">
                 <MinimalTable
@@ -237,9 +234,9 @@ const ListingPhotos = () => {
             >
               {t(listingFormPhotos.length > 0 ? "listings.editPhotos" : "listings.addPhoto")}
             </Button>
-          </GridCell>
-        </GridSection>
-      </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
       {fieldHasError(errors?.images) && (
         <span className={"text-sm text-alert"}>{errors?.images?.nested?.message}</span>
       )}
