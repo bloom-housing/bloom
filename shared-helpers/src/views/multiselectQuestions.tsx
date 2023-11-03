@@ -1,22 +1,22 @@
 import * as React from "react"
 import {
-  InputType,
-  MultiselectQuestion,
-  MultiselectOption,
   ApplicationMultiselectQuestion,
   ApplicationMultiselectQuestionOption,
   ApplicationSection,
-  ListingMultiselectQuestion,
+  InputType,
   Listing,
+  ListingMultiselectQuestion,
+  MultiselectOption,
+  MultiselectQuestion,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
-  t,
-  Field,
-  resolveObject,
-  FormAddress,
   ExpandableContent,
+  Field,
   FieldGroup,
+  FormAddress,
+  resolveObject,
+  t,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
 
@@ -235,7 +235,6 @@ export const getCheckboxOption = (
           exclusiveKeys
         )}
       </div>
-
       {option.description && (
         <div className="ml-8 -mt-5 mb-5">
           <ExpandableContent strings={{ readMore: t("t.readMore"), readLess: t("t.readLess") }}>
@@ -257,11 +256,44 @@ export const getCheckboxOption = (
           </ExpandableContent>
         </div>
       )}
-
+      {watchFields[optionFieldName] && option.collectName && (
+        <Field
+          id="addressHolderName"
+          name={fieldName(question.text, applicationSection, `${option.text}-addressHolderName`)}
+          label={t("application.preferences.options.addressHolderName")}
+          register={register}
+          validation={{ required: true, maxLength: 64 }}
+          error={!!resolveObject("addressHolderName", errors)}
+          errorMessage={
+            resolveObject("addressHolderName", errors)?.type === "maxLength"
+              ? t("errors.maxLength")
+              : t("errors.requiredFieldError")
+          }
+        />
+      )}
+      {watchFields[optionFieldName] && option.collectRelationship && (
+        <Field
+          id="addressHolderRelationship"
+          name={fieldName(
+            question.text,
+            applicationSection,
+            `${option.text}-addressHolderRelationship`
+          )}
+          label={t("application.preferences.options.addressHolderRelationship")}
+          register={register}
+          validation={{ required: true, maxLength: 64 }}
+          error={!!resolveObject("addressHolderRelationship", errors)}
+          errorMessage={
+            resolveObject("addressHolderRelationship", errors)?.type === "maxLength"
+              ? t("errors.maxLength")
+              : t("errors.requiredFieldError")
+          }
+        />
+      )}
       {watchFields[optionFieldName] && option.collectAddress && (
         <div className="pb-4">
           <FormAddress
-            subtitle={t("application.preferences.options.address")}
+            subtitle={t("application.preferences.options.qualifyingAddress")}
             dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
             register={register}
             errors={errors}
@@ -322,10 +354,18 @@ export const mapCheckboxesToApi = (
     .filter((option) => !Object.keys(data[option]).length)
     .map((key) => {
       const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
+      const addressHolderNameData = addressFields.filter(
+        (addressField) => addressField === `${key}-addressHolderName`
+      )
+      const addressHolderRelationshipData = addressFields.filter(
+        (addressField) => addressField === `${key}-addressHolderRelationship`
+      )
 
       return {
         key,
         checked: data[key] === true,
+        addressHolderName: data[addressHolderNameData[0]],
+        addressHolderRelationship: data[addressHolderRelationshipData[0]],
         extraData: addressData.length
           ? [{ type: InputType.address, key, value: data[addressData[0]] }]
           : [],
@@ -379,11 +419,16 @@ export const mapApiToMultiselectForm = (
     if (appQuestion.inputType === "checkbox") {
       options = question.options.reduce((acc, curr) => {
         const claimed = curr.checked
-
         if (appQuestion.inputType === "checkbox") {
           acc[curr.key] = claimed
           if (curr.extraData?.length) {
             acc[`${curr.key}-address`] = curr.extraData[0].value
+          }
+          if (curr.addressHolderName) {
+            acc[`${curr.key}-addressHolderName`] = curr.addressHolderName
+          }
+          if (curr.addressHolderRelationship) {
+            acc[`${curr.key}-addressHolderRelationship`] = curr.addressHolderRelationship
           }
         }
 

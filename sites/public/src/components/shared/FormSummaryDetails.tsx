@@ -93,7 +93,7 @@ const FormSummaryDetails = ({
     return extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
         acc += `
-          ${item.value.street}${!item.value.street2 && ","}
+          ${item.value.street}${!item.value.street2 ? "," : ""}
           ${item.value.street2 ? `${item.value.street2},` : ""}
           ${item.value.city},
           ${item.value.state}

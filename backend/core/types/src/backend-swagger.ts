@@ -2651,6 +2651,12 @@ export interface ApplicationMultiselectQuestionOption {
   checked: boolean
 
   /**  */
+  addressHolderName?: string
+
+  /**  */
+  addressHolderRelationship?: string
+
+  /**  */
   extraData?: AllExtraDataTypes[]
 }
 

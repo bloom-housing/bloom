@@ -20,6 +20,16 @@ export class ApplicationMultiselectQuestionOption {
   checked: boolean
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  addressHolderName?: string
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  addressHolderRelationship?: string
+
+  @Expose()
   @ApiProperty({
     type: "array",
     required: false,
