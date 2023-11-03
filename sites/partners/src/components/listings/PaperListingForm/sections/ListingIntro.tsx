@@ -30,7 +30,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        <Grid.Row className={`${defaultJurisdiction ? "hidden" : ""}`}>
+        <Grid.Row columns={1}>
           <Grid.Cell>
             <Field
               id="name"
@@ -57,7 +57,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
                 ? "field-value-error"
                 : ""
-            }`}
+            } ${defaultJurisdiction ? "hidden" : ""}`}
           >
             <Select
               id={"jurisdiction.id"}
