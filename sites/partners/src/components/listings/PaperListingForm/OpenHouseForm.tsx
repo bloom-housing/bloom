@@ -5,8 +5,6 @@ import {
   Button,
   AppearanceStyleType,
   t,
-  GridSection,
-  GridCell,
   Field,
   Textarea,
   Form,
@@ -16,10 +14,11 @@ import {
   TimeFieldValues,
   formatDateToTimeField,
 } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { Card, Grid } from "@bloom-housing/ui-seeds"
 import { TempEvent } from "../../../lib/listings/formTypes"
 import { createDate, createTime } from "../../../lib/helpers"
 import dayjs from "dayjs"
+import SectionWithGrid from "../../shared/SectionWithGrid"
 
 type OpenHouseFormProps = {
   onSubmit: (data: TempEvent) => void
@@ -98,106 +97,89 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
 
   return (
     <Form onSubmit={() => false}>
-      <div className="border rounded-md p-8 bg-white">
-        <GridSection title={t("listings.sections.openHouse")} columns={3}>
-          <GridCell>
-            <FieldValue label={t("t.date")}>
-              <DateField
-                label={t("t.date")}
-                name="date"
-                id="date"
-                register={register}
-                watch={watch}
-                readerOnly
-                error={errors?.date}
-                errorMessage={t("errors.requiredFieldError")}
-                required
-                defaultDate={defaultValues?.date}
-              />
-            </FieldValue>
-          </GridCell>
-          <GridCell>
-            <FieldValue label={t("t.startTime")}>
-              <TimeField
-                label={t("t.startTime")}
-                name="startTime"
-                id="startTime"
-                register={register}
-                watch={watch}
-                readerOnly
-                error={!!errors?.startTime}
-                required
-                defaultValues={defaultValues?.startTime}
-              />
-            </FieldValue>
-          </GridCell>
-          <GridCell>
-            <FieldValue label={t("t.end")}>
-              <TimeField
-                label={t("t.end")}
-                name="endTime"
-                id="endTime"
-                register={register}
-                watch={watch}
-                readerOnly
-                error={!!errors?.endTime}
-                required
-                defaultValues={defaultValues?.endTime}
-              />
-            </FieldValue>
-          </GridCell>
-          <GridCell>
-            <GridSection columns={1}>
-              <GridCell>
-                <FieldValue label={t("t.label")}>
-                  <Field
-                    id="label"
-                    name="label"
-                    label={t("t.label")}
-                    placeholder={t("t.label")}
-                    register={register}
-                    readerOnly
-                  />
-                </FieldValue>
-              </GridCell>
-              <GridCell>
-                <FieldValue label={t("t.url")}>
-                  <Field
-                    type="url"
-                    id="url"
-                    name="url"
-                    label={t("t.url")}
-                    placeholder={"https://"}
-                    register={register}
-                    readerOnly
-                    error={!!errors?.url}
-                    errorMessage={
-                      errors?.url?.type === "https"
-                        ? t("errors.urlHttpsError")
-                        : t("errors.urlError")
-                    }
-                  />
-                </FieldValue>
-              </GridCell>
-            </GridSection>
-          </GridCell>
+      <Card>
+        <Card.Section>
+          <SectionWithGrid heading={t("listings.sections.openHouse")}>
+            <Grid.Row columns={3}>
+              <Grid.Cell>
+                <DateField
+                  label={t("t.date")}
+                  name="date"
+                  id="date"
+                  register={register}
+                  watch={watch}
+                  error={errors?.date}
+                  errorMessage={t("errors.requiredFieldError")}
+                  required
+                  defaultDate={defaultValues?.date}
+                />
+              </Grid.Cell>
+              <Grid.Cell>
+                <TimeField
+                  label={t("t.startTime")}
+                  name="startTime"
+                  id="startTime"
+                  register={register}
+                  watch={watch}
+                  error={!!errors?.startTime}
+                  required
+                  defaultValues={defaultValues?.startTime}
+                />
+              </Grid.Cell>
+              <Grid.Cell>
+                <TimeField
+                  label={t("t.end")}
+                  name="endTime"
+                  id="endTime"
+                  register={register}
+                  watch={watch}
+                  error={!!errors?.endTime}
+                  required
+                  defaultValues={defaultValues?.endTime}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Cell>
+                <Field
+                  id="label"
+                  name="label"
+                  label={t("t.label")}
+                  placeholder={t("t.label")}
+                  register={register}
+                />
+              </Grid.Cell>
 
-          <GridCell>
-            <FieldValue label={t("listings.events.openHouseNotes")}>
-              <Textarea
-                id="note"
-                name="note"
-                label={t("listings.events.openHouseNotes")}
-                placeholder={t("t.notes")}
-                register={register}
-                readerOnly
-                note={t("t.optional")}
-                rows={5}
-              />
-            </FieldValue>
-          </GridCell>
-        </GridSection>
-      </div>
+              <Grid.Cell>
+                <Field
+                  type="url"
+                  id="url"
+                  name="url"
+                  label={t("t.url")}
+                  placeholder={"https://"}
+                  register={register}
+                  error={!!errors?.url}
+                  errorMessage={
+                    errors?.url?.type === "https" ? t("errors.urlHttpsError") : t("errors.urlError")
+                  }
+                />
+              </Grid.Cell>
+
+              <Grid.Cell className="flex">
+                <Textarea
+                  id="note"
+                  name="note"
+                  label={t("listings.events.openHouseNotes")}
+                  placeholder={t("t.notes")}
+                  register={register}
+                  note={t("t.optional")}
+                  rows={5}
+                />
+              </Grid.Cell>
+            </Grid.Row>
+          </SectionWithGrid>
+        </Card.Section>
+      </Card>
 
       <Button
         type="button"

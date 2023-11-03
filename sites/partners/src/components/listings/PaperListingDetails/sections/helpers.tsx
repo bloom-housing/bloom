@@ -1,8 +1,9 @@
 import React from "react"
 import { AddressUpdate } from "@bloom-housing/backend-core/types"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import dayjs from "dayjs"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 export const getDetailFieldNumber = (listingNumber: number) => {
   return listingNumber ? listingNumber.toString() : t("t.none")
@@ -59,43 +60,40 @@ export const getDetailAddress = (
 ) => {
   if (!address) {
     return (
-      <FieldValue>
-        <GridSection subtitle={subtitle}>{getDetailFieldString(null)}</GridSection>
-      </FieldValue>
+      <>
+        <SectionWithGrid.HeadingRow>{subtitle}</SectionWithGrid.HeadingRow>
+        <Grid.Row>{getDetailFieldString(null)}</Grid.Row>
+      </>
     )
   }
   return (
     <>
-      <GridSection subtitle={subtitle} columns={6}>
-        <GridCell span={3}>
-          <FieldValue
-            id={`${addressName}.street`}
-            label={t("listings.streetAddressOrPOBox")}
-            testId={`${addressName}.street`}
-          >
-            {getDetailFieldString(address?.street)}
-          </FieldValue>
-        </GridCell>
-        <GridCell span={3}>
-          <FieldValue
-            id={`${addressName}.street2`}
-            label={t("application.contact.apt")}
-            testId={`${addressName}.street2`}
-          >
-            {getDetailFieldString(address?.street2)}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={6}>
-        <GridCell span={2}>
-          <FieldValue
-            id={`${addressName}.city`}
-            label={t("application.contact.city")}
-            testId={`${addressName}.city`}
-          >
-            {getDetailFieldString(address?.city)}
-          </FieldValue>
-        </GridCell>
+      <SectionWithGrid.HeadingRow>{subtitle}</SectionWithGrid.HeadingRow>
+      <Grid.Row>
+        <FieldValue
+          id={`${addressName}.street`}
+          label={t("listings.streetAddressOrPOBox")}
+          testId={`${addressName}.street`}
+        >
+          {getDetailFieldString(address?.street)}
+        </FieldValue>
+        <FieldValue
+          id={`${addressName}.street2`}
+          label={t("application.contact.apt")}
+          testId={`${addressName}.street2`}
+        >
+          {getDetailFieldString(address?.street2)}
+        </FieldValue>
+      </Grid.Row>
+      <Grid.Row columns={6}>
+        <FieldValue
+          id={`${addressName}.city`}
+          className="seeds-grid-span-2"
+          label={t("application.contact.city")}
+          testId={`${addressName}.city`}
+        >
+          {getDetailFieldString(address?.city)}
+        </FieldValue>
         <FieldValue
           id={`${addressName}.state`}
           label={t("application.contact.state")}
@@ -105,12 +103,13 @@ export const getDetailAddress = (
         </FieldValue>
         <FieldValue
           id={`${addressName}.zipCode`}
+          className="seeds-grid-span-3"
           label={t("application.contact.zip")}
           testId={`${addressName}.zipCode`}
         >
           {getDetailFieldString(address?.zipCode)}
         </FieldValue>
-      </GridSection>
+      </Grid.Row>
     </>
   )
 }
