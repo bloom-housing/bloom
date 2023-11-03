@@ -72,7 +72,7 @@
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^10.0.0",
     "nyc": "^15.1.0",
-    "postcss": "^8.3.6",
+    "postcss": "^8.4.31",
     "sass": "1.52.1",
     "sass-loader": "^10.0.3",
     "ts-loader": "^6.0.3",
