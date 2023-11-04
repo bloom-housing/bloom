@@ -40,7 +40,7 @@ Cypress.Commands.add("loginAndAcceptTerms", (fix = "user") => {
   cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
+    cy.get("button").contains("Sign In").click()
     cy.getByTestId("agree").check()
     cy.getByID("form-submit").click()
     cy.contains("Listings")
@@ -52,7 +52,7 @@ Cypress.Commands.add("login", (fix = "user") => {
   cy.fixture(fix).then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
+    cy.get("button").contains("Sign In").click()
     cy.contains("Listings")
   })
 })
@@ -62,7 +62,7 @@ Cypress.Commands.add("loginWithMfa", () => {
   cy.fixture("mfaUser").then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
+    cy.get("button").contains("Sign In").click()
     cy.getByID("verify-by-email").click()
     cy.getByTestId("sign-in-mfa-code-field").type(user.mfaCode)
     cy.getByID("verify-and-sign-in").click()

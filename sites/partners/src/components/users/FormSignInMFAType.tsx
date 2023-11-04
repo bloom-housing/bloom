@@ -73,7 +73,7 @@ const FormSignInMFAType = ({
           />
 
           <div className="text-center mt-6">
-            <Button variant="secondary" id="verify-by-email" onClick={emailOnClick}>
+            <Button type="submit" variant="secondary" id="verify-by-email" onClick={emailOnClick}>
               {t("nav.signInMFA.verifyByEmail")}
             </Button>
           </div>

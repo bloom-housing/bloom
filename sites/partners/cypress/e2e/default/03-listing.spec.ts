@@ -9,7 +9,7 @@ describe("Listing Management Tests", () => {
 
   it("full listing publish", () => {
     cy.visit("/")
-    cy.get("a > .button").contains("Add Listing").click()
+    cy.get("a").contains("Add Listing").click()
     cy.contains("New Listing")
     cy.fixture("listing").then((listing) => {
       fillOutListing(cy, listing)
@@ -88,7 +88,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("priorityType.id").select(listing["priorityType.id"])
     cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
     cy.getByID("add-preferences-button").contains("Add Preference").click()
-    cy.get(".border > .button").contains("Select Preferences").click()
+    cy.get(".border > button").contains("Select Preferences").click()
     cy.get(
       ":nth-child(1) > .seeds-grid > .seeds-grid-row > .seeds-grid-cell > .field > div > .label"
     )
@@ -123,7 +123,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("requiredDocuments").type(listing["requiredDocuments"])
     cy.getByID("programRules").type(listing["programRules"])
     cy.getByID("specialNotes").type(listing["specialNotes"])
-    cy.get(".text-right > .button").contains("Application Process").click()
+    cy.get("button").contains("Application Process").click()
     cy.getByID("reviewOrderFCFS").check()
     cy.getByID("dueDateQuestionNo").check()
     cy.getByID("waitlistOpenNo").check()
@@ -179,7 +179,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("note").type(listing["note"])
     cy.getByID("startTime.period").select("AM")
     cy.getByID("endTime.period").select("PM")
-    cy.get("form > .button").contains("Save").click()
+    cy.get("button").contains("Save").click()
     cy.getByID("publishButton").contains("Publish").click()
 
     cy.getByID("publishButtonConfirm").contains("Publish").click()

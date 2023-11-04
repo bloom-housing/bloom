@@ -203,17 +203,15 @@ export default function ListingsList() {
               <div className="flex-row">
                 {isAdmin && (
                   <div className="flex-row">
-                    <LocalizedLink href={`/listings/add`}>
-                      <Button
-                        size="sm"
-                        className="mx-1"
-                        variant="primary"
-                        onClick={() => false}
-                        id={"addListingButton"}
-                      >
-                        {t("listings.addListing")}
-                      </Button>
-                    </LocalizedLink>
+                    <Button
+                      size="sm"
+                      className="mx-1"
+                      variant="primary"
+                      href="/listings/add"
+                      id="addListingButton"
+                    >
+                      {t("listings.addListing")}
+                    </Button>
                     <Button
                       className="mx-1"
                       id="export-listings"

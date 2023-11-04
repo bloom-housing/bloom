@@ -80,7 +80,7 @@ describe("Listings approval feature", () => {
     cy.getByID("number").type(listing["number"])
     cy.getByID("unitType.id").select(listing["unitType.id"])
     cy.getByID("unitFormSaveAndExitButton").contains("Save & Exit").click()
-    cy.get(".text-right > .button").contains("Application Process").click()
+    cy.get("button").contains("Application Process").click()
 
     cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
     cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])

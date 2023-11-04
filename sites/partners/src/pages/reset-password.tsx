@@ -89,7 +89,9 @@ const ResetPassword = () => {
             />
 
             <div className="text-center mt-6">
-              <Button variant="primary">{t("authentication.forgotPassword.changePassword")}</Button>
+              <Button type="submit" variant="primary">
+                {t("authentication.forgotPassword.changePassword")}
+              </Button>
             </div>
           </Form>
         </div>

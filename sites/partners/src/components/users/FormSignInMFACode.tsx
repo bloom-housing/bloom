@@ -89,7 +89,7 @@ const FormSignInMFACode = ({
             note={note}
           />
           <div className="text-center mt-10">
-            <Button variant="primary" id="verify-and-sign-in">
+            <Button type="submit" variant="primary" id="verify-and-sign-in">
               {t("nav.signInMFA.signIn")}
             </Button>
           </div>

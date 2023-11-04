@@ -55,7 +55,7 @@ const FormTerms = (props: FormTermsProps) => {
 
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
-            <Button variant="primary" id="form-submit">
+            <Button type="submit" variant="primary" id="form-submit">
               {t("t.submit")}
             </Button>
           </div>
