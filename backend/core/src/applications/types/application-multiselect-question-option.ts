@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { ArrayMaxSize, IsBoolean, IsString, ValidateNested } from "class-validator"
+import { ArrayMaxSize, IsBoolean, IsOptional, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty, getSchemaPath } from "@nestjs/swagger"
 import { BooleanInput } from "./form-metadata/boolean-input"
@@ -20,12 +20,14 @@ export class ApplicationMultiselectQuestionOption {
   checked: boolean
 
   @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
   addressHolderName?: string
 
   @Expose()
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
   addressHolderRelationship?: string
 
