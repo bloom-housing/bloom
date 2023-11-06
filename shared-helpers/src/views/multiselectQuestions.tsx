@@ -259,13 +259,13 @@ export const getCheckboxOption = (
       {watchFields[optionFieldName] && option.collectName && (
         <Field
           id="addressHolderName"
-          name={fieldName(question.text, applicationSection, `${option.text}-addressHolderName`)}
+          name={`${optionFieldName}-addressHolderName`}
           label={t("application.preferences.options.addressHolderName")}
           register={register}
           validation={{ required: true, maxLength: 64 }}
-          error={!!resolveObject("addressHolderName", errors)}
+          error={!!resolveObject(`${optionFieldName}-addressHolderName`, errors)}
           errorMessage={
-            resolveObject("addressHolderName", errors)?.type === "maxLength"
+            resolveObject(`${optionFieldName}-addressHolderName`, errors)?.type === "maxLength"
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
@@ -274,17 +274,14 @@ export const getCheckboxOption = (
       {watchFields[optionFieldName] && option.collectRelationship && (
         <Field
           id="addressHolderRelationship"
-          name={fieldName(
-            question.text,
-            applicationSection,
-            `${option.text}-addressHolderRelationship`
-          )}
+          name={`${optionFieldName}-addressHolderRelationship`}
           label={t("application.preferences.options.addressHolderRelationship")}
           register={register}
           validation={{ required: true, maxLength: 64 }}
-          error={!!resolveObject("addressHolderRelationship", errors)}
+          error={!!resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)}
           errorMessage={
-            resolveObject("addressHolderRelationship", errors)?.type === "maxLength"
+            resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)?.type ===
+            "maxLength"
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
