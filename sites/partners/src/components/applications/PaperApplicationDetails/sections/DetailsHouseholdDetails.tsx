@@ -1,8 +1,9 @@
 import React, { useContext, Fragment } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { sortUnitTypes } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailsHouseholdDetails = () => {
   const application = useContext(ApplicationContext)
@@ -20,12 +21,8 @@ const DetailsHouseholdDetails = () => {
   const preferredUnits = sortUnitTypes(application?.preferredUnit)
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("application.review.householdDetails")}
-      inset
-    >
-      <GridCell>
+    <SectionWithGrid heading={t("application.review.householdDetails")} inset>
+      <Grid.Row>
         <FieldValue label={t("application.details.preferredUnitSizes")} testId="preferredUnitSizes">
           {(() => {
             if (!preferredUnits.length) return t("t.n/a")
@@ -38,9 +35,7 @@ const DetailsHouseholdDetails = () => {
             ))
           })()}
         </FieldValue>
-      </GridCell>
 
-      <GridCell>
         <FieldValue label={t("application.details.adaPriorities")} testId="adaPriorities">
           {accessibilityLabels(application.accessibility).map((item) => (
             <Fragment key={item}>
@@ -49,8 +44,7 @@ const DetailsHouseholdDetails = () => {
             </Fragment>
           ))}
         </FieldValue>
-      </GridCell>
-      <GridCell>
+
         <FieldValue
           id="householdChanges"
           label={t("application.household.expectingChanges.title")}
@@ -58,9 +52,9 @@ const DetailsHouseholdDetails = () => {
         >
           {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
         </FieldValue>
-      </GridCell>
+      </Grid.Row>
 
-      <GridCell>
+      <Grid.Row>
         <FieldValue
           id="householdStudent"
           label={t("application.household.householdStudent.title")}
@@ -68,8 +62,8 @@ const DetailsHouseholdDetails = () => {
         >
           {application.householdStudent ? t("t.yes") : t("t.no")}
         </FieldValue>
-      </GridCell>
-    </GridSection>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

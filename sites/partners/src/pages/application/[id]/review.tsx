@@ -13,7 +13,6 @@ import {
   useMutate,
   AgTable,
   useAgTable,
-  GridSection,
   Modal,
   Field,
   AppearanceSizeType,
@@ -194,7 +193,7 @@ const Flag = () => {
             </div>
 
             <aside className="md:w-3/12 md:pl-6">
-              <GridSection columns={1} className={"w-full"}>
+              <section className={"w-full"}>
                 <Button
                   styleType={AppearanceStyleType.primary}
                   onClick={() => setSaveModalOpen(true)}
@@ -207,7 +206,7 @@ const Flag = () => {
                     {t("t.lastUpdated")}: {dayjs(data?.updatedAt).format("MMMM DD, YYYY")}
                   </div>
                 )}
-              </GridSection>
+              </section>
             </aside>
           </div>
         </div>

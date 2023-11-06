@@ -1,11 +1,12 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 import { InputType, AddressCreate, ApplicationSection } from "@bloom-housing/backend-core/types"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
 import { useSingleListingData } from "../../../../lib/hooks"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type DetailsMultiselectQuestionsProps = {
   listingId: string
@@ -31,11 +32,14 @@ const DetailsMultiselectQuestions = ({
   const questions = application[applicationSection]
 
   return (
-    <GridSection className="bg-primary-lighter" title={title} inset columns={2}>
-      {listingQuestions?.map((listingQuestion) => {
-        return (
-          <GridCell key={listingQuestion?.multiselectQuestion.text}>
-            <FieldValue label={listingQuestion?.multiselectQuestion.text}>
+    <SectionWithGrid heading={title} inset>
+      <Grid.Row columns={2}>
+        {listingQuestions?.map((listingQuestion) => {
+          return (
+            <FieldValue
+              key={listingQuestion?.multiselectQuestion.text}
+              label={listingQuestion?.multiselectQuestion.text}
+            >
               {(() => {
                 const appQuestion = questions?.find(
                   (question) => question.key === listingQuestion?.multiselectQuestion.text
@@ -67,18 +71,21 @@ const DetailsMultiselectQuestions = ({
 
                     if (extra.type === InputType.address)
                       return (
-                        <GridSection
+                        <FieldValue
                           key={extra.key}
-                          subtitle={t(`application.preferences.options.address`, {
+                          label={t(`application.preferences.options.address`, {
                             county: listingDto?.countyCode,
                           })}
-                          columns={3}
                         >
-                          <DetailsAddressColumns
-                            type={AddressColsType.preferences}
-                            addressObject={extra.value as AddressCreate}
-                          />
-                        </GridSection>
+                          <Grid spacing="lg">
+                            <Grid.Row columns={3}>
+                              <DetailsAddressColumns
+                                type={AddressColsType.preferences}
+                                addressObject={extra.value as AddressCreate}
+                              />
+                            </Grid.Row>
+                          </Grid>
+                        </FieldValue>
                       )
                   })
 
@@ -91,10 +98,10 @@ const DetailsMultiselectQuestions = ({
                 })
               })()}
             </FieldValue>
-          </GridCell>
-        )
-      })}
-    </GridSection>
+          )
+        })}
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 
