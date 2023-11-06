@@ -196,8 +196,8 @@ workflows:
           package-manager: yarn
           install-command: yarn install && cd ../../backend_new && yarn install
           post-install: |
-            pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed
-          cypress-command: npx wait-on@latest http://0.0.0.0:3000 && yarn dev:all-cypress
+            pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
+          cypress-command: npx wait-on@latest http://0.0.0.0:3000 
           # store_artifacts: true
       # Turning off partner tests until we connect the partner site to new backend
       # - cypress/run:
