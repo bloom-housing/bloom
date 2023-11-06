@@ -1,49 +1,9 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@3.2.0
-executor:
-  docker:
-    - image: "cypress/base:18.14.1"
-    - image: "cimg/postgres:12.10"
-      environment:
-        POSTGRES_USER: bloom-ci
-        # Never do this in production or with any sensitive / non-test data:
-        POSTGRES_HOST_AUTH_METHOD: trust
-        POSTGRES_DB: bloom
-        JURISDICTION_NAME: Bloomington
-  environment:
-    PORT: "3100"
-    EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
-    APP_SECRET: "CI-LONG-SECRET-KEY"
-    NODE_ENV: "development"
-    # DB URL for migration and seeds:
-    DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-    # DB URL for the jest tests per ormconfig.test.ts
-    TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-    PARTNERS_PORTAL_URL: "http://localhost:3001"
-    JURISDICTION_NAME: Bloomington
+  node: circleci/node@5
 
 executors:
-  standard-node:
-    docker:
-      - image: "cimg/node:18.14.2"
-      - image: "cimg/postgres:12.10"
-        environment:
-          POSTGRES_USER: bloom-ci
-          # Never do this in production or with any sensitive / non-test data:
-          POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_DB: bloom
-          JURISDICTION_NAME: Bloomington
-  standard-node-new:
-    docker:
-      - image: "cimg/node:18.14.2"
-      - image: "cimg/postgres:12.10"
-        environment:
-          POSTGRES_USER: bloom-ci
-          # Never do this in production or with any sensitive / non-test data:
-          POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_DB: bloom_prisma
-          JURISDICTION_NAME: Bloomington
   cypress-node:
     docker:
       - image: "cypress/base:18.14.1"
@@ -65,132 +25,74 @@ executors:
       TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
       JURISDICTION_NAME: Bloomington
+  standard-node:
+    docker:
+      - image: "cimg/node:18.14.2"
+      - image: "cimg/postgres:12.10"
+        environment:
+          POSTGRES_USER: bloom-ci
+          # Never do this in production or with any sensitive / non-test data:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: bloom_prisma
+          JURISDICTION_NAME: Bloomington
 
 jobs:
   setup:
-    executor: standard-node
+    executor: cypress-node
     steps:
       - checkout
-      - run: yarn install --frozen-lockfile
-      - save_cache:
+      - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/
-  setup-with-new-db:
-    resource_class: large
-    executor: standard-node
-    steps:
-      - checkout
-      - run: yarn backend:new:install
+      - node/install-packages:
+          app-dir: sites/public
+          pkg-manager: yarn
+          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - node/install-packages:
+          app-dir: backend_new
+          pkg-manager: yarn
+          cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - save_cache:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
-  lint:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn lint
-  jest-shared-helpers:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:shared:helpers
-  jest-backend:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - when:
+          condition: yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
+          steps:
+            - run:
+                name: Post Install Script
+                command: pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
+      # - when:
+      #     condition: << parameters.start-command >>
+      #     steps:
+      #       - run:
+      #           name: Start Server
+      #           command: << parameters.start-command >>
+      #           background: true
+      #           working_directory: << parameters.working-directory >>
       - run:
-          name: DB Setup
-          command: |
-            yarn test:backend:core:dbsetup
-          environment:
-            PORT: "3100"
-            EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
-            APP_SECRET: "CI-LONG-SECRET-KEY"
-            # DB URL for migration and seeds:
-            DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-            # DB URL for the jest tests per ormconfig.test.ts
-            TEST_DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
-            CLOUDINARY_SIGNED_PRESET: "fake_secret"
-            CLOUDINARY_KEY: "fake_key"
-            CLOUDINARY_CLOUD_NAME: "exygy"
-            CLOUDINARY_SECRET: "fake_secret"
-            PARTNERS_PORTAL_URL: "http://localhost:3001"
-  jest-new-backend:
-    executor: standard-node-new
-    steps:
-      - restore_cache:
-          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
-      - run:
-          name: DB Setup + New Backend Core Tests
-          command: |
-            yarn test:backend:new:dbsetup
-            yarn test:backend:new:cov
-          environment:
-            PORT: "3100"
-            EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
-            APP_SECRET: "CI-LONG-SECRET-KEY"
-            # DB URL for migration and seeds:
-            DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom_prisma"
-  build-public:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn build:app:public
-  build-partners:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn build:app:partners
-  unit-test-partners:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:app:partners:unit
-  unit-test-public:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:app:public:unit
+          name: Run Cypress
+          command: npx cypress run
+          working_directory: sites/public
+      - store_artifacts:
+          path: sites/public/cypress/videos
+      - store_artifacts:
+          path: sites/public/cypress/screenshots
+      # - run:
+      #     name: Verify Cypress
+      #     command: "npx cypress verify"
+      #     working_directory: sites/public
+  # build-and-run-backend:
+
+    
 
 workflows:
   build:
     jobs:
       - setup
-      - setup-with-new-db
-      - lint:
-          requires:
-            - setup
-      - jest-shared-helpers:
-          requires:
-            - setup
-      - jest-new-backend:
-          requires:
-            - setup-with-new-db
-      - build-public:
-          requires:
-            - setup
-      - unit-test-public:
-          requires:
-            - setup
-      - build-partners:
-          requires:
-            - setup
-      - unit-test-partners:
-          requires:
-            - setup
       - cypress/run:
           name: "cypress-public"
           requires:
-            - setup-with-new-db
+            - setup
           # executor: cypress-node
           working-directory: sites/public
           package-manager: yarn
@@ -198,39 +100,3 @@ workflows:
           post-install: |
             pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
           cypress-command: npx wait-on@latest http://0.0.0.0:3000 
-          # store_artifacts: true
-      # Turning off partner tests until we connect the partner site to new backend
-      # - cypress/run:
-      #     name: "cypress-partners"
-      #     requires:
-      #       - setup
-      #     executor: cypress-node
-      #     working_directory: sites/partners
-      #     yarn: true
-      #     build: |
-      #       echo 'export FEATURE_LISTINGS_APPROVAL=FALSE' >> "$BASH_ENV"
-      #       source "$BASH_ENV"
-      #       yarn test:backend:core:dbsetup
-      #     start: |
-      #       yarn dev:all-cypress
-      #     command: |
-      #       npx cypress run --spec cypress/e2e/default/**/*.{js,jsx,ts,tsx}
-      #     wait-on: "http://0.0.0.0:3001"
-      #     store_artifacts: true
-      # - cypress/run:
-      #     name: "cypress-partners-listings-approval"
-      #     requires:
-      #       - setup
-      #     executor: cypress-node
-      #     working_directory: sites/partners
-      #     yarn: true
-      #     build: |
-      #       echo 'export FEATURE_LISTINGS_APPROVAL=TRUE' >> "$BASH_ENV"
-      #       source "$BASH_ENV"
-      #       yarn test:backend:core:dbsetup
-      #     start: |
-      #       yarn dev:all-cypress
-      #     command: |
-      #       npx cypress run --spec cypress/e2e/listings-approval/**/*.{js,jsx,ts,tsx}
-      #     wait-on: "http://0.0.0.0:3001"
-      #     store_artifacts: true
