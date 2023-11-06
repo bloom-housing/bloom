@@ -1349,7 +1349,7 @@ describe('Testing user service', () => {
       requestingUser,
       `${headerRow}\n${row1}\n${row2}\n${row3}\n`,
       'User Export',
-      'a user export',
+      'an export of all users',
     );
   });
 });

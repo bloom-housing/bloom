@@ -158,13 +158,13 @@ describe('Testing email service', () => {
       user,
       'csv data goes here',
       'User Export',
-      'a user export',
+      'an export of all users',
     );
     expect(sendMock).toHaveBeenCalled();
     expect(sendMock.mock.calls[0][0].to).toEqual(user.email);
     expect(sendMock.mock.calls[0][0].subject).toEqual('User Export');
     expect(sendMock.mock.calls[0][0].html).toContain(
-      'The attached file is a user export. If you have any questions, please reach out to your administrator.',
+      'The attached file is an export of all users. If you have any questions, please reach out to your administrator.',
     );
     expect(sendMock.mock.calls[0][0].html).toContain('Hello,');
     expect(sendMock.mock.calls[0][0].html).toContain('User Export');

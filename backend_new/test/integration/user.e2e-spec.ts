@@ -598,7 +598,7 @@ describe('User Controller Tests', () => {
       expect.anything(),
       expect.anything(),
       'User Export',
-      'a user export',
+      'an export of all users',
     );
     expect(testEmailService.sendCSV.mock.calls[0][2]).toContain(
       `\"First Name\",\"Last Name\",\"Email\",\"Role\",\"Date Created\",\"Status\",\"Listing Names\",\"Listing Ids\",\"Last Logged In\"`,
