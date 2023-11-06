@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.29.0
+  cypress: cypress-io/cypress@3.2.0
 
 executors:
   standard-node:
@@ -170,15 +170,14 @@ workflows:
           name: "cypress-public"
           requires:
             - setup-with-new-db
-          executor: cypress-node
-          working_directory: sites/public
-          yarn: true
+          # executor: cypress-node
+          working-directory: sites/public
+          package-manager: yarn
           install-command: yarn install && cd ../../backend_new && yarn install
-          build: |
+          post-install: |
             pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed
-          start: yarn dev:all-cypress
-          wait-on: "http://0.0.0.0:3000"
-          store_artifacts: true
+          cypress-command: npx wait-on@latest http://0.0.0.0:3000 && yarn dev:all-cypress
+          # store_artifacts: true
       # Turning off partner tests until we connect the partner site to new backend
       # - cypress/run:
       #     name: "cypress-partners"
