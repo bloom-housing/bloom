@@ -60,7 +60,7 @@ jobs:
           steps:
             - run:
                 name: Post Install Script
-                command: pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
+                command: yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
       # - when:
       #     condition: << parameters.start-command >>
       #     steps:
