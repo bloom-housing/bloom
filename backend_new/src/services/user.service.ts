@@ -843,7 +843,7 @@ export class UserService {
       requestingUser,
       csvData,
       'User Export',
-      'a user export',
+      'an export of all users',
     );
     return {
       success: true,
