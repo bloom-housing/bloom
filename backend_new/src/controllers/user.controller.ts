@@ -66,6 +66,19 @@ export class UserController {
     return await this.userService.list(queryParams, mapTo(User, req['user']));
   }
 
+  @Get('/csv')
+  @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiOkResponse({ type: SuccessDTO })
+  @ApiOperation({
+    summary: 'List users in CSV',
+    operationId: 'listAsCsv',
+  })
+  @UseGuards(JwtAuthGuard)
+  async listAsCsv(@Request() req: ExpressRequest): Promise<SuccessDTO> {
+    return await this.userService.export(mapTo(User, req['user']));
+  }
+
   @Get(`:id`)
   @ApiOperation({
     summary: 'Get user by id',

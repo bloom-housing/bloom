@@ -1359,6 +1359,20 @@ export class UserService {
     })
   }
   /**
+   * List users in CSV
+   */
+  listAsCsv(options: IRequestOptions = {}): Promise<SuccessDTO> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/csv"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * Get user by id
    */
   retrieve(

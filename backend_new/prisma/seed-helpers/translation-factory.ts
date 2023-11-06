@@ -141,6 +141,11 @@ const translations = (jurisdictionName?: string) => ({
     viewPublished:
       'To view the published listing, please click on the link below',
   },
+  csvExport: {
+    body: 'The attached file is %{fileDescription}. If you have any questions, please reach out to your administrator.',
+    hello: 'Hello,',
+    title: '%{title}',
+  },
 });
 
 export const translationFactory = (
