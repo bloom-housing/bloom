@@ -1,6 +1,5 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@3.2.0
   node: circleci/node@5
 
 executors:
@@ -38,6 +37,24 @@ executors:
 
 jobs:
   setup:
+    executor: standard-node
+    steps:
+      - checkout
+      - run: yarn install --frozen-lockfile
+      - save_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
+  setup-backend:
+    executor: standard-node
+    steps:
+      - checkout
+      - run: yarn backend:new:install
+      - save_cache:
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/
+  cypress-public:
     executor: cypress-node
     resource_class: large
     steps:
@@ -52,10 +69,6 @@ jobs:
           app-dir: backend_new
           pkg-manager: yarn
           cache-version: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - save_cache:
-          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/
       - run:
           name: setup db and seed
           command: yarn test:backend:new:dbsetup:withseed
@@ -64,14 +77,6 @@ jobs:
           command: yarn dev:all-cypress
           background: true
           working_directory: sites/public
-      # - when:
-      #     condition: << parameters.start-command >>
-      #     steps:
-      #       - run:
-      #           name: Start Server
-      #           command: << parameters.start-command >>
-      #           background: true
-      #           working_directory: << parameters.working-directory >>
       - run:
           name: wait
           command: yarn dev:public-wait
@@ -84,15 +89,88 @@ jobs:
           path: sites/public/cypress/videos
       - store_artifacts:
           path: sites/public/cypress/screenshots
-      # - run:
-      #     name: Verify Cypress
-      #     command: "npx cypress verify"
-      #     working_directory: sites/public
-  # build-and-run-backend:
-
+  build-public:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn build:app:public
+  build-partners:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn build:app:partners
+  unit-test-partners:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:app:partners:unit
+  unit-test-public:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:app:public:unit
+  lint:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn lint
+  jest-shared-helpers:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:shared:helpers
+  jest-backend:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: DB Setup + New Backend Core Tests
+          command: |
+            yarn backend:new:install
+            yarn test:backend:new:dbsetup
+            yarn test:backend:new:cov
+          environment:
+            PORT: "3100"
+            EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
+            APP_SECRET: "CI-LONG-SECRET-KEY"
+            # DB URL for migration and seeds:
+            DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom_prisma"
     
 
 workflows:
   build:
     jobs:
       - setup
+      - setup-backend
+      - lint:
+          requires:
+            - setup
+      - jest-shared-helpers:
+          requires:
+            - setup
+      - jest-backend:
+          requires:
+            - setup-backend
+      - build-public:
+          requires:
+            - setup
+      - unit-test-public:
+          requires:
+            - setup
+      - build-partners:
+          requires:
+            - setup
+      - unit-test-partners:
+          requires:
+            - setup
+      - cypress-public:
+          requires:
+            - setup
+            - setup-backend
