@@ -206,12 +206,14 @@ Cypress.Commands.add("step5AlternateContactInfo", (application) => {
 
 Cypress.Commands.add("step6HouseholdSize", (application) => {
   if (application.householdMembers.length > 0) {
-    cy.getByID("btn-with-people").click()
+    cy.get("householdSizeLiveWithOthers").click()
+    cy.goNext()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/members-info")
   } else {
-    cy.getByID("btn-live-alone").click()
+    cy.get("#householdSizeLiveAlone").click()
+    cy.goNext()
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/preferred-units")

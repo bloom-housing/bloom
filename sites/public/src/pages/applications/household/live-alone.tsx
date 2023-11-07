@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { Button } from "@bloom-housing/ui-seeds"
-import { Form, t } from "@bloom-housing/ui-components"
+import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
@@ -30,6 +29,19 @@ const ApplicationLiveAlone = () => {
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
+
+  const householdSizeValues = [
+    {
+      id: "householdSizeLiveAlone",
+      value: "1",
+      label: t("application.household.liveAlone.willLiveAlone"),
+    },
+    {
+      id: "householdSizeLiveWithOthers",
+      value: "0",
+      label: t("application.household.liveAlone.liveWithOtherPeople"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -62,36 +74,34 @@ const ApplicationLiveAlone = () => {
           </div>
 
           <CardSection divider={"flush"} className={"border-none"}>
-            <div>
-              <Button
-                id="btn-live-alone"
-                className="mb-4"
-                onClick={() => {
+            <fieldset
+              onChange={(event: ChangeEvent<any>) => {
+                if (event.target.value === "1") {
                   application.householdSize = 1
                   application.householdMembers = []
                   setValidateHousehold(true)
-                }}
-                data-testid={"app-household-live-alone"}
-                variant={"primary-outlined"}
-                type={"submit"}
-              >
-                {t("application.household.liveAlone.willLiveAlone")}
-              </Button>
-            </div>
-            <div>
-              <Button
-                id="btn-with-people"
-                onClick={() => {
+                } else {
                   if (application.householdSize === 1) application.householdSize = 0
                   setValidateHousehold(false)
-                }}
-                data-testid={"app-household-live-with-others"}
-                variant={"primary-outlined"}
-                type={"submit"}
-              >
-                {t("application.household.liveAlone.liveWithOtherPeople")}
-              </Button>
-            </div>
+                }
+              }}
+            >
+              <legend className={`text__caps-spaced ${errors?.type ? "text-alert" : ""}`}>
+                Household members
+              </legend>
+              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+              <FieldGroup
+                type="radio"
+                name="householdSize"
+                error={errors.householdSize}
+                errorMessage={t("errors.selectOption")}
+                register={register}
+                validation={{ required: true }}
+                fields={householdSizeValues}
+                fieldGroupClassName="grid grid-cols-1"
+                fieldClassName="ml-0"
+              />
+            </fieldset>
           </CardSection>
         </ApplicationFormLayout>
       </Form>
