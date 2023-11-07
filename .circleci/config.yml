@@ -62,7 +62,7 @@ jobs:
       - run:
           name: run all
           command: yarn dev:all-cypress
-          # background: true
+          background: true
           working_directory: sites/public
       # - when:
       #     condition: << parameters.start-command >>
@@ -72,6 +72,10 @@ jobs:
       #           command: << parameters.start-command >>
       #           background: true
       #           working_directory: << parameters.working-directory >>
+      - run:
+          name: wait
+          command: yarn dev:public-wait
+          working_directory: sites/public
       - run:
           name: Run Cypress
           command: npx cypress run
