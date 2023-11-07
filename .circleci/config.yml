@@ -68,6 +68,7 @@ jobs:
                 name: run all
                 command: yarn dev:all-cypress
                 background: true
+                working_directory: sites/public
       # - when:
       #     condition: << parameters.start-command >>
       #     steps:
