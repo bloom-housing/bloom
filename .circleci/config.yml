@@ -61,8 +61,8 @@ jobs:
           command: yarn test:backend:new:dbsetup:withseed
       - run:
           name: run all
-          command: npx wait-on@latest http://0.0.0.0:3000 && yarn dev:all-cypress
-          background: true
+          command: yarn dev:all-cypress
+          # background: true
           working_directory: sites/public
       # - when:
       #     condition: << parameters.start-command >>
