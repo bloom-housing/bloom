@@ -2,11 +2,13 @@ import { HttpException, Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
 import { MailDataRequired } from "@sendgrid/helpers/classes/mail"
+import axios from "axios"
 import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
+import juice from "juice"
 import { ConfigService } from "@nestjs/config"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
@@ -233,26 +235,23 @@ export class EmailService {
       )
     }
 
-    // TODO: This is mock data just for the template that will need to be updated
-    await this.send(
-      user.email,
-      jurisdiction.emailFromAddress,
-      "New rental opportunity",
-      compiledTemplate({
-        appUrl,
-        tableRows: [
-          { label: "Community", value: "Senior 55+" },
-          { label: "Applications Due", value: "August 11, 2021" },
-          { label: "Address", value: "2330 Webster Street, Oakland CA 94612" },
-          { label: "1 Bedrooms", value: "1 unit, 1 bath, 668 sqft" },
-          { label: "2 Bedrooms", value: "2 units, 1-2 baths, 900 - 968 sqft" },
-          { label: "Rent", value: "$1,251 - $1,609 per month" },
-          { label: "Minimum Income", value: "$2,502 - $3,218 per month" },
-          { label: "Maximum Income", value: "$6,092 - $10,096 per month" },
-          { label: "Lottery Date", value: "August 31, 2021" },
-        ],
-      })
-    )
+    const rawHtml = compiledTemplate({
+      appUrl,
+      // TODO: This is mock data just for the template that will need to be updated
+      tableRows: [
+        { label: "Community", value: "Senior 55+" },
+        { label: "Applications Due", value: "August 11, 2021" },
+        { label: "Address", value: "2330 Webster Street, Oakland CA 94612" },
+        { label: "1 Bedrooms", value: "1 unit, 1 bath, 668 sqft" },
+        { label: "2 Bedrooms", value: "2 units, 1-2 baths, 900 - 968 sqft" },
+        { label: "Rent", value: "$1,251 - $1,609 per month" },
+        { label: "Minimum Income", value: "$2,502 - $3,218 per month" },
+        { label: "Maximum Income", value: "$6,092 - $10,096 per month" },
+        { label: "Lottery Date", value: "August 31, 2021" },
+      ],
+    })
+
+    await this.govSend(rawHtml, "Listing Opportunity")
   }
 
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
@@ -327,6 +326,38 @@ export class EmailService {
     })
 
     return partials
+  }
+
+  private async govSend(rawHtml: string, subject: string) {
+    const {
+      GOVDELIVERY_API_URL,
+      GOVDELIVERY_USERNAME,
+      GOVDELIVERY_PASSWORD,
+      GOVDELIVERY_TOPIC,
+    } = process.env
+    const isGovConfigured =
+      !!GOVDELIVERY_API_URL &&
+      !!GOVDELIVERY_USERNAME &&
+      !!GOVDELIVERY_PASSWORD &&
+      !!GOVDELIVERY_TOPIC
+    if (!isGovConfigured) {
+      console.warn("failed to configure Govdelivery, ensure that all env variables are provided")
+      return
+    }
+
+    // juice inlines css to allow for email styling
+    const inlineHtml = juice(rawHtml)
+    const govEmailXml = `<bulletin>\n <subject>${subject}</subject>\n  <body><![CDATA[\n     
+      ${inlineHtml}\n   ]]></body>\n   <sms_body nil='true'></sms_body>\n   <publish_rss type='boolean'>false</publish_rss>\n   <open_tracking type='boolean'>true</open_tracking>\n   <click_tracking type='boolean'>true</click_tracking>\n   <share_content_enabled type='boolean'>true</share_content_enabled>\n   <topics type='array'>\n     <topic>\n       <code>${GOVDELIVERY_TOPIC}</code>\n     </topic>\n   </topics>\n   <categories type='array' />\n </bulletin>`
+
+    await axios.post(GOVDELIVERY_API_URL, govEmailXml, {
+      headers: {
+        "Content-Type": "application/xml",
+        Authorization: `Basic ${Buffer.from(
+          `${GOVDELIVERY_USERNAME}:${GOVDELIVERY_PASSWORD}`
+        ).toString("base64")}`,
+      },
+    })
   }
 
   private async send(
