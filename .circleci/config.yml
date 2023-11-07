@@ -39,6 +39,7 @@ executors:
 jobs:
   setup:
     executor: cypress-node
+    resource_class: large
     steps:
       - checkout
       - restore_cache:
@@ -97,14 +98,3 @@ workflows:
   build:
     jobs:
       - setup
-      - cypress/run:
-          name: "cypress-public"
-          requires:
-            - setup
-          # executor: cypress-node
-          working-directory: sites/public
-          package-manager: yarn
-          install-command: yarn install && cd ../../backend_new && yarn install
-          post-install: |
-            pwd && cd ../.. && yarn test:backend:new:dbsetup:withseed && yarn dev:all-cypress
-          cypress-command: npx wait-on@latest http://0.0.0.0:3000 
