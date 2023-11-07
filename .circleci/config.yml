@@ -56,20 +56,14 @@ jobs:
           key: build-cache-new-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/
-      - when:
-          condition: yarn test:backend:new:dbsetup:withseed
-          steps:
-            - run:
-                name: setup db and seed
-                command: yarn test:backend:new:dbsetup:withseed
-      - when:
-          condition: yarn dev:all-cypress
-          steps:
-            - run:
-                name: run all
-                command: yarn dev:all-cypress
-                background: true
-                working_directory: sites/public
+      - run:
+          name: setup db and seed
+          command: yarn test:backend:new:dbsetup:withseed
+      - run:
+          name: run all
+          command: npx wait-on@latest http://0.0.0.0:3000 && yarn dev:all-cypress
+          background: true
+          working_directory: sites/public
       # - when:
       #     condition: << parameters.start-command >>
       #     steps:
