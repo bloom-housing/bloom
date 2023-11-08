@@ -30,16 +30,14 @@ import {
   UserService,
   serviceOptions,
 } from "../types/backend-swagger"
-import { ApplicationFlaggedSetsService, UserProfileService } from "@bloom-housing/backend-core"
 
 type ContextProps = {
   amiChartsService: AmiChartsService
   applicationsService: ApplicationsService
-  applicationFlaggedSetsService: ApplicationFlaggedSetsService
+  applicationFlaggedSetsService: ApplicationsService
   listingsService: ListingsService
   jurisdictionsService: JurisdictionsService
   userService: UserService
-  userProfileService: UserProfileService
   authService: AuthService
   multiselectQuestionsService: MultiselectQuestionsService
   reservedCommunityTypeService: ReservedCommunityTypesService
@@ -202,11 +200,11 @@ export const AuthProvider: FunctionComponent<React.PropsWithChildren> = ({ child
   const contextValues: ContextProps = {
     amiChartsService: new AmiChartsService(),
     applicationsService: new ApplicationsService(),
-    applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
+    // TODO: connect this to the AFS service when that exists
+    applicationFlaggedSetsService: new ApplicationsService(),
     listingsService: new ListingsService(),
     jurisdictionsService: new JurisdictionsService(),
     userService: new UserService(),
-    userProfileService: new UserProfileService(),
     authService: new AuthService(),
     multiselectQuestionsService: new MultiselectQuestionsService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),

@@ -1,10 +1,9 @@
 import {
-  Application,
-  ApplicationStatus,
-  ApplicationSubmissionType,
-  IncomePeriod,
-  Language,
-} from "@bloom-housing/backend-core/types"
+  ApplicationStatusEnum,
+  ApplicationSubmissionTypeEnum,
+  IncomePeriodEnum,
+  LanguagesEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const idDefaults = {
   id: "abcd1234",
@@ -60,7 +59,7 @@ export const raceCheckboxesOrder = [
   "declineToRespond",
 ]
 
-export const ElmVillageApplication: Application = {
+export const ElmVillageApplication = {
   markedAsDuplicate: false,
   ...idDefaults,
   listing: {
@@ -154,7 +153,7 @@ export const ElmVillageApplication: Application = {
   },
   incomeVouchers: false,
   income: "3000.00",
-  incomePeriod: IncomePeriod.perMonth,
+  incomePeriod: IncomePeriodEnum.perMonth,
   householdMembers: [
     {
       ...idDefaults,
@@ -350,12 +349,12 @@ export const ElmVillageApplication: Application = {
     },
   ],
   confirmationCode: "",
-  status: ApplicationStatus.draft,
-  submissionType: ApplicationSubmissionType.electronical,
-  language: Language.en,
+  status: ApplicationStatusEnum.draft,
+  submissionType: ApplicationSubmissionTypeEnum.electronical,
+  language: LanguagesEnum.en,
 }
 
-export const minimalDataApplication: Application = {
+export const minimalDataApplication = {
   markedAsDuplicate: false,
   ...idDefaults,
   listing: {
@@ -444,7 +443,7 @@ export const minimalDataApplication: Application = {
   },
   incomeVouchers: false,
   income: "50000",
-  incomePeriod: IncomePeriod.perYear,
+  incomePeriod: IncomePeriodEnum.perYear,
   householdMembers: [],
   preferredUnit: [
     {
@@ -553,9 +552,9 @@ export const minimalDataApplication: Application = {
     },
   ],
   confirmationCode: "",
-  status: ApplicationStatus.draft,
-  submissionType: ApplicationSubmissionType.electronical,
-  language: Language.en,
+  status: ApplicationStatusEnum.draft,
+  submissionType: ApplicationSubmissionTypeEnum.electronical,
+  language: LanguagesEnum.en,
 }
 
 export const applicationStepOrder = [

@@ -43,7 +43,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     configs.params = rest
     configs.data = req.body || {}
 
-    console.log("configs", configs)
     // send request to backend
     const response = await axios.request(configs)
 

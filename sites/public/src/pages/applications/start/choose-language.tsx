@@ -24,14 +24,13 @@ import {
   pushGtmEvent,
   AuthContext,
 } from "@bloom-housing/shared-helpers"
-
+import { LanguagesEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
   retrieveApplicationConfig,
 } from "../../../lib/applications/AppSubmissionContext"
 import React, { useCallback, useContext, useEffect, useState } from "react"
-import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 
@@ -93,7 +92,7 @@ const ApplicationChooseLanguage = () => {
     : ""
 
   const onLanguageSelect = useCallback(
-    (language: Language) => {
+    (language: LanguagesEnum) => {
       conductor.currentStep.save({
         language,
       })
