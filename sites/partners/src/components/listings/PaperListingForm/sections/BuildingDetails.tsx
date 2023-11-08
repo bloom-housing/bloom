@@ -155,7 +155,7 @@ const BuildingDetails = ({
           {t("listings.sections.buildingAddress")}
         </SectionWithGrid.HeadingRow>
         <Grid.Row columns={3}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("application.contact.streetAddress")}
               name={"buildingAddress.street"}
@@ -187,7 +187,7 @@ const BuildingDetails = ({
           />
         </Grid.Row>
         <Grid.Row columns={6}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("application.contact.city")}
               name={"buildingAddress.city"}
@@ -272,7 +272,7 @@ const BuildingDetails = ({
               register={register}
             />
           </Grid.Cell>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Field
               label={t("listings.yearBuilt")}
               name={"yearBuilt"}
@@ -284,7 +284,7 @@ const BuildingDetails = ({
           </Grid.Cell>
         </Grid.Row>
         <Grid.Row columns={3}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <FieldValue label={t("listings.mapPreview")}>
               {displayMapPreview() ? (
                 <ListingMap

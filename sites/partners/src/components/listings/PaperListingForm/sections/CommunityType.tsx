@@ -72,7 +72,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
           </FieldValue>
         </Grid.Row>
         <Grid.Row columns={3}>
-          <Grid.Cell className="grid-double-span">
+          <Grid.Cell className="seeds-grid-span-2">
             <Textarea
               label={t("listings.reservedCommunityDescription")}
               name={"reservedCommunityDescription"}

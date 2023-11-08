@@ -98,7 +98,7 @@ const DetailsAddressColumns = ({
       </FieldValue>
 
       <FieldValue
-        className="grid-double-span"
+        className="seeds-grid-span-2"
         label={t("application.contact.apt")}
         testId={`${dataTestId}.street2`}
       >

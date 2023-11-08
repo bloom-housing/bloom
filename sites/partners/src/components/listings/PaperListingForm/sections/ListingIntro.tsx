@@ -30,14 +30,34 @@ const ListingIntro = (props: ListingIntroProps) => {
         heading={t("listings.sections.introTitle")}
         subheading={t("listings.sections.introSubtitle")}
       >
-        <Grid.Row columns={3} className={`${defaultJurisdiction ? "hidden" : ""}`}>
+        <Grid.Row columns={1}>
+          <Grid.Cell>
+            <Field
+              id="name"
+              name="name"
+              label={t("listings.listingName")}
+              placeholder={t("listings.listingName")}
+              inputProps={{
+                onChange: () => {
+                  fieldHasError(errors?.name) && clearErrors("name")
+                },
+              }}
+              subNote={t("listings.requiredToPublish")}
+              register={register}
+              error={fieldHasError(errors?.name)}
+              errorMessage={fieldMessage(errors?.name)}
+              dataTestId={"nameField"}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row columns={2}>
           <FieldValue
             label={t("t.jurisdiction")}
-            className={`grid-double-span ${
+            className={`${
               fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
                 ? "field-value-error"
                 : ""
-            }`}
+            } ${defaultJurisdiction ? "hidden" : ""}`}
           >
             <Select
               id={"jurisdiction.id"}
@@ -68,26 +88,6 @@ const ListingIntro = (props: ListingIntroProps) => {
               }}
             />
           </FieldValue>
-        </Grid.Row>
-        <Grid.Row columns={3}>
-          <Grid.Cell>
-            <Field
-              id="name"
-              name="name"
-              label={t("listings.listingName")}
-              placeholder={t("listings.listingName")}
-              inputProps={{
-                onChange: () => {
-                  fieldHasError(errors?.name) && clearErrors("name")
-                },
-              }}
-              subNote={t("listings.requiredToPublish")}
-              register={register}
-              error={fieldHasError(errors?.name)}
-              errorMessage={fieldMessage(errors?.name)}
-              dataTestId={"nameField"}
-            />
-          </Grid.Cell>
           <Grid.Cell>
             <Field
               id="developer"

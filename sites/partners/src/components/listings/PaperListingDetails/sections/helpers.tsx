@@ -88,7 +88,7 @@ export const getDetailAddress = (
       <Grid.Row columns={6}>
         <FieldValue
           id={`${addressName}.city`}
-          className="grid-double-span"
+          className="seeds-grid-span-2"
           label={t("application.contact.city")}
           testId={`${addressName}.city`}
         >
@@ -103,7 +103,7 @@ export const getDetailAddress = (
         </FieldValue>
         <FieldValue
           id={`${addressName}.zipCode`}
-          className="grid-triple-span"
+          className="seeds-grid-span-3"
           label={t("application.contact.zip")}
           testId={`${addressName}.zipCode`}
         >

@@ -63,7 +63,7 @@ const DetailApplicationDates = () => {
           </FieldValue>
           <FieldValue
             id="applicationDueTime"
-            className="grid-double-span"
+            className="seeds-grid-span-2"
             label={t("listings.applicationDueTime")}
           >
             {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}

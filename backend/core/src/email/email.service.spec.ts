@@ -210,7 +210,11 @@ describe("EmailService", () => {
         },
         {
           provide: JurisdictionsService,
-          useValue: {},
+          useValue: {
+            findOne: () => ({
+              emailFromAddress: "myeamil@from",
+            }),
+          },
         },
         {
           provide: JurisdictionResolverService,
@@ -330,7 +334,7 @@ describe("EmailService", () => {
       const service = await module.resolve(EmailService)
       await service.requestApproval(
         user,
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction?.id },
         emailArr,
         "http://localhost:3001"
       )
@@ -373,7 +377,7 @@ describe("EmailService", () => {
       const service = await module.resolve(EmailService)
       await service.changesRequested(
         user,
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction?.id },
         emailArr,
         "http://localhost:3001"
       )
@@ -420,7 +424,7 @@ describe("EmailService", () => {
       const service = await module.resolve(EmailService)
       await service.listingApproved(
         user,
-        { id: listing.id, name: listing.name },
+        { id: listing.id, name: listing.name, juris: listing.jurisdiction?.id },
         emailArr,
         "http://localhost:3000"
       )

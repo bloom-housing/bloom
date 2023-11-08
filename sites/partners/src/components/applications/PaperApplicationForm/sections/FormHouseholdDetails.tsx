@@ -110,7 +110,8 @@ const FormHouseholdDetails = ({
               />
             </div>
           </FieldValue>
-
+        </Grid.Row>
+        <Grid.Row columns="3">
           <FieldValue label={t("application.household.householdStudent.title")}>
             <div className="flex h-12 items-center">
               <Field
