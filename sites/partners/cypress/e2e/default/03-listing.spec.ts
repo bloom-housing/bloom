@@ -86,7 +86,7 @@ describe("Listing Management Tests", () => {
     cy.getByID("monthlyIncomeMin").type(listing["monthlyIncomeMin"])
     cy.getByID("monthlyRent").type(listing["monthlyRent"])
     cy.getByID("priorityType.id").select(listing["priorityType.id"])
-    cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
+    cy.get("button").contains("Save & Exit").click()
     cy.getByID("add-preferences-button").contains("Add Preference").click()
     cy.get(".border > button").contains("Select Preferences").click()
     cy.get(
@@ -96,7 +96,7 @@ describe("Listing Management Tests", () => {
       .click()
     cy.getByID("addPreferenceSaveButton").contains("Save").click()
 
-    cy.get(".drawer__content > .is-primary").contains("Save").click()
+    cy.get(".drawer__content > button").contains("Save").click()
     cy.getByID("applicationFee").type(listing["applicationFee"])
     cy.getByID("depositMin").type(listing["depositMin"])
     cy.getByID("depositMax").type(listing["depositMax"])
@@ -119,7 +119,7 @@ describe("Listing Management Tests", () => {
       .click()
     cy.getByID("criteriaAttachTypeURL").check()
     cy.getByID("buildingSelectionCriteriaURL").type(listing["buildingSelectionCriteriaURL"])
-    cy.get(".p-4 > .is-primary").contains("Save").click()
+    cy.get("button").contains("Save").click()
     cy.getByID("requiredDocuments").type(listing["requiredDocuments"])
     cy.getByID("programRules").type(listing["programRules"])
     cy.getByID("specialNotes").type(listing["specialNotes"])
