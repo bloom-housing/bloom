@@ -58,6 +58,7 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
       elements.push(
         <Grid.Cell key="btn-submit">
           <Button
+            type="submit"
             variant="primary"
             className="w-100"
             onClick={() => false}
