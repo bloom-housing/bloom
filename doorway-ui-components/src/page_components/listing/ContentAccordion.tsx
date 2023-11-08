@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Icon, IconFillColors } from "../../icons/Icon"
+import { Icon, IconFillColors } from "@bloom-housing/ui-components"
 import "./ContentAccordion.scss"
 
 interface ContentAccordionProps {

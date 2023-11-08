@@ -3,14 +3,13 @@ import {
   Button,
   Form,
   FormCard,
-  Icon,
   SiteAlert,
   PhoneField,
   FormSignInErrorBox,
 } from "../../.."
 import type { UseFormMethods } from "react-hook-form"
 import { NetworkStatus } from "./FormSignIn"
-import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Icon } from "@bloom-housing/ui-components"
 
 export type FormSignInAddPhoneProps = {
   control: FormSignInAddPhoneControl

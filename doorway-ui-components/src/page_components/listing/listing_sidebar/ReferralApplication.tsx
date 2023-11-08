@@ -1,6 +1,5 @@
 import * as React from "react"
-import { Heading, t } from "@bloom-housing/ui-components"
-import { Icon, IconFillColors } from "../../../icons/Icon"
+import { Heading, t, Icon, IconFillColors } from "@bloom-housing/ui-components"
 
 interface ReferralApplicationProps {
   description: string

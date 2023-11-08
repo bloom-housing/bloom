@@ -5,11 +5,11 @@ import {
   GridCell,
   MinimalTable,
   TableThumbnail,
+  Icon,
 } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
-import { Icon } from "@bloom-housing/doorway-ui-components"
 import { pdfFileNameFromFileId } from "../../../../lib/helpers"
 
 const DetailAdditionalEligibility = () => {

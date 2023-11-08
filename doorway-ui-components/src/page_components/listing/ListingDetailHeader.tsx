@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Icon } from "../../icons/Icon"
+import { Icon } from "@bloom-housing/ui-components"
 import "./ListingDetailHeader.scss"
 
 export interface ListingDetailHeaderProps {

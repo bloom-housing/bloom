@@ -77,7 +77,6 @@ export * from "./src/helpers/validators"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
-export * from "./src/icons/Icon"
 
 /* Lists */
 export * from "./src/lists/PreferencesList"

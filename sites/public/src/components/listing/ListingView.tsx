@@ -35,8 +35,10 @@ import {
   ExpandableSection,
   SiteAlert,
   StandardTable,
+  GroupedTable,
+  ImageCard,
+  Icon,
 } from "@bloom-housing/ui-components"
-import { ImageCard, Icon } from "@bloom-housing/doorway-ui-components"
 import { Message } from "@bloom-housing/ui-seeds"
 import {
   getOccupancyDescription,
@@ -61,6 +63,7 @@ import { SubmitApplication } from "./SubmitApplication"
 import { ListingGoogleMap } from "./ListingGoogleMap"
 import getConfig from "next/config"
 import Link from "next/link"
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 
 // nextConfig may not be set in some unit tests since it relies on app startup
 const nextConfig = getConfig()
@@ -580,7 +583,7 @@ export const ListingView = (props: ListingProps) => {
               aria-label="Opens in new window"
               className="lighter-uppercase"
             >
-              {t("t.viewOnMap")} <Icon size="small" symbol="externalLink" />
+              {t("t.viewOnMap")} <Icon size="small" symbol={faArrowUpRightFromSquare} />
             </Link>
           </p>
         </div>

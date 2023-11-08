@@ -1,10 +1,10 @@
 import React, { useContext } from "react"
+import { Icon } from '@bloom-housing/ui-components'
 import {
   Button,
   Field,
   Form,
   FormCard,
-  Icon,
   AlertBox,
   SiteAlert,
   AlertNotice,

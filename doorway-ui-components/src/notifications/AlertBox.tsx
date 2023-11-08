@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import type { ReactNode } from "react"
-import { Icon, IconTypes, IconFillColors } from "../icons/Icon"
+import { Icon, IconTypes, IconFillColors } from "@bloom-housing/ui-components"
 import type { AlertTypes } from "./alertTypes"
 import { colorClasses } from "./alertTypes"
 import "./AlertBox.scss"

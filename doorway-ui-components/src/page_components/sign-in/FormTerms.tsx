@@ -4,12 +4,11 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   MarkdownSection,
 } from "../../.."
 import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
-import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Icon } from "@bloom-housing/ui-components"
 
 type FormTermsInValues = {
   agree: boolean

@@ -1,8 +1,7 @@
 import React from "react"
 import ActionBlock, { ActionBlockLayout } from "./ActionBlock"
 import { Button } from "../.."
-import Icon from "../icons/Icon"
-import { AppearanceStyleType, Heading } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Heading, Icon } from "@bloom-housing/ui-components"
 
 export default {
   title: "Blocks/Action Block",

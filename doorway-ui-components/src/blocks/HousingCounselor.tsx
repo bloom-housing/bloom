@@ -1,6 +1,5 @@
 import * as React from "react"
-import { t } from "@bloom-housing/ui-components"
-import { Icon, IconFillColors } from "../icons/Icon"
+import { t, Icon, IconFillColors } from "@bloom-housing/ui-components"
 
 export interface HousingCounselorProps {
   addressCityState?: string

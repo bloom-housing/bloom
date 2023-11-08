@@ -1,6 +1,6 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
-import { Icon, IconFillColors } from "../../../icons/Icon"
+import { Icon, IconFillColors } from "@bloom-housing/ui-components"
 import { MultiLineAddress, Address } from "../../../helpers/MultiLineAddress"
 import { OneLineAddress } from "../../../helpers/OneLineAddress"
 

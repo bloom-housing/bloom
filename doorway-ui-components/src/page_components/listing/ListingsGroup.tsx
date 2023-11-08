@@ -1,6 +1,6 @@
 import React, { useState } from "react"
+import { Icon, UniversalIconType } from "@bloom-housing/ui-components"
 import { Button } from "../../actions/Button"
-import { Icon, UniversalIconType } from "../../icons/Icon"
 import "./ListingsGroup.scss"
 
 export interface ListingsGroupProps {

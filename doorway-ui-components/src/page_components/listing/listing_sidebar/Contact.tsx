@@ -1,7 +1,6 @@
 import * as React from "react"
-import { Heading } from "@bloom-housing/ui-components"
+import { Heading, Icon, IconFillColors } from "@bloom-housing/ui-components"
 import { ContactAddress } from "./ContactAddress"
-import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Address } from "../../../helpers/MultiLineAddress"
 
 export interface ContactProps {

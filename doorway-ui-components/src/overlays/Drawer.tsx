@@ -1,6 +1,6 @@
 import React, { useRef } from "react"
 import "./Drawer.scss"
-import { Icon } from "../icons/Icon"
+import { Icon } from "@bloom-housing/ui-components"
 import { Overlay, OverlayProps } from "./Overlay"
 import { Tag } from "../text/Tag"
 import { AppearanceSizeType } from "../global/AppearanceTypes"

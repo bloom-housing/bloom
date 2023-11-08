@@ -10,8 +10,9 @@ import {
   ListingMap,
   LatitudeLongitude,
   AlertNotice,
+  Icon,
 } from "@bloom-housing/ui-components"
-import { Icon, Tooltip } from "@bloom-housing/doorway-ui-components"
+import { Tooltip } from "@bloom-housing/doorway-ui-components"
 import { countyKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { FormListing } from "../../../../lib/listings/formTypes"
@@ -20,6 +21,7 @@ import GeocodeService, {
 } from "@mapbox/mapbox-sdk/services/geocoding"
 import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import Link from "next/link"
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -335,21 +337,21 @@ const BuildingDetails = ({
               {t("county.goToOtherPortalsCitySanJose")}
               <Link href="https://partners.housingbayarea.org/">
                 {" "}
-                <Icon size="small" symbol="externalLink" />{" "}
+                <Icon size="small" symbol={faArrowUpRightFromSquare} />{" "}
               </Link>
             </li>
             <li className="list-disc list-inside">
               {t("county.goToOtherPortalsAlamedaSanMateo")}
               <Link href="https://partners.housingbayarea.org/">
                 {" "}
-                <Icon size="small" symbol="externalLink" />{" "}
+                <Icon size="small" symbol={faArrowUpRightFromSquare} />{" "}
               </Link>
             </li>
             <li className="list-disc list-inside">
               {t("county.goToOtherPortalsSanFrancisco")}
               <Link href="https://www.partner.housing.sfgov.org/">
                 {" "}
-                <Icon size="small" symbol="externalLink" />{" "}
+                <Icon size="small" symbol={faArrowUpRightFromSquare} />{" "}
               </Link>
             </li>
           </AlertNotice>

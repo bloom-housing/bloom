@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { Icon } from "../icons/Icon"
+import { Icon } from "@bloom-housing/ui-components"
 import "./LoadingOverlay.scss"
 
 type LoadingOverlayProps = {

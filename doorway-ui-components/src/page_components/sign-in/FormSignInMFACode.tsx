@@ -4,12 +4,11 @@ import {
   Field,
   Form,
   FormCard,
-  Icon,
   SiteAlert,
   FormSignInErrorBox,
 } from "../../.."
 import { NetworkStatus, FormSignInControl } from "./FormSignIn"
-import { AppearanceStyleType, t } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, t, Icon } from "@bloom-housing/ui-components"
 
 export enum RequestType {
   email = "email",

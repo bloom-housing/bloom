@@ -1,9 +1,8 @@
 import * as React from "react"
-import { t } from "@bloom-housing/ui-components"
+import { t, IconFillColors, UniversalIconType } from "@bloom-housing/ui-components"
 import { BADGES } from "../../.storybook/constants"
 import { ImageCard } from "./ImageCard"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
-import { IconFillColors, UniversalIconType } from "../icons/Icon"
 import ImageCardDocumentation from "./ImageCard.docs.mdx"
 
 export default {

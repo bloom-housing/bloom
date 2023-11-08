@@ -10,6 +10,7 @@ import {
   TableThumbnail,
   StandardTableData,
   AppearanceSizeType,
+  Icon,
 } from "@bloom-housing/ui-components"
 import {
   ListingEvent,
@@ -18,7 +19,6 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
 import { getPdfUrlFromAsset } from "@bloom-housing/shared-helpers"
-import { Icon } from "@bloom-housing/doorway-ui-components"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -104,7 +104,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
       preview: {
         content: (
           <TableThumbnail>
-            {/* 
+            {/*
               Using a PDF URL for an image usually doesn't work.
               Switching to UIC icon instead
             */}

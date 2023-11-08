@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo } from "react"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
+import { Icon } from "@bloom-housing/ui-components"
 import "./MultiSelectField.scss"
-import { Icon } from "../icons/Icon"
 
 export interface MultiSelectFieldItem {
   value: string

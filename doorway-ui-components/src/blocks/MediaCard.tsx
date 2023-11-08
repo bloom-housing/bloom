@@ -1,6 +1,6 @@
 import * as React from "react"
 import "./MediaCard.scss"
-import { Icon, UniversalIconType } from "../icons/Icon"
+import { Icon, UniversalIconType } from "@bloom-housing/ui-components"
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons"
 
 export interface MediaCardProps {

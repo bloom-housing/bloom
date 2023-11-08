@@ -14,9 +14,9 @@ import {
   FieldGroup,
   StandardTableData,
   AppearanceSizeType,
+  Icon,
 } from "@bloom-housing/ui-components"
 import { uploadAssetAndSetData } from "../../../../lib/assets"
-import { Icon } from "@bloom-housing/doorway-ui-components"
 
 const BuildingSelectionCriteria = () => {
   const formMethods = useFormContext()
@@ -81,7 +81,7 @@ const BuildingSelectionCriteria = () => {
       preview: {
         content: (
           <TableThumbnail>
-            {/* 
+            {/*
               Using a PDF URL for an image usually doesn't work.
               Switching to UIC icon instead
             */}

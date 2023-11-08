@@ -1,10 +1,10 @@
 import React, { useContext } from "react"
+import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
+import { Icon } from "@bloom-housing/ui-components"
 import "./Button.scss"
 import { buttonClassesForProps, buttonInner, ButtonProps } from "./Button"
 import { NavigationContext } from "../config/NavigationContext"
 import { isExternalLink } from "../helpers/links"
-import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons"
-import { Icon } from "../icons/Icon"
 
 export interface LinkButtonProps extends Omit<ButtonProps, "onClick"> {
   href: string

@@ -1,6 +1,6 @@
 import React, { useRef } from "react"
+import { Icon, IconFillColors } from "@bloom-housing/ui-components"
 import "./Modal.scss"
-import { Icon, IconFillColors } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
 import { nanoid } from "nanoid"
 

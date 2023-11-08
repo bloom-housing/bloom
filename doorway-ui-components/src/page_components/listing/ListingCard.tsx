@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Heading, AppearanceStyleType, StandardTableProps } from "@bloom-housing/ui-components"
+import { Heading, AppearanceStyleType, StandardTableProps, HeaderType, Icon, IconFillColors } from "@bloom-housing/ui-components"
 import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
 import { StackedTableProps } from "../../tables/StackedTable"
 import { Tag } from "../../text/Tag"
 import { AppearanceShadeType } from "../../global/AppearanceTypes"
-import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ListingCard.scss"
 import { NavigationContext } from "../../config/NavigationContext"
 import { DoorwayListingTable } from "./DoorwayListingTable"
-import { HeaderType } from "@bloom-housing/ui-components"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
