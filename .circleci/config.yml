@@ -73,8 +73,13 @@ jobs:
           name: setup db and seed
           command: yarn test:backend:new:dbsetup:withseed
       - run:
-          name: run all
-          command: yarn dev:all-cypress
+          name: run backend
+          command: yarn dev
+          background: true
+          working_directory: backend_new
+      - run:
+          name: build and run public
+          command: yarn dev:server-wait-new && yarn build && yarn start
           background: true
           working_directory: sites/public
       - run:
