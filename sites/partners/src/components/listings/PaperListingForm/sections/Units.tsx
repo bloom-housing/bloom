@@ -112,7 +112,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         priorityType: { content: unit.priorityType?.name },
         action: {
           content: (
-            <div className="flex">
+            <div className="flex gap-3">
               <Button
                 type="button"
                 className="font-semibold"

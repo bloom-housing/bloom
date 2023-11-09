@@ -121,7 +121,7 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaFile.fileId.split("/").slice(-1).join() },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
               className="font-semibold uppercase my-0"
@@ -156,7 +156,7 @@ const BuildingSelectionCriteria = () => {
       fileName: { content: listingCriteriaURL },
       actions: {
         content: (
-          <div className="flex">
+          <div className="flex gap-3">
             <Button
               type="button"
               className="font-semibold"

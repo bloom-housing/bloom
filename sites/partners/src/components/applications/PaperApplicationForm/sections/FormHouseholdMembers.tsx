@@ -101,7 +101,7 @@ const FormHouseholdMembers = ({
         workInRegion: { content: chooseAddressStatus(workInRegion) },
         action: {
           content: (
-            <div className="flex">
+            <div className="flex gap-3">
               <Button
                 type="button"
                 className="font-semibold"
