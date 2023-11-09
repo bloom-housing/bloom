@@ -17,6 +17,10 @@
   .seeds-button {
     -webkit-font-smoothing: antialiased; // restore macOS styling that had been unset
   }
+
+  .seeds-button[data-variant="primary"] {
+    color: white; // AG grid styling from UIC was messing up our primary button
+  }
 }
 
 .section-with-grid hgroup p {
@@ -30,86 +34,6 @@
   .text-heading-md {
     margin-block-end: calc(0rem - var(--seeds-spacer-label));
   }
-}
-
-@media (--sm-and-up) {
-  .grid-double-span {
-    grid-column: span 2;
-  }
-
-  .grid-triple-span {
-    grid-column: span 3;
-  }
-}
-
-.spacer-container-above {
-  margin-block-start: var(--seeds-spacer-container);
-}
-
-.spacer-container {
-  margin-block-end: var(--seeds-spacer-container);
-}
-
-.spacer-section-above {
-  margin-block-start: var(--seeds-spacer-section);
-}
-
-.spacer-section {
-  margin-block-end: var(--seeds-spacer-section);
-}
-
-.spacer-content-above {
-  margin-block-start: var(--seeds-spacer-content);
-}
-
-.spacer-content {
-  margin-block-end: var(--seeds-spacer-content);
-}
-
-.spacer-header-above {
-  margin-block-start: var(--seeds-spacer-header);
-}
-
-.spacer-header {
-  margin-block-end: var(--seeds-spacer-header);
-}
-
-.spacer-label-above {
-  margin-block-start: var(--seeds-spacer-label);
-}
-
-.spacer-label {
-  margin-block-end: var(--seeds-spacer-label);
-}
-
-.spacer-text-above {
-  margin-block-start: var(--seeds-spacer-text);
-}
-
-.spacer-text {
-  margin-block-end: var(--seeds-spacer-text);
-}
-
-:is(.spacer-container, .spacer-section, .spacer-content, .spacer-header, .spacer-label, .spacer-text):last-child {
-  margin-block-end: 0;
-}
-
-/* Override out-of-date ui-components labeling */
-:is(label, legend).text__caps-spaced {
-/*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
-  --text-caps-spaced-letter-spacing: normal;
-  --text-caps-spaced-font-weight: normal;
-  --text-caps-spaced-margin-bottom: var(--seeds-s2);
-  text-transform: none;
-}
-
-.section-with-grid hgroup p {
-  color: var(--seeds-text-color);
-}
-
-.grid-inset-section {
-  background: var(--seeds-bg-color-surface-primary);
-  padding: var(--seeds-spacer-section);
 }
 
 .grid-section-row-heading {
@@ -170,7 +94,7 @@
 
 /* Override out-of-date ui-components labeling */
 :is(label, legend).text__caps-spaced {
-  /*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
+/*  --text-caps-spaced-font-family: var(--bloom-font-sans); */
   --text-caps-spaced-letter-spacing: normal;
   --text-caps-spaced-font-weight: normal;
   --text-caps-spaced-margin-bottom: var(--seeds-s2);

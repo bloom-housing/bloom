@@ -380,47 +380,49 @@ const PreferenceDrawer = ({
             </Grid>
           </Card.Section>
         </Card>
-        <Button
-          type="button"
-          className={"mt-4"}
-          variant="primary"
-          loadingMessage={isLoading && t("t.formSubmitted")}
-          onClick={async () => {
-            const validation = await trigger()
-            if (!questionData || !questionData?.options?.length) {
-              setError("questions", { message: t("errors.requiredFieldError") })
-              return
-            }
-            if (!validation) return
-            const formValues = getValues()
+        <div className="pb-8">
+          <Button
+            type="button"
+            className={"mt-4"}
+            variant="primary"
+            loadingMessage={isLoading && t("t.formSubmitted")}
+            onClick={async () => {
+              const validation = await trigger()
+              if (!questionData || !questionData?.options?.length) {
+                setError("questions", { message: t("errors.requiredFieldError") })
+                return
+              }
+              if (!validation) return
+              const formValues = getValues()
 
-            const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
-              applicationSection: ApplicationSection.preferences,
-              text: formValues.text,
-              description: formValues.description,
-              hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
-              optOutText:
-                optOutQuestion === YesNoAnswer.Yes &&
-                formValues.optOutText &&
-                formValues.optOutText !== ""
-                  ? formValues.optOutText
-                  : null,
-              options: questionData?.options,
-              jurisdictions: [
-                profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
-              ],
-              links: formValues.preferenceUrl
-                ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
-                : [],
-            }
-            clearErrors()
-            clearErrors("questions")
-            saveQuestion(formattedQuestionData, drawerType)
-          }}
-          id={"preference-save-button"}
-        >
-          {t("t.save")}
-        </Button>
+              const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
+                applicationSection: ApplicationSection.preferences,
+                text: formValues.text,
+                description: formValues.description,
+                hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,
+                optOutText:
+                  optOutQuestion === YesNoAnswer.Yes &&
+                  formValues.optOutText &&
+                  formValues.optOutText !== ""
+                    ? formValues.optOutText
+                    : null,
+                options: questionData?.options,
+                jurisdictions: [
+                  profile.jurisdictions.find((juris) => juris.id === formValues.jurisdictionId),
+                ],
+                links: formValues.preferenceUrl
+                  ? [{ title: formValues.preferenceLinkTitle, url: formValues.preferenceUrl }]
+                  : [],
+              }
+              clearErrors()
+              clearErrors("questions")
+              saveQuestion(formattedQuestionData, drawerType)
+            }}
+            id={"preference-save-button"}
+          >
+            {t("t.save")}
+          </Button>
+        </div>
       </Drawer>
 
       <Drawer
@@ -491,8 +493,7 @@ const PreferenceDrawer = ({
                     defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
                   />
                 </FieldValue>
-              </Grid.Row>
-              <Grid.Row>
+
                 <FieldValue label={t("settings.preferenceLinkTitle")}>
                   <Field
                     id="optionLinkTitle"
@@ -555,55 +556,57 @@ const PreferenceDrawer = ({
             </SectionWithGrid>
           </Card.Section>
         </Card>
-        <Button
-          type="button"
-          className={"mt-4"}
-          variant="primary"
-          onClick={async () => {
-            const formData = getValues() as OptionForm
-            await trigger()
-            if (!formData.optionTitle || formData.optionTitle === "") {
-              setError("optionTitle", { message: t("errors.requiredFieldError") })
-              return
-            }
-            if (formState.errors.optionUrl) return
-            const existingOptionData = questionData?.options?.find(
-              (option) => optionData?.ordinal === option.ordinal
-            )
-
-            const getNewOrdinal = () => {
-              if (existingOptionData) return existingOptionData.ordinal
-              return questionData?.options?.length ? questionData?.options.length + 1 : 1
-            }
-
-            const newOptionData: MultiselectOption = {
-              text: formData.optionTitle,
-              description: formData.optionDescription,
-              links: formData.optionUrl
-                ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
-                : [],
-              ordinal: getNewOrdinal(),
-              collectAddress: formData.collectAddress,
-              exclusive: formData.exclusiveQuestion === "exclusive",
-            }
-            let newOptions = []
-
-            if (existingOptionData) {
-              newOptions = questionData.options.map((option) =>
-                option.ordinal === existingOptionData.ordinal ? newOptionData : option
+        <div className="pb-8">
+          <Button
+            type="button"
+            className={"mt-4"}
+            variant="primary"
+            onClick={async () => {
+              const formData = getValues() as OptionForm
+              await trigger()
+              if (!formData.optionTitle || formData.optionTitle === "") {
+                setError("optionTitle", { message: t("errors.requiredFieldError") })
+                return
+              }
+              if (formState.errors.optionUrl) return
+              const existingOptionData = questionData?.options?.find(
+                (option) => optionData?.ordinal === option.ordinal
               )
-            } else {
-              newOptions = questionData?.options
-                ? [...questionData.options, newOptionData]
-                : [newOptionData]
-            }
-            setQuestionData({ ...questionData, options: newOptions })
-            setOptionDrawerOpen(null)
-          }}
-          id={"preference-option-save"}
-        >
-          {t("t.save")}
-        </Button>
+
+              const getNewOrdinal = () => {
+                if (existingOptionData) return existingOptionData.ordinal
+                return questionData?.options?.length ? questionData?.options.length + 1 : 1
+              }
+
+              const newOptionData: MultiselectOption = {
+                text: formData.optionTitle,
+                description: formData.optionDescription,
+                links: formData.optionUrl
+                  ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
+                  : [],
+                ordinal: getNewOrdinal(),
+                collectAddress: formData.collectAddress,
+                exclusive: formData.exclusiveQuestion === "exclusive",
+              }
+              let newOptions = []
+
+              if (existingOptionData) {
+                newOptions = questionData.options.map((option) =>
+                  option.ordinal === existingOptionData.ordinal ? newOptionData : option
+                )
+              } else {
+                newOptions = questionData?.options
+                  ? [...questionData.options, newOptionData]
+                  : [newOptionData]
+              }
+              setQuestionData({ ...questionData, options: newOptions })
+              setOptionDrawerOpen(null)
+            }}
+            id={"preference-option-save"}
+          >
+            {t("t.save")}
+          </Button>
+        </div>
       </Drawer>
     </>
   )
