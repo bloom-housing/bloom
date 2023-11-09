@@ -214,8 +214,6 @@ const PreferenceDrawer = ({
                     defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
                   />
                 </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row>
                 <Grid.Cell>
                   <Field
                     id="preferenceLinkTitle"
@@ -247,10 +245,11 @@ const PreferenceDrawer = ({
               </div>
             )}
 
-            <div className={"flex flex-col"}>
+            <div className={"mb-5 flex flex-col"}>
               <Button
                 type="button"
                 size="sm"
+                className="w-max"
                 variant={errors["questions"] ? "alert" : "primary"}
                 onClick={() => {
                   clearErrors("questions")
@@ -269,7 +268,7 @@ const PreferenceDrawer = ({
             </div>
 
             <Grid>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <FieldGroup
                     name="canYouOptOutQuestion"
@@ -314,9 +313,7 @@ const PreferenceDrawer = ({
                   </Grid.Cell>
                 )}
               </Grid.Row>
-            </Grid>
-            <Grid>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <FieldGroup
                     name="showOnListingQuestion"
@@ -345,9 +342,7 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-            </Grid>
-            <Grid>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
                     id={"jurisdictionId"}

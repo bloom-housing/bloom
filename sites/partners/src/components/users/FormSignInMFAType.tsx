@@ -73,13 +73,18 @@ const FormSignInMFAType = ({
           />
 
           <div className="text-center mt-6">
-            <Button type="submit" variant="secondary" id="verify-by-email" onClick={emailOnClick}>
+            <Button
+              type="submit"
+              variant="primary-outlined"
+              id="verify-by-email"
+              onClick={emailOnClick}
+            >
               {t("nav.signInMFA.verifyByEmail")}
             </Button>
           </div>
           {process.env.showSmsMfa && (
             <div className="text-center mt-6">
-              <Button variant="secondary" id="verify-by-phone" onClick={smsOnClick}>
+              <Button variant="primary-outlined" id="verify-by-phone" onClick={smsOnClick}>
                 {t("nav.signInMFA.verifyByPhone")}
               </Button>
             </div>
