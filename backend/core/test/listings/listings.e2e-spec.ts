@@ -56,10 +56,12 @@ describe("Listings", () => {
     requestApproval: async () => {},
     changesRequested: async () => {},
     listingApproved: async () => {},
+    listingOpportunity: async () => {},
   }
   const mockChangesRequested = jest.spyOn(testEmailService, "changesRequested")
   const mockRequestApproval = jest.spyOn(testEmailService, "requestApproval")
   const mockListingApproved = jest.spyOn(testEmailService, "listingApproved")
+  const mockListingOpportunity = jest.spyOn(testEmailService, "listingOpportunity")
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -534,6 +536,15 @@ describe("Listings", () => {
       )
     })
     it("update status to listing approved and notify appropriate users", async () => {
+      // turn on enableListingOpportunity
+      bayArea.enableListingOpportunity = true
+      bayArea.multiselectQuestions = []
+      await supertest(app.getHttpServer())
+        .put(`/jurisdictions/${bayArea.id}`)
+        .send(bayArea)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+
       listing.status = ListingStatus.active
       const putApprovedResponse = await supertest(app.getHttpServer())
         .put(`/listings/${listing.id}`)
@@ -554,6 +565,19 @@ describe("Listings", () => {
         expect.arrayContaining(["leasing-agent-1@example.com", "bayarea-admin@example.com"]),
         bayArea.publicUrl
       )
+      expect(mockListingOpportunity).toBeCalledWith(
+        expect.objectContaining({
+          id: listing.id,
+          name: listing.name,
+        })
+      )
+      // re-disable listing opportunity
+      bayArea.enableListingOpportunity = false
+      await supertest(app.getHttpServer())
+        .put(`/jurisdictions/${bayArea.id}`)
+        .send(bayArea)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
     })
 
     it("should create pending review listing and notify appropriate users", async () => {

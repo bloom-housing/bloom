@@ -175,6 +175,24 @@ export class ListingsService {
         jurisId: listing.jurisdiction.id,
       })
     }
+
+    if (listing.status === ListingStatus.active) {
+      // The email send to gov delivery should not be a blocker from the normal flow so wrapping this in a try catch
+      try {
+        const jurisdiction = await this.jurisdictionsService.findOne({
+          where: { id: listing.jurisdiction.id },
+        })
+        if (jurisdiction.enableListingOpportunity) {
+          const units = await this.getUnitsForListing(saveResponse.id)
+          await this.emailService.listingOpportunity({
+            ...saveResponse,
+            units: units.units,
+          } as Listing)
+        }
+      } catch (error) {
+        console.error(`Error: unable to send to govDelivery ${error}`)
+      }
+    }
     return saveResponse
   }
 
@@ -233,11 +251,10 @@ export class ListingsService {
     })
 
     const saveResponse = await this.listingRepository.save(listing)
-    const listingApprovalPermissions = (
-      await this.jurisdictionsService.findOne({
-        where: { id: listing.jurisdiction.id },
-      })
-    )?.listingApprovalPermissions
+    const jurisdiction = await this.jurisdictionsService.findOne({
+      where: { id: listing.jurisdiction.id },
+    })
+    const listingApprovalPermissions = jurisdiction?.listingApprovalPermissions
 
     if (listingApprovalPermissions?.length > 0)
       await this.listingApprovalNotify({
@@ -249,6 +266,23 @@ export class ListingsService {
         jurisId: listing.jurisdiction.id,
       })
     await this.cachePurgeService.cachePurgeForSingleListing(previousStatus, newStatus, saveResponse)
+
+    if (
+      listing.status === ListingStatus.active &&
+      previousStatus !== ListingStatus.active &&
+      jurisdiction.enableListingOpportunity
+    ) {
+      // The email send to gov delivery should not be a blocker from the normal flow so wrapping this in a try catch
+      try {
+        const units = await this.getUnitsForListing(saveResponse.id)
+        await this.emailService.listingOpportunity({
+          ...saveResponse,
+          units: units.units,
+        } as Listing)
+      } catch (error) {
+        console.error(`Error: unable to send to govDelivery ${error}`)
+      }
+    }
     return saveResponse
   }
 

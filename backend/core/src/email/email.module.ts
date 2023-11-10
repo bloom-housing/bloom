@@ -1,4 +1,5 @@
 import { forwardRef, Module } from "@nestjs/common"
+import { HttpModule } from "@nestjs/axios"
 import { SendGridModule } from "@anchan828/nest-sendgrid"
 import { EmailService } from "./email.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
@@ -11,6 +12,7 @@ import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
     SharedModule,
     forwardRef(() => JurisdictionsModule),
     TranslationsModule,
+    HttpModule,
     SendGridModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -2,14 +2,16 @@ import { HttpException, Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
 import { MailDataRequired } from "@sendgrid/helpers/classes/mail"
-import axios from "axios"
+import { ConfigService } from "@nestjs/config"
+import { HttpService } from "@nestjs/axios"
+import { firstValueFrom } from "rxjs"
 import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
 import Polyglot from "node-polyglot"
 import fs from "fs"
 import juice from "juice"
-import { ConfigService } from "@nestjs/config"
+import dayjs from "dayjs"
 import { TranslationsService } from "../translations/services/translations.service"
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
 import { User } from "../auth/entities/user.entity"
@@ -20,13 +22,44 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
-import { IdName } from "../../types"
+import { IdName, ListingEventType, Unit } from "../../types"
 import { formatLocalDate } from "../shared/utils/format-local-date"
+import { formatCommunityType } from "../listings/helpers"
 
 type EmailAttachmentData = {
   data: string
   name: string
   type: string
+}
+
+const formatPricing = (values: number[]): string => {
+  const minPrice = Math.min(...values)
+  const maxPrice = Math.max(...values)
+  return `$${minPrice.toLocaleString()}${
+    minPrice !== maxPrice ? " - $" + maxPrice.toLocaleString() : ""
+  } per month`
+}
+
+const formatUnitDetails = (
+  units: Unit[],
+  field: string,
+  label: string,
+  pluralLabel?: string
+): string => {
+  const mappedField = units.reduce((values, unit) => {
+    if (unit[field]) {
+      values.push(Number.parseFloat(unit[field]))
+    }
+    return values
+  }, [])
+  if (mappedField?.length) {
+    const minValue = Math.min(...mappedField)
+    const maxValue = Math.max(...mappedField)
+    return `, ${minValue.toLocaleString()}${
+      minValue !== maxValue ? " - " + maxValue.toLocaleString() : ""
+    } ${pluralLabel && maxValue === 1 ? pluralLabel : label}`
+  }
+  return ""
 }
 
 @Injectable({ scope: Scope.REQUEST })
@@ -38,7 +71,8 @@ export class EmailService {
     private readonly configService: ConfigService,
     private readonly translationService: TranslationsService,
     private readonly jurisdictionResolverService: JurisdictionResolverService,
-    private readonly jurisdictionService: JurisdictionsService
+    private readonly jurisdictionService: JurisdictionsService,
+    private readonly httpService: HttpService
   ) {
     this.polyglot = new Polyglot({
       phrases: {},
@@ -224,34 +258,115 @@ export class EmailService {
     )
   }
 
-  public async listingOpportunity(user: User, appUrl: string) {
-    const jurisdiction = await this.getUserJurisdiction(user)
-    void (await this.loadTranslations(jurisdiction, user.language))
+  public async listingOpportunity(listing: Listing) {
+    const jurisdiction = await this.jurisdictionService.findOne({
+      where: {
+        id: listing.jurisdiction.id,
+      },
+    })
+    void (await this.loadTranslations(jurisdiction, Language.en))
     const compiledTemplate = this.template("listing-opportunity")
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a listing opportunity email to ${user.email} from ${jurisdiction.emailFromAddress}...`
+        `Preparing to send a listing opportunity email for ${listing.name} from ${jurisdiction.emailFromAddress}...`
       )
     }
 
-    const rawHtml = compiledTemplate({
-      appUrl,
-      // TODO: This is mock data just for the template that will need to be updated
-      tableRows: [
-        { label: "Community", value: "Senior 55+" },
-        { label: "Applications Due", value: "August 11, 2021" },
-        { label: "Address", value: "2330 Webster Street, Oakland CA 94612" },
-        { label: "1 Bedrooms", value: "1 unit, 1 bath, 668 sqft" },
-        { label: "2 Bedrooms", value: "2 units, 1-2 baths, 900 - 968 sqft" },
-        { label: "Rent", value: "$1,251 - $1,609 per month" },
-        { label: "Minimum Income", value: "$2,502 - $3,218 per month" },
-        { label: "Maximum Income", value: "$6,092 - $10,096 per month" },
-        { label: "Lottery Date", value: "August 31, 2021" },
-      ],
+    // Gather all variables from each unit into one place
+    const units: {
+      bedrooms: { [key: number]: Unit[] }
+      rent: number[]
+      minIncome: number[]
+      maxIncome: number[]
+    } = listing.units?.reduce(
+      (summaries, unit) => {
+        if (unit.monthlyIncomeMin) {
+          summaries.minIncome.push(Number.parseFloat(unit.monthlyIncomeMin))
+        }
+        if (unit.annualIncomeMax) {
+          summaries.maxIncome.push(Number.parseFloat(unit.annualIncomeMax) / 12.0)
+        }
+        if (unit.monthlyRent) {
+          summaries.rent.push(Number.parseFloat(unit.monthlyRent))
+        }
+        const thisBedroomInfo = summaries.bedrooms[unit.unitType?.name]
+        summaries.bedrooms[unit.unitType?.name] = thisBedroomInfo
+          ? [...thisBedroomInfo, unit]
+          : [unit]
+        return summaries
+      },
+      {
+        bedrooms: {},
+        rent: [],
+        minIncome: [],
+        maxIncome: [],
+      }
+    )
+    const tableRows = []
+    if (listing.reservedCommunityType) {
+      tableRows.push({
+        label: this.polyglot.t("rentalOpportunity.community"),
+        value: formatCommunityType[listing.reservedCommunityType?.name],
+      })
+    }
+    if (listing.applicationDueDate) {
+      tableRows.push({
+        label: this.polyglot.t("rentalOpportunity.applicationsDue"),
+        value: dayjs(listing.applicationDueDate).format("MMMM D, YYYY"),
+      })
+    }
+    tableRows.push({
+      label: this.polyglot.t("rentalOpportunity.address"),
+      value: `${listing.buildingAddress.street}, ${listing.buildingAddress.city} ${listing.buildingAddress.state} ${listing.buildingAddress.zipCode}`,
+    })
+    Object.entries(units.bedrooms).forEach(([key, bedroom]) => {
+      const sqFtString = formatUnitDetails(bedroom, "sqFeet", "sqft")
+      const bathroomstring = formatUnitDetails(bedroom, "numBathrooms", "bath", "baths")
+      tableRows.push({
+        label: this.polyglot.t(`rentalOpportunity.${key}`),
+        value: `${bedroom.length} unit${
+          bedroom.length > 1 ? "s" : ""
+        }${bathroomstring}${sqFtString}`,
+      })
+    })
+    if (units.rent?.length) {
+      tableRows.push({
+        label: this.polyglot.t("rentalOpportunity.rent"),
+        value: formatPricing(units.rent),
+      })
+    }
+    if (units.minIncome?.length) {
+      tableRows.push({
+        label: this.polyglot.t("rentalOpportunity.minIncome"),
+        value: formatPricing(units.minIncome),
+      })
+    }
+    if (units.maxIncome?.length) {
+      tableRows.push({
+        label: this.polyglot.t("rentalOpportunity.maxIncome"),
+        value: formatPricing(units.maxIncome),
+      })
+    }
+    if (listing.events && listing.events.length > 0) {
+      const lotteryEvent = listing.events.find(
+        (event) => event.type === ListingEventType.publicLottery
+      )
+      if (lotteryEvent && lotteryEvent.startDate) {
+        tableRows.push({
+          label: this.polyglot.t("rentalOpportunity.lottery"),
+          value: dayjs(lotteryEvent.startDate).format("MMMM D, YYYY"),
+        })
+      }
+    }
+
+    const compiled = compiledTemplate({
+      listingName: listing.name,
+      listingUrl: `${jurisdiction.publicUrl}/listing/${listing.id}`,
+      tableRows,
     })
 
-    await this.govSend(rawHtml, "Listing Opportunity")
+    await this.govSend(compiled, "New rental opportunity")
   }
 
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
@@ -328,7 +443,7 @@ export class EmailService {
     return partials
   }
 
-  private async govSend(rawHtml: string, subject: string) {
+  async govSend(rawHtml: string, subject: string) {
     const {
       GOVDELIVERY_API_URL,
       GOVDELIVERY_USERNAME,
@@ -350,14 +465,16 @@ export class EmailService {
     const govEmailXml = `<bulletin>\n <subject>${subject}</subject>\n  <body><![CDATA[\n     
       ${inlineHtml}\n   ]]></body>\n   <sms_body nil='true'></sms_body>\n   <publish_rss type='boolean'>false</publish_rss>\n   <open_tracking type='boolean'>true</open_tracking>\n   <click_tracking type='boolean'>true</click_tracking>\n   <share_content_enabled type='boolean'>true</share_content_enabled>\n   <topics type='array'>\n     <topic>\n       <code>${GOVDELIVERY_TOPIC}</code>\n     </topic>\n   </topics>\n   <categories type='array' />\n </bulletin>`
 
-    await axios.post(GOVDELIVERY_API_URL, govEmailXml, {
-      headers: {
-        "Content-Type": "application/xml",
-        Authorization: `Basic ${Buffer.from(
-          `${GOVDELIVERY_USERNAME}:${GOVDELIVERY_PASSWORD}`
-        ).toString("base64")}`,
-      },
-    })
+    await firstValueFrom(
+      this.httpService.post(GOVDELIVERY_API_URL, govEmailXml, {
+        headers: {
+          "Content-Type": "application/xml",
+          Authorization: `Basic ${Buffer.from(
+            `${GOVDELIVERY_USERNAME}:${GOVDELIVERY_PASSWORD}`
+          ).toString("base64")}`,
+        },
+      })
+    )
   }
 
   private async send(

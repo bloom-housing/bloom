@@ -14,6 +14,9 @@ import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.se
 import { GeneratedListingTranslation } from "../translations/entities/generated-listing-translation.entity"
 import { GoogleTranslateService } from "../translations/services/google-translate.service"
 import { ListingReviewOrder } from "../listings/types/listing-review-order-enum"
+import Listing from "../listings/entities/listing.entity"
+import { HttpService } from "@nestjs/axios"
+import { of } from "rxjs"
 
 declare const expect: jest.Expect
 jest.setTimeout(30000)
@@ -30,6 +33,18 @@ const application = {
   confirmationCode: "abc123",
 }
 let sendMock
+const httpPostMockFn = jest.fn()
+const mockHttpService = {
+  post: httpPostMockFn.mockImplementation(() => {
+    return of({
+      data: "test",
+      status: 200,
+      statusText: "OK",
+      headers: {},
+      config: {},
+    })
+  }),
+}
 
 const translationRepositoryMock = {}
 
@@ -163,6 +178,25 @@ const translationServiceMock = {
                 "The %{listingName} listing has been approved and published by an administrator.",
               viewPublished: "To view the published listing, please click on the link below",
             },
+            rentalOpportunity: {
+              subject: "New rental opportunity",
+              intro: "Rental opportunity at",
+              applicationsDue: "Applications Due",
+              community: "Community",
+              address: "Address",
+              rent: "Rent",
+              minIncome: "Minimum Income",
+              maxIncome: "Maximum Income",
+              lottery: "Lottery Date",
+              viewButton: "View Listing & Apply",
+              studio: "Studios",
+              oneBdrm: "1 Bedrooms",
+              twoBdrm: "2 Bedrooms",
+              threeBdrm: "3 Bedrooms",
+              fourBdrm: "4 Bedrooms",
+              fiveBdrm: "5 Bedrooms",
+              SRO: "SROs",
+            },
             t: {
               hello: "Hello",
               seeListing: "See Listing",
@@ -209,8 +243,16 @@ describe("EmailService", () => {
           useValue: generatedListingTranslationRepositoryMock,
         },
         {
+          provide: HttpService,
+          useValue: mockHttpService,
+        },
+        {
           provide: JurisdictionsService,
-          useValue: {},
+          useValue: {
+            findOne: () => ({
+              emailFromAddress: "myeamil@from",
+            }),
+          },
         },
         {
           provide: JurisdictionResolverService,
@@ -239,6 +281,10 @@ describe("EmailService", () => {
     sendMock = jest.fn()
     sendGridService.send = sendMock
     service = await module.resolve(EmailService)
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   it("should be defined", async () => {
@@ -446,6 +492,65 @@ describe("EmailService", () => {
       expect(emailMock.html).toMatch("Alameda County Housing Portal")
       expect(emailMock.html).toMatch("Alameda County Housing Portal is a project of the")
       expect(emailMock.html).toMatch(
+        "Alameda County - Housing and Community Development (HCD) Department"
+      )
+    })
+  })
+
+  describe("Listing Opportunity", () => {
+    it("should not send if gov delivery is not configured", async () => {
+      const warnMock = jest.fn()
+      console.warn = warnMock
+      const service = await module.resolve(EmailService)
+      await service.listingOpportunity(({
+        ...listing,
+        reservedCommunityType: { name: "senior55" },
+      } as unknown) as Listing)
+
+      expect(httpPostMockFn).not.toHaveBeenCalled()
+      expect(warnMock).toBeCalledWith(
+        "failed to configure Govdelivery, ensure that all env variables are provided"
+      )
+    })
+
+    it("should generate html body", async () => {
+      process.env.GOVDELIVERY_API_URL = "fake_url"
+      process.env.GOVDELIVERY_USERNAME = "fake_user"
+      process.env.GOVDELIVERY_PASSWORD = "fake_password"
+      process.env.GOVDELIVERY_TOPIC = "fake_topic"
+      const service = await module.resolve(EmailService)
+      await service.listingOpportunity(({
+        ...listing,
+        reservedCommunityType: { name: "senior55" },
+      } as unknown) as Listing)
+
+      expect(httpPostMockFn).toHaveBeenCalled()
+      const emailMock = httpPostMockFn.mock.calls[0]
+      expect(emailMock[0]).toEqual("fake_url")
+      expect(emailMock[1]).toMatch("<subject>New rental opportunity</subject>")
+      expect(emailMock[1]).toMatch(
+        "https://res.cloudinary.com/mariposta/image/upload/v1652326298/testing/alameda-portal.png"
+      )
+      expect(emailMock[1]).toMatch("Rental opportunity at")
+      expect(emailMock[1]).toMatch("Archer Studios")
+      expect(emailMock[1]).toMatch("Community")
+      expect(emailMock[1]).toMatch("Seniors 55+")
+      expect(emailMock[1]).toMatch("Applications Due")
+      expect(emailMock[1]).toMatch("December 31, 2019")
+      expect(emailMock[1]).toMatch("Address")
+      expect(emailMock[1]).toMatch("98 Archer Place, Dixon CA 95620")
+      expect(emailMock[1]).toMatch("Studios")
+      expect(emailMock[1]).toMatch("41 units, 285 sqft")
+      expect(emailMock[1]).toMatch("Rent")
+      expect(emailMock[1]).toMatch("$719 - $1,104 per month")
+      expect(emailMock[1]).toMatch("Minimum Income")
+      expect(emailMock[1]).toMatch("$1,438 - $2,208 per month")
+      expect(emailMock[1]).toMatch("Maximum Income")
+      expect(emailMock[1]).toMatch("$2,562.5 - $3,843.75 per month")
+      expect(emailMock[1]).toMatch("View Listing & Apply")
+      expect(emailMock[1]).toMatch("Alameda County Housing Portal")
+      expect(emailMock[1]).toMatch("Alameda County Housing Portal is a project of the")
+      expect(emailMock[1]).toMatch(
         "Alameda County - Housing and Community Development (HCD) Department"
       )
     })

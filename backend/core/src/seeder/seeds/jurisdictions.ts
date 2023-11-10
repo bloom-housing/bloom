@@ -17,6 +17,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enablePartnerSettings: true,
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
+    enableListingOpportunity: false,
     listingApprovalPermissions: [UserRoleEnum.admin],
   },
 ]
