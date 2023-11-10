@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from "react"
+import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
   Drawer,
   Field,
@@ -19,6 +19,7 @@ import {
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
+  ValidationMethod,
 } from "@bloom-housing/backend-core"
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings/index"
@@ -38,7 +39,11 @@ type PreferenceDrawerProps = {
 }
 
 type OptionForm = {
-  collectAddress: boolean
+  collectAddress: YesNoAnswer
+  validationMethod?: ValidationMethod
+  radiusSize?: string
+  collectRelationship?: YesNoAnswer
+  collectName?: YesNoAnswer
   exclusiveQuestion: "exclusive" | "multiselect"
   optionDescription: string
   optionLinkTitle: string
@@ -85,6 +90,14 @@ const PreferenceDrawer = ({
   }, [questionData])
 
   const optOutQuestion = watch("canYouOptOutQuestion")
+
+  const collectAddressExpand =
+    (optionData?.collectAddress && watch("collectAddress") === undefined) ||
+    watch("collectAddress") === YesNoAnswer.Yes
+  const readiusExpand =
+    (optionData?.validationMethod === ValidationMethod.radius &&
+      watch("validationMethod") === undefined) ||
+    watch("validationMethod") === ValidationMethod.radius
 
   // Update local state with dragged state
   useEffect(() => {
@@ -432,35 +445,36 @@ const PreferenceDrawer = ({
         onClose={() => {
           setOptionDrawerOpen(null)
         }}
-        className={"w-auto"}
       >
         <Card>
           <Card.Section>
             <SectionWithGrid heading={t("t.option")}>
-              <Grid.Row>
-                <FieldValue label={t("t.title")}>
-                  <Field
-                    id="optionTitle"
-                    name="optionTitle"
-                    label={t("t.title")}
-                    placeholder={t("t.title")}
-                    register={register}
-                    type="text"
-                    readerOnly
-                    dataTestId={"preference-option-title"}
-                    defaultValue={optionData?.text}
-                    errorMessage={t("errors.requiredFieldError")}
-                    error={!!errors["optionTitle"]}
-                    inputProps={{
-                      onChange: () => {
-                        clearErrors("optionTitle")
-                      },
-                    }}
-                  />
-                </FieldValue>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
+                  <FieldValue label={t("t.title")}>
+                    <Field
+                      id="optionTitle"
+                      name="optionTitle"
+                      label={t("t.title")}
+                      placeholder={t("t.title")}
+                      register={register}
+                      type="text"
+                      readerOnly
+                      dataTestId={"preference-option-title"}
+                      defaultValue={optionData?.text}
+                      errorMessage={t("errors.requiredFieldError")}
+                      error={!!errors["optionTitle"]}
+                      inputProps={{
+                        onChange: () => {
+                          clearErrors("optionTitle")
+                        },
+                      }}
+                    />
+                  </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
-                <Grid.Cell>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("t.descriptionTitle")}
                     name={"optionDescription"}
@@ -473,7 +487,7 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <FieldValue label={t("t.url")}>
                   <Field
                     id="optionUrl"
@@ -493,7 +507,6 @@ const PreferenceDrawer = ({
                     defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
                   />
                 </FieldValue>
-
                 <FieldValue label={t("settings.preferenceLinkTitle")}>
                   <Field
                     id="optionLinkTitle"
@@ -508,24 +521,7 @@ const PreferenceDrawer = ({
                   />
                 </FieldValue>
               </Grid.Row>
-              <Grid.Row>
-                <Grid.Cell>
-                  <Field
-                    type="checkbox"
-                    id="collectAddress"
-                    name="collectAddress"
-                    label={t("settings.preferenceCollectAddress")}
-                    register={register}
-                    dataTestId={"preference-option-collect-address"}
-                    controlClassName={"font-normal"}
-                    inputProps={{
-                      defaultChecked: optionData?.collectAddress,
-                    }}
-                  />
-                </Grid.Cell>
-              </Grid.Row>
-
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
                   <FieldGroup
                     name="exclusiveQuestion"
@@ -555,6 +551,208 @@ const PreferenceDrawer = ({
               </Grid.Row>
             </SectionWithGrid>
           </Card.Section>
+
+          <Card.Section>
+            <div className="border-t pt-8" />
+            <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="pr-8">
+                  <FieldValue label={t("settings.preferenceCollectAddress")}>
+                    <FieldGroup
+                      name="collectAddress"
+                      type="radio"
+                      register={register}
+                      validation={{ required: true }}
+                      error={errors.collectAddress}
+                      fields={[
+                        {
+                          label: t("t.yes"),
+                          value: YesNoAnswer.Yes,
+                          defaultChecked: optionData?.collectAddress,
+                          id: "collectAddressYes",
+                          dataTestId: "collect-address-yes",
+                          inputProps: {
+                            onChange: () => {
+                              clearErrors("collectAddress")
+                            },
+                          },
+                        },
+                        {
+                          label: t("t.no"),
+                          value: YesNoAnswer.No,
+                          defaultChecked:
+                            optionData?.collectAddress !== undefined &&
+                            optionData?.collectAddress === false,
+                          id: "collectAddressNo",
+                          dataTestId: "collect-address-no",
+                          inputProps: {
+                            onChange: () => {
+                              clearErrors("collectAddress")
+                            },
+                          },
+                        },
+                      ]}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex column items-center"
+                      dataTestId={"preference-option-collect-address"}
+                    />
+                  </FieldValue>
+                </Grid.Cell>
+                <Grid.Cell className="pr-12">
+                  {collectAddressExpand && (
+                    <FieldValue label={t("settings.preferenceValidatingAddress")}>
+                      <FieldGroup
+                        name="validationMethod"
+                        type="radio"
+                        register={register}
+                        validation={{ required: true }}
+                        error={errors.validationMethod}
+                        fields={[
+                          {
+                            label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
+                            value: ValidationMethod.radius,
+                            defaultChecked:
+                              optionData?.validationMethod === ValidationMethod.radius,
+                            id: "validationMethodRadius",
+                            dataTestId: "validation-method-radius",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("validationMethod")
+                              },
+                            },
+                          },
+                          {
+                            label: t("settings.preferenceValidatingAddress.checkManually"),
+                            value: ValidationMethod.none,
+                            defaultChecked: optionData?.validationMethod === ValidationMethod.none,
+                            id: "validationMethodNone",
+                            dataTestId: "validation-method-none",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("validationMethod")
+                              },
+                            },
+                          },
+                        ]}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex flex-col"
+                        dataTestId={"preference-option-validation-method"}
+                      />
+                    </FieldValue>
+                  )}
+                </Grid.Cell>
+                <Grid.Cell className="pr-8">
+                  {collectAddressExpand && readiusExpand && (
+                    <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
+                      <Field
+                        id="radiusSize"
+                        name="radiusSize"
+                        label={t("settings.preferenceValidatingAddress.howManyMiles")}
+                        register={register}
+                        validation={{ required: true, min: 0 }}
+                        error={errors.radiusSize}
+                        errorMessage={t("errors.requiredFieldError")}
+                        type="number"
+                        readerOnly
+                        defaultValue={optionData?.radiusSize ?? null}
+                        dataTestId={"preference-option-radius-size"}
+                        inputProps={{
+                          onChange: () => clearErrors("radiusSize"),
+                        }}
+                      />
+                    </FieldValue>
+                  )}
+                </Grid.Cell>
+              </Grid.Row>
+              {collectAddressExpand && (
+                <Grid.Row columns={3}>
+                  <Grid.Cell className="pr-8">
+                    <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
+                      <FieldGroup
+                        name="collectName"
+                        type="radio"
+                        register={register}
+                        validation={{ required: true }}
+                        error={errors.collectName}
+                        fields={[
+                          {
+                            label: t("t.yes"),
+                            value: YesNoAnswer.Yes,
+                            defaultChecked: optionData?.collectName,
+                            id: "collectNameYes",
+                            dataTestId: "collect-name-yes",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("collectName")
+                              },
+                            },
+                          },
+                          {
+                            label: t("t.no"),
+                            value: YesNoAnswer.No,
+                            defaultChecked:
+                              optionData?.collectName !== undefined && !optionData?.collectName,
+                            id: "collectNameNo",
+                            dataTestId: "collect-name-no",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("collectName")
+                              },
+                            },
+                          },
+                        ]}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex column items-center"
+                        dataTestId={"preference-option-collect-name"}
+                      />
+                    </FieldValue>
+                  </Grid.Cell>
+                  <Grid.Cell className="pr-8">
+                    <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
+                      <FieldGroup
+                        name="collectRelationship"
+                        type="radio"
+                        register={register}
+                        validation={{ required: true }}
+                        error={errors.collectRelationship}
+                        fields={[
+                          {
+                            label: t("t.yes"),
+                            value: YesNoAnswer.Yes,
+                            defaultChecked: optionData?.collectRelationship,
+                            id: "collectRelationshipYes",
+                            dataTestId: "collect-relationship-yes",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("collectRelationship")
+                              },
+                            },
+                          },
+                          {
+                            label: t("t.no"),
+                            value: YesNoAnswer.No,
+                            defaultChecked:
+                              optionData?.collectRelationship !== undefined &&
+                              !optionData?.collectRelationship,
+                            id: "collectRelationshipNo",
+                            dataTestId: "collect-relationship-no",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("collectRelationship")
+                              },
+                            },
+                          },
+                        ]}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex"
+                        dataTestId={"preference-option-collect-relationship"}
+                      />
+                    </FieldValue>
+                  </Grid.Cell>
+                </Grid.Row>
+              )}
+            </SectionWithGrid>
+          </Card.Section>
         </Card>
         <div className="pb-8">
           <Button
@@ -572,6 +770,19 @@ const PreferenceDrawer = ({
               const existingOptionData = questionData?.options?.find(
                 (option) => optionData?.ordinal === option.ordinal
               )
+              if (
+                Object.keys(formState.errors).some((field) =>
+                  [
+                    "collectAddress",
+                    "collectName",
+                    "collectRelationship",
+                    "validationMethod",
+                    "radiusSize",
+                  ].includes(field)
+                )
+              ) {
+                return
+              }
 
               const getNewOrdinal = () => {
                 if (existingOptionData) return existingOptionData.ordinal
@@ -585,11 +796,19 @@ const PreferenceDrawer = ({
                   ? [{ title: formData.optionLinkTitle, url: formData.optionUrl }]
                   : [],
                 ordinal: getNewOrdinal(),
-                collectAddress: formData.collectAddress,
                 exclusive: formData.exclusiveQuestion === "exclusive",
+                collectAddress: formData.collectAddress === YesNoAnswer.Yes,
               }
-              let newOptions = []
+              if (formData.collectAddress === YesNoAnswer.Yes) {
+                newOptionData.validationMethod = formData.validationMethod
+                newOptionData.collectRelationship = formData.collectRelationship === YesNoAnswer.Yes
+                newOptionData.collectName = formData.collectName === YesNoAnswer.Yes
+              }
+              if (formData.validationMethod === ValidationMethod.radius && formData?.radiusSize) {
+                newOptionData.radiusSize = parseFloat(formData.radiusSize)
+              }
 
+              let newOptions = []
               if (existingOptionData) {
                 newOptions = questionData.options.map((option) =>
                   option.ordinal === existingOptionData.ordinal ? newOptionData : option

@@ -36,8 +36,9 @@ export const multiselectQuestionPreference: MultiselectQuestion = {
           url: "https://www.example.com",
         },
       ],
+      collectAddress: false,
     },
-    { text: "Work in County", ordinal: 1 },
+    { text: "Work in County", ordinal: 1, collectAddress: false },
   ],
   applicationSection: ApplicationSection.preferences,
 }

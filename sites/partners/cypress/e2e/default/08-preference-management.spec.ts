@@ -27,9 +27,15 @@ describe("Preference Management Tests", () => {
     cy.getByTestId("preference-option-description").type("Preference Option Description")
     cy.getByTestId("preference-option-link").type("https://www.example2.com")
     cy.getByTestId("preference-option-link-title").type("Preference Option Link Title")
-    cy.getByTestId("preference-option-collect-address").check()
+    cy.getByTestId("collect-address-yes").click()
     cy.getByTestId("exclusive-question-exclusive").check()
     cy.getByID("preference-option-save").click()
+
+    cy.getByTestId("validation-method-radius").click()
+    cy.getByTestId("preference-option-radius-size").type("100")
+    cy.getByTestId("collect-name-yes").click()
+    cy.getByTestId("collect-relationship-yes").click()
+    cy.getByTestId("preference-option-save").click()
 
     cy.getByTestId("preference-opt-out-label").clear()
     cy.getByTestId("preference-opt-out-label").type("Preference Opt Out Label")
@@ -59,7 +65,12 @@ describe("Preference Management Tests", () => {
       "have.value",
       "Preference Option Link Title"
     )
-    cy.getByTestId("preference-option-collect-address").should("be.checked")
+
+    cy.getByTestId("collect-address-yes").should("be.checked")
+    cy.getByTestId("validation-method-radius").should("be.checked")
+    cy.getByTestId("preference-option-radius-size").should("have.value", "100")
+    cy.getByTestId("collect-name-yes").should("be.checked")
+    cy.getByTestId("collect-relationship-yes").should("be.checked")
     cy.getByTestId("exclusive-question-exclusive").should("have.value", "exclusive")
     cy.getByID("preference-option-save").click()
 
