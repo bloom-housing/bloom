@@ -161,8 +161,8 @@ const PreferenceDrawer = ({
         <Card>
           <Card.Section>
             <SectionWithGrid heading={t("settings.preference")}>
-              <Grid.Row>
-                <Grid.Cell>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Field
                     id="text"
                     name="text"
@@ -181,8 +181,8 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
-                <Grid.Cell>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("t.descriptionTitle")}
                     name={"description"}
@@ -195,7 +195,7 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Field
                     id="preferenceUrl"
