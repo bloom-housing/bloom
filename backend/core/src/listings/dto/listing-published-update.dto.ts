@@ -11,6 +11,7 @@ import {
   ValidateNested,
   IsBoolean,
   IsPhoneNumber,
+  IsOptional,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingUpdateDto } from "./listing-update.dto"
@@ -102,7 +103,8 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  referralOpportunity: boolean
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  referralOpportunity?: boolean
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

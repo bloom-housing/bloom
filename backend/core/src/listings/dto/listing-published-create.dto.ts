@@ -14,6 +14,7 @@ import {
   ValidateNested,
   IsBoolean,
   IsPhoneNumber,
+  IsOptional,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OmitType } from "@nestjs/swagger"
@@ -102,7 +103,8 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  referralOpportunity: boolean
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  referralOpportunity?: boolean
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
