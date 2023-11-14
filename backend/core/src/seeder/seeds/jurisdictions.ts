@@ -17,7 +17,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
     listingApprovalPermissions: [UserRoleEnum.admin],
-    enableGeocodingPreferences: false,
+    enableGeocodingPreferences: true,
   },
   {
     name: "San Jose",
