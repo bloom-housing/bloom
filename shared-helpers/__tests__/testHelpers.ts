@@ -111,6 +111,7 @@ export const jurisdiction: Jurisdiction = {
   enablePartnerSettings: true,
   enableAccessibilityFeatures: false,
   enableUtilitiesIncluded: true,
+  enableGeocodingPreferences: false,
   id: "67c22813-6080-441d-a496-03f2d06f2635",
   createdAt: new Date("2023-02-06T22:32:30.397Z"),
   updatedAt: new Date("2023-02-21T21:57:58.346Z"),

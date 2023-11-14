@@ -94,7 +94,7 @@ const PreferenceDrawer = ({
 
   const optOutQuestion = watch("canYouOptOutQuestion")
 
-  const isAdditionalDetailsEnabled = profile.jurisdictions.some(
+  const isAdditionalDetailsEnabled = profile?.jurisdictions?.some(
     (jurisdiction) => jurisdiction.enableGeocodingPreferences
   )
 
