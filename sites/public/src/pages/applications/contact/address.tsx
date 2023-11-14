@@ -67,6 +67,7 @@ const ApplicationAddress = () => {
       shouldFocusError: false,
     }
   )
+
   const onSubmit = (data) => {
     if (!verifyAddress) {
       setFoundAddress({})
@@ -77,11 +78,11 @@ const ApplicationAddress = () => {
     }
 
     mergeDeep(application, data)
-
     if (newAddressSelected && foundAddress.newAddress) {
       application.applicant.applicantAddress.street = foundAddress.newAddress.street
       application.applicant.applicantAddress.city = foundAddress.newAddress.city
       application.applicant.applicantAddress.zipCode = foundAddress.newAddress.zipCode
+      application.applicant.applicantAddress.state = foundAddress.newAddress.state
     }
 
     if (application.applicant.noPhone) {
