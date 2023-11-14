@@ -94,9 +94,14 @@ const PreferenceDrawer = ({
 
   const optOutQuestion = watch("canYouOptOutQuestion")
 
+  const isAdditionalDetailsEnabled = profile.jurisdictions.some(
+    (jurisdiction) => jurisdiction.enableGeocodingPreferences
+  )
+
   const collectAddressExpand =
-    (optionData?.collectAddress && watch("collectAddress") === undefined) ||
-    watch("collectAddress") === YesNoAnswer.Yes
+    ((optionData?.collectAddress && watch("collectAddress") === undefined) ||
+      watch("collectAddress") === YesNoAnswer.Yes) &&
+    isAdditionalDetailsEnabled
   const readiusExpand =
     (optionData?.validationMethod === ValidationMethod.radius &&
       watch("validationMethod") === undefined) ||
@@ -378,7 +383,7 @@ const PreferenceDrawer = ({
                       profile
                         ? [
                             { label: "", value: "" },
-                            ...profile?.jurisdictions.map((jurisdiction) => ({
+                            ...(profile?.jurisdictions || []).map((jurisdiction) => ({
                               label: jurisdiction.name,
                               value: jurisdiction.id,
                             })),
