@@ -43,6 +43,7 @@ const Applications = () => {
 
   useEffect(() => {
     if (!applications || (applications && !listLoading)) return
+
     void Promise.all(
       applications?.map(async (app) => {
         const retrievedListing = await listingsService.retrieve({ id: app?.listings.id })

@@ -46,6 +46,7 @@ view.base = {
   ...view.partnerList,
   demographics: true,
   preferredUnitTypes: true,
+  listings: true,
   householdMember: {
     include: {
       householdMemberAddress: true,
