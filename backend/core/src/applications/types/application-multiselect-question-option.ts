@@ -7,6 +7,7 @@ import { TextInput } from "./form-metadata/text-input"
 import { AddressInput } from "./form-metadata/address-input"
 import { FormMetadataExtraData } from "./form-metadata/form-metadata-extra-data"
 import { InputType } from "../../shared/types/input-type"
+import { GeocodingInput } from "./form-metadata/geocoding-input"
 
 export class ApplicationMultiselectQuestionOption {
   @Expose()
@@ -44,5 +45,5 @@ export class ApplicationMultiselectQuestionOption {
       ],
     },
   })
-  extraData: Array<BooleanInput | TextInput | AddressInput>
+  extraData: Array<BooleanInput | TextInput | AddressInput | GeocodingInput>
 }
