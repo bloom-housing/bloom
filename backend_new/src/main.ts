@@ -10,7 +10,7 @@ async function bootstrap() {
     logger:
       process.env.NODE_ENV === 'development'
         ? ['error', 'warn', 'log', 'debug']
-        : ['error', 'warn', 'log', 'debug'],
+        : ['error', 'warn'],
   });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new CustomExceptionFilter(httpAdapter));

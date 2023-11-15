@@ -98,9 +98,7 @@ export class ApplicationController {
     @Request() req: ExpressRequest,
     @Body() dto: ApplicationCreate,
   ): Promise<Application> {
-    console.log('req', req);
     const user = mapTo(User, req['user']);
-    console.log('user', user);
     return await this.applicationService.create(dto, true, user);
   }
 

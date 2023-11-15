@@ -15,7 +15,7 @@ import {
 } from 'class-validator';
 import { InputType } from '../../enums/shared/input-type-enum';
 import { ValidationsGroupsEnum } from '../../enums/shared/validation-groups-enum';
-import { AddressCreateDto } from '../addresses/address.dto';
+import { AddressCreate } from '../addresses/address-create.dto';
 
 export class FormMetadataExtraData {
   @Expose()
@@ -33,9 +33,9 @@ export class AddressInput extends FormMetadataExtraData {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  @ApiProperty({ type: AddressCreateDto })
-  value: AddressCreateDto;
+  @Type(() => AddressCreate)
+  @ApiProperty({ type: AddressCreate })
+  value: AddressCreate;
 }
 
 export class BooleanInput extends FormMetadataExtraData {

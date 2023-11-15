@@ -353,6 +353,7 @@ describe('Testing application service', () => {
             householdMemberWorkAddress: true,
           },
         },
+        listings: true,
         preferredUnitTypes: true,
       },
     });
@@ -394,6 +395,7 @@ describe('Testing application service', () => {
             householdMemberWorkAddress: true,
           },
         },
+        listings: true,
         preferredUnitTypes: true,
       },
     });
@@ -593,6 +595,7 @@ describe('Testing application service', () => {
             householdMemberWorkAddress: true,
           },
         },
+        listings: true,
         preferredUnitTypes: true,
       },
     });
@@ -714,6 +717,7 @@ describe('Testing application service', () => {
         applicationsAlternateAddress: true,
         applicationsMailingAddress: true,
         demographics: true,
+        listings: true,
         preferredUnitTypes: true,
         userAccounts: true,
         alternateContact: {
@@ -961,6 +965,7 @@ describe('Testing application service', () => {
         applicationsAlternateAddress: true,
         applicationsMailingAddress: true,
         demographics: true,
+        listings: true,
         preferredUnitTypes: true,
         userAccounts: true,
         alternateContact: {
@@ -1186,6 +1191,7 @@ describe('Testing application service', () => {
         applicationsAlternateAddress: true,
         applicationsMailingAddress: true,
         demographics: true,
+        listings: true,
         preferredUnitTypes: true,
         userAccounts: true,
         alternateContact: {

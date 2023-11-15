@@ -51,8 +51,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader("Set-Cookie", cookies)
     res.statusMessage = response.statusText
     res.status(response.status).json(response.data)
-
-    console.log("response headers", response.headers)
   } catch (e) {
     console.error("public's backend url adapter error:", { e })
     if (e.response) {
