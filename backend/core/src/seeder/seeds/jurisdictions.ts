@@ -17,6 +17,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
     listingApprovalPermissions: [UserRoleEnum.admin],
+    enableGeocodingPreferences: true,
   },
   {
     name: "San Jose",
@@ -30,6 +31,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: true,
     listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
+    enableGeocodingPreferences: false,
   },
   {
     name: "San Mateo",
@@ -43,6 +45,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: false,
     listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
+    enableGeocodingPreferences: false,
   },
   {
     name: "Detroit",
@@ -56,6 +59,7 @@ export const activeJurisdictions: JurisdictionCreateDto[] = [
     enableAccessibilityFeatures: false,
     enableUtilitiesIncluded: false,
     listingApprovalPermissions: [UserRoleEnum.admin, UserRoleEnum.jurisdictionAdmin],
+    enableGeocodingPreferences: false,
   },
 ]
 
