@@ -57,10 +57,17 @@ interface AddressValidationSelectionProps {
   newAddressSelected: boolean
   setVerifyAddress: React.Dispatch<React.SetStateAction<boolean>>
   setNewAddressSelected: React.Dispatch<React.SetStateAction<boolean>>
+  setVerifyAddressStep?: React.Dispatch<React.SetStateAction<number>>
 }
 
 export const AddressValidationSelection = (props: AddressValidationSelectionProps) => {
-  const { foundAddress, newAddressSelected, setNewAddressSelected, setVerifyAddress } = props
+  const {
+    foundAddress,
+    newAddressSelected,
+    setNewAddressSelected,
+    setVerifyAddress,
+    setVerifyAddressStep,
+  } = props
   return (
     <div className="form-card__group">
       {foundAddress.newAddress && (
@@ -128,6 +135,7 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               className="font-alt-sans uppercase font-semibold mt-0 mr-0"
               onClick={() => {
                 setVerifyAddress(false)
+                setVerifyAddressStep?.(0)
               }}
               data-testid="app-edit-original-address"
             >
