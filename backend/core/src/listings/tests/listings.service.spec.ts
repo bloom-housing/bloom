@@ -23,6 +23,7 @@ import { EmailService } from "../../../src/email/email.service"
 import { JurisdictionsService } from "../../../src/jurisdictions/services/jurisdictions.service"
 import { ListingStatus } from "../types/listing-status-enum"
 import { UserRoleEnum } from "../../../src/auth/enum/user-role-enum"
+import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 
 /* eslint-disable @typescript-eslint/unbound-method */
 
@@ -142,6 +143,10 @@ const mockListingsRepo = {
   save: jest.fn(),
 }
 
+const mockReservedCommunityTypeRepo = {
+  findOne: jest.fn(),
+}
+
 const mockUserRepo = {
   findOne: jest.fn(),
   save: jest.fn(),
@@ -175,6 +180,10 @@ describe("ListingsService", () => {
         {
           provide: getRepositoryToken(Listing),
           useValue: mockListingsRepo,
+        },
+        {
+          provide: getRepositoryToken(ReservedCommunityType),
+          useValue: mockReservedCommunityTypeRepo,
         },
         {
           provide: getRepositoryToken(User),

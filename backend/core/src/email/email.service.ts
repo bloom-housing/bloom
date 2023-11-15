@@ -304,10 +304,10 @@ export class EmailService {
       }
     )
     const tableRows = []
-    if (listing.reservedCommunityType) {
+    if (listing.reservedCommunityType?.name) {
       tableRows.push({
         label: this.polyglot.t("rentalOpportunity.community"),
-        value: formatCommunityType[listing.reservedCommunityType?.name],
+        value: formatCommunityType[listing.reservedCommunityType.name],
       })
     }
     if (listing.applicationDueDate) {

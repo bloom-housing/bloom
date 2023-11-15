@@ -31,6 +31,7 @@ import { CombinedListingFilterParams } from "./combined/combined-listing-filter-
 import { Compare } from "../shared/dto/filter.dto"
 import { CachePurgeService } from "./cache-purge.service"
 import { CombinedListingsQueryBuilder } from "./combined/combined-listing-query-builder"
+import { ReservedCommunityType } from "../reserved-community-type/entities/reserved-community-type.entity"
 
 type JurisdictionIdToExternalResponse = { [Identifier: string]: Pagination<Listing> }
 export type ListingIncludeExternalResponse = {
@@ -47,6 +48,8 @@ export class ListingsService {
   constructor(
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
+    @InjectRepository(ReservedCommunityType)
+    private readonly reservedCommunityTypeRepository: Repository<ReservedCommunityType>,
     private readonly translationService: TranslationsService,
     private readonly authzService: AuthzService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
@@ -274,10 +277,17 @@ export class ListingsService {
     ) {
       // The email send to gov delivery should not be a blocker from the normal flow so wrapping this in a try catch
       try {
+        // Get the data from the needed joined tables
         const units = await this.getUnitsForListing(saveResponse.id)
+        const communityType = saveResponse.reservedCommunityType
+          ? await this.reservedCommunityTypeRepository.findOne({
+              where: { id: saveResponse.reservedCommunityType.id },
+            })
+          : await Promise.resolve(undefined)
         await this.emailService.listingOpportunity({
           ...saveResponse,
           units: units.units,
+          reservedCommunityType: communityType || undefined,
         } as Listing)
       } catch (error) {
         console.error(`Error: unable to send to govDelivery ${error}`)

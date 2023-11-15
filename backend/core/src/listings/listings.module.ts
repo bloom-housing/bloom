@@ -21,6 +21,9 @@ import { CsvBuilder } from "../../src/applications/services/csv-builder.service"
 import { CachePurgeService } from "./cache-purge.service"
 import { EmailModule } from "../../src/email/email.module"
 import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
+import { ReservedCommunityTypesModule } from "../reserved-community-type/reserved-community-types.module"
+import { ReservedCommunityTypesService } from "../reserved-community-type/reserved-community-types.service"
+import { ReservedCommunityType } from "../reserved-community-type/entities/reserved-community-type.entity"
 
 @Module({
   imports: [
@@ -32,6 +35,7 @@ import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.modul
       AmiChart,
       ListingFeatures,
       ListingUtilities,
+      ReservedCommunityType,
     ]),
     forwardRef(() => AuthModule),
     TranslationsModule,
