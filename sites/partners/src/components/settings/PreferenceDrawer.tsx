@@ -454,35 +454,36 @@ const PreferenceDrawer = ({
         onClose={() => {
           setOptionDrawerOpen(null)
         }}
-        className={"w-auto"}
       >
         <Card>
           <Card.Section>
             <SectionWithGrid heading={t("t.option")}>
-              <Grid.Row>
-                <FieldValue label={t("t.title")}>
-                  <Field
-                    id="optionTitle"
-                    name="optionTitle"
-                    label={t("t.title")}
-                    placeholder={t("t.title")}
-                    register={register}
-                    type="text"
-                    readerOnly
-                    dataTestId={"preference-option-title"}
-                    defaultValue={optionData?.text}
-                    errorMessage={t("errors.requiredFieldError")}
-                    error={!!errors["optionTitle"]}
-                    inputProps={{
-                      onChange: () => {
-                        clearErrors("optionTitle")
-                      },
-                    }}
-                  />
-                </FieldValue>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
+                  <FieldValue label={t("t.title")}>
+                    <Field
+                      id="optionTitle"
+                      name="optionTitle"
+                      label={t("t.title")}
+                      placeholder={t("t.title")}
+                      register={register}
+                      type="text"
+                      readerOnly
+                      dataTestId={"preference-option-title"}
+                      defaultValue={optionData?.text}
+                      errorMessage={t("errors.requiredFieldError")}
+                      error={!!errors["optionTitle"]}
+                      inputProps={{
+                        onChange: () => {
+                          clearErrors("optionTitle")
+                        },
+                      }}
+                    />
+                  </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
-                <Grid.Cell>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="seeds-grid-span-2">
                   <Textarea
                     label={t("t.descriptionTitle")}
                     name={"optionDescription"}
@@ -495,41 +496,43 @@ const PreferenceDrawer = ({
                   />
                 </Grid.Cell>
               </Grid.Row>
-              <Grid.Row>
-                <FieldValue label={t("t.url")}>
-                  <Field
-                    id="optionUrl"
-                    name="optionUrl"
-                    label={t("t.url")}
-                    placeholder={"https://"}
-                    register={register}
-                    type="url"
-                    error={!!errors?.optionUrl}
-                    errorMessage={
-                      errors?.optionUrl?.type === "https"
-                        ? t("errors.urlHttpsError")
-                        : t("errors.urlError")
-                    }
-                    readerOnly
-                    dataTestId={"preference-option-link"}
-                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
-                  />
-                </FieldValue>
-              </Grid.Row>
-              <Grid.Row>
-                <FieldValue label={t("settings.preferenceLinkTitle")}>
-                  <Field
-                    id="optionLinkTitle"
-                    name="optionLinkTitle"
-                    label={t("settings.preferenceLinkTitle")}
-                    placeholder={t("settings.preferenceLinkTitle")}
-                    register={register}
-                    type="text"
-                    readerOnly
-                    dataTestId={"preference-option-link-title"}
-                    defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
-                  />
-                </FieldValue>
+              <Grid.Row columns={3}>
+                <Grid.Cell>
+                  <FieldValue label={t("t.url")}>
+                    <Field
+                      id="optionUrl"
+                      name="optionUrl"
+                      label={t("t.url")}
+                      placeholder={"https://"}
+                      register={register}
+                      type="url"
+                      error={!!errors?.optionUrl}
+                      errorMessage={
+                        errors?.optionUrl?.type === "https"
+                          ? t("errors.urlHttpsError")
+                          : t("errors.urlError")
+                      }
+                      readerOnly
+                      dataTestId={"preference-option-link"}
+                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].url : ""}
+                    />
+                  </FieldValue>
+                </Grid.Cell>
+                <Grid.Cell>
+                  <FieldValue label={t("settings.preferenceLinkTitle")}>
+                    <Field
+                      id="optionLinkTitle"
+                      name="optionLinkTitle"
+                      label={t("settings.preferenceLinkTitle")}
+                      placeholder={t("settings.preferenceLinkTitle")}
+                      register={register}
+                      type="text"
+                      readerOnly
+                      dataTestId={"preference-option-link-title"}
+                      defaultValue={optionData?.links?.length > 0 ? optionData?.links[0].title : ""}
+                    />
+                  </FieldValue>
+                </Grid.Cell>
               </Grid.Row>
               <Grid.Row>
                 <FieldValue label={t("settings.preferenceExclusiveQuestion")} className="mb-1">
@@ -563,112 +566,120 @@ const PreferenceDrawer = ({
           </Card.Section>
 
           <Card.Section>
+            <div className="border-t pt-8" />
             <SectionWithGrid heading={t("settings.preferenceAdditionalFields")}>
-              <Grid.Row>
-                <FieldValue label={t("settings.preferenceCollectAddress")}>
-                  <FieldGroup
-                    name="collectAddress"
-                    type="radio"
-                    register={register}
-                    validation={{ required: true }}
-                    error={errors.collectAddress}
-                    fields={[
-                      {
-                        label: t("t.yes"),
-                        value: YesNoAnswer.Yes,
-                        defaultChecked: optionData?.collectAddress,
-                        id: "collectAddressYes",
-                        dataTestId: "collect-address-yes",
-                        inputProps: {
-                          onChange: () => {
-                            clearErrors("collectAddress")
-                          },
-                        },
-                      },
-                      {
-                        label: t("t.no"),
-                        value: YesNoAnswer.No,
-                        defaultChecked:
-                          optionData?.collectAddress !== undefined &&
-                          optionData?.collectAddress === false,
-                        id: "collectAddressNo",
-                        dataTestId: "collect-address-no",
-                        inputProps: {
-                          onChange: () => {
-                            clearErrors("collectAddress")
-                          },
-                        },
-                      },
-                    ]}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex column items-center"
-                    dataTestId={"preference-option-collect-address"}
-                  />
-                </FieldValue>
-              </Grid.Row>
-              <Grid.Row>
-                {collectAddressExpand && (
-                  <FieldValue label={t("settings.preferenceValidatingAddress")}>
+              <Grid.Row columns={3}>
+                <Grid.Cell className="pr-8">
+                  <FieldValue label={t("settings.preferenceCollectAddress")}>
                     <FieldGroup
-                      name="validationMethod"
+                      name="collectAddress"
                       type="radio"
                       register={register}
                       validation={{ required: true }}
-                      error={errors.validationMethod}
+                      error={errors.collectAddress}
                       fields={[
                         {
-                          label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
-                          value: ValidationMethod.radius,
-                          defaultChecked: optionData?.validationMethod === ValidationMethod.radius,
-                          id: "validationMethodRadius",
-                          dataTestId: "validation-method-radius",
+                          label: t("t.yes"),
+                          value: YesNoAnswer.Yes,
+                          defaultChecked: optionData?.collectAddress,
+                          id: "collectAddressYes",
+                          dataTestId: "collect-address-yes",
                           inputProps: {
                             onChange: () => {
-                              clearErrors("validationMethod")
+                              clearErrors("collectAddress")
                             },
                           },
                         },
                         {
-                          label: t("settings.preferenceValidatingAddress.checkManually"),
-                          value: ValidationMethod.none,
-                          defaultChecked: optionData?.validationMethod === ValidationMethod.none,
-                          id: "validationMethodNone",
-                          dataTestId: "validation-method-none",
+                          label: t("t.no"),
+                          value: YesNoAnswer.No,
+                          defaultChecked:
+                            optionData?.collectAddress !== undefined &&
+                            optionData?.collectAddress === false,
+                          id: "collectAddressNo",
+                          dataTestId: "collect-address-no",
                           inputProps: {
                             onChange: () => {
-                              clearErrors("validationMethod")
+                              clearErrors("collectAddress")
                             },
                           },
                         },
                       ]}
                       fieldClassName="m-0"
-                      fieldGroupClassName="flex flex-col"
-                      dataTestId={"preference-option-validation-method"}
+                      fieldGroupClassName="flex column items-center"
+                      dataTestId={"preference-option-collect-address"}
                     />
                   </FieldValue>
-                )}
-              </Grid.Row>
-              <Grid.Row>
-                {collectAddressExpand && readiusExpand && (
-                  <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
-                    <Field
-                      id="radiusSize"
-                      name="radiusSize"
-                      label={t("settings.preferenceValidatingAddress.howManyMiles")}
-                      register={register}
-                      validation={{ required: true, min: 0 }}
-                      error={errors.radiusSize}
-                      type="number"
-                      readerOnly
-                      defaultValue={optionData?.radiusSize ?? null}
-                      dataTestId={"preference-option-radius-size"}
-                    />
-                  </FieldValue>
-                )}
+                </Grid.Cell>
+                <Grid.Cell className="pr-12">
+                  {collectAddressExpand && (
+                    <FieldValue label={t("settings.preferenceValidatingAddress")}>
+                      <FieldGroup
+                        name="validationMethod"
+                        type="radio"
+                        register={register}
+                        validation={{ required: true }}
+                        error={errors.validationMethod}
+                        fields={[
+                          {
+                            label: t("settings.preferenceValidatingAddress.checkWithinRadius"),
+                            value: ValidationMethod.radius,
+                            defaultChecked:
+                              optionData?.validationMethod === ValidationMethod.radius,
+                            id: "validationMethodRadius",
+                            dataTestId: "validation-method-radius",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("validationMethod")
+                              },
+                            },
+                          },
+                          {
+                            label: t("settings.preferenceValidatingAddress.checkManually"),
+                            value: ValidationMethod.none,
+                            defaultChecked: optionData?.validationMethod === ValidationMethod.none,
+                            id: "validationMethodNone",
+                            dataTestId: "validation-method-none",
+                            inputProps: {
+                              onChange: () => {
+                                clearErrors("validationMethod")
+                              },
+                            },
+                          },
+                        ]}
+                        fieldClassName="m-0"
+                        fieldGroupClassName="flex flex-col"
+                        dataTestId={"preference-option-validation-method"}
+                      />
+                    </FieldValue>
+                  )}
+                </Grid.Cell>
+                <Grid.Cell className="pr-8">
+                  {collectAddressExpand && readiusExpand && (
+                    <FieldValue label={t("settings.preferenceValidatingAddress.howManyMiles")}>
+                      <Field
+                        id="radiusSize"
+                        name="radiusSize"
+                        label={t("settings.preferenceValidatingAddress.howManyMiles")}
+                        register={register}
+                        validation={{ required: true, min: 0 }}
+                        error={errors.radiusSize}
+                        errorMessage={t("errors.requiredFieldError")}
+                        type="number"
+                        readerOnly
+                        defaultValue={optionData?.radiusSize ?? null}
+                        dataTestId={"preference-option-radius-size"}
+                        inputProps={{
+                          onChange: () => clearErrors("radiusSize"),
+                        }}
+                      />
+                    </FieldValue>
+                  )}
+                </Grid.Cell>
               </Grid.Row>
               {collectAddressExpand && (
-                <>
-                  <Grid.Row>
+                <Grid.Row columns={3}>
+                  <Grid.Cell className="pr-8">
                     <FieldValue label={t("settings.preferenceCollectAddressHolderName")}>
                       <FieldGroup
                         name="collectName"
@@ -708,8 +719,8 @@ const PreferenceDrawer = ({
                         dataTestId={"preference-option-collect-name"}
                       />
                     </FieldValue>
-                  </Grid.Row>
-                  <Grid.Row>
+                  </Grid.Cell>
+                  <Grid.Cell className="pr-8">
                     <FieldValue label={t("settings.preferenceCollectAddressHolderRelationship")}>
                       <FieldGroup
                         name="collectRelationship"
@@ -750,8 +761,8 @@ const PreferenceDrawer = ({
                         dataTestId={"preference-option-collect-relationship"}
                       />
                     </FieldValue>
-                  </Grid.Row>
-                </>
+                  </Grid.Cell>
+                </Grid.Row>
               )}
             </SectionWithGrid>
           </Card.Section>

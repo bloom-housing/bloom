@@ -88,21 +88,22 @@ const FormSummaryDetails = ({
     }
   }
 
-  const multiselectQuestionAddress = (extraData?: AllExtraDataTypes[]) => {
+  const multiselectQuestionHelpText = (
+    extraData?: AllExtraDataTypes[],
+    name?: string,
+    relationship?: string
+  ) => {
     if (!extraData) return
-    return extraData.reduce((acc, item) => {
+    const helperText = extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
-        acc += `
-          ${item.value.street}${!item.value.street2 ? "," : ""}
-          ${item.value.street2 ? `${item.value.street2},` : ""}
-          ${item.value.city},
-          ${item.value.state}
-          ${item.value.zipCode}
-          `
+        acc += `${item.value.street} ${!item.value.street2 ? "," : ""} ${
+          item.value.street2 ? `${item.value.street2},` : ""
+        } ${item.value.city}, ${item.value.state} ${item.value.zipCode}`
       }
 
       return acc
     }, "")
+    return `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${helperText}`
   }
 
   const multiselectQuestionSection = (
@@ -134,10 +135,14 @@ const FormSummaryDetails = ({
                     .map((option: ApplicationMultiselectQuestionOption, index) => (
                       <FieldValue
                         label={question.key}
-                        helpText={multiselectQuestionAddress(option?.extraData)}
+                        helpText={multiselectQuestionHelpText(
+                          option?.extraData,
+                          option?.addressHolderName,
+                          option?.addressHolderRelationship
+                        )}
                         key={index}
                         testId={"app-summary-preference"}
-                        className={"pb-4"}
+                        className={"pb-6 whitespace-pre-wrap"}
                       >
                         {option.key}
                       </FieldValue>
