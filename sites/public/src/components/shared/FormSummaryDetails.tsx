@@ -142,7 +142,7 @@ const FormSummaryDetails = ({
                         )}
                         key={index}
                         testId={"app-summary-preference"}
-                        className={"pb-4 whitespace-pre-wrap"}
+                        className={"pb-6 whitespace-pre-wrap"}
                       >
                         {option.key}
                       </FieldValue>
