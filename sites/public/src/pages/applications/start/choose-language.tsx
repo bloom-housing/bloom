@@ -10,8 +10,9 @@ import {
   AuthContext,
 } from "@bloom-housing/shared-helpers"
 import { Language } from "@bloom-housing/backend-core/types"
-import { Heading, Button } from "@bloom-housing/ui-seeds"
+import { Heading, Icon, Button, Message } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { faClock } from "@fortawesome/free-regular-svg-icons"
 import FormsLayout from "../../../layouts/forms"
 import {
   AppSubmissionContext,
@@ -20,6 +21,7 @@ import {
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const loadListing = async (listingId, stateFunction, conductor, context, language) => {
   const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
@@ -104,11 +106,14 @@ const ApplicationChooseLanguage = () => {
       >
         {listing && (
           <CardSection className={"p-0"}>
-            <ImageCard
-              imageUrl={imageUrl}
-              statuses={[{ content: appStatusContent }]}
-              description={listing.name}
-            />
+            <ImageCard imageUrl={imageUrl} description={listing.name} />
+            <Message
+              className={styles["message-inside-card"]}
+              customIcon={<Icon icon={faClock} size="md" />}
+              fullwidth
+            >
+              {appStatusContent}
+            </Message>
           </CardSection>
         )}
 

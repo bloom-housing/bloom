@@ -15,6 +15,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationVouchers = () => {
   const { profile } = useContext(AuthContext)
@@ -95,7 +96,7 @@ const ApplicationVouchers = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <Alert variant="alert" fullwidth>
+            <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
             </Alert>
           )}

@@ -17,6 +17,7 @@ import FormSummaryDetails from "../../../components/shared/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
 import { UserStatus } from "../../../lib/constants"
 import ApplicationFormLayout from "../../../layouts/application-form"
+import styles from "../../../layouts/application-form.module.scss"
 
 const ApplicationSummary = () => {
   const router = useRouter()
@@ -88,7 +89,7 @@ const ApplicationSummary = () => {
           }}
         >
           {validationError && (
-            <Alert variant="alert" fullwidth>
+            <Alert className={styles["message-inside-card"]} variant="alert" fullwidth>
               {t("errors.alert.applicationSubmissionVerificationError")}
             </Alert>
           )}
