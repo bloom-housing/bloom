@@ -75,6 +75,9 @@ const ApplicationName = () => {
             labels: conductor.config.sections.map((label) => t(`t.${label}`)),
             mounted: OnClientSide(),
           }}
+          backLink={{
+            url: autofilled ? `/applications/start/autofill` : `/applications/start/what-to-expect`,
+          }}
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (

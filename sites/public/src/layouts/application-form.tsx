@@ -1,8 +1,11 @@
+import React from "react"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { Button, Card, Heading, Icon } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import { t, ProgressNav, StepHeader } from "@bloom-housing/ui-components"
 import ApplicationConductor from "../lib/applications/ApplicationConductor"
+
+import styles from "./application-form.module.scss"
 
 interface ApplicationFormLayoutProps {
   listingName: string
@@ -41,7 +44,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
 
   return (
     <>
-      <Card spacing={"sm"} className={"my-6"}>
+      <Card spacing={"sm"} className={styles["application-form-header"]}>
         <CardSection className={"bg-primary px-8 py-4 text-white"}>
           <Heading priority={1} className={"text-xl text-white font-bold font-alt-sans"}>
             {props.listingName}
@@ -61,7 +64,7 @@ const ApplicationFormLayout = (props: ApplicationFormLayoutProps) => {
           </div>
         </CardSection>
       </Card>
-      <Card spacing={"lg"} className={"mb-6"}>
+      <Card spacing={"lg"} className={styles["application-form-body"]}>
         <CardSection divider={"inset"}>
           {props.backLink && getBackLink(props.backLink.url, props.backLink.onClickFxn)}
           <Heading priority={2} size={"2xl"}>

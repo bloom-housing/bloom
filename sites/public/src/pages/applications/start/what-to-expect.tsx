@@ -64,6 +64,9 @@ const ApplicationWhatToExpect = () => {
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: OnClientSide(),
         }}
+        backLink={{
+          url: `/applications/start/choose-language?listingId=${listing?.id}`,
+        }}
       >
         <CardSection>
           <div className="markdown">

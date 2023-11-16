@@ -1,0 +1,29 @@
+.application-form-header {
+  margin-block: var(--seeds-s6);
+
+  @media (max-width: theme('screens.md')) {
+    margin-block-end: 0;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  @media (max-width: theme('screens.sm')) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
+.application-form-body {
+  margin-block-end: var(--seeds-s6);
+
+  @media (max-width: theme('screens.md')) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  @media (max-width: theme('screens.sm')) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}

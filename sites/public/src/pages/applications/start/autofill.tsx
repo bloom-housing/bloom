@@ -101,6 +101,9 @@ export default () => {
           labels: conductor.config.sections.map((label) => t(`t.${label}`)),
           mounted: mounted,
         }}
+        backLink={{
+          url: `/applications/start/what-to-expect`,
+        }}
       >
         <FormSummaryDetails
           application={previousApplication}

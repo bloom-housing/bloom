@@ -1,3 +1,4 @@
+import React from "react"
 import Layout from "./application"
 import { ApplicationTimeout } from "../components/applications/ApplicationTimeout"
 
