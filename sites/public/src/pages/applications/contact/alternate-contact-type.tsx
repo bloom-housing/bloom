@@ -1,8 +1,8 @@
 import React, { Fragment, useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
-import { AlertBox, Field, Form, t } from "@bloom-housing/ui-components"
+import { Field, Form, t } from "@bloom-housing/ui-components"
 import {
   altContactRelationshipKeys,
   AuthContext,
@@ -65,9 +65,9 @@ const ApplicationAlternateContactType = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
           <CardSection divider={"flush"} className={"border-none"}>
             <fieldset>

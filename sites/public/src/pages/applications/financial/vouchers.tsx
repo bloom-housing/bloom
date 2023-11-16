@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { ApplicationSection } from "@bloom-housing/backend-core"
-import { AlertBox, Form, t, FieldGroup } from "@bloom-housing/ui-components"
+import { Form, t, FieldGroup } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import {
   OnClientSide,
   PageView,
@@ -94,9 +95,9 @@ const ApplicationVouchers = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
 
           <CardSection divider={"flush"} className={"border-none"}>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
-import { Button } from "@bloom-housing/ui-seeds"
-import { AlertBox, Form, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import { Alert, Button } from "@bloom-housing/ui-seeds"
+import { Form, setSiteAlertMessage, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
@@ -88,9 +88,9 @@ const ApplicationSummary = () => {
           }}
         >
           {validationError && (
-            <AlertBox type="alert" inverted>
+            <Alert variant="alert" fullwidth>
               {t("errors.alert.applicationSubmissionVerificationError")}
-            </AlertBox>
+            </Alert>
           )}
 
           <FormSummaryDetails

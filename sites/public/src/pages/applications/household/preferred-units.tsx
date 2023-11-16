@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { AlertBox, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { FieldGroup, Form, t } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import {
   createUnitTypeId,
   getUniqueUnitTypes,
@@ -76,9 +77,9 @@ const ApplicationPreferredUnits = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
 
           <CardSection divider={"flush"} className={"border-none"}>

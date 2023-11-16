@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
-import { AlertBox, Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
+import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Form, t, FieldGroup, FieldSingle } from "@bloom-housing/ui-components"
 import {
   OnClientSide,
   PageView,
@@ -120,9 +120,9 @@ const ApplicationAda = () => {
         >
           {Object.entries(errors).length === Object.keys(getValues()).length &&
             Object.keys(getValues()).length > 0 && (
-              <AlertBox type="alert" inverted closeable>
+              <Alert variant="alert" fullwidth>
                 {t("errors.errorsToResolve")}
-              </AlertBox>
+              </Alert>
             )}
 
           <CardSection divider={"flush"} className={"border-none"}>

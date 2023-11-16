@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { ApplicationSection, Listing } from "@bloom-housing/backend-core/types"
 import { AlertBox, AlertNotice, Field, FieldGroup, Form, t } from "@bloom-housing/ui-components"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
 import {
   OnClientSide,
@@ -127,9 +128,9 @@ const ApplicationIncome = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
 
           {incomeError && (

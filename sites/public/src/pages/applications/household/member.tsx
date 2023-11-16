@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-import { Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Alert, Button, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
-  AlertBox,
   DOBField,
   Field,
   FieldGroup,
@@ -130,9 +129,9 @@ const ApplicationMember = () => {
           }}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
 
           <CardSection divider={"inset"}>

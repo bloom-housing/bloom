@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
-  AlertBox,
   DOBField,
   Field,
   Form,
@@ -11,6 +10,7 @@ import {
   emailRegex,
 } from "@bloom-housing/ui-components"
 import { CardSection } from "@bloom-housing/ui-seeds/src/blocks/Card"
+import { Alert } from "@bloom-housing/ui-seeds"
 import { OnClientSide, PageView, pushGtmEvent, AuthContext } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -81,9 +81,9 @@ const ApplicationName = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
           <CardSection divider={"inset"}>
             <div data-testid={"application-initial-page"}>

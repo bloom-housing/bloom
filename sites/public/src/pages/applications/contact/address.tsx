@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { FormErrorMessage } from "@bloom-housing/ui-seeds"
+import { Alert, FormErrorMessage } from "@bloom-housing/ui-seeds"
 import {
-  AlertBox,
   Field,
   FieldGroup,
   Form,
@@ -156,9 +155,9 @@ const ApplicationAddress = () => {
           conductor={conductor}
         >
           {Object.entries(errors).length > 0 && (
-            <AlertBox type="alert" inverted closeable>
+            <Alert variant="alert" fullwidth>
               {t("errors.errorsToResolve")}
-            </AlertBox>
+            </Alert>
           )}
           <div style={{ display: verifyAddress ? "none" : "block" }}>
             <CardSection divider={"inset"}>
@@ -278,7 +277,7 @@ const ApplicationAddress = () => {
                 <legend
                   className={`text__caps-spaced ${errors.applicant?.address ? "text-alert" : ""}`}
                 >
-                  {t("application.contact.address")}
+                  {t("application.contact.yourAddress")}
                 </legend>
 
                 <p className="field-note mb-4">
