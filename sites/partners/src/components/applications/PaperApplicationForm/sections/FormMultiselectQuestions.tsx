@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { Field, t, FormAddress, FieldGroup } from "@bloom-housing/ui-components"
+import { Field, t, FormAddress, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
@@ -25,7 +25,11 @@ const FormMultiselectQuestions = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = formMethods
 
   const allOptionFieldNames = useMemo(() => {
     const keys = []
@@ -57,6 +61,38 @@ const FormMultiselectQuestions = ({
           label={option.text}
           register={register}
         />
+
+        {watchQuestions[optionFieldName] && option?.collectName && (
+          <Field
+            id="addressHolderName"
+            name={`${optionFieldName}-addressHolderName`}
+            label={t("application.preferences.options.addressHolderName")}
+            register={register}
+            validation={{ required: true, maxLength: 64 }}
+            error={!!resolveObject(`${optionFieldName}-addressHolderName`, errors)}
+            errorMessage={
+              resolveObject(`${optionFieldName}-addressHolderName`, errors)?.type === "maxLength"
+                ? t("errors.maxLength")
+                : t("errors.requiredFieldError")
+            }
+          />
+        )}
+        {watchQuestions[optionFieldName] && option?.collectRelationship && (
+          <Field
+            id="addressHolderRelationship"
+            name={`${optionFieldName}-addressHolderRelationship`}
+            label={t("application.preferences.options.addressHolderRelationship")}
+            register={register}
+            validation={{ required: true, maxLength: 64 }}
+            error={!!resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)}
+            errorMessage={
+              resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)?.type ===
+              "maxLength"
+                ? t("errors.maxLength")
+                : t("errors.requiredFieldError")
+            }
+          />
+        )}
         {watchQuestions[optionFieldName] && option.collectAddress && (
           <div className="pb-4">
             <FormAddress
@@ -64,6 +100,7 @@ const FormMultiselectQuestions = ({
               dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
               register={register}
               required={true}
+              errors={errors}
               stateKeys={stateKeys}
               data-testid={"app-question-extra-field"}
             />
