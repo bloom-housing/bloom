@@ -346,10 +346,10 @@ export const mapCheckboxesToApi = (
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
-
   const questionOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
     .filter((option) => !Object.keys(data[option]).length)
     .map((key) => {
+      const extraData = []
       const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
       const addressHolderNameData = addressFields.filter(
         (addressField) => addressField === `${key}-addressHolderName`
@@ -357,15 +357,30 @@ export const mapCheckboxesToApi = (
       const addressHolderRelationshipData = addressFields.filter(
         (addressField) => addressField === `${key}-addressHolderRelationship`
       )
+      if (addressData.length) {
+        extraData.push({ type: InputType.address, key: "address", value: data[addressData[0]] })
+
+        if (addressHolderNameData.length) {
+          extraData.push({
+            type: InputType.text,
+            key: "addressHolderName",
+            value: data[addressHolderNameData[0]],
+          })
+        }
+
+        if (addressHolderRelationshipData.length) {
+          extraData.push({
+            type: InputType.text,
+            key: "addressHolderRelationship",
+            value: data[addressHolderRelationshipData[0]],
+          })
+        }
+      }
 
       return {
         key,
         checked: data[key] === true,
-        addressHolderName: data[addressHolderNameData[0]],
-        addressHolderRelationship: data[addressHolderRelationshipData[0]],
-        extraData: addressData.length
-          ? [{ type: InputType.address, key, value: data[addressData[0]] }]
-          : [],
+        extraData: extraData,
       }
     })
 
@@ -420,12 +435,20 @@ export const mapApiToMultiselectForm = (
           acc[curr.key] = claimed
           if (curr.extraData?.length) {
             acc[`${curr.key}-address`] = curr.extraData[0].value
-          }
-          if (curr.addressHolderName) {
-            acc[`${curr.key}-addressHolderName`] = curr.addressHolderName
-          }
-          if (curr.addressHolderRelationship) {
-            acc[`${curr.key}-addressHolderRelationship`] = curr.addressHolderRelationship
+
+            const addressHolderName = curr.extraData?.find(
+              (field) => field.key === "addressHolderName"
+            )
+            if (addressHolderName) {
+              acc[`${curr.key}-addressHolderName`] = addressHolderName.value
+            }
+
+            const addressHolderRelationship = curr.extraData?.find(
+              (field) => field.key === "addressHolderRelationship"
+            )
+            if (addressHolderRelationship) {
+              acc[`${curr.key}-addressHolderRelationship`] = addressHolderRelationship.value
+            }
           }
         }
 

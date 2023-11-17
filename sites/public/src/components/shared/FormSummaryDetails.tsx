@@ -88,11 +88,7 @@ const FormSummaryDetails = ({
     }
   }
 
-  const multiselectQuestionHelpText = (
-    extraData?: AllExtraDataTypes[],
-    name?: string,
-    relationship?: string
-  ) => {
+  const multiselectQuestionHelpText = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
     const helperText = extraData.reduce((acc, item) => {
       if (item.type === InputType.address && typeof item.value === "object") {
@@ -103,6 +99,11 @@ const FormSummaryDetails = ({
 
       return acc
     }, "")
+
+    const name = extraData.find((field) => field.key === "addressHolderName")?.value as string
+    const relationship = extraData.find((field) => field.key === "addressHolderRelationship")
+      ?.value as string
+
     return `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${helperText}`
   }
 
@@ -135,11 +136,7 @@ const FormSummaryDetails = ({
                     .map((option: ApplicationMultiselectQuestionOption, index) => (
                       <FieldValue
                         label={question.key}
-                        helpText={multiselectQuestionHelpText(
-                          option?.extraData,
-                          option?.addressHolderName,
-                          option?.addressHolderRelationship
-                        )}
+                        helpText={multiselectQuestionHelpText(option?.extraData)}
                         key={index}
                         testId={"app-summary-preference"}
                         className={"pb-6 whitespace-pre-wrap"}
