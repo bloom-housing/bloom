@@ -515,13 +515,14 @@ export const useApplicationsExport = (listingId: string, includeDemographics: bo
   const [csvExportError, setCsvExportError] = useState(false)
   const [csvExportSuccess, setCsvExportSuccess] = useState(false)
 
-  const onExport = useCallback(async () => {
+  const onExport = useCallback(() => {
     setCsvExportError(false)
     setCsvExportSuccess(false)
     setCsvExportLoading(true)
 
     try {
-      await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
+      // TODO: uncomment this for partner integration
+      // await applicationsService.listAsCsv({ listingId, timeZone, includeDemographics })
       setCsvExportSuccess(true)
       setSiteAlertMessage(
         t("t.emailingExportSuccess", {

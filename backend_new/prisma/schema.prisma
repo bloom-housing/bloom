@@ -333,6 +333,7 @@ model Jurisdictions {
   enablePartnerSettings       Boolean                  @default(false) @map("enable_partner_settings")
   enableAccessibilityFeatures Boolean                  @default(false) @map("enable_accessibility_features")
   enableUtilitiesIncluded     Boolean                  @default(false) @map("enable_utilities_included")
+  enableGeocodingPreferences  Boolean                  @default(false) @map("enable_geocoding_preferences")
   amiChart                    AmiChart[]
   multiselectQuestions        MultiselectQuestions[]
   listings                    Listings[]

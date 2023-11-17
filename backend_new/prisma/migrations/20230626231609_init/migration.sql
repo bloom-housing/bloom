@@ -332,6 +332,7 @@ CREATE TABLE "jurisdictions" (
     "enable_partner_settings" BOOLEAN NOT NULL DEFAULT false,
     "enable_accessibility_features" BOOLEAN NOT NULL DEFAULT false,
     "enable_utilities_included" BOOLEAN NOT NULL DEFAULT false,
+    "enable_geocoding_preferences" BOOLEAN NOT NULL DEFAULT false,
     "listing_approval_permission" "user_role_enum"[],
 
     CONSTRAINT "jurisdictions_pkey" PRIMARY KEY ("id")

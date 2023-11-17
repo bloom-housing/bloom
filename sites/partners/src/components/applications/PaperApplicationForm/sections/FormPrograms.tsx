@@ -3,7 +3,7 @@ import { t, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { getInputType } from "@bloom-housing/shared-helpers"
-import { ListingMultiselectQuestion } from "@bloom-housing/backend-core"
+import { ListingMultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormProgramsProps = {
@@ -23,17 +23,17 @@ const FormPrograms = ({ programs }: FormProgramsProps) => {
         <Grid.Row columns={2}>
           {programs?.map((listingProgram) => {
             return (
-              <FieldValue label={listingProgram?.multiselectQuestion?.text}>
+              <FieldValue label={listingProgram?.multiselectQuestions?.text}>
                 <fieldset>
                   <FieldGroup
                     fieldGroupClassName="grid grid-cols-1"
                     fieldClassName="ml-0"
-                    type={getInputType(listingProgram?.multiselectQuestion?.options)}
-                    name={`application.programs.${listingProgram?.multiselectQuestion?.text}`}
+                    type={getInputType(listingProgram?.multiselectQuestions?.options)}
+                    name={`application.programs.${listingProgram?.multiselectQuestions?.text}`}
                     register={register}
-                    fields={listingProgram?.multiselectQuestion?.options?.map((option) => {
+                    fields={listingProgram?.multiselectQuestions?.options?.map((option) => {
                       return {
-                        id: `${listingProgram?.multiselectQuestion?.text}-${option.text}`,
+                        id: `${listingProgram?.multiselectQuestions?.text}-${option.text}`,
                         label: option.text,
                         value: option.text,
                       }

@@ -1744,6 +1744,18 @@ export interface MultiselectOption {
   collectAddress?: boolean
 
   /**  */
+  validationMethod?: ValidationMethodEnum
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
+
+  /**  */
   exclusive?: boolean
 }
 
@@ -3435,6 +3447,9 @@ export interface JurisdictionCreate {
   enablePartnerSettings?: boolean
 
   /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
   enableAccessibilityFeatures: boolean
 
   /**  */
@@ -3471,6 +3486,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enablePartnerSettings?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
 
   /**  */
   enableAccessibilityFeatures: boolean
@@ -3518,6 +3536,9 @@ export interface Jurisdiction {
 
   /**  */
   enablePartnerSettings?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
 
   /**  */
   enableAccessibilityFeatures: boolean
@@ -3620,7 +3641,7 @@ export interface AddressInput {
   key: string
 
   /**  */
-  value: Address
+  value: AddressCreate
 }
 
 export interface BooleanInput {
@@ -4432,9 +4453,6 @@ export interface UserUpdate {
   language?: LanguagesEnum
 
   /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
   agreedToTermsOfService: boolean
 
   /**  */
@@ -4451,6 +4469,9 @@ export interface UserUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  jurisdictions?: IdDTO[]
 }
 
 export interface UserCreate {
@@ -4648,6 +4669,12 @@ export enum ReviewOrderTypeEnum {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
   "waitlist" = "waitlist",
+}
+
+export enum ValidationMethodEnum {
+  "radius" = "radius",
+  "map" = "map",
+  "none" = "none",
 }
 
 export enum MultiselectQuestionsApplicationSectionEnum {

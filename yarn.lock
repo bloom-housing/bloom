@@ -1609,42 +1609,6 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@12.0.21":
-  version "12.0.21"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.0.21.tgz#7709ad8739a752aa8251c4b34e0107456b11410a"
-  integrity sha512-ChnsfnQC/5yKFvGUFnsjZfP3nXU7yh0qXZe3zk2bGqTNNbc7ybDruVi0rBaQ8nbD+dwPL+hStttkbD4bxft0Ig==
-  dependencies:
-    "@fortawesome/fontawesome-svg-core" "^6.1.1"
-    "@fortawesome/free-regular-svg-icons" "^6.1.1"
-    "@fortawesome/free-solid-svg-icons" "^6.1.1"
-    "@fortawesome/react-fontawesome" "^0.1.18"
-    "@mapbox/mapbox-sdk" "^0.13.0"
-    ag-grid-community "^26.0.0"
-    ag-grid-react "^26.0.0"
-    aria-autocomplete "^1.4.0"
-    axios "0.21.2"
-    dayjs "^1.10.7"
-    jwt-decode "^2.2.0"
-    markdown-to-jsx "7.1.8"
-    nanoid "^3.1.12"
-    node-polyglot "^2.4.0"
-    react "18.2.0"
-    react-accessible-accordion "5.0.0"
-    react-beautiful-dnd "^13.1.1"
-    react-dom "18.2.0"
-    react-dropzone "^11.3.2"
-    react-focus-lock "^2.9.4"
-    react-hook-form "^6.15.5"
-    react-map-gl "^6.1.16"
-    react-media "^1.10.0"
-    react-remove-scroll "2.5.4"
-    react-tabs "^3.2.2"
-    react-text-mask "^5.5.0"
-    react-transition-group "^4.4.1"
-    tailwindcss "2.2.10"
-    tailwindcss-rtl "^0.9.0"
-    typesafe-actions "^5.1.0"
-
 "@bloom-housing/ui-components@12.0.24":
   version "12.0.24"
   resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-12.0.24.tgz#b2a499b883be0eebfc4aac942b0301dd373897a7"
