@@ -1,16 +1,19 @@
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { YesNoAnswer } from "../helpers"
 import {
-  ListingStatus,
-  ListingApplicationAddressType,
-  Unit,
-  User,
+  ApplicationAddressTypeEnum,
   Listing,
+  ListingCreate,
   ListingEvent,
+  ListingEventCreate,
+  ListingUpdate,
+  ListingsStatusEnum,
+  MultiselectQuestion,
   PaperApplication,
   PaperApplicationCreate,
-  MultiselectQuestion,
-} from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../helpers"
+  Unit,
+  User,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
@@ -42,8 +45,6 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   canPaperApplicationsBePickedUp?: YesNoAnswer
   canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
-  listingFeatures?: string[]
-  listingUtilities?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
@@ -74,13 +75,13 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   listingAvailabilityQuestion?: string
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
-  whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
-  whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
-  whereApplicationsMailedIn?: ListingApplicationAddressType | AnotherAddressEnum
+  whereApplicationsDroppedOff?: ApplicationAddressTypeEnum | AnotherAddressEnum
+  whereApplicationsPickedUp?: ApplicationAddressTypeEnum | AnotherAddressEnum
+  whereApplicationsMailedIn?: ApplicationAddressTypeEnum | AnotherAddressEnum
 }
 
 export const addressTypes = {
-  ...ListingApplicationAddressType,
+  ...ApplicationAddressTypeEnum,
   anotherAddress: AnotherAddressEnum.anotherAddress,
 }
 
@@ -95,16 +96,16 @@ export const formDefaults: FormListing = {
   applicationMethods: [],
   applicationOpenDate: new Date(),
   applicationOrganization: "",
-  applicationPickUpAddress: null,
+  listingsApplicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",
-  applicationMailingAddress: null,
-  applicationDropOffAddress: null,
+  listingsApplicationMailingAddress: null,
+  listingsApplicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  buildingSelectionCriteriaFile: null,
+  listingsBuildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
-  jurisdiction: undefined,
+  jurisdictions: undefined,
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
@@ -113,13 +114,11 @@ export const formDefaults: FormListing = {
   depositHelperText: "or one month's rent may be higher for lower credit scores",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
-  events: [],
-  images: [],
-  listingFeatures: [],
-  listingUtilities: [],
-  features: {},
-  utilities: {},
-  leasingAgentAddress: null,
+  listingEvents: [],
+  listingImages: [],
+  listingFeatures: {},
+  listingUtilities: {},
+  listingsLeasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
   leasingAgentOfficeHours: "",
@@ -133,7 +132,7 @@ export const formDefaults: FormListing = {
   rentalAssistance: null,
   rentalHistory: "",
   requiredDocuments: "",
-  status: ListingStatus.pending,
+  status: ListingsStatusEnum.pending,
   waitlistCurrentSize: null,
   waitlistMaxSize: null,
   isWaitlistOpen: null,
@@ -143,7 +142,7 @@ export const formDefaults: FormListing = {
   units: [],
   accessibility: "",
   amenities: "",
-  buildingAddress: null,
+  listingsBuildingAddress: null,
   buildingTotalUnits: 0,
   developer: null,
   householdSizeMax: 0,
@@ -155,22 +154,22 @@ export const formDefaults: FormListing = {
   unitAmenities: "",
   servicesOffered: "",
   yearBuilt: null,
-  urlSlug: undefined,
-  showWaitlist: false,
+  // urlSlug: undefined,
+  // showWaitlist: false,
   reviewOrderType: null,
   unitsSummary: [],
-  unitsSummarized: {
-    unitTypes: [],
-    priorityTypes: [],
-    amiPercentages: [],
-    byUnitTypeAndRent: [],
-    byUnitType: [],
-    byAMI: [],
-    hmi: {
-      columns: [],
-      rows: [],
-    },
-  },
+  // unitsSummarized: {
+  //   unitTypes: [],
+  //   priorityTypes: [],
+  //   amiPercentages: [],
+  //   byUnitTypeAndRent: [],
+  //   byUnitType: [],
+  //   byAMI: [],
+  //   hmi: {
+  //     columns: [],
+  //     rows: [],
+  //   },
+  // },
 }
 
 export type TempUnit = Unit & {

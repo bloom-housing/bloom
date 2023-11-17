@@ -45,8 +45,10 @@ export class JurisdictionController {
   @ApiOkResponse({ type: Jurisdiction })
   async retrieve(
     @Param('jurisdictionId') jurisdictionId: string,
-  ): Promise<Jurisdiction> {
-    return this.jurisdictionService.findOne({ jurisdictionId });
+  ): Promise<Jurisdiction | null> {
+    return jurisdictionId && jurisdictionId != 'undefined'
+      ? this.jurisdictionService.findOne({ jurisdictionId })
+      : null;
   }
 
   @Get(`byName/:jurisdictionName`)

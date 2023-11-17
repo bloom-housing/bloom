@@ -49,7 +49,7 @@ export class MultiselectQuestionService {
       };
     }
     params.filter.forEach((filter) => {
-      if (MultiselectQuestionFilterKeys.jurisdiction in filter) {
+      if (filter[MultiselectQuestionFilterKeys.jurisdiction]) {
         const builtFilter = buildFilter({
           $comparison: filter.$comparison,
           $include_nulls: false,
@@ -66,7 +66,7 @@ export class MultiselectQuestionService {
             },
           })),
         });
-      } else if (MultiselectQuestionFilterKeys.applicationSection in filter) {
+      } else if (filter[MultiselectQuestionFilterKeys.applicationSection]) {
         const builtFilter = buildFilter({
           $comparison: filter.$comparison,
           $include_nulls: false,

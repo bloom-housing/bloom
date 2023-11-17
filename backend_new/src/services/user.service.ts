@@ -307,9 +307,31 @@ export class UserService {
       );
     }
 
+    // only update userRoles if something has changed
+    if (dto.userRoles && storedUser.userRoles) {
+      if (
+        !(
+          dto.userRoles.isAdmin === storedUser.userRoles.isAdmin &&
+          dto.userRoles.isJurisdictionalAdmin ===
+            storedUser.userRoles.isJurisdictionalAdmin &&
+          dto.userRoles.isPartner === storedUser.userRoles.isPartner
+        )
+      ) {
+        this.prisma.userRoles.update({
+          data: {
+            ...dto.userRoles,
+          },
+          where: {
+            userId: storedUser.id,
+          },
+        });
+      }
+    }
+
     const res = this.prisma.userAccounts.update({
       include: view,
       data: {
+        agreedToTermsOfService: dto.agreedToTermsOfService,
         passwordHash: passwordHash ?? undefined,
         passwordUpdatedAt: passwordUpdatedAt ?? undefined,
         confirmationToken: confirmationToken ?? undefined,
@@ -331,18 +353,13 @@ export class UserService {
               })),
             }
           : undefined,
-        userRoles: dto.userRoles
-          ? {
-              create: {
-                ...dto.userRoles,
-              },
-            }
-          : undefined,
       },
       where: {
         id: dto.id,
       },
     });
+
+    // TODO: THIS IS WHERE I ENDED!
 
     return mapTo(User, res);
   }
@@ -725,7 +742,7 @@ export class UserService {
         dto.appUrl,
       );
     } else if (forPartners) {
-      const confirmationUrl = this.getPublicConfirmationUrl(
+      const confirmationUrl = this.getPartnersConfirmationUrl(
         this.configService.get('PARTNERS_PORTAL_URL'),
         confirmationToken,
       );

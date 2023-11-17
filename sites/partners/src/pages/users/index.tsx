@@ -14,7 +14,7 @@ import {
   AlertBox,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
-import { Listing, User } from "@bloom-housing/backend-core/types"
+import { User } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
@@ -75,14 +75,14 @@ const Users = () => {
       },
       {
         headerName: t("t.listing"),
-        field: "leasingAgentInListings",
+        field: "listings",
         valueFormatter: ({ value }) => {
-          return value.map((item) => item.name).join(", ")
+          return value?.map((item) => item?.name).join(", ")
         },
       },
       {
         headerName: t("t.role"),
-        field: "roles",
+        field: "userRoles",
         valueFormatter: ({ value }) => {
           const { isAdmin, isPartner, isJurisdictionalAdmin } = value || {}
 
@@ -212,7 +212,7 @@ const Users = () => {
         <FormUserManage
           mode={userDrawer?.type}
           user={userDrawer?.user}
-          listings={listingDtos?.items as unknown as Listing[]}
+          listings={listingDtos?.items}
           onDrawerClose={() => {
             setUserDrawer(null)
             void mutate(cacheKey)

@@ -269,17 +269,13 @@ export class EmailService {
     );
   }
 
-  // TODO: connect to auth controller when it is implemented
-  public async sendMfaCode(
-    jurisdictionIds: IdDTO[],
-    user: User,
-    email: string,
-    mfaCode: string,
-  ) {
-    const jurisdiction = await this.getJurisdiction(jurisdictionIds);
+  public async sendMfaCode(user: User, mfaCode: string) {
+    const jurisdiction = await this.getJurisdiction(user.jurisdictions);
     void (await this.loadTranslations(jurisdiction, user.language));
+    console.log('jurisdiction', jurisdiction);
+    console.log('user juris', user.jurisdictions);
     await this.send(
-      email,
+      user.email,
       jurisdiction.emailFromAddress,
       'Partners Portal account access token',
       this.template('mfa-code')({

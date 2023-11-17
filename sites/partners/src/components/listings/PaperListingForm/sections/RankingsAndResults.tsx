@@ -7,8 +7,11 @@ import { t, Field, FieldGroup, Textarea, DateField, TimeField } from "@bloom-hou
 import { Grid } from "@bloom-housing/ui-seeds"
 import { YesNoAnswer } from "../../../../lib/helpers"
 import { FormListing } from "../../../../lib/listings/formTypes"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { getLotteryEvent } from "@bloom-housing/shared-helpers"
+import {
+  Listing,
+  ReviewOrderTypeEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type RankingsAndResultsProps = {
@@ -21,7 +24,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, control } = formMethods
 
-  const lotteryEvent = getLotteryEvent(listing)
+  const lotteryEvent = getLotteryEvent(listing as unknown as Listing)
 
   const waitlistOpen = useWatch({
     control,
@@ -37,7 +40,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
     control,
     name: "reviewOrderQuestion",
     defaultValue:
-      listing?.reviewOrderType === ListingReviewOrder.lottery
+      listing?.reviewOrderType === ReviewOrderTypeEnum.lottery
         ? "reviewOrderLottery"
         : "reviewOrderFCFS",
   })
@@ -77,13 +80,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                     value: "reviewOrderFCFS",
                     id: "reviewOrderFCFS",
                     defaultChecked:
-                      listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+                      listing?.reviewOrderType === ReviewOrderTypeEnum.firstComeFirstServe,
                   },
                   {
                     label: t("listings.lotteryTitle"),
                     value: "reviewOrderLottery",
                     id: "reviewOrderLottery",
-                    defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
+                    defaultChecked: listing?.reviewOrderType === ReviewOrderTypeEnum.lottery,
                   },
                 ]}
               />

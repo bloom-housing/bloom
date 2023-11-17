@@ -1,7 +1,7 @@
 import React from "react"
-import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
 import { Card, FieldValue, Grid } from "@bloom-housing/ui-seeds"
-import { Unit } from "@bloom-housing/backend-core/types"
+import { AppearanceStyleType, t, Button, Drawer } from "@bloom-housing/ui-components"
+import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { getRentType } from "../../../lib/helpers"
 import { useSingleAmiChartData } from "../../../lib/hooks"
 import SectionWithGrid from "../../shared/SectionWithGrid"
@@ -42,8 +42,8 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
               <FieldValue
                 label={t("listings.unit.type")}
                 children={
-                  unit?.unitType?.name
-                    ? t(`listings.unit.typeOptions.${unit?.unitType?.name}`)
+                  unit?.unitTypes?.name
+                    ? t(`listings.unit.typeOptions.${unit?.unitTypes?.name}`)
                     : t("t.n/a")
                 }
               />
@@ -93,7 +93,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
               />
             </Grid.Row>
 
-            {unit?.amiChartOverride?.items.map((override, index) => {
+            {unit?.unitAmiChartOverrides?.items.map((override, index) => {
               return (
                 <Grid.Row>
                   <FieldValue
@@ -136,7 +136,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
               <FieldValue
                 id="unit.accessibilityPriorityType"
                 label={t("listings.unit.accessibilityPriorityType")}
-                children={unit?.priorityType?.name || t("t.n/a")}
+                children={unit?.unitAccessibilityPriorityTypes?.name || t("t.n/a")}
               />
             </Grid.Row>
           </SectionWithGrid>

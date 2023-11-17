@@ -3,8 +3,8 @@ import { t, MinimalTable, Button } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
-import { ListingReviewOrder } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ReviewOrderTypeEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -27,11 +27,11 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     () =>
       listing?.units.map((unit) => ({
         number: { content: unit.number },
-        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        unitType: { content: unit.unitTypes && t(`listings.unitTypes.${unit.unitTypes.name}`) },
         amiPercentage: { content: unit.amiPercentage },
         monthlyRent: { content: unit.monthlyRent },
         sqFeet: { content: unit.sqFeet },
-        priorityType: { content: unit.priorityType?.name },
+        priorityType: { content: unit.unitAccessibilityPriorityTypes?.name },
         action: {
           content: (
             <Button
@@ -49,9 +49,9 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   )
 
   const listingAvailabilityText = useMemo(() => {
-    if (listing.reviewOrderType !== ListingReviewOrder.waitlist) {
+    if (listing.reviewOrderType !== ReviewOrderTypeEnum.waitlist) {
       return t("listings.availableUnits")
-    } else if (listing.reviewOrderType === ListingReviewOrder.waitlist) {
+    } else if (listing.reviewOrderType === ReviewOrderTypeEnum.waitlist) {
       return t("listings.waitlist.open")
     }
     return t("t.none")

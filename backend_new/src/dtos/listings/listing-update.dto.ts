@@ -14,6 +14,7 @@ import { AddressCreate } from '../addresses/address-create.dto';
 import { ListingEventCreate } from './listing-event-create.dto';
 import { ListingFeatures } from './listing-feature.dto';
 import { ListingUtilities } from './listing-utility.dto';
+import { ListingImage } from './listing-image.dto';
 
 export class ListingUpdate extends OmitType(Listing, [
   // fields get their type changed
@@ -33,6 +34,7 @@ export class ListingUpdate extends OmitType(Listing, [
   'listingEvents',
   'listingFeatures',
   'listingUtilities',
+  'requestedChangesUser',
 
   // fields removed entirely
   'createdAt',
@@ -146,4 +148,10 @@ export class ListingUpdate extends OmitType(Listing, [
   @Type(() => ListingUtilities)
   @ApiPropertyOptional({ type: ListingUtilities })
   listingUtilities?: ListingUtilities;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDTO)
+  requestedChangesUser?: IdDTO;
 }

@@ -3,11 +3,6 @@ import Head from "next/head"
 import { useSWRConfig } from "swr"
 
 import {
-  MultiselectQuestion,
-  MultiselectQuestionCreate as MultiselectQuestionCreateOld,
-  MultiselectQuestionUpdate as MultiselectQuestionUpdateOld,
-} from "@bloom-housing/backend-core"
-import {
   AppearanceSizeType,
   Button,
   LoadingOverlay,
@@ -29,6 +24,7 @@ import ManageIconSection from "../../components/settings/ManageIconSection"
 import { PreferenceDeleteModal } from "../../components/settings/PreferenceDeleteModal"
 import { NavigationHeader } from "../../components/shared/NavigationHeader"
 import {
+  MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
   MultiselectQuestionsApplicationSectionEnum,
@@ -58,9 +54,7 @@ const Settings = () => {
   )
 
   const { data, loading, cacheKey } = useJurisdictionalMultiselectQuestionList(
-    profile?.jurisdictions?.reduce((acc, curr) => {
-      return `${acc}${","}${curr.id}`
-    }, ""),
+    profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id).toString(),
     MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
@@ -113,10 +107,7 @@ const Settings = () => {
     }
   }, [isCreateLoading])
 
-  const saveQuestion = (
-    formattedData: MultiselectQuestionCreateOld | MultiselectQuestionUpdateOld,
-    requestType: DrawerType
-  ) => {
+  const saveQuestion = (formattedData: MultiselectQuestionCreate, requestType: DrawerType) => {
     if (requestType === "edit") {
       void updateQuestion(() =>
         multiselectQuestionsService

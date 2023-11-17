@@ -32,7 +32,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
       return t("t.n/a")
     }
-    return application?.householdMembers?.map((item) => ({
+    return application?.householdMember?.map((item) => ({
       name: { content: `${item.firstName} ${item.middleName} ${item.lastName}` },
       relationship: {
         content: item.relationship
@@ -64,7 +64,7 @@ const DetailsHouseholdMembers = ({ setMembersDrawer }: DetailsHouseholdMembersPr
 
   return (
     <SectionWithGrid heading={t("application.household.householdMembers")} bypassGrid inset>
-      {application?.householdMembers?.length ? (
+      {application?.householdMember?.length ? (
         <MinimalTable headers={householdMembersHeaders} data={householdMembersData} />
       ) : (
         <FieldValue>{t("t.none")}</FieldValue>

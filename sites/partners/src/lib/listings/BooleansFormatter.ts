@@ -27,26 +27,26 @@ export default class BooleansFormatter extends Formatter {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
         this.data.whereApplicationsDroppedOff === addressTypes.anotherAddress,
-      trueCase: () => this.data.applicationDropOffAddress,
+      trueCase: () => this.data.listingsApplicationDropOffAddress,
     })
     this.processBoolean("applicationPickUpAddress", {
       when:
         this.data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
         this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
-      trueCase: () => this.data.applicationPickUpAddress,
+      trueCase: () => this.data.listingsApplicationPickUpAddress,
     })
     this.processBoolean("applicationMailingAddress", {
       when:
         this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
         this.data.whereApplicationsMailedIn === addressTypes.anotherAddress,
-      trueCase: () => this.data.applicationMailingAddress,
+      trueCase: () => this.data.listingsApplicationMailingAddress,
     })
     this.processBoolean("images", {
       when:
-        this.data.images?.length &&
-        !!this.data.images[0].image.fileId &&
-        !!this.data.images[0].image.label,
-      trueCase: () => this.data.images,
+        this.data.listingImages?.length &&
+        !!this.data.listingImages[0].assets.fileId &&
+        !!this.data.listingImages[0].assets.label,
+      trueCase: () => this.data.listingImages,
     })
     this.processBoolean("digitalApplication", {
       when: this.data.digitalApplicationChoice === YesNoAnswer.Yes,

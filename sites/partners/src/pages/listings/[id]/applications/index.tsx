@@ -14,6 +14,10 @@ import {
 } from "@bloom-housing/ui-components"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
+  ApplicationOrderByKeys,
+  OrderByEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
   useSingleListingData,
   useFlaggedApplicationsList,
   useApplicationsData,
@@ -22,11 +26,6 @@ import {
 import { ListingStatusBar } from "../../../../components/listings/ListingStatusBar"
 import Layout from "../../../../layouts"
 import { getColDefs } from "../../../../components/applications/ApplicationsColDefs"
-import {
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
-  ListingStatus,
-} from "@bloom-housing/backend-core/types"
 import { ApplicationsSideNav } from "../../../../components/applications/ApplicationsSideNav"
 import { NavigationHeader } from "../../../../components/shared/NavigationHeader"
 
@@ -58,8 +57,8 @@ const ApplicationsList = () => {
     tableOptions.filter.filterValue,
     tableOptions.pagination.itemsPerPage,
     listingId,
-    tableOptions.sort.sortOptions?.[0]?.orderBy as EnumApplicationsApiExtraModelOrderBy,
-    tableOptions.sort.sortOptions?.[0]?.orderDir as EnumApplicationsApiExtraModelOrder
+    tableOptions.sort.sortOptions?.[0]?.orderBy as ApplicationOrderByKeys,
+    tableOptions.sort.sortOptions?.[0]?.orderDir as OrderByEnum
   )
 
   class formatLinkCell {
@@ -138,7 +137,7 @@ const ApplicationsList = () => {
         }
       />
 
-      <ListingStatusBar status={listingDto?.status as unknown as ListingStatus} />
+      <ListingStatusBar status={listingDto?.status} />
 
       <section className={"bg-gray-200 pt-4"}>
         <article className="flex flex-col md:flex-row items-start gap-x-8 relative max-w-screen-xl mx-auto pb-8 px-4 flex-col">

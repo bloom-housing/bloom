@@ -12,7 +12,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         in: ['capital', 'lowercase'],
-        mode: 'insensitive',
       },
     ]);
   });
@@ -27,7 +26,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         in: ['capital', 'lowercase'],
-        mode: 'insensitive',
       },
       {
         equals: null,
@@ -48,7 +46,6 @@ describe('Testing constructFilter', () => {
         not: {
           equals: 'example',
         },
-        mode: 'insensitive',
       },
     ]);
   });
@@ -65,7 +62,6 @@ describe('Testing constructFilter', () => {
         not: {
           equals: 'example',
         },
-        mode: 'insensitive',
       },
       {
         equals: null,
@@ -84,7 +80,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         equals: 'example',
-        mode: 'insensitive',
       },
     ]);
   });
@@ -99,7 +94,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         equals: 'example',
-        mode: 'insensitive',
       },
       {
         equals: null,
@@ -118,7 +112,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         gte: 'example',
-        mode: 'insensitive',
       },
     ]);
   });
@@ -133,7 +126,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         gte: 'example',
-        mode: 'insensitive',
       },
       {
         equals: null,
@@ -152,7 +144,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         lte: 'example',
-        mode: 'insensitive',
       },
     ]);
   });
@@ -167,7 +158,6 @@ describe('Testing constructFilter', () => {
     ).toEqual([
       {
         lte: 'example',
-        mode: 'insensitive',
       },
       {
         equals: null,

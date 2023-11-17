@@ -3,13 +3,13 @@ import { t, ExpandableText } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString, getDetailFieldDate } from "./helpers"
-import { ListingStatus } from "@bloom-housing/backend-core"
 import SectionWithGrid from "../../../shared/SectionWithGrid"
+import { ListingsStatusEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const DetailListingNotes = () => {
   const listing = useContext(ListingContext)
 
-  if (!listing.requestedChanges || !(listing.status === ListingStatus.changesRequested)) return
+  if (!listing.requestedChanges || !(listing.status === ListingsStatusEnum.changesRequested)) return
 
   return (
     <SectionWithGrid heading={t("listings.approval.listingNotes")} inset>

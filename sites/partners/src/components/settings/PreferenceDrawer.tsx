@@ -14,16 +14,16 @@ import {
 } from "@bloom-housing/ui-components"
 import { FormErrorMessage, FieldValue, Card, Grid } from "@bloom-housing/ui-seeds"
 import { AuthContext } from "@bloom-housing/shared-helpers"
-import { useForm } from "react-hook-form"
-import { YesNoAnswer } from "../../lib/helpers"
 import {
-  ApplicationSection,
   MultiselectOption,
   MultiselectQuestion,
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
-  ValidationMethod,
-} from "@bloom-housing/backend-core"
+  MultiselectQuestionsApplicationSectionEnum,
+  ValidationMethodEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import { useForm } from "react-hook-form"
+import { YesNoAnswer } from "../../lib/helpers"
 import ManageIconSection from "./ManageIconSection"
 import { DrawerType } from "../../pages/settings/index"
 import SectionWithGrid from "../shared/SectionWithGrid"
@@ -43,7 +43,7 @@ type PreferenceDrawerProps = {
 
 type OptionForm = {
   collectAddress: YesNoAnswer
-  validationMethod?: ValidationMethod
+  validationMethod?: ValidationMethodEnum
   radiusSize?: string
   collectRelationship?: YesNoAnswer
   collectName?: YesNoAnswer
@@ -103,9 +103,9 @@ const PreferenceDrawer = ({
       watch("collectAddress") === YesNoAnswer.Yes) &&
     isAdditionalDetailsEnabled
   const readiusExpand =
-    (optionData?.validationMethod === ValidationMethod.radius &&
+    (optionData?.validationMethod === ValidationMethodEnum.radius &&
       watch("validationMethod") === undefined) ||
-    watch("validationMethod") === ValidationMethod.radius
+    watch("validationMethod") === ValidationMethodEnum.radius
 
   // Update local state with dragged state
   useEffect(() => {
@@ -429,7 +429,7 @@ const PreferenceDrawer = ({
             const formValues = getValues()
 
             const formattedQuestionData: MultiselectQuestionUpdate | MultiselectQuestionCreate = {
-              applicationSection: ApplicationSection.preferences,
+              applicationSection: MultiselectQuestionsApplicationSectionEnum.preferences,
               text: formValues.text,
               description: formValues.description,
               hideFromListing: formValues.showOnListingQuestion === YesNoAnswer.No,

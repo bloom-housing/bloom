@@ -2468,6 +2468,141 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface UserRole {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isJurisdictionalAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpUrl?: string
+
+  /**  */
+  languages: LanguagesEnum[]
+
+  /**  */
+  multiselectQuestions: IdDTO[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  emailFromAddress: string
+
+  /**  */
+  rentalAssistanceDefault: string
+
+  /**  */
+  enablePartnerSettings?: boolean
+
+  /**  */
+  enableGeocodingPreferences?: boolean
+
+  /**  */
+  enableAccessibilityFeatures: boolean
+
+  /**  */
+  enableUtilitiesIncluded: boolean
+
+  /**  */
+  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
+}
+
+export interface User {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  listings: IdDTO[]
+
+  /**  */
+  userRoles?: UserRole
+
+  /**  */
+  language?: LanguagesEnum
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  mfaEnabled?: boolean
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
+
+  /**  */
+  activeAccessToken?: string
+
+  /**  */
+  activeRefreshToken?: string
+}
+
 export interface Listing {
   /**  */
   id: string
@@ -2735,6 +2870,15 @@ export interface Listing {
 
   /**  */
   urlSlug?: string
+
+  /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
+  requestedChangesUser?: User
 }
 
 export interface PaginationMeta {
@@ -2832,6 +2976,9 @@ export interface AssetCreate {
 
   /**  */
   label: string
+
+  /**  */
+  id?: string
 }
 
 export interface PaperApplicationCreate {
@@ -3163,6 +3310,12 @@ export interface ListingCreate {
   reservedCommunityTypes?: IdDTO
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3209,6 +3362,9 @@ export interface ListingCreate {
 
   /**  */
   listingUtilities?: ListingUtilities
+
+  /**  */
+  requestedChangesUser?: IdDTO
 }
 
 export interface ListingUpdate {
@@ -3402,6 +3558,12 @@ export interface ListingUpdate {
   reservedCommunityTypes?: IdDTO
 
   /**  */
+  requestedChanges?: string
+
+  /**  */
+  requestedChangesDate?: Date
+
+  /**  */
   listingMultiselectQuestions?: IdDTO[]
 
   /**  */
@@ -3448,6 +3610,9 @@ export interface ListingUpdate {
 
   /**  */
   listingUtilities?: ListingUtilities
+
+  /**  */
+  requestedChangesUser?: IdDTO
 }
 
 export interface AmiChartCreate {
@@ -3646,56 +3811,6 @@ export interface JurisdictionUpdate {
 
   /**  */
   listingApprovalPermissions: EnumJurisdictionUpdateListingApprovalPermissions[]
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpUrl?: string
-
-  /**  */
-  languages: LanguagesEnum[]
-
-  /**  */
-  multiselectQuestions: IdDTO[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  emailFromAddress: string
-
-  /**  */
-  rentalAssistanceDefault: string
-
-  /**  */
-  enablePartnerSettings?: boolean
-
-  /**  */
-  enableGeocodingPreferences?: boolean
-
-  /**  */
-  enableAccessibilityFeatures: boolean
-
-  /**  */
-  enableUtilitiesIncluded: boolean
-
-  /**  */
-  listingApprovalPermissions: EnumJurisdictionListingApprovalPermissions[]
 }
 
 export interface MultiselectQuestionCreate {
@@ -4109,7 +4224,7 @@ export interface Application {
   demographics: Demographic
 
   /**  */
-  preferredUnitTypes: IdDTO[]
+  preferredUnitTypes: UnitType[]
 
   /**  */
   applicant: Applicant
@@ -4268,10 +4383,10 @@ export interface HouseholdMemberUpdate {
   workInRegion?: YesNoEnum
 
   /**  */
-  householdMemberAddress: AddressCreate
+  householdMemberAddress?: AddressCreate
 
   /**  */
-  householdMemberWorkAddress: AddressCreate
+  householdMemberWorkAddress?: AddressCreate
 }
 
 export interface ApplicationCreate {
@@ -4333,9 +4448,6 @@ export interface ApplicationCreate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
-  preferredUnitTypes: IdDTO[]
-
-  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -4364,6 +4476,9 @@ export interface ApplicationCreate {
 
   /**  */
   householdMember: HouseholdMemberUpdate[]
+
+  /**  */
+  preferredUnitTypes: IdDTO[]
 }
 
 export interface ApplicationUpdate {
@@ -4428,9 +4543,6 @@ export interface ApplicationUpdate {
   reviewStatus?: ApplicationReviewStatusEnum
 
   /**  */
-  preferredUnitTypes: IdDTO[]
-
-  /**  */
   preferences?: ApplicationMultiselectQuestion[]
 
   /**  */
@@ -4459,6 +4571,9 @@ export interface ApplicationUpdate {
 
   /**  */
   householdMember: HouseholdMemberUpdate[]
+
+  /**  */
+  preferredUnitTypes: IdDTO[]
 }
 
 export interface CreatePresignedUploadMetadata {
@@ -4477,91 +4592,6 @@ export interface EmailAndAppUrl {
 
   /**  */
   appUrl?: string
-}
-
-export interface UserRole {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isJurisdictionalAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface User {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  listings: IdDTO[]
-
-  /**  */
-  userRoles?: UserRole
-
-  /**  */
-  language?: LanguagesEnum
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  mfaEnabled?: boolean
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-
-  /**  */
-  phoneNumberVerified?: boolean
-
-  /**  */
-  agreedToTermsOfService: boolean
-
-  /**  */
-  hitConfirmationURL?: Date
-
-  /**  */
-  activeAccessToken?: string
-
-  /**  */
-  activeRefreshToken?: string
 }
 
 export interface PaginatedUser {
@@ -4972,6 +5002,12 @@ export enum UnitAccessibilityPriorityTypeEnum {
   "mobilityAndVisual" = "mobilityAndVisual",
   "mobilityHearingAndVisual" = "mobilityHearingAndVisual",
 }
+export enum EnumJurisdictionListingApprovalPermissions {
+  "user" = "user",
+  "partner" = "partner",
+  "admin" = "admin",
+  "jurisdictionAdmin" = "jurisdictionAdmin",
+}
 export enum EnumJurisdictionCreateListingApprovalPermissions {
   "user" = "user",
   "partner" = "partner",
@@ -4979,12 +5015,6 @@ export enum EnumJurisdictionCreateListingApprovalPermissions {
   "jurisdictionAdmin" = "jurisdictionAdmin",
 }
 export enum EnumJurisdictionUpdateListingApprovalPermissions {
-  "user" = "user",
-  "partner" = "partner",
-  "admin" = "admin",
-  "jurisdictionAdmin" = "jurisdictionAdmin",
-}
-export enum EnumJurisdictionListingApprovalPermissions {
   "user" = "user",
   "partner" = "partner",
   "admin" = "admin",

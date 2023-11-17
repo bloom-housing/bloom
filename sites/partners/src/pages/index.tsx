@@ -104,7 +104,8 @@ export default function ListingsList() {
         field: "status",
         sortable: true,
         unSortIcon: true,
-        sort: "asc",
+        // TODO: put this back in when AgTable component in ui-component no longer capitalizes this
+        // sort: "asc",
         // disable frontend sorting
         comparator: () => 0,
         filter: false,

@@ -32,17 +32,27 @@ export const stagingSeed = async (
   prismaClient: PrismaClient,
   jurisdictionName: string,
 ) => {
+  // create single jurisdiction
+  const jurisdiction = await prismaClient.jurisdictions.create({
+    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
+  });
   // create admin user
   await prismaClient.userAccounts.create({
     data: await userFactory({
       roles: { isAdmin: true },
       email: 'admin@example.com',
       confirmedAt: new Date(),
+      jurisdictionId: jurisdiction.id,
     }),
   });
-  // create single jurisdiction
-  const jurisdiction = await prismaClient.jurisdictions.create({
-    data: jurisdictionFactory(jurisdictionName, [UserRoleEnum.admin]),
+  // create a jurisdictional admin
+  await prismaClient.userAccounts.create({
+    data: await userFactory({
+      roles: { isJurisdictionalAdmin: true },
+      email: 'jurisdiction-admin@example.com',
+      confirmedAt: new Date(),
+      jurisdictionId: jurisdiction.id,
+    }),
   });
   // add jurisdiction specific translations and default ones
   await prismaClient.translations.create({

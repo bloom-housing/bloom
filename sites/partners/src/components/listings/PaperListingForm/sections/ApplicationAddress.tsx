@@ -79,7 +79,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     control,
     name: "canApplicationsBeMailedIn",
     defaultValue:
-      listing?.applicationMailingAddress || listing?.applicationMailingAddressType
+      listing?.listingsApplicationMailingAddress || listing?.applicationMailingAddressType
         ? YesNoAnswer.Yes
         : YesNoAnswer.No,
   })
@@ -88,7 +88,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     control,
     name: "canPaperApplicationsBePickedUp",
     defaultValue:
-      listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
+      listing?.listingsApplicationPickUpAddress || listing?.applicationPickUpAddressType
         ? YesNoAnswer.Yes
         : YesNoAnswer.No,
   })
@@ -97,7 +97,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     control,
     name: "canApplicationsBeDroppedOff",
     defaultValue:
-      listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
+      listing?.listingsApplicationDropOffAddress || listing?.applicationDropOffAddressType
         ? YesNoAnswer.Yes
         : YesNoAnswer.No,
   })
@@ -107,7 +107,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     name: "whereApplicationsMailedIn",
     defaultValue: listing?.applicationMailingAddressType
       ? listing?.applicationMailingAddressType
-      : listing?.applicationMailingAddress
+      : listing?.listingsApplicationMailingAddress
       ? addressTypes.anotherAddress
       : null,
   })
@@ -117,7 +117,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     name: "whereApplicationsPickedUp",
     defaultValue: listing?.applicationPickUpAddressType
       ? listing?.applicationPickUpAddressType
-      : listing?.applicationPickUpAddress
+      : listing?.listingsApplicationPickUpAddress
       ? addressTypes.anotherAddress
       : null,
   })
@@ -127,7 +127,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     name: "whereApplicationsDroppedOff",
     defaultValue: listing?.applicationDropOffAddressType
       ? listing?.applicationDropOffAddressType
-      : listing?.applicationDropOffAddress
+      : listing?.listingsApplicationDropOffAddress
       ? addressTypes.anotherAddress
       : null,
   })
@@ -193,14 +193,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   ...yesNoRadioOptions[0],
                   id: "applicationsMailedInYes",
                   defaultChecked:
-                    isNullOrUndefined(listing?.applicationMailingAddress) === false ||
+                    isNullOrUndefined(listing?.listingsApplicationMailingAddress) === false ||
                     isNullOrUndefined(listing?.applicationMailingAddressType) === false,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "applicationsMailedInNo",
                   defaultChecked:
-                    listing?.applicationMailingAddress === null &&
+                    listing?.listingsApplicationMailingAddress === null &&
                     listing?.applicationMailingAddressType === null,
                 },
               ]}
@@ -216,14 +216,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   ...yesNoRadioOptions[0],
                   id: "applicationsPickedUpYes",
                   defaultChecked:
-                    isNullOrUndefined(listing?.applicationPickUpAddress) === false ||
+                    isNullOrUndefined(listing?.listingsApplicationPickUpAddress) === false ||
                     isNullOrUndefined(listing?.applicationPickUpAddressType) === false,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "applicationsPickedUpNo",
                   defaultChecked:
-                    listing?.applicationPickUpAddress === null &&
+                    listing?.listingsApplicationPickUpAddress === null &&
                     listing?.applicationPickUpAddressType === null,
                 },
               ]}
@@ -239,14 +239,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   ...yesNoRadioOptions[0],
                   id: "applicationsDroppedOffYes",
                   defaultChecked:
-                    isNullOrUndefined(listing?.applicationDropOffAddress) === false ||
+                    isNullOrUndefined(listing?.listingsApplicationDropOffAddress) === false ||
                     isNullOrUndefined(listing?.applicationDropOffAddressType) === false,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "applicationsDroppedOffNo",
                   defaultChecked:
-                    listing?.applicationDropOffAddress === null &&
+                    listing?.listingsApplicationDropOffAddress === null &&
                     listing?.applicationDropOffAddressType === null,
                 },
               ]}
@@ -265,7 +265,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 fields={getLocationOptions(
                   "mailIn",
                   listing?.applicationMailingAddressType,
-                  isNullOrUndefined(listing?.applicationMailingAddress) === false
+                  isNullOrUndefined(listing?.listingsApplicationMailingAddress) === false
                 )}
               />
             </FieldValue>
@@ -284,7 +284,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 fields={getLocationOptions(
                   "pickUp",
                   listing?.applicationPickUpAddressType,
-                  isNullOrUndefined(listing?.applicationPickUpAddress) === false
+                  isNullOrUndefined(listing?.listingsApplicationPickUpAddress) === false
                 )}
               />
             </FieldValue>
@@ -303,7 +303,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 fields={getLocationOptions(
                   "dropOff",
                   listing?.applicationDropOffAddressType,
-                  isNullOrUndefined(listing?.applicationDropOffAddress) === false
+                  isNullOrUndefined(listing?.listingsApplicationDropOffAddress) === false
                 )}
               />
             </FieldValue>

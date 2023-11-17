@@ -20,10 +20,10 @@ import {
   AmiChartItem,
   UnitAccessibilityPriorityType,
   UnitType,
-} from "@bloom-housing/backend-core/types"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
-import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import SectionWithGrid from "../../shared/SectionWithGrid"
+import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
+import { arrayToFormOptions, fieldHasError, getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -127,8 +127,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
       })
-      if (defaultUnit.amiChartOverride) {
-        defaultUnit.amiChartOverride.items.forEach((override) => {
+      if (defaultUnit.unitAmiChartOverrides) {
+        defaultUnit.unitAmiChartOverrides.items.forEach((override) => {
           setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
         })
       }
@@ -343,7 +343,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // after the unitType options are set
   useEffect(() => {
     if (defaultUnit && unitTypesOptions) {
-      setValue("unitType.id", defaultUnit.unitType?.id)
+      setValue("unitType.id", defaultUnit.unitTypes?.id)
     }
   }, [defaultUnit, unitTypesOptions, setValue])
 
@@ -364,10 +364,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // sets the options for the ami charts
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
-    setAmiChartsOptions(
-      // TODO: remove the casting when partner site is connected to the new backend
-      arrayToFormOptions<AmiChart>(amiCharts as unknown as AmiChart[], "name", "id")
-    )
+    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
   }, [amiCharts, amiChartsOptions])
 
   // sets the options for the unit priorities

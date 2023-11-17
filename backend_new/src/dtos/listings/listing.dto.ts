@@ -33,6 +33,7 @@ import { UnitsSummarized } from '../units/unit-summarized.dto';
 import { UnitsSummary } from '../units/units-summary.dto';
 import { IdDTO } from '../shared/id.dto';
 import { listingUrlSlug } from '../../utilities/listing-url-slug';
+import { User } from '../users/user.dto';
 
 class Listing extends AbstractDTO {
   @Expose()
@@ -530,6 +531,23 @@ class Listing extends AbstractDTO {
   @ApiPropertyOptional()
   @Transform((value: TransformFnParams) => listingUrlSlug(value.obj as Listing))
   urlSlug?: string;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  requestedChanges?: string;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  requestedChangesDate?: Date;
+
+  @Expose()
+  @ApiPropertyOptional()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => User)
+  requestedChangesUser?: User;
 }
 
 export { Listing as default, Listing };
