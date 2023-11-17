@@ -3,5 +3,4 @@ export enum InputType {
   text = "text",
   address = "address",
   hhMemberSelect = "hhMemberSelect",
-  geocodingVerified = "geocodingVerified",
 }

@@ -1,11 +1,11 @@
 import { point } from "@turf/helpers"
+import buffer from "@turf/buffer"
+import booleanPointInPolygon from "@turf/boolean-point-in-polygon"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { Address } from "../../shared/entities/address.entity"
 import { Application } from "../entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
-import buffer from "@turf/buffer"
-import booleanPointInPolygon from "@turf/boolean-point-in-polygon"
 import { ValidationMethod } from "../../multiselect-question/types/validation-method-enum"
 import { MultiselectOption } from "../../multiselect-question/types/multiselect-option"
 import { ApplicationMultiselectQuestion } from "../entities/application-multiselect-question.entity"
@@ -65,9 +65,7 @@ export class GeocodingService {
         (preference) => {
           const newPreferenceOptions: ApplicationMultiselectQuestionOption[] = preference.options.map(
             (option) => {
-              const addressData = option.extraData.find(
-                (data) => data.type === InputType.geocodingVerified
-              )
+              const addressData = option.extraData.find((data) => data.type === InputType.address)
               if (option.checked && addressData) {
                 const foundOption = radiusPreferenceOptions.find(
                   (preferenceOption) => preferenceOption.text === option.key
@@ -83,8 +81,8 @@ export class GeocodingService {
                     extraData: [
                       ...option.extraData,
                       {
-                        key: option.key,
-                        type: InputType.geocodingVerified,
+                        key: "geocodingVerified",
+                        type: InputType.text,
                         value: geocodingVerified,
                       },
                     ],
