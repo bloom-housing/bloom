@@ -56,7 +56,7 @@ const Layout = (props) => {
         </Head>
         <SiteHeader
           imageOnly={true}
-          logoSrc="/images/doorway-logo-partners.png"
+          logoSrc="/images/doorway-logo-partners.svg"
           logoWidth={"medium"}
           menuLinks={menuLinks}
           siteHeaderWidth={"wide"}
