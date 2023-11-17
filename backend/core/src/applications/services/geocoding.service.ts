@@ -22,7 +22,7 @@ export class GeocodingService {
     await this.validateRadiusPreferences(application, listing)
   }
 
-  private verifyRadius(
+  verifyRadius(
     preferenceAddress: Address,
     radius: number,
     listingAddress: Address
