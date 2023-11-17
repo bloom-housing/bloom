@@ -71,7 +71,7 @@ export default function ListingsList() {
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const [errorAlert, setErrorAlert] = useState(false)
   const { profile } = useContext(AuthContext)
-  const isAdmin = profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin || false
+  const isAdmin = profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin || false
   const { onExport, zipCompleted, zipExportLoading, zipExportError } = useListingZip()
   useEffect(() => {
     setErrorAlert(zipExportError)
@@ -145,7 +145,7 @@ export default function ListingsList() {
     search: tableOptions.filter.filterValue,
     userId: profile?.id,
     sort: tableOptions.sort.sortOptions,
-    roles: profile?.roles,
+    roles: profile?.userRoles,
     userJurisidctionIds: profile?.jurisdictions?.map((jurisdiction) => jurisdiction.id),
   })
 

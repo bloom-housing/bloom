@@ -6,7 +6,7 @@ import { Tag } from "@bloom-housing/ui-seeds"
 import { useSingleApplicationData, useSingleListingData } from "../../../lib/hooks"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import Layout from "../../../layouts"
-import { ApplicationSection, ApplicationStatus } from "@bloom-housing/backend-core/types"
+import { Application } from "@bloom-housing/backend-core/types"
 import {
   DetailsMemberDrawer,
   MembersDrawer,
@@ -22,6 +22,10 @@ import { DetailsMultiselectQuestions } from "../../../components/applications/Pa
 import { DetailsHouseholdIncome } from "../../../components/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../components/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../components/applications/Aside"
+import {
+  ApplicationStatusEnum,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -31,7 +35,7 @@ export default function ApplicationsList() {
   {
     /* TODO: add listing name in a listing response */
   }
-  const { listingDto } = useSingleListingData(application?.listing.id)
+  const { listingDto } = useSingleListingData(application?.listings.id)
 
   const { applicationsService } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState(false)
@@ -41,7 +45,7 @@ export default function ApplicationsList() {
   async function deleteApplication() {
     try {
       await applicationsService.delete({ body: { id: applicationId } })
-      void router.push(`/listings/${application?.listing?.id}/applications`)
+      void router.push(`/listings/${application?.listings?.id}/applications`)
     } catch (err) {
       setErrorAlert(true)
     }
@@ -49,13 +53,13 @@ export default function ApplicationsList() {
 
   const applicationStatus = useMemo(() => {
     switch (application?.status) {
-      case ApplicationStatus.submitted:
+      case ApplicationStatusEnum.submitted:
         return (
           <Tag variant={"success"} size={"lg"}>
             {t(`application.details.applicationStatus.submitted`)}
           </Tag>
         )
-      case ApplicationStatus.removed:
+      case ApplicationStatusEnum.removed:
         return (
           <Tag variant={"highlight-warm"} size={"lg"}>
             {t(`application.details.applicationStatus.removed`)}
@@ -73,7 +77,7 @@ export default function ApplicationsList() {
   if (!application) return null
 
   return (
-    <ApplicationContext.Provider value={application}>
+    <ApplicationContext.Provider value={application as unknown as Application}>
       <Layout>
         <Head>
           <title>{t("nav.siteTitlePartners")}</title>
@@ -95,10 +99,10 @@ export default function ApplicationsList() {
           breadcrumbs={
             <Breadcrumbs>
               <BreadcrumbLink href="/">{t("t.listing")}</BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}`}>
+              <BreadcrumbLink href={`/listings/${application?.listings?.id}`}>
                 {listingDto?.name}
               </BreadcrumbLink>
-              <BreadcrumbLink href={`/listings/${application?.listing?.id}/applications`}>
+              <BreadcrumbLink href={`/listings/${application?.listings?.id}/applications`}>
                 {t("nav.applications")}
               </BreadcrumbLink>
               <BreadcrumbLink href={`/application/${application.id}`} current>
@@ -139,16 +143,16 @@ export default function ApplicationsList() {
                 <DetailsHouseholdDetails />
 
                 <DetailsMultiselectQuestions
-                  listingId={application?.listing?.id}
-                  applicationSection={ApplicationSection.programs}
+                  listingId={application?.listings?.id}
+                  applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
                   title={t("application.details.programs")}
                 />
 
                 <DetailsHouseholdIncome />
 
                 <DetailsMultiselectQuestions
-                  listingId={application?.listing?.id}
-                  applicationSection={ApplicationSection.preferences}
+                  listingId={application?.listings?.id}
+                  applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                   title={t("application.details.preferences")}
                 />
 
@@ -158,7 +162,7 @@ export default function ApplicationsList() {
               <div className="md:w-3/12 pl-6">
                 <Aside
                   type="details"
-                  listingId={application?.listing?.id}
+                  listingId={application?.listings?.id}
                   onDelete={deleteApplication}
                 />
               </div>
@@ -168,7 +172,7 @@ export default function ApplicationsList() {
       </Layout>
 
       <DetailsMemberDrawer
-        application={application}
+        application={application as unknown as Application}
         membersDrawer={membersDrawer}
         setMembersDrawer={setMembersDrawer}
       />

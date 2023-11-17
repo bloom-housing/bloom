@@ -4,7 +4,6 @@ Total pre-tax household income from all sources
 */
 import React, { useContext, useEffect, useState } from "react"
 import Link from "next/link"
-import { ApplicationSection } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -30,7 +29,10 @@ import {
   listingSectionQuestions,
 } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../../../lib/constants"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -64,7 +66,10 @@ const ApplicationIncome = () => {
   const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
-  const currentPageSection = listingSectionQuestions(listing, ApplicationSection.programs)?.length
+  const currentPageSection = listingSectionQuestions(
+    listing,
+    MultiselectQuestionsApplicationSectionEnum.programs
+  )?.length
     ? 4
     : 3
 

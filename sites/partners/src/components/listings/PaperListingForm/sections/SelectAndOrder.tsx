@@ -13,6 +13,7 @@ import {
 import { useFormContext } from "react-hook-form"
 import { ApplicationSection, MultiselectQuestion } from "@bloom-housing/backend-core/types"
 import LinkComponent from "../../../../components/core/LinkComponent"
+import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type SelectAndOrderSection = MultiselectQuestion
 
@@ -27,7 +28,7 @@ type SelectAndOrderProps = {
   drawerButtonText: string
   dataFetcher: (
     jurisdiction?: string,
-    applicationSection?: ApplicationSection
+    applicationSection?: MultiselectQuestionsApplicationSectionEnum
   ) => {
     data: SelectAndOrderSection[]
     loading: boolean
@@ -148,7 +149,10 @@ const SelectAndOrder = ({
 
   const jurisdiction: string = watch("jurisdiction.id")
 
-  const { data: fetchedData = [] } = dataFetcher(jurisdiction, applicationSection)
+  const { data: fetchedData = [] } = dataFetcher(
+    jurisdiction,
+    applicationSection as unknown as MultiselectQuestionsApplicationSectionEnum
+  )
 
   const formTableHeaders = {
     order: "t.order",

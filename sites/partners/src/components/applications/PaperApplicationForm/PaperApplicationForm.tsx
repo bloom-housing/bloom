@@ -11,15 +11,20 @@ import { Tag } from "@bloom-housing/ui-seeds"
 import { AuthContext, listingSectionQuestions } from "@bloom-housing/shared-helpers"
 import { useForm, FormProvider } from "react-hook-form"
 import {
-  HouseholdMember,
   Application,
   ApplicationStatus,
-  ApplicationSection,
-  ApplicationReviewStatus,
   MultiselectQuestion,
   ListingMultiselectQuestion,
+  Listing as OldListing,
+  HouseholdMember,
 } from "@bloom-housing/backend-core/types"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  ApplicationCreate,
+  ApplicationReviewStatusEnum,
+  ApplicationUpdate,
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import { mapFormToApi, mapApiToForm } from "../../../lib/applications/formatApplicationData"
 import { useSingleListingData } from "../../../lib/hooks"
 import { FormApplicationData } from "./sections/FormApplicationData"
@@ -50,17 +55,19 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const preferences = listingSectionQuestions(
     listingDto as unknown as Listing,
-    ApplicationSection.preferences
+    MultiselectQuestionsApplicationSectionEnum.preferences
   )
 
   const programs = listingSectionQuestions(
     listingDto as unknown as Listing,
-    ApplicationSection.programs
+    MultiselectQuestionsApplicationSectionEnum.programs
   )
 
   const units = listingDto?.units
 
-  const defaultValues = editMode ? mapApiToForm(application, listingDto) : {}
+  const defaultValues = editMode
+    ? mapApiToForm(application, listingDto as unknown as OldListing)
+    : {}
 
   const formMethods = useForm<FormTypes>({
     defaultValues,
@@ -130,10 +137,19 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       const result = editMode
         ? await applicationsService.update({
             id: application.id,
-            body: { id: application.id, ...body, reviewStatus: application.reviewStatus },
+            // TODO: update this to the new types when migrate to new backend
+            body: {
+              id: application.id,
+              ...body,
+              reviewStatus: application.reviewStatus as unknown as ApplicationReviewStatusEnum,
+            } as unknown as ApplicationUpdate,
           })
         : await applicationsService.create({
-            body: { ...body, reviewStatus: ApplicationReviewStatus.valid },
+            // TODO: update this to the new types when migrate to new backend
+            body: {
+              ...body,
+              reviewStatus: ApplicationReviewStatusEnum.valid,
+            } as unknown as ApplicationCreate,
           })
 
       setLoading(false)
@@ -222,7 +238,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     {/* TODO: remove the typing on programs when switching to new backend */}
                     <FormMultiselectQuestions
                       questions={programs as unknown as ListingMultiselectQuestion[]}
-                      applicationSection={ApplicationSection.programs}
+                      applicationSection={MultiselectQuestionsApplicationSectionEnum.programs}
                       sectionTitle={t("application.details.programs")}
                     />
 
@@ -231,7 +247,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     {/* TODO: remove the typing on preferences when switching to new backend */}
                     <FormMultiselectQuestions
                       questions={preferences as unknown as ListingMultiselectQuestion[]}
-                      applicationSection={ApplicationSection.preferences}
+                      applicationSection={MultiselectQuestionsApplicationSectionEnum.preferences}
                       sectionTitle={t("application.details.preferences")}
                     />
 

@@ -47,6 +47,11 @@ export class UserController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: User })
+  @ApiOperation({
+    summary: 'Get a user from cookies',
+    operationId: 'profile',
+  })
   profile(@Request() req: ExpressRequest): User {
     return mapTo(User, req['user']);
   }
@@ -101,8 +106,12 @@ export class UserController {
   @Put(':id')
   @ApiOperation({ summary: 'Update user', operationId: 'update' })
   @ApiOkResponse({ type: User })
-  async update(@Body() dto: UserUpdate): Promise<User> {
-    return await this.userService.update(dto);
+  async update(
+    @Request() req: ExpressRequest,
+    @Body() dto: UserUpdate,
+  ): Promise<User> {
+    const jurisdictionName = req.headers['jurisdictionname'] || '';
+    return await this.userService.update(dto, jurisdictionName as string);
   }
 
   @Delete()
@@ -119,13 +128,16 @@ export class UserController {
   })
   @ApiOkResponse({ type: User })
   async create(
+    @Request() req: ExpressRequest,
     @Body() dto: UserCreate,
     @Query() queryParams: UserCreateParams,
   ): Promise<User> {
+    const jurisdictionName = req.headers['jurisdictionname'] || '';
     return await this.userService.create(
       dto,
       false,
       queryParams.noWelcomeEmail !== true,
+      jurisdictionName as string,
     );
   }
 

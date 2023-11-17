@@ -17,7 +17,7 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiPropertyOptional({
     enum: ListingsStatusEnum,
-    enumName: 'ListingStatusEnum',
+    enumName: 'ListingsStatusEnum',
     example: 'active',
   })
   @IsEnum(ListingsStatusEnum, { groups: [ValidationsGroupsEnum.default] })

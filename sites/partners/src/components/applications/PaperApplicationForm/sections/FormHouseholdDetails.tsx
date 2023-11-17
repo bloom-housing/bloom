@@ -3,8 +3,9 @@ import { useFormContext } from "react-hook-form"
 import { t, GridSection, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
-import { Accessibility, Unit, UnitType } from "@bloom-housing/backend-core/types"
+import { Accessibility, UnitType } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../../lib/helpers"
+import { Unit } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 type FormHouseholdDetailsProps = {
   listingUnits: Unit[]

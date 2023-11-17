@@ -472,7 +472,7 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn) =
     const listingQuestionSectionExists = (sectionTitle) => {
       return (
         listing.listingMultiselectQuestions?.filter(
-          (question) => question.multiselectQuestion.applicationSection === sectionTitle
+          (question) => question.multiselectQuestions.applicationSection === sectionTitle
         )?.length > 0
       )
     }

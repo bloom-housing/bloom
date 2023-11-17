@@ -1,8 +1,10 @@
 import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication, listingSectionQuestions } from "@bloom-housing/shared-helpers"
-import { ApplicationSection } from "@bloom-housing/backend-core/types"
-import { Listing } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  Listing,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export const retrieveApplicationConfig = (listing: Listing) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
@@ -59,7 +61,9 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   }
 
   // conditionally add programs
-  if (listingSectionQuestions(listing, ApplicationSection.programs)?.length) {
+  if (
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.programs)?.length
+  ) {
     config.sections.push("programs")
     config.steps.push({
       name: "programs",
@@ -78,7 +82,9 @@ export const retrieveApplicationConfig = (listing: Listing) => {
   )
 
   // conditionally add preferences
-  if (listingSectionQuestions(listing, ApplicationSection.preferences)?.length) {
+  if (
+    listingSectionQuestions(listing, MultiselectQuestionsApplicationSectionEnum.preferences)?.length
+  ) {
     config.sections.push("preferences")
     config.steps.push(
       {

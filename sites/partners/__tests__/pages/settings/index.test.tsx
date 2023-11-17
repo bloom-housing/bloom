@@ -28,7 +28,13 @@ describe("settings", () => {
       }),
       rest.get("http://localhost/api/adapter/multiselectQuestions", (_req, res, ctx) => {
         return res(ctx.json([multiselectQuestionPreference]))
-      })
+      }),
+      rest.get(
+        "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
+        (_req, res, ctx) => {
+          return res(ctx.json([listing]))
+        }
+      )
     )
 
     const { getByText, findByText } = render(<Settings />)
@@ -79,7 +85,7 @@ describe("settings", () => {
         return res(ctx.json([multiselectQuestionPreference]))
       }),
       rest.get(
-        "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+        "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
         (_req, res, ctx) => {
           return res(ctx.json([]))
         }
@@ -122,7 +128,7 @@ describe("settings", () => {
         return res(ctx.json([multiselectQuestionPreference]))
       }),
       rest.get(
-        "http://localhost/api/adapter/multiselectQuestions/listings/id1",
+        "http://localhost/api/adapter/listings/byMultiselectQuestion/id1",
         (_req, res, ctx) => {
           return res(ctx.json([listing]))
         }

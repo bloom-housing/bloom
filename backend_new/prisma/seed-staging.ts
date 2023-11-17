@@ -1,11 +1,13 @@
 import {
   ApplicationAddressTypeEnum,
+  ApplicationMethodsTypeEnum,
   ListingsStatusEnum,
   MultiselectQuestions,
   MultiselectQuestionsApplicationSectionEnum,
   Prisma,
   PrismaClient,
   ReviewOrderTypeEnum,
+  UserRoleEnum,
 } from '@prisma/client';
 import dayjs from 'dayjs';
 import { jurisdictionFactory } from './seed-helpers/jurisdiction-factory';
@@ -25,7 +27,6 @@ import {
 } from './seed-helpers/address-factory';
 import { applicationFactory } from './seed-helpers/application-factory';
 import { translationFactory } from './seed-helpers/translation-factory';
-import { UserRoleEnum } from '../src/enums/users/user-role-enum';
 
 export const stagingSeed = async (
   prismaClient: PrismaClient,
@@ -64,6 +65,7 @@ export const stagingSeed = async (
         options: [
           {
             text: 'At least one member of my household is a city employee',
+            collectAddress: true,
             ordinal: 0,
           },
         ],
@@ -390,6 +392,11 @@ export const stagingSeed = async (
         applicationDropOffAddressOfficeHours: null,
         applicationDropOffAddressType: ApplicationAddressTypeEnum.leasingAgent,
         applicationMailingAddressType: ApplicationAddressTypeEnum.leasingAgent,
+        applicationMethods: {
+          create: {
+            type: ApplicationMethodsTypeEnum.Internal,
+          },
+        },
         buildingSelectionCriteria: null,
         costsNotIncluded: null,
         creditHistory: null,
@@ -669,6 +676,11 @@ export const stagingSeed = async (
         unitAmenities: null,
         servicesOffered: null,
         yearBuilt: 1988,
+        applicationMethods: {
+          create: {
+            type: ApplicationMethodsTypeEnum.Internal,
+          },
+        },
         applicationDueDate: dayjs(new Date()).add(7, 'days').toDate(),
         applicationOpenDate: dayjs(new Date()).subtract(1, 'days').toDate(),
         applicationFee: null,
@@ -741,6 +753,7 @@ export const stagingSeed = async (
           ],
         },
       },
+      multiselectQuestions: [multiselectQuestion2, multiselectQuestion1],
     },
   ].map(
     async (

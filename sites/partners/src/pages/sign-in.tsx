@@ -25,6 +25,7 @@ import {
 import { FormSignInMFAType } from "../components/users/FormSignInMFAType"
 import { FormSignInMFACode, RequestType } from "../components/users/FormSignInMFACode"
 import { FormSignInAddPhone } from "../components/users/FormSignInAddPhone"
+import { SuccessDTO } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 const SignIn = () => {
   const { login, requestMfaCode, userService } = useContext(AuthContext)
@@ -55,7 +56,7 @@ const SignIn = () => {
     mutate: mutateResendConfirmation,
     reset: resetResendConfirmation,
     isLoading: isResendConfirmationLoading,
-  } = useMutate<{ status: string }>()
+  } = useMutate<SuccessDTO>()
 
   const onResendConfirmationSubmit = useCallback(
     (email: string) => {

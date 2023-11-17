@@ -15,15 +15,14 @@ import {
 } from "@bloom-housing/ui-components"
 import { pdfUrlFromListingEvents, AuthContext } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
-import {
-  EnumJurisdictionListingApprovalPermissions,
-  ListingEventType,
-  ListingStatus,
-} from "@bloom-housing/backend-core/types"
+import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 import { StatusAside } from "../shared/StatusAside"
 import {
   ListingEvent,
   ListingEventsTypeEnum,
+  ListingUpdate,
+  ListingsStatusEnum,
+  EnumJurisdictionListingApprovalPermissions,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 
 export enum ListingFormActionsType {
@@ -61,8 +60,8 @@ const ListingFormActions = ({
   )?.listingApprovalPermissions
 
   const isListingApprover =
-    profile?.roles.isAdmin ||
-    (profile?.roles.isJurisdictionalAdmin &&
+    profile?.userRoles.isAdmin ||
+    (profile?.userRoles.isJurisdictionalAdmin &&
       listingApprovalPermissions?.includes(
         EnumJurisdictionListingApprovalPermissions.jurisdictionAdmin
       ))
@@ -257,7 +256,10 @@ const ListingFormActions = ({
               try {
                 const result = await listingsService.update({
                   id: listing.id,
-                  body: { ...listing, status: ListingStatus.active },
+                  body: {
+                    ...(listing as unknown as ListingUpdate),
+                    status: ListingsStatusEnum.active,
+                  },
                 })
                 if (result) {
                   setSiteAlertMessage(t("listings.approval.listingPublished"), "success")

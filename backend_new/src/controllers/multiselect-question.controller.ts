@@ -24,6 +24,8 @@ import { MultiselectQuestionQueryParams } from '../dtos/multiselect-questions/mu
 import { defaultValidationPipeOptions } from '../utilities/default-validation-pipe-options';
 import { IdDTO } from '../dtos/shared/id.dto';
 import { SuccessDTO } from '../dtos/shared/success.dto';
+import { MultiselectQuestionFilterParams } from '../dtos/multiselect-questions/multiselect-question-filter-params.dto';
+import { PaginationMeta } from '../dtos/shared/pagination.dto';
 
 @Controller('multiselectQuestions')
 @ApiTags('multiselectQuestions')
@@ -32,6 +34,8 @@ import { SuccessDTO } from '../dtos/shared/success.dto';
   MultiselectQuestionCreate,
   MultiselectQuestionUpdate,
   MultiselectQuestionQueryParams,
+  MultiselectQuestionFilterParams,
+  PaginationMeta,
   IdDTO,
 )
 export class MultiselectQuestionController {

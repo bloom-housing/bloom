@@ -5,15 +5,20 @@ import dayjs from "dayjs"
 import JSZip from "jszip"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import {
-  ApplicationSection,
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
-  EnumMultiselectQuestionsFilterParamsComparison,
   EnumUserFilterParamsComparison,
+  MultiselectQuestion,
   UserRolesOnly,
 } from "@bloom-housing/backend-core/types"
 import { setSiteAlertMessage, t } from "@bloom-housing/ui-components"
+import {
+  EnumMultiselectQuestionFilterParamsComparison,
+  ListingViews,
+  MultiselectQuestionFilterParams,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 export interface PaginationProps {
   page?: number
   limit: number | "all"
@@ -72,7 +77,7 @@ export function useListingsData({
     limit,
     filter: [],
     search,
-    view: "base",
+    view: ListingViews.base,
   }
 
   if (sort) {
@@ -129,10 +134,12 @@ export const useListingZip = () => {
     setZipExportError(false)
     setZipCompleted(false)
     setZipExportLoading(true)
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
+    // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
     try {
-      const content = await listingsService.listAsCsv({ timeZone })
+      // TODO: connect to the csv endpoint when it is implemented
+      // const content = await listingsService.listAsCsv({ timeZone })
+      const content = { listingCsv: "", unitCsv: "" }
       const now = new Date()
       const dateString = dayjs(now).format("YYYY-MM-DD_HH-mm")
       const zip = new JSZip()
@@ -164,7 +171,7 @@ export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
   const backendSingleApplicationsEndpointUrl = `/api/adapter/applications/${applicationId}`
 
-  const fetcher = () => applicationsService.retrieve({ id: applicationId })
+  const fetcher = () => applicationsService.retrieve({ applicationId: applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
   return {
@@ -388,20 +395,22 @@ export function useMultiselectQuestionList() {
 
 export function useJurisdictionalMultiselectQuestionList(
   jurisdictionId: string,
-  applicationSection?: ApplicationSection
+  applicationSection?: MultiselectQuestionsApplicationSectionEnum
 ) {
   const { multiselectQuestionsService } = useContext(AuthContext)
 
-  const params = {
+  const params: {
+    filter: MultiselectQuestionFilterParams[]
+  } = {
     filter: [],
   }
   params.filter.push({
-    $comparison: EnumMultiselectQuestionsFilterParamsComparison["IN"],
+    $comparison: EnumMultiselectQuestionFilterParamsComparison["IN"],
     jurisdiction: jurisdictionId && jurisdictionId !== "" ? jurisdictionId : undefined,
   })
   if (applicationSection) {
     params.filter.push({
-      $comparison: EnumMultiselectQuestionsFilterParamsComparison["="],
+      $comparison: EnumMultiselectQuestionFilterParamsComparison["="],
       applicationSection,
     })
   }
@@ -416,17 +425,18 @@ export function useJurisdictionalMultiselectQuestionList(
 
   return {
     cacheKey,
-    data,
+    // TODO: remove casting when connecting partner site to new backend
+    data: data as unknown as MultiselectQuestion[],
     loading: !error && !data,
     error,
   }
 }
 
 export function useListingsMultiselectQuestionList(multiselectQuestionId: string) {
-  const { multiselectQuestionsService } = useContext(AuthContext)
+  const { listingsService } = useContext(AuthContext)
 
   const fetcher = () =>
-    multiselectQuestionsService.retrieveListings({
+    listingsService.retrieveListings({
       multiselectQuestionId,
     })
 
@@ -498,20 +508,24 @@ export const createDateStringFromNow = (format = "YYYY-MM-DD_HH:mm:ss"): string 
 }
 
 export const useApplicationsExport = (listingId: string, includeDemographics: boolean) => {
-  const { applicationsService } = useContext(AuthContext)
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
+  // const { applicationsService } = useContext(AuthContext)
+  // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone.replace("/", "-")
 
   return useCsvExport(
-    () => applicationsService.listAsCsv({ listingId, timeZone, includeDemographics }),
+    // TODO: reconnect when csv endpoint is implemented
+    // () => applicationsService.listAsCsv({ listingId, timeZone, includeDemographics }),
+    () => Promise.resolve(""),
     `applications-${listingId}-${createDateStringFromNow()}.csv`
   )
 }
 
 export const useUsersExport = () => {
-  const { userService } = useContext(AuthContext)
+  // const { userService } = useContext(AuthContext)
 
   return useCsvExport(
-    () => userService.listAsCsv(),
+    // TODO: reconnect when csv endpoint is implemented
+    // () => userService.listAsCsv(),
+    () => Promise.resolve(""),
     `users-${createDateStringFromNow("YYYY-MM-DD_HH:mm")}.csv`
   )
 }

@@ -138,7 +138,6 @@ export class TranslationService {
         pathsToFilter[
           `listingMultiselectQuestions[${index}].multiselectQuestions.optOutText`
         ] = multiselectQuestion.multiselectQuestions?.optOutText;
-        // TODO: should we translate links?
         multiselectQuestion.multiselectQuestions?.options?.map(
           (multiselectOption, optionIndex) => {
             multiselectOption.untranslatedText = multiselectOption.text;
@@ -152,7 +151,6 @@ export class TranslationService {
               `listingMultiselectQuestions[${index}].multiselectQuestions.options[${optionIndex}].description`
             ] = multiselectOption.description;
           },
-          // TODO: should we translate links?
         );
       });
     }
@@ -163,18 +161,26 @@ export class TranslationService {
     );
     let translatedValue;
 
+    // Remove all null or undefined values
+    const cleanedPaths = {};
+    Object.entries(pathsToFilter).forEach(([key, value]) => {
+      if (value) {
+        cleanedPaths[key] = value;
+      }
+    });
+
     if (persistedTranslationsFromDB) {
       translatedValue = persistedTranslationsFromDB.translations;
     } else {
       translatedValue = await this.googleTranslateService.fetch(
-        Object.values(pathsToFilter),
+        Object.values(cleanedPaths),
         language,
       );
       await this.persistNewTranslatedValues(listing, language, translatedValue);
     }
 
     if (translatedValue) {
-      [...Object.keys(pathsToFilter).values()].forEach((path, index) => {
+      [...Object.keys(cleanedPaths).values()].forEach((path, index) => {
         lodash.set(listing, path, translatedValue[0][index]);
       });
     }

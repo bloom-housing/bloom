@@ -365,7 +365,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   // sets the options for the ami charts
   useEffect(() => {
     if (amiCharts.length === 0 || amiChartsOptions.length) return
-    setAmiChartsOptions(arrayToFormOptions<AmiChart>(amiCharts, "name", "id"))
+    setAmiChartsOptions(
+      // TODO: remove the casting when partner site is connected to the new backend
+      arrayToFormOptions<AmiChart>(amiCharts as unknown as AmiChart[], "name", "id")
+    )
   }, [amiCharts, amiChartsOptions])
 
   // sets the options for the unit priorities

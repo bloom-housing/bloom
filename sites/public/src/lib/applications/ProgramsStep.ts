@@ -1,4 +1,4 @@
-import { ApplicationMultiselectQuestion } from "@bloom-housing/backend-core/types"
+import { ApplicationMultiselectQuestion } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 import StepDefinition from "./StepDefinition"
 
 export default class ProgramsStep extends StepDefinition {

@@ -14,7 +14,7 @@ import {
   AlertBox,
   UniversalIconType,
 } from "@bloom-housing/ui-components"
-import { User } from "@bloom-housing/backend-core/types"
+import { Listing, User } from "@bloom-housing/backend-core/types"
 import { AuthContext } from "@bloom-housing/shared-helpers"
 import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import Layout from "../../layouts"
@@ -186,7 +186,7 @@ const Users = () => {
                 >
                   {t("users.addUser")}
                 </Button>
-                {(profile?.roles?.isAdmin || profile?.roles?.isJurisdictionalAdmin) && (
+                {(profile?.userRoles?.isAdmin || profile?.userRoles?.isJurisdictionalAdmin) && (
                   <Button
                     className="mx-1"
                     icon={!csvExportLoading ? (faFileExport as UniversalIconType) : null}
@@ -212,7 +212,7 @@ const Users = () => {
         <FormUserManage
           mode={userDrawer?.type}
           user={userDrawer?.user}
-          listings={listingDtos?.items}
+          listings={listingDtos?.items as unknown as Listing[]}
           onDrawerClose={() => {
             setUserDrawer(null)
             void mutate(cacheKey)

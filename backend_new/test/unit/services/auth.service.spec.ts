@@ -166,7 +166,7 @@ describe('Testing auth service', () => {
 
     expect(response.cookie).toHaveBeenCalledWith(
       ACCESS_TOKEN_AVAILABLE_NAME,
-      true,
+      'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
   });
@@ -231,7 +231,7 @@ describe('Testing auth service', () => {
 
     expect(response.cookie).toHaveBeenCalledWith(
       ACCESS_TOKEN_AVAILABLE_NAME,
-      true,
+      'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
   });
@@ -640,7 +640,7 @@ describe('Testing auth service', () => {
 
     expect(response.cookie).toHaveBeenCalledWith(
       ACCESS_TOKEN_AVAILABLE_NAME,
-      true,
+      'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
   });
@@ -741,7 +741,7 @@ describe('Testing auth service', () => {
 
     expect(response.cookie).toHaveBeenCalledWith(
       ACCESS_TOKEN_AVAILABLE_NAME,
-      true,
+      'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
   });
@@ -806,7 +806,7 @@ describe('Testing auth service', () => {
 
     expect(response.cookie).toHaveBeenCalledWith(
       ACCESS_TOKEN_AVAILABLE_NAME,
-      true,
+      'True',
       ACCESS_TOKEN_AVAILABLE_OPTIONS,
     );
   });
