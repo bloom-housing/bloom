@@ -4,8 +4,6 @@ import {
   Button,
   t,
   Form,
-  GridSection,
-  GridCell,
   Field,
   Select,
   useMutate,
@@ -14,11 +12,12 @@ import {
   AppearanceSizeType,
   Modal,
 } from "@bloom-housing/ui-components"
-import { FieldValue, Tag } from "@bloom-housing/ui-seeds"
+import { Card, Grid, Tag } from "@bloom-housing/ui-seeds"
 import { RoleOption, roleKeys, AuthContext } from "@bloom-housing/shared-helpers"
 import { Listing, User, UserRolesCreate } from "@bloom-housing/backend-core/types"
 import { JurisdictionAndListingSelection } from "./JurisdictionAndListingSelection"
 import { UserInvite, UserUpdate } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../shared/SectionWithGrid"
 
 type FormUserManageProps = {
   mode: "add" | "edit"
@@ -111,6 +110,7 @@ const FormUserManage = ({
     jurisdictionList.forEach((juris) => {
       jurisdictionalizedListings[juris.id] = []
     })
+    listings.sort((a, b) => a.name.localeCompare(b.name))
     listings.forEach((listing) => {
       if (jurisdictionalizedListings[listing.jurisdiction.id]) {
         // if the user has access to the jurisdiction
@@ -311,105 +311,96 @@ const FormUserManage = ({
   return (
     <FormProvider {...methods}>
       <Form onSubmit={() => false}>
-        <div className="border rounded-md p-8 bg-white">
-          <GridSection
-            title={
-              <div className="flex content-center">
-                <span>{t("users.userDetails")}</span>
+        <Card>
+          <Card.Section>
+            <SectionWithGrid
+              heading={
+                <div className="flex content-center">
+                  <span>{t("users.userDetails")}</span>
 
-                {mode === "edit" && (
-                  <div className="ml-2 mt-1 flex items-center justify-center">
-                    <Tag variant={user.confirmedAt ? "success" : "primary"}>
-                      {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
-                    </Tag>
-                  </div>
-                )}
-              </div>
-            }
-            columns={4}
-          >
-            <GridCell>
-              <FieldValue label={t("authentication.createAccount.firstName")}>
-                <Field
-                  id="firstName"
-                  name="firstName"
-                  label={t("authentication.createAccount.firstName")}
-                  placeholder={t("authentication.createAccount.firstName")}
-                  error={!!errors?.firstName}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  register={register}
-                  type="text"
-                  readerOnly
-                />
-              </FieldValue>
-            </GridCell>
+                  {mode === "edit" && (
+                    <div className="ml-2 mt-1 flex items-center justify-center">
+                      <Tag variant={user.confirmedAt ? "success" : "primary"}>
+                        {user.confirmedAt ? t("users.confirmed") : t("users.unconfirmed")}
+                      </Tag>
+                    </div>
+                  )}
+                </div>
+              }
+            >
+              <Grid.Row columns={4}>
+                <Grid.Cell>
+                  <Field
+                    id="firstName"
+                    name="firstName"
+                    label={t("authentication.createAccount.firstName")}
+                    placeholder={t("authentication.createAccount.firstName")}
+                    error={!!errors?.firstName}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    register={register}
+                    type="text"
+                  />
+                </Grid.Cell>
 
-            <GridCell>
-              <FieldValue label={t("authentication.createAccount.lastName")}>
-                <Field
-                  id="lastName"
-                  name="lastName"
-                  label={t("authentication.createAccount.lastName")}
-                  placeholder={t("authentication.createAccount.lastName")}
-                  error={!!errors?.lastName}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                  register={register}
-                  type="text"
-                  readerOnly
-                />
-              </FieldValue>
-            </GridCell>
+                <Grid.Cell>
+                  <Field
+                    id="lastName"
+                    name="lastName"
+                    label={t("authentication.createAccount.lastName")}
+                    placeholder={t("authentication.createAccount.lastName")}
+                    error={!!errors?.lastName}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                    register={register}
+                    type="text"
+                  />
+                </Grid.Cell>
 
-            <GridCell>
-              <FieldValue label={t("t.email")}>
-                <Field
-                  id="email"
-                  name="email"
-                  label={t("t.email")}
-                  placeholder={t("t.email")}
-                  error={!!errors?.email}
-                  errorMessage={t("authentication.signIn.loginError")}
-                  validation={{ required: true, pattern: emailRegex }}
-                  register={register}
-                  type="email"
-                  readerOnly
-                />
-              </FieldValue>
-            </GridCell>
+                <Grid.Cell>
+                  <Field
+                    id="email"
+                    name="email"
+                    label={t("t.email")}
+                    placeholder={t("t.email")}
+                    error={!!errors?.email}
+                    errorMessage={t("authentication.signIn.loginError")}
+                    validation={{ required: true, pattern: emailRegex }}
+                    register={register}
+                    type="email"
+                  />
+                </Grid.Cell>
 
-            <GridCell>
-              <FieldValue label={t("t.role")}>
-                <Select
-                  id="role"
-                  name="role"
-                  label={t("t.role")}
-                  placeholder={t("t.role")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  keyPrefix="users"
-                  options={roleKeys
-                    .filter((elem) => {
-                      if (profile?.userRoles?.isJurisdictionalAdmin) {
-                        return elem !== RoleOption.Administrator
-                      }
-                      return true
-                    })
-                    .sort((a, b) => (a < b ? -1 : 1))}
-                  error={!!errors?.role}
-                  errorMessage={t("errors.requiredFieldError")}
-                  validation={{ required: true }}
-                />
-              </FieldValue>
-            </GridCell>
-          </GridSection>
-          <JurisdictionAndListingSelection
-            jurisdictionOptions={jurisdictionOptions}
-            listingsOptions={listingsOptions}
-          />
-        </div>
+                <Grid.Cell>
+                  <Select
+                    id="role"
+                    name="role"
+                    label={t("t.role")}
+                    placeholder={t("t.role")}
+                    register={register}
+                    controlClassName="control"
+                    keyPrefix="users"
+                    options={roleKeys
+                      .filter((elem) => {
+                        if (profile?.userRoles?.isJurisdictionalAdmin) {
+                          return elem !== RoleOption.Administrator
+                        }
+                        return true
+                      })
+                      .sort((a, b) => (a < b ? -1 : 1))}
+                    error={!!errors?.role}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
+                  />
+                </Grid.Cell>
+              </Grid.Row>
+            </SectionWithGrid>
+            <JurisdictionAndListingSelection
+              jurisdictionOptions={jurisdictionOptions}
+              listingsOptions={listingsOptions}
+            />
+          </Card.Section>
+        </Card>
 
         <div className="mt-6">
           {mode === "edit" && (

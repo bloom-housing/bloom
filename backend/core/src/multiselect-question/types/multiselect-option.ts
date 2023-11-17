@@ -3,6 +3,7 @@ import { IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { MultiselectLink } from "./multiselect-link"
+import { ValidationMethod } from "./validation-method-enum"
 
 export class MultiselectOption {
   @Expose()
@@ -38,7 +39,34 @@ export class MultiselectOption {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ required: false })
-  collectAddress?: boolean | null
+  collectAddress?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    required: false,
+    enum: ValidationMethod,
+    enumName: "ValidationMethod",
+  })
+  validationMethod?: ValidationMethod
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  radiusSize?: number
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  collectName?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ required: false })
+  collectRelationship?: boolean
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

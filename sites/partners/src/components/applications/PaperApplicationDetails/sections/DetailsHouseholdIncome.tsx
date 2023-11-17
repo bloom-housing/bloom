@@ -1,20 +1,17 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 import { formatIncome } from "../../../../lib/helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailsHouseholdIncome = () => {
   const application = useContext(ApplicationContext)
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("application.details.householdIncome")}
-      inset
-    >
-      <GridCell>
+    <SectionWithGrid heading={t("application.details.householdIncome")} inset>
+      <Grid.Row>
         <FieldValue label={t("application.details.annualIncome")} testId="annualIncome">
           {application.incomePeriod === IncomePeriod.perYear
             ? formatIncome(
@@ -24,9 +21,7 @@ const DetailsHouseholdIncome = () => {
               )
             : t("t.n/a")}
         </FieldValue>
-      </GridCell>
 
-      <GridCell>
         <FieldValue label={t("application.details.monthlyIncome")} testId="monthlyIncome">
           {application.incomePeriod === IncomePeriod.perMonth
             ? formatIncome(
@@ -36,9 +31,7 @@ const DetailsHouseholdIncome = () => {
               )
             : t("t.n/a")}
         </FieldValue>
-      </GridCell>
 
-      <GridCell>
         <FieldValue label={t("application.details.vouchers")} testId="vouchers">
           {(() => {
             if (application.incomeVouchers === null) return t("t.n/a")
@@ -50,8 +43,8 @@ const DetailsHouseholdIncome = () => {
             return t("t.no")
           })()}
         </FieldValue>
-      </GridCell>
-    </GridSection>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

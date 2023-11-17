@@ -1,76 +1,58 @@
 import React, { useContext } from "react"
-import { t, GridSection, GridCell } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { ApplicationContext } from "../../ApplicationContext"
 import { DetailsAddressColumns, AddressColsType } from "../DetailsAddressColumns"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailsAlternateContact = () => {
   const application = useContext(ApplicationContext)
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("application.alternateContact.type.label")}
-      inset
-      grid={false}
-    >
-      <GridSection columns={3}>
-        <GridCell>
-          <FieldValue label={t("application.name.firstName")} testId="alternateContact.firstName">
-            {application.alternateContact.firstName || t("t.n/a")}
-          </FieldValue>
-        </GridCell>
+    <SectionWithGrid heading={t("application.alternateContact.type.label")} inset>
+      <Grid.Row columns={3}>
+        <FieldValue label={t("application.name.firstName")} testId="alternateContact.firstName">
+          {application.alternateContact.firstName || t("t.n/a")}
+        </FieldValue>
+        <FieldValue label={t("application.name.lastName")} testId="alternateContact.lastName">
+          {application.alternateContact.lastName || t("t.n/a")}
+        </FieldValue>
+        <FieldValue label={t("t.relationship")} testId="relationship">
+          {(() => {
+            if (!application.alternateContact.type) return t("t.n/a")
 
-        <GridCell>
-          <FieldValue label={t("application.name.lastName")} testId="alternateContact.lastName">
-            {application.alternateContact.lastName || t("t.n/a")}
-          </FieldValue>
-        </GridCell>
+            if (application.alternateContact.otherType)
+              return application.alternateContact.otherType
 
-        <GridCell>
-          <FieldValue label={t("t.relationship")} testId="relationship">
-            {(() => {
-              if (!application.alternateContact.type) return t("t.n/a")
-
-              if (application.alternateContact.otherType)
-                return application.alternateContact.otherType
-
-              return t(
-                `application.alternateContact.type.options.${application.alternateContact.type}`
-              )
-            })()}
-          </FieldValue>
-        </GridCell>
+            return t(
+              `application.alternateContact.type.options.${application.alternateContact.type}`
+            )
+          })()}
+        </FieldValue>
 
         {
-          <GridCell>
-            <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
-              {application.alternateContact.agency || t("t.n/a")}
-            </FieldValue>
-          </GridCell>
+          <FieldValue label={t("application.details.agency")} testId="alternateContact.agency">
+            {application.alternateContact.agency || t("t.n/a")}
+          </FieldValue>
         }
 
-        <GridCell>
-          <FieldValue label={t("t.email")} testId="alternateContact.emailAddress">
-            {application.alternateContact.emailAddress || t("t.n/a")}
-          </FieldValue>
-        </GridCell>
+        <FieldValue label={t("t.email")} testId="alternateContact.emailAddress">
+          {application.alternateContact.emailAddress || t("t.n/a")}
+        </FieldValue>
 
-        <GridCell>
-          <FieldValue label={t("t.phone")} testId="alternateContact.phoneNumber">
-            {application.alternateContact.phoneNumber || t("t.n/a")}
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-
-      <GridSection subtitle={t("application.contact.address")} columns={3}>
+        <FieldValue label={t("t.phone")} testId="alternateContact.phoneNumber">
+          {application.alternateContact.phoneNumber || t("t.n/a")}
+        </FieldValue>
+      </Grid.Row>
+      <SectionWithGrid.HeadingRow>{t("application.contact.address")} </SectionWithGrid.HeadingRow>
+      <Grid.Row columns={3}>
         <DetailsAddressColumns
           type={AddressColsType.alternateAddress}
           application={application}
           dataTestId="alternateContact"
         />
-      </GridSection>
-    </GridSection>
+      </Grid.Row>
+    </SectionWithGrid>
   )
 }
 

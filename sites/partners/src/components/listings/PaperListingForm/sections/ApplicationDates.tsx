@@ -6,7 +6,6 @@ import dayjs from "dayjs"
 
 import {
   t,
-  GridSection,
   DateField,
   TimeField,
   Drawer,
@@ -17,8 +16,10 @@ import {
   Modal,
   AppearanceStyleType,
 } from "@bloom-housing/ui-components"
+import { Grid } from "@bloom-housing/ui-seeds"
 import { FormListing, TempEvent } from "../../../../lib/listings/formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
@@ -117,66 +118,69 @@ const ApplicationDates = ({
 
   return (
     <>
-      <GridSection
-        grid={false}
-        separator
-        title={t("listings.sections.applicationDatesTitle")}
-        description={t("listings.sections.applicationDatesSubtitle")}
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid
+        heading={t("listings.sections.applicationDatesTitle")}
+        subheading={t("listings.sections.applicationDatesSubtitle")}
       >
-        <GridSection columns={2}>
-          <DateField
-            label={t("listings.applicationDeadline")}
-            name={"applicationDueDateField"}
-            id={"applicationDueDateField"}
-            register={register}
-            watch={watch}
-            note={t("listings.whenApplicationsClose")}
-            disabled={enableDueDate === YesNoAnswer.No}
-            defaultDate={{
-              month: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
-                : null,
-              day: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
-                : null,
-              year: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
-                : null,
-            }}
-          />
-          <TimeField
-            label={t("listings.applicationDueTime")}
-            name={"applicationDueTimeField"}
-            id={"applicationDueTimeField"}
-            register={register}
-            watch={watch}
-            disabled={enableDueDate === YesNoAnswer.No}
-            defaultValues={{
-              hours: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                : enableDueDate === YesNoAnswer.No
-                ? null
-                : "05",
-              minutes: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                : enableDueDate === YesNoAnswer.No
-                ? null
-                : "00",
-              seconds: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                : enableDueDate === YesNoAnswer.No
-                ? null
-                : "00",
-              period: listing?.applicationDueDate
-                ? new Date(listing?.applicationDueDate).getHours() >= 12
-                  ? "pm"
-                  : "am"
-                : "pm",
-            }}
-          />
-        </GridSection>
-        <div className="mt-5">
-          <div className="bg-gray-300 px-4 py-5 mt-5">
+        <Grid.Row columns={2}>
+          <Grid.Cell>
+            <DateField
+              label={t("listings.applicationDeadline")}
+              name={"applicationDueDateField"}
+              id={"applicationDueDateField"}
+              register={register}
+              watch={watch}
+              note={t("listings.whenApplicationsClose")}
+              disabled={enableDueDate === YesNoAnswer.No}
+              defaultDate={{
+                month: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
+                  : null,
+                day: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
+                  : null,
+                year: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
+                  : null,
+              }}
+            />
+          </Grid.Cell>
+          <Grid.Cell>
+            <TimeField
+              label={t("listings.applicationDueTime")}
+              name={"applicationDueTimeField"}
+              id={"applicationDueTimeField"}
+              register={register}
+              watch={watch}
+              disabled={enableDueDate === YesNoAnswer.No}
+              defaultValues={{
+                hours: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
+                  : enableDueDate === YesNoAnswer.No
+                  ? null
+                  : "05",
+                minutes: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
+                  : enableDueDate === YesNoAnswer.No
+                  ? null
+                  : "00",
+                seconds: listing?.applicationDueDate
+                  ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
+                  : enableDueDate === YesNoAnswer.No
+                  ? null
+                  : "00",
+                period: listing?.applicationDueDate
+                  ? new Date(listing?.applicationDueDate).getHours() >= 12
+                    ? "pm"
+                    : "am"
+                  : "pm",
+              }}
+            />
+          </Grid.Cell>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Cell className="grid-inset-section">
             {!!openHouseTableData.length && (
               <div className="mb-5">
                 <MinimalTable headers={openHouseHeaders} data={openHouseTableData} />
@@ -191,9 +195,9 @@ const ApplicationDates = ({
             >
               {t("listings.sections.addOpenHouse")}
             </Button>
-          </div>
-        </div>
-      </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
 
       <Drawer
         open={!!drawerOpenHouse}
