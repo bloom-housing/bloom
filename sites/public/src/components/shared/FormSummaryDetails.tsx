@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, t } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
-import { getUniqueUnitTypes } from "@bloom-housing/shared-helpers"
+import { getUniqueUnitTypes, AddressHolder } from "@bloom-housing/shared-helpers"
 import {
   Address,
   AllExtraDataTypes,
@@ -100,8 +100,8 @@ const FormSummaryDetails = ({
       return acc
     }, "")
 
-    const name = extraData.find((field) => field.key === "addressHolderName")?.value as string
-    const relationship = extraData.find((field) => field.key === "addressHolderRelationship")
+    const name = extraData.find((field) => field.key === AddressHolder.Name)?.value as string
+    const relationship = extraData.find((field) => field.key === AddressHolder.Relationship)
       ?.value as string
 
     return `${name ? `${name}\n` : ""}${relationship ? `${relationship}\n` : ""}${helperText}`
