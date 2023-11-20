@@ -33,6 +33,7 @@ import {
   MultiselectQuestionsApplicationSectionEnum,
   MultiselectQuestion as NewMultiselectQuestion,
   ApplicationMultiselectQuestion,
+  MultiselectOption,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
 dayjs.extend(customParseFormat)
 
@@ -144,7 +145,7 @@ export const mapFormToApi = ({
   })()
 
   const preferencesData = preferences.map((pref: MultiselectQuestion) => {
-    const inputType = getInputType(pref.options)
+    const inputType = getInputType(pref.options as unknown as MultiselectOption[])
     if (inputType === "checkbox") {
       return mapCheckboxesToApi(
         data,
@@ -161,7 +162,7 @@ export const mapFormToApi = ({
   })
 
   const programsData = programs.map((program: MultiselectQuestion) => {
-    const inputType = getInputType(program.options)
+    const inputType = getInputType(program.options as unknown as MultiselectOption[])
     if (inputType === "checkbox") {
       return mapCheckboxesToApi(
         data,

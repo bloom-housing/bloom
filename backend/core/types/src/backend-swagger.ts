@@ -566,7 +566,7 @@ export class ApplicationsService {
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<string> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/applications/csv"
 
@@ -3815,6 +3815,9 @@ export interface Jurisdiction {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  enableGeocodingPreferences: boolean
 }
 
 export interface User {
@@ -4251,6 +4254,9 @@ export interface JurisdictionCreate {
   enableUtilitiesIncluded: boolean
 
   /**  */
+  enableGeocodingPreferences: boolean
+
+  /**  */
   multiselectQuestions: Id[]
 }
 
@@ -4290,6 +4296,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  enableGeocodingPreferences: boolean
 
   /**  */
   multiselectQuestions: Id[]
@@ -4516,6 +4525,18 @@ export interface MultiselectOption {
 
   /**  */
   collectAddress?: boolean
+
+  /**  */
+  validationMethod?: ValidationMethod
+
+  /**  */
+  radiusSize?: number
+
+  /**  */
+  collectName?: boolean
+
+  /**  */
+  collectRelationship?: boolean
 
   /**  */
   exclusive?: boolean
@@ -6354,6 +6375,12 @@ export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
+}
+
+export enum ValidationMethod {
+  "radius" = "radius",
+  "map" = "map",
+  "none" = "none",
 }
 
 export enum ApplicationSection {

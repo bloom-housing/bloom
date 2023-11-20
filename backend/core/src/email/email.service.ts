@@ -1,6 +1,7 @@
 import { HttpException, Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
+import { MailDataRequired } from "@sendgrid/helpers/classes/mail"
 import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
@@ -17,7 +18,19 @@ import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Translation } from "../translations/entities/translation.entity"
-import { IdName } from "../../types"
+import { formatLocalDate } from "../shared/utils/format-local-date"
+
+type EmailAttachmentData = {
+  data: string
+  name: string
+  type: string
+}
+
+type listingInfo = {
+  id: string
+  name: string
+  juris: string
+}
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -297,14 +310,25 @@ export class EmailService {
     from: string,
     subject: string,
     body: string,
-    retry = 3
+    retry = 3,
+    attachment?: EmailAttachmentData
   ) {
     const multipleRecipients = Array.isArray(to)
-    const emailParams = {
+    const emailParams: Partial<MailDataRequired> = {
       to,
       from,
       subject,
       html: body,
+    }
+    if (attachment) {
+      emailParams.attachments = [
+        {
+          content: Buffer.from(attachment.data).toString("base64"),
+          filename: attachment.name,
+          type: attachment.type,
+          disposition: "attachment",
+        },
+      ]
     }
     const handleError = (error) => {
       if (error instanceof ResponseError) {
@@ -356,9 +380,20 @@ export class EmailService {
     )
   }
 
-  public async requestApproval(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+  public async requestApproval(
+    user: User,
+    listingInfo: listingInfo,
+    emails: string[],
+    appUrl: string
+  ) {
     try {
-      const jurisdiction = await this.getUserJurisdiction(user)
+      const jurisdiction = listingInfo.juris
+        ? await this.jurisdictionService.findOne({
+            where: {
+              id: listingInfo.juris,
+            },
+          })
+        : await this.getUserJurisdiction(user)
       void (await this.loadTranslations(jurisdiction, Language.en))
       await this.send(
         emails,
@@ -376,9 +411,20 @@ export class EmailService {
     }
   }
 
-  public async changesRequested(user: User, listingInfo: IdName, emails: string[], appUrl: string) {
+  public async changesRequested(
+    user: User,
+    listingInfo: listingInfo,
+    emails: string[],
+    appUrl: string
+  ) {
     try {
-      const jurisdiction = await this.getUserJurisdiction(user)
+      const jurisdiction = listingInfo.juris
+        ? await this.jurisdictionService.findOne({
+            where: {
+              id: listingInfo.juris,
+            },
+          })
+        : await this.getUserJurisdiction(user)
       void (await this.loadTranslations(jurisdiction, Language.en))
       await this.send(
         emails,
@@ -398,12 +444,18 @@ export class EmailService {
 
   public async listingApproved(
     user: User,
-    listingInfo: IdName,
+    listingInfo: listingInfo,
     emails: string[],
     publicUrl: string
   ) {
     try {
-      const jurisdiction = await this.getUserJurisdiction(user)
+      const jurisdiction = listingInfo.juris
+        ? await this.jurisdictionService.findOne({
+            where: {
+              id: listingInfo.juris,
+            },
+          })
+        : await this.getUserJurisdiction(user)
       void (await this.loadTranslations(jurisdiction, Language.en))
       await this.send(
         emails,
@@ -418,5 +470,28 @@ export class EmailService {
     } catch (err) {
       throw new HttpException("email failed", 500)
     }
+  }
+
+  async sendCSV(user: User, listingName: string, listingId: string, applicationData: string) {
+    void (await this.loadTranslations(
+      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
+      user.language || Language.en
+    ))
+    const jurisdiction = await this.getUserJurisdiction(user)
+    await this.send(
+      user.email,
+      jurisdiction.emailFromAddress,
+      `${listingName} applications export`,
+      this.template("csv-export")({
+        user: user,
+        appOptions: { listingName, appUrl: this.configService.get("PARTNERS_PORTAL_URL") },
+      }),
+      undefined,
+      {
+        data: applicationData,
+        name: `applications-${listingId}-${formatLocalDate(new Date(), "YYYY-MM-DD_HH:mm:ss")}.csv`,
+        type: "text/csv",
+      }
+    )
   }
 }

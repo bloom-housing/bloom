@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
+import { t, MinimalTable } from "@bloom-housing/ui-components"
 import { FieldValue } from "@bloom-housing/ui-seeds"
 import { ListingContext } from "../../ListingContext"
 import { listingSectionQuestions } from "@bloom-housing/shared-helpers"
@@ -7,6 +7,7 @@ import {
   Listing,
   MultiselectQuestionsApplicationSectionEnum,
 } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const DetailPreferences = () => {
   const listing = useContext(ListingContext)
@@ -31,25 +32,19 @@ const DetailPreferences = () => {
   )
 
   return (
-    <GridSection
-      className="bg-primary-lighter"
-      title={t("listings.sections.housingPreferencesTitle")}
-      grid={false}
-      tinted
-      inset
-    >
-      <FieldValue label={t("listings.activePreferences")} className={"mb-2"}>
-        {preferenceTableData.length ? (
-          <MinimalTable
-            id="preferenceTable"
-            headers={preferencesTableHeaders}
-            data={preferenceTableData}
-          />
-        ) : (
-          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-        )}
-      </FieldValue>
-    </GridSection>
+    <SectionWithGrid heading={t("listings.sections.housingPreferencesTitle")} inset bypassGrid>
+      <SectionWithGrid.HeadingRow>{t("listings.activePreferences")}</SectionWithGrid.HeadingRow>
+      {preferenceTableData.length ? (
+        <MinimalTable
+          id="preferenceTable"
+          className="spacer-section-above"
+          headers={preferencesTableHeaders}
+          data={preferenceTableData}
+        />
+      ) : (
+        <FieldValue className="spacer-section-above">{t("t.none")}</FieldValue>
+      )}
+    </SectionWithGrid>
   )
 }
 

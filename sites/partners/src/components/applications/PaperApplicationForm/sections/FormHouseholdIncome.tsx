@@ -1,9 +1,10 @@
 import React from "react"
-import { t, GridSection, GridCell, Field, Select } from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { t, Field, Select } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { IncomePeriod } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../../../lib/helpers"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 const FormHouseholdIncome = () => {
   const formMethods = useFormContext()
@@ -14,9 +15,10 @@ const FormHouseholdIncome = () => {
   const incomePeriodValue: string = watch("application.incomePeriod")
 
   return (
-    <GridSection title={t("application.details.householdIncome")} grid={false} separator>
-      <GridSection columns={3}>
-        <GridCell>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={t("application.details.householdIncome")}>
+        <Grid.Row columns={3}>
           <FieldValue label={t("application.add.incomePeriod")}>
             <div className="flex h-12 items-center">
               <Field
@@ -52,12 +54,10 @@ const FormHouseholdIncome = () => {
               />
             </div>
           </FieldValue>
-        </GridCell>
-      </GridSection>
+        </Grid.Row>
 
-      <GridSection columns={3}>
-        <GridCell>
-          <FieldValue label={t("application.details.annualIncome")}>
+        <Grid.Row columns={3}>
+          <Grid.Cell>
             <Field
               id="incomeYear"
               type="number"
@@ -66,13 +66,10 @@ const FormHouseholdIncome = () => {
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriod.perYear}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("application.details.monthlyIncome")}>
+          <Grid.Cell>
             <Field
               id="incomeMonth"
               type="number"
@@ -81,28 +78,24 @@ const FormHouseholdIncome = () => {
               placeholder={t("t.enterAmount")}
               register={register}
               disabled={incomePeriodValue !== IncomePeriod.perMonth}
-              readerOnly
             />
-          </FieldValue>
-        </GridCell>
+          </Grid.Cell>
 
-        <GridCell>
-          <FieldValue label={t("application.details.vouchers")}>
+          <Grid.Cell>
             <Select
               id="application.incomeVouchers"
               name="application.incomeVouchers"
               placeholder={t("t.selectOne")}
               label={t("application.details.vouchers")}
-              labelClassName="sr-only"
               register={register}
               controlClassName="control"
               options={[YesNoAnswer.Yes, YesNoAnswer.No]}
               keyPrefix="t"
             />
-          </FieldValue>
-        </GridCell>
-      </GridSection>
-    </GridSection>
+          </Grid.Cell>
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 

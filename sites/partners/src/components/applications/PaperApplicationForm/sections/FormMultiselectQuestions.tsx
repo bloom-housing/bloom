@@ -1,21 +1,18 @@
 import React, { useMemo } from "react"
-import {
-  Field,
-  t,
-  GridSection,
-  GridCell,
-  FormAddress,
-  FieldGroup,
-} from "@bloom-housing/ui-components"
-import { FieldValue } from "@bloom-housing/ui-seeds"
+import { Field, t, FormAddress, FieldGroup } from "@bloom-housing/ui-components"
+import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
 import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
 import {
   ListingMultiselectQuestion,
-  MultiselectOption,
   MultiselectQuestion,
+  MultiselectOption as MultiselectOptionOld,
 } from "@bloom-housing/backend-core/types"
-import { MultiselectQuestionsApplicationSectionEnum } from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import {
+  MultiselectOption,
+  MultiselectQuestionsApplicationSectionEnum,
+} from "@bloom-housing/shared-helpers/src/types/backend-swagger"
+import SectionWithGrid from "../../../shared/SectionWithGrid"
 
 type FormMultiselectQuestionsProps = {
   questions: ListingMultiselectQuestion[]
@@ -52,7 +49,7 @@ const FormMultiselectQuestions = ({
 
   const watchQuestions = watch(allOptionFieldNames)
 
-  const getCheckboxOption = (option: MultiselectOption, question: MultiselectQuestion) => {
+  const getCheckboxOption = (option: MultiselectOptionOld, question: MultiselectQuestion) => {
     const optionFieldName = fieldName(question.text, applicationSection, option.text)
     return (
       <React.Fragment key={option.text}>
@@ -79,7 +76,7 @@ const FormMultiselectQuestions = ({
     )
   }
 
-  const getRadioFields = (options: MultiselectOption[], question: MultiselectQuestion) => {
+  const getRadioFields = (options: MultiselectOptionOld[], question: MultiselectQuestion) => {
     return (
       <fieldset>
         <FieldGroup
@@ -103,13 +100,14 @@ const FormMultiselectQuestions = ({
   }
 
   return (
-    <GridSection title={sectionTitle} separator grid={false}>
-      <GridSection columns={2}>
-        {questions?.map((listingQuestion) => {
-          const question = listingQuestion?.multiselectQuestion
-          const inputType = getInputType(question.options)
-          return (
-            <GridCell key={question.text}>
+    <>
+      <hr className="spacer-section-above spacer-section" />
+      <SectionWithGrid heading={sectionTitle}>
+        <Grid.Row columns={2}>
+          {questions?.map((listingQuestion) => {
+            const question = listingQuestion?.multiselectQuestion
+            const inputType = getInputType(question.options as unknown as MultiselectOption[])
+            return (
               <FieldValue label={question.text}>
                 {inputType === "checkbox" ? (
                   <fieldset className={"mt-4"}>
@@ -135,11 +133,11 @@ const FormMultiselectQuestions = ({
                   getRadioFields(question?.options, question)
                 )}
               </FieldValue>
-            </GridCell>
-          )
-        })}
-      </GridSection>
-    </GridSection>
+            )
+          })}
+        </Grid.Row>
+      </SectionWithGrid>
+    </>
   )
 }
 
