@@ -19,6 +19,7 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
+import { AddressHolder } from "../utilities/constants"
 
 export const listingSectionQuestions = (
   listing: Listing,
@@ -258,14 +259,14 @@ export const getCheckboxOption = (
       )}
       {watchFields[optionFieldName] && option.collectName && (
         <Field
-          id="addressHolderName"
-          name={`${optionFieldName}-addressHolderName`}
-          label={t("application.preferences.options.addressHolderName")}
+          id={AddressHolder.Name}
+          name={`${optionFieldName}-${AddressHolder.Name}`}
+          label={t(`application.preferences.options.${AddressHolder.Name}`)}
           register={register}
           validation={{ required: true, maxLength: 64 }}
-          error={!!resolveObject(`${optionFieldName}-addressHolderName`, errors)}
+          error={!!resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)}
           errorMessage={
-            resolveObject(`${optionFieldName}-addressHolderName`, errors)?.type === "maxLength"
+            resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)?.type === "maxLength"
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
           }
@@ -273,14 +274,14 @@ export const getCheckboxOption = (
       )}
       {watchFields[optionFieldName] && option.collectRelationship && (
         <Field
-          id="addressHolderRelationship"
-          name={`${optionFieldName}-addressHolderRelationship`}
-          label={t("application.preferences.options.addressHolderRelationship")}
+          id={AddressHolder.Relationship}
+          name={`${optionFieldName}-${AddressHolder.Relationship}`}
+          label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
           register={register}
           validation={{ required: true, maxLength: 64 }}
-          error={!!resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)}
+          error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
           errorMessage={
-            resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)?.type ===
+            resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
             "maxLength"
               ? t("errors.maxLength")
               : t("errors.requiredFieldError")
@@ -346,26 +347,41 @@ export const mapCheckboxesToApi = (
   const claimed = !!Object.keys(data).filter((key) => data[key] === true).length
 
   const addressFields = Object.keys(data).filter((option) => Object.keys(data[option]))
-
   const questionOptions: ApplicationMultiselectQuestionOption[] = Object.keys(data)
     .filter((option) => !Object.keys(data[option]).length)
     .map((key) => {
+      const extraData = []
       const addressData = addressFields.filter((addressField) => addressField === `${key}-address`)
       const addressHolderNameData = addressFields.filter(
-        (addressField) => addressField === `${key}-addressHolderName`
+        (addressField) => addressField === `${key}-${AddressHolder.Name}`
       )
       const addressHolderRelationshipData = addressFields.filter(
-        (addressField) => addressField === `${key}-addressHolderRelationship`
+        (addressField) => addressField === `${key}-${AddressHolder.Relationship}`
       )
+      if (addressData.length) {
+        extraData.push({ type: InputType.address, key: "address", value: data[addressData[0]] })
+
+        if (addressHolderNameData.length) {
+          extraData.push({
+            type: InputType.text,
+            key: AddressHolder.Name,
+            value: data[addressHolderNameData[0]],
+          })
+        }
+
+        if (addressHolderRelationshipData.length) {
+          extraData.push({
+            type: InputType.text,
+            key: AddressHolder.Relationship,
+            value: data[addressHolderRelationshipData[0]],
+          })
+        }
+      }
 
       return {
         key,
         checked: data[key] === true,
-        addressHolderName: data[addressHolderNameData[0]],
-        addressHolderRelationship: data[addressHolderRelationshipData[0]],
-        extraData: addressData.length
-          ? [{ type: InputType.address, key, value: data[addressData[0]] }]
-          : [],
+        extraData: extraData,
       }
     })
 
@@ -420,12 +436,20 @@ export const mapApiToMultiselectForm = (
           acc[curr.key] = claimed
           if (curr.extraData?.length) {
             acc[`${curr.key}-address`] = curr.extraData[0].value
-          }
-          if (curr.addressHolderName) {
-            acc[`${curr.key}-addressHolderName`] = curr.addressHolderName
-          }
-          if (curr.addressHolderRelationship) {
-            acc[`${curr.key}-addressHolderRelationship`] = curr.addressHolderRelationship
+
+            const addressHolderName = curr.extraData?.find(
+              (field) => field.key === AddressHolder.Name
+            )
+            if (addressHolderName) {
+              acc[`${curr.key}-${AddressHolder.Name}`] = addressHolderName.value
+            }
+
+            const addressHolderRelationship = curr.extraData?.find(
+              (field) => field.key === AddressHolder.Relationship
+            )
+            if (addressHolderRelationship) {
+              acc[`${curr.key}-${AddressHolder.Relationship}`] = addressHolderRelationship.value
+            }
           }
         }
 
