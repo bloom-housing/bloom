@@ -50,7 +50,7 @@ export const FormAddressAlternate = ({
         errorMessage={t("errors.maxLength")}
       />
 
-      <div className="flex max-w-2xl">
+      <div className="flex">
         <Field
           id={`${dataKey}.city`}
           name={`${dataKey}.city`}
@@ -70,7 +70,7 @@ export const FormAddressAlternate = ({
           id={`${dataKey}.state`}
           name={`${dataKey}.state`}
           label={t("application.contact.state")}
-          validation={{ required: true, maxLength: 64 }}
+          validation={{ required: true }}
           error={!!resolveObject(`${dataKey}.state`, errors)}
           errorMessage={
             resolveObject(`${dataKey}.state`, errors)?.type === "maxLength"
@@ -81,7 +81,6 @@ export const FormAddressAlternate = ({
           controlClassName="control"
           options={stateKeys}
           keyPrefix="states"
-          dataTestId={"app-primary-address-state"}
         />
       </div>
       <Field
