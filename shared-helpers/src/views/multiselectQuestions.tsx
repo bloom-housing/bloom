@@ -14,12 +14,12 @@ import {
   ExpandableContent,
   Field,
   FieldGroup,
-  FormAddress,
   resolveObject,
   t,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "../utilities/formKeys"
 import { AddressHolder } from "../utilities/constants"
+import { FormAddressAlternate } from "./address/FormAddressAlternate"
 
 export const listingSectionQuestions = (
   listing: Listing,
@@ -290,7 +290,7 @@ export const getCheckboxOption = (
       )}
       {watchFields[optionFieldName] && option.collectAddress && (
         <div className="pb-4">
-          <FormAddress
+          <FormAddressAlternate
             subtitle={t("application.preferences.options.qualifyingAddress")}
             dataKey={fieldName(question.text, applicationSection, `${option.text}-address`)}
             register={register}
