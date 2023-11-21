@@ -94,9 +94,14 @@ const PreferenceDrawer = ({
 
   const optOutQuestion = watch("canYouOptOutQuestion")
 
+  const isAdditionalDetailsEnabled = profile?.jurisdictions?.some(
+    (jurisdiction) => jurisdiction.enableGeocodingPreferences
+  )
+
   const collectAddressExpand =
-    (optionData?.collectAddress && watch("collectAddress") === undefined) ||
-    watch("collectAddress") === YesNoAnswer.Yes
+    ((optionData?.collectAddress && watch("collectAddress") === undefined) ||
+      watch("collectAddress") === YesNoAnswer.Yes) &&
+    isAdditionalDetailsEnabled
   const readiusExpand =
     (optionData?.validationMethod === ValidationMethod.radius &&
       watch("validationMethod") === undefined) ||
@@ -230,8 +235,6 @@ const PreferenceDrawer = ({
                     defaultValue={questionData?.links?.length > 0 ? questionData?.links[0].url : ""}
                   />
                 </Grid.Cell>
-              </Grid.Row>
-              <Grid.Row>
                 <Grid.Cell>
                   <Field
                     id="preferenceLinkTitle"
@@ -263,57 +266,64 @@ const PreferenceDrawer = ({
               </div>
             )}
 
-            <div className={"flex flex-col"}>
-              <Button
-                type="button"
-                size={AppearanceSizeType.small}
-                styleType={
-                  errors["questions"] ? AppearanceStyleType.alert : AppearanceStyleType.primary
-                }
-                onClick={() => {
-                  clearErrors("questions")
-                  setOptionData(null)
-                  setOptionDrawerOpen("add")
-                }}
-                dataTestId={"preference-add-option-button"}
-              >
-                {t("settings.preferenceAddOption")}
-              </Button>
-              {errors["questions"] && (
-                <FormErrorMessage className={"pt-1"}>
-                  {errors["questions"].message}
-                </FormErrorMessage>
-              )}
-            </div>
+            <Grid.Row columns={2}>
+              <Grid.Cell>
+                <div className="flex flex-col pb-4">
+                  <Button
+                    type="button"
+                    size={AppearanceSizeType.small}
+                    styleType={
+                      errors["questions"] ? AppearanceStyleType.alert : AppearanceStyleType.primary
+                    }
+                    onClick={() => {
+                      clearErrors("questions")
+                      setOptionData(null)
+                      setOptionDrawerOpen("add")
+                    }}
+                    dataTestId={"preference-add-option-button"}
+                  >
+                    {t("settings.preferenceAddOption")}
+                  </Button>
+                  {errors["questions"] && (
+                    <FormErrorMessage className={"pt-1"}>
+                      {errors["questions"].message}
+                    </FormErrorMessage>
+                  )}
+                </div>
+              </Grid.Cell>
+            </Grid.Row>
 
             <Grid>
-              <Grid.Row>
+              <Grid.Row columns={2}>
                 <Grid.Cell>
-                  <FieldGroup
-                    name="canYouOptOutQuestion"
-                    type="radio"
-                    register={register}
-                    groupLabel={t("settings.preferenceOptOut")}
-                    fields={[
-                      {
-                        id: "optOutYes",
-                        label: t("t.yes"),
-                        value: YesNoAnswer.Yes,
-                        defaultChecked: questionData === null || questionData?.optOutText !== null,
-                        dataTestId: "opt-out-question-yes",
-                      },
-                      {
-                        id: "optOutNo",
-                        label: t("t.no"),
-                        value: YesNoAnswer.No,
-                        defaultChecked: questionData && questionData?.optOutText === null,
-                        dataTestId: "opt-out-question-no",
-                      },
-                    ]}
-                    fieldClassName="m-0"
-                    fieldGroupClassName="flex h-12 items-center"
-                    dataTestId={"preference-can-you-opt-out"}
-                  />
+                  <div className="pb-4">
+                    <FieldGroup
+                      name="canYouOptOutQuestion"
+                      type="radio"
+                      register={register}
+                      groupLabel={t("settings.preferenceOptOut")}
+                      fields={[
+                        {
+                          id: "optOutYes",
+                          label: t("t.yes"),
+                          value: YesNoAnswer.Yes,
+                          defaultChecked:
+                            questionData === null || questionData?.optOutText !== null,
+                          dataTestId: "opt-out-question-yes",
+                        },
+                        {
+                          id: "optOutNo",
+                          label: t("t.no"),
+                          value: YesNoAnswer.No,
+                          defaultChecked: questionData && questionData?.optOutText === null,
+                          dataTestId: "opt-out-question-no",
+                        },
+                      ]}
+                      fieldClassName="m-0"
+                      fieldGroupClassName="flex h-12 items-center"
+                      dataTestId={"preference-can-you-opt-out"}
+                    />
+                  </div>
                 </Grid.Cell>
                 {optOutQuestion === YesNoAnswer.Yes && (
                   <Grid.Cell>
@@ -365,7 +375,7 @@ const PreferenceDrawer = ({
               </Grid.Row>
             </Grid>
             <Grid>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 <Grid.Cell>
                   <Select
                     id={"jurisdictionId"}
@@ -378,7 +388,7 @@ const PreferenceDrawer = ({
                       profile
                         ? [
                             { label: "", value: "" },
-                            ...profile?.jurisdictions.map((jurisdiction) => ({
+                            ...(profile?.jurisdictions || []).map((jurisdiction) => ({
                               label: jurisdiction.name,
                               value: jurisdiction.id,
                             })),

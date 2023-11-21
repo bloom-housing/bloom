@@ -94,7 +94,7 @@ export const onSubmitMfaCode = (
 ) => async (data: { mfaCode: string }) => {
   const { mfaCode } = data
   try {
-    await login(email, password, mfaCode, mfaType)
+    await login(email, password, mfaCode?.trim(), mfaType)
     resetNetworkError()
     await router.push("/")
   } catch (error) {

@@ -3821,6 +3821,9 @@ export interface Jurisdiction {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  enableGeocodingPreferences: boolean
 }
 
 export interface User {
@@ -4257,6 +4260,9 @@ export interface JurisdictionCreate {
   enableUtilitiesIncluded: boolean
 
   /**  */
+  enableGeocodingPreferences: boolean
+
+  /**  */
   multiselectQuestions: Id[]
 }
 
@@ -4296,6 +4302,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   enableUtilitiesIncluded: boolean
+
+  /**  */
+  enableGeocodingPreferences: boolean
 
   /**  */
   multiselectQuestions: Id[]
