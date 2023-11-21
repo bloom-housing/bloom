@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { Field, t, FormAddress, FieldGroup, resolveObject } from "@bloom-housing/ui-components"
 import { FieldValue, Grid } from "@bloom-housing/ui-seeds"
 import { useFormContext } from "react-hook-form"
-import { stateKeys, getInputType, fieldName } from "@bloom-housing/shared-helpers"
+import { stateKeys, getInputType, fieldName, AddressHolder } from "@bloom-housing/shared-helpers"
 import {
   ApplicationSection,
   ListingMultiselectQuestion,
@@ -64,14 +64,15 @@ const FormMultiselectQuestions = ({
 
         {watchQuestions[optionFieldName] && option?.collectName && (
           <Field
-            id="addressHolderName"
-            name={`${optionFieldName}-addressHolderName`}
-            label={t("application.preferences.options.addressHolderName")}
+            id={AddressHolder.Name}
+            name={`${optionFieldName}-${AddressHolder.Name}`}
+            label={t(`application.preferences.options.${AddressHolder.Name}`)}
             register={register}
             validation={{ required: true, maxLength: 64 }}
-            error={!!resolveObject(`${optionFieldName}-addressHolderName`, errors)}
+            error={!!resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)}
             errorMessage={
-              resolveObject(`${optionFieldName}-addressHolderName`, errors)?.type === "maxLength"
+              resolveObject(`${optionFieldName}-${AddressHolder.Name}`, errors)?.type ===
+              "maxLength"
                 ? t("errors.maxLength")
                 : t("errors.requiredFieldError")
             }
@@ -79,14 +80,14 @@ const FormMultiselectQuestions = ({
         )}
         {watchQuestions[optionFieldName] && option?.collectRelationship && (
           <Field
-            id="addressHolderRelationship"
-            name={`${optionFieldName}-addressHolderRelationship`}
-            label={t("application.preferences.options.addressHolderRelationship")}
+            id={AddressHolder.Relationship}
+            name={`${optionFieldName}-${AddressHolder.Relationship}`}
+            label={t(`application.preferences.options.${AddressHolder.Relationship}`)}
             register={register}
             validation={{ required: true, maxLength: 64 }}
-            error={!!resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)}
+            error={!!resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)}
             errorMessage={
-              resolveObject(`${optionFieldName}-addressHolderRelationship`, errors)?.type ===
+              resolveObject(`${optionFieldName}-${AddressHolder.Relationship}`, errors)?.type ===
               "maxLength"
                 ? t("errors.maxLength")
                 : t("errors.requiredFieldError")
